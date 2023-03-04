@@ -1,9 +1,10 @@
 package cn.allay.component.injector;
 
-import cn.allay.component.annotation.ComponentDependency;
-import cn.allay.component.annotation.ComponentImpl;
-import cn.allay.component.annotation.ComponentInject;
+import cn.allay.component.annotation.Dependency;
+import cn.allay.component.annotation.Impl;
+import cn.allay.component.annotation.Inject;
 import cn.allay.component.api.ComponentGroup;
+import cn.allay.component.api.ComponentImpl;
 import cn.allay.component.api.ComponentInjector;
 import cn.allay.component.api.RuntimeComponentObject;
 import cn.allay.component.exception.ComponentInjectException;
@@ -25,7 +26,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 public class SimpleComponentInjector<T> implements ComponentInjector<T> {
 
     protected Class<T> parentClass;
-    protected List<Object> components = new ArrayList<>();
+    protected List<ComponentImpl> components = new ArrayList<>();
 
     public SimpleComponentInjector(ComponentGroup<T> componentGroup) {
         loadComponentGroup(componentGroup);
@@ -39,7 +40,7 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
     }
 
     @Override
-    public ComponentInjector<T> withComponent(List<?> components) {
+    public ComponentInjector<T> withComponent(List<ComponentImpl> components) {
         Objects.requireNonNull(components, "The components cannot be null");
         this.components.addAll(components);
         return this;
@@ -57,6 +58,7 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
     @SuppressWarnings("unchecked")
     @Override
     public Class<T> inject() {
+        checkComponentValid();
         injectDependency();
         var bb = new ByteBuddy()
                 .subclass(parentClass);
@@ -65,10 +67,10 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
         //So we need to reverse the list of components to ensure that the method of the component declared first will override the method declared later
         Collections.reverse(reversed);
         for (var component : reversed) {
-            for (var method : Arrays.stream(component.getClass().getMethods()).filter(method -> method.isAnnotationPresent(ComponentImpl.class)).toList()) {
+            for (var method : Arrays.stream(component.getClass().getMethods()).filter(method -> method.isAnnotationPresent(Impl.class)).toList()) {
                 bb = bb.method(named(method.getName())
                                 .and(takesArguments(method.getParameterTypes()))
-                                .and(isAnnotatedWith(ComponentInject.class)))
+                                .and(isAnnotatedWith(Inject.class)))
                         .intercept(MethodDelegation.to(component));
             }
         }
@@ -80,17 +82,40 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
                 .getLoaded();
     }
 
+    protected void checkComponentValid() {
+        Set<String> identifiers = new HashSet<>();
+        for (var component : components) {
+            var identifier = component.getNamespaceId();
+            if (identifiers.contains(identifier))
+                throw new ComponentInjectException("Duplicate component " + component.getNamespaceId());
+            else
+                identifiers.add(identifier);
+        }
+    }
+
     protected void injectDependency() {
         for (var component : components) {
             for (var field : component.getClass().getDeclaredFields()) {
-                if (field.isAnnotationPresent(ComponentDependency.class)) {
+                var annotation = field.getAnnotation(Dependency.class);
+                if (annotation != null) {
                     var type = field.getType();
-                    var dependencies = components.stream().filter(type::isInstance).toList();
-                    var count = dependencies.size();
-                    if (count == 0)
-                        throw new ComponentInjectException("Cannot find dependency " + type.getName() + " for " + component.getClass().getName());
+                    List<ComponentImpl> dependencies = new ArrayList<>(components);
+                    var count = Integer.MAX_VALUE;
+                    var requireCompId = annotation.namespaceId();
+                    //尝试通过继承关系查找依赖
+                    //尝试通过namespaceId进行匹配
+                    if (!requireCompId.isBlank())
+                        dependencies = dependencies.stream().filter(dependency -> dependency.getNamespaceId().equals(requireCompId)).toList();
+                    else
+                        dependencies = dependencies.stream().filter(type::isInstance).toList();
+                    count = dependencies.size();
+                    //匹配到多个依赖
                     if (count > 1)
                         throw new ComponentInjectException("Found multiple dependencies " + type.getName() + " for " + component.getClass().getName());
+                    //无可用依赖
+                    if (count == 0)
+                        throw new ComponentInjectException("Cannot find dependency " + type.getName() + " for " + component.getClass().getName());
+                    //注入依赖
                     var dependency = dependencies.get(0);
                     field.setAccessible(true);
                     try {

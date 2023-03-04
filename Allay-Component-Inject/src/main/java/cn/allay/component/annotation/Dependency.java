@@ -10,9 +10,10 @@ import java.lang.annotation.Target;
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  *
- * This annotation is used to mark a method as injectable
+ * Used to describe the interdependencies between components
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface ComponentImpl {
+@Target(ElementType.FIELD)
+public @interface Dependency {
+    String namespaceId() default "";
 }

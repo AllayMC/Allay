@@ -23,7 +23,7 @@ public interface ComponentInjector<T> {
      * @param components components
      * @return the injector
      */
-    ComponentInjector<T> withComponent(List<?> components);
+    ComponentInjector<T> withComponent(List<ComponentImpl> components);
 
     /**
      * Load components & parent class from a {@link ComponentGroup}

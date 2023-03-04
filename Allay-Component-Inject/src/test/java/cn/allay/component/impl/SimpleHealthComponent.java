@@ -1,6 +1,7 @@
 package cn.allay.component.impl;
 
-import cn.allay.component.annotation.ComponentImpl;
+import cn.allay.component.annotation.Impl;
+import cn.allay.component.api.ComponentImpl;
 import cn.allay.component.interfaces.HealthComponent;
 
 /**
@@ -8,7 +9,7 @@ import cn.allay.component.interfaces.HealthComponent;
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  */
-public class SimpleHealthComponent implements HealthComponent {
+public class SimpleHealthComponent implements HealthComponent, ComponentImpl {
 
     protected final int maxHealth;
     protected int health;
@@ -22,27 +23,32 @@ public class SimpleHealthComponent implements HealthComponent {
         this.health = health;
     }
 
-    @ComponentImpl
+    @Impl
     @Override
     public int getHealth() {
         return health;
     }
 
-    @ComponentImpl
+    @Impl
     @Override
     public int getMaxHealth() {
         return maxHealth;
     }
 
-    @ComponentImpl
+    @Impl
     @Override
     public void setHealth(int health) {
         this.health = health;
     }
 
-    @ComponentImpl
+    @Impl
     @Override
     public boolean isDead() {
         return health <= 0;
+    }
+
+    @Override
+    public String getNamespaceId() {
+        return "minecraft:health_component";
     }
 }

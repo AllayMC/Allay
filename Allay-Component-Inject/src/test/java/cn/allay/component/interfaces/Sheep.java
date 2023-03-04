@@ -5,6 +5,6 @@ package cn.allay.component.interfaces;
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  */
-public interface Sheep extends Animal, AttackComponent {
+public interface Sheep extends Animal, AttackComponent, TestDependencyComponent {
 
 }

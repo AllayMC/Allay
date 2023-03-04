@@ -4,6 +4,8 @@ package cn.allay.component.exception;
  * Author: daoge_cmd <br>
  * Date: 2023/3/4 <br>
  * Allay Project <br>
+ *
+ * Exception thrown when the component injection fails
  */
 public class ComponentInjectException extends RuntimeException {
     public ComponentInjectException() {

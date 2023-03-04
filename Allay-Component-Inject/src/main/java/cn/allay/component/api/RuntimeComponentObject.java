@@ -13,5 +13,5 @@ public interface RuntimeComponentObject {
     /**
      * @return Components provided when constructing the object
      */
-    List<Object> getComponents();
+    List<ComponentImpl> getComponents();
 }

@@ -1,6 +1,7 @@
 package cn.allay.component.group;
 
 import cn.allay.component.api.ComponentGroup;
+import cn.allay.component.api.ComponentImpl;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,13 +14,13 @@ import java.util.Objects;
 public class SimpleComponentGroup<T> implements ComponentGroup<T> {
 
     protected Class<T> parentClass;
-    protected List<Object> components;
+    protected List<ComponentImpl> components;
 
-    public SimpleComponentGroup(Class<T> parentClass, Object... components) {
+    public SimpleComponentGroup(Class<T> parentClass, ComponentImpl... components) {
         this(parentClass, List.of(components));
     }
 
-    public SimpleComponentGroup(Class<T> parentClass, List<Object> components) {
+    public SimpleComponentGroup(Class<T> parentClass, List<ComponentImpl> components) {
         Objects.requireNonNull(parentClass, "The parent class cannot be null in component group");
         Objects.requireNonNull(components, "The components cannot be null in component group");
         components.forEach(component -> Objects.requireNonNull(component, "The component cannot be null in component group"));
@@ -33,7 +34,7 @@ public class SimpleComponentGroup<T> implements ComponentGroup<T> {
     }
 
     @Override
-    public List<Object> getComponents() {
+    public List<ComponentImpl> getComponents() {
         return components;
     }
 }

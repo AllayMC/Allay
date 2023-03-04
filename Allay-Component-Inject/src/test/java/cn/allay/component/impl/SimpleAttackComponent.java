@@ -1,7 +1,8 @@
 package cn.allay.component.impl;
 
-import cn.allay.component.annotation.ComponentDependency;
-import cn.allay.component.annotation.ComponentImpl;
+import cn.allay.component.annotation.Dependency;
+import cn.allay.component.annotation.Impl;
+import cn.allay.component.api.ComponentImpl;
 import cn.allay.component.interfaces.AttackComponent;
 import cn.allay.component.interfaces.HealthComponent;
 
@@ -10,14 +11,19 @@ import cn.allay.component.interfaces.HealthComponent;
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  */
-public class SimpleAttackComponent implements AttackComponent {
+public class SimpleAttackComponent implements AttackComponent, ComponentImpl {
 
-    @ComponentDependency
+    @Dependency
     protected HealthComponent healthComponent;
 
-    @ComponentImpl
+    @Impl
     @Override
     public void attack(int amount) {
         healthComponent.setHealth(healthComponent.getHealth() - amount);
+    }
+
+    @Override
+    public String getNamespaceId() {
+        return "minecraft:attack_component";
     }
 }

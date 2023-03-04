@@ -1,6 +1,6 @@
 package cn.allay.component.interfaces;
 
-import cn.allay.component.annotation.ComponentInject;
+import cn.allay.component.annotation.Inject;
 
 /**
  * Author: daoge_cmd <br>
@@ -8,6 +8,6 @@ import cn.allay.component.annotation.ComponentInject;
  * Allay Project <br>
  */
 public interface AttackComponent {
-    @ComponentInject
+    @Inject
     void attack(int amount);
 }

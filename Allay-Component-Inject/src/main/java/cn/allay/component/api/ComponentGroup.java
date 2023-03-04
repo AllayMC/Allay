@@ -19,5 +19,5 @@ public interface ComponentGroup<T> {
     /**
      * @return the components
      */
-    List<Object> getComponents();
+    List<ComponentImpl> getComponents();
 }
