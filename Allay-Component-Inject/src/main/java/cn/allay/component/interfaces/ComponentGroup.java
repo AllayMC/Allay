@@ -1,4 +1,4 @@
-package cn.allay.component.api;
+package cn.allay.component.interfaces;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * Allay Project <br>
  *
  * Describe a group of components <p/>
- * And can be built into object using {@link cn.allay.component.api.ComponentInjector}
+ * And can be built into object using {@link cn.allay.component.interfaces.ComponentInjector}
  */
 public interface ComponentGroup<T> {
     /**

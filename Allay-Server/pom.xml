@@ -32,6 +32,14 @@
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- Component-Inject -->
+        <dependency>
+            <groupId>cn.allay</groupId>
+            <artifactId>Allay-Component-Inject</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Annotations -->
         <dependency>
             <groupId>org.projectlombok</groupId>

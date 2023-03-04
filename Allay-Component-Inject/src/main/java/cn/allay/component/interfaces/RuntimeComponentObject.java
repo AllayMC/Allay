@@ -1,4 +1,4 @@
-package cn.allay.component.api;
+package cn.allay.component.interfaces;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package cn.allay.component.group;
 
-import cn.allay.component.api.ComponentGroup;
-import cn.allay.component.api.ComponentImpl;
+import cn.allay.component.interfaces.ComponentGroup;
+import cn.allay.component.interfaces.ComponentImpl;
 
 import java.util.List;
 import java.util.Objects;

@@ -1,8 +1,8 @@
 package cn.allay.component;
 
-import cn.allay.component.api.ComponentGroup;
-import cn.allay.component.api.ComponentImpl;
-import cn.allay.component.api.RuntimeComponentObject;
+import cn.allay.component.interfaces.ComponentGroup;
+import cn.allay.component.interfaces.ComponentImpl;
+import cn.allay.component.interfaces.RuntimeComponentObject;
 import cn.allay.component.group.SimpleComponentGroup;
 import cn.allay.component.impl.SimpleAttackComponent;
 import cn.allay.component.impl.SimpleHealthComponent;
