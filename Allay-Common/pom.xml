@@ -38,6 +38,13 @@
             <version>${junit-jupiter-engine.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Level -->
+        <dependency>
+            <groupId>cn.allay</groupId>
+            <artifactId>Allay-Level</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

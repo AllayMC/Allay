@@ -1,25 +1,25 @@
 package cn.allay.math.vector.record;
 
-import cn.allay.math.vector.interfaces.Vector3f;
+import cn.allay.math.vector.interfaces.Vector3d;
 
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  */
-public record ImmutableVector3f(float x, float y, float z) implements Vector3f {
+public record VectorRecord3d(double x, double y, double z) implements Vector3d {
     @Override
-    public Float getX() {
+    public Double getX() {
         return x;
     }
 
     @Override
-    public Float getY() {
+    public Double getY() {
         return y;
     }
 
     @Override
-    public Float getZ() {
+    public Double getZ() {
         return z;
     }
 }

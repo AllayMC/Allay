@@ -1,20 +1,20 @@
 package cn.allay.math.vector.record;
 
-import cn.allay.math.vector.interfaces.Vector2d;
+import cn.allay.math.vector.interfaces.Vector2i;
 
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  */
-public record ImmutableVector2d(double x, double z) implements Vector2d {
+public record VectorRecord2i(int x, int z) implements Vector2i {
     @Override
-    public Double getX() {
+    public Integer getX() {
         return x;
     }
 
     @Override
-    public Double getZ() {
+    public Integer getZ() {
         return z;
     }
 }

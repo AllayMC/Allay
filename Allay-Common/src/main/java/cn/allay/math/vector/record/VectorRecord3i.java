@@ -1,16 +1,21 @@
 package cn.allay.math.vector.record;
 
-import cn.allay.math.vector.interfaces.Vector2i;
+import cn.allay.math.vector.interfaces.Vector3i;
 
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  */
-public record ImmutableVector2i(int x, int z) implements Vector2i {
+public record VectorRecord3i(int x, int y, int z) implements Vector3i {
     @Override
     public Integer getX() {
         return x;
+    }
+
+    @Override
+    public Integer getY() {
+        return y;
     }
 
     @Override
