@@ -102,20 +102,20 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
                     List<ComponentImpl> dependencies = new ArrayList<>(components);
                     var count = Integer.MAX_VALUE;
                     var requireCompId = annotation.namespaceId();
-                    //尝试通过继承关系查找依赖
-                    //尝试通过namespaceId进行匹配
+                    //Try to find dependencies through inheritance
+                    //Try to match by namespace ID
                     if (!requireCompId.isBlank())
                         dependencies = dependencies.stream().filter(dependency -> dependency.getNamespaceId().equals(requireCompId)).toList();
                     else
                         dependencies = dependencies.stream().filter(type::isInstance).toList();
                     count = dependencies.size();
-                    //匹配到多个依赖
+                    //Matches to multiple dependencies
                     if (count > 1)
                         throw new ComponentInjectException("Found multiple dependencies " + type.getName() + " for " + component.getClass().getName());
-                    //无可用依赖
+                    //No dependencies available
                     if (count == 0)
                         throw new ComponentInjectException("Cannot find dependency " + type.getName() + " for " + component.getClass().getName());
-                    //注入依赖
+                    //Inject dependencies
                     var dependency = dependencies.get(0);
                     field.setAccessible(true);
                     try {

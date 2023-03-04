@@ -25,6 +25,13 @@
             <version>3.0.0.Beta1-SNAPSHOT</version>
         </dependency>
 
+        <!-- Common -->
+        <dependency>
+            <groupId>cn.allay</groupId>
+            <artifactId>Allay-Common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- Annotations -->
         <dependency>
             <groupId>org.projectlombok</groupId>
