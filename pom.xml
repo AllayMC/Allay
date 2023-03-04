@@ -12,6 +12,7 @@
     <modules>
         <module>Allay-Server</module>
         <module>Allay-Component-Inject</module>
+        <module>Allay-Common</module>
     </modules>
 
     <name>Allay</name>

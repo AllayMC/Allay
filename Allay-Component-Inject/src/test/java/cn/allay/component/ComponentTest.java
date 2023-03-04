@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  */
-public class ComponentTest {
+class ComponentTest {
 
     protected static ComponentGroup<Sheep> componentGroup;
     protected static Class<Sheep> parentClass;
@@ -29,10 +29,11 @@ public class ComponentTest {
     protected static Sheep sheep;
 
     @BeforeAll
-    public static void init() {
+    static void init() {
         parentClass = Sheep.class;
         components = List.of(
                 new SimpleNameComponent("Sheep"),
+                new SimpleNameComponent("BigSheep"),
                 new SimpleHealthComponent(20),
                 new SimpleAttackComponent());
         componentGroup = new SimpleComponentGroup<>(
@@ -43,7 +44,7 @@ public class ComponentTest {
 
     @SneakyThrows
     @Test
-    public void testInjector() {
+    void testInjector() {
         sheep = new SimpleComponentInjector<>(componentGroup)
                 .inject()
                 .getDeclaredConstructor()
@@ -53,16 +54,16 @@ public class ComponentTest {
         sheep.attack(10);
         assertEquals(10, sheep.getHealth());
         var runtime = (RuntimeComponentObject) sheep;
-        assertEquals(runtime.getComponents(), components);
+        assertEquals(components, runtime.getComponents());
     }
 
     @Test
-    public void testComponentGroup() {
-        assertEquals(componentGroup.getComponents(), components);
+    void testComponentGroup() {
+        assertEquals(components, componentGroup.getComponents());
     }
 
     @Test
-    public void testParentClass() {
-        assertEquals(componentGroup.getParentClass(), parentClass);
+    void testParentClass() {
+        assertEquals(parentClass, componentGroup.getParentClass());
     }
 }
