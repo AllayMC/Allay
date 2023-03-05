@@ -10,13 +10,15 @@ buildscript {
 }
 
 group = "cn.allay"
-plugins{
+plugins {
     `kotlin-dsl`
     idea
 }
 
-apply(plugin = "java")
-apply(plugin = "com.github.johnrengelman.shadow")
+//不构建这个根项目,这个只作为控制子模块
+tasks.forEach {
+    it.enabled = false
+}
 
 subprojects {
     apply(plugin = "java-library")
