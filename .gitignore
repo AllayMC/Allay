@@ -1,5 +1,4 @@
-/Allay-Component-Inject/target/
 /.idea/
-/Allay-Server/target/
-/test/
-/Allay-Common/target/
+/.gradle/
+buildSrc/**
+**/build
