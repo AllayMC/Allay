@@ -1,8 +1,9 @@
 package cn.allay.math.impl;
 
-import cn.allay.level.Level;
+import cn.allay.level.ILevel;
 import cn.allay.math.interfaces.ILocation;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: daoge_cmd <br>
@@ -16,5 +17,18 @@ public class Location implements ILocation {
     double z;
     double yaw;
     double pitch;
-    Level level;
+    ILevel level;
+
+    private Location(double x, double y, double z, double yaw, double pitch, ILevel level) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.level = level;
+    }
+
+    public static @NotNull ILocation of(double x, double y, double z, double yaw, double pitch, ILevel level) {
+        return new Location(x, y, z, yaw, pitch, level);
+    }
 }

@@ -1,6 +1,6 @@
 package cn.allay.math.interfaces;
 
-import cn.allay.level.Level;
+import cn.allay.level.ILevel;
 
 /**
  * Author: daoge_cmd <br>
@@ -8,5 +8,5 @@ import cn.allay.level.Level;
  * Allay Project <br>
  */
 public interface IPosition extends IVector3 {
-    Level getLevel();
+    ILevel getLevel();
 }

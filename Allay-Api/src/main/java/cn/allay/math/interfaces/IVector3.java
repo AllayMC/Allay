@@ -89,7 +89,7 @@ public interface IVector3 extends IVector {
     /**
      * Divides the vector by another.
      *
-     * @param vec the vec
+     * @param vector3 the vec
      * @return the vector 2
      */
     default @NotNull IVector3 divide(@NotNull IVector3 vector3) {
