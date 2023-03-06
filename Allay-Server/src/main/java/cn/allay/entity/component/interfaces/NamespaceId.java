@@ -1,7 +1,7 @@
 package cn.allay.entity.component.interfaces;
 
-import cn.allay.component.annotation.Inject;
-import cn.allay.identifier.Identifier;
+import cn.allay.inject.annotation.Inject;
+import cn.allay.utils.Identifier;
 
 /**
  * Author: daoge_cmd <br>
