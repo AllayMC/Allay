@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
- * Allay Project <br>
- *
  * String helpers
  */
 public class StringUtils {

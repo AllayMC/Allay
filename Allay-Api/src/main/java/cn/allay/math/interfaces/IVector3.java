@@ -3,10 +3,6 @@ package cn.allay.math.interfaces;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
- * Allay Project <br>
- * <p>
  * Describes a three-dimensional vector
  */
 public interface IVector3 extends IVector {

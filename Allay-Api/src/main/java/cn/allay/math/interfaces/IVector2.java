@@ -2,11 +2,6 @@ package cn.allay.math.interfaces;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
- * Allay Project <br>
- */
 public interface IVector2 extends IVector {
     /**
      * Gets the X component.

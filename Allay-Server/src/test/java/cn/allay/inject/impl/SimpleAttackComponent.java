@@ -1,10 +1,10 @@
 package cn.allay.inject.impl;
 
-import cn.allay.component.interfaces.AttackComponent;
-import cn.allay.component.interfaces.HealthComponent;
 import cn.allay.inject.annotation.Dependency;
 import cn.allay.inject.annotation.Impl;
+import cn.allay.inject.interfaces.AttackComponent;
 import cn.allay.inject.interfaces.ComponentImpl;
+import cn.allay.inject.interfaces.HealthComponent;
 
 /**
  * Author: daoge_cmd <br>

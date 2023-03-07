@@ -7,10 +7,6 @@ import static cn.allay.utils.IdentifierUtils.isPathValid;
 import static cn.allay.utils.StringUtils.fastTwoPartSplit;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
- * Allay Project <br>
- * <p>
  * NamespaceId
  */
 @Getter

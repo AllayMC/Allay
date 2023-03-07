@@ -5,10 +5,6 @@ import javax.annotation.Nullable;
 import static cn.allay.utils.StringUtils.fastTwoPartSplit;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
- * Allay Project <br>
- * <p>
  * Some helper for {@link Identifier}
  */
 public final class IdentifierUtils {
