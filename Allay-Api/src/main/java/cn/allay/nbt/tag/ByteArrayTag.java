@@ -1,14 +1,11 @@
 package cn.allay.nbt.tag;
 
-import lombok.Getter;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 
 public class ByteArrayTag extends Tag {
-    @Getter
     protected byte[] data;
 
     public ByteArrayTag() {
@@ -21,6 +18,10 @@ public class ByteArrayTag extends Tag {
     @Override
     public int getId() {
         return BYTE_ARRAY;
+    }
+
+    public byte[] getData() {
+        return data;
     }
 
     @Override
