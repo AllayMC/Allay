@@ -9,8 +9,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
-    private List<T> list = new ArrayList<>();
-    private Integer type;
+    protected List<T> list = new ArrayList<>();
+    protected Integer type;
 
     public ListTag() {
     }

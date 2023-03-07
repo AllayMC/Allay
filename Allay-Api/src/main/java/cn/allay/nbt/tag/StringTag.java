@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class StringTag extends Tag {
-    public String data;
+    protected String data;
 
     public StringTag() {
     }

@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class ByteArrayTag extends Tag {
     @Getter
-    byte[] data;
+    protected byte[] data;
 
     public ByteArrayTag() {
     }

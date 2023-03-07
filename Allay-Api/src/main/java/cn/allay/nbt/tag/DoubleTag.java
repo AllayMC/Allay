@@ -5,7 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 public class DoubleTag extends NumberTag<Double> {
-    public double data;
+    protected double data;
 
     public DoubleTag() {
     }

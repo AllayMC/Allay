@@ -5,7 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 public class ShortTag extends NumberTag<Short> {
-    public int data;
+    protected int data;
 
     public ShortTag() {
     }

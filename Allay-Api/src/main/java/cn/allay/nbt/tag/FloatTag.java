@@ -5,7 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 public class FloatTag extends NumberTag<Float> {
-    public float data;
+    protected float data;
 
     public FloatTag() {
     }

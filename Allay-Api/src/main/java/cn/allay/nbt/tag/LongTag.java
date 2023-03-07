@@ -5,7 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 public class LongTag extends NumberTag<Long> {
-    public long data;
+    protected long data;
 
     public LongTag() {
     }

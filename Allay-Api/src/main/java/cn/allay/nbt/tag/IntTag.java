@@ -5,7 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 public class IntTag extends NumberTag<Integer> {
-    public int data;
+    protected int data;
 
     public IntTag() {
     }
