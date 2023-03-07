@@ -9,7 +9,6 @@ public class IntArrayTag extends Tag {
     public int[] data;
 
     public IntArrayTag() {
-
     }
 
     public IntArrayTag(int[] data) {

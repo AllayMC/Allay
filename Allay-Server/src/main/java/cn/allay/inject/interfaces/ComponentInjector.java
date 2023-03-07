@@ -3,10 +3,6 @@ package cn.allay.inject.interfaces;
 import java.util.List;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
- * Allay Project <br>
- *
  * This interface describes a component injector
  */
 public interface ComponentInjector<T> {

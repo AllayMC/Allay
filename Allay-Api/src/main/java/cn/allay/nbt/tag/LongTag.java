@@ -8,7 +8,6 @@ public class LongTag extends NumberTag<Long> {
     public long data;
 
     public LongTag() {
-
     }
 
     public LongTag(long data) {

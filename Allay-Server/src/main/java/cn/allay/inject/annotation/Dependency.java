@@ -6,10 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
- * Allay Project <br>
- *
  * Used to describe the interdependencies between components
  */
 @Retention(RetentionPolicy.RUNTIME)

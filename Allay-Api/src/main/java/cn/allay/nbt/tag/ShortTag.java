@@ -8,7 +8,6 @@ public class ShortTag extends NumberTag<Short> {
     public int data;
 
     public ShortTag() {
-
     }
 
     public ShortTag(int data) {

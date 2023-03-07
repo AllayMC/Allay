@@ -8,7 +8,6 @@ public class IntTag extends NumberTag<Integer> {
     public int data;
 
     public IntTag() {
-
     }
 
     public IntTag(int data) {

@@ -6,11 +6,6 @@ import cn.allay.inject.interfaces.ComponentImpl;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
- * Allay Project <br>
- */
 public class SimpleComponentGroup<T> implements ComponentGroup<T> {
 
     protected Class<T> parentClass;

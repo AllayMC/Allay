@@ -82,7 +82,7 @@ public final class SNBTParser {
                         }
                     }
                 } else {
-                    result.put(key, new EndTag());
+                    throw new ParseException();
                 }
             }
         }

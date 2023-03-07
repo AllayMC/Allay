@@ -16,10 +16,6 @@ import net.bytebuddy.matcher.ElementMatchers;
 import java.util.*;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
- * Allay Project <br>
- *
  * The default injector which use byte-buddy
  */
 public class SimpleComponentInjector<T> implements ComponentInjector<T> {
