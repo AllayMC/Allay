@@ -1,6 +1,6 @@
 package cn.allay.math.impl;
 
-import cn.allay.level.ILevel;
+import cn.allay.level.Level;
 import cn.allay.math.interfaces.ILocation;
 import lombok.Data;
 
@@ -11,9 +11,9 @@ public class Location implements ILocation {
     double z;
     double yaw;
     double pitch;
-    ILevel level;
+    Level level;
 
-    public Location(double x, double y, double z, double yaw, double pitch, ILevel level) {
+    public Location(double x, double y, double z, double yaw, double pitch, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;

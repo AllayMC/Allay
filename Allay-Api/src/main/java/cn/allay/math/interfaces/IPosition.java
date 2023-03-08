@@ -1,7 +1,7 @@
 package cn.allay.math.interfaces;
 
-import cn.allay.level.ILevel;
+import cn.allay.level.Level;
 
 public interface IPosition extends IVector3 {
-    ILevel getLevel();
+    Level getLevel();
 }

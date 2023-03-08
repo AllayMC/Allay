@@ -1,6 +1,6 @@
 package cn.allay.math.impl;
 
-import cn.allay.level.ILevel;
+import cn.allay.level.Level;
 import cn.allay.math.interfaces.IPosition;
 import lombok.Data;
 
@@ -9,9 +9,9 @@ public class Position implements IPosition {
     double x;
     double y;
     double z;
-    ILevel level;
+    Level level;
 
-    public Position(double x, double y, double z, ILevel level) {
+    public Position(double x, double y, double z, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -19,7 +19,7 @@ public class Position implements IPosition {
     }
 
     @Override
-    protected Position clone() throws CloneNotSupportedException {
-        return (Position) super.clone();
+    protected IPosition clone() throws CloneNotSupportedException {
+        return (IPosition) super.clone();
     }
 }

@@ -16,7 +16,7 @@ public class Vector3 implements IVector3 {
     }
 
     @Override
-    protected IVector3 clone() throws CloneNotSupportedException {
-        return (IVector3) super.clone();
+    protected Vector3 clone() throws CloneNotSupportedException {
+        return (Vector3) super.clone();
     }
 }
