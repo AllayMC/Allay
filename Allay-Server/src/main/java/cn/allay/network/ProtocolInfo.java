@@ -21,7 +21,8 @@ public final class ProtocolInfo {
         registerDefaultPacketCodec(Bedrock_v568.CODEC);
     }
 
-    private ProtocolInfo() {}
+    private ProtocolInfo() {
+    }
 
     @Nullable
     public static BedrockCodec getPacketCodec(@Nonnegative int protocolVersion) {

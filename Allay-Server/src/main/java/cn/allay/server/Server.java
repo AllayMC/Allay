@@ -6,9 +6,11 @@ package cn.allay.server;
 public interface Server {
     /**
      * Initialize the server
+     *
      * @return true if success
      */
     void initServer();
+
     /**
      * Start the server main loop
      */
@@ -16,6 +18,7 @@ public interface Server {
 
     /**
      * Get the server settings
+     *
      * @return the server settings
      */
     ServerSettings getServerSettings();

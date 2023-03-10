@@ -1,7 +1,7 @@
 package cn.allay.server;
 
-import cn.allay.network.Network;
 import cn.allay.network.AllayNetwork;
+import cn.allay.network.Network;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,8 @@ public final class AllayServer implements Server {
     @Override
     public void startMainLoop() {
         //TODO
-        while (true){}
+        while (true) {
+        }
     }
 
     @Override

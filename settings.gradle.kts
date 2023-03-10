@@ -1,5 +1,4 @@
 rootProject.name = "Allay"
-include(":Allay-Component-Inject")
-include(":Allay-Level")
-include(":Allay-Common")
+include(":Allay-API")
 include(":Allay-Server")
+include(":Allay-Level-Loader")

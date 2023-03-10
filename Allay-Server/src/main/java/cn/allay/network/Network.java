@@ -10,6 +10,8 @@ public interface Network {
      * Initialize the network component
      */
     void start();
+
     BedrockPong getPong();
+
     void updatePong();
 }

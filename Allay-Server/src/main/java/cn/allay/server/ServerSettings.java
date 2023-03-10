@@ -12,4 +12,5 @@ public record ServerSettings(
         int maxPlayerCount,
         String ip,
         int port
-) {}
+) {
+}

@@ -7,8 +7,8 @@ application {
 }
 
 dependencies {
-    api(project(":Allay-Common"))
-    api(project(":Allay-Component-Inject"))
+    implementation(project(":Allay-API"))
+    implementation(project(":Allay-Level-Loader"))
     api(libs.network)
     api(libs.fastutil)
     api(libs.guava)
