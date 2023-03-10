@@ -4,6 +4,7 @@ import cn.allay.component.annotation.Dependency;
 import cn.allay.component.annotation.Impl;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.TestDependencyComponent;
+import cn.allay.identifier.Identifier;
 
 /**
  * Author: daoge_cmd <br>
@@ -11,6 +12,9 @@ import cn.allay.component.interfaces.TestDependencyComponent;
  * Allay Project <br>
  */
 public class SimpleTestDependencyComponent implements ComponentImpl, TestDependencyComponent {
+
+    private static final Identifier IDENTIFIER = new Identifier("minecraft:test_component");
+
 
     @Dependency(namespaceId = "minecraft:name_component")
     protected ComponentImpl nameComponent;
@@ -22,8 +26,8 @@ public class SimpleTestDependencyComponent implements ComponentImpl, TestDepende
     protected ComponentImpl attackComponent;
 
     @Override
-    public String getNamespaceId() {
-        return "minecraft:test_component";
+    public Identifier getNamespaceId() {
+        return IDENTIFIER;
     }
 
     @Impl

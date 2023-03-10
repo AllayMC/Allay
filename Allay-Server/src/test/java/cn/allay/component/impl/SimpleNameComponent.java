@@ -3,6 +3,7 @@ package cn.allay.component.impl;
 import cn.allay.component.annotation.Impl;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.NameComponent;
+import cn.allay.identifier.Identifier;
 
 /**
  * Author: daoge_cmd <br>
@@ -10,6 +11,8 @@ import cn.allay.component.interfaces.NameComponent;
  * Allay Project <br>
  */
 public class SimpleNameComponent implements NameComponent, ComponentImpl {
+
+    private static final Identifier IDENTIFIER = new Identifier("minecraft:name_component");
 
     protected String name;
 
@@ -24,7 +27,7 @@ public class SimpleNameComponent implements NameComponent, ComponentImpl {
     }
 
     @Override
-    public String getNamespaceId() {
-        return "minecraft:name_component";
+    public Identifier getNamespaceId() {
+        return IDENTIFIER;
     }
 }

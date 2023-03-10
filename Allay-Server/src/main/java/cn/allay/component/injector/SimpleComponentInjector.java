@@ -8,6 +8,7 @@ import cn.allay.component.group.ComponentGroup;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.component.interfaces.RuntimeComponentObject;
+import cn.allay.identifier.Identifier;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -83,7 +84,7 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
     }
 
     protected void checkComponentValid() {
-        Set<String> identifiers = new HashSet<>();
+        Set<Identifier> identifiers = new HashSet<>();
         for (var component : components) {
             var identifier = component.getNamespaceId();
             if (identifiers.contains(identifier))
@@ -105,7 +106,7 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
                     //Try to find dependencies through inheritance
                     //Try to match by namespace ID
                     if (!requireCompId.isBlank())
-                        dependencies = dependencies.stream().filter(dependency -> dependency.getNamespaceId().equals(requireCompId)).toList();
+                        dependencies = dependencies.stream().filter(dependency -> dependency.getNamespaceId().toString().equals(requireCompId)).toList();
                     else
                         dependencies = dependencies.stream().filter(type::isInstance).toList();
                     count = dependencies.size();
@@ -127,4 +128,6 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
             }
         }
     }
+
+
 }

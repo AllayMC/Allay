@@ -3,6 +3,7 @@ package cn.allay.component.impl;
 import cn.allay.component.annotation.Impl;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.HealthComponent;
+import cn.allay.identifier.Identifier;
 
 /**
  * Author: daoge_cmd <br>
@@ -10,6 +11,8 @@ import cn.allay.component.interfaces.HealthComponent;
  * Allay Project <br>
  */
 public class SimpleHealthComponent implements HealthComponent, ComponentImpl {
+
+    private static final Identifier IDENTIFIER = new Identifier("minecraft:health_component");
 
     protected final int maxHealth;
     protected int health;
@@ -48,7 +51,7 @@ public class SimpleHealthComponent implements HealthComponent, ComponentImpl {
     }
 
     @Override
-    public String getNamespaceId() {
-        return "minecraft:health_component";
+    public Identifier getNamespaceId() {
+        return IDENTIFIER;
     }
 }

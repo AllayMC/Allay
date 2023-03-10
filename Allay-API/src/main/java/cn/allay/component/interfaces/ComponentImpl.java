@@ -1,5 +1,7 @@
 package cn.allay.component.interfaces;
 
+import cn.allay.identifier.Identifier;
+
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/4 <br>
@@ -8,5 +10,5 @@ package cn.allay.component.interfaces;
  * Describe the implementation of a component
  */
 public interface ComponentImpl {
-    String getNamespaceId();
+    Identifier getNamespaceId();
 }

@@ -5,6 +5,7 @@ import cn.allay.component.annotation.Impl;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.AttackComponent;
 import cn.allay.component.interfaces.HealthComponent;
+import cn.allay.identifier.Identifier;
 
 /**
  * Author: daoge_cmd <br>
@@ -12,6 +13,8 @@ import cn.allay.component.interfaces.HealthComponent;
  * Allay Project <br>
  */
 public class SimpleAttackComponent implements AttackComponent, ComponentImpl {
+
+    private static final Identifier IDENTIFIER = new Identifier("minecraft:attack_component");
 
     @Dependency
     protected HealthComponent healthComponent;
@@ -23,7 +26,7 @@ public class SimpleAttackComponent implements AttackComponent, ComponentImpl {
     }
 
     @Override
-    public String getNamespaceId() {
-        return "minecraft:attack_component";
+    public Identifier getNamespaceId() {
+        return IDENTIFIER;
     }
 }
