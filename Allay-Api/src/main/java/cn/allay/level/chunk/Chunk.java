@@ -15,62 +15,231 @@ import java.util.Set;
 
 public interface Chunk extends Comparable<Chunk> {
     /**
-     * 代表块被新建
+     * Chunk New
      */
     int STATE_NEW = 0;
+    /**
+     * Chunk has generated terrain
+     */
     int STATE_GENERATED = 1;
+    /**
+     * Chunk have been filled with terrain
+     */
     int STATE_POPULATED = 2;
+    /**
+     * Chunk Completion
+     */
     int STATE_FINISHED = 3;
 
-    ChunkSection getOrCreateSection(@NonNegative int fY);
+    /**
+     * Gets or create section.
+     *
+     * @param y the section Y
+     * @return the section or create section
+     */
+    ChunkSection getOrCreateSection(@NonNegative int y);
 
+    /**
+     * Get section.
+     *
+     * @param y the section Y
+     * @return the section
+     */
     @Nullable
-    ChunkSection getSection(@NonNegative int fY);
+    ChunkSection getSection(@NonNegative int y);
 
-    boolean setSection(@NonNegative float fY, ChunkSection section);
+    /**
+     * Set the section.
+     *
+     * @param y       the section Y
+     * @param section the section
+     * @return is success set the section
+     */
+    boolean setSection(@NonNegative float y, ChunkSection section);
 
+    /**
+     * Get sections
+     *
+     * @return the chunk all sections
+     */
     ChunkSection[] getSections();
 
+    /**
+     * Get a BlockState.
+     *
+     * @param x the chunkX(0-15)
+     * @param y the y
+     * @param z the chunkZ(0-15)
+     * @return the BlockState
+     */
     default BlockState getBlock(int x, int y, int z) {
         return this.getBlock(x, y, z, 0);
     }
 
+    /**
+     * Get a BlockState.
+     *
+     * @param x     the chunkX(0-15)
+     * @param y     the y
+     * @param z     the chunkZ(0-15)
+     * @param layer the data layer(0 or 1)
+     * @return the BlockState
+     */
     BlockState getBlock(int x, int y, int z, @NonNegative int layer);
 
+    /**
+     * Get and Set BlockState.
+     *
+     * @param x          the chunkX(0-15)
+     * @param y          the y
+     * @param z          the chunkZ(0-15)
+     * @param blockState the BlockState to be set
+     * @return the BlockState
+     */
     default BlockState getAndSetBlock(int x, int y, int z, BlockState blockState) {
         return this.getAndSetBlock(x, y, z, 0, blockState);
     }
 
+    /**
+     * Get and Set BlockState.
+     *
+     * @param x          the chunkX(0-15)
+     * @param y          the y
+     * @param z          the chunkZ(0-15)
+     * @param layer      the data layer(0 or 1)
+     * @param blockState the BlockState to be set
+     * @return the BlockState
+     */
     BlockState getAndSetBlock(int x, int y, int z, @NonNegative int layer, BlockState blockState);
 
+    /**
+     * Set a BlockState.
+     *
+     * @param x          the chunkX(0-15)
+     * @param y          the y
+     * @param z          the chunkZ(0-15)
+     * @param blockState the BlockState to be set
+     */
     default void setBlock(int x, int y, int z, BlockState blockState) {
         this.setBlock(x, y, z, 0, blockState);
     }
 
+    /**
+     * Set a BlockState.
+     *
+     * @param x          the chunkX(0-15)
+     * @param y          the y
+     * @param z          the chunkZ(0-15)
+     * @param layer      the data layer(0 or 1)
+     * @param blockState the BlockState to be set
+     */
     void setBlock(int x, int y, int z, @NonNegative int layer, BlockState blockState);
 
-    int getBiomeId(int x, int z);
+    /**
+     * Get a biome id at pos
+     *
+     * @param x the chunkX(0-15)
+     * @param y the y
+     * @param z the chunkZ(0-15)
+     * @return the biome id
+     */
+    int getBiomeId(int x, int y, int z);
 
-    void setBiomeId(int x, int z, int biome);
+    /**
+     * set a biome id at pos
+     *
+     * @param x       the chunkX(0-15)
+     * @param y       the y
+     * @param z       the chunkZ(0-15)
+     * @param biomeId the biomeId
+     */
+    void setBiomeId(int x, int y, int z, int biomeId);
 
-    void setBiome(int x, int z, Biome biome);
+    /**
+     * set a biome at pos
+     *
+     * @param x     the chunkX(0-15)
+     * @param y     the y
+     * @param z     the chunkZ(0-15)
+     * @param biome the biome
+     */
+    void setBiome(int x, int y, int z, Biome biome);
 
+    /**
+     * get a SkyLight at pos
+     *
+     * @param x the chunkX(0-15)
+     * @param y the y
+     * @param z the chunkZ(0-15)
+     * @return SkyLight(0 - 15)
+     */
     byte getSkyLight(int x, int y, int z);
 
+    /**
+     * set a SkyLight at pos
+     *
+     * @param x     the chunkX(0-15)
+     * @param y     the y
+     * @param z     the chunkZ(0-15)
+     * @param level the SkyLight level(0 - 15)
+     */
     void setSkyLight(int x, int y, int z, @NonNegative int level);
 
+    /**
+     * get a BlockLight at pos
+     *
+     * @param x the chunkX(0-15)
+     * @param y the y
+     * @param z the chunkZ(0-15)
+     * @return BlockLight(0 - 15)
+     */
     byte getBlockLight(int x, int y, int z);
 
+    /**
+     * set a SkyLight at pos
+     *
+     * @param x     the chunkX(0-15)
+     * @param y     the y
+     * @param z     the chunkZ(0-15)
+     * @param level the BlockLight level(0 - 15)
+     */
     void setBlockLight(int x, int y, int z, @NonNegative int level);
 
+    /**
+     * Get the highest block at pos.
+     *
+     * @param x the chunkX(0-15)
+     * @param z the chunkZ(0-15)
+     * @return the highest block
+     */
     int getHighestBlock(int x, int z);
 
+    /**
+     * Add entity.
+     *
+     * @param entity the entity
+     */
     void addEntity(@NotNull Entity entity);
 
+    /**
+     * Remove entity.
+     *
+     * @param entity the entity
+     */
     void removeEntity(Entity entity);
 
+    /**
+     * Add block entity.
+     *
+     * @param blockEntity the block entity
+     */
     void addBlockEntity(BlockEntity blockEntity);
 
+    /**
+     * Remove block entity.
+     *
+     * @param blockEntity the block entity
+     */
     void removeBlockEntity(BlockEntity blockEntity);
 
     /**
@@ -108,8 +277,18 @@ public interface Chunk extends Comparable<Chunk> {
      */
     int[] getHeightMapArray();
 
+    /**
+     * Get a copy of the SkyLight array.
+     *
+     * @return height map
+     */
     byte[] getBlockSkyLightArray();
 
+    /**
+     * Get a copy of the BlockLight array.
+     *
+     * @return the byte [ ]
+     */
     byte[] getBlockLightArray();
 
     /**
@@ -189,13 +368,6 @@ public interface Chunk extends Comparable<Chunk> {
 
     void save();
 
-    /**
-     * @return this chunk's key
-     */
-    default long key() {
-        return (((long) getX()) << 32) | (getZ() & 0xffffffffL);
-    }
-
     int getMaxHeight();
 
     int getMinHeight();
@@ -203,6 +375,13 @@ public interface Chunk extends Comparable<Chunk> {
     Set<ChunkLoader> getLoaders();
 
     Set<Player> getPlayerLoaders();
+
+    /**
+     * @return this chunk's key
+     */
+    default long key() {
+        return (((long) getX()) << 32) | (getZ() & 0xffffffffL);
+    }
 
     @Override
     default int compareTo(Chunk o) {
