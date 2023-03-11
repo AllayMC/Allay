@@ -4,10 +4,9 @@ import cn.allay.component.annotation.Dependency;
 import cn.allay.component.annotation.Impl;
 import cn.allay.component.annotation.Inject;
 import cn.allay.component.exception.ComponentInjectException;
-import cn.allay.component.group.ComponentGroup;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.ComponentInjector;
-import cn.allay.component.interfaces.RuntimeComponentObject;
+import cn.allay.component.interfaces.ComponentedObject;
 import cn.allay.identifier.Identifier;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.FixedValue;
@@ -29,9 +28,7 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
     protected Class<T> parentClass;
     protected List<ComponentImpl> components = new ArrayList<>();
 
-    public SimpleComponentInjector(ComponentGroup<T> componentGroup) {
-        loadComponentGroup(componentGroup);
-    }
+    public SimpleComponentInjector() {}
 
     @Override
     public ComponentInjector<T> parentClass(Class<T> parentClass) {
@@ -44,15 +41,6 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
     public ComponentInjector<T> withComponent(List<ComponentImpl> components) {
         Objects.requireNonNull(components, "The components cannot be null");
         this.components.addAll(components);
-        return this;
-    }
-
-    @Override
-    public ComponentInjector<T> loadComponentGroup(ComponentGroup<T> componentGroup) {
-        Objects.requireNonNull(componentGroup.getParentClass(), "The parent class cannot be null");
-        Objects.requireNonNull(componentGroup.getComponents(), "The components cannot be null");
-        this.components = componentGroup.getComponents();
-        this.parentClass = componentGroup.getParentClass();
         return this;
     }
 
@@ -75,7 +63,7 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
                         .intercept(MethodDelegation.to(component));
             }
         }
-        bb = bb.implement(RuntimeComponentObject.class)
+        bb = bb.implement(ComponentedObject.class)
                 .method(named("getComponents"))
                 .intercept(FixedValue.value(Collections.unmodifiableList(components)));
         return (Class<T>) bb.make()

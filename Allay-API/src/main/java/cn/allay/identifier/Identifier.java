@@ -11,10 +11,10 @@ import static cn.allay.utils.StringUtils.fastTwoPartSplit;
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  * <p>
- * NamespaceId
+ * A simple logging class that implements the Identified interface
  */
 @Getter
-public final class Identifier {
+public final class Identifier implements Identified {
     public static final String NAMESPACE_SEPARATOR = ":";
     public static final String DEFAULT_NAMESPACE = "minecraft";
 
@@ -54,5 +54,10 @@ public final class Identifier {
 
     public int hashCode() {
         return 31 * this.namespace.hashCode() + this.path.hashCode();
+    }
+
+    @Override
+    public Identifier getIdentifier() {
+        return this;
     }
 }

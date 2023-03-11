@@ -3,15 +3,15 @@ plugins {
 }
 
 dependencies {
-    api(libs.bytebuddy)
-    api(libs.bundles.terminal)
     api(libs.bundles.log4j)
+    api(libs.bundles.terminal)
     api(libs.network)
     api(libs.fastutil)
     api(libs.guava)
     api(libs.gson)
     api(libs.snakeyaml)
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testImplementation libs.bytebuddy
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 

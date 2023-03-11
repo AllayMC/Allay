@@ -1,13 +1,20 @@
 package cn.allay.server;
 
+import cn.allay.api.AllayAPI;
+
 /**
  * The server interface
  */
 public interface Server {
+
+    Server INSTANCE = AllayAPI.getInstance().get(Server.class);
+
+    static Server getInstance() {
+        return INSTANCE;
+    }
+
     /**
      * Initialize the server
-     *
-     * @return true if success
      */
     void initServer();
 

@@ -9,7 +9,7 @@ import java.util.List;
  * <p>
  * The object which has been built by {@link ComponentInjector}
  */
-public interface RuntimeComponentObject {
+public interface ComponentedObject {
     /**
      * @return Components provided when constructing the object
      */

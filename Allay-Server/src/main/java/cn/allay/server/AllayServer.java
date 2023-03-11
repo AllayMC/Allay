@@ -24,6 +24,7 @@ public final class AllayServer implements Server {
     public void startMainLoop() {
         //TODO
         while (true) {
+
         }
     }
 

@@ -1,6 +1,6 @@
 package cn.allay.component.interfaces;
 
-import cn.allay.component.group.ComponentGroup;
+import cn.allay.api.AllayAPI;
 
 import java.util.List;
 
@@ -12,6 +12,13 @@ import java.util.List;
  * This interface describes a component injector
  */
 public interface ComponentInjector<T> {
+
+    ComponentInjectorFactory FACTORY = AllayAPI.getInstance().get(ComponentInjectorFactory.class);
+
+    static <U> ComponentInjector<U> createInjector() {
+        return FACTORY.get();
+    }
+
     /**
      * Defines the parent class for this injector
      *
@@ -30,15 +37,8 @@ public interface ComponentInjector<T> {
     ComponentInjector<T> withComponent(List<ComponentImpl> components);
 
     /**
-     * Load components & parent class from a {@link ComponentGroup}
-     *
-     * @param componentGroup the component group
-     * @return the injector
-     */
-    ComponentInjector<T> loadComponentGroup(ComponentGroup<T> componentGroup);
-
-    /**
-     * Build the class
+     * Build the class<br/>
+     * Note that we guarantee that the returned class implements the {@link ComponentedObject} interface
      *
      * @return the class
      */

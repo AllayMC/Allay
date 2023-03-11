@@ -1,10 +1,8 @@
 package cn.allay.component;
 
-import cn.allay.component.group.ComponentGroup;
-import cn.allay.component.group.SimpleComponentGroup;
 import cn.allay.component.injector.SimpleComponentInjector;
 import cn.allay.component.interfaces.ComponentImpl;
-import cn.allay.component.interfaces.RuntimeComponentObject;
+import cn.allay.component.interfaces.ComponentedObject;
 import cn.allay.component.impl.SimpleAttackComponent;
 import cn.allay.component.impl.SimpleHealthComponent;
 import cn.allay.component.impl.SimpleNameComponent;
@@ -28,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 class ComponentTest {
 
-    protected static ComponentGroup<Sheep> componentGroup;
     protected static Class<Sheep> parentClass;
     protected static List<ComponentImpl> components;
     protected static Sheep sheep;
@@ -41,16 +38,14 @@ class ComponentTest {
                 new SimpleHealthComponent(20),
                 new SimpleAttackComponent(),
                 new SimpleTestDependencyComponent());
-        componentGroup = new SimpleComponentGroup<>(
-                parentClass,
-                components
-        );
     }
 
     @SneakyThrows
     @Test
     void testInjector() {
-        sheep = new SimpleComponentInjector<>(componentGroup)
+        sheep = new SimpleComponentInjector<Sheep>()
+                .parentClass(parentClass)
+                .withComponent(components)
                 .inject()
                 .getDeclaredConstructor()
                 .newInstance();
@@ -58,22 +53,12 @@ class ComponentTest {
         assertEquals(20, sheep.getHealth());
         sheep.attack(10);
         assertEquals(10, sheep.getHealth());
-        var runtime = (RuntimeComponentObject) sheep;
+        var runtime = (ComponentedObject) sheep;
         assertEquals(components, runtime.getComponents());
         assertEquals(sheep.getName(), ((NameComponent) sheep.getNameComponent()).getName());
         assertEquals(sheep.getHealth(), ((HealthComponent) sheep.getHealthComponent()).getHealth());
         assertEquals(sheep.getMaxHealth(), ((HealthComponent) sheep.getHealthComponent()).getMaxHealth());
         ((AttackComponent) sheep.getAttackComponent()).attack(10);
         assert sheep.isDead();
-    }
-
-    @Test
-    void testComponentGroup() {
-        assertEquals(components, componentGroup.getComponents());
-    }
-
-    @Test
-    void testParentClass() {
-        assertEquals(parentClass, componentGroup.getParentClass());
     }
 }

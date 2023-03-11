@@ -1,6 +1,6 @@
 [versions]
 junit = "5.9.2"
-log4j = "2.20.0"
+log4j = "2.17.2"
 jline = "3.22.0"
 
 [libraries]
@@ -17,21 +17,22 @@ bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.0" }
 # Logging dependencies
 log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j" }
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
-slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.6" }
+log4j-slf4j18-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j18-impl", version.ref = "log4j" }
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.0-alpha1" }
+terminal-console-appender = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 
 # CLI dependencies
 jline-terminal = { group = "org.jline", name = "jline-terminal", version.ref = "jline" }
 jline-terminal-jna = { group = "org.jline", name = "jline-terminal-jna", version.ref = "jline" }
 jline-reader = { group = "org.jline", name = "jline-reader", version.ref = "jline" }
-terminal-console = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 
 # Testing dependencies
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
 
 [bundles]
-log4j = ["log4j-api", "log4j-core", "slf4j-api"]
-terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader", "terminal-console"]
+log4j = ["log4j-api", "log4j-core", "log4j-slf4j18-impl", "slf4j-api", "disruptor", "terminal-console-appender"]
+terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader"]
 junit = ["junit-jupiter-api", "junit-jupiter-engine"]
 
 [plugins]
