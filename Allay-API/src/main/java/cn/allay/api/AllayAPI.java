@@ -1,6 +1,6 @@
 package cn.allay.api;
 
-import cn.allay.component.interfaces.ComponentInjectorFactory;
+import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.server.Server;
 import lombok.Getter;
 
@@ -46,13 +46,13 @@ public final class AllayAPI {
         bindings.put(api, instance);
     }
 
-    public <T> T get(Class<T> api) {
-        if (!implemented) throw new RuntimeException("AllayAPI::get cannot be called before it been implemented");
+    public <T> T getAPIInstance(Class<T> api) {
+        if (!implemented) throw new RuntimeException("AllayAPI::getAPIInstance cannot be called before it been implemented");
         return api.cast(bindings.get(api));
     }
 
     private void defaultAPIRequirements() {
         requireImpl(Server.class);
-        requireImpl(ComponentInjectorFactory.class);
+        requireImpl(ComponentInjector.ComponentInjectorFactory.class);
     }
 }

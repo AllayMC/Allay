@@ -7,7 +7,7 @@ import cn.allay.api.AllayAPI;
  */
 public interface Server {
 
-    Server INSTANCE = AllayAPI.getInstance().get(Server.class);
+    Server INSTANCE = AllayAPI.getInstance().getAPIInstance(Server.class);
 
     static Server getInstance() {
         return INSTANCE;

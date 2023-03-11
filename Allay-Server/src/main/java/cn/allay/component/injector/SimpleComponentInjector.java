@@ -116,6 +116,4 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
             }
         }
     }
-
-
 }

@@ -13,10 +13,10 @@ import java.util.List;
  */
 public interface ComponentInjector<T> {
 
-    ComponentInjectorFactory FACTORY = AllayAPI.getInstance().get(ComponentInjectorFactory.class);
+    ComponentInjectorFactory FACTORY = AllayAPI.getInstance().getAPIInstance(ComponentInjectorFactory.class);
 
     static <U> ComponentInjector<U> createInjector() {
-        return FACTORY.get();
+        return FACTORY.create();
     }
 
     /**
@@ -43,4 +43,8 @@ public interface ComponentInjector<T> {
      * @return the class
      */
     Class<T> inject();
+
+    interface ComponentInjectorFactory {
+        <R> ComponentInjector<R> create();
+    }
 }
