@@ -6,5 +6,5 @@ package cn.allay.identifier;
  * Allay Project <br>
  */
 public interface Identified {
-    Identifier getIdentifier();
+    Identifier getNamespaceId();
 }

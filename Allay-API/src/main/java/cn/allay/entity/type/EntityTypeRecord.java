@@ -52,7 +52,7 @@ public final class EntityTypeRecord<T extends Entity> implements EntityType<T> {
     }
 
     @Override
-    public Identifier getIdentifier() {
+    public Identifier getNamespaceId() {
         return identifier;
     }
 

@@ -1,7 +1,7 @@
 package cn.allay;
 
 import cn.allay.api.AllayAPI;
-import cn.allay.api.MissingBindingException;
+import cn.allay.api.MissingImplementationException;
 import cn.allay.component.injector.SimpleComponentInjector;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.server.AllayServer;
@@ -15,7 +15,7 @@ public final class Allay {
         log.info("Starting Allay...");
         try {
             initAllayAPI();
-        } catch (MissingBindingException e) {
+        } catch (MissingImplementationException e) {
             log.error("Cannot init Allay API!");
             e.printStackTrace();
             System.exit(1);
@@ -24,7 +24,7 @@ public final class Allay {
         Server.getInstance().startMainLoop();
     }
 
-    private static void initAllayAPI() throws MissingBindingException {
+    private static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         api.bind(ComponentInjector.ComponentInjectorFactory.class, SimpleComponentInjector::new);
         api.bind(Server.class, new AllayServer());

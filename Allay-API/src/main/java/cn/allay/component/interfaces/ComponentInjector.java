@@ -15,6 +15,10 @@ public interface ComponentInjector<T> {
 
     ComponentInjectorFactory FACTORY = AllayAPI.getInstance().getAPIInstance(ComponentInjectorFactory.class);
 
+    /**
+     * Create a new injector
+     * @return a new injector
+     */
     static <U> ComponentInjector<U> createInjector() {
         return FACTORY.create();
     }
