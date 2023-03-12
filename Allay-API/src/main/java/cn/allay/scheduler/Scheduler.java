@@ -18,7 +18,7 @@ public interface Scheduler {
         return FACTORY.createScheduler();
     }
 
-    boolean ticking();
+    void ticking();
 
     default void scheduleDelayed(Task task, int delay) {
         scheduleDelayed(task, delay, false);

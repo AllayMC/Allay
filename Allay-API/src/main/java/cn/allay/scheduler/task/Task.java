@@ -14,7 +14,7 @@ public interface Task {
 
     Logger LOGGER = LoggerFactory.getLogger(Task.class);
 
-    boolean onRun(long currentTick);
+    boolean onRun();
 
     default void onCancel() {
 

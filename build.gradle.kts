@@ -63,10 +63,12 @@ subprojects {
 
     tasks.named<Test>("test") {
         useJUnitPlatform()
+        jvmArgs = listOf("--enable-preview")
     }
 
     tasks.withType<JavaCompile>() {
         options.encoding = "UTF-8"
+        options.compilerArgs.add("--enable-preview")
     }
 
     tasks.withType<Javadoc>() {

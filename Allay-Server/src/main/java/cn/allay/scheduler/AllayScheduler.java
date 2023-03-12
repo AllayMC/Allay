@@ -19,7 +19,7 @@ public class AllayScheduler implements Scheduler {
     protected long tickCounter = 0;
 
     @Override
-    public boolean ticking() {
+    public void ticking() {
         tickCounter++;
         for (var iterator = runningTasks.entrySet().iterator(); iterator.hasNext(); ) {
             var entry = iterator.next();
@@ -37,7 +37,6 @@ public class AllayScheduler implements Scheduler {
                 else runTask(task, info);
             }
         }
-        return true;
     }
 
     @Override
@@ -64,7 +63,7 @@ public class AllayScheduler implements Scheduler {
 
     protected void runTask(Task task, RunningTaskInfo info) {
         try {
-            if (!task.onRun(tickCounter)) {
+            if (!task.onRun()) {
                 task.onCancel();
                 info.setStop(true);
             }
