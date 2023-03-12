@@ -1,6 +1,7 @@
 package cn.allay.api;
 
 import cn.allay.component.interfaces.ComponentInjector;
+import cn.allay.scheduler.Scheduler;
 import cn.allay.server.Server;
 import lombok.Getter;
 
@@ -79,5 +80,6 @@ public final class AllayAPI {
     private void defaultAPIRequirements() {
         requireImpl(Server.class);
         requireImpl(ComponentInjector.ComponentInjectorFactory.class);
+        requireImpl(Scheduler.SchedulerFactory.class);
     }
 }

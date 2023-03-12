@@ -1,11 +1,12 @@
 package cn.allay.server;
 
 import cn.allay.api.AllayAPI;
+import cn.allay.scheduler.taskcreator.TaskCreator;
 
 /**
  * The server interface
  */
-public interface Server {
+public interface Server extends TaskCreator {
 
     Server INSTANCE = AllayAPI.getInstance().getAPIInstance(Server.class);
 

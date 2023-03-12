@@ -49,4 +49,9 @@ public final class AllayServer implements Server {
     private Network initNetwork() {
         return new AllayNetwork(this);
     }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }
