@@ -1,7 +1,5 @@
 package cn.allay.scheduler;
 
-import cn.allay.scheduler.task.Task;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -13,23 +11,48 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Date: 2023/3/12 <br>
  * Allay Project <br>
  */
-@Slf4j
 class SchedulerTest {
     protected static Scheduler scheduler = new AllayScheduler();
 
     @Test
-    void testAsync() throws InterruptedException {
+    void testAsync() {
         AtomicLong total = new AtomicLong(0);
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             scheduler.scheduleDelayed(() -> {
-                total.addAndGet(1);
+                total.incrementAndGet();
                 return false;
             }, 1, true);
         }
         //TODO: mock tick loop, replace it!
         while(scheduler.getRunningTasks().size() != 0) {
             scheduler.ticking();
-            Thread.sleep(1);
+        }
+        assertEquals(1000000, total.get());
+    }
+
+    @Test
+    void testSync() {
+        AtomicLong total = new AtomicLong();
+        for (int i = 0; i < 1000; i++) {
+            scheduler.scheduleDelayed(() -> {
+                total.incrementAndGet();
+                return false;
+            }, 1);
+        }
+        //TODO: mock tick loop, replace it!
+        while(scheduler.getRunningTasks().size() != 0) {
+            scheduler.ticking();
+        }
+        assertEquals(1000, total.get());
+    }
+
+    @Test
+    void testRepeating() {
+        AtomicLong total = new AtomicLong();
+        scheduler.scheduleRepeating(() -> total.incrementAndGet() != 1000, 1);
+        //TODO: mock tick loop, replace it!
+        while(scheduler.getRunningTasks().size() != 0) {
+            scheduler.ticking();
         }
         assertEquals(1000, total.get());
     }

@@ -28,7 +28,7 @@ public interface Scheduler {
     void scheduleDelayed(Task task, int delay, boolean async);
 
     default void scheduleRepeating(Task task, int period) {
-        scheduleDelayed(task, period, false);
+        scheduleRepeating(task, period, false);
     }
 
     void scheduleRepeating(Task task, int period, boolean async);

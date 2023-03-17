@@ -12,6 +12,8 @@ import java.util.concurrent.Executors;
  * Author: daoge_cmd <br>
  * Date: 2023/3/12 <br>
  * Allay Project <br>
+ *
+ * The scheduler implementation in Allay
  */
 public class AllayScheduler implements Scheduler {
 
@@ -35,9 +37,13 @@ public class AllayScheduler implements Scheduler {
                     info.setNextRunTick(tickCounter + info.getPeriod());
                 //Code !info.isRunning()" check whether the previous run completed
                 //If the previous asynchronous task does not finish, the call will be postponed until the next tick
-                if (info.isAsync() && !info.isRunning())
+                if (info.isAsync() && !info.isRunning()) {
+                    info.setRunning(true);
                     asyncTaskExecutor.submit(() -> runTask(task, info));
-                else runTask(task, info);
+                } else {
+                    info.setRunning(true);
+                    runTask(task, info);
+                }
             }
         }
     }
@@ -71,7 +77,6 @@ public class AllayScheduler implements Scheduler {
 
     protected void runTask(Task task, RunningTaskInfo info) {
         try {
-            info.setRunning(true);
             if (!task.onRun()) {
                 task.onCancel();
                 info.setStop(true);
