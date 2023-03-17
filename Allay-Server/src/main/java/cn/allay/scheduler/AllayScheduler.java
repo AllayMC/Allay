@@ -17,7 +17,6 @@ public class AllayScheduler implements Scheduler {
 
     protected final ExecutorService asyncTaskExecutor = getExecutorService();
     protected Map<RunningTaskInfo, Task> runningTasks = new ConcurrentHashMap<>();
-    protected Map<RunningTaskInfo, Task> runningAsyncTasks = new ConcurrentHashMap<>();
     protected long tickCounter = 0;
 
     @Override
@@ -35,6 +34,7 @@ public class AllayScheduler implements Scheduler {
                 if (info.getPeriod() > 0)
                     info.setNextRunTick(tickCounter + info.getPeriod());
                 //Code !info.isRunning()" check whether the previous run completed
+                //If the previous asynchronous task does not finish, the call will be postponed until the next tick
                 if (info.isAsync() && !info.isRunning())
                     asyncTaskExecutor.submit(() -> runTask(task, info));
                 else runTask(task, info);
