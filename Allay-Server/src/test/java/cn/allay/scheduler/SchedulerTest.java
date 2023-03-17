@@ -17,7 +17,7 @@ class SchedulerTest {
     @Test
     void testAsync() {
         AtomicLong total = new AtomicLong(0);
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 1_000_000; i++) {
             scheduler.scheduleDelayed(() -> {
                 total.incrementAndGet();
                 return false;
@@ -27,7 +27,7 @@ class SchedulerTest {
         while(scheduler.getRunningTasks().size() != 0) {
             scheduler.ticking();
         }
-        assertEquals(1000000, total.get());
+        assertEquals(1_000_000, total.get());
     }
 
     @Test

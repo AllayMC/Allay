@@ -4,9 +4,7 @@ import cn.allay.scheduler.task.RunningTaskInfo;
 import cn.allay.scheduler.task.Task;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * Author: daoge_cmd <br>
@@ -37,9 +35,11 @@ public class AllayScheduler implements Scheduler {
                     info.setNextRunTick(tickCounter + info.getPeriod());
                 //Code !info.isRunning()" check whether the previous run completed
                 //If the previous asynchronous task does not finish, the call will be postponed until the next tick
-                if (info.isAsync() && !info.isRunning()) {
-                    info.setRunning(true);
-                    asyncTaskExecutor.submit(() -> runTask(task, info));
+                if (info.isAsync()) {
+                    if (!info.isRunning()) {
+                        info.setRunning(true);
+                        asyncTaskExecutor.submit(() -> runTask(task, info));
+                    }
                 } else {
                     info.setRunning(true);
                     runTask(task, info);
@@ -79,7 +79,6 @@ public class AllayScheduler implements Scheduler {
         try {
             if (!task.onRun()) {
                 task.onCancel();
-                info.setStop(true);
             }
         } catch (Throwable error) {
             task.onError(error);
