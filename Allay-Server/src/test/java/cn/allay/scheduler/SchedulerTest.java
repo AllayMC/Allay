@@ -21,16 +21,9 @@ class SchedulerTest {
     void testAsync() throws InterruptedException {
         AtomicLong total = new AtomicLong(0);
         for (int i = 0; i < 1000; i++) {
-            scheduler.scheduleDelayed(new Task() {
-                boolean added;
-                @Override
-                public boolean onRun() {
-                    if (!added) {
-                        total.addAndGet(1);
-                        added = true;
-                    }
-                    return false;
-                }
+            scheduler.scheduleDelayed(() -> {
+                total.addAndGet(1);
+                return false;
             }, 1, true);
         }
         //TODO: mock tick loop, replace it!

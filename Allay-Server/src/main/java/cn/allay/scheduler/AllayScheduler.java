@@ -17,6 +17,7 @@ public class AllayScheduler implements Scheduler {
 
     protected final ExecutorService asyncTaskExecutor = getExecutorService();
     protected Map<RunningTaskInfo, Task> runningTasks = new ConcurrentHashMap<>();
+    protected Map<RunningTaskInfo, Task> runningAsyncTasks = new ConcurrentHashMap<>();
     protected long tickCounter = 0;
 
     @Override
@@ -33,7 +34,8 @@ public class AllayScheduler implements Scheduler {
             if (info.getNextRunTick() <= tickCounter) {
                 if (info.getPeriod() > 0)
                     info.setNextRunTick(tickCounter + info.getPeriod());
-                if (info.isAsync())
+                //Code !info.isRunning()" check whether the previous run completed
+                if (info.isAsync() && !info.isRunning())
                     asyncTaskExecutor.submit(() -> runTask(task, info));
                 else runTask(task, info);
             }
@@ -69,15 +71,18 @@ public class AllayScheduler implements Scheduler {
 
     protected void runTask(Task task, RunningTaskInfo info) {
         try {
+            info.setRunning(true);
             if (!task.onRun()) {
                 task.onCancel();
                 info.setStop(true);
             }
         } catch (Throwable error) {
             task.onError(error);
+        } finally {
+            if (info.getPeriod() <= 0)
+                info.setStop(true);
+            info.setRunning(false);
         }
-        if (info.getPeriod() <= 0)
-            info.setStop(true);
     }
 
     protected ExecutorService getExecutorService() {
