@@ -5,9 +5,11 @@ import cn.allay.scheduler.Scheduler;
 import cn.allay.server.Server;
 import lombok.Getter;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Author: daoge_cmd <br>
@@ -24,6 +26,7 @@ import java.util.Objects;
 public final class AllayAPI {
     private static final AllayAPI INSTANCE = new AllayAPI();
     private final Map<Class<?>, Object> bindings = new HashMap<>();
+    private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean implemented = false;
 
     /**
@@ -50,13 +53,20 @@ public final class AllayAPI {
         implemented = true;
     }
 
+    public <T> void requireImpl(Class<T> api) {
+        requireImpl(api, null);
+    }
+
     /**
      * Add an interface to be implemented<br/>
      * It needs to be implemented by the server
      * @param api the interface
      */
-    public void requireImpl(Class<?> api) {
+    public <T> void requireImpl(Class<T> api, @Nullable Consumer<T> apiInstanceConsumer) {
         bindings.put(api, null);
+        if (apiInstanceConsumer != null) {
+            consumers.put(api, apiInstanceConsumer);
+        }
     }
 
     public <T> void bind(Class<T> api, T instance) {
@@ -78,8 +88,8 @@ public final class AllayAPI {
     }
 
     private void defaultAPIRequirements() {
-        requireImpl(Server.class);
-        requireImpl(ComponentInjector.ComponentInjectorFactory.class);
-        requireImpl(Scheduler.SchedulerFactory.class);
+        requireImpl(Server.class, Server.INSTANCE::set);
+        requireImpl(ComponentInjector.ComponentInjectorFactory.class, ComponentInjector.ComponentInjectorFactory.FACTORY::set);
+        requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
     }
 }

@@ -1,6 +1,6 @@
 package cn.allay.server;
 
-import cn.allay.api.AllayAPI;
+import cn.allay.api.ApiInstanceHolder;
 import cn.allay.scheduler.taskcreator.TaskCreator;
 
 /**
@@ -8,10 +8,10 @@ import cn.allay.scheduler.taskcreator.TaskCreator;
  */
 public interface Server extends TaskCreator {
 
-    Server INSTANCE = AllayAPI.getInstance().getAPIInstance(Server.class);
+    ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.create();
 
     static Server getInstance() {
-        return INSTANCE;
+        return INSTANCE.get();
     }
 
     /**

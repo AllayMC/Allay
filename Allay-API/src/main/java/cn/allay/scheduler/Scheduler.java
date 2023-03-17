@@ -1,6 +1,6 @@
 package cn.allay.scheduler;
 
-import cn.allay.api.AllayAPI;
+import cn.allay.api.ApiInstanceHolder;
 import cn.allay.scheduler.task.RunningTaskInfo;
 import cn.allay.scheduler.task.Task;
 
@@ -16,7 +16,7 @@ import java.util.Set;
 public interface Scheduler {
 
     static Scheduler createScheduler() {
-        return SchedulerFactory.FACTORY.createScheduler();
+        return SchedulerFactory.FACTORY.get().createScheduler();
     }
 
     void ticking();
@@ -42,7 +42,7 @@ public interface Scheduler {
 
     interface SchedulerFactory {
 
-        SchedulerFactory FACTORY = AllayAPI.getInstance().getAPIInstance(SchedulerFactory.class);
+        ApiInstanceHolder<SchedulerFactory> FACTORY = ApiInstanceHolder.create();
 
         Scheduler createScheduler();
     }

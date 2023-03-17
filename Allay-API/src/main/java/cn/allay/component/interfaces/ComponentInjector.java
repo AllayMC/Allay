@@ -1,6 +1,6 @@
 package cn.allay.component.interfaces;
 
-import cn.allay.api.AllayAPI;
+import cn.allay.api.ApiInstanceHolder;
 
 import java.util.List;
 
@@ -13,14 +13,12 @@ import java.util.List;
  */
 public interface ComponentInjector<T> {
 
-    ComponentInjectorFactory FACTORY = AllayAPI.getInstance().getAPIInstance(ComponentInjectorFactory.class);
-
     /**
      * Create a new injector
      * @return a new injector
      */
     static <U> ComponentInjector<U> createInjector() {
-        return FACTORY.create();
+        return ComponentInjectorFactory.FACTORY.get().create();
     }
 
     /**
@@ -49,6 +47,9 @@ public interface ComponentInjector<T> {
     Class<T> inject();
 
     interface ComponentInjectorFactory {
+
+        ApiInstanceHolder<ComponentInjectorFactory> FACTORY = ApiInstanceHolder.create();
+
         <R> ComponentInjector<R> create();
     }
 }
