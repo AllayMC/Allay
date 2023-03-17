@@ -1,0 +1,56 @@
+@startuml
+Title "Entity"
+interface EntityComponentImpl {
++ Identifier getIdentifier()
+}
+interface HealthComponent {
++ int getHealth()
++ int getMaxHealth()
++ boolean alive()
+}
+interface AttackComponent {
++ void attack(int amount)
+}
+interface TameComponent {
++ boolean tame()
++ EntityXXX getOwner()
+}
+interface AIComponent {
++ BehaviorGroup getBehaviorGroup()
+}
+class HealthComponentImpl
+class AttackComponentImpl
+class TameComponentImpl
+class AIComponentImpl
+HealthComponentImpl ..|> HealthComponent
+HealthComponentImpl ..|> EntityComponentImpl
+AttackComponentImpl ..|> AttackComponent
+AttackComponentImpl ..|> EntityComponentImpl
+TameComponentImpl ..|> TameComponent
+TameComponentImpl ..|> EntityComponentImpl
+AIComponentImpl ..|> AIComponent
+AIComponentImpl ..|> EntityComponentImpl
+class EntityDefinition {
++ Set<EntityComponent> getComponents()
++ Class<? extends Entity> getParentInterface()
+}
+class EntityTypeBuilder {
++ EntityType buildEntityType()
+}
+interface EntityXXX
+EntityXXX ..|> HealthComponent
+EntityXXX ..|> AttackComponent
+EntityXXX ..|> TameComponent
+EntityXXX ..|> AIComponent
+class EntityType {
++ EntityXXX createEntity(参数...)
+}
+
+EntityDefinition o-- HealthComponentImpl
+EntityDefinition o-- AttackComponentImpl
+EntityDefinition o-- TameComponentImpl
+EntityDefinition o-- AIComponentImpl
+EntityTypeBuilder o-- EntityDefinition : 传入到EntityBuilder中
+EntityType <- EntityTypeBuilder : 构建出EntityType，其持有Entity接口的实现类对象(Class<Entity>)
+EntityXXX <- EntityType : 通过EntityType创建Entity接口的实例
+@enduml
