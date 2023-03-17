@@ -1,7 +1,10 @@
 package cn.allay.scheduler;
 
 import cn.allay.api.AllayAPI;
+import cn.allay.scheduler.task.RunningTaskInfo;
 import cn.allay.scheduler.task.Task;
+
+import java.util.Set;
 
 /**
  * Author: daoge_cmd <br>
@@ -12,10 +15,8 @@ import cn.allay.scheduler.task.Task;
  */
 public interface Scheduler {
 
-    SchedulerFactory FACTORY = AllayAPI.getInstance().getAPIInstance(SchedulerFactory.class);
-
     static Scheduler createScheduler() {
-        return FACTORY.createScheduler();
+        return SchedulerFactory.FACTORY.createScheduler();
     }
 
     void ticking();
@@ -32,11 +33,17 @@ public interface Scheduler {
 
     void scheduleRepeating(Task task, int period, boolean async);
 
-    long getTotalTicks();
-
     //TODO: delayed repeating
 
+    long getTotalTicks();
+
+    //TODO: The setter for the user is not turned off, there is a potential risk of misuse
+    Set<RunningTaskInfo> getRunningTasks();
+
     interface SchedulerFactory {
+
+        SchedulerFactory FACTORY = AllayAPI.getInstance().getAPIInstance(SchedulerFactory.class);
+
         Scheduler createScheduler();
     }
 }

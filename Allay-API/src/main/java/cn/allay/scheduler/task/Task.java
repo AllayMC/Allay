@@ -14,12 +14,22 @@ public interface Task {
 
     Logger LOGGER = LoggerFactory.getLogger(Task.class);
 
+    /**
+     * @return If false is returned, the Task will be canceled
+     */
     boolean onRun();
 
+    /**
+     * Called when the task is canceled
+     */
     default void onCancel() {
 
     }
 
+    /**
+     * Called when an error occurs while running the task
+     * @param error The error that occurred
+     */
     default void onError(Throwable error) {
         LOGGER.error("Exception while running task!", error);
     }

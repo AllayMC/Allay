@@ -1,5 +1,6 @@
 package cn.allay.scheduler;
 
+import cn.allay.scheduler.task.RunningTaskInfo;
 import cn.allay.scheduler.task.Task;
 
 import java.util.*;
@@ -43,7 +44,7 @@ public class AllayScheduler implements Scheduler {
     public void scheduleDelayed(Task task, int delay, boolean async) {
         if (delay <= 0)
             throw new IllegalArgumentException("Delay must be greater than 0! (delay=" + delay + ")");
-        var info = new RunningTaskInfo(delay, 0, async);
+        var info = new RunningTaskInfo(task, delay, 0, async);
         info.setNextRunTick(tickCounter + delay);
         runningTasks.put(info, task);
     }
@@ -52,13 +53,18 @@ public class AllayScheduler implements Scheduler {
     public void scheduleRepeating(Task task, int period, boolean async) {
         if (period <= 0)
             throw new IllegalArgumentException("Period must be greater than 0! (period=" + period + ")");
-        var info = new RunningTaskInfo(0, period, async);
+        var info = new RunningTaskInfo(task, 0, period, async);
         runningTasks.put(info, task);
     }
 
     @Override
     public long getTotalTicks() {
         return tickCounter;
+    }
+
+    @Override
+    public Set<RunningTaskInfo> getRunningTasks() {
+        return runningTasks.keySet();
     }
 
     protected void runTask(Task task, RunningTaskInfo info) {

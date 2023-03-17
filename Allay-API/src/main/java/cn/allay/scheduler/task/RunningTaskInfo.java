@@ -1,4 +1,4 @@
-package cn.allay.scheduler;
+package cn.allay.scheduler.task;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +13,7 @@ import lombok.Setter;
  */
 @Getter
 public final class RunningTaskInfo {
+    private final Task task;
     private final int delay;
     private final int period;
     private final boolean async;
@@ -25,7 +26,8 @@ public final class RunningTaskInfo {
     private boolean stop;
 
     @Builder
-    public RunningTaskInfo(int delay, int period, boolean async) {
+    public RunningTaskInfo(Task task, int delay, int period, boolean async) {
+        this.task = task;
         this.delay = delay;
         this.period = period;
         this.async = async;
