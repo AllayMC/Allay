@@ -31,7 +31,8 @@ public interface ComponentInjector<T> {
 
     /**
      * Bind a set of implementations for the injector <br/>
-     * The method of the component earlier in the list will override the method of the component later (if there is a method conflict)
+     * If there are multiple implementation methods for a method to be injected, they will be executed in the order in the component list <p/>
+     * and the return value is the return value of the last executed method
      *
      * @param components components
      * @return the injector

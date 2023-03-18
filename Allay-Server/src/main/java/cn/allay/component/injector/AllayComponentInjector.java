@@ -8,11 +8,17 @@ import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.component.interfaces.ComponentedObject;
 import cn.allay.identifier.Identifier;
+import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.FixedValue;
+import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.matcher.ElementMatchers;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
@@ -51,24 +57,43 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         injectDependency();
         var bb = new ByteBuddy()
                 .subclass(parentClass);
-        var reversed = new ArrayList<>(components);
-        //byte-buddy will give priority to matching proxy methods declared late
-        //So we need to reverse the list of components to ensure that the method of the component declared first will override the method declared later
-        Collections.reverse(reversed);
-        for (var component : reversed) {
-            for (var method : Arrays.stream(component.getClass().getMethods()).filter(method -> method.isAnnotationPresent(Impl.class)).toList()) {
-                bb = bb.method(named(method.getName())
-                                .and(takesArguments(method.getParameterTypes()))
-                                .and(isAnnotatedWith(Inject.class)))
-                        .intercept(MethodDelegation.to(component));
+//        var reversed = new ArrayList<>(components);
+//        //byte-buddy will give priority to matching proxy methods declared late
+//        //So we need to reverse the list of components to ensure that the method of the component declared first will override the method declared later
+//        Collections.reverse(reversed);
+//        for (var component : reversed) {
+//            for (var method : Arrays.stream(component.getClass().getMethods()).filter(method -> method.isAnnotationPresent(Impl.class)).toList()) {
+//                bb = bb.method(named(method.getName())
+//                                .and(takesArguments(method.getParameterTypes()))
+//                                .and(isAnnotatedWith(Inject.class)))
+//                        .intercept(MethodDelegation.to(component));
+//            }
+//        }
+        for (var methodShouldBeInject : Arrays.stream(parentClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
+            Implementation.Composable methodDelegation = null;
+            for (var component: components) {
+                try {
+                    Method methodImpl = component.getClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
+                    if (!methodImpl.isAnnotationPresent(Impl.class)) continue;
+                    if (methodDelegation == null) methodDelegation = MethodDelegation.to(component);
+                    else methodDelegation = methodDelegation.andThen(MethodDelegation.to(component));
+                } catch (NoSuchMethodException ignored) {}
             }
+            if (methodDelegation == null)
+                throw new ComponentInjectException("Missing implementation for method: " + methodShouldBeInject.getName());
+            bb = bb.method(ElementMatchers.is(methodShouldBeInject))
+                        .intercept(methodDelegation);
         }
         bb = bb.implement(ComponentedObject.class)
                 .method(named("getComponents"))
                 .intercept(FixedValue.value(Collections.unmodifiableList(components)));
-        return (Class<T>) bb.make()
-                .load(getClass().getClassLoader())
-                .getLoaded();
+        try (var unloaded = bb.make()) {
+            return (Class<T>) unloaded
+                    .load(getClass().getClassLoader())
+                    .getLoaded();
+        } catch (IOException e) {
+            throw new ComponentInjectException(e);
+        }
     }
 
     protected void checkComponentValid() {
