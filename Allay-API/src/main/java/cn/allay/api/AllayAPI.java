@@ -49,6 +49,7 @@ public final class AllayAPI {
             if (entry.getValue() == null) {
                 throw new MissingImplementationException("Missing binding for " + entry.getKey().getName());
             }
+            ((Consumer<Object>)consumers.get(entry.getKey())).accept(entry.getValue());
         }
         implemented = true;
     }

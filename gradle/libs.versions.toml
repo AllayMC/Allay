@@ -1,6 +1,6 @@
 [versions]
 junit = "5.9.2"
-log4j = "2.17.2"
+log4j = "2.19.0"
 jline = "3.22.0"
 
 [libraries]
@@ -17,7 +17,7 @@ bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.0" }
 # Logging dependencies
 log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j" }
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
-log4j-slf4j18-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j18-impl", version.ref = "log4j" }
+log4j-slf4j18-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j18-impl", version = "2.18.0" }
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.0-alpha1" }
 terminal-console-appender = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 
