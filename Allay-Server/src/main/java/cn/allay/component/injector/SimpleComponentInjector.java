@@ -84,7 +84,7 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
 
     protected void injectDependency() {
         for (var component : components) {
-            for (var field : component.getClass().getFields()) {
+            for (var field : component.getClass().getDeclaredFields()) {
                 var annotation = field.getAnnotation(Dependency.class);
                 if (annotation != null) {
                     var type = field.getType();
