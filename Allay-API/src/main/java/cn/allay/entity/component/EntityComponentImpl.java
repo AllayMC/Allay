@@ -1,4 +1,4 @@
-package cn.allay.entity.component.interfaces;
+package cn.allay.entity.component;
 
 import cn.allay.component.interfaces.ComponentImpl;
 

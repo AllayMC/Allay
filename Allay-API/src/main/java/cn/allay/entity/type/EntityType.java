@@ -1,12 +1,10 @@
 package cn.allay.entity.type;
 
-import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.entity.Entity;
+import cn.allay.entity.definition.EntityDefinition;
 import cn.allay.identifier.Identified;
 import cn.allay.math.location.Location;
 import org.cloudburstmc.nbt.NbtMap;
-
-import java.util.List;
 
 /**
  * Author: daoge_cmd <br>
@@ -16,11 +14,10 @@ import java.util.List;
  * Describes a specific type of entity
  */
 public interface EntityType<T extends Entity> extends Identified {
-    List<ComponentImpl> getComponents();
 
-    Class<T> getSourceClass();
+    EntityDefinition<T> getDefinition();
 
-    Class<T> getComponentedClass();
+    Class<T> getCompiledEntityClass();
 
     T createEntity(Location<Double> location, NbtMap nbt);
 }

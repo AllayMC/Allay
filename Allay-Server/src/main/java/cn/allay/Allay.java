@@ -2,8 +2,10 @@ package cn.allay;
 
 import cn.allay.api.AllayAPI;
 import cn.allay.api.MissingImplementationException;
-import cn.allay.component.injector.SimpleComponentInjector;
+import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.component.interfaces.ComponentInjector;
+import cn.allay.entity.type.AllayEntityTypeBuilder;
+import cn.allay.entity.type.EntityTypeBuilder;
 import cn.allay.scheduler.AllayScheduler;
 import cn.allay.scheduler.Scheduler;
 import cn.allay.server.AllayServer;
@@ -28,9 +30,10 @@ public final class Allay {
 
     private static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
-        api.bind(ComponentInjector.ComponentInjectorFactory.class, SimpleComponentInjector::new);
+        api.bind(ComponentInjector.ComponentInjectorFactory.class, AllayComponentInjector::new);
         api.bind(Server.class, new AllayServer());
         api.bind(Scheduler.SchedulerFactory.class, AllayScheduler::new);
+        api.bind(EntityTypeBuilder.class, new AllayEntityTypeBuilder());
         api.implement();
     }
 }

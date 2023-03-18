@@ -1,6 +1,6 @@
 package cn.allay.component;
 
-import cn.allay.component.injector.SimpleComponentInjector;
+import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.ComponentedObject;
 import cn.allay.component.impl.SimpleAttackComponent;
@@ -43,7 +43,7 @@ class ComponentTest {
     @SneakyThrows
     @Test
     void testInjector() {
-        sheep = new SimpleComponentInjector<Sheep>()
+        sheep = new AllayComponentInjector<Sheep>()
                 .parentClass(parentClass)
                 .withComponent(components)
                 .inject()

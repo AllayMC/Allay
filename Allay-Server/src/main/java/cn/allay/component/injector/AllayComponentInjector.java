@@ -23,12 +23,12 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * <p>
  * The default injector which use byte-buddy
  */
-public class SimpleComponentInjector<T> implements ComponentInjector<T> {
+public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     protected Class<T> parentClass;
     protected List<ComponentImpl> components = new ArrayList<>();
 
-    public SimpleComponentInjector() {}
+    public AllayComponentInjector() {}
 
     @Override
     public ComponentInjector<T> parentClass(Class<T> parentClass) {
@@ -38,7 +38,7 @@ public class SimpleComponentInjector<T> implements ComponentInjector<T> {
     }
 
     @Override
-    public ComponentInjector<T> withComponent(List<ComponentImpl> components) {
+    public ComponentInjector<T> withComponent(List<? extends ComponentImpl> components) {
         Objects.requireNonNull(components, "The components cannot be null");
         this.components.addAll(components);
         return this;

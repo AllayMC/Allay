@@ -36,7 +36,7 @@ public interface ComponentInjector<T> {
      * @param components components
      * @return the injector
      */
-    ComponentInjector<T> withComponent(List<ComponentImpl> components);
+    ComponentInjector<T> withComponent(List<? extends ComponentImpl> components);
 
     /**
      * Build the class<br/>
