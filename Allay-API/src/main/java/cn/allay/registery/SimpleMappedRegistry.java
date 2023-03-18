@@ -61,7 +61,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * @param <MAPPING> the returned mappings type, a map in this case
      * @return a new registry with the given RegistryLoader
      */
-    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> create(INPUT input, RegistryLoader<I, M> registryLoader) {
+    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> create(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {
         return new SimpleMappedRegistry<>(input, registryLoader);
     }
 
