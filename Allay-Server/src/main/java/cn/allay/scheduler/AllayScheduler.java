@@ -78,6 +78,7 @@ public class AllayScheduler implements Scheduler {
         try {
             if (!task.onRun()) {
                 task.onCancel();
+                info.setStop(true);
             }
         } catch (Throwable error) {
             task.onError(error);
