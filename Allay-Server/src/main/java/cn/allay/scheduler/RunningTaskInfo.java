@@ -1,5 +1,6 @@
-package cn.allay.scheduler.task;
+package cn.allay.scheduler;
 
+import cn.allay.scheduler.task.Task;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

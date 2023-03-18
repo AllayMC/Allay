@@ -1,10 +1,7 @@
 package cn.allay.scheduler;
 
 import cn.allay.api.ApiInstanceHolder;
-import cn.allay.scheduler.task.RunningTaskInfo;
 import cn.allay.scheduler.task.Task;
-
-import java.util.Set;
 
 /**
  * Author: daoge_cmd <br>
@@ -37,8 +34,7 @@ public interface Scheduler {
 
     long getTotalTicks();
 
-    //TODO: The setter for the user is not turned off, there is a potential risk of misuse
-    Set<RunningTaskInfo> getRunningTasks();
+    int getRunningTaskCount();
 
     interface SchedulerFactory {
 

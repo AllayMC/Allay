@@ -24,7 +24,7 @@ class SchedulerTest {
             }, 1, true);
         }
         //TODO: mock tick loop, replace it!
-        while(scheduler.getRunningTasks().size() != 0) {
+        while(scheduler.getRunningTaskCount() != 0) {
             scheduler.ticking();
         }
         assertEquals(1_000_000, total.get());
@@ -40,7 +40,7 @@ class SchedulerTest {
             }, 1);
         }
         //TODO: mock tick loop, replace it!
-        while(scheduler.getRunningTasks().size() != 0) {
+        while(scheduler.getRunningTaskCount() != 0) {
             scheduler.ticking();
         }
         assertEquals(1000, total.get());
@@ -51,7 +51,7 @@ class SchedulerTest {
         AtomicLong total = new AtomicLong();
         scheduler.scheduleRepeating(() -> total.incrementAndGet() != 1000, 1);
         //TODO: mock tick loop, replace it!
-        while(scheduler.getRunningTasks().size() != 0) {
+        while(scheduler.getRunningTaskCount() != 0) {
             scheduler.ticking();
         }
         assertEquals(1000, total.get());

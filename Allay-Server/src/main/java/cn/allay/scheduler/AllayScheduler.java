@@ -1,6 +1,5 @@
 package cn.allay.scheduler;
 
-import cn.allay.scheduler.task.RunningTaskInfo;
 import cn.allay.scheduler.task.Task;
 
 import java.util.*;
@@ -71,8 +70,8 @@ public class AllayScheduler implements Scheduler {
     }
 
     @Override
-    public Set<RunningTaskInfo> getRunningTasks() {
-        return runningTasks.keySet();
+    public int getRunningTaskCount() {
+        return runningTasks.size();
     }
 
     protected void runTask(Task task, RunningTaskInfo info) {
