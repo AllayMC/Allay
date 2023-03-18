@@ -1,6 +1,5 @@
 package cn.allay.utils;
 
-import cn.allay.utils.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

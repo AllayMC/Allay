@@ -1,17 +1,11 @@
 package cn.allay.component;
 
-import cn.allay.component.annotation.Impl;
-import cn.allay.component.injector.AllayComponentInjector;
-import cn.allay.component.interfaces.ComponentImpl;
-import cn.allay.component.interfaces.ComponentedObject;
 import cn.allay.component.impl.SimpleAttackComponent;
 import cn.allay.component.impl.SimpleHealthComponent;
 import cn.allay.component.impl.SimpleNameComponent;
 import cn.allay.component.impl.SimpleTestDependencyComponent;
-import cn.allay.component.interfaces.AttackComponent;
-import cn.allay.component.interfaces.HealthComponent;
-import cn.allay.component.interfaces.NameComponent;
-import cn.allay.component.interfaces.Sheep;
+import cn.allay.component.injector.AllayComponentInjector;
+import cn.allay.component.interfaces.*;
 import cn.allay.identifier.Identifier;
 import com.google.common.collect.Lists;
 import lombok.SneakyThrows;

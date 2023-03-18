@@ -8,7 +8,6 @@ import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.component.interfaces.ComponentedObject;
 import cn.allay.identifier.Identifier;
-import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.implementation.Implementation;
@@ -18,9 +17,8 @@ import net.bytebuddy.matcher.ElementMatchers;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static net.bytebuddy.matcher.ElementMatchers.*;
+import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
  * Author: daoge_cmd <br>
@@ -57,18 +55,6 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         injectDependency();
         var bb = new ByteBuddy()
                 .subclass(parentClass);
-//        var reversed = new ArrayList<>(components);
-//        //byte-buddy will give priority to matching proxy methods declared late
-//        //So we need to reverse the list of components to ensure that the method of the component declared first will override the method declared later
-//        Collections.reverse(reversed);
-//        for (var component : reversed) {
-//            for (var method : Arrays.stream(component.getClass().getMethods()).filter(method -> method.isAnnotationPresent(Impl.class)).toList()) {
-//                bb = bb.method(named(method.getName())
-//                                .and(takesArguments(method.getParameterTypes()))
-//                                .and(isAnnotatedWith(Inject.class)))
-//                        .intercept(MethodDelegation.to(component));
-//            }
-//        }
         for (var methodShouldBeInject : Arrays.stream(parentClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
             Implementation.Composable methodDelegation = null;
             for (var component: components) {

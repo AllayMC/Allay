@@ -2,8 +2,8 @@ package cn.allay.component.impl;
 
 import cn.allay.component.annotation.Dependency;
 import cn.allay.component.annotation.Impl;
-import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.AttackComponent;
+import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.HealthComponent;
 import cn.allay.identifier.Identifier;
 

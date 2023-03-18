@@ -1,7 +1,5 @@
 package cn.allay.identifier;
 
-import cn.allay.identifier.IdentifierUtils;
-import cn.allay.identifier.InvalidIdentifierException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
