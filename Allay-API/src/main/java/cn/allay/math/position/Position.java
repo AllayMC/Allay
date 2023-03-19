@@ -10,7 +10,7 @@ import java.util.Objects;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-public interface Position<T extends Number> extends ReadOnlyPosition<T>, Vector3<T> {
+public interface Position<T extends Number> extends PositionRN<T>, Vector3<T> {
 
     static <T extends Number> Position<T> of(T x, T y, T z, Level level) {
         Objects.requireNonNull(level);

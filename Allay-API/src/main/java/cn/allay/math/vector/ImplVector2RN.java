@@ -5,11 +5,11 @@ package cn.allay.math.vector;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplReadOnlyVector2<T extends Number> implements ReadOnlyVector2<T> {
+class ImplVector2RN<T extends Number> implements Vector2RN<T> {
     protected T x;
     protected T z;
 
-    public ImplReadOnlyVector2(T x, T z) {
+    public ImplVector2RN(T x, T z) {
         this.x = x;
         this.z = z;
     }

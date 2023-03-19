@@ -5,7 +5,7 @@ package cn.allay.math.vector;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-public interface Vector2<T extends Number> extends ReadOnlyVector2<T> {
+public interface Vector2<T extends Number> extends Vector2RN<T> {
 
     static <T extends Number> Vector2<T> of(T x, T z) {
         return new ImplVector2<>(x, z);

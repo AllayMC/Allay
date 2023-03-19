@@ -7,7 +7,7 @@ import cn.allay.level.Level;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplPosition<T extends Number> extends ImplReadOnlyPosition<T> implements Position<T> {
+class ImplPosition<T extends Number> extends ImplPositionRN<T> implements Position<T> {
     public ImplPosition(T x, T y, T z, Level level) {
         super(x, y, z, level);
     }

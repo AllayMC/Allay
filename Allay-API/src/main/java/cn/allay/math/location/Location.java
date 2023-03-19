@@ -10,7 +10,7 @@ import java.util.Objects;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-public interface Location<T extends Number> extends ReadOnlyLocation<T>, Position<T> {
+public interface Location<T extends Number> extends LocationRN<T>, Position<T> {
 
     static <T extends Number> Location<T> of(T x, T y, T z, Level level) {
         return of(x, y, z, 0, 0, level);

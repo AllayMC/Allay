@@ -1,24 +1,19 @@
-package cn.allay.math.position;
-
-import cn.allay.level.Level;
+package cn.allay.math.vector;
 
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplReadOnlyPosition<T extends Number> implements ReadOnlyPosition<T> {
-
+class ImplVector3RN<T extends Number> implements Vector3RN<T> {
     protected T x;
     protected T y;
     protected T z;
-    protected Level level;
 
-    public ImplReadOnlyPosition(T x, T y, T z, Level level) {
+    public ImplVector3RN(T x, T y, T z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.level = level;
     }
 
     @Override
@@ -34,10 +29,5 @@ class ImplReadOnlyPosition<T extends Number> implements ReadOnlyPosition<T> {
     @Override
     public T getZ() {
         return z;
-    }
-
-    @Override
-    public Level getLevel() {
-        return level;
     }
 }

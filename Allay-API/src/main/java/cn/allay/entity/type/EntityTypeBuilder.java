@@ -13,7 +13,7 @@ public interface EntityTypeBuilder {
 
     ApiInstanceHolder<EntityTypeBuilder> BUILDER = ApiInstanceHolder.create();
 
-     static EntityTypeBuilder builder() {
+    static EntityTypeBuilder builder() {
         return BUILDER.get();
     }
 

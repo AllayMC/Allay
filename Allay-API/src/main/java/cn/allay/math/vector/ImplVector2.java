@@ -5,7 +5,7 @@ package cn.allay.math.vector;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplVector2<T extends Number> extends ImplReadOnlyVector2<T> implements Vector2<T> {
+class ImplVector2<T extends Number> extends ImplVector2RN<T> implements Vector2<T> {
     public ImplVector2(T x, T z) {
         super(x, z);
     }
