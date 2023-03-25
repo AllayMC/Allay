@@ -1,13 +1,20 @@
-package cn.allay.math.vector;
+package cn.allay.math.position;
+
+import cn.allay.level.Level;
 
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplVector3<T extends Number> extends ImplVector3RN<T> implements Vector3<T> {
-    public ImplVector3(T x, T y, T z) {
-        super(x, y, z);
+class ImplPos<T extends Number> extends ImplPosRO<T> implements Pos<T> {
+    public ImplPos(T x, T y, T z, Level level) {
+        super(x, y, z, level);
+    }
+
+    @Override
+    public void setLevel(Level level) {
+        this.level = level;
     }
 
     @Override

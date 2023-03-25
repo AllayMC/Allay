@@ -7,16 +7,16 @@ import cn.allay.level.Level;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplLocation<T extends Number> extends ImplLocationRN<T> implements Location<T> {
-    public ImplLocation(T x, T y, T z, Level level) {
+class ImplLoc<T extends Number> extends ImplLocRO<T> implements Loc<T> {
+    public ImplLoc(T x, T y, T z, Level level) {
         super(x, y, z, level);
     }
 
-    public ImplLocation(T x, T y, T z, double yaw, double pitch, Level level) {
+    public ImplLoc(T x, T y, T z, double yaw, double pitch, Level level) {
         super(x, y, z, yaw, pitch, level);
     }
 
-    public ImplLocation(T x, T y, T z, double yaw, double headYaw, double pitch, Level level) {
+    public ImplLoc(T x, T y, T z, double yaw, double headYaw, double pitch, Level level) {
         super(x, y, z, yaw, headYaw, pitch, level);
     }
 

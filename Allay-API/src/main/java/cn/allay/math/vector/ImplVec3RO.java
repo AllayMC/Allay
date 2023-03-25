@@ -5,12 +5,12 @@ package cn.allay.math.vector;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplVector3RN<T extends Number> implements Vector3RN<T> {
+class ImplVec3RO<T extends Number> implements Vec3RO<T> {
     protected T x;
     protected T y;
     protected T z;
 
-    public ImplVector3RN(T x, T y, T z) {
+    public ImplVec3RO(T x, T y, T z) {
         this.x = x;
         this.y = y;
         this.z = z;

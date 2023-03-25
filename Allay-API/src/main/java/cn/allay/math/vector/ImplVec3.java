@@ -5,14 +5,19 @@ package cn.allay.math.vector;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplVector2<T extends Number> extends ImplVector2RN<T> implements Vector2<T> {
-    public ImplVector2(T x, T z) {
-        super(x, z);
+class ImplVec3<T extends Number> extends ImplVec3RO<T> implements Vec3<T> {
+    public ImplVec3(T x, T y, T z) {
+        super(x, y, z);
     }
 
     @Override
     public void setX(T value) {
         this.x = value;
+    }
+
+    @Override
+    public void setY(T value) {
+        this.y = value;
     }
 
     @Override

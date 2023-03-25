@@ -56,13 +56,15 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         var bb = new ByteBuddy()
                 .subclass(parentClass);
         for (var methodShouldBeInject : Arrays.stream(parentClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
+            var canDuplicate = methodShouldBeInject.getReturnType().equals(Void.class);
             Implementation.Composable methodDelegation = null;
             for (var component: components) {
                 try {
                     Method methodImpl = component.getClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
                     if (!methodImpl.isAnnotationPresent(Impl.class)) continue;
                     if (methodDelegation == null) methodDelegation = MethodDelegation.to(component);
-                    else methodDelegation = methodDelegation.andThen(MethodDelegation.to(component));
+                    else if (canDuplicate) methodDelegation = methodDelegation.andThen(MethodDelegation.to(component));
+                    else throw new ComponentInjectException("Duplicate implementation for non-void-return method: " + methodShouldBeInject.getName() + " in " + component.getClass().getName());
                 } catch (NoSuchMethodException ignored) {}
             }
             if (methodDelegation == null)

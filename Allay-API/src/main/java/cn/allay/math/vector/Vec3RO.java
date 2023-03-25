@@ -5,9 +5,9 @@ package cn.allay.math.vector;
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  */
-public interface Vector3RN<T extends Number> {
-    static <T extends Number> Vector3RN<T> of(T x, T y, T z) {
-        return new ImplVector3RN<>(x, y, z);
+public interface Vec3RO<T extends Number> {
+    static <T extends Number> Vec3RO<T> of(T x, T y, T z) {
+        return new ImplVec3RO<>(x, y, z);
     }
 
     T getX();

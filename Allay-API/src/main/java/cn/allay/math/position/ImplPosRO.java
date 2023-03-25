@@ -7,14 +7,14 @@ import cn.allay.level.Level;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplPositionRN<T extends Number> implements PositionRN<T> {
+class ImplPosRO<T extends Number> implements PosRO<T> {
 
     protected T x;
     protected T y;
     protected T z;
     protected Level level;
 
-    public ImplPositionRN(T x, T y, T z, Level level) {
+    public ImplPosRO(T x, T y, T z, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;

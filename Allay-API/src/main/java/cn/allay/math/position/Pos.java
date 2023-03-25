@@ -1,7 +1,7 @@
 package cn.allay.math.position;
 
 import cn.allay.level.Level;
-import cn.allay.math.vector.Vector3;
+import cn.allay.math.vector.Vec3;
 
 import java.util.Objects;
 
@@ -10,11 +10,11 @@ import java.util.Objects;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-public interface Position<T extends Number> extends PositionRN<T>, Vector3<T> {
+public interface Pos<T extends Number> extends PosRO<T>, Vec3<T> {
 
-    static <T extends Number> Position<T> of(T x, T y, T z, Level level) {
+    static <T extends Number> Pos<T> of(T x, T y, T z, Level level) {
         Objects.requireNonNull(level);
-        return new ImplPosition<>(x, y, z, level);
+        return new ImplPos<>(x, y, z, level);
     }
 
     void setLevel(Level level);

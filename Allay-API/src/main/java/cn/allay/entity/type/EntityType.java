@@ -4,7 +4,7 @@ import cn.allay.entity.Entity;
 import cn.allay.entity.definition.EntityDefinition;
 import cn.allay.identifier.Identified;
 import cn.allay.identifier.Identifier;
-import cn.allay.math.location.Location;
+import cn.allay.math.location.Loc;
 import cn.allay.registery.MappedRegistry;
 import cn.allay.registery.SimpleMappedRegistry;
 import org.cloudburstmc.nbt.NbtMap;
@@ -27,5 +27,5 @@ public interface EntityType<T extends Entity> extends Identified {
 
     Class<T> getCompiledEntityClass();
 
-    T createEntity(Location<Double> location, NbtMap nbt);
+    T createEntity(Loc<Double> location, NbtMap nbt);
 }

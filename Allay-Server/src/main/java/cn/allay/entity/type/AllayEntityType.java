@@ -3,7 +3,7 @@ package cn.allay.entity.type;
 import cn.allay.entity.Entity;
 import cn.allay.entity.definition.EntityDefinition;
 import cn.allay.identifier.Identifier;
-import cn.allay.math.location.Location;
+import cn.allay.math.location.Loc;
 import lombok.Getter;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -24,7 +24,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T>{
     }
 
     @Override
-    public T createEntity(Location<Double> location, NbtMap nbt) {
+    public T createEntity(Loc<Double> location, NbtMap nbt) {
         //TODO
         return null;
     }

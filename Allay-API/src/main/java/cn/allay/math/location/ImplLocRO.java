@@ -7,7 +7,7 @@ import cn.allay.level.Level;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplLocationRN<T extends Number> implements LocationRN<T> {
+class ImplLocRO<T extends Number> implements LocRO<T> {
 
     protected T x;
     protected T y;
@@ -17,14 +17,14 @@ class ImplLocationRN<T extends Number> implements LocationRN<T> {
     protected double pitch;
     protected Level level;
 
-    public ImplLocationRN(T x, T y, T z, Level level) {
+    public ImplLocRO(T x, T y, T z, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.level = level;
     }
 
-    public ImplLocationRN(T x, T y, T z, double yaw, double pitch, Level level) {
+    public ImplLocRO(T x, T y, T z, double yaw, double pitch, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -33,7 +33,7 @@ class ImplLocationRN<T extends Number> implements LocationRN<T> {
         this.level = level;
     }
 
-    public ImplLocationRN(T x, T y, T z, double yaw, double headYaw, double pitch, Level level) {
+    public ImplLocRO(T x, T y, T z, double yaw, double headYaw, double pitch, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;

@@ -1,8 +1,8 @@
 package cn.allay.math.vector;
 
 import cn.allay.level.Level;
-import cn.allay.math.location.Location;
-import cn.allay.math.position.Position;
+import cn.allay.math.location.Loc;
+import cn.allay.math.position.Pos;
 import net.bytebuddy.ByteBuddy;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +34,7 @@ class VectorTest {
 
     @Test
     void vector() {
-        var v3 = Vector3.of(1, 1, 1);
+        var v3 = Vec3.of(1, 1, 1);
         assertEquals(1, v3.getX());
         assertEquals(1, v3.getY());
         assertEquals(1, v3.getZ());
@@ -48,8 +48,8 @@ class VectorTest {
 
     @Test
     void position() {
-        assertThrows(NullPointerException.class, () -> Position.of(1, 1, 1, null));
-        var pos = Position.of(1, 1, 1, mockLevel);
+        assertThrows(NullPointerException.class, () -> Pos.of(1, 1, 1, null));
+        var pos = Pos.of(1, 1, 1, mockLevel);
         assertNotNull(pos.getLevel());
         assertEquals(1, pos.getX());
         assertEquals(1, pos.getY());
@@ -64,8 +64,8 @@ class VectorTest {
 
     @Test
     void location() {
-        assertThrows(NullPointerException.class, () -> Location.of(1, 1, 1, null));
-        var loc = Location.of(1, 1, 1, mockLevel);
+        assertThrows(NullPointerException.class, () -> Loc.of(1, 1, 1, null));
+        var loc = Loc.of(1, 1, 1, mockLevel);
         assertNotNull(loc.getLevel());
         assertEquals(0d, loc.getYaw());
         assertEquals(0d, loc.getHeadYaw());

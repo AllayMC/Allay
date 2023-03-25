@@ -5,10 +5,10 @@ package cn.allay.math.vector;
  * Date: 2023/3/4 <br>
  * Allay Project <br>
  */
-public interface Vector2RN<T extends Number> {
+public interface Vec2RO<T extends Number> {
 
-    static <T extends Number> Vector2RN<T> of(T x, T z) {
-        return new ImplVector2RN<>(x, z);
+    static <T extends Number> Vec2RO<T> of(T x, T z) {
+        return new ImplVec2RO<>(x, z);
     }
 
     T getX();
