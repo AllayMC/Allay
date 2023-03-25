@@ -38,13 +38,13 @@ class BlockDataComponentImplTest {
             "        \"waterlogFlowing\":true,\n" +
             "        \"waterlogSolid\":false,\n" +
             "        \"color\":-1,\n" +
-            "        \"aabb\":\"new SimpleAxisAlignedBB(0,0,0,1,1,1)\",\n" +
+            "        \"aabb\":\"new SimpleAxisAlignedBB(-0.1,-0.1,-0.1,1.1,1.1,1.1)\",\n" +
             "        \"targetTool\":\"ToolTypes.PICKAXE\"\n" +
             "    }";
 
     @Test
     void of() {
-        BlockDataComponent blockDataComponent = BlockDataComponentImpl.of(json);
+        BlockDataComponent blockDataComponent = BlockDataComponent.of(json);
         assertFalse(blockDataComponent.fallable());
         assertEquals(0.6f, blockDataComponent.friction());
         assertEquals(1.5f, blockDataComponent.hardness());
@@ -71,6 +71,13 @@ class BlockDataComponentImplTest {
         assertTrue(blockDataComponent.waterlogFlowing());
         assertFalse(blockDataComponent.waterlogSolid());
         assertEquals(-1, blockDataComponent.color());
-        assertEquals("new SimpleAxisAlignedBB(0,0,0,1,1,1)", blockDataComponent.axisAlignedBB().toString());
+        var aabb = blockDataComponent.axisAlignedBB();
+        //Prevents loss of floating-point precision
+        assertEquals("-0.1", String.valueOf(aabb.minX()));
+        assertEquals("-0.1", String.valueOf(aabb.minY()));
+        assertEquals("-0.1", String.valueOf(aabb.minZ()));
+        assertEquals("1.1", String.valueOf(aabb.maxX()));
+        assertEquals("1.1", String.valueOf(aabb.maxY()));
+        assertEquals("1.1", String.valueOf(aabb.maxZ()));
     }
 }

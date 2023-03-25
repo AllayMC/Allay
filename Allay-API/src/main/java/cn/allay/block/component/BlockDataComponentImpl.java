@@ -2,19 +2,12 @@ package cn.allay.block.component;
 
 import cn.allay.identifier.Identifier;
 import cn.allay.math.aabb.AxisAlignedBBRO;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
-import com.google.gson.TypeAdapter;
+import cn.allay.utils.StringUtils;
+import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
 
 /**
  * Author: daoge_cmd <br>
@@ -26,7 +19,6 @@ import java.lang.reflect.Type;
 @Accessors(fluent = true)
 public class BlockDataComponentImpl implements BlockDataComponent, BlockComponentImpl {
 
-    protected static final Gson GSON = new GsonBuilder().create();
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:block_data");
 
     @Builder.Default protected boolean fallable = false;
@@ -62,10 +54,6 @@ public class BlockDataComponentImpl implements BlockDataComponent, BlockComponen
     @Builder.Default protected int color = 0;
     @SerializedName("aabb")
     @Builder.Default protected AxisAlignedBBRO axisAlignedBB = AxisAlignedBBRO.of(0, 0, 0, 1, 1, 1);
-
-    public static BlockDataComponent of(String json) {
-        return GSON.fromJson(json, BlockDataComponentImpl.class);
-    }
 
     @Override
     public Identifier getNamespaceId() {
