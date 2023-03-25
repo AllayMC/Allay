@@ -1,5 +1,6 @@
 package cn.allay.component;
 
+import cn.allay.component.exception.ComponentInjectException;
 import cn.allay.component.impl.SimpleAttackComponent;
 import cn.allay.component.impl.SimpleHealthComponent;
 import cn.allay.component.impl.SimpleNameComponent;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Author: daoge_cmd <br>
@@ -58,13 +60,12 @@ class ComponentTest {
         ((AttackComponent) sheep.getAttackComponent()).attack(10);
         assert sheep.isDead();
         components.add(new SimpleNameComponentV2("SmallSheep"));
-        sheep = new AllayComponentInjector<Sheep>()
-                .parentClass(parentClass)
-                .withComponent(components)
-                .inject()
-                .getDeclaredConstructor()
-                .newInstance();
-        assertEquals("SmallSheep", sheep.getName());
+        assertThrows(
+                ComponentInjectException.class,
+                () -> new AllayComponentInjector<Sheep>()
+                        .parentClass(parentClass)
+                        .withComponent(components)
+                        .inject());
     }
 
     public static class SimpleNameComponentV2 extends SimpleNameComponent {
