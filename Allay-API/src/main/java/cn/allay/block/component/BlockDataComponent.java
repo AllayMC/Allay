@@ -1,5 +1,6 @@
 package cn.allay.block.component;
 
+import cn.allay.block.data.ToolType;
 import cn.allay.math.aabb.AxisAlignedBBRO;
 import cn.allay.utils.StringUtils;
 import com.google.gson.Gson;
@@ -19,6 +20,7 @@ public interface BlockDataComponent {
                 var numbers = StringUtils.fastSplit(originStr.substring(24, originStr.length() - 1), ",").stream().map(Float::valueOf).toList();
                 return AxisAlignedBBRO.of(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
             })
+            .registerTypeAdapter(ToolType.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> ToolType.valueOf(json.getAsString().substring(10)))
             .create();
 
     static BlockDataComponent of(String json) {
@@ -52,5 +54,5 @@ public interface BlockDataComponent {
     boolean waterlogSolid();
     int color();
     AxisAlignedBBRO axisAlignedBB();
-    //TODO: ToolTypes
+    ToolType targetTool();
 }

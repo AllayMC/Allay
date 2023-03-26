@@ -1,9 +1,8 @@
 package cn.allay.block.component;
 
+import cn.allay.block.data.ToolType;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.aabb.AxisAlignedBBRO;
-import cn.allay.utils.StringUtils;
-import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,6 +53,7 @@ public class BlockDataComponentImpl implements BlockDataComponent, BlockComponen
     @Builder.Default protected int color = 0;
     @SerializedName("aabb")
     @Builder.Default protected AxisAlignedBBRO axisAlignedBB = AxisAlignedBBRO.of(0, 0, 0, 1, 1, 1);
+    @Builder.Default protected ToolType targetTool = ToolType.NONE;
 
     @Override
     public Identifier getNamespaceId() {

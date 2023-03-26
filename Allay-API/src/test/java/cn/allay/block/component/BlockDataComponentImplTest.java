@@ -1,5 +1,6 @@
 package cn.allay.block.component;
 
+import cn.allay.block.data.ToolType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,5 +80,6 @@ class BlockDataComponentImplTest {
         assertEquals("1.1", String.valueOf(aabb.maxX()));
         assertEquals("1.1", String.valueOf(aabb.maxY()));
         assertEquals("1.1", String.valueOf(aabb.maxZ()));
+        assertEquals(ToolType.PICKAXE, blockDataComponent.targetTool());
     }
 }
