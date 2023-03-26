@@ -1,4 +1,4 @@
-package cn.allay.registery;
+package cn.allay.registry;
 
 import java.util.function.Consumer;
 

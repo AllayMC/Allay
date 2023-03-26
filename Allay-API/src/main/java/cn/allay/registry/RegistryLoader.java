@@ -1,4 +1,4 @@
-package cn.allay.registery;
+package cn.allay.registry;
 
 /**
  * Represents a registry loader. {@link I} is the input value, which can be anything,

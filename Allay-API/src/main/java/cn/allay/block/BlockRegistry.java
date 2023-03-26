@@ -2,7 +2,7 @@ package cn.allay.block;
 
 import cn.allay.block.type.BlockType;
 import cn.allay.identifier.Identifier;
-import cn.allay.registery.SimpleMappedRegistry;
+import cn.allay.registry.SimpleMappedRegistry;
 
 import java.util.HashMap;
 import java.util.Map;

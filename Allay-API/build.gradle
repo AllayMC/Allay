@@ -12,6 +12,7 @@ dependencies {
     api(libs.snakeyaml)
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testImplementation libs.bytebuddy
+    testImplementation libs.javapoet
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 

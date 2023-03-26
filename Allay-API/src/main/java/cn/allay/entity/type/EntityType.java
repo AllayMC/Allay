@@ -5,8 +5,8 @@ import cn.allay.entity.definition.EntityDefinition;
 import cn.allay.identifier.Identified;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.location.Loc;
-import cn.allay.registery.MappedRegistry;
-import cn.allay.registery.SimpleMappedRegistry;
+import cn.allay.registry.MappedRegistry;
+import cn.allay.registry.SimpleMappedRegistry;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.HashMap;
