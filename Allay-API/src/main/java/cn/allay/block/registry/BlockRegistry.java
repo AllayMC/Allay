@@ -1,4 +1,4 @@
-package cn.allay.block;
+package cn.allay.block.registry;
 
 import cn.allay.block.type.BlockType;
 import cn.allay.identifier.Identifier;

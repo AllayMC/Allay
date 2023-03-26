@@ -1099,7 +1099,7 @@
         "aabb":"new SimpleAxisAlignedBB(0,0,0,1,1,1)"
     },
     {
-        "name":"PISTONARMCOLLISION",
+        "name":"PISTON_ARM_COLLISION",
         "fallable":false,
         "friction":0.6,
         "hardness":0.5,
@@ -1129,7 +1129,7 @@
         "aabb":"new SimpleAxisAlignedBB(0,0,0,1,1,1)"
     },
     {
-        "name":"STICKYPISTONARMCOLLISION",
+        "name":"STICKY_PISTON_ARM_COLLISION",
         "fallable":false,
         "friction":0.6,
         "hardness":0.5,
@@ -1159,7 +1159,7 @@
         "aabb":"new SimpleAxisAlignedBB(0,0,0,1,1,1)"
     },
     {
-        "name":"MOVINGBLOCK",
+        "name":"MOVING_BLOCK",
         "fallable":false,
         "friction":0.6,
         "hardness":-1,

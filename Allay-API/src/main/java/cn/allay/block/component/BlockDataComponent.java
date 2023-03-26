@@ -30,10 +30,10 @@ public interface BlockDataComponent {
     boolean fallable();
     float friction();
     float hardness();
-    int resistance();
+    float resistance();
     boolean solid();
     boolean pushesOutItems();
-    int translucency();
+    float translucency();
     int burnChance();
     int burnAbility();
     int lightFilterFactor();

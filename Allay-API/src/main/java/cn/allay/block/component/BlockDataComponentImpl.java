@@ -23,10 +23,10 @@ public class BlockDataComponentImpl implements BlockDataComponent, BlockComponen
     @Builder.Default protected boolean fallable = false;
     @Builder.Default protected float friction = 0.6f;
     @Builder.Default protected float hardness = 1;
-    @Builder.Default protected int resistance = 15;
+    @Builder.Default protected float resistance = 15;
     @Builder.Default protected boolean solid = true;
     @Builder.Default protected boolean pushesOutItems = true;
-    @Builder.Default protected int translucency = 0;
+    @Builder.Default protected float translucency = 0;
     @Builder.Default protected int burnChance = 0;
     @Builder.Default protected int burnAbility = 0;
     @SerializedName("filterLight")

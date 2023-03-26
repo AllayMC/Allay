@@ -1,5 +1,6 @@
 package cn.allay.server;
 
+import cn.allay.block.registry.VanillaBlockDataRegistry;
 import cn.allay.network.AllayNetwork;
 import cn.allay.network.Network;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public final class AllayServer implements Server {
         this.network = initNetwork();
         log.info("Starting up network...");
         this.network.start();
+        VanillaBlockDataRegistry.init(new VanillaBlockDataRegistry.Loader());
     }
 
     @Override
