@@ -12,74 +12,79 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class BlockDataComponentImplTest {
     private static final String json = "{\n" +
-            "        \"name\":\"STONE\",\n" +
-            "        \"fallable\":false,\n" +
-            "        \"friction\":0.6,\n" +
-            "        \"hardness\":1.5,\n" +
-            "        \"resistance\":30,\n" +
-            "        \"solid\":true,\n" +
-            "        \"pushesOutItems\":true,\n" +
-            "        \"translucency\":0,\n" +
-            "        \"burnChance\":0,\n" +
-            "        \"burnAbility\":0,\n" +
-            "        \"filterLight\":15,\n" +
-            "        \"experimental\":false,\n" +
-            "        \"flammable\":false,\n" +
-            "        \"replaceable\":false,\n" +
-            "        \"emitLight\":0,\n" +
-            "        \"diggable\":true,\n" +
-            "        \"powerSource\":false,\n" +
-            "        \"breakFalling\":false,\n" +
-            "        \"blockWater\":true,\n" +
-            "        \"canBeSilkTouched\":true,\n" +
-            "        \"blockSolid\":true,\n" +
-            "        \"blockMotion\":true,\n" +
-            "        \"comparatorSignal\":false,\n" +
-            "        \"pushUpFalling\":false,\n" +
-            "        \"waterlogFlowing\":true,\n" +
-            "        \"waterlogSolid\":false,\n" +
-            "        \"color\":-1,\n" +
-            "        \"aabb\":\"new SimpleAxisAlignedBB(-0.1,-0.1,-0.1,1.1,1.1,1.1)\",\n" +
-            "        \"targetTool\":\"ToolTypes.PICKAXE\"\n" +
+            "        \"aabb\": \"0.0005,0.0005,0.0005,0.9995,0.1825,0.9995\",\n" +
+            "        \"canBeMovingBlock\": true,\n" +
+            "        \"blocksPrecipitation\": true,\n" +
+            "        \"breaksFallingBlocks\": true,\n" +
+            "        \"burnAbility\": 0,\n" +
+            "        \"burnChance\": 0,\n" +
+            "        \"canBeBrokenFromFalling\": true,\n" +
+            "        \"canContainLiquid\": true,\n" +
+            "        \"color\": -1,\n" +
+            "        \"explosionResistance\": 15,\n" +
+            "        \"friction\": 0.6,\n" +
+            "        \"hardness\": 3,\n" +
+            "        \"hasBlockEntity\": false,\n" +
+            "        \"hasComparatorSignal\": false,\n" +
+            "        \"identifier\": \"minecraft:trapdoor\",\n" +
+            "        \"isAlwaysDestroyable\": true,\n" +
+            "        \"isContainerBlock\": false,\n" +
+            "        \"isLiquid\": false,\n" +
+            "        \"isMotionBlockingBlock\": false,\n" +
+            "        \"isPowerSource\": false,\n" +
+            "        \"isSolid\": false,\n" +
+            "        \"isSolidBlocking\": true,\n" +
+            "        \"isUnbreakable\": false,\n" +
+            "        \"isWaterBlocking\": true,\n" +
+            "        \"flammable\": true,\n" +
+            "        \"light\": 0,\n" +
+            "        \"lightEmission\": 0,\n" +
+            "        \"pushesUpFallingBlocks\": false,\n" +
+            "        \"superHot\": false,\n" +
+            "        \"thickness\": 0,\n" +
+            "        \"translucency\": 0,\n" +
+            "        \"waterSpreadCausesSpawn\": false\n" +
             "    }";
 
     @Test
     void of() {
         BlockDataComponent blockDataComponent = BlockDataComponent.of(json);
-        assertFalse(blockDataComponent.fallable());
-        assertEquals(0.6f, blockDataComponent.friction());
-        assertEquals(1.5f, blockDataComponent.hardness());
-        assertEquals(30, blockDataComponent.resistance());
-        assertTrue(blockDataComponent.solid());
-        assertTrue(blockDataComponent.pushesOutItems());
-        assertEquals(0, blockDataComponent.translucency());
-        assertEquals(0, blockDataComponent.burnChance());
-        assertEquals(0, blockDataComponent.burnAbility());
-        assertEquals(15, blockDataComponent.lightFilterFactor());
-        assertFalse(blockDataComponent.experimental());
-        assertFalse(blockDataComponent.flammable());
-        assertFalse(blockDataComponent.replaceable());
-        assertEquals(0, blockDataComponent.emitLightFactor());
-        assertTrue(blockDataComponent.diggable());
-        assertFalse(blockDataComponent.powerSource());
-        assertFalse(blockDataComponent.canBreakFallingBlock());
-        assertTrue(blockDataComponent.canBlockWater());
-        assertTrue(blockDataComponent.canBeSilkTouched());
-        assertTrue(blockDataComponent.blockSolid());
+        //Check all the values
+        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockDataComponent.aabb().minX()));
+        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockDataComponent.aabb().minY()));
+        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockDataComponent.aabb().minZ()));
+        assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockDataComponent.aabb().maxX()));
+        assertEquals(Float.toHexString(0.1825f), Float.toHexString(blockDataComponent.aabb().maxY()));
+        assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockDataComponent.aabb().maxZ()));
         assertTrue(blockDataComponent.canBeMovingBlock());
-        assertFalse(blockDataComponent.comparatorSignal());
-        assertFalse(blockDataComponent.pushUpFalling());
-        assertTrue(blockDataComponent.waterlogFlowing());
-        assertFalse(blockDataComponent.waterlogSolid());
+        assertTrue(blockDataComponent.blocksPrecipitation());
+        assertTrue(blockDataComponent.breaksFallingBlocks());
+        assertEquals(0, blockDataComponent.burnAbility());
+        assertEquals(0, blockDataComponent.burnChance());
+        assertTrue(blockDataComponent.canBeBrokenFromFalling());
+        assertTrue(blockDataComponent.canContainLiquid());
         assertEquals(-1, blockDataComponent.color());
-        var aabb = blockDataComponent.axisAlignedBB();
-        //Prevents loss of floating-point precision
-        assertEquals("-0.1", String.valueOf(aabb.minX()));
-        assertEquals("-0.1", String.valueOf(aabb.minY()));
-        assertEquals("-0.1", String.valueOf(aabb.minZ()));
-        assertEquals("1.1", String.valueOf(aabb.maxX()));
-        assertEquals("1.1", String.valueOf(aabb.maxY()));
-        assertEquals("1.1", String.valueOf(aabb.maxZ()));
-        assertEquals(ToolType.PICKAXE, blockDataComponent.targetTool());
+        assertEquals(15, blockDataComponent.explosionResistance());
+        assertEquals(Float.toHexString(0.6f), Float.toHexString(blockDataComponent.friction()));
+        assertEquals(3, blockDataComponent.hardness());
+        assertFalse(blockDataComponent.hasBlockEntity());
+        assertFalse(blockDataComponent.hasComparatorSignal());
+        assertTrue(blockDataComponent.isAlwaysDestroyable());
+        assertFalse(blockDataComponent.isContainerBlock());
+        assertFalse(blockDataComponent.isLiquid());
+        assertFalse(blockDataComponent.isMotionBlockingBlock());
+        assertFalse(blockDataComponent.isPowerSource());
+        assertFalse(blockDataComponent.isSolid());
+        assertTrue(blockDataComponent.isSolidBlocking());
+        assertFalse(blockDataComponent.isUnbreakable());
+        assertTrue(blockDataComponent.isWaterBlocking());
+        assertTrue(blockDataComponent.flammable());
+        assertEquals(0, blockDataComponent.light());
+        assertEquals(0, blockDataComponent.lightEmission());
+        assertFalse(blockDataComponent.pushesUpFallingBlocks());
+        assertFalse(blockDataComponent.superHot());
+        assertEquals(0, blockDataComponent.thickness());
+        assertEquals(0, blockDataComponent.translucency());
+        assertFalse(blockDataComponent.waterSpreadCausesSpawn());
     }
 }

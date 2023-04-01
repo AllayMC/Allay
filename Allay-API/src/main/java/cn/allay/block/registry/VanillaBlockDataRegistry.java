@@ -4,6 +4,7 @@ import cn.allay.block.component.BlockDataComponent;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.registry.RegistryLoader;
 import cn.allay.registry.SimpleMappedRegistry;
+import cn.allay.utils.StringUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
@@ -50,19 +51,23 @@ public final class VanillaBlockDataRegistry extends SimpleMappedRegistry<Vanilla
                 for (JsonElement jsonElement : element.getAsJsonArray()) {
                     VanillaBlockId type;
                     try {
-                        type = VanillaBlockId.valueOf(jsonElement.getAsJsonObject().get("name").getAsString());
+                        type = VanillaBlockId.valueOf(StringUtils.fastTwoPartSplit(jsonElement.getAsJsonObject().get("identifier").getAsString(), ":", "")[1].toUpperCase());
                     } catch (IllegalArgumentException ignore) {
-                        log.error("Unknown block name: " + jsonElement.getAsJsonObject().get("name"));
+                        log.error("Unknown block identifier: " + jsonElement.getAsJsonObject().get("identifier"));
                         continue;
                     }
                     var component = BlockDataComponent.of(jsonElement.toString());
                     loaded.put(type, component);
                 }
+                int missing = 0;
                 for (var vanillaBlock : VanillaBlockId.values()) {
                     if (!loaded.containsKey(vanillaBlock)) {
                         log.error("Missing block attributes for block: " + vanillaBlock);
+                        missing++;
                     }
                 }
+                if (missing != 0) log.error(missing + " blocks' attributes are missing");
+                log.info("Loaded vanilla block palette registry successfully");
                 return loaded;
             }
         }
