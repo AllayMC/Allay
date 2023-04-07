@@ -1,6 +1,6 @@
 package cn.allay.block;
 
-import cn.allay.block.component.property.BlockProperty;
+import cn.allay.block.property.BlockProperty;
 import cn.allay.block.type.BlockType;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.position.PosRO;

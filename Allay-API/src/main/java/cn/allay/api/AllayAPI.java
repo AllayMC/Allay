@@ -1,5 +1,6 @@
 package cn.allay.api;
 
+import cn.allay.block.definition.BlockDefinitionBuilder;
 import cn.allay.block.type.BlockTypeBuilder;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.entity.type.EntityTypeBuilder;
@@ -96,5 +97,6 @@ public final class AllayAPI {
         requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
         requireImpl(EntityTypeBuilder.class, EntityTypeBuilder.BUILDER::set);
         requireImpl(BlockTypeBuilder.class, BlockTypeBuilder.BUILDER::set);
+        requireImpl(BlockDefinitionBuilder.class, BlockDefinitionBuilder.BUILDER::set);
     }
 }
