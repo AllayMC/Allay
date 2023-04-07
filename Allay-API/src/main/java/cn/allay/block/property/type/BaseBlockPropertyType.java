@@ -33,4 +33,17 @@ public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPro
     public List<DATATYPE> getValidValues() {
         return validValues;
     }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof BaseBlockPropertyType<?> anotherType) {
+            return name.equals(anotherType.name);
+        }
+        return false;
+    }
 }

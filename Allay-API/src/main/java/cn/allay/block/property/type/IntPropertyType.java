@@ -2,7 +2,6 @@ package cn.allay.block.property.type;
 
 import lombok.Getter;
 
-import java.util.List;
 import java.util.stream.IntStream;
 
 /**

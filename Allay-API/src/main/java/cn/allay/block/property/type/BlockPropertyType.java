@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Author: daoge_cmd <br>
@@ -56,6 +57,19 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
         public void setValue(DATATYPE value) {
             if (propertyType.checkValid(value)) this.value = value;
             else throw new IllegalArgumentException("Invalid value");
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(propertyType, value);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof BlockProperty<?, ?> anotherProperty) {
+                return propertyType.equals(anotherProperty.propertyType) && value.equals(anotherProperty.value);
+            }
+            return false;
         }
     }
 }
