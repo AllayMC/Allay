@@ -1,7 +1,7 @@
 package cn.allay.block.property;
 
-import cn.allay.block.property.type.BlockProperty;
-import cn.allay.block.property.vanilla.VanillaBlockProperties;
+import cn.allay.block.property.type.BlockPropertyType;
+import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * Date: 2023/4/8 <br>
  * Allay Project <br>
  */
-class BlockPropertyRegistryTest {
+class BlockPropertyTypeRegistryTest {
 
     @Test
     void testInit() {
-        var registry = BlockPropertyRegistry.getInstance();
-        for (BlockProperty<?> property : VanillaBlockProperties.values()) {
+        var registry = BlockPropertyTypeRegistry.getInstance();
+        for (BlockPropertyType<?> property : VanillaBlockPropertyTypes.values()) {
             assertEquals(property, registry.get(property.getName()));
         }
     }

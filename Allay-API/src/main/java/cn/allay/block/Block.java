@@ -1,6 +1,6 @@
 package cn.allay.block;
 
-import cn.allay.block.property.type.BlockProperty;
+import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.type.BlockType;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.position.PosRO;
@@ -17,5 +17,5 @@ public interface Block extends PosRO<Integer> {
 
     BlockType<? extends Block> getBlockType();
 
-    Set<BlockProperty<?>> getBlockProperties();
+    Set<BlockPropertyType<?>> getBlockProperties();
 }
