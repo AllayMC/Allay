@@ -14,7 +14,4 @@
 ## 2. Update the auto-generated code
 
 - ```cn/allay/block/data/VanillaBlockId.java``` (Using Allay-API/src/test/cn/allay/codegen/VanillaBlockIdEnumGen.java)
-
-
-
-//TODO
+- ```cn/allay/block/property/vanilla/*``` (Using Allay-API/src/test/cn/allay/codegen/VanillaBlockPropertyEnumGen.java)
