@@ -52,7 +52,7 @@ public class VanillaBlockPropertyTypeGen {
                     codeBuilder.addField(
                             FieldSpec
                                     .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.createType($S ,List.of($T.values()) ,$T.values()[0])", enumPropertyClass, blockPropertyTypeInfo.name, enumClass, enumClass)
+                                    .initializer("$T.createType($S ,List.of($T.values()) ,$T.values()[0]).register()", enumPropertyClass, blockPropertyTypeInfo.name, enumClass, enumClass)
                                     .build()
                     );
                 }
@@ -60,7 +60,7 @@ public class VanillaBlockPropertyTypeGen {
                     codeBuilder.addField(
                             FieldSpec
                                     .builder(booleanPropertyClass, blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.createType($S, $N)", booleanPropertyClass, blockPropertyTypeInfo.name, blockPropertyTypeInfo.validValues.get(0))
+                                    .initializer("$T.createType($S, $N).register()", booleanPropertyClass, blockPropertyTypeInfo.name, blockPropertyTypeInfo.validValues.get(0))
                                     .build()
                     );
                 }
@@ -79,7 +79,7 @@ public class VanillaBlockPropertyTypeGen {
                     codeBuilder.addField(
                             FieldSpec
                                     .builder(intPropertyClass, blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.createType($S, $L, $L, $L)", intPropertyClass, blockPropertyTypeInfo.name, min, max, blockPropertyTypeInfo.validValues.get(0))
+                                    .initializer("$T.createType($S, $L, $L, $L).register()", intPropertyClass, blockPropertyTypeInfo.name, min, max, blockPropertyTypeInfo.validValues.get(0))
                                     .build()
                     );
                 }
