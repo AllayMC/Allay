@@ -1,6 +1,4 @@
-package cn.allay.block.property;
-
-import cn.allay.block.component.BlockComponentImpl;
+package cn.allay.block.property.type;
 
 /**
  * Author: daoge_cmd <br>
@@ -9,6 +7,5 @@ import cn.allay.block.component.BlockComponentImpl;
  */
 public sealed interface BlockProperty<DATATYPE> permits BaseBlockProperty {
     String getName();
-    void set(DATATYPE value);
     DATATYPE get();
 }

@@ -1,4 +1,4 @@
-package cn.allay.block.property;
+package cn.allay.block.property.type;
 
 /**
  * Author: daoge_cmd <br>
@@ -6,10 +6,6 @@ package cn.allay.block.property;
  * Allay Project <br>
  */
 public final class EnumProperty<T extends Enum<T>> extends BaseBlockProperty<T> {
-    public EnumProperty(String name) {
-        super(name);
-    }
-
     public EnumProperty(String name, T defaultData) {
         super(name, defaultData);
     }

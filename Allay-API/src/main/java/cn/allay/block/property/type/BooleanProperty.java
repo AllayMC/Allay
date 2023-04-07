@@ -1,4 +1,4 @@
-package cn.allay.block.property;
+package cn.allay.block.property.type;
 
 /**
  * Author: daoge_cmd <br>
@@ -6,10 +6,6 @@ package cn.allay.block.property;
  * Allay Project <br>
  */
 public final class BooleanProperty extends BaseBlockProperty<Boolean> {
-    public BooleanProperty(String name) {
-        super(name);
-    }
-
     public BooleanProperty(String name, Boolean defaultData) {
         super(name, defaultData);
     }

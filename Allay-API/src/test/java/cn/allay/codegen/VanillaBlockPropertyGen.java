@@ -7,9 +7,12 @@ import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
 import javax.lang.model.element.Modifier;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Author: daoge_cmd <br>
@@ -41,9 +44,9 @@ public class VanillaBlockPropertyGen {
                         MethodSpec.constructorBuilder()
                                 .addModifiers(Modifier.PRIVATE)
                                 .build());
-        var enumPropertyClass = ClassName.get("cn.allay.block.property", "EnumProperty");
-        var booleanPropertyClass = ClassName.get("cn.allay.block.property", "BooleanProperty");
-        var intPropertyClass = ClassName.get("cn.allay.block.property", "IntProperty");
+        var enumPropertyClass = ClassName.get("cn.allay.block.property.type", "EnumProperty");
+        var booleanPropertyClass = ClassName.get("cn.allay.block.property.type", "BooleanProperty");
+        var intPropertyClass = ClassName.get("cn.allay.block.property.type", "IntProperty");
         for (BlockPropertyInfo blockPropertyInfo : blockPropertyInfos) {
             switch (blockPropertyInfo.type) {
                 case ENUM -> {
@@ -84,6 +87,23 @@ public class VanillaBlockPropertyGen {
                 }
             }
         }
+        var propertyClass = ClassName.get("cn.allay.block.property.type", "BlockProperty");
+        var listClass = ParameterizedTypeName.get(ClassName.get("java.util", "List"), ParameterizedTypeName.get(propertyClass, WildcardTypeName.subtypeOf(Object.class)));
+        String paramStr = blockPropertyInfos.stream().map(info -> info.name.toUpperCase()).collect(Collectors.joining(", "));
+        codeBuilder.addField(
+                FieldSpec
+                        .builder(listClass, "VALUES", Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                        .initializer("List.of($N)", paramStr)
+                        .build()
+        );
+        codeBuilder.addMethod(
+                MethodSpec
+                        .methodBuilder("values")
+                        .returns(listClass)
+                        .addStatement("return VALUES")
+                        .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                        .build()
+        );
         var javaFile = JavaFile.builder("cn.allay.block.property.vanilla", codeBuilder.build()).build();
         Files.writeString(FILE_OUTPUT_PATH_BASE.resolve("VanillaBlockProperties.java"), javaFile.toString());
     }

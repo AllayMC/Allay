@@ -1,4 +1,4 @@
-package cn.allay.block.property;
+package cn.allay.block.property.type;
 
 import lombok.Getter;
 
