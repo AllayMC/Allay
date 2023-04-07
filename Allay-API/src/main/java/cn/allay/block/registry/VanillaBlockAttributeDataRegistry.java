@@ -13,8 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Author: daoge_cmd <br>
@@ -22,58 +23,57 @@ import java.util.Map;
  * Allay Project <br>
  */
 @Slf4j
-public final class VanillaBlockDataRegistry extends SimpleMappedRegistry<VanillaBlockId, BlockDataComponent, Map<VanillaBlockId, BlockDataComponent>> {
+public final class VanillaBlockAttributeDataRegistry extends SimpleMappedRegistry<VanillaBlockId, BlockDataComponent, Map<VanillaBlockId, BlockDataComponent>> {
 
-    private static VanillaBlockDataRegistry INSTANCE;
+    private static VanillaBlockAttributeDataRegistry INSTANCE;
 
-    private VanillaBlockDataRegistry(RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockDataComponent>> loader) {
+    private VanillaBlockAttributeDataRegistry(RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockDataComponent>> loader) {
         super(VanillaBlockId.values(), loader);
     }
 
-    public static VanillaBlockDataRegistry getInstance() {
+    public static VanillaBlockAttributeDataRegistry getInstance() {
         return INSTANCE;
     }
 
     public static void init(RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockDataComponent>> loader) {
-        INSTANCE = new VanillaBlockDataRegistry(loader);
+        INSTANCE = new VanillaBlockAttributeDataRegistry(loader);
     }
 
     public static class Loader implements RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockDataComponent>> {
 
-
         @SneakyThrows
         @Override
         public Map<VanillaBlockId, BlockDataComponent> load(VanillaBlockId[] input) {
-            log.info("Start loading vanilla block palette registry");
+            log.info("Start loading vanilla block attribute data registry...");
             try (var reader = getReader()) {
                 var element = JsonParser.parseReader(reader);
-                var loaded = new HashMap<VanillaBlockId, BlockDataComponent>();
+                var loaded = new EnumMap<VanillaBlockId, BlockDataComponent>(VanillaBlockId.class);
                 for (JsonElement jsonElement : element.getAsJsonArray()) {
                     VanillaBlockId type;
                     try {
                         type = VanillaBlockId.valueOf(StringUtils.fastTwoPartSplit(jsonElement.getAsJsonObject().get("identifier").getAsString(), ":", "")[1].toUpperCase());
                     } catch (IllegalArgumentException ignore) {
-                        log.error("Unknown block identifier: " + jsonElement.getAsJsonObject().get("identifier"));
+                        log.error("Unknown block name: " + jsonElement.getAsJsonObject().get("identifier"));
                         continue;
                     }
                     var component = BlockDataComponent.of(jsonElement.toString());
                     loaded.put(type, component);
                 }
-                int missing = 0;
+                int missings = 0;
                 for (var vanillaBlock : VanillaBlockId.values()) {
                     if (!loaded.containsKey(vanillaBlock)) {
-                        log.error("Missing block attributes for block: " + vanillaBlock);
-                        missing++;
+                        log.error("Missing attribute data for block: " + vanillaBlock);
+                        missings++;
                     }
                 }
-                if (missing != 0) log.error(missing + " blocks' attributes are missing");
-                log.info("Loaded vanilla block palette registry successfully");
+                if (missings != 0) log.error(missings + " blocks' attributes are missing!");
+                log.info("Loaded vanilla block attribute data registry successfully");
                 return loaded;
             }
         }
 
         protected Reader getReader() {
-            return new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("block_attributes.json")));
+            return new BufferedReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("block_attributes.json"), "block_attributes.json is missing!")));
         }
     }
 }

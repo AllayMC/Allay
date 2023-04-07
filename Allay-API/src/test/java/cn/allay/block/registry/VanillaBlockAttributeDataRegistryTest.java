@@ -14,16 +14,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * Date: 2023/3/26 <br>
  * Allay Project <br>
  */
-class VanillaBlockDataRegistryTest {
+class VanillaBlockAttributeDataRegistryTest {
     @Test
     void testInit() {
-        VanillaBlockDataRegistry.init(new VanillaBlockDataRegistry.Loader() {
+        VanillaBlockAttributeDataRegistry.init(new VanillaBlockAttributeDataRegistry.Loader() {
             @SneakyThrows
             @Override
             protected Reader getReader() {
                 return Files.newBufferedReader(TestUtils.getSrcMainResourceFilePath("block_attributes.json"));
             }
         });
-        assertNotNull(VanillaBlockDataRegistry.getInstance());
+        assertNotNull(VanillaBlockAttributeDataRegistry.getInstance());
     }
 }
