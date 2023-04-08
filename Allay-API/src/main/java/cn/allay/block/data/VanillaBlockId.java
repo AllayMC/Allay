@@ -1,6 +1,7 @@
 package cn.allay.block.data;
 
 import cn.allay.identifier.Identifier;
+import java.lang.String;
 import lombok.Getter;
 
 /**
@@ -1578,11 +1579,5 @@ public enum VanillaBlockId {
 
   VanillaBlockId(String namespaceId) {
     this.namespaceId = new Identifier(namespaceId);
-  }
-
-
-  @Override
-  public String toString() {
-    return namespaceId.toString();
   }
 }

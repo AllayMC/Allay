@@ -1,16 +1,24 @@
 package cn.allay.codegen;
 
 import cn.allay.utils.StringUtils;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
+import org.cloudburstmc.nbt.NBTInputStream;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 
 import javax.lang.model.element.Modifier;
+import java.io.DataInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Author: daoge_cmd <br>
@@ -19,13 +27,15 @@ import java.util.stream.Collectors;
  */
 public class VanillaBlockPropertyTypeGen {
 
-    private static final Path BLOCK_DATA_FILE_PATH = Path.of("Allay-API/src/test/resources/minecraft-bedrock-data.json");
+    private static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Allay-Server/src/main/resources/block_palette.nbt");
     private static final Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/block/property/vanilla");
 
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @SneakyThrows
     public static void generate() {
         var blockPropertyInfos = generateBlockPropertyInfos();
+        exportBlockPropertyInfosToFile(blockPropertyInfos);
         for (BlockPropertyTypeInfo blockPropertyTypeInfo : blockPropertyInfos) {
             if (blockPropertyTypeInfo.type == BlockPropertyType.ENUM) {
                 generateEnumClass(blockPropertyTypeInfo);
@@ -127,30 +137,45 @@ public class VanillaBlockPropertyTypeGen {
 
     @SneakyThrows
     protected static List<BlockPropertyTypeInfo> generateBlockPropertyInfos() {
-        try (var reader = Files.newBufferedReader(BLOCK_DATA_FILE_PATH)) {
-            return JsonParser
-                    .parseReader(reader)
-                    .getAsJsonObject()
-                    .getAsJsonObject("blockProperties")
-                    .asMap()
-                    .entrySet()
-                    .stream()
-                    .map(entry -> {
-                        var propertyName = entry.getKey();
-                        var validValues = entry.getValue().getAsJsonArray().get(0).getAsJsonObject().getAsJsonArray("validValues").asList().stream().map(JsonElement::getAsString).toList();
-                        var propertyType = getPropertyType(validValues.get(0));
-                        return new BlockPropertyTypeInfo(propertyName, validValues, propertyType);
-                    }).toList();
+        Map<String, List<String>> propertyInfos = new HashMap<>();
+        try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(BLOCK_PALETTE_FILE_PATH))))) {
+            var blocks = ((NbtMap) nbtReader.readTag()).getList("blocks", NbtType.COMPOUND);
+            blocks.forEach(block -> block.getCompound("states").forEach((name, value) -> {
+                if (!propertyInfos.containsKey(name)) {
+                    var validValues = new ArrayList<String>();
+                    validValues.add(value.toString());
+                    propertyInfos.put(name, validValues);
+                } else {
+                    var validValues = propertyInfos.get(name);
+                    if (!validValues.contains(value.toString()))
+                        validValues.add(value.toString());
+                }
+            }));
         }
+        var boolValidValues = List.of("false", "true");
+        return propertyInfos.entrySet().stream().map(entry -> {
+            var propertyType = getPropertyType(entry.getValue());
+            return new BlockPropertyTypeInfo(entry.getKey(), propertyType == BlockPropertyType.BOOLEAN ? boolValidValues : entry.getValue(), propertyType);
+        }).toList();
     }
 
-    protected static BlockPropertyType getPropertyType(String value) {
-        if (value.equals("true") || value.equals("false")) {
-            return BlockPropertyType.BOOLEAN;
+    @SneakyThrows
+    protected static void exportBlockPropertyInfosToFile(List<BlockPropertyTypeInfo> infos) {
+        Map<String, Map<String, Object>> converted = new HashMap<>();
+        for (var info : infos) {
+            converted.put(info.name, info.toMapStyle());
         }
+        System.out.println("block_properties.json has exported to Allay-Server/src/test/resources!");
+        Files.writeString(Path.of("Allay-Server/src/test/resources/block_properties.json"), GSON.toJson(converted));
+    }
+
+    protected static BlockPropertyType getPropertyType(List<String> values) {
         try {
-            Integer.parseInt(value);
-            return BlockPropertyType.INTEGER;
+            Integer.parseInt(values.get(0));
+            if (values.size() == 2)
+                return BlockPropertyType.BOOLEAN;
+            else
+                return BlockPropertyType.INTEGER;
         } catch (NumberFormatException ignore) {
         }
         return BlockPropertyType.ENUM;
@@ -177,6 +202,14 @@ public class VanillaBlockPropertyTypeGen {
     protected record BlockPropertyTypeInfo(String name, List<String> validValues, BlockPropertyType type) {
         public String getEnumClassName() {
             return convertToCamelCase(name);
+        }
+
+        //"name" is not included
+        public Map<String, Object> toMapStyle() {
+            var map = new HashMap<String, Object>();
+            map.put("validValues", validValues);
+            map.put("valueType", type);
+            return map;
         }
     }
 }
