@@ -1,4 +1,4 @@
-package cn.allay.block.registry;
+package cn.allay.block.attribute;
 
 import cn.allay.block.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.testutils.TestUtils;

@@ -21,6 +21,7 @@ import java.util.zip.GZIPInputStream;
  * Author: daoge_cmd <br>
  * Date: 2023/4/7 <br>
  * Allay Project <br>
+ * TODO: Reduce memory usage
  */
 @Slf4j
 public class VanillaBlockPaletteRegistry extends SimpleMappedRegistry<VanillaBlockId, VanillaBlockPaletteRegistry.VanillaBlockPaletteDataEntry, Map<VanillaBlockId, VanillaBlockPaletteRegistry.VanillaBlockPaletteDataEntry>> {

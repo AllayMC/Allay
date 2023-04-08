@@ -1,4 +1,4 @@
-package cn.allay.block.registry;
+package cn.allay.block.palette;
 
 import cn.allay.block.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.palette.VanillaBlockPaletteRegistry;
@@ -38,6 +38,6 @@ class VanillaBlockPaletteRegistryTest {
                 );
             }
         });
-        assertNotNull(VanillaBlockAttributeRegistry.getInstance());
+        assertNotNull(VanillaBlockPaletteRegistry.getInstance());
     }
 }
