@@ -1,9 +1,9 @@
 package cn.allay.block.property;
 
+import cn.allay.api.ApiInstanceHolder;
 import cn.allay.block.property.type.BlockPropertyType;
-import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
-import cn.allay.registry.SimpleMappedRegistry;
-import java.util.HashMap;
+import cn.allay.registry.MappedRegistry;
+
 import java.util.Map;
 
 /**
@@ -11,20 +11,10 @@ import java.util.Map;
  * Date: 2023/4/8 <br>
  * Allay Project <br>
  */
-public final class BlockPropertyTypeRegistry extends SimpleMappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> {
+public interface BlockPropertyTypeRegistry extends MappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> {
+    ApiInstanceHolder<BlockPropertyTypeRegistry> REGISTRY = ApiInstanceHolder.create();
 
-    private static final BlockPropertyTypeRegistry INSTANCE = new BlockPropertyTypeRegistry();
-
-    static {
-        //Load vanilla property types
-        VanillaBlockPropertyTypes.values();
-    }
-
-    private BlockPropertyTypeRegistry() {
-        super(null, input -> new HashMap<>());
-    }
-
-    public static BlockPropertyTypeRegistry getInstance() {
-        return INSTANCE;
+    static BlockPropertyTypeRegistry getRegistry() {
+        return REGISTRY.get();
     }
 }

@@ -28,7 +28,7 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     }
 
     default <T extends BlockPropertyType<?>> T register() {
-        return register(BlockPropertyTypeRegistry.getInstance());
+        return register(BlockPropertyTypeRegistry.getRegistry());
     }
 
      default <T extends BlockPropertyType<?>> T register(MappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> registry) {

@@ -1,6 +1,9 @@
 package cn.allay.api;
 
+import cn.allay.block.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.definition.BlockDefinitionBuilder;
+import cn.allay.block.palette.VanillaBlockPaletteRegistry;
+import cn.allay.block.property.BlockPropertyTypeRegistry;
 import cn.allay.block.type.BlockTypeBuilder;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.entity.type.EntityTypeBuilder;
@@ -98,5 +101,8 @@ public final class AllayAPI {
         requireImpl(EntityTypeBuilder.class, EntityTypeBuilder.BUILDER::set);
         requireImpl(BlockTypeBuilder.class, BlockTypeBuilder.BUILDER::set);
         requireImpl(BlockDefinitionBuilder.class, BlockDefinitionBuilder.BUILDER::set);
+        requireImpl(BlockPropertyTypeRegistry.class, BlockPropertyTypeRegistry.REGISTRY::set);
+        requireImpl(VanillaBlockPaletteRegistry.class, VanillaBlockPaletteRegistry.REGISTRY::set);
+        requireImpl(VanillaBlockAttributeRegistry.class, VanillaBlockAttributeRegistry.REGISTRY::set);
     }
 }

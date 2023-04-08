@@ -2,6 +2,13 @@ package cn.allay;
 
 import cn.allay.api.AllayAPI;
 import cn.allay.api.MissingImplementationException;
+import cn.allay.block.attribute.AllayVanillaBlockAttributeRegistry;
+import cn.allay.block.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.block.palette.AllayVanillaBlockPaletteRegistry;
+import cn.allay.block.palette.VanillaBlockPaletteRegistry;
+import cn.allay.block.property.AllayBlockPropertyTypeRegistry;
+import cn.allay.block.property.BlockPropertyTypeRegistry;
+import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.entity.type.AllayEntityTypeBuilder;
@@ -34,6 +41,10 @@ public final class Allay {
         api.bind(Server.class, new AllayServer());
         api.bind(Scheduler.SchedulerFactory.class, AllayScheduler::new);
         api.bind(EntityTypeBuilder.class, new AllayEntityTypeBuilder());
+        //TODO: BlockDefinitionBuilder
+        api.bind(BlockPropertyTypeRegistry.class, new AllayBlockPropertyTypeRegistry());
+        api.bind(VanillaBlockPaletteRegistry.class, new AllayVanillaBlockPaletteRegistry(new AllayVanillaBlockPaletteRegistry.Loader()));
+        api.bind(VanillaBlockAttributeRegistry.class, new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));
         api.implement();
     }
 }

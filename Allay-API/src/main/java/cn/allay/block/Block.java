@@ -13,9 +13,5 @@ import java.util.Set;
  * Allay Project <br>
  */
 public interface Block extends PosRO<Integer> {
-    Identifier getNamespaceId();
-
     BlockType<? extends Block> getBlockType();
-
-    Set<BlockPropertyType<?>> getBlockProperties();
 }
