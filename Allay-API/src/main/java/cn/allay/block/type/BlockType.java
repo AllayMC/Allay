@@ -1,7 +1,9 @@
 package cn.allay.block.type;
 
 import cn.allay.block.Block;
-import cn.allay.block.definition.BlockDefinition;
+import cn.allay.block.property.type.BlockPropertyType;
+
+import java.util.List;
 
 /**
  * Author: daoge_cmd <br>
@@ -9,8 +11,5 @@ import cn.allay.block.definition.BlockDefinition;
  * Allay Project <br>
  */
 public interface BlockType<T extends Block> {
-
-    BlockDefinition<T> getDefinition();
-
-    Class<T> getCompiledEntityClass();
+    List<BlockPropertyType<?>> getBlockPropertyList();
 }

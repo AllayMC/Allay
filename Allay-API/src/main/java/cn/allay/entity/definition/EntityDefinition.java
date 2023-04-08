@@ -10,6 +10,7 @@ import java.util.List;
  * Author: daoge_cmd <br>
  * Date: 2023/3/18 <br>
  * Allay Project <br>
+ * TODO: remove this
  */
 public interface EntityDefinition<T extends Entity> extends Identified {
     List<EntityComponentImpl> getComponents();

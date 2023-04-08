@@ -1,4 +1,4 @@
-package cn.allay.block.attribute;
+package cn.allay.block.component.attribute;
 
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.block.data.VanillaBlockId;

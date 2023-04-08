@@ -9,16 +9,23 @@ import java.util.stream.IntStream;
  * Date: 2023/3/19 <br>
  * Allay Project <br>
  */
-@Getter
 public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
 
+    private final BlockProperty<Integer, IntPropertyType>[] cachedValues;
+    @Getter
     private final int min;
+    @Getter
     private final int max;
 
     private IntPropertyType(String name, int min, int max, Integer defaultData) {
         super(name, IntStream.range(min, max + 1).boxed().toList(), defaultData);
         this.min = min;
         this.max = max;
+        cachedValues = new BlockProperty[max + 1 - min];
+        for (int i = min; i <= max; i++) {
+            BlockProperty<Integer, IntPropertyType> property = new BlockProperty<>(this, i);
+            cachedValues[i] = property;
+        }
     }
 
     public static IntPropertyType createType(String name, int min, int max, Integer defaultData) {
@@ -26,8 +33,14 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
     }
 
     @Override
-    public boolean checkValid(Integer value) {
-        int v = value;
-        return v >= min && v <= max;
+    public BlockProperty<Integer, ? extends BlockPropertyType<Integer>> createProperty(Integer value) {
+        return cachedValues[value - min];
+    }
+
+    @Override
+    public BlockProperty<Integer, ? extends BlockPropertyType<Integer>> tryCreateProperty(Object value) {
+        if (value instanceof Integer integer) {
+            return cachedValues[integer - min];
+        } else throw new IllegalArgumentException("Invalid value for int property type: " + value);
     }
 }

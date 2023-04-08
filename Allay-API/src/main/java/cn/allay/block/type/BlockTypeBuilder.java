@@ -2,20 +2,23 @@ package cn.allay.block.type;
 
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.block.Block;
-import cn.allay.block.definition.BlockDefinition;
 
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/19 <br>
  * Allay Project <br>
  */
-public interface BlockTypeBuilder {
+public interface BlockTypeBuilder<T extends Block> {
 
-    ApiInstanceHolder<BlockTypeBuilder> BUILDER = ApiInstanceHolder.create();
+    ApiInstanceHolder<BlockTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
 
-    static BlockTypeBuilder builder() {
-        return BUILDER.get();
+    static <T extends Block> BlockTypeBuilder<T> builder(Class<T> clazz) {
+        return FACTORY.get().create(clazz);
     }
 
-    <T extends Block> BlockType<T> build(BlockDefinition<T> definition);
+    BlockType<T> build();
+
+    interface BlockTypeBuilderFactory {
+        <T extends Block> BlockTypeBuilder<T> create(Class<T> clazz);
+    }
 }

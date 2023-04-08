@@ -20,14 +20,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
+import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_FILE_PATH;
+import static cn.allay.codegen.Utils.convertToCamelCase;
+
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/4/8 <br>
  * Allay Project <br>
  */
 public class VanillaBlockPropertyTypeGen {
-
-    private static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Allay-Server/src/main/resources/block_palette.nbt");
     private static final Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/block/property/vanilla");
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -62,7 +63,7 @@ public class VanillaBlockPropertyTypeGen {
                     codeBuilder.addField(
                             FieldSpec
                                     .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.createType($S ,List.of($T.values()) ,$T.values()[0])", enumPropertyClass, blockPropertyTypeInfo.name, enumClass, enumClass)
+                                    .initializer("$T.createType($S ,$T.class ,$T.values()[0])", enumPropertyClass, blockPropertyTypeInfo.name, enumClass, enumClass)
                                     .build()
                     );
                 }
@@ -179,18 +180,6 @@ public class VanillaBlockPropertyTypeGen {
         } catch (NumberFormatException ignore) {
         }
         return BlockPropertyType.ENUM;
-    }
-
-    protected static String convertToCamelCase(String str) {
-        List<String> parts = StringUtils.fastSplit(str, "_");
-        StringBuilder output = new StringBuilder();
-
-        for (String part : parts) {
-            output.append(Character.toUpperCase(part.charAt(0)));
-            output.append(part.substring(1));
-        }
-
-        return output.toString();
     }
 
     protected enum BlockPropertyType {

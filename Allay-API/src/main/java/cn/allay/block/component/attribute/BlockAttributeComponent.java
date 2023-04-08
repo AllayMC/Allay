@@ -1,4 +1,4 @@
-package cn.allay.block.attribute;
+package cn.allay.block.component.attribute;
 
 import cn.allay.math.aabb.AxisAlignedBBRO;
 import cn.allay.utils.StringUtils;

@@ -1,5 +1,7 @@
 package cn.allay.block.attribute;
 
+import cn.allay.block.component.attribute.BlockAttributeComponent;
+import cn.allay.block.component.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.registry.RegistryLoader;
 import cn.allay.registry.SimpleMappedRegistry;

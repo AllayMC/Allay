@@ -20,7 +20,6 @@ import java.util.zip.GZIPInputStream;
  */
 public class VanillaBlockIdEnumGen {
 
-    private static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Allay-Server/src/main/resources/block_palette.nbt");
     private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/block/data/VanillaBlockId.java");
 
     @SneakyThrows
@@ -43,7 +42,7 @@ public class VanillaBlockIdEnumGen {
                         .addStatement("this.$N = new $T($N)", "namespaceId", identifierClass, "namespaceId")
                         .build()
                 );
-        try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(BLOCK_PALETTE_FILE_PATH))))) {
+        try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(CodeGen.BLOCK_PALETTE_FILE_PATH))))) {
             var blocks = ((NbtMap) nbtReader.readTag()).getList("blocks", NbtType.COMPOUND);
             var sortedNamespaceId = blocks.stream().map(block -> block.getString("name")).sorted(String::compareTo).map(Identifier::new).toList();
             for (var namespaceId : sortedNamespaceId) {

@@ -57,7 +57,7 @@ public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry
                 blockPalette.getCompound("states").forEach((k, v) -> {
                     var propertyType = getBlockPropertyTypeRegistry().get(k);
                     propertyTypes.add(propertyType);
-                    properties.add(propertyType.createProperty(v));
+                    properties.add(propertyType.tryCreateProperty(v));
                 });
                 if (!loaded.containsKey(blockId)) {
                     var runtimeIdMap = new HashMap<List<BlockPropertyType.BlockProperty<?, ?>>, Integer>();

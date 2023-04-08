@@ -1,6 +1,7 @@
 package cn.allay.block.property.type;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Author: daoge_cmd <br>
@@ -14,6 +15,7 @@ public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPro
     protected final DATATYPE defaultValue;
 
     protected BaseBlockPropertyType(String name, List<DATATYPE> validValues, DATATYPE defaultValue) {
+        Objects.requireNonNull(defaultValue);
         this.name = name;
         this.validValues = validValues;
         this.defaultValue = defaultValue;
@@ -32,18 +34,5 @@ public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPro
     @Override
     public List<DATATYPE> getValidValues() {
         return validValues;
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof BaseBlockPropertyType<?> anotherType) {
-            return name.equals(anotherType.name);
-        }
-        return false;
     }
 }
