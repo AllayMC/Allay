@@ -2,6 +2,8 @@ package cn.allay.block.registry;
 
 import cn.allay.block.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.palette.VanillaBlockPaletteRegistry;
+import cn.allay.block.property.type.BooleanPropertyType;
+import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.testutils.TestUtils;
 import lombok.SneakyThrows;
 import org.cloudburstmc.nbt.NBTInputStream;

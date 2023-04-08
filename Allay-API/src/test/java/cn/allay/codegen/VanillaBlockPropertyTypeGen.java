@@ -24,7 +24,7 @@ public class VanillaBlockPropertyTypeGen {
 
 
     @SneakyThrows
-    public static void main(String[] args) {
+    public static void generate() {
         var blockPropertyInfos = generateBlockPropertyInfos();
         for (BlockPropertyTypeInfo blockPropertyTypeInfo : blockPropertyInfos) {
             if (blockPropertyTypeInfo.type == BlockPropertyType.ENUM) {

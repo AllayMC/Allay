@@ -1,6 +1,8 @@
 package cn.allay.block.palette;
 
 import cn.allay.block.data.VanillaBlockId;
+import cn.allay.block.property.BlockPropertyTypeRegistry;
+import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.registry.RegistryLoader;
 import cn.allay.registry.SimpleMappedRegistry;
 import cn.allay.utils.StringUtils;
@@ -11,9 +13,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
 import java.io.DataInputStream;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 
@@ -62,9 +62,21 @@ public class VanillaBlockPaletteRegistry extends SimpleMappedRegistry<VanillaBlo
                     continue;
                 }
                 var version = blockPalette.getInt("version");
-                var states = blockPalette.getCompound("states");
-                var entry = new VanillaBlockPaletteDataEntry(blockId, states, runtimeId, version);
-                loaded.put(blockId, entry);
+                var propertyTypes = new ArrayList<BlockPropertyType<?>>();
+                var properties = new ArrayList<BlockPropertyType.BlockProperty<?, ?>>();
+                blockPalette.getCompound("states").forEach((k, v) -> {
+                    var propertyType = BlockPropertyTypeRegistry.getInstance().get(k);
+                    propertyTypes.add(propertyType);
+                    properties.add(propertyType.createProperty(v));
+                });
+                if (!loaded.containsKey(blockId)) {
+                    var runtimeIdMap = new HashMap<List<BlockPropertyType.BlockProperty<?, ?>>, Integer>();
+                    runtimeIdMap.put(properties, runtimeId);
+                    var entry = new VanillaBlockPaletteDataEntry(blockId, propertyTypes, runtimeIdMap, version);
+                    loaded.put(blockId, entry);
+                } else {
+                    loaded.get(blockId).runtimeIdMap().put(properties, runtimeId);
+                }
             }
             int missings = 0;
             for (var vanillaBlock : VanillaBlockId.values()) {
@@ -93,5 +105,11 @@ public class VanillaBlockPaletteRegistry extends SimpleMappedRegistry<VanillaBlo
         }
     }
 
-    protected record VanillaBlockPaletteDataEntry(VanillaBlockId blockId, NbtMap states, int runtimeId, int version) { }
+    public record VanillaBlockPaletteDataEntry(
+            VanillaBlockId blockId,
+            List<BlockPropertyType<?>> propertyTypes,
+            Map<List<BlockPropertyType.BlockProperty<?, ?>>, Integer> runtimeIdMap,
+            int version) {
+
+    }
 }

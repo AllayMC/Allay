@@ -24,7 +24,7 @@ public class VanillaBlockIdEnumGen {
     private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/block/data/VanillaBlockId.java");
 
     @SneakyThrows
-    public static void main(String[] args) {
+    public static void generate() {
         var identifierClass = ClassName.get("cn.allay.identifier", "Identifier");
         var stringClass = ClassName.get("java.lang", "String");
         var getterClass = ClassName.get("lombok", "Getter");
