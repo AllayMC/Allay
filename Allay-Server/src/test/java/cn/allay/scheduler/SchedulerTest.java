@@ -1,5 +1,6 @@
 package cn.allay.scheduler;
 
+import cn.allay.utils.GameLoop;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -17,17 +18,21 @@ class SchedulerTest {
     @Test
     void testAsync() {
         AtomicLong total = new AtomicLong(0);
-        for (int i = 0; i < 1_000_000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             scheduler.scheduleDelayed(() -> {
                 total.incrementAndGet();
                 return false;
             }, 1, true);
         }
-        //TODO: mock tick loop, replace it!
-        while(scheduler.getRunningTaskCount() != 0) {
-            scheduler.ticking();
-        }
-        assertEquals(1_000_000, total.get());
+        GameLoop.builder()
+                .loopCountPerSec(1000000)
+                .onTick(loop -> {
+                    if (scheduler.getRunningTaskCount() == 0)
+                        loop.stop();
+                    scheduler.ticking();
+                })
+                .build().startLoop();
+        assertEquals(1000000, total.get());
     }
 
     @Test
@@ -39,10 +44,14 @@ class SchedulerTest {
                 return false;
             }, 1);
         }
-        //TODO: mock tick loop, replace it!
-        while(scheduler.getRunningTaskCount() != 0) {
-            scheduler.ticking();
-        }
+        GameLoop.builder()
+                .loopCountPerSec(1000000)
+                .onTick(loop -> {
+                    if (scheduler.getRunningTaskCount() == 0)
+                        loop.stop();
+                    scheduler.ticking();
+                })
+                .build().startLoop();
         assertEquals(1000, total.get());
     }
 
@@ -50,10 +59,14 @@ class SchedulerTest {
     void testRepeating() {
         AtomicLong total = new AtomicLong();
         scheduler.scheduleRepeating(() -> total.incrementAndGet() != 1000, 1);
-        //TODO: mock tick loop, replace it!
-        while(scheduler.getRunningTaskCount() != 0) {
-            scheduler.ticking();
-        }
+        GameLoop.builder()
+                .loopCountPerSec(1000000)
+                .onTick(loop -> {
+                    if (scheduler.getRunningTaskCount() == 0)
+                        loop.stop();
+                    scheduler.ticking();
+                })
+                .build().startLoop();
         assertEquals(1000, total.get());
     }
 }
