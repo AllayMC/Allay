@@ -9,6 +9,7 @@ import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.component.interfaces.ComponentedObject;
 import cn.allay.identifier.Identifier;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -77,9 +78,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             bb = bb.method(ElementMatchers.is(methodShouldBeInject))
                         .intercept(methodDelegation);
         }
-        bb = bb.implement(ComponentedObject.class)
-                .method(named("getComponents"))
-                .intercept(FixedValue.value(Collections.unmodifiableList(components)));
+        bb = afterInject(bb);
         try (var unloaded = bb.make()) {
             return (Class<T>) unloaded
                     .load(getClass().getClassLoader())
@@ -87,6 +86,13 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         } catch (IOException e) {
             throw new ComponentInjectException(e);
         }
+    }
+
+    protected DynamicType.Builder<T> afterInject(DynamicType.Builder<T> bb) {
+        bb = bb.implement(ComponentedObject.class)
+                .method(named("getComponents"))
+                .intercept(FixedValue.value(Collections.unmodifiableList(components)));
+        return bb;
     }
 
     protected void checkComponentValid() {

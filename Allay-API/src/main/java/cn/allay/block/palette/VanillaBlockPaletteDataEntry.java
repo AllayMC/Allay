@@ -11,8 +11,7 @@ import java.util.Map;
  * Date: 2023/4/8 <br>
  * Allay Project <br>
  */
-public
-record VanillaBlockPaletteDataEntry(
+public record VanillaBlockPaletteDataEntry(
         VanillaBlockId blockId,
         List<BlockPropertyType<?>> propertyTypes,
         Map<List<BlockPropertyType.BlockProperty<?, ?>>, Integer> runtimeIdMap,

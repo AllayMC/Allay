@@ -8,6 +8,8 @@ import cn.allay.block.palette.AllayVanillaBlockPaletteRegistry;
 import cn.allay.block.palette.VanillaBlockPaletteRegistry;
 import cn.allay.block.property.AllayBlockPropertyTypeRegistry;
 import cn.allay.block.property.BlockPropertyTypeRegistry;
+import cn.allay.block.type.AllayBlockType;
+import cn.allay.block.type.BlockTypeBuilder;
 import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.entity.type.AllayEntityTypeBuilder;
@@ -40,7 +42,7 @@ public final class Allay {
         api.bind(Server.class, new AllayServer());
         api.bind(Scheduler.SchedulerFactory.class, AllayScheduler::new);
         api.bind(EntityTypeBuilder.class, new AllayEntityTypeBuilder());
-        //TODO: BlockDefinitionBuilder
+        api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, AllayBlockType::builder);
         api.bind(BlockPropertyTypeRegistry.class, new AllayBlockPropertyTypeRegistry());
         api.bind(VanillaBlockPaletteRegistry.class, new AllayVanillaBlockPaletteRegistry(new AllayVanillaBlockPaletteRegistry.Loader()));
         api.bind(VanillaBlockAttributeRegistry.class, new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));

@@ -13,5 +13,4 @@ public interface Block extends
         BlockBaseComponent,
         BlockAttributeComponent,
         BlockPositionComponent {
-
 }

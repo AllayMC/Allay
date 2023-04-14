@@ -12,7 +12,8 @@ import java.util.List;
  * Allay Project <br>
  */
 public interface BlockBaseComponent {
-    BlockType<? extends Block> getBlockType();
-
-    List<BlockPropertyType<?>> getProperties();
+    //This method is guaranteed to be overridden (Through a dedicated injection)
+    default BlockType<? extends Block> getBlockType() {
+        throw new UnsupportedOperationException();
+    }
 }
