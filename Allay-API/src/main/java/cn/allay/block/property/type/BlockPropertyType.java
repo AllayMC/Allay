@@ -4,6 +4,7 @@ import cn.allay.block.property.BlockPropertyTypeRegistry;
 import cn.allay.registry.MappedRegistry;
 import lombok.Getter;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     DATATYPE getDefaultValue();
 
     List<DATATYPE> getValidValues();
+
+    Type getType();
 
     default <T extends BlockPropertyType<?>> T register() {
         return registerTo(BlockPropertyTypeRegistry.getRegistry());
@@ -48,5 +51,20 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
         public String toString() {
             return propertyType.getName() + "=" + value;
         }
+    }
+
+    @Getter
+    enum Type{
+        BOOLEAN,
+        INT,
+        ENUM
+    }
+
+    @Nullable
+    static Type getPropertyType(Class<?> clazz) {
+        if (clazz == BooleanPropertyType.class) return Type.BOOLEAN;
+        else if (clazz == IntPropertyType.class) return Type.INT;
+        else if (clazz == EnumPropertyType.class) return Type.ENUM;
+        else return null;
     }
 }

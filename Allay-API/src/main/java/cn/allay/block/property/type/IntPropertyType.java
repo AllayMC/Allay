@@ -33,6 +33,11 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
     }
 
     @Override
+    public Type getType() {
+        return Type.INT;
+    }
+
+    @Override
     public BlockProperty<Integer, ? extends BlockPropertyType<Integer>> createProperty(Integer value) {
         return cachedValues[value - min];
     }

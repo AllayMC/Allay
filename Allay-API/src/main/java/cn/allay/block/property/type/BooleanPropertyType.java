@@ -21,6 +21,11 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
     }
 
     @Override
+    public Type getType() {
+        return Type.BOOLEAN;
+    }
+
+    @Override
     public BlockProperty<Boolean, ? extends BlockPropertyType<Boolean>> createProperty(Boolean value) {
         return value ? TRUE : FALSE;
     }

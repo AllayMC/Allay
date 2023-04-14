@@ -52,9 +52,14 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     @Override
     public Class<T> inject() {
         checkComponentValid();
-        injectDependency();
-        var bb = new ByteBuddy()
-                .subclass(parentClass);
+        for (var component : components) {
+            injectDependency(component);
+        }
+        return buildClass();
+    }
+
+    protected Class<T> buildClass() {
+        var bb = new ByteBuddy().subclass(parentClass);
         for (var methodShouldBeInject : Arrays.stream(parentClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
             var canDuplicate = methodShouldBeInject.getReturnType().equals(Void.class);
             Implementation.Composable methodDelegation = null;
@@ -95,36 +100,34 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
-    protected void injectDependency() {
-        for (var component : components) {
-            for (var field : component.getClass().getDeclaredFields()) {
-                var annotation = field.getAnnotation(Dependency.class);
-                if (annotation != null) {
-                    var type = field.getType();
-                    List<ComponentImpl> dependencies = new ArrayList<>(components);
-                    var count = Integer.MAX_VALUE;
-                    var requireCompId = annotation.namespaceId();
-                    //Try to find dependencies through inheritance
-                    //Try to match by namespace ID
-                    if (!requireCompId.isBlank())
-                        dependencies = dependencies.stream().filter(dependency -> dependency.getNamespaceId().toString().equals(requireCompId)).toList();
-                    else
-                        dependencies = dependencies.stream().filter(type::isInstance).toList();
-                    count = dependencies.size();
-                    //Matches to multiple dependencies
-                    if (count > 1)
-                        throw new ComponentInjectException("Found multiple dependencies " + type.getName() + " for " + component.getClass().getName());
-                    //No dependencies available
-                    if (count == 0)
-                        throw new ComponentInjectException("Cannot find dependency " + type.getName() + " for " + component.getClass().getName());
-                    //Inject dependencies
-                    var dependency = dependencies.get(0);
-                    field.setAccessible(true);
-                    try {
-                        field.set(component, dependency);
-                    } catch (IllegalAccessException e) {
-                        throw new ComponentInjectException("Cannot inject dependency " + type.getName() + " for " + component.getClass().getName(), e);
-                    }
+    protected void injectDependency(ComponentImpl component) {
+        for (var field : component.getClass().getDeclaredFields()) {
+            var annotation = field.getAnnotation(Dependency.class);
+            if (annotation != null) {
+                var type = field.getType();
+                List<ComponentImpl> dependencies = new ArrayList<>(components);
+                var count = Integer.MAX_VALUE;
+                var requireCompId = annotation.namespaceId();
+                //Try to find dependencies through inheritance
+                //Try to match by namespace ID
+                if (!requireCompId.isBlank())
+                    dependencies = dependencies.stream().filter(dependency -> dependency.getNamespaceId().toString().equals(requireCompId)).toList();
+                else
+                    dependencies = dependencies.stream().filter(type::isInstance).toList();
+                count = dependencies.size();
+                //Matches to multiple dependencies
+                if (count > 1)
+                    throw new ComponentInjectException("Found multiple dependencies " + type.getName() + " for " + component.getClass().getName());
+                //No dependencies available
+                if (count == 0)
+                    throw new ComponentInjectException("Cannot find dependency " + type.getName() + " for " + component.getClass().getName());
+                //Inject dependencies
+                var dependency = dependencies.get(0);
+                field.setAccessible(true);
+                try {
+                    field.set(component, dependency);
+                } catch (IllegalAccessException e) {
+                    throw new ComponentInjectException("Cannot inject dependency " + type.getName() + " for " + component.getClass().getName(), e);
                 }
             }
         }

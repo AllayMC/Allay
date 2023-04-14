@@ -8,4 +8,5 @@ import cn.allay.component.interfaces.ComponentImpl;
  * Allay Project <br>
  */
 public interface BlockComponentImpl extends ComponentImpl {
+
 }

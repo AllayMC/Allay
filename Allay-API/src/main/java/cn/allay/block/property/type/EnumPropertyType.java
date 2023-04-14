@@ -29,6 +29,11 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
     }
 
     @Override
+    public Type getType() {
+        return Type.ENUM;
+    }
+
+    @Override
     public BlockProperty<T, ? extends BlockPropertyType<T>> createProperty(T value) {
         return cachedValues.get(value);
     }

@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 public class BlockAttributeComponentImpl implements BlockAttributeComponent, BlockComponentImpl {
 
-    protected static final Identifier IDENTIFIER = new Identifier("minecraft:block_attribute_component");
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_attribute_component");
 
     @Builder.Default
     protected AxisAlignedBBRO aabb = AxisAlignedBBRO.of(0, 0, 0, 1, 1, 1);
