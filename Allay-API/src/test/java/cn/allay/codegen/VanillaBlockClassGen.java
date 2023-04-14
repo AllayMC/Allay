@@ -23,7 +23,7 @@ public class VanillaBlockClassGen {
     public static void main(String[] args) {
         for (var block : VanillaBlockId.values()) {
             var className = Utils.convertToCamelCase(block.getNamespaceId().getPath());
-            var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
+            var path = FILE_OUTPUT_PATH_BASE.resolve("Block" + className + ".java");
             if (Files.exists(path)) {
                 System.out.println("Class " + className + " already exists, skipped");
             } else {

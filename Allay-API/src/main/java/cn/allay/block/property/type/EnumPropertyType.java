@@ -3,7 +3,6 @@ package cn.allay.block.property.type;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Author: daoge_cmd <br>
