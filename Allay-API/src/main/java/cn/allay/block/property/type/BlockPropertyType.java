@@ -20,10 +20,10 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     List<DATATYPE> getValidValues();
 
     default <T extends BlockPropertyType<?>> T register() {
-        return register(BlockPropertyTypeRegistry.getRegistry());
+        return registerTo(BlockPropertyTypeRegistry.getRegistry());
     }
 
-     default <T extends BlockPropertyType<?>> T register(MappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> registry) {
+     default <T extends BlockPropertyType<?>> T registerTo(MappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> registry) {
         registry.register(this.getName(), this);
         return (T) this;
     }

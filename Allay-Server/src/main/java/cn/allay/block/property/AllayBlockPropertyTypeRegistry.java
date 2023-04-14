@@ -15,6 +15,6 @@ public final class AllayBlockPropertyTypeRegistry extends SimpleMappedRegistry<S
     public AllayBlockPropertyTypeRegistry() {
         super(null, input -> new HashMap<>());
         //Load vanilla property types
-        VanillaBlockPropertyTypes.values().forEach(property -> property.register(this));
+        VanillaBlockPropertyTypes.values().forEach(property -> property.registerTo(this));
     }
 }
