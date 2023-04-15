@@ -7,7 +7,7 @@ import cn.allay.scheduler.task.Task;
  * Author: daoge_cmd <br>
  * Date: 2023/3/12 <br>
  * Allay Project <br>
- *
+ * <p>
  * scheduler
  */
 public interface Scheduler {

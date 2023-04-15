@@ -6,9 +6,9 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum CauldronLiquid {
-  WATER,
+    WATER,
 
-  LAVA,
+    LAVA,
 
-  POWDER_SNOW
+    POWDER_SNOW
 }

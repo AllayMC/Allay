@@ -1,6 +1,5 @@
 package cn.allay.entity.type;
 
-import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.entity.Entity;
 import cn.allay.entity.definition.EntityDefinition;
 
@@ -9,7 +8,7 @@ import cn.allay.entity.definition.EntityDefinition;
  * Date: 2023/3/18 <br>
  * Allay Project <br>
  */
-public class AllayEntityTypeBuilder implements EntityTypeBuilder{
+public class AllayEntityTypeBuilder implements EntityTypeBuilder {
 
     @Override
     public <T extends Entity> EntityType<T> build(EntityDefinition<T> definition) {

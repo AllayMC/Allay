@@ -15,10 +15,16 @@ public interface AxisAlignedBBRO {
     static AxisAlignedBBRO of(Vec3RO<Float> min, Vec3RO<Float> max) {
         return new ImplAxisAlignedBBRO(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
     }
+
     float minX();
+
     float minY();
+
     float minZ();
+
     float maxX();
+
     float maxY();
+
     float maxZ();
 }

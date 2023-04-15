@@ -3,6 +3,7 @@ package cn.allay.block.property;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.registry.SimpleMappedRegistry;
+
 import java.util.HashMap;
 import java.util.Map;
 

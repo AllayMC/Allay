@@ -6,19 +6,19 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum StoneSlabType {
-  SMOOTH_STONE,
+    SMOOTH_STONE,
 
-  SANDSTONE,
+    SANDSTONE,
 
-  WOOD,
+    WOOD,
 
-  COBBLESTONE,
+    COBBLESTONE,
 
-  BRICK,
+    BRICK,
 
-  STONE_BRICK,
+    STONE_BRICK,
 
-  QUARTZ,
+    QUARTZ,
 
-  NETHER_BRICK
+    NETHER_BRICK
 }

@@ -34,6 +34,10 @@ public final class AllayAPI {
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean implemented = false;
 
+    private AllayAPI() {
+        defaultAPIRequirements();
+    }
+
     /**
      * @return the API instance
      */
@@ -41,12 +45,9 @@ public final class AllayAPI {
         return INSTANCE;
     }
 
-    private AllayAPI() {
-        defaultAPIRequirements();
-    }
-
     /**
      * After you have finished registering your implementation, you need to call this method to complete the implementation injection
+     *
      * @throws MissingImplementationException If there are interface which are not been implemented
      */
     public void implement() throws MissingImplementationException {
@@ -54,7 +55,7 @@ public final class AllayAPI {
             if (entry.getValue() == null) {
                 throw new MissingImplementationException("Missing binding for " + entry.getKey().getName());
             }
-            ((Consumer<Object>)consumers.get(entry.getKey())).accept(entry.getValue());
+            ((Consumer<Object>) consumers.get(entry.getKey())).accept(entry.getValue());
         }
         implemented = true;
     }
@@ -66,6 +67,7 @@ public final class AllayAPI {
     /**
      * Add an interface to be implemented<br/>
      * It needs to be implemented by the server
+     *
      * @param api the interface
      */
     public <T> void requireImpl(Class<T> api, @Nullable Consumer<T> apiInstanceConsumer) {
@@ -83,13 +85,14 @@ public final class AllayAPI {
 
     /**
      * @param api the interface
-     * @return the implementation instance of the specific interface <br/>
-     *         Each interface has only one instance of the corresponding implementation class, so if you call this method with the same parameters, you will return an identical object <br/>
-     *         If the interface has not been implemented, it will throw an exception <br/>
      * @param <T> the interface type
+     * @return the implementation instance of the specific interface <br/>
+     * Each interface has only one instance of the corresponding implementation class, so if you call this method with the same parameters, you will return an identical object <br/>
+     * If the interface has not been implemented, it will throw an exception <br/>
      */
     public <T> T getAPIInstance(Class<T> api) {
-        if (!implemented) throw new RuntimeException("AllayAPI::getAPIInstance cannot be called before it been implemented");
+        if (!implemented)
+            throw new RuntimeException("AllayAPI::getAPIInstance cannot be called before it been implemented");
         return api.cast(bindings.get(api));
     }
 

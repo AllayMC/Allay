@@ -15,7 +15,10 @@ import java.util.Map;
  */
 public interface BlockType<T extends Block> {
     List<BlockComponentImpl> getComponents();
+
     List<BlockPropertyType<?>> getProperties();
+
     Map<String, BlockPropertyType<?>> getMappedProperties();
+
     Identifier getNamespaceId();
 }

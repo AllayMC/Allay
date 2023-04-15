@@ -6,9 +6,9 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum WallConnectionTypeSouth {
-  NONE,
+    NONE,
 
-  SHORT,
+    SHORT,
 
-  TALL
+    TALL
 }

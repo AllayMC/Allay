@@ -1,6 +1,5 @@
 package cn.allay.codegen;
 
-import cn.allay.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.*;

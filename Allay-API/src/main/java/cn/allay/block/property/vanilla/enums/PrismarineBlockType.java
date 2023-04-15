@@ -6,9 +6,9 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum PrismarineBlockType {
-  DEFAULT,
+    DEFAULT,
 
-  DARK,
+    DARK,
 
-  BRICKS
+    BRICKS
 }

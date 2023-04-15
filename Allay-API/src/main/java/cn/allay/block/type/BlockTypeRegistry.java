@@ -11,7 +11,7 @@ import java.util.Map;
  * Date: 2023/3/26 <br>
  * Allay Project <br>
  */
-public final class BlockTypeRegistry extends SimpleMappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>>{
+public final class BlockTypeRegistry extends SimpleMappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>> {
 
     private static final BlockTypeRegistry INSTANCE = new BlockTypeRegistry();
 

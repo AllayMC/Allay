@@ -6,15 +6,15 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum MonsterEggStoneType {
-  STONE,
+    STONE,
 
-  COBBLESTONE,
+    COBBLESTONE,
 
-  STONE_BRICK,
+    STONE_BRICK,
 
-  MOSSY_STONE_BRICK,
+    MOSSY_STONE_BRICK,
 
-  CRACKED_STONE_BRICK,
+    CRACKED_STONE_BRICK,
 
-  CHISELED_STONE_BRICK
+    CHISELED_STONE_BRICK
 }

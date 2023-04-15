@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
  * Author: daoge_cmd <br>
  * Date: 2023/3/12 <br>
  * Allay Project <br>
- *
+ * <p>
  * The scheduler implementation in Allay
  */
 public class AllayScheduler implements Scheduler {

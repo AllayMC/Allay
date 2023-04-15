@@ -6,11 +6,11 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum SandStoneType {
-  DEFAULT,
+    DEFAULT,
 
-  HEIROGLYPHS,
+    HEIROGLYPHS,
 
-  CUT,
+    CUT,
 
-  SMOOTH
+    SMOOTH
 }

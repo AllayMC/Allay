@@ -6,11 +6,11 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum ChemistryTableType {
-  COMPOUND_CREATOR,
+    COMPOUND_CREATOR,
 
-  MATERIAL_REDUCER,
+    MATERIAL_REDUCER,
 
-  ELEMENT_CONSTRUCTOR,
+    ELEMENT_CONSTRUCTOR,
 
-  LAB_TABLE
+    LAB_TABLE
 }

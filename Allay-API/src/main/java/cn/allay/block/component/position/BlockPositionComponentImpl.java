@@ -6,7 +6,6 @@ import cn.allay.identifier.Identifier;
 import cn.allay.level.Level;
 import cn.allay.math.position.Pos;
 import cn.allay.math.position.PosRO;
-import org.jetbrains.annotations.Contract;
 
 /**
  * Author: daoge_cmd <br>

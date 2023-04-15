@@ -3,7 +3,6 @@ package cn.allay.registry;
 import java.util.function.Consumer;
 
 /**
- *
  * A wrapper around a value which is loaded based on the output from the provided
  * {@link RegistryLoader}. This class is primarily designed to hold a registration
  * of some kind, however no limits are set on what it can hold, as long as the
@@ -34,10 +33,10 @@ import java.util.function.Consumer;
  * where the loader will load the mappings from.
  *
  * @param <CONTENT> the type of the value which is being held by the registry
- * <p>
- * Author: GeyserMC & daoge_cmd <br>
- * Date: 2023/3/18 <br>
- * Allay Project <br>
+ *                  <p>
+ *                  Author: GeyserMC & daoge_cmd <br>
+ *                  Date: 2023/3/18 <br>
+ *                  Allay Project <br>
  */
 public interface Registry<CONTENT> {
     /**

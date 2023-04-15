@@ -15,6 +15,7 @@ public interface ComponentInjector<T> {
 
     /**
      * Create a new injector
+     *
      * @return a new injector
      */
     static <U> ComponentInjector<U> createInjector() {

@@ -10,30 +10,24 @@ import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.component.interfaces.ComponentedObject;
 import cn.allay.identifier.Identifier;
 import lombok.SneakyThrows;
-import lombok.experimental.Delegate;
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
-import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.bind.annotation.Origin;
-import net.bytebuddy.implementation.bind.annotation.SuperCall;
-import net.bytebuddy.implementation.bind.annotation.This;
 import net.bytebuddy.matcher.ElementMatchers;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static net.bytebuddy.implementation.MethodCall.*;
-import static net.bytebuddy.matcher.ElementMatchers.*;
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
  * Author: daoge_cmd <br>
@@ -45,6 +39,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     protected static final String COMPONENT_LIST_FIELD_NAME = "components";
+    protected static final String INIT_METHOD_NAME = "initComponents";
     protected Class<T> parentClass;
     protected List<ComponentProvider<? extends ComponentImpl>> componentProviders = new ArrayList<>();
 
@@ -78,12 +73,12 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             bb = bb.defineField(fieldName, provider.getComponentClass(), Visibility.PRIVATE);
         }
         bb = bb.defineField(COMPONENT_LIST_FIELD_NAME, List.class, Modifier.STATIC | Modifier.PRIVATE);
-        bb = bb.defineMethod("init", void.class, Modifier.PUBLIC)
+        bb = bb.defineMethod(INIT_METHOD_NAME, void.class, Modifier.PUBLIC)
                 .withParameter(Object.class)
-                .intercept(MethodDelegation.to(new Initializer(this, componentProviders, componentFieldNameMapping)));
+                .intercept(MethodDelegation.to(new Initializer(this, componentFieldNameMapping)));
         //TODO: 构造函数入参
-        bb = bb.constructor(isDefaultConstructor())
-                .intercept(invoke(named("init")).withThis());
+        bb = bb.constructor(ElementMatchers.any())
+                .intercept(Advice.to(ConstructorAdvice.class));
         for (var methodShouldBeInject : Arrays.stream(parentClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
             var canDuplicate = methodShouldBeInject.getReturnType().equals(Void.class);
             Implementation.Composable methodDelegation = null;
@@ -169,27 +164,31 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     public static class Initializer {
 
         private final AllayComponentInjector<?> injector;
-        private final List<ComponentProvider<? extends ComponentImpl>> componentProviders;
         private final Map<ComponentProvider<? extends ComponentImpl>, String> componentFieldNameMapping;
 
         public Initializer(AllayComponentInjector<?> injector,
-                           List<ComponentProvider<? extends ComponentImpl>> componentProviders,
                            Map<ComponentProvider<? extends ComponentImpl>, String> componentFieldNameMapping) {
             this.injector = injector;
-            this.componentProviders = componentProviders;
             this.componentFieldNameMapping = componentFieldNameMapping;
         }
 
         public void init(Object instance) {
             //TODO: 有一些操作可以在构建类的时候完成，这边有待优化
-            List<? extends ComponentImpl> components = componentProviders.stream().map(ComponentProvider::provide).toList();
-            injector.checkComponentValid(components);
-            for (var component : components) {
-                injector.injectDependency(components, component);
-            }
+            Map<ComponentProvider<?>, ? extends ComponentImpl> componentMap = injector.componentProviders.stream()
+                    .collect(Collectors.toMap(Function.identity(), ComponentProvider::provide));
+            var componentList = Collections.unmodifiableList(new ArrayList<>(componentMap.values()));
+            injector.checkComponentValid(componentList);
             try {
-                for (var provider : componentProviders) {
-                    instance.getClass().getDeclaredField(componentFieldNameMapping.get(provider)).set(instance, provider.provide());
+                var componentListField = instance.getClass().getDeclaredField(COMPONENT_LIST_FIELD_NAME);
+                componentListField.setAccessible(true);
+                componentListField.set(instance, componentList);
+                for (var entry : componentMap.entrySet()) {
+                    var provider = entry.getKey();
+                    var component = entry.getValue();
+                    injector.injectDependency(componentList, component);
+                    var field = instance.getClass().getDeclaredField(componentFieldNameMapping.get(provider));
+                    field.setAccessible(true);
+                    field.set(instance, component);
                 }
             } catch (IllegalAccessException | NoSuchFieldException e) {
                 throw new RuntimeException(e);
@@ -197,14 +196,11 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
-//    public static class Interceptor {
-//        public static void intercept(@Origin Constructor<?> constructor, @SuperCall Callable<?> superCall, @This Object instance) {
-//            try {
-//                superCall.call();
-//                instance.getClass().getDeclaredMethod("init", Object.class).invoke(instance, instance);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
+    public static class ConstructorAdvice {
+        @SneakyThrows
+        @Advice.OnMethodExit
+        public static void onExit(@Advice.This Object instance) {
+            instance.getClass().getDeclaredMethod(INIT_METHOD_NAME, Object.class).invoke(instance, instance);
+        }
+    }
 }

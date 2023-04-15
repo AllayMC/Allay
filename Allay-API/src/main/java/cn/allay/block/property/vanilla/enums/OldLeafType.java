@@ -6,11 +6,11 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum OldLeafType {
-  OAK,
+    OAK,
 
-  SPRUCE,
+    SPRUCE,
 
-  BIRCH,
+    BIRCH,
 
-  JUNGLE
+    JUNGLE
 }

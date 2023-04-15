@@ -6,25 +6,25 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum FlowerType {
-  POPPY,
+    POPPY,
 
-  ORCHID,
+    ORCHID,
 
-  ALLIUM,
+    ALLIUM,
 
-  HOUSTONIA,
+    HOUSTONIA,
 
-  TULIP_RED,
+    TULIP_RED,
 
-  TULIP_ORANGE,
+    TULIP_ORANGE,
 
-  TULIP_WHITE,
+    TULIP_WHITE,
 
-  TULIP_PINK,
+    TULIP_PINK,
 
-  OXEYE,
+    OXEYE,
 
-  CORNFLOWER,
+    CORNFLOWER,
 
-  LILY_OF_THE_VALLEY
+    LILY_OF_THE_VALLEY
 }

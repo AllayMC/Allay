@@ -2,16 +2,12 @@ package cn.allay.block.type;
 
 import cn.allay.block.Block;
 import cn.allay.block.component.BlockComponentImpl;
-import cn.allay.block.component.injector.AllayBlockComponentInjector;
-import cn.allay.block.component.position.BlockPositionComponentImpl;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.identifier.Identifier;
 import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

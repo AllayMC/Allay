@@ -17,9 +17,14 @@ public interface AxisAlignedBB extends AxisAlignedBBRO {
     }
 
     void setMinX(float minX);
+
     void setMinY(float minY);
+
     void setMinZ(float minZ);
+
     void setMaxX(float maxX);
+
     void setMaxY(float maxY);
+
     void setMaxZ(float maxZ);
 }

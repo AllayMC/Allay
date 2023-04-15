@@ -6,7 +6,7 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum NewLogType {
-  ACACIA,
+    ACACIA,
 
-  DARK_OAK
+    DARK_OAK
 }

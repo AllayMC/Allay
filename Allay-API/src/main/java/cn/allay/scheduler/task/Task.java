@@ -28,6 +28,7 @@ public interface Task {
 
     /**
      * Called when an error occurs while running the task
+     *
      * @param error The error that occurred
      */
     default void onError(Throwable error) {

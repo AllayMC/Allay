@@ -6,11 +6,11 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum Attachment {
-  STANDING,
+    STANDING,
 
-  HANGING,
+    HANGING,
 
-  SIDE,
+    SIDE,
 
-  MULTIPLE
+    MULTIPLE
 }

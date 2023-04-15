@@ -14,6 +14,7 @@ import java.lang.annotation.*;
 @Repeatable(RequireBlockProperty.Requirements.class)
 public @interface RequireBlockProperty {
     BlockPropertyType.Type type();
+
     String name();
 
     @Retention(RetentionPolicy.RUNTIME)

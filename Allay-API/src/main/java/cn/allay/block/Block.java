@@ -6,7 +6,7 @@ import cn.allay.block.component.position.BlockPositionComponent;
 
 /**
  * Author: daoge_cmd <br>
-    * Date: 2023/3/19 <br>
+ * Date: 2023/3/19 <br>
  * Allay Project <br>
  */
 public interface Block extends

@@ -1,9 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.utils.StringUtils;
-
 import java.nio.file.Path;
-import java.util.List;
 
 /**
  * Author: daoge_cmd <br>

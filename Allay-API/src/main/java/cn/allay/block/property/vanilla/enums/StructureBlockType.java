@@ -6,15 +6,15 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum StructureBlockType {
-  DATA,
+    DATA,
 
-  SAVE,
+    SAVE,
 
-  LOAD,
+    LOAD,
 
-  CORNER,
+    CORNER,
 
-  INVALID,
+    INVALID,
 
-  EXPORT
+    EXPORT
 }

@@ -1,6 +1,5 @@
 package cn.allay.utils;
 
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.concurrent.TimeUnit;
@@ -33,6 +32,10 @@ public final class GameLoop {
         this.onTick = onTick;
         this.onStop = onStop;
         this.loopCountPerSec = loopCountPerSec;
+    }
+
+    public static GameLoopBuilder builder() {
+        return new GameLoopBuilder();
     }
 
     public void startLoop() {
@@ -79,20 +82,19 @@ public final class GameLoop {
         this.isRunning.set(false);
     }
 
+    // Builder pattern
+
     public boolean isRunning() {
         return isRunning.get();
     }
 
-    // Builder pattern
-
-    public static GameLoopBuilder builder() {
-        return new GameLoopBuilder();
-    }
-
     public static class GameLoopBuilder {
-        private Runnable onStart = () -> {};
-        private Consumer<GameLoop> onTick = (gameLoop) -> {};
-        private Runnable onStop = () -> {};
+        private Runnable onStart = () -> {
+        };
+        private Consumer<GameLoop> onTick = (gameLoop) -> {
+        };
+        private Runnable onStop = () -> {
+        };
         private int loopCountPerSec = 20;
 
         public GameLoopBuilder onStart(Runnable onStart) {

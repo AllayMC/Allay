@@ -7,10 +7,10 @@ package cn.allay.registry;
  *
  * @param <I> the input to load the registry from
  * @param <O> the output of the registry
- * <p>
- * Author: GeyserMC & daoge_cmd <br>
- * Date: 2023/3/18 <br>
- * Allay Project <br>
+ *            <p>
+ *            Author: GeyserMC & daoge_cmd <br>
+ *            Date: 2023/3/18 <br>
+ *            Allay Project <br>
  */
 @FunctionalInterface
 public interface RegistryLoader<I, O> {

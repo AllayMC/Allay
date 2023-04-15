@@ -1,6 +1,5 @@
 package cn.allay.server;
 
-import cn.allay.block.attribute.AllayVanillaBlockAttributeRegistry;
 import cn.allay.network.AllayNetwork;
 import cn.allay.network.Network;
 import lombok.Getter;

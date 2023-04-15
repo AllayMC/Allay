@@ -5,7 +5,7 @@ package cn.allay.api;
  * Date: 2023/3/17 <br>
  * Allay Project <br>
  */
-public final class ApiInstanceHolder<T>{
+public final class ApiInstanceHolder<T> {
     private T instance;
 
     private ApiInstanceHolder() {

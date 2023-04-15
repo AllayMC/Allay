@@ -1,37 +1,7 @@
 package cn.allay.block.component.injector;
 
 import cn.allay.block.Block;
-import cn.allay.block.component.annotation.RequireBlockProperty;
-import cn.allay.block.property.type.BlockPropertyType;
-import cn.allay.block.type.BlockType;
-import cn.allay.component.annotation.Impl;
-import cn.allay.component.annotation.Inject;
-import cn.allay.component.exception.BlockComponentInjectException;
-import cn.allay.component.exception.ComponentInjectException;
 import cn.allay.component.injector.AllayComponentInjector;
-import cn.allay.component.interfaces.ComponentImpl;
-import cn.allay.component.interfaces.ComponentProvider;
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.implementation.FixedValue;
-import net.bytebuddy.implementation.Implementation;
-import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.bind.annotation.Origin;
-import net.bytebuddy.implementation.bind.annotation.SuperCall;
-import net.bytebuddy.matcher.ElementMatchers;
-
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
  * Author: daoge_cmd <br>

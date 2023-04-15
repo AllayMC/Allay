@@ -9,7 +9,8 @@
 
 ## 2. Update the auto-generated code
 
-(Using Allay-API/src/test/cn/allay/codegen/CodeGenMain.java to update, Under normal circumstances, the following files should not be modified manually)
+(Using Allay-API/src/test/cn/allay/codegen/CodeGenMain.java to update, Under normal circumstances, the following files
+should not be modified manually)
 
-- ```cn/allay/block/data/VanillaBlockId.java``` 
+- ```cn/allay/block/data/VanillaBlockId.java```
 - ```cn/allay/block/property/vanilla/*``` 

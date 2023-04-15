@@ -3,9 +3,9 @@ package cn.allay.block.property.type;
 import cn.allay.block.property.BlockPropertyTypeRegistry;
 import cn.allay.registry.MappedRegistry;
 import lombok.Getter;
-
 import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +15,14 @@ import java.util.Map;
  * Allay Project <br>
  */
 public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyType {
+    @Nullable
+    static Type getPropertyType(Class<?> clazz) {
+        if (clazz == BooleanPropertyType.class) return Type.BOOLEAN;
+        else if (clazz == IntPropertyType.class) return Type.INT;
+        else if (clazz == EnumPropertyType.class) return Type.ENUM;
+        else return null;
+    }
+
     String getName();
 
     DATATYPE getDefaultValue();
@@ -27,7 +35,7 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
         return registerTo(BlockPropertyTypeRegistry.getRegistry());
     }
 
-     default <T extends BlockPropertyType<?>> T registerTo(MappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> registry) {
+    default <T extends BlockPropertyType<?>> T registerTo(MappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> registry) {
         registry.register(this.getName(), this);
         return (T) this;
     }
@@ -41,6 +49,13 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     }
 
     @Getter
+    enum Type {
+        BOOLEAN,
+        INT,
+        ENUM
+    }
+
+    @Getter
     @ToString
     final class BlockPropertyValue<DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> {
 
@@ -51,20 +66,5 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
             this.propertyType = propertyType;
             this.value = value;
         }
-    }
-
-    @Getter
-    enum Type{
-        BOOLEAN,
-        INT,
-        ENUM
-    }
-
-    @Nullable
-    static Type getPropertyType(Class<?> clazz) {
-        if (clazz == BooleanPropertyType.class) return Type.BOOLEAN;
-        else if (clazz == IntPropertyType.class) return Type.INT;
-        else if (clazz == EnumPropertyType.class) return Type.ENUM;
-        else return null;
     }
 }

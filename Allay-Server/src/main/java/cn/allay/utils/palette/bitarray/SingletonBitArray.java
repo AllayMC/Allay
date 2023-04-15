@@ -12,7 +12,8 @@ public final class SingletonBitArray implements BitArray {
     private static final int[] EMPTY_ARRAY = new int[0];
 
     @Override
-    public void set(int index, int value) {}
+    public void set(int index, int value) {
+    }
 
     @Override
     public int get(int index) {
@@ -20,7 +21,8 @@ public final class SingletonBitArray implements BitArray {
     }
 
     @Override
-    public void writeSizeToNetwork(ByteBuf buffer, int size) {}
+    public void writeSizeToNetwork(ByteBuf buffer, int size) {
+    }
 
     @Override
     public int getSize() {

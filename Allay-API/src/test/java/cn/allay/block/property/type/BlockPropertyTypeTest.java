@@ -2,7 +2,7 @@ package cn.allay.block.property.type;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Author: daoge_cmd <br>

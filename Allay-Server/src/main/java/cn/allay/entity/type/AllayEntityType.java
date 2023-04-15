@@ -13,7 +13,7 @@ import org.cloudburstmc.nbt.NbtMap;
  * Allay Project <br>
  */
 @Getter
-public class AllayEntityType<T extends Entity> implements EntityType<T>{
+public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
     protected EntityDefinition<T> definition;
     protected Class<T> compiledEntityClass;

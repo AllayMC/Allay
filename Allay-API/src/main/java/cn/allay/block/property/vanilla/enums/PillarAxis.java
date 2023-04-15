@@ -6,9 +6,9 @@ package cn.allay.block.property.vanilla.enums;
  * Allay Project <br>
  */
 public enum PillarAxis {
-  Y,
+    Y,
 
-  X,
+    X,
 
-  Z
+    Z
 }

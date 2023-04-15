@@ -14,5 +14,6 @@ import java.util.List;
  */
 public interface EntityDefinition<T extends Entity> extends Identified {
     List<EntityComponentImpl> getComponents();
+
     Class<T> getTargetInterface();
 }

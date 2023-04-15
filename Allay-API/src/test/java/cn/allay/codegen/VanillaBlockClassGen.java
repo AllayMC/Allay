@@ -17,7 +17,7 @@ import java.nio.file.Path;
  */
 public class VanillaBlockClassGen {
 
-     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/block/vanilla");
+    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/block/vanilla");
 
     @SneakyThrows
     public static void main(String[] args) {

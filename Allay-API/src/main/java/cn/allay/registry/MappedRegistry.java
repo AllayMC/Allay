@@ -1,6 +1,7 @@
 package cn.allay.registry;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -10,13 +11,13 @@ import java.util.function.Function;
  * The M represents the map class, which can be anything that extends {@link Map}. The
  * {@link KEY} and {@link VALUE} generics are the key and value respectively.
  *
- * @param <KEY> the key
- * @param <VALUE> the value
+ * @param <KEY>     the key
+ * @param <VALUE>   the value
  * @param <MAPPING> the map
- * <p>
- * Author: daoge_cmd <br>
- * Date: 2023/3/18 <br>
- * Allay Project <br>
+ *                  <p>
+ *                  Author: daoge_cmd <br>
+ *                  Date: 2023/3/18 <br>
+ *                  Allay Project <br>
  */
 public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> extends Registry<MAPPING> {
     /**
@@ -33,9 +34,9 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
     /**
      * Returns and maps the value by the given key if present.
      *
-     * @param key the key
+     * @param key    the key
      * @param mapper the mapper
-     * @param <U> the type
+     * @param <U>    the type
      * @return the mapped value from the given key if present
      */
     default <U> Optional<U> map(KEY key, Function<? super VALUE, ? extends U> mapper) {
@@ -51,10 +52,10 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
      * Returns the value registered by the given key or the default value
      * specified if null.
      *
-     * @param key the key
+     * @param key          the key
      * @param defaultValue the default value
      * @return the value registered by the given key or the default value
-     *         specified if null.
+     * specified if null.
      */
     default VALUE getOrDefault(KEY key, VALUE defaultValue) {
         return getContent().getOrDefault(key, defaultValue);
@@ -63,7 +64,7 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
     /**
      * Registers a new value into this registry with the given key.
      *
-     * @param key the key
+     * @param key   the key
      * @param value the value
      * @return a new value into this registry with the given key.
      */

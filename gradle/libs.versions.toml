@@ -30,11 +30,11 @@ junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", v
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
 
 # Code generating
-javapoet = {group = "com.squareup", name = "javapoet", version = "1.13.0"}
+javapoet = { group = "com.squareup", name = "javapoet", version = "1.13.0" }
 
 # FastUtil
 #fastutil = { group = "com.nukkitx", name = "fastutil-lite", version = "8.1.1" }
-fastutil = {group = "it.unimi.dsi", name = "fastutil", version = "8.5.11"}
+fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.11" }
 [bundles]
 log4j = ["log4j-api", "log4j-core", "log4j-slf4j18-impl", "slf4j-api", "disruptor", "terminal-console-appender"]
 terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader"]

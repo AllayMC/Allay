@@ -2,10 +2,10 @@ package cn.allay.network;
 
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v568.Bedrock_v568;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

@@ -16,7 +16,7 @@ import java.util.Map;
  * Author: daoge_cmd <br>
  * Date: 2023/3/11 <br>
  * Allay Project <br>
- *
+ * <p>
  * Describes a specific type of entity
  */
 public interface EntityType<T extends Entity> extends Identified {

@@ -5,7 +5,6 @@ import cn.allay.component.annotation.Inject;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.aabb.AxisAlignedBBRO;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**

@@ -11,13 +11,13 @@ import java.util.function.Supplier;
  * Allay Project <br>
  */
 public interface ComponentProvider<T extends ComponentImpl> {
-    T provide();
-
-    Class<T> getComponentClass();
-
     static <T extends ComponentImpl> ComponentProvider<T> of(Supplier<T> supplier, Class<T> componentClass) {
         return new SimpleComponentProvider<>(supplier, componentClass);
     }
+
+    T provide();
+
+    Class<T> getComponentClass();
 
     @AllArgsConstructor
     class SimpleComponentProvider<T extends ComponentImpl> implements ComponentProvider<T> {
