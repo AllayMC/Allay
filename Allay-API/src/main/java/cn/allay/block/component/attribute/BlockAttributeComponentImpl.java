@@ -1,7 +1,7 @@
 package cn.allay.block.component.attribute;
 
 import cn.allay.block.component.BlockComponentImpl;
-import cn.allay.component.annotation.Inject;
+import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.aabb.AxisAlignedBBRO;
 import lombok.Builder;
@@ -117,187 +117,187 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
     }
 
     @Override
-    @Inject
+    @Impl
     public AxisAlignedBBRO aabb() {
         return aabb;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean blocksPrecipitation() {
         return blocksPrecipitation;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean canBeMovingBlock() {
         return canBeMovingBlock;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean breaksFallingBlocks() {
         return breaksFallingBlocks;
     }
 
     @Override
-    @Inject
+    @Impl
     public int burnAbility() {
         return burnAbility;
     }
 
     @Override
-    @Inject
+    @Impl
     public int burnChance() {
         return burnChance;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean canBeBrokenFromFalling() {
         return canBeBrokenFromFalling;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean canContainLiquid() {
         return canContainLiquid;
     }
 
     @Override
-    @Inject
+    @Impl
     public int color() {
         return color;
     }
 
     @Override
-    @Inject
+    @Impl
     public float explosionResistance() {
         return explosionResistance;
     }
 
     @Override
-    @Inject
+    @Impl
     public float friction() {
         return friction;
     }
 
     @Override
-    @Inject
+    @Impl
     public float hardness() {
         return hardness;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean hasBlockEntity() {
         return hasBlockEntity;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean hasComparatorSignal() {
         return hasComparatorSignal;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean isAlwaysDestroyable() {
         return isAlwaysDestroyable;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean isContainerBlock() {
         return isContainerBlock;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean isLiquid() {
         return isLiquid;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean isMotionBlockingBlock() {
         return isMotionBlockingBlock;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean isPowerSource() {
         return isPowerSource;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean isSolid() {
         return isSolid;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean isSolidBlocking() {
         return isSolidBlocking;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean isUnbreakable() {
         return isUnbreakable;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean isWaterBlocking() {
         return isWaterBlocking;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean flammable() {
         return flammable;
     }
 
     @Override
-    @Inject
+    @Impl
     public int light() {
         return light;
     }
 
     @Override
-    @Inject
+    @Impl
     public int lightEmission() {
         return lightEmission;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean pushesUpFallingBlocks() {
         return pushesUpFallingBlocks;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean superHot() {
         return superHot;
     }
 
     @Override
-    @Inject
+    @Impl
     public float thickness() {
         return thickness;
     }
 
     @Override
-    @Inject
+    @Impl
     public float translucency() {
         return translucency;
     }
 
     @Override
-    @Inject
+    @Impl
     public boolean waterSpreadCausesSpawn() {
         return waterSpreadCausesSpawn;
     }

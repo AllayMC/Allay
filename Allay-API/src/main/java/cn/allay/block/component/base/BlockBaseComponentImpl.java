@@ -4,7 +4,7 @@ import cn.allay.block.Block;
 import cn.allay.block.component.BlockComponentImpl;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.type.BlockType;
-import cn.allay.component.annotation.Inject;
+import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -33,7 +33,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     }
 
     @Override
-    @Inject
+    @Impl
     public BlockType<? extends Block> getBlockType() {
         return type;
     }
@@ -47,7 +47,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     }
 
     @Override
-    @Inject
+    @Impl
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value) {
         //TODO: 也许需要额外的工作？
         ensureMapping();
@@ -58,14 +58,14 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     @Override
     @Nullable
-    @Inject
+    @Impl
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getProperty(PROPERTY property) {
         ensureMapping();
         return (DATATYPE) currentProperties.computeIfAbsent(property, BlockPropertyType::createDefaultValue).getValue();
     }
 
     @Override
-    @Inject
+    @Impl
     @UnmodifiableView
     public Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> getCurrentProperties() {
         return Collections.unmodifiableMap(currentProperties);

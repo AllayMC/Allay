@@ -1,7 +1,7 @@
 package cn.allay.block.component.position;
 
 import cn.allay.block.component.BlockComponentImpl;
-import cn.allay.component.annotation.Inject;
+import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
 import cn.allay.level.Level;
 import cn.allay.math.position.Pos;
@@ -32,25 +32,25 @@ public class BlockPositionComponentImpl implements BlockPositionComponent, Block
     }
 
     @Override
-    @Inject
+    @Impl
     public Level getLevel() {
         return pos.getLevel();
     }
 
     @Override
-    @Inject
+    @Impl
     public Integer getX() {
         return pos.getX();
     }
 
     @Override
-    @Inject
+    @Impl
     public Integer getY() {
         return pos.getY();
     }
 
     @Override
-    @Inject
+    @Impl
     public Integer getZ() {
         return pos.getZ();
     }
