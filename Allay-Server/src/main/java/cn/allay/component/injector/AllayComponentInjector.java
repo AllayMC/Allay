@@ -174,18 +174,17 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
         public void init(Object instance) {
             //TODO: 有一些操作可以在构建类的时候完成，这边有待优化
-            Map<ComponentProvider<?>, ? extends ComponentImpl> componentMap = injector.componentProviders.stream()
-                    .collect(Collectors.toMap(Function.identity(), ComponentProvider::provide));
-            var componentList = Collections.unmodifiableList(new ArrayList<>(componentMap.values()));
-            injector.checkComponentValid(componentList);
+            var providers = injector.componentProviders;
+            List<? extends ComponentImpl> components = providers.stream().map(ComponentProvider::provide).toList();
+            injector.checkComponentValid(components);
             try {
                 var componentListField = instance.getClass().getDeclaredField(COMPONENT_LIST_FIELD_NAME);
                 componentListField.setAccessible(true);
-                componentListField.set(instance, componentList);
-                for (var entry : componentMap.entrySet()) {
-                    var provider = entry.getKey();
-                    var component = entry.getValue();
-                    injector.injectDependency(componentList, component);
+                componentListField.set(instance, components);
+                for (int index = 0; index < components.size(); index++) {
+                    var provider = providers.get(index);
+                    var component = components.get(index);
+                    injector.injectDependency(components, component);
                     var field = instance.getClass().getDeclaredField(componentFieldNameMapping.get(provider));
                     field.setAccessible(true);
                     field.set(instance, component);

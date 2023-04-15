@@ -53,8 +53,7 @@ class ComponentTest {
         sheep.attack(10);
         assertEquals(10, sheep.getHealth());
         var runtime = (ComponentedObject) sheep;
-        //TODO
-//        assertEquals(componentProviders.stream().map(ComponentProvider::getComponentClass).toList(), runtime.getComponents().stream().map(Object::getClass).toList());
+        assertEquals(componentProviders.stream().map(ComponentProvider::getComponentClass).toList(), runtime.getComponents().stream().map(Object::getClass).toList());
         assertEquals(sheep.getName(), ((NameComponent) sheep.getNameComponent()).getName());
         assertEquals(sheep.getHealth(), ((HealthComponent) sheep.getHealthComponent()).getHealth());
         assertEquals(sheep.getMaxHealth(), ((HealthComponent) sheep.getHealthComponent()).getMaxHealth());
