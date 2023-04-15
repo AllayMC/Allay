@@ -6,6 +6,7 @@ import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.identifier.Identifier;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: daoge_cmd <br>
@@ -15,5 +16,6 @@ import java.util.List;
 public interface BlockType<T extends Block> {
     List<BlockComponentImpl> getComponents();
     List<BlockPropertyType<?>> getProperties();
+    Map<String, BlockPropertyType<?>> getMappedProperties();
     Identifier getNamespaceId();
 }

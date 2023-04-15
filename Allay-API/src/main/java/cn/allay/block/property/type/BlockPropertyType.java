@@ -4,7 +4,8 @@ import cn.allay.block.property.BlockPropertyTypeRegistry;
 import cn.allay.registry.MappedRegistry;
 import lombok.Getter;
 
-import javax.annotation.Nullable;
+import lombok.ToString;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -31,25 +32,24 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
         return (T) this;
     }
 
-    BlockProperty<DATATYPE, ? extends BlockPropertyType<DATATYPE>> createProperty(DATATYPE value);
+    BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>> createValue(DATATYPE value);
 
-    BlockProperty<DATATYPE, ? extends BlockPropertyType<DATATYPE>> tryCreateProperty(Object value);
+    BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>> tryCreateValue(Object value);
 
-    //TODO: 减少对象创建
+    default BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>> createDefaultValue() {
+        return createValue(getDefaultValue());
+    }
+
     @Getter
-    final class BlockProperty<DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> {
+    @ToString
+    final class BlockPropertyValue<DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> {
 
         private final PROPERTY propertyType;
         private final DATATYPE value;
 
-        BlockProperty(PROPERTY propertyType, DATATYPE value) {
+        BlockPropertyValue(PROPERTY propertyType, DATATYPE value) {
             this.propertyType = propertyType;
             this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return propertyType.getName() + "=" + value;
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
  */
 public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
 
-    private final BlockProperty<Integer, IntPropertyType>[] cachedValues;
+    private final BlockPropertyValue<Integer, IntPropertyType>[] cachedValues;
     @Getter
     private final int min;
     @Getter
@@ -21,9 +21,9 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
         super(name, IntStream.range(min, max + 1).boxed().toList(), defaultData);
         this.min = min;
         this.max = max;
-        cachedValues = new BlockProperty[max + 1 - min];
+        cachedValues = new BlockPropertyValue[max + 1 - min];
         for (int i = min; i <= max; i++) {
-            BlockProperty<Integer, IntPropertyType> property = new BlockProperty<>(this, i);
+            BlockPropertyValue<Integer, IntPropertyType> property = new BlockPropertyValue<>(this, i);
             cachedValues[i] = property;
         }
     }
@@ -38,12 +38,12 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
     }
 
     @Override
-    public BlockProperty<Integer, ? extends BlockPropertyType<Integer>> createProperty(Integer value) {
+    public BlockPropertyValue<Integer, ? extends BlockPropertyType<Integer>> createValue(Integer value) {
         return cachedValues[value - min];
     }
 
     @Override
-    public BlockProperty<Integer, ? extends BlockPropertyType<Integer>> tryCreateProperty(Object value) {
+    public BlockPropertyValue<Integer, ? extends BlockPropertyType<Integer>> tryCreateValue(Object value) {
         if (value instanceof Integer integer) {
             return cachedValues[integer - min];
         } else throw new IllegalArgumentException("Invalid value for int property type: " + value);

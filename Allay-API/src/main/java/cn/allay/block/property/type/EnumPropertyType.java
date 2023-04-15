@@ -11,15 +11,15 @@ import java.util.HashMap;
  */
 public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockPropertyType<T> {
 
-    private final EnumMap<T, BlockProperty<T, EnumPropertyType<T>>> cachedValues;
+    private final EnumMap<T, BlockPropertyValue<T, EnumPropertyType<T>>> cachedValues;
     private final Class<T> enumClass;
 
     private EnumPropertyType(String name, Class<T> enumClass, T defaultData) {
         super(name, Arrays.asList(enumClass.getEnumConstants()), defaultData);
         this.enumClass = enumClass;
-        var map = new HashMap<T, BlockProperty<T, EnumPropertyType<T>>>();
+        var map = new HashMap<T, BlockPropertyValue<T, EnumPropertyType<T>>>();
         for (var value : validValues) {
-            map.put(value, new BlockProperty<>(this, value));
+            map.put(value, new BlockPropertyValue<>(this, value));
         }
         cachedValues = new EnumMap<>(map);
     }
@@ -34,12 +34,12 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
     }
 
     @Override
-    public BlockProperty<T, ? extends BlockPropertyType<T>> createProperty(T value) {
+    public BlockPropertyValue<T, ? extends BlockPropertyType<T>> createValue(T value) {
         return cachedValues.get(value);
     }
 
     @Override
-    public BlockProperty<T, ? extends BlockPropertyType<T>> tryCreateProperty(Object value) {
+    public BlockPropertyValue<T, ? extends BlockPropertyType<T>> tryCreateValue(Object value) {
         if (enumClass.isInstance(value)) {
             return cachedValues.get(enumClass.cast(value));
         } else if (value instanceof String str) {

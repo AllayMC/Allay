@@ -10,8 +10,8 @@ gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "1.33" }
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.26" }
 disruptor = { group = "com.lmax", name = "disruptor", version = "3.4.4" }
-jsr305 = { group = "com.google.code.findbugs", name = "jsr305", version = "3.0.2" }
 bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.0" }
+annotations = { group = "org.jetbrains", name = "annotations", version = "24.0.0" }
 
 # Logging dependencies
 log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j" }
@@ -35,7 +35,6 @@ javapoet = {group = "com.squareup", name = "javapoet", version = "1.13.0"}
 # FastUtil
 #fastutil = { group = "com.nukkitx", name = "fastutil-lite", version = "8.1.1" }
 fastutil = {group = "it.unimi.dsi", name = "fastutil", version = "8.5.11"}
-
 [bundles]
 log4j = ["log4j-api", "log4j-core", "log4j-slf4j18-impl", "slf4j-api", "disruptor", "terminal-console-appender"]
 terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader"]

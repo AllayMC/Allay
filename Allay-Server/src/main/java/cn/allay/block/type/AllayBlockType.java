@@ -3,13 +3,17 @@ package cn.allay.block.type;
 import cn.allay.block.Block;
 import cn.allay.block.component.BlockComponentImpl;
 import cn.allay.block.component.injector.AllayBlockComponentInjector;
+import cn.allay.block.component.position.BlockPositionComponentImpl;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.identifier.Identifier;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Author: daoge_cmd <br>
@@ -17,19 +21,23 @@ import java.util.List;
  * Allay Project <br>
  */
 @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class AllayBlockType<T extends Block> implements BlockType<T> {
     protected Class<T> injectedClass;
     protected List<BlockComponentImpl> components;
     protected List<BlockPropertyType<?>> properties;
+    protected Map<String, BlockPropertyType<?>> mappedProperties;
     protected Identifier namespaceId;
+
+    public AllayBlockType(Class<T> injectedClass, List<BlockComponentImpl> components, List<BlockPropertyType<?>> properties, Identifier namespaceId) {
+        this.injectedClass = injectedClass;
+        this.components = components;
+        this.properties = properties;
+        this.namespaceId = namespaceId;
+        this.mappedProperties = properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
+    }
 
     public static <T extends Block> Builder<T> builder(Class<T> blockClass) {
         return new Builder<>(blockClass);
-    }
-
-    protected void setInjectedClass(Class<T> injectedClass) {
-        this.injectedClass = injectedClass;
     }
 
     public static class Builder<T extends Block> implements BlockTypeBuilder<T> {
@@ -82,7 +90,8 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             if (components == null)
                 throw new BlockTypeBuildException("Components cannot be null");
             var type = new AllayBlockType<T>(blockClass, components, properties, namespaceId);
-            type.setInjectedClass(new AllayBlockComponentInjector<>(type).parentClass(blockClass).withComponent(components).inject());
+            //TODO: default components
+            type.injectedClass = new AllayBlockComponentInjector<>(type).parentClass(blockClass).withComponent(components).inject();
             return type;
         }
     }

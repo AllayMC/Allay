@@ -5,7 +5,7 @@ import org.cloudburstmc.protocol.bedrock.codec.v568.Bedrock_v568;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

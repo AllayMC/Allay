@@ -9,8 +9,8 @@ import java.util.List;
  */
 public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
 
-    private final BlockProperty<Boolean, BooleanPropertyType> FALSE = new BlockProperty<>(this, false);
-    private final BlockProperty<Boolean, BooleanPropertyType> TRUE = new BlockProperty<>(this, true);
+    private final BlockPropertyValue<Boolean, BooleanPropertyType> FALSE = new BlockPropertyValue<>(this, false);
+    private final BlockPropertyValue<Boolean, BooleanPropertyType> TRUE = new BlockPropertyValue<>(this, true);
 
     private BooleanPropertyType(String name, Boolean defaultData) {
         super(name, List.of(true, false), defaultData);
@@ -26,12 +26,12 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
     }
 
     @Override
-    public BlockProperty<Boolean, ? extends BlockPropertyType<Boolean>> createProperty(Boolean value) {
+    public BlockPropertyValue<Boolean, ? extends BlockPropertyType<Boolean>> createValue(Boolean value) {
         return value ? TRUE : FALSE;
     }
 
     @Override
-    public BlockProperty<Boolean, BooleanPropertyType> tryCreateProperty(Object value) {
+    public BlockPropertyValue<Boolean, BooleanPropertyType> tryCreateValue(Object value) {
         if (value instanceof Boolean bool) {
             return bool ? TRUE : FALSE;
         } else if (value instanceof Number number) {

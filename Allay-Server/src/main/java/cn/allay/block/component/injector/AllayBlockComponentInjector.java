@@ -27,7 +27,7 @@ public class AllayBlockComponentInjector<T extends Block> extends AllayComponent
 
     public AllayBlockComponentInjector(BlockType<T> type) {
         super();
-        this.mappedProperties = type.getProperties().stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
+        this.mappedProperties = type.getMappedProperties();
         this.type = type;
     }
 

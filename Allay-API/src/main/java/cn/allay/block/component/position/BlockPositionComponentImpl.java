@@ -4,7 +4,9 @@ import cn.allay.block.component.BlockComponentImpl;
 import cn.allay.component.annotation.Inject;
 import cn.allay.identifier.Identifier;
 import cn.allay.level.Level;
+import cn.allay.math.position.Pos;
 import cn.allay.math.position.PosRO;
+import org.jetbrains.annotations.Contract;
 
 /**
  * Author: daoge_cmd <br>
@@ -15,14 +17,14 @@ public class BlockPositionComponentImpl implements BlockPositionComponent, Block
 
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:block_position_component");
 
-    protected final PosRO<Integer> pos;
+    protected final Pos<Integer> pos;
 
     public BlockPositionComponentImpl(PosRO<Integer> pos) {
-        this.pos = pos;
+        this.pos = Pos.of(pos.getX(), pos.getY(), pos.getZ(), pos.getLevel());
     }
 
     public BlockPositionComponentImpl(int x, int y, int z, Level level) {
-        this.pos = PosRO.of(x, y, z, level);
+        this.pos = Pos.of(x, y, z, level);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package cn.allay.identifier;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static cn.allay.identifier.Identifier.DEFAULT_NAMESPACE;
 import static cn.allay.identifier.Identifier.NAMESPACE_SEPARATOR;
