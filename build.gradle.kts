@@ -4,6 +4,9 @@ buildscript {
         maven {
             url=uri("https://plugins.gradle.org/m2/")
         }
+        maven {
+            url = uri("https://repo.maven.apache.org/maven2/")
+        }
     }
     dependencies {
         classpath("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
@@ -45,7 +48,7 @@ subprojects {
     }
 
     dependencies {
-        api(rootProject.libs.jsr305)
+        api(rootProject.libs.annotations)
         testImplementation(rootProject.libs.bundles.junit)
 
         compileOnly(rootProject.libs.lombok)

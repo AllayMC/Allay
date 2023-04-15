@@ -10,6 +10,7 @@ dependencies {
     api(libs.guava)
     api(libs.gson)
     api(libs.snakeyaml)
+    api(libs.annotations)
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testImplementation libs.bytebuddy
     testImplementation libs.javapoet
