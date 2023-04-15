@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -102,6 +100,8 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
         bb = afterInject(componentProviders, bb);
         try (var unloaded = bb.make()) {
+//            var file = new File("C:\\Users\\daoge_cmd\\IdeaProjects\\Allay\\Allay-Server\\build\\outclasses");
+//            unloaded.saveIn(file);
             return (Class<T>) unloaded
                     .load(getClass().getClassLoader())
                     .getLoaded();

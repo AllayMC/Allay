@@ -70,7 +70,7 @@ class ComponentTest {
 
     public static class SimpleNameComponentV2 extends SimpleNameComponent {
 
-        private static final Identifier IDENTIDIER = new Identifier("minecraft:name_component_2");
+        private static final Identifier IDENTIFIER = new Identifier("minecraft:name_component_2");
 
         public SimpleNameComponentV2(String name) {
             super(name);
@@ -78,7 +78,7 @@ class ComponentTest {
 
         @Override
         public Identifier getNamespaceId() {
-            return IDENTIDIER;
+            return IDENTIFIER;
         }
     }
 }
