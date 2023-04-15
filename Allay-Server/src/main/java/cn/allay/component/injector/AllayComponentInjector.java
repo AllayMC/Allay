@@ -6,20 +6,34 @@ import cn.allay.component.annotation.Inject;
 import cn.allay.component.exception.ComponentInjectException;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.ComponentInjector;
+import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.component.interfaces.ComponentedObject;
 import cn.allay.identifier.Identifier;
+import lombok.SneakyThrows;
+import lombok.experimental.Delegate;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.implementation.FixedValue;
+import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
+import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.bind.annotation.Origin;
+import net.bytebuddy.implementation.bind.annotation.SuperCall;
+import net.bytebuddy.implementation.bind.annotation.This;
 import net.bytebuddy.matcher.ElementMatchers;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.Callable;
 
-import static net.bytebuddy.matcher.ElementMatchers.named;
+import static net.bytebuddy.implementation.MethodCall.*;
+import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
  * Author: daoge_cmd <br>
@@ -30,10 +44,12 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
  */
 public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
+    protected static final String COMPONENT_LIST_FIELD_NAME = "components";
     protected Class<T> parentClass;
-    protected List<ComponentImpl> components = new ArrayList<>();
+    protected List<ComponentProvider<? extends ComponentImpl>> componentProviders = new ArrayList<>();
 
-    public AllayComponentInjector() {}
+    public AllayComponentInjector() {
+    }
 
     @Override
     public ComponentInjector<T> parentClass(Class<T> parentClass) {
@@ -43,42 +59,53 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     }
 
     @Override
-    public ComponentInjector<T> withComponent(List<? extends ComponentImpl> components) {
-        Objects.requireNonNull(components, "The components cannot be null");
-        this.components.addAll(components);
+    public ComponentInjector<T> withComponent(List<ComponentProvider<? extends ComponentImpl>> providers) {
+        Objects.requireNonNull(providers, "The providers cannot be null");
+        this.componentProviders.addAll(providers);
         return this;
     }
 
+    @SneakyThrows
     @SuppressWarnings("unchecked")
     @Override
     public Class<T> inject() {
-        checkComponentValid();
-        for (var component : components) {
-            injectDependency(component);
-        }
-        return buildClass();
-    }
-
-    protected Class<T> buildClass() {
         var bb = new ByteBuddy().subclass(parentClass);
+        var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
+        int num = 0;
+        for (var provider : componentProviders) {
+            var fieldName = "f" + num++;
+            componentFieldNameMapping.put(provider, fieldName);
+            bb = bb.defineField(fieldName, provider.getComponentClass(), Visibility.PRIVATE);
+        }
+        bb = bb.defineField(COMPONENT_LIST_FIELD_NAME, List.class, Modifier.STATIC | Modifier.PRIVATE);
+        bb = bb.defineMethod("init", void.class, Modifier.PUBLIC)
+                .withParameter(Object.class)
+                .intercept(MethodDelegation.to(new Initializer(this, componentProviders, componentFieldNameMapping)));
+        //TODO: 构造函数入参
+        bb = bb.constructor(isDefaultConstructor())
+                .intercept(invoke(named("init")).withThis());
         for (var methodShouldBeInject : Arrays.stream(parentClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
             var canDuplicate = methodShouldBeInject.getReturnType().equals(Void.class);
             Implementation.Composable methodDelegation = null;
-            for (var component: components) {
+            for (var provider : componentProviders) {
+                var componentFieldName = componentFieldNameMapping.get(provider);
                 try {
-                    Method methodImpl = component.getClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
+                    Method methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
                     if (!methodImpl.isAnnotationPresent(Impl.class)) continue;
-                    if (methodDelegation == null) methodDelegation = MethodDelegation.to(component);
-                    else if (canDuplicate) methodDelegation = methodDelegation.andThen(MethodDelegation.to(component));
-                    else throw new ComponentInjectException("Duplicate implementation for non-void-return method: " + methodShouldBeInject.getName() + " in " + component.getClass().getName());
-                } catch (NoSuchMethodException ignored) {}
+                    if (methodDelegation == null) methodDelegation = MethodDelegation.toField(componentFieldName);
+                    else if (canDuplicate)
+                        methodDelegation = methodDelegation.andThen(MethodDelegation.toField(componentFieldName));
+                    else
+                        throw new ComponentInjectException("Duplicate implementation for non-void-return method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
+                } catch (NoSuchMethodException ignored) {
+                }
             }
             if (methodDelegation == null)
                 throw new ComponentInjectException("Missing implementation for method: " + methodShouldBeInject.getName());
-            bb = bb.method(ElementMatchers.is(methodShouldBeInject))
-                        .intercept(methodDelegation);
+            bb = bb.method(is(methodShouldBeInject))
+                    .intercept(methodDelegation);
         }
-        bb = afterInject(bb);
+        bb = afterInject(componentProviders, bb);
         try (var unloaded = bb.make()) {
             return (Class<T>) unloaded
                     .load(getClass().getClassLoader())
@@ -88,14 +115,14 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
-    protected DynamicType.Builder<T> afterInject(DynamicType.Builder<T> bb) {
+    protected DynamicType.Builder<T> afterInject(List<ComponentProvider<? extends ComponentImpl>> providers, DynamicType.Builder<T> bb) {
         bb = bb.implement(ComponentedObject.class)
                 .method(named("getComponents"))
-                .intercept(FixedValue.value(Collections.unmodifiableList(components)));
+                .intercept(FieldAccessor.ofField(COMPONENT_LIST_FIELD_NAME));
         return bb;
     }
 
-    protected void checkComponentValid() {
+    protected void checkComponentValid(List<? extends ComponentImpl> components) {
         Set<Identifier> identifiers = new HashSet<>();
         for (var component : components) {
             var identifier = component.getNamespaceId();
@@ -106,7 +133,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
-    protected void injectDependency(ComponentImpl component) {
+    protected void injectDependency(List<? extends ComponentImpl> components, ComponentImpl component) {
         for (var field : component.getClass().getDeclaredFields()) {
             var annotation = field.getAnnotation(Dependency.class);
             if (annotation != null) {
@@ -138,4 +165,46 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             }
         }
     }
+
+    public static class Initializer {
+
+        private final AllayComponentInjector<?> injector;
+        private final List<ComponentProvider<? extends ComponentImpl>> componentProviders;
+        private final Map<ComponentProvider<? extends ComponentImpl>, String> componentFieldNameMapping;
+
+        public Initializer(AllayComponentInjector<?> injector,
+                           List<ComponentProvider<? extends ComponentImpl>> componentProviders,
+                           Map<ComponentProvider<? extends ComponentImpl>, String> componentFieldNameMapping) {
+            this.injector = injector;
+            this.componentProviders = componentProviders;
+            this.componentFieldNameMapping = componentFieldNameMapping;
+        }
+
+        public void init(Object instance) {
+            //TODO: 有一些操作可以在构建类的时候完成，这边有待优化
+            List<? extends ComponentImpl> components = componentProviders.stream().map(ComponentProvider::provide).toList();
+            injector.checkComponentValid(components);
+            for (var component : components) {
+                injector.injectDependency(components, component);
+            }
+            try {
+                for (var provider : componentProviders) {
+                    instance.getClass().getDeclaredField(componentFieldNameMapping.get(provider)).set(instance, provider.provide());
+                }
+            } catch (IllegalAccessException | NoSuchFieldException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+//    public static class Interceptor {
+//        public static void intercept(@Origin Constructor<?> constructor, @SuperCall Callable<?> superCall, @This Object instance) {
+//            try {
+//                superCall.call();
+//                instance.getClass().getDeclaredMethod("init", Object.class).invoke(instance, instance);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
 }

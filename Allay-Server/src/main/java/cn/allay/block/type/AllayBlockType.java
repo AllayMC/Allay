@@ -91,7 +91,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
                 throw new BlockTypeBuildException("Components cannot be null");
             var type = new AllayBlockType<T>(blockClass, components, properties, namespaceId);
             //TODO: default components
-            type.injectedClass = new AllayBlockComponentInjector<>(type).parentClass(blockClass).withComponent(components).inject();
+//            type.injectedClass = new AllayBlockComponentInjector<>(type).parentClass(blockClass).withComponent(components).inject();
             return type;
         }
     }

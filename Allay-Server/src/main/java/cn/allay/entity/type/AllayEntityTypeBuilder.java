@@ -13,10 +13,7 @@ public class AllayEntityTypeBuilder implements EntityTypeBuilder{
 
     @Override
     public <T extends Entity> EntityType<T> build(EntityDefinition<T> definition) {
-        var injector = new AllayComponentInjector<T>();
-        var clazz = injector.parentClass(definition.getTargetInterface())
-                .withComponent(definition.getComponents())
-                .inject();
-        return new AllayEntityType<>(definition, clazz);
+        //TODO
+        return null;
     }
 }

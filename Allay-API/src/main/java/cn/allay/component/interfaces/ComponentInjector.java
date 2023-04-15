@@ -31,13 +31,14 @@ public interface ComponentInjector<T> {
 
     /**
      * Bind a set of implementations for the injector <br/>
+     * When the dynamic class is instantiated, the component instance will be obtained from the Provider <br/>
      * If there are multiple implementation methods for a method to be injected, they will be executed in the order in the component list <p/>
      * and the return value is the return value of the last executed method
      *
-     * @param components components
+     * @param providers component providers
      * @return the injector
      */
-    ComponentInjector<T> withComponent(List<? extends ComponentImpl> components);
+    ComponentInjector<T> withComponent(List<ComponentProvider<? extends ComponentImpl>> providers);
 
     /**
      * Build the class<br/>

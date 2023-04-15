@@ -26,17 +26,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ComponentTest {
 
     protected static Class<Sheep> parentClass;
-    protected static List<ComponentImpl> components;
+    protected static List<ComponentProvider<?>> components;
     protected static Sheep sheep;
 
     @BeforeAll
     static void init() {
         parentClass = Sheep.class;
-        components = Lists.newArrayList(
-                new SimpleNameComponent("Sheep"),
-                new SimpleHealthComponent(20),
-                new SimpleAttackComponent(),
-                new SimpleTestDependencyComponent());
+        components = List.of(
+                ComponentProvider.of(() -> new SimpleNameComponent("Sheep"), SimpleNameComponent.class),
+                ComponentProvider.of(() -> new SimpleHealthComponent(20), SimpleHealthComponent.class),
+                ComponentProvider.of(SimpleAttackComponent::new, SimpleAttackComponent.class),
+                ComponentProvider.of(SimpleTestDependencyComponent::new, SimpleTestDependencyComponent.class)
+        );
     }
 
     @SneakyThrows
@@ -59,7 +60,7 @@ class ComponentTest {
         assertEquals(sheep.getMaxHealth(), ((HealthComponent) sheep.getHealthComponent()).getMaxHealth());
         ((AttackComponent) sheep.getAttackComponent()).attack(10);
         assert sheep.isDead();
-        components.add(new SimpleNameComponentV2("SmallSheep"));
+        components.add(ComponentProvider.of(() -> new SimpleNameComponentV2("SmallSheep"), SimpleNameComponentV2.class));
         assertThrows(
                 ComponentInjectException.class,
                 () -> new AllayComponentInjector<Sheep>()
