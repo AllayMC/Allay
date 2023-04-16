@@ -3,6 +3,7 @@ package cn.allay.block.type;
 import cn.allay.block.Block;
 import cn.allay.block.component.BlockComponentImpl;
 import cn.allay.block.property.type.BlockPropertyType;
+import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identifier;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Map;
  * Allay Project <br>
  */
 public interface BlockType<T extends Block> {
-    List<BlockComponentImpl> getComponents();
+    List<ComponentProvider<? extends BlockComponentImpl>> getComponentProviders();
 
     List<BlockPropertyType<?>> getProperties();
 

@@ -1,6 +1,7 @@
 package cn.allay.block.attribute;
 
 import cn.allay.block.component.attribute.BlockAttributeComponent;
+import cn.allay.block.component.attribute.BlockAttributeComponentImpl;
 import cn.allay.block.component.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.registry.RegistryLoader;
@@ -24,20 +25,20 @@ import java.util.Objects;
  * Allay Project <br>
  */
 @Slf4j
-public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegistry<VanillaBlockId, BlockAttributeComponent, Map<VanillaBlockId, BlockAttributeComponent>> implements VanillaBlockAttributeRegistry {
-    public AllayVanillaBlockAttributeRegistry(RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockAttributeComponent>> loader) {
+public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegistry<VanillaBlockId, BlockAttributeComponentImpl, Map<VanillaBlockId, BlockAttributeComponentImpl>> implements VanillaBlockAttributeRegistry {
+    public AllayVanillaBlockAttributeRegistry(RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockAttributeComponentImpl>> loader) {
         super(VanillaBlockId.values(), loader);
     }
 
-    public static class Loader implements RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockAttributeComponent>> {
+    public static class Loader implements RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockAttributeComponentImpl>> {
 
         @SneakyThrows
         @Override
-        public Map<VanillaBlockId, BlockAttributeComponent> load(VanillaBlockId[] input) {
+        public Map<VanillaBlockId, BlockAttributeComponentImpl> load(VanillaBlockId[] input) {
             log.info("Start loading vanilla block attribute data registry...");
             try (var reader = getReader()) {
                 var element = JsonParser.parseReader(reader);
-                var loaded = new EnumMap<VanillaBlockId, BlockAttributeComponent>(VanillaBlockId.class);
+                var loaded = new EnumMap<VanillaBlockId, BlockAttributeComponentImpl>(VanillaBlockId.class);
                 for (JsonElement jsonElement : element.getAsJsonArray()) {
                     VanillaBlockId type;
                     try {
@@ -46,7 +47,7 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
                         log.error("Unknown block name: " + jsonElement.getAsJsonObject().get("identifier"));
                         continue;
                     }
-                    var component = BlockAttributeComponent.of(jsonElement.toString());
+                    var component = BlockAttributeComponentImpl.of(jsonElement.toString());
                     loaded.put(type, component);
                 }
                 int missings = 0;

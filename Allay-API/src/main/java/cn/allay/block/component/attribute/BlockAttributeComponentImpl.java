@@ -18,6 +18,10 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
 
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_attribute_component");
 
+    public static BlockAttributeComponentImpl of(String json) {
+        return SERIALIZER.fromJson(json, BlockAttributeComponentImpl.class);
+    }
+
     @Builder.Default
     protected AxisAlignedBBRO aabb = AxisAlignedBBRO.of(0, 0, 0, 1, 1, 1);
 

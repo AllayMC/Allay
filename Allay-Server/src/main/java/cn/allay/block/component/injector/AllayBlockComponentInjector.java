@@ -48,7 +48,9 @@ public class AllayBlockComponentInjector<T extends Block> extends AllayComponent
 
     protected void checkPropertyValid() {
         for (var provider : componentProviders) {
-            var requirements = provider.getComponentClass().getAnnotation(RequireBlockProperty.Requirements.class).value();
+            var annotation = provider.getComponentClass().getAnnotation(RequireBlockProperty.Requirements.class);
+            if (annotation == null) continue;
+            var requirements = annotation.value();
             for (var requirement : requirements) {
                 var type = requirement.type();
                 var name = requirement.name();

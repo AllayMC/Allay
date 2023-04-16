@@ -11,7 +11,7 @@ import java.util.Map;
  * Date: 2023/4/8 <br>
  * Allay Project <br>
  */
-public interface VanillaBlockAttributeRegistry extends MappedRegistry<VanillaBlockId, BlockAttributeComponent, Map<VanillaBlockId, BlockAttributeComponent>> {
+public interface VanillaBlockAttributeRegistry extends MappedRegistry<VanillaBlockId, BlockAttributeComponentImpl, Map<VanillaBlockId, BlockAttributeComponentImpl>> {
     ApiInstanceHolder<VanillaBlockAttributeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static VanillaBlockAttributeRegistry getRegistry() {

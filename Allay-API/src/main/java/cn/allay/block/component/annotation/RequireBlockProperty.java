@@ -11,6 +11,7 @@ import java.lang.annotation.*;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
+@Inherited
 @Repeatable(RequireBlockProperty.Requirements.class)
 public @interface RequireBlockProperty {
     BlockPropertyType.Type type();
@@ -19,6 +20,7 @@ public @interface RequireBlockProperty {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
+    @Inherited
     @interface Requirements {
         RequireBlockProperty[] value();
     }

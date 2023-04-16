@@ -20,6 +20,7 @@ import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatchers;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -36,6 +37,8 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
  * The default injector which use byte-buddy
  */
 public class AllayComponentInjector<T> implements ComponentInjector<T> {
+
+    protected static final boolean DEBUG = true;
 
     protected static final String COMPONENT_LIST_FIELD_NAME = "components";
     protected static final String INIT_METHOD_NAME = "initComponents";
@@ -54,7 +57,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     @Override
     public ComponentInjector<T> withComponent(List<ComponentProvider<? extends ComponentImpl>> providers) {
-        Objects.requireNonNull(providers, "The providers cannot be null");
+        Objects.requireNonNull(providers, "The component providers cannot be null");
         this.componentProviders.addAll(providers);
         return this;
     }
@@ -106,8 +109,10 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
         bb = afterInject(componentProviders, bb);
         try (var unloaded = bb.make()) {
-//            var file = new File("C:\\Users\\daoge_cmd\\IdeaProjects\\Allay\\Allay-Server\\build\\outclasses");
-//            unloaded.saveIn(file);
+            if (DEBUG) {
+                var file = new File("C:\\Users\\daoge_cmd\\IdeaProjects\\Allay\\Allay-Server\\build\\outclass");
+                unloaded.saveIn(file);
+            }
             return (Class<T>) unloaded
                     .load(getClass().getClassLoader())
                     .getLoaded();

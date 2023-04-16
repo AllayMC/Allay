@@ -20,10 +20,6 @@ public interface BlockAttributeComponent {
             })
             .create();
 
-    static BlockAttributeComponent of(String json) {
-        return SERIALIZER.fromJson(json, BlockAttributeComponentImpl.class);
-    }
-
     AxisAlignedBBRO aabb();
 
     boolean blocksPrecipitation();
