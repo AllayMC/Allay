@@ -18,6 +18,7 @@ import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatchers;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -62,6 +63,11 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     @SuppressWarnings("unchecked")
     @Override
     public Class<T> inject() {
+        return buildClass();
+    }
+
+    @NotNull
+    private Class<T> buildClass() {
         var bb = new ByteBuddy().subclass(parentClass);
         var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
         int num = 0;
