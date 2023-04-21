@@ -8,7 +8,6 @@ application {
 
 dependencies {
     implementation(project(":Allay-API"))
-    implementation(project(":Allay-Level-Loader"))
     implementation(libs.bytebuddy)
 }
 
