@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
  * Allay Project <br>
  * <p>
  * The scheduler implementation in Allay
+ * TODO: 需要优化，目前看样子问题很多（
  */
 public class AllayScheduler implements Scheduler {
 
