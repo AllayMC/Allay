@@ -40,15 +40,15 @@ public final class Allay {
 
     private static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
-        api.bind(ComponentInjector.ComponentInjectorFactory.class, AllayComponentInjector::new);
-        api.bind(Server.class, new AllayServer());
-        api.bind(Scheduler.SchedulerFactory.class, AllayScheduler::new);
-        api.bind(EntityTypeBuilder.class, new AllayEntityTypeBuilder());
-        api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, AllayBlockType::builder);
-        api.bind(BlockPropertyTypeRegistry.class, new AllayBlockPropertyTypeRegistry());
-        api.bind(BlockTypeRegistry.class, new AllayBlockTypeRegistry());
-        api.bind(VanillaBlockPaletteRegistry.class, new AllayVanillaBlockPaletteRegistry(new AllayVanillaBlockPaletteRegistry.Loader()));
-        api.bind(VanillaBlockAttributeRegistry.class, new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));
+        api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
+        api.bind(Server.class, AllayServer::new);
+        api.bind(Scheduler.SchedulerFactory.class, () -> AllayScheduler::new);
+        api.bind(EntityTypeBuilder.class, AllayEntityTypeBuilder::new);
+        api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
+        api.bind(BlockPropertyTypeRegistry.class, AllayBlockPropertyTypeRegistry::new);
+        api.bind(VanillaBlockPaletteRegistry.class, () -> new AllayVanillaBlockPaletteRegistry(new AllayVanillaBlockPaletteRegistry.Loader()));
+        api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new);
+        api.bind(VanillaBlockAttributeRegistry.class, () -> new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));
         api.implement("Allay");
     }
 }

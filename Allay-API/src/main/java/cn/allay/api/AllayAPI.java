@@ -14,9 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Author: daoge_cmd <br>
@@ -37,7 +39,7 @@ public final class AllayAPI {
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
-    private final Map<Class<?>, Object> bindings = new HashMap<>();
+    private final Map<Class<?>, Supplier<?>> bindings = new LinkedHashMap<>();
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean implemented = false;
 
@@ -58,11 +60,11 @@ public final class AllayAPI {
      * @throws MissingImplementationException If there are interface which are not been implemented
      */
     public void implement(String coreName) throws MissingImplementationException {
-        for (Map.Entry<Class<?>, ?> entry : bindings.entrySet()) {
+        for (Map.Entry<Class<?>, Supplier<?>> entry : bindings.entrySet()) {
             if (entry.getValue() == null) {
                 throw new MissingImplementationException("Missing binding for " + entry.getKey().getName());
             }
-            ((Consumer<Object>) consumers.get(entry.getKey())).accept(entry.getValue());
+            ((Consumer<Object>) consumers.get(entry.getKey())).accept(entry.getValue().get());
         }
         //TODO: 多语言支持
         log.info("This server is running §b" + coreName + "§f, implement Allay-API version §b" + API_VERSION);
@@ -86,10 +88,10 @@ public final class AllayAPI {
         }
     }
 
-    public <T> void bind(Class<T> api, T instance) {
+    public <T> void bind(Class<T> api, Supplier<T> supplier) {
         Objects.requireNonNull(api);
-        Objects.requireNonNull(instance);
-        bindings.put(api, instance);
+        Objects.requireNonNull(supplier);
+        bindings.put(api, supplier);
     }
 
     /**

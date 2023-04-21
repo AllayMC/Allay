@@ -63,7 +63,7 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
         }
 
         protected Reader getReader() {
-            return new BufferedReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("block_attributes.json"), "block_attributes.json is missing!")));
+            return new BufferedReader(new InputStreamReader(Objects.requireNonNull(AllayVanillaBlockAttributeRegistry.class.getClassLoader().getResourceAsStream("block_attributes.json"), "block_attributes.json is missing!")));
         }
     }
 }
