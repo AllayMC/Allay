@@ -12,40 +12,42 @@ import static org.junit.jupiter.api.Assertions.*;
  * Allay Project <br>
  */
 class BlockAttributeComponentImplTest {
-    private static final String json = "{\n" +
-            "        \"aabb\": \"0.0005,0.0005,0.0005,0.9995,0.1825,0.9995\",\n" +
-            "        \"canBeMovingBlock\": true,\n" +
-            "        \"blocksPrecipitation\": true,\n" +
-            "        \"breaksFallingBlocks\": true,\n" +
-            "        \"burnAbility\": 0,\n" +
-            "        \"burnChance\": 0,\n" +
-            "        \"canBeBrokenFromFalling\": true,\n" +
-            "        \"canContainLiquid\": true,\n" +
-            "        \"color\": -1,\n" +
-            "        \"explosionResistance\": 15,\n" +
-            "        \"friction\": 0.6,\n" +
-            "        \"hardness\": 3,\n" +
-            "        \"hasBlockEntity\": false,\n" +
-            "        \"hasComparatorSignal\": false,\n" +
-            "        \"identifier\": \"minecraft:trapdoor\",\n" +
-            "        \"isAlwaysDestroyable\": true,\n" +
-            "        \"isContainerBlock\": false,\n" +
-            "        \"isLiquid\": false,\n" +
-            "        \"isMotionBlockingBlock\": false,\n" +
-            "        \"isPowerSource\": false,\n" +
-            "        \"isSolid\": false,\n" +
-            "        \"isSolidBlocking\": true,\n" +
-            "        \"isUnbreakable\": false,\n" +
-            "        \"isWaterBlocking\": true,\n" +
-            "        \"flammable\": true,\n" +
-            "        \"light\": 0,\n" +
-            "        \"lightEmission\": 0,\n" +
-            "        \"pushesUpFallingBlocks\": false,\n" +
-            "        \"superHot\": false,\n" +
-            "        \"thickness\": 0,\n" +
-            "        \"translucency\": 0,\n" +
-            "        \"waterSpreadCausesSpawn\": false\n" +
-            "    }";
+    private static final String json = """
+            {
+                "aabb": "0.0005,0.0005,0.0005,0.9995,0.1825,0.9995",
+                "canBeMovingBlock": true,
+                "blocksPrecipitation": true,
+                "breaksFallingBlocks": true,
+                "burnAbility": 0,
+                "burnChance": 0,
+                "canBeBrokenFromFalling": true,
+                "canContainLiquid": true,
+                "color": -1,
+                "explosionResistance": 15,
+                "friction": 0.6,
+                "hardness": 3,
+                "hasBlockEntity": false,
+                "hasComparatorSignal": false,
+                "identifier": "minecraft:trapdoor",
+                "isAlwaysDestroyable": true,
+                "isContainerBlock": false,
+                "isLiquid": false,
+                "isMotionBlockingBlock": false,
+                "isPowerSource": false,
+                "isSolid": false,
+                "isSolidBlocking": true,
+                "isUnbreakable": false,
+                "isWaterBlocking": true,
+                "flammable": true,
+                "light": 0,
+                "lightEmission": 0,
+                "pushesUpFallingBlocks": false,
+                "superHot": false,
+                "thickness": 0,
+                "translucency": 0,
+                "waterSpreadCausesSpawn": false
+            }
+            """;
 
     @Test
     void of() {
