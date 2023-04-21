@@ -2,6 +2,7 @@ package cn.allay.server;
 
 import cn.allay.network.AllayNetwork;
 import cn.allay.network.Network;
+import cn.allay.utils.GameLoop;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,10 +23,15 @@ public final class AllayServer implements Server {
 
     @Override
     public void startMainLoop() {
-        //TODO
-        while (true) {
+        GameLoop.builder()
+                .loopCountPerSec(20)
+                .onTick(loop -> onTick())
+                .build()
+                .startLoop();
+    }
 
-        }
+    private void onTick() {
+        //TODO
     }
 
     @Override
