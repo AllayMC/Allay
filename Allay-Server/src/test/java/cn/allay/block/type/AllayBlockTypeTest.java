@@ -5,6 +5,7 @@ import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
 import cn.allay.block.property.type.IntPropertyType;
+import cn.allay.component.exception.BlockComponentInjectException;
 import cn.allay.math.position.Pos;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,15 @@ class AllayBlockTypeTest {
                         of(TestComponentImpl::new, TestComponentImpl.class)
                 ))
                 .build();
+    }
+
+    @Test
+    void testBlockType() {
+        assertNotNull(testBlockType);
+    }
+
+    @Test
+    void testBlockInstance() {
         var block = testBlockType.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
         assertEquals(1, block.getX());
         assertEquals(2, block.getY());
@@ -58,7 +68,20 @@ class AllayBlockTypeTest {
     }
 
     @Test
-    void testBlockType() {
-        assertNotNull(testBlockType);
+    void testRequirePropertyAnnotation() {
+        assertThrows(
+                BlockComponentInjectException.class,
+                () -> AllayBlockType
+                        .builder(TestBlock.class)
+                        .namespaceId("minecraft:test_block")
+                        .property(
+                                TEST_BOOLEAN_PROPERTY_TYPE,
+//                                TEST_INT_PROPERTY_TYPE,
+                                TEST_ENUM_PROPERTY_TYPE)
+                        .component(List.of(
+                                of(TestComponentImpl::new, TestComponentImpl.class)
+                        ))
+                        .build()
+        );
     }
 }

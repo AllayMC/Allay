@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_FILE_PATH;
+import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
 import static cn.allay.codegen.Utils.convertToCamelCase;
 
 /**
@@ -138,20 +139,17 @@ public class VanillaBlockPropertyTypeGen {
     @SneakyThrows
     protected static List<BlockPropertyTypeInfo> generateBlockPropertyInfos() {
         Map<String, List<String>> propertyInfos = new HashMap<>();
-        try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(BLOCK_PALETTE_FILE_PATH))))) {
-            var blocks = ((NbtMap) nbtReader.readTag()).getList("blocks", NbtType.COMPOUND);
-            blocks.forEach(block -> block.getCompound("states").forEach((name, value) -> {
-                if (!propertyInfos.containsKey(name)) {
-                    var validValues = new ArrayList<String>();
+        BLOCK_PALETTE_NBT.forEach(block -> block.getCompound("states").forEach((name, value) -> {
+            if (!propertyInfos.containsKey(name)) {
+                var validValues = new ArrayList<String>();
+                validValues.add(value.toString());
+                propertyInfos.put(name, validValues);
+            } else {
+                var validValues = propertyInfos.get(name);
+                if (!validValues.contains(value.toString()))
                     validValues.add(value.toString());
-                    propertyInfos.put(name, validValues);
-                } else {
-                    var validValues = propertyInfos.get(name);
-                    if (!validValues.contains(value.toString()))
-                        validValues.add(value.toString());
-                }
-            }));
-        }
+            }
+        }));
         var boolValidValues = List.of("false", "true");
         return propertyInfos.entrySet().stream().map(entry -> {
             var propertyType = getPropertyType(entry.getValue());

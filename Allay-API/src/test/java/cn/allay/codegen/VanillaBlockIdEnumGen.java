@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
 
+import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
+
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/26 <br>
@@ -42,15 +44,13 @@ public class VanillaBlockIdEnumGen {
                         .addStatement("this.$N = new $T($N)", "namespaceId", identifierClass, "namespaceId")
                         .build()
                 );
-        try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(CodeGen.BLOCK_PALETTE_FILE_PATH))))) {
-            var blocks = ((NbtMap) nbtReader.readTag()).getList("blocks", NbtType.COMPOUND);
-            var sortedNamespaceId = blocks.stream().map(block -> block.getString("name")).sorted(String::compareTo).map(Identifier::new).toList();
-            for (var namespaceId : sortedNamespaceId) {
-                codeBuilder
-                        .addEnumConstant(namespaceId.getPath().toUpperCase(),
-                                TypeSpec.anonymousClassBuilder("$S", namespaceId.toString()).build());
-            }
+        var sortedNamespaceId = BLOCK_PALETTE_NBT.stream().map(block -> block.getString("name")).sorted(String::compareTo).map(Identifier::new).toList();
+        for (var namespaceId : sortedNamespaceId) {
+            codeBuilder
+                    .addEnumConstant(namespaceId.getPath().toUpperCase(),
+                            TypeSpec.anonymousClassBuilder("$S", namespaceId.toString()).build());
         }
+
         var javaFile = JavaFile.builder("cn.allay.block.data", codeBuilder.build()).build();
         Files.writeString(FILE_OUTPUT_PATH, javaFile.toString());
     }
