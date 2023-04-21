@@ -1,6 +1,7 @@
 package cn.allay.block.component;
 
 import cn.allay.block.component.attribute.BlockAttributeComponent;
+import cn.allay.block.component.attribute.BlockAttributeComponentImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +49,7 @@ class BlockAttributeComponentImplTest {
 
     @Test
     void of() {
-        BlockAttributeComponent blockAttributeComponent = BlockAttributeComponent.of(json);
+        BlockAttributeComponent blockAttributeComponent = BlockAttributeComponentImpl.of(json);
         //Check all the values
         assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributeComponent.aabb().minX()));
         assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributeComponent.aabb().minY()));
