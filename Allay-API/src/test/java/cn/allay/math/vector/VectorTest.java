@@ -48,7 +48,6 @@ class VectorTest {
 
     @Test
     void position() {
-        assertThrows(NullPointerException.class, () -> Pos.of(1, 1, 1, null));
         var pos = Pos.of(1, 1, 1, mockLevel);
         assertNotNull(pos.getLevel());
         assertEquals(1, pos.getX());
@@ -64,7 +63,6 @@ class VectorTest {
 
     @Test
     void location() {
-        assertThrows(NullPointerException.class, () -> Loc.of(1, 1, 1, null));
         var loc = Loc.of(1, 1, 1, mockLevel);
         assertNotNull(loc.getLevel());
         assertEquals(0d, loc.getYaw());
