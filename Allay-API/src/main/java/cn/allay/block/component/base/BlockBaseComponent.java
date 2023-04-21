@@ -3,6 +3,7 @@ package cn.allay.block.component.base;
 import cn.allay.block.Block;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.type.BlockType;
+import cn.allay.component.annotation.Inject;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -13,12 +14,16 @@ import java.util.Map;
  * Allay Project <br>
  */
 public interface BlockBaseComponent {
+    @Inject
     BlockType<? extends Block> getBlockType();
 
+    @Inject
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value);
 
+    @Inject
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getProperty(PROPERTY property);
 
+    @Inject
     @UnmodifiableView
     Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> getCurrentProperties();
 }

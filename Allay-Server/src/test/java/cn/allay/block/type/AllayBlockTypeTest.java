@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static cn.allay.component.interfaces.ComponentProvider.of;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Author: daoge_cmd <br>
@@ -47,6 +46,15 @@ class AllayBlockTypeTest {
         assertEquals(1, block.getX());
         assertEquals(2, block.getY());
         assertEquals(3, block.getZ());
+        assertFalse(block.getProperty(TEST_BOOLEAN_PROPERTY_TYPE));
+        block.setProperty(TEST_BOOLEAN_PROPERTY_TYPE, true);
+        assertTrue(block.getProperty(TEST_BOOLEAN_PROPERTY_TYPE));
+        assertEquals(0, block.getProperty(TEST_INT_PROPERTY_TYPE));
+        block.setProperty(TEST_INT_PROPERTY_TYPE, 5);
+        assertEquals(5, block.getProperty(TEST_INT_PROPERTY_TYPE));
+        assertEquals(TestEnum.A, block.getProperty(TEST_ENUM_PROPERTY_TYPE));
+        block.setProperty(TEST_ENUM_PROPERTY_TYPE, TestEnum.B);
+        assertEquals(TestEnum.B, block.getProperty(TEST_ENUM_PROPERTY_TYPE));
     }
 
     @Test

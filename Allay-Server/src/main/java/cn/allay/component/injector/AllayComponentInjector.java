@@ -95,6 +95,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         bb = afterInject(componentProviders, bb);
         try (var unloaded = bb.make()) {
             if (DEBUG) {
+                //TODO: improve this
                 var file = new File("C:\\Users\\daoge_cmd\\IdeaProjects\\Allay\\Allay-Server\\build\\outclass");
                 unloaded.saveIn(file);
             }

@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class AllayBlockType<T extends Block> implements BlockType<T> {
+    protected Class<T> blockClass;
     protected Class<T> injectedClass;
     protected Constructor<T> constructor;
     protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders;
@@ -37,21 +38,24 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     protected Map<String, BlockPropertyType<?>> mappedProperties;
     protected Identifier namespaceId;
 
-    @SneakyThrows
     protected AllayBlockType(Class<T> blockClass,
                              List<ComponentProvider<? extends BlockComponentImpl>> componentProviders,
                              List<BlockPropertyType<?>> properties,
                              Identifier namespaceId) {
+        this.blockClass = blockClass;
         this.componentProviders = componentProviders;
         this.properties = properties;
         this.namespaceId = namespaceId;
-        this.mappedProperties = properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
 
+        mappedProperties = properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
+    }
+
+    @SneakyThrows
+    protected void complete() {
         injectedClass = new AllayBlockComponentInjector<>(this)
                 .parentClass(blockClass)
                 .component(convertList(componentProviders))
                 .inject();
-
         //Cache constructor
         constructor = injectedClass.getConstructor(ComponentInitInfo.class);
     }
@@ -125,7 +129,8 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
                 throw new BlockTypeBuildException("Component providers cannot be null");
             //Make sure it's not an immutable list, to add the default component
             componentProviders = new ArrayList<>(componentProviders);
-            componentProviders.add(ComponentProvider.of(BlockBaseComponentImpl::new, BlockBaseComponentImpl.class));
+            var type = new AllayBlockType<>(blockClass, componentProviders, properties, namespaceId);
+            componentProviders.add(ComponentProvider.of(() -> new BlockBaseComponentImpl(type), BlockBaseComponentImpl.class));
             componentProviders.add(ComponentProvider.of(info -> {
                 var blockInitInfo = (BlockInitInfo) info;
                 return new BlockPositionComponentImpl(blockInitInfo.position());
@@ -140,7 +145,8 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             else attributeComponent = BlockAttributeComponentImpl.builder().build();
             //TODO: 对于所有Block实例，只持有一个BlockAttributeComponentImpl实例，需要确认后续是否需要改进
             componentProviders.add(ComponentProvider.ofSingleton(attributeComponent));
-            return new AllayBlockType<>(blockClass, componentProviders, properties, namespaceId);
+            type.complete();
+            return type;
         }
     }
 }

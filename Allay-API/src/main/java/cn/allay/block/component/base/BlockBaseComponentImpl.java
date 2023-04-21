@@ -26,24 +26,29 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     protected Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> currentProperties = new HashMap<>();
     protected BlockType<? extends Block> type;
 
-    //This method will be called by the injector when assembling the class to set the Block Type
-    //DO NOT CALL IT!!!
-    public static void setBlockType(BlockBaseComponentImpl component, BlockType<? extends Block> type) {
-        component.setBlockType(type);
-    }
-
+//    //This method will be called by the injector when assembling the class to set the Block Type
+//    //DO NOT CALL IT!!!
+//    public static void setBlockType(BlockBaseComponentImpl component, BlockType<? extends Block> type) {
+//        component.setBlockType(type);
+//    }
+//
     @Override
     @Impl
     public BlockType<? extends Block> getBlockType() {
         return type;
     }
+//
+//    private void setBlockType(BlockType<? extends Block> type) {
+//        if (this.type != null)
+//            throw new IllegalStateException("Block type has been set");
+//        this.type = type;
+//        for (var propertyType : type.getProperties())
+//            currentProperties.put(propertyType, propertyType.tryCreateValue(propertyType.getDefaultValue()));
+//    }
 
-    private void setBlockType(BlockType<? extends Block> type) {
-        if (this.type != null)
-            throw new IllegalStateException("Block type has been set");
+
+    public BlockBaseComponentImpl(BlockType<? extends Block> type) {
         this.type = type;
-        for (var propertyType : type.getProperties())
-            currentProperties.put(propertyType, propertyType.tryCreateValue(propertyType.getDefaultValue()));
     }
 
     @Override
@@ -51,7 +56,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value) {
         //TODO: 也许需要额外的工作？
         ensureMapping();
-        if (!type.getMappedProperties().containsKey(property.getName()))
+        if (!getBlockType().getMappedProperties().containsKey(property.getName()))
             throw new IllegalArgumentException("Property " + property + " is not supported by this block");
         currentProperties.put(property, property.createValue(value));
     }

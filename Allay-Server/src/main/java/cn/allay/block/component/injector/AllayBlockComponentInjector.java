@@ -38,14 +38,6 @@ public class AllayBlockComponentInjector<T extends Block> extends AllayComponent
         return super.inject();
     }
 
-    @Override
-    protected DynamicType.Builder<T> afterInject(List<ComponentProvider<? extends ComponentImpl>> providers, DynamicType.Builder<T> bb) {
-        //Implement BlockType<? extends Block> getBlockType();
-        return super.afterInject(providers, bb)
-                .method(named("getBlockType"))
-                .intercept(FixedValue.value(type));
-    }
-
     protected void checkPropertyValid() {
         for (var provider : componentProviders) {
             var annotation = provider.getComponentClass().getAnnotation(RequireBlockProperty.Requirements.class);
