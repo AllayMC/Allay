@@ -37,7 +37,7 @@ public class VanillaBlockClassGen {
         TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(className)
                 .addJavadoc(
                         "Author: daoge_cmd <br>\n" +
-                                "Allay Project <br>\n")
+                        "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var javaFile = JavaFile.builder("cn.allay.block.vanilla", codeBuilder.build()).build();
         Files.writeString(path, javaFile.toString());

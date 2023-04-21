@@ -1,10 +1,7 @@
 package cn.allay.component;
 
 import cn.allay.component.exception.ComponentInjectException;
-import cn.allay.component.impl.SimpleAttackComponent;
-import cn.allay.component.impl.SimpleHealthComponent;
-import cn.allay.component.impl.SimpleNameComponent;
-import cn.allay.component.impl.SimpleTestDependencyComponent;
+import cn.allay.component.impl.*;
 import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.component.interfaces.*;
 import cn.allay.identifier.Identifier;
@@ -37,6 +34,10 @@ class ComponentTest {
         componentProviders.add(ComponentProvider.of(() -> new SimpleHealthComponent(20), SimpleHealthComponent.class));
         componentProviders.add(ComponentProvider.of(SimpleAttackComponent::new, SimpleAttackComponent.class));
         componentProviders.add(ComponentProvider.of(SimpleTestDependencyComponent::new, SimpleTestDependencyComponent.class));
+        componentProviders.add(ComponentProvider.of(info -> {
+            var casted = (TestComponentInitInfo) info;
+            return new SimpleTestInitArgComponent(casted.data());
+        }, SimpleTestInitArgComponent.class));
     }
 
     @SneakyThrows
@@ -44,10 +45,10 @@ class ComponentTest {
     void testInjector() {
         sheep = new AllayComponentInjector<Sheep>()
                 .parentClass(parentClass)
-                .withComponent(componentProviders)
+                .component(componentProviders)
                 .inject()
-                .getDeclaredConstructor()
-                .newInstance();
+                .getDeclaredConstructor(ComponentInitInfo.class)
+                .newInstance(new TestComponentInitInfo(114514));
         assertEquals("Sheep", sheep.getName());
         assertEquals(20, sheep.getHealth());
         sheep.attack(10);
@@ -59,12 +60,13 @@ class ComponentTest {
         assertEquals(sheep.getMaxHealth(), ((HealthComponent) sheep.getHealthComponent()).getMaxHealth());
         ((AttackComponent) sheep.getAttackComponent()).attack(10);
         assert sheep.isDead();
+        assertEquals(114514, sheep.getData());
         componentProviders.add(ComponentProvider.of(() -> new SimpleNameComponentV2("SmallSheep"), SimpleNameComponentV2.class));
         assertThrows(
                 ComponentInjectException.class,
                 () -> new AllayComponentInjector<Sheep>()
                         .parentClass(parentClass)
-                        .withComponent(componentProviders)
+                        .component(componentProviders)
                         .inject());
     }
 

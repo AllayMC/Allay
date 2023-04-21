@@ -1,13 +1,11 @@
 package cn.allay.block.type;
 
-import cn.allay.block.component.TestComponent;
 import cn.allay.block.component.TestComponentImpl;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
 import cn.allay.block.property.type.IntPropertyType;
 import cn.allay.component.interfaces.ComponentProvider;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
