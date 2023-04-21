@@ -1,7 +1,7 @@
 package cn.allay.block.type;
 
 import cn.allay.component.interfaces.ComponentInitInfo;
-import cn.allay.math.location.Loc;
+import cn.allay.math.position.Pos;
 
 /**
  * Author: daoge_cmd <br>
@@ -10,9 +10,9 @@ import cn.allay.math.location.Loc;
  */
 public interface BlockInitInfo extends ComponentInitInfo {
 
-    Loc<Integer> location();
+    Pos<Integer> position();
 
-    record Simple(Loc<Integer> location) implements BlockInitInfo {
+    record Simple(Pos<Integer> position) implements BlockInitInfo {
 
     }
 }

@@ -13,7 +13,6 @@ import java.util.Objects;
 public interface PosRO<T extends Number> extends Vec3RO<T> {
 
     static <T extends Number> PosRO<T> of(T x, T y, T z, Level level) {
-        Objects.requireNonNull(level);
         return new ImplPosRO<>(x, y, z, level);
     }
 

@@ -1,5 +1,6 @@
 package cn.allay.block.component.position;
 
+import cn.allay.component.annotation.Inject;
 import cn.allay.math.position.PosRO;
 
 /**
@@ -8,5 +9,15 @@ import cn.allay.math.position.PosRO;
  * Allay Project <br>
  */
 public interface BlockPositionComponent extends PosRO<Integer> {
+    @Inject
+    @Override
+    Integer getX();
 
+    @Inject
+    @Override
+    Integer getY();
+
+    @Inject
+    @Override
+    Integer getZ();
 }

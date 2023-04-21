@@ -22,4 +22,6 @@ public interface BlockType<T extends Block> {
     Map<String, BlockPropertyType<?>> getMappedProperties();
 
     Identifier getNamespaceId();
+
+    T createBlock(BlockInitInfo info);
 }

@@ -21,7 +21,6 @@ public interface LocRO<T extends Number> extends PosRO<T> {
     }
 
     static <T extends Number> LocRO<T> of(T x, T y, T z, double yaw, double headYaw, double pitch, Level level) {
-        Objects.requireNonNull(level);
         return new ImplLocRO<>(x, y, z, yaw, headYaw, pitch, level);
     }
 

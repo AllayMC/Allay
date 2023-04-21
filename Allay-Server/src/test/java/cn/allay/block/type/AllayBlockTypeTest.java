@@ -5,12 +5,14 @@ import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
 import cn.allay.block.property.type.IntPropertyType;
-import cn.allay.component.interfaces.ComponentProvider;
+import cn.allay.math.position.Pos;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static cn.allay.component.interfaces.ComponentProvider.of;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -37,8 +39,14 @@ class AllayBlockTypeTest {
                         TEST_BOOLEAN_PROPERTY_TYPE,
                         TEST_INT_PROPERTY_TYPE,
                         TEST_ENUM_PROPERTY_TYPE)
-                .component(List.of(ComponentProvider.of(TestComponentImpl::new, TestComponentImpl.class)))
+                .component(List.of(
+                        of(TestComponentImpl::new, TestComponentImpl.class)
+                ))
                 .build();
+        var block = testBlockType.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        assertEquals(1, block.getX());
+        assertEquals(2, block.getY());
+        assertEquals(3, block.getZ());
     }
 
     @Test
