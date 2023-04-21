@@ -18,7 +18,7 @@ log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.re
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
 log4j-slf4j18-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j18-impl", version = "2.18.0" }
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.0-alpha1" }
-terminal-console-appender = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
+#terminal-console-appender = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 
 # CLI dependencies
 jline-terminal = { group = "org.jline", name = "jline-terminal", version.ref = "jline" }
@@ -35,8 +35,9 @@ javapoet = { group = "com.squareup", name = "javapoet", version = "1.13.0" }
 # FastUtil
 #fastutil = { group = "com.nukkitx", name = "fastutil-lite", version = "8.1.1" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.11" }
+
 [bundles]
-log4j = ["log4j-api", "log4j-core", "log4j-slf4j18-impl", "slf4j-api", "disruptor", "terminal-console-appender"]
+log4j = ["log4j-api", "log4j-core", "log4j-slf4j18-impl", "slf4j-api", "disruptor"]
 terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader"]
 junit = ["junit-jupiter-api", "junit-jupiter-engine"]
 

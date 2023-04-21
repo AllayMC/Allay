@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <TerminalConsole name="Console">
-            <PatternLayout pattern="[%cyan{%d{HH:mm:ss}}] [%level] %minecraftFormatting{%msg}%n"/>
-        </TerminalConsole>
+        <Console name="Console" shutdownHook="disable">
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t] [%level] [%c{0}] %msg%n"/>
+        </Console>
         <RollingRandomAccessFile name="File" fileName="logs/server.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level - %msg%n"/>
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t] [%level] [%C{0}] %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <OnStartupTriggeringPolicy/>
