@@ -1,4 +1,4 @@
-package cn.allay.block.component.position;
+package cn.allay.block.component.impl.position;
 
 import cn.allay.block.component.BlockComponentImpl;
 import cn.allay.component.annotation.Impl;

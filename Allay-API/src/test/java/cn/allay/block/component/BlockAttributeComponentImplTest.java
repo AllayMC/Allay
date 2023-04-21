@@ -1,7 +1,7 @@
 package cn.allay.block.component;
 
-import cn.allay.block.component.attribute.BlockAttributeComponent;
-import cn.allay.block.component.attribute.BlockAttributeComponentImpl;
+import cn.allay.block.component.impl.attribute.BlockAttributeComponent;
+import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

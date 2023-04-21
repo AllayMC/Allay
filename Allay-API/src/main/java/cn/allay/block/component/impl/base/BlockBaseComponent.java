@@ -1,4 +1,4 @@
-package cn.allay.block.component.base;
+package cn.allay.block.component.impl.base;
 
 import cn.allay.block.Block;
 import cn.allay.block.property.type.BlockPropertyType;

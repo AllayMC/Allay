@@ -3,7 +3,7 @@ package cn.allay;
 import cn.allay.api.AllayAPI;
 import cn.allay.api.MissingImplementationException;
 import cn.allay.block.attribute.AllayVanillaBlockAttributeRegistry;
-import cn.allay.block.component.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.palette.AllayVanillaBlockPaletteRegistry;
 import cn.allay.block.palette.VanillaBlockPaletteRegistry;
 import cn.allay.block.property.AllayBlockPropertyTypeRegistry;

@@ -2,11 +2,11 @@ package cn.allay.block.type;
 
 import cn.allay.block.Block;
 import cn.allay.block.component.BlockComponentImpl;
-import cn.allay.block.component.attribute.BlockAttributeComponentImpl;
-import cn.allay.block.component.attribute.VanillaBlockAttributeRegistry;
-import cn.allay.block.component.base.BlockBaseComponentImpl;
+import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
+import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.block.component.impl.base.BlockBaseComponentImpl;
 import cn.allay.block.component.injector.AllayBlockComponentInjector;
-import cn.allay.block.component.position.BlockPositionComponentImpl;
+import cn.allay.block.component.impl.position.BlockPositionComponentImpl;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.component.interfaces.ComponentImpl;
@@ -60,7 +60,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         constructor = injectedClass.getConstructor(ComponentInitInfo.class);
     }
 
-    public static <T extends Block> Builder<T> builder(Class<T> blockClass) {
+    public static <T extends Block> BlockTypeBuilder<T> builder(Class<T> blockClass) {
         return new Builder<>(blockClass);
     }
 
@@ -131,10 +131,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             componentProviders = new ArrayList<>(componentProviders);
             var type = new AllayBlockType<>(blockClass, componentProviders, properties, namespaceId);
             componentProviders.add(ComponentProvider.of(() -> new BlockBaseComponentImpl(type), BlockBaseComponentImpl.class));
-            componentProviders.add(ComponentProvider.of(info -> {
-                var blockInitInfo = (BlockInitInfo) info;
-                return new BlockPositionComponentImpl(blockInitInfo.position());
-            }, BlockPositionComponentImpl.class));
+            componentProviders.add(ComponentProvider.of(info -> new BlockPositionComponentImpl(((BlockInitInfo) info).position()), BlockPositionComponentImpl.class));
             BlockAttributeComponentImpl attributeComponent;
             if (isVanillaBlock) {
                 attributeComponent = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);

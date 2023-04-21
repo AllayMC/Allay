@@ -1,4 +1,4 @@
-package cn.allay.block.component.attribute;
+package cn.allay.block.component.impl.attribute;
 
 import cn.allay.block.component.BlockComponentImpl;
 import cn.allay.component.annotation.Impl;

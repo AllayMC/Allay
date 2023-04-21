@@ -1,4 +1,4 @@
-package cn.allay.block.component.position;
+package cn.allay.block.component.impl.position;
 
 import cn.allay.component.annotation.Inject;
 import cn.allay.math.position.PosRO;

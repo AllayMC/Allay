@@ -1,7 +1,7 @@
 package cn.allay.block.registry;
 
 import cn.allay.block.attribute.AllayVanillaBlockAttributeRegistry;
-import cn.allay.block.component.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.palette.AllayVanillaBlockPaletteRegistry;
 import cn.allay.block.palette.VanillaBlockPaletteRegistry;

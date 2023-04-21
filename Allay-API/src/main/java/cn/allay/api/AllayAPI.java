@@ -1,6 +1,6 @@
 package cn.allay.api;
 
-import cn.allay.block.component.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.palette.VanillaBlockPaletteRegistry;
 import cn.allay.block.property.BlockPropertyTypeRegistry;
 import cn.allay.block.type.BlockTypeBuilder;
