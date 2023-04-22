@@ -1,6 +1,7 @@
 package cn.allay.block.type;
 
 import cn.allay.block.component.TestComponentImpl;
+import cn.allay.block.component.TestComponentImplV2;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
@@ -43,6 +44,21 @@ class AllayBlockTypeTest {
                         of(TestComponentImpl::new, TestComponentImpl.class)
                 ))
                 .build();
+        assertThrows(BlockTypeBuildException.class,
+                () -> {
+                    AllayBlockType
+                            .builder(TestBlock.class)
+                            .namespaceId("minecraft:test_block_v2")
+                            .property(
+                                    TEST_BOOLEAN_PROPERTY_TYPE,
+                                    TEST_INT_PROPERTY_TYPE,
+                                    TEST_ENUM_PROPERTY_TYPE)
+                            .component(List.of(
+                                    of(TestComponentImplV2::new, TestComponentImplV2.class)
+                            ))
+                            .build();
+                }
+        );
     }
 
     @Test
@@ -72,7 +88,7 @@ class AllayBlockTypeTest {
     @Test
     void testRequirePropertyAnnotation() {
         assertThrows(
-                BlockComponentInjectException.class,
+                BlockTypeBuildException.class,
                 () -> AllayBlockType
                         .builder(TestBlock.class)
                         .namespaceId("minecraft:test_block")

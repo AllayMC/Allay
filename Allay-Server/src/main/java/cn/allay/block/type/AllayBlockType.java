@@ -52,10 +52,14 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
 
     @SneakyThrows
     protected void complete() {
-        injectedClass = new AllayBlockComponentInjector<>(this)
-                .parentClass(blockClass)
-                .component(convertList(componentProviders))
-                .inject();
+        try {
+            injectedClass = new AllayBlockComponentInjector<>(this)
+                    .parentClass(blockClass)
+                    .component(convertList(componentProviders))
+                    .inject();
+        } catch (Exception e) {
+            throw new BlockTypeBuildException("Failed to create block type", e);
+        }
         //Cache constructor
         constructor = injectedClass.getConstructor(ComponentInitInfo.class);
     }
@@ -130,6 +134,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             //Make sure it's not an immutable list, to add the default component
             componentProviders = new ArrayList<>(componentProviders);
             var type = new AllayBlockType<>(blockClass, componentProviders, properties, namespaceId);
+            //TODO: 这边应该检查用户是否提供了自己的默认组件，若提供了就不应该再添加默认组件
             componentProviders.add(ComponentProvider.of(() -> new BlockBaseComponentImpl(type), BlockBaseComponentImpl.class));
             componentProviders.add(ComponentProvider.of(info -> new BlockPositionComponentImpl(((BlockInitInfo) info).position()), BlockPositionComponentImpl.class));
             BlockAttributeComponentImpl attributeComponent;
