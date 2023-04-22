@@ -67,7 +67,7 @@ public final class AllayAPI {
             ((Consumer<Object>) consumers.get(entry.getKey())).accept(entry.getValue().get());
         }
         //TODO: 多语言支持
-        log.info("This server is running §b" + coreName + "§f, implement Allay-API version §b" + API_VERSION);
+        log.info("This server is running " + coreName + ", implement Allay-API version §b" + API_VERSION);
         implemented = true;
     }
 

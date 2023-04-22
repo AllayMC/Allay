@@ -56,6 +56,8 @@ class AllayBlockTypeTest {
         assertEquals(1, block.getX());
         assertEquals(2, block.getY());
         assertEquals(3, block.getZ());
+        assertEquals(testBlockType, block.getBlockType());
+        //Test block properties
         assertFalse(block.getProperty(TEST_BOOLEAN_PROPERTY_TYPE));
         block.setProperty(TEST_BOOLEAN_PROPERTY_TYPE, true);
         assertTrue(block.getProperty(TEST_BOOLEAN_PROPERTY_TYPE));

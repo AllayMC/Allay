@@ -46,8 +46,8 @@ public final class AllayServer implements Server {
                 .builder()
                 .ip("0.0.0.0")
                 .port(19132)
-                .motd("Spray Server")
-                .subMotd("Powered by Spray")
+                .motd("Allay Server")
+                .subMotd("Powered by Allay")
                 .maxPlayerCount(20)
                 .build();
     }
