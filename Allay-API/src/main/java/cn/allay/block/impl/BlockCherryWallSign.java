@@ -10,11 +10,10 @@ import cn.allay.block.type.BlockTypeBuilder;
  * Author: daoge_cmd <br>
  * Allay Project <br>
  */
-public interface BlockLog2 extends Block {
-    BlockType<BlockLog2> TYPE = BlockTypeBuilder
-            .builder(BlockLog2.class)
-            .vanillaBlock(VanillaBlockId.LOG2)
-            .property(VanillaBlockPropertyTypes.NEW_LOG_TYPE,
-                    VanillaBlockPropertyTypes.PILLAR_AXIS)
+public interface BlockCherryWallSign extends Block {
+    BlockType<BlockCherryWallSign> TYPE = BlockTypeBuilder
+            .builder(BlockCherryWallSign.class)
+            .vanillaBlock(VanillaBlockId.CHERRY_WALL_SIGN)
+            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
             .build();
 }

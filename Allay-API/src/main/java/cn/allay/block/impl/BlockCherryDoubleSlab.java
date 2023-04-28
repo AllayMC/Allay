@@ -10,10 +10,10 @@ import cn.allay.block.type.BlockTypeBuilder;
  * Author: daoge_cmd <br>
  * Allay Project <br>
  */
-public interface BlockFence extends Block {
-    BlockType<BlockFence> TYPE = BlockTypeBuilder
-            .builder(BlockFence.class)
-            .vanillaBlock(VanillaBlockId.FENCE)
-            .property(VanillaBlockPropertyTypes.WOOD_TYPE)
+public interface BlockCherryDoubleSlab extends Block {
+    BlockType<BlockCherryDoubleSlab> TYPE = BlockTypeBuilder
+            .builder(BlockCherryDoubleSlab.class)
+            .vanillaBlock(VanillaBlockId.CHERRY_DOUBLE_SLAB)
+            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
             .build();
 }
