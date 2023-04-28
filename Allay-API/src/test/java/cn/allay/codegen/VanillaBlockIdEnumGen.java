@@ -3,15 +3,10 @@ package cn.allay.codegen;
 import cn.allay.identifier.Identifier;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
-import org.cloudburstmc.nbt.NBTInputStream;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 
 import javax.lang.model.element.Modifier;
-import java.io.DataInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.zip.GZIPInputStream;
 
 import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
 

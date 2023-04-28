@@ -6,7 +6,8 @@ import cn.allay.math.position.Pos;
 import net.bytebuddy.ByteBuddy;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Author: daoge_cmd <br>

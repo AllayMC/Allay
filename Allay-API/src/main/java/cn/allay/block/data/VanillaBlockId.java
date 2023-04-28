@@ -13,9 +13,13 @@ public enum VanillaBlockId {
 
     ACACIA_DOOR("minecraft:acacia_door"),
 
+    ACACIA_FENCE("minecraft:acacia_fence"),
+
     ACACIA_FENCE_GATE("minecraft:acacia_fence_gate"),
 
     ACACIA_HANGING_SIGN("minecraft:acacia_hanging_sign"),
+
+    ACACIA_LOG("minecraft:acacia_log"),
 
     ACACIA_PRESSURE_PLATE("minecraft:acacia_pressure_plate"),
 
@@ -115,9 +119,13 @@ public enum VanillaBlockId {
 
     BIRCH_DOOR("minecraft:birch_door"),
 
+    BIRCH_FENCE("minecraft:birch_fence"),
+
     BIRCH_FENCE_GATE("minecraft:birch_fence_gate"),
 
     BIRCH_HANGING_SIGN("minecraft:birch_hanging_sign"),
+
+    BIRCH_LOG("minecraft:birch_log"),
 
     BIRCH_PRESSURE_PLATE("minecraft:birch_pressure_plate"),
 
@@ -193,6 +201,8 @@ public enum VanillaBlockId {
 
     CALCITE("minecraft:calcite"),
 
+    CALIBRATED_SCULK_SENSOR("minecraft:calibrated_sculk_sensor"),
+
     CAMERA("minecraft:camera"),
 
     CAMPFIRE("minecraft:campfire"),
@@ -224,6 +234,40 @@ public enum VanillaBlockId {
     CHEMICAL_HEAT("minecraft:chemical_heat"),
 
     CHEMISTRY_TABLE("minecraft:chemistry_table"),
+
+    CHERRY_BUTTON("minecraft:cherry_button"),
+
+    CHERRY_DOOR("minecraft:cherry_door"),
+
+    CHERRY_DOUBLE_SLAB("minecraft:cherry_double_slab"),
+
+    CHERRY_FENCE("minecraft:cherry_fence"),
+
+    CHERRY_FENCE_GATE("minecraft:cherry_fence_gate"),
+
+    CHERRY_HANGING_SIGN("minecraft:cherry_hanging_sign"),
+
+    CHERRY_LEAVES("minecraft:cherry_leaves"),
+
+    CHERRY_LOG("minecraft:cherry_log"),
+
+    CHERRY_PLANKS("minecraft:cherry_planks"),
+
+    CHERRY_PRESSURE_PLATE("minecraft:cherry_pressure_plate"),
+
+    CHERRY_SAPLING("minecraft:cherry_sapling"),
+
+    CHERRY_SLAB("minecraft:cherry_slab"),
+
+    CHERRY_STAIRS("minecraft:cherry_stairs"),
+
+    CHERRY_STANDING_SIGN("minecraft:cherry_standing_sign"),
+
+    CHERRY_TRAPDOOR("minecraft:cherry_trapdoor"),
+
+    CHERRY_WALL_SIGN("minecraft:cherry_wall_sign"),
+
+    CHERRY_WOOD("minecraft:cherry_wood"),
 
     CHEST("minecraft:chest"),
 
@@ -361,9 +405,13 @@ public enum VanillaBlockId {
 
     DARK_OAK_DOOR("minecraft:dark_oak_door"),
 
+    DARK_OAK_FENCE("minecraft:dark_oak_fence"),
+
     DARK_OAK_FENCE_GATE("minecraft:dark_oak_fence_gate"),
 
     DARK_OAK_HANGING_SIGN("minecraft:dark_oak_hanging_sign"),
+
+    DARK_OAK_LOG("minecraft:dark_oak_log"),
 
     DARK_OAK_PRESSURE_PLATE("minecraft:dark_oak_pressure_plate"),
 
@@ -733,8 +781,6 @@ public enum VanillaBlockId {
 
     FARMLAND("minecraft:farmland"),
 
-    FENCE("minecraft:fence"),
-
     FENCE_GATE("minecraft:fence_gate"),
 
     FIRE("minecraft:fire"),
@@ -853,9 +899,13 @@ public enum VanillaBlockId {
 
     JUNGLE_DOOR("minecraft:jungle_door"),
 
+    JUNGLE_FENCE("minecraft:jungle_fence"),
+
     JUNGLE_FENCE_GATE("minecraft:jungle_fence_gate"),
 
     JUNGLE_HANGING_SIGN("minecraft:jungle_hanging_sign"),
+
+    JUNGLE_LOG("minecraft:jungle_log"),
 
     JUNGLE_PRESSURE_PLATE("minecraft:jungle_pressure_plate"),
 
@@ -934,10 +984,6 @@ public enum VanillaBlockId {
     LIT_SMOKER("minecraft:lit_smoker"),
 
     LODESTONE("minecraft:lodestone"),
-
-    LOG("minecraft:log"),
-
-    LOG2("minecraft:log2"),
 
     LOOM("minecraft:loom"),
 
@@ -1049,7 +1095,11 @@ public enum VanillaBlockId {
 
     NOTEBLOCK("minecraft:noteblock"),
 
+    OAK_FENCE("minecraft:oak_fence"),
+
     OAK_HANGING_SIGN("minecraft:oak_hanging_sign"),
+
+    OAK_LOG("minecraft:oak_log"),
 
     OAK_STAIRS("minecraft:oak_stairs"),
 
@@ -1088,6 +1138,8 @@ public enum VanillaBlockId {
     PINK_CANDLE_CAKE("minecraft:pink_candle_cake"),
 
     PINK_GLAZED_TERRACOTTA("minecraft:pink_glazed_terracotta"),
+
+    PINK_PETALS("minecraft:pink_petals"),
 
     PINK_WOOL("minecraft:pink_wool"),
 
@@ -1311,9 +1363,13 @@ public enum VanillaBlockId {
 
     SPRUCE_DOOR("minecraft:spruce_door"),
 
+    SPRUCE_FENCE("minecraft:spruce_fence"),
+
     SPRUCE_FENCE_GATE("minecraft:spruce_fence_gate"),
 
     SPRUCE_HANGING_SIGN("minecraft:spruce_hanging_sign"),
+
+    SPRUCE_LOG("minecraft:spruce_log"),
 
     SPRUCE_PRESSURE_PLATE("minecraft:spruce_pressure_plate"),
 
@@ -1369,6 +1425,10 @@ public enum VanillaBlockId {
 
     STRIPPED_BIRCH_LOG("minecraft:stripped_birch_log"),
 
+    STRIPPED_CHERRY_LOG("minecraft:stripped_cherry_log"),
+
+    STRIPPED_CHERRY_WOOD("minecraft:stripped_cherry_wood"),
+
     STRIPPED_CRIMSON_HYPHAE("minecraft:stripped_crimson_hyphae"),
 
     STRIPPED_CRIMSON_STEM("minecraft:stripped_crimson_stem"),
@@ -1392,6 +1452,8 @@ public enum VanillaBlockId {
     STRUCTURE_BLOCK("minecraft:structure_block"),
 
     STRUCTURE_VOID("minecraft:structure_void"),
+
+    SUSPICIOUS_GRAVEL("minecraft:suspicious_gravel"),
 
     SUSPICIOUS_SAND("minecraft:suspicious_sand"),
 

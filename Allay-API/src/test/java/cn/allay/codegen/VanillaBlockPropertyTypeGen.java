@@ -4,12 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
-import org.cloudburstmc.nbt.NBTInputStream;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 
 import javax.lang.model.element.Modifier;
-import java.io.DataInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -17,9 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.zip.GZIPInputStream;
 
-import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_FILE_PATH;
 import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
 import static cn.allay.codegen.Utils.convertToCamelCase;
 

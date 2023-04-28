@@ -26,29 +26,14 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     protected Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> currentProperties = new HashMap<>();
     protected BlockType<? extends Block> type;
 
-//    //This method will be called by the injector when assembling the class to set the Block Type
-//    //DO NOT CALL IT!!!
-//    public static void setBlockType(BlockBaseComponentImpl component, BlockType<? extends Block> type) {
-//        component.setBlockType(type);
-//    }
-//
+    public BlockBaseComponentImpl(BlockType<? extends Block> type) {
+        this.type = type;
+    }
+
     @Override
     @Impl
     public BlockType<? extends Block> getBlockType() {
         return type;
-    }
-//
-//    private void setBlockType(BlockType<? extends Block> type) {
-//        if (this.type != null)
-//            throw new IllegalStateException("Block type has been set");
-//        this.type = type;
-//        for (var propertyType : type.getProperties())
-//            currentProperties.put(propertyType, propertyType.tryCreateValue(propertyType.getDefaultValue()));
-//    }
-
-
-    public BlockBaseComponentImpl(BlockType<? extends Block> type) {
-        this.type = type;
     }
 
     @Override

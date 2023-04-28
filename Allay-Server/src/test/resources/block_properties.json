@@ -57,13 +57,6 @@
       "snow"
     ]
   },
-  "new_log_type": {
-    "valueType": "ENUM",
-    "validValues": [
-      "acacia",
-      "dark_oak"
-    ]
-  },
   "composter_fill_level": {
     "valueType": "INTEGER",
     "validValues": [
@@ -1327,15 +1320,6 @@
       "cracked",
       "chiseled",
       "smooth"
-    ]
-  },
-  "old_log_type": {
-    "valueType": "ENUM",
-    "validValues": [
-      "oak",
-      "spruce",
-      "birch",
-      "jungle"
     ]
   },
   "wall_post_bit": {
