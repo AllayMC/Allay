@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockHardGlassPane extends Block {
     BlockType<BlockHardGlassPane> TYPE = BlockTypeBuilder
             .builder(BlockHardGlassPane.class)
-            .vanillaBlock(VanillaBlockId.HARD_GLASS_PANE)
+            .vanillaBlock(VanillaBlockId.HARD_GLASS_PANE, true)
+            .addBasicComponents()
             .build();
 }

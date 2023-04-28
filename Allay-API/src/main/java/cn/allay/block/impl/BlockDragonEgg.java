@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDragonEgg extends Block {
     BlockType<BlockDragonEgg> TYPE = BlockTypeBuilder
             .builder(BlockDragonEgg.class)
-            .vanillaBlock(VanillaBlockId.DRAGON_EGG)
+            .vanillaBlock(VanillaBlockId.DRAGON_EGG, true)
+            .addBasicComponents()
             .build();
 }

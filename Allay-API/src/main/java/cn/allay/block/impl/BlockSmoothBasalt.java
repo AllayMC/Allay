@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSmoothBasalt extends Block {
     BlockType<BlockSmoothBasalt> TYPE = BlockTypeBuilder
             .builder(BlockSmoothBasalt.class)
-            .vanillaBlock(VanillaBlockId.SMOOTH_BASALT)
+            .vanillaBlock(VanillaBlockId.SMOOTH_BASALT, true)
+            .addBasicComponents()
             .build();
 }

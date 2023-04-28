@@ -13,10 +13,11 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockAcaciaHangingSign extends Block {
     BlockType<BlockAcaciaHangingSign> TYPE = BlockTypeBuilder
             .builder(BlockAcaciaHangingSign.class)
-            .vanillaBlock(VanillaBlockId.ACACIA_HANGING_SIGN)
-            .property(VanillaBlockPropertyTypes.ATTACHED_BIT,
+            .vanillaBlock(VanillaBlockId.ACACIA_HANGING_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION,
                     VanillaBlockPropertyTypes.HANGING)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSandstone extends Block {
     BlockType<BlockSandstone> TYPE = BlockTypeBuilder
             .builder(BlockSandstone.class)
-            .vanillaBlock(VanillaBlockId.SANDSTONE)
-            .property(VanillaBlockPropertyTypes.SAND_STONE_TYPE)
+            .vanillaBlock(VanillaBlockId.SANDSTONE, true)
+            .withProperties(VanillaBlockPropertyTypes.SAND_STONE_TYPE)
+            .addBasicComponents()
             .build();
 }

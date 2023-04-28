@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockConcrete extends Block {
     BlockType<BlockConcrete> TYPE = BlockTypeBuilder
             .builder(BlockConcrete.class)
-            .vanillaBlock(VanillaBlockId.CONCRETE)
-            .property(VanillaBlockPropertyTypes.COLOR)
+            .vanillaBlock(VanillaBlockId.CONCRETE, true)
+            .withProperties(VanillaBlockPropertyTypes.COLOR)
+            .addBasicComponents()
             .build();
 }

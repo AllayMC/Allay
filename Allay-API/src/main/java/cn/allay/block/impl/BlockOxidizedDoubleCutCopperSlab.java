@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockOxidizedDoubleCutCopperSlab extends Block {
     BlockType<BlockOxidizedDoubleCutCopperSlab> TYPE = BlockTypeBuilder
             .builder(BlockOxidizedDoubleCutCopperSlab.class)
-            .vanillaBlock(VanillaBlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

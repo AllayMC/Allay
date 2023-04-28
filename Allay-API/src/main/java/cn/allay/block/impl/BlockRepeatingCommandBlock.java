@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockRepeatingCommandBlock extends Block {
     BlockType<BlockRepeatingCommandBlock> TYPE = BlockTypeBuilder
             .builder(BlockRepeatingCommandBlock.class)
-            .vanillaBlock(VanillaBlockId.REPEATING_COMMAND_BLOCK)
-            .property(VanillaBlockPropertyTypes.CONDITIONAL_BIT,
+            .vanillaBlock(VanillaBlockId.REPEATING_COMMAND_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

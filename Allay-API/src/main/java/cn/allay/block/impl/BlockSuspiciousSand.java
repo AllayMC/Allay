@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSuspiciousSand extends Block {
     BlockType<BlockSuspiciousSand> TYPE = BlockTypeBuilder
             .builder(BlockSuspiciousSand.class)
-            .vanillaBlock(VanillaBlockId.SUSPICIOUS_SAND)
-            .property(VanillaBlockPropertyTypes.BRUSHED_PROGRESS,
+            .vanillaBlock(VanillaBlockId.SUSPICIOUS_SAND, true)
+            .withProperties(VanillaBlockPropertyTypes.BRUSHED_PROGRESS,
                     VanillaBlockPropertyTypes.HANGING)
+            .addBasicComponents()
             .build();
 }

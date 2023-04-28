@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockKelp extends Block {
     BlockType<BlockKelp> TYPE = BlockTypeBuilder
             .builder(BlockKelp.class)
-            .vanillaBlock(VanillaBlockId.KELP)
-            .property(VanillaBlockPropertyTypes.KELP_AGE)
+            .vanillaBlock(VanillaBlockId.KELP, true)
+            .withProperties(VanillaBlockPropertyTypes.KELP_AGE)
+            .addBasicComponents()
             .build();
 }

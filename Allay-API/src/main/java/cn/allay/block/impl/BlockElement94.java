@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockElement94 extends Block {
     BlockType<BlockElement94> TYPE = BlockTypeBuilder
             .builder(BlockElement94.class)
-            .vanillaBlock(VanillaBlockId.ELEMENT_94)
+            .vanillaBlock(VanillaBlockId.ELEMENT_94, true)
+            .addBasicComponents()
             .build();
 }

@@ -51,7 +51,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     }
 
     @SneakyThrows
-    protected void complete() {
+    protected AllayBlockType<T> complete() {
         try {
             injectedClass = new AllayBlockComponentInjector<>(this)
                     .parentClass(blockClass)
@@ -62,6 +62,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         }
         //Cache constructor
         constructor = injectedClass.getConstructor(ComponentInitInfo.class);
+        return this;
     }
 
     public static <T extends Block> BlockTypeBuilder<T> builder(Class<T> blockClass) {
@@ -83,8 +84,6 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders;
         protected List<BlockPropertyType<?>> properties;
         protected Identifier namespaceId;
-        protected VanillaBlockId vanillaBlockId;
-        protected boolean isVanillaBlock;
 
         public Builder(Class<T> blockClass) {
             if (blockClass == null)
@@ -103,24 +102,43 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
-            this.vanillaBlockId = vanillaBlockId;
+            return vanillaBlock(vanillaBlockId, true);
+        }
+
+        public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId, boolean initVanillaBlockAttributeComponent) {
             this.namespaceId = vanillaBlockId.getNamespaceId();
-            isVanillaBlock = true;
+            if (initVanillaBlockAttributeComponent) {
+                BlockAttributeComponentImpl attributeComponent = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
+                if (attributeComponent == null)
+                    throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry");
+                //TODO: 对于所有相同类型的Block实例，只持有一个BlockAttributeComponentImpl实例，需要确认后续是否需要改进
+                componentProviders.add(ComponentProvider.ofSingleton(attributeComponent));
+            }
             return this;
         }
 
-        public Builder<T> property(BlockPropertyType<?>... properties) {
+        public Builder<T> withProperties(BlockPropertyType<?>... properties) {
             this.properties = List.of(properties);
             return this;
         }
 
-        public Builder<T> property(List<BlockPropertyType<?>> properties) {
+        public Builder<T> withProperties(List<BlockPropertyType<?>> properties) {
             this.properties = properties;
             return this;
         }
 
-        public Builder<T> component(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders) {
-            this.componentProviders = componentProviders;
+        public Builder<T> setComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders) {
+            this.componentProviders = new ArrayList<>(componentProviders);
+            return this;
+        }
+
+        public Builder<T> addComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders) {
+            this.componentProviders.addAll(componentProviders);
+            return this;
+        }
+
+        public Builder<T> addBasicComponents() {
+            componentProviders.add(ComponentProvider.of(info -> new BlockPositionComponentImpl(((BlockInitInfo) info).position()), BlockPositionComponentImpl.class));
             return this;
         }
 
@@ -131,24 +149,10 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
                 throw new BlockTypeBuildException("Properties cannot be null");
             if (componentProviders == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
-            //Make sure it's not an immutable list, to add the default component
-            componentProviders = new ArrayList<>(componentProviders);
             var type = new AllayBlockType<>(blockClass, componentProviders, properties, namespaceId);
-            //TODO: 这边应该检查用户是否提供了自己的默认组件，若提供了就不应该再添加默认组件
+            //TODO: 分离逻辑
             componentProviders.add(ComponentProvider.of(() -> new BlockBaseComponentImpl(type), BlockBaseComponentImpl.class));
-            componentProviders.add(ComponentProvider.of(info -> new BlockPositionComponentImpl(((BlockInitInfo) info).position()), BlockPositionComponentImpl.class));
-            BlockAttributeComponentImpl attributeComponent;
-            if (isVanillaBlock) {
-                attributeComponent = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
-                if (attributeComponent == null)
-                    throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry");
-            }
-            //default attribute component
-            else attributeComponent = BlockAttributeComponentImpl.builder().build();
-            //TODO: 对于所有Block实例，只持有一个BlockAttributeComponentImpl实例，需要确认后续是否需要改进
-            componentProviders.add(ComponentProvider.ofSingleton(attributeComponent));
-            type.complete();
-            return type;
+            return type.complete();
         }
     }
 }

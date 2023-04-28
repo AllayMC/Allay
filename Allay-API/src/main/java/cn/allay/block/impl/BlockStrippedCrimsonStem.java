@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStrippedCrimsonStem extends Block {
     BlockType<BlockStrippedCrimsonStem> TYPE = BlockTypeBuilder
             .builder(BlockStrippedCrimsonStem.class)
-            .vanillaBlock(VanillaBlockId.STRIPPED_CRIMSON_STEM)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.STRIPPED_CRIMSON_STEM, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

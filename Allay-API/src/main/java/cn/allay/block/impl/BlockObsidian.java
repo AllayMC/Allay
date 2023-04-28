@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockObsidian extends Block {
     BlockType<BlockObsidian> TYPE = BlockTypeBuilder
             .builder(BlockObsidian.class)
-            .vanillaBlock(VanillaBlockId.OBSIDIAN)
+            .vanillaBlock(VanillaBlockId.OBSIDIAN, true)
+            .addBasicComponents()
             .build();
 }

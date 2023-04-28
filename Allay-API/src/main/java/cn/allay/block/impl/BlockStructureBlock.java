@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStructureBlock extends Block {
     BlockType<BlockStructureBlock> TYPE = BlockTypeBuilder
             .builder(BlockStructureBlock.class)
-            .vanillaBlock(VanillaBlockId.STRUCTURE_BLOCK)
-            .property(VanillaBlockPropertyTypes.STRUCTURE_BLOCK_TYPE)
+            .vanillaBlock(VanillaBlockId.STRUCTURE_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.STRUCTURE_BLOCK_TYPE)
+            .addBasicComponents()
             .build();
 }

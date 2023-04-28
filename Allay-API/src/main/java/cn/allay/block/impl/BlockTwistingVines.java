@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockTwistingVines extends Block {
     BlockType<BlockTwistingVines> TYPE = BlockTypeBuilder
             .builder(BlockTwistingVines.class)
-            .vanillaBlock(VanillaBlockId.TWISTING_VINES)
-            .property(VanillaBlockPropertyTypes.TWISTING_VINES_AGE)
+            .vanillaBlock(VanillaBlockId.TWISTING_VINES, true)
+            .withProperties(VanillaBlockPropertyTypes.TWISTING_VINES_AGE)
+            .addBasicComponents()
             .build();
 }

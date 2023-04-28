@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGravel extends Block {
     BlockType<BlockGravel> TYPE = BlockTypeBuilder
             .builder(BlockGravel.class)
-            .vanillaBlock(VanillaBlockId.GRAVEL)
+            .vanillaBlock(VanillaBlockId.GRAVEL, true)
+            .addBasicComponents()
             .build();
 }

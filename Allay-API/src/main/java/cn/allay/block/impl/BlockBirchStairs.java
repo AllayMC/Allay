@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBirchStairs extends Block {
     BlockType<BlockBirchStairs> TYPE = BlockTypeBuilder
             .builder(BlockBirchStairs.class)
-            .vanillaBlock(VanillaBlockId.BIRCH_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.BIRCH_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

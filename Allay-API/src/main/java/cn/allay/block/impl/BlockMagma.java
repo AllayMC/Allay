@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMagma extends Block {
     BlockType<BlockMagma> TYPE = BlockTypeBuilder
             .builder(BlockMagma.class)
-            .vanillaBlock(VanillaBlockId.MAGMA)
+            .vanillaBlock(VanillaBlockId.MAGMA, true)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBirchPressurePlate extends Block {
     BlockType<BlockBirchPressurePlate> TYPE = BlockTypeBuilder
             .builder(BlockBirchPressurePlate.class)
-            .vanillaBlock(VanillaBlockId.BIRCH_PRESSURE_PLATE)
-            .property(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .vanillaBlock(VanillaBlockId.BIRCH_PRESSURE_PLATE, true)
+            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .addBasicComponents()
             .build();
 }

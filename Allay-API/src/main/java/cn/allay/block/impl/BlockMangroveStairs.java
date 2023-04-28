@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMangroveStairs extends Block {
     BlockType<BlockMangroveStairs> TYPE = BlockTypeBuilder
             .builder(BlockMangroveStairs.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.MANGROVE_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

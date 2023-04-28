@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockNetherBrickStairs extends Block {
     BlockType<BlockNetherBrickStairs> TYPE = BlockTypeBuilder
             .builder(BlockNetherBrickStairs.class)
-            .vanillaBlock(VanillaBlockId.NETHER_BRICK_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.NETHER_BRICK_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

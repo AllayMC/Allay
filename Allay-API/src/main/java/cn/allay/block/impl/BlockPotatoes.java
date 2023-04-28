@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPotatoes extends Block {
     BlockType<BlockPotatoes> TYPE = BlockTypeBuilder
             .builder(BlockPotatoes.class)
-            .vanillaBlock(VanillaBlockId.POTATOES)
-            .property(VanillaBlockPropertyTypes.GROWTH)
+            .vanillaBlock(VanillaBlockId.POTATOES, true)
+            .withProperties(VanillaBlockPropertyTypes.GROWTH)
+            .addBasicComponents()
             .build();
 }

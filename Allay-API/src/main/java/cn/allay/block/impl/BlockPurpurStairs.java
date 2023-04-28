@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPurpurStairs extends Block {
     BlockType<BlockPurpurStairs> TYPE = BlockTypeBuilder
             .builder(BlockPurpurStairs.class)
-            .vanillaBlock(VanillaBlockId.PURPUR_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.PURPUR_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

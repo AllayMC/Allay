@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockTnt extends Block {
     BlockType<BlockTnt> TYPE = BlockTypeBuilder
             .builder(BlockTnt.class)
-            .vanillaBlock(VanillaBlockId.TNT)
-            .property(VanillaBlockPropertyTypes.ALLOW_UNDERWATER_BIT,
+            .vanillaBlock(VanillaBlockId.TNT, true)
+            .withProperties(VanillaBlockPropertyTypes.ALLOW_UNDERWATER_BIT,
                     VanillaBlockPropertyTypes.EXPLODE_BIT)
+            .addBasicComponents()
             .build();
 }

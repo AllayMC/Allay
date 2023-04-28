@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSpruceWallSign extends Block {
     BlockType<BlockSpruceWallSign> TYPE = BlockTypeBuilder
             .builder(BlockSpruceWallSign.class)
-            .vanillaBlock(VanillaBlockId.SPRUCE_WALL_SIGN)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.SPRUCE_WALL_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

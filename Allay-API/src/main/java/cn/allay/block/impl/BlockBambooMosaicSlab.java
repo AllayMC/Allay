@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBambooMosaicSlab extends Block {
     BlockType<BlockBambooMosaicSlab> TYPE = BlockTypeBuilder
             .builder(BlockBambooMosaicSlab.class)
-            .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

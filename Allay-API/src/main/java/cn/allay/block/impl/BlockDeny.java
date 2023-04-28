@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDeny extends Block {
     BlockType<BlockDeny> TYPE = BlockTypeBuilder
             .builder(BlockDeny.class)
-            .vanillaBlock(VanillaBlockId.DENY)
+            .vanillaBlock(VanillaBlockId.DENY, true)
+            .addBasicComponents()
             .build();
 }

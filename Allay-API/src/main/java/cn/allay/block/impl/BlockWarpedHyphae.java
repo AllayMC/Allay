@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedHyphae extends Block {
     BlockType<BlockWarpedHyphae> TYPE = BlockTypeBuilder
             .builder(BlockWarpedHyphae.class)
-            .vanillaBlock(VanillaBlockId.WARPED_HYPHAE)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.WARPED_HYPHAE, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLantern extends Block {
     BlockType<BlockLantern> TYPE = BlockTypeBuilder
             .builder(BlockLantern.class)
-            .vanillaBlock(VanillaBlockId.LANTERN)
-            .property(VanillaBlockPropertyTypes.HANGING)
+            .vanillaBlock(VanillaBlockId.LANTERN, true)
+            .withProperties(VanillaBlockPropertyTypes.HANGING)
+            .addBasicComponents()
             .build();
 }

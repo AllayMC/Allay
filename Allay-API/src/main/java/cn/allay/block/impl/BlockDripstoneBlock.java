@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDripstoneBlock extends Block {
     BlockType<BlockDripstoneBlock> TYPE = BlockTypeBuilder
             .builder(BlockDripstoneBlock.class)
-            .vanillaBlock(VanillaBlockId.DRIPSTONE_BLOCK)
+            .vanillaBlock(VanillaBlockId.DRIPSTONE_BLOCK, true)
+            .addBasicComponents()
             .build();
 }

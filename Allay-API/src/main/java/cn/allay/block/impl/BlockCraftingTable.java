@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCraftingTable extends Block {
     BlockType<BlockCraftingTable> TYPE = BlockTypeBuilder
             .builder(BlockCraftingTable.class)
-            .vanillaBlock(VanillaBlockId.CRAFTING_TABLE)
+            .vanillaBlock(VanillaBlockId.CRAFTING_TABLE, true)
+            .addBasicComponents()
             .build();
 }

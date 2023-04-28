@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBambooStandingSign extends Block {
     BlockType<BlockBambooStandingSign> TYPE = BlockTypeBuilder
             .builder(BlockBambooStandingSign.class)
-            .vanillaBlock(VanillaBlockId.BAMBOO_STANDING_SIGN)
-            .property(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .vanillaBlock(VanillaBlockId.BAMBOO_STANDING_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .addBasicComponents()
             .build();
 }

@@ -49,17 +49,18 @@ public class VanillaBlockClassGen {
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T\n.builder($N.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, className)
-                .add(".vanillaBlock($T.$N)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.getNamespaceId().getPath().toUpperCase());
+                .add(".vanillaBlock($T.$N, true)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.getNamespaceId().getPath().toUpperCase());
         var blockPaletteData = CodeGen.MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getNamespaceId().toString());
         var states = blockPaletteData.getCompound("states");
         if (states.size() != 0) {
-            initializer.add(".property(");
+            initializer.add(".withProperties(");
             AtomicInteger count = new AtomicInteger();
             states.forEach((name, value) -> {
                 initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ",\n"), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME, name.toUpperCase());
             });
             initializer.add(")\n");
         }
+        initializer.add(".addBasicComponents()\n");
         initializer.add(".build()");
         codeBuilder.addField(
                 FieldSpec

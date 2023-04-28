@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPurpurBlock extends Block {
     BlockType<BlockPurpurBlock> TYPE = BlockTypeBuilder
             .builder(BlockPurpurBlock.class)
-            .vanillaBlock(VanillaBlockId.PURPUR_BLOCK)
-            .property(VanillaBlockPropertyTypes.CHISEL_TYPE,
+            .vanillaBlock(VanillaBlockId.PURPUR_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.CHISEL_TYPE,
                     VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

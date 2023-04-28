@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockJukebox extends Block {
     BlockType<BlockJukebox> TYPE = BlockTypeBuilder
             .builder(BlockJukebox.class)
-            .vanillaBlock(VanillaBlockId.JUKEBOX)
+            .vanillaBlock(VanillaBlockId.JUKEBOX, true)
+            .addBasicComponents()
             .build();
 }

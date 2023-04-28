@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLever extends Block {
     BlockType<BlockLever> TYPE = BlockTypeBuilder
             .builder(BlockLever.class)
-            .vanillaBlock(VanillaBlockId.LEVER)
-            .property(VanillaBlockPropertyTypes.LEVER_DIRECTION,
+            .vanillaBlock(VanillaBlockId.LEVER, true)
+            .withProperties(VanillaBlockPropertyTypes.LEVER_DIRECTION,
                     VanillaBlockPropertyTypes.OPEN_BIT)
+            .addBasicComponents()
             .build();
 }

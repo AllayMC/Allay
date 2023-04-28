@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWeepingVines extends Block {
     BlockType<BlockWeepingVines> TYPE = BlockTypeBuilder
             .builder(BlockWeepingVines.class)
-            .vanillaBlock(VanillaBlockId.WEEPING_VINES)
-            .property(VanillaBlockPropertyTypes.WEEPING_VINES_AGE)
+            .vanillaBlock(VanillaBlockId.WEEPING_VINES, true)
+            .withProperties(VanillaBlockPropertyTypes.WEEPING_VINES_AGE)
+            .addBasicComponents()
             .build();
 }

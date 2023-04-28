@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonPlanks extends Block {
     BlockType<BlockCrimsonPlanks> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonPlanks.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_PLANKS)
+            .vanillaBlock(VanillaBlockId.CRIMSON_PLANKS, true)
+            .addBasicComponents()
             .build();
 }

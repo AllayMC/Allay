@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBrewingStand extends Block {
     BlockType<BlockBrewingStand> TYPE = BlockTypeBuilder
             .builder(BlockBrewingStand.class)
-            .vanillaBlock(VanillaBlockId.BREWING_STAND)
-            .property(VanillaBlockPropertyTypes.BREWING_STAND_SLOT_A_BIT,
+            .vanillaBlock(VanillaBlockId.BREWING_STAND, true)
+            .withProperties(VanillaBlockPropertyTypes.BREWING_STAND_SLOT_A_BIT,
                     VanillaBlockPropertyTypes.BREWING_STAND_SLOT_B_BIT,
                     VanillaBlockPropertyTypes.BREWING_STAND_SLOT_C_BIT)
+            .addBasicComponents()
             .build();
 }

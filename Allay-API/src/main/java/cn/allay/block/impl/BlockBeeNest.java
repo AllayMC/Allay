@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBeeNest extends Block {
     BlockType<BlockBeeNest> TYPE = BlockTypeBuilder
             .builder(BlockBeeNest.class)
-            .vanillaBlock(VanillaBlockId.BEE_NEST)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.BEE_NEST, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.HONEY_LEVEL)
+            .addBasicComponents()
             .build();
 }

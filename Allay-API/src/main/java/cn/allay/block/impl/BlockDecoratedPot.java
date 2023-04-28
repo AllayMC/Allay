@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDecoratedPot extends Block {
     BlockType<BlockDecoratedPot> TYPE = BlockTypeBuilder
             .builder(BlockDecoratedPot.class)
-            .vanillaBlock(VanillaBlockId.DECORATED_POT)
-            .property(VanillaBlockPropertyTypes.DIRECTION)
+            .vanillaBlock(VanillaBlockId.DECORATED_POT, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }

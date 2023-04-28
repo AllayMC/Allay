@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCoralFan extends Block {
     BlockType<BlockCoralFan> TYPE = BlockTypeBuilder
             .builder(BlockCoralFan.class)
-            .vanillaBlock(VanillaBlockId.CORAL_FAN)
-            .property(VanillaBlockPropertyTypes.CORAL_COLOR,
+            .vanillaBlock(VanillaBlockId.CORAL_FAN, true)
+            .withProperties(VanillaBlockPropertyTypes.CORAL_COLOR,
                     VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
+            .addBasicComponents()
             .build();
 }

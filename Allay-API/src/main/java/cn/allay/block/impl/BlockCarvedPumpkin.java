@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCarvedPumpkin extends Block {
     BlockType<BlockCarvedPumpkin> TYPE = BlockTypeBuilder
             .builder(BlockCarvedPumpkin.class)
-            .vanillaBlock(VanillaBlockId.CARVED_PUMPKIN)
-            .property(VanillaBlockPropertyTypes.DIRECTION)
+            .vanillaBlock(VanillaBlockId.CARVED_PUMPKIN, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }

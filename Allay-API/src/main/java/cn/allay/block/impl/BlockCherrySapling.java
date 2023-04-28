@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCherrySapling extends Block {
     BlockType<BlockCherrySapling> TYPE = BlockTypeBuilder
             .builder(BlockCherrySapling.class)
-            .vanillaBlock(VanillaBlockId.CHERRY_SAPLING)
-            .property(VanillaBlockPropertyTypes.AGE_BIT)
+            .vanillaBlock(VanillaBlockId.CHERRY_SAPLING, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE_BIT)
+            .addBasicComponents()
             .build();
 }

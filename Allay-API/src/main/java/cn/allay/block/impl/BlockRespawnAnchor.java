@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockRespawnAnchor extends Block {
     BlockType<BlockRespawnAnchor> TYPE = BlockTypeBuilder
             .builder(BlockRespawnAnchor.class)
-            .vanillaBlock(VanillaBlockId.RESPAWN_ANCHOR)
-            .property(VanillaBlockPropertyTypes.RESPAWN_ANCHOR_CHARGE)
+            .vanillaBlock(VanillaBlockId.RESPAWN_ANCHOR, true)
+            .withProperties(VanillaBlockPropertyTypes.RESPAWN_ANCHOR_CHARGE)
+            .addBasicComponents()
             .build();
 }

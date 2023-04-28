@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCarrots extends Block {
     BlockType<BlockCarrots> TYPE = BlockTypeBuilder
             .builder(BlockCarrots.class)
-            .vanillaBlock(VanillaBlockId.CARROTS)
-            .property(VanillaBlockPropertyTypes.GROWTH)
+            .vanillaBlock(VanillaBlockId.CARROTS, true)
+            .withProperties(VanillaBlockPropertyTypes.GROWTH)
+            .addBasicComponents()
             .build();
 }

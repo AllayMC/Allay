@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDiamondOre extends Block {
     BlockType<BlockDiamondOre> TYPE = BlockTypeBuilder
             .builder(BlockDiamondOre.class)
-            .vanillaBlock(VanillaBlockId.DIAMOND_ORE)
+            .vanillaBlock(VanillaBlockId.DIAMOND_ORE, true)
+            .addBasicComponents()
             .build();
 }

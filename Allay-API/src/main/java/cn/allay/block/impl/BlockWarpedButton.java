@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedButton extends Block {
     BlockType<BlockWarpedButton> TYPE = BlockTypeBuilder
             .builder(BlockWarpedButton.class)
-            .vanillaBlock(VanillaBlockId.WARPED_BUTTON)
-            .property(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
+            .vanillaBlock(VanillaBlockId.WARPED_BUTTON, true)
+            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

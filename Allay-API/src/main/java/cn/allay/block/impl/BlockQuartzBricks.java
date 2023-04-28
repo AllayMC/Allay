@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockQuartzBricks extends Block {
     BlockType<BlockQuartzBricks> TYPE = BlockTypeBuilder
             .builder(BlockQuartzBricks.class)
-            .vanillaBlock(VanillaBlockId.QUARTZ_BRICKS)
+            .vanillaBlock(VanillaBlockId.QUARTZ_BRICKS, true)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPolishedBasalt extends Block {
     BlockType<BlockPolishedBasalt> TYPE = BlockTypeBuilder
             .builder(BlockPolishedBasalt.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_BASALT)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.POLISHED_BASALT, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

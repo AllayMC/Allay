@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockShulkerBox extends Block {
     BlockType<BlockShulkerBox> TYPE = BlockTypeBuilder
             .builder(BlockShulkerBox.class)
-            .vanillaBlock(VanillaBlockId.SHULKER_BOX)
-            .property(VanillaBlockPropertyTypes.COLOR)
+            .vanillaBlock(VanillaBlockId.SHULKER_BOX, true)
+            .withProperties(VanillaBlockPropertyTypes.COLOR)
+            .addBasicComponents()
             .build();
 }

@@ -13,10 +13,11 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockIronDoor extends Block {
     BlockType<BlockIronDoor> TYPE = BlockTypeBuilder
             .builder(BlockIronDoor.class)
-            .vanillaBlock(VanillaBlockId.IRON_DOOR)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.IRON_DOOR, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.DOOR_HINGE_BIT,
                     VanillaBlockPropertyTypes.OPEN_BIT,
                     VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+            .addBasicComponents()
             .build();
 }

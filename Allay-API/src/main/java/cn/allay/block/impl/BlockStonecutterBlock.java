@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStonecutterBlock extends Block {
     BlockType<BlockStonecutterBlock> TYPE = BlockTypeBuilder
             .builder(BlockStonecutterBlock.class)
-            .vanillaBlock(VanillaBlockId.STONECUTTER_BLOCK)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.STONECUTTER_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

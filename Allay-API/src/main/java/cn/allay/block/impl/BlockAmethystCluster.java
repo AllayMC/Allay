@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockAmethystCluster extends Block {
     BlockType<BlockAmethystCluster> TYPE = BlockTypeBuilder
             .builder(BlockAmethystCluster.class)
-            .vanillaBlock(VanillaBlockId.AMETHYST_CLUSTER)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.AMETHYST_CLUSTER, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

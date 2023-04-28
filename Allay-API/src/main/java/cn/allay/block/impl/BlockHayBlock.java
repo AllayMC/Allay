@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockHayBlock extends Block {
     BlockType<BlockHayBlock> TYPE = BlockTypeBuilder
             .builder(BlockHayBlock.class)
-            .vanillaBlock(VanillaBlockId.HAY_BLOCK)
-            .property(VanillaBlockPropertyTypes.DEPRECATED,
+            .vanillaBlock(VanillaBlockId.HAY_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.DEPRECATED,
                     VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

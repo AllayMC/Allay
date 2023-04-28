@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCherryWallSign extends Block {
     BlockType<BlockCherryWallSign> TYPE = BlockTypeBuilder
             .builder(BlockCherryWallSign.class)
-            .vanillaBlock(VanillaBlockId.CHERRY_WALL_SIGN)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.CHERRY_WALL_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

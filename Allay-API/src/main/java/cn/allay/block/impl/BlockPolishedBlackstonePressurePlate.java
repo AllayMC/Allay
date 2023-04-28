@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPolishedBlackstonePressurePlate extends Block {
     BlockType<BlockPolishedBlackstonePressurePlate> TYPE = BlockTypeBuilder
             .builder(BlockPolishedBlackstonePressurePlate.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE)
-            .property(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE, true)
+            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .addBasicComponents()
             .build();
 }

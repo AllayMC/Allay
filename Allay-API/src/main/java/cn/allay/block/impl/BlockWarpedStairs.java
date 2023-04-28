@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedStairs extends Block {
     BlockType<BlockWarpedStairs> TYPE = BlockTypeBuilder
             .builder(BlockWarpedStairs.class)
-            .vanillaBlock(VanillaBlockId.WARPED_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.WARPED_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

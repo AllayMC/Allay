@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockChainCommandBlock extends Block {
     BlockType<BlockChainCommandBlock> TYPE = BlockTypeBuilder
             .builder(BlockChainCommandBlock.class)
-            .vanillaBlock(VanillaBlockId.CHAIN_COMMAND_BLOCK)
-            .property(VanillaBlockPropertyTypes.CONDITIONAL_BIT,
+            .vanillaBlock(VanillaBlockId.CHAIN_COMMAND_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

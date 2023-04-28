@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSpruceStairs extends Block {
     BlockType<BlockSpruceStairs> TYPE = BlockTypeBuilder
             .builder(BlockSpruceStairs.class)
-            .vanillaBlock(VanillaBlockId.SPRUCE_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.SPRUCE_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

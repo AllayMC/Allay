@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockVerdantFroglight extends Block {
     BlockType<BlockVerdantFroglight> TYPE = BlockTypeBuilder
             .builder(BlockVerdantFroglight.class)
-            .vanillaBlock(VanillaBlockId.VERDANT_FROGLIGHT)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.VERDANT_FROGLIGHT, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

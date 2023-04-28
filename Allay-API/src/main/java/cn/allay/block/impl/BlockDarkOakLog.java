@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDarkOakLog extends Block {
     BlockType<BlockDarkOakLog> TYPE = BlockTypeBuilder
             .builder(BlockDarkOakLog.class)
-            .vanillaBlock(VanillaBlockId.DARK_OAK_LOG)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.DARK_OAK_LOG, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

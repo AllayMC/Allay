@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonStandingSign extends Block {
     BlockType<BlockCrimsonStandingSign> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonStandingSign.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_STANDING_SIGN)
-            .property(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .vanillaBlock(VanillaBlockId.CRIMSON_STANDING_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .addBasicComponents()
             .build();
 }

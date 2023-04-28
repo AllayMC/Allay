@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLoom extends Block {
     BlockType<BlockLoom> TYPE = BlockTypeBuilder
             .builder(BlockLoom.class)
-            .vanillaBlock(VanillaBlockId.LOOM)
-            .property(VanillaBlockPropertyTypes.DIRECTION)
+            .vanillaBlock(VanillaBlockId.LOOM, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }

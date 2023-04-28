@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockFletchingTable extends Block {
     BlockType<BlockFletchingTable> TYPE = BlockTypeBuilder
             .builder(BlockFletchingTable.class)
-            .vanillaBlock(VanillaBlockId.FLETCHING_TABLE)
+            .vanillaBlock(VanillaBlockId.FLETCHING_TABLE, true)
+            .addBasicComponents()
             .build();
 }

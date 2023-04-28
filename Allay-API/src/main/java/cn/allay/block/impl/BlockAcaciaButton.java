@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockAcaciaButton extends Block {
     BlockType<BlockAcaciaButton> TYPE = BlockTypeBuilder
             .builder(BlockAcaciaButton.class)
-            .vanillaBlock(VanillaBlockId.ACACIA_BUTTON)
-            .property(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
+            .vanillaBlock(VanillaBlockId.ACACIA_BUTTON, true)
+            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

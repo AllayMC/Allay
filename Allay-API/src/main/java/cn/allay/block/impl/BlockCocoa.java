@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCocoa extends Block {
     BlockType<BlockCocoa> TYPE = BlockTypeBuilder
             .builder(BlockCocoa.class)
-            .vanillaBlock(VanillaBlockId.COCOA)
-            .property(VanillaBlockPropertyTypes.AGE,
+            .vanillaBlock(VanillaBlockId.COCOA, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE,
                     VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }

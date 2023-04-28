@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockScaffolding extends Block {
     BlockType<BlockScaffolding> TYPE = BlockTypeBuilder
             .builder(BlockScaffolding.class)
-            .vanillaBlock(VanillaBlockId.SCAFFOLDING)
-            .property(VanillaBlockPropertyTypes.STABILITY,
+            .vanillaBlock(VanillaBlockId.SCAFFOLDING, true)
+            .withProperties(VanillaBlockPropertyTypes.STABILITY,
                     VanillaBlockPropertyTypes.STABILITY_CHECK)
+            .addBasicComponents()
             .build();
 }

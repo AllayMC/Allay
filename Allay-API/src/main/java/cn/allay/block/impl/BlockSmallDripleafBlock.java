@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSmallDripleafBlock extends Block {
     BlockType<BlockSmallDripleafBlock> TYPE = BlockTypeBuilder
             .builder(BlockSmallDripleafBlock.class)
-            .vanillaBlock(VanillaBlockId.SMALL_DRIPLEAF_BLOCK)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.SMALL_DRIPLEAF_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSpruceLog extends Block {
     BlockType<BlockSpruceLog> TYPE = BlockTypeBuilder
             .builder(BlockSpruceLog.class)
-            .vanillaBlock(VanillaBlockId.SPRUCE_LOG)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.SPRUCE_LOG, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockExposedCutCopperSlab extends Block {
     BlockType<BlockExposedCutCopperSlab> TYPE = BlockTypeBuilder
             .builder(BlockExposedCutCopperSlab.class)
-            .vanillaBlock(VanillaBlockId.EXPOSED_CUT_COPPER_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.EXPOSED_CUT_COPPER_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

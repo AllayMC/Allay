@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPiston extends Block {
     BlockType<BlockPiston> TYPE = BlockTypeBuilder
             .builder(BlockPiston.class)
-            .vanillaBlock(VanillaBlockId.PISTON)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.PISTON, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

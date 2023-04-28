@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDoubleWoodenSlab extends Block {
     BlockType<BlockDoubleWoodenSlab> TYPE = BlockTypeBuilder
             .builder(BlockDoubleWoodenSlab.class)
-            .vanillaBlock(VanillaBlockId.DOUBLE_WOODEN_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT,
+            .vanillaBlock(VanillaBlockId.DOUBLE_WOODEN_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT,
                     VanillaBlockPropertyTypes.WOOD_TYPE)
+            .addBasicComponents()
             .build();
 }

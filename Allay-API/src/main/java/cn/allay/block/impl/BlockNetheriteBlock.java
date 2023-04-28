@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockNetheriteBlock extends Block {
     BlockType<BlockNetheriteBlock> TYPE = BlockTypeBuilder
             .builder(BlockNetheriteBlock.class)
-            .vanillaBlock(VanillaBlockId.NETHERITE_BLOCK)
+            .vanillaBlock(VanillaBlockId.NETHERITE_BLOCK, true)
+            .addBasicComponents()
             .build();
 }

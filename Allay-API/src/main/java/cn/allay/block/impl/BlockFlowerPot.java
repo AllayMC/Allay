@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockFlowerPot extends Block {
     BlockType<BlockFlowerPot> TYPE = BlockTypeBuilder
             .builder(BlockFlowerPot.class)
-            .vanillaBlock(VanillaBlockId.FLOWER_POT)
-            .property(VanillaBlockPropertyTypes.UPDATE_BIT)
+            .vanillaBlock(VanillaBlockId.FLOWER_POT, true)
+            .withProperties(VanillaBlockPropertyTypes.UPDATE_BIT)
+            .addBasicComponents()
             .build();
 }

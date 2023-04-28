@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonDoubleSlab extends Block {
     BlockType<BlockCrimsonDoubleSlab> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonDoubleSlab.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_DOUBLE_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.CRIMSON_DOUBLE_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

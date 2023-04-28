@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPrismarine extends Block {
     BlockType<BlockPrismarine> TYPE = BlockTypeBuilder
             .builder(BlockPrismarine.class)
-            .vanillaBlock(VanillaBlockId.PRISMARINE)
-            .property(VanillaBlockPropertyTypes.PRISMARINE_BLOCK_TYPE)
+            .vanillaBlock(VanillaBlockId.PRISMARINE, true)
+            .withProperties(VanillaBlockPropertyTypes.PRISMARINE_BLOCK_TYPE)
+            .addBasicComponents()
             .build();
 }

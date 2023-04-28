@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDaylightDetector extends Block {
     BlockType<BlockDaylightDetector> TYPE = BlockTypeBuilder
             .builder(BlockDaylightDetector.class)
-            .vanillaBlock(VanillaBlockId.DAYLIGHT_DETECTOR)
-            .property(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .vanillaBlock(VanillaBlockId.DAYLIGHT_DETECTOR, true)
+            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .addBasicComponents()
             .build();
 }

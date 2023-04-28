@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBirchLog extends Block {
     BlockType<BlockBirchLog> TYPE = BlockTypeBuilder
             .builder(BlockBirchLog.class)
-            .vanillaBlock(VanillaBlockId.BIRCH_LOG)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.BIRCH_LOG, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

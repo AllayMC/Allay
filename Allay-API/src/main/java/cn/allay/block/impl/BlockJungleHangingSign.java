@@ -13,10 +13,11 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockJungleHangingSign extends Block {
     BlockType<BlockJungleHangingSign> TYPE = BlockTypeBuilder
             .builder(BlockJungleHangingSign.class)
-            .vanillaBlock(VanillaBlockId.JUNGLE_HANGING_SIGN)
-            .property(VanillaBlockPropertyTypes.ATTACHED_BIT,
+            .vanillaBlock(VanillaBlockId.JUNGLE_HANGING_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION,
                     VanillaBlockPropertyTypes.HANGING)
+            .addBasicComponents()
             .build();
 }

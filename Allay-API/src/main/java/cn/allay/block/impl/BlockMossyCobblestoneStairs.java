@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMossyCobblestoneStairs extends Block {
     BlockType<BlockMossyCobblestoneStairs> TYPE = BlockTypeBuilder
             .builder(BlockMossyCobblestoneStairs.class)
-            .vanillaBlock(VanillaBlockId.MOSSY_COBBLESTONE_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.MOSSY_COBBLESTONE_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

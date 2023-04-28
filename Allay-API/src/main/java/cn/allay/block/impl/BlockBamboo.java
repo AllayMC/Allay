@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBamboo extends Block {
     BlockType<BlockBamboo> TYPE = BlockTypeBuilder
             .builder(BlockBamboo.class)
-            .vanillaBlock(VanillaBlockId.BAMBOO)
-            .property(VanillaBlockPropertyTypes.AGE_BIT,
+            .vanillaBlock(VanillaBlockId.BAMBOO, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE_BIT,
                     VanillaBlockPropertyTypes.BAMBOO_LEAF_SIZE,
                     VanillaBlockPropertyTypes.BAMBOO_STALK_THICKNESS)
+            .addBasicComponents()
             .build();
 }

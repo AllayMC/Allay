@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLavaCauldron extends Block {
     BlockType<BlockLavaCauldron> TYPE = BlockTypeBuilder
             .builder(BlockLavaCauldron.class)
-            .vanillaBlock(VanillaBlockId.LAVA_CAULDRON)
-            .property(VanillaBlockPropertyTypes.CAULDRON_LIQUID,
+            .vanillaBlock(VanillaBlockId.LAVA_CAULDRON, true)
+            .withProperties(VanillaBlockPropertyTypes.CAULDRON_LIQUID,
                     VanillaBlockPropertyTypes.FILL_LEVEL)
+            .addBasicComponents()
             .build();
 }

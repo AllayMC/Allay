@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBambooBlock extends Block {
     BlockType<BlockBambooBlock> TYPE = BlockTypeBuilder
             .builder(BlockBambooBlock.class)
-            .vanillaBlock(VanillaBlockId.BAMBOO_BLOCK)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.BAMBOO_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

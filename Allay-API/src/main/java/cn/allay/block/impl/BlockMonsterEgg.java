@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMonsterEgg extends Block {
     BlockType<BlockMonsterEgg> TYPE = BlockTypeBuilder
             .builder(BlockMonsterEgg.class)
-            .vanillaBlock(VanillaBlockId.MONSTER_EGG)
-            .property(VanillaBlockPropertyTypes.MONSTER_EGG_STONE_TYPE)
+            .vanillaBlock(VanillaBlockId.MONSTER_EGG, true)
+            .withProperties(VanillaBlockPropertyTypes.MONSTER_EGG_STONE_TYPE)
+            .addBasicComponents()
             .build();
 }

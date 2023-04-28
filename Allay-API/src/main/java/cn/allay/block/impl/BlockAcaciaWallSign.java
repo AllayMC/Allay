@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockAcaciaWallSign extends Block {
     BlockType<BlockAcaciaWallSign> TYPE = BlockTypeBuilder
             .builder(BlockAcaciaWallSign.class)
-            .vanillaBlock(VanillaBlockId.ACACIA_WALL_SIGN)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.ACACIA_WALL_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

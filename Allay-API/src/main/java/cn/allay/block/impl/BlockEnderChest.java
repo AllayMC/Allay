@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockEnderChest extends Block {
     BlockType<BlockEnderChest> TYPE = BlockTypeBuilder
             .builder(BlockEnderChest.class)
-            .vanillaBlock(VanillaBlockId.ENDER_CHEST)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.ENDER_CHEST, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

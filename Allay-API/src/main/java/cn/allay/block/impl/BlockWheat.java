@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWheat extends Block {
     BlockType<BlockWheat> TYPE = BlockTypeBuilder
             .builder(BlockWheat.class)
-            .vanillaBlock(VanillaBlockId.WHEAT)
-            .property(VanillaBlockPropertyTypes.GROWTH)
+            .vanillaBlock(VanillaBlockId.WHEAT, true)
+            .withProperties(VanillaBlockPropertyTypes.GROWTH)
+            .addBasicComponents()
             .build();
 }

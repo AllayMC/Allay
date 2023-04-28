@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSoulSoil extends Block {
     BlockType<BlockSoulSoil> TYPE = BlockTypeBuilder
             .builder(BlockSoulSoil.class)
-            .vanillaBlock(VanillaBlockId.SOUL_SOIL)
+            .vanillaBlock(VanillaBlockId.SOUL_SOIL, true)
+            .addBasicComponents()
             .build();
 }

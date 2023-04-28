@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDeepslate extends Block {
     BlockType<BlockDeepslate> TYPE = BlockTypeBuilder
             .builder(BlockDeepslate.class)
-            .vanillaBlock(VanillaBlockId.DEEPSLATE)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.DEEPSLATE, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSuspiciousGravel extends Block {
     BlockType<BlockSuspiciousGravel> TYPE = BlockTypeBuilder
             .builder(BlockSuspiciousGravel.class)
-            .vanillaBlock(VanillaBlockId.SUSPICIOUS_GRAVEL)
-            .property(VanillaBlockPropertyTypes.BRUSHED_PROGRESS,
+            .vanillaBlock(VanillaBlockId.SUSPICIOUS_GRAVEL, true)
+            .withProperties(VanillaBlockPropertyTypes.BRUSHED_PROGRESS,
                     VanillaBlockPropertyTypes.HANGING)
+            .addBasicComponents()
             .build();
 }

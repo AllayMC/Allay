@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMelonStem extends Block {
     BlockType<BlockMelonStem> TYPE = BlockTypeBuilder
             .builder(BlockMelonStem.class)
-            .vanillaBlock(VanillaBlockId.MELON_STEM)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION,
+            .vanillaBlock(VanillaBlockId.MELON_STEM, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.GROWTH)
+            .addBasicComponents()
             .build();
 }

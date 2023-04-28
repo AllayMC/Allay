@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockTrappedChest extends Block {
     BlockType<BlockTrappedChest> TYPE = BlockTypeBuilder
             .builder(BlockTrappedChest.class)
-            .vanillaBlock(VanillaBlockId.TRAPPED_CHEST)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.TRAPPED_CHEST, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

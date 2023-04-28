@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMossyCobblestone extends Block {
     BlockType<BlockMossyCobblestone> TYPE = BlockTypeBuilder
             .builder(BlockMossyCobblestone.class)
-            .vanillaBlock(VanillaBlockId.MOSSY_COBBLESTONE)
+            .vanillaBlock(VanillaBlockId.MOSSY_COBBLESTONE, true)
+            .addBasicComponents()
             .build();
 }

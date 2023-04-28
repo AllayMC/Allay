@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockRedFlower extends Block {
     BlockType<BlockRedFlower> TYPE = BlockTypeBuilder
             .builder(BlockRedFlower.class)
-            .vanillaBlock(VanillaBlockId.RED_FLOWER)
-            .property(VanillaBlockPropertyTypes.FLOWER_TYPE)
+            .vanillaBlock(VanillaBlockId.RED_FLOWER, true)
+            .withProperties(VanillaBlockPropertyTypes.FLOWER_TYPE)
+            .addBasicComponents()
             .build();
 }

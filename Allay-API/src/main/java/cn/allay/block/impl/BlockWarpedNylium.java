@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedNylium extends Block {
     BlockType<BlockWarpedNylium> TYPE = BlockTypeBuilder
             .builder(BlockWarpedNylium.class)
-            .vanillaBlock(VanillaBlockId.WARPED_NYLIUM)
+            .vanillaBlock(VanillaBlockId.WARPED_NYLIUM, true)
+            .addBasicComponents()
             .build();
 }

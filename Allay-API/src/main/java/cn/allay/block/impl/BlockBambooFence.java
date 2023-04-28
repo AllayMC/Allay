@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBambooFence extends Block {
     BlockType<BlockBambooFence> TYPE = BlockTypeBuilder
             .builder(BlockBambooFence.class)
-            .vanillaBlock(VanillaBlockId.BAMBOO_FENCE)
+            .vanillaBlock(VanillaBlockId.BAMBOO_FENCE, true)
+            .addBasicComponents()
             .build();
 }

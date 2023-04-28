@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockClientRequestPlaceholderBlock extends Block {
     BlockType<BlockClientRequestPlaceholderBlock> TYPE = BlockTypeBuilder
             .builder(BlockClientRequestPlaceholderBlock.class)
-            .vanillaBlock(VanillaBlockId.CLIENT_REQUEST_PLACEHOLDER_BLOCK)
+            .vanillaBlock(VanillaBlockId.CLIENT_REQUEST_PLACEHOLDER_BLOCK, true)
+            .addBasicComponents()
             .build();
 }

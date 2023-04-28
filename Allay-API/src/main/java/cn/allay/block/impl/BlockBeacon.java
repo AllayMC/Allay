@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBeacon extends Block {
     BlockType<BlockBeacon> TYPE = BlockTypeBuilder
             .builder(BlockBeacon.class)
-            .vanillaBlock(VanillaBlockId.BEACON)
+            .vanillaBlock(VanillaBlockId.BEACON, true)
+            .addBasicComponents()
             .build();
 }

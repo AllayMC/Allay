@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCherryButton extends Block {
     BlockType<BlockCherryButton> TYPE = BlockTypeBuilder
             .builder(BlockCherryButton.class)
-            .vanillaBlock(VanillaBlockId.CHERRY_BUTTON)
-            .property(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
+            .vanillaBlock(VanillaBlockId.CHERRY_BUTTON, true)
+            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

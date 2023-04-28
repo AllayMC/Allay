@@ -29,11 +29,17 @@ public interface BlockTypeBuilder<T extends Block> {
 
     BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId);
 
-    BlockTypeBuilder<T> property(BlockPropertyType<?>... properties);
+    BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId, boolean initVanillaBlockAttributeComponent);
 
-    BlockTypeBuilder<T> property(List<BlockPropertyType<?>> properties);
+    BlockTypeBuilder<T> withProperties(BlockPropertyType<?>... properties);
 
-    BlockTypeBuilder<T> component(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders);
+    BlockTypeBuilder<T> withProperties(List<BlockPropertyType<?>> properties);
+
+    BlockTypeBuilder<T> setComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders);
+
+    BlockTypeBuilder<T> addComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders);
+
+    BlockTypeBuilder<T> addBasicComponents();
 
     BlockType<T> build();
 

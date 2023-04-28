@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDarkoakWallSign extends Block {
     BlockType<BlockDarkoakWallSign> TYPE = BlockTypeBuilder
             .builder(BlockDarkoakWallSign.class)
-            .vanillaBlock(VanillaBlockId.DARKOAK_WALL_SIGN)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.DARKOAK_WALL_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

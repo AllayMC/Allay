@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockTorchflower extends Block {
     BlockType<BlockTorchflower> TYPE = BlockTypeBuilder
             .builder(BlockTorchflower.class)
-            .vanillaBlock(VanillaBlockId.TORCHFLOWER)
+            .vanillaBlock(VanillaBlockId.TORCHFLOWER, true)
+            .addBasicComponents()
             .build();
 }

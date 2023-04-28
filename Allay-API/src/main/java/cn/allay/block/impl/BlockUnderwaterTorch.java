@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockUnderwaterTorch extends Block {
     BlockType<BlockUnderwaterTorch> TYPE = BlockTypeBuilder
             .builder(BlockUnderwaterTorch.class)
-            .vanillaBlock(VanillaBlockId.UNDERWATER_TORCH)
-            .property(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.UNDERWATER_TORCH, true)
+            .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

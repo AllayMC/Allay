@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWaxedCutCopper extends Block {
     BlockType<BlockWaxedCutCopper> TYPE = BlockTypeBuilder
             .builder(BlockWaxedCutCopper.class)
-            .vanillaBlock(VanillaBlockId.WAXED_CUT_COPPER)
+            .vanillaBlock(VanillaBlockId.WAXED_CUT_COPPER, true)
+            .addBasicComponents()
             .build();
 }

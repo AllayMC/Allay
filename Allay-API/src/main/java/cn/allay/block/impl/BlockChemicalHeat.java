@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockChemicalHeat extends Block {
     BlockType<BlockChemicalHeat> TYPE = BlockTypeBuilder
             .builder(BlockChemicalHeat.class)
-            .vanillaBlock(VanillaBlockId.CHEMICAL_HEAT)
+            .vanillaBlock(VanillaBlockId.CHEMICAL_HEAT, true)
+            .addBasicComponents()
             .build();
 }

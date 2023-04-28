@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockColoredTorchBp extends Block {
     BlockType<BlockColoredTorchBp> TYPE = BlockTypeBuilder
             .builder(BlockColoredTorchBp.class)
-            .vanillaBlock(VanillaBlockId.COLORED_TORCH_BP)
-            .property(VanillaBlockPropertyTypes.COLOR_BIT,
+            .vanillaBlock(VanillaBlockId.COLORED_TORCH_BP, true)
+            .withProperties(VanillaBlockPropertyTypes.COLOR_BIT,
                     VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

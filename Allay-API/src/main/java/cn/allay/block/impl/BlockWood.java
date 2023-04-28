@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWood extends Block {
     BlockType<BlockWood> TYPE = BlockTypeBuilder
             .builder(BlockWood.class)
-            .vanillaBlock(VanillaBlockId.WOOD)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS,
+            .vanillaBlock(VanillaBlockId.WOOD, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS,
                     VanillaBlockPropertyTypes.STRIPPED_BIT,
                     VanillaBlockPropertyTypes.WOOD_TYPE)
+            .addBasicComponents()
             .build();
 }

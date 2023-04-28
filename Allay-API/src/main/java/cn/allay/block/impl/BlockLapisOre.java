@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLapisOre extends Block {
     BlockType<BlockLapisOre> TYPE = BlockTypeBuilder
             .builder(BlockLapisOre.class)
-            .vanillaBlock(VanillaBlockId.LAPIS_ORE)
+            .vanillaBlock(VanillaBlockId.LAPIS_ORE, true)
+            .addBasicComponents()
             .build();
 }

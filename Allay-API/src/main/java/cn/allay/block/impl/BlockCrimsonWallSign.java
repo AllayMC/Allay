@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonWallSign extends Block {
     BlockType<BlockCrimsonWallSign> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonWallSign.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_WALL_SIGN)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.CRIMSON_WALL_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLightBlock extends Block {
     BlockType<BlockLightBlock> TYPE = BlockTypeBuilder
             .builder(BlockLightBlock.class)
-            .vanillaBlock(VanillaBlockId.LIGHT_BLOCK)
-            .property(VanillaBlockPropertyTypes.BLOCK_LIGHT_LEVEL)
+            .vanillaBlock(VanillaBlockId.LIGHT_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.BLOCK_LIGHT_LEVEL)
+            .addBasicComponents()
             .build();
 }

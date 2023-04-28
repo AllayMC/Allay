@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSeagrass extends Block {
     BlockType<BlockSeagrass> TYPE = BlockTypeBuilder
             .builder(BlockSeagrass.class)
-            .vanillaBlock(VanillaBlockId.SEAGRASS)
-            .property(VanillaBlockPropertyTypes.SEA_GRASS_TYPE)
+            .vanillaBlock(VanillaBlockId.SEAGRASS, true)
+            .withProperties(VanillaBlockPropertyTypes.SEA_GRASS_TYPE)
+            .addBasicComponents()
             .build();
 }

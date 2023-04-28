@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonPressurePlate extends Block {
     BlockType<BlockCrimsonPressurePlate> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonPressurePlate.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_PRESSURE_PLATE)
-            .property(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .vanillaBlock(VanillaBlockId.CRIMSON_PRESSURE_PLATE, true)
+            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .addBasicComponents()
             .build();
 }

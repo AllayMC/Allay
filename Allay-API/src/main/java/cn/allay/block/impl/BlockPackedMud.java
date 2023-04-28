@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPackedMud extends Block {
     BlockType<BlockPackedMud> TYPE = BlockTypeBuilder
             .builder(BlockPackedMud.class)
-            .vanillaBlock(VanillaBlockId.PACKED_MUD)
+            .vanillaBlock(VanillaBlockId.PACKED_MUD, true)
+            .addBasicComponents()
             .build();
 }

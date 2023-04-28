@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPodzol extends Block {
     BlockType<BlockPodzol> TYPE = BlockTypeBuilder
             .builder(BlockPodzol.class)
-            .vanillaBlock(VanillaBlockId.PODZOL)
+            .vanillaBlock(VanillaBlockId.PODZOL, true)
+            .addBasicComponents()
             .build();
 }

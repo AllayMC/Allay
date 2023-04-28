@@ -13,11 +13,12 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMudBrickWall extends Block {
     BlockType<BlockMudBrickWall> TYPE = BlockTypeBuilder
             .builder(BlockMudBrickWall.class)
-            .vanillaBlock(VanillaBlockId.MUD_BRICK_WALL)
-            .property(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST,
+            .vanillaBlock(VanillaBlockId.MUD_BRICK_WALL, true)
+            .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST,
                     VanillaBlockPropertyTypes.WALL_POST_BIT)
+            .addBasicComponents()
             .build();
 }

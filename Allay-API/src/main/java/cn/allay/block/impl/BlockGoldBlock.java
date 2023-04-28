@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGoldBlock extends Block {
     BlockType<BlockGoldBlock> TYPE = BlockTypeBuilder
             .builder(BlockGoldBlock.class)
-            .vanillaBlock(VanillaBlockId.GOLD_BLOCK)
+            .vanillaBlock(VanillaBlockId.GOLD_BLOCK, true)
+            .addBasicComponents()
             .build();
 }

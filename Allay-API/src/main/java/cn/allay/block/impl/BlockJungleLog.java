@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockJungleLog extends Block {
     BlockType<BlockJungleLog> TYPE = BlockTypeBuilder
             .builder(BlockJungleLog.class)
-            .vanillaBlock(VanillaBlockId.JUNGLE_LOG)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.JUNGLE_LOG, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

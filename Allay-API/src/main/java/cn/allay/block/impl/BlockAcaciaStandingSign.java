@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockAcaciaStandingSign extends Block {
     BlockType<BlockAcaciaStandingSign> TYPE = BlockTypeBuilder
             .builder(BlockAcaciaStandingSign.class)
-            .vanillaBlock(VanillaBlockId.ACACIA_STANDING_SIGN)
-            .property(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .vanillaBlock(VanillaBlockId.ACACIA_STANDING_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .addBasicComponents()
             .build();
 }

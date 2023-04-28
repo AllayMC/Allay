@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockRedNetherBrick extends Block {
     BlockType<BlockRedNetherBrick> TYPE = BlockTypeBuilder
             .builder(BlockRedNetherBrick.class)
-            .vanillaBlock(VanillaBlockId.RED_NETHER_BRICK)
+            .vanillaBlock(VanillaBlockId.RED_NETHER_BRICK, true)
+            .addBasicComponents()
             .build();
 }

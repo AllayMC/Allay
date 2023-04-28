@@ -13,12 +13,13 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCobblestoneWall extends Block {
     BlockType<BlockCobblestoneWall> TYPE = BlockTypeBuilder
             .builder(BlockCobblestoneWall.class)
-            .vanillaBlock(VanillaBlockId.COBBLESTONE_WALL)
-            .property(VanillaBlockPropertyTypes.WALL_BLOCK_TYPE,
+            .vanillaBlock(VanillaBlockId.COBBLESTONE_WALL, true)
+            .withProperties(VanillaBlockPropertyTypes.WALL_BLOCK_TYPE,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST,
                     VanillaBlockPropertyTypes.WALL_POST_BIT)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDirt extends Block {
     BlockType<BlockDirt> TYPE = BlockTypeBuilder
             .builder(BlockDirt.class)
-            .vanillaBlock(VanillaBlockId.DIRT)
-            .property(VanillaBlockPropertyTypes.DIRT_TYPE)
+            .vanillaBlock(VanillaBlockId.DIRT, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRT_TYPE)
+            .addBasicComponents()
             .build();
 }

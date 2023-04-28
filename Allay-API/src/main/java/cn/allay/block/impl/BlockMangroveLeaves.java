@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMangroveLeaves extends Block {
     BlockType<BlockMangroveLeaves> TYPE = BlockTypeBuilder
             .builder(BlockMangroveLeaves.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_LEAVES)
-            .property(VanillaBlockPropertyTypes.PERSISTENT_BIT,
+            .vanillaBlock(VanillaBlockId.MANGROVE_LEAVES, true)
+            .withProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT,
                     VanillaBlockPropertyTypes.UPDATE_BIT)
+            .addBasicComponents()
             .build();
 }

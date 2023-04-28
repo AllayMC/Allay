@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockTintedGlass extends Block {
     BlockType<BlockTintedGlass> TYPE = BlockTypeBuilder
             .builder(BlockTintedGlass.class)
-            .vanillaBlock(VanillaBlockId.TINTED_GLASS)
+            .vanillaBlock(VanillaBlockId.TINTED_GLASS, true)
+            .addBasicComponents()
             .build();
 }

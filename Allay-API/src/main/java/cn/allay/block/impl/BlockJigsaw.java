@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockJigsaw extends Block {
     BlockType<BlockJigsaw> TYPE = BlockTypeBuilder
             .builder(BlockJigsaw.class)
-            .vanillaBlock(VanillaBlockId.JIGSAW)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION,
+            .vanillaBlock(VanillaBlockId.JIGSAW, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.ROTATION)
+            .addBasicComponents()
             .build();
 }

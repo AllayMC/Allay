@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockTripwireHook extends Block {
     BlockType<BlockTripwireHook> TYPE = BlockTypeBuilder
             .builder(BlockTripwireHook.class)
-            .vanillaBlock(VanillaBlockId.TRIPWIRE_HOOK)
-            .property(VanillaBlockPropertyTypes.ATTACHED_BIT,
+            .vanillaBlock(VanillaBlockId.TRIPWIRE_HOOK, true)
+            .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT,
                     VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.POWERED_BIT)
+            .addBasicComponents()
             .build();
 }

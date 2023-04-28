@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockIronBars extends Block {
     BlockType<BlockIronBars> TYPE = BlockTypeBuilder
             .builder(BlockIronBars.class)
-            .vanillaBlock(VanillaBlockId.IRON_BARS)
+            .vanillaBlock(VanillaBlockId.IRON_BARS, true)
+            .addBasicComponents()
             .build();
 }

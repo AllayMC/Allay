@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDropper extends Block {
     BlockType<BlockDropper> TYPE = BlockTypeBuilder
             .builder(BlockDropper.class)
-            .vanillaBlock(VanillaBlockId.DROPPER)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION,
+            .vanillaBlock(VanillaBlockId.DROPPER, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.TRIGGERED_BIT)
+            .addBasicComponents()
             .build();
 }

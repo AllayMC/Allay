@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMobSpawner extends Block {
     BlockType<BlockMobSpawner> TYPE = BlockTypeBuilder
             .builder(BlockMobSpawner.class)
-            .vanillaBlock(VanillaBlockId.MOB_SPAWNER)
+            .vanillaBlock(VanillaBlockId.MOB_SPAWNER, true)
+            .addBasicComponents()
             .build();
 }

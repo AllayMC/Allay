@@ -13,10 +13,11 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockOakHangingSign extends Block {
     BlockType<BlockOakHangingSign> TYPE = BlockTypeBuilder
             .builder(BlockOakHangingSign.class)
-            .vanillaBlock(VanillaBlockId.OAK_HANGING_SIGN)
-            .property(VanillaBlockPropertyTypes.ATTACHED_BIT,
+            .vanillaBlock(VanillaBlockId.OAK_HANGING_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION,
                     VanillaBlockPropertyTypes.HANGING)
+            .addBasicComponents()
             .build();
 }

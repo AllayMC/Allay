@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockQuartzBlock extends Block {
     BlockType<BlockQuartzBlock> TYPE = BlockTypeBuilder
             .builder(BlockQuartzBlock.class)
-            .vanillaBlock(VanillaBlockId.QUARTZ_BLOCK)
-            .property(VanillaBlockPropertyTypes.CHISEL_TYPE,
+            .vanillaBlock(VanillaBlockId.QUARTZ_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.CHISEL_TYPE,
                     VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

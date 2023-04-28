@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLeaves2 extends Block {
     BlockType<BlockLeaves2> TYPE = BlockTypeBuilder
             .builder(BlockLeaves2.class)
-            .vanillaBlock(VanillaBlockId.LEAVES2)
-            .property(VanillaBlockPropertyTypes.NEW_LEAF_TYPE,
+            .vanillaBlock(VanillaBlockId.LEAVES2, true)
+            .withProperties(VanillaBlockPropertyTypes.NEW_LEAF_TYPE,
                     VanillaBlockPropertyTypes.PERSISTENT_BIT,
                     VanillaBlockPropertyTypes.UPDATE_BIT)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockNetherGoldOre extends Block {
     BlockType<BlockNetherGoldOre> TYPE = BlockTypeBuilder
             .builder(BlockNetherGoldOre.class)
-            .vanillaBlock(VanillaBlockId.NETHER_GOLD_ORE)
+            .vanillaBlock(VanillaBlockId.NETHER_GOLD_ORE, true)
+            .addBasicComponents()
             .build();
 }

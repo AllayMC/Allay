@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockAncientDebris extends Block {
     BlockType<BlockAncientDebris> TYPE = BlockTypeBuilder
             .builder(BlockAncientDebris.class)
-            .vanillaBlock(VanillaBlockId.ANCIENT_DEBRIS)
+            .vanillaBlock(VanillaBlockId.ANCIENT_DEBRIS, true)
+            .addBasicComponents()
             .build();
 }

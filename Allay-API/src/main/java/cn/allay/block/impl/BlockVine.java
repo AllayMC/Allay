@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockVine extends Block {
     BlockType<BlockVine> TYPE = BlockTypeBuilder
             .builder(BlockVine.class)
-            .vanillaBlock(VanillaBlockId.VINE)
-            .property(VanillaBlockPropertyTypes.VINE_DIRECTION_BITS)
+            .vanillaBlock(VanillaBlockId.VINE, true)
+            .withProperties(VanillaBlockPropertyTypes.VINE_DIRECTION_BITS)
+            .addBasicComponents()
             .build();
 }

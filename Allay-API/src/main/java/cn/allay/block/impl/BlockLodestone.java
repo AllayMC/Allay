@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLodestone extends Block {
     BlockType<BlockLodestone> TYPE = BlockTypeBuilder
             .builder(BlockLodestone.class)
-            .vanillaBlock(VanillaBlockId.LODESTONE)
+            .vanillaBlock(VanillaBlockId.LODESTONE, true)
+            .addBasicComponents()
             .build();
 }

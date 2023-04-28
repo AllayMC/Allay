@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockNetherreactor extends Block {
     BlockType<BlockNetherreactor> TYPE = BlockTypeBuilder
             .builder(BlockNetherreactor.class)
-            .vanillaBlock(VanillaBlockId.NETHERREACTOR)
+            .vanillaBlock(VanillaBlockId.NETHERREACTOR, true)
+            .addBasicComponents()
             .build();
 }

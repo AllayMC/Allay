@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSculkVein extends Block {
     BlockType<BlockSculkVein> TYPE = BlockTypeBuilder
             .builder(BlockSculkVein.class)
-            .vanillaBlock(VanillaBlockId.SCULK_VEIN)
-            .property(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+            .vanillaBlock(VanillaBlockId.SCULK_VEIN, true)
+            .withProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+            .addBasicComponents()
             .build();
 }

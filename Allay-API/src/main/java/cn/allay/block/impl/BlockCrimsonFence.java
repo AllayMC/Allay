@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonFence extends Block {
     BlockType<BlockCrimsonFence> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonFence.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_FENCE)
+            .vanillaBlock(VanillaBlockId.CRIMSON_FENCE, true)
+            .addBasicComponents()
             .build();
 }

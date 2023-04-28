@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockRail extends Block {
     BlockType<BlockRail> TYPE = BlockTypeBuilder
             .builder(BlockRail.class)
-            .vanillaBlock(VanillaBlockId.RAIL)
-            .property(VanillaBlockPropertyTypes.RAIL_DIRECTION)
+            .vanillaBlock(VanillaBlockId.RAIL, true)
+            .withProperties(VanillaBlockPropertyTypes.RAIL_DIRECTION)
+            .addBasicComponents()
             .build();
 }

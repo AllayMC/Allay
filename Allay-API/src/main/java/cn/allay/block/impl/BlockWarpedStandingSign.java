@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedStandingSign extends Block {
     BlockType<BlockWarpedStandingSign> TYPE = BlockTypeBuilder
             .builder(BlockWarpedStandingSign.class)
-            .vanillaBlock(VanillaBlockId.WARPED_STANDING_SIGN)
-            .property(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .vanillaBlock(VanillaBlockId.WARPED_STANDING_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .addBasicComponents()
             .build();
 }

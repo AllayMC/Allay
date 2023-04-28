@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockFire extends Block {
     BlockType<BlockFire> TYPE = BlockTypeBuilder
             .builder(BlockFire.class)
-            .vanillaBlock(VanillaBlockId.FIRE)
-            .property(VanillaBlockPropertyTypes.AGE)
+            .vanillaBlock(VanillaBlockId.FIRE, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .addBasicComponents()
             .build();
 }

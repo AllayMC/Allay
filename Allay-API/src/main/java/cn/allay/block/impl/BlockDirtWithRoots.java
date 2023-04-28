@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDirtWithRoots extends Block {
     BlockType<BlockDirtWithRoots> TYPE = BlockTypeBuilder
             .builder(BlockDirtWithRoots.class)
-            .vanillaBlock(VanillaBlockId.DIRT_WITH_ROOTS)
+            .vanillaBlock(VanillaBlockId.DIRT_WITH_ROOTS, true)
+            .addBasicComponents()
             .build();
 }

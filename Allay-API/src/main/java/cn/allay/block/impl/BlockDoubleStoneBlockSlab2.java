@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDoubleStoneBlockSlab2 extends Block {
     BlockType<BlockDoubleStoneBlockSlab2> TYPE = BlockTypeBuilder
             .builder(BlockDoubleStoneBlockSlab2.class)
-            .vanillaBlock(VanillaBlockId.DOUBLE_STONE_BLOCK_SLAB2)
-            .property(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_2,
+            .vanillaBlock(VanillaBlockId.DOUBLE_STONE_BLOCK_SLAB2, true)
+            .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_2,
                     VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

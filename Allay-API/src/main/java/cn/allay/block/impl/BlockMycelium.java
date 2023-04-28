@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMycelium extends Block {
     BlockType<BlockMycelium> TYPE = BlockTypeBuilder
             .builder(BlockMycelium.class)
-            .vanillaBlock(VanillaBlockId.MYCELIUM)
+            .vanillaBlock(VanillaBlockId.MYCELIUM, true)
+            .addBasicComponents()
             .build();
 }

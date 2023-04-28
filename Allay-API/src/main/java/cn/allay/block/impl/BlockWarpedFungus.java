@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedFungus extends Block {
     BlockType<BlockWarpedFungus> TYPE = BlockTypeBuilder
             .builder(BlockWarpedFungus.class)
-            .vanillaBlock(VanillaBlockId.WARPED_FUNGUS)
+            .vanillaBlock(VanillaBlockId.WARPED_FUNGUS, true)
+            .addBasicComponents()
             .build();
 }

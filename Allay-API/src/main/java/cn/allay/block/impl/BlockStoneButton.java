@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStoneButton extends Block {
     BlockType<BlockStoneButton> TYPE = BlockTypeBuilder
             .builder(BlockStoneButton.class)
-            .vanillaBlock(VanillaBlockId.STONE_BUTTON)
-            .property(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
+            .vanillaBlock(VanillaBlockId.STONE_BUTTON, true)
+            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

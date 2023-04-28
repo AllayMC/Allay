@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockConduit extends Block {
     BlockType<BlockConduit> TYPE = BlockTypeBuilder
             .builder(BlockConduit.class)
-            .vanillaBlock(VanillaBlockId.CONDUIT)
+            .vanillaBlock(VanillaBlockId.CONDUIT, true)
+            .addBasicComponents()
             .build();
 }

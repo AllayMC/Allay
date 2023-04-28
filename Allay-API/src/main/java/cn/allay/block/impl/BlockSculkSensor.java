@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSculkSensor extends Block {
     BlockType<BlockSculkSensor> TYPE = BlockTypeBuilder
             .builder(BlockSculkSensor.class)
-            .vanillaBlock(VanillaBlockId.SCULK_SENSOR)
-            .property(VanillaBlockPropertyTypes.POWERED_BIT)
+            .vanillaBlock(VanillaBlockId.SCULK_SENSOR, true)
+            .withProperties(VanillaBlockPropertyTypes.POWERED_BIT)
+            .addBasicComponents()
             .build();
 }

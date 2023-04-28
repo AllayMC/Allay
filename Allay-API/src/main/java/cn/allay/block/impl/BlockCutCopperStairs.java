@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCutCopperStairs extends Block {
     BlockType<BlockCutCopperStairs> TYPE = BlockTypeBuilder
             .builder(BlockCutCopperStairs.class)
-            .vanillaBlock(VanillaBlockId.CUT_COPPER_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.CUT_COPPER_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

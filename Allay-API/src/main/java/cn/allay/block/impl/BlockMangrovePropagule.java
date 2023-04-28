@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMangrovePropagule extends Block {
     BlockType<BlockMangrovePropagule> TYPE = BlockTypeBuilder
             .builder(BlockMangrovePropagule.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_PROPAGULE)
-            .property(VanillaBlockPropertyTypes.HANGING,
+            .vanillaBlock(VanillaBlockId.MANGROVE_PROPAGULE, true)
+            .withProperties(VanillaBlockPropertyTypes.HANGING,
                     VanillaBlockPropertyTypes.PROPAGULE_STAGE)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCopperOre extends Block {
     BlockType<BlockCopperOre> TYPE = BlockTypeBuilder
             .builder(BlockCopperOre.class)
-            .vanillaBlock(VanillaBlockId.COPPER_ORE)
+            .vanillaBlock(VanillaBlockId.COPPER_ORE, true)
+            .addBasicComponents()
             .build();
 }

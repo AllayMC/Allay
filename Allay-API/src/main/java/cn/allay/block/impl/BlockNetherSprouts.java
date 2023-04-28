@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockNetherSprouts extends Block {
     BlockType<BlockNetherSprouts> TYPE = BlockTypeBuilder
             .builder(BlockNetherSprouts.class)
-            .vanillaBlock(VanillaBlockId.NETHER_SPROUTS)
+            .vanillaBlock(VanillaBlockId.NETHER_SPROUTS, true)
+            .addBasicComponents()
             .build();
 }

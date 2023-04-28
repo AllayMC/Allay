@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSapling extends Block {
     BlockType<BlockSapling> TYPE = BlockTypeBuilder
             .builder(BlockSapling.class)
-            .vanillaBlock(VanillaBlockId.SAPLING)
-            .property(VanillaBlockPropertyTypes.AGE_BIT,
+            .vanillaBlock(VanillaBlockId.SAPLING, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE_BIT,
                     VanillaBlockPropertyTypes.SAPLING_TYPE)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSculk extends Block {
     BlockType<BlockSculk> TYPE = BlockTypeBuilder
             .builder(BlockSculk.class)
-            .vanillaBlock(VanillaBlockId.SCULK)
+            .vanillaBlock(VanillaBlockId.SCULK, true)
+            .addBasicComponents()
             .build();
 }

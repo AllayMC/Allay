@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBeehive extends Block {
     BlockType<BlockBeehive> TYPE = BlockTypeBuilder
             .builder(BlockBeehive.class)
-            .vanillaBlock(VanillaBlockId.BEEHIVE)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.BEEHIVE, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.HONEY_LEVEL)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockInfestedDeepslate extends Block {
     BlockType<BlockInfestedDeepslate> TYPE = BlockTypeBuilder
             .builder(BlockInfestedDeepslate.class)
-            .vanillaBlock(VanillaBlockId.INFESTED_DEEPSLATE)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.INFESTED_DEEPSLATE, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

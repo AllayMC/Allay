@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCarpet extends Block {
     BlockType<BlockCarpet> TYPE = BlockTypeBuilder
             .builder(BlockCarpet.class)
-            .vanillaBlock(VanillaBlockId.CARPET)
-            .property(VanillaBlockPropertyTypes.COLOR)
+            .vanillaBlock(VanillaBlockId.CARPET, true)
+            .withProperties(VanillaBlockPropertyTypes.COLOR)
+            .addBasicComponents()
             .build();
 }

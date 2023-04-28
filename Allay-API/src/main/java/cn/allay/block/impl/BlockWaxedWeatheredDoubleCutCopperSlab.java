@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWaxedWeatheredDoubleCutCopperSlab extends Block {
     BlockType<BlockWaxedWeatheredDoubleCutCopperSlab> TYPE = BlockTypeBuilder
             .builder(BlockWaxedWeatheredDoubleCutCopperSlab.class)
-            .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

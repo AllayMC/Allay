@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLectern extends Block {
     BlockType<BlockLectern> TYPE = BlockTypeBuilder
             .builder(BlockLectern.class)
-            .vanillaBlock(VanillaBlockId.LECTERN)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.LECTERN, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.POWERED_BIT)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockAcaciaFence extends Block {
     BlockType<BlockAcaciaFence> TYPE = BlockTypeBuilder
             .builder(BlockAcaciaFence.class)
-            .vanillaBlock(VanillaBlockId.ACACIA_FENCE)
+            .vanillaBlock(VanillaBlockId.ACACIA_FENCE, true)
+            .addBasicComponents()
             .build();
 }

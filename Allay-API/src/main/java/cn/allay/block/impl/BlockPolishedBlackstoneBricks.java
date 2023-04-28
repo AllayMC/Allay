@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPolishedBlackstoneBricks extends Block {
     BlockType<BlockPolishedBlackstoneBricks> TYPE = BlockTypeBuilder
             .builder(BlockPolishedBlackstoneBricks.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICKS)
+            .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICKS, true)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrackedDeepslateBricks extends Block {
     BlockType<BlockCrackedDeepslateBricks> TYPE = BlockTypeBuilder
             .builder(BlockCrackedDeepslateBricks.class)
-            .vanillaBlock(VanillaBlockId.CRACKED_DEEPSLATE_BRICKS)
+            .vanillaBlock(VanillaBlockId.CRACKED_DEEPSLATE_BRICKS, true)
+            .addBasicComponents()
             .build();
 }

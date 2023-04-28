@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMossBlock extends Block {
     BlockType<BlockMossBlock> TYPE = BlockTypeBuilder
             .builder(BlockMossBlock.class)
-            .vanillaBlock(VanillaBlockId.MOSS_BLOCK)
+            .vanillaBlock(VanillaBlockId.MOSS_BLOCK, true)
+            .addBasicComponents()
             .build();
 }

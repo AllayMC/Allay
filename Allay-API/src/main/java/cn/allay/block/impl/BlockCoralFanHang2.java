@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCoralFanHang2 extends Block {
     BlockType<BlockCoralFanHang2> TYPE = BlockTypeBuilder
             .builder(BlockCoralFanHang2.class)
-            .vanillaBlock(VanillaBlockId.CORAL_FAN_HANG2)
-            .property(VanillaBlockPropertyTypes.CORAL_DIRECTION,
+            .vanillaBlock(VanillaBlockId.CORAL_FAN_HANG2, true)
+            .withProperties(VanillaBlockPropertyTypes.CORAL_DIRECTION,
                     VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT,
                     VanillaBlockPropertyTypes.DEAD_BIT)
+            .addBasicComponents()
             .build();
 }

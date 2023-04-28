@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockChiseledBookshelf extends Block {
     BlockType<BlockChiseledBookshelf> TYPE = BlockTypeBuilder
             .builder(BlockChiseledBookshelf.class)
-            .vanillaBlock(VanillaBlockId.CHISELED_BOOKSHELF)
-            .property(VanillaBlockPropertyTypes.BOOKS_STORED,
+            .vanillaBlock(VanillaBlockId.CHISELED_BOOKSHELF, true)
+            .withProperties(VanillaBlockPropertyTypes.BOOKS_STORED,
                     VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }

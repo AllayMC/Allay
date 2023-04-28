@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSkull extends Block {
     BlockType<BlockSkull> TYPE = BlockTypeBuilder
             .builder(BlockSkull.class)
-            .vanillaBlock(VanillaBlockId.SKULL)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.SKULL, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

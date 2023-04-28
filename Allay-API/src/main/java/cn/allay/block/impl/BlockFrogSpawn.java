@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockFrogSpawn extends Block {
     BlockType<BlockFrogSpawn> TYPE = BlockTypeBuilder
             .builder(BlockFrogSpawn.class)
-            .vanillaBlock(VanillaBlockId.FROG_SPAWN)
+            .vanillaBlock(VanillaBlockId.FROG_SPAWN, true)
+            .addBasicComponents()
             .build();
 }

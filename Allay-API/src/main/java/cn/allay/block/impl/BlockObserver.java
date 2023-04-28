@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockObserver extends Block {
     BlockType<BlockObserver> TYPE = BlockTypeBuilder
             .builder(BlockObserver.class)
-            .vanillaBlock(VanillaBlockId.OBSERVER)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION,
+            .vanillaBlock(VanillaBlockId.OBSERVER, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.POWERED_BIT)
+            .addBasicComponents()
             .build();
 }

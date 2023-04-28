@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedPlanks extends Block {
     BlockType<BlockWarpedPlanks> TYPE = BlockTypeBuilder
             .builder(BlockWarpedPlanks.class)
-            .vanillaBlock(VanillaBlockId.WARPED_PLANKS)
+            .vanillaBlock(VanillaBlockId.WARPED_PLANKS, true)
+            .addBasicComponents()
             .build();
 }

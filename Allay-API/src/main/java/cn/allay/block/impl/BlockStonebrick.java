@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStonebrick extends Block {
     BlockType<BlockStonebrick> TYPE = BlockTypeBuilder
             .builder(BlockStonebrick.class)
-            .vanillaBlock(VanillaBlockId.STONEBRICK)
-            .property(VanillaBlockPropertyTypes.STONE_BRICK_TYPE)
+            .vanillaBlock(VanillaBlockId.STONEBRICK, true)
+            .withProperties(VanillaBlockPropertyTypes.STONE_BRICK_TYPE)
+            .addBasicComponents()
             .build();
 }

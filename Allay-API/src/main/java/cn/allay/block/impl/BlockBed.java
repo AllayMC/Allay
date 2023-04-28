@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBed extends Block {
     BlockType<BlockBed> TYPE = BlockTypeBuilder
             .builder(BlockBed.class)
-            .vanillaBlock(VanillaBlockId.BED)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.BED, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.HEAD_PIECE_BIT,
                     VanillaBlockPropertyTypes.OCCUPIED_BIT)
+            .addBasicComponents()
             .build();
 }

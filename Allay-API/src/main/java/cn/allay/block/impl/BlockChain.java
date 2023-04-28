@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockChain extends Block {
     BlockType<BlockChain> TYPE = BlockTypeBuilder
             .builder(BlockChain.class)
-            .vanillaBlock(VanillaBlockId.CHAIN)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.CHAIN, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

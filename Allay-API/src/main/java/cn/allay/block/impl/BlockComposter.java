@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockComposter extends Block {
     BlockType<BlockComposter> TYPE = BlockTypeBuilder
             .builder(BlockComposter.class)
-            .vanillaBlock(VanillaBlockId.COMPOSTER)
-            .property(VanillaBlockPropertyTypes.COMPOSTER_FILL_LEVEL)
+            .vanillaBlock(VanillaBlockId.COMPOSTER, true)
+            .withProperties(VanillaBlockPropertyTypes.COMPOSTER_FILL_LEVEL)
+            .addBasicComponents()
             .build();
 }

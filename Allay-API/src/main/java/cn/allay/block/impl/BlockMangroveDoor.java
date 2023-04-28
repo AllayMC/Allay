@@ -13,10 +13,11 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMangroveDoor extends Block {
     BlockType<BlockMangroveDoor> TYPE = BlockTypeBuilder
             .builder(BlockMangroveDoor.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_DOOR)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.MANGROVE_DOOR, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.DOOR_HINGE_BIT,
                     VanillaBlockPropertyTypes.OPEN_BIT,
                     VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+            .addBasicComponents()
             .build();
 }

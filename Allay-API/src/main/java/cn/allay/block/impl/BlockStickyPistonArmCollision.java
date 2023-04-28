@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStickyPistonArmCollision extends Block {
     BlockType<BlockStickyPistonArmCollision> TYPE = BlockTypeBuilder
             .builder(BlockStickyPistonArmCollision.class)
-            .vanillaBlock(VanillaBlockId.STICKY_PISTON_ARM_COLLISION)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.STICKY_PISTON_ARM_COLLISION, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

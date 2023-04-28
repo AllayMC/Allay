@@ -2,6 +2,7 @@ package cn.allay.block.type;
 
 import cn.allay.block.component.TestComponentImpl;
 import cn.allay.block.component.TestComponentImplV2;
+import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static cn.allay.component.interfaces.ComponentProvider.of;
+import static cn.allay.component.interfaces.ComponentProvider.ofSingleton;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -36,26 +38,30 @@ class AllayBlockTypeTest {
         testBlockType = AllayBlockType
                 .builder(TestBlock.class)
                 .namespaceId("minecraft:test_block")
-                .property(
+                .withProperties(
                         TEST_BOOLEAN_PROPERTY_TYPE,
                         TEST_INT_PROPERTY_TYPE,
                         TEST_ENUM_PROPERTY_TYPE)
-                .component(List.of(
-                        of(TestComponentImpl::new, TestComponentImpl.class)
+                .setComponents(List.of(
+                        of(TestComponentImpl::new, TestComponentImpl.class),
+                        ofSingleton(BlockAttributeComponentImpl.builder().build())
                 ))
+                .addBasicComponents()
                 .build();
         assertThrows(BlockTypeBuildException.class,
                 () -> {
                     AllayBlockType
                             .builder(TestBlock.class)
                             .namespaceId("minecraft:test_block_v2")
-                            .property(
+                            .withProperties(
                                     TEST_BOOLEAN_PROPERTY_TYPE,
                                     TEST_INT_PROPERTY_TYPE,
                                     TEST_ENUM_PROPERTY_TYPE)
-                            .component(List.of(
-                                    of(TestComponentImplV2::new, TestComponentImplV2.class)
+                            .setComponents(List.of(
+                                    of(TestComponentImplV2::new, TestComponentImplV2.class),
+                                    ofSingleton(BlockAttributeComponentImpl.builder().build())
                             ))
+                            .addBasicComponents()
                             .build();
                 }
         );
@@ -92,13 +98,15 @@ class AllayBlockTypeTest {
                 () -> AllayBlockType
                         .builder(TestBlock.class)
                         .namespaceId("minecraft:test_block")
-                        .property(
+                        .withProperties(
                                 TEST_BOOLEAN_PROPERTY_TYPE,
 //                                TEST_INT_PROPERTY_TYPE,
                                 TEST_ENUM_PROPERTY_TYPE)
-                        .component(List.of(
-                                of(TestComponentImpl::new, TestComponentImpl.class)
+                        .setComponents(List.of(
+                                of(TestComponentImpl::new, TestComponentImpl.class),
+                                ofSingleton(BlockAttributeComponentImpl.builder().build())
                         ))
+                        .addBasicComponents()
                         .build()
         );
     }

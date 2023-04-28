@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDispenser extends Block {
     BlockType<BlockDispenser> TYPE = BlockTypeBuilder
             .builder(BlockDispenser.class)
-            .vanillaBlock(VanillaBlockId.DISPENSER)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION,
+            .vanillaBlock(VanillaBlockId.DISPENSER, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.TRIGGERED_BIT)
+            .addBasicComponents()
             .build();
 }

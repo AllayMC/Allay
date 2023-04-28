@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSculkCatalyst extends Block {
     BlockType<BlockSculkCatalyst> TYPE = BlockTypeBuilder
             .builder(BlockSculkCatalyst.class)
-            .vanillaBlock(VanillaBlockId.SCULK_CATALYST)
-            .property(VanillaBlockPropertyTypes.BLOOM)
+            .vanillaBlock(VanillaBlockId.SCULK_CATALYST, true)
+            .withProperties(VanillaBlockPropertyTypes.BLOOM)
+            .addBasicComponents()
             .build();
 }

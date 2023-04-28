@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCalcite extends Block {
     BlockType<BlockCalcite> TYPE = BlockTypeBuilder
             .builder(BlockCalcite.class)
-            .vanillaBlock(VanillaBlockId.CALCITE)
+            .vanillaBlock(VanillaBlockId.CALCITE, true)
+            .addBasicComponents()
             .build();
 }

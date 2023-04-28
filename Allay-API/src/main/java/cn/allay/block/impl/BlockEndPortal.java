@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockEndPortal extends Block {
     BlockType<BlockEndPortal> TYPE = BlockTypeBuilder
             .builder(BlockEndPortal.class)
-            .vanillaBlock(VanillaBlockId.END_PORTAL)
+            .vanillaBlock(VanillaBlockId.END_PORTAL, true)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedPressurePlate extends Block {
     BlockType<BlockWarpedPressurePlate> TYPE = BlockTypeBuilder
             .builder(BlockWarpedPressurePlate.class)
-            .vanillaBlock(VanillaBlockId.WARPED_PRESSURE_PLATE)
-            .property(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .vanillaBlock(VanillaBlockId.WARPED_PRESSURE_PLATE, true)
+            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .addBasicComponents()
             .build();
 }

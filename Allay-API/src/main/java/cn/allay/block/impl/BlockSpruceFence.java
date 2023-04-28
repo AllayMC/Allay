@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSpruceFence extends Block {
     BlockType<BlockSpruceFence> TYPE = BlockTypeBuilder
             .builder(BlockSpruceFence.class)
-            .vanillaBlock(VanillaBlockId.SPRUCE_FENCE)
+            .vanillaBlock(VanillaBlockId.SPRUCE_FENCE, true)
+            .addBasicComponents()
             .build();
 }

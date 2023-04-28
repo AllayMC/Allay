@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockShroomlight extends Block {
     BlockType<BlockShroomlight> TYPE = BlockTypeBuilder
             .builder(BlockShroomlight.class)
-            .vanillaBlock(VanillaBlockId.SHROOMLIGHT)
+            .vanillaBlock(VanillaBlockId.SHROOMLIGHT, true)
+            .addBasicComponents()
             .build();
 }

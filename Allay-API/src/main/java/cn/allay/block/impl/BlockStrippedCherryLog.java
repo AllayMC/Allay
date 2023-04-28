@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStrippedCherryLog extends Block {
     BlockType<BlockStrippedCherryLog> TYPE = BlockTypeBuilder
             .builder(BlockStrippedCherryLog.class)
-            .vanillaBlock(VanillaBlockId.STRIPPED_CHERRY_LOG)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.STRIPPED_CHERRY_LOG, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

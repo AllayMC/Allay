@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCamera extends Block {
     BlockType<BlockCamera> TYPE = BlockTypeBuilder
             .builder(BlockCamera.class)
-            .vanillaBlock(VanillaBlockId.CAMERA)
+            .vanillaBlock(VanillaBlockId.CAMERA, true)
+            .addBasicComponents()
             .build();
 }

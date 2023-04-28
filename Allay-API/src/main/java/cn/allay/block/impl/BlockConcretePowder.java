@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockConcretePowder extends Block {
     BlockType<BlockConcretePowder> TYPE = BlockTypeBuilder
             .builder(BlockConcretePowder.class)
-            .vanillaBlock(VanillaBlockId.CONCRETE_POWDER)
-            .property(VanillaBlockPropertyTypes.COLOR)
+            .vanillaBlock(VanillaBlockId.CONCRETE_POWDER, true)
+            .withProperties(VanillaBlockPropertyTypes.COLOR)
+            .addBasicComponents()
             .build();
 }

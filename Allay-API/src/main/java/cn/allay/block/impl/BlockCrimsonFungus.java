@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonFungus extends Block {
     BlockType<BlockCrimsonFungus> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonFungus.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_FUNGUS)
+            .vanillaBlock(VanillaBlockId.CRIMSON_FUNGUS, true)
+            .addBasicComponents()
             .build();
 }

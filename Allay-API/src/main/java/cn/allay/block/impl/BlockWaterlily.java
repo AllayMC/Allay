@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWaterlily extends Block {
     BlockType<BlockWaterlily> TYPE = BlockTypeBuilder
             .builder(BlockWaterlily.class)
-            .vanillaBlock(VanillaBlockId.WATERLILY)
+            .vanillaBlock(VanillaBlockId.WATERLILY, true)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSeaLantern extends Block {
     BlockType<BlockSeaLantern> TYPE = BlockTypeBuilder
             .builder(BlockSeaLantern.class)
-            .vanillaBlock(VanillaBlockId.SEA_LANTERN)
+            .vanillaBlock(VanillaBlockId.SEA_LANTERN, true)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMangroveWallSign extends Block {
     BlockType<BlockMangroveWallSign> TYPE = BlockTypeBuilder
             .builder(BlockMangroveWallSign.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_WALL_SIGN)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.MANGROVE_WALL_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

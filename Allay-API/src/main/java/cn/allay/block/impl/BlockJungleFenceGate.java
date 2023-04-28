@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockJungleFenceGate extends Block {
     BlockType<BlockJungleFenceGate> TYPE = BlockTypeBuilder
             .builder(BlockJungleFenceGate.class)
-            .vanillaBlock(VanillaBlockId.JUNGLE_FENCE_GATE)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.JUNGLE_FENCE_GATE, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.IN_WALL_BIT,
                     VanillaBlockPropertyTypes.OPEN_BIT)
+            .addBasicComponents()
             .build();
 }

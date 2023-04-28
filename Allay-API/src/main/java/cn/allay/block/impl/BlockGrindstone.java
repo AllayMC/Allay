@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGrindstone extends Block {
     BlockType<BlockGrindstone> TYPE = BlockTypeBuilder
             .builder(BlockGrindstone.class)
-            .vanillaBlock(VanillaBlockId.GRINDSTONE)
-            .property(VanillaBlockPropertyTypes.ATTACHMENT,
+            .vanillaBlock(VanillaBlockId.GRINDSTONE, true)
+            .withProperties(VanillaBlockPropertyTypes.ATTACHMENT,
                     VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockRedGlazedTerracotta extends Block {
     BlockType<BlockRedGlazedTerracotta> TYPE = BlockTypeBuilder
             .builder(BlockRedGlazedTerracotta.class)
-            .vanillaBlock(VanillaBlockId.RED_GLAZED_TERRACOTTA)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.RED_GLAZED_TERRACOTTA, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

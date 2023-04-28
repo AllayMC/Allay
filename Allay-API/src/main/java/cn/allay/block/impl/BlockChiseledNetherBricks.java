@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockChiseledNetherBricks extends Block {
     BlockType<BlockChiseledNetherBricks> TYPE = BlockTypeBuilder
             .builder(BlockChiseledNetherBricks.class)
-            .vanillaBlock(VanillaBlockId.CHISELED_NETHER_BRICKS)
+            .vanillaBlock(VanillaBlockId.CHISELED_NETHER_BRICKS, true)
+            .addBasicComponents()
             .build();
 }

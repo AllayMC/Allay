@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDoublePlant extends Block {
     BlockType<BlockDoublePlant> TYPE = BlockTypeBuilder
             .builder(BlockDoublePlant.class)
-            .vanillaBlock(VanillaBlockId.DOUBLE_PLANT)
-            .property(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE,
+            .vanillaBlock(VanillaBlockId.DOUBLE_PLANT, true)
+            .withProperties(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE,
                     VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+            .addBasicComponents()
             .build();
 }

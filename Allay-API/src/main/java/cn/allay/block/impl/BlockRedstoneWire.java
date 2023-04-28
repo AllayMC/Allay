@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockRedstoneWire extends Block {
     BlockType<BlockRedstoneWire> TYPE = BlockTypeBuilder
             .builder(BlockRedstoneWire.class)
-            .vanillaBlock(VanillaBlockId.REDSTONE_WIRE)
-            .property(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .vanillaBlock(VanillaBlockId.REDSTONE_WIRE, true)
+            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .addBasicComponents()
             .build();
 }

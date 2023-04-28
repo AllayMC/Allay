@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockFlowingWater extends Block {
     BlockType<BlockFlowingWater> TYPE = BlockTypeBuilder
             .builder(BlockFlowingWater.class)
-            .vanillaBlock(VanillaBlockId.FLOWING_WATER)
-            .property(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+            .vanillaBlock(VanillaBlockId.FLOWING_WATER, true)
+            .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+            .addBasicComponents()
             .build();
 }

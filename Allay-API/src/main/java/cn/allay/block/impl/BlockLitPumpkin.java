@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLitPumpkin extends Block {
     BlockType<BlockLitPumpkin> TYPE = BlockTypeBuilder
             .builder(BlockLitPumpkin.class)
-            .vanillaBlock(VanillaBlockId.LIT_PUMPKIN)
-            .property(VanillaBlockPropertyTypes.DIRECTION)
+            .vanillaBlock(VanillaBlockId.LIT_PUMPKIN, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }

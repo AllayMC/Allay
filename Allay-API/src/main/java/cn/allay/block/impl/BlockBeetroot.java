@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBeetroot extends Block {
     BlockType<BlockBeetroot> TYPE = BlockTypeBuilder
             .builder(BlockBeetroot.class)
-            .vanillaBlock(VanillaBlockId.BEETROOT)
-            .property(VanillaBlockPropertyTypes.GROWTH)
+            .vanillaBlock(VanillaBlockId.BEETROOT, true)
+            .withProperties(VanillaBlockPropertyTypes.GROWTH)
+            .addBasicComponents()
             .build();
 }

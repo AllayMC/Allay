@@ -13,11 +13,12 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBorderBlock extends Block {
     BlockType<BlockBorderBlock> TYPE = BlockTypeBuilder
             .builder(BlockBorderBlock.class)
-            .vanillaBlock(VanillaBlockId.BORDER_BLOCK)
-            .property(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST,
+            .vanillaBlock(VanillaBlockId.BORDER_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST,
                     VanillaBlockPropertyTypes.WALL_POST_BIT)
+            .addBasicComponents()
             .build();
 }

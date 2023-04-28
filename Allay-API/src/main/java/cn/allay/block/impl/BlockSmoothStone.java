@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSmoothStone extends Block {
     BlockType<BlockSmoothStone> TYPE = BlockTypeBuilder
             .builder(BlockSmoothStone.class)
-            .vanillaBlock(VanillaBlockId.SMOOTH_STONE)
+            .vanillaBlock(VanillaBlockId.SMOOTH_STONE, true)
+            .addBasicComponents()
             .build();
 }

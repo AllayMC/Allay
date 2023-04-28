@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSoulLantern extends Block {
     BlockType<BlockSoulLantern> TYPE = BlockTypeBuilder
             .builder(BlockSoulLantern.class)
-            .vanillaBlock(VanillaBlockId.SOUL_LANTERN)
-            .property(VanillaBlockPropertyTypes.HANGING)
+            .vanillaBlock(VanillaBlockId.SOUL_LANTERN, true)
+            .withProperties(VanillaBlockPropertyTypes.HANGING)
+            .addBasicComponents()
             .build();
 }

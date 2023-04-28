@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonButton extends Block {
     BlockType<BlockCrimsonButton> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonButton.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_BUTTON)
-            .property(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
+            .vanillaBlock(VanillaBlockId.CRIMSON_BUTTON, true)
+            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

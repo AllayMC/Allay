@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGraniteStairs extends Block {
     BlockType<BlockGraniteStairs> TYPE = BlockTypeBuilder
             .builder(BlockGraniteStairs.class)
-            .vanillaBlock(VanillaBlockId.GRANITE_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.GRANITE_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

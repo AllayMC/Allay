@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCampfire extends Block {
     BlockType<BlockCampfire> TYPE = BlockTypeBuilder
             .builder(BlockCampfire.class)
-            .vanillaBlock(VanillaBlockId.CAMPFIRE)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.CAMPFIRE, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.EXTINGUISHED)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockFloweringAzalea extends Block {
     BlockType<BlockFloweringAzalea> TYPE = BlockTypeBuilder
             .builder(BlockFloweringAzalea.class)
-            .vanillaBlock(VanillaBlockId.FLOWERING_AZALEA)
+            .vanillaBlock(VanillaBlockId.FLOWERING_AZALEA, true)
+            .addBasicComponents()
             .build();
 }

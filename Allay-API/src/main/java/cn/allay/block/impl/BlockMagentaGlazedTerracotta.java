@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMagentaGlazedTerracotta extends Block {
     BlockType<BlockMagentaGlazedTerracotta> TYPE = BlockTypeBuilder
             .builder(BlockMagentaGlazedTerracotta.class)
-            .vanillaBlock(VanillaBlockId.MAGENTA_GLAZED_TERRACOTTA)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.MAGENTA_GLAZED_TERRACOTTA, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDriedKelpBlock extends Block {
     BlockType<BlockDriedKelpBlock> TYPE = BlockTypeBuilder
             .builder(BlockDriedKelpBlock.class)
-            .vanillaBlock(VanillaBlockId.DRIED_KELP_BLOCK)
+            .vanillaBlock(VanillaBlockId.DRIED_KELP_BLOCK, true)
+            .addBasicComponents()
             .build();
 }

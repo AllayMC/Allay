@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSoulTorch extends Block {
     BlockType<BlockSoulTorch> TYPE = BlockTypeBuilder
             .builder(BlockSoulTorch.class)
-            .vanillaBlock(VanillaBlockId.SOUL_TORCH)
-            .property(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.SOUL_TORCH, true)
+            .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

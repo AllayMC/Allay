@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMudBrickDoubleSlab extends Block {
     BlockType<BlockMudBrickDoubleSlab> TYPE = BlockTypeBuilder
             .builder(BlockMudBrickDoubleSlab.class)
-            .vanillaBlock(VanillaBlockId.MUD_BRICK_DOUBLE_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.MUD_BRICK_DOUBLE_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

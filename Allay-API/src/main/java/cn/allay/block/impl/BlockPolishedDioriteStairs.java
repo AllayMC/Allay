@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPolishedDioriteStairs extends Block {
     BlockType<BlockPolishedDioriteStairs> TYPE = BlockTypeBuilder
             .builder(BlockPolishedDioriteStairs.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_DIORITE_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.POLISHED_DIORITE_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

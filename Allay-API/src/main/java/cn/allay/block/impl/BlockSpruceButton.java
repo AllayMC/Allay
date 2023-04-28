@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSpruceButton extends Block {
     BlockType<BlockSpruceButton> TYPE = BlockTypeBuilder
             .builder(BlockSpruceButton.class)
-            .vanillaBlock(VanillaBlockId.SPRUCE_BUTTON)
-            .property(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
+            .vanillaBlock(VanillaBlockId.SPRUCE_BUTTON, true)
+            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

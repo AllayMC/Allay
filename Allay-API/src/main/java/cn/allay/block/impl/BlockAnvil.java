@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockAnvil extends Block {
     BlockType<BlockAnvil> TYPE = BlockTypeBuilder
             .builder(BlockAnvil.class)
-            .vanillaBlock(VanillaBlockId.ANVIL)
-            .property(VanillaBlockPropertyTypes.DAMAGE,
+            .vanillaBlock(VanillaBlockId.ANVIL, true)
+            .withProperties(VanillaBlockPropertyTypes.DAMAGE,
                     VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }

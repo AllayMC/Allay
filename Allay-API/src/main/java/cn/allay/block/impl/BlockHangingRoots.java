@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockHangingRoots extends Block {
     BlockType<BlockHangingRoots> TYPE = BlockTypeBuilder
             .builder(BlockHangingRoots.class)
-            .vanillaBlock(VanillaBlockId.HANGING_ROOTS)
+            .vanillaBlock(VanillaBlockId.HANGING_ROOTS, true)
+            .addBasicComponents()
             .build();
 }

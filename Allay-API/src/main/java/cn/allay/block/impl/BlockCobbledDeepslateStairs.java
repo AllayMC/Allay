@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCobbledDeepslateStairs extends Block {
     BlockType<BlockCobbledDeepslateStairs> TYPE = BlockTypeBuilder
             .builder(BlockCobbledDeepslateStairs.class)
-            .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

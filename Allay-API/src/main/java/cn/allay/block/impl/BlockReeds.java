@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockReeds extends Block {
     BlockType<BlockReeds> TYPE = BlockTypeBuilder
             .builder(BlockReeds.class)
-            .vanillaBlock(VanillaBlockId.REEDS)
-            .property(VanillaBlockPropertyTypes.AGE)
+            .vanillaBlock(VanillaBlockId.REEDS, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .addBasicComponents()
             .build();
 }

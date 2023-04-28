@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBarrel extends Block {
     BlockType<BlockBarrel> TYPE = BlockTypeBuilder
             .builder(BlockBarrel.class)
-            .vanillaBlock(VanillaBlockId.BARREL)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION,
+            .vanillaBlock(VanillaBlockId.BARREL, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.OPEN_BIT)
+            .addBasicComponents()
             .build();
 }

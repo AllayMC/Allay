@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWeatheredCopper extends Block {
     BlockType<BlockWeatheredCopper> TYPE = BlockTypeBuilder
             .builder(BlockWeatheredCopper.class)
-            .vanillaBlock(VanillaBlockId.WEATHERED_COPPER)
+            .vanillaBlock(VanillaBlockId.WEATHERED_COPPER, true)
+            .addBasicComponents()
             .build();
 }

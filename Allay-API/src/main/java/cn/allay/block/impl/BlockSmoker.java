@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSmoker extends Block {
     BlockType<BlockSmoker> TYPE = BlockTypeBuilder
             .builder(BlockSmoker.class)
-            .vanillaBlock(VanillaBlockId.SMOKER)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.SMOKER, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

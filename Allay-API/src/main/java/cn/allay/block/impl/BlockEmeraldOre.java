@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockEmeraldOre extends Block {
     BlockType<BlockEmeraldOre> TYPE = BlockTypeBuilder
             .builder(BlockEmeraldOre.class)
-            .vanillaBlock(VanillaBlockId.EMERALD_ORE)
+            .vanillaBlock(VanillaBlockId.EMERALD_ORE, true)
+            .addBasicComponents()
             .build();
 }

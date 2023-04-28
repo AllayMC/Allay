@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMediumAmethystBud extends Block {
     BlockType<BlockMediumAmethystBud> TYPE = BlockTypeBuilder
             .builder(BlockMediumAmethystBud.class)
-            .vanillaBlock(VanillaBlockId.MEDIUM_AMETHYST_BUD)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.MEDIUM_AMETHYST_BUD, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

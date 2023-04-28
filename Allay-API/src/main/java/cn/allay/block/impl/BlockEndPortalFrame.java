@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockEndPortalFrame extends Block {
     BlockType<BlockEndPortalFrame> TYPE = BlockTypeBuilder
             .builder(BlockEndPortalFrame.class)
-            .vanillaBlock(VanillaBlockId.END_PORTAL_FRAME)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.END_PORTAL_FRAME, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.END_PORTAL_EYE_BIT)
+            .addBasicComponents()
             .build();
 }

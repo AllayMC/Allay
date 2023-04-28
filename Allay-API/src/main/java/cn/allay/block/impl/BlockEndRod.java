@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockEndRod extends Block {
     BlockType<BlockEndRod> TYPE = BlockTypeBuilder
             .builder(BlockEndRod.class)
-            .vanillaBlock(VanillaBlockId.END_ROD)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.END_ROD, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

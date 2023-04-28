@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockChorusPlant extends Block {
     BlockType<BlockChorusPlant> TYPE = BlockTypeBuilder
             .builder(BlockChorusPlant.class)
-            .vanillaBlock(VanillaBlockId.CHORUS_PLANT)
+            .vanillaBlock(VanillaBlockId.CHORUS_PLANT, true)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLapisBlock extends Block {
     BlockType<BlockLapisBlock> TYPE = BlockTypeBuilder
             .builder(BlockLapisBlock.class)
-            .vanillaBlock(VanillaBlockId.LAPIS_BLOCK)
+            .vanillaBlock(VanillaBlockId.LAPIS_BLOCK, true)
+            .addBasicComponents()
             .build();
 }

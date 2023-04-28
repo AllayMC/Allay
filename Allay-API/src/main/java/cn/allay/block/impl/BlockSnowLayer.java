@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSnowLayer extends Block {
     BlockType<BlockSnowLayer> TYPE = BlockTypeBuilder
             .builder(BlockSnowLayer.class)
-            .vanillaBlock(VanillaBlockId.SNOW_LAYER)
-            .property(VanillaBlockPropertyTypes.COVERED_BIT,
+            .vanillaBlock(VanillaBlockId.SNOW_LAYER, true)
+            .withProperties(VanillaBlockPropertyTypes.COVERED_BIT,
                     VanillaBlockPropertyTypes.HEIGHT)
+            .addBasicComponents()
             .build();
 }

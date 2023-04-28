@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockUnpoweredComparator extends Block {
     BlockType<BlockUnpoweredComparator> TYPE = BlockTypeBuilder
             .builder(BlockUnpoweredComparator.class)
-            .vanillaBlock(VanillaBlockId.UNPOWERED_COMPARATOR)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.UNPOWERED_COMPARATOR, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.OUTPUT_LIT_BIT,
                     VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
+            .addBasicComponents()
             .build();
 }

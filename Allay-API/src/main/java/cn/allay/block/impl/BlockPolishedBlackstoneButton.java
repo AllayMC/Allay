@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPolishedBlackstoneButton extends Block {
     BlockType<BlockPolishedBlackstoneButton> TYPE = BlockTypeBuilder
             .builder(BlockPolishedBlackstoneButton.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BUTTON)
-            .property(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
+            .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BUTTON, true)
+            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

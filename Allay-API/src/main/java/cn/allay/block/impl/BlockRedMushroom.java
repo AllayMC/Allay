@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockRedMushroom extends Block {
     BlockType<BlockRedMushroom> TYPE = BlockTypeBuilder
             .builder(BlockRedMushroom.class)
-            .vanillaBlock(VanillaBlockId.RED_MUSHROOM)
+            .vanillaBlock(VanillaBlockId.RED_MUSHROOM, true)
+            .addBasicComponents()
             .build();
 }

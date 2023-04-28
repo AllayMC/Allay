@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCobblestone extends Block {
     BlockType<BlockCobblestone> TYPE = BlockTypeBuilder
             .builder(BlockCobblestone.class)
-            .vanillaBlock(VanillaBlockId.COBBLESTONE)
+            .vanillaBlock(VanillaBlockId.COBBLESTONE, true)
+            .addBasicComponents()
             .build();
 }

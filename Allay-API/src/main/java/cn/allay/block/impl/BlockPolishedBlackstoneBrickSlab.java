@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPolishedBlackstoneBrickSlab extends Block {
     BlockType<BlockPolishedBlackstoneBrickSlab> TYPE = BlockTypeBuilder
             .builder(BlockPolishedBlackstoneBrickSlab.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICK_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICK_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

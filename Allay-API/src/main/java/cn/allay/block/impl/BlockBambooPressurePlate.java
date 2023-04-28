@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBambooPressurePlate extends Block {
     BlockType<BlockBambooPressurePlate> TYPE = BlockTypeBuilder
             .builder(BlockBambooPressurePlate.class)
-            .vanillaBlock(VanillaBlockId.BAMBOO_PRESSURE_PLATE)
-            .property(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .vanillaBlock(VanillaBlockId.BAMBOO_PRESSURE_PLATE, true)
+            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .addBasicComponents()
             .build();
 }

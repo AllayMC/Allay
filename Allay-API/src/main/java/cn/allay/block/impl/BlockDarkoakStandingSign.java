@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDarkoakStandingSign extends Block {
     BlockType<BlockDarkoakStandingSign> TYPE = BlockTypeBuilder
             .builder(BlockDarkoakStandingSign.class)
-            .vanillaBlock(VanillaBlockId.DARKOAK_STANDING_SIGN)
-            .property(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .vanillaBlock(VanillaBlockId.DARKOAK_STANDING_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .addBasicComponents()
             .build();
 }

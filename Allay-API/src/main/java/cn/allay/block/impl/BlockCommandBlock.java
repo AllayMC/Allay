@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCommandBlock extends Block {
     BlockType<BlockCommandBlock> TYPE = BlockTypeBuilder
             .builder(BlockCommandBlock.class)
-            .vanillaBlock(VanillaBlockId.COMMAND_BLOCK)
-            .property(VanillaBlockPropertyTypes.CONDITIONAL_BIT,
+            .vanillaBlock(VanillaBlockId.COMMAND_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

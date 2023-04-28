@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDeepslateRedstoneOre extends Block {
     BlockType<BlockDeepslateRedstoneOre> TYPE = BlockTypeBuilder
             .builder(BlockDeepslateRedstoneOre.class)
-            .vanillaBlock(VanillaBlockId.DEEPSLATE_REDSTONE_ORE)
+            .vanillaBlock(VanillaBlockId.DEEPSLATE_REDSTONE_ORE, true)
+            .addBasicComponents()
             .build();
 }

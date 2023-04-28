@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSlime extends Block {
     BlockType<BlockSlime> TYPE = BlockTypeBuilder
             .builder(BlockSlime.class)
-            .vanillaBlock(VanillaBlockId.SLIME)
+            .vanillaBlock(VanillaBlockId.SLIME, true)
+            .addBasicComponents()
             .build();
 }

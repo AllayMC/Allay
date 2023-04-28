@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSeaPickle extends Block {
     BlockType<BlockSeaPickle> TYPE = BlockTypeBuilder
             .builder(BlockSeaPickle.class)
-            .vanillaBlock(VanillaBlockId.SEA_PICKLE)
-            .property(VanillaBlockPropertyTypes.CLUSTER_COUNT,
+            .vanillaBlock(VanillaBlockId.SEA_PICKLE, true)
+            .withProperties(VanillaBlockPropertyTypes.CLUSTER_COUNT,
                     VanillaBlockPropertyTypes.DEAD_BIT)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCaveVinesHeadWithBerries extends Block {
     BlockType<BlockCaveVinesHeadWithBerries> TYPE = BlockTypeBuilder
             .builder(BlockCaveVinesHeadWithBerries.class)
-            .vanillaBlock(VanillaBlockId.CAVE_VINES_HEAD_WITH_BERRIES)
-            .property(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
+            .vanillaBlock(VanillaBlockId.CAVE_VINES_HEAD_WITH_BERRIES, true)
+            .withProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
+            .addBasicComponents()
             .build();
 }

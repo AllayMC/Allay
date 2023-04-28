@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLightningRod extends Block {
     BlockType<BlockLightningRod> TYPE = BlockTypeBuilder
             .builder(BlockLightningRod.class)
-            .vanillaBlock(VanillaBlockId.LIGHTNING_ROD)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.LIGHTNING_ROD, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

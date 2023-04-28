@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockNetherrack extends Block {
     BlockType<BlockNetherrack> TYPE = BlockTypeBuilder
             .builder(BlockNetherrack.class)
-            .vanillaBlock(VanillaBlockId.NETHERRACK)
+            .vanillaBlock(VanillaBlockId.NETHERRACK, true)
+            .addBasicComponents()
             .build();
 }

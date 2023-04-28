@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockTurtleEgg extends Block {
     BlockType<BlockTurtleEgg> TYPE = BlockTypeBuilder
             .builder(BlockTurtleEgg.class)
-            .vanillaBlock(VanillaBlockId.TURTLE_EGG)
-            .property(VanillaBlockPropertyTypes.CRACKED_STATE,
+            .vanillaBlock(VanillaBlockId.TURTLE_EGG, true)
+            .withProperties(VanillaBlockPropertyTypes.CRACKED_STATE,
                     VanillaBlockPropertyTypes.TURTLE_EGG_COUNT)
+            .addBasicComponents()
             .build();
 }

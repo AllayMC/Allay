@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockChorusFlower extends Block {
     BlockType<BlockChorusFlower> TYPE = BlockTypeBuilder
             .builder(BlockChorusFlower.class)
-            .vanillaBlock(VanillaBlockId.CHORUS_FLOWER)
-            .property(VanillaBlockPropertyTypes.AGE)
+            .vanillaBlock(VanillaBlockId.CHORUS_FLOWER, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .addBasicComponents()
             .build();
 }

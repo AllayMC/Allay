@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLitRedstoneOre extends Block {
     BlockType<BlockLitRedstoneOre> TYPE = BlockTypeBuilder
             .builder(BlockLitRedstoneOre.class)
-            .vanillaBlock(VanillaBlockId.LIT_REDSTONE_ORE)
+            .vanillaBlock(VanillaBlockId.LIT_REDSTONE_ORE, true)
+            .addBasicComponents()
             .build();
 }

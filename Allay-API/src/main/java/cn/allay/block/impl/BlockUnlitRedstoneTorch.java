@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockUnlitRedstoneTorch extends Block {
     BlockType<BlockUnlitRedstoneTorch> TYPE = BlockTypeBuilder
             .builder(BlockUnlitRedstoneTorch.class)
-            .vanillaBlock(VanillaBlockId.UNLIT_REDSTONE_TORCH)
-            .property(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.UNLIT_REDSTONE_TORCH, true)
+            .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

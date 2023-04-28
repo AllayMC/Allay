@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedRoots extends Block {
     BlockType<BlockWarpedRoots> TYPE = BlockTypeBuilder
             .builder(BlockWarpedRoots.class)
-            .vanillaBlock(VanillaBlockId.WARPED_ROOTS)
+            .vanillaBlock(VanillaBlockId.WARPED_ROOTS, true)
+            .addBasicComponents()
             .build();
 }

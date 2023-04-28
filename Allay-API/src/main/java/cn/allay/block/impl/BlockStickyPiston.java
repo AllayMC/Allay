@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStickyPiston extends Block {
     BlockType<BlockStickyPiston> TYPE = BlockTypeBuilder
             .builder(BlockStickyPiston.class)
-            .vanillaBlock(VanillaBlockId.STICKY_PISTON)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.STICKY_PISTON, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

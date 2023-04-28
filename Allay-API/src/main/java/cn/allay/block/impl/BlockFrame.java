@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockFrame extends Block {
     BlockType<BlockFrame> TYPE = BlockTypeBuilder
             .builder(BlockFrame.class)
-            .vanillaBlock(VanillaBlockId.FRAME)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION,
+            .vanillaBlock(VanillaBlockId.FRAME, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.ITEM_FRAME_MAP_BIT,
                     VanillaBlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
+            .addBasicComponents()
             .build();
 }

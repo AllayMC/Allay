@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGlowingobsidian extends Block {
     BlockType<BlockGlowingobsidian> TYPE = BlockTypeBuilder
             .builder(BlockGlowingobsidian.class)
-            .vanillaBlock(VanillaBlockId.GLOWINGOBSIDIAN)
+            .vanillaBlock(VanillaBlockId.GLOWINGOBSIDIAN, true)
+            .addBasicComponents()
             .build();
 }

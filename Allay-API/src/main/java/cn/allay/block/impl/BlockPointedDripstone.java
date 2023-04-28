@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPointedDripstone extends Block {
     BlockType<BlockPointedDripstone> TYPE = BlockTypeBuilder
             .builder(BlockPointedDripstone.class)
-            .vanillaBlock(VanillaBlockId.POINTED_DRIPSTONE)
-            .property(VanillaBlockPropertyTypes.DRIPSTONE_THICKNESS,
+            .vanillaBlock(VanillaBlockId.POINTED_DRIPSTONE, true)
+            .withProperties(VanillaBlockPropertyTypes.DRIPSTONE_THICKNESS,
                     VanillaBlockPropertyTypes.HANGING)
+            .addBasicComponents()
             .build();
 }

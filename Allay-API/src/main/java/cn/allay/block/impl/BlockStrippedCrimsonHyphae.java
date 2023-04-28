@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStrippedCrimsonHyphae extends Block {
     BlockType<BlockStrippedCrimsonHyphae> TYPE = BlockTypeBuilder
             .builder(BlockStrippedCrimsonHyphae.class)
-            .vanillaBlock(VanillaBlockId.STRIPPED_CRIMSON_HYPHAE)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.STRIPPED_CRIMSON_HYPHAE, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

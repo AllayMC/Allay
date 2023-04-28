@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMangrovePlanks extends Block {
     BlockType<BlockMangrovePlanks> TYPE = BlockTypeBuilder
             .builder(BlockMangrovePlanks.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_PLANKS)
+            .vanillaBlock(VanillaBlockId.MANGROVE_PLANKS, true)
+            .addBasicComponents()
             .build();
 }

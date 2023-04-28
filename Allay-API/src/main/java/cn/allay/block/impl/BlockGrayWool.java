@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGrayWool extends Block {
     BlockType<BlockGrayWool> TYPE = BlockTypeBuilder
             .builder(BlockGrayWool.class)
-            .vanillaBlock(VanillaBlockId.GRAY_WOOL)
+            .vanillaBlock(VanillaBlockId.GRAY_WOOL, true)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMovingBlock extends Block {
     BlockType<BlockMovingBlock> TYPE = BlockTypeBuilder
             .builder(BlockMovingBlock.class)
-            .vanillaBlock(VanillaBlockId.MOVING_BLOCK)
+            .vanillaBlock(VanillaBlockId.MOVING_BLOCK, true)
+            .addBasicComponents()
             .build();
 }

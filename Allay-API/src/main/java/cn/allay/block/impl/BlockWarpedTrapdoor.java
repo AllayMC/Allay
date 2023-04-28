@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedTrapdoor extends Block {
     BlockType<BlockWarpedTrapdoor> TYPE = BlockTypeBuilder
             .builder(BlockWarpedTrapdoor.class)
-            .vanillaBlock(VanillaBlockId.WARPED_TRAPDOOR)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.WARPED_TRAPDOOR, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.OPEN_BIT,
                     VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+            .addBasicComponents()
             .build();
 }

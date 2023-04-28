@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCartographyTable extends Block {
     BlockType<BlockCartographyTable> TYPE = BlockTypeBuilder
             .builder(BlockCartographyTable.class)
-            .vanillaBlock(VanillaBlockId.CARTOGRAPHY_TABLE)
+            .vanillaBlock(VanillaBlockId.CARTOGRAPHY_TABLE, true)
+            .addBasicComponents()
             .build();
 }

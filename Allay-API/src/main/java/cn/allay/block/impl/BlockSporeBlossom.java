@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSporeBlossom extends Block {
     BlockType<BlockSporeBlossom> TYPE = BlockTypeBuilder
             .builder(BlockSporeBlossom.class)
-            .vanillaBlock(VanillaBlockId.SPORE_BLOSSOM)
+            .vanillaBlock(VanillaBlockId.SPORE_BLOSSOM, true)
+            .addBasicComponents()
             .build();
 }

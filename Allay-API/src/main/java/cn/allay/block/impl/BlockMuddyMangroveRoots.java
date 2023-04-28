@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMuddyMangroveRoots extends Block {
     BlockType<BlockMuddyMangroveRoots> TYPE = BlockTypeBuilder
             .builder(BlockMuddyMangroveRoots.class)
-            .vanillaBlock(VanillaBlockId.MUDDY_MANGROVE_ROOTS)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.MUDDY_MANGROVE_ROOTS, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

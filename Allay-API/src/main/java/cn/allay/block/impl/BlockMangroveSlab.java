@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMangroveSlab extends Block {
     BlockType<BlockMangroveSlab> TYPE = BlockTypeBuilder
             .builder(BlockMangroveSlab.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.MANGROVE_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

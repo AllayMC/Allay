@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPrismarineBricksStairs extends Block {
     BlockType<BlockPrismarineBricksStairs> TYPE = BlockTypeBuilder
             .builder(BlockPrismarineBricksStairs.class)
-            .vanillaBlock(VanillaBlockId.PRISMARINE_BRICKS_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.PRISMARINE_BRICKS_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

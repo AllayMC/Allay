@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPolishedDeepslateSlab extends Block {
     BlockType<BlockPolishedDeepslateSlab> TYPE = BlockTypeBuilder
             .builder(BlockPolishedDeepslateSlab.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

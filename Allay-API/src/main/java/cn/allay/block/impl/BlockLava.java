@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLava extends Block {
     BlockType<BlockLava> TYPE = BlockTypeBuilder
             .builder(BlockLava.class)
-            .vanillaBlock(VanillaBlockId.LAVA)
-            .property(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+            .vanillaBlock(VanillaBlockId.LAVA, true)
+            .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+            .addBasicComponents()
             .build();
 }

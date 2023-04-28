@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBlastFurnace extends Block {
     BlockType<BlockBlastFurnace> TYPE = BlockTypeBuilder
             .builder(BlockBlastFurnace.class)
-            .vanillaBlock(VanillaBlockId.BLAST_FURNACE)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.BLAST_FURNACE, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

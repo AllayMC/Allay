@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGoldenRail extends Block {
     BlockType<BlockGoldenRail> TYPE = BlockTypeBuilder
             .builder(BlockGoldenRail.class)
-            .vanillaBlock(VanillaBlockId.GOLDEN_RAIL)
-            .property(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
+            .vanillaBlock(VanillaBlockId.GOLDEN_RAIL, true)
+            .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
                     VanillaBlockPropertyTypes.RAIL_DIRECTION)
+            .addBasicComponents()
             .build();
 }

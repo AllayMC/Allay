@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGrassPath extends Block {
     BlockType<BlockGrassPath> TYPE = BlockTypeBuilder
             .builder(BlockGrassPath.class)
-            .vanillaBlock(VanillaBlockId.GRASS_PATH)
+            .vanillaBlock(VanillaBlockId.GRASS_PATH, true)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockChiseledDeepslate extends Block {
     BlockType<BlockChiseledDeepslate> TYPE = BlockTypeBuilder
             .builder(BlockChiseledDeepslate.class)
-            .vanillaBlock(VanillaBlockId.CHISELED_DEEPSLATE)
+            .vanillaBlock(VanillaBlockId.CHISELED_DEEPSLATE, true)
+            .addBasicComponents()
             .build();
 }

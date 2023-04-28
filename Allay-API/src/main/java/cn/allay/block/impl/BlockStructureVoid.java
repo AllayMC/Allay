@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStructureVoid extends Block {
     BlockType<BlockStructureVoid> TYPE = BlockTypeBuilder
             .builder(BlockStructureVoid.class)
-            .vanillaBlock(VanillaBlockId.STRUCTURE_VOID)
-            .property(VanillaBlockPropertyTypes.STRUCTURE_VOID_TYPE)
+            .vanillaBlock(VanillaBlockId.STRUCTURE_VOID, true)
+            .withProperties(VanillaBlockPropertyTypes.STRUCTURE_VOID_TYPE)
+            .addBasicComponents()
             .build();
 }

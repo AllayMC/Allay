@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockHardenedClay extends Block {
     BlockType<BlockHardenedClay> TYPE = BlockTypeBuilder
             .builder(BlockHardenedClay.class)
-            .vanillaBlock(VanillaBlockId.HARDENED_CLAY)
+            .vanillaBlock(VanillaBlockId.HARDENED_CLAY, true)
+            .addBasicComponents()
             .build();
 }

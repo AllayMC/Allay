@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSponge extends Block {
     BlockType<BlockSponge> TYPE = BlockTypeBuilder
             .builder(BlockSponge.class)
-            .vanillaBlock(VanillaBlockId.SPONGE)
-            .property(VanillaBlockPropertyTypes.SPONGE_TYPE)
+            .vanillaBlock(VanillaBlockId.SPONGE, true)
+            .withProperties(VanillaBlockPropertyTypes.SPONGE_TYPE)
+            .addBasicComponents()
             .build();
 }

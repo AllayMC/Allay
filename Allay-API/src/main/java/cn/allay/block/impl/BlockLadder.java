@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLadder extends Block {
     BlockType<BlockLadder> TYPE = BlockTypeBuilder
             .builder(BlockLadder.class)
-            .vanillaBlock(VanillaBlockId.LADDER)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.LADDER, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

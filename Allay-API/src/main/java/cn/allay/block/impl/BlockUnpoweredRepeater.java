@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockUnpoweredRepeater extends Block {
     BlockType<BlockUnpoweredRepeater> TYPE = BlockTypeBuilder
             .builder(BlockUnpoweredRepeater.class)
-            .vanillaBlock(VanillaBlockId.UNPOWERED_REPEATER)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.UNPOWERED_REPEATER, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.REPEATER_DELAY)
+            .addBasicComponents()
             .build();
 }

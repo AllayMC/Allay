@@ -13,10 +13,11 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonDoor extends Block {
     BlockType<BlockCrimsonDoor> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonDoor.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_DOOR)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.CRIMSON_DOOR, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.DOOR_HINGE_BIT,
                     VanillaBlockPropertyTypes.OPEN_BIT,
                     VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+            .addBasicComponents()
             .build();
 }

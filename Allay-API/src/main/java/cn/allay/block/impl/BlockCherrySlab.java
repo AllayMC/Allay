@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCherrySlab extends Block {
     BlockType<BlockCherrySlab> TYPE = BlockTypeBuilder
             .builder(BlockCherrySlab.class)
-            .vanillaBlock(VanillaBlockId.CHERRY_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.CHERRY_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

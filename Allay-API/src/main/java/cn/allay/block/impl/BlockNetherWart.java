@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockNetherWart extends Block {
     BlockType<BlockNetherWart> TYPE = BlockTypeBuilder
             .builder(BlockNetherWart.class)
-            .vanillaBlock(VanillaBlockId.NETHER_WART)
-            .property(VanillaBlockPropertyTypes.AGE)
+            .vanillaBlock(VanillaBlockId.NETHER_WART, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .addBasicComponents()
             .build();
 }

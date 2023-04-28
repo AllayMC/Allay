@@ -13,11 +13,12 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPolishedDeepslateWall extends Block {
     BlockType<BlockPolishedDeepslateWall> TYPE = BlockTypeBuilder
             .builder(BlockPolishedDeepslateWall.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_WALL)
-            .property(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST,
+            .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_WALL, true)
+            .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH,
                     VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST,
                     VanillaBlockPropertyTypes.WALL_POST_BIT)
+            .addBasicComponents()
             .build();
 }

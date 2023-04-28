@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBirchWallSign extends Block {
     BlockType<BlockBirchWallSign> TYPE = BlockTypeBuilder
             .builder(BlockBirchWallSign.class)
-            .vanillaBlock(VanillaBlockId.BIRCH_WALL_SIGN)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .vanillaBlock(VanillaBlockId.BIRCH_WALL_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

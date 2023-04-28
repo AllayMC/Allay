@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDarkOakButton extends Block {
     BlockType<BlockDarkOakButton> TYPE = BlockTypeBuilder
             .builder(BlockDarkOakButton.class)
-            .vanillaBlock(VanillaBlockId.DARK_OAK_BUTTON)
-            .property(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
+            .vanillaBlock(VanillaBlockId.DARK_OAK_BUTTON, true)
+            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .addBasicComponents()
             .build();
 }

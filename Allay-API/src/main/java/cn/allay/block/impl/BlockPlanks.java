@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPlanks extends Block {
     BlockType<BlockPlanks> TYPE = BlockTypeBuilder
             .builder(BlockPlanks.class)
-            .vanillaBlock(VanillaBlockId.PLANKS)
-            .property(VanillaBlockPropertyTypes.WOOD_TYPE)
+            .vanillaBlock(VanillaBlockId.PLANKS, true)
+            .withProperties(VanillaBlockPropertyTypes.WOOD_TYPE)
+            .addBasicComponents()
             .build();
 }

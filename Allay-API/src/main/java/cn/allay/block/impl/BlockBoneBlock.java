@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBoneBlock extends Block {
     BlockType<BlockBoneBlock> TYPE = BlockTypeBuilder
             .builder(BlockBoneBlock.class)
-            .vanillaBlock(VanillaBlockId.BONE_BLOCK)
-            .property(VanillaBlockPropertyTypes.DEPRECATED,
+            .vanillaBlock(VanillaBlockId.BONE_BLOCK, true)
+            .withProperties(VanillaBlockPropertyTypes.DEPRECATED,
                     VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

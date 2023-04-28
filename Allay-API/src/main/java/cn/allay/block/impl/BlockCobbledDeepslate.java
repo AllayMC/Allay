@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCobbledDeepslate extends Block {
     BlockType<BlockCobbledDeepslate> TYPE = BlockTypeBuilder
             .builder(BlockCobbledDeepslate.class)
-            .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE)
+            .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE, true)
+            .addBasicComponents()
             .build();
 }

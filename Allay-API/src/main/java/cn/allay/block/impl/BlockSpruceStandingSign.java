@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSpruceStandingSign extends Block {
     BlockType<BlockSpruceStandingSign> TYPE = BlockTypeBuilder
             .builder(BlockSpruceStandingSign.class)
-            .vanillaBlock(VanillaBlockId.SPRUCE_STANDING_SIGN)
-            .property(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .vanillaBlock(VanillaBlockId.SPRUCE_STANDING_SIGN, true)
+            .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+            .addBasicComponents()
             .build();
 }

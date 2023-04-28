@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStonecutter extends Block {
     BlockType<BlockStonecutter> TYPE = BlockTypeBuilder
             .builder(BlockStonecutter.class)
-            .vanillaBlock(VanillaBlockId.STONECUTTER)
+            .vanillaBlock(VanillaBlockId.STONECUTTER, true)
+            .addBasicComponents()
             .build();
 }

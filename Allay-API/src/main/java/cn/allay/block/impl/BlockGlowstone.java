@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGlowstone extends Block {
     BlockType<BlockGlowstone> TYPE = BlockTypeBuilder
             .builder(BlockGlowstone.class)
-            .vanillaBlock(VanillaBlockId.GLOWSTONE)
+            .vanillaBlock(VanillaBlockId.GLOWSTONE, true)
+            .addBasicComponents()
             .build();
 }

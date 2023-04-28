@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockUndyedShulkerBox extends Block {
     BlockType<BlockUndyedShulkerBox> TYPE = BlockTypeBuilder
             .builder(BlockUndyedShulkerBox.class)
-            .vanillaBlock(VanillaBlockId.UNDYED_SHULKER_BOX)
+            .vanillaBlock(VanillaBlockId.UNDYED_SHULKER_BOX, true)
+            .addBasicComponents()
             .build();
 }

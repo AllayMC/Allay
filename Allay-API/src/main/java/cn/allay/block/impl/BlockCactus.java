@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCactus extends Block {
     BlockType<BlockCactus> TYPE = BlockTypeBuilder
             .builder(BlockCactus.class)
-            .vanillaBlock(VanillaBlockId.CACTUS)
-            .property(VanillaBlockPropertyTypes.AGE)
+            .vanillaBlock(VanillaBlockId.CACTUS, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .addBasicComponents()
             .build();
 }

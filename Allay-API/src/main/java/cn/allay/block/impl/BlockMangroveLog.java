@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMangroveLog extends Block {
     BlockType<BlockMangroveLog> TYPE = BlockTypeBuilder
             .builder(BlockMangroveLog.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_LOG)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.MANGROVE_LOG, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

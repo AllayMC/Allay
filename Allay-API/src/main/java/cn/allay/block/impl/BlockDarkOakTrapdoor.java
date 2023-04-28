@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDarkOakTrapdoor extends Block {
     BlockType<BlockDarkOakTrapdoor> TYPE = BlockTypeBuilder
             .builder(BlockDarkOakTrapdoor.class)
-            .vanillaBlock(VanillaBlockId.DARK_OAK_TRAPDOOR)
-            .property(VanillaBlockPropertyTypes.DIRECTION,
+            .vanillaBlock(VanillaBlockId.DARK_OAK_TRAPDOOR, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.OPEN_BIT,
                     VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+            .addBasicComponents()
             .build();
 }

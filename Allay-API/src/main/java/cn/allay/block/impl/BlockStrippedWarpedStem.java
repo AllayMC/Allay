@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStrippedWarpedStem extends Block {
     BlockType<BlockStrippedWarpedStem> TYPE = BlockTypeBuilder
             .builder(BlockStrippedWarpedStem.class)
-            .vanillaBlock(VanillaBlockId.STRIPPED_WARPED_STEM)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.STRIPPED_WARPED_STEM, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockGlowLichen extends Block {
     BlockType<BlockGlowLichen> TYPE = BlockTypeBuilder
             .builder(BlockGlowLichen.class)
-            .vanillaBlock(VanillaBlockId.GLOW_LICHEN)
-            .property(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+            .vanillaBlock(VanillaBlockId.GLOW_LICHEN, true)
+            .withProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+            .addBasicComponents()
             .build();
 }

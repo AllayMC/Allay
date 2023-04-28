@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonRoots extends Block {
     BlockType<BlockCrimsonRoots> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonRoots.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_ROOTS)
+            .vanillaBlock(VanillaBlockId.CRIMSON_ROOTS, true)
+            .addBasicComponents()
             .build();
 }

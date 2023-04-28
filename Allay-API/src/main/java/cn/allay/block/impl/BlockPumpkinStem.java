@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPumpkinStem extends Block {
     BlockType<BlockPumpkinStem> TYPE = BlockTypeBuilder
             .builder(BlockPumpkinStem.class)
-            .vanillaBlock(VanillaBlockId.PUMPKIN_STEM)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION,
+            .vanillaBlock(VanillaBlockId.PUMPKIN_STEM, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.GROWTH)
+            .addBasicComponents()
             .build();
 }

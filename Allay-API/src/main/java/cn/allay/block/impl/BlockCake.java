@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCake extends Block {
     BlockType<BlockCake> TYPE = BlockTypeBuilder
             .builder(BlockCake.class)
-            .vanillaBlock(VanillaBlockId.CAKE)
-            .property(VanillaBlockPropertyTypes.BITE_COUNTER)
+            .vanillaBlock(VanillaBlockId.CAKE, true)
+            .withProperties(VanillaBlockPropertyTypes.BITE_COUNTER)
+            .addBasicComponents()
             .build();
 }

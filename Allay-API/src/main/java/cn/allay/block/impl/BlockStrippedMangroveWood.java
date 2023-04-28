@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStrippedMangroveWood extends Block {
     BlockType<BlockStrippedMangroveWood> TYPE = BlockTypeBuilder
             .builder(BlockStrippedMangroveWood.class)
-            .vanillaBlock(VanillaBlockId.STRIPPED_MANGROVE_WOOD)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.STRIPPED_MANGROVE_WOOD, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

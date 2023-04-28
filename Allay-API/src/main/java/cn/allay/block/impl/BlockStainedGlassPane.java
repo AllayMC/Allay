@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStainedGlassPane extends Block {
     BlockType<BlockStainedGlassPane> TYPE = BlockTypeBuilder
             .builder(BlockStainedGlassPane.class)
-            .vanillaBlock(VanillaBlockId.STAINED_GLASS_PANE)
-            .property(VanillaBlockPropertyTypes.COLOR)
+            .vanillaBlock(VanillaBlockId.STAINED_GLASS_PANE, true)
+            .withProperties(VanillaBlockPropertyTypes.COLOR)
+            .addBasicComponents()
             .build();
 }

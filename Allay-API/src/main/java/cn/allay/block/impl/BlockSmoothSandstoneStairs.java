@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockSmoothSandstoneStairs extends Block {
     BlockType<BlockSmoothSandstoneStairs> TYPE = BlockTypeBuilder
             .builder(BlockSmoothSandstoneStairs.class)
-            .vanillaBlock(VanillaBlockId.SMOOTH_SANDSTONE_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.SMOOTH_SANDSTONE_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

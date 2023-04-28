@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockMangroveFence extends Block {
     BlockType<BlockMangroveFence> TYPE = BlockTypeBuilder
             .builder(BlockMangroveFence.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_FENCE)
+            .vanillaBlock(VanillaBlockId.MANGROVE_FENCE, true)
+            .addBasicComponents()
             .build();
 }

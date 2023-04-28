@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedFence extends Block {
     BlockType<BlockWarpedFence> TYPE = BlockTypeBuilder
             .builder(BlockWarpedFence.class)
-            .vanillaBlock(VanillaBlockId.WARPED_FENCE)
+            .vanillaBlock(VanillaBlockId.WARPED_FENCE, true)
+            .addBasicComponents()
             .build();
 }

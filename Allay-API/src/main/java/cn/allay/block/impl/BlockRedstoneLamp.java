@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockRedstoneLamp extends Block {
     BlockType<BlockRedstoneLamp> TYPE = BlockTypeBuilder
             .builder(BlockRedstoneLamp.class)
-            .vanillaBlock(VanillaBlockId.REDSTONE_LAMP)
+            .vanillaBlock(VanillaBlockId.REDSTONE_LAMP, true)
+            .addBasicComponents()
             .build();
 }

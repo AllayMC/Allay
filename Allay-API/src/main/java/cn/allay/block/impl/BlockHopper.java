@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockHopper extends Block {
     BlockType<BlockHopper> TYPE = BlockTypeBuilder
             .builder(BlockHopper.class)
-            .vanillaBlock(VanillaBlockId.HOPPER)
-            .property(VanillaBlockPropertyTypes.FACING_DIRECTION,
+            .vanillaBlock(VanillaBlockId.HOPPER, true)
+            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
                     VanillaBlockPropertyTypes.TOGGLE_BIT)
+            .addBasicComponents()
             .build();
 }

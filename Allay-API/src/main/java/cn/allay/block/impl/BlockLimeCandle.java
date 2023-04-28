@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockLimeCandle extends Block {
     BlockType<BlockLimeCandle> TYPE = BlockTypeBuilder
             .builder(BlockLimeCandle.class)
-            .vanillaBlock(VanillaBlockId.LIME_CANDLE)
-            .property(VanillaBlockPropertyTypes.CANDLES,
+            .vanillaBlock(VanillaBlockId.LIME_CANDLE, true)
+            .withProperties(VanillaBlockPropertyTypes.CANDLES,
                     VanillaBlockPropertyTypes.LIT)
+            .addBasicComponents()
             .build();
 }

@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBookshelf extends Block {
     BlockType<BlockBookshelf> TYPE = BlockTypeBuilder
             .builder(BlockBookshelf.class)
-            .vanillaBlock(VanillaBlockId.BOOKSHELF)
+            .vanillaBlock(VanillaBlockId.BOOKSHELF, true)
+            .addBasicComponents()
             .build();
 }

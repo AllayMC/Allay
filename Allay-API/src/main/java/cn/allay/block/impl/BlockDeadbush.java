@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDeadbush extends Block {
     BlockType<BlockDeadbush> TYPE = BlockTypeBuilder
             .builder(BlockDeadbush.class)
-            .vanillaBlock(VanillaBlockId.DEADBUSH)
+            .vanillaBlock(VanillaBlockId.DEADBUSH, true)
+            .addBasicComponents()
             .build();
 }

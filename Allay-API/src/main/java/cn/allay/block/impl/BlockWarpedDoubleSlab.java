@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockWarpedDoubleSlab extends Block {
     BlockType<BlockWarpedDoubleSlab> TYPE = BlockTypeBuilder
             .builder(BlockWarpedDoubleSlab.class)
-            .vanillaBlock(VanillaBlockId.WARPED_DOUBLE_SLAB)
-            .property(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .vanillaBlock(VanillaBlockId.WARPED_DOUBLE_SLAB, true)
+            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .addBasicComponents()
             .build();
 }

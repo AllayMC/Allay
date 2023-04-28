@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockFrostedIce extends Block {
     BlockType<BlockFrostedIce> TYPE = BlockTypeBuilder
             .builder(BlockFrostedIce.class)
-            .vanillaBlock(VanillaBlockId.FROSTED_ICE)
-            .property(VanillaBlockPropertyTypes.AGE)
+            .vanillaBlock(VanillaBlockId.FROSTED_ICE, true)
+            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .addBasicComponents()
             .build();
 }

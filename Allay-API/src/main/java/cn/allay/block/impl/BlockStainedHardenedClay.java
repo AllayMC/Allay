@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStainedHardenedClay extends Block {
     BlockType<BlockStainedHardenedClay> TYPE = BlockTypeBuilder
             .builder(BlockStainedHardenedClay.class)
-            .vanillaBlock(VanillaBlockId.STAINED_HARDENED_CLAY)
-            .property(VanillaBlockPropertyTypes.COLOR)
+            .vanillaBlock(VanillaBlockId.STAINED_HARDENED_CLAY, true)
+            .withProperties(VanillaBlockPropertyTypes.COLOR)
+            .addBasicComponents()
             .build();
 }

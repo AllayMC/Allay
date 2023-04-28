@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockCrimsonNylium extends Block {
     BlockType<BlockCrimsonNylium> TYPE = BlockTypeBuilder
             .builder(BlockCrimsonNylium.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_NYLIUM)
+            .vanillaBlock(VanillaBlockId.CRIMSON_NYLIUM, true)
+            .addBasicComponents()
             .build();
 }

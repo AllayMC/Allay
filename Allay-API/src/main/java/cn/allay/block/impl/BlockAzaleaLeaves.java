@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockAzaleaLeaves extends Block {
     BlockType<BlockAzaleaLeaves> TYPE = BlockTypeBuilder
             .builder(BlockAzaleaLeaves.class)
-            .vanillaBlock(VanillaBlockId.AZALEA_LEAVES)
-            .property(VanillaBlockPropertyTypes.PERSISTENT_BIT,
+            .vanillaBlock(VanillaBlockId.AZALEA_LEAVES, true)
+            .withProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT,
                     VanillaBlockPropertyTypes.UPDATE_BIT)
+            .addBasicComponents()
             .build();
 }

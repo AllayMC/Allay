@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockOxidizedCutCopper extends Block {
     BlockType<BlockOxidizedCutCopper> TYPE = BlockTypeBuilder
             .builder(BlockOxidizedCutCopper.class)
-            .vanillaBlock(VanillaBlockId.OXIDIZED_CUT_COPPER)
+            .vanillaBlock(VanillaBlockId.OXIDIZED_CUT_COPPER, true)
+            .addBasicComponents()
             .build();
 }

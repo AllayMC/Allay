@@ -13,7 +13,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockStrippedCherryWood extends Block {
     BlockType<BlockStrippedCherryWood> TYPE = BlockTypeBuilder
             .builder(BlockStrippedCherryWood.class)
-            .vanillaBlock(VanillaBlockId.STRIPPED_CHERRY_WOOD)
-            .property(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .vanillaBlock(VanillaBlockId.STRIPPED_CHERRY_WOOD, true)
+            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .addBasicComponents()
             .build();
 }

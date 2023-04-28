@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDetectorRail extends Block {
     BlockType<BlockDetectorRail> TYPE = BlockTypeBuilder
             .builder(BlockDetectorRail.class)
-            .vanillaBlock(VanillaBlockId.DETECTOR_RAIL)
-            .property(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
+            .vanillaBlock(VanillaBlockId.DETECTOR_RAIL, true)
+            .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
                     VanillaBlockPropertyTypes.RAIL_DIRECTION)
+            .addBasicComponents()
             .build();
 }

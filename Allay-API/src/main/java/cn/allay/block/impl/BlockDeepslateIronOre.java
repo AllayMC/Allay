@@ -12,6 +12,7 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockDeepslateIronOre extends Block {
     BlockType<BlockDeepslateIronOre> TYPE = BlockTypeBuilder
             .builder(BlockDeepslateIronOre.class)
-            .vanillaBlock(VanillaBlockId.DEEPSLATE_IRON_ORE)
+            .vanillaBlock(VanillaBlockId.DEEPSLATE_IRON_ORE, true)
+            .addBasicComponents()
             .build();
 }

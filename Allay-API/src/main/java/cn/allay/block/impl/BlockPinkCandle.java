@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockPinkCandle extends Block {
     BlockType<BlockPinkCandle> TYPE = BlockTypeBuilder
             .builder(BlockPinkCandle.class)
-            .vanillaBlock(VanillaBlockId.PINK_CANDLE)
-            .property(VanillaBlockPropertyTypes.CANDLES,
+            .vanillaBlock(VanillaBlockId.PINK_CANDLE, true)
+            .withProperties(VanillaBlockPropertyTypes.CANDLES,
                     VanillaBlockPropertyTypes.LIT)
+            .addBasicComponents()
             .build();
 }

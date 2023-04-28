@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBigDripleaf extends Block {
     BlockType<BlockBigDripleaf> TYPE = BlockTypeBuilder
             .builder(BlockBigDripleaf.class)
-            .vanillaBlock(VanillaBlockId.BIG_DRIPLEAF)
-            .property(VanillaBlockPropertyTypes.BIG_DRIPLEAF_HEAD,
+            .vanillaBlock(VanillaBlockId.BIG_DRIPLEAF, true)
+            .withProperties(VanillaBlockPropertyTypes.BIG_DRIPLEAF_HEAD,
                     VanillaBlockPropertyTypes.BIG_DRIPLEAF_TILT,
                     VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }

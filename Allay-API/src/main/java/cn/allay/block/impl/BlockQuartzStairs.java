@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockQuartzStairs extends Block {
     BlockType<BlockQuartzStairs> TYPE = BlockTypeBuilder
             .builder(BlockQuartzStairs.class)
-            .vanillaBlock(VanillaBlockId.QUARTZ_STAIRS)
-            .property(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
+            .vanillaBlock(VanillaBlockId.QUARTZ_STAIRS, true)
+            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
                     VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addBasicComponents()
             .build();
 }

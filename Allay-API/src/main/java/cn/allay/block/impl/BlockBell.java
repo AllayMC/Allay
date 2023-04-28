@@ -13,9 +13,10 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockBell extends Block {
     BlockType<BlockBell> TYPE = BlockTypeBuilder
             .builder(BlockBell.class)
-            .vanillaBlock(VanillaBlockId.BELL)
-            .property(VanillaBlockPropertyTypes.ATTACHMENT,
+            .vanillaBlock(VanillaBlockId.BELL, true)
+            .withProperties(VanillaBlockPropertyTypes.ATTACHMENT,
                     VanillaBlockPropertyTypes.DIRECTION,
                     VanillaBlockPropertyTypes.TOGGLE_BIT)
+            .addBasicComponents()
             .build();
 }

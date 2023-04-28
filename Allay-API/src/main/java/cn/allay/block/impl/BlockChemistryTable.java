@@ -13,8 +13,9 @@ import cn.allay.block.type.BlockTypeBuilder;
 public interface BlockChemistryTable extends Block {
     BlockType<BlockChemistryTable> TYPE = BlockTypeBuilder
             .builder(BlockChemistryTable.class)
-            .vanillaBlock(VanillaBlockId.CHEMISTRY_TABLE)
-            .property(VanillaBlockPropertyTypes.CHEMISTRY_TABLE_TYPE,
+            .vanillaBlock(VanillaBlockId.CHEMISTRY_TABLE, true)
+            .withProperties(VanillaBlockPropertyTypes.CHEMISTRY_TABLE_TYPE,
                     VanillaBlockPropertyTypes.DIRECTION)
+            .addBasicComponents()
             .build();
 }
