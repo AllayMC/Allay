@@ -157,8 +157,8 @@ public class VanillaBlockPropertyTypeGen {
         for (var info : infos) {
             converted.put(info.name, info.toMapStyle());
         }
-        System.out.println("block_properties.json has exported to Allay-Server/src/test/resources!");
-        Files.writeString(Path.of("Allay-Server/src/test/resources/block_properties.json"), GSON.toJson(converted));
+        System.out.println("block_properties.json has exported to Data/block_properties.json!");
+        Files.writeString(Path.of("Data/block_properties.json"), GSON.toJson(converted));
     }
 
     protected static BlockPropertyType getPropertyType(List<String> values) {
