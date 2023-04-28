@@ -18,6 +18,8 @@ public interface Scheduler {
 
     void ticking();
 
+    void stop();
+
     default void scheduleDelayed(Task task, int delay) {
         scheduleDelayed(task, delay, false);
     }

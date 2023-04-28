@@ -24,7 +24,7 @@ public final class RunningTaskInfo {
     @Setter
     private long nextRunTick;
     @Setter
-    private boolean stop;
+    private boolean cancelled;
     /**
      * This boolean indicates whether Task.onRun() is being calling <p/>
      * If async is true, the last run will be checked before each scheduler makes an asynchronous task call to prevent unexpected additional calls
@@ -38,5 +38,9 @@ public final class RunningTaskInfo {
         this.delay = delay;
         this.period = period;
         this.async = async;
+    }
+
+    public boolean isRepeating() {
+        return period > 0;
     }
 }

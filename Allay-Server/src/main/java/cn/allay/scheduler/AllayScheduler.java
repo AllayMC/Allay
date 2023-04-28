@@ -2,69 +2,52 @@ package cn.allay.scheduler;
 
 import cn.allay.scheduler.task.Task;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.PriorityBlockingQueue;
 
 /**
  * Author: daoge_cmd <br>
- * Date: 2023/3/12 <br>
+ * Date: 2023/4/28 <br>
  * Allay Project <br>
- * <p>
- * The scheduler implementation in Allay
- * TODO: 需要优化，目前看样子问题很多（
  */
 public class AllayScheduler implements Scheduler {
 
+    protected static final Comparator<RunningTaskInfo> COMPARATOR = Comparator.comparing(RunningTaskInfo::getNextRunTick).reversed();
     protected final ExecutorService asyncTaskExecutor = getExecutorService();
-    protected Map<RunningTaskInfo, Task> runningTasks = new ConcurrentHashMap<>();
-    protected long tickCounter = 0;
+    protected final PriorityBlockingQueue<RunningTaskInfo> queue = new PriorityBlockingQueue<>(11, COMPARATOR);
+    protected long tickCounter;
 
     @Override
     public void ticking() {
         tickCounter++;
-        for (var iterator = runningTasks.entrySet().iterator(); iterator.hasNext(); ) {
-            var entry = iterator.next();
-            var info = entry.getKey();
-            if (info.isStop()) {
-                iterator.remove();
+        while (!this.queue.isEmpty() && this.queue.peek().getNextRunTick() <= tickCounter) {
+            var taskInfo = this.queue.poll();
+            Task task = taskInfo.getTask();
+            //1. Confirm validity
+            if (taskInfo.isCancelled() || !task.getTaskCreator().isValid()) {
+                taskInfo.setCancelled(true);
+                task.onCancel();
                 continue;
             }
-            var task = entry.getValue();
-            if (info.getNextRunTick() <= tickCounter) {
-                if (info.getPeriod() > 0)
-                    info.setNextRunTick(tickCounter + info.getPeriod());
-                //Code !info.isRunning()" check whether the previous run completed
-                //If the previous asynchronous task does not finish, the call will be postponed until the next tick
-                if (info.isAsync()) {
-                    if (!info.isRunning()) {
-                        info.setRunning(true);
-                        asyncTaskExecutor.submit(() -> runTask(task, info));
-                    }
-                } else {
-                    info.setRunning(true);
-                    runTask(task, info);
-                }
-            }
+
+            //2. Run it
+            if (taskInfo.isAsync()) asyncTaskExecutor.submit(() -> runTask(taskInfo));
+            else runTask(taskInfo);
         }
     }
 
     @Override
     public void scheduleDelayed(Task task, int delay, boolean async) {
-        if (delay <= 0)
-            throw new IllegalArgumentException("Delay must be greater than 0! (delay=" + delay + ")");
-        var info = new RunningTaskInfo(task, delay, 0, async);
-        info.setNextRunTick(tickCounter + delay);
-        runningTasks.put(info, task);
+        var taskInfo = new RunningTaskInfo(task, delay, 0, async);
+        this.addInQueue(taskInfo);
     }
 
     @Override
     public void scheduleRepeating(Task task, int period, boolean async) {
-        if (period <= 0)
-            throw new IllegalArgumentException("Period must be greater than 0! (period=" + period + ")");
-        var info = new RunningTaskInfo(task, 0, period, async);
-        runningTasks.put(info, task);
+        var taskInfo = new RunningTaskInfo(task, 0, period, async);
+        this.addInQueue(taskInfo);
     }
 
     @Override
@@ -74,22 +57,46 @@ public class AllayScheduler implements Scheduler {
 
     @Override
     public int getRunningTaskCount() {
-        return runningTasks.size();
+        return queue.size();
     }
 
-    protected void runTask(Task task, RunningTaskInfo info) {
+    @Override
+    public void stop() {
+        this.queue.forEach(entry -> {
+            entry.setCancelled(true);
+            entry.getTask().onCancel();
+        });
+        this.queue.clear();
+    }
+
+    protected void runTask(RunningTaskInfo info) {
+        var task = info.getTask();
         try {
-            if (!task.onRun()) {
-                task.onCancel();
-                info.setStop(true);
-            }
+            info.setRunning(true);
+            if (!task.onRun()) cancelTask(info, task);
         } catch (Throwable error) {
             task.onError(error);
+            cancelTask(info, task);
         } finally {
-            if (info.getPeriod() <= 0)
-                info.setStop(true);
             info.setRunning(false);
+            //Run only once
+            if (!info.isRepeating()) {
+                cancelTask(info, task);
+            } else {
+                addInQueue(info);
+            }
         }
+    }
+
+    protected void cancelTask(RunningTaskInfo info, Task task) {
+        info.setCancelled(true);
+        task.onCancel();
+    }
+
+    protected void addInQueue(RunningTaskInfo taskInfo) {
+        if (taskInfo.isRepeating()) taskInfo.setNextRunTick(tickCounter + taskInfo.getPeriod());
+        else taskInfo.setNextRunTick(tickCounter + taskInfo.getDelay());
+        queue.add(taskInfo);
     }
 
     protected ExecutorService getExecutorService() {

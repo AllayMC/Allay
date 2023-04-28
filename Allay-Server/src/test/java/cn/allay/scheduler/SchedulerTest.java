@@ -1,5 +1,7 @@
 package cn.allay.scheduler;
 
+import cn.allay.scheduler.task.Task;
+import cn.allay.scheduler.taskcreator.TaskCreator;
 import cn.allay.utils.GameLoop;
 import org.junit.jupiter.api.Test;
 
@@ -13,15 +15,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Allay Project <br>
  */
 class SchedulerTest {
-    protected static Scheduler scheduler = new AllayScheduler();
+    protected static final Scheduler scheduler = new AllayScheduler();
+
+    protected static final TaskCreator MOCK_TASK_CREATOR = new MockTaskCreator();
 
     @Test
     void testAsync() {
         AtomicLong total = new AtomicLong(0);
         for (int i = 0; i < 1000000; i++) {
-            scheduler.scheduleDelayed(() -> {
-                total.incrementAndGet();
-                return false;
+            scheduler.scheduleDelayed(new Task() {
+                @Override
+                public boolean onRun() {
+                    total.incrementAndGet();
+                    return false;
+                }
+
+                @Override
+                public TaskCreator getTaskCreator() {
+                    return MOCK_TASK_CREATOR;
+                }
             }, 1, true);
         }
         GameLoop.builder()
@@ -39,9 +51,17 @@ class SchedulerTest {
     void testSync() {
         AtomicLong total = new AtomicLong();
         for (int i = 0; i < 1000; i++) {
-            scheduler.scheduleDelayed(() -> {
-                total.incrementAndGet();
-                return false;
+            scheduler.scheduleDelayed(new Task() {
+                @Override
+                public boolean onRun() {
+                    total.incrementAndGet();
+                    return false;
+                }
+
+                @Override
+                public TaskCreator getTaskCreator() {
+                    return MOCK_TASK_CREATOR;
+                }
             }, 1);
         }
         GameLoop.builder()
@@ -58,7 +78,17 @@ class SchedulerTest {
     @Test
     void testRepeating() {
         AtomicLong total = new AtomicLong();
-        scheduler.scheduleRepeating(() -> total.incrementAndGet() != 1000, 1);
+        scheduler.scheduleRepeating(new Task() {
+            @Override
+            public boolean onRun() {
+                return total.incrementAndGet() != 1000;
+            }
+
+            @Override
+            public TaskCreator getTaskCreator() {
+                return MOCK_TASK_CREATOR;
+            }
+        }, 1);
         GameLoop.builder()
                 .loopCountPerSec(1000000)
                 .onTick(loop -> {
@@ -68,5 +98,12 @@ class SchedulerTest {
                 })
                 .build().startLoop();
         assertEquals(1000, total.get());
+    }
+
+    private static class MockTaskCreator implements TaskCreator {
+        @Override
+        public boolean isValid() {
+            return true;
+        }
     }
 }
