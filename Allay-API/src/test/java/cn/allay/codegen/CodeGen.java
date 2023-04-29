@@ -20,7 +20,7 @@ import java.util.zip.GZIPInputStream;
  */
 public class CodeGen {
     //TODO: 统一资源加载？eg: block_palette.nbt
-    static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Allay-Server/src/main/resources/block_palette.nbt");
+    static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Data/block_palette.nbt");
     static final List<NbtMap> BLOCK_PALETTE_NBT;
     static final Map<String, NbtMap> MAPPED_BLOCK_PALETTE_NBT = new HashMap<>();
 

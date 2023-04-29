@@ -82,7 +82,7 @@ public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry
 
         @SneakyThrows
         protected NBTInputStream getNBTInputStream() {
-            var input = AllayVanillaBlockPaletteRegistry.class.getClassLoader().getResourceAsStream("block_palette.nbt");
+            var input = AllayVanillaBlockPaletteRegistry.class.getClassLoader().getResourceAsStream("Data/block_palette.nbt");
             if (input == null)
                 throw new NullPointerException("block_palette.nbt not found!");
             return new NBTInputStream(

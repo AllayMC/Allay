@@ -1,6 +1,8 @@
 package cn.allay.block.component.impl.attribute;
 
 import cn.allay.block.component.BlockComponentImpl;
+import cn.allay.block.component.impl.base.BlockBaseComponent;
+import cn.allay.component.annotation.Dependency;
 import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.aabb.AxisAlignedBBRO;
@@ -17,6 +19,10 @@ import lombok.experimental.Accessors;
 public class BlockAttributeComponentImpl implements BlockAttributeComponent, BlockComponentImpl {
 
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_attribute_component");
+
+    @Dependency
+    protected BlockBaseComponent baseComponent;
+
     @Builder.Default
     protected AxisAlignedBBRO aabb = AxisAlignedBBRO.of(0, 0, 0, 1, 1, 1);
     @Builder.Default

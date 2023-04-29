@@ -2,6 +2,9 @@ plugins {
     id 'java'
 }
 
+description = "Allay-API"
+
+
 dependencies {
     api(libs.bundles.log4j)
     api(libs.bundles.terminal)
@@ -17,4 +20,3 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
-description = "Allay-API"
