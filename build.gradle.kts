@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
         maven {
             url = uri("https://plugins.gradle.org/m2/")
@@ -14,6 +15,7 @@ buildscript {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven {
         url = uri("https://plugins.gradle.org/m2/")
@@ -24,9 +26,13 @@ repositories {
 }
 
 group = "cn.allay"
+description = "The next generation minecraft server software"
+
 plugins {
     `kotlin-dsl`
     idea
+    java
+    application
 }
 
 //不构建这个根项目,这个只作为控制子模块
@@ -42,16 +48,14 @@ subprojects {
     java.sourceCompatibility = JavaVersion.VERSION_19
 
     repositories {
+        mavenLocal()
         mavenCentral()
-
         maven {
             url = uri("https://repo.opencollab.dev/maven-releases/")
         }
-
         maven {
             url = uri("https://repo.opencollab.dev/maven-snapshots/")
         }
-
         maven {
             url = uri("https://repo.maven.apache.org/maven2/")
         }
@@ -66,6 +70,21 @@ subprojects {
 
         testCompileOnly(rootProject.libs.lombok)
         testAnnotationProcessor(rootProject.libs.lombok)
+    }
+
+    sourceSets {
+        main {
+            resources {
+                srcDirs("src/main/resources", "${rootProject.projectDir}/Data")
+                exclude("${rootProject.projectDir}/Data/unpacked")
+            }
+        }
+        test {
+            resources {
+                srcDirs("src/test/resources", "${rootProject.projectDir}/Data")
+                exclude("${rootProject.projectDir}/Data/unpacked")
+            }
+        }
     }
 
     rootProject.idea {
@@ -83,6 +102,10 @@ subprojects {
     tasks.withType<JavaCompile>() {
         options.encoding = "UTF-8"
         options.compilerArgs.add("--enable-preview")
+    }
+
+    tasks.withType<Copy> {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
     tasks.withType<Javadoc>() {
