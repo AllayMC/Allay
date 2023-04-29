@@ -1,6 +1,7 @@
 package cn.allay.block.component.impl.base;
 
 import cn.allay.block.Block;
+import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.type.BlockType;
 import cn.allay.component.annotation.Inject;
@@ -24,6 +25,5 @@ public interface BlockBaseComponent {
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getProperty(PROPERTY property);
 
     @Inject
-    @UnmodifiableView
-    Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> getCurrentProperties();
+    BlockState<?> getCurrentState();
 }
