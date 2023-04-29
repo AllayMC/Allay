@@ -8,6 +8,7 @@ import cn.allay.block.component.impl.base.BlockBaseComponentImpl;
 import cn.allay.block.component.injector.AllayBlockComponentInjector;
 import cn.allay.block.component.impl.position.BlockPositionComponentImpl;
 import cn.allay.block.data.VanillaBlockId;
+import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.ComponentInitInfo;
@@ -15,11 +16,14 @@ import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identifier;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -36,6 +40,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders;
     protected List<BlockPropertyType<?>> properties;
     protected Map<String, BlockPropertyType<?>> mappedProperties;
+    protected Map<List<BlockPropertyType.BlockPropertyValue<?, ?>>, BlockState<T>> possibleBlockStateMap = new ConcurrentHashMap<>();
     protected Identifier namespaceId;
 
     protected AllayBlockType(Class<T> blockClass,
@@ -55,7 +60,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         try {
             injectedClass = new AllayBlockComponentInjector<>(this)
                     .parentClass(blockClass)
-                    .component(convertList(componentProviders))
+                    .component(new ArrayList<>(componentProviders))
                     .inject();
         } catch (Exception e) {
             throw new BlockTypeBuildException("Failed to create block type", e);
@@ -69,14 +74,39 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         return new Builder<>(blockClass);
     }
 
-    //TODO: Check it
-    protected static <T extends ComponentImpl> List<ComponentProvider<? extends ComponentImpl>> convertList(List<ComponentProvider<? extends T>> inputList) {
-        return new ArrayList<>(inputList);
-    }
-
     @SneakyThrows
     public T createBlock(BlockInitInfo info) {
         return constructor.newInstance(info);
+    }
+
+    @Override
+    public BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues) {
+        //对于每一组唯一的属性值，有且仅有一个AllayBlockState与之对应
+        //这意味着你可以直接用==比较两个BlockState是否相等
+        return possibleBlockStateMap.computeIfAbsent(propertyValues, k ->
+                new AllayBlockState(Collections.unmodifiableMap(
+                        k.stream().collect(Collectors.toMap(BlockPropertyType.BlockPropertyValue::getPropertyType, Function.identity()))
+                )));
+    }
+
+    protected class AllayBlockState implements BlockState<T> {
+
+        Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues;
+
+        private AllayBlockState(Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues) {
+            this.propertyValues = propertyValues;
+        }
+
+        @Override
+        public BlockType<T> getBlockType() {
+            return AllayBlockType.this;
+        }
+
+        @UnmodifiableView
+        @Override
+        public Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> getPropertyValues() {
+            return propertyValues;
+        }
     }
 
     public static class Builder<T extends Block> implements BlockTypeBuilder<T> {

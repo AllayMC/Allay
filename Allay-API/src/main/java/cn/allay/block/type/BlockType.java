@@ -2,6 +2,7 @@ package cn.allay.block.type;
 
 import cn.allay.block.Block;
 import cn.allay.block.component.BlockComponentImpl;
+import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identifier;
@@ -24,4 +25,10 @@ public interface BlockType<T extends Block> {
     Identifier getNamespaceId();
 
     T createBlock(BlockInitInfo info);
+
+    BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues);
+
+    default BlockState<T> ofState(BlockPropertyType.BlockPropertyValue<?, ?>... propertyValues) {
+        return ofState(List.of(propertyValues));
+    }
 }

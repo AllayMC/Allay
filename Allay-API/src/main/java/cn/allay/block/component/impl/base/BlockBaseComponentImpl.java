@@ -2,16 +2,16 @@ package cn.allay.block.component.impl.base;
 
 import cn.allay.block.Block;
 import cn.allay.block.component.BlockComponentImpl;
+import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.type.BlockType;
 import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Author: daoge_cmd <br>
@@ -22,51 +22,52 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
 
-    //TODO: 也许可以优化结构以进一步节省占用
-    protected Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> currentProperties = new HashMap<>();
-    protected BlockType<? extends Block> type;
+    protected BlockState<?> currentState;
+    protected BlockType<? extends Block> blockType;
 
-    public BlockBaseComponentImpl(BlockType<? extends Block> type) {
-        this.type = type;
+    public BlockBaseComponentImpl(BlockType<? extends Block> blockType) {
+        this.blockType = blockType;
+        //TODO: 也许需要从配置文件读取默认方块状态
+        this.currentState = blockType.ofState(
+                blockType.getMappedProperties()
+                        .values()
+                        .stream()
+                        .map(BlockPropertyType::createDefaultValue)
+                        .collect(Collectors.toList()));
     }
 
     @Override
     @Impl
     public BlockType<? extends Block> getBlockType() {
-        return type;
+        return blockType;
     }
 
     @Override
     @Impl
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value) {
-        //TODO: 也许需要额外的工作？
-        ensureMapping();
         if (!getBlockType().getMappedProperties().containsKey(property.getName()))
             throw new IllegalArgumentException("Property " + property + " is not supported by this block");
-        currentProperties.put(property, property.createValue(value));
+        //TODO: 太慢了，考虑生成一个strid然后比较strid而不是比较List
+        var changed = new HashMap<>(currentState.getPropertyValues());
+        changed.put(property, property.createValue(value));
+        currentState = blockType.ofState(new ArrayList<>(changed.values()));
     }
 
     @Override
     @Nullable
     @Impl
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getProperty(PROPERTY property) {
-        ensureMapping();
-        return (DATATYPE) currentProperties.computeIfAbsent(property, BlockPropertyType::createDefaultValue).getValue();
+        return (DATATYPE) currentState.getPropertyValues().get(property).getValue();
     }
 
     @Override
     @Impl
-    @UnmodifiableView
-    public Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> getCurrentProperties() {
-        return Collections.unmodifiableMap(currentProperties);
+    public BlockState<?> getCurrentState() {
+        return currentState;
     }
 
     @Override
     public Identifier getNamespaceId() {
         return IDENTIFIER;
-    }
-
-    protected void ensureMapping() {
-        if (currentProperties == null) currentProperties = new HashMap<>();
     }
 }
