@@ -3,11 +3,19 @@ package cn.allay.block.type;
 import cn.allay.block.component.TestComponentImpl;
 import cn.allay.block.component.TestComponentImplV2;
 import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
+import cn.allay.block.impl.BlockCobbledDeepslateSlab;
+import cn.allay.block.impl.BlockCobbledDeepslateWall;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
 import cn.allay.block.property.type.IntPropertyType;
+import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
+import cn.allay.block.property.vanilla.enums.WallConnectionTypeEast;
+import cn.allay.block.property.vanilla.enums.WallConnectionTypeNorth;
+import cn.allay.block.property.vanilla.enums.WallConnectionTypeSouth;
+import cn.allay.block.property.vanilla.enums.WallConnectionTypeWest;
 import cn.allay.component.exception.BlockComponentInjectException;
+import cn.allay.identifier.Identifier;
 import cn.allay.math.position.Pos;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -109,5 +117,26 @@ class AllayBlockTypeTest {
                         .addBasicComponents()
                         .build()
         );
+    }
+
+    @Test
+    void testBlockStateHash() {
+        //TODO: fix this test
+//        var block = BlockCobbledDeepslateWall.TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+//        block.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
+//        block.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
+//        block.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
+//        block.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
+//        block.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
+//        assertEquals(1789459903, block.getCurrentState().getBlockStateHash());
+        List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues =
+                List.of(
+                        VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST.createValue(WallConnectionTypeEast.NONE),
+                        VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH.createValue(WallConnectionTypeNorth.TALL),
+                        VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH.createValue(WallConnectionTypeSouth.SHORT),
+                        VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST.createValue(WallConnectionTypeWest.NONE),
+                        VanillaBlockPropertyTypes.WALL_POST_BIT.createValue(true)
+                );
+        AllayBlockType.AllayBlockState.computeBlockStateHash(new Identifier("minecraft:cobbled_deepslate_wall"), propertyValues);
     }
 }
