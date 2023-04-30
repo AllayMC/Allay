@@ -175,8 +175,8 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
 
     public static class Builder<T extends Block> implements BlockTypeBuilder<T> {
         protected Class<T> blockClass;
-        protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders;
-        protected List<BlockPropertyType<?>> properties;
+        protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders = new ArrayList<>();
+        protected List<BlockPropertyType<?>> properties = new ArrayList<>();
         protected Identifier namespaceId;
 
         public Builder(Class<T> blockClass) {
