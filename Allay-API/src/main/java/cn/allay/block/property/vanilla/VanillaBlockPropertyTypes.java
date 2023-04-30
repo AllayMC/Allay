@@ -4,8 +4,50 @@ import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
 import cn.allay.block.property.type.IntPropertyType;
-import cn.allay.block.property.vanilla.enums.*;
-
+import cn.allay.block.property.vanilla.enums.Attachment;
+import cn.allay.block.property.vanilla.enums.BambooLeafSize;
+import cn.allay.block.property.vanilla.enums.BambooStalkThickness;
+import cn.allay.block.property.vanilla.enums.BigDripleafTilt;
+import cn.allay.block.property.vanilla.enums.CauldronLiquid;
+import cn.allay.block.property.vanilla.enums.ChemistryTableType;
+import cn.allay.block.property.vanilla.enums.ChiselType;
+import cn.allay.block.property.vanilla.enums.Color;
+import cn.allay.block.property.vanilla.enums.CoralColor;
+import cn.allay.block.property.vanilla.enums.CrackedState;
+import cn.allay.block.property.vanilla.enums.Damage;
+import cn.allay.block.property.vanilla.enums.DirtType;
+import cn.allay.block.property.vanilla.enums.DoublePlantType;
+import cn.allay.block.property.vanilla.enums.DripstoneThickness;
+import cn.allay.block.property.vanilla.enums.FlowerType;
+import cn.allay.block.property.vanilla.enums.LeverDirection;
+import cn.allay.block.property.vanilla.enums.MonsterEggStoneType;
+import cn.allay.block.property.vanilla.enums.NewLeafType;
+import cn.allay.block.property.vanilla.enums.OldLeafType;
+import cn.allay.block.property.vanilla.enums.PillarAxis;
+import cn.allay.block.property.vanilla.enums.PortalAxis;
+import cn.allay.block.property.vanilla.enums.PrismarineBlockType;
+import cn.allay.block.property.vanilla.enums.SandStoneType;
+import cn.allay.block.property.vanilla.enums.SandType;
+import cn.allay.block.property.vanilla.enums.SaplingType;
+import cn.allay.block.property.vanilla.enums.SeaGrassType;
+import cn.allay.block.property.vanilla.enums.SpongeType;
+import cn.allay.block.property.vanilla.enums.StoneBrickType;
+import cn.allay.block.property.vanilla.enums.StoneSlabType;
+import cn.allay.block.property.vanilla.enums.StoneSlabType2;
+import cn.allay.block.property.vanilla.enums.StoneSlabType3;
+import cn.allay.block.property.vanilla.enums.StoneSlabType4;
+import cn.allay.block.property.vanilla.enums.StoneType;
+import cn.allay.block.property.vanilla.enums.StructureBlockType;
+import cn.allay.block.property.vanilla.enums.StructureVoidType;
+import cn.allay.block.property.vanilla.enums.TallGrassType;
+import cn.allay.block.property.vanilla.enums.TorchFacingDirection;
+import cn.allay.block.property.vanilla.enums.TurtleEggCount;
+import cn.allay.block.property.vanilla.enums.WallBlockType;
+import cn.allay.block.property.vanilla.enums.WallConnectionTypeEast;
+import cn.allay.block.property.vanilla.enums.WallConnectionTypeNorth;
+import cn.allay.block.property.vanilla.enums.WallConnectionTypeSouth;
+import cn.allay.block.property.vanilla.enums.WallConnectionTypeWest;
+import cn.allay.block.property.vanilla.enums.WoodType;
 import java.util.List;
 
 /**
@@ -14,262 +56,262 @@ import java.util.List;
  * Allay Project <br>
  */
 public final class VanillaBlockPropertyTypes {
-    public static final BooleanPropertyType EXTINGUISHED = BooleanPropertyType.createType("extinguished", false);
+  public static final BooleanPropertyType EXTINGUISHED = BooleanPropertyType.createType("extinguished", false);
 
-    public static final BooleanPropertyType ITEM_FRAME_PHOTO_BIT = BooleanPropertyType.createType("item_frame_photo_bit", false);
+  public static final BooleanPropertyType ITEM_FRAME_PHOTO_BIT = BooleanPropertyType.createType("item_frame_photo_bit", false);
 
-    public static final EnumPropertyType<SandType> SAND_TYPE = EnumPropertyType.createType("sand_type", SandType.class, SandType.values()[0]);
+  public static final EnumPropertyType<SandType> SAND_TYPE = EnumPropertyType.createType("sand_type" ,SandType.class ,SandType.values()[0]);
 
-    public static final IntPropertyType DEPRECATED = IntPropertyType.createType("deprecated", 0, 3, 0);
+  public static final IntPropertyType DEPRECATED = IntPropertyType.createType("deprecated", 0, 3, 0);
 
-    public static final BooleanPropertyType SUSPENDED_BIT = BooleanPropertyType.createType("suspended_bit", false);
+  public static final BooleanPropertyType SUSPENDED_BIT = BooleanPropertyType.createType("suspended_bit", false);
 
-    public static final IntPropertyType BITE_COUNTER = IntPropertyType.createType("bite_counter", 0, 6, 0);
+  public static final IntPropertyType BITE_COUNTER = IntPropertyType.createType("bite_counter", 0, 6, 0);
 
-    public static final EnumPropertyType<TallGrassType> TALL_GRASS_TYPE = EnumPropertyType.createType("tall_grass_type", TallGrassType.class, TallGrassType.values()[0]);
+  public static final EnumPropertyType<TallGrassType> TALL_GRASS_TYPE = EnumPropertyType.createType("tall_grass_type" ,TallGrassType.class ,TallGrassType.values()[0]);
 
-    public static final IntPropertyType COMPOSTER_FILL_LEVEL = IntPropertyType.createType("composter_fill_level", 0, 8, 0);
+  public static final IntPropertyType COMPOSTER_FILL_LEVEL = IntPropertyType.createType("composter_fill_level", 0, 8, 0);
 
-    public static final IntPropertyType KELP_AGE = IntPropertyType.createType("kelp_age", 0, 25, 0);
+  public static final IntPropertyType KELP_AGE = IntPropertyType.createType("kelp_age", 0, 25, 0);
 
-    public static final IntPropertyType MOISTURIZED_AMOUNT = IntPropertyType.createType("moisturized_amount", 0, 7, 0);
+  public static final IntPropertyType MOISTURIZED_AMOUNT = IntPropertyType.createType("moisturized_amount", 0, 7, 0);
 
-    public static final EnumPropertyType<TorchFacingDirection> TORCH_FACING_DIRECTION = EnumPropertyType.createType("torch_facing_direction", TorchFacingDirection.class, TorchFacingDirection.values()[0]);
+  public static final EnumPropertyType<TorchFacingDirection> TORCH_FACING_DIRECTION = EnumPropertyType.createType("torch_facing_direction" ,TorchFacingDirection.class ,TorchFacingDirection.values()[0]);
 
-    public static final EnumPropertyType<DoublePlantType> DOUBLE_PLANT_TYPE = EnumPropertyType.createType("double_plant_type", DoublePlantType.class, DoublePlantType.values()[0]);
+  public static final EnumPropertyType<DoublePlantType> DOUBLE_PLANT_TYPE = EnumPropertyType.createType("double_plant_type" ,DoublePlantType.class ,DoublePlantType.values()[0]);
 
-    public static final BooleanPropertyType ALLOW_UNDERWATER_BIT = BooleanPropertyType.createType("allow_underwater_bit", false);
+  public static final BooleanPropertyType ALLOW_UNDERWATER_BIT = BooleanPropertyType.createType("allow_underwater_bit", false);
 
-    public static final IntPropertyType TWISTING_VINES_AGE = IntPropertyType.createType("twisting_vines_age", 0, 25, 0);
+  public static final IntPropertyType TWISTING_VINES_AGE = IntPropertyType.createType("twisting_vines_age", 0, 25, 0);
 
-    public static final BooleanPropertyType BREWING_STAND_SLOT_B_BIT = BooleanPropertyType.createType("brewing_stand_slot_b_bit", false);
+  public static final BooleanPropertyType BREWING_STAND_SLOT_B_BIT = BooleanPropertyType.createType("brewing_stand_slot_b_bit", false);
 
-    public static final IntPropertyType HEIGHT = IntPropertyType.createType("height", 0, 7, 0);
+  public static final IntPropertyType HEIGHT = IntPropertyType.createType("height", 0, 7, 0);
 
-    public static final BooleanPropertyType BUTTON_PRESSED_BIT = BooleanPropertyType.createType("button_pressed_bit", false);
+  public static final BooleanPropertyType BUTTON_PRESSED_BIT = BooleanPropertyType.createType("button_pressed_bit", false);
 
-    public static final BooleanPropertyType COLOR_BIT = BooleanPropertyType.createType("color_bit", false);
+  public static final BooleanPropertyType COLOR_BIT = BooleanPropertyType.createType("color_bit", false);
 
-    public static final BooleanPropertyType UPPER_BLOCK_BIT = BooleanPropertyType.createType("upper_block_bit", false);
+  public static final BooleanPropertyType UPPER_BLOCK_BIT = BooleanPropertyType.createType("upper_block_bit", false);
 
-    public static final IntPropertyType RESPAWN_ANCHOR_CHARGE = IntPropertyType.createType("respawn_anchor_charge", 0, 4, 0);
+  public static final IntPropertyType RESPAWN_ANCHOR_CHARGE = IntPropertyType.createType("respawn_anchor_charge", 0, 4, 0);
 
-    public static final BooleanPropertyType ACTIVE = BooleanPropertyType.createType("active", false);
+  public static final BooleanPropertyType ACTIVE = BooleanPropertyType.createType("active", false);
 
-    public static final EnumPropertyType<CoralColor> CORAL_COLOR = EnumPropertyType.createType("coral_color", CoralColor.class, CoralColor.values()[0]);
+  public static final EnumPropertyType<CoralColor> CORAL_COLOR = EnumPropertyType.createType("coral_color" ,CoralColor.class ,CoralColor.values()[0]);
 
-    public static final IntPropertyType MULTI_FACE_DIRECTION_BITS = IntPropertyType.createType("multi_face_direction_bits", 0, 63, 0);
+  public static final IntPropertyType MULTI_FACE_DIRECTION_BITS = IntPropertyType.createType("multi_face_direction_bits", 0, 63, 0);
 
-    public static final IntPropertyType VINE_DIRECTION_BITS = IntPropertyType.createType("vine_direction_bits", 0, 15, 0);
+  public static final IntPropertyType VINE_DIRECTION_BITS = IntPropertyType.createType("vine_direction_bits", 0, 15, 0);
 
-    public static final BooleanPropertyType ATTACHED_BIT = BooleanPropertyType.createType("attached_bit", false);
+  public static final BooleanPropertyType ATTACHED_BIT = BooleanPropertyType.createType("attached_bit", false);
 
-    public static final IntPropertyType BLOCK_LIGHT_LEVEL = IntPropertyType.createType("block_light_level", 0, 15, 0);
+  public static final IntPropertyType BLOCK_LIGHT_LEVEL = IntPropertyType.createType("block_light_level", 0, 15, 0);
 
-    public static final EnumPropertyType<StructureVoidType> STRUCTURE_VOID_TYPE = EnumPropertyType.createType("structure_void_type", StructureVoidType.class, StructureVoidType.values()[0]);
+  public static final EnumPropertyType<StructureVoidType> STRUCTURE_VOID_TYPE = EnumPropertyType.createType("structure_void_type" ,StructureVoidType.class ,StructureVoidType.values()[0]);
 
-    public static final EnumPropertyType<Damage> DAMAGE = EnumPropertyType.createType("damage", Damage.class, Damage.values()[0]);
+  public static final EnumPropertyType<Damage> DAMAGE = EnumPropertyType.createType("damage" ,Damage.class ,Damage.values()[0]);
 
-    public static final BooleanPropertyType CORAL_HANG_TYPE_BIT = BooleanPropertyType.createType("coral_hang_type_bit", false);
+  public static final BooleanPropertyType CORAL_HANG_TYPE_BIT = BooleanPropertyType.createType("coral_hang_type_bit", false);
 
-    public static final EnumPropertyType<BambooStalkThickness> BAMBOO_STALK_THICKNESS = EnumPropertyType.createType("bamboo_stalk_thickness", BambooStalkThickness.class, BambooStalkThickness.values()[0]);
+  public static final EnumPropertyType<BambooStalkThickness> BAMBOO_STALK_THICKNESS = EnumPropertyType.createType("bamboo_stalk_thickness" ,BambooStalkThickness.class ,BambooStalkThickness.values()[0]);
 
-    public static final BooleanPropertyType DEAD_BIT = BooleanPropertyType.createType("dead_bit", false);
+  public static final BooleanPropertyType DEAD_BIT = BooleanPropertyType.createType("dead_bit", false);
 
-    public static final EnumPropertyType<LeverDirection> LEVER_DIRECTION = EnumPropertyType.createType("lever_direction", LeverDirection.class, LeverDirection.values()[0]);
+  public static final EnumPropertyType<LeverDirection> LEVER_DIRECTION = EnumPropertyType.createType("lever_direction" ,LeverDirection.class ,LeverDirection.values()[0]);
 
-    public static final BooleanPropertyType CORAL_FAN_DIRECTION = BooleanPropertyType.createType("coral_fan_direction", false);
+  public static final BooleanPropertyType CORAL_FAN_DIRECTION = BooleanPropertyType.createType("coral_fan_direction", false);
 
-    public static final BooleanPropertyType CAN_SUMMON = BooleanPropertyType.createType("can_summon", false);
+  public static final BooleanPropertyType CAN_SUMMON = BooleanPropertyType.createType("can_summon", false);
 
-    public static final EnumPropertyType<StructureBlockType> STRUCTURE_BLOCK_TYPE = EnumPropertyType.createType("structure_block_type", StructureBlockType.class, StructureBlockType.values()[0]);
+  public static final EnumPropertyType<StructureBlockType> STRUCTURE_BLOCK_TYPE = EnumPropertyType.createType("structure_block_type" ,StructureBlockType.class ,StructureBlockType.values()[0]);
 
-    public static final IntPropertyType REDSTONE_SIGNAL = IntPropertyType.createType("redstone_signal", 0, 15, 0);
+  public static final IntPropertyType REDSTONE_SIGNAL = IntPropertyType.createType("redstone_signal", 0, 15, 0);
 
-    public static final IntPropertyType REPEATER_DELAY = IntPropertyType.createType("repeater_delay", 0, 3, 0);
+  public static final IntPropertyType REPEATER_DELAY = IntPropertyType.createType("repeater_delay", 0, 3, 0);
 
-    public static final BooleanPropertyType EXPLODE_BIT = BooleanPropertyType.createType("explode_bit", false);
+  public static final BooleanPropertyType EXPLODE_BIT = BooleanPropertyType.createType("explode_bit", false);
 
-    public static final BooleanPropertyType OPEN_BIT = BooleanPropertyType.createType("open_bit", false);
+  public static final BooleanPropertyType OPEN_BIT = BooleanPropertyType.createType("open_bit", false);
 
-    public static final BooleanPropertyType ITEM_FRAME_MAP_BIT = BooleanPropertyType.createType("item_frame_map_bit", false);
+  public static final BooleanPropertyType ITEM_FRAME_MAP_BIT = BooleanPropertyType.createType("item_frame_map_bit", false);
 
-    public static final EnumPropertyType<WallConnectionTypeEast> WALL_CONNECTION_TYPE_EAST = EnumPropertyType.createType("wall_connection_type_east", WallConnectionTypeEast.class, WallConnectionTypeEast.values()[0]);
+  public static final EnumPropertyType<WallConnectionTypeEast> WALL_CONNECTION_TYPE_EAST = EnumPropertyType.createType("wall_connection_type_east" ,WallConnectionTypeEast.class ,WallConnectionTypeEast.values()[0]);
 
-    public static final EnumPropertyType<BigDripleafTilt> BIG_DRIPLEAF_TILT = EnumPropertyType.createType("big_dripleaf_tilt", BigDripleafTilt.class, BigDripleafTilt.values()[0]);
+  public static final EnumPropertyType<BigDripleafTilt> BIG_DRIPLEAF_TILT = EnumPropertyType.createType("big_dripleaf_tilt" ,BigDripleafTilt.class ,BigDripleafTilt.values()[0]);
 
-    public static final IntPropertyType WEEPING_VINES_AGE = IntPropertyType.createType("weeping_vines_age", 0, 25, 0);
+  public static final IntPropertyType WEEPING_VINES_AGE = IntPropertyType.createType("weeping_vines_age", 0, 25, 0);
 
-    public static final BooleanPropertyType AGE_BIT = BooleanPropertyType.createType("age_bit", false);
+  public static final BooleanPropertyType AGE_BIT = BooleanPropertyType.createType("age_bit", false);
 
-    public static final EnumPropertyType<CrackedState> CRACKED_STATE = EnumPropertyType.createType("cracked_state", CrackedState.class, CrackedState.values()[0]);
+  public static final EnumPropertyType<CrackedState> CRACKED_STATE = EnumPropertyType.createType("cracked_state" ,CrackedState.class ,CrackedState.values()[0]);
 
-    public static final IntPropertyType FILL_LEVEL = IntPropertyType.createType("fill_level", 0, 6, 0);
+  public static final IntPropertyType FILL_LEVEL = IntPropertyType.createType("fill_level", 0, 6, 0);
 
-    public static final BooleanPropertyType RAIL_DATA_BIT = BooleanPropertyType.createType("rail_data_bit", false);
+  public static final BooleanPropertyType RAIL_DATA_BIT = BooleanPropertyType.createType("rail_data_bit", false);
 
-    public static final BooleanPropertyType HANGING = BooleanPropertyType.createType("hanging", false);
+  public static final BooleanPropertyType HANGING = BooleanPropertyType.createType("hanging", false);
 
-    public static final EnumPropertyType<PrismarineBlockType> PRISMARINE_BLOCK_TYPE = EnumPropertyType.createType("prismarine_block_type", PrismarineBlockType.class, PrismarineBlockType.values()[0]);
+  public static final EnumPropertyType<PrismarineBlockType> PRISMARINE_BLOCK_TYPE = EnumPropertyType.createType("prismarine_block_type" ,PrismarineBlockType.class ,PrismarineBlockType.values()[0]);
 
-    public static final BooleanPropertyType BREWING_STAND_SLOT_C_BIT = BooleanPropertyType.createType("brewing_stand_slot_c_bit", false);
+  public static final BooleanPropertyType BREWING_STAND_SLOT_C_BIT = BooleanPropertyType.createType("brewing_stand_slot_c_bit", false);
 
-    public static final BooleanPropertyType TOP_SLOT_BIT = BooleanPropertyType.createType("top_slot_bit", false);
+  public static final BooleanPropertyType TOP_SLOT_BIT = BooleanPropertyType.createType("top_slot_bit", false);
 
-    public static final IntPropertyType LIQUID_DEPTH = IntPropertyType.createType("liquid_depth", 0, 15, 0);
+  public static final IntPropertyType LIQUID_DEPTH = IntPropertyType.createType("liquid_depth", 0, 15, 0);
 
-    public static final BooleanPropertyType DISARMED_BIT = BooleanPropertyType.createType("disarmed_bit", false);
+  public static final BooleanPropertyType DISARMED_BIT = BooleanPropertyType.createType("disarmed_bit", false);
 
-    public static final IntPropertyType GROWING_PLANT_AGE = IntPropertyType.createType("growing_plant_age", 0, 25, 0);
+  public static final IntPropertyType GROWING_PLANT_AGE = IntPropertyType.createType("growing_plant_age", 0, 25, 0);
 
-    public static final EnumPropertyType<WallBlockType> WALL_BLOCK_TYPE = EnumPropertyType.createType("wall_block_type", WallBlockType.class, WallBlockType.values()[0]);
+  public static final EnumPropertyType<WallBlockType> WALL_BLOCK_TYPE = EnumPropertyType.createType("wall_block_type" ,WallBlockType.class ,WallBlockType.values()[0]);
 
-    public static final BooleanPropertyType DOOR_HINGE_BIT = BooleanPropertyType.createType("door_hinge_bit", false);
+  public static final BooleanPropertyType DOOR_HINGE_BIT = BooleanPropertyType.createType("door_hinge_bit", false);
 
-    public static final EnumPropertyType<StoneType> STONE_TYPE = EnumPropertyType.createType("stone_type", StoneType.class, StoneType.values()[0]);
+  public static final EnumPropertyType<StoneType> STONE_TYPE = EnumPropertyType.createType("stone_type" ,StoneType.class ,StoneType.values()[0]);
 
-    public static final IntPropertyType HONEY_LEVEL = IntPropertyType.createType("honey_level", 0, 5, 0);
+  public static final IntPropertyType HONEY_LEVEL = IntPropertyType.createType("honey_level", 0, 5, 0);
 
-    public static final EnumPropertyType<StoneSlabType> STONE_SLAB_TYPE = EnumPropertyType.createType("stone_slab_type", StoneSlabType.class, StoneSlabType.values()[0]);
+  public static final EnumPropertyType<StoneSlabType> STONE_SLAB_TYPE = EnumPropertyType.createType("stone_slab_type" ,StoneSlabType.class ,StoneSlabType.values()[0]);
 
-    public static final EnumPropertyType<ChemistryTableType> CHEMISTRY_TABLE_TYPE = EnumPropertyType.createType("chemistry_table_type", ChemistryTableType.class, ChemistryTableType.values()[0]);
+  public static final EnumPropertyType<ChemistryTableType> CHEMISTRY_TABLE_TYPE = EnumPropertyType.createType("chemistry_table_type" ,ChemistryTableType.class ,ChemistryTableType.values()[0]);
 
-    public static final EnumPropertyType<MonsterEggStoneType> MONSTER_EGG_STONE_TYPE = EnumPropertyType.createType("monster_egg_stone_type", MonsterEggStoneType.class, MonsterEggStoneType.values()[0]);
+  public static final EnumPropertyType<MonsterEggStoneType> MONSTER_EGG_STONE_TYPE = EnumPropertyType.createType("monster_egg_stone_type" ,MonsterEggStoneType.class ,MonsterEggStoneType.values()[0]);
 
-    public static final BooleanPropertyType BLOOM = BooleanPropertyType.createType("bloom", false);
+  public static final BooleanPropertyType BLOOM = BooleanPropertyType.createType("bloom", false);
 
-    public static final BooleanPropertyType LIT = BooleanPropertyType.createType("lit", false);
+  public static final BooleanPropertyType LIT = BooleanPropertyType.createType("lit", false);
 
-    public static final BooleanPropertyType TOGGLE_BIT = BooleanPropertyType.createType("toggle_bit", false);
+  public static final BooleanPropertyType TOGGLE_BIT = BooleanPropertyType.createType("toggle_bit", false);
 
-    public static final BooleanPropertyType BIG_DRIPLEAF_HEAD = BooleanPropertyType.createType("big_dripleaf_head", false);
+  public static final BooleanPropertyType BIG_DRIPLEAF_HEAD = BooleanPropertyType.createType("big_dripleaf_head", false);
 
-    public static final IntPropertyType STABILITY = IntPropertyType.createType("stability", 0, 7, 0);
+  public static final IntPropertyType STABILITY = IntPropertyType.createType("stability", 0, 7, 0);
 
-    public static final IntPropertyType HUGE_MUSHROOM_BITS = IntPropertyType.createType("huge_mushroom_bits", 0, 15, 0);
+  public static final IntPropertyType HUGE_MUSHROOM_BITS = IntPropertyType.createType("huge_mushroom_bits", 0, 15, 0);
 
-    public static final IntPropertyType FACING_DIRECTION = IntPropertyType.createType("facing_direction", 0, 5, 0);
+  public static final IntPropertyType FACING_DIRECTION = IntPropertyType.createType("facing_direction", 0, 5, 0);
 
-    public static final EnumPropertyType<WallConnectionTypeWest> WALL_CONNECTION_TYPE_WEST = EnumPropertyType.createType("wall_connection_type_west", WallConnectionTypeWest.class, WallConnectionTypeWest.values()[0]);
+  public static final EnumPropertyType<WallConnectionTypeWest> WALL_CONNECTION_TYPE_WEST = EnumPropertyType.createType("wall_connection_type_west" ,WallConnectionTypeWest.class ,WallConnectionTypeWest.values()[0]);
 
-    public static final BooleanPropertyType DRAG_DOWN = BooleanPropertyType.createType("drag_down", false);
+  public static final BooleanPropertyType DRAG_DOWN = BooleanPropertyType.createType("drag_down", false);
 
-    public static final BooleanPropertyType POWERED_BIT = BooleanPropertyType.createType("powered_bit", false);
+  public static final BooleanPropertyType POWERED_BIT = BooleanPropertyType.createType("powered_bit", false);
 
-    public static final BooleanPropertyType INFINIBURN_BIT = BooleanPropertyType.createType("infiniburn_bit", false);
+  public static final BooleanPropertyType INFINIBURN_BIT = BooleanPropertyType.createType("infiniburn_bit", false);
 
-    public static final EnumPropertyType<OldLeafType> OLD_LEAF_TYPE = EnumPropertyType.createType("old_leaf_type", OldLeafType.class, OldLeafType.values()[0]);
+  public static final EnumPropertyType<OldLeafType> OLD_LEAF_TYPE = EnumPropertyType.createType("old_leaf_type" ,OldLeafType.class ,OldLeafType.values()[0]);
 
-    public static final BooleanPropertyType BREWING_STAND_SLOT_A_BIT = BooleanPropertyType.createType("brewing_stand_slot_a_bit", false);
+  public static final BooleanPropertyType BREWING_STAND_SLOT_A_BIT = BooleanPropertyType.createType("brewing_stand_slot_a_bit", false);
 
-    public static final EnumPropertyType<PillarAxis> PILLAR_AXIS = EnumPropertyType.createType("pillar_axis", PillarAxis.class, PillarAxis.values()[0]);
+  public static final EnumPropertyType<PillarAxis> PILLAR_AXIS = EnumPropertyType.createType("pillar_axis" ,PillarAxis.class ,PillarAxis.values()[0]);
 
-    public static final IntPropertyType RAIL_DIRECTION = IntPropertyType.createType("rail_direction", 0, 9, 0);
+  public static final IntPropertyType RAIL_DIRECTION = IntPropertyType.createType("rail_direction", 0, 9, 0);
 
-    public static final EnumPropertyType<ChiselType> CHISEL_TYPE = EnumPropertyType.createType("chisel_type", ChiselType.class, ChiselType.values()[0]);
+  public static final EnumPropertyType<ChiselType> CHISEL_TYPE = EnumPropertyType.createType("chisel_type" ,ChiselType.class ,ChiselType.values()[0]);
 
-    public static final EnumPropertyType<SaplingType> SAPLING_TYPE = EnumPropertyType.createType("sapling_type", SaplingType.class, SaplingType.values()[0]);
+  public static final EnumPropertyType<SaplingType> SAPLING_TYPE = EnumPropertyType.createType("sapling_type" ,SaplingType.class ,SaplingType.values()[0]);
 
-    public static final EnumPropertyType<StoneSlabType3> STONE_SLAB_TYPE_3 = EnumPropertyType.createType("stone_slab_type_3", StoneSlabType3.class, StoneSlabType3.values()[0]);
+  public static final EnumPropertyType<StoneSlabType3> STONE_SLAB_TYPE_3 = EnumPropertyType.createType("stone_slab_type_3" ,StoneSlabType3.class ,StoneSlabType3.values()[0]);
 
-    public static final EnumPropertyType<StoneSlabType2> STONE_SLAB_TYPE_2 = EnumPropertyType.createType("stone_slab_type_2", StoneSlabType2.class, StoneSlabType2.values()[0]);
+  public static final EnumPropertyType<StoneSlabType2> STONE_SLAB_TYPE_2 = EnumPropertyType.createType("stone_slab_type_2" ,StoneSlabType2.class ,StoneSlabType2.values()[0]);
 
-    public static final EnumPropertyType<StoneSlabType4> STONE_SLAB_TYPE_4 = EnumPropertyType.createType("stone_slab_type_4", StoneSlabType4.class, StoneSlabType4.values()[0]);
+  public static final EnumPropertyType<StoneSlabType4> STONE_SLAB_TYPE_4 = EnumPropertyType.createType("stone_slab_type_4" ,StoneSlabType4.class ,StoneSlabType4.values()[0]);
 
-    public static final IntPropertyType GROUND_SIGN_DIRECTION = IntPropertyType.createType("ground_sign_direction", 0, 15, 0);
+  public static final IntPropertyType GROUND_SIGN_DIRECTION = IntPropertyType.createType("ground_sign_direction", 0, 15, 0);
 
-    public static final BooleanPropertyType STRIPPED_BIT = BooleanPropertyType.createType("stripped_bit", false);
+  public static final BooleanPropertyType STRIPPED_BIT = BooleanPropertyType.createType("stripped_bit", false);
 
-    public static final BooleanPropertyType OUTPUT_LIT_BIT = BooleanPropertyType.createType("output_lit_bit", false);
+  public static final BooleanPropertyType OUTPUT_LIT_BIT = BooleanPropertyType.createType("output_lit_bit", false);
 
-    public static final EnumPropertyType<Color> COLOR = EnumPropertyType.createType("color", Color.class, Color.values()[0]);
+  public static final EnumPropertyType<Color> COLOR = EnumPropertyType.createType("color" ,Color.class ,Color.values()[0]);
 
-    public static final EnumPropertyType<BambooLeafSize> BAMBOO_LEAF_SIZE = EnumPropertyType.createType("bamboo_leaf_size", BambooLeafSize.class, BambooLeafSize.values()[0]);
+  public static final EnumPropertyType<BambooLeafSize> BAMBOO_LEAF_SIZE = EnumPropertyType.createType("bamboo_leaf_size" ,BambooLeafSize.class ,BambooLeafSize.values()[0]);
 
-    public static final BooleanPropertyType CONDITIONAL_BIT = BooleanPropertyType.createType("conditional_bit", false);
+  public static final BooleanPropertyType CONDITIONAL_BIT = BooleanPropertyType.createType("conditional_bit", false);
 
-    public static final IntPropertyType PROPAGULE_STAGE = IntPropertyType.createType("propagule_stage", 0, 4, 0);
+  public static final IntPropertyType PROPAGULE_STAGE = IntPropertyType.createType("propagule_stage", 0, 4, 0);
 
-    public static final BooleanPropertyType END_PORTAL_EYE_BIT = BooleanPropertyType.createType("end_portal_eye_bit", false);
+  public static final BooleanPropertyType END_PORTAL_EYE_BIT = BooleanPropertyType.createType("end_portal_eye_bit", false);
 
-    public static final IntPropertyType BRUSHED_PROGRESS = IntPropertyType.createType("brushed_progress", 0, 3, 0);
+  public static final IntPropertyType BRUSHED_PROGRESS = IntPropertyType.createType("brushed_progress", 0, 3, 0);
 
-    public static final EnumPropertyType<SpongeType> SPONGE_TYPE = EnumPropertyType.createType("sponge_type", SpongeType.class, SpongeType.values()[0]);
+  public static final EnumPropertyType<SpongeType> SPONGE_TYPE = EnumPropertyType.createType("sponge_type" ,SpongeType.class ,SpongeType.values()[0]);
 
-    public static final IntPropertyType CLUSTER_COUNT = IntPropertyType.createType("cluster_count", 0, 3, 0);
+  public static final IntPropertyType CLUSTER_COUNT = IntPropertyType.createType("cluster_count", 0, 3, 0);
 
-    public static final IntPropertyType CANDLES = IntPropertyType.createType("candles", 0, 3, 0);
+  public static final IntPropertyType CANDLES = IntPropertyType.createType("candles", 0, 3, 0);
 
-    public static final BooleanPropertyType UPSIDE_DOWN_BIT = BooleanPropertyType.createType("upside_down_bit", false);
+  public static final BooleanPropertyType UPSIDE_DOWN_BIT = BooleanPropertyType.createType("upside_down_bit", false);
 
-    public static final EnumPropertyType<PortalAxis> PORTAL_AXIS = EnumPropertyType.createType("portal_axis", PortalAxis.class, PortalAxis.values()[0]);
+  public static final EnumPropertyType<PortalAxis> PORTAL_AXIS = EnumPropertyType.createType("portal_axis" ,PortalAxis.class ,PortalAxis.values()[0]);
 
-    public static final IntPropertyType BOOKS_STORED = IntPropertyType.createType("books_stored", 0, 63, 0);
+  public static final IntPropertyType BOOKS_STORED = IntPropertyType.createType("books_stored", 0, 63, 0);
 
-    public static final BooleanPropertyType OUTPUT_SUBTRACT_BIT = BooleanPropertyType.createType("output_subtract_bit", false);
+  public static final BooleanPropertyType OUTPUT_SUBTRACT_BIT = BooleanPropertyType.createType("output_subtract_bit", false);
 
-    public static final EnumPropertyType<Attachment> ATTACHMENT = EnumPropertyType.createType("attachment", Attachment.class, Attachment.values()[0]);
+  public static final EnumPropertyType<Attachment> ATTACHMENT = EnumPropertyType.createType("attachment" ,Attachment.class ,Attachment.values()[0]);
 
-    public static final EnumPropertyType<WoodType> WOOD_TYPE = EnumPropertyType.createType("wood_type", WoodType.class, WoodType.values()[0]);
+  public static final EnumPropertyType<WoodType> WOOD_TYPE = EnumPropertyType.createType("wood_type" ,WoodType.class ,WoodType.values()[0]);
 
-    public static final IntPropertyType WEIRDO_DIRECTION = IntPropertyType.createType("weirdo_direction", 0, 3, 0);
+  public static final IntPropertyType WEIRDO_DIRECTION = IntPropertyType.createType("weirdo_direction", 0, 3, 0);
 
-    public static final BooleanPropertyType COVERED_BIT = BooleanPropertyType.createType("covered_bit", false);
+  public static final BooleanPropertyType COVERED_BIT = BooleanPropertyType.createType("covered_bit", false);
 
-    public static final EnumPropertyType<FlowerType> FLOWER_TYPE = EnumPropertyType.createType("flower_type", FlowerType.class, FlowerType.values()[0]);
+  public static final EnumPropertyType<FlowerType> FLOWER_TYPE = EnumPropertyType.createType("flower_type" ,FlowerType.class ,FlowerType.values()[0]);
 
-    public static final BooleanPropertyType STABILITY_CHECK = BooleanPropertyType.createType("stability_check", false);
+  public static final BooleanPropertyType STABILITY_CHECK = BooleanPropertyType.createType("stability_check", false);
 
-    public static final IntPropertyType DIRECTION = IntPropertyType.createType("direction", 0, 3, 0);
+  public static final IntPropertyType DIRECTION = IntPropertyType.createType("direction", 0, 3, 0);
 
-    public static final EnumPropertyType<CauldronLiquid> CAULDRON_LIQUID = EnumPropertyType.createType("cauldron_liquid", CauldronLiquid.class, CauldronLiquid.values()[0]);
+  public static final EnumPropertyType<CauldronLiquid> CAULDRON_LIQUID = EnumPropertyType.createType("cauldron_liquid" ,CauldronLiquid.class ,CauldronLiquid.values()[0]);
 
-    public static final BooleanPropertyType IN_WALL_BIT = BooleanPropertyType.createType("in_wall_bit", false);
+  public static final BooleanPropertyType IN_WALL_BIT = BooleanPropertyType.createType("in_wall_bit", false);
 
-    public static final EnumPropertyType<DripstoneThickness> DRIPSTONE_THICKNESS = EnumPropertyType.createType("dripstone_thickness", DripstoneThickness.class, DripstoneThickness.values()[0]);
+  public static final EnumPropertyType<DripstoneThickness> DRIPSTONE_THICKNESS = EnumPropertyType.createType("dripstone_thickness" ,DripstoneThickness.class ,DripstoneThickness.values()[0]);
 
-    public static final BooleanPropertyType HEAD_PIECE_BIT = BooleanPropertyType.createType("head_piece_bit", false);
+  public static final BooleanPropertyType HEAD_PIECE_BIT = BooleanPropertyType.createType("head_piece_bit", false);
 
-    public static final BooleanPropertyType TRIGGERED_BIT = BooleanPropertyType.createType("triggered_bit", false);
+  public static final BooleanPropertyType TRIGGERED_BIT = BooleanPropertyType.createType("triggered_bit", false);
 
-    public static final EnumPropertyType<WallConnectionTypeSouth> WALL_CONNECTION_TYPE_SOUTH = EnumPropertyType.createType("wall_connection_type_south", WallConnectionTypeSouth.class, WallConnectionTypeSouth.values()[0]);
+  public static final EnumPropertyType<WallConnectionTypeSouth> WALL_CONNECTION_TYPE_SOUTH = EnumPropertyType.createType("wall_connection_type_south" ,WallConnectionTypeSouth.class ,WallConnectionTypeSouth.values()[0]);
 
-    public static final EnumPropertyType<SeaGrassType> SEA_GRASS_TYPE = EnumPropertyType.createType("sea_grass_type", SeaGrassType.class, SeaGrassType.values()[0]);
+  public static final EnumPropertyType<SeaGrassType> SEA_GRASS_TYPE = EnumPropertyType.createType("sea_grass_type" ,SeaGrassType.class ,SeaGrassType.values()[0]);
 
-    public static final EnumPropertyType<WallConnectionTypeNorth> WALL_CONNECTION_TYPE_NORTH = EnumPropertyType.createType("wall_connection_type_north", WallConnectionTypeNorth.class, WallConnectionTypeNorth.values()[0]);
+  public static final EnumPropertyType<WallConnectionTypeNorth> WALL_CONNECTION_TYPE_NORTH = EnumPropertyType.createType("wall_connection_type_north" ,WallConnectionTypeNorth.class ,WallConnectionTypeNorth.values()[0]);
 
-    public static final IntPropertyType ROTATION = IntPropertyType.createType("rotation", 0, 3, 0);
+  public static final IntPropertyType ROTATION = IntPropertyType.createType("rotation", 0, 3, 0);
 
-    public static final EnumPropertyType<SandStoneType> SAND_STONE_TYPE = EnumPropertyType.createType("sand_stone_type", SandStoneType.class, SandStoneType.values()[0]);
+  public static final EnumPropertyType<SandStoneType> SAND_STONE_TYPE = EnumPropertyType.createType("sand_stone_type" ,SandStoneType.class ,SandStoneType.values()[0]);
 
-    public static final EnumPropertyType<DirtType> DIRT_TYPE = EnumPropertyType.createType("dirt_type", DirtType.class, DirtType.values()[0]);
+  public static final EnumPropertyType<DirtType> DIRT_TYPE = EnumPropertyType.createType("dirt_type" ,DirtType.class ,DirtType.values()[0]);
 
-    public static final BooleanPropertyType OCCUPIED_BIT = BooleanPropertyType.createType("occupied_bit", false);
+  public static final BooleanPropertyType OCCUPIED_BIT = BooleanPropertyType.createType("occupied_bit", false);
 
-    public static final EnumPropertyType<StoneBrickType> STONE_BRICK_TYPE = EnumPropertyType.createType("stone_brick_type", StoneBrickType.class, StoneBrickType.values()[0]);
+  public static final EnumPropertyType<StoneBrickType> STONE_BRICK_TYPE = EnumPropertyType.createType("stone_brick_type" ,StoneBrickType.class ,StoneBrickType.values()[0]);
 
-    public static final BooleanPropertyType WALL_POST_BIT = BooleanPropertyType.createType("wall_post_bit", false);
+  public static final BooleanPropertyType WALL_POST_BIT = BooleanPropertyType.createType("wall_post_bit", false);
 
-    public static final BooleanPropertyType PERSISTENT_BIT = BooleanPropertyType.createType("persistent_bit", false);
+  public static final BooleanPropertyType PERSISTENT_BIT = BooleanPropertyType.createType("persistent_bit", false);
 
-    public static final BooleanPropertyType UPDATE_BIT = BooleanPropertyType.createType("update_bit", false);
+  public static final BooleanPropertyType UPDATE_BIT = BooleanPropertyType.createType("update_bit", false);
 
-    public static final IntPropertyType CORAL_DIRECTION = IntPropertyType.createType("coral_direction", 0, 3, 0);
+  public static final IntPropertyType CORAL_DIRECTION = IntPropertyType.createType("coral_direction", 0, 3, 0);
 
-    public static final EnumPropertyType<NewLeafType> NEW_LEAF_TYPE = EnumPropertyType.createType("new_leaf_type", NewLeafType.class, NewLeafType.values()[0]);
+  public static final EnumPropertyType<NewLeafType> NEW_LEAF_TYPE = EnumPropertyType.createType("new_leaf_type" ,NewLeafType.class ,NewLeafType.values()[0]);
 
-    public static final IntPropertyType GROWTH = IntPropertyType.createType("growth", 0, 7, 0);
+  public static final IntPropertyType GROWTH = IntPropertyType.createType("growth", 0, 7, 0);
 
-    public static final EnumPropertyType<TurtleEggCount> TURTLE_EGG_COUNT = EnumPropertyType.createType("turtle_egg_count", TurtleEggCount.class, TurtleEggCount.values()[0]);
+  public static final EnumPropertyType<TurtleEggCount> TURTLE_EGG_COUNT = EnumPropertyType.createType("turtle_egg_count" ,TurtleEggCount.class ,TurtleEggCount.values()[0]);
 
-    public static final IntPropertyType AGE = IntPropertyType.createType("age", 0, 15, 0);
+  public static final IntPropertyType AGE = IntPropertyType.createType("age", 0, 15, 0);
 
-    public static final List<BlockPropertyType<?>> VALUES = List.of(EXTINGUISHED, ITEM_FRAME_PHOTO_BIT, SAND_TYPE, DEPRECATED, SUSPENDED_BIT, BITE_COUNTER, TALL_GRASS_TYPE, COMPOSTER_FILL_LEVEL, KELP_AGE, MOISTURIZED_AMOUNT, TORCH_FACING_DIRECTION, DOUBLE_PLANT_TYPE, ALLOW_UNDERWATER_BIT, TWISTING_VINES_AGE, BREWING_STAND_SLOT_B_BIT, HEIGHT, BUTTON_PRESSED_BIT, COLOR_BIT, UPPER_BLOCK_BIT, RESPAWN_ANCHOR_CHARGE, ACTIVE, CORAL_COLOR, MULTI_FACE_DIRECTION_BITS, VINE_DIRECTION_BITS, ATTACHED_BIT, BLOCK_LIGHT_LEVEL, STRUCTURE_VOID_TYPE, DAMAGE, CORAL_HANG_TYPE_BIT, BAMBOO_STALK_THICKNESS, DEAD_BIT, LEVER_DIRECTION, CORAL_FAN_DIRECTION, CAN_SUMMON, STRUCTURE_BLOCK_TYPE, REDSTONE_SIGNAL, REPEATER_DELAY, EXPLODE_BIT, OPEN_BIT, ITEM_FRAME_MAP_BIT, WALL_CONNECTION_TYPE_EAST, BIG_DRIPLEAF_TILT, WEEPING_VINES_AGE, AGE_BIT, CRACKED_STATE, FILL_LEVEL, RAIL_DATA_BIT, HANGING, PRISMARINE_BLOCK_TYPE, BREWING_STAND_SLOT_C_BIT, TOP_SLOT_BIT, LIQUID_DEPTH, DISARMED_BIT, GROWING_PLANT_AGE, WALL_BLOCK_TYPE, DOOR_HINGE_BIT, STONE_TYPE, HONEY_LEVEL, STONE_SLAB_TYPE, CHEMISTRY_TABLE_TYPE, MONSTER_EGG_STONE_TYPE, BLOOM, LIT, TOGGLE_BIT, BIG_DRIPLEAF_HEAD, STABILITY, HUGE_MUSHROOM_BITS, FACING_DIRECTION, WALL_CONNECTION_TYPE_WEST, DRAG_DOWN, POWERED_BIT, INFINIBURN_BIT, OLD_LEAF_TYPE, BREWING_STAND_SLOT_A_BIT, PILLAR_AXIS, RAIL_DIRECTION, CHISEL_TYPE, SAPLING_TYPE, STONE_SLAB_TYPE_3, STONE_SLAB_TYPE_2, STONE_SLAB_TYPE_4, GROUND_SIGN_DIRECTION, STRIPPED_BIT, OUTPUT_LIT_BIT, COLOR, BAMBOO_LEAF_SIZE, CONDITIONAL_BIT, PROPAGULE_STAGE, END_PORTAL_EYE_BIT, BRUSHED_PROGRESS, SPONGE_TYPE, CLUSTER_COUNT, CANDLES, UPSIDE_DOWN_BIT, PORTAL_AXIS, BOOKS_STORED, OUTPUT_SUBTRACT_BIT, ATTACHMENT, WOOD_TYPE, WEIRDO_DIRECTION, COVERED_BIT, FLOWER_TYPE, STABILITY_CHECK, DIRECTION, CAULDRON_LIQUID, IN_WALL_BIT, DRIPSTONE_THICKNESS, HEAD_PIECE_BIT, TRIGGERED_BIT, WALL_CONNECTION_TYPE_SOUTH, SEA_GRASS_TYPE, WALL_CONNECTION_TYPE_NORTH, ROTATION, SAND_STONE_TYPE, DIRT_TYPE, OCCUPIED_BIT, STONE_BRICK_TYPE, WALL_POST_BIT, PERSISTENT_BIT, UPDATE_BIT, CORAL_DIRECTION, NEW_LEAF_TYPE, GROWTH, TURTLE_EGG_COUNT, AGE);
+  public static final List<BlockPropertyType<?>> VALUES = List.of(EXTINGUISHED, ITEM_FRAME_PHOTO_BIT, SAND_TYPE, DEPRECATED, SUSPENDED_BIT, BITE_COUNTER, TALL_GRASS_TYPE, COMPOSTER_FILL_LEVEL, KELP_AGE, MOISTURIZED_AMOUNT, TORCH_FACING_DIRECTION, DOUBLE_PLANT_TYPE, ALLOW_UNDERWATER_BIT, TWISTING_VINES_AGE, BREWING_STAND_SLOT_B_BIT, HEIGHT, BUTTON_PRESSED_BIT, COLOR_BIT, UPPER_BLOCK_BIT, RESPAWN_ANCHOR_CHARGE, ACTIVE, CORAL_COLOR, MULTI_FACE_DIRECTION_BITS, VINE_DIRECTION_BITS, ATTACHED_BIT, BLOCK_LIGHT_LEVEL, STRUCTURE_VOID_TYPE, DAMAGE, CORAL_HANG_TYPE_BIT, BAMBOO_STALK_THICKNESS, DEAD_BIT, LEVER_DIRECTION, CORAL_FAN_DIRECTION, CAN_SUMMON, STRUCTURE_BLOCK_TYPE, REDSTONE_SIGNAL, REPEATER_DELAY, EXPLODE_BIT, OPEN_BIT, ITEM_FRAME_MAP_BIT, WALL_CONNECTION_TYPE_EAST, BIG_DRIPLEAF_TILT, WEEPING_VINES_AGE, AGE_BIT, CRACKED_STATE, FILL_LEVEL, RAIL_DATA_BIT, HANGING, PRISMARINE_BLOCK_TYPE, BREWING_STAND_SLOT_C_BIT, TOP_SLOT_BIT, LIQUID_DEPTH, DISARMED_BIT, GROWING_PLANT_AGE, WALL_BLOCK_TYPE, DOOR_HINGE_BIT, STONE_TYPE, HONEY_LEVEL, STONE_SLAB_TYPE, CHEMISTRY_TABLE_TYPE, MONSTER_EGG_STONE_TYPE, BLOOM, LIT, TOGGLE_BIT, BIG_DRIPLEAF_HEAD, STABILITY, HUGE_MUSHROOM_BITS, FACING_DIRECTION, WALL_CONNECTION_TYPE_WEST, DRAG_DOWN, POWERED_BIT, INFINIBURN_BIT, OLD_LEAF_TYPE, BREWING_STAND_SLOT_A_BIT, PILLAR_AXIS, RAIL_DIRECTION, CHISEL_TYPE, SAPLING_TYPE, STONE_SLAB_TYPE_3, STONE_SLAB_TYPE_2, STONE_SLAB_TYPE_4, GROUND_SIGN_DIRECTION, STRIPPED_BIT, OUTPUT_LIT_BIT, COLOR, BAMBOO_LEAF_SIZE, CONDITIONAL_BIT, PROPAGULE_STAGE, END_PORTAL_EYE_BIT, BRUSHED_PROGRESS, SPONGE_TYPE, CLUSTER_COUNT, CANDLES, UPSIDE_DOWN_BIT, PORTAL_AXIS, BOOKS_STORED, OUTPUT_SUBTRACT_BIT, ATTACHMENT, WOOD_TYPE, WEIRDO_DIRECTION, COVERED_BIT, FLOWER_TYPE, STABILITY_CHECK, DIRECTION, CAULDRON_LIQUID, IN_WALL_BIT, DRIPSTONE_THICKNESS, HEAD_PIECE_BIT, TRIGGERED_BIT, WALL_CONNECTION_TYPE_SOUTH, SEA_GRASS_TYPE, WALL_CONNECTION_TYPE_NORTH, ROTATION, SAND_STONE_TYPE, DIRT_TYPE, OCCUPIED_BIT, STONE_BRICK_TYPE, WALL_POST_BIT, PERSISTENT_BIT, UPDATE_BIT, CORAL_DIRECTION, NEW_LEAF_TYPE, GROWTH, TURTLE_EGG_COUNT, AGE);
 
-    private VanillaBlockPropertyTypes() {
-    }
+  private VanillaBlockPropertyTypes() {
+  }
 
-    public static List<BlockPropertyType<?>> values() {
-        return VALUES;
-    }
+  public static List<BlockPropertyType<?>> values() {
+    return VALUES;
+  }
 }

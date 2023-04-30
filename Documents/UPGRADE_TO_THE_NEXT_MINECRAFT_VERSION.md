@@ -20,3 +20,5 @@ should not be modified manually)
 
 - ```cn/allay/block/data/VanillaBlockId.java```
 - ```cn/allay/block/property/vanilla/*``` 
+
+After the code is generated, you also need to apply "Format Code" to the generated code
