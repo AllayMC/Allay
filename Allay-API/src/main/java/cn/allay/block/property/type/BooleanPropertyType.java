@@ -9,8 +9,8 @@ import java.util.List;
  */
 public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
 
-    private final BlockPropertyValue<Boolean, BooleanPropertyType> FALSE = new BlockPropertyValue<>(this, false);
-    private final BlockPropertyValue<Boolean, BooleanPropertyType> TRUE = new BlockPropertyValue<>(this, true);
+    private final BlockPropertyValue<Boolean, BooleanPropertyType> FALSE = new BooleanPropertyValue(this, false);
+    private final BlockPropertyValue<Boolean, BooleanPropertyType> TRUE = new BooleanPropertyValue(this, true);
 
     private BooleanPropertyType(String name, Boolean defaultData) {
         super(name, List.of(true, false), defaultData);
@@ -40,5 +40,17 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
                 return intValue == 1 ? TRUE : FALSE;
         }
         throw new IllegalArgumentException("Invalid value for boolean property type: " + value);
+    }
+
+    private final class BooleanPropertyValue extends BlockPropertyValue<Boolean, BooleanPropertyType> {
+
+        BooleanPropertyValue(BooleanPropertyType propertyType, Boolean value) {
+            super(propertyType, value);
+        }
+
+        @Override
+        public String getSerializedValue() {
+            return value ? "1" : "0";
+        }
     }
 }

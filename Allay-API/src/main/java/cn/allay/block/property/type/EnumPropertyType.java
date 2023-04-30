@@ -19,7 +19,7 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
         this.enumClass = enumClass;
         var map = new HashMap<T, BlockPropertyValue<T, EnumPropertyType<T>>>();
         for (var value : validValues) {
-            map.put(value, new BlockPropertyValue<>(this, value));
+            map.put(value, new EnumPropertyValue(this, value));
         }
         cachedValues = new EnumMap<>(map);
     }
@@ -46,5 +46,20 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
             return cachedValues.get(Enum.valueOf(enumClass, str.toUpperCase()));
         }
         throw new IllegalArgumentException("Invalid value for enum property type: " + value);
+    }
+
+    private final class EnumPropertyValue extends BlockPropertyValue<T, EnumPropertyType<T>> {
+
+        private final String serializedValue;
+
+        EnumPropertyValue(EnumPropertyType<T> propertyType, T value) {
+            super(propertyType, value);
+            serializedValue = value.name().toLowerCase();
+        }
+
+        @Override
+        public String getSerializedValue() {
+            return serializedValue;
+        }
     }
 }

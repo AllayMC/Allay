@@ -10,19 +10,19 @@ import cn.allay.block.component.impl.position.BlockPositionComponentImpl;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
-import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.ComponentInitInfo;
 import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identifier;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -40,7 +40,8 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders;
     protected List<BlockPropertyType<?>> properties;
     protected Map<String, BlockPropertyType<?>> mappedProperties;
-    protected Map<List<BlockPropertyType.BlockPropertyValue<?, ?>>, BlockState<T>> possibleBlockStateMap = new ConcurrentHashMap<>();
+    //blockStateHash -> blockState
+    protected Map<Integer, BlockState<T>> possibleBlockStateMap = new ConcurrentHashMap<>();
     protected Identifier namespaceId;
 
     protected AllayBlockType(Class<T> blockClass,
@@ -81,20 +82,27 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
 
     @Override
     public BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues) {
+        var blockStateHash = AllayBlockState.computeBlockStateHash(namespaceId, propertyValues);
         //对于每一组唯一的属性值，有且仅有一个AllayBlockState与之对应
         //这意味着你可以直接用==比较两个BlockState是否相等
-        return possibleBlockStateMap.computeIfAbsent(propertyValues, k ->
-                new AllayBlockState(Collections.unmodifiableMap(
-                        k.stream().collect(Collectors.toMap(BlockPropertyType.BlockPropertyValue::getPropertyType, Function.identity()))
-                )));
+        return possibleBlockStateMap.computeIfAbsent(blockStateHash, k -> new AllayBlockState(propertyValues, k));
     }
 
     protected class AllayBlockState implements BlockState<T> {
 
-        Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues;
+        protected Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues;
+        protected int blockStateHash;
 
-        private AllayBlockState(Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues) {
-            this.propertyValues = propertyValues;
+        private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues) {
+            this(propertyValues, computeBlockStateHash(namespaceId, propertyValues));
+        }
+
+        private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues, int blockStateHash) {
+            var mappedPropertyValues = new HashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>>();
+            for (var value : propertyValues)
+                mappedPropertyValues.put(value.getPropertyType(), value);
+            this.propertyValues = mappedPropertyValues;
+            this.blockStateHash = blockStateHash;
         }
 
         @Override
@@ -106,6 +114,62 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         @Override
         public Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> getPropertyValues() {
             return propertyValues;
+        }
+
+        @Override
+        public int getBlockStateHash() {
+            return blockStateHash;
+        }
+
+        @Override
+        public BlockState<T> updatePropertyValue(BlockPropertyType.BlockPropertyValue<?, ?> newPropertyValue) {
+            var newPropertyValues = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?>>();
+            for (var value : propertyValues.values()) {
+                if (value.getPropertyType() == newPropertyValue.getPropertyType())
+                    newPropertyValues.add(newPropertyValue);
+                else newPropertyValues.add(value);
+            }
+            return ofState(newPropertyValues);
+        }
+
+        //https://gist.github.com/Alemiz112/504d0f79feac7ef57eda174b668dd345
+        protected static int computeBlockStateHash(Identifier namespaceId, List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues) {
+            if (namespaceId.equals(VanillaBlockId.UNKNOWN.getNamespaceId())) {
+                return -2; // This is special case
+            }
+
+            var states = new TreeMap<String, Object>();
+            for (var value : propertyValues) {
+                states.put(value.getPropertyType().getName(), value.getSerializedValue());
+            }
+
+            var tag = NbtMap.builder()
+                    .putString("name", namespaceId.toString())
+                    .putCompound("states", NbtMap.fromMap(states))
+                    .build();
+
+            byte[] bytes;
+            try (var stream = new ByteArrayOutputStream();
+                 var outputStream = NbtUtils.createWriterLE(stream)) {
+                outputStream.writeTag(tag);
+                bytes = stream.toByteArray();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return fnv1a_32(bytes);
+        }
+
+        protected static final int FNV1_32_INIT = 0x811c9dc5;
+        protected static final int FNV1_PRIME_32 = 0x01000193;
+
+        protected static int fnv1a_32(byte[] data) {
+            int hash = FNV1_32_INIT;
+            for (byte datum : data) {
+                hash ^= (datum & 0xff);
+                hash *= FNV1_PRIME_32;
+            }
+            return hash;
         }
     }
 

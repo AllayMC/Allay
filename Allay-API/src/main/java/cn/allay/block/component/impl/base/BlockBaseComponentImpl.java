@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -47,10 +48,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value) {
         if (!getBlockType().getMappedProperties().containsKey(property.getName()))
             throw new IllegalArgumentException("Property " + property + " is not supported by this block");
-        //TODO: 太慢了，考虑生成一个strid然后比较strid而不是比较List
-        var changed = new HashMap<>(currentState.getPropertyValues());
-        changed.put(property, property.createValue(value));
-        currentState = blockType.ofState(new ArrayList<>(changed.values()));
+        currentState = currentState.updatePropertyValue(property.createValue(value));
     }
 
     @Override

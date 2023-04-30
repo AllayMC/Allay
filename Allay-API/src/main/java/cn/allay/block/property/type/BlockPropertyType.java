@@ -57,14 +57,18 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
 
     @Getter
     @ToString
-    final class BlockPropertyValue<DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> {
+    class BlockPropertyValue<DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> {
 
-        private final PROPERTY propertyType;
-        private final DATATYPE value;
+        protected final PROPERTY propertyType;
+        protected final DATATYPE value;
 
         BlockPropertyValue(PROPERTY propertyType, DATATYPE value) {
             this.propertyType = propertyType;
             this.value = value;
+        }
+
+        public String getSerializedValue() {
+            return value.toString();
         }
     }
 }
