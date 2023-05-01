@@ -1,9 +1,20 @@
 package cn.allay.block.component;
 
-import cn.allay.block.component.impl.attribute.BlockAttributeComponent;
-import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.block.component.impl.attribute.BlockAttributes;
+import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.block.data.VanillaBlockId;
+import cn.allay.block.property.state.BlockState;
+import cn.allay.block.type.BlockInitInfo;
+import cn.allay.block.type.BlockType;
+import cn.allay.block.type.BlockTypeRegistry;
+import cn.allay.math.position.Pos;
+import cn.allay.testutils.AllayTestExtension;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * Date: 2023/3/25 <br>
  * Allay Project <br>
  */
-class BlockAttributeComponentImplTest {
+@ExtendWith(AllayTestExtension.class)
+@Slf4j
+class BlockAttributesTest {
     private static final String json = """
             {
                 "aabb": "0.0005,0.0005,0.0005,0.9995,0.1825,0.9995",
@@ -29,7 +42,7 @@ class BlockAttributeComponentImplTest {
                 "hardness": 3,
                 "hasBlockEntity": false,
                 "hasComparatorSignal": false,
-                "identifier": "minecraft:trapdoor",
+                "name": "minecraft:trapdoor",
                 "isAlwaysDestroyable": true,
                 "isContainerBlock": false,
                 "isLiquid": false,
@@ -51,7 +64,7 @@ class BlockAttributeComponentImplTest {
             """;
 
     @Test
-    void of() {
+    void testDeserialization() {
         var blockAttributes = BlockAttributes.of(json);
         //Check all the values
         assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.aabb().minX()));
@@ -90,5 +103,31 @@ class BlockAttributeComponentImplTest {
         assertEquals(0, blockAttributes.thickness());
         assertEquals(0, blockAttributes.translucency());
         assertFalse(blockAttributes.waterSpreadCausesSpawn());
+    }
+
+    @Test
+    void testVanillaBlockAttributes() {
+        for (var vanillaBlockId : VanillaBlockId.values()) {
+            log.info("Testing block type: " + vanillaBlockId.getNamespaceId());
+            testBlockType(vanillaBlockId, BlockTypeRegistry.getRegistry().get(vanillaBlockId.getNamespaceId()));
+        }
+//        System.out.println("Missing: " + missing.size());
+    }
+
+//    static List<BlockState<?>> missing = new ArrayList<>();
+
+    void testBlockType(VanillaBlockId vanillaBlockId, BlockType<?> type) {
+        var block = type.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null)));
+        var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
+        for (var state : type.allStates().values()) {
+            block.setState(state);
+            var expected = attributeMap.get(state.getBlockStateHash());
+//            if (expected == null) {
+//                missing.add(state);
+//                continue;
+//            }
+            assertNotNull(expected, "Missing block attributes for state: " + state + ", Block: " + type.getNamespaceId());
+            assertEquals(attributeMap.get(state.getBlockStateHash()), block.getBlockAttributes());
+        }
     }
 }

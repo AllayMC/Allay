@@ -5,6 +5,7 @@ import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -18,5 +19,5 @@ public interface BlockCoralFanHang extends Block {
                     VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT,
                     VanillaBlockPropertyTypes.DEAD_BIT)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

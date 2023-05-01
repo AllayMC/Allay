@@ -4,50 +4,8 @@ import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
 import cn.allay.block.property.type.IntPropertyType;
-import cn.allay.block.property.vanilla.enums.Attachment;
-import cn.allay.block.property.vanilla.enums.BambooLeafSize;
-import cn.allay.block.property.vanilla.enums.BambooStalkThickness;
-import cn.allay.block.property.vanilla.enums.BigDripleafTilt;
-import cn.allay.block.property.vanilla.enums.CauldronLiquid;
-import cn.allay.block.property.vanilla.enums.ChemistryTableType;
-import cn.allay.block.property.vanilla.enums.ChiselType;
-import cn.allay.block.property.vanilla.enums.Color;
-import cn.allay.block.property.vanilla.enums.CoralColor;
-import cn.allay.block.property.vanilla.enums.CrackedState;
-import cn.allay.block.property.vanilla.enums.Damage;
-import cn.allay.block.property.vanilla.enums.DirtType;
-import cn.allay.block.property.vanilla.enums.DoublePlantType;
-import cn.allay.block.property.vanilla.enums.DripstoneThickness;
-import cn.allay.block.property.vanilla.enums.FlowerType;
-import cn.allay.block.property.vanilla.enums.LeverDirection;
-import cn.allay.block.property.vanilla.enums.MonsterEggStoneType;
-import cn.allay.block.property.vanilla.enums.NewLeafType;
-import cn.allay.block.property.vanilla.enums.OldLeafType;
-import cn.allay.block.property.vanilla.enums.PillarAxis;
-import cn.allay.block.property.vanilla.enums.PortalAxis;
-import cn.allay.block.property.vanilla.enums.PrismarineBlockType;
-import cn.allay.block.property.vanilla.enums.SandStoneType;
-import cn.allay.block.property.vanilla.enums.SandType;
-import cn.allay.block.property.vanilla.enums.SaplingType;
-import cn.allay.block.property.vanilla.enums.SeaGrassType;
-import cn.allay.block.property.vanilla.enums.SpongeType;
-import cn.allay.block.property.vanilla.enums.StoneBrickType;
-import cn.allay.block.property.vanilla.enums.StoneSlabType;
-import cn.allay.block.property.vanilla.enums.StoneSlabType2;
-import cn.allay.block.property.vanilla.enums.StoneSlabType3;
-import cn.allay.block.property.vanilla.enums.StoneSlabType4;
-import cn.allay.block.property.vanilla.enums.StoneType;
-import cn.allay.block.property.vanilla.enums.StructureBlockType;
-import cn.allay.block.property.vanilla.enums.StructureVoidType;
-import cn.allay.block.property.vanilla.enums.TallGrassType;
-import cn.allay.block.property.vanilla.enums.TorchFacingDirection;
-import cn.allay.block.property.vanilla.enums.TurtleEggCount;
-import cn.allay.block.property.vanilla.enums.WallBlockType;
-import cn.allay.block.property.vanilla.enums.WallConnectionTypeEast;
-import cn.allay.block.property.vanilla.enums.WallConnectionTypeNorth;
-import cn.allay.block.property.vanilla.enums.WallConnectionTypeSouth;
-import cn.allay.block.property.vanilla.enums.WallConnectionTypeWest;
-import cn.allay.block.property.vanilla.enums.WoodType;
+import cn.allay.block.property.vanilla.enums.*;
+
 import java.util.List;
 
 /**
@@ -120,7 +78,7 @@ public final class VanillaBlockPropertyTypes {
 
   public static final EnumPropertyType<LeverDirection> LEVER_DIRECTION = EnumPropertyType.createType("lever_direction" ,LeverDirection.class ,LeverDirection.values()[0]);
 
-  public static final BooleanPropertyType CORAL_FAN_DIRECTION = BooleanPropertyType.createType("coral_fan_direction", false);
+  public static final IntPropertyType CORAL_FAN_DIRECTION = IntPropertyType.createType("coral_fan_direction", 0, 1, 0);
 
   public static final BooleanPropertyType CAN_SUMMON = BooleanPropertyType.createType("can_summon", false);
 

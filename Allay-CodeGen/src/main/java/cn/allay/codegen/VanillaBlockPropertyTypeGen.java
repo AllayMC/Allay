@@ -146,7 +146,7 @@ public class VanillaBlockPropertyTypeGen {
         }));
         var boolValidValues = List.of("false", "true");
         return propertyInfos.entrySet().stream().map(entry -> {
-            var propertyType = getPropertyType(entry.getValue());
+            var propertyType = getPropertyType(entry.getKey(), entry.getValue());
             return new BlockPropertyTypeInfo(entry.getKey(), propertyType == BlockPropertyType.BOOLEAN ? boolValidValues : entry.getValue(), propertyType);
         }).toList();
     }
@@ -161,7 +161,15 @@ public class VanillaBlockPropertyTypeGen {
         Files.writeString(Path.of("Data/unpacked/block_properties.json"), GSON.toJson(converted));
     }
 
-    protected static BlockPropertyType getPropertyType(List<String> values) {
+    protected static Map<String, BlockPropertyType> SPECIAL_CASES = new HashMap<>();
+
+    static {
+        SPECIAL_CASES.put("coral_fan_direction", BlockPropertyType.INTEGER);
+    }
+
+    protected static BlockPropertyType getPropertyType(String propertyName, List<String> values) {
+        if (SPECIAL_CASES.containsKey(propertyName))
+            return SPECIAL_CASES.get(propertyName);
         try {
             Integer.parseInt(values.get(0));
             if (values.size() == 2)

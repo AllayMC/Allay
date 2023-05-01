@@ -1,5 +1,7 @@
 package cn.allay.block.property.type;
 
+import lombok.ToString;
+
 import java.util.List;
 
 /**
@@ -51,6 +53,11 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
         @Override
         public Byte getSerializedValue() {
             return (byte) (value ? 1 : 0);
+        }
+
+        @Override
+        public String toString() {
+            return "BoolPropertyValue(name=" + name + ", value=" + value + ")";
         }
     }
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 /**
@@ -20,11 +21,23 @@ public class PaletteHashTest {
     private static final int FNV1_32_INIT = 0x811c9dc5;
     private static final int FNV1_PRIME_32 = 0x01000193;
 
+    /**
+     * Some info:
+     *
+     * The compute method "Block#computeRawSerializationIdHashForNetwork()" does not account for collision and special cases.
+     * That's why you should use instead the property I mentioned.
+     *
+     * The special cases are just hardcoded as I wrote.
+     * Other thing to account for is that when there is a collision one of the collided hashes is increased by 1.
+     *
+     * Special cases:
+     *
+     * minecraft:coral_fan;coral_color=blue;coral_fan_direction=0
+     * minecraft:coral_fan_dead;coral_color=blue;coral_fan_direction=0
+     * minecraft:unknown
+     */
+
     public static void main(String[] args) {
-        //"name": "minecraft:polished_basalt"
-//        "states": {
-//            "pillar_axis": "x"
-//        }
         NbtMap b1 = NbtMap.builder()
                 .putString("name", "minecraft:polished_basalt")
                 .putCompound("states", NbtMap.builder()
@@ -43,6 +56,24 @@ public class PaletteHashTest {
                 .build();
 
         System.out.printf("b2 hash: %s%n", Integer.toUnsignedLong(createHash(b2)));
+
+        NbtMap b3 = NbtMap.builder()
+                .putString("name", "minecraft:coral_fan")
+                .putCompound("states", NbtMap.builder()
+                        .putString("coral_color", "blue")
+                        .putInt("coral_fan_direction", 0)
+                        .build())
+                .build();
+
+        //781710940
+        System.out.printf("b3 hash: %s%n", Integer.toUnsignedLong(createHash(b3)));
+
+        NbtMap b4 = NbtMap.builder()
+                .putString("name", "minecraft:unknown")
+                .putCompound("states", NbtMap.fromMap(new TreeMap<>()))
+                .build();
+
+        System.out.printf("b4 hash: %s%n", Integer.toUnsignedLong(createHash(b4)));
     }
 
     public static int createHash(NbtMap block) {

@@ -49,8 +49,8 @@ public final class Allay {
         api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
         api.bind(BlockPropertyTypeRegistry.class, AllayBlockPropertyTypeRegistry::new);
         api.bind(VanillaBlockPaletteRegistry.class, () -> new AllayVanillaBlockPaletteRegistry(new AllayVanillaBlockPaletteRegistry.Loader()));
-        api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new);
         api.bind(VanillaBlockAttributeRegistry.class, () -> new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));
+        api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
         api.implement("Allay");
     }
 }

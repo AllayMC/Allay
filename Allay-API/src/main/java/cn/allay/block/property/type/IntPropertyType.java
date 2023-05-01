@@ -44,8 +44,8 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
 
     @Override
     public IntPropertyValue tryCreateValue(Object value) {
-        if (value instanceof Integer integer) {
-            return cachedValues[integer - min];
+        if (value instanceof Number number) {
+            return cachedValues[number.intValue() - min];
         } else throw new IllegalArgumentException("Invalid value for int property type: " + value);
     }
 
@@ -58,6 +58,11 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
         @Override
         public Integer getSerializedValue() {
             return value;
+        }
+
+        @Override
+        public String toString() {
+            return "IntPropertyValue(name=" + name + ", value=" + value + ")";
         }
     }
 }

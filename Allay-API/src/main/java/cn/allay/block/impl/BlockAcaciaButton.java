@@ -5,6 +5,7 @@ import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -17,5 +18,5 @@ public interface BlockAcaciaButton extends Block {
             .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
                     VanillaBlockPropertyTypes.FACING_DIRECTION)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

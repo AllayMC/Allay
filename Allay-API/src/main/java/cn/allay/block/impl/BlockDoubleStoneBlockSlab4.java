@@ -5,6 +5,7 @@ import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -17,5 +18,5 @@ public interface BlockDoubleStoneBlockSlab4 extends Block {
             .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4,
                     VanillaBlockPropertyTypes.TOP_SLOT_BIT)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }
