@@ -41,6 +41,7 @@ public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry
                 nbtMap = ((NbtMap) inputStream.readTag()).getList("blocks", NbtType.COMPOUND);
             }
             var loaded = new EnumMap<VanillaBlockId, VanillaBlockPaletteDataEntry>(VanillaBlockId.class);
+            int index = 0;
             for (var blockPalette : nbtMap) {
                 var runtimeId = runtimeCounter.getAndIncrement();
                 var name = blockPalette.getString("name");
@@ -62,7 +63,8 @@ public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry
                 if (!loaded.containsKey(blockId)) {
                     var runtimeIdMap = new HashMap<List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>, Integer>();
                     runtimeIdMap.put(properties, runtimeId);
-                    var entry = new VanillaBlockPaletteDataEntry(blockId, propertyTypes, runtimeIdMap, version);
+                    var entry = new VanillaBlockPaletteDataEntry(blockId, propertyTypes, runtimeIdMap, version, index);
+                    index++;
                     loaded.put(blockId, entry);
                 } else {
                     loaded.get(blockId).runtimeIdMap().put(properties, runtimeId);
