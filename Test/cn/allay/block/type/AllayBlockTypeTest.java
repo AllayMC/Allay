@@ -4,8 +4,6 @@ import cn.allay.block.component.TestComponentImpl;
 import cn.allay.block.component.TestComponentImplV2;
 import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.block.component.impl.attribute.BlockAttributes;
-import cn.allay.block.impl.BlockCobbledDeepslateSlab;
-import cn.allay.block.impl.BlockCobbledDeepslateWall;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
@@ -18,6 +16,7 @@ import cn.allay.block.property.vanilla.enums.WallConnectionTypeWest;
 import cn.allay.component.exception.BlockComponentInjectException;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.position.Pos;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -140,7 +139,7 @@ class AllayBlockTypeTest {
                         VanillaBlockPropertyTypes.WALL_POST_BIT.createValue(true)
                 );
         var hash1 = AllayBlockType.AllayBlockState.computeBlockStateHash(new Identifier("minecraft:cobbled_deepslate_wall"), propertyValues1);
-        assertEquals(1789459903, hash1);
+        Assertions.assertEquals(1789459903, hash1);
 
         List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues2 =
                 List.of(

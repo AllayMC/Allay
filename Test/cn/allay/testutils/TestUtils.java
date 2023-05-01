@@ -12,7 +12,7 @@ import java.nio.file.Path;
 public final class TestUtils {
 
     @SneakyThrows
-    public static Path getSrcMainResourceFilePath(String fileName) {
+    public static Path getResourceFilePath(String fileName) {
         //It's ugly...
         return Path.of(TestUtils.class.getClassLoader().getResource("").toURI())
                 .getParent()
@@ -20,6 +20,6 @@ public final class TestUtils {
                 .getParent()
                 .getParent()
                 .getParent()
-                .resolve("Allay-Server/src/main/resources/" + fileName);
+                .resolve("Data/" + fileName);
     }
 }

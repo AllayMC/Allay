@@ -12,3 +12,11 @@ dependencies {
 }
 
 description = "Allay-Server"
+
+sourceSets {
+    test {
+        java {
+            srcDirs("${rootProject.projectDir}/Test")
+        }
+    }
+}
