@@ -81,7 +81,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     }
 
     @Override
-    public BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues) {
+    public BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
         var blockStateHash = AllayBlockState.computeBlockStateHash(namespaceId, propertyValues);
         //对于每一组唯一的属性值，有且仅有一个AllayBlockState与之对应
         //这意味着你可以直接用==比较两个BlockState是否相等
@@ -90,15 +90,15 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
 
     protected class AllayBlockState implements BlockState<T> {
 
-        protected Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues;
+        protected Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues;
         protected int blockStateHash;
 
-        private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues) {
+        private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
             this(propertyValues, computeBlockStateHash(namespaceId, propertyValues));
         }
 
-        private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues, int blockStateHash) {
-            var mappedPropertyValues = new HashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>>();
+        private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues, int blockStateHash) {
+            var mappedPropertyValues = new HashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
             for (var value : propertyValues)
                 mappedPropertyValues.put(value.getPropertyType(), value);
             this.propertyValues = mappedPropertyValues;
@@ -112,7 +112,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
 
         @UnmodifiableView
         @Override
-        public Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> getPropertyValues() {
+        public Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues() {
             return propertyValues;
         }
 
@@ -122,8 +122,13 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         @Override
-        public BlockState<T> updatePropertyValue(BlockPropertyType.BlockPropertyValue<?, ?> newPropertyValue) {
-            var newPropertyValues = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?>>();
+        public long getUnsignedBlockStateHash() {
+            return Integer.toUnsignedLong(blockStateHash);
+        }
+
+        @Override
+        public BlockState<T> updatePropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> newPropertyValue) {
+            var newPropertyValues = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
             for (var value : propertyValues.values()) {
                 if (value.getPropertyType() == newPropertyValue.getPropertyType())
                     newPropertyValues.add(newPropertyValue);
@@ -133,7 +138,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         //https://gist.github.com/Alemiz112/504d0f79feac7ef57eda174b668dd345
-        protected static int computeBlockStateHash(Identifier namespaceId, List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues) {
+        protected static int computeBlockStateHash(Identifier namespaceId, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
             if (namespaceId.equals(VanillaBlockId.UNKNOWN.getNamespaceId())) {
                 return -2; // This is special case
             }
@@ -202,10 +207,10 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId, boolean initVanillaBlockAttributeComponent) {
             this.namespaceId = vanillaBlockId.getNamespaceId();
             if (initVanillaBlockAttributeComponent) {
-                BlockAttributeComponentImpl attributeComponent = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
-                if (attributeComponent == null)
+                var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
+                if (attributeMap == null)
                     throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry");
-                //TODO: 对于所有相同类型的Block实例，只持有一个BlockAttributeComponentImpl实例，需要确认后续是否需要改进
+                var attributeComponent = BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap);
                 componentProviders.add(ComponentProvider.ofSingleton(attributeComponent));
             }
             return this;

@@ -53,14 +53,14 @@ public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry
                 }
                 var version = blockPalette.getInt("version");
                 var propertyTypes = new ArrayList<BlockPropertyType<?>>();
-                var properties = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?>>();
+                var properties = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
                 blockPalette.getCompound("states").forEach((k, v) -> {
                     var propertyType = getBlockPropertyTypeRegistry().get(k);
                     propertyTypes.add(propertyType);
                     properties.add(propertyType.tryCreateValue(v));
                 });
                 if (!loaded.containsKey(blockId)) {
-                    var runtimeIdMap = new HashMap<List<BlockPropertyType.BlockPropertyValue<?, ?>>, Integer>();
+                    var runtimeIdMap = new HashMap<List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>, Integer>();
                     runtimeIdMap.put(properties, runtimeId);
                     var entry = new VanillaBlockPaletteDataEntry(blockId, propertyTypes, runtimeIdMap, version);
                     loaded.put(blockId, entry);

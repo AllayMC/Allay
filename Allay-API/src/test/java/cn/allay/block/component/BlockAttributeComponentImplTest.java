@@ -2,6 +2,7 @@ package cn.allay.block.component;
 
 import cn.allay.block.component.impl.attribute.BlockAttributeComponent;
 import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
+import cn.allay.block.component.impl.attribute.BlockAttributes;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,43 +52,43 @@ class BlockAttributeComponentImplTest {
 
     @Test
     void of() {
-        BlockAttributeComponent blockAttributeComponent = BlockAttributeComponentImpl.of(json);
+        var blockAttributes = BlockAttributes.of(json);
         //Check all the values
-        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributeComponent.aabb().minX()));
-        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributeComponent.aabb().minY()));
-        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributeComponent.aabb().minZ()));
-        assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockAttributeComponent.aabb().maxX()));
-        assertEquals(Float.toHexString(0.1825f), Float.toHexString(blockAttributeComponent.aabb().maxY()));
-        assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockAttributeComponent.aabb().maxZ()));
-        assertTrue(blockAttributeComponent.canBeMovingBlock());
-        assertTrue(blockAttributeComponent.blocksPrecipitation());
-        assertTrue(blockAttributeComponent.breaksFallingBlocks());
-        assertEquals(0, blockAttributeComponent.burnAbility());
-        assertEquals(0, blockAttributeComponent.burnChance());
-        assertTrue(blockAttributeComponent.canBeBrokenFromFalling());
-        assertTrue(blockAttributeComponent.canContainLiquid());
-        assertEquals(-1, blockAttributeComponent.color());
-        assertEquals(15, blockAttributeComponent.explosionResistance());
-        assertEquals(Float.toHexString(0.6f), Float.toHexString(blockAttributeComponent.friction()));
-        assertEquals(3, blockAttributeComponent.hardness());
-        assertFalse(blockAttributeComponent.hasBlockEntity());
-        assertFalse(blockAttributeComponent.hasComparatorSignal());
-        assertTrue(blockAttributeComponent.isAlwaysDestroyable());
-        assertFalse(blockAttributeComponent.isContainerBlock());
-        assertFalse(blockAttributeComponent.isLiquid());
-        assertFalse(blockAttributeComponent.isMotionBlockingBlock());
-        assertFalse(blockAttributeComponent.isPowerSource());
-        assertFalse(blockAttributeComponent.isSolid());
-        assertTrue(blockAttributeComponent.isSolidBlocking());
-        assertFalse(blockAttributeComponent.isUnbreakable());
-        assertTrue(blockAttributeComponent.isWaterBlocking());
-        assertTrue(blockAttributeComponent.flammable());
-        assertEquals(0, blockAttributeComponent.light());
-        assertEquals(0, blockAttributeComponent.lightEmission());
-        assertFalse(blockAttributeComponent.pushesUpFallingBlocks());
-        assertFalse(blockAttributeComponent.superHot());
-        assertEquals(0, blockAttributeComponent.thickness());
-        assertEquals(0, blockAttributeComponent.translucency());
-        assertFalse(blockAttributeComponent.waterSpreadCausesSpawn());
+        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.aabb().minX()));
+        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.aabb().minY()));
+        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.aabb().minZ()));
+        assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockAttributes.aabb().maxX()));
+        assertEquals(Float.toHexString(0.1825f), Float.toHexString(blockAttributes.aabb().maxY()));
+        assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockAttributes.aabb().maxZ()));
+        assertTrue(blockAttributes.canBeMovingBlock());
+        assertTrue(blockAttributes.blocksPrecipitation());
+        assertTrue(blockAttributes.breaksFallingBlocks());
+        assertEquals(0, blockAttributes.burnAbility());
+        assertEquals(0, blockAttributes.burnChance());
+        assertTrue(blockAttributes.canBeBrokenFromFalling());
+        assertTrue(blockAttributes.canContainLiquid());
+        assertEquals(-1, blockAttributes.color());
+        assertEquals(15, blockAttributes.explosionResistance());
+        assertEquals(Float.toHexString(0.6f), Float.toHexString(blockAttributes.friction()));
+        assertEquals(3, blockAttributes.hardness());
+        assertFalse(blockAttributes.hasBlockEntity());
+        assertFalse(blockAttributes.hasComparatorSignal());
+        assertTrue(blockAttributes.isAlwaysDestroyable());
+        assertFalse(blockAttributes.isContainerBlock());
+        assertFalse(blockAttributes.isLiquid());
+        assertFalse(blockAttributes.isMotionBlockingBlock());
+        assertFalse(blockAttributes.isPowerSource());
+        assertFalse(blockAttributes.isSolid());
+        assertTrue(blockAttributes.isSolidBlocking());
+        assertFalse(blockAttributes.isUnbreakable());
+        assertTrue(blockAttributes.isWaterBlocking());
+        assertTrue(blockAttributes.flammable());
+        assertEquals(0, blockAttributes.light());
+        assertEquals(0, blockAttributes.lightEmission());
+        assertFalse(blockAttributes.pushesUpFallingBlocks());
+        assertFalse(blockAttributes.superHot());
+        assertEquals(0, blockAttributes.thickness());
+        assertEquals(0, blockAttributes.translucency());
+        assertFalse(blockAttributes.waterSpreadCausesSpawn());
     }
 }

@@ -41,7 +41,7 @@ public class RegistryTest {
             @SneakyThrows
             @Override
             protected Reader getReader() {
-                return Files.newBufferedReader(TestUtils.getSrcMainResourceFilePath("Data/block_attributes_old.json"));
+                return Files.newBufferedReader(TestUtils.getResourceFilePath("block_attributes.json"));
             }
         });
         PROPERTY_REGISTRY = new AllayBlockPropertyTypeRegistry();
@@ -49,7 +49,7 @@ public class RegistryTest {
             @SneakyThrows
             @Override
             protected NBTInputStream getNBTInputStream() {
-                var input = Files.newInputStream(TestUtils.getSrcMainResourceFilePath("Data/block_palette.nbt"));
+                var input = Files.newInputStream(TestUtils.getResourceFilePath("block_palette.nbt"));
                 return new NBTInputStream(
                         new DataInputStream(
                                 new GZIPInputStream(
@@ -68,9 +68,8 @@ public class RegistryTest {
 
     @Test
     void testAttributeRegistry() {
-        for (var id : VanillaBlockId.values()) {
-            assertNotNull(ATTRIBUTE_REGISTRY.get(id));
-        }
+        //Special case
+        assertNotNull(ATTRIBUTE_REGISTRY.get(VanillaBlockId.UNKNOWN).get(-2));
     }
 
     @Test

@@ -3,6 +3,7 @@ package cn.allay.block.type;
 import cn.allay.block.component.TestComponentImpl;
 import cn.allay.block.component.TestComponentImplV2;
 import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
+import cn.allay.block.component.impl.attribute.BlockAttributes;
 import cn.allay.block.impl.BlockCobbledDeepslateSlab;
 import cn.allay.block.impl.BlockCobbledDeepslateWall;
 import cn.allay.block.property.type.BlockPropertyType;
@@ -52,7 +53,7 @@ class AllayBlockTypeTest {
                         TEST_ENUM_PROPERTY_TYPE)
                 .setComponents(List.of(
                         of(TestComponentImpl::new, TestComponentImpl.class),
-                        ofSingleton(BlockAttributeComponentImpl.builder().build())
+                        ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT))
                 ))
                 .addBasicComponents()
                 .build();
@@ -67,7 +68,7 @@ class AllayBlockTypeTest {
                                     TEST_ENUM_PROPERTY_TYPE)
                             .setComponents(List.of(
                                     of(TestComponentImplV2::new, TestComponentImplV2.class),
-                                    ofSingleton(BlockAttributeComponentImpl.builder().build())
+                                    ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT))
                             ))
                             .addBasicComponents()
                             .build();
@@ -112,7 +113,7 @@ class AllayBlockTypeTest {
                                 TEST_ENUM_PROPERTY_TYPE)
                         .setComponents(List.of(
                                 of(TestComponentImpl::new, TestComponentImpl.class),
-                                ofSingleton(BlockAttributeComponentImpl.builder().build())
+                                ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT))
                         ))
                         .addBasicComponents()
                         .build()
@@ -129,7 +130,8 @@ class AllayBlockTypeTest {
 //        block.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
 //        block.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
 //        assertEquals(1789459903, block.getCurrentState().getBlockStateHash());
-        List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues =
+
+        List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues1 =
                 List.of(
                         VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST.createValue(WallConnectionTypeEast.NONE),
                         VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH.createValue(WallConnectionTypeNorth.TALL),
@@ -137,6 +139,15 @@ class AllayBlockTypeTest {
                         VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST.createValue(WallConnectionTypeWest.NONE),
                         VanillaBlockPropertyTypes.WALL_POST_BIT.createValue(true)
                 );
-        AllayBlockType.AllayBlockState.computeBlockStateHash(new Identifier("minecraft:cobbled_deepslate_wall"), propertyValues);
+        var hash1 = AllayBlockType.AllayBlockState.computeBlockStateHash(new Identifier("minecraft:cobbled_deepslate_wall"), propertyValues1);
+        assertEquals(1789459903, hash1);
+
+        List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues2 =
+                List.of(
+                        VanillaBlockPropertyTypes.CANDLES.createValue(2),
+                        VanillaBlockPropertyTypes.LIT.createValue(false)
+                );
+        var hash2 = AllayBlockType.AllayBlockState.computeBlockStateHash(new Identifier("minecraft:blue_candle"), propertyValues2);
+        assertEquals(4220034033L, Integer.toUnsignedLong(hash2));
     }
 }

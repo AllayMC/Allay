@@ -5,7 +5,6 @@ import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.type.BlockType;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,11 +16,13 @@ public interface BlockState<T extends Block> {
     BlockType<T> getBlockType();
 
     @UnmodifiableView
-    Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?>> getPropertyValues();
+    Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues();
 
-    BlockState<T> updatePropertyValue(BlockPropertyType.BlockPropertyValue<?, ?> newPropertyValue);
+    BlockState<T> updatePropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> newPropertyValue);
 
     //TODO: updatePropertyValues
 
     int getBlockStateHash();
+
+    long getUnsignedBlockStateHash();
 }
