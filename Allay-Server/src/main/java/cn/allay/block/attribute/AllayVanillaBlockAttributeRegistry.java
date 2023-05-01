@@ -65,7 +65,7 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
                             Objects.requireNonNull(
                                     AllayVanillaBlockAttributeRegistry.class
                                             .getClassLoader()
-                                            .getResourceAsStream("Data/block_attributes.json"),
+                                            .getResourceAsStream("block_attributes.json"),
                                     "block_attributes.json is missing!")
                     )
             );

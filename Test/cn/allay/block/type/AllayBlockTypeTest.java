@@ -4,6 +4,8 @@ import cn.allay.block.component.TestComponentImpl;
 import cn.allay.block.component.TestComponentImplV2;
 import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.block.component.impl.attribute.BlockAttributes;
+import cn.allay.block.impl.BlockBlueCandle;
+import cn.allay.block.impl.BlockCobbledDeepslateWall;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.type.BooleanPropertyType;
 import cn.allay.block.property.type.EnumPropertyType;
@@ -16,9 +18,11 @@ import cn.allay.block.property.vanilla.enums.WallConnectionTypeWest;
 import cn.allay.component.exception.BlockComponentInjectException;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.position.Pos;
+import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
@@ -31,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Date: 2023/4/16 <br>
  * Allay Project <br>
  */
+@ExtendWith(AllayTestExtension.class)
 class AllayBlockTypeTest {
 
     static BlockType<TestBlock> testBlockType;
@@ -121,32 +126,17 @@ class AllayBlockTypeTest {
 
     @Test
     void testBlockStateHash() {
-        //TODO: fix this test
-//        var block = BlockCobbledDeepslateWall.TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
-//        block.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
-//        block.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
-//        block.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
-//        block.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
-//        block.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
-//        assertEquals(1789459903, block.getCurrentState().getBlockStateHash());
+        var b1 = BlockCobbledDeepslateWall.TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
+        b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
+        b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
+        b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
+        b1.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
+        assertEquals(1789459903, b1.getCurrentState().getBlockStateHash());
 
-        List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues1 =
-                List.of(
-                        VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST.createValue(WallConnectionTypeEast.NONE),
-                        VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH.createValue(WallConnectionTypeNorth.TALL),
-                        VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH.createValue(WallConnectionTypeSouth.SHORT),
-                        VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST.createValue(WallConnectionTypeWest.NONE),
-                        VanillaBlockPropertyTypes.WALL_POST_BIT.createValue(true)
-                );
-        var hash1 = AllayBlockType.AllayBlockState.computeBlockStateHash(new Identifier("minecraft:cobbled_deepslate_wall"), propertyValues1);
-        Assertions.assertEquals(1789459903, hash1);
-
-        List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues2 =
-                List.of(
-                        VanillaBlockPropertyTypes.CANDLES.createValue(2),
-                        VanillaBlockPropertyTypes.LIT.createValue(false)
-                );
-        var hash2 = AllayBlockType.AllayBlockState.computeBlockStateHash(new Identifier("minecraft:blue_candle"), propertyValues2);
-        assertEquals(4220034033L, Integer.toUnsignedLong(hash2));
+        var b2 = BlockBlueCandle.TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        b2.setProperty(VanillaBlockPropertyTypes.CANDLES, 2);
+        b2.setProperty(VanillaBlockPropertyTypes.LIT, false);
+        assertEquals(4220034033L, Integer.toUnsignedLong(b2.getCurrentState().getBlockStateHash()));
     }
 }
