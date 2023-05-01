@@ -4,6 +4,7 @@ import cn.allay.block.Block;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -14,5 +15,5 @@ public interface BlockLitDeepslateRedstoneOre extends Block {
             .builder(BlockLitDeepslateRedstoneOre.class)
             .vanillaBlock(VanillaBlockId.LIT_DEEPSLATE_REDSTONE_ORE, true)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

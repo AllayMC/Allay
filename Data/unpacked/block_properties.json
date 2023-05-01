@@ -412,10 +412,10 @@
     ]
   },
   "coral_fan_direction": {
-    "valueType": "BOOLEAN",
+    "valueType": "INTEGER",
     "validValues": [
-      "false",
-      "true"
+      "0",
+      "1"
     ]
   },
   "can_summon": {

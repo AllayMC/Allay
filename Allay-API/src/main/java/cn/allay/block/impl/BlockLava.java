@@ -5,6 +5,7 @@ import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -16,5 +17,5 @@ public interface BlockLava extends Block {
             .vanillaBlock(VanillaBlockId.LAVA, true)
             .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

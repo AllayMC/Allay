@@ -4,6 +4,7 @@ import cn.allay.block.Block;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -14,5 +15,5 @@ public interface BlockDirtWithRoots extends Block {
             .builder(BlockDirtWithRoots.class)
             .vanillaBlock(VanillaBlockId.DIRT_WITH_ROOTS, true)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

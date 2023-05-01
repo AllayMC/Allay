@@ -5,6 +5,7 @@ import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -19,5 +20,5 @@ public interface BlockBirchHangingSign extends Block {
                     VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION,
                     VanillaBlockPropertyTypes.HANGING)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

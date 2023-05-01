@@ -4,6 +4,7 @@ import cn.allay.block.Block;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -14,5 +15,5 @@ public interface BlockOxidizedCopper extends Block {
             .builder(BlockOxidizedCopper.class)
             .vanillaBlock(VanillaBlockId.OXIDIZED_COPPER, true)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

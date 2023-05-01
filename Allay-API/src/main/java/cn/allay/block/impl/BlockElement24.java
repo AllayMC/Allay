@@ -4,6 +4,7 @@ import cn.allay.block.Block;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -14,5 +15,5 @@ public interface BlockElement24 extends Block {
             .builder(BlockElement24.class)
             .vanillaBlock(VanillaBlockId.ELEMENT_24, true)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

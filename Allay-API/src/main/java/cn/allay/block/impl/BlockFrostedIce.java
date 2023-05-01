@@ -5,6 +5,7 @@ import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -16,5 +17,5 @@ public interface BlockFrostedIce extends Block {
             .vanillaBlock(VanillaBlockId.FROSTED_ICE, true)
             .withProperties(VanillaBlockPropertyTypes.AGE)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

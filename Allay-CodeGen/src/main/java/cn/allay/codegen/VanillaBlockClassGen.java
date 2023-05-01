@@ -22,6 +22,7 @@ public class VanillaBlockClassGen {
     public static final ClassName VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("cn.allay.block.property.vanilla", "VanillaBlockPropertyTypes");
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.block.type", "BlockType");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.block.type", "BlockTypeBuilder");
+    public static final ClassName BLOCK_TYPE_REGISTRY = ClassName.get("cn.allay.block.type", "BlockTypeRegistry");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/block/impl");
 
     @SneakyThrows
@@ -62,6 +63,7 @@ public class VanillaBlockClassGen {
         }
         initializer.add(".addBasicComponents()\n");
         initializer.add(".build()");
+        initializer.add(".register($T.getRegistry())", BLOCK_TYPE_REGISTRY);
         codeBuilder.addField(
                 FieldSpec
                         .builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, ClassName.get("", className)), "TYPE")

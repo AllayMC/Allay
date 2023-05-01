@@ -61,5 +61,10 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
         public String getSerializedValue() {
             return serializedValue;
         }
+
+        @Override
+        public String toString() {
+            return "EnumPropertyValue(name=" + name + ", value=" + value + ")";
+        }
     }
 }

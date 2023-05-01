@@ -25,5 +25,8 @@ public interface BlockBaseComponent {
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getProperty(PROPERTY property);
 
     @Inject
+    void setState(BlockState<?> state);
+
+    @Inject
     BlockState<?> getCurrentState();
 }

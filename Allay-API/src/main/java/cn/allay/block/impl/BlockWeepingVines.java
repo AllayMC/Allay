@@ -5,6 +5,7 @@ import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -16,5 +17,5 @@ public interface BlockWeepingVines extends Block {
             .vanillaBlock(VanillaBlockId.WEEPING_VINES, true)
             .withProperties(VanillaBlockPropertyTypes.WEEPING_VINES_AGE)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

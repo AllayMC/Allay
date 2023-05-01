@@ -38,7 +38,7 @@ public class CodeGen {
     public static void main(String[] args) {
         System.out.println();
         //TODO
-//        VanillaBlockIdEnumGen.generate();
+        VanillaBlockIdEnumGen.generate();
         VanillaBlockPropertyTypeGen.generate();
     }
 }

@@ -5,6 +5,7 @@ import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -18,5 +19,5 @@ public interface BlockBamboo extends Block {
                     VanillaBlockPropertyTypes.BAMBOO_LEAF_SIZE,
                     VanillaBlockPropertyTypes.BAMBOO_STALK_THICKNESS)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

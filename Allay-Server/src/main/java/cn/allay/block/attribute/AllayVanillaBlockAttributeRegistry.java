@@ -8,6 +8,8 @@ import cn.allay.block.property.state.BlockState;
 import cn.allay.registry.RegistryLoader;
 import cn.allay.registry.SimpleMappedRegistry;
 import cn.allay.utils.StringUtils;
+import com.google.common.primitives.UnsignedInteger;
+import com.google.common.primitives.UnsignedLong;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
@@ -52,7 +54,11 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
                     var component = BlockAttributes.of(jsonElement.toString());
                     if (!loaded.containsKey(type))
                         loaded.put(type, new HashMap<>());
-                    loaded.get(type).put(jsonElement.getAsJsonObject().get("blockStateHash").getAsInt(), component);
+                    //TODO: check
+                    if (type != VanillaBlockId.UNKNOWN)
+                        loaded.get(type).put(Integer.parseUnsignedInt(jsonElement.getAsJsonObject().get("blockStateHash").getAsString()), component);
+                    else //Special case
+                        loaded.get(type).put(jsonElement.getAsJsonObject().get("blockStateHash").getAsInt(), component);
                 }
                 log.info("Loaded vanilla block attribute data registry successfully");
                 return loaded;

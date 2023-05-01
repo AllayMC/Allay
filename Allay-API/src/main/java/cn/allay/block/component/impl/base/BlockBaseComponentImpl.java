@@ -60,6 +60,14 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     @Override
     @Impl
+    public void setState(BlockState<?> state) {
+        if (blockType.allStates().containsValue(state))
+            currentState = state;
+        else throw new IllegalArgumentException("State " + state + " is not supported by this block");
+    }
+
+    @Override
+    @Impl
     public BlockState<?> getCurrentState() {
         return currentState;
     }

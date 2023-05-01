@@ -5,6 +5,7 @@ import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeBuilder;
+import cn.allay.block.type.BlockTypeRegistry;
 
 /**
  * Author: daoge_cmd <br>
@@ -16,5 +17,5 @@ public interface BlockStrippedCherryWood extends Block {
             .vanillaBlock(VanillaBlockId.STRIPPED_CHERRY_WOOD, true)
             .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .addBasicComponents()
-            .build();
+            .build().register(BlockTypeRegistry.getRegistry());
 }

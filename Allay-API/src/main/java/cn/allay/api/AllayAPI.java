@@ -39,7 +39,7 @@ public final class AllayAPI {
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
-    private final Map<Class<?>, Supplier<?>> bindings = new LinkedHashMap<>();
+    private final Map<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean implemented = false;
 
@@ -60,11 +60,15 @@ public final class AllayAPI {
      * @throws MissingImplementationException If there are interface which are not been implemented
      */
     public void implement(String coreName) throws MissingImplementationException {
-        for (Map.Entry<Class<?>, Supplier<?>> entry : bindings.entrySet()) {
+        for (Map.Entry<Class<?>, ApiBindingAction<?>> entry : bindings.entrySet()) {
             if (entry.getValue() == null) {
                 throw new MissingImplementationException("Missing binding for " + entry.getKey().getName());
             }
-            ((Consumer<Object>) consumers.get(entry.getKey())).accept(entry.getValue().get());
+            var apiInstance = entry.getValue().bindingAction.get();
+            ((Consumer<Object>) consumers.get(entry.getKey())).accept(apiInstance);
+            if (entry.getValue().afterBound != null) {
+                ((Consumer<Object>) entry.getValue().afterBound).accept(apiInstance);
+            }
         }
         //TODO: 多语言支持
         log.info("This server is running " + coreName + ", implement Allay-API version §b" + API_VERSION);
@@ -89,9 +93,14 @@ public final class AllayAPI {
     }
 
     public <T> void bind(Class<T> api, Supplier<T> supplier) {
+        bind(api, supplier, null);
+    }
+
+    public <T> void bind(Class<T> api, Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {
         Objects.requireNonNull(api);
-        Objects.requireNonNull(supplier);
-        bindings.put(api, supplier);
+        Objects.requireNonNull(bindingAction);
+        bindings.put(api, new ApiBindingAction<>(bindingAction, afterBound));
+
     }
 
     /**
@@ -114,8 +123,10 @@ public final class AllayAPI {
         requireImpl(EntityTypeBuilder.class, EntityTypeBuilder.BUILDER::set);
         requireImpl(BlockTypeBuilder.BlockTypeBuilderFactory.class, BlockTypeBuilder.FACTORY::set);
         requireImpl(BlockPropertyTypeRegistry.class, BlockPropertyTypeRegistry.REGISTRY::set);
-        requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
         requireImpl(VanillaBlockPaletteRegistry.class, VanillaBlockPaletteRegistry.REGISTRY::set);
         requireImpl(VanillaBlockAttributeRegistry.class, VanillaBlockAttributeRegistry.REGISTRY::set);
+        requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
     }
+
+    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {}
 }

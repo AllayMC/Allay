@@ -15,6 +15,7 @@ import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identifier;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.ToString;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -88,6 +89,12 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         return possibleBlockStateMap.computeIfAbsent(blockStateHash, k -> new AllayBlockState(propertyValues, k));
     }
 
+    @Override
+    public Map<Integer, BlockState<T>> allStates() {
+        return Collections.unmodifiableMap(possibleBlockStateMap);
+    }
+
+    @ToString
     protected class AllayBlockState implements BlockState<T> {
 
         protected Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues;
