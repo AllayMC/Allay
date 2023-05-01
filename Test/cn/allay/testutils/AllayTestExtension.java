@@ -1,6 +1,7 @@
 package cn.allay.testutils;
 
 import cn.allay.Allay;
+import cn.allay.api.AllayAPI;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
@@ -16,6 +17,7 @@ public class AllayTestExtension implements BeforeAllCallback {
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
         //Init allay api
-        Allay.initAllayAPI();
+        if (!AllayAPI.getInstance().isImplemented())
+            Allay.initAllayAPI();
     }
 }
