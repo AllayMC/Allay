@@ -21,6 +21,7 @@ import cn.allay.scheduler.Scheduler;
 import cn.allay.server.AllayServer;
 import cn.allay.server.Server;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.VisibleForTesting;
 
 @Slf4j
 public final class Allay {
@@ -38,7 +39,8 @@ public final class Allay {
         Server.getInstance().startMainLoop();
     }
 
-    private static void initAllayAPI() throws MissingImplementationException {
+    @VisibleForTesting
+    public static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::new);

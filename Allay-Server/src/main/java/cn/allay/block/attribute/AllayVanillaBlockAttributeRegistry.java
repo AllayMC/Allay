@@ -1,8 +1,10 @@
 package cn.allay.block.attribute;
 
 import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
+import cn.allay.block.component.impl.attribute.BlockAttributes;
 import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.data.VanillaBlockId;
+import cn.allay.block.property.state.BlockState;
 import cn.allay.registry.RegistryLoader;
 import cn.allay.registry.SimpleMappedRegistry;
 import cn.allay.utils.StringUtils;
@@ -15,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -24,39 +27,33 @@ import java.util.Objects;
  * Allay Project <br>
  */
 @Slf4j
-public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegistry<VanillaBlockId, BlockAttributeComponentImpl, Map<VanillaBlockId, BlockAttributeComponentImpl>> implements VanillaBlockAttributeRegistry {
-    public AllayVanillaBlockAttributeRegistry(RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockAttributeComponentImpl>> loader) {
-        super(VanillaBlockId.values(), loader);
+public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegistry<VanillaBlockId, Map<Integer, BlockAttributes>, Map<VanillaBlockId, Map<Integer, BlockAttributes>>> implements VanillaBlockAttributeRegistry {
+    public AllayVanillaBlockAttributeRegistry(RegistryLoader<Void, Map<VanillaBlockId, Map<Integer, BlockAttributes>>> loader) {
+        super(null, loader);
     }
 
-    public static class Loader implements RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, BlockAttributeComponentImpl>> {
+    public static class Loader implements RegistryLoader<Void, Map<VanillaBlockId, Map<Integer, BlockAttributes>>> {
 
         @SneakyThrows
         @Override
-        public Map<VanillaBlockId, BlockAttributeComponentImpl> load(VanillaBlockId[] input) {
+        public Map<VanillaBlockId, Map<Integer, BlockAttributes>> load(Void input) {
             log.info("Start loading vanilla block attribute data registry...");
             try (var reader = getReader()) {
                 var element = JsonParser.parseReader(reader);
-                var loaded = new EnumMap<VanillaBlockId, BlockAttributeComponentImpl>(VanillaBlockId.class);
+                var loaded = new HashMap<VanillaBlockId, Map<Integer, BlockAttributes>>();
                 for (JsonElement jsonElement : element.getAsJsonArray()) {
                     VanillaBlockId type;
                     try {
-                        type = VanillaBlockId.valueOf(StringUtils.fastTwoPartSplit(jsonElement.getAsJsonObject().get("identifier").getAsString(), ":", "")[1].toUpperCase());
+                        type = VanillaBlockId.valueOf(StringUtils.fastTwoPartSplit(jsonElement.getAsJsonObject().get("name").getAsString(), ":", "")[1].toUpperCase());
                     } catch (IllegalArgumentException ignore) {
-                        log.error("Unknown block name: " + jsonElement.getAsJsonObject().get("identifier"));
+                        log.error("Unknown block name: " + jsonElement.getAsJsonObject().get("name"));
                         continue;
                     }
-                    var component = BlockAttributeComponentImpl.of(jsonElement.toString());
-                    loaded.put(type, component);
+                    var component = BlockAttributes.of(jsonElement.toString());
+                    if (!loaded.containsKey(type))
+                        loaded.put(type, new HashMap<>());
+                    loaded.get(type).put(jsonElement.getAsJsonObject().get("blockStateHash").getAsInt(), component);
                 }
-                int missings = 0;
-                for (var vanillaBlock : VanillaBlockId.values()) {
-                    if (!loaded.containsKey(vanillaBlock)) {
-                        log.error("Missing attribute data for block: " + vanillaBlock);
-                        missings++;
-                    }
-                }
-                if (missings != 0) log.error(missings + " blocks' attributes are missing!");
                 log.info("Loaded vanilla block attribute data registry successfully");
                 return loaded;
             }

@@ -26,9 +26,9 @@ public interface BlockType<T extends Block> {
 
     T createBlock(BlockInitInfo info);
 
-    BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?>> propertyValues);
+    BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
-    default BlockState<T> ofState(BlockPropertyType.BlockPropertyValue<?, ?>... propertyValues) {
+    default BlockState<T> ofState(BlockPropertyType.BlockPropertyValue<?, ?, ?>... propertyValues) {
         return ofState(List.of(propertyValues));
     }
 }

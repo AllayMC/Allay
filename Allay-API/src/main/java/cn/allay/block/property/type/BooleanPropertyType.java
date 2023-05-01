@@ -9,8 +9,8 @@ import java.util.List;
  */
 public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
 
-    private final BlockPropertyValue<Boolean, BooleanPropertyType> FALSE = new BooleanPropertyValue(this, false);
-    private final BlockPropertyValue<Boolean, BooleanPropertyType> TRUE = new BooleanPropertyValue(this, true);
+    private final BooleanPropertyValue FALSE = new BooleanPropertyValue(false);
+    private final BooleanPropertyValue TRUE = new BooleanPropertyValue(true);
 
     private BooleanPropertyType(String name, Boolean defaultData) {
         super(name, List.of(true, false), defaultData);
@@ -26,12 +26,12 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
     }
 
     @Override
-    public BlockPropertyValue<Boolean, ? extends BlockPropertyType<Boolean>> createValue(Boolean value) {
+    public BooleanPropertyValue createValue(Boolean value) {
         return value ? TRUE : FALSE;
     }
 
     @Override
-    public BlockPropertyValue<Boolean, BooleanPropertyType> tryCreateValue(Object value) {
+    public BooleanPropertyValue tryCreateValue(Object value) {
         if (value instanceof Boolean bool) {
             return bool ? TRUE : FALSE;
         } else if (value instanceof Number number) {
@@ -42,15 +42,15 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
         throw new IllegalArgumentException("Invalid value for boolean property type: " + value);
     }
 
-    private final class BooleanPropertyValue extends BlockPropertyValue<Boolean, BooleanPropertyType> {
+    final class BooleanPropertyValue extends BlockPropertyValue<Boolean, BooleanPropertyType, Byte> {
 
-        BooleanPropertyValue(BooleanPropertyType propertyType, Boolean value) {
-            super(propertyType, value);
+        BooleanPropertyValue(Boolean value) {
+            super(BooleanPropertyType.this, value);
         }
 
         @Override
-        public String getSerializedValue() {
-            return value ? "1" : "0";
+        public Byte getSerializedValue() {
+            return (byte) (value ? 1 : 0);
         }
     }
 }

@@ -10,6 +10,8 @@ import java.util.Map;
  * Author: daoge_cmd <br>
  * Date: 2023/4/8 <br>
  * Allay Project <br>
+ *
+ * TODO: Replaced by blockStateHash, the block runtime id is not used anymore.
  */
 public interface VanillaBlockPaletteRegistry extends MappedRegistry<VanillaBlockId, VanillaBlockPaletteDataEntry, Map<VanillaBlockId, VanillaBlockPaletteDataEntry>> {
     ApiInstanceHolder<VanillaBlockPaletteRegistry> REGISTRY = ApiInstanceHolder.create();

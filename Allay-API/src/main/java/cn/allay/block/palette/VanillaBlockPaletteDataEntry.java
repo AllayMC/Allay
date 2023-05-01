@@ -14,7 +14,7 @@ import java.util.Map;
 public record VanillaBlockPaletteDataEntry(
         VanillaBlockId blockId,
         List<BlockPropertyType<?>> propertyTypes,
-        Map<List<BlockPropertyType.BlockPropertyValue<?, ?>>, Integer> runtimeIdMap,
+        Map<List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>, Integer> runtimeIdMap,
         int version) {
 
 }

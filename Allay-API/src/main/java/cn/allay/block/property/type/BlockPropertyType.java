@@ -40,11 +40,11 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
         return (T) this;
     }
 
-    BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>> createValue(DATATYPE value);
+    BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createValue(DATATYPE value);
 
-    BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>> tryCreateValue(Object value);
+    BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> tryCreateValue(Object value);
 
-    default BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>> createDefaultValue() {
+    default BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createDefaultValue() {
         return createValue(getDefaultValue());
     }
 
@@ -57,7 +57,7 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
 
     @Getter
     @ToString
-    class BlockPropertyValue<DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> {
+    abstract sealed class BlockPropertyValue<DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>, SERIALIZED_DATATYPE> permits BooleanPropertyType.BooleanPropertyValue, EnumPropertyType.EnumPropertyValue, IntPropertyType.IntPropertyValue {
 
         protected final PROPERTY propertyType;
         protected final DATATYPE value;
@@ -67,8 +67,6 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
             this.value = value;
         }
 
-        public String getSerializedValue() {
-            return value.toString();
-        }
+         public abstract SERIALIZED_DATATYPE getSerializedValue();
     }
 }
