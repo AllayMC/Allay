@@ -29,7 +29,7 @@ public class VanillaBlockClassGen {
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
-            var className = "Block" + Utils.convertToCamelCase(block.getNamespaceId().getPath());
+            var className = "Block" + Utils.convertToPascalCase(block.getNamespaceId().getPath());
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             if (Files.exists(path)) {
                 System.out.println("Class " + className + " already exists, skipped");

@@ -25,11 +25,11 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
         //HACK: Load all the vanilla block class
         //TODO: Replace it with auto-registry (or other) and remove this hack
         for (var vanillaBlockId : VanillaBlockId.values()) {
-            Class.forName("cn.allay.block.impl.Block" + convertToCamelCase(vanillaBlockId.getNamespaceId().getPath()));
+            Class.forName("cn.allay.block.impl.Block" + convertToPascalCase(vanillaBlockId.getNamespaceId().getPath()));
         }
     }
 
-    private static String convertToCamelCase(String str) {
+    private static String convertToPascalCase(String str) {
         List<String> parts = StringUtils.fastSplit(str, "_");
         StringBuilder output = new StringBuilder();
 
