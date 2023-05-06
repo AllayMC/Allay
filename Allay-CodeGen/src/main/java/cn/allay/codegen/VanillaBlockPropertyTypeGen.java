@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
-import static cn.allay.codegen.Utils.convertToCamelCase;
+import static cn.allay.codegen.Utils.convertToPascalCase;
 
 /**
  * Author: daoge_cmd <br>
@@ -189,7 +189,7 @@ public class VanillaBlockPropertyTypeGen {
 
     protected record BlockPropertyTypeInfo(String name, List<String> validValues, BlockPropertyType type) {
         public String getEnumClassName() {
-            return convertToCamelCase(name);
+            return convertToPascalCase(name);
         }
 
         //"name" is not included

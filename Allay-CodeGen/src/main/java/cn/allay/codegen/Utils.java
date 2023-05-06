@@ -10,7 +10,7 @@ import java.util.List;
  * Allay Project <br>
  */
 public class Utils {
-    public static String convertToCamelCase(String str) {
+    public static String convertToPascalCase(String str) {
         List<String> parts = StringUtils.fastSplit(str, "_");
         StringBuilder output = new StringBuilder();
 

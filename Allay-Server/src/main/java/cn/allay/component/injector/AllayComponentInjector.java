@@ -1,8 +1,7 @@
 package cn.allay.component.injector;
 
-import cn.allay.component.annotation.Dependency;
-import cn.allay.component.annotation.Impl;
-import cn.allay.component.annotation.Inject;
+import cn.allay.component.annotation.*;
+import cn.allay.component.annotation.Manager;
 import cn.allay.component.exception.ComponentInjectException;
 import cn.allay.component.interfaces.*;
 import cn.allay.identifier.Identifier;
@@ -17,9 +16,11 @@ import net.bytebuddy.implementation.MethodDelegation;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
@@ -141,6 +142,47 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         return bb;
     }
 
+    protected static class AllayComponentManager implements cn.allay.component.interfaces.ComponentManager {
+
+        Map<Class<? extends ComponentEvent>, List<Listener>> listenerMap = new ConcurrentHashMap<>();
+
+        @Override
+        public <T extends ComponentEvent> T callEvent(T event) {
+            if (!listenerMap.containsKey(event.getClass()))
+                return event;
+            for (var listener : listenerMap.get(event.getClass()))
+                listener.access(event);
+            return event;
+        }
+
+        private void registerListener(Class<? extends ComponentEvent> eventClass, Listener listener) {
+            listenerMap.computeIfAbsent(eventClass, k -> new ArrayList<>()).add(listener);
+        }
+
+        protected static class Listener {
+
+            private final Method method;
+            private final Object instance;
+
+            Listener(Method method, Object instance) {
+                this.method = method;
+                this.instance = instance;
+            }
+
+            static Listener wrap(Method method, Object instance) {
+                return new Listener(method, instance);
+            }
+
+            void access(ComponentEvent event) {
+                try {
+                    method.invoke(instance, event);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
     public static class Initializer {
 
         private final List<ComponentProvider<? extends ComponentImpl>> componentProviders;
@@ -156,6 +198,37 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             //TODO: 有一些操作可以在构建类的时候完成，这边有待优化
             List<? extends ComponentImpl> components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
             checkComponentValid(components);
+            injectComponentInstances(instance, components);
+            var componentManager = new AllayComponentManager();
+            injectComponentManager(componentManager, components);
+        }
+
+        protected void injectComponentManager(AllayComponentManager manager, List<? extends ComponentImpl> components) {
+            for (var component : components) {
+                for (var field : component.getClass().getDeclaredFields()) {
+                    if (field.isAnnotationPresent(Manager.class)) {
+                        field.setAccessible(true);
+                        try {
+                            field.set(component, manager);
+                        } catch (IllegalAccessException e) {
+                            throw new ComponentInjectException("Cannot inject component manager to component: " + component.getClass().getName(), e);
+                        }
+                    }
+                }
+                for (var method : component.getClass().getDeclaredMethods()) {
+                    if (!method.isAnnotationPresent(ComponentEventListener.class))
+                        continue;
+                    if (!(method.getReturnType() == void.class))
+                        throw new ComponentInjectException("Component event listener method must be void: " + method.getName() + " in component: " + component.getClass().getName());
+                    if (method.getParameterCount() != 1 || !ComponentEvent.class.isAssignableFrom(method.getParameters()[0].getType()))
+                        throw new ComponentInjectException("Component event listener method must have one parameter and the parameter must be a subclass of ComponentEvent: " + method.getName() + " in component: " + component.getClass().getName());
+                    method.setAccessible(true);
+                    manager.registerListener((Class<? extends ComponentEvent>) method.getParameters()[0].getType(), AllayComponentManager.Listener.wrap(method, component));
+                }
+            }
+        }
+
+        protected void injectComponentInstances(Object instance, List<? extends ComponentImpl> components) {
             try {
                 var componentListField = instance.getClass().getDeclaredField(COMPONENT_LIST_FIELD_NAME);
                 componentListField.setAccessible(true);

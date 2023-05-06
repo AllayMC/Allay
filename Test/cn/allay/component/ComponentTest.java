@@ -26,6 +26,7 @@ class ComponentTest {
     protected static List<ComponentProvider<?>> componentProviders;
     protected static Sheep sheep;
 
+    @SneakyThrows
     @BeforeAll
     static void init() {
         parentClass = Sheep.class;
@@ -38,17 +39,19 @@ class ComponentTest {
             var casted = (TestComponentInitInfo) info;
             return new SimpleTestInitArgComponent(casted.data());
         }, SimpleTestInitArgComponent.class));
-    }
-
-    @SneakyThrows
-    @Test
-    void testInjector() {
+        componentProviders.add(ComponentProvider.of(SimpleTestEventTriggerComponent::new, SimpleTestEventTriggerComponent.class));
+        componentProviders.add(ComponentProvider.ofSingleton(new SimpleTestEventListenerComponent()));
+        //testInjector :)
         sheep = new AllayComponentInjector<Sheep>()
                 .parentClass(parentClass)
                 .component(componentProviders)
                 .inject()
                 .getDeclaredConstructor(ComponentInitInfo.class)
                 .newInstance(new TestComponentInitInfo(114514));
+    }
+
+    @Test
+    void testCommonFunctions() {
         assertEquals("Sheep", sheep.getName());
         assertEquals(20, sheep.getHealth());
         sheep.attack(10);
@@ -61,6 +64,10 @@ class ComponentTest {
         ((AttackComponent) sheep.getAttackComponent()).attack(10);
         assert sheep.isDead();
         assertEquals(114514, sheep.getData());
+    }
+
+    @Test
+    void testIllegalInject() {
         componentProviders.add(ComponentProvider.of(() -> new SimpleNameComponentV2("SmallSheep"), SimpleNameComponentV2.class));
         assertThrows(
                 ComponentInjectException.class,
@@ -68,6 +75,11 @@ class ComponentTest {
                         .parentClass(parentClass)
                         .component(componentProviders)
                         .inject());
+    }
+
+    @Test
+    void testListener() {
+        assertEquals("testListener() accepted to the event!", sheep.triggerEvent("origin message").getMessage());
     }
 
     public static class SimpleNameComponentV2 extends SimpleNameComponent {
