@@ -9,6 +9,7 @@ import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.entity.type.EntityTypeBuilder;
 import cn.allay.item.component.impl.attribute.VanillaItemAttributeRegistry;
 import cn.allay.item.type.ItemTypeBuilder;
+import cn.allay.item.type.ItemTypeRegistry;
 import cn.allay.scheduler.Scheduler;
 import cn.allay.server.Server;
 import lombok.Getter;
@@ -134,6 +135,7 @@ public final class AllayAPI {
         //Item
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
         requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);
+        requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
         //todo: ItemTypeRegistry
 
         //Entity (TODO)

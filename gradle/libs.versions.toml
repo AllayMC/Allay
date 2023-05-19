@@ -37,6 +37,9 @@ javapoet = { group = "com.squareup", name = "javapoet", version = "1.13.0" }
 #fastutil = { group = "com.nukkitx", name = "fastutil-lite", version = "8.1.1" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.11" }
 
+# Reflections
+reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
+
 [bundles]
 log4j = ["log4j-api", "log4j-core", "log4j-slf4j18-impl", "slf4j-api", "disruptor"]
 terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader"]

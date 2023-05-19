@@ -1,6 +1,7 @@
 package cn.allay.item.type;
 
 import cn.allay.component.injector.AllayComponentInjector;
+import cn.allay.component.interfaces.ComponentInitInfo;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identifier;
@@ -48,7 +49,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
             throw new ItemTypeBuildException("Failed to create item type!", e);
         }
         //Cache constructor
-        constructor = injectedClass.getConstructor(ComponentInjector.class);
+        constructor = injectedClass.getConstructor(ComponentInitInfo.class);
         return this;
     }
 
@@ -123,6 +124,12 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
         @Override
         public ItemTypeBuilder<T> addComponents(List<ComponentProvider<? extends ItemComponentImpl>> componentProviders) {
             this.componentProviders.addAll(componentProviders);
+            return this;
+        }
+
+        @Override
+        public ItemTypeBuilder<T> addBasicComponents() {
+            //保留以处理后续需求
             return this;
         }
 

@@ -50,7 +50,7 @@ public class VanillaBlockClassGen {
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T\n.builder($N.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, className)
-                .add(".vanillaBlock($T.$N, true)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.getNamespaceId().getPath().toUpperCase());
+                .add(".vanillaBlock($T.$N, true)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
         var blockPaletteData = CodeGen.MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getNamespaceId().toString());
         var states = blockPaletteData.getCompound("states");
         if (states.size() != 0) {

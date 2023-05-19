@@ -9,6 +9,7 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 /**
  * Author: daoge_cmd <br>
@@ -28,7 +29,10 @@ public class VanillaItemClassGen {
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var item : VanillaItemId.values()) {
-            var className = "Item" + Utils.convertToPascalCase(item.getNamespaceId().getPath());
+            var typeName = StringUtils.fastTwoPartSplit(
+                    item.getNamespaceId().getPath(),
+                    ".", "")[1];
+            var className = item == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0" : "Item" + Utils.convertToPascalCase(typeName);
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             if (Files.exists(path)) {
                 System.out.println("Class " + className + " already exists, skipped");
@@ -47,12 +51,9 @@ public class VanillaItemClassGen {
                         "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var initializer = CodeBlock.builder();
-        var typeName = StringUtils.fastTwoPartSplit(
-                vanillaItemId.getNamespaceId().getPath(),
-                ".", "")[1].toUpperCase();
         initializer
                 .add("$T\n.builder($N.class)\n", ITEM_TYPE_BUILDER_CLASS_NAME, className)
-                .add(".vanillaItem($T.$N, true)\n", VANILLA_ITEM_ID_CLASS_NAME, typeName)
+                .add(".vanillaItem($T.$N, true)\n", VANILLA_ITEM_ID_CLASS_NAME, vanillaItemId.name())
                 .add(".addBasicComponents()\n")
                 .add(".build()")
                 .add(".register($T.getRegistry())", ITEM_TYPE_REGISTRY);

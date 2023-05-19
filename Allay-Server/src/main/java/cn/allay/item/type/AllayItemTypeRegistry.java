@@ -2,7 +2,7 @@ package cn.allay.item.type;
 
 import cn.allay.identifier.Identifier;
 import cn.allay.registry.SimpleMappedRegistry;
-import lombok.SneakyThrows;
+import cn.allay.utils.PackageClassLoader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +17,7 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
         super(null, input -> new HashMap<>());
     }
 
-    @SneakyThrows
     public void init() {
-        //TODO: load vanilla item types
+        PackageClassLoader.loadClasses("cn.allay.item.impl");
     }
 }

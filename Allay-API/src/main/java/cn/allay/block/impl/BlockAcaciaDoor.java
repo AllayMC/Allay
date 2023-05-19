@@ -12,13 +12,13 @@ import cn.allay.block.type.BlockTypeRegistry;
  * Allay Project <br>
  */
 public interface BlockAcaciaDoor extends Block {
-  BlockType<BlockAcaciaDoor> TYPE = BlockTypeBuilder
-          .builder(BlockAcaciaDoor.class)
-          .vanillaBlock(VanillaBlockId.ACACIA_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                  VanillaBlockPropertyTypes.DOOR_HINGE_BIT,
-                  VanillaBlockPropertyTypes.OPEN_BIT,
-                  VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-          .addBasicComponents()
-          .build().register(BlockTypeRegistry.getRegistry());
+    BlockType<BlockAcaciaDoor> TYPE = BlockTypeBuilder
+            .builder(BlockAcaciaDoor.class)
+            .vanillaBlock(VanillaBlockId.ACACIA_DOOR, true)
+            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
+                    VanillaBlockPropertyTypes.DOOR_HINGE_BIT,
+                    VanillaBlockPropertyTypes.OPEN_BIT,
+                    VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+            .addBasicComponents()
+            .build().register(BlockTypeRegistry.getRegistry());
 }
