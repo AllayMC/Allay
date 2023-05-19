@@ -6,8 +6,10 @@ import cn.allay.block.palette.VanillaBlockPaletteRegistry;
 import cn.allay.block.property.BlockPropertyTypeRegistry;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
+import cn.allay.block.type.BlockTypeRegistry;
 import cn.allay.item.component.impl.attribute.VanillaItemAttributeRegistry;
 import cn.allay.item.data.VanillaItemId;
+import cn.allay.item.type.ItemTypeRegistry;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @ExtendWith(AllayTestExtension.class)
 public class RegistryTest {
+
+    @Test
+    void testBlockTypeRegistry() {
+        for (var id : VanillaBlockId.values()) {
+            assertNotNull(BlockTypeRegistry.getRegistry().get(id.getNamespaceId()));
+        }
+    }
 
     @Test
     void testBlockAttributeRegistry() {
@@ -52,6 +61,8 @@ public class RegistryTest {
 
     @Test
     void testItemTypeRegistry() {
-        //TODO
+        for (var id : VanillaItemId.values()) {
+            assertNotNull(ItemTypeRegistry.getRegistry().get(id.getNamespaceId()));
+        }
     }
 }

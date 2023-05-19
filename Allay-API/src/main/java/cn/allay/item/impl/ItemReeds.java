@@ -10,10 +10,10 @@ import cn.allay.item.type.ItemTypeRegistry;
  * Author: daoge_cmd <br>
  * Allay Project <br>
  */
-public interface ItemNetherBrick extends ItemStack {
-    ItemType<ItemNetherBrick> TYPE = ItemTypeBuilder
-            .builder(ItemNetherBrick.class)
-            .vanillaItem(VanillaItemId.NETHER_BRICK, true)
+public interface ItemReeds extends ItemStack {
+    ItemType<ItemReeds> TYPE = ItemTypeBuilder
+            .builder(ItemReeds.class)
+            .vanillaItem(VanillaItemId.REEDS, true)
             .addBasicComponents()
             .build().register(ItemTypeRegistry.getRegistry());
 }

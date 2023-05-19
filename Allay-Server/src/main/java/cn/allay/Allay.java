@@ -19,7 +19,9 @@ import cn.allay.entity.type.EntityTypeBuilder;
 import cn.allay.item.attribute.AllayVanillaItemAttributeRegistry;
 import cn.allay.item.component.impl.attribute.VanillaItemAttributeRegistry;
 import cn.allay.item.type.AllayItemType;
+import cn.allay.item.type.AllayItemTypeRegistry;
 import cn.allay.item.type.ItemTypeBuilder;
+import cn.allay.item.type.ItemTypeRegistry;
 import cn.allay.scheduler.AllayScheduler;
 import cn.allay.scheduler.Scheduler;
 import cn.allay.server.AllayServer;
@@ -61,7 +63,7 @@ public final class Allay {
         //Item
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
         api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));
-        //todo: ItemTypeRegistry
+        api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());
 
         //Entity
         api.bind(EntityTypeBuilder.class, AllayEntityTypeBuilder::new);
