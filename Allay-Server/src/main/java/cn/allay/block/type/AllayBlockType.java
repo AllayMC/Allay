@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class AllayBlockType<T extends Block> implements BlockType<T> {
-    protected Class<T> blockClass;
+    protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
     protected Constructor<T> constructor;
     protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders;
@@ -45,11 +45,11 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     protected Map<Integer, BlockState<T>> possibleBlockStateMap = new ConcurrentHashMap<>();
     protected Identifier namespaceId;
 
-    protected AllayBlockType(Class<T> blockClass,
+    protected AllayBlockType(Class<T> interfaceClass,
                              List<ComponentProvider<? extends BlockComponentImpl>> componentProviders,
                              List<BlockPropertyType<?>> properties,
                              Identifier namespaceId) {
-        this.blockClass = blockClass;
+        this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
         this.properties = properties;
         this.namespaceId = namespaceId;
@@ -61,22 +61,23 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     protected AllayBlockType<T> complete() {
         try {
             injectedClass = new AllayBlockComponentInjector<>(this)
-                    .parentClass(blockClass)
+                    .interfaceClass(interfaceClass)
                     .component(new ArrayList<>(componentProviders))
                     .inject();
         } catch (Exception e) {
-            throw new BlockTypeBuildException("Failed to create block type", e);
+            throw new BlockTypeBuildException("Failed to create block type!", e);
         }
         //Cache constructor
         constructor = injectedClass.getConstructor(ComponentInitInfo.class);
         return this;
     }
 
-    public static <T extends Block> BlockTypeBuilder<T> builder(Class<T> blockClass) {
-        return new Builder<>(blockClass);
+    public static <T extends Block> BlockTypeBuilder<T> builder(Class<T> interfaceClass) {
+        return new Builder<>(interfaceClass);
     }
 
     @SneakyThrows
+    @Override
     public T createBlock(BlockInitInfo info) {
         return constructor.newInstance(info);
     }
@@ -186,15 +187,15 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     }
 
     public static class Builder<T extends Block> implements BlockTypeBuilder<T> {
-        protected Class<T> blockClass;
+        protected Class<T> interfaceClass;
         protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders = new ArrayList<>();
         protected List<BlockPropertyType<?>> properties = new ArrayList<>();
         protected Identifier namespaceId;
 
-        public Builder(Class<T> blockClass) {
-            if (blockClass == null)
-                throw new BlockTypeBuildException("Block class cannot be null");
-            this.blockClass = blockClass;
+        public Builder(Class<T> interfaceClass) {
+            if (interfaceClass == null)
+                throw new BlockTypeBuildException("Interface class cannot be null!");
+            this.interfaceClass = interfaceClass;
         }
 
         public Builder<T> namespaceId(Identifier namespaceId) {
@@ -216,7 +217,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             if (initVanillaBlockAttributeComponent) {
                 var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
                 if (attributeMap == null)
-                    throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry");
+                    throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
                 var attributeComponent = BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap);
                 componentProviders.add(ComponentProvider.ofSingleton(attributeComponent));
             }
@@ -234,6 +235,8 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         public Builder<T> setComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders) {
+            if (componentProviders == null)
+                throw new BlockTypeBuildException("Component providers cannot be null");
             this.componentProviders = new ArrayList<>(componentProviders);
             return this;
         }
@@ -250,12 +253,8 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
 
         public AllayBlockType<T> build() {
             if (namespaceId == null)
-                throw new BlockTypeBuildException("Identifier cannot be null");
-            if (properties == null)
-                throw new BlockTypeBuildException("Properties cannot be null");
-            if (componentProviders == null)
-                throw new BlockTypeBuildException("Component providers cannot be null");
-            var type = new AllayBlockType<>(blockClass, componentProviders, properties, namespaceId);
+                throw new BlockTypeBuildException("NamespaceId cannot be null!");
+            var type = new AllayBlockType<>(interfaceClass, componentProviders, properties, namespaceId);
             //TODO: 分离逻辑
             componentProviders.add(ComponentProvider.of(() -> new BlockBaseComponentImpl(type), BlockBaseComponentImpl.class));
             return type.complete();

@@ -16,6 +16,10 @@ import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.entity.type.AllayEntityTypeBuilder;
 import cn.allay.entity.type.EntityTypeBuilder;
+import cn.allay.item.attribute.AllayVanillaItemAttributeRegistry;
+import cn.allay.item.component.impl.attribute.VanillaItemAttributeRegistry;
+import cn.allay.item.type.AllayItemType;
+import cn.allay.item.type.ItemTypeBuilder;
 import cn.allay.scheduler.AllayScheduler;
 import cn.allay.scheduler.Scheduler;
 import cn.allay.server.AllayServer;
@@ -30,7 +34,7 @@ public final class Allay {
         log.info("Starting Allay...");
         try {
             initAllayAPI();
-        } catch (MissingImplementationException e) {
+        } catch (Exception e) {
             log.error("Cannot init Allay API!");
             e.printStackTrace();
             System.exit(1);
@@ -42,15 +46,26 @@ public final class Allay {
     @VisibleForTesting
     public static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
+        //Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::new);
         api.bind(Scheduler.SchedulerFactory.class, () -> AllayScheduler::new);
-        api.bind(EntityTypeBuilder.class, AllayEntityTypeBuilder::new);
+
+        //Block
         api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
         api.bind(BlockPropertyTypeRegistry.class, AllayBlockPropertyTypeRegistry::new);
         api.bind(VanillaBlockPaletteRegistry.class, () -> new AllayVanillaBlockPaletteRegistry(new AllayVanillaBlockPaletteRegistry.Loader()));
         api.bind(VanillaBlockAttributeRegistry.class, () -> new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));
         api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
+
+        //Item
+        api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
+        api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));
+        //todo: ItemTypeRegistry
+
+        //Entity
+        api.bind(EntityTypeBuilder.class, AllayEntityTypeBuilder::new);
+
         api.implement("Allay");
     }
 }
