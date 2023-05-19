@@ -22,14 +22,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class ComponentTest {
 
-    protected static Class<Sheep> parentClass;
+    protected static Class<Sheep> interfaceClass;
     protected static List<ComponentProvider<?>> componentProviders;
     protected static Sheep sheep;
 
     @SneakyThrows
     @BeforeAll
     static void init() {
-        parentClass = Sheep.class;
+        interfaceClass = Sheep.class;
         componentProviders = new ArrayList<>();
         componentProviders.add(ComponentProvider.of(() -> new SimpleNameComponent("Sheep"), SimpleNameComponent.class));
         componentProviders.add(ComponentProvider.of(() -> new SimpleHealthComponent(20), SimpleHealthComponent.class));
@@ -43,7 +43,7 @@ class ComponentTest {
         componentProviders.add(ComponentProvider.ofSingleton(new SimpleTestEventListenerComponent()));
         //testInjector :)
         sheep = new AllayComponentInjector<Sheep>()
-                .parentClass(parentClass)
+                .interfaceClass(interfaceClass)
                 .component(componentProviders)
                 .inject()
                 .getDeclaredConstructor(ComponentInitInfo.class)
@@ -68,13 +68,15 @@ class ComponentTest {
 
     @Test
     void testIllegalInject() {
-        componentProviders.add(ComponentProvider.of(() -> new SimpleNameComponentV2("SmallSheep"), SimpleNameComponentV2.class));
+        var componentProvidersV2 = new ArrayList<>(componentProviders);
+        componentProvidersV2.add(ComponentProvider.of(() -> new SimpleNameComponentV2("SmallSheep"), SimpleNameComponentV2.class));
         assertThrows(
                 ComponentInjectException.class,
                 () -> new AllayComponentInjector<Sheep>()
-                        .parentClass(parentClass)
-                        .component(componentProviders)
+                        .interfaceClass(interfaceClass)
+                        .component(componentProvidersV2)
                         .inject());
+
     }
 
     @Test

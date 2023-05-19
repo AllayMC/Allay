@@ -1,16 +1,18 @@
 package cn.allay.codegen;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -35,10 +37,26 @@ public class CodeGen {
         }
     }
 
+    static final Path ITEM_DATA_FILE_PATH = Path.of("Data/item_data.json");
+    static final Map<String, Map<String, JsonElement>> MAPPED_ITEM_DATA = new TreeMap<>();
+
+    static {
+        try {
+            var reader = JsonParser.parseReader(Files.newBufferedReader(ITEM_DATA_FILE_PATH));
+            reader.getAsJsonArray().forEach(item -> {
+                var obj = item.getAsJsonObject();
+                MAPPED_ITEM_DATA.put(obj.get("name").getAsString(), obj.asMap());
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println();
         //TODO
-        VanillaBlockIdEnumGen.generate();
-        VanillaBlockPropertyTypeGen.generate();
+//        VanillaBlockIdEnumGen.generate();
+//        VanillaBlockPropertyTypeGen.generate();
+        VanillaItemIdEnumCodeGen.generate();
     }
 }

@@ -51,14 +51,14 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
                         log.error("Unknown block name: " + jsonElement.getAsJsonObject().get("name"));
                         continue;
                     }
-                    var component = BlockAttributes.of(jsonElement.toString());
+                    var blockAttributes = BlockAttributes.of(jsonElement.toString());
                     if (!loaded.containsKey(type))
                         loaded.put(type, new HashMap<>());
                     //TODO: check
                     if (type != VanillaBlockId.UNKNOWN)
-                        loaded.get(type).put(Integer.parseUnsignedInt(jsonElement.getAsJsonObject().get("blockStateHash").getAsString()), component);
+                        loaded.get(type).put(Integer.parseUnsignedInt(jsonElement.getAsJsonObject().get("blockStateHash").getAsString()), blockAttributes);
                     else //Special case
-                        loaded.get(type).put(jsonElement.getAsJsonObject().get("blockStateHash").getAsInt(), component);
+                        loaded.get(type).put(jsonElement.getAsJsonObject().get("blockStateHash").getAsInt(), blockAttributes);
                 }
                 log.info("Loaded vanilla block attribute data registry successfully");
                 return loaded;

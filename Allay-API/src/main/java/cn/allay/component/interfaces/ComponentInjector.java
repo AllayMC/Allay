@@ -25,10 +25,10 @@ public interface ComponentInjector<T> {
     /**
      * Defines the parent class for this injector
      *
-     * @param parentClass the parent class
+     * @param interfaceClass the interface class
      * @return the injector
      */
-    ComponentInjector<T> parentClass(Class<T> parentClass);
+    ComponentInjector<T> interfaceClass(Class<T> interfaceClass);
 
     /**
      * Bind a set of implementations for the injector <br/>

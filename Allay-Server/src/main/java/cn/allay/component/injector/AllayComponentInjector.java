@@ -37,16 +37,16 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     protected static final String COMPONENT_LIST_FIELD_NAME = "components";
     protected static final String INIT_METHOD_NAME = "initComponents";
-    protected Class<T> parentClass;
+    protected Class<T> interfaceClass;
     protected List<ComponentProvider<? extends ComponentImpl>> componentProviders = new ArrayList<>();
 
     public AllayComponentInjector() {
     }
 
     @Override
-    public ComponentInjector<T> parentClass(Class<T> parentClass) {
-        Objects.requireNonNull(parentClass, "The parent class cannot be null");
-        this.parentClass = parentClass;
+    public ComponentInjector<T> interfaceClass(Class<T> interfaceClass) {
+        Objects.requireNonNull(interfaceClass, "The interface class cannot be null");
+        this.interfaceClass = interfaceClass;
         return this;
     }
 
@@ -61,7 +61,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     @SuppressWarnings("unchecked")
     @Override
     public Class<T> inject() {
-        var bb = new ByteBuddy().subclass(parentClass);
+        var bb = new ByteBuddy().subclass(interfaceClass);
         var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
         int num = 0;
         for (var provider : componentProviders) {
@@ -72,7 +72,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         bb = bb.defineField(COMPONENT_LIST_FIELD_NAME, List.class, Modifier.STATIC | Modifier.PRIVATE);
         bb = buildInitializer(bb, componentFieldNameMapping);
         bb = buildConstructor(bb);
-        for (var methodShouldBeInject : Arrays.stream(parentClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
+        for (var methodShouldBeInject : Arrays.stream(interfaceClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
             var canDuplicate = methodShouldBeInject.getReturnType().equals(Void.class);
             Implementation.Composable methodDelegation = null;
             for (var provider : componentProviders) {

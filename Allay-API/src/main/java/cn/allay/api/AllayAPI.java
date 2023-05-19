@@ -7,6 +7,8 @@ import cn.allay.block.type.BlockTypeBuilder;
 import cn.allay.block.type.BlockTypeRegistry;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.entity.type.EntityTypeBuilder;
+import cn.allay.item.component.impl.attribute.VanillaItemAttributeRegistry;
+import cn.allay.item.type.ItemTypeBuilder;
 import cn.allay.scheduler.Scheduler;
 import cn.allay.server.Server;
 import lombok.Getter;
@@ -117,15 +119,25 @@ public final class AllayAPI {
     }
 
     private void defaultAPIRequirements() {
+        //Common
         requireImpl(Server.class, Server.INSTANCE::set);
         requireImpl(ComponentInjector.ComponentInjectorFactory.class, ComponentInjector.ComponentInjectorFactory.FACTORY::set);
         requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
-        requireImpl(EntityTypeBuilder.class, EntityTypeBuilder.BUILDER::set);
+
+        //Block
         requireImpl(BlockTypeBuilder.BlockTypeBuilderFactory.class, BlockTypeBuilder.FACTORY::set);
         requireImpl(BlockPropertyTypeRegistry.class, BlockPropertyTypeRegistry.REGISTRY::set);
         requireImpl(VanillaBlockPaletteRegistry.class, VanillaBlockPaletteRegistry.REGISTRY::set);
         requireImpl(VanillaBlockAttributeRegistry.class, VanillaBlockAttributeRegistry.REGISTRY::set);
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
+
+        //Item
+        requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
+        requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);
+        //todo: ItemTypeRegistry
+
+        //Entity (TODO)
+        requireImpl(EntityTypeBuilder.class, EntityTypeBuilder.BUILDER::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {}
