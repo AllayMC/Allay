@@ -139,7 +139,10 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 throw new ItemTypeBuildException("NamespaceId cannot be null!");
             var type = new AllayItemType<>(interfaceClass, componentProviders, namespaceId);
             //TODO: 分离逻辑
-            componentProviders.add(ComponentProvider.of(() -> new ItemBaseComponentImpl(type), ItemBaseComponentImpl.class));
+            componentProviders.add(ComponentProvider.of(info -> {
+                var cast = (ItemStackInitInfo) info;
+                return new ItemBaseComponentImpl(type, cast.count(), cast.meta(), cast.nbt());
+            }, ItemBaseComponentImpl.class));
             return type.complete();
         }
     }
