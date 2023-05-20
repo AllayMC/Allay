@@ -77,12 +77,14 @@ subprojects {
             resources {
                 srcDirs("src/main/resources", "${rootProject.projectDir}/Data")
                 exclude("${rootProject.projectDir}/Data/unpacked")
+                exclude("${rootProject.projectDir}/Data/bedrock-samples")
             }
         }
         test {
             resources {
                 srcDirs("src/test/resources", "${rootProject.projectDir}/Data")
                 exclude("${rootProject.projectDir}/Data/unpacked")
+                exclude("${rootProject.projectDir}/Data/bedrock-samples")
             }
         }
     }

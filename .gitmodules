@@ -1,0 +1,3 @@
+[submodule "Data/bedrock-samples"]
+	path = Data/bedrock-samples
+	url = git@github.com:Mojang/bedrock-samples.git
