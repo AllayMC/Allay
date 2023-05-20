@@ -22,16 +22,4 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
     public void init() {
         PackageClassLoader.loadClasses("cn.allay.block.impl");
     }
-
-    private static String convertToPascalCase(String str) {
-        List<String> parts = StringUtils.fastSplit(str, "_");
-        StringBuilder output = new StringBuilder();
-
-        for (String part : parts) {
-            output.append(Character.toUpperCase(part.charAt(0)));
-            output.append(part.substring(1));
-        }
-
-        return output.toString();
-    }
 }

@@ -99,7 +99,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
         @Override
         public ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId) {
-            return null;
+            return vanillaItem(vanillaItemId, true);
         }
 
         @Override
