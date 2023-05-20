@@ -6,6 +6,8 @@ import cn.allay.block.property.BlockPropertyTypeRegistry;
 import cn.allay.block.type.BlockTypeBuilder;
 import cn.allay.block.type.BlockTypeRegistry;
 import cn.allay.component.interfaces.ComponentInjector;
+import cn.allay.entity.type.EntityTypeBuilder;
+import cn.allay.entity.type.EntityTypeRegistry;
 import cn.allay.item.component.impl.attribute.VanillaItemAttributeRegistry;
 import cn.allay.item.type.ItemTypeBuilder;
 import cn.allay.item.type.ItemTypeRegistry;
@@ -135,9 +137,10 @@ public final class AllayAPI {
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
         requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);
         requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
-        //todo: ItemTypeRegistry
 
-        //Entity (TODO)
+        //Entity
+        requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
+        requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {}

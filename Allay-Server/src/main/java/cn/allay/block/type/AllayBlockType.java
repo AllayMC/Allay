@@ -198,8 +198,8 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             this.interfaceClass = interfaceClass;
         }
 
-        public Builder<T> namespaceId(Identifier namespaceId) {
-            this.namespaceId = namespaceId;
+        public Builder<T> namespaceId(Identifier identifier) {
+            this.namespaceId = identifier;
             return this;
         }
 
