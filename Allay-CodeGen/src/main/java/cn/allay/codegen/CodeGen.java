@@ -52,11 +52,27 @@ public class CodeGen {
         }
     }
 
+    static final Path ENTITY_DATA_FILE_PATH = Path.of("Data/entity_data.json");
+    static final Map<String, Map<String, JsonElement>> MAPPED_ENTITY_DATA = new TreeMap<>();
+
+    static {
+        try {
+            var reader = JsonParser.parseReader(Files.newBufferedReader(ENTITY_DATA_FILE_PATH));
+            reader.getAsJsonObject().entrySet().forEach(entry -> {
+                var obj = entry.getValue().getAsJsonObject();
+                MAPPED_ENTITY_DATA.put(obj.get("canonicalName").getAsString(), obj.asMap());
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println();
         //TODO
 //        VanillaBlockIdEnumGen.generate();
 //        VanillaBlockPropertyTypeGen.generate();
-        VanillaItemIdEnumCodeGen.generate();
+//        VanillaItemIdEnumCodeGen.generate();
+        VanillaEntityIdEnumGen.generate();
     }
 }
