@@ -2,3 +2,10 @@
 /.gradle/
 buildSrc/**
 **/build
+/Data/bedrock-samples/behavior_pack/
+/Data/bedrock-samples/documentation/
+/Data/bedrock-samples/resource_pack/
+/Data/bedrock-samples/.gitignore
+/Data/bedrock-samples/LICENSE.md
+/Data/bedrock-samples/README.md
+/Data/bedrock-samples/version.json
