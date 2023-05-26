@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,14 @@ class BlockAttributesTest {
                 "burnChance": 0,
                 "canBeBrokenFromFalling": true,
                 "canContainLiquid": true,
-                "color": -1,
+                "color": {
+                            "a": 255,
+                            "b": 178,
+                            "g": 76,
+                            "hexString": "#ff334cb2",
+                            "nearestColorCode": "§9",
+                            "r": 51
+                        },
                 "explosionResistance": 15,
                 "friction": 0.6,
                 "hardness": 3,
@@ -80,7 +88,7 @@ class BlockAttributesTest {
         assertEquals(0, blockAttributes.burnChance());
         assertTrue(blockAttributes.canBeBrokenFromFalling());
         assertTrue(blockAttributes.canContainLiquid());
-        assertEquals(-1, blockAttributes.color());
+        assertEquals(new Color(51,76, 178, 255), blockAttributes.color());
         assertEquals(15, blockAttributes.explosionResistance());
         assertEquals(Float.toHexString(0.6f), Float.toHexString(blockAttributes.friction()));
         assertEquals(3, blockAttributes.hardness());
