@@ -72,7 +72,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
     public static class Builder<T extends Entity> implements EntityTypeBuilder<T> {
         protected Class<T> interfaceClass;
-        protected List<ComponentProvider<? extends EntityComponentImpl>> componentProviders;
+        protected List<ComponentProvider<? extends EntityComponentImpl>> componentProviders = new ArrayList<>();
         protected Identifier namespaceId;
 
         public Builder(Class<T> interfaceClass) {

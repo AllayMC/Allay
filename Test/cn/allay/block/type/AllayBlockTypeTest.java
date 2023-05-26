@@ -81,11 +81,11 @@ class AllayBlockTypeTest {
     }
 
     @Test
-    void testBlockInstance() {
+    void testCommon() {
         var block = testBlockType.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
-        assertEquals(1, block.getX());
-        assertEquals(2, block.getY());
-        assertEquals(3, block.getZ());
+        assertEquals(1, block.getPosition().getX());
+        assertEquals(2, block.getPosition().getY());
+        assertEquals(3, block.getPosition().getZ());
         assertEquals(testBlockType, block.getBlockType());
         //Test block properties
         assertFalse(block.getProperty(TEST_BOOLEAN_PROPERTY_TYPE));

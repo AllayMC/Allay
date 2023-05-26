@@ -1,6 +1,7 @@
 package cn.allay.entity.type;
 
 import cn.allay.component.interfaces.ComponentInitInfo;
+import cn.allay.math.location.Loc;
 
 /**
  * Author: daoge_cmd <br>
@@ -8,4 +9,9 @@ import cn.allay.component.interfaces.ComponentInitInfo;
  * Allay Project <br>
  */
 public interface EntityInitInfo extends ComponentInitInfo {
+    Loc<Float> location();
+
+    record Simple(Loc<Float> location) implements EntityInitInfo {
+
+    }
 }

@@ -5,9 +5,7 @@ import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.type.BlockType;
 import cn.allay.component.annotation.Inject;
-import org.jetbrains.annotations.UnmodifiableView;
-
-import java.util.Map;
+import cn.allay.math.position.PosRO;
 
 /**
  * Author: daoge_cmd <br>
@@ -29,4 +27,7 @@ public interface BlockBaseComponent {
 
     @Inject
     BlockState<?> getCurrentState();
+
+    @Inject
+    PosRO<Integer> getPosition();
 }

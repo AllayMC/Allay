@@ -1,4 +1,4 @@
-package cn.allay.converter;
+package cn.allay.dataconverter;
 
 import lombok.SneakyThrows;
 import org.cloudburstmc.nbt.NBTOutputStream;
