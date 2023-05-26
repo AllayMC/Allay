@@ -15,7 +15,9 @@ import cn.allay.block.type.BlockTypeRegistry;
 import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.entity.type.AllayEntityType;
+import cn.allay.entity.type.AllayEntityTypeRegistry;
 import cn.allay.entity.type.EntityTypeBuilder;
+import cn.allay.entity.type.EntityTypeRegistry;
 import cn.allay.item.attribute.AllayVanillaItemAttributeRegistry;
 import cn.allay.item.component.impl.attribute.VanillaItemAttributeRegistry;
 import cn.allay.item.type.AllayItemType;
@@ -67,6 +69,7 @@ public final class Allay {
 
         //Entity
         api.bind(EntityTypeBuilder.EntityTypeBuilderFactory.class, () -> AllayEntityType::builder);
+        api.bind(EntityTypeRegistry.class, AllayEntityTypeRegistry::new, instance -> ((AllayEntityTypeRegistry) instance).init());
 
         api.implement("Allay");
     }
