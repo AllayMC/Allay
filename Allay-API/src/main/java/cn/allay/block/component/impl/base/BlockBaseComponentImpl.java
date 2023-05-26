@@ -8,11 +8,10 @@ import cn.allay.block.type.BlockInitInfo;
 import cn.allay.block.type.BlockType;
 import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
+import cn.allay.math.position.Pos;
+import cn.allay.math.position.PosRO;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +25,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     protected BlockState<?> currentState;
     protected BlockType<? extends Block> blockType;
+    protected final Pos<Integer> pos;
 
     public BlockBaseComponentImpl(BlockType<? extends Block> blockType, BlockInitInfo info) {
         this.blockType = blockType;
@@ -36,6 +36,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
                         .stream()
                         .map(BlockPropertyType::createDefaultValue)
                         .collect(Collectors.toList()));
+        pos = info.position();
     }
 
     @Override
@@ -71,6 +72,12 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     @Impl
     public BlockState<?> getCurrentState() {
         return currentState;
+    }
+
+    @Override
+    @Impl
+    public PosRO<Integer> getPosition() {
+        return pos;
     }
 
     @Override

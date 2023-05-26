@@ -2,7 +2,6 @@ package cn.allay.block;
 
 import cn.allay.block.component.impl.attribute.BlockAttributeComponent;
 import cn.allay.block.component.impl.base.BlockBaseComponent;
-import cn.allay.block.component.impl.position.BlockPositionComponent;
 
 /**
  * Author: daoge_cmd <br>
@@ -11,6 +10,5 @@ import cn.allay.block.component.impl.position.BlockPositionComponent;
  */
 public interface Block extends
         BlockBaseComponent,
-        BlockAttributeComponent,
-        BlockPositionComponent {
+        BlockAttributeComponent {
 }

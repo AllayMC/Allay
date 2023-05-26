@@ -6,7 +6,6 @@ import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.component.impl.base.BlockBaseComponentImpl;
 import cn.allay.block.component.injector.AllayBlockComponentInjector;
-import cn.allay.block.component.impl.position.BlockPositionComponentImpl;
 import cn.allay.block.data.VanillaBlockId;
 import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
@@ -247,7 +246,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         public Builder<T> addBasicComponents() {
-            componentProviders.add(ComponentProvider.of(info -> new BlockPositionComponentImpl(((BlockInitInfo) info).position()), BlockPositionComponentImpl.class));
+            //Unused
             return this;
         }
 

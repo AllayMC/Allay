@@ -1,12 +1,14 @@
 package cn.allay.math.location;
 
 import cn.allay.level.Level;
+import lombok.EqualsAndHashCode;
 
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
+@EqualsAndHashCode
 class ImplLocRO<T extends Number> implements LocRO<T> {
 
     protected T x;

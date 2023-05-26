@@ -1,10 +1,13 @@
 package cn.allay.math.aabb;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/3/25 <br>
  * Allay Project <br>
  */
+@EqualsAndHashCode
 class ImplAxisAlignedBBRO implements AxisAlignedBBRO {
 
     protected float minX;
