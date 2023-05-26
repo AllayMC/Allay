@@ -4,6 +4,7 @@ import cn.allay.block.Block;
 import cn.allay.block.component.BlockComponentImpl;
 import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
+import cn.allay.block.type.BlockInitInfo;
 import cn.allay.block.type.BlockType;
 import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
@@ -26,7 +27,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     protected BlockState<?> currentState;
     protected BlockType<? extends Block> blockType;
 
-    public BlockBaseComponentImpl(BlockType<? extends Block> blockType) {
+    public BlockBaseComponentImpl(BlockType<? extends Block> blockType, BlockInitInfo info) {
         this.blockType = blockType;
         //TODO: 也许需要从配置文件读取默认方块状态
         this.currentState = blockType.ofState(
