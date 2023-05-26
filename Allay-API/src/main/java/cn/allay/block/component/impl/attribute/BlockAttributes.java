@@ -10,6 +10,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import java.awt.*;
+
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/5/1 <br>
@@ -24,6 +26,13 @@ public class BlockAttributes {
             .registerTypeAdapter(AxisAlignedBBRO.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var numbers = StringUtils.fastSplit(json.getAsString(), ",").stream().map(Float::valueOf).toList();
                 return AxisAlignedBBRO.of(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
+            })
+            .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
+                var r = json.getAsJsonObject().get("r").getAsInt();
+                var g = json.getAsJsonObject().get("g").getAsInt();
+                var b = json.getAsJsonObject().get("b").getAsInt();
+                var a = json.getAsJsonObject().get("a").getAsInt();
+                return new Color(r, g, b, a);
             })
             .create();
 
@@ -50,7 +59,7 @@ public class BlockAttributes {
     @Builder.Default
     protected boolean canContainLiquid = false;
     @Builder.Default
-    protected int color = 0;
+    protected Color color = Color.BLACK;
     @Builder.Default
     protected float explosionResistance = 15;
     @Builder.Default
