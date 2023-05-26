@@ -6,6 +6,7 @@ import cn.allay.component.interfaces.ComponentInitInfo;
 import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.entity.Entity;
 import cn.allay.entity.component.EntityComponentImpl;
+import cn.allay.entity.component.impl.base.EntityBaseComponentImpl;
 import cn.allay.entity.data.VanillaEntityId;
 import cn.allay.identifier.Identifier;
 import lombok.SneakyThrows;
@@ -92,15 +93,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
         @Override
         public EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId) {
-            return vanillaEntity(vanillaEntityId, true);
-        }
-
-        @Override
-        public EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId, boolean initVanillaEntityAttributeComponent) {
             this.namespaceId = vanillaEntityId.getNamespaceId();
-            if (initVanillaEntityAttributeComponent) {
-                //TODO
-            }
             return this;
         }
 
@@ -129,8 +122,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
             if (namespaceId == null)
                 throw new EntityTypeBuildException("NamespaceId cannot be null!");
             var type = new AllayEntityType<>(interfaceClass, componentProviders, namespaceId);
-            //TODO: 分离逻辑
-            //todo: BaseComponent
+            componentProviders.add(ComponentProvider.of(info -> new EntityBaseComponentImpl(type, (EntityInitInfo) info), EntityBaseComponentImpl.class));
             return type.complete();
         }
     }

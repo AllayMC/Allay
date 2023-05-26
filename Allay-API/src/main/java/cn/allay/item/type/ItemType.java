@@ -1,9 +1,8 @@
 package cn.allay.item.type;
 
-import cn.allay.block.type.BlockType;
-import cn.allay.block.type.BlockTypeRegistry;
 import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identified;
+import cn.allay.identifier.Identifier;
 import cn.allay.item.ItemStack;
 import cn.allay.item.component.ItemComponentImpl;
 

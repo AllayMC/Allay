@@ -6,6 +6,7 @@ import cn.allay.identifier.Identifier;
 import cn.allay.item.ItemStack;
 import cn.allay.item.component.ItemComponentImpl;
 import cn.allay.item.component.impl.attribute.ItemAttributeComponent;
+import cn.allay.item.type.ItemStackInitInfo;
 import cn.allay.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -24,11 +25,11 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
     //todo: damage
     protected NbtMap nbt;
 
-    public ItemBaseComponentImpl(ItemType<? extends ItemStack> itemType, int count, int meta, NbtMap nbt) {
+    public ItemBaseComponentImpl(ItemType<? extends ItemStack> itemType, ItemStackInitInfo initInfo) {
         this.itemType = itemType;
-        this.count = count;
-        this.meta = meta;
-        this.nbt = nbt;
+        this.count = initInfo.count();
+        this.meta = initInfo.meta();
+        this.nbt = initInfo.nbt();
     }
 
     @Override

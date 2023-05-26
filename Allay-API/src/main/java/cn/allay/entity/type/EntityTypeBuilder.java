@@ -21,15 +21,11 @@ public interface EntityTypeBuilder<T extends Entity> {
         return FACTORY.get().create(clazz);
     }
 
-    //todo
-
     EntityTypeBuilder<T> namespace(Identifier identifier);
 
     EntityTypeBuilder<T> namespace(String namespaceId);
 
     EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId);
-
-    EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId, boolean initVanillaEntityAttributeComponent);
 
     EntityTypeBuilder<T> setComponents(List<ComponentProvider<? extends EntityComponentImpl>> componentProviders);
 

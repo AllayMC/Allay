@@ -255,8 +255,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             if (namespaceId == null)
                 throw new BlockTypeBuildException("NamespaceId cannot be null!");
             var type = new AllayBlockType<>(interfaceClass, componentProviders, properties, namespaceId);
-            //TODO: 分离逻辑
-            componentProviders.add(ComponentProvider.of(() -> new BlockBaseComponentImpl(type), BlockBaseComponentImpl.class));
+            componentProviders.add(ComponentProvider.of(info -> new BlockBaseComponentImpl(type, (BlockInitInfo) info), BlockBaseComponentImpl.class));
             return type.complete();
         }
     }

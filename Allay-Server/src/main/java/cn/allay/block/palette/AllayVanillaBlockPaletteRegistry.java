@@ -29,6 +29,7 @@ public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry
         super(VanillaBlockId.values(), loader);
     }
 
+    //TODO: Using block_palette.json instead
     public static class Loader implements RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, VanillaBlockPaletteDataEntry>> {
 
         @SneakyThrows
