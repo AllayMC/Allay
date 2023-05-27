@@ -14,7 +14,7 @@ import java.util.Map;
  * TODO: Replaced by blockStateHash, the block runtime id is not used anymore.
  */
 public interface VanillaBlockPaletteRegistry extends MappedRegistry<VanillaBlockId, VanillaBlockPaletteDataEntry, Map<VanillaBlockId, VanillaBlockPaletteDataEntry>> {
-    ApiInstanceHolder<VanillaBlockPaletteRegistry> REGISTRY = ApiInstanceHolder.create();
+    ApiInstanceHolder<VanillaBlockPaletteRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static VanillaBlockPaletteRegistry getRegistry() {
         return REGISTRY.get();

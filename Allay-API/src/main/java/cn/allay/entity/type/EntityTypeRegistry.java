@@ -12,7 +12,7 @@ import java.util.Map;
  * Allay Project <br>
  */
 public interface EntityTypeRegistry extends MappedRegistry<Identifier, EntityType<?>, Map<Identifier, EntityType<?>>> {
-    ApiInstanceHolder<EntityTypeRegistry> REGISTRY = ApiInstanceHolder.create();
+    ApiInstanceHolder<EntityTypeRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static EntityTypeRegistry getRegistry() {
         return REGISTRY.get();

@@ -31,7 +31,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      * @param <CONTENT>      the returned mappings type
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> create(Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
+    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
         return new SimpleRegistry<>(null, registryLoader.get());
     }
 
@@ -45,7 +45,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      * @param <CONTENT>      the returned mappings type
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> create(INPUT input, Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
+    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(INPUT input, Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
         return new SimpleRegistry<>(input, registryLoader.get());
     }
 
@@ -59,7 +59,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      * @param <CONTENT>      the returned mappings type
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> create(RegistryLoader<INPUT, CONTENT> registryLoader) {
+    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(RegistryLoader<INPUT, CONTENT> registryLoader) {
         return new SimpleRegistry<>(null, registryLoader);
     }
 
@@ -72,7 +72,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      * @param <CONTENT>      the returned mappings type
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> create(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {
+    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {
         return new SimpleRegistry<>(input, registryLoader);
     }
 

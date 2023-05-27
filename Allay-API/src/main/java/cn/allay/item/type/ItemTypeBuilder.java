@@ -15,7 +15,7 @@ import java.util.List;
  * Allay Project <br>
  */
 public interface ItemTypeBuilder<T extends ItemStack> {
-    ApiInstanceHolder<ItemTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
+    ApiInstanceHolder<ItemTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
 
     static <T extends ItemStack> ItemTypeBuilder<T> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);

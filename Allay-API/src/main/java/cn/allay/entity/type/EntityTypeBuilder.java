@@ -15,7 +15,7 @@ import java.util.List;
  * Allay Project <br>
  */
 public interface EntityTypeBuilder<T extends Entity> {
-    ApiInstanceHolder<EntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
+    ApiInstanceHolder<EntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
 
     static <T extends Entity> EntityTypeBuilder<T> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);
