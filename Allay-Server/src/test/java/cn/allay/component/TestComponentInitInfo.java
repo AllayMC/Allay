@@ -1,6 +1,6 @@
 package cn.allay.component;
 
-import cn.allay.component.interfaces.ComponentInitInfo;
+import cn.allay.api.component.interfaces.ComponentInitInfo;
 
 /**
  * Author: daoge_cmd <br>

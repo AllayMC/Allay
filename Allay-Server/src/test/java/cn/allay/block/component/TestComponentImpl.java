@@ -1,8 +1,9 @@
 package cn.allay.block.component;
 
-import cn.allay.block.component.annotation.RequireBlockProperty;
-import cn.allay.block.property.type.BlockPropertyType;
-import cn.allay.identifier.Identifier;
+import cn.allay.api.block.component.BlockComponentImpl;
+import cn.allay.api.block.component.annotation.RequireBlockProperty;
+import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.identifier.Identifier;
 
 /**
  * Author: daoge_cmd <br>

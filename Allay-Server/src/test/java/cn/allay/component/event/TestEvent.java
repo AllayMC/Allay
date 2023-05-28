@@ -1,6 +1,6 @@
 package cn.allay.component.event;
 
-import cn.allay.component.interfaces.ComponentEvent;
+import cn.allay.api.component.interfaces.ComponentEvent;
 import lombok.Getter;
 import lombok.Setter;
 

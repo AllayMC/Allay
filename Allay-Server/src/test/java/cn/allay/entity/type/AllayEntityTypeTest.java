@@ -1,7 +1,8 @@
 package cn.allay.entity.type;
 
-import cn.allay.entity.impl.EntitySheep;
-import cn.allay.math.location.Loc;
+import cn.allay.api.entity.impl.EntitySheep;
+import cn.allay.api.entity.type.EntityInitInfo;
+import cn.allay.api.math.location.Loc;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

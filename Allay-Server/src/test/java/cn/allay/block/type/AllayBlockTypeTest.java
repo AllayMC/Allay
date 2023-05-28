@@ -1,19 +1,23 @@
 package cn.allay.block.type;
 
+import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
+import cn.allay.api.block.component.impl.attribute.BlockAttributes;
+import cn.allay.api.block.impl.BlockBlueCandle;
+import cn.allay.api.block.impl.BlockCobbledDeepslateWall;
+import cn.allay.api.block.impl.BlockCoralFan;
+import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.block.property.type.BooleanPropertyType;
+import cn.allay.api.block.property.type.EnumPropertyType;
+import cn.allay.api.block.property.type.IntPropertyType;
+import cn.allay.api.block.property.vanilla.VanillaBlockPropertyTypes;
+import cn.allay.api.block.property.vanilla.enums.*;
+import cn.allay.api.block.type.BlockInitInfo;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.math.position.Pos;
 import cn.allay.block.component.TestComponentImpl;
 import cn.allay.block.component.TestComponentImplV2;
-import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
-import cn.allay.block.component.impl.attribute.BlockAttributes;
-import cn.allay.block.impl.BlockBlueCandle;
-import cn.allay.block.impl.BlockCobbledDeepslateWall;
-import cn.allay.block.impl.BlockCoralFan;
-import cn.allay.block.property.type.BlockPropertyType;
-import cn.allay.block.property.type.BooleanPropertyType;
-import cn.allay.block.property.type.EnumPropertyType;
-import cn.allay.block.property.type.IntPropertyType;
-import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
-import cn.allay.block.property.vanilla.enums.*;
-import cn.allay.math.position.Pos;
+import cn.allay.server.block.type.AllayBlockType;
+import cn.allay.server.block.type.BlockTypeBuildException;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,8 +25,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
-import static cn.allay.component.interfaces.ComponentProvider.of;
-import static cn.allay.component.interfaces.ComponentProvider.ofSingleton;
+import static cn.allay.api.component.interfaces.ComponentProvider.of;
+import static cn.allay.api.component.interfaces.ComponentProvider.ofSingleton;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

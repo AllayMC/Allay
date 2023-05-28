@@ -1,10 +1,10 @@
 package cn.allay.component.impl;
 
-import cn.allay.component.annotation.ComponentEventListener;
+import cn.allay.api.component.annotation.ComponentEventListener;
+import cn.allay.api.component.interfaces.ComponentImpl;
+import cn.allay.api.identifier.Identifier;
 import cn.allay.component.event.TestEvent;
-import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.TestEventListenerComponent;
-import cn.allay.identifier.Identifier;
 
 /**
  * Author: daoge_cmd <br>

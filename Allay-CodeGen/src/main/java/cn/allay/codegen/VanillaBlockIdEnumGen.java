@@ -1,6 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.identifier.Identifier;
+import cn.allay.api.identifier.Identifier;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -17,7 +17,7 @@ import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
  */
 public class VanillaBlockIdEnumGen {
 
-    private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/block/data/VanillaBlockId.java");
+    private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/block/data/VanillaBlockId.java");
 
     @SneakyThrows
     public static void generate() {

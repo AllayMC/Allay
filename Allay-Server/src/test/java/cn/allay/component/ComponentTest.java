@@ -1,10 +1,16 @@
 package cn.allay.component;
 
-import cn.allay.component.exception.ComponentInjectException;
+import cn.allay.api.component.exception.ComponentInjectException;
+import cn.allay.api.component.interfaces.ComponentInitInfo;
+import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.component.interfaces.ComponentedObject;
+import cn.allay.api.identifier.Identifier;
 import cn.allay.component.impl.*;
-import cn.allay.component.injector.AllayComponentInjector;
-import cn.allay.component.interfaces.*;
-import cn.allay.identifier.Identifier;
+import cn.allay.component.interfaces.AttackComponent;
+import cn.allay.component.interfaces.HealthComponent;
+import cn.allay.component.interfaces.NameComponent;
+import cn.allay.component.interfaces.Sheep;
+import cn.allay.server.component.injector.AllayComponentInjector;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

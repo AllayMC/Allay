@@ -1,9 +1,9 @@
 package cn.allay.component.impl;
 
-import cn.allay.component.annotation.Impl;
-import cn.allay.component.interfaces.ComponentImpl;
+import cn.allay.api.component.annotation.Impl;
+import cn.allay.api.component.interfaces.ComponentImpl;
+import cn.allay.api.identifier.Identifier;
 import cn.allay.component.interfaces.NameComponent;
-import cn.allay.identifier.Identifier;
 
 /**
  * Author: daoge_cmd <br>

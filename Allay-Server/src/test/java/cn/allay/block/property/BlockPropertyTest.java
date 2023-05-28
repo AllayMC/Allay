@@ -1,7 +1,7 @@
 package cn.allay.block.property;
 
-import cn.allay.block.property.vanilla.VanillaBlockPropertyTypes;
-import cn.allay.block.property.vanilla.enums.PillarAxis;
+import cn.allay.api.block.property.vanilla.VanillaBlockPropertyTypes;
+import cn.allay.api.block.property.vanilla.enums.PillarAxis;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotSame;

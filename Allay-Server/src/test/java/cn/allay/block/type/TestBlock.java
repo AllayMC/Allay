@@ -1,6 +1,6 @@
 package cn.allay.block.type;
 
-import cn.allay.block.Block;
+import cn.allay.api.block.Block;
 import cn.allay.block.component.TestComponent;
 
 /**

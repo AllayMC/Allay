@@ -23,7 +23,7 @@ import static cn.allay.codegen.Utils.convertToPascalCase;
  * Allay Project <br>
  */
 public class VanillaBlockPropertyTypeGen {
-    private static final Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/block/property/vanilla");
+    private static final Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/property/vanilla");
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -47,13 +47,13 @@ public class VanillaBlockPropertyTypeGen {
                         MethodSpec.constructorBuilder()
                                 .addModifiers(Modifier.PRIVATE)
                                 .build());
-        var enumPropertyClass = ClassName.get("cn.allay.block.property.type", "EnumPropertyType");
-        var booleanPropertyClass = ClassName.get("cn.allay.block.property.type", "BooleanPropertyType");
-        var intPropertyClass = ClassName.get("cn.allay.block.property.type", "IntPropertyType");
+        var enumPropertyClass = ClassName.get("cn.allay.api.block.property.type", "EnumPropertyType");
+        var booleanPropertyClass = ClassName.get("cn.allay.api.block.property.type", "BooleanPropertyType");
+        var intPropertyClass = ClassName.get("cn.allay.api.block.property.type", "IntPropertyType");
         for (BlockPropertyTypeInfo blockPropertyTypeInfo : blockPropertyInfos) {
             switch (blockPropertyTypeInfo.type) {
                 case ENUM -> {
-                    var enumClass = ClassName.get("cn.allay.block.property.vanilla.enums", blockPropertyTypeInfo.getEnumClassName());
+                    var enumClass = ClassName.get("cn.allay.api.block.property.vanilla.enums", blockPropertyTypeInfo.getEnumClassName());
                     codeBuilder.addField(
                             FieldSpec
                                     .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
@@ -90,7 +90,7 @@ public class VanillaBlockPropertyTypeGen {
                 }
             }
         }
-        var propertyClass = ClassName.get("cn.allay.block.property.type", "BlockPropertyType");
+        var propertyClass = ClassName.get("cn.allay.api.block.property.type", "BlockPropertyType");
         var listClass = ParameterizedTypeName.get(ClassName.get("java.util", "List"), ParameterizedTypeName.get(propertyClass, WildcardTypeName.subtypeOf(Object.class)));
         String paramStr = blockPropertyInfos.stream().map(info -> info.name.toUpperCase()).collect(Collectors.joining(", "));
         codeBuilder.addField(
@@ -107,7 +107,7 @@ public class VanillaBlockPropertyTypeGen {
                         .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                         .build()
         );
-        var javaFile = JavaFile.builder("cn.allay.block.property.vanilla", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.block.property.vanilla", codeBuilder.build()).build();
         Files.writeString(FILE_OUTPUT_PATH_BASE.resolve("VanillaBlockPropertyTypes.java"), javaFile.toString());
     }
 
@@ -123,7 +123,7 @@ public class VanillaBlockPropertyTypeGen {
         for (var value : info.validValues) {
             codeBuilder.addEnumConstant(value.toUpperCase());
         }
-        var javaFile = JavaFile.builder("cn.allay.block.property.vanilla.enums", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.block.property.vanilla.enums", codeBuilder.build()).build();
         var path = FILE_OUTPUT_PATH_BASE.resolve("enums/" + enumName + ".java");
         if (Files.exists(path))
             Files.delete(path);

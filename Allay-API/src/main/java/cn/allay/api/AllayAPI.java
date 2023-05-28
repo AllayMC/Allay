@@ -1,18 +1,18 @@
 package cn.allay.api;
 
-import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
-import cn.allay.block.palette.VanillaBlockPaletteRegistry;
-import cn.allay.block.property.BlockPropertyTypeRegistry;
-import cn.allay.block.type.BlockTypeBuilder;
-import cn.allay.block.type.BlockTypeRegistry;
-import cn.allay.component.interfaces.ComponentInjector;
-import cn.allay.entity.type.EntityTypeBuilder;
-import cn.allay.entity.type.EntityTypeRegistry;
-import cn.allay.item.component.impl.attribute.VanillaItemAttributeRegistry;
-import cn.allay.item.type.ItemTypeBuilder;
-import cn.allay.item.type.ItemTypeRegistry;
-import cn.allay.scheduler.Scheduler;
-import cn.allay.server.Server;
+import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.api.block.palette.VanillaBlockPaletteRegistry;
+import cn.allay.api.block.property.BlockPropertyTypeRegistry;
+import cn.allay.api.block.type.BlockTypeBuilder;
+import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.component.interfaces.ComponentInjector;
+import cn.allay.api.entity.type.EntityTypeBuilder;
+import cn.allay.api.entity.type.EntityTypeRegistry;
+import cn.allay.api.item.component.impl.attribute.VanillaItemAttributeRegistry;
+import cn.allay.api.item.type.ItemTypeBuilder;
+import cn.allay.api.item.type.ItemTypeRegistry;
+import cn.allay.api.scheduler.Scheduler;
+import cn.allay.api.server.Server;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

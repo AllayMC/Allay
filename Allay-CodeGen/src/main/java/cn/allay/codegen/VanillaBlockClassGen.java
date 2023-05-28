@@ -1,6 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.block.data.VanillaBlockId;
+import cn.allay.api.block.data.VanillaBlockId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -17,13 +17,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class VanillaBlockClassGen {
 
-    public static final ClassName BLOCK_CLASS_NAME = ClassName.get("cn.allay.block", "Block");
-    public static final ClassName VANILLA_BLOCK_ID_CLASS_NAME = ClassName.get("cn.allay.block.data", "VanillaBlockId");
-    public static final ClassName VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("cn.allay.block.property.vanilla", "VanillaBlockPropertyTypes");
-    public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.block.type", "BlockType");
-    public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.block.type", "BlockTypeBuilder");
-    public static final ClassName BLOCK_TYPE_REGISTRY = ClassName.get("cn.allay.block.type", "BlockTypeRegistry");
-    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/block/impl");
+    public static final ClassName BLOCK_CLASS_NAME = ClassName.get("cn.allay.api.block", "Block");
+    public static final ClassName VANILLA_BLOCK_ID_CLASS_NAME = ClassName.get("cn.allay.api.block.data", "VanillaBlockId");
+    public static final ClassName VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("cn.allay.api.block.property.vanilla", "VanillaBlockPropertyTypes");
+    public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockType");
+    public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockTypeBuilder");
+    public static final ClassName BLOCK_TYPE_REGISTRY = ClassName.get("cn.allay.api.block.type", "BlockTypeRegistry");
+    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/impl");
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -70,7 +70,7 @@ public class VanillaBlockClassGen {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                         .initializer(initializer.build())
                         .build());
-        var javaFile = JavaFile.builder("cn.allay.block.impl", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.block.impl", codeBuilder.build()).build();
         Files.writeString(path, javaFile.toString());
     }
 }

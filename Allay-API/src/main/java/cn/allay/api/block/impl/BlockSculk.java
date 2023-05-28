@@ -1,0 +1,19 @@
+package cn.allay.api.block.impl;
+
+import cn.allay.api.block.Block;
+import cn.allay.api.block.data.VanillaBlockId;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeBuilder;
+import cn.allay.api.block.type.BlockTypeRegistry;
+
+/**
+ * Author: daoge_cmd <br>
+ * Allay Project <br>
+ */
+public interface BlockSculk extends Block {
+    BlockType<BlockSculk> TYPE = BlockTypeBuilder
+            .builder(BlockSculk.class)
+            .vanillaBlock(VanillaBlockId.SCULK, true)
+            .addBasicComponents()
+            .build().register(BlockTypeRegistry.getRegistry());
+}

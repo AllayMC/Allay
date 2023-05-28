@@ -1,8 +1,9 @@
 package cn.allay.math.vector;
 
-import cn.allay.level.Level;
-import cn.allay.math.location.Loc;
-import cn.allay.math.position.Pos;
+import cn.allay.api.level.Level;
+import cn.allay.api.math.location.Loc;
+import cn.allay.api.math.position.Pos;
+import cn.allay.api.math.vector.Vec3;
 import net.bytebuddy.ByteBuddy;
 import org.junit.jupiter.api.Test;
 

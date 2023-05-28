@@ -1,7 +1,7 @@
 package cn.allay.codegen;
 
-import cn.allay.identifier.Identifier;
-import cn.allay.utils.StringUtils;
+import cn.allay.api.identifier.Identifier;
+import cn.allay.api.utils.StringUtils;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -18,11 +18,11 @@ import static cn.allay.codegen.CodeGen.MAPPED_ENTITY_DATA;
  */
 public class VanillaEntityIdEnumGen {
 
-    private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/entity/data/VanillaEntityId.java");
+    private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/entity/data/VanillaEntityId.java");
 
     @SneakyThrows
     public static void generate() {
-        var identifierClass = ClassName.get("cn.allay.identifier", "Identifier");
+        var identifierClass = ClassName.get("cn.allay.api.identifier", "Identifier");
         var stringClass = ClassName.get("java.lang", "String");
         var getterClass = ClassName.get("lombok", "Getter");
         TypeSpec.Builder codeBuilder = TypeSpec.enumBuilder("VanillaEntityId")
@@ -48,7 +48,7 @@ public class VanillaEntityIdEnumGen {
             codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S", entry.getKey()).build());
         }
 
-        var javaFile = JavaFile.builder("cn.allay.entity.data", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.entity.data", codeBuilder.build()).build();
         Files.writeString(FILE_OUTPUT_PATH, javaFile.toString());
     }
 }

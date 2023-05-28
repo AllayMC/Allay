@@ -1,8 +1,10 @@
 package cn.allay.scheduler;
 
-import cn.allay.scheduler.task.Task;
-import cn.allay.scheduler.taskcreator.TaskCreator;
-import cn.allay.utils.GameLoop;
+import cn.allay.api.scheduler.Scheduler;
+import cn.allay.api.scheduler.task.Task;
+import cn.allay.api.scheduler.taskcreator.TaskCreator;
+import cn.allay.server.scheduler.AllayScheduler;
+import cn.allay.server.utils.GameLoop;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicLong;

@@ -1,6 +1,6 @@
 package cn.allay.component.interfaces;
 
-import cn.allay.component.annotation.Inject;
+import cn.allay.api.component.annotation.Inject;
 
 /**
  * Author: daoge_cmd <br>

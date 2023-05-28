@@ -1,12 +1,12 @@
 package cn.allay.block.component;
 
-import cn.allay.block.component.impl.attribute.BlockAttributes;
-import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
-import cn.allay.block.data.VanillaBlockId;
-import cn.allay.block.type.BlockInitInfo;
-import cn.allay.block.type.BlockType;
-import cn.allay.block.type.BlockTypeRegistry;
-import cn.allay.math.position.Pos;
+import cn.allay.api.block.component.impl.attribute.BlockAttributes;
+import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.api.block.data.VanillaBlockId;
+import cn.allay.api.block.type.BlockInitInfo;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.math.position.Pos;
 import cn.allay.testutils.AllayTestExtension;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

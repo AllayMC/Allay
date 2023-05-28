@@ -1,11 +1,11 @@
 package cn.allay.component.impl;
 
-import cn.allay.component.annotation.Dependency;
-import cn.allay.component.annotation.Impl;
+import cn.allay.api.component.annotation.Dependency;
+import cn.allay.api.component.annotation.Impl;
+import cn.allay.api.component.interfaces.ComponentImpl;
+import cn.allay.api.identifier.Identifier;
 import cn.allay.component.interfaces.AttackComponent;
-import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.HealthComponent;
-import cn.allay.identifier.Identifier;
 
 /**
  * Author: daoge_cmd <br>

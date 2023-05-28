@@ -1,5 +1,9 @@
 package cn.allay.block.property.type;
 
+import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.block.property.type.BooleanPropertyType;
+import cn.allay.api.block.property.type.EnumPropertyType;
+import cn.allay.api.block.property.type.IntPropertyType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

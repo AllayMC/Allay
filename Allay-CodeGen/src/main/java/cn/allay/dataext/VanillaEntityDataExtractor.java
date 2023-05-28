@@ -1,6 +1,6 @@
 package cn.allay.dataext;
 
-import cn.allay.entity.data.VanillaEntityId;
+import cn.allay.api.entity.data.VanillaEntityId;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;

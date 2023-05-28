@@ -1,0 +1,21 @@
+package cn.allay.api.block.impl;
+
+import cn.allay.api.block.Block;
+import cn.allay.api.block.data.VanillaBlockId;
+import cn.allay.api.block.property.vanilla.VanillaBlockPropertyTypes;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeBuilder;
+import cn.allay.api.block.type.BlockTypeRegistry;
+
+/**
+ * Author: daoge_cmd <br>
+ * Allay Project <br>
+ */
+public interface BlockLightBlueCandleCake extends Block {
+    BlockType<BlockLightBlueCandleCake> TYPE = BlockTypeBuilder
+            .builder(BlockLightBlueCandleCake.class)
+            .vanillaBlock(VanillaBlockId.LIGHT_BLUE_CANDLE_CAKE, true)
+            .withProperties(VanillaBlockPropertyTypes.LIT)
+            .addBasicComponents()
+            .build().register(BlockTypeRegistry.getRegistry());
+}
