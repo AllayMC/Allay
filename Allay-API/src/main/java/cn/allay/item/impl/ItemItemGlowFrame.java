@@ -11,9 +11,9 @@ import cn.allay.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemItemGlowFrame extends ItemStack {
-  ItemType<ItemItemGlowFrame> TYPE = ItemTypeBuilder
-  .builder(ItemItemGlowFrame.class)
-  .vanillaItem(VanillaItemId.ITEM_GLOW_FRAME, true)
-  .addBasicComponents()
-  .build().register(ItemTypeRegistry.getRegistry());
+    ItemType<ItemItemGlowFrame> TYPE = ItemTypeBuilder
+            .builder(ItemItemGlowFrame.class)
+            .vanillaItem(VanillaItemId.ITEM_GLOW_FRAME, true)
+            .addBasicComponents()
+            .build().register(ItemTypeRegistry.getRegistry());
 }
