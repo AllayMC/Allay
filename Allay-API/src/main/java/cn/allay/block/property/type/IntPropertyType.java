@@ -28,7 +28,7 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
         }
     }
 
-    public static IntPropertyType createType(String name, int min, int max, Integer defaultData) {
+    public static IntPropertyType of(String name, int min, int max, Integer defaultData) {
         return new IntPropertyType(name, min, max, defaultData);
     }
 

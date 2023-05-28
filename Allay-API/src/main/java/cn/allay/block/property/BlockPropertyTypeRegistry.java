@@ -12,7 +12,7 @@ import java.util.Map;
  * Allay Project <br>
  */
 public interface BlockPropertyTypeRegistry extends MappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> {
-    ApiInstanceHolder<BlockPropertyTypeRegistry> REGISTRY = ApiInstanceHolder.create();
+    ApiInstanceHolder<BlockPropertyTypeRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static BlockPropertyTypeRegistry getRegistry() {
         return REGISTRY.get();

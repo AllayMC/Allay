@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface BlockTypeRegistry extends MappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>> {
 
-    ApiInstanceHolder<BlockTypeRegistry> REGISTRY = ApiInstanceHolder.create();
+    ApiInstanceHolder<BlockTypeRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static BlockTypeRegistry getRegistry() {
         return REGISTRY.get();

@@ -57,7 +57,7 @@ public class VanillaBlockPropertyTypeGen {
                     codeBuilder.addField(
                             FieldSpec
                                     .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.createType($S ,$T.class ,$T.values()[0])", enumPropertyClass, blockPropertyTypeInfo.name, enumClass, enumClass)
+                                    .initializer("$T.of($S ,$T.class ,$T.values()[0])", enumPropertyClass, blockPropertyTypeInfo.name, enumClass, enumClass)
                                     .build()
                     );
                 }
@@ -65,7 +65,7 @@ public class VanillaBlockPropertyTypeGen {
                     codeBuilder.addField(
                             FieldSpec
                                     .builder(booleanPropertyClass, blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.createType($S, $N)", booleanPropertyClass, blockPropertyTypeInfo.name, blockPropertyTypeInfo.validValues.get(0))
+                                    .initializer("$T.of($S, $N)", booleanPropertyClass, blockPropertyTypeInfo.name, blockPropertyTypeInfo.validValues.get(0))
                                     .build()
                     );
                 }
@@ -84,7 +84,7 @@ public class VanillaBlockPropertyTypeGen {
                     codeBuilder.addField(
                             FieldSpec
                                     .builder(intPropertyClass, blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.createType($S, $L, $L, $L)", intPropertyClass, blockPropertyTypeInfo.name, min, max, blockPropertyTypeInfo.validValues.get(0))
+                                    .initializer("$T.of($S, $L, $L, $L)", intPropertyClass, blockPropertyTypeInfo.name, min, max, blockPropertyTypeInfo.validValues.get(0))
                                     .build()
                     );
                 }

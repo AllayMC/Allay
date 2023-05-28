@@ -12,7 +12,7 @@ import java.util.Map;
  * Allay Project <br>
  */
 public interface VanillaItemAttributeRegistry extends MappedRegistry<VanillaItemId, ItemAttributes, Map<VanillaItemId, ItemAttributes>> {
-    ApiInstanceHolder<VanillaItemAttributeRegistry> REGISTRY = ApiInstanceHolder.create();
+    ApiInstanceHolder<VanillaItemAttributeRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static VanillaItemAttributeRegistry getRegistry() {
         return REGISTRY.get();

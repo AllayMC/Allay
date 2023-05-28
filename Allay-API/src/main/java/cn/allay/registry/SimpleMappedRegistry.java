@@ -36,7 +36,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * @param <MAPPING>      the returned mappings type, a map in this case
      * @return a new registry with the given RegistryLoader
      */
-    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> create(RegistryLoader<INPUT, MAPPING> registryLoader) {
+    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(RegistryLoader<INPUT, MAPPING> registryLoader) {
         return new SimpleMappedRegistry<>(null, registryLoader);
     }
 
@@ -51,7 +51,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * @param <MAPPING>      the returned mappings type, a map in this case
      * @return a new registry with the given RegistryLoader
      */
-    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> create(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {
+    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {
         return new SimpleMappedRegistry<>(input, registryLoader);
     }
 
@@ -67,7 +67,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * @param <MAPPING>      the returned mappings type, a map in this case
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> create(Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {
+    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {
         return new SimpleMappedRegistry<>(null, registryLoader.get());
     }
 
@@ -81,7 +81,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * @param <MAPPING>      the returned mappings type, a map in this case
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> create(INPUT input, Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {
+    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(INPUT input, Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {
         return new SimpleMappedRegistry<>(input, registryLoader.get());
     }
 

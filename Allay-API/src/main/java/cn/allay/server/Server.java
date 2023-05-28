@@ -7,8 +7,7 @@ import cn.allay.scheduler.taskcreator.TaskCreator;
  * The server interface
  */
 public interface Server extends TaskCreator {
-
-    ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.create();
+    ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.of();
 
     static Server getInstance() {
         return INSTANCE.get();

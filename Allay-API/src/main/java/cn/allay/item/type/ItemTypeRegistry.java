@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface ItemTypeRegistry extends MappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> {
 
-    ApiInstanceHolder<ItemTypeRegistry> REGISTRY = ApiInstanceHolder.create();
+    ApiInstanceHolder<ItemTypeRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static ItemTypeRegistry getRegistry() {
         return REGISTRY.get();

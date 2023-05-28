@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface BlockTypeBuilder<T extends Block> {
 
-    ApiInstanceHolder<BlockTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
+    ApiInstanceHolder<BlockTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
 
     static <T extends Block> BlockTypeBuilder<T> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);

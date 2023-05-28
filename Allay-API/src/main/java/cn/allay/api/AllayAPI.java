@@ -63,6 +63,7 @@ public final class AllayAPI {
      *
      * @throws MissingImplementationException If there are interface which are not been implemented
      */
+    @SuppressWarnings("unchecked")
     public void implement(String coreName) throws MissingImplementationException {
         for (Map.Entry<Class<?>, ApiBindingAction<?>> entry : bindings.entrySet()) {
             if (entry.getValue() == null) {

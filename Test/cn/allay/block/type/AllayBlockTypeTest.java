@@ -40,9 +40,9 @@ class AllayBlockTypeTest {
 
     @BeforeAll
     static void init() {
-        TEST_BOOLEAN_PROPERTY_TYPE = BooleanPropertyType.createType("test_boolean", false);
-        TEST_INT_PROPERTY_TYPE = IntPropertyType.createType("test_int", 0, 10, 0);
-        TEST_ENUM_PROPERTY_TYPE = EnumPropertyType.createType("test_enum", TestEnum.class, TestEnum.A);
+        TEST_BOOLEAN_PROPERTY_TYPE = BooleanPropertyType.of("test_boolean", false);
+        TEST_INT_PROPERTY_TYPE = IntPropertyType.of("test_int", 0, 10, 0);
+        TEST_ENUM_PROPERTY_TYPE = EnumPropertyType.of("test_enum", TestEnum.class, TestEnum.A);
         testBlockType = AllayBlockType
                 .builder(TestBlock.class)
                 .namespaceId("minecraft:test_block")
