@@ -31,8 +31,6 @@ description = "The next generation minecraft server software"
 plugins {
     `kotlin-dsl`
     idea
-    java
-    application
 }
 
 //不构建这个根项目,这个只作为控制子模块
@@ -41,7 +39,7 @@ tasks.forEach {
 }
 
 subprojects {
-    apply(plugin = "java-library")
+    apply(plugin = "java")
     apply(plugin = "maven-publish")
     apply(plugin = "com.github.johnrengelman.shadow")
 
@@ -59,10 +57,12 @@ subprojects {
         maven {
             url = uri("https://repo.maven.apache.org/maven2/")
         }
+        maven {
+            url = uri("https://www.jitpack.io/")
+        }
     }
 
     dependencies {
-        api(rootProject.libs.annotations)
         testImplementation(rootProject.libs.bundles.junit)
 
         compileOnly(rootProject.libs.lombok)
@@ -70,23 +70,6 @@ subprojects {
 
         testCompileOnly(rootProject.libs.lombok)
         testAnnotationProcessor(rootProject.libs.lombok)
-    }
-
-    sourceSets {
-        main {
-            resources {
-                srcDirs("src/main/resources", "${rootProject.projectDir}/Data")
-                exclude("${rootProject.projectDir}/Data/unpacked")
-                exclude("${rootProject.projectDir}/Data/bedrock-samples")
-            }
-        }
-        test {
-            resources {
-                srcDirs("src/test/resources", "${rootProject.projectDir}/Data")
-                exclude("${rootProject.projectDir}/Data/unpacked")
-                exclude("${rootProject.projectDir}/Data/bedrock-samples")
-            }
-        }
     }
 
     rootProject.idea {
@@ -101,7 +84,7 @@ subprojects {
         jvmArgs = listOf("--enable-preview")
     }
 
-    tasks.withType<JavaCompile>() {
+    tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.compilerArgs.add("--enable-preview")
     }
@@ -110,7 +93,7 @@ subprojects {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
-    tasks.withType<Javadoc>() {
+    tasks.withType<Javadoc> {
         options.encoding = "UTF-8"
     }
 }

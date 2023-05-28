@@ -40,9 +40,8 @@ public class AllayVanillaItemAttributeRegistry extends SimpleMappedRegistry<Vani
                 for (JsonElement jsonElement : element.getAsJsonArray()) {
                     VanillaItemId type;
                     try {
-                        var typeName = StringUtils.fastTwoPartSplit(
-                                StringUtils.fastTwoPartSplit(jsonElement.getAsJsonObject().get("name").getAsString(), ":", "")[1],
-                                ".", "")[1].toUpperCase();
+                        var typeName = StringUtils.fastTwoPartSplit(jsonElement.getAsJsonObject().get("name").getAsString(), ":", "")[1]
+                                .replace(".","_").toUpperCase();
                         type = VanillaItemId.valueOf(typeName);
                     } catch (IllegalArgumentException ignore) {
                         log.error("Unknown item name: " + jsonElement.getAsJsonObject().get("name"));

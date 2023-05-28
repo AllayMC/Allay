@@ -2,7 +2,6 @@ package cn.allay.item.type;
 
 import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.component.interfaces.ComponentInitInfo;
-import cn.allay.component.interfaces.ComponentInjector;
 import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identifier;
 import cn.allay.item.ItemStack;
@@ -31,8 +30,8 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
     protected Identifier namespaceId;
 
     protected AllayItemType(Class<T> interfaceClass,
-                         List<ComponentProvider<? extends ItemComponentImpl>> componentProviders,
-                         Identifier namespaceId) {
+                            List<ComponentProvider<? extends ItemComponentImpl>> componentProviders,
+                            Identifier namespaceId) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
         this.namespaceId = namespaceId;

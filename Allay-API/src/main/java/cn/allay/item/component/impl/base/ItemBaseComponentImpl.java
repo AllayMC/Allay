@@ -1,11 +1,9 @@
 package cn.allay.item.component.impl.base;
 
-import cn.allay.component.annotation.Dependency;
 import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
 import cn.allay.item.ItemStack;
 import cn.allay.item.component.ItemComponentImpl;
-import cn.allay.item.component.impl.attribute.ItemAttributeComponent;
 import cn.allay.item.type.ItemStackInitInfo;
 import cn.allay.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;

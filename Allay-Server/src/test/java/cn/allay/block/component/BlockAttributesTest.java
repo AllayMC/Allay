@@ -3,7 +3,6 @@ package cn.allay.block.component;
 import cn.allay.block.component.impl.attribute.BlockAttributes;
 import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.data.VanillaBlockId;
-import cn.allay.block.property.state.BlockState;
 import cn.allay.block.type.BlockInitInfo;
 import cn.allay.block.type.BlockType;
 import cn.allay.block.type.BlockTypeRegistry;
@@ -14,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -88,7 +85,7 @@ class BlockAttributesTest {
         assertEquals(0, blockAttributes.burnChance());
         assertTrue(blockAttributes.canBeBrokenFromFalling());
         assertTrue(blockAttributes.canContainLiquid());
-        assertEquals(new Color(51,76, 178, 255), blockAttributes.color());
+        assertEquals(new Color(51, 76, 178, 255), blockAttributes.color());
         assertEquals(15, blockAttributes.explosionResistance());
         assertEquals(Float.toHexString(0.6f), Float.toHexString(blockAttributes.friction()));
         assertEquals(3, blockAttributes.hardness());

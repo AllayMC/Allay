@@ -2,7 +2,6 @@ package cn.allay.item.type;
 
 import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identified;
-import cn.allay.identifier.Identifier;
 import cn.allay.item.ItemStack;
 import cn.allay.item.component.ItemComponentImpl;
 

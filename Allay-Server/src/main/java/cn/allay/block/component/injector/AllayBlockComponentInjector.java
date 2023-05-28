@@ -6,15 +6,8 @@ import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.type.BlockType;
 import cn.allay.component.exception.BlockComponentInjectException;
 import cn.allay.component.injector.AllayComponentInjector;
-import cn.allay.component.interfaces.ComponentImpl;
-import cn.allay.component.interfaces.ComponentProvider;
-import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.implementation.FixedValue;
 
-import java.util.List;
 import java.util.Map;
-
-import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
  * Author: daoge_cmd <br>

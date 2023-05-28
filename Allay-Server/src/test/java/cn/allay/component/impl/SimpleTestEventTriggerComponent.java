@@ -1,7 +1,7 @@
 package cn.allay.component.impl;
 
-import cn.allay.component.annotation.Manager;
 import cn.allay.component.annotation.Impl;
+import cn.allay.component.annotation.Manager;
 import cn.allay.component.event.TestEvent;
 import cn.allay.component.interfaces.ComponentImpl;
 import cn.allay.component.interfaces.ComponentManager;
