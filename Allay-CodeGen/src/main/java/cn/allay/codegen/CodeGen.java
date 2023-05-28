@@ -6,13 +6,14 @@ import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -69,9 +70,9 @@ public class CodeGen {
 
     public static void main(String[] args) {
         System.out.println();
-//        VanillaBlockIdEnumGen.generate();
-//        VanillaBlockPropertyTypeGen.generate();
+        VanillaBlockIdEnumGen.generate();
+        VanillaBlockPropertyTypeGen.generate();
         VanillaItemIdEnumCodeGen.generate();
-//        VanillaEntityIdEnumGen.generate();
+        VanillaEntityIdEnumGen.generate();
     }
 }

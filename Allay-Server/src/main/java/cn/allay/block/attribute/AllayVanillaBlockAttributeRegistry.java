@@ -1,15 +1,11 @@
 package cn.allay.block.attribute;
 
-import cn.allay.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.block.component.impl.attribute.BlockAttributes;
 import cn.allay.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.block.data.VanillaBlockId;
-import cn.allay.block.property.state.BlockState;
 import cn.allay.registry.RegistryLoader;
 import cn.allay.registry.SimpleMappedRegistry;
 import cn.allay.utils.StringUtils;
-import com.google.common.primitives.UnsignedInteger;
-import com.google.common.primitives.UnsignedLong;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
@@ -18,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;

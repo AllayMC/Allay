@@ -6,8 +6,8 @@ import cn.allay.entity.component.EntityComponentImpl;
 import cn.allay.entity.type.EntityInitInfo;
 import cn.allay.entity.type.EntityType;
 import cn.allay.identifier.Identifier;
-import cn.allay.math.location.Loc;
 import cn.allay.math.location.FixedLoc;
+import cn.allay.math.location.Loc;
 
 /**
  * Author: daoge_cmd <br>

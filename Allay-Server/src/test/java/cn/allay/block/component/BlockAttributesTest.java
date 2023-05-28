@@ -85,7 +85,7 @@ class BlockAttributesTest {
         assertEquals(0, blockAttributes.burnChance());
         assertTrue(blockAttributes.canBeBrokenFromFalling());
         assertTrue(blockAttributes.canContainLiquid());
-        assertEquals(new Color(51,76, 178, 255), blockAttributes.color());
+        assertEquals(new Color(51, 76, 178, 255), blockAttributes.color());
         assertEquals(15, blockAttributes.explosionResistance());
         assertEquals(Float.toHexString(0.6f), Float.toHexString(blockAttributes.friction()));
         assertEquals(3, blockAttributes.hardness());

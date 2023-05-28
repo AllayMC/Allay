@@ -144,5 +144,6 @@ public final class AllayAPI {
         requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
     }
 
-    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {}
+    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {
+    }
 }
