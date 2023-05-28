@@ -8,7 +8,7 @@ import cn.allay.math.position.Pos;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-public interface Loc<T extends Number> extends LocRO<T>, Pos<T> {
+public interface Loc<T extends Number> extends FixedLoc<T>, Pos<T> {
 
     static <T extends Number> Loc<T> of(T x, T y, T z, Level level) {
         return of(x, y, z, 0, 0, level);

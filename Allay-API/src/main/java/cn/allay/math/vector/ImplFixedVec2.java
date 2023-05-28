@@ -8,25 +8,18 @@ import lombok.EqualsAndHashCode;
  * Allay Project <br>
  */
 @EqualsAndHashCode
-class ImplVec3RO<T extends Number> implements Vec3RO<T> {
+class ImplFixedVec2<T extends Number> implements FixedVec2<T> {
     protected T x;
-    protected T y;
     protected T z;
 
-    public ImplVec3RO(T x, T y, T z) {
+    public ImplFixedVec2(T x, T z) {
         this.x = x;
-        this.y = y;
         this.z = z;
     }
 
     @Override
     public T getX() {
         return x;
-    }
-
-    @Override
-    public T getY() {
-        return y;
     }
 
     @Override

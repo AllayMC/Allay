@@ -5,7 +5,7 @@ import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.block.type.BlockType;
 import cn.allay.component.annotation.Inject;
-import cn.allay.math.position.PosRO;
+import cn.allay.math.position.FixedPos;
 
 /**
  * Author: daoge_cmd <br>
@@ -29,5 +29,5 @@ public interface BlockBaseComponent {
     BlockState<?> getCurrentState();
 
     @Inject
-    PosRO<Integer> getPosition();
+    FixedPos<Integer> getPosition();
 }

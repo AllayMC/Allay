@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
  * Allay Project <br>
  */
 @EqualsAndHashCode
-class ImplAxisAlignedBBRO implements AxisAlignedBBRO {
+class ImplFixedAABB implements FixedAABB {
 
     protected float minX;
     protected float minY;
@@ -17,7 +17,7 @@ class ImplAxisAlignedBBRO implements AxisAlignedBBRO {
     protected float maxY;
     protected float maxZ;
 
-    public ImplAxisAlignedBBRO(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+    public ImplFixedAABB(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;

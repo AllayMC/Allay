@@ -5,9 +5,9 @@ package cn.allay.math.aabb;
  * Date: 2023/3/25 <br>
  * Allay Project <br>
  */
-class ImplAxisAlignedBB extends ImplAxisAlignedBBRO implements AxisAlignedBB {
+class ImplAABB extends ImplFixedAABB implements AABB {
 
-    public ImplAxisAlignedBB(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+    public ImplAABB(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
         super(minX, minY, minZ, maxX, maxY, maxZ);
     }
 

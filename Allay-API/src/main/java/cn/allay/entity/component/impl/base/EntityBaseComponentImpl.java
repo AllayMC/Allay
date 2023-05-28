@@ -7,7 +7,7 @@ import cn.allay.entity.type.EntityInitInfo;
 import cn.allay.entity.type.EntityType;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.location.Loc;
-import cn.allay.math.location.LocRO;
+import cn.allay.math.location.FixedLoc;
 
 /**
  * Author: daoge_cmd <br>
@@ -34,7 +34,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
 
     @Override
     @Impl
-    public LocRO<Float> getLocation() {
+    public FixedLoc<Float> getLocation() {
         return location;
     }
 
