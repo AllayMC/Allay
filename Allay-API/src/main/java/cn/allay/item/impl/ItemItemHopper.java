@@ -11,9 +11,9 @@ import cn.allay.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemItemHopper extends ItemStack {
-  ItemType<ItemItemHopper> TYPE = ItemTypeBuilder
-  .builder(ItemItemHopper.class)
-  .vanillaItem(VanillaItemId.ITEM_HOPPER, true)
-  .addBasicComponents()
-  .build().register(ItemTypeRegistry.getRegistry());
+    ItemType<ItemItemHopper> TYPE = ItemTypeBuilder
+            .builder(ItemItemHopper.class)
+            .vanillaItem(VanillaItemId.ITEM_HOPPER, true)
+            .addBasicComponents()
+            .build().register(ItemTypeRegistry.getRegistry());
 }
