@@ -24,7 +24,7 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
         cachedValues = new EnumMap<>(map);
     }
 
-    public static <T extends Enum<T>> EnumPropertyType<T> createType(String name, Class<T> enumClass, T defaultData) {
+    public static <T extends Enum<T>> EnumPropertyType<T> of(String name, Class<T> enumClass, T defaultData) {
         return new EnumPropertyType<>(name, enumClass, defaultData);
     }
 

@@ -1,7 +1,5 @@
 package cn.allay.block.property.type;
 
-import lombok.ToString;
-
 import java.util.List;
 
 /**
@@ -18,7 +16,7 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
         super(name, List.of(true, false), defaultData);
     }
 
-    public static BooleanPropertyType createType(String name, Boolean defaultData) {
+    public static BooleanPropertyType of(String name, Boolean defaultData) {
         return new BooleanPropertyType(name, defaultData);
     }
 

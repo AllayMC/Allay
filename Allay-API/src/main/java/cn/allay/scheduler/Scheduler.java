@@ -40,7 +40,7 @@ public interface Scheduler {
 
     interface SchedulerFactory {
 
-        ApiInstanceHolder<SchedulerFactory> FACTORY = ApiInstanceHolder.create();
+        ApiInstanceHolder<SchedulerFactory> FACTORY = ApiInstanceHolder.of();
 
         Scheduler createScheduler();
     }

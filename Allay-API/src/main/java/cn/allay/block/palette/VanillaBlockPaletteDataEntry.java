@@ -17,5 +17,4 @@ public record VanillaBlockPaletteDataEntry(
         Map<List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>, Integer> runtimeIdMap,
         int version,
         int index) {
-
 }

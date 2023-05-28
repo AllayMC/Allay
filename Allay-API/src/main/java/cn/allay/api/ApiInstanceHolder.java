@@ -12,7 +12,7 @@ public final class ApiInstanceHolder<T> {
 
     }
 
-    public static <T> ApiInstanceHolder<T> create() {
+    public static <T> ApiInstanceHolder<T> of() {
         return new ApiInstanceHolder<>();
     }
 
