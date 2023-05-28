@@ -67,6 +67,6 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
             this.value = value;
         }
 
-         public abstract SERIALIZED_DATATYPE getSerializedValue();
+        public abstract SERIALIZED_DATATYPE getSerializedValue();
     }
 }

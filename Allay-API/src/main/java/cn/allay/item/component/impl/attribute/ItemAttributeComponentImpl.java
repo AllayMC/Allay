@@ -1,7 +1,6 @@
 package cn.allay.item.component.impl.attribute;
 
 import cn.allay.component.annotation.Impl;
-import cn.allay.component.annotation.Inject;
 import cn.allay.identifier.Identifier;
 import cn.allay.item.component.ItemComponentImpl;
 

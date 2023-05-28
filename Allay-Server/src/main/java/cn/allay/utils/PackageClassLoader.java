@@ -11,7 +11,8 @@ import static org.reflections.scanners.Scanners.SubTypes;
  * Allay Project <br>
  */
 public final class PackageClassLoader {
-    private PackageClassLoader() {}
+    private PackageClassLoader() {
+    }
 
     @SneakyThrows
     public static void loadClasses(String packageName) {

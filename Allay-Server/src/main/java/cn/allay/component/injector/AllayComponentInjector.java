@@ -1,7 +1,6 @@
 package cn.allay.component.injector;
 
 import cn.allay.component.annotation.*;
-import cn.allay.component.annotation.Manager;
 import cn.allay.component.exception.ComponentInjectException;
 import cn.allay.component.interfaces.*;
 import cn.allay.identifier.Identifier;
@@ -97,7 +96,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         try (var unloaded = bb.make()) {
             if (DEBUG) {
                 //TODO: improve this
-                var file = new File("C:\\Users\\daoge_cmd\\IdeaProjects\\Allay\\Allay-Server\\build\\outclass");
+                var file = new File("./build/outclass");
                 unloaded.saveIn(file);
             }
             return (Class<T>) unloaded

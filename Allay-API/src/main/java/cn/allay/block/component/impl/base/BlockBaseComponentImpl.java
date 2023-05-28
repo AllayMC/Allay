@@ -8,8 +8,8 @@ import cn.allay.block.type.BlockInitInfo;
 import cn.allay.block.type.BlockType;
 import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
-import cn.allay.math.position.Pos;
 import cn.allay.math.position.FixedPos;
+import cn.allay.math.position.Pos;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Collectors;

@@ -6,10 +6,8 @@ import cn.allay.block.property.state.BlockState;
 import cn.allay.component.annotation.Dependency;
 import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
-import lombok.Builder;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**

@@ -14,6 +14,7 @@ import cn.allay.identifier.Identifier;
 public class SimpleTestEventListenerComponent implements TestEventListenerComponent, ComponentImpl {
 
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:test_event_listener_component");
+
     @Override
     public Identifier getNamespaceId() {
         return IDENTIFIER;

@@ -6,6 +6,7 @@ import cn.allay.component.injector.AllayComponentInjector;
 import cn.allay.component.interfaces.*;
 import cn.allay.identifier.Identifier;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -58,8 +59,8 @@ class ComponentTest {
         assertEquals(10, sheep.getHealth());
         var runtime = (ComponentedObject) sheep;
         assertEquals(componentProviders.stream().map(ComponentProvider::getComponentClass).toList(), runtime.getComponents().stream().map(Object::getClass).toList());
-        assertEquals(sheep.getName(), ((NameComponent) sheep.getNameComponent()).getName());
-        assertEquals(sheep.getHealth(), ((HealthComponent) sheep.getHealthComponent()).getHealth());
+        Assertions.assertEquals(sheep.getName(), ((NameComponent) sheep.getNameComponent()).getName());
+        Assertions.assertEquals(sheep.getHealth(), ((HealthComponent) sheep.getHealthComponent()).getHealth());
         assertEquals(sheep.getMaxHealth(), ((HealthComponent) sheep.getHealthComponent()).getMaxHealth());
         ((AttackComponent) sheep.getAttackComponent()).attack(10);
         assert sheep.isDead();
@@ -81,7 +82,7 @@ class ComponentTest {
 
     @Test
     void testListener() {
-        assertEquals("testListener() accepted to the event!", sheep.triggerEvent("origin message").getMessage());
+        Assertions.assertEquals("testListener() accepted to the event!", sheep.triggerEvent("origin message").getMessage());
     }
 
     public static class SimpleNameComponentV2 extends SimpleNameComponent {

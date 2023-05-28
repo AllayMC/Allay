@@ -2,13 +2,10 @@ package cn.allay.block.hash;
 
 import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtUtils;
-import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 /**
@@ -23,15 +20,15 @@ public class PaletteHashTest {
 
     /**
      * Some info:
-     *
+     * <p>
      * The compute method "Block#computeRawSerializationIdHashForNetwork()" does not account for collision and special cases.
      * That's why you should use instead the property I mentioned.
-     *
+     * <p>
      * The special cases are just hardcoded as I wrote.
      * Other thing to account for is that when there is a collision one of the collided hashes is increased by 1.
-     *
+     * <p>
      * Special cases:
-     *
+     * <p>
      * minecraft:coral_fan;coral_color=blue;coral_fan_direction=0
      * minecraft:coral_fan_dead;coral_color=blue;coral_fan_direction=0
      * minecraft:unknown

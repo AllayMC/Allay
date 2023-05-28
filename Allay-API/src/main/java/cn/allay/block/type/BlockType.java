@@ -6,7 +6,6 @@ import cn.allay.block.property.state.BlockState;
 import cn.allay.block.property.type.BlockPropertyType;
 import cn.allay.component.interfaces.ComponentProvider;
 import cn.allay.identifier.Identified;
-import cn.allay.identifier.Identifier;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;

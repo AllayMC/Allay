@@ -3,10 +3,8 @@ package cn.allay.block.type;
 import cn.allay.identifier.Identifier;
 import cn.allay.registry.SimpleMappedRegistry;
 import cn.allay.utils.PackageClassLoader;
-import cn.allay.utils.StringUtils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
