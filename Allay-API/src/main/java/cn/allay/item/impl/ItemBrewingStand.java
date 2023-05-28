@@ -11,9 +11,9 @@ import cn.allay.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBrewingStand extends ItemStack {
-  ItemType<ItemBrewingStand> TYPE = ItemTypeBuilder
-          .builder(ItemBrewingStand.class)
-          .vanillaItem(VanillaItemId.BREWING_STAND, true)
-          .addBasicComponents()
-          .build().register(ItemTypeRegistry.getRegistry());
+    ItemType<ItemBrewingStand> TYPE = ItemTypeBuilder
+            .builder(ItemBrewingStand.class)
+            .vanillaItem(VanillaItemId.BREWING_STAND, true)
+            .addBasicComponents()
+            .build().register(ItemTypeRegistry.getRegistry());
 }
