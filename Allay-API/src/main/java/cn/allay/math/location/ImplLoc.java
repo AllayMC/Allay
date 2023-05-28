@@ -7,7 +7,7 @@ import cn.allay.level.Level;
  * Date: 2023/3/11 <br>
  * Allay Project <br>
  */
-class ImplLoc<T extends Number> extends ImplLocRO<T> implements Loc<T> {
+class ImplLoc<T extends Number> extends ImplFixedLoc<T> implements Loc<T> {
     public ImplLoc(T x, T y, T z, Level level) {
         super(x, y, z, level);
     }

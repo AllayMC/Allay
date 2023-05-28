@@ -1,6 +1,5 @@
-package cn.allay.math.position;
+package cn.allay.math.vector;
 
-import cn.allay.level.Level;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -9,18 +8,15 @@ import lombok.EqualsAndHashCode;
  * Allay Project <br>
  */
 @EqualsAndHashCode
-class ImplPosRO<T extends Number> implements PosRO<T> {
-
+class ImplFixedVec3<T extends Number> implements FixedVec3<T> {
     protected T x;
     protected T y;
     protected T z;
-    protected Level level;
 
-    public ImplPosRO(T x, T y, T z, Level level) {
+    public ImplFixedVec3(T x, T y, T z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.level = level;
     }
 
     @Override
@@ -36,10 +32,5 @@ class ImplPosRO<T extends Number> implements PosRO<T> {
     @Override
     public T getZ() {
         return z;
-    }
-
-    @Override
-    public Level getLevel() {
-        return level;
     }
 }

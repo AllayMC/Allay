@@ -3,7 +3,7 @@ package cn.allay.entity.component.impl.base;
 import cn.allay.component.annotation.Inject;
 import cn.allay.entity.Entity;
 import cn.allay.entity.type.EntityType;
-import cn.allay.math.location.LocRO;
+import cn.allay.math.location.FixedLoc;
 
 /**
  * Author: daoge_cmd <br>
@@ -15,5 +15,5 @@ public interface EntityBaseComponent {
     EntityType<? extends Entity> getEntityType();
 
     @Inject
-    LocRO<Float> getLocation();
+    FixedLoc<Float> getLocation();
 }

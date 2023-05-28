@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
  * Allay Project <br>
  */
 @EqualsAndHashCode
-class ImplLocRO<T extends Number> implements LocRO<T> {
+class ImplFixedLoc<T extends Number> implements FixedLoc<T> {
 
     protected T x;
     protected T y;
@@ -19,14 +19,14 @@ class ImplLocRO<T extends Number> implements LocRO<T> {
     protected double pitch;
     protected Level level;
 
-    public ImplLocRO(T x, T y, T z, Level level) {
+    public ImplFixedLoc(T x, T y, T z, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.level = level;
     }
 
-    public ImplLocRO(T x, T y, T z, double yaw, double pitch, Level level) {
+    public ImplFixedLoc(T x, T y, T z, double yaw, double pitch, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -35,7 +35,7 @@ class ImplLocRO<T extends Number> implements LocRO<T> {
         this.level = level;
     }
 
-    public ImplLocRO(T x, T y, T z, double yaw, double headYaw, double pitch, Level level) {
+    public ImplFixedLoc(T x, T y, T z, double yaw, double headYaw, double pitch, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;

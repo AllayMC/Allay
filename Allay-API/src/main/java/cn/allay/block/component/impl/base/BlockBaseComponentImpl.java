@@ -9,7 +9,7 @@ import cn.allay.block.type.BlockType;
 import cn.allay.component.annotation.Impl;
 import cn.allay.identifier.Identifier;
 import cn.allay.math.position.Pos;
-import cn.allay.math.position.PosRO;
+import cn.allay.math.position.FixedPos;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Collectors;
@@ -76,7 +76,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     @Override
     @Impl
-    public PosRO<Integer> getPosition() {
+    public FixedPos<Integer> getPosition() {
         return pos;
     }
 
