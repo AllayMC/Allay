@@ -29,9 +29,7 @@ public class VanillaItemClassGen {
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var item : VanillaItemId.values()) {
-            var typeName = StringUtils.fastTwoPartSplit(
-                    item.getNamespaceId().getPath(),
-                    ".", "")[1];
+            var typeName = item.getNamespaceId().getPath().replace(".", "_");
             var className = item == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0" : "Item" + Utils.convertToPascalCase(typeName);
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             if (Files.exists(path)) {

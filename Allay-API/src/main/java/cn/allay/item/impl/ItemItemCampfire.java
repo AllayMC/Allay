@@ -10,10 +10,10 @@ import cn.allay.item.type.ItemTypeRegistry;
  * Author: daoge_cmd <br>
  * Allay Project <br>
  */
-public interface ItemReeds extends ItemStack {
-    ItemType<ItemReeds> TYPE = ItemTypeBuilder
-            .builder(ItemReeds.class)
-            .vanillaItem(VanillaItemId.REEDS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+public interface ItemItemCampfire extends ItemStack {
+  ItemType<ItemItemCampfire> TYPE = ItemTypeBuilder
+  .builder(ItemItemCampfire.class)
+  .vanillaItem(VanillaItemId.ITEM_CAMPFIRE, true)
+  .addBasicComponents()
+  .build().register(ItemTypeRegistry.getRegistry());
 }

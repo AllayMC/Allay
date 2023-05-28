@@ -71,7 +71,7 @@ public class CodeGen {
         System.out.println();
 //        VanillaBlockIdEnumGen.generate();
 //        VanillaBlockPropertyTypeGen.generate();
-//        VanillaItemIdEnumCodeGen.generate();
-        VanillaEntityIdEnumGen.generate();
+        VanillaItemIdEnumCodeGen.generate();
+//        VanillaEntityIdEnumGen.generate();
     }
 }
