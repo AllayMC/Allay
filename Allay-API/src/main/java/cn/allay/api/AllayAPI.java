@@ -28,18 +28,18 @@ import java.util.function.Supplier;
  * Author: daoge_cmd <br>
  * Date: 2023/3/11 <br>
  * Allay Project <br>
- * <p/>
- * This class is used to manage the implementation of the API to the module<br/>
- * The Allay-API defines a number of interfaces that need to be implemented in advance, <br/>
- * and in Allay-Server, this will be implemented through such registrations<br/>
- * <p/>
+ * <p>
+ * This class is used to manage the implementation of the API to the module<br>
+ * The Allay-API defines a number of interfaces that need to be implemented in advance, <br>
+ * and in Allay-Server, this will be implemented through such registrations<br>
+ * <p>
  * Note that for each interface that needs to be implemented, there is only one instance of the implementation class in runtime
  */
 @Slf4j
 @Getter
 public final class AllayAPI {
 
-    //TODO: 移动到文件中？防止编译器内联导致的问题
+    //TODO: move to file?Prevent problems caused by compiler inlining
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
@@ -75,7 +75,7 @@ public final class AllayAPI {
                 ((Consumer<Object>) entry.getValue().afterBound).accept(apiInstance);
             }
         }
-        //TODO: 多语言支持
+        //TODO: multilingual support
         log.info("This server is running " + coreName + ", implement Allay-API version §b" + API_VERSION);
         implemented = true;
     }
@@ -85,7 +85,7 @@ public final class AllayAPI {
     }
 
     /**
-     * Add an interface to be implemented<br/>
+     * Add an interface to be implemented<br>
      * It needs to be implemented by the server
      *
      * @param api the interface
@@ -109,11 +109,11 @@ public final class AllayAPI {
     }
 
     /**
+     * Each interface has only one instance of the corresponding implementation class, so if you call this method with the same parameters, you will return an identical object <br>
+     * If the interface has not been implemented, it will throw an exception <br>
+     *
      * @param api the interface
-     * @param <T> the interface type
      * @return the implementation instance of the specific interface <br/>
-     * Each interface has only one instance of the corresponding implementation class, so if you call this method with the same parameters, you will return an identical object <br/>
-     * If the interface has not been implemented, it will throw an exception <br/>
      */
     public <T> T getAPIInstance(Class<T> api) {
         if (!implemented)

@@ -44,6 +44,7 @@ subprojects {
     apply(plugin = "com.github.johnrengelman.shadow")
 
     java.sourceCompatibility = JavaVersion.VERSION_19
+    java.targetCompatibility = JavaVersion.VERSION_19
 
     repositories {
         mavenLocal()
@@ -72,6 +73,11 @@ subprojects {
         testAnnotationProcessor(rootProject.libs.lombok)
     }
 
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     rootProject.idea {
         module {
             isDownloadSources = false
@@ -95,5 +101,6 @@ subprojects {
 
     tasks.withType<Javadoc> {
         options.encoding = "UTF-8"
+        isFailOnError = false
     }
 }

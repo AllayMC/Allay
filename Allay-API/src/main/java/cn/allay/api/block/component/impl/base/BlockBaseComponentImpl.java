@@ -29,7 +29,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     public BlockBaseComponentImpl(BlockType<? extends Block> blockType, BlockInitInfo info) {
         this.blockType = blockType;
-        //TODO: 也许需要从配置文件读取默认方块状态
+        //TODO: Maybe need to read default block state from config file
         this.currentState = blockType.ofState(
                 blockType.getMappedProperties()
                         .values()
