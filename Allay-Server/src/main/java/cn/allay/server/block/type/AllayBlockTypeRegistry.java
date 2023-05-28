@@ -20,6 +20,6 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
     }
 
     public void init() {
-        PackageClassLoader.loadClasses("cn.allay.block.impl");
+        PackageClassLoader.loadClasses("cn.allay.api.block.impl");
     }
 }

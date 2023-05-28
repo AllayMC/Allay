@@ -116,10 +116,8 @@ class BlockAttributesTest {
             log.info("Testing block type: " + vanillaBlockId.getNamespaceId());
             testBlockType(vanillaBlockId, BlockTypeRegistry.getRegistry().get(vanillaBlockId.getNamespaceId()));
         }
-//        System.out.println("Missing: " + missing.size());
     }
 
-//    static List<BlockState<?>> missing = new ArrayList<>();
 
     void testBlockType(VanillaBlockId vanillaBlockId, BlockType<?> type) {
         var block = type.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null)));

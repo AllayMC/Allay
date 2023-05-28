@@ -20,6 +20,6 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
     }
 
     public void init() {
-        PackageClassLoader.loadClasses("cn.allay.item.impl");
+        PackageClassLoader.loadClasses("cn.allay.api.item.impl");
     }
 }
