@@ -41,9 +41,10 @@ public class VanillaItemIdEnumCodeGen {
                         .build()
                 );
         for (var entry : MAPPED_ITEM_DATA.entrySet()) {
-            var valueName = StringUtils.fastTwoPartSplit(
+            var split = StringUtils.fastTwoPartSplit(
                     StringUtils.fastTwoPartSplit(entry.getKey(), ":", "")[1],
-                    ".", "")[1].toUpperCase();
+                    ".", "");
+            var valueName = split[0].isBlank() ? split[1].toUpperCase() : split[0].toUpperCase() + "_" + split[1].toUpperCase();
             codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S", entry.getKey()).build());
         }
 

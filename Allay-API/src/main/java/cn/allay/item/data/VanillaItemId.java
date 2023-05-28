@@ -16,7 +16,7 @@ public enum VanillaItemId {
 
   ACACIA_CHEST_BOAT("minecraft:acacia_chest_boat"),
 
-  ACACIA_DOOR("minecraft:item.acacia_door"),
+  ACACIA_DOOR("minecraft:acacia_door"),
 
   ACACIA_FENCE("minecraft:acacia_fence"),
 
@@ -146,7 +146,7 @@ public enum VanillaItemId {
 
   BEACON("minecraft:beacon"),
 
-  BED("minecraft:item.bed"),
+  BED("minecraft:bed"),
 
   BEDROCK("minecraft:bedrock"),
 
@@ -158,7 +158,7 @@ public enum VanillaItemId {
 
   BEEHIVE("minecraft:beehive"),
 
-  BEETROOT("minecraft:item.beetroot"),
+  BEETROOT("minecraft:beetroot"),
 
   BEETROOT_SEEDS("minecraft:beetroot_seeds"),
 
@@ -174,7 +174,7 @@ public enum VanillaItemId {
 
   BIRCH_CHEST_BOAT("minecraft:birch_chest_boat"),
 
-  BIRCH_DOOR("minecraft:item.birch_door"),
+  BIRCH_DOOR("minecraft:birch_door"),
 
   BIRCH_FENCE("minecraft:birch_fence"),
 
@@ -264,7 +264,7 @@ public enum VanillaItemId {
 
   BREWER_POTTERY_SHARD("minecraft:brewer_pottery_shard"),
 
-  BREWING_STAND("minecraft:item.brewing_stand"),
+  BREWING_STAND("minecraft:brewing_stand"),
 
   BRICK("minecraft:brick"),
 
@@ -298,7 +298,7 @@ public enum VanillaItemId {
 
   CACTUS("minecraft:cactus"),
 
-  CAKE("minecraft:item.cake"),
+  CAKE("minecraft:cake"),
 
   CALCITE("minecraft:calcite"),
 
@@ -306,9 +306,9 @@ public enum VanillaItemId {
 
   CAMEL_SPAWN_EGG("minecraft:camel_spawn_egg"),
 
-  CAMERA("minecraft:item.camera"),
+  CAMERA("minecraft:camera"),
 
-  CAMPFIRE("minecraft:item.campfire"),
+  CAMPFIRE("minecraft:campfire"),
 
   CANDLE("minecraft:candle"),
 
@@ -328,7 +328,7 @@ public enum VanillaItemId {
 
   CAT_SPAWN_EGG("minecraft:cat_spawn_egg"),
 
-  CAULDRON("minecraft:item.cauldron"),
+  CAULDRON("minecraft:cauldron"),
 
   CAVE_SPIDER_SPAWN_EGG("minecraft:cave_spider_spawn_egg"),
 
@@ -338,7 +338,7 @@ public enum VanillaItemId {
 
   CAVE_VINES_HEAD_WITH_BERRIES("minecraft:cave_vines_head_with_berries"),
 
-  CHAIN("minecraft:item.chain"),
+  CHAIN("minecraft:chain"),
 
   CHAIN_COMMAND_BLOCK("minecraft:chain_command_block"),
 
@@ -536,7 +536,7 @@ public enum VanillaItemId {
 
   CRIMSON_BUTTON("minecraft:crimson_button"),
 
-  CRIMSON_DOOR("minecraft:item.crimson_door"),
+  CRIMSON_DOOR("minecraft:crimson_door"),
 
   CRIMSON_DOUBLE_SLAB("minecraft:crimson_double_slab"),
 
@@ -600,7 +600,7 @@ public enum VanillaItemId {
 
   DARK_OAK_CHEST_BOAT("minecraft:dark_oak_chest_boat"),
 
-  DARK_OAK_DOOR("minecraft:item.dark_oak_door"),
+  DARK_OAK_DOOR("minecraft:dark_oak_door"),
 
   DARK_OAK_FENCE("minecraft:dark_oak_fence"),
 
@@ -1084,7 +1084,7 @@ public enum VanillaItemId {
 
   FLOWER_BANNER_PATTERN("minecraft:flower_banner_pattern"),
 
-  FLOWER_POT("minecraft:item.flower_pot"),
+  FLOWER_POT("minecraft:flower_pot"),
 
   FLOWERING_AZALEA("minecraft:flowering_azalea"),
 
@@ -1094,7 +1094,7 @@ public enum VanillaItemId {
 
   FOX_SPAWN_EGG("minecraft:fox_spawn_egg"),
 
-  FRAME("minecraft:item.frame"),
+  FRAME("minecraft:frame"),
 
   FRIEND_POTTERY_SHARD("minecraft:friend_pottery_shard"),
 
@@ -1124,7 +1124,7 @@ public enum VanillaItemId {
 
   GLOW_BERRIES("minecraft:glow_berries"),
 
-  GLOW_FRAME("minecraft:item.glow_frame"),
+  GLOW_FRAME("minecraft:glow_frame"),
 
   GLOW_INK_SAC("minecraft:glow_ink_sac"),
 
@@ -1244,7 +1244,7 @@ public enum VanillaItemId {
 
   HONEYCOMB_BLOCK("minecraft:honeycomb_block"),
 
-  HOPPER("minecraft:item.hopper"),
+  HOPPER("minecraft:hopper"),
 
   HOPPER_MINECART("minecraft:hopper_minecart"),
 
@@ -1280,7 +1280,7 @@ public enum VanillaItemId {
 
   IRON_CHESTPLATE("minecraft:iron_chestplate"),
 
-  IRON_DOOR("minecraft:item.iron_door"),
+  IRON_DOOR("minecraft:iron_door"),
 
   IRON_GOLEM_SPAWN_EGG("minecraft:iron_golem_spawn_egg"),
 
@@ -1306,29 +1306,63 @@ public enum VanillaItemId {
 
   IRON_TRAPDOOR("minecraft:iron_trapdoor"),
 
-  JUNGLE_DOOR("minecraft:jungle_door"),
+  ITEM_ACACIA_DOOR("minecraft:item.acacia_door"),
 
-  KELP("minecraft:kelp"),
+  ITEM_BED("minecraft:item.bed"),
 
-  MANGROVE_DOOR("minecraft:mangrove_door"),
+  ITEM_BEETROOT("minecraft:item.beetroot"),
 
-  NETHER_SPROUTS("minecraft:nether_sprouts"),
+  ITEM_BIRCH_DOOR("minecraft:item.birch_door"),
 
-  NETHER_WART("minecraft:nether_wart"),
+  ITEM_BREWING_STAND("minecraft:item.brewing_stand"),
 
-  REEDS("minecraft:item.reeds"),
+  ITEM_CAKE("minecraft:item.cake"),
 
-  SKULL("minecraft:skull"),
+  ITEM_CAMERA("minecraft:item.camera"),
 
-  SOUL_CAMPFIRE("minecraft:soul_campfire"),
+  ITEM_CAMPFIRE("minecraft:item.campfire"),
 
-  SPRUCE_DOOR("minecraft:spruce_door"),
+  ITEM_CAULDRON("minecraft:item.cauldron"),
 
-  WARPED_DOOR("minecraft:warped_door"),
+  ITEM_CHAIN("minecraft:item.chain"),
 
-  WHEAT("minecraft:wheat"),
+  ITEM_CRIMSON_DOOR("minecraft:item.crimson_door"),
 
-  WOODEN_DOOR("minecraft:wooden_door"),
+  ITEM_DARK_OAK_DOOR("minecraft:item.dark_oak_door"),
+
+  ITEM_FLOWER_POT("minecraft:item.flower_pot"),
+
+  ITEM_FRAME("minecraft:item.frame"),
+
+  ITEM_GLOW_FRAME("minecraft:item.glow_frame"),
+
+  ITEM_HOPPER("minecraft:item.hopper"),
+
+  ITEM_IRON_DOOR("minecraft:item.iron_door"),
+
+  ITEM_JUNGLE_DOOR("minecraft:item.jungle_door"),
+
+  ITEM_KELP("minecraft:item.kelp"),
+
+  ITEM_MANGROVE_DOOR("minecraft:item.mangrove_door"),
+
+  ITEM_NETHER_SPROUTS("minecraft:item.nether_sprouts"),
+
+  ITEM_NETHER_WART("minecraft:item.nether_wart"),
+
+  ITEM_REEDS("minecraft:item.reeds"),
+
+  ITEM_SKULL("minecraft:item.skull"),
+
+  ITEM_SOUL_CAMPFIRE("minecraft:item.soul_campfire"),
+
+  ITEM_SPRUCE_DOOR("minecraft:item.spruce_door"),
+
+  ITEM_WARPED_DOOR("minecraft:item.warped_door"),
+
+  ITEM_WHEAT("minecraft:item.wheat"),
+
+  ITEM_WOODEN_DOOR("minecraft:item.wooden_door"),
 
   JIGSAW("minecraft:jigsaw"),
 
@@ -1339,6 +1373,8 @@ public enum VanillaItemId {
   JUNGLE_BUTTON("minecraft:jungle_button"),
 
   JUNGLE_CHEST_BOAT("minecraft:jungle_chest_boat"),
+
+  JUNGLE_DOOR("minecraft:jungle_door"),
 
   JUNGLE_FENCE("minecraft:jungle_fence"),
 
@@ -1359,6 +1395,8 @@ public enum VanillaItemId {
   JUNGLE_TRAPDOOR("minecraft:jungle_trapdoor"),
 
   JUNGLE_WALL_SIGN("minecraft:jungle_wall_sign"),
+
+  KELP("minecraft:kelp"),
 
   LADDER("minecraft:ladder"),
 
@@ -1483,6 +1521,8 @@ public enum VanillaItemId {
   MANGROVE_BUTTON("minecraft:mangrove_button"),
 
   MANGROVE_CHEST_BOAT("minecraft:mangrove_chest_boat"),
+
+  MANGROVE_DOOR("minecraft:mangrove_door"),
 
   MANGROVE_DOUBLE_SLAB("minecraft:mangrove_double_slab"),
 
@@ -1622,7 +1662,11 @@ public enum VanillaItemId {
 
   NETHER_GOLD_ORE("minecraft:nether_gold_ore"),
 
+  NETHER_SPROUTS("minecraft:nether_sprouts"),
+
   NETHER_STAR("minecraft:nether_star"),
+
+  NETHER_WART("minecraft:nether_wart"),
 
   NETHER_WART_BLOCK("minecraft:nether_wart_block"),
 
@@ -2024,6 +2068,8 @@ public enum VanillaItemId {
 
   SKELETON_SPAWN_EGG("minecraft:skeleton_spawn_egg"),
 
+  SKULL("minecraft:skull"),
+
   SKULL_BANNER_PATTERN("minecraft:skull_banner_pattern"),
 
   SKULL_POTTERY_SHARD("minecraft:skull_pottery_shard"),
@@ -2066,6 +2112,8 @@ public enum VanillaItemId {
 
   SNOWBALL("minecraft:snowball"),
 
+  SOUL_CAMPFIRE("minecraft:soul_campfire"),
+
   SOUL_FIRE("minecraft:soul_fire"),
 
   SOUL_LANTERN("minecraft:soul_lantern"),
@@ -2097,6 +2145,8 @@ public enum VanillaItemId {
   SPRUCE_BUTTON("minecraft:spruce_button"),
 
   SPRUCE_CHEST_BOAT("minecraft:spruce_chest_boat"),
+
+  SPRUCE_DOOR("minecraft:spruce_door"),
 
   SPRUCE_FENCE("minecraft:spruce_fence"),
 
@@ -2316,6 +2366,8 @@ public enum VanillaItemId {
 
   WARPED_BUTTON("minecraft:warped_button"),
 
+  WARPED_DOOR("minecraft:warped_door"),
+
   WARPED_DOUBLE_SLAB("minecraft:warped_double_slab"),
 
   WARPED_FENCE("minecraft:warped_fence"),
@@ -2416,6 +2468,8 @@ public enum VanillaItemId {
 
   WEEPING_VINES("minecraft:weeping_vines"),
 
+  WHEAT("minecraft:wheat"),
+
   WHEAT_SEEDS("minecraft:wheat_seeds"),
 
   WHITE_CANDLE("minecraft:white_candle"),
@@ -2445,6 +2499,8 @@ public enum VanillaItemId {
   WOODEN_AXE("minecraft:wooden_axe"),
 
   WOODEN_BUTTON("minecraft:wooden_button"),
+
+  WOODEN_DOOR("minecraft:wooden_door"),
 
   WOODEN_HOE("minecraft:wooden_hoe"),
 
