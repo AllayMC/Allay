@@ -3,9 +3,9 @@ package cn.allay.api.block.type;
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
-import cn.allay.api.block.data.VanillaBlockId;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.identifier.Identifier;
 
 import java.util.List;

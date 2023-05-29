@@ -1,7 +1,7 @@
 package cn.allay.api.block.palette;
 
 import cn.allay.api.ApiInstanceHolder;
-import cn.allay.api.block.data.VanillaBlockId;
+import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.registry.MappedRegistry;
 
 import java.util.Map;

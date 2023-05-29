@@ -2,13 +2,13 @@ package cn.allay.server.item.type;
 
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponentImpl;
 import cn.allay.api.item.component.impl.attribute.ItemAttributeComponentImpl;
 import cn.allay.api.item.component.impl.attribute.VanillaItemAttributeRegistry;
 import cn.allay.api.item.component.impl.base.ItemBaseComponentImpl;
-import cn.allay.api.item.data.VanillaItemId;
 import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeBuilder;

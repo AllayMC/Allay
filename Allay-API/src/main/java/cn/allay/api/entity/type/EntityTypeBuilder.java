@@ -2,9 +2,9 @@ package cn.allay.api.entity.type;
 
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponentImpl;
-import cn.allay.api.entity.data.VanillaEntityId;
 import cn.allay.api.identifier.Identifier;
 
 import java.util.List;

@@ -1,14 +1,14 @@
 package cn.allay.block.registry;
 
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
-import cn.allay.api.block.data.VanillaBlockId;
 import cn.allay.api.block.palette.VanillaBlockPaletteRegistry;
 import cn.allay.api.block.property.BlockPropertyTypeRegistry;
 import cn.allay.api.block.property.type.BlockPropertyType;
-import cn.allay.api.block.property.vanilla.VanillaBlockPropertyTypes;
 import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.data.VanillaBlockId;
+import cn.allay.api.data.VanillaBlockPropertyTypes;
+import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.item.component.impl.attribute.VanillaItemAttributeRegistry;
-import cn.allay.api.item.data.VanillaItemId;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,10 @@
 package cn.allay.server.block.palette;
 
-import cn.allay.api.block.data.VanillaBlockId;
 import cn.allay.api.block.palette.VanillaBlockPaletteDataEntry;
 import cn.allay.api.block.palette.VanillaBlockPaletteRegistry;
 import cn.allay.api.block.property.BlockPropertyTypeRegistry;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.registry.RegistryLoader;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.StringUtils;

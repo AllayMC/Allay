@@ -1,7 +1,7 @@
 package cn.allay.api.item.component.impl.attribute;
 
 import cn.allay.api.ApiInstanceHolder;
-import cn.allay.api.item.data.VanillaItemId;
+import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.registry.MappedRegistry;
 
 import java.util.Map;

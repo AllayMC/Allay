@@ -2,7 +2,7 @@ package cn.allay.server.block.property;
 
 import cn.allay.api.block.property.BlockPropertyTypeRegistry;
 import cn.allay.api.block.property.type.BlockPropertyType;
-import cn.allay.api.block.property.vanilla.VanillaBlockPropertyTypes;
+import cn.allay.api.data.VanillaBlockPropertyTypes;
 import cn.allay.api.registry.SimpleMappedRegistry;
 
 import java.util.HashMap;

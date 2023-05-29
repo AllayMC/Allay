@@ -2,10 +2,10 @@ package cn.allay.server.entity.type;
 
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponentImpl;
 import cn.allay.api.entity.component.impl.base.EntityBaseComponentImpl;
-import cn.allay.api.entity.data.VanillaEntityId;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;

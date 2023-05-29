@@ -1,7 +1,7 @@
 package cn.allay.block.hash;
 
-import cn.allay.api.block.data.VanillaBlockId;
 import cn.allay.api.block.palette.VanillaBlockPaletteRegistry;
+import cn.allay.api.data.VanillaBlockId;
 import cn.allay.testutils.AllayTestExtension;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

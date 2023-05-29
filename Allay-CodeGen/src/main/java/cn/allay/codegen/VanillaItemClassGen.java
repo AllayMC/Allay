@@ -1,6 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.api.item.data.VanillaItemId;
+import cn.allay.api.data.VanillaItemId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 

@@ -1,6 +1,6 @@
 package cn.allay.api.block.palette;
 
-import cn.allay.api.block.property.state.BlockState;
+import cn.allay.api.block.property.BlockState;
 import cn.allay.api.identifier.Identifier;
 
 /**

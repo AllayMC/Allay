@@ -2,10 +2,10 @@ package cn.allay.api.item.type;
 
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponentImpl;
-import cn.allay.api.item.data.VanillaItemId;
 
 import java.util.List;
 

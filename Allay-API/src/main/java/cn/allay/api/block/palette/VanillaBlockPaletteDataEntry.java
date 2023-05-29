@@ -1,7 +1,7 @@
 package cn.allay.api.block.palette;
 
-import cn.allay.api.block.data.VanillaBlockId;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.data.VanillaBlockId;
 
 import java.util.List;
 import java.util.Map;

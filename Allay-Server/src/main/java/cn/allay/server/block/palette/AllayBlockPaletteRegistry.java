@@ -3,7 +3,7 @@ package cn.allay.server.block.palette;
 import cn.allay.api.block.palette.BlockPaletteDataEntry;
 import cn.allay.api.block.palette.BlockPaletteRegistry;
 import cn.allay.api.block.property.BlockPropertyTypeRegistry;
-import cn.allay.api.block.property.state.BlockState;
+import cn.allay.api.block.property.BlockState;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.identifier.Identifier;
