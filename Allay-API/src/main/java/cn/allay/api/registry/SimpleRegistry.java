@@ -7,7 +7,7 @@ import java.util.function.Supplier;
  * for simple registrations of any given type without restrictions on what
  * the input or output can be.
  * <p>
- * Author: GeyserMC & daoge_cmd <br>
+ * Author: GeyserMC | daoge_cmd <br>
  * Date: 2023/3/18 <br>
  * Allay Project <br>
  *

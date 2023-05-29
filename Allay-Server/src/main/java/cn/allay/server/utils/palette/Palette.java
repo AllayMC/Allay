@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Author: JukeboxMC & daoge_cmd <br>
+ * Author: JukeboxMC | daoge_cmd <br>
  * Date: 2023/4/14 <br>
  * Allay Project <br>
  */

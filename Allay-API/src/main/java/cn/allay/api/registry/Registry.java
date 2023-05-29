@@ -20,11 +20,7 @@ import java.util.function.Consumer;
  * Registries can be very simple to create. Here is an example that simply parses a
  * number given a string:
  *
- * <pre>
- * {
- *      public static final SimpleRegistry<Integer> STRING_TO_INT = SimpleRegistry.create("5", Integer::parseInt);
- * }
- * </pre>
+ * <pre>{@code public static final SimpleRegistry<Integer> STRING_TO_INT = SimpleRegistry.create("5", Integer::parseInt);}</pre>
  *
  * <p>
  * This is a simple example which really wouldn't have much of a practical use,
@@ -32,7 +28,7 @@ import java.util.function.Consumer;
  * though, the first parameter would be a location of some sort, such as a file path
  * where the loader will load the mappings from.
  * <p>
- * Author: GeyserMC & daoge_cmd <br>
+ * Author: GeyserMC | daoge_cmd <br>
  * Date: 2023/3/18 <br>
  * Allay Project <br>
  *

@@ -3,7 +3,7 @@ package cn.allay.server.utils.palette.bitarray;
 import org.cloudburstmc.math.GenericMath;
 
 /**
- * Author: JukeboxMC & daoge_cmd <br>
+ * Author: JukeboxMC | daoge_cmd <br>
  * Date: 2023/4/14 <br>
  * Allay Project <br>
  */

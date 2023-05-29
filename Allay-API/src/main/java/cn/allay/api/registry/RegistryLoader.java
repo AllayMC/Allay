@@ -5,7 +5,7 @@ package cn.allay.api.registry;
  * but is commonly a file path or something similar. {@link O} represents the output
  * type returned by this, which can also be anything.
  * <p>
- * Author: GeyserMC & daoge_cmd <br>
+ * Author: GeyserMC | daoge_cmd <br>
  * Date: 2023/3/18 <br>
  * Allay Project <br>
  *

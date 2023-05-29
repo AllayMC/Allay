@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import org.cloudburstmc.protocol.common.util.VarInts;
 
 /**
- * Author: JukeboxMC & daoge_cmd <br>
+ * Author: JukeboxMC | daoge_cmd <br>
  * Date: 2023/4/14 <br>
  * Allay Project <br>
  */

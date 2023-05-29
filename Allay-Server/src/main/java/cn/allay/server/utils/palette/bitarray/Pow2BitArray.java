@@ -6,7 +6,7 @@ import org.cloudburstmc.math.GenericMath;
 import java.util.Arrays;
 
 /**
- * Author: JukeboxMC & daoge_cmd <br>
+ * Author: JukeboxMC | daoge_cmd <br>
  * Date: 2023/4/14 <br>
  * Allay Project <br>
  */

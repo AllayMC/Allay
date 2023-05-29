@@ -33,7 +33,7 @@ plugins {
     idea
 }
 
-//不构建这个根项目,这个只作为控制子模块
+//Do not build this root project, this is only used as a control submodule
 tasks.forEach {
     it.enabled = false
 }
@@ -101,6 +101,9 @@ subprojects {
 
     tasks.withType<Javadoc> {
         options.encoding = "UTF-8"
-        isFailOnError = false
+        //Suppress some meaningless warnings
+        options {
+            (this as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
+        }
     }
 }
