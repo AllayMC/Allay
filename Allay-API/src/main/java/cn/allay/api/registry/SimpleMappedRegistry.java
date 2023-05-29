@@ -4,17 +4,17 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * A public registry holding a map of various registrations as defined by {@link MAPPING}.
+ * A public registry holding a map of various registrations as defined by {@code MAPPING}.
  * The M represents the map class, which can be anything that extends {@link Map}. The
- * {@link KEY} and {@link VALUE} generics are the key and value respectively.
+ * {@code KEY} and {@code VALUE} generics are the key and value respectively.
+ * <p>
+ * Author: GeyserMC & daoge_cmd <br>
+ * Date: 2023/3/18 <br>
+ * Allay Project <br>
  *
  * @param <KEY>     the key
  * @param <VALUE>   the value
  * @param <MAPPING> the map
- *                  <p>
- *                  Author: GeyserMC & daoge_cmd <br>
- *                  Date: 2023/3/18 <br>
- *                  Allay Project <br>
  */
 public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> implements MappedRegistry<KEY, VALUE, MAPPING> {
 

@@ -14,15 +14,15 @@ import java.util.function.Consumer;
  * generic types: the input, and the output. The input is what it takes in, whether
  * it be a string which references to a file, or nothing more than an integer. The
  * output is what it generates based on the input, and should be the same type as
- * the {@link CONTENT} generic specified in the registry.
+ * the {@code CONTENT} generic specified in the registry.
  *
  * <p>
  * Registries can be very simple to create. Here is an example that simply parses a
  * number given a string:
  *
  * <pre>
- * {@code
- *     public static final SimpleRegistry<Integer> STRING_TO_INT = SimpleRegistry.create("5", Integer::parseInt);
+ * {
+ *      public static final SimpleRegistry<Integer> STRING_TO_INT = SimpleRegistry.create("5", Integer::parseInt);
  * }
  * </pre>
  *
@@ -31,12 +31,12 @@ import java.util.function.Consumer;
  * however it demonstrates a fairly basic use case of how this system works. Typically
  * though, the first parameter would be a location of some sort, such as a file path
  * where the loader will load the mappings from.
+ * <p>
+ * Author: GeyserMC & daoge_cmd <br>
+ * Date: 2023/3/18 <br>
+ * Allay Project <br>
  *
  * @param <CONTENT> the type of the value which is being held by the registry
- *                  <p>
- *                  Author: GeyserMC & daoge_cmd <br>
- *                  Date: 2023/3/18 <br>
- *                  Allay Project <br>
  */
 public interface Registry<CONTENT> {
     /**

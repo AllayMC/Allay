@@ -10,7 +10,7 @@ import cn.allay.api.identifier.Identified;
  * <p>
  * Describe the implementation of a component <br/>
  * Any component implementation needs to implement this interface, otherwise obviously you can't pass it into the injector <br/>
- * <p/>
+ * <p>
  * The namespace ID of this component implementation will be used when injecting component dependencies <br/>
  *
  * @see Dependency

@@ -6,12 +6,12 @@ import java.util.function.Supplier;
  * A simple registry with no defined mapping or input type. Designed to allow
  * for simple registrations of any given type without restrictions on what
  * the input or output can be.
+ * <p>
+ * Author: GeyserMC & daoge_cmd <br>
+ * Date: 2023/3/18 <br>
+ * Allay Project <br>
  *
  * @param <CONTENT> the value being held by the registry
- *                  <p>
- *                  Author: GeyserMC & daoge_cmd <br>
- *                  Date: 2023/3/18 <br>
- *                  Allay Project <br>
  */
 public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
 

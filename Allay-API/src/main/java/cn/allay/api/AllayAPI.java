@@ -25,15 +25,15 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/11 <br>
- * Allay Project <br>
- * <p>
  * This class is used to manage the implementation of the API to the module<br>
  * The Allay-API defines a number of interfaces that need to be implemented in advance, <br>
  * and in Allay-Server, this will be implemented through such registrations<br>
  * <p>
  * Note that for each interface that needs to be implemented, there is only one instance of the implementation class in runtime
+ * <p>
+ * Author: daoge_cmd <br>
+ * Date: 2023/3/11 <br>
+ * Allay Project <br>
  */
 @Slf4j
 @Getter
@@ -113,7 +113,7 @@ public final class AllayAPI {
      * If the interface has not been implemented, it will throw an exception <br>
      *
      * @param api the interface
-     * @return the implementation instance of the specific interface <br/>
+     * @return the implementation instance of the specific interface
      */
     public <T> T getAPIInstance(Class<T> api) {
         if (!implemented)
