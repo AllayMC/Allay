@@ -18,7 +18,7 @@ import static cn.allay.codegen.CodeGen.MAPPED_ENTITY_DATA;
  */
 public class VanillaEntityIdEnumGen {
 
-    private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/entity/data/VanillaEntityId.java");
+    private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaEntityId.java");
 
     @SneakyThrows
     public static void generate() {
@@ -48,7 +48,7 @@ public class VanillaEntityIdEnumGen {
             codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S", entry.getKey()).build());
         }
 
-        var javaFile = JavaFile.builder("cn.allay.api.entity.data", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.data", codeBuilder.build()).build();
         Files.writeString(FILE_OUTPUT_PATH, javaFile.toString());
     }
 }

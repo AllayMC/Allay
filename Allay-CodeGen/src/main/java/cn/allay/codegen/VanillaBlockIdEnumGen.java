@@ -17,7 +17,7 @@ import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
  */
 public class VanillaBlockIdEnumGen {
 
-    private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/block/data/VanillaBlockId.java");
+    private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockId.java");
 
     @SneakyThrows
     public static void generate() {
@@ -46,7 +46,7 @@ public class VanillaBlockIdEnumGen {
                             TypeSpec.anonymousClassBuilder("$S", namespaceId.toString()).build());
         }
 
-        var javaFile = JavaFile.builder("cn.allay.api.block.data", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.data", codeBuilder.build()).build();
         Files.writeString(FILE_OUTPUT_PATH, javaFile.toString());
     }
 }

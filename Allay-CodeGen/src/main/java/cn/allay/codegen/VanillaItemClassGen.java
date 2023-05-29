@@ -17,7 +17,7 @@ import java.nio.file.Path;
 public class VanillaItemClassGen {
 
     public static final ClassName ITEM_CLASS_NAME = ClassName.get("cn.allay.api.item", "ItemStack");
-    public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("cn.allay.api.item.data", "VanillaItemId");
+    public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaItemId");
     public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.item.type", "ItemType");
     public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.item.type", "ItemTypeBuilder");
     public static final ClassName ITEM_TYPE_REGISTRY = ClassName.get("cn.allay.api.item.type", "ItemTypeRegistry");

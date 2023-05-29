@@ -17,7 +17,7 @@ import java.nio.file.Path;
 public class VanillaEntityClassGen {
 
     public static final ClassName ENTITY_CLASS_NAME = ClassName.get("cn.allay.api.entity", "Entity");
-    public static final ClassName VANILLA_ENTITY_ID_CLASS_NAME = ClassName.get("cn.allay.api.entity.data", "VanillaEntityId");
+    public static final ClassName VANILLA_ENTITY_ID_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaEntityId");
     public static final ClassName ENTITY_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.entity.type", "EntityType");
     public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.entity.type", "EntityTypeBuilder");
     public static final ClassName ENTITY_TYPE_REGISTRY = ClassName.get("cn.allay.api.entity.type", "EntityTypeRegistry");

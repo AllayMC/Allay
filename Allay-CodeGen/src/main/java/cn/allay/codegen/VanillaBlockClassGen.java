@@ -18,8 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class VanillaBlockClassGen {
 
     public static final ClassName BLOCK_CLASS_NAME = ClassName.get("cn.allay.api.block", "Block");
-    public static final ClassName VANILLA_BLOCK_ID_CLASS_NAME = ClassName.get("cn.allay.api.block.data", "VanillaBlockId");
-    public static final ClassName VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("cn.allay.api.block.property.vanilla", "VanillaBlockPropertyTypes");
+    public static final ClassName VANILLA_BLOCK_ID_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaBlockId");
+    public static final ClassName VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaBlockPropertyTypes");
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockTypeBuilder");
     public static final ClassName BLOCK_TYPE_REGISTRY = ClassName.get("cn.allay.api.block.type", "BlockTypeRegistry");

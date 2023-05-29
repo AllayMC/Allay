@@ -23,7 +23,7 @@ import static cn.allay.codegen.Utils.convertToPascalCase;
  * Allay Project <br>
  */
 public class VanillaBlockPropertyTypeGen {
-    private static final Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/property/vanilla");
+    private static final Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/property");
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -53,7 +53,7 @@ public class VanillaBlockPropertyTypeGen {
         for (BlockPropertyTypeInfo blockPropertyTypeInfo : blockPropertyInfos) {
             switch (blockPropertyTypeInfo.type) {
                 case ENUM -> {
-                    var enumClass = ClassName.get("cn.allay.api.block.property.vanilla.enums", blockPropertyTypeInfo.getEnumClassName());
+                    var enumClass = ClassName.get("cn.allay.api.block.property.enums", blockPropertyTypeInfo.getEnumClassName());
                     codeBuilder.addField(
                             FieldSpec
                                     .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
@@ -107,8 +107,8 @@ public class VanillaBlockPropertyTypeGen {
                         .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                         .build()
         );
-        var javaFile = JavaFile.builder("cn.allay.api.block.property.vanilla", codeBuilder.build()).build();
-        Files.writeString(FILE_OUTPUT_PATH_BASE.resolve("VanillaBlockPropertyTypes.java"), javaFile.toString());
+        var javaFile = JavaFile.builder("cn.allay.api.block.data", codeBuilder.build()).build();
+        Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockPropertyTypes.java"), javaFile.toString());
     }
 
     @SneakyThrows
@@ -123,7 +123,7 @@ public class VanillaBlockPropertyTypeGen {
         for (var value : info.validValues) {
             codeBuilder.addEnumConstant(value.toUpperCase());
         }
-        var javaFile = JavaFile.builder("cn.allay.api.block.property.vanilla.enums", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.block.property.enums", codeBuilder.build()).build();
         var path = FILE_OUTPUT_PATH_BASE.resolve("enums/" + enumName + ".java");
         if (Files.exists(path))
             Files.delete(path);
