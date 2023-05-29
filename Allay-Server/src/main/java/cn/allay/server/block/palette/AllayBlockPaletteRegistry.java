@@ -5,6 +5,7 @@ import cn.allay.api.block.palette.BlockPaletteRegistry;
 import cn.allay.api.block.property.BlockPropertyTypeRegistry;
 import cn.allay.api.block.property.BlockState;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.RegistryLoader;
@@ -51,9 +52,12 @@ public class AllayBlockPaletteRegistry extends SimpleMappedRegistry<Integer, Blo
                 var properties = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
                 blockPalette.getCompound("states").forEach((k, v) -> {
                     var propertyType = getBlockPropertyTypeRegistry().get(k);
+                    assert propertyType != null;
                     properties.add(propertyType.tryCreateValue(v));
                 });
-                BlockState<?> blockState = BlockTypeRegistry.getRegistry().get(name).ofState(properties);
+                BlockType<?> blockType = BlockTypeRegistry.getRegistry().get(name);
+                assert blockType != null;
+                BlockState<?> blockState = blockType.ofState(properties);
                 loaded.putIfAbsent(blockState.getBlockStateHash(), new BlockPaletteDataEntry(name, blockState, version));
             }
             return loaded;

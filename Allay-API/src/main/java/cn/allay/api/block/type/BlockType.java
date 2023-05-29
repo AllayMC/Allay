@@ -19,20 +19,21 @@ import java.util.Map;
 public interface BlockType<T extends Block> extends Identified {
     List<ComponentProvider<? extends BlockComponentImpl>> getComponentProviders();
 
-    List<BlockPropertyType<?>> getProperties();
+    @UnmodifiableView
+    Map<String, BlockPropertyType<?>> getProperties();
 
-    Map<String, BlockPropertyType<?>> getMappedProperties();
+    @UnmodifiableView
+    Map<Integer, BlockState<T>> allStates();
 
     T createBlock(BlockInitInfo info);
+
+    BlockState<T> getDefaultState();
 
     BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     default BlockState<T> ofState(BlockPropertyType.BlockPropertyValue<?, ?, ?>... propertyValues) {
         return ofState(List.of(propertyValues));
     }
-
-    @UnmodifiableView
-    Map<Integer, BlockState<T>> allStates();
 
     default BlockType<T> register(BlockTypeRegistry registry) {
         registry.register(getNamespaceId(), this);
