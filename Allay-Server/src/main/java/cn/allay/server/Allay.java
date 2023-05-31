@@ -4,6 +4,7 @@ import cn.allay.api.AllayAPI;
 import cn.allay.api.MissingImplementationException;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.palette.BlockPaletteRegistry;
+import cn.allay.api.block.palette.VanillaBlockPaletteRegistry;
 import cn.allay.api.block.property.BlockPropertyTypeRegistry;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
@@ -17,6 +18,7 @@ import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.server.block.attribute.AllayVanillaBlockAttributeRegistry;
 import cn.allay.server.block.palette.AllayBlockPaletteRegistry;
+import cn.allay.server.block.palette.AllayVanillaBlockPaletteRegistry;
 import cn.allay.server.block.property.AllayBlockPropertyTypeRegistry;
 import cn.allay.server.block.type.AllayBlockType;
 import cn.allay.server.block.type.AllayBlockTypeRegistry;
@@ -57,7 +59,7 @@ public final class Allay {
         //Block
         api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
         api.bind(BlockPropertyTypeRegistry.class, AllayBlockPropertyTypeRegistry::new);
-        //api.bind(VanillaBlockPaletteRegistry.class, () -> new AllayVanillaBlockPaletteRegistry(new AllayVanillaBlockPaletteRegistry.Loader()));
+        api.bind(VanillaBlockPaletteRegistry.class, () -> new AllayVanillaBlockPaletteRegistry(new AllayVanillaBlockPaletteRegistry.Loader()));
         api.bind(VanillaBlockAttributeRegistry.class, () -> new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));
         api.bind(BlockPaletteRegistry.class, AllayBlockPaletteRegistry::new);
         api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
