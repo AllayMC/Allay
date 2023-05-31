@@ -1,6 +1,6 @@
 package cn.allay.dataext;
 
-import cn.allay.entity.data.VanillaEntityId;
+import cn.allay.api.data.VanillaEntityId;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
@@ -62,7 +62,7 @@ public class VanillaEntityDataExtractor {
                                             healthObj.get("value").getAsInt() : Integer.MAX_VALUE;
 
             var dataEntry = new EntityDataEntry(aabb, hasCollision, maxHealth);
-            datas.put(entityId.getNamespaceId().toString(), dataEntry);
+            datas.put(entityId.getIdentifier().toString(), dataEntry);
         }
 
         var output = GSON.toJson(datas);
@@ -72,7 +72,7 @@ public class VanillaEntityDataExtractor {
     static String resolveFileName(VanillaEntityId entityId) {
         return switch (entityId) {
             case COD -> "fish.json";
-            default -> entityId.getNamespaceId().getPath() + ".json";
+            default -> entityId.getIdentifier().getPath() + ".json";
         };
     }
 

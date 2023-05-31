@@ -1,7 +1,7 @@
 package cn.allay.testutils;
 
-import cn.allay.Allay;
 import cn.allay.api.AllayAPI;
+import cn.allay.server.Allay;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 

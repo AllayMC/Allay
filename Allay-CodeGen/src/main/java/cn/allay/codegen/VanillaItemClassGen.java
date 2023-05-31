@@ -1,7 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.item.data.VanillaItemId;
-import cn.allay.utils.StringUtils;
+import cn.allay.api.data.VanillaItemId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -9,7 +8,6 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Collectors;
 
 /**
  * Author: daoge_cmd <br>
@@ -18,18 +16,18 @@ import java.util.stream.Collectors;
  */
 public class VanillaItemClassGen {
 
-    public static final ClassName ITEM_CLASS_NAME = ClassName.get("cn.allay.item", "ItemStack");
-    public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("cn.allay.item.data", "VanillaItemId");
-    public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("cn.allay.item.type", "ItemType");
-    public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.item.type", "ItemTypeBuilder");
-    public static final ClassName ITEM_TYPE_REGISTRY = ClassName.get("cn.allay.item.type", "ItemTypeRegistry");
-    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/item/impl");
+    public static final ClassName ITEM_CLASS_NAME = ClassName.get("cn.allay.api.item", "ItemStack");
+    public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaItemId");
+    public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.item.type", "ItemType");
+    public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.item.type", "ItemTypeBuilder");
+    public static final ClassName ITEM_TYPE_REGISTRY = ClassName.get("cn.allay.api.item.type", "ItemTypeRegistry");
+    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/item/impl");
 
     @SneakyThrows
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var item : VanillaItemId.values()) {
-            var typeName = item.getNamespaceId().getPath().replace(".", "_");
+            var typeName = item.getIdentifier().getPath().replace(".", "_");
             var className = item == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0" : "Item" + Utils.convertToPascalCase(typeName);
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             if (Files.exists(path)) {
@@ -61,7 +59,7 @@ public class VanillaItemClassGen {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                         .initializer(initializer.build())
                         .build());
-        var javaFile = JavaFile.builder("cn.allay.item.impl", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.item.impl", codeBuilder.build()).build();
         Files.writeString(path, javaFile.toString());
     }
 }

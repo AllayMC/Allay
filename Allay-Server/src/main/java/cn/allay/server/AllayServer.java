@@ -1,8 +1,10 @@
 package cn.allay.server;
 
-import cn.allay.network.AllayNetwork;
-import cn.allay.network.Network;
-import cn.allay.utils.GameLoop;
+import cn.allay.api.network.Network;
+import cn.allay.api.server.Server;
+import cn.allay.api.server.ServerSettings;
+import cn.allay.server.network.AllayNetwork;
+import cn.allay.server.utils.GameLoop;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
