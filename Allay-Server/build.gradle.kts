@@ -18,8 +18,9 @@ dependencies {
 }
 
 tasks.processResources {
-    // 输入目录
+    // input directory
     from("${rootProject.projectDir}/Data")
-    // 排除unpacked文件夹
+    // exclude unpacked folder and block palette.nbt
     exclude("**/unpacked/**")
+    exclude("**/block_palette.nbt")
 }

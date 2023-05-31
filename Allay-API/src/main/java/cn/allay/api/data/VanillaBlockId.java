@@ -1,9 +1,8 @@
 package cn.allay.api.data;
 
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.identifier.Identifier;
-
-import java.lang.String;
-
 import lombok.Getter;
 
 /**
@@ -1643,5 +1642,9 @@ public enum VanillaBlockId {
 
   VanillaBlockId(String identifier) {
     this.identifier = new Identifier(identifier);
+  }
+
+  public BlockType getBlockType() {
+    return BlockTypeRegistry.getRegistry().get(this.getIdentifier());
   }
 }

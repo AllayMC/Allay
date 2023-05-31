@@ -25,6 +25,7 @@ import java.util.zip.GZIPInputStream;
  * Allay Project <br>
  * TODO: Reduce memory usage
  */
+@Deprecated
 @Slf4j
 public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry<VanillaBlockId, VanillaBlockPaletteDataEntry, Map<VanillaBlockId, VanillaBlockPaletteDataEntry>> implements VanillaBlockPaletteRegistry {
     public AllayVanillaBlockPaletteRegistry(RegistryLoader<VanillaBlockId[], Map<VanillaBlockId, VanillaBlockPaletteDataEntry>> loader) {
@@ -61,6 +62,7 @@ public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry
                 blockPalette.getCompound("states").forEach((k, v) -> {
                     var propertyType = getBlockPropertyTypeRegistry().get(k);
                     propertyTypes.add(propertyType);
+                    assert propertyType != null;
                     properties.add(propertyType.tryCreateValue(v));
                 });
                 if (!loaded.containsKey(blockId)) {

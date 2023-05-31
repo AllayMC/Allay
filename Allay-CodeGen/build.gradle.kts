@@ -6,8 +6,8 @@ dependencies {
 }
 
 tasks.processResources {
-    // 输入目录
+    // input
     from("${rootProject.projectDir}/Data")
-    // 排除unpacked文件夹
+    //  exclude unpacked folder
     exclude("**/unpacked/**")
 }

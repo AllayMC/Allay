@@ -2,9 +2,13 @@ package cn.allay.api.block.type;
 
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
+import cn.allay.api.block.impl.BlockAir;
+import cn.allay.api.block.palette.BlockPaletteData;
+import cn.allay.api.block.palette.BlockPaletteRegistry;
 import cn.allay.api.block.property.BlockState;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.identifier.Identified;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -16,14 +20,21 @@ import java.util.Map;
  * Date: 2023/3/19 <br>
  * Allay Project <br>
  */
+@SuppressWarnings("unchecked")
 public interface BlockType<T extends Block> extends Identified {
+    BlockType<BlockAir> AIR = (BlockType<BlockAir>) VanillaBlockId.AIR.getBlockType();
+
     List<ComponentProvider<? extends BlockComponentImpl>> getComponentProviders();
 
-    List<BlockPropertyType<?>> getProperties();
+    @UnmodifiableView
+    Map<String, BlockPropertyType<?>> getProperties();
 
-    Map<String, BlockPropertyType<?>> getMappedProperties();
+    @UnmodifiableView
+    Map<Integer, BlockState<T>> allStates();
 
     T createBlock(BlockInitInfo info);
+
+    BlockState<T> getDefaultState();
 
     BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
@@ -31,11 +42,14 @@ public interface BlockType<T extends Block> extends Identified {
         return ofState(List.of(propertyValues));
     }
 
-    @UnmodifiableView
-    Map<Integer, BlockState<T>> allStates();
-
-    default BlockType<T> register(BlockTypeRegistry registry) {
+    default void register(BlockTypeRegistry registry) {
         registry.register(getIdentifier(), this);
-        return this;
+    }
+
+    default void register(BlockPaletteRegistry registry) {
+        registry.register(getDefaultState().getBlockStateHash(), new BlockPaletteData(getIdentifier(), getDefaultState()));
+        for (var s : this.allStates().values()) {
+            registry.getContent().putIfAbsent(s.getBlockStateHash(), new BlockPaletteData(getIdentifier(), s));
+        }
     }
 }

@@ -10,7 +10,7 @@ import java.util.Map;
  * Date: 2023/5/29 <br>
  * Allay Project
  */
-public interface BlockPaletteRegistry extends MappedRegistry<Integer, BlockPaletteDataEntry, Map<Integer, BlockPaletteDataEntry>> {
+public interface BlockPaletteRegistry extends MappedRegistry<Integer, BlockPaletteData, Map<Integer, BlockPaletteData>> {
     ApiInstanceHolder<BlockPaletteRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static BlockPaletteRegistry getRegistry() {

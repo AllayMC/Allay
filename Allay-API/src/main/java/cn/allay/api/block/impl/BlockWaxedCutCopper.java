@@ -3,7 +3,6 @@ package cn.allay.api.block.impl;
 import cn.allay.api.block.Block;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockId;
 
 /**
@@ -15,5 +14,5 @@ public interface BlockWaxedCutCopper extends Block {
             .builder(BlockWaxedCutCopper.class)
             .vanillaBlock(VanillaBlockId.WAXED_CUT_COPPER, true)
             .addBasicComponents()
-            .build().register(BlockTypeRegistry.getRegistry());
+            .build();
 }

@@ -3,7 +3,6 @@ package cn.allay.api.block.impl;
 import cn.allay.api.block.Block;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
@@ -17,5 +16,5 @@ public interface BlockSand extends Block {
             .vanillaBlock(VanillaBlockId.SAND, true)
             .withProperties(VanillaBlockPropertyTypes.SAND_TYPE)
             .addBasicComponents()
-            .build().register(BlockTypeRegistry.getRegistry());
+            .build();
 }

@@ -5,11 +5,11 @@ import org.jetbrains.annotations.Nullable;
 import static cn.allay.api.utils.StringUtils.fastTwoPartSplit;
 
 /**
+ * Some helper for {@link Identifier}
+ * <p>
  * Author: daoge_cmd <br>
  * Date: 2023/3/4 <br>
  * Allay Project <br>
- * <p>
- * Some helper for {@link Identifier}
  */
 public final class IdentifierUtils {
     public static Identifier splitOn(String id, String delimiter) {

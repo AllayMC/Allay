@@ -1,5 +1,6 @@
 package cn.allay.api.block.palette;
 
+import cn.allay.api.block.Block;
 import cn.allay.api.block.property.BlockState;
 import cn.allay.api.identifier.Identifier;
 
@@ -8,6 +9,6 @@ import cn.allay.api.identifier.Identifier;
  * Date: 2023/5/29 <br>
  * Allay Project
  */
-public record BlockPaletteDataEntry(Identifier blockId, BlockState<?> blockState, int version) {
+public record BlockPaletteData(Identifier blockId, BlockState<? extends Block> blockState) {
 }
 

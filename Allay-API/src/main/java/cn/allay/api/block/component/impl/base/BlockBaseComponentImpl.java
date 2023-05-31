@@ -12,8 +12,6 @@ import cn.allay.api.math.position.FixedPos;
 import cn.allay.api.math.position.Pos;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.stream.Collectors;
-
 /**
  * Author: daoge_cmd <br>
  * Date: 2023/4/8 <br>
@@ -29,14 +27,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     public BlockBaseComponentImpl(BlockType<? extends Block> blockType, BlockInitInfo info) {
         this.blockType = blockType;
-        //TODO: Maybe need to read default block state from config file
-        this.currentState = blockType.ofState(
-                blockType.getMappedProperties()
-                        .values()
-                        .stream()
-                        .map(BlockPropertyType::createDefaultValue)
-                        .collect(Collectors.toList()));
-        pos = info.position();
+        this.currentState = blockType.getDefaultState();
+        this.pos = info.position();
     }
 
     @Override
@@ -48,7 +40,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     @Override
     @Impl
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value) {
-        if (!getBlockType().getMappedProperties().containsKey(property.getName()))
+        if (!getBlockType().getProperties().containsKey(property.getName()))
             throw new IllegalArgumentException("Property " + property + " is not supported by this block");
         currentState = currentState.updatePropertyValue(property.createValue(value));
     }

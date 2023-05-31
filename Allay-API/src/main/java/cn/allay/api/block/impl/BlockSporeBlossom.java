@@ -3,7 +3,6 @@ package cn.allay.api.block.impl;
 import cn.allay.api.block.Block;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockId;
 
 /**
@@ -15,5 +14,5 @@ public interface BlockSporeBlossom extends Block {
             .builder(BlockSporeBlossom.class)
             .vanillaBlock(VanillaBlockId.SPORE_BLOSSOM, true)
             .addBasicComponents()
-            .build().register(BlockTypeRegistry.getRegistry());
+            .build();
 }

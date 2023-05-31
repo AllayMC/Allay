@@ -12,7 +12,6 @@ import java.util.Map;
  * Allay Project <br>
  */
 public interface BlockTypeRegistry extends MappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>> {
-
     ApiInstanceHolder<BlockTypeRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static BlockTypeRegistry getRegistry() {

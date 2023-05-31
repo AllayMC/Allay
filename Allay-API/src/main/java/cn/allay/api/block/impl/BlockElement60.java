@@ -1,10 +1,9 @@
 package cn.allay.api.block.impl;
 
 import cn.allay.api.block.Block;
-import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.data.VanillaBlockId;
 
 /**
  * Author: daoge_cmd <br>
@@ -15,5 +14,5 @@ public interface BlockElement60 extends Block {
             .builder(BlockElement60.class)
             .vanillaBlock(VanillaBlockId.ELEMENT_60, true)
             .addBasicComponents()
-            .build().register(BlockTypeRegistry.getRegistry());
+            .build();
 }
