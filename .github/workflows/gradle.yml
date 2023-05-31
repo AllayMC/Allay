@@ -23,5 +23,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: success()
         with:
-          name: BeEngine
-          path: target/BeEngine-*.jar
+          name: Allay
+          path: target/Allay-*.jar
