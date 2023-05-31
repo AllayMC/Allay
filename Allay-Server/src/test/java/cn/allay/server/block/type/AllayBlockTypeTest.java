@@ -56,7 +56,7 @@ class AllayBlockTypeTest {
                         TEST_ENUM_PROPERTY_TYPE)
                 .setComponents(List.of(
                         ComponentProvider.of(TestComponentImpl::new, TestComponentImpl.class),
-                        ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT))
+                        ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.builder().burnChance(2).build()))
                 ))
                 .addBasicComponents()
                 .build();
@@ -69,7 +69,7 @@ class AllayBlockTypeTest {
                         TEST_ENUM_PROPERTY_TYPE)
                 .setComponents(List.of(
                         ComponentProvider.of(TestComponentImpl::new, TestComponentImpl.class),
-                        ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofDynamic(blockState -> BlockAttributes.builder().build()))
+                        ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofDynamic(blockState -> BlockAttributes.builder().burnChance(3).build()))
                 ))
                 .addBasicComponents()
                 .build();
@@ -155,5 +155,11 @@ class AllayBlockTypeTest {
         b3.setProperty(VanillaBlockPropertyTypes.CORAL_COLOR, CoralColor.BLUE);
         b3.setProperty(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION, 0);
         assertEquals(781710940, b3.getCurrentState().getUnsignedBlockStateHash());
+    }
+
+    @Test
+    void testBlockAttributes() {
+        assertEquals(2, testBlockType1.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null))).getBlockAttributes().burnChance());
+        assertEquals(3, testBlockType2.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null))).getBlockAttributes().burnChance());
     }
 }
