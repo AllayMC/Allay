@@ -18,7 +18,7 @@ public interface EntityType<T extends Entity> extends Identified {
     T createEntity(EntityInitInfo info);
 
     default EntityType<T> register(EntityTypeRegistry registry) {
-        registry.register(getNamespaceId(), this);
+        registry.register(getIdentifier(), this);
         return this;
     }
 }

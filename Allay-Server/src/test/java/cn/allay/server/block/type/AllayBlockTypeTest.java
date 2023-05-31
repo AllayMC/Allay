@@ -48,7 +48,7 @@ class AllayBlockTypeTest {
         TEST_ENUM_PROPERTY_TYPE = EnumPropertyType.of("test_enum", TestEnum.class, TestEnum.A);
         testBlockType = AllayBlockType
                 .builder(TestBlock.class)
-                .namespaceId("minecraft:test_block")
+                .identifier("minecraft:test_block")
                 .withProperties(
                         TEST_BOOLEAN_PROPERTY_TYPE,
                         TEST_INT_PROPERTY_TYPE,
@@ -63,7 +63,7 @@ class AllayBlockTypeTest {
                 () -> {
                     AllayBlockType
                             .builder(TestBlock.class)
-                            .namespaceId("minecraft:test_block_v2")
+                            .identifier("minecraft:test_block_v2")
                             .withProperties(
                                     TEST_BOOLEAN_PROPERTY_TYPE,
                                     TEST_INT_PROPERTY_TYPE,
@@ -108,7 +108,7 @@ class AllayBlockTypeTest {
                 BlockTypeBuildException.class,
                 () -> AllayBlockType
                         .builder(TestBlock.class)
-                        .namespaceId("minecraft:test_block")
+                        .identifier("minecraft:test_block")
                         .withProperties(
                                 TEST_BOOLEAN_PROPERTY_TYPE,
 //                                TEST_INT_PROPERTY_TYPE,

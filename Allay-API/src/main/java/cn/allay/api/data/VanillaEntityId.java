@@ -1,6 +1,9 @@
 package cn.allay.api.data;
 
 import cn.allay.api.identifier.Identifier;
+
+import java.lang.String;
+
 import lombok.Getter;
 
 /**
@@ -204,9 +207,9 @@ public enum VanillaEntityId {
   ZOMBIE_VILLAGER("minecraft:zombie_villager");
 
   @Getter
-  private final Identifier namespaceId;
+  private final Identifier identifier;
 
-  VanillaEntityId(String namespaceId) {
-    this.namespaceId = new Identifier(namespaceId);
+  VanillaEntityId(String identifier) {
+    this.identifier = new Identifier(identifier);
   }
 }

@@ -35,7 +35,7 @@ public interface BlockType<T extends Block> extends Identified {
     Map<Integer, BlockState<T>> allStates();
 
     default BlockType<T> register(BlockTypeRegistry registry) {
-        registry.register(getNamespaceId(), this);
+        registry.register(getIdentifier(), this);
         return this;
     }
 }

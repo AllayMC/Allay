@@ -27,7 +27,7 @@ public class SimpleNameComponent implements NameComponent, ComponentImpl {
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 }

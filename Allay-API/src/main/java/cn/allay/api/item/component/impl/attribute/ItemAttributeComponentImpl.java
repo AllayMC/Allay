@@ -26,7 +26,7 @@ public class ItemAttributeComponentImpl implements ItemAttributeComponent, ItemC
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 }

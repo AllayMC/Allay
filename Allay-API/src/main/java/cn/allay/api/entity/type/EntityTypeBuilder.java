@@ -23,7 +23,7 @@ public interface EntityTypeBuilder<T extends Entity> {
 
     EntityTypeBuilder<T> namespace(Identifier identifier);
 
-    EntityTypeBuilder<T> namespace(String namespaceId);
+    EntityTypeBuilder<T> namespace(String identifier);
 
     EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId);
 

@@ -51,7 +51,7 @@ public class SimpleHealthComponent implements HealthComponent, ComponentImpl {
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 }

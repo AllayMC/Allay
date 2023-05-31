@@ -74,7 +74,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 }

@@ -248,9 +248,9 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         protected void checkComponentValid(List<? extends ComponentImpl> components) {
             Set<Identifier> identifiers = new HashSet<>();
             for (var component : components) {
-                var identifier = component.getNamespaceId();
+                var identifier = component.getIdentifier();
                 if (identifiers.contains(identifier))
-                    throw new ComponentInjectException("Duplicate component " + component.getNamespaceId());
+                    throw new ComponentInjectException("Duplicate component " + component.getIdentifier());
                 else
                     identifiers.add(identifier);
             }
@@ -263,11 +263,11 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                     var type = field.getType();
                     List<ComponentImpl> dependencies = new ArrayList<>(components);
                     var count = Integer.MAX_VALUE;
-                    var requireCompId = annotation.namespaceId();
+                    var requireCompId = annotation.identifier();
                     //Try to find dependencies through inheritance
                     //Try to match by namespace ID
                     if (!requireCompId.isBlank())
-                        dependencies = dependencies.stream().filter(dependency -> dependency.getNamespaceId().toString().equals(requireCompId)).toList();
+                        dependencies = dependencies.stream().filter(dependency -> dependency.getIdentifier().toString().equals(requireCompId)).toList();
                     else
                         dependencies = dependencies.stream().filter(type::isInstance).toList();
                     count = dependencies.size();

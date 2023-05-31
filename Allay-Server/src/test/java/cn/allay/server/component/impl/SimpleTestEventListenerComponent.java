@@ -16,7 +16,7 @@ public class SimpleTestEventListenerComponent implements TestEventListenerCompon
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:test_event_listener_component");
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 

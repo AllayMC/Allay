@@ -26,7 +26,7 @@ public class SimpleAttackComponent implements AttackComponent, ComponentImpl {
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 }

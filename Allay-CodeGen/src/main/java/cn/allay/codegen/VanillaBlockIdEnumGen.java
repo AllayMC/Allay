@@ -31,19 +31,19 @@ public class VanillaBlockIdEnumGen {
                                 "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec
-                        .builder(Identifier.class, "namespaceId", Modifier.PRIVATE, Modifier.FINAL)
+                        .builder(Identifier.class, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(getterClass)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(stringClass, "namespaceId")
-                        .addStatement("this.$N = new $T($N)", "namespaceId", identifierClass, "namespaceId")
+                        .addParameter(stringClass, "identifier")
+                        .addStatement("this.$N = new $T($N)", "identifier", identifierClass, "identifier")
                         .build()
                 );
-        var sortedNamespaceId = BLOCK_PALETTE_NBT.stream().map(block -> block.getString("name")).sorted(String::compareTo).map(Identifier::new).toList();
-        for (var namespaceId : sortedNamespaceId) {
+        var sortedidentifier = BLOCK_PALETTE_NBT.stream().map(block -> block.getString("name")).sorted(String::compareTo).map(Identifier::new).toList();
+        for (var identifier : sortedidentifier) {
             codeBuilder
-                    .addEnumConstant(namespaceId.getPath().toUpperCase(),
-                            TypeSpec.anonymousClassBuilder("$S", namespaceId.toString()).build());
+                    .addEnumConstant(identifier.getPath().toUpperCase(),
+                            TypeSpec.anonymousClassBuilder("$S", identifier.toString()).build());
         }
 
         var javaFile = JavaFile.builder("cn.allay.api.data", codeBuilder.build()).build();

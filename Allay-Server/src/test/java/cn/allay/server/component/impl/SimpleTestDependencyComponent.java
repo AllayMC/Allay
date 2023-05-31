@@ -16,17 +16,17 @@ public class SimpleTestDependencyComponent implements ComponentImpl, TestDepende
     private static final Identifier IDENTIFIER = new Identifier("minecraft:test_component");
 
 
-    @Dependency(namespaceId = "minecraft:name_component")
+    @Dependency(identifier = "minecraft:name_component")
     protected ComponentImpl nameComponent;
 
-    @Dependency(namespaceId = "minecraft:health_component")
+    @Dependency(identifier = "minecraft:health_component")
     protected ComponentImpl healthComponent;
 
-    @Dependency(namespaceId = "minecraft:attack_component")
+    @Dependency(identifier = "minecraft:attack_component")
     protected ComponentImpl attackComponent;
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 

@@ -1,6 +1,9 @@
 package cn.allay.api.data;
 
 import cn.allay.api.identifier.Identifier;
+
+import java.lang.String;
+
 import lombok.Getter;
 
 /**
@@ -1636,9 +1639,9 @@ public enum VanillaBlockId {
   YELLOW_WOOL("minecraft:yellow_wool");
 
   @Getter
-  private final Identifier namespaceId;
+  private final Identifier identifier;
 
-  VanillaBlockId(String namespaceId) {
-    this.namespaceId = new Identifier(namespaceId);
+  VanillaBlockId(String identifier) {
+    this.identifier = new Identifier(identifier);
   }
 }

@@ -39,7 +39,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 }

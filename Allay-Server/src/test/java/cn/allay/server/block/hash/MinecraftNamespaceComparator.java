@@ -26,9 +26,9 @@ public class MinecraftNamespaceComparator {
                 .entrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(e -> e.getValue().index()))
-                .map(e -> e.getKey().getNamespaceId().toString())
+                .map(e -> e.getKey().getIdentifier().toString())
                 .toList();
-        var blocks = Arrays.stream(VanillaBlockId.values()).map(vanillaBlockId -> vanillaBlockId.getNamespaceId().toString()).sorted(MinecraftNamespaceComparator::compareFNV).toList();
+        var blocks = Arrays.stream(VanillaBlockId.values()).map(vanillaBlockId -> vanillaBlockId.getIdentifier().toString()).sorted(MinecraftNamespaceComparator::compareFNV).toList();
         assertEquals(example, blocks);
     }
 

@@ -29,7 +29,7 @@ public class VanillaBlockClassGen {
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
-            var className = "Block" + Utils.convertToPascalCase(block.getNamespaceId().getPath());
+            var className = "Block" + Utils.convertToPascalCase(block.getIdentifier().getPath());
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             if (Files.exists(path)) {
                 System.out.println("Class " + className + " already exists, skipped");
@@ -51,7 +51,7 @@ public class VanillaBlockClassGen {
         initializer
                 .add("$T\n.builder($N.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, className)
                 .add(".vanillaBlock($T.$N, true)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
-        var blockPaletteData = CodeGen.MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getNamespaceId().toString());
+        var blockPaletteData = CodeGen.MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
         var states = blockPaletteData.getCompound("states");
         if (states.size() != 0) {
             initializer.add(".withProperties(");

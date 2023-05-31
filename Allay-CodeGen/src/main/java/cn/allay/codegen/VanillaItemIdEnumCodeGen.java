@@ -32,12 +32,12 @@ public class VanillaItemIdEnumCodeGen {
                                 "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec
-                        .builder(Identifier.class, "namespaceId", Modifier.PRIVATE, Modifier.FINAL)
+                        .builder(Identifier.class, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(getterClass)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(stringClass, "namespaceId")
-                        .addStatement("this.$N = new $T($N)", "namespaceId", identifierClass, "namespaceId")
+                        .addParameter(stringClass, "identifier")
+                        .addStatement("this.$N = new $T($N)", "identifier", identifierClass, "identifier")
                         .build()
                 );
         for (var entry : MAPPED_ITEM_DATA.entrySet()) {

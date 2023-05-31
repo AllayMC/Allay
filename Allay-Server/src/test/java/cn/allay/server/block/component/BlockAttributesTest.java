@@ -113,8 +113,8 @@ class BlockAttributesTest {
     @Test
     void testVanillaBlockAttributes() {
         for (var vanillaBlockId : VanillaBlockId.values()) {
-            log.info("Testing block type: " + vanillaBlockId.getNamespaceId());
-            testBlockType(vanillaBlockId, BlockTypeRegistry.getRegistry().get(vanillaBlockId.getNamespaceId()));
+            log.info("Testing block type: " + vanillaBlockId.getIdentifier());
+            testBlockType(vanillaBlockId, BlockTypeRegistry.getRegistry().get(vanillaBlockId.getIdentifier()));
         }
     }
 
@@ -129,7 +129,7 @@ class BlockAttributesTest {
 //                missing.add(state);
 //                continue;
 //            }
-            assertNotNull(expected, "Missing block attributes for state: " + state + ", Block: " + type.getNamespaceId());
+            assertNotNull(expected, "Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
             assertEquals(attributeMap.get(state.getBlockStateHash()), block.getBlockAttributes());
         }
     }

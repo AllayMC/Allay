@@ -101,7 +101,7 @@ class ComponentTest {
         }
 
         @Override
-        public Identifier getNamespaceId() {
+        public Identifier getIdentifier() {
             return IDENTIFIER;
         }
     }

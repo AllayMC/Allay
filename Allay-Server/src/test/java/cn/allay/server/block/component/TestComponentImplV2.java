@@ -19,7 +19,7 @@ public class TestComponentImplV2 implements TestComponent, BlockComponentImpl {
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:test_component");
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 }

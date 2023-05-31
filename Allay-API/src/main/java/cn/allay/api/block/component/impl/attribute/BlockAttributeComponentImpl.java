@@ -52,7 +52,7 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 

@@ -18,7 +18,7 @@ public interface ItemType<T extends ItemStack> extends Identified {
     T createItemStack(ItemStackInitInfo info);
 
     default ItemType<T> register(ItemTypeRegistry registry) {
-        registry.register(getNamespaceId(), this);
+        registry.register(getIdentifier(), this);
         return this;
     }
 }

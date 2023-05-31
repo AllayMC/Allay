@@ -27,7 +27,7 @@ public class VanillaEntityClassGen {
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var entity : VanillaEntityId.values()) {
-            var typeName = entity.getNamespaceId().getPath();
+            var typeName = entity.getIdentifier().getPath();
             var className = "Entity" + Utils.convertToPascalCase(typeName);
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             if (Files.exists(path)) {

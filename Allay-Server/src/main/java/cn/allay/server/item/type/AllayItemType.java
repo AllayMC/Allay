@@ -30,14 +30,14 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
     protected Class<T> injectedClass;
     protected Constructor<T> constructor;
     protected List<ComponentProvider<? extends ItemComponentImpl>> componentProviders;
-    protected Identifier namespaceId;
+    protected Identifier identifier;
 
     protected AllayItemType(Class<T> interfaceClass,
                             List<ComponentProvider<? extends ItemComponentImpl>> componentProviders,
-                            Identifier namespaceId) {
+                            Identifier identifier) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
-        this.namespaceId = namespaceId;
+        this.identifier = identifier;
     }
 
     @SneakyThrows
@@ -60,8 +60,8 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
     }
 
     @Override
-    public Identifier getNamespaceId() {
-        return namespaceId;
+    public Identifier getIdentifier() {
+        return identifier;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
     public static class Builder<T extends ItemStack> implements ItemTypeBuilder<T> {
         protected Class<T> interfaceClass;
         protected List<ComponentProvider<? extends ItemComponentImpl>> componentProviders = new ArrayList<>();
-        protected Identifier namespaceId;
+        protected Identifier identifier;
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -88,14 +88,14 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
-        public ItemTypeBuilder<T> namespace(Identifier namespaceId) {
-            this.namespaceId = namespaceId;
+        public ItemTypeBuilder<T> namespace(Identifier identifier) {
+            this.identifier = identifier;
             return this;
         }
 
         @Override
-        public ItemTypeBuilder<T> namespace(String namespaceId) {
-            this.namespaceId = new Identifier(namespaceId);
+        public ItemTypeBuilder<T> namespace(String identifier) {
+            this.identifier = new Identifier(identifier);
             return this;
         }
 
@@ -106,7 +106,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
         @Override
         public ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId, boolean initVanillaItemAttributeComponent) {
-            this.namespaceId = vanillaItemId.getNamespaceId();
+            this.identifier = vanillaItemId.getIdentifier();
             if (initVanillaItemAttributeComponent) {
                 var attributes = VanillaItemAttributeRegistry.getRegistry().get(vanillaItemId);
                 if (attributes == null)
@@ -137,9 +137,9 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
         @Override
         public ItemType<T> build() {
-            if (namespaceId == null)
-                throw new ItemTypeBuildException("NamespaceId cannot be null!");
-            var type = new AllayItemType<>(interfaceClass, componentProviders, namespaceId);
+            if (identifier == null)
+                throw new ItemTypeBuildException("identifier cannot be null!");
+            var type = new AllayItemType<>(interfaceClass, componentProviders, identifier);
             componentProviders.add(ComponentProvider.of(info -> new ItemBaseComponentImpl(type, (ItemStackInitInfo) info), ItemBaseComponentImpl.class));
             return type.complete();
         }

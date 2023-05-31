@@ -28,14 +28,14 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     protected Class<T> injectedClass;
     protected Constructor<T> constructor;
     protected List<ComponentProvider<? extends EntityComponentImpl>> componentProviders;
-    protected Identifier namespaceId;
+    protected Identifier identifier;
 
     protected AllayEntityType(Class<T> interfaceClass,
                               List<ComponentProvider<? extends EntityComponentImpl>> componentProviders,
-                              Identifier namespaceId) {
+                              Identifier identifier) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
-        this.namespaceId = namespaceId;
+        this.identifier = identifier;
     }
 
     @SneakyThrows
@@ -65,8 +65,8 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     }
 
     @Override
-    public Identifier getNamespaceId() {
-        return namespaceId;
+    public Identifier getIdentifier() {
+        return identifier;
     }
 
     public static <T extends Entity> EntityTypeBuilder<T> builder(Class<T> interfaceClass) {
@@ -76,7 +76,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     public static class Builder<T extends Entity> implements EntityTypeBuilder<T> {
         protected Class<T> interfaceClass;
         protected List<ComponentProvider<? extends EntityComponentImpl>> componentProviders = new ArrayList<>();
-        protected Identifier namespaceId;
+        protected Identifier identifier;
 
         public Builder(Class<T> interfaceClass) {
             this.interfaceClass = interfaceClass;
@@ -84,19 +84,19 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
         @Override
         public EntityTypeBuilder<T> namespace(Identifier identifier) {
-            this.namespaceId = identifier;
+            this.identifier = identifier;
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T> namespace(String namespaceId) {
-            this.namespaceId = new Identifier(namespaceId);
+        public EntityTypeBuilder<T> namespace(String identifier) {
+            this.identifier = new Identifier(identifier);
             return this;
         }
 
         @Override
         public EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId) {
-            this.namespaceId = vanillaEntityId.getNamespaceId();
+            this.identifier = vanillaEntityId.getIdentifier();
             return this;
         }
 
@@ -122,9 +122,9 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
         @Override
         public EntityType<T> build() {
-            if (namespaceId == null)
-                throw new EntityTypeBuildException("NamespaceId cannot be null!");
-            var type = new AllayEntityType<>(interfaceClass, componentProviders, namespaceId);
+            if (identifier == null)
+                throw new EntityTypeBuildException("identifier cannot be null!");
+            var type = new AllayEntityType<>(interfaceClass, componentProviders, identifier);
             componentProviders.add(ComponentProvider.of(info -> new EntityBaseComponentImpl(type, (EntityInitInfo) info), EntityBaseComponentImpl.class));
             return type.complete();
         }

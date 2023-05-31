@@ -57,7 +57,7 @@ public final class Identifier implements Identified {
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return this;
     }
 }

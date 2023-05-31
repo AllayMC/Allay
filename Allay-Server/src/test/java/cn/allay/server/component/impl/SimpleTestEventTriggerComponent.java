@@ -20,7 +20,7 @@ public class SimpleTestEventTriggerComponent implements TestEventTriggerComponen
     protected ComponentManager manager;
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 

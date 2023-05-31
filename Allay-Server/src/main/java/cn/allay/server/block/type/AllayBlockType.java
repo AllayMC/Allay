@@ -45,16 +45,16 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     protected Map<String, BlockPropertyType<?>> mappedProperties;
     //blockStateHash -> blockState
     protected Map<Integer, BlockState<T>> possibleBlockStateMap = new ConcurrentHashMap<>();
-    protected Identifier namespaceId;
+    protected Identifier identifier;
 
     protected AllayBlockType(Class<T> interfaceClass,
                              List<ComponentProvider<? extends BlockComponentImpl>> componentProviders,
                              List<BlockPropertyType<?>> properties,
-                             Identifier namespaceId) {
+                             Identifier identifier) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
         this.properties = properties;
-        this.namespaceId = namespaceId;
+        this.identifier = identifier;
 
         mappedProperties = properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
     }
@@ -86,7 +86,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
 
     @Override
     public BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        var blockStateHash = AllayBlockState.computeBlockStateHash(namespaceId, propertyValues);
+        var blockStateHash = AllayBlockState.computeBlockStateHash(identifier, propertyValues);
         //对于每一组唯一的属性值，有且仅有一个AllayBlockState与之对应
         //这意味着你可以直接用==比较两个BlockState是否相等
         return possibleBlockStateMap.computeIfAbsent(blockStateHash, k -> new AllayBlockState(propertyValues, k));
@@ -104,7 +104,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         protected int blockStateHash;
 
         private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-            this(propertyValues, computeBlockStateHash(namespaceId, propertyValues));
+            this(propertyValues, computeBlockStateHash(identifier, propertyValues));
         }
 
         private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues, int blockStateHash) {
@@ -148,8 +148,8 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         //https://gist.github.com/Alemiz112/504d0f79feac7ef57eda174b668dd345
-        protected static int computeBlockStateHash(Identifier namespaceId, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-            if (namespaceId.equals(VanillaBlockId.UNKNOWN.getNamespaceId())) {
+        protected static int computeBlockStateHash(Identifier identifier, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
+            if (identifier.equals(VanillaBlockId.UNKNOWN.getIdentifier())) {
                 return -2; // This is special case
             }
 
@@ -159,7 +159,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             }
 
             var tag = NbtMap.builder()
-                    .putString("name", namespaceId.toString())
+                    .putString("name", identifier.toString())
                     .putCompound("states", NbtMap.fromMap(states))
                     .build();
 
@@ -192,7 +192,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         protected Class<T> interfaceClass;
         protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders = new ArrayList<>();
         protected List<BlockPropertyType<?>> properties = new ArrayList<>();
-        protected Identifier namespaceId;
+        protected Identifier identifier;
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -200,13 +200,13 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             this.interfaceClass = interfaceClass;
         }
 
-        public Builder<T> namespaceId(Identifier identifier) {
-            this.namespaceId = identifier;
+        public Builder<T> identifier(Identifier identifier) {
+            this.identifier = identifier;
             return this;
         }
 
-        public Builder<T> namespaceId(String namespaceId) {
-            this.namespaceId = new Identifier(namespaceId);
+        public Builder<T> identifier(String identifier) {
+            this.identifier = new Identifier(identifier);
             return this;
         }
 
@@ -215,7 +215,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId, boolean initVanillaBlockAttributeComponent) {
-            this.namespaceId = vanillaBlockId.getNamespaceId();
+            this.identifier = vanillaBlockId.getIdentifier();
             if (initVanillaBlockAttributeComponent) {
                 var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
                 if (attributeMap == null)
@@ -254,9 +254,9 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         public AllayBlockType<T> build() {
-            if (namespaceId == null)
-                throw new BlockTypeBuildException("NamespaceId cannot be null!");
-            var type = new AllayBlockType<>(interfaceClass, componentProviders, properties, namespaceId);
+            if (identifier == null)
+                throw new BlockTypeBuildException("identifier cannot be null!");
+            var type = new AllayBlockType<>(interfaceClass, componentProviders, properties, identifier);
             componentProviders.add(ComponentProvider.of(info -> new BlockBaseComponentImpl(type, (BlockInitInfo) info), BlockBaseComponentImpl.class));
             return type.complete();
         }

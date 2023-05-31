@@ -107,7 +107,7 @@ public class VanillaBlockPropertyTypeGen {
                         .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                         .build()
         );
-        var javaFile = JavaFile.builder("cn.allay.api.block.data", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.data", codeBuilder.build()).build();
         Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockPropertyTypes.java"), javaFile.toString());
     }
 

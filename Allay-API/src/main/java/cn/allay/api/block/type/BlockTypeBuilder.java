@@ -23,9 +23,9 @@ public interface BlockTypeBuilder<T extends Block> {
         return FACTORY.get().create(clazz);
     }
 
-    BlockTypeBuilder<T> namespaceId(Identifier namespaceId);
+    BlockTypeBuilder<T> identifier(Identifier identifier);
 
-    BlockTypeBuilder<T> namespaceId(String namespaceId);
+    BlockTypeBuilder<T> identifier(String identifier);
 
     BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId);
 

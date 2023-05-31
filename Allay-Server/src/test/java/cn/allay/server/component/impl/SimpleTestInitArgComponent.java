@@ -21,7 +21,7 @@ public class SimpleTestInitArgComponent implements TestInitArgComponent, Compone
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 

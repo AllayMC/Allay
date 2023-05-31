@@ -23,7 +23,7 @@ public interface ItemTypeBuilder<T extends ItemStack> {
 
     ItemTypeBuilder<T> namespace(Identifier identifier);
 
-    ItemTypeBuilder<T> namespace(String namespaceId);
+    ItemTypeBuilder<T> namespace(String identifier);
 
     ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId);
 

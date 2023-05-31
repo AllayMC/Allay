@@ -81,7 +81,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     }
 
     @Override
-    public Identifier getNamespaceId() {
+    public Identifier getIdentifier() {
         return IDENTIFIER;
     }
 }
