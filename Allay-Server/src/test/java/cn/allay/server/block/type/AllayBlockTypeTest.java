@@ -36,7 +36,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(AllayTestExtension.class)
 class AllayBlockTypeTest {
 
-    static BlockType<TestBlock> testBlockType;
+    static BlockType<TestBlock> testBlockType1;
+    static BlockType<TestBlock> testBlockType2;
     static BlockPropertyType<Boolean> TEST_BOOLEAN_PROPERTY_TYPE;
     static BlockPropertyType<Integer> TEST_INT_PROPERTY_TYPE;
     static BlockPropertyType<TestEnum> TEST_ENUM_PROPERTY_TYPE;
@@ -46,7 +47,7 @@ class AllayBlockTypeTest {
         TEST_BOOLEAN_PROPERTY_TYPE = BooleanPropertyType.of("test_boolean", false);
         TEST_INT_PROPERTY_TYPE = IntPropertyType.of("test_int", 0, 10, 0);
         TEST_ENUM_PROPERTY_TYPE = EnumPropertyType.of("test_enum", TestEnum.class, TestEnum.A);
-        testBlockType = AllayBlockType
+        testBlockType1 = AllayBlockType
                 .builder(TestBlock.class)
                 .identifier("minecraft:test_block")
                 .withProperties(
@@ -55,7 +56,20 @@ class AllayBlockTypeTest {
                         TEST_ENUM_PROPERTY_TYPE)
                 .setComponents(List.of(
                         ComponentProvider.of(TestComponentImpl::new, TestComponentImpl.class),
-                        ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT))
+                        ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT))
+                ))
+                .addBasicComponents()
+                .build();
+        testBlockType2 = AllayBlockType
+                .builder(TestBlock.class)
+                .identifier("minecraft:test_block2")
+                .withProperties(
+                        TEST_BOOLEAN_PROPERTY_TYPE,
+                        TEST_INT_PROPERTY_TYPE,
+                        TEST_ENUM_PROPERTY_TYPE)
+                .setComponents(List.of(
+                        ComponentProvider.of(TestComponentImpl::new, TestComponentImpl.class),
+                        ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofDynamic(blockState -> BlockAttributes.builder().build()))
                 ))
                 .addBasicComponents()
                 .build();
@@ -80,16 +94,16 @@ class AllayBlockTypeTest {
 
     @Test
     void testBlockType() {
-        assertNotNull(testBlockType);
+        assertNotNull(testBlockType1);
     }
 
     @Test
     void testCommon() {
-        var block = testBlockType.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        var block = testBlockType1.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
         assertEquals(1, block.getPosition().getX());
         assertEquals(2, block.getPosition().getY());
         assertEquals(3, block.getPosition().getZ());
-        assertEquals(testBlockType, block.getBlockType());
+        assertEquals(testBlockType1, block.getBlockType());
         //Test block properties
         assertFalse(block.getProperty(TEST_BOOLEAN_PROPERTY_TYPE));
         block.setProperty(TEST_BOOLEAN_PROPERTY_TYPE, true);
