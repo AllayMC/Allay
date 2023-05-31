@@ -33,7 +33,7 @@ plugins {
     idea
 }
 
-//不构建这个根项目,这个只作为控制子模块
+//Do not build this root project, this is only used as a control submodule
 tasks.forEach {
     it.enabled = false
 }
@@ -44,6 +44,7 @@ subprojects {
     apply(plugin = "com.github.johnrengelman.shadow")
 
     java.sourceCompatibility = JavaVersion.VERSION_19
+    java.targetCompatibility = JavaVersion.VERSION_19
 
     repositories {
         mavenLocal()
@@ -72,6 +73,11 @@ subprojects {
         testAnnotationProcessor(rootProject.libs.lombok)
     }
 
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     rootProject.idea {
         module {
             isDownloadSources = false
@@ -95,5 +101,9 @@ subprojects {
 
     tasks.withType<Javadoc> {
         options.encoding = "UTF-8"
+        //Suppress some meaningless warnings
+        options {
+            (this as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
+        }
     }
 }

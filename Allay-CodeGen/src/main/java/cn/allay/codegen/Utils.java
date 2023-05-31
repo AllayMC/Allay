@@ -1,6 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.utils.StringUtils;
+import cn.allay.api.utils.StringUtils;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.entity.data.VanillaEntityId;
+import cn.allay.api.data.VanillaEntityId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -16,18 +16,18 @@ import java.nio.file.Path;
  */
 public class VanillaEntityClassGen {
 
-    public static final ClassName ENTITY_CLASS_NAME = ClassName.get("cn.allay.entity", "Entity");
-    public static final ClassName VANILLA_ENTITY_ID_CLASS_NAME = ClassName.get("cn.allay.entity.data", "VanillaEntityId");
-    public static final ClassName ENTITY_TYPE_CLASS_NAME = ClassName.get("cn.allay.entity.type", "EntityType");
-    public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.entity.type", "EntityTypeBuilder");
-    public static final ClassName ENTITY_TYPE_REGISTRY = ClassName.get("cn.allay.entity.type", "EntityTypeRegistry");
-    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/entity/impl");
+    public static final ClassName ENTITY_CLASS_NAME = ClassName.get("cn.allay.api.entity", "Entity");
+    public static final ClassName VANILLA_ENTITY_ID_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaEntityId");
+    public static final ClassName ENTITY_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.entity.type", "EntityType");
+    public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.entity.type", "EntityTypeBuilder");
+    public static final ClassName ENTITY_TYPE_REGISTRY = ClassName.get("cn.allay.api.entity.type", "EntityTypeRegistry");
+    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/entity/impl");
 
     @SneakyThrows
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var entity : VanillaEntityId.values()) {
-            var typeName = entity.getNamespaceId().getPath();
+            var typeName = entity.getIdentifier().getPath();
             var className = "Entity" + Utils.convertToPascalCase(typeName);
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             if (Files.exists(path)) {
@@ -59,7 +59,7 @@ public class VanillaEntityClassGen {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                         .initializer(initializer.build())
                         .build());
-        var javaFile = JavaFile.builder("cn.allay.entity.impl", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.entity.impl", codeBuilder.build()).build();
         Files.writeString(path, javaFile.toString());
     }
 }
