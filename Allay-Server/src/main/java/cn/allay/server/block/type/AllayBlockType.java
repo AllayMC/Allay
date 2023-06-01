@@ -6,13 +6,8 @@ import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.component.impl.base.BlockBaseComponentImpl;
 import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
-import cn.allay.api.block.palette.BlockPaletteRegistry;
-import cn.allay.api.block.property.BlockState;
 import cn.allay.api.block.property.type.BlockPropertyType;
-import cn.allay.api.block.type.BlockInitInfo;
-import cn.allay.api.block.type.BlockType;
-import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.block.type.*;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
@@ -73,7 +68,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
 
     @Override
     public BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        return BlockPaletteRegistry.getRegistry().get(HashUtils.computeBlockStateHash(identifier, propertyValues));
+        return BlockStateRegistry.getRegistry().get(HashUtils.computeBlockStateHash(identifier, propertyValues));
     }
 
     @UnmodifiableView
@@ -82,6 +77,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         return Collections.unmodifiableSet(allStates);
     }
 
+    //package private
     Set<BlockState> getUnSafeAllStates() {
         return allStates;
     }
@@ -191,7 +187,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
                 AllayBlockState state = new AllayBlockState(blockType, List.of());
                 blockType.setDefaultState(state);
                 blockType.getUnSafeAllStates().add(state);
-                BlockPaletteRegistry.getRegistry().register(state.getBlockStateHash(), state);
+                BlockStateRegistry.getRegistry().register(state.getBlockStateHash(), state);
                 return;
             }
             ImmutableList.Builder<BlockState> states = ImmutableList.builder();
@@ -239,7 +235,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             BlockState defaultState = new AllayBlockState(blockType, blockType.properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList()));
             blockType.setDefaultState(defaultState);
             blockType.getUnSafeAllStates().add(defaultState);
-            BlockPaletteRegistry.getRegistry().register(defaultState.getBlockStateHash(), defaultState);
+            BlockStateRegistry.getRegistry().register(defaultState.getBlockStateHash(), defaultState);
             int defaultStateHash = defaultState.getBlockStateHash();
             for (int i = 0, len = build.size(); i < len; i++) {
                 BlockState blockState = build.get(i);
@@ -247,7 +243,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
                     continue;
                 }
                 blockType.getUnSafeAllStates().add(blockState);
-                BlockPaletteRegistry.getRegistry().register(blockState.getBlockStateHash(), blockState);
+                BlockStateRegistry.getRegistry().register(blockState.getBlockStateHash(), blockState);
             }
         }
     }

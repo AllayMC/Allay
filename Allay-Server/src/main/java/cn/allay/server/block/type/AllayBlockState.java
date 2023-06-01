@@ -6,9 +6,9 @@ package cn.allay.server.block.type;
  * Allay Project
  */
 
-import cn.allay.api.block.palette.BlockPaletteRegistry;
-import cn.allay.api.block.property.BlockState;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.block.type.BlockState;
+import cn.allay.api.block.type.BlockStateRegistry;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.utils.HashUtils;
 import lombok.ToString;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 
 /**
- * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockPaletteRegistry AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
+ * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateRegistry AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
  */
 @ToString
 class AllayBlockState implements BlockState {
@@ -71,6 +71,6 @@ class AllayBlockState implements BlockState {
                 newPropertyValues.add(newPropertyValue);
             else newPropertyValues.add(value);
         }
-        return BlockPaletteRegistry.getRegistry().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), newPropertyValues));
+        return BlockStateRegistry.getRegistry().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), newPropertyValues));
     }
 }

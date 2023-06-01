@@ -3,7 +3,6 @@ package cn.allay.api.block.type;
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.impl.BlockAir;
-import cn.allay.api.block.property.BlockState;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;

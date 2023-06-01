@@ -2,9 +2,9 @@ package cn.allay.api.block.component.impl.base;
 
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
-import cn.allay.api.block.property.BlockState;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.type.BlockInitInfo;
+import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;

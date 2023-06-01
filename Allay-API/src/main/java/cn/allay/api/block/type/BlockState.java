@@ -1,7 +1,6 @@
-package cn.allay.api.block.property;
+package cn.allay.api.block.type;
 
 import cn.allay.api.block.property.type.BlockPropertyType;
-import cn.allay.api.block.type.BlockType;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;

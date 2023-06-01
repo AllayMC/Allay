@@ -1,9 +1,9 @@
 package cn.allay.server.block.type;
 
-import cn.allay.api.block.palette.BlockPaletteRegistry;
 import cn.allay.api.block.property.BlockPropertyTypeRegistry;
-import cn.allay.api.block.property.BlockState;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.block.type.BlockState;
+import cn.allay.api.block.type.BlockStateRegistry;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.registry.RegistryLoader;
 import cn.allay.api.registry.SimpleMappedRegistry;
@@ -26,8 +26,8 @@ import java.util.zip.GZIPInputStream;
  * Allay Project
  */
 @Slf4j
-public class AllayBlockPaletteRegistry extends SimpleMappedRegistry<Integer, BlockState, Map<Integer, BlockState>> implements BlockPaletteRegistry {
-    public AllayBlockPaletteRegistry(RegistryLoader<Void, Map<Integer, BlockState>> loader) {
+public class AllayBlockStateRegistry extends SimpleMappedRegistry<Integer, BlockState, Map<Integer, BlockState>> implements BlockStateRegistry {
+    public AllayBlockStateRegistry(RegistryLoader<Void, Map<Integer, BlockState>> loader) {
         super(null, loader);
     }
 
@@ -73,7 +73,7 @@ public class AllayBlockPaletteRegistry extends SimpleMappedRegistry<Integer, Blo
 
         @SneakyThrows
         protected NBTInputStream getNBTInputStream() {
-            var input = AllayBlockPaletteRegistry.class.getClassLoader().getResourceAsStream("block_palette.nbt");
+            var input = AllayBlockStateRegistry.class.getClassLoader().getResourceAsStream("block_palette.nbt");
             if (input == null)
                 throw new NullPointerException("block_palette.nbt not found!");
             return new NBTInputStream(
