@@ -19,8 +19,8 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
       - run: gradle build
-      - name: Upload artifact
+      - name: Upload Allay-API
         uses: actions/upload-artifact@v3
         if: success()
         with:
-          path: Allay-*.jar
+          path: Allay-API/build/Allay-*.jar
