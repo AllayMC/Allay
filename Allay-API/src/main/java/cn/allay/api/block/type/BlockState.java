@@ -18,7 +18,6 @@ public interface BlockState {
 
     BlockState updatePropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> newPropertyValue);
 
-    //TODO: updatePropertyValues
 
     int getBlockStateHash();
 
