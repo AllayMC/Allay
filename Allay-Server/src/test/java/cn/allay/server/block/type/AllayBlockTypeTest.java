@@ -2,6 +2,7 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.BlockAttributes;
+import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.impl.BlockBlueCandle;
 import cn.allay.api.block.impl.BlockCobbledDeepslateWall;
 import cn.allay.api.block.impl.BlockCoralFan;
@@ -58,6 +59,7 @@ class AllayBlockTypeTest {
                         ComponentProvider.of(TestComponentImpl::new, TestComponentImpl.class),
                         ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.builder().burnChance(2).build()))
                 ))
+                .addCustomBlockComponent(new CustomBlockComponentImpl())
                 .addBasicComponents()
                 .build();
         testBlockType2 = AllayBlockType
@@ -71,6 +73,7 @@ class AllayBlockTypeTest {
                         ComponentProvider.of(TestComponentImpl::new, TestComponentImpl.class),
                         ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofDynamic(blockState -> BlockAttributes.builder().burnChance(3).build()))
                 ))
+                .addCustomBlockComponent(new CustomBlockComponentImpl())
                 .addBasicComponents()
                 .build();
         assertThrows(BlockTypeBuildException.class,
@@ -86,6 +89,7 @@ class AllayBlockTypeTest {
                                     of(TestComponentImplV2::new, TestComponentImplV2.class),
                                     ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT))
                             ))
+                            .addCustomBlockComponent(new CustomBlockComponentImpl())
                             .addBasicComponents()
                             .build();
                 }

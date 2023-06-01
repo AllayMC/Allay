@@ -5,7 +5,7 @@ import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.component.impl.base.BlockBaseComponentImpl;
-import cn.allay.api.block.palette.BlockPaletteData;
+import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.palette.BlockPaletteRegistry;
 import cn.allay.api.block.property.BlockState;
 import cn.allay.api.block.property.type.BlockPropertyType;
@@ -17,17 +17,13 @@ import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.utils.HashUtils;
 import cn.allay.server.block.component.injector.AllayBlockComponentInjector;
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.ToString;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.function.Function;
@@ -47,9 +43,12 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
      */
     protected Constructor<T> constructor;
     protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders;
-    protected Map<String, BlockPropertyType<?>> properties;
     protected Identifier identifier;
-    protected BlockState<T> defaultState;
+    protected Map<String, BlockPropertyType<?>> properties;
+
+    //Empty on first load, initialized in the AllayBlockPaletteRegistry
+    protected Set<BlockState> allStates;
+    protected BlockState defaultState;
 
     protected AllayBlockType(Class<T> interfaceClass,
                              List<ComponentProvider<? extends BlockComponentImpl>> componentProviders,
@@ -57,9 +56,9 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
                              Identifier identifier) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
-        this.properties = Collections.unmodifiableMap(properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity())));
         this.identifier = identifier;
-        this.defaultState = ofState(properties.stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList()));
+        this.properties = Collections.unmodifiableMap(properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity())));
+        this.allStates = new LinkedHashSet<>();
     }
 
     public static <T extends Block> BlockTypeBuilder<T> builder(Class<T> interfaceClass) {
@@ -73,164 +72,22 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public BlockState<T> ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        var blockStateHash = AllayBlockState.computeBlockStateHash(identifier, propertyValues);
-        BlockPaletteRegistry registry = BlockPaletteRegistry.getRegistry();
-        BlockPaletteData blockPaletteData = registry.get(blockStateHash);
-        if (blockPaletteData != null) {
-            return (BlockState<T>) blockPaletteData.blockState();
-        } else {
-            return new AllayBlockState(propertyValues);
-        }
+    public BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
+        return BlockPaletteRegistry.getRegistry().get(HashUtils.computeBlockStateHash(identifier, propertyValues));
     }
 
+    @UnmodifiableView
     @Override
-    public Map<Integer, BlockState<T>> allStates() {
-        List<BlockPropertyType<?>> propertyTypeList = this.properties.values().stream().toList();
-        int size = propertyTypeList.size();
-        if (size == 0) {
-            BlockState<T> state = ofState();
-            return Map.of(state.getBlockStateHash(), state);
-        }
-
-        ImmutableList.Builder<BlockState<T>> states = ImmutableList.builder();
-
-        // to keep track of next element in each of
-        // the n arrays
-        int[] indices = new int[size];
-
-        // initialize with first element's index
-        Arrays.fill(indices, 0);
-
-        while (true) {
-            // Generate BlockState
-            ImmutableList.Builder<BlockPropertyType.BlockPropertyValue<?, ?, ?>> values = ImmutableList.builder();
-            for (int i = 0; i < size; ++i) {
-                BlockPropertyType<?> type = propertyTypeList.get(i);
-                values.add(type.tryCreateValue(type.getValidValues().get(indices[i])));
-            }
-            states.add(ofState(values.build()));
-
-            // find the rightmost array that has more
-            // elements left after the current element
-            // in that array
-            int next = size - 1;
-            while (next >= 0 && (indices[next] + 1 >= propertyTypeList.get(next).getValidValues().size())) {
-                next--;
-            }
-
-            // no such array is found so no more
-            // combinations left
-            if (next < 0) break;
-
-            // if found move to next element in that
-            // array
-            indices[next]++;
-
-            // for all arrays to the right of this
-            // array current index again points to
-            // first element
-            for (int i = next + 1; i < size; i++) {
-                indices[i] = 0;
-            }
-        }
-        ImmutableList<BlockState<T>> build = states.build();
-        return Collections.unmodifiableMap(build.stream().collect(Collectors.toMap(BlockState::getBlockStateHash, Function.identity())));
+    public Set<BlockState> getAllStates() {
+        return Collections.unmodifiableSet(allStates);
     }
 
-    /**
-     * Each {@link AllayBlockState} is a singleton, stored in the {@link cn.allay.server.block.palette.AllayBlockPaletteRegistry AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
-     */
-    @ToString
-    protected class AllayBlockState implements BlockState<T> {
+    Set<BlockState> getUnSafeAllStates() {
+        return allStates;
+    }
 
-        protected Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues;
-        protected int blockStateHash;
-
-        private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-            this(propertyValues, computeBlockStateHash(identifier, propertyValues));
-        }
-
-        private AllayBlockState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues, int blockStateHash) {
-            var mappedPropertyValues = new HashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
-            for (var value : propertyValues)
-                mappedPropertyValues.put(value.getPropertyType(), value);
-            this.propertyValues = mappedPropertyValues;
-            this.blockStateHash = blockStateHash;
-        }
-
-        @Override
-        public BlockType<T> getBlockType() {
-            return AllayBlockType.this;
-        }
-
-        @UnmodifiableView
-        @Override
-        public Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues() {
-            return propertyValues;
-        }
-
-        @Override
-        public int getBlockStateHash() {
-            return blockStateHash;
-        }
-
-        @Override
-        public long getUnsignedBlockStateHash() {
-            return Integer.toUnsignedLong(blockStateHash);
-        }
-
-        @Override
-        public BlockState<T> updatePropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> newPropertyValue) {
-            var newPropertyValues = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
-            for (var value : propertyValues.values()) {
-                if (value.getPropertyType() == newPropertyValue.getPropertyType())
-                    newPropertyValues.add(newPropertyValue);
-                else newPropertyValues.add(value);
-            }
-            return ofState(newPropertyValues);
-        }
-
-        //https://gist.github.com/Alemiz112/504d0f79feac7ef57eda174b668dd345
-        protected static int computeBlockStateHash(Identifier identifier, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-            if (identifier.equals(VanillaBlockId.UNKNOWN.getIdentifier())) {
-                return -2; // This is special case
-            }
-
-            var states = new TreeMap<String, Object>();
-            for (var value : propertyValues) {
-                states.put(value.getPropertyType().getName(), value.getSerializedValue());
-            }
-
-            var tag = NbtMap.builder()
-                    .putString("name", identifier.toString())
-                    .putCompound("states", NbtMap.fromMap(states))
-                    .build();
-
-            byte[] bytes;
-            try (var stream = new ByteArrayOutputStream();
-                 var outputStream = NbtUtils.createWriterLE(stream)) {
-                outputStream.writeTag(tag);
-                bytes = stream.toByteArray();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            return fnv1a_32(bytes);
-        }
-
-        protected static final int FNV1_32_INIT = 0x811c9dc5;
-        protected static final int FNV1_PRIME_32 = 0x01000193;
-
-        protected static int fnv1a_32(byte[] data) {
-            int hash = FNV1_32_INIT;
-            for (byte datum : data) {
-                hash ^= (datum & 0xff);
-                hash *= FNV1_PRIME_32;
-            }
-            return hash;
-        }
+    void setDefaultState(BlockState defaultState) {
+        this.defaultState = defaultState;
     }
 
     public static class Builder<T extends Block> implements BlockTypeBuilder<T> {
@@ -238,6 +95,7 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
         protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders = new ArrayList<>();
         protected List<BlockPropertyType<?>> properties = new ArrayList<>();
         protected Identifier identifier;
+        protected boolean isCustomBlock = false;
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -298,9 +156,19 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
             return this;
         }
 
+        public Builder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent) {
+            componentProviders.add(ComponentProvider.ofSingleton(customBlockComponent));
+            isCustomBlock = true;
+            return this;
+        }
+
         public AllayBlockType<T> build() {
             if (identifier == null) throw new BlockTypeBuildException("identifier cannot be null!");
             var type = new AllayBlockType<>(interfaceClass, componentProviders, properties, identifier);
+            //Register all blockStates for the CustomBlock
+            if (isCustomBlock) {
+                registerCustomBlockAllStates(type);
+            }
             componentProviders.add(ComponentProvider.of(info -> new BlockBaseComponentImpl(type, (BlockInitInfo) info), BlockBaseComponentImpl.class));
             try {
                 type.injectedClass = new AllayBlockComponentInjector<>(type)
@@ -313,8 +181,74 @@ public class AllayBlockType<T extends Block> implements BlockType<T> {
                 throw new BlockTypeBuildException("Failed to create block type!", e);
             }
             type.register(BlockTypeRegistry.getRegistry());
-            type.register(BlockPaletteRegistry.getRegistry());
             return type;
+        }
+
+        private void registerCustomBlockAllStates(AllayBlockType<T> blockType) {
+            List<BlockPropertyType<?>> propertyTypeList = blockType.getProperties().values().stream().toList();
+            int size = propertyTypeList.size();
+            if (size == 0) {
+                AllayBlockState state = new AllayBlockState(blockType, List.of());
+                blockType.setDefaultState(state);
+                blockType.getUnSafeAllStates().add(state);
+                BlockPaletteRegistry.getRegistry().register(state.getBlockStateHash(), state);
+                return;
+            }
+            ImmutableList.Builder<BlockState> states = ImmutableList.builder();
+
+            // to keep track of next element in each of
+            // the n arrays
+            int[] indices = new int[size];
+
+            // initialize with first element's index
+            Arrays.fill(indices, 0);
+
+            while (true) {
+                // Generate BlockState
+                ImmutableList.Builder<BlockPropertyType.BlockPropertyValue<?, ?, ?>> values = ImmutableList.builder();
+                for (int i = 0; i < size; ++i) {
+                    BlockPropertyType<?> type = propertyTypeList.get(i);
+                    values.add(type.tryCreateValue(type.getValidValues().get(indices[i])));
+                }
+                states.add(new AllayBlockState(blockType, values.build()));
+
+                // find the rightmost array that has more
+                // elements left after the current element
+                // in that array
+                int next = size - 1;
+                while (next >= 0 && (indices[next] + 1 >= propertyTypeList.get(next).getValidValues().size())) {
+                    next--;
+                }
+
+                // no such array is found so no more
+                // combinations left
+                if (next < 0) break;
+
+                // if found move to next element in that
+                // array
+                indices[next]++;
+
+                // for all arrays to the right of this
+                // array current index again points to
+                // first element
+                for (int i = next + 1; i < size; i++) {
+                    indices[i] = 0;
+                }
+            }
+            ImmutableList<BlockState> build = states.build();
+            BlockState defaultState = new AllayBlockState(blockType, blockType.properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList()));
+            blockType.setDefaultState(defaultState);
+            blockType.getUnSafeAllStates().add(defaultState);
+            BlockPaletteRegistry.getRegistry().register(defaultState.getBlockStateHash(), defaultState);
+            int defaultStateHash = defaultState.getBlockStateHash();
+            for (int i = 0, len = build.size(); i < len; i++) {
+                BlockState blockState = build.get(i);
+                if (defaultStateHash == blockState.getBlockStateHash()) {
+                    continue;
+                }
+                blockType.getUnSafeAllStates().add(blockState);
+                BlockPaletteRegistry.getRegistry().register(blockState.getBlockStateHash(), blockState);
+            }
         }
     }
 }

@@ -10,7 +10,10 @@ import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.position.FixedPos;
 import cn.allay.api.math.position.Pos;
+import com.google.common.collect.Lists;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 /**
  * Author: daoge_cmd <br>
@@ -21,7 +24,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
 
-    protected BlockState<?> currentState;
+    protected BlockState currentState;
     protected BlockType<? extends Block> blockType;
     protected final Pos<Integer> pos;
 
@@ -54,16 +57,28 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     @Override
     @Impl
-    public void setState(BlockState<?> state) {
-        if (blockType.allStates().containsValue(state))
+    public void setState(BlockState state) {
+        if (blockType.getAllStates().contains(state))
             currentState = state;
         else throw new IllegalArgumentException("State " + state + " is not supported by this block");
     }
 
     @Override
     @Impl
-    public BlockState<?> getCurrentState() {
+    public BlockState getCurrentState() {
         return currentState;
+    }
+
+    @Override
+    @Impl
+    public BlockState getNextState() {
+        ArrayList<? extends BlockState> blockStates = Lists.newArrayList(getBlockType().getAllStates());
+        int next = blockStates.indexOf(currentState) + 1;
+        if (next == blockStates.size()) {
+            return blockStates.get(0);
+        } else {
+            return blockStates.get(next);
+        }
     }
 
     @Override

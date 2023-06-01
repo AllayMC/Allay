@@ -23,10 +23,13 @@ public interface BlockBaseComponent {
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getProperty(PROPERTY property);
 
     @Inject
-    void setState(BlockState<?> state);
+    void setState(BlockState state);
 
     @Inject
-    BlockState<?> getCurrentState();
+    BlockState getCurrentState();
+
+    @Inject
+    BlockState getNextState();
 
     @Inject
     FixedPos<Integer> getPosition();

@@ -38,6 +38,13 @@ tasks.forEach {
     it.enabled = false
 }
 
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
+}
+
 subprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")
@@ -76,13 +83,6 @@ subprojects {
     java {
         withJavadocJar()
         withSourcesJar()
-    }
-
-    rootProject.idea {
-        module {
-            isDownloadSources = false
-            isDownloadJavadoc = true
-        }
     }
 
     tasks.named<Test>("test") {

@@ -21,9 +21,9 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
 
     @Dependency
     protected BlockBaseComponent baseComponent;
-    protected Function<BlockState<?>, BlockAttributes> attributeAccessor;
+    protected Function<BlockState, BlockAttributes> attributeAccessor;
 
-    protected BlockAttributeComponentImpl(Function<BlockState<?>, BlockAttributes> attributeAccessor) {
+    protected BlockAttributeComponentImpl(Function<BlockState, BlockAttributes> attributeAccessor) {
         this.attributeAccessor = attributeAccessor;
     }
 
@@ -31,15 +31,15 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
         return new BlockAttributeComponentImpl(state -> attributes);
     }
 
-    public static BlockAttributeComponentImpl ofDynamic(Function<BlockState<?>, BlockAttributes> attributeAccessor) {
+    public static BlockAttributeComponentImpl ofDynamic(Function<BlockState, BlockAttributes> attributeAccessor) {
         return new BlockAttributeComponentImpl(attributeAccessor);
     }
 
-    public static BlockAttributeComponentImpl ofMapped(Map<BlockState<?>, BlockAttributes> attributeMap) {
+    public static BlockAttributeComponentImpl ofMapped(Map<BlockState, BlockAttributes> attributeMap) {
         return ofMapped(attributeMap, BlockAttributes.DEFAULT);
     }
 
-    public static BlockAttributeComponentImpl ofMapped(Map<BlockState<?>, BlockAttributes> attributeMap, BlockAttributes defaultAttributes) {
+    public static BlockAttributeComponentImpl ofMapped(Map<BlockState, BlockAttributes> attributeMap, BlockAttributes defaultAttributes) {
         return new BlockAttributeComponentImpl(state -> attributeMap.getOrDefault(state, defaultAttributes));
     }
 

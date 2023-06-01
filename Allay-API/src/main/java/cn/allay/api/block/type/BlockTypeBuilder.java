@@ -3,6 +3,7 @@ package cn.allay.api.block.type;
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
+import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
@@ -40,6 +41,8 @@ public interface BlockTypeBuilder<T extends Block> {
     BlockTypeBuilder<T> addComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders);
 
     BlockTypeBuilder<T> addBasicComponents();
+
+    BlockTypeBuilder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent);
 
     BlockType<T> build();
 

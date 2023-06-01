@@ -1644,7 +1644,7 @@ public enum VanillaBlockId {
     this.identifier = new Identifier(identifier);
   }
 
-  public BlockType getBlockType() {
-    return BlockTypeRegistry.getRegistry().get(this.getIdentifier());
+  public BlockType<?> getBlockType() {
+      return BlockTypeRegistry.getRegistry().get(this.getIdentifier());
   }
 }
