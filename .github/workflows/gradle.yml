@@ -23,4 +23,4 @@ jobs:
         uses: actions/upload-artifact@v3
         if: success()
         with:
-          path: Allay-API/build/Allay-*.jar
+          path: Allay-API/build/libs/Allay-API.jar
