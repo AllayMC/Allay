@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.Throughput)
-@Warmup(iterations = 0)
+@Warmup(iterations = 3)
 @Threads(1)
 @Fork(1)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
