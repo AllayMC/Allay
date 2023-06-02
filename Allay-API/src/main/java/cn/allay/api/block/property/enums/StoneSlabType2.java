@@ -6,19 +6,19 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum StoneSlabType2 {
-  RED_SANDSTONE,
+    MOSSY_COBBLESTONE,
 
-  PURPUR,
+    PRISMARINE_BRICK,
 
-  PRISMARINE_ROUGH,
+    PRISMARINE_DARK,
 
-  PRISMARINE_DARK,
+    PRISMARINE_ROUGH,
 
-  PRISMARINE_BRICK,
+    PURPUR,
 
-  MOSSY_COBBLESTONE,
+    RED_NETHER_BRICK,
 
-  SMOOTH_SANDSTONE,
+    RED_SANDSTONE,
 
-  RED_NETHER_BRICK
+    SMOOTH_SANDSTONE
 }

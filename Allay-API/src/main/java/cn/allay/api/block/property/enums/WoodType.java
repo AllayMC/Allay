@@ -6,15 +6,15 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum WoodType {
-    OAK,
-
-    SPRUCE,
+    ACACIA,
 
     BIRCH,
 
+    DARK_OAK,
+
     JUNGLE,
 
-    ACACIA,
+    OAK,
 
-    DARK_OAK
+    SPRUCE
 }

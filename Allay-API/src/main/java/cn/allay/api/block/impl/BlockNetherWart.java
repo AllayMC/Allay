@@ -7,14 +7,14 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockNetherWart extends Block {
     BlockType<BlockNetherWart> TYPE = BlockTypeBuilder
             .builder(BlockNetherWart.class)
             .vanillaBlock(VanillaBlockId.NETHER_WART, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .withProperties(VanillaBlockPropertyTypes.NETHER_WART_AGE)
             .addBasicComponents()
             .build();
 }

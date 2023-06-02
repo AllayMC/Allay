@@ -8,9 +8,9 @@ package cn.allay.api.block.property.enums;
 public enum TallGrassType {
     DEFAULT,
 
-    TALL,
-
     FERN,
 
-    SNOW
+    SNOW,
+
+    TALL
 }

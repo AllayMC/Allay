@@ -6,11 +6,11 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum BigDripleafTilt {
-    NONE,
+    FULL_TILT,
 
-    UNSTABLE,
+    NONE,
 
     PARTIAL_TILT,
 
-    FULL_TILT
+    UNSTABLE
 }

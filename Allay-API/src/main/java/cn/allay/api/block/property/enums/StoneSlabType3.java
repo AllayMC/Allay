@@ -6,19 +6,19 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum StoneSlabType3 {
-    END_STONE_BRICK,
-
-    SMOOTH_RED_SANDSTONE,
-
-    POLISHED_ANDESITE,
-
     ANDESITE,
 
     DIORITE,
 
-    POLISHED_DIORITE,
+    END_STONE_BRICK,
 
     GRANITE,
 
-    POLISHED_GRANITE
+    POLISHED_ANDESITE,
+
+    POLISHED_DIORITE,
+
+    POLISHED_GRANITE,
+
+    SMOOTH_RED_SANDSTONE
 }

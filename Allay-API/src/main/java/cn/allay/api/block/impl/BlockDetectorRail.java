@@ -7,7 +7,7 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockDetectorRail extends Block {
@@ -15,7 +15,7 @@ public interface BlockDetectorRail extends Block {
             .builder(BlockDetectorRail.class)
             .vanillaBlock(VanillaBlockId.DETECTOR_RAIL, true)
             .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
-                    VanillaBlockPropertyTypes.RAIL_DIRECTION)
+                    VanillaBlockPropertyTypes.DETECTOR_RAIL_RAIL_DIRECTION)
             .addBasicComponents()
             .build();
 }

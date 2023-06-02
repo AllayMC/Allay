@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static cn.allay.codegen.CodeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
+
 /**
  * Author: daoge_cmd | Cool_Loong<br>
  * Date: 2023/4/8 <br>
@@ -51,7 +53,8 @@ public class VanillaBlockClassGen {
             initializer.add(".withProperties(");
             AtomicInteger count = new AtomicInteger();
             states.forEach((name, value) -> {
-                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ",\n"), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME, name.toUpperCase());
+                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ",\n"), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME,
+                        BLOCK_PROPERTY_TYPE_INFO_FILE.multiple_propertyType.contains(name) ? vanillaBlockId.getIdentifier().getPath().toUpperCase() + "_" + name.toUpperCase() : name.toUpperCase());
             });
             initializer.add(")\n");
         }

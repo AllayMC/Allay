@@ -7,14 +7,14 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockChorusFlower extends Block {
     BlockType<BlockChorusFlower> TYPE = BlockTypeBuilder
             .builder(BlockChorusFlower.class)
             .vanillaBlock(VanillaBlockId.CHORUS_FLOWER, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .withProperties(VanillaBlockPropertyTypes.CHORUS_FLOWER_AGE)
             .addBasicComponents()
             .build();
 }

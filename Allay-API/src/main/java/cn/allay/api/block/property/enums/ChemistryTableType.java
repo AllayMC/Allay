@@ -8,9 +8,9 @@ package cn.allay.api.block.property.enums;
 public enum ChemistryTableType {
     COMPOUND_CREATOR,
 
-    MATERIAL_REDUCER,
-
     ELEMENT_CONSTRUCTOR,
 
-    LAB_TABLE
+    LAB_TABLE,
+
+    MATERIAL_REDUCER
 }

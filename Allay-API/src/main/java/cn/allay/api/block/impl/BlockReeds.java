@@ -7,14 +7,14 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockReeds extends Block {
     BlockType<BlockReeds> TYPE = BlockTypeBuilder
             .builder(BlockReeds.class)
             .vanillaBlock(VanillaBlockId.REEDS, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .withProperties(VanillaBlockPropertyTypes.REEDS_AGE)
             .addBasicComponents()
             .build();
 }

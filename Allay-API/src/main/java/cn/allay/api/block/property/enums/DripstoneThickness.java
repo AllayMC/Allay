@@ -6,13 +6,13 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum DripstoneThickness {
-  TIP,
+    BASE,
 
-  FRUSTUM,
+    FRUSTUM,
 
-  MIDDLE,
+    MERGE,
 
-  BASE,
+    MIDDLE,
 
-  MERGE
+    TIP
 }

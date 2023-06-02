@@ -7,14 +7,14 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockSoulFire extends Block {
     BlockType<BlockSoulFire> TYPE = BlockTypeBuilder
             .builder(BlockSoulFire.class)
             .vanillaBlock(VanillaBlockId.SOUL_FIRE, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .withProperties(VanillaBlockPropertyTypes.SOUL_FIRE_AGE)
             .addBasicComponents()
             .build();
 }

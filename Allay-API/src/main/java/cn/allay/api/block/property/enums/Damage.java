@@ -6,11 +6,11 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum Damage {
-    UNDAMAGED,
+    BROKEN,
 
     SLIGHTLY_DAMAGED,
 
-    VERY_DAMAGED,
+    UNDAMAGED,
 
-    BROKEN
+    VERY_DAMAGED
 }

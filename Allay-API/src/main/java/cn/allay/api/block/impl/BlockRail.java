@@ -7,14 +7,14 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockRail extends Block {
     BlockType<BlockRail> TYPE = BlockTypeBuilder
             .builder(BlockRail.class)
             .vanillaBlock(VanillaBlockId.RAIL, true)
-            .withProperties(VanillaBlockPropertyTypes.RAIL_DIRECTION)
+            .withProperties(VanillaBlockPropertyTypes.RAIL_RAIL_DIRECTION)
             .addBasicComponents()
             .build();
 }

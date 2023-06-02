@@ -6,7 +6,7 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum BambooStalkThickness {
-    THIN,
+    THICK,
 
-    THICK
+    THIN
 }

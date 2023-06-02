@@ -6,35 +6,35 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum Color {
-    WHITE,
-
-    ORANGE,
-
-    MAGENTA,
-
-    LIGHT_BLUE,
-
-    YELLOW,
-
-    LIME,
-
-    PINK,
-
-    GRAY,
-
-    SILVER,
-
-    CYAN,
-
-    PURPLE,
+    BLACK,
 
     BLUE,
 
     BROWN,
 
+    CYAN,
+
+    GRAY,
+
     GREEN,
+
+    LIGHT_BLUE,
+
+    LIME,
+
+    MAGENTA,
+
+    ORANGE,
+
+    PINK,
+
+    PURPLE,
 
     RED,
 
-    BLACK
+    SILVER,
+
+    WHITE,
+
+    YELLOW
 }

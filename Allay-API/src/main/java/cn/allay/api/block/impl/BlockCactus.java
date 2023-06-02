@@ -7,14 +7,14 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockCactus extends Block {
     BlockType<BlockCactus> TYPE = BlockTypeBuilder
             .builder(BlockCactus.class)
             .vanillaBlock(VanillaBlockId.CACTUS, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE)
+            .withProperties(VanillaBlockPropertyTypes.CACTUS_AGE)
             .addBasicComponents()
             .build();
 }

@@ -6,7 +6,7 @@ import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.data.VanillaBlockId;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockIronBlock extends Block {
