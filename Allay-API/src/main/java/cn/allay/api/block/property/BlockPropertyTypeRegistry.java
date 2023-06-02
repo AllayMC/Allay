@@ -11,6 +11,7 @@ import java.util.Map;
  * Date: 2023/4/8 <br>
  * Allay Project <br>
  */
+@Deprecated
 public interface BlockPropertyTypeRegistry extends MappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> {
     ApiInstanceHolder<BlockPropertyTypeRegistry> REGISTRY = ApiInstanceHolder.of();
 

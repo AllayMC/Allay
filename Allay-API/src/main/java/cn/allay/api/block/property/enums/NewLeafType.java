@@ -6,7 +6,7 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum NewLeafType {
-  ACACIA,
+    ACACIA,
 
-  DARK_OAK
+    DARK_OAK
 }

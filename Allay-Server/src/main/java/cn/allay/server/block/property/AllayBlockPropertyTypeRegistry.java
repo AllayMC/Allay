@@ -13,6 +13,7 @@ import java.util.Map;
  * Date: 2023/4/8 <br>
  * Allay Project <br>
  */
+@Deprecated
 public final class AllayBlockPropertyTypeRegistry extends SimpleMappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> implements BlockPropertyTypeRegistry {
     public AllayBlockPropertyTypeRegistry() {
         super(null, input -> new HashMap<>());
