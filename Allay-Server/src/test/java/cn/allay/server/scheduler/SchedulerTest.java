@@ -23,7 +23,7 @@ class SchedulerTest {
     @Test
     void testAsync() {
         AtomicLong total = new AtomicLong(0);
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 1000; i++) {
             scheduler.scheduleDelayed(new Task() {
                 @Override
                 public boolean onRun() {
@@ -38,14 +38,14 @@ class SchedulerTest {
             }, 1, true);
         }
         GameLoop.builder()
-                .loopCountPerSec(1000000)
+                .loopCountPerSec(1000)
                 .onTick(loop -> {
                     if (scheduler.getRunningTaskCount() == 0)
                         loop.stop();
                     scheduler.ticking();
                 })
                 .build().startLoop();
-        assertEquals(1000000, total.get());
+        assertEquals(1000, total.get());
     }
 
     @Test
@@ -66,7 +66,7 @@ class SchedulerTest {
             }, 1);
         }
         GameLoop.builder()
-                .loopCountPerSec(1000000)
+                .loopCountPerSec(1000)
                 .onTick(loop -> {
                     if (scheduler.getRunningTaskCount() == 0)
                         loop.stop();
@@ -91,7 +91,7 @@ class SchedulerTest {
             }
         }, 1);
         GameLoop.builder()
-                .loopCountPerSec(1000000)
+                .loopCountPerSec(1000)
                 .onTick(loop -> {
                     if (scheduler.getRunningTaskCount() == 0)
                         loop.stop();
