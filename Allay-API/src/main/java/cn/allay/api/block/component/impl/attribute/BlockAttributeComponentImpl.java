@@ -35,14 +35,6 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
         return new BlockAttributeComponentImpl(attributeAccessor);
     }
 
-    public static BlockAttributeComponentImpl ofMapped(Map<BlockState, BlockAttributes> attributeMap) {
-        return ofMapped(attributeMap, BlockAttributes.DEFAULT);
-    }
-
-    public static BlockAttributeComponentImpl ofMapped(Map<BlockState, BlockAttributes> attributeMap, BlockAttributes defaultAttributes) {
-        return new BlockAttributeComponentImpl(state -> attributeMap.getOrDefault(state, defaultAttributes));
-    }
-
     public static BlockAttributeComponentImpl ofMappedBlockStateHash(Map<Integer, BlockAttributes> attributeMap) {
         return ofMappedBlockStateHash(attributeMap, BlockAttributes.DEFAULT);
     }
