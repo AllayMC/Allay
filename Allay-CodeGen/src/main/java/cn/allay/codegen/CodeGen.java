@@ -12,10 +12,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 import static cn.allay.codegen.Utils.convertToPascalCase;
@@ -106,16 +103,21 @@ public class CodeGen {
         }
     }
 
-    public static final Map<String, BiomeData> BIOME_DATA;
+    public static final Map<String, BiomeData> BIOME_DATA = new LinkedHashMap<>();
 
     public static class BiomeData {
-        String id;
+        int id;
         String type;
     }
 
     static {
         try {
-            BIOME_DATA = GSON.fromJson(Files.newBufferedReader(Path.of("Data/unpacked/biome_id_and_type.json")), new HashMap<String, BiomeData>() {}.getClass().getGenericSuperclass());
+            Map<String, BiomeData> unsorted = GSON.fromJson(Files.newBufferedReader(Path.of("Data/unpacked/biome_id_and_type.json")), new HashMap<String, BiomeData>() {}.getClass().getGenericSuperclass());
+            //sort BIOME_DATA by BiomeData.id, using TreeMap
+            unsorted.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByValue(Comparator.comparingInt(o -> o.id)))
+                    .forEachOrdered(entry -> BIOME_DATA.put(entry.getKey(), entry.getValue()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
