@@ -4,7 +4,7 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.chunk.ChunkSection;
-import cn.allay.api.world.dimension.DimensionData;
+import cn.allay.api.world.dimension.Dimension;
 import cn.allay.api.world.heightmap.HeightMap;
 import cn.allay.api.world.heightmap.HeightType;
 import org.jetbrains.annotations.NotNull;
@@ -27,10 +27,10 @@ public class AnvilChunk implements Chunk {
     private final List<ChunkSection> sections;
     //WORLD_SURFACE,OCEAN_FLOOR,MOTION_BLOCKING,MOTION_BLOCKING_NO_LEAVES
     private final HeightMap[] heightMaps;
-    private final DimensionData dimensionData;
+    private final Dimension dimensionData;
     private final ReadWriteLock readWriteLock;
 
-    private AnvilChunk(DimensionData dimensionData) {
+    private AnvilChunk(Dimension dimensionData) {
         this.sections = new ArrayList<>(16);
         //Only one height map is used now, and more may be used in the future
         this.heightMaps = new HeightMap[]{new HeightMap(new long[37])};
@@ -39,7 +39,7 @@ public class AnvilChunk implements Chunk {
     }
 
     @Override
-    public DimensionData getDimensionData() {
+    public Dimension getDimensionData() {
         return dimensionData;
     }
 
