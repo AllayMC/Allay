@@ -1,71 +1,85 @@
 package cn.allay.api.world;
 
-import cn.allay.api.math.vector.Vec3;
-import cn.allay.api.world.dimension.DimensionData;
 import cn.allay.api.world.gamerule.GameRules;
-import org.cloudburstmc.nbt.NbtMap;
+import lombok.Builder;
 
-import java.io.File;
+import java.util.List;
+import java.util.Map;
 
-/**
- * Author: Cool_Loong <br>
- * Date: 5/31/2023 <br>
- * Allay Project
- */
-public interface WorldData {
-    File getFile();
-
-    NbtMap getNBT();
-
-    /**
-     * be: RandomSeed
-     * je: WorldGenSettings#seed
-     */
-    long getRandomSeed();
-
-    /**
-     * be: SpawnX SpawnY SpawnZ
-     * je: SpawnX SpawnY SpawnZ
-     */
-    Vec3<Integer> getSpawnPoint();
-
-    /**
-     * be: rainTime
-     * je: rainTime
-     */
-    int getRainTime();
-
-    /**
-     * be: lightningTime
-     * je: thunderTime
-     */
-    int getThunderTime();
-
-    /**
-     * be: LevelName
-     * je: LevelName
-     */
-    String getWorldName();
-
-    /**
-     * be: Time
-     * je: Time
-     */
-    long getTime();
-
-    /**
-     * be: Difficulty
-     * je: Difficulty
-     */
-    int getDifficulty();
-
-    /**
-     * be: GameType
-     * je: GameType
-     */
-    int getGameType();
-
-    GameRules getGameRules();
-
-    DimensionData getDimensionData();
+@Builder
+public record WorldData(
+        GameRules gameRules,
+        long lightningTime,
+        int platform,
+        int difficulty,
+        boolean hasLockedResourcePack,
+        int gameType,
+        boolean isFromWorldTemplate,
+        boolean hasBeenLoadedInCreative,
+        float lightningLevel,
+        int XBLBroadcastIntent,
+        boolean startWithMapEnabled,
+        float rainLevel,
+        int platformBroadcastIntent,
+        List<Integer> lastOpenedWithVersion,
+        int serverChunkTickRange,
+        int worldVersion,
+        boolean educationFeaturesEnabled,
+        boolean isExportedFromEditor,
+        boolean isCreatedInEditor,
+        int generator,
+        long randomSeed,
+        int networkVersion,
+        Map<String, Boolean> experiments,
+        boolean commandsEnabled,
+        boolean spawnMobs,
+        String inventoryVersion,
+        boolean centerMapsToOrigin,
+        boolean LANBroadcastIntent,
+        long currentTick,
+        boolean isFromLockedTemplate,
+        int rainTime,
+        boolean LANBroadcast,
+        Map<String, String> worldPolicies,
+        boolean hasLockedBehaviorPack,
+        boolean cheatsEnabled,
+        int storageVersion,
+        List<Integer> minimumCompatibleClientVersion,
+        boolean confirmedPlatformLockedContent,
+        boolean texturePacksRequired,
+        boolean bonusChestEnabled,
+        WorldAbilities abilities,
+        int daylightCycle,
+        String baseGameVersion,
+        boolean bonusChestSpawned,
+        boolean multiplayerGame,
+        boolean isSingleUseWorld,
+        int permissionsLevel,
+        int spawnY,
+        int spawnZ,
+        int spawnX,
+        String prid,
+        int eduOffer,
+        long worldStartCount,
+        boolean forceGameType,
+        boolean multiplayerGameIntent,
+        String levelName,
+        boolean isWorldTemplateOptionLocked,
+        long time,
+        int limitedWorldDepth,
+        int limitedWorldOriginY,
+        boolean requiresCopiedPackRemovalCheck,
+        int limitedWorldOriginX,
+        int limitedWorldOriginZ,
+        int limitedWorldWidth,
+        String biomeOverride,
+        boolean spawnV1Villagers,
+        long lastPlayed,
+        int netherScale,
+        boolean useMsaGamertagsOnly,
+        String flatWorldLayers,
+        boolean immutableWorld,
+        int playerPermissionsLevel
+) {
 }
+

@@ -1,4 +1,4 @@
-package cn.allay.server.world.chunk.anvil;
+package cn.allay.server.world.anvil.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
