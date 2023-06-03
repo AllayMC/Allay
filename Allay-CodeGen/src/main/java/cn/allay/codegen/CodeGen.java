@@ -113,7 +113,6 @@ public class CodeGen {
     static {
         try {
             Map<String, BiomeData> unsorted = GSON.fromJson(Files.newBufferedReader(Path.of("Data/unpacked/biome_id_and_type.json")), new HashMap<String, BiomeData>() {}.getClass().getGenericSuperclass());
-            //sort BIOME_DATA by BiomeData.id, using TreeMap
             unsorted.entrySet()
                     .stream()
                     .sorted(Map.Entry.comparingByValue(Comparator.comparingInt(o -> o.id)))
