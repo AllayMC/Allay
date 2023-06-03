@@ -1,6 +1,6 @@
 package cn.allay.api.math.location;
 
-import cn.allay.api.level.Level;
+import cn.allay.api.world.World;
 
 /**
  * Author: daoge_cmd <br>
@@ -8,16 +8,16 @@ import cn.allay.api.level.Level;
  * Allay Project <br>
  */
 class ImplLoc<T extends Number> extends ImplFixedLoc<T> implements Loc<T> {
-    public ImplLoc(T x, T y, T z, Level level) {
-        super(x, y, z, level);
+    public ImplLoc(T x, T y, T z, World world) {
+        super(x, y, z, world);
     }
 
-    public ImplLoc(T x, T y, T z, double yaw, double pitch, Level level) {
-        super(x, y, z, yaw, pitch, level);
+    public ImplLoc(T x, T y, T z, double yaw, double pitch, World world) {
+        super(x, y, z, yaw, pitch, world);
     }
 
-    public ImplLoc(T x, T y, T z, double yaw, double headYaw, double pitch, Level level) {
-        super(x, y, z, yaw, headYaw, pitch, level);
+    public ImplLoc(T x, T y, T z, double yaw, double headYaw, double pitch, World world) {
+        super(x, y, z, yaw, headYaw, pitch, world);
     }
 
     @Override
@@ -36,8 +36,8 @@ class ImplLoc<T extends Number> extends ImplFixedLoc<T> implements Loc<T> {
     }
 
     @Override
-    public void setLevel(Level level) {
-        this.level = level;
+    public void setLevel(World world) {
+        this.world = world;
     }
 
     @Override

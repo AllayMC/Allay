@@ -1,4 +1,4 @@
-package cn.allay.server.utils.palette.bitarray;
+package cn.allay.api.world.palette.bitarray;
 
 import io.netty.buffer.ByteBuf;
 

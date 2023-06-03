@@ -1,7 +1,8 @@
-package cn.allay.server.utils.palette;
+package cn.allay.api.world.palette;
 
-import cn.allay.server.utils.palette.bitarray.BitArray;
-import cn.allay.server.utils.palette.bitarray.BitArrayVersion;
+import cn.allay.api.world.chunk.ChunkSection;
+import cn.allay.api.world.palette.bitarray.BitArray;
+import cn.allay.api.world.palette.bitarray.BitArrayVersion;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -25,9 +26,7 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 public final class Palette<V> {
-
-    public static final int SIZE = 4096;
-    public static final int COPY_LAST_FLAG_HEADER = (0x7F << 1) | 1;
+    public static final int COPY_LAST_FLAG_HEADER = (0x7F << 1) | 1;// 11111111b (1byte)
 
     private final List<V> palette;
     private BitArray bitArray;
@@ -37,25 +36,9 @@ public final class Palette<V> {
     }
 
     public Palette(V first, BitArrayVersion version) {
-        this.bitArray = version.createArray(SIZE);
+        this.bitArray = version.createArray(ChunkSection.SECTION_SIZE);
         this.palette = new ReferenceArrayList<>(16);
         this.palette.add(first);
-    }
-
-    private static int getPaletteHeader(BitArrayVersion version, boolean runtime) {
-        return (version.bits << 1) | (runtime ? 1 : 0);
-    }
-
-    private static BitArrayVersion getVersionFromHeader(short header) {
-        return BitArrayVersion.get(header >> 1, true);
-    }
-
-    private static boolean hasCopyLastFlag(short header) {
-        return (header >> 1) == 0x7F;
-    }
-
-    private static boolean isPersistent(short header) {
-        return (header & 1) == 0;
     }
 
     public V get(int index) {
@@ -131,9 +114,9 @@ public final class Palette<V> {
             return;
         }
 
-        final BitArrayVersion version = Palette.getVersionFromHeader(header);
+        final BitArrayVersion version = Palette.getVersionFromPaletteHeader(header);
         if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(SIZE, null);
+            this.bitArray = version.createArray(ChunkSection.SECTION_SIZE, null);
             this.palette.clear();
             this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
 
@@ -147,23 +130,39 @@ public final class Palette<V> {
         for (int i = 0; i < paletteSize; i++) this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
     }
 
+    private static int getPaletteHeader(BitArrayVersion version, boolean runtime) {
+        return (version.bits << 1) | (runtime ? 1 : 0);
+    }
+
+    private static BitArrayVersion getVersionFromPaletteHeader(short header) {
+        return BitArrayVersion.get(header >> 1, true);
+    }
+
+    private static boolean hasCopyLastFlag(short header) {
+        return (header >> 1) == 0x7F;
+    }
+
+    private static boolean isPersistent(short header) {
+        return (header & 1) == 0;
+    }
+
     private BitArrayVersion readBitArrayVersion(ByteBuf byteBuf) {
         short header = byteBuf.readUnsignedByte();
-        return Palette.getVersionFromHeader(header);
+        return Palette.getVersionFromPaletteHeader(header);
     }
 
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
-        final int wordCount = version.getWordsForSize(SIZE);
+        final int wordCount = version.getWordsForSize(ChunkSection.SECTION_SIZE);
         final int[] words = new int[wordCount];
         for (int i = 0; i < wordCount; i++) words[i] = byteBuf.readIntLE();
 
-        this.bitArray = version.createArray(SIZE, words);
+        this.bitArray = version.createArray(ChunkSection.SECTION_SIZE, words);
         this.palette.clear();
     }
 
     private void onResize(BitArrayVersion version) {
-        final BitArray newBitArray = version.createArray(SIZE);
-        for (int i = 0; i < SIZE; i++)
+        final BitArray newBitArray = version.createArray(ChunkSection.SECTION_SIZE);
+        for (int i = 0; i < ChunkSection.SECTION_SIZE; i++)
             newBitArray.set(i, this.bitArray.get(i));
 
         this.bitArray = newBitArray;

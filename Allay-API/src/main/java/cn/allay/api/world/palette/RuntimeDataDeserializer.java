@@ -1,4 +1,4 @@
-package cn.allay.server.utils.palette;
+package cn.allay.api.world.palette;
 
 /**
  * Author: JukeboxMC | daoge_cmd <br>
