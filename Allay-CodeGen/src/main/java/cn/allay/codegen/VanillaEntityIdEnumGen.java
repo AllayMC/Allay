@@ -17,14 +17,13 @@ import static cn.allay.codegen.CodeGen.MAPPED_ENTITY_DATA;
  * Allay Project <br>
  */
 public class VanillaEntityIdEnumGen {
-
+    public static final ClassName IDENTIFIER_CLASS = ClassName.get("cn.allay.api.identifier", "Identifier");
+    public static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
+    public static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
     private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaEntityId.java");
 
     @SneakyThrows
     public static void generate() {
-        var identifierClass = ClassName.get("cn.allay.api.identifier", "Identifier");
-        var stringClass = ClassName.get("java.lang", "String");
-        var getterClass = ClassName.get("lombok", "Getter");
         TypeSpec.Builder codeBuilder = TypeSpec.enumBuilder("VanillaEntityId")
                 .addJavadoc(
                         "Author: daoge_cmd <br>\n" +
@@ -33,11 +32,11 @@ public class VanillaEntityIdEnumGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec
                         .builder(Identifier.class, "identifier", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(getterClass)
+                        .addAnnotation(GETTER_CLASS)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(stringClass, "identifier")
-                        .addStatement("this.$N = new $T($N)", "identifier", identifierClass, "identifier")
+                        .addParameter(STRING_CLASS, "identifier")
+                        .addStatement("this.$N = new $T($N)", "identifier", IDENTIFIER_CLASS, "identifier")
                         .build()
                 );
         for (var entry : MAPPED_ENTITY_DATA.entrySet()) {

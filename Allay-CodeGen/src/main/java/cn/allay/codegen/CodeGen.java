@@ -27,6 +27,7 @@ import static cn.allay.codegen.Utils.convertToPascalCase;
  */
 public class CodeGen {
     //TODO: 统一资源加载？eg: block_palette.nbt
+    static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Data/block_palette.nbt");
     static final List<NbtMap> BLOCK_PALETTE_NBT;
     static final Map<String, NbtMap> MAPPED_BLOCK_PALETTE_NBT = new HashMap<>();
@@ -74,7 +75,6 @@ public class CodeGen {
 
     private static final Path BLOCK_PROPERTY_TYPES_FILE = Path.of("Data/unpacked/block_property_types.json");
     static final BlockPropertyTypeFile BLOCK_PROPERTY_TYPE_INFO_FILE;
-    static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public static class BlockPropertyTypeFile {
         Map<String, BlockPropertyTypeInfo> propertyTypes;
@@ -106,10 +106,26 @@ public class CodeGen {
         }
     }
 
+    public static final Map<String, BiomeData> BIOME_DATA;
+
+    public static class BiomeData {
+        String id;
+        String type;
+    }
+
+    static {
+        try {
+            BIOME_DATA = GSON.fromJson(Files.newBufferedReader(Path.of("Data/unpacked/biome_id_and_type.json")), new HashMap<String, BiomeData>() {}.getClass().getGenericSuperclass());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
-        VanillaBlockPropertyTypeGen.generate();
-        VanillaBlockIdEnumGen.generate();
-        VanillaItemIdEnumCodeGen.generate();
-        VanillaEntityIdEnumGen.generate();
+//        VanillaBlockPropertyTypeGen.generate();
+//        VanillaBlockIdEnumGen.generate();
+//        VanillaItemIdEnumGen.generate();
+//        VanillaEntityIdEnumGen.generate();
+        VanillaBiomeIdEnumGen.generate();
     }
 }
