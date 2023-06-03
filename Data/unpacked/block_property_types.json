@@ -1,12 +1,60 @@
 {
-    "multiple_propertyType": [
+    "differentSizePropertyTypes": [
         "age",
         "rail_direction"
     ],
     "propertyTypes": {
-        "activator_rail_rail_direction": {
-            "multi": true,
-            "serializationName": "rail_direction",
+        "active": {
+            "serializationName": "active",
+            "valueType": "BOOLEAN",
+            "values": [
+                false,
+                true
+            ]
+        },
+        "age_16": {
+            "serializationName": "age",
+            "valueType": "INTEGER",
+            "values": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+            ]
+        },
+        "age_3": {
+            "serializationName": "age",
+            "valueType": "INTEGER",
+            "values": [
+                0,
+                1,
+                2
+            ]
+        },
+        "age_4": {
+            "serializationName": "age",
+            "valueType": "INTEGER",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ]
+        },
+        "age_6": {
+            "serializationName": "age",
             "valueType": "INTEGER",
             "values": [
                 0,
@@ -17,17 +65,7 @@
                 5
             ]
         },
-        "active": {
-            "multi": false,
-            "serializationName": "active",
-            "valueType": "BOOLEAN",
-            "values": [
-                false,
-                true
-            ]
-        },
         "age_bit": {
-            "multi": false,
             "serializationName": "age_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -36,7 +74,6 @@
             ]
         },
         "allow_underwater_bit": {
-            "multi": false,
             "serializationName": "allow_underwater_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -45,7 +82,6 @@
             ]
         },
         "attached_bit": {
-            "multi": false,
             "serializationName": "attached_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -54,7 +90,6 @@
             ]
         },
         "attachment": {
-            "multi": false,
             "serializationName": "attachment",
             "valueType": "ENUM",
             "values": [
@@ -65,7 +100,6 @@
             ]
         },
         "bamboo_leaf_size": {
-            "multi": false,
             "serializationName": "bamboo_leaf_size",
             "valueType": "ENUM",
             "values": [
@@ -75,7 +109,6 @@
             ]
         },
         "bamboo_stalk_thickness": {
-            "multi": false,
             "serializationName": "bamboo_stalk_thickness",
             "valueType": "ENUM",
             "values": [
@@ -84,7 +117,6 @@
             ]
         },
         "big_dripleaf_head": {
-            "multi": false,
             "serializationName": "big_dripleaf_head",
             "valueType": "BOOLEAN",
             "values": [
@@ -93,7 +125,6 @@
             ]
         },
         "big_dripleaf_tilt": {
-            "multi": false,
             "serializationName": "big_dripleaf_tilt",
             "valueType": "ENUM",
             "values": [
@@ -104,7 +135,6 @@
             ]
         },
         "bite_counter": {
-            "multi": false,
             "serializationName": "bite_counter",
             "valueType": "INTEGER",
             "values": [
@@ -118,7 +148,6 @@
             ]
         },
         "block_light_level": {
-            "multi": false,
             "serializationName": "block_light_level",
             "valueType": "INTEGER",
             "values": [
@@ -141,7 +170,6 @@
             ]
         },
         "bloom": {
-            "multi": false,
             "serializationName": "bloom",
             "valueType": "BOOLEAN",
             "values": [
@@ -150,7 +178,6 @@
             ]
         },
         "books_stored": {
-            "multi": false,
             "serializationName": "books_stored",
             "valueType": "INTEGER",
             "values": [
@@ -221,7 +248,6 @@
             ]
         },
         "brewing_stand_slot_a_bit": {
-            "multi": false,
             "serializationName": "brewing_stand_slot_a_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -230,7 +256,6 @@
             ]
         },
         "brewing_stand_slot_b_bit": {
-            "multi": false,
             "serializationName": "brewing_stand_slot_b_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -239,7 +264,6 @@
             ]
         },
         "brewing_stand_slot_c_bit": {
-            "multi": false,
             "serializationName": "brewing_stand_slot_c_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -248,7 +272,6 @@
             ]
         },
         "brushed_progress": {
-            "multi": false,
             "serializationName": "brushed_progress",
             "valueType": "INTEGER",
             "values": [
@@ -259,7 +282,6 @@
             ]
         },
         "button_pressed_bit": {
-            "multi": false,
             "serializationName": "button_pressed_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -267,31 +289,7 @@
                 true
             ]
         },
-        "cactus_age": {
-            "multi": true,
-            "serializationName": "age",
-            "valueType": "INTEGER",
-            "values": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15
-            ]
-        },
         "can_summon": {
-            "multi": false,
             "serializationName": "can_summon",
             "valueType": "BOOLEAN",
             "values": [
@@ -300,7 +298,6 @@
             ]
         },
         "candles": {
-            "multi": false,
             "serializationName": "candles",
             "valueType": "INTEGER",
             "values": [
@@ -311,7 +308,6 @@
             ]
         },
         "cauldron_liquid": {
-            "multi": false,
             "serializationName": "cauldron_liquid",
             "valueType": "ENUM",
             "values": [
@@ -321,7 +317,6 @@
             ]
         },
         "chemistry_table_type": {
-            "multi": false,
             "serializationName": "chemistry_table_type",
             "valueType": "ENUM",
             "values": [
@@ -332,7 +327,6 @@
             ]
         },
         "chisel_type": {
-            "multi": false,
             "serializationName": "chisel_type",
             "valueType": "ENUM",
             "values": [
@@ -342,21 +336,7 @@
                 "smooth"
             ]
         },
-        "chorus_flower_age": {
-            "multi": true,
-            "serializationName": "age",
-            "valueType": "INTEGER",
-            "values": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5
-            ]
-        },
         "cluster_count": {
-            "multi": false,
             "serializationName": "cluster_count",
             "valueType": "INTEGER",
             "values": [
@@ -366,18 +346,7 @@
                 3
             ]
         },
-        "cocoa_age": {
-            "multi": true,
-            "serializationName": "age",
-            "valueType": "INTEGER",
-            "values": [
-                0,
-                1,
-                2
-            ]
-        },
         "color": {
-            "multi": false,
             "serializationName": "color",
             "valueType": "ENUM",
             "values": [
@@ -400,7 +369,6 @@
             ]
         },
         "color_bit": {
-            "multi": false,
             "serializationName": "color_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -409,7 +377,6 @@
             ]
         },
         "composter_fill_level": {
-            "multi": false,
             "serializationName": "composter_fill_level",
             "valueType": "INTEGER",
             "values": [
@@ -425,7 +392,6 @@
             ]
         },
         "conditional_bit": {
-            "multi": false,
             "serializationName": "conditional_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -434,7 +400,6 @@
             ]
         },
         "coral_color": {
-            "multi": false,
             "serializationName": "coral_color",
             "valueType": "ENUM",
             "values": [
@@ -446,7 +411,6 @@
             ]
         },
         "coral_direction": {
-            "multi": false,
             "serializationName": "coral_direction",
             "valueType": "INTEGER",
             "values": [
@@ -457,7 +421,6 @@
             ]
         },
         "coral_fan_direction": {
-            "multi": false,
             "serializationName": "coral_fan_direction",
             "valueType": "INTEGER",
             "values": [
@@ -466,7 +429,6 @@
             ]
         },
         "coral_hang_type_bit": {
-            "multi": false,
             "serializationName": "coral_hang_type_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -475,7 +437,6 @@
             ]
         },
         "covered_bit": {
-            "multi": false,
             "serializationName": "covered_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -484,7 +445,6 @@
             ]
         },
         "cracked_state": {
-            "multi": false,
             "serializationName": "cracked_state",
             "valueType": "ENUM",
             "values": [
@@ -494,7 +454,6 @@
             ]
         },
         "damage": {
-            "multi": false,
             "serializationName": "damage",
             "valueType": "ENUM",
             "values": [
@@ -505,7 +464,6 @@
             ]
         },
         "dead_bit": {
-            "multi": false,
             "serializationName": "dead_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -514,7 +472,6 @@
             ]
         },
         "deprecated": {
-            "multi": false,
             "serializationName": "deprecated",
             "valueType": "INTEGER",
             "values": [
@@ -525,7 +482,6 @@
             ]
         },
         "direction": {
-            "multi": false,
             "serializationName": "direction",
             "valueType": "INTEGER",
             "values": [
@@ -536,7 +492,6 @@
             ]
         },
         "dirt_type": {
-            "multi": false,
             "serializationName": "dirt_type",
             "valueType": "ENUM",
             "values": [
@@ -545,7 +500,6 @@
             ]
         },
         "disarmed_bit": {
-            "multi": false,
             "serializationName": "disarmed_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -554,7 +508,6 @@
             ]
         },
         "door_hinge_bit": {
-            "multi": false,
             "serializationName": "door_hinge_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -563,7 +516,6 @@
             ]
         },
         "double_plant_type": {
-            "multi": false,
             "serializationName": "double_plant_type",
             "valueType": "ENUM",
             "values": [
@@ -576,7 +528,6 @@
             ]
         },
         "drag_down": {
-            "multi": false,
             "serializationName": "drag_down",
             "valueType": "BOOLEAN",
             "values": [
@@ -585,7 +536,6 @@
             ]
         },
         "dripstone_thickness": {
-            "multi": false,
             "serializationName": "dripstone_thickness",
             "valueType": "ENUM",
             "values": [
@@ -597,7 +547,6 @@
             ]
         },
         "end_portal_eye_bit": {
-            "multi": false,
             "serializationName": "end_portal_eye_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -606,7 +555,6 @@
             ]
         },
         "explode_bit": {
-            "multi": false,
             "serializationName": "explode_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -615,7 +563,6 @@
             ]
         },
         "extinguished": {
-            "multi": false,
             "serializationName": "extinguished",
             "valueType": "BOOLEAN",
             "values": [
@@ -624,7 +571,6 @@
             ]
         },
         "facing_direction": {
-            "multi": false,
             "serializationName": "facing_direction",
             "valueType": "INTEGER",
             "values": [
@@ -637,7 +583,6 @@
             ]
         },
         "fill_level": {
-            "multi": false,
             "serializationName": "fill_level",
             "valueType": "INTEGER",
             "values": [
@@ -650,31 +595,7 @@
                 6
             ]
         },
-        "fire_age": {
-            "multi": true,
-            "serializationName": "age",
-            "valueType": "INTEGER",
-            "values": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15
-            ]
-        },
         "flower_type": {
-            "multi": false,
             "serializationName": "flower_type",
             "valueType": "ENUM",
             "values": [
@@ -691,19 +612,7 @@
                 "tulip_white"
             ]
         },
-        "frosted_ice_age": {
-            "multi": true,
-            "serializationName": "age",
-            "valueType": "INTEGER",
-            "values": [
-                0,
-                1,
-                2,
-                3
-            ]
-        },
         "ground_sign_direction": {
-            "multi": false,
             "serializationName": "ground_sign_direction",
             "valueType": "INTEGER",
             "values": [
@@ -726,7 +635,6 @@
             ]
         },
         "growing_plant_age": {
-            "multi": false,
             "serializationName": "growing_plant_age",
             "valueType": "INTEGER",
             "values": [
@@ -759,7 +667,6 @@
             ]
         },
         "growth": {
-            "multi": false,
             "serializationName": "growth",
             "valueType": "INTEGER",
             "values": [
@@ -774,7 +681,6 @@
             ]
         },
         "hanging": {
-            "multi": false,
             "serializationName": "hanging",
             "valueType": "BOOLEAN",
             "values": [
@@ -783,7 +689,6 @@
             ]
         },
         "head_piece_bit": {
-            "multi": false,
             "serializationName": "head_piece_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -792,7 +697,6 @@
             ]
         },
         "height": {
-            "multi": false,
             "serializationName": "height",
             "valueType": "INTEGER",
             "values": [
@@ -807,7 +711,6 @@
             ]
         },
         "honey_level": {
-            "multi": false,
             "serializationName": "honey_level",
             "valueType": "INTEGER",
             "values": [
@@ -820,7 +723,6 @@
             ]
         },
         "huge_mushroom_bits": {
-            "multi": false,
             "serializationName": "huge_mushroom_bits",
             "valueType": "INTEGER",
             "values": [
@@ -843,7 +745,6 @@
             ]
         },
         "in_wall_bit": {
-            "multi": false,
             "serializationName": "in_wall_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -852,7 +753,6 @@
             ]
         },
         "infiniburn_bit": {
-            "multi": false,
             "serializationName": "infiniburn_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -861,7 +761,6 @@
             ]
         },
         "item_frame_map_bit": {
-            "multi": false,
             "serializationName": "item_frame_map_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -870,7 +769,6 @@
             ]
         },
         "item_frame_photo_bit": {
-            "multi": false,
             "serializationName": "item_frame_photo_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -879,7 +777,6 @@
             ]
         },
         "kelp_age": {
-            "multi": false,
             "serializationName": "kelp_age",
             "valueType": "INTEGER",
             "values": [
@@ -912,7 +809,6 @@
             ]
         },
         "lever_direction": {
-            "multi": false,
             "serializationName": "lever_direction",
             "valueType": "ENUM",
             "values": [
@@ -927,7 +823,6 @@
             ]
         },
         "liquid_depth": {
-            "multi": false,
             "serializationName": "liquid_depth",
             "valueType": "INTEGER",
             "values": [
@@ -950,7 +845,6 @@
             ]
         },
         "lit": {
-            "multi": false,
             "serializationName": "lit",
             "valueType": "BOOLEAN",
             "values": [
@@ -959,7 +853,6 @@
             ]
         },
         "moisturized_amount": {
-            "multi": false,
             "serializationName": "moisturized_amount",
             "valueType": "INTEGER",
             "values": [
@@ -974,7 +867,6 @@
             ]
         },
         "monster_egg_stone_type": {
-            "multi": false,
             "serializationName": "monster_egg_stone_type",
             "valueType": "ENUM",
             "values": [
@@ -987,7 +879,6 @@
             ]
         },
         "multi_face_direction_bits": {
-            "multi": false,
             "serializationName": "multi_face_direction_bits",
             "valueType": "INTEGER",
             "values": [
@@ -1057,19 +948,7 @@
                 63
             ]
         },
-        "nether_wart_age": {
-            "multi": true,
-            "serializationName": "age",
-            "valueType": "INTEGER",
-            "values": [
-                0,
-                1,
-                2,
-                3
-            ]
-        },
         "new_leaf_type": {
-            "multi": false,
             "serializationName": "new_leaf_type",
             "valueType": "ENUM",
             "values": [
@@ -1078,7 +957,6 @@
             ]
         },
         "occupied_bit": {
-            "multi": false,
             "serializationName": "occupied_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1087,7 +965,6 @@
             ]
         },
         "old_leaf_type": {
-            "multi": false,
             "serializationName": "old_leaf_type",
             "valueType": "ENUM",
             "values": [
@@ -1098,7 +975,6 @@
             ]
         },
         "open_bit": {
-            "multi": false,
             "serializationName": "open_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1107,7 +983,6 @@
             ]
         },
         "output_lit_bit": {
-            "multi": false,
             "serializationName": "output_lit_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1116,7 +991,6 @@
             ]
         },
         "output_subtract_bit": {
-            "multi": false,
             "serializationName": "output_subtract_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1125,7 +999,6 @@
             ]
         },
         "persistent_bit": {
-            "multi": false,
             "serializationName": "persistent_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1134,7 +1007,6 @@
             ]
         },
         "pillar_axis": {
-            "multi": false,
             "serializationName": "pillar_axis",
             "valueType": "ENUM",
             "values": [
@@ -1144,7 +1016,6 @@
             ]
         },
         "portal_axis": {
-            "multi": false,
             "serializationName": "portal_axis",
             "valueType": "ENUM",
             "values": [
@@ -1154,7 +1025,6 @@
             ]
         },
         "powered_bit": {
-            "multi": false,
             "serializationName": "powered_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1163,7 +1033,6 @@
             ]
         },
         "prismarine_block_type": {
-            "multi": false,
             "serializationName": "prismarine_block_type",
             "valueType": "ENUM",
             "values": [
@@ -1173,7 +1042,6 @@
             ]
         },
         "propagule_stage": {
-            "multi": false,
             "serializationName": "propagule_stage",
             "valueType": "INTEGER",
             "values": [
@@ -1185,7 +1053,6 @@
             ]
         },
         "rail_data_bit": {
-            "multi": false,
             "serializationName": "rail_data_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1193,8 +1060,7 @@
                 true
             ]
         },
-        "rail_rail_direction": {
-            "multi": true,
+        "rail_direction_10": {
             "serializationName": "rail_direction",
             "valueType": "INTEGER",
             "values": [
@@ -1210,8 +1076,19 @@
                 9
             ]
         },
+        "rail_direction_6": {
+            "serializationName": "rail_direction",
+            "valueType": "INTEGER",
+            "values": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        },
         "redstone_signal": {
-            "multi": false,
             "serializationName": "redstone_signal",
             "valueType": "INTEGER",
             "values": [
@@ -1233,31 +1110,7 @@
                 15
             ]
         },
-        "reeds_age": {
-            "multi": true,
-            "serializationName": "age",
-            "valueType": "INTEGER",
-            "values": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15
-            ]
-        },
         "repeater_delay": {
-            "multi": false,
             "serializationName": "repeater_delay",
             "valueType": "INTEGER",
             "values": [
@@ -1268,7 +1121,6 @@
             ]
         },
         "respawn_anchor_charge": {
-            "multi": false,
             "serializationName": "respawn_anchor_charge",
             "valueType": "INTEGER",
             "values": [
@@ -1280,7 +1132,6 @@
             ]
         },
         "rotation": {
-            "multi": false,
             "serializationName": "rotation",
             "valueType": "INTEGER",
             "values": [
@@ -1291,7 +1142,6 @@
             ]
         },
         "sand_stone_type": {
-            "multi": false,
             "serializationName": "sand_stone_type",
             "valueType": "ENUM",
             "values": [
@@ -1302,7 +1152,6 @@
             ]
         },
         "sand_type": {
-            "multi": false,
             "serializationName": "sand_type",
             "valueType": "ENUM",
             "values": [
@@ -1311,7 +1160,6 @@
             ]
         },
         "sapling_type": {
-            "multi": false,
             "serializationName": "sapling_type",
             "valueType": "ENUM",
             "values": [
@@ -1324,7 +1172,6 @@
             ]
         },
         "sea_grass_type": {
-            "multi": false,
             "serializationName": "sea_grass_type",
             "valueType": "ENUM",
             "values": [
@@ -1333,31 +1180,7 @@
                 "double_top"
             ]
         },
-        "soul_fire_age": {
-            "multi": true,
-            "serializationName": "age",
-            "valueType": "INTEGER",
-            "values": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15
-            ]
-        },
         "sponge_type": {
-            "multi": false,
             "serializationName": "sponge_type",
             "valueType": "ENUM",
             "values": [
@@ -1366,7 +1189,6 @@
             ]
         },
         "stability": {
-            "multi": false,
             "serializationName": "stability",
             "valueType": "INTEGER",
             "values": [
@@ -1381,7 +1203,6 @@
             ]
         },
         "stability_check": {
-            "multi": false,
             "serializationName": "stability_check",
             "valueType": "BOOLEAN",
             "values": [
@@ -1390,7 +1211,6 @@
             ]
         },
         "stone_brick_type": {
-            "multi": false,
             "serializationName": "stone_brick_type",
             "valueType": "ENUM",
             "values": [
@@ -1402,7 +1222,6 @@
             ]
         },
         "stone_slab_type": {
-            "multi": false,
             "serializationName": "stone_slab_type",
             "valueType": "ENUM",
             "values": [
@@ -1417,7 +1236,6 @@
             ]
         },
         "stone_slab_type_2": {
-            "multi": false,
             "serializationName": "stone_slab_type_2",
             "valueType": "ENUM",
             "values": [
@@ -1432,7 +1250,6 @@
             ]
         },
         "stone_slab_type_3": {
-            "multi": false,
             "serializationName": "stone_slab_type_3",
             "valueType": "ENUM",
             "values": [
@@ -1447,7 +1264,6 @@
             ]
         },
         "stone_slab_type_4": {
-            "multi": false,
             "serializationName": "stone_slab_type_4",
             "valueType": "ENUM",
             "values": [
@@ -1459,7 +1275,6 @@
             ]
         },
         "stone_type": {
-            "multi": false,
             "serializationName": "stone_type",
             "valueType": "ENUM",
             "values": [
@@ -1473,7 +1288,6 @@
             ]
         },
         "stripped_bit": {
-            "multi": false,
             "serializationName": "stripped_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1482,7 +1296,6 @@
             ]
         },
         "structure_block_type": {
-            "multi": false,
             "serializationName": "structure_block_type",
             "valueType": "ENUM",
             "values": [
@@ -1495,7 +1308,6 @@
             ]
         },
         "structure_void_type": {
-            "multi": false,
             "serializationName": "structure_void_type",
             "valueType": "ENUM",
             "values": [
@@ -1504,7 +1316,6 @@
             ]
         },
         "suspended_bit": {
-            "multi": false,
             "serializationName": "suspended_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1513,7 +1324,6 @@
             ]
         },
         "tall_grass_type": {
-            "multi": false,
             "serializationName": "tall_grass_type",
             "valueType": "ENUM",
             "values": [
@@ -1524,7 +1334,6 @@
             ]
         },
         "toggle_bit": {
-            "multi": false,
             "serializationName": "toggle_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1533,7 +1342,6 @@
             ]
         },
         "top_slot_bit": {
-            "multi": false,
             "serializationName": "top_slot_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1542,7 +1350,6 @@
             ]
         },
         "torch_facing_direction": {
-            "multi": false,
             "serializationName": "torch_facing_direction",
             "valueType": "ENUM",
             "values": [
@@ -1555,7 +1362,6 @@
             ]
         },
         "triggered_bit": {
-            "multi": false,
             "serializationName": "triggered_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1564,7 +1370,6 @@
             ]
         },
         "turtle_egg_count": {
-            "multi": false,
             "serializationName": "turtle_egg_count",
             "valueType": "ENUM",
             "values": [
@@ -1575,7 +1380,6 @@
             ]
         },
         "twisting_vines_age": {
-            "multi": false,
             "serializationName": "twisting_vines_age",
             "valueType": "INTEGER",
             "values": [
@@ -1608,7 +1412,6 @@
             ]
         },
         "update_bit": {
-            "multi": false,
             "serializationName": "update_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1617,7 +1420,6 @@
             ]
         },
         "upper_block_bit": {
-            "multi": false,
             "serializationName": "upper_block_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1626,7 +1428,6 @@
             ]
         },
         "upside_down_bit": {
-            "multi": false,
             "serializationName": "upside_down_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1635,7 +1436,6 @@
             ]
         },
         "vine_direction_bits": {
-            "multi": false,
             "serializationName": "vine_direction_bits",
             "valueType": "INTEGER",
             "values": [
@@ -1658,7 +1458,6 @@
             ]
         },
         "wall_block_type": {
-            "multi": false,
             "serializationName": "wall_block_type",
             "valueType": "ENUM",
             "values": [
@@ -1679,7 +1478,6 @@
             ]
         },
         "wall_connection_type_east": {
-            "multi": false,
             "serializationName": "wall_connection_type_east",
             "valueType": "ENUM",
             "values": [
@@ -1689,7 +1487,6 @@
             ]
         },
         "wall_connection_type_north": {
-            "multi": false,
             "serializationName": "wall_connection_type_north",
             "valueType": "ENUM",
             "values": [
@@ -1699,7 +1496,6 @@
             ]
         },
         "wall_connection_type_south": {
-            "multi": false,
             "serializationName": "wall_connection_type_south",
             "valueType": "ENUM",
             "values": [
@@ -1709,7 +1505,6 @@
             ]
         },
         "wall_connection_type_west": {
-            "multi": false,
             "serializationName": "wall_connection_type_west",
             "valueType": "ENUM",
             "values": [
@@ -1719,7 +1514,6 @@
             ]
         },
         "wall_post_bit": {
-            "multi": false,
             "serializationName": "wall_post_bit",
             "valueType": "BOOLEAN",
             "values": [
@@ -1728,7 +1522,6 @@
             ]
         },
         "weeping_vines_age": {
-            "multi": false,
             "serializationName": "weeping_vines_age",
             "valueType": "INTEGER",
             "values": [
@@ -1761,7 +1554,6 @@
             ]
         },
         "weirdo_direction": {
-            "multi": false,
             "serializationName": "weirdo_direction",
             "valueType": "INTEGER",
             "values": [
@@ -1772,7 +1564,6 @@
             ]
         },
         "wood_type": {
-            "multi": false,
             "serializationName": "wood_type",
             "valueType": "ENUM",
             "values": [
