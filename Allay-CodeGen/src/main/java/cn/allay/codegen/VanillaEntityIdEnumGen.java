@@ -1,7 +1,7 @@
 package cn.allay.codegen;
 
-import cn.allay.api.identifier.Identifier;
-import cn.allay.api.utils.StringUtils;
+import cn.allay.dependence.Identifier;
+import cn.allay.dependence.StringUtils;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 

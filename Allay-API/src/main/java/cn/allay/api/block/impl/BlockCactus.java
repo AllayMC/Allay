@@ -14,7 +14,7 @@ public interface BlockCactus extends Block {
     BlockType<BlockCactus> TYPE = BlockTypeBuilder
             .builder(BlockCactus.class)
             .vanillaBlock(VanillaBlockId.CACTUS, true)
-            .withProperties(VanillaBlockPropertyTypes.CACTUS_AGE)
+            .withProperties(VanillaBlockPropertyTypes.AGE_16)
             .addBasicComponents()
             .build();
 }

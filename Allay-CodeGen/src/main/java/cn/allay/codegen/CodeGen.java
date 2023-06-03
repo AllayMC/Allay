@@ -78,10 +78,10 @@ public class CodeGen {
 
     public static class BlockPropertyTypeFile {
         Map<String, BlockPropertyTypeInfo> propertyTypes;
-        List<String> multiple_propertyType;
+        List<String> differentSizePropertyTypes;
+        Map<String, Map<String, String>> specialBlockTypes;
 
         public static class BlockPropertyTypeInfo {
-            boolean multi;
             String serializationName;
             BlockPropertyType valueType;
             List<String> values;
@@ -107,7 +107,6 @@ public class CodeGen {
     }
 
     public static void main(String[] args) {
-        System.out.println();
         VanillaBlockPropertyTypeGen.generate();
         VanillaBlockIdEnumGen.generate();
         VanillaItemIdEnumCodeGen.generate();

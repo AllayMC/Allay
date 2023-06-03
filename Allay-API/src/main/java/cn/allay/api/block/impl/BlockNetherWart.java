@@ -14,7 +14,7 @@ public interface BlockNetherWart extends Block {
     BlockType<BlockNetherWart> TYPE = BlockTypeBuilder
             .builder(BlockNetherWart.class)
             .vanillaBlock(VanillaBlockId.NETHER_WART, true)
-            .withProperties(VanillaBlockPropertyTypes.NETHER_WART_AGE)
+            .withProperties(VanillaBlockPropertyTypes.AGE_4)
             .addBasicComponents()
             .build();
 }

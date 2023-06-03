@@ -14,7 +14,7 @@ public interface BlockFrostedIce extends Block {
   BlockType<BlockFrostedIce> TYPE = BlockTypeBuilder
           .builder(BlockFrostedIce.class)
           .vanillaBlock(VanillaBlockId.FROSTED_ICE, true)
-          .withProperties(VanillaBlockPropertyTypes.FROSTED_ICE_AGE)
+          .withProperties(VanillaBlockPropertyTypes.AGE_4)
           .addBasicComponents()
           .build();
 }

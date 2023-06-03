@@ -14,7 +14,7 @@ public interface BlockReeds extends Block {
     BlockType<BlockReeds> TYPE = BlockTypeBuilder
             .builder(BlockReeds.class)
             .vanillaBlock(VanillaBlockId.REEDS, true)
-            .withProperties(VanillaBlockPropertyTypes.REEDS_AGE)
+            .withProperties(VanillaBlockPropertyTypes.AGE_16)
             .addBasicComponents()
             .build();
 }

@@ -15,7 +15,7 @@ public interface BlockGoldenRail extends Block {
             .builder(BlockGoldenRail.class)
             .vanillaBlock(VanillaBlockId.GOLDEN_RAIL, true)
             .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
-                    VanillaBlockPropertyTypes.GOLDEN_RAIL_RAIL_DIRECTION)
+                    VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
             .addBasicComponents()
             .build();
 }

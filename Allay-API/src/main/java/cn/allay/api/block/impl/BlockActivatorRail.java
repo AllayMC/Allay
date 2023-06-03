@@ -15,7 +15,7 @@ public interface BlockActivatorRail extends Block {
           .builder(BlockActivatorRail.class)
           .vanillaBlock(VanillaBlockId.ACTIVATOR_RAIL, true)
           .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
-                  VanillaBlockPropertyTypes.ACTIVATOR_RAIL_RAIL_DIRECTION)
+                  VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
           .addBasicComponents()
           .build();
 }

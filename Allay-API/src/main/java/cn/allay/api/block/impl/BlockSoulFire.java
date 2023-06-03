@@ -14,7 +14,7 @@ public interface BlockSoulFire extends Block {
     BlockType<BlockSoulFire> TYPE = BlockTypeBuilder
             .builder(BlockSoulFire.class)
             .vanillaBlock(VanillaBlockId.SOUL_FIRE, true)
-            .withProperties(VanillaBlockPropertyTypes.SOUL_FIRE_AGE)
+            .withProperties(VanillaBlockPropertyTypes.AGE_16)
             .addBasicComponents()
             .build();
 }

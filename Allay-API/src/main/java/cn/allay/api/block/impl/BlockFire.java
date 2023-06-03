@@ -14,7 +14,7 @@ public interface BlockFire extends Block {
     BlockType<BlockFire> TYPE = BlockTypeBuilder
             .builder(BlockFire.class)
             .vanillaBlock(VanillaBlockId.FIRE, true)
-            .withProperties(VanillaBlockPropertyTypes.FIRE_AGE)
+            .withProperties(VanillaBlockPropertyTypes.AGE_16)
             .addBasicComponents()
             .build();
 }

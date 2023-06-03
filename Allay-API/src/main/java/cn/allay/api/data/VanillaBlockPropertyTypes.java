@@ -14,9 +14,15 @@ import java.util.List;
  * Allay Project <br>
  */
 public final class VanillaBlockPropertyTypes {
-    public static final IntPropertyType ACTIVATOR_RAIL_RAIL_DIRECTION = IntPropertyType.of("activator_rail_rail_direction", 0, 5, 0);
-
     public static final BooleanPropertyType ACTIVE = BooleanPropertyType.of("active", false);
+
+    public static final IntPropertyType AGE_16 = IntPropertyType.of("age_16", 0, 15, 0);
+
+    public static final IntPropertyType AGE_3 = IntPropertyType.of("age_3", 0, 2, 0);
+
+    public static final IntPropertyType AGE_4 = IntPropertyType.of("age_4", 0, 3, 0);
+
+    public static final IntPropertyType AGE_6 = IntPropertyType.of("age_6", 0, 5, 0);
 
     public static final BooleanPropertyType AGE_BIT = BooleanPropertyType.of("age_bit", false);
 
@@ -52,8 +58,6 @@ public final class VanillaBlockPropertyTypes {
 
     public static final BooleanPropertyType BUTTON_PRESSED_BIT = BooleanPropertyType.of("button_pressed_bit", false);
 
-    public static final IntPropertyType CACTUS_AGE = IntPropertyType.of("cactus_age", 0, 15, 0);
-
     public static final BooleanPropertyType CAN_SUMMON = BooleanPropertyType.of("can_summon", false);
 
     public static final IntPropertyType CANDLES = IntPropertyType.of("candles", 0, 3, 0);
@@ -64,11 +68,7 @@ public final class VanillaBlockPropertyTypes {
 
     public static final EnumPropertyType<ChiselType> CHISEL_TYPE = EnumPropertyType.of("chisel_type", ChiselType.class, ChiselType.values()[0]);
 
-    public static final IntPropertyType CHORUS_FLOWER_AGE = IntPropertyType.of("chorus_flower_age", 0, 5, 0);
-
     public static final IntPropertyType CLUSTER_COUNT = IntPropertyType.of("cluster_count", 0, 3, 0);
-
-    public static final IntPropertyType COCOA_AGE = IntPropertyType.of("cocoa_age", 0, 2, 0);
 
     public static final EnumPropertyType<Color> COLOR = EnumPropertyType.of("color", Color.class, Color.values()[0]);
 
@@ -120,11 +120,7 @@ public final class VanillaBlockPropertyTypes {
 
     public static final IntPropertyType FILL_LEVEL = IntPropertyType.of("fill_level", 0, 6, 0);
 
-    public static final IntPropertyType FIRE_AGE = IntPropertyType.of("fire_age", 0, 15, 0);
-
     public static final EnumPropertyType<FlowerType> FLOWER_TYPE = EnumPropertyType.of("flower_type", FlowerType.class, FlowerType.values()[0]);
-
-    public static final IntPropertyType FROSTED_ICE_AGE = IntPropertyType.of("frosted_ice_age", 0, 3, 0);
 
     public static final IntPropertyType GROUND_SIGN_DIRECTION = IntPropertyType.of("ground_sign_direction", 0, 15, 0);
 
@@ -164,8 +160,6 @@ public final class VanillaBlockPropertyTypes {
 
     public static final IntPropertyType MULTI_FACE_DIRECTION_BITS = IntPropertyType.of("multi_face_direction_bits", 0, 63, 0);
 
-    public static final IntPropertyType NETHER_WART_AGE = IntPropertyType.of("nether_wart_age", 0, 3, 0);
-
     public static final EnumPropertyType<NewLeafType> NEW_LEAF_TYPE = EnumPropertyType.of("new_leaf_type", NewLeafType.class, NewLeafType.values()[0]);
 
     public static final BooleanPropertyType OCCUPIED_BIT = BooleanPropertyType.of("occupied_bit", false);
@@ -192,11 +186,11 @@ public final class VanillaBlockPropertyTypes {
 
     public static final BooleanPropertyType RAIL_DATA_BIT = BooleanPropertyType.of("rail_data_bit", false);
 
-    public static final IntPropertyType RAIL_RAIL_DIRECTION = IntPropertyType.of("rail_rail_direction", 0, 9, 0);
+    public static final IntPropertyType RAIL_DIRECTION_10 = IntPropertyType.of("rail_direction_10", 0, 9, 0);
+
+    public static final IntPropertyType RAIL_DIRECTION_6 = IntPropertyType.of("rail_direction_6", 0, 5, 0);
 
     public static final IntPropertyType REDSTONE_SIGNAL = IntPropertyType.of("redstone_signal", 0, 15, 0);
-
-    public static final IntPropertyType REEDS_AGE = IntPropertyType.of("reeds_age", 0, 15, 0);
 
     public static final IntPropertyType REPEATER_DELAY = IntPropertyType.of("repeater_delay", 0, 3, 0);
 
@@ -211,8 +205,6 @@ public final class VanillaBlockPropertyTypes {
     public static final EnumPropertyType<SaplingType> SAPLING_TYPE = EnumPropertyType.of("sapling_type", SaplingType.class, SaplingType.values()[0]);
 
     public static final EnumPropertyType<SeaGrassType> SEA_GRASS_TYPE = EnumPropertyType.of("sea_grass_type", SeaGrassType.class, SeaGrassType.values()[0]);
-
-    public static final IntPropertyType SOUL_FIRE_AGE = IntPropertyType.of("soul_fire_age", 0, 15, 0);
 
     public static final EnumPropertyType<SpongeType> SPONGE_TYPE = EnumPropertyType.of("sponge_type", SpongeType.class, SpongeType.values()[0]);
 
@@ -280,7 +272,7 @@ public final class VanillaBlockPropertyTypes {
 
     public static final EnumPropertyType<WoodType> WOOD_TYPE = EnumPropertyType.of("wood_type", WoodType.class, WoodType.values()[0]);
 
-    public static final List<BlockPropertyType<?>> VALUES = List.of(ACTIVATOR_RAIL_RAIL_DIRECTION, ACTIVE, AGE_BIT, ALLOW_UNDERWATER_BIT, ATTACHED_BIT, ATTACHMENT, BAMBOO_LEAF_SIZE, BAMBOO_STALK_THICKNESS, BIG_DRIPLEAF_HEAD, BIG_DRIPLEAF_TILT, BITE_COUNTER, BLOCK_LIGHT_LEVEL, BLOOM, BOOKS_STORED, BREWING_STAND_SLOT_A_BIT, BREWING_STAND_SLOT_B_BIT, BREWING_STAND_SLOT_C_BIT, BRUSHED_PROGRESS, BUTTON_PRESSED_BIT, CACTUS_AGE, CAN_SUMMON, CANDLES, CAULDRON_LIQUID, CHEMISTRY_TABLE_TYPE, CHISEL_TYPE, CHORUS_FLOWER_AGE, CLUSTER_COUNT, COCOA_AGE, COLOR, COLOR_BIT, COMPOSTER_FILL_LEVEL, CONDITIONAL_BIT, CORAL_COLOR, CORAL_DIRECTION, CORAL_FAN_DIRECTION, CORAL_HANG_TYPE_BIT, COVERED_BIT, CRACKED_STATE, DAMAGE, DEAD_BIT, DEPRECATED, DIRECTION, DIRT_TYPE, DISARMED_BIT, DOOR_HINGE_BIT, DOUBLE_PLANT_TYPE, DRAG_DOWN, DRIPSTONE_THICKNESS, END_PORTAL_EYE_BIT, EXPLODE_BIT, EXTINGUISHED, FACING_DIRECTION, FILL_LEVEL, FIRE_AGE, FLOWER_TYPE, FROSTED_ICE_AGE, GROUND_SIGN_DIRECTION, GROWING_PLANT_AGE, GROWTH, HANGING, HEAD_PIECE_BIT, HEIGHT, HONEY_LEVEL, HUGE_MUSHROOM_BITS, IN_WALL_BIT, INFINIBURN_BIT, ITEM_FRAME_MAP_BIT, ITEM_FRAME_PHOTO_BIT, KELP_AGE, LEVER_DIRECTION, LIQUID_DEPTH, LIT, MOISTURIZED_AMOUNT, MONSTER_EGG_STONE_TYPE, MULTI_FACE_DIRECTION_BITS, NETHER_WART_AGE, NEW_LEAF_TYPE, OCCUPIED_BIT, OLD_LEAF_TYPE, OPEN_BIT, OUTPUT_LIT_BIT, OUTPUT_SUBTRACT_BIT, PERSISTENT_BIT, PILLAR_AXIS, PORTAL_AXIS, POWERED_BIT, PRISMARINE_BLOCK_TYPE, PROPAGULE_STAGE, RAIL_DATA_BIT, RAIL_RAIL_DIRECTION, REDSTONE_SIGNAL, REEDS_AGE, REPEATER_DELAY, RESPAWN_ANCHOR_CHARGE, ROTATION, SAND_STONE_TYPE, SAND_TYPE, SAPLING_TYPE, SEA_GRASS_TYPE, SOUL_FIRE_AGE, SPONGE_TYPE, STABILITY, STABILITY_CHECK, STONE_BRICK_TYPE, STONE_SLAB_TYPE, STONE_SLAB_TYPE_2, STONE_SLAB_TYPE_3, STONE_SLAB_TYPE_4, STONE_TYPE, STRIPPED_BIT, STRUCTURE_BLOCK_TYPE, STRUCTURE_VOID_TYPE, SUSPENDED_BIT, TALL_GRASS_TYPE, TOGGLE_BIT, TOP_SLOT_BIT, TORCH_FACING_DIRECTION, TRIGGERED_BIT, TURTLE_EGG_COUNT, TWISTING_VINES_AGE, UPDATE_BIT, UPPER_BLOCK_BIT, UPSIDE_DOWN_BIT, VINE_DIRECTION_BITS, WALL_BLOCK_TYPE, WALL_CONNECTION_TYPE_EAST, WALL_CONNECTION_TYPE_NORTH, WALL_CONNECTION_TYPE_SOUTH, WALL_CONNECTION_TYPE_WEST, WALL_POST_BIT, WEEPING_VINES_AGE, WEIRDO_DIRECTION, WOOD_TYPE);
+    public static final List<BlockPropertyType<?>> VALUES = List.of(ACTIVE, AGE_16, AGE_3, AGE_4, AGE_6, AGE_BIT, ALLOW_UNDERWATER_BIT, ATTACHED_BIT, ATTACHMENT, BAMBOO_LEAF_SIZE, BAMBOO_STALK_THICKNESS, BIG_DRIPLEAF_HEAD, BIG_DRIPLEAF_TILT, BITE_COUNTER, BLOCK_LIGHT_LEVEL, BLOOM, BOOKS_STORED, BREWING_STAND_SLOT_A_BIT, BREWING_STAND_SLOT_B_BIT, BREWING_STAND_SLOT_C_BIT, BRUSHED_PROGRESS, BUTTON_PRESSED_BIT, CAN_SUMMON, CANDLES, CAULDRON_LIQUID, CHEMISTRY_TABLE_TYPE, CHISEL_TYPE, CLUSTER_COUNT, COLOR, COLOR_BIT, COMPOSTER_FILL_LEVEL, CONDITIONAL_BIT, CORAL_COLOR, CORAL_DIRECTION, CORAL_FAN_DIRECTION, CORAL_HANG_TYPE_BIT, COVERED_BIT, CRACKED_STATE, DAMAGE, DEAD_BIT, DEPRECATED, DIRECTION, DIRT_TYPE, DISARMED_BIT, DOOR_HINGE_BIT, DOUBLE_PLANT_TYPE, DRAG_DOWN, DRIPSTONE_THICKNESS, END_PORTAL_EYE_BIT, EXPLODE_BIT, EXTINGUISHED, FACING_DIRECTION, FILL_LEVEL, FLOWER_TYPE, GROUND_SIGN_DIRECTION, GROWING_PLANT_AGE, GROWTH, HANGING, HEAD_PIECE_BIT, HEIGHT, HONEY_LEVEL, HUGE_MUSHROOM_BITS, IN_WALL_BIT, INFINIBURN_BIT, ITEM_FRAME_MAP_BIT, ITEM_FRAME_PHOTO_BIT, KELP_AGE, LEVER_DIRECTION, LIQUID_DEPTH, LIT, MOISTURIZED_AMOUNT, MONSTER_EGG_STONE_TYPE, MULTI_FACE_DIRECTION_BITS, NEW_LEAF_TYPE, OCCUPIED_BIT, OLD_LEAF_TYPE, OPEN_BIT, OUTPUT_LIT_BIT, OUTPUT_SUBTRACT_BIT, PERSISTENT_BIT, PILLAR_AXIS, PORTAL_AXIS, POWERED_BIT, PRISMARINE_BLOCK_TYPE, PROPAGULE_STAGE, RAIL_DATA_BIT, RAIL_DIRECTION_10, RAIL_DIRECTION_6, REDSTONE_SIGNAL, REPEATER_DELAY, RESPAWN_ANCHOR_CHARGE, ROTATION, SAND_STONE_TYPE, SAND_TYPE, SAPLING_TYPE, SEA_GRASS_TYPE, SPONGE_TYPE, STABILITY, STABILITY_CHECK, STONE_BRICK_TYPE, STONE_SLAB_TYPE, STONE_SLAB_TYPE_2, STONE_SLAB_TYPE_3, STONE_SLAB_TYPE_4, STONE_TYPE, STRIPPED_BIT, STRUCTURE_BLOCK_TYPE, STRUCTURE_VOID_TYPE, SUSPENDED_BIT, TALL_GRASS_TYPE, TOGGLE_BIT, TOP_SLOT_BIT, TORCH_FACING_DIRECTION, TRIGGERED_BIT, TURTLE_EGG_COUNT, TWISTING_VINES_AGE, UPDATE_BIT, UPPER_BLOCK_BIT, UPSIDE_DOWN_BIT, VINE_DIRECTION_BITS, WALL_BLOCK_TYPE, WALL_CONNECTION_TYPE_EAST, WALL_CONNECTION_TYPE_NORTH, WALL_CONNECTION_TYPE_SOUTH, WALL_CONNECTION_TYPE_WEST, WALL_POST_BIT, WEEPING_VINES_AGE, WEIRDO_DIRECTION, WOOD_TYPE);
 
     private VanillaBlockPropertyTypes() {
     }

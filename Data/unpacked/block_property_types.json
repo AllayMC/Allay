@@ -1575,5 +1575,43 @@
                 "spruce"
             ]
         }
+    },
+    "specialBlockTypes": {
+        "minecraft:activator_rail": {
+            "rail_direction": "rail_direction_6"
+        },
+        "minecraft:cactus": {
+            "age": "age_16"
+        },
+        "minecraft:chorus_flower": {
+            "age": "age_6"
+        },
+        "minecraft:cocoa": {
+            "age": "age_3"
+        },
+        "minecraft:detector_rail": {
+            "rail_direction": "rail_direction_6"
+        },
+        "minecraft:fire": {
+            "age": "age_16"
+        },
+        "minecraft:frosted_ice": {
+            "age": "age_4"
+        },
+        "minecraft:golden_rail": {
+            "rail_direction": "rail_direction_6"
+        },
+        "minecraft:nether_wart": {
+            "age": "age_4"
+        },
+        "minecraft:rail": {
+            "rail_direction": "rail_direction_10"
+        },
+        "minecraft:reeds": {
+            "age": "age_16"
+        },
+        "minecraft:soul_fire": {
+            "age": "age_16"
+        }
     }
 }

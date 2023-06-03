@@ -34,7 +34,9 @@ public class VanillaBlockClassGen {
         for (var block : VanillaBlockId.values()) {
             var className = "Block" + Utils.convertToPascalCase(block.getIdentifier().path());
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
-            generateBlockClass(block, className, path);
+            if (!Files.exists(path)) {
+                generateBlockClass(block, className, path);
+            }
         }
     }
 
@@ -56,7 +58,8 @@ public class VanillaBlockClassGen {
             AtomicInteger count = new AtomicInteger();
             states.forEach((name, value) -> {
                 initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ",\n"), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME,
-                        BLOCK_PROPERTY_TYPE_INFO_FILE.multiple_propertyType.contains(name) ? vanillaBlockId.getIdentifier().path().toUpperCase() + "_" + name.toUpperCase() : name.toUpperCase());
+                        BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name) ?
+                                BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(vanillaBlockId.getIdentifier().toString()).get(name) .toUpperCase(): name.toUpperCase());
             });
             initializer.add(")\n");
         }

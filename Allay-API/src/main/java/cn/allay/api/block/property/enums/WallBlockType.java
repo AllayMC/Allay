@@ -6,31 +6,31 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum WallBlockType {
-    ANDESITE,
+  ANDESITE,
 
-    BRICK,
+  BRICK,
 
-    COBBLESTONE,
+  COBBLESTONE,
 
-    DIORITE,
+  DIORITE,
 
-    END_BRICK,
+  END_BRICK,
 
-    GRANITE,
+  GRANITE,
 
-    MOSSY_COBBLESTONE,
+  MOSSY_COBBLESTONE,
 
-    MOSSY_STONE_BRICK,
+  MOSSY_STONE_BRICK,
 
-    NETHER_BRICK,
+  NETHER_BRICK,
 
-    PRISMARINE,
+  PRISMARINE,
 
-    RED_NETHER_BRICK,
+  RED_NETHER_BRICK,
 
-    RED_SANDSTONE,
+  RED_SANDSTONE,
 
-    SANDSTONE,
+  SANDSTONE,
 
-    STONE_BRICK
+  STONE_BRICK
 }

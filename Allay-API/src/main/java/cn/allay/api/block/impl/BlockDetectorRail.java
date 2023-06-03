@@ -15,7 +15,7 @@ public interface BlockDetectorRail extends Block {
           .builder(BlockDetectorRail.class)
           .vanillaBlock(VanillaBlockId.DETECTOR_RAIL, true)
           .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
-                  VanillaBlockPropertyTypes.DETECTOR_RAIL_RAIL_DIRECTION)
+                  VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
           .addBasicComponents()
           .build();
 }

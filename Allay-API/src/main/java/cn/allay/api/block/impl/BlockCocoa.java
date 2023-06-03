@@ -14,7 +14,7 @@ public interface BlockCocoa extends Block {
     BlockType<BlockCocoa> TYPE = BlockTypeBuilder
             .builder(BlockCocoa.class)
             .vanillaBlock(VanillaBlockId.COCOA, true)
-            .withProperties(VanillaBlockPropertyTypes.COCOA_AGE,
+            .withProperties(VanillaBlockPropertyTypes.AGE_3,
                     VanillaBlockPropertyTypes.DIRECTION)
             .addBasicComponents()
             .build();

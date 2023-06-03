@@ -14,7 +14,7 @@ public interface BlockChorusFlower extends Block {
     BlockType<BlockChorusFlower> TYPE = BlockTypeBuilder
             .builder(BlockChorusFlower.class)
             .vanillaBlock(VanillaBlockId.CHORUS_FLOWER, true)
-            .withProperties(VanillaBlockPropertyTypes.CHORUS_FLOWER_AGE)
+            .withProperties(VanillaBlockPropertyTypes.AGE_6)
             .addBasicComponents()
             .build();
 }

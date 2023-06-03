@@ -14,7 +14,7 @@ public interface BlockRail extends Block {
     BlockType<BlockRail> TYPE = BlockTypeBuilder
             .builder(BlockRail.class)
             .vanillaBlock(VanillaBlockId.RAIL, true)
-            .withProperties(VanillaBlockPropertyTypes.RAIL_RAIL_DIRECTION)
+            .withProperties(VanillaBlockPropertyTypes.RAIL_DIRECTION_10)
             .addBasicComponents()
             .build();
 }
