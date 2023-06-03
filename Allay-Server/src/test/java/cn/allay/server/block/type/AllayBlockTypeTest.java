@@ -17,6 +17,7 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
 import cn.allay.api.math.position.Pos;
 import cn.allay.server.block.component.TestComponentImpl;
 import cn.allay.server.block.component.TestComponentImplV2;
+import cn.allay.server.block.component.TestCustomBlockComponentImpl;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,7 @@ class AllayBlockTypeTest {
                         ComponentProvider.of(TestComponentImpl::new, TestComponentImpl.class),
                         ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.builder().burnChance(2).build()))
                 ))
+                .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                 .addBasicComponents()
                 .build();
         testBlockType2 = AllayBlockType
@@ -71,6 +73,7 @@ class AllayBlockTypeTest {
                         ComponentProvider.of(TestComponentImpl::new, TestComponentImpl.class),
                         ComponentProvider.ofSingleton(BlockAttributeComponentImpl.ofDynamic(blockState -> BlockAttributes.builder().burnChance(3).build()))
                 ))
+                .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                 .addBasicComponents()
                 .build();
         assertThrows(BlockTypeBuildException.class,
@@ -86,6 +89,7 @@ class AllayBlockTypeTest {
                                     of(TestComponentImplV2::new, TestComponentImplV2.class),
                                     ofSingleton(BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT))
                             ))
+                            .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                             .addBasicComponents()
                             .build();
                 }
@@ -144,17 +148,17 @@ class AllayBlockTypeTest {
         b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
         b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
         b1.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
-        assertEquals(1789459903, b1.getCurrentState().getUnsignedBlockStateHash());
+        assertEquals(1789459903, b1.getCurrentState().unsignedBlockStateHash());
 
         var b2 = BlockBlueCandle.TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
         b2.setProperty(VanillaBlockPropertyTypes.CANDLES, 2);
         b2.setProperty(VanillaBlockPropertyTypes.LIT, false);
-        assertEquals(4220034033L, b2.getCurrentState().getUnsignedBlockStateHash());
+        assertEquals(4220034033L, b2.getCurrentState().unsignedBlockStateHash());
 
         var b3 = BlockCoralFan.TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null)));
         b3.setProperty(VanillaBlockPropertyTypes.CORAL_COLOR, CoralColor.BLUE);
         b3.setProperty(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION, 0);
-        assertEquals(781710940, b3.getCurrentState().getUnsignedBlockStateHash());
+        assertEquals(781710940, b3.getCurrentState().unsignedBlockStateHash());
     }
 
     @Test

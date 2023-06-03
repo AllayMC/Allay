@@ -6,7 +6,7 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum StructureVoidType {
-    VOID,
+  AIR,
 
-    AIR
+  VOID
 }

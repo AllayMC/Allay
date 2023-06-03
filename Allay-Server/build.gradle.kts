@@ -1,5 +1,6 @@
 plugins {
     id("application")
+    id("me.champeau.jmh") version ("0.7.1")
 }
 
 description = "Allay-Server"
@@ -18,8 +19,14 @@ dependencies {
 }
 
 tasks.processResources {
-    // 输入目录
+    // input directory
     from("${rootProject.projectDir}/Data")
-    // 排除unpacked文件夹
+    // exclude unpacked folder and block palette.nbt
     exclude("**/unpacked/**")
+    //todo Confirm that the state hash is valid and remove it
+    //exclude("**/block_palette.nbt")
+}
+
+tasks.jmh {
+    jvmArgs.add("--enable-preview")
 }

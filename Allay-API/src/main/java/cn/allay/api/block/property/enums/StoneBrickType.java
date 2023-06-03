@@ -6,13 +6,13 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum StoneBrickType {
-    DEFAULT,
+  CHISELED,
 
-    MOSSY,
+  CRACKED,
 
-    CRACKED,
+  DEFAULT,
 
-    CHISELED,
+  MOSSY,
 
-    SMOOTH
+  SMOOTH
 }

@@ -1,13 +1,10 @@
 package cn.allay.api.block.property.type;
 
-import cn.allay.api.block.property.BlockPropertyTypeRegistry;
-import cn.allay.api.registry.MappedRegistry;
 import lombok.Getter;
 import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Author: daoge_cmd <br>
@@ -30,16 +27,6 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     List<DATATYPE> getValidValues();
 
     Type getType();
-
-    default <T extends BlockPropertyType<?>> T register() {
-        return registerTo(BlockPropertyTypeRegistry.getRegistry());
-    }
-
-    default <T extends BlockPropertyType<?>> T registerTo(MappedRegistry<String, BlockPropertyType<?>, Map<String, BlockPropertyType<?>>> registry) {
-        registry.register(this.getName(), this);
-        return (T) this;
-    }
-
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createValue(DATATYPE value);
 
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> tryCreateValue(Object value);

@@ -1,13 +1,14 @@
 description = "Allay-CodeGen"
 
 dependencies {
-    implementation(project(":Allay-API"))
     implementation(libs.javapoet)
+    implementation(libs.nbt)
+    implementation(libs.gson)
 }
 
 tasks.processResources {
-    // 输入目录
+    // input
     from("${rootProject.projectDir}/Data")
-    // 排除unpacked文件夹
+    //  exclude unpacked folder
     exclude("**/unpacked/**")
 }

@@ -1,21 +1,14 @@
 package cn.allay.codegen;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
-import static cn.allay.codegen.Utils.convertToPascalCase;
+import static cn.allay.codegen.CodeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 
 /**
  * Author: daoge_cmd <br>
@@ -23,16 +16,13 @@ import static cn.allay.codegen.Utils.convertToPascalCase;
  * Allay Project <br>
  */
 public class VanillaBlockPropertyTypeGen {
-    private static final Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/property");
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/property");
 
     @SneakyThrows
     public static void generate() {
-        var blockPropertyInfos = generateBlockPropertyInfos();
-        exportBlockPropertyInfosToFile(blockPropertyInfos);
-        for (BlockPropertyTypeInfo blockPropertyTypeInfo : blockPropertyInfos) {
-            if (blockPropertyTypeInfo.type == BlockPropertyType.ENUM) {
+        for (CodeGen.BlockPropertyTypeFile.BlockPropertyTypeInfo blockPropertyTypeInfo : BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.values()) {
+            if (blockPropertyTypeInfo.valueType == CodeGen.BlockPropertyTypeFile.BlockPropertyType.ENUM) {
                 generateEnumClass(blockPropertyTypeInfo);
             }
         }
@@ -50,29 +40,32 @@ public class VanillaBlockPropertyTypeGen {
         var enumPropertyClass = ClassName.get("cn.allay.api.block.property.type", "EnumPropertyType");
         var booleanPropertyClass = ClassName.get("cn.allay.api.block.property.type", "BooleanPropertyType");
         var intPropertyClass = ClassName.get("cn.allay.api.block.property.type", "IntPropertyType");
-        for (BlockPropertyTypeInfo blockPropertyTypeInfo : blockPropertyInfos) {
-            switch (blockPropertyTypeInfo.type) {
+        for (var entry : BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.entrySet()) {
+            var key = entry.getKey().toUpperCase();
+            var blockPropertyTypeInfo = entry.getValue();
+            var name = blockPropertyTypeInfo.serializationName;
+            switch (blockPropertyTypeInfo.valueType) {
                 case ENUM -> {
                     var enumClass = ClassName.get("cn.allay.api.block.property.enums", blockPropertyTypeInfo.getEnumClassName());
                     codeBuilder.addField(
                             FieldSpec
-                                    .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.of($S ,$T.class ,$T.values()[0])", enumPropertyClass, blockPropertyTypeInfo.name, enumClass, enumClass)
+                                    .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                                    .initializer("$T.of($S ,$T.class ,$T.values()[0])", enumPropertyClass, name, enumClass, enumClass)
                                     .build()
                     );
                 }
                 case BOOLEAN -> {
                     codeBuilder.addField(
                             FieldSpec
-                                    .builder(booleanPropertyClass, blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.of($S, $N)", booleanPropertyClass, blockPropertyTypeInfo.name, blockPropertyTypeInfo.validValues.get(0))
+                                    .builder(booleanPropertyClass, key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                                    .initializer("$T.of($S, $N)", booleanPropertyClass, name, blockPropertyTypeInfo.values.get(0))
                                     .build()
                     );
                 }
                 case INTEGER -> {
                     int min = Integer.MAX_VALUE;
                     int max = Integer.MIN_VALUE;
-                    for (var value : blockPropertyTypeInfo.validValues) {
+                    for (var value : blockPropertyTypeInfo.values) {
                         var intValue = Integer.parseInt(value);
                         if (intValue < min) {
                             min = intValue;
@@ -83,8 +76,8 @@ public class VanillaBlockPropertyTypeGen {
                     }
                     codeBuilder.addField(
                             FieldSpec
-                                    .builder(intPropertyClass, blockPropertyTypeInfo.name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.of($S, $L, $L, $L)", intPropertyClass, blockPropertyTypeInfo.name, min, max, blockPropertyTypeInfo.validValues.get(0))
+                                    .builder(intPropertyClass, key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                                    .initializer("$T.of($S, $L, $L, $L)", intPropertyClass, name, min, max, blockPropertyTypeInfo.values.get(0))
                                     .build()
                     );
                 }
@@ -92,7 +85,7 @@ public class VanillaBlockPropertyTypeGen {
         }
         var propertyClass = ClassName.get("cn.allay.api.block.property.type", "BlockPropertyType");
         var listClass = ParameterizedTypeName.get(ClassName.get("java.util", "List"), ParameterizedTypeName.get(propertyClass, WildcardTypeName.subtypeOf(Object.class)));
-        String paramStr = blockPropertyInfos.stream().map(info -> info.name.toUpperCase()).collect(Collectors.joining(", "));
+        String paramStr = BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.keySet().stream().map(String::toUpperCase).collect(Collectors.joining(", "));
         codeBuilder.addField(
                 FieldSpec
                         .builder(listClass, "VALUES", Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
@@ -112,15 +105,15 @@ public class VanillaBlockPropertyTypeGen {
     }
 
     @SneakyThrows
-    protected static void generateEnumClass(BlockPropertyTypeInfo info) {
+    protected static void generateEnumClass(CodeGen.BlockPropertyTypeFile.BlockPropertyTypeInfo info) {
         var enumName = info.getEnumClassName();
         TypeSpec.Builder codeBuilder = TypeSpec.enumBuilder(enumName)
                 .addJavadoc(
                         "Author: daoge_cmd <br>\n" +
-                                "Automatically generated by {@code cn.allay.codegen.VanillaBlockPropertyTypeGen} <br>\n" +
-                                "Allay Project <br>\n")
+                        "Automatically generated by {@code cn.allay.codegen.VanillaBlockPropertyTypeGen} <br>\n" +
+                        "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
-        for (var value : info.validValues) {
+        for (var value : info.values) {
             codeBuilder.addEnumConstant(value.toUpperCase());
         }
         var javaFile = JavaFile.builder("cn.allay.api.block.property.enums", codeBuilder.build()).build();
@@ -128,76 +121,5 @@ public class VanillaBlockPropertyTypeGen {
         if (Files.exists(path))
             Files.delete(path);
         Files.writeString(path, javaFile.toString());
-    }
-
-    @SneakyThrows
-    protected static List<BlockPropertyTypeInfo> generateBlockPropertyInfos() {
-        Map<String, List<String>> propertyInfos = new HashMap<>();
-        BLOCK_PALETTE_NBT.forEach(block -> block.getCompound("states").forEach((name, value) -> {
-            if (!propertyInfos.containsKey(name)) {
-                var validValues = new ArrayList<String>();
-                validValues.add(value.toString());
-                propertyInfos.put(name, validValues);
-            } else {
-                var validValues = propertyInfos.get(name);
-                if (!validValues.contains(value.toString()))
-                    validValues.add(value.toString());
-            }
-        }));
-        var boolValidValues = List.of("false", "true");
-        return propertyInfos.entrySet().stream().map(entry -> {
-            var propertyType = getPropertyType(entry.getKey(), entry.getValue());
-            return new BlockPropertyTypeInfo(entry.getKey(), propertyType == BlockPropertyType.BOOLEAN ? boolValidValues : entry.getValue(), propertyType);
-        }).toList();
-    }
-
-    @SneakyThrows
-    protected static void exportBlockPropertyInfosToFile(List<BlockPropertyTypeInfo> infos) {
-        Map<String, Map<String, Object>> converted = new HashMap<>();
-        for (var info : infos) {
-            converted.put(info.name, info.toMapStyle());
-        }
-        System.out.println("block_properties.json has exported to Data/unpacked/block_properties.json!");
-        Files.writeString(Path.of("Data/unpacked/block_properties.json"), GSON.toJson(converted));
-    }
-
-    protected static Map<String, BlockPropertyType> SPECIAL_CASES = new HashMap<>();
-
-    static {
-        SPECIAL_CASES.put("coral_fan_direction", BlockPropertyType.INTEGER);
-    }
-
-    protected static BlockPropertyType getPropertyType(String propertyName, List<String> values) {
-        if (SPECIAL_CASES.containsKey(propertyName))
-            return SPECIAL_CASES.get(propertyName);
-        try {
-            Integer.parseInt(values.get(0));
-            if (values.size() == 2)
-                return BlockPropertyType.BOOLEAN;
-            else
-                return BlockPropertyType.INTEGER;
-        } catch (NumberFormatException ignore) {
-        }
-        return BlockPropertyType.ENUM;
-    }
-
-    protected enum BlockPropertyType {
-        BOOLEAN,
-        INTEGER,
-        ENUM
-    }
-
-    protected record BlockPropertyTypeInfo(String name, List<String> validValues, BlockPropertyType type) {
-        public String getEnumClassName() {
-            return convertToPascalCase(name);
-        }
-
-        //"name" is not included
-        public Map<String, Object> toMapStyle() {
-            var map = new HashMap<String, Object>();
-            map.put("validValues", validValues);
-            map.put("valueType", type);
-            return map;
-        }
     }
 }

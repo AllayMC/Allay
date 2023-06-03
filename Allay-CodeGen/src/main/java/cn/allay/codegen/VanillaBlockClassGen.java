@@ -1,6 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.api.data.VanillaBlockId;
+import cn.allay.dependence.VanillaBlockId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -10,8 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static cn.allay.codegen.CodeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
+
 /**
- * Author: daoge_cmd <br>
+ * Depend on VanillaBlockIdEnumGen execution
+ * <p>
+ * Author: daoge_cmd | Cool_Loong<br>
  * Date: 2023/4/8 <br>
  * Allay Project <br>
  */
@@ -22,19 +26,15 @@ public class VanillaBlockClassGen {
     public static final ClassName VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaBlockPropertyTypes");
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockTypeBuilder");
-    public static final ClassName BLOCK_TYPE_REGISTRY = ClassName.get("cn.allay.api.block.type", "BlockTypeRegistry");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/impl");
 
     @SneakyThrows
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
-            var className = "Block" + Utils.convertToPascalCase(block.getIdentifier().getPath());
+            var className = "Block" + Utils.convertToPascalCase(block.getIdentifier().path());
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
-            if (Files.exists(path)) {
-                System.out.println("Class " + className + " already exists, skipped");
-            } else {
-                System.out.println("Generating " + className + ".java ...");
+            if (!Files.exists(path)) {
                 generateBlockClass(block, className, path);
             }
         }
@@ -44,8 +44,8 @@ public class VanillaBlockClassGen {
         TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(className)
                 .addSuperinterface(BLOCK_CLASS_NAME)
                 .addJavadoc(
-                        "Author: daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
+                        "Author: daoge_cmd | Cool_Loong <br>\n" +
+                                "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var initializer = CodeBlock.builder();
         initializer
@@ -57,13 +57,14 @@ public class VanillaBlockClassGen {
             initializer.add(".withProperties(");
             AtomicInteger count = new AtomicInteger();
             states.forEach((name, value) -> {
-                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ",\n"), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME, name.toUpperCase());
+                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ",\n"), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME,
+                        BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name) ?
+                                BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(vanillaBlockId.getIdentifier().toString()).get(name) .toUpperCase(): name.toUpperCase());
             });
             initializer.add(")\n");
         }
         initializer.add(".addBasicComponents()\n");
         initializer.add(".build()");
-        initializer.add(".register($T.getRegistry())", BLOCK_TYPE_REGISTRY);
         codeBuilder.addField(
                 FieldSpec
                         .builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, ClassName.get("", className)), "TYPE")
@@ -71,6 +72,16 @@ public class VanillaBlockClassGen {
                         .initializer(initializer.build())
                         .build());
         var javaFile = JavaFile.builder("cn.allay.api.block.impl", codeBuilder.build()).build();
+        if (!path.toFile().exists()) {
+            System.out.println("Generating " + className + ".java ...");
+            Files.writeString(path, javaFile.toString());
+            return;
+        }
+        if (Files.readString(path).equals(javaFile.toString())) {
+            System.out.println("Class " + className + " already exists, skipped");
+            return;
+        }
+        System.out.println("Generating " + className + ".java ...");
         Files.writeString(path, javaFile.toString());
     }
 }

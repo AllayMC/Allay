@@ -3,12 +3,11 @@ package cn.allay.api.block.impl;
 import cn.allay.api.block.Block;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockGoldenRail extends Block {
@@ -16,7 +15,7 @@ public interface BlockGoldenRail extends Block {
             .builder(BlockGoldenRail.class)
             .vanillaBlock(VanillaBlockId.GOLDEN_RAIL, true)
             .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
-                    VanillaBlockPropertyTypes.RAIL_DIRECTION)
+                    VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
             .addBasicComponents()
-            .build().register(BlockTypeRegistry.getRegistry());
+            .build();
 }

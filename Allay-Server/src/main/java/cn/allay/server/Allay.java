@@ -3,8 +3,8 @@ package cn.allay.server;
 import cn.allay.api.AllayAPI;
 import cn.allay.api.MissingImplementationException;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
-import cn.allay.api.block.palette.VanillaBlockPaletteRegistry;
-import cn.allay.api.block.property.BlockPropertyTypeRegistry;
+import cn.allay.api.block.palette.VanillaBlockStatePalette;
+import cn.allay.api.block.type.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;
@@ -16,8 +16,8 @@ import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.server.block.attribute.AllayVanillaBlockAttributeRegistry;
-import cn.allay.server.block.palette.AllayVanillaBlockPaletteRegistry;
-import cn.allay.server.block.property.AllayBlockPropertyTypeRegistry;
+import cn.allay.server.block.palette.AllayVanillaBlockStatePalette;
+import cn.allay.server.block.type.AllayBlockStateHashPalette;
 import cn.allay.server.block.type.AllayBlockType;
 import cn.allay.server.block.type.AllayBlockTypeRegistry;
 import cn.allay.server.component.injector.AllayComponentInjector;
@@ -56,10 +56,10 @@ public final class Allay {
 
         //Block
         api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
-        api.bind(BlockPropertyTypeRegistry.class, AllayBlockPropertyTypeRegistry::new);
-        api.bind(VanillaBlockPaletteRegistry.class, () -> new AllayVanillaBlockPaletteRegistry(new AllayVanillaBlockPaletteRegistry.Loader()));
         api.bind(VanillaBlockAttributeRegistry.class, () -> new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));
+        api.bind(BlockStateHashPalette.class, AllayBlockStateHashPalette::new);
         api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
+        api.bind(VanillaBlockStatePalette.class, () -> new AllayVanillaBlockStatePalette(new AllayVanillaBlockStatePalette.Loader()));
 
         //Item
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
