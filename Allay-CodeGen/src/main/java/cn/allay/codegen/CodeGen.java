@@ -1,5 +1,7 @@
 package cn.allay.codegen;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.cloudburstmc.nbt.NBTInputStream;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
+
+import static cn.allay.codegen.Utils.convertToPascalCase;
 
 /**
  * Author: daoge_cmd <br>
@@ -68,10 +72,43 @@ public class CodeGen {
         }
     }
 
+    private static final Path BLOCK_PROPERTY_TYPES_FILE = Path.of("Data/unpacked/block_property_types.json");
+    static final BlockPropertyTypeFile BLOCK_PROPERTY_TYPE_INFO_FILE;
+    static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    public static class BlockPropertyTypeFile {
+        Map<String, BlockPropertyTypeInfo> propertyTypes;
+        List<String> differentSizePropertyTypes;
+        Map<String, Map<String, String>> specialBlockTypes;
+
+        public static class BlockPropertyTypeInfo {
+            String serializationName;
+            BlockPropertyType valueType;
+            List<String> values;
+
+            public String getEnumClassName() {
+                return convertToPascalCase(serializationName);
+            }
+        }
+
+        protected enum BlockPropertyType {
+            BOOLEAN,
+            INTEGER,
+            ENUM
+        }
+    }
+
+    static {
+        try {
+            BLOCK_PROPERTY_TYPE_INFO_FILE = GSON.fromJson(Files.newBufferedReader(BLOCK_PROPERTY_TYPES_FILE), BlockPropertyTypeFile.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
-        System.out.println();
-        VanillaBlockIdEnumGen.generate();
         VanillaBlockPropertyTypeGen.generate();
+        VanillaBlockIdEnumGen.generate();
         VanillaItemIdEnumCodeGen.generate();
         VanillaEntityIdEnumGen.generate();
     }

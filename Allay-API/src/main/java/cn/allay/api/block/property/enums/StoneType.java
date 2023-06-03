@@ -6,17 +6,17 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum StoneType {
-    STONE,
+  ANDESITE,
 
-    GRANITE,
+  ANDESITE_SMOOTH,
 
-    GRANITE_SMOOTH,
+  DIORITE,
 
-    DIORITE,
+  DIORITE_SMOOTH,
 
-    DIORITE_SMOOTH,
+  GRANITE,
 
-    ANDESITE,
+  GRANITE_SMOOTH,
 
-    ANDESITE_SMOOTH
+  STONE
 }

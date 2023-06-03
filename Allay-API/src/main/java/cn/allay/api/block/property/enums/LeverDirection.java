@@ -6,19 +6,19 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum LeverDirection {
-    DOWN_EAST_WEST,
+  DOWN_EAST_WEST,
 
-    EAST,
+  DOWN_NORTH_SOUTH,
 
-    WEST,
+  EAST,
 
-    SOUTH,
+  NORTH,
 
-    NORTH,
+  SOUTH,
 
-    UP_NORTH_SOUTH,
+  UP_EAST_WEST,
 
-    UP_EAST_WEST,
+  UP_NORTH_SOUTH,
 
-    DOWN_NORTH_SOUTH
+  WEST
 }

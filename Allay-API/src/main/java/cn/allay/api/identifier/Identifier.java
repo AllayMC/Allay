@@ -1,25 +1,19 @@
 package cn.allay.api.identifier;
 
-import lombok.Getter;
-
 import static cn.allay.api.identifier.IdentifierUtils.isNamespaceValid;
 import static cn.allay.api.identifier.IdentifierUtils.isPathValid;
 import static cn.allay.api.utils.StringUtils.fastTwoPartSplit;
 
 /**
+ * A simple logging class that implements the Identified interface
+ * <p>
  * Author: daoge_cmd <br>
  * Date: 2023/3/4 <br>
  * Allay Project <br>
- * <p>
- * A simple logging class that implements the Identified interface
  */
-@Getter
-public final class Identifier implements Identified {
+public record Identifier(String namespace, String path) {
     public static final String NAMESPACE_SEPARATOR = ":";
     public static final String DEFAULT_NAMESPACE = "minecraft";
-
-    private final String namespace;
-    private final String path;
 
     public Identifier(String[] id) {
         this(id[0], id[1]);
@@ -54,10 +48,5 @@ public final class Identifier implements Identified {
 
     public int hashCode() {
         return 31 * this.namespace.hashCode() + this.path.hashCode();
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return this;
     }
 }

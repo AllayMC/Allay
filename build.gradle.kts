@@ -1,19 +1,3 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven {
-            url = uri("https://plugins.gradle.org/m2/")
-        }
-        maven {
-            url = uri("https://repo.maven.apache.org/maven2/")
-        }
-    }
-    dependencies {
-        classpath("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
-    }
-}
-
 repositories {
     mavenLocal()
     mavenCentral()
@@ -31,11 +15,19 @@ description = "The next generation minecraft server software"
 plugins {
     `kotlin-dsl`
     idea
+    id("com.github.johnrengelman.shadow") version ("8.0.0")
 }
 
 //Do not build this root project, this is only used as a control submodule
 tasks.forEach {
     it.enabled = false
+}
+
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
 }
 
 subprojects {
@@ -76,13 +68,6 @@ subprojects {
     java {
         withJavadocJar()
         withSourcesJar()
-    }
-
-    rootProject.idea {
-        module {
-            isDownloadSources = false
-            isDownloadJavadoc = true
-        }
     }
 
     tasks.named<Test>("test") {

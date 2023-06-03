@@ -1,8 +1,8 @@
 package cn.allay.api;
 
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
-import cn.allay.api.block.palette.VanillaBlockPaletteRegistry;
-import cn.allay.api.block.property.BlockPropertyTypeRegistry;
+import cn.allay.api.block.palette.VanillaBlockStatePalette;
+import cn.allay.api.block.type.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;
@@ -129,10 +129,10 @@ public final class AllayAPI {
 
         //Block
         requireImpl(BlockTypeBuilder.BlockTypeBuilderFactory.class, BlockTypeBuilder.FACTORY::set);
-        requireImpl(BlockPropertyTypeRegistry.class, BlockPropertyTypeRegistry.REGISTRY::set);
-        requireImpl(VanillaBlockPaletteRegistry.class, VanillaBlockPaletteRegistry.REGISTRY::set);
         requireImpl(VanillaBlockAttributeRegistry.class, VanillaBlockAttributeRegistry.REGISTRY::set);
+        requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
+        requireImpl(VanillaBlockStatePalette.class, VanillaBlockStatePalette.REGISTRY::set);
 
         //Item
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);

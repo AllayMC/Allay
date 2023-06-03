@@ -6,11 +6,11 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum ChiselType {
-    DEFAULT,
+  CHISELED,
 
-    CHISELED,
+  DEFAULT,
 
-    LINES,
+  LINES,
 
-    SMOOTH
+  SMOOTH
 }

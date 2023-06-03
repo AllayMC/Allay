@@ -1,13 +1,12 @@
 package cn.allay.api.block.impl;
 
 import cn.allay.api.block.Block;
-import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.data.VanillaBlockId;
 
 /**
- * Author: daoge_cmd <br>
+ * Author: daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
 public interface BlockCamera extends Block {
@@ -15,5 +14,5 @@ public interface BlockCamera extends Block {
             .builder(BlockCamera.class)
             .vanillaBlock(VanillaBlockId.CAMERA, true)
             .addBasicComponents()
-            .build().register(BlockTypeRegistry.getRegistry());
+            .build();
 }

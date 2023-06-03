@@ -1,6 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.api.data.VanillaEntityId;
+import cn.allay.dependence.VanillaEntityId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -10,7 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Author: daoge_cmd <br>
+ * Depend on VanillaEntityIdEnumGen execution
+ * <p>
+ * Author: daoge_cmd | Cool_Loong<br>
  * Date: 2023/5/26 <br>
  * Allay Project <br>
  */
@@ -27,7 +29,7 @@ public class VanillaEntityClassGen {
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var entity : VanillaEntityId.values()) {
-            var typeName = entity.getIdentifier().getPath();
+            var typeName = entity.getIdentifier().path();
             var className = "Entity" + Utils.convertToPascalCase(typeName);
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             if (Files.exists(path)) {
@@ -44,7 +46,7 @@ public class VanillaEntityClassGen {
                 .addSuperinterface(ENTITY_CLASS_NAME)
                 .addJavadoc(
                         "Author: daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
+                                "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var initializer = CodeBlock.builder();
         initializer

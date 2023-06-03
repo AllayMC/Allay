@@ -6,9 +6,9 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum SeaGrassType {
-    DEFAULT,
+  DEFAULT,
 
-    DOUBLE_TOP,
+  DOUBLE_BOT,
 
-    DOUBLE_BOT
+  DOUBLE_TOP
 }

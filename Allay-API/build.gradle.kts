@@ -5,13 +5,13 @@ plugins {
 description = "Allay-API"
 
 dependencies {
+    api(libs.bundles.log4j.api)
     api(libs.network) {
         //use allay nbt
-        exclude group: 'org.cloudburstmc', module: 'nbt'
+        exclude(group = "org.cloudburstmc", module = "nbt")
         //use it.unimi.dsi.fastutil
-        exclude group: 'com.nukkitx.fastutil'
+        exclude(group = "com.nukkitx.fastutil")
     }
-    api(libs.bundles.log4j.api)
     api(libs.nbt)
     api(libs.fastutil)
     api(libs.guava)
