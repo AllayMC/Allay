@@ -1,4 +1,4 @@
-package cn.allay.api.world;
+package cn.allay.api.world.generator;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
