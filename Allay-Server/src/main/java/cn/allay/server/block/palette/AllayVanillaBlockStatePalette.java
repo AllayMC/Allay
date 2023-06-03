@@ -1,8 +1,8 @@
 package cn.allay.server.block.palette;
 
-import cn.allay.api.block.palette.VanillaBlockPaletteRegistry;
+import cn.allay.api.block.palette.VanillaBlockStatePalette;
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.block.type.BlockStateRegistry;
+import cn.allay.api.block.type.BlockStateHashPalette;
 import cn.allay.api.registry.RegistryLoader;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.HashUtils;
@@ -26,8 +26,8 @@ import java.util.zip.GZIPInputStream;
  */
 @Deprecated
 @Slf4j
-public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry<BlockState, Integer, Map<BlockState, Integer>> implements VanillaBlockPaletteRegistry {
-    public AllayVanillaBlockPaletteRegistry(RegistryLoader<Void, Map<BlockState, Integer>> loader) {
+public final class AllayVanillaBlockStatePalette extends SimpleMappedRegistry<BlockState, Integer, Map<BlockState, Integer>> implements VanillaBlockStatePalette {
+    public AllayVanillaBlockStatePalette(RegistryLoader<Void, Map<BlockState, Integer>> loader) {
         super(null, loader);
     }
 
@@ -51,7 +51,7 @@ public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry
                         .putCompound("states", blockState.getCompound("states"))
                         .build();
                 var hash = HashUtils.fnv1a_32_nbt(tag);
-                loaded.put(BlockStateRegistry.getRegistry().get(hash), runtimeId);
+                loaded.put(BlockStateHashPalette.getRegistry().get(hash), runtimeId);
             }
             log.info("Loaded vanilla block palette data registry successfully");
             return loaded;
@@ -59,7 +59,7 @@ public final class AllayVanillaBlockPaletteRegistry extends SimpleMappedRegistry
 
         @SneakyThrows
         protected NBTInputStream getNBTInputStream() {
-            var input = AllayVanillaBlockPaletteRegistry.class.getClassLoader().getResourceAsStream("block_palette.nbt");
+            var input = AllayVanillaBlockStatePalette.class.getClassLoader().getResourceAsStream("block_palette.nbt");
             if (input == null)
                 throw new NullPointerException("block_palette.nbt not found!");
             return new NBTInputStream(

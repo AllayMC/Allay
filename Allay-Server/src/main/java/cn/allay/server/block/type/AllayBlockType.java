@@ -67,7 +67,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
 
     @Override
     public BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        return BlockStateRegistry.getRegistry().get(HashUtils.computeBlockStateHash(identifier, propertyValues));
+        return BlockStateHashPalette.getRegistry().get(HashUtils.computeBlockStateHash(identifier, propertyValues));
     }
 
     @UnmodifiableView
@@ -138,7 +138,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
     }
 
     /**
-     * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateRegistry AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
+     * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateHashPalette AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
      */
     record AllayBlockState(
             BlockType<?> blockType,
@@ -165,7 +165,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
                     newPropertyValues.add(newPropertyValue);
                 else newPropertyValues.add(value);
             }
-            return BlockStateRegistry.getRegistry().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), newPropertyValues));
+            return BlockStateHashPalette.getRegistry().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), newPropertyValues));
         }
     }
 
@@ -256,7 +256,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
                 throw new BlockTypeBuildException("Failed to create block type!", e);
             }
             type.register(BlockTypeRegistry.getRegistry());
-            type.register(BlockStateRegistry.getRegistry());
+            type.register(BlockStateHashPalette.getRegistry());
             return type;
         }
     }

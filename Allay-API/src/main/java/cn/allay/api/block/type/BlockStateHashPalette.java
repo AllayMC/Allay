@@ -10,10 +10,10 @@ import java.util.Map;
  * Date: 2023/5/29 <br>
  * Allay Project
  */
-public interface BlockStateRegistry extends MappedRegistry<Integer, BlockState, Map<Integer, BlockState>> {
-    ApiInstanceHolder<BlockStateRegistry> REGISTRY = ApiInstanceHolder.of();
+public interface BlockStateHashPalette extends MappedRegistry<Integer, BlockState, Map<Integer, BlockState>> {
+    ApiInstanceHolder<BlockStateHashPalette> REGISTRY = ApiInstanceHolder.of();
 
-    static BlockStateRegistry getRegistry() {
+    static BlockStateHashPalette getRegistry() {
         return REGISTRY.get();
     }
 }

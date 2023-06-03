@@ -44,7 +44,7 @@ public interface BlockType<T extends Block> extends Identified {
         registry.register(getIdentifier(), this);
     }
 
-    default void register(BlockStateRegistry registry) {
+    default void register(BlockStateHashPalette registry) {
         for (var s : getAllStates()) {
             registry.register(s.blockStateHash(), s);
         }

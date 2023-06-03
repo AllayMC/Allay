@@ -1,7 +1,7 @@
 package cn.allay.server.block.type;
 
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.block.type.BlockStateRegistry;
+import cn.allay.api.block.type.BlockStateHashPalette;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Allay Project
  */
 @Slf4j
-public class AllayBlockStateRegistry extends SimpleMappedRegistry<Integer, BlockState, Map<Integer, BlockState>> implements BlockStateRegistry {
-    public AllayBlockStateRegistry() {
+public class AllayBlockStateHashPalette extends SimpleMappedRegistry<Integer, BlockState, Map<Integer, BlockState>> implements BlockStateHashPalette {
+    public AllayBlockStateHashPalette() {
         super(null, input -> new ConcurrentHashMap<>());
     }
 }
