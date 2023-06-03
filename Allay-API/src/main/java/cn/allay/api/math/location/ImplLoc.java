@@ -36,7 +36,7 @@ class ImplLoc<T extends Number> extends ImplFixedLoc<T> implements Loc<T> {
     }
 
     @Override
-    public void setLevel(World world) {
+    public void setWorld(World world) {
         this.world = world;
     }
 

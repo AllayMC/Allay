@@ -13,7 +13,7 @@ class ImplPos<T extends Number> extends ImplFixedPos<T> implements Pos<T> {
     }
 
     @Override
-    public void setLevel(World world) {
+    public void setWorld(World world) {
         this.world = world;
     }
 

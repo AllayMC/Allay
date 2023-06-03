@@ -14,5 +14,5 @@ public interface Pos<T extends Number> extends FixedPos<T>, Vec3<T> {
         return new ImplPos<>(x, y, z, world);
     }
 
-    void setLevel(World world);
+    void setWorld(World world);
 }
