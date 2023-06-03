@@ -1,7 +1,14 @@
 package cn.allay.server.scheduler;
 
 import cn.allay.api.scheduler.Scheduler;
+import cn.allay.api.scheduler.task.Task;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
+import cn.allay.server.utils.GameLoop;
+import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Author: daoge_cmd <br>
@@ -13,7 +20,7 @@ class SchedulerTest {
 
     protected static final TaskCreator MOCK_TASK_CREATOR = new MockTaskCreator();
 
-    /*@Test
+    @Test
     void testAsync() {
         AtomicLong total = new AtomicLong(0);
         for (int i = 0; i < 1000000; i++) {
@@ -92,7 +99,7 @@ class SchedulerTest {
                 })
                 .build().startLoop();
         assertEquals(1000, total.get());
-    }*/
+    }
 
     private static class MockTaskCreator implements TaskCreator {
         @Override
