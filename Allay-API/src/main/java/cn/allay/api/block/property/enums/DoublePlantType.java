@@ -6,15 +6,15 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum DoublePlantType {
-    FERN,
+  FERN,
 
-    GRASS,
+  GRASS,
 
-    PAEONIA,
+  PAEONIA,
 
-    ROSE,
+  ROSE,
 
-    SUNFLOWER,
+  SUNFLOWER,
 
-    SYRINGA
+  SYRINGA
 }

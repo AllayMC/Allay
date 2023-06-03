@@ -6,15 +6,15 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum TorchFacingDirection {
-    EAST,
+  EAST,
 
-    NORTH,
+  NORTH,
 
-    SOUTH,
+  SOUTH,
 
-    TOP,
+  TOP,
 
-    UNKNOWN,
+  UNKNOWN,
 
-    WEST
+  WEST
 }

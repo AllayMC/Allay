@@ -6,9 +6,9 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum BambooLeafSize {
-    LARGE_LEAVES,
+  LARGE_LEAVES,
 
-    NO_LEAVES,
+  NO_LEAVES,
 
-    SMALL_LEAVES
+  SMALL_LEAVES
 }

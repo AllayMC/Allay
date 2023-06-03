@@ -6,11 +6,11 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum TallGrassType {
-    DEFAULT,
+  DEFAULT,
 
-    FERN,
+  FERN,
 
-    SNOW,
+  SNOW,
 
-    TALL
+  TALL
 }

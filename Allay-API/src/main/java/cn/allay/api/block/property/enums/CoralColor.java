@@ -6,13 +6,13 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum CoralColor {
-    BLUE,
+  BLUE,
 
-    PINK,
+  PINK,
 
-    PURPLE,
+  PURPLE,
 
-    RED,
+  RED,
 
-    YELLOW
+  YELLOW
 }

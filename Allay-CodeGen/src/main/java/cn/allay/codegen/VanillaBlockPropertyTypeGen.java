@@ -41,14 +41,15 @@ public class VanillaBlockPropertyTypeGen {
         var booleanPropertyClass = ClassName.get("cn.allay.api.block.property.type", "BooleanPropertyType");
         var intPropertyClass = ClassName.get("cn.allay.api.block.property.type", "IntPropertyType");
         for (var entry : BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.entrySet()) {
-            var name = entry.getKey();
+            var key = entry.getKey().toUpperCase();
             var blockPropertyTypeInfo = entry.getValue();
+            var name = blockPropertyTypeInfo.serializationName;
             switch (blockPropertyTypeInfo.valueType) {
                 case ENUM -> {
                     var enumClass = ClassName.get("cn.allay.api.block.property.enums", blockPropertyTypeInfo.getEnumClassName());
                     codeBuilder.addField(
                             FieldSpec
-                                    .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                                    .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                                     .initializer("$T.of($S ,$T.class ,$T.values()[0])", enumPropertyClass, name, enumClass, enumClass)
                                     .build()
                     );
@@ -56,7 +57,7 @@ public class VanillaBlockPropertyTypeGen {
                 case BOOLEAN -> {
                     codeBuilder.addField(
                             FieldSpec
-                                    .builder(booleanPropertyClass, name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                                    .builder(booleanPropertyClass, key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                                     .initializer("$T.of($S, $N)", booleanPropertyClass, name, blockPropertyTypeInfo.values.get(0))
                                     .build()
                     );
@@ -75,7 +76,7 @@ public class VanillaBlockPropertyTypeGen {
                     }
                     codeBuilder.addField(
                             FieldSpec
-                                    .builder(intPropertyClass, name.toUpperCase(), Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                                    .builder(intPropertyClass, key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                                     .initializer("$T.of($S, $L, $L, $L)", intPropertyClass, name, min, max, blockPropertyTypeInfo.values.get(0))
                                     .build()
                     );

@@ -6,7 +6,7 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum SpongeType {
-    DRY,
+  DRY,
 
-    WET
+  WET
 }

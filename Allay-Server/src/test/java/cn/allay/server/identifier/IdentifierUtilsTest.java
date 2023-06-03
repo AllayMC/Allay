@@ -27,16 +27,16 @@ class IdentifierUtilsTest {
     void tryParse() {
         var id = IdentifierUtils.tryParse(idStr);
         assert id != null;
-        assertEquals("pnx", id.getNamespace());
-        assertEquals("love", id.getPath());
+        assertEquals("pnx", id.namespace());
+        assertEquals("love", id.path());
     }
 
     @Test
     void of() {
         var id = IdentifierUtils.of("pnx", "love");
         assert id != null;
-        assertEquals("pnx", id.getNamespace());
-        assertEquals("love", id.getPath());
+        assertEquals("pnx", id.namespace());
+        assertEquals("love", id.path());
     }
 
     @Test

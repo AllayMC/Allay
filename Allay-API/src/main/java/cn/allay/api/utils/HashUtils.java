@@ -38,6 +38,10 @@ public class HashUtils {
                 .putCompound("states", NbtMap.fromMap(states))
                 .build();
 
+        return fnv1a_32_nbt(tag);
+    }
+
+    public int fnv1a_32_nbt(NbtMap tag) {
         byte[] bytes;
         try (var stream = new ByteArrayOutputStream();
              var outputStream = NbtUtils.createWriterLE(stream)) {

@@ -1,7 +1,7 @@
 package cn.allay.api.block.palette;
 
 import cn.allay.api.ApiInstanceHolder;
-import cn.allay.api.data.VanillaBlockId;
+import cn.allay.api.block.type.BlockState;
 import cn.allay.api.registry.MappedRegistry;
 
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
  * TODO: Replaced by blockStateHash, the block runtime id is not used anymore.
  */
 @Deprecated
-public interface VanillaBlockPaletteRegistry extends MappedRegistry<VanillaBlockId, VanillaBlockPaletteDataEntry, Map<VanillaBlockId, VanillaBlockPaletteDataEntry>> {
+public interface VanillaBlockPaletteRegistry extends MappedRegistry<BlockState, Integer, Map<BlockState, Integer>> {
     ApiInstanceHolder<VanillaBlockPaletteRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static VanillaBlockPaletteRegistry getRegistry() {

@@ -6,11 +6,11 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum TurtleEggCount {
-    FOUR_EGG,
+  FOUR_EGG,
 
-    ONE_EGG,
+  ONE_EGG,
 
-    THREE_EGG,
+  THREE_EGG,
 
-    TWO_EGG
+  TWO_EGG
 }

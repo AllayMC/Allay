@@ -6,15 +6,15 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum SaplingType {
-    ACACIA,
+  ACACIA,
 
-    BIRCH,
+  BIRCH,
 
-    DARK_OAK,
+  DARK_OAK,
 
-    JUNGLE,
+  JUNGLE,
 
-    OAK,
+  OAK,
 
-    SPRUCE
+  SPRUCE
 }

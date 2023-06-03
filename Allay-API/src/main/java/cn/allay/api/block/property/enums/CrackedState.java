@@ -6,9 +6,9 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum CrackedState {
-    CRACKED,
+  CRACKED,
 
-    MAX_CRACKED,
+  MAX_CRACKED,
 
-    NO_CRACKS
+  NO_CRACKS
 }

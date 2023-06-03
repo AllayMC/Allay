@@ -6,9 +6,9 @@ package cn.allay.api.block.property.enums;
  * Allay Project <br>
  */
 public enum PortalAxis {
-    UNKNOWN,
+  UNKNOWN,
 
-    X,
+  X,
 
-    Z
+  Z
 }
