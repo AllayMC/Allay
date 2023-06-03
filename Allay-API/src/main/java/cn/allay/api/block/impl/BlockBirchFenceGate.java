@@ -11,12 +11,12 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBirchFenceGate extends Block {
-    BlockType<BlockBirchFenceGate> TYPE = BlockTypeBuilder
-            .builder(BlockBirchFenceGate.class)
-            .vanillaBlock(VanillaBlockId.BIRCH_FENCE_GATE, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.IN_WALL_BIT,
-                    VanillaBlockPropertyTypes.OPEN_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBirchFenceGate> TYPE = BlockTypeBuilder
+          .builder(BlockBirchFenceGate.class)
+          .vanillaBlock(VanillaBlockId.BIRCH_FENCE_GATE, true)
+          .withProperties(VanillaBlockPropertyTypes.DIRECTION,
+                  VanillaBlockPropertyTypes.IN_WALL_BIT,
+                  VanillaBlockPropertyTypes.OPEN_BIT)
+          .addBasicComponents()
+          .build();
 }

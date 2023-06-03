@@ -1,6 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.api.data.VanillaItemId;
+import cn.allay.dependence.VanillaItemId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -27,7 +27,7 @@ public class VanillaItemClassGen {
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var item : VanillaItemId.values()) {
-            var typeName = item.getIdentifier().getPath().replace(".", "_");
+            var typeName = item.getIdentifier().path().replace(".", "_");
             var className = item == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0" : "Item" + Utils.convertToPascalCase(typeName);
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             if (Files.exists(path)) {

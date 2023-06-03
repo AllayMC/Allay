@@ -52,7 +52,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     @Nullable
     @Impl
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getProperty(PROPERTY property) {
-        return (DATATYPE) currentState.getPropertyValues().get(property).getValue();
+        return (DATATYPE) currentState.propertyValues().get(property).getValue();
     }
 
     @Override

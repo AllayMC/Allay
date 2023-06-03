@@ -1,6 +1,6 @@
 package cn.allay.dataext;
 
-import cn.allay.api.data.VanillaEntityId;
+import cn.allay.dependence.VanillaEntityId;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
@@ -72,7 +72,7 @@ public class VanillaEntityDataExtractor {
     static String resolveFileName(VanillaEntityId entityId) {
         return switch (entityId) {
             case COD -> "fish.json";
-            default -> entityId.getIdentifier().getPath() + ".json";
+            default -> entityId.getIdentifier().path() + ".json";
         };
     }
 

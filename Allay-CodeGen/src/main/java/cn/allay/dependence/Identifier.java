@@ -1,8 +1,8 @@
-package cn.allay.api.identifier;
+package cn.allay.dependence;
 
-import static cn.allay.api.identifier.IdentifierUtils.isNamespaceValid;
-import static cn.allay.api.identifier.IdentifierUtils.isPathValid;
-import static cn.allay.api.utils.StringUtils.fastTwoPartSplit;
+import static cn.allay.dependence.IdentifierUtils.isNamespaceValid;
+import static cn.allay.dependence.IdentifierUtils.isPathValid;
+import static cn.allay.dependence.StringUtils.fastTwoPartSplit;
 
 /**
  * A simple logging class that implements the Identified interface

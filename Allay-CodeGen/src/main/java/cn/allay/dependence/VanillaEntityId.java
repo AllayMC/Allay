@@ -1,8 +1,4 @@
-package cn.allay.api.data;
-
-import cn.allay.api.entity.type.EntityType;
-import cn.allay.api.entity.type.EntityTypeRegistry;
-import cn.allay.api.identifier.Identifier;
+package cn.allay.dependence;
 
 import java.lang.String;
 
@@ -213,9 +209,5 @@ public enum VanillaEntityId {
 
   VanillaEntityId(String identifier) {
     this.identifier = new Identifier(identifier);
-  }
-
-  public EntityType<?> getEntityType() {
-    return EntityTypeRegistry.getRegistry().get(this.getIdentifier());
   }
 }

@@ -1,8 +1,4 @@
-package cn.allay.api.data;
-
-import cn.allay.api.identifier.Identifier;
-import cn.allay.api.item.type.ItemType;
-import cn.allay.api.item.type.ItemTypeRegistry;
+package cn.allay.dependence;
 
 import java.lang.String;
 
@@ -2551,9 +2547,5 @@ public enum VanillaItemId {
 
   VanillaItemId(String identifier) {
     this.identifier = new Identifier(identifier);
-  }
-
-  public ItemType<?> getItemType() {
-    return ItemTypeRegistry.getRegistry().get(this.getIdentifier());
   }
 }

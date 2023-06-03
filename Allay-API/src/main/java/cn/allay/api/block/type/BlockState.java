@@ -11,15 +11,15 @@ import java.util.Map;
  * Allay Project <br>
  */
 public interface BlockState {
-    BlockType<?> getBlockType();
+    BlockType<?> blockType();
 
     @UnmodifiableView
-    Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues();
+    Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues();
 
     BlockState updatePropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> newPropertyValue);
 
 
-    int getBlockStateHash();
+    int blockStateHash();
 
-    long getUnsignedBlockStateHash();
+    long unsignedBlockStateHash();
 }

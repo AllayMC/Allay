@@ -11,11 +11,11 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDetectorRail extends Block {
-    BlockType<BlockDetectorRail> TYPE = BlockTypeBuilder
-            .builder(BlockDetectorRail.class)
-            .vanillaBlock(VanillaBlockId.DETECTOR_RAIL, true)
-            .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
-                    VanillaBlockPropertyTypes.DETECTOR_RAIL_RAIL_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDetectorRail> TYPE = BlockTypeBuilder
+          .builder(BlockDetectorRail.class)
+          .vanillaBlock(VanillaBlockId.DETECTOR_RAIL, true)
+          .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
+                  VanillaBlockPropertyTypes.DETECTOR_RAIL_RAIL_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

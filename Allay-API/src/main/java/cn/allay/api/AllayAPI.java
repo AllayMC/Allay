@@ -133,8 +133,8 @@ public final class AllayAPI {
         requireImpl(BlockPropertyTypeRegistry.class, BlockPropertyTypeRegistry.REGISTRY::set);
         requireImpl(VanillaBlockPaletteRegistry.class, VanillaBlockPaletteRegistry.REGISTRY::set);
         requireImpl(VanillaBlockAttributeRegistry.class, VanillaBlockAttributeRegistry.REGISTRY::set);
-        requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
         requireImpl(BlockStateRegistry.class, BlockStateRegistry.REGISTRY::set);
+        requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
 
         //Item
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);

@@ -108,9 +108,9 @@ public class CodeGen {
 
     public static void main(String[] args) {
         System.out.println();
-//        VanillaBlockIdEnumGen.generate();
         VanillaBlockPropertyTypeGen.generate();
-//        VanillaItemIdEnumCodeGen.generate();
-//        VanillaEntityIdEnumGen.generate();
+        VanillaBlockIdEnumGen.generate();
+        VanillaItemIdEnumCodeGen.generate();
+        VanillaEntityIdEnumGen.generate();
     }
 }

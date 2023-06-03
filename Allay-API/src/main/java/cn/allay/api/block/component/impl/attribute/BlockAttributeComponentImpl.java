@@ -48,7 +48,7 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
     }
 
     public static BlockAttributeComponentImpl ofMappedBlockStateHash(Map<Integer, BlockAttributes> attributeMap, BlockAttributes defaultAttributes) {
-        return new BlockAttributeComponentImpl(state -> attributeMap.getOrDefault(state.getBlockStateHash(), defaultAttributes));
+        return new BlockAttributeComponentImpl(state -> attributeMap.getOrDefault(state.blockStateHash(), defaultAttributes));
     }
 
     @Override

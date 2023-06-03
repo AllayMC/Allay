@@ -124,13 +124,13 @@ class BlockAttributesTest {
         var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
         for (var state : type.getAllStates()) {
             block.setState(state);
-            var expected = attributeMap.get(state.getBlockStateHash());
+            var expected = attributeMap.get(state.blockStateHash());
 //            if (expected == null) {
 //                missing.add(state);
 //                continue;
 //            }
             assertNotNull(expected, "Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
-            assertEquals(attributeMap.get(state.getBlockStateHash()), block.getBlockAttributes());
+            assertEquals(attributeMap.get(state.blockStateHash()), block.getBlockAttributes());
         }
     }
 }

@@ -1,8 +1,9 @@
 description = "Allay-CodeGen"
 
 dependencies {
-    implementation(project(":Allay-API"))
     implementation(libs.javapoet)
+    implementation(libs.nbt)
+    implementation(libs.gson)
 }
 
 tasks.processResources {

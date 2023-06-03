@@ -1,6 +1,6 @@
 package cn.allay.codegen;
 
-import cn.allay.api.data.VanillaBlockId;
+import cn.allay.dependence.VanillaBlockId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -13,6 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static cn.allay.codegen.CodeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 
 /**
+ * Depend on VanillaBlockIdEnumGen execution
+ * <p>
  * Author: daoge_cmd | Cool_Loong<br>
  * Date: 2023/4/8 <br>
  * Allay Project <br>
@@ -30,7 +32,7 @@ public class VanillaBlockClassGen {
     public static void main(String[] args) {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
-            var className = "Block" + Utils.convertToPascalCase(block.getIdentifier().getPath());
+            var className = "Block" + Utils.convertToPascalCase(block.getIdentifier().path());
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             generateBlockClass(block, className, path);
         }
@@ -54,7 +56,7 @@ public class VanillaBlockClassGen {
             AtomicInteger count = new AtomicInteger();
             states.forEach((name, value) -> {
                 initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ",\n"), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME,
-                        BLOCK_PROPERTY_TYPE_INFO_FILE.multiple_propertyType.contains(name) ? vanillaBlockId.getIdentifier().getPath().toUpperCase() + "_" + name.toUpperCase() : name.toUpperCase());
+                        BLOCK_PROPERTY_TYPE_INFO_FILE.multiple_propertyType.contains(name) ? vanillaBlockId.getIdentifier().path().toUpperCase() + "_" + name.toUpperCase() : name.toUpperCase());
             });
             initializer.add(")\n");
         }
