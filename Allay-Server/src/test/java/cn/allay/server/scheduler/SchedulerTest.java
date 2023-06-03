@@ -6,6 +6,9 @@ import cn.allay.api.scheduler.taskcreator.TaskCreator;
 import cn.allay.server.utils.GameLoop;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,8 +23,9 @@ class SchedulerTest {
 
     protected static final TaskCreator MOCK_TASK_CREATOR = new MockTaskCreator();
 
+    //TODO: 修复概率FAILED
     @Test
-    void testAsync() {
+    void testAsync() throws InterruptedException {
         AtomicLong total = new AtomicLong(0);
         for (int i = 0; i < 1000; i++) {
             scheduler.scheduleDelayed(new Task() {
@@ -45,6 +49,7 @@ class SchedulerTest {
                     scheduler.ticking();
                 })
                 .build().startLoop();
+        Thread.sleep(Duration.of(1, ChronoUnit.SECONDS));
         assertEquals(1000, total.get());
     }
 
