@@ -1,6 +1,5 @@
 package cn.allay.api.world.gamerule;
 
-import cn.allay.api.identifier.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -43,22 +42,18 @@ public enum GameRule {
     SHOW_BORDER_EFFECT("showBorderEffect", true, Type.BOOLEAN),
     FUNCTION_COMMAND_LIMIT("functionCommandLimit", 10000, Type.INT);
 
-    private final Identifier identifier;
+    private final String name;
     private final Object defaultValue;
     private final Type type;
 
-    GameRule(String identifier, Object defaultValue, Type type) {
-        this(new Identifier(identifier), defaultValue, type);
-    }
-
-    GameRule(Identifier identifier, Object defaultValue, Type type) {
-        this.identifier = identifier;
+    GameRule(String name, Object defaultValue, Type type) {
+        this.name = name;
         this.defaultValue = defaultValue;
         this.type = type;
     }
 
-    public Identifier getIdentifier() {
-        return this.identifier;
+    public String getName() {
+        return this.name;
     }
 
     public Object getDefaultValue() {
@@ -70,8 +65,8 @@ public enum GameRule {
     }
 
     @Nullable
-    public static GameRule fromIdentifier(Identifier identifier) {
-        return Arrays.stream(values()).filter(gameRule -> gameRule.getIdentifier().equals(identifier)).findFirst().orElseGet(null);
+    public static GameRule fromName(String name) {
+        return Arrays.stream(values()).filter(gameRule -> gameRule.getName().equals(name)).findFirst().orElseGet(null);
     }
 
     public static boolean parseByteToBoolean(byte value) {

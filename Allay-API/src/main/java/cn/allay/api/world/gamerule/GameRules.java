@@ -30,7 +30,7 @@ public class GameRules {
         final Set<Map.Entry<GameRule, Object>> entrySet = this.gameRules.entrySet();
         final List<GameRuleData<?>> networkList = new ArrayList<>(entrySet.size());
         for (Map.Entry<GameRule, Object> entry : entrySet) {
-            networkList.add(new GameRuleData<>(entry.getKey().getIdentifier().toString(), entry.getValue()));
+            networkList.add(new GameRuleData<>(entry.getKey().getName().toString(), entry.getValue()));
         }
         return networkList;
     }

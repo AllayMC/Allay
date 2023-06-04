@@ -8,9 +8,11 @@ import java.io.File;
  * Allay Project
  */
 public interface WorldProvider {
-    World getWorld();
-
     File getWorldFolder();
 
-    WorldData getWorldData();
+    WorldReader getChunkReader();
+
+    WorldWriter getChunkWriter();
+
+    void close();
 }
