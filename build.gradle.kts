@@ -35,8 +35,8 @@ subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "com.github.johnrengelman.shadow")
 
-    java.sourceCompatibility = JavaVersion.VERSION_19
-    java.targetCompatibility = JavaVersion.VERSION_19
+    java.sourceCompatibility = JavaVersion.VERSION_20
+    java.targetCompatibility = JavaVersion.VERSION_20
 
     repositories {
         mavenLocal()
