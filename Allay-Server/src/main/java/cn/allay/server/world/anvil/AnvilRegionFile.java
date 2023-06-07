@@ -43,10 +43,10 @@ public final class AnvilRegionFile implements Cloneable {
     private final int regionX;
     private final int regionZ;
 
-    public AnvilRegionFile(Path mcaFile, int regionX, int regionZ) throws IOException {
+    public AnvilRegionFile(Path region, int regionX, int regionZ) throws IOException {
         this.regionX = regionX;
         this.regionZ = regionZ;
-        channel = FileChannel.open(mcaFile, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
+        channel = FileChannel.open(region.resolve("r.%d.%d.mca".formatted(regionX, regionZ)), StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
         //Set the pointer in the file header
         channel.position(0);
 
@@ -72,10 +72,10 @@ public final class AnvilRegionFile implements Cloneable {
                 throw new EOFException();
             }
         }
-        //`locations` buffer to complete the preparation for reading
+        // `locations` buffer to complete the preparation for reading
         locations.flip();
         IntBuffer ints = locations.asIntBuffer();
-        //init locations and timestamps
+        // init locations and timestamps
         for (int i = 0; i < MAX_ENTRY_COUNT; i++) {
             int loc = ints.get();
             this.locations.add(loc);
@@ -132,20 +132,20 @@ public final class AnvilRegionFile implements Cloneable {
     }
 
     public synchronized void writeChunk(int chunkX, int chunkZ, NbtMap chunkData) throws IOException {
-        //Convert chunk data to byte stream and compress
+        // Convert chunk data to byte stream and compress
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         NBTOutputStream writer = NbtUtils.createWriter(new BufferedOutputStream(byteArrayOutputStream));
         writer.writeTag(chunkData);
         byte[] deflateData = ZlibProviderType.LibDeflateThreadLocal.of(CompressionType.ZLIB, 6).deflate(byteArrayOutputStream.toByteArray());
         writer.close();
-        //Calculate the number of sector needed for the chunk
+        // Calculate the number of sector needed for the chunk
         int sectorCount = (deflateData.length + CHUNK_HEADER_LENGTH) / SECTOR_SIZE;
-        //The maximum sector count of a chunk can use 256 sector, that is to say, the maximum size of a chunk is 256 * 4096 = 1M
+        // The maximum sector count of a chunk can use 256 sector, that is to say, the maximum size of a chunk is 256 * 4096 = 1M
         if (sectorCount >= SECTOR_COUNT_PER1M) {
             throw new IllegalArgumentException("Writing this chunk would take too many sectors (limit is 255, but " + sectorCount + " is needed)");
         }
 
-        //Get the sector index and size previously used by this chunk
+        // Get the sector index and size previously used by this chunk
         var index = index(chunkX, chunkZ);
         var previousSectorCount = sectorCount(locations.getInt(index));
         var previousSectorStart = sectorIndex(locations.getInt(index));
@@ -154,7 +154,7 @@ public final class AnvilRegionFile implements Cloneable {
         long position;
         int sectorStartCount;
 
-        //Find the first sector index that is continuous and enough to store data
+        // Find the first sector index that is continuous and enough to store data
         sectorStartCount = findAvailableSectors(sectorCount);
         // Not found , we need to allocate sectors
         if (sectorStartCount == -1) {
@@ -168,18 +168,18 @@ public final class AnvilRegionFile implements Cloneable {
             }
             appendToEnd = true;
         } else {
-            //found, calculate file offset
+            // found, calculate file offset
             position = (long) sectorStartCount * SECTOR_SIZE;
         }
-        //Mark the new partition
+        // Mark the new partition
         usedSectors.set(sectorStartCount, sectorStartCount + sectorCount + 1);
 
-        //Write chunk header data
+        // Write chunk header data
         ByteBuffer header = ByteBuffer.allocateDirect(CHUNK_HEADER_LENGTH);
         header.putInt(deflateData.length).put(ZLIB_COMPRESSION);
         header.flip();
 
-        //write to file
+        // write to file
         channel.position(position);
         channel.write(new ByteBuffer[]{header, ByteBuffer.wrap(deflateData)});
         // we are at the EOF, we may have to add some padding
@@ -187,7 +187,7 @@ public final class AnvilRegionFile implements Cloneable {
             alignment4K();
         }
 
-        //Update and write locations and timestamps
+        // Update and write locations and timestamps
         locations.set(index, buildLocation(sectorStartCount, sectorCount));
         timestamps.set(index, Long.valueOf(System.currentTimeMillis()).intValue());
         ByteBuffer location = ByteBuffer.allocateDirect(4);//int

@@ -14,18 +14,15 @@ import java.nio.file.Path;
  * Allay Project
  */
 public class AnvilRegionFileTest {
-    final Path mca00 = Path.of("src/test/resources/world/r.0.0.mca");
+    final Path regionPath = Path.of("src/test/resources/world");
 
     @Test
     void loadMCA() throws IOException {
-        AnvilRegionFile anvilRegionFile = new AnvilRegionFile(mca00, 0, 0, new DimensionInfo(0, -64, 319));
+        AnvilRegionFile anvilRegionFile = new AnvilRegionFile(regionPath, 0, 0);
         NbtMap nbtMap = anvilRegionFile.readChunkData(0, 0);
-        System.out.println(nbtMap.toString());
+        System.out.println(nbtMap.toSNBT(4));
     }
     @Test
     void writeMCA() throws IOException {
-        AnvilRegionFile anvilRegionFile = new AnvilRegionFile(mca00, 0, 0, new DimensionInfo(0, -64, 319));
-        NbtMap nbtMap = anvilRegionFile.readChunkData(0, 0);
-        System.out.println(nbtMap.toString());
     }
 }

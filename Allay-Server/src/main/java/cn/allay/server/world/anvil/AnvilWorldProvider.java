@@ -26,11 +26,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AnvilWorldProvider implements WorldProvider {
     private final Path worldFolderPath;
+    private final Path regionFolderPath;
     private final Long2ObjectMap<AnvilRegionFile> regions = new Long2ObjectOpenHashMap<>();
     private final ConcurrentHashMap<Long, AnvilRegionFile> chunkCaches = new ConcurrentHashMap<>();
 
     public AnvilWorldProvider(Path worldFolderPath) {
         this.worldFolderPath = worldFolderPath;
+        this.regionFolderPath = worldFolderPath.resolve("region");
     }
 
     @Override
@@ -40,6 +42,26 @@ public class AnvilWorldProvider implements WorldProvider {
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionData) {
+//        long chunkHash = chunkHash(x, z);
+//        AnvilRegionFile region = regions.get(chunkHash);
+//        try {
+//            if (region == null) {
+//                region = new AnvilRegionFile(regionFolderPath, x, z);
+//                regions.put(chunkHash, region);
+//            }
+//            AnvilRegionFile finalRegion = region;
+//            CompletableFuture.runAsync(()->{
+//                NbtMap chunkNBT;
+//                try {
+//                    chunkNBT = finalRegion.readChunkData(x, z);
+//                    Chunk chunk = new AnvilChunk(chunkNBT, dimensionData);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            })
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         return null;
     }
 

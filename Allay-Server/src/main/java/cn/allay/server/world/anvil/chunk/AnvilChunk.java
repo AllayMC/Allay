@@ -2,11 +2,12 @@ package cn.allay.server.world.anvil.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
+import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.chunk.ChunkSection;
-import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.heightmap.HeightMap;
 import cn.allay.api.world.heightmap.HeightType;
+import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -30,7 +31,7 @@ public class AnvilChunk implements Chunk {
     private final DimensionInfo dimensionData;
     private final ReadWriteLock readWriteLock;
 
-    private AnvilChunk(DimensionInfo dimensionData) {
+    public AnvilChunk(NbtMap data, DimensionInfo dimensionData) {
         this.sections = new ArrayList<>(16);
         //Only one height map is used now, and more may be used in the future
         this.heightMaps = new HeightMap[]{new HeightMap(new long[37])};
