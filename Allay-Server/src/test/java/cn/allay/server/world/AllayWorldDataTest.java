@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 
 public class AllayWorldDataTest {
-    final Path je = Path.of("src/test/resources/leveldat/jelevel.dat");
-    final Path be = Path.of("src/test/resources/leveldat/belevel.dat");
+    final Path je = Path.of("src/test/resources/world/jelevel.dat");
+    final Path be = Path.of("src/test/resources/world/belevel.dat");
 
     /*@SneakyThrows
     @Test

@@ -1,7 +1,7 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.world.dimension.Dimension;
+import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.heightmap.HeightType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Range;
  * Allay Project
  */
 public interface Chunk {
-    Dimension getDimensionData();
+    DimensionInfo getDimensionData();
 
     @Nullable
     ChunkSection getSection(@Range(from = 0, to = 23) int y);
