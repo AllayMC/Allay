@@ -2,8 +2,6 @@ package cn.allay.api.je2be;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.ToNumberStrategy;
-import com.google.gson.stream.JsonReader;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -79,19 +77,20 @@ public final class DataConvert {
      * Convert je BlockState NBT to be BlockState NBT
      *
      * <pre>
-     *        BE                      JE
-     *  {                       {
-     *      name: xxx,             Name: xxx,
-     *      states: {    =>        Properties: {
-     *          xxx                    xxx
-     *      }                      }
-     *  }                       }
+     *           BE                                                  JE
+     *  {                                          {
+     *   "name": "minecraft:sapling",                "Name": "minecraft:acacia_sapling",
+     *   "states": {                                 "Properties": {
+     *     "age_bit": true,               =>             "stage": 1i
+     *     "sapling_type": "acacia"                   }
+     *   }                                         }
+     * }
      *
      * </pre>
      * @param beBlockState the BlockState NBT
      * @return the nbt map
      */
-    public static NbtMap convertJEBlockState(NbtMap beBlockState) {
+    public static NbtMap convertToJEBlockState(NbtMap beBlockState) {
         if (BE_2_JE_BLOCKS_MAPPING == null) {
             loadBlockStateMapping();
         }

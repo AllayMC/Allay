@@ -19,7 +19,8 @@ public class DataConvertTest {
         states.put("sapling_type", "acacia");
         NbtMap beState = NbtMap.builder().putString("name", "minecraft:sapling")
                 .putCompound("states", NbtMap.fromMap(states)).build();
-        NbtMap nbtMap = DataConvert.convertJEBlockState(beState);
+        NbtMap nbtMap = DataConvert.convertToJEBlockState(beState);
+        System.out.println(beState);
         System.out.println(nbtMap);
     }
 }
