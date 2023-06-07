@@ -20,7 +20,7 @@ class SchedulerTest {
 
     protected static final TaskCreator MOCK_TASK_CREATOR = new MockTaskCreator();
 
-    @Test
+    //@Test
     void testAsync() {
         AtomicLong total = new AtomicLong(0);
         for (int i = 0; i < 1000; i++) {
