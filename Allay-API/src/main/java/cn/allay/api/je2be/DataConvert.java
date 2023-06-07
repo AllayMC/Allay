@@ -75,6 +75,22 @@ public final class DataConvert {
         JE_2_BE_BLOCKS_MAPPING.trim();
     }
 
+    /**
+     * Convert je BlockState NBT to be BlockState NBT
+     *
+     * <pre>
+     *        BE                      JE
+     *  {                       {
+     *      name: xxx,             Name: xxx,
+     *      states: {    =>        Properties: {
+     *          xxx                    xxx
+     *      }                      }
+     *  }                       }
+     *
+     * </pre>
+     * @param beBlockState the BlockState NBT
+     * @return the nbt map
+     */
     public static NbtMap convertJEBlockState(NbtMap beBlockState) {
         if (BE_2_JE_BLOCKS_MAPPING == null) {
             loadBlockStateMapping();
