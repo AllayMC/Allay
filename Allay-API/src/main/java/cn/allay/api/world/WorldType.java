@@ -1,4 +1,4 @@
-package cn.allay.api.world.generator;
+package cn.allay.api.world;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Range;
  */
 @AllArgsConstructor
 @Getter
-public enum GeneratorType {
+public enum WorldType {
 
     OLD(0),
     INFINITE(1),
@@ -20,12 +20,12 @@ public enum GeneratorType {
     // The generator id.
     private final int id;
 
-    public static GeneratorType fromId(@Range(from = 0, to = 2) int id) {
+    public static WorldType fromId(@Range(from = 0, to = 2) int id) {
         return switch (id) {
             case 0 -> OLD;
             case 1 -> INFINITE;
             case 2 -> FLAT;
-            default -> throw new IllegalArgumentException("Unknown generator type id: " + id);
+            default -> throw new IllegalArgumentException("Unknown world type id: " + id);
         };
     }
 }
