@@ -3,7 +3,7 @@ package cn.allay.server.world.anvil;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.Chunk;
-import cn.allay.api.world.storage.WorldProvider;
+import cn.allay.api.world.storage.NativeFileWorldProvider;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.nbt.NbtMap;
@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 6/4/2023 <br>
  * Allay Project
  */
-public class AnvilWorldProvider implements WorldProvider {
+public class AnvilWorldProvider implements NativeFileWorldProvider {
     private final Path worldFolderPath;
     private final Path regionFolderPath;
     private final Long2ObjectMap<AnvilRegionFile> regions = new Long2ObjectOpenHashMap<>();
@@ -42,6 +42,7 @@ public class AnvilWorldProvider implements WorldProvider {
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionData) {
+        //TODO: read chunk
 //        long chunkHash = chunkHash(x, z);
 //        AnvilRegionFile region = regions.get(chunkHash);
 //        try {
@@ -67,12 +68,13 @@ public class AnvilWorldProvider implements WorldProvider {
 
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) {
+        //TODO: write chunk
         return null;
     }
 
     @Override
     public void writeWorldData(WorldData worldData) {
-
+        //TODO
     }
 
     @Override

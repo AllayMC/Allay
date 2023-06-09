@@ -15,8 +15,7 @@ public enum GeneratorType {
 
     OLD(0),
     INFINITE(1),
-    FLAT(2),
-    ;
+    FLAT(2);
 
     // The generator id.
     private final int id;

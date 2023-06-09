@@ -15,7 +15,6 @@ import java.util.concurrent.CompletableFuture;
  * Allay Project
  */
 public interface WorldProvider {
-    Path getWorldFolderPath();
     CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionData);
     CompletableFuture<Void> writeChunk(Chunk chunk);
     void writeWorldData(WorldData worldData);
