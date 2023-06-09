@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockMobSpawner extends Block {
-    BlockType<BlockMobSpawner> TYPE = BlockTypeBuilder
-            .builder(BlockMobSpawner.class)
-            .vanillaBlock(VanillaBlockId.MOB_SPAWNER, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMobSpawner> TYPE = BlockTypeBuilder
+          .builder(BlockMobSpawner.class)
+          .vanillaBlock(VanillaBlockId.MOB_SPAWNER, true)
+          .addBasicComponents()
+          .build();
 }

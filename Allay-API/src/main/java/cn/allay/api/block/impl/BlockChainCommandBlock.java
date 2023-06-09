@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockChainCommandBlock extends Block {
-    BlockType<BlockChainCommandBlock> TYPE = BlockTypeBuilder
-            .builder(BlockChainCommandBlock.class)
-            .vanillaBlock(VanillaBlockId.CHAIN_COMMAND_BLOCK, true)
-            .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT,
-                    VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockChainCommandBlock> TYPE = BlockTypeBuilder
+          .builder(BlockChainCommandBlock.class)
+          .vanillaBlock(VanillaBlockId.CHAIN_COMMAND_BLOCK, true)
+          .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

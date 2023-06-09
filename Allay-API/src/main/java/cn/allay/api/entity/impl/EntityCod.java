@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityCod extends Entity {
-    EntityType<EntityCod> TYPE = EntityTypeBuilder
-            .builder(EntityCod.class)
-            .vanillaEntity(VanillaEntityId.COD)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityCod> TYPE = EntityTypeBuilder
+          .builder(EntityCod.class)
+          .vanillaEntity(VanillaEntityId.COD)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

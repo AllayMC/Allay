@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockFrogSpawn extends Block {
-    BlockType<BlockFrogSpawn> TYPE = BlockTypeBuilder
-            .builder(BlockFrogSpawn.class)
-            .vanillaBlock(VanillaBlockId.FROG_SPAWN, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockFrogSpawn> TYPE = BlockTypeBuilder
+          .builder(BlockFrogSpawn.class)
+          .vanillaBlock(VanillaBlockId.FROG_SPAWN, true)
+          .addBasicComponents()
+          .build();
 }

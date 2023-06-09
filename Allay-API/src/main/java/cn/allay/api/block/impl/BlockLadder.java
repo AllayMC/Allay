@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockLadder extends Block {
-    BlockType<BlockLadder> TYPE = BlockTypeBuilder
-            .builder(BlockLadder.class)
-            .vanillaBlock(VanillaBlockId.LADDER, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLadder> TYPE = BlockTypeBuilder
+          .builder(BlockLadder.class)
+          .vanillaBlock(VanillaBlockId.LADDER, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

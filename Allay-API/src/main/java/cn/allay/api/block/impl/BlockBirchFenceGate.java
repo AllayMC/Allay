@@ -14,9 +14,7 @@ public interface BlockBirchFenceGate extends Block {
   BlockType<BlockBirchFenceGate> TYPE = BlockTypeBuilder
           .builder(BlockBirchFenceGate.class)
           .vanillaBlock(VanillaBlockId.BIRCH_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                  VanillaBlockPropertyTypes.IN_WALL_BIT,
-                  VanillaBlockPropertyTypes.OPEN_BIT)
+          .withProperties(VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.DIRECTION)
           .addBasicComponents()
           .build();
 }

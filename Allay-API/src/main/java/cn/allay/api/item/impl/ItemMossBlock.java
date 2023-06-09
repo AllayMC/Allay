@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMossBlock extends ItemStack {
-    ItemType<ItemMossBlock> TYPE = ItemTypeBuilder
-            .builder(ItemMossBlock.class)
-            .vanillaItem(VanillaItemId.MOSS_BLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMossBlock> TYPE = ItemTypeBuilder
+          .builder(ItemMossBlock.class)
+          .vanillaItem(VanillaItemId.MOSS_BLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityMooshroom extends Entity {
-    EntityType<EntityMooshroom> TYPE = EntityTypeBuilder
-            .builder(EntityMooshroom.class)
-            .vanillaEntity(VanillaEntityId.MOOSHROOM)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityMooshroom> TYPE = EntityTypeBuilder
+          .builder(EntityMooshroom.class)
+          .vanillaEntity(VanillaEntityId.MOOSHROOM)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

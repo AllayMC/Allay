@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCherryLog extends ItemStack {
-    ItemType<ItemCherryLog> TYPE = ItemTypeBuilder
-            .builder(ItemCherryLog.class)
-            .vanillaItem(VanillaItemId.CHERRY_LOG, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCherryLog> TYPE = ItemTypeBuilder
+          .builder(ItemCherryLog.class)
+          .vanillaItem(VanillaItemId.CHERRY_LOG, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

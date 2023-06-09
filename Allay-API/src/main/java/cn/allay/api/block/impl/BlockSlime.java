@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockSlime extends Block {
-    BlockType<BlockSlime> TYPE = BlockTypeBuilder
-            .builder(BlockSlime.class)
-            .vanillaBlock(VanillaBlockId.SLIME, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSlime> TYPE = BlockTypeBuilder
+          .builder(BlockSlime.class)
+          .vanillaBlock(VanillaBlockId.SLIME, true)
+          .addBasicComponents()
+          .build();
 }

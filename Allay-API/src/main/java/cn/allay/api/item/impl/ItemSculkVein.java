@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSculkVein extends ItemStack {
-    ItemType<ItemSculkVein> TYPE = ItemTypeBuilder
-            .builder(ItemSculkVein.class)
-            .vanillaItem(VanillaItemId.SCULK_VEIN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSculkVein> TYPE = ItemTypeBuilder
+          .builder(ItemSculkVein.class)
+          .vanillaItem(VanillaItemId.SCULK_VEIN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

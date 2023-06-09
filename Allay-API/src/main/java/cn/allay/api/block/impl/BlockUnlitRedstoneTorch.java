@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockUnlitRedstoneTorch extends Block {
-    BlockType<BlockUnlitRedstoneTorch> TYPE = BlockTypeBuilder
-            .builder(BlockUnlitRedstoneTorch.class)
-            .vanillaBlock(VanillaBlockId.UNLIT_REDSTONE_TORCH, true)
-            .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockUnlitRedstoneTorch> TYPE = BlockTypeBuilder
+          .builder(BlockUnlitRedstoneTorch.class)
+          .vanillaBlock(VanillaBlockId.UNLIT_REDSTONE_TORCH, true)
+          .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWarpedHangingSign extends ItemStack {
-    ItemType<ItemWarpedHangingSign> TYPE = ItemTypeBuilder
-            .builder(ItemWarpedHangingSign.class)
-            .vanillaItem(VanillaItemId.WARPED_HANGING_SIGN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWarpedHangingSign> TYPE = ItemTypeBuilder
+          .builder(ItemWarpedHangingSign.class)
+          .vanillaItem(VanillaItemId.WARPED_HANGING_SIGN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

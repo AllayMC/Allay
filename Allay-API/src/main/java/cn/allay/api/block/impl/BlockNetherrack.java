@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockNetherrack extends Block {
-    BlockType<BlockNetherrack> TYPE = BlockTypeBuilder
-            .builder(BlockNetherrack.class)
-            .vanillaBlock(VanillaBlockId.NETHERRACK, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockNetherrack> TYPE = BlockTypeBuilder
+          .builder(BlockNetherrack.class)
+          .vanillaBlock(VanillaBlockId.NETHERRACK, true)
+          .addBasicComponents()
+          .build();
 }

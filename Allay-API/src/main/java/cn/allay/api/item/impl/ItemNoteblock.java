@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNoteblock extends ItemStack {
-    ItemType<ItemNoteblock> TYPE = ItemTypeBuilder
-            .builder(ItemNoteblock.class)
-            .vanillaItem(VanillaItemId.NOTEBLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNoteblock> TYPE = ItemTypeBuilder
+          .builder(ItemNoteblock.class)
+          .vanillaItem(VanillaItemId.NOTEBLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

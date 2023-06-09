@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDaylightDetector extends Block {
-    BlockType<BlockDaylightDetector> TYPE = BlockTypeBuilder
-            .builder(BlockDaylightDetector.class)
-            .vanillaBlock(VanillaBlockId.DAYLIGHT_DETECTOR, true)
-            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDaylightDetector> TYPE = BlockTypeBuilder
+          .builder(BlockDaylightDetector.class)
+          .vanillaBlock(VanillaBlockId.DAYLIGHT_DETECTOR, true)
+          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .addBasicComponents()
+          .build();
 }

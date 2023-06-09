@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWarpedFungusOnAStick extends ItemStack {
-    ItemType<ItemWarpedFungusOnAStick> TYPE = ItemTypeBuilder
-            .builder(ItemWarpedFungusOnAStick.class)
-            .vanillaItem(VanillaItemId.WARPED_FUNGUS_ON_A_STICK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWarpedFungusOnAStick> TYPE = ItemTypeBuilder
+          .builder(ItemWarpedFungusOnAStick.class)
+          .vanillaItem(VanillaItemId.WARPED_FUNGUS_ON_A_STICK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

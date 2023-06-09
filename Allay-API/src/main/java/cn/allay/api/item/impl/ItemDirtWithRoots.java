@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDirtWithRoots extends ItemStack {
-    ItemType<ItemDirtWithRoots> TYPE = ItemTypeBuilder
-            .builder(ItemDirtWithRoots.class)
-            .vanillaItem(VanillaItemId.DIRT_WITH_ROOTS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDirtWithRoots> TYPE = ItemTypeBuilder
+          .builder(ItemDirtWithRoots.class)
+          .vanillaItem(VanillaItemId.DIRT_WITH_ROOTS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

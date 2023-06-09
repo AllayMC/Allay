@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockChain extends Block {
-    BlockType<BlockChain> TYPE = BlockTypeBuilder
-            .builder(BlockChain.class)
-            .vanillaBlock(VanillaBlockId.CHAIN, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockChain> TYPE = BlockTypeBuilder
+          .builder(BlockChain.class)
+          .vanillaBlock(VanillaBlockId.CHAIN, true)
+          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

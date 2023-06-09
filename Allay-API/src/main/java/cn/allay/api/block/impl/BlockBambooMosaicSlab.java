@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBambooMosaicSlab extends Block {
-    BlockType<BlockBambooMosaicSlab> TYPE = BlockTypeBuilder
-            .builder(BlockBambooMosaicSlab.class)
-            .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_SLAB, true)
-            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBambooMosaicSlab> TYPE = BlockTypeBuilder
+          .builder(BlockBambooMosaicSlab.class)
+          .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_SLAB, true)
+          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCherrySign extends ItemStack {
-    ItemType<ItemCherrySign> TYPE = ItemTypeBuilder
-            .builder(ItemCherrySign.class)
-            .vanillaItem(VanillaItemId.CHERRY_SIGN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCherrySign> TYPE = ItemTypeBuilder
+          .builder(ItemCherrySign.class)
+          .vanillaItem(VanillaItemId.CHERRY_SIGN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

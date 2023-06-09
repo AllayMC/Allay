@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemChemicalHeat extends ItemStack {
-    ItemType<ItemChemicalHeat> TYPE = ItemTypeBuilder
-            .builder(ItemChemicalHeat.class)
-            .vanillaItem(VanillaItemId.CHEMICAL_HEAT, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemChemicalHeat> TYPE = ItemTypeBuilder
+          .builder(ItemChemicalHeat.class)
+          .vanillaItem(VanillaItemId.CHEMICAL_HEAT, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

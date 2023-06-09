@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockSeaLantern extends Block {
-    BlockType<BlockSeaLantern> TYPE = BlockTypeBuilder
-            .builder(BlockSeaLantern.class)
-            .vanillaBlock(VanillaBlockId.SEA_LANTERN, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSeaLantern> TYPE = BlockTypeBuilder
+          .builder(BlockSeaLantern.class)
+          .vanillaBlock(VanillaBlockId.SEA_LANTERN, true)
+          .addBasicComponents()
+          .build();
 }

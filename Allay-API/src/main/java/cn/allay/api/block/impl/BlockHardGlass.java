@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockHardGlass extends Block {
-    BlockType<BlockHardGlass> TYPE = BlockTypeBuilder
-            .builder(BlockHardGlass.class)
-            .vanillaBlock(VanillaBlockId.HARD_GLASS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockHardGlass> TYPE = BlockTypeBuilder
+          .builder(BlockHardGlass.class)
+          .vanillaBlock(VanillaBlockId.HARD_GLASS, true)
+          .addBasicComponents()
+          .build();
 }

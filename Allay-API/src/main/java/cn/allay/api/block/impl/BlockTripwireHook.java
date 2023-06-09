@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockTripwireHook extends Block {
-    BlockType<BlockTripwireHook> TYPE = BlockTypeBuilder
-            .builder(BlockTripwireHook.class)
-            .vanillaBlock(VanillaBlockId.TRIPWIRE_HOOK, true)
-            .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT,
-                    VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.POWERED_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTripwireHook> TYPE = BlockTypeBuilder
+          .builder(BlockTripwireHook.class)
+          .vanillaBlock(VanillaBlockId.TRIPWIRE_HOOK, true)
+          .withProperties(VanillaBlockPropertyTypes.POWERED_BIT, VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

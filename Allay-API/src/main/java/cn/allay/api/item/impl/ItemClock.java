@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemClock extends ItemStack {
-    ItemType<ItemClock> TYPE = ItemTypeBuilder
-            .builder(ItemClock.class)
-            .vanillaItem(VanillaItemId.CLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemClock> TYPE = ItemTypeBuilder
+          .builder(ItemClock.class)
+          .vanillaItem(VanillaItemId.CLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

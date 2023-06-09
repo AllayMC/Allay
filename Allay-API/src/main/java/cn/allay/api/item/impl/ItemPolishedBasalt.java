@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemPolishedBasalt extends ItemStack {
-    ItemType<ItemPolishedBasalt> TYPE = ItemTypeBuilder
-            .builder(ItemPolishedBasalt.class)
-            .vanillaItem(VanillaItemId.POLISHED_BASALT, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemPolishedBasalt> TYPE = ItemTypeBuilder
+          .builder(ItemPolishedBasalt.class)
+          .vanillaItem(VanillaItemId.POLISHED_BASALT, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

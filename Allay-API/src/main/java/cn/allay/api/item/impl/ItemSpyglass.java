@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSpyglass extends ItemStack {
-    ItemType<ItemSpyglass> TYPE = ItemTypeBuilder
-            .builder(ItemSpyglass.class)
-            .vanillaItem(VanillaItemId.SPYGLASS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSpyglass> TYPE = ItemTypeBuilder
+          .builder(ItemSpyglass.class)
+          .vanillaItem(VanillaItemId.SPYGLASS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

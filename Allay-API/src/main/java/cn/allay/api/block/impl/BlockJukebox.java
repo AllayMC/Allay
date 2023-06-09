@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockJukebox extends Block {
-    BlockType<BlockJukebox> TYPE = BlockTypeBuilder
-            .builder(BlockJukebox.class)
-            .vanillaBlock(VanillaBlockId.JUKEBOX, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockJukebox> TYPE = BlockTypeBuilder
+          .builder(BlockJukebox.class)
+          .vanillaBlock(VanillaBlockId.JUKEBOX, true)
+          .addBasicComponents()
+          .build();
 }

@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockTurtleEgg extends Block {
-    BlockType<BlockTurtleEgg> TYPE = BlockTypeBuilder
-            .builder(BlockTurtleEgg.class)
-            .vanillaBlock(VanillaBlockId.TURTLE_EGG, true)
-            .withProperties(VanillaBlockPropertyTypes.CRACKED_STATE,
-                    VanillaBlockPropertyTypes.TURTLE_EGG_COUNT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTurtleEgg> TYPE = BlockTypeBuilder
+          .builder(BlockTurtleEgg.class)
+          .vanillaBlock(VanillaBlockId.TURTLE_EGG, true)
+          .withProperties(VanillaBlockPropertyTypes.CRACKED_STATE, VanillaBlockPropertyTypes.TURTLE_EGG_COUNT)
+          .addBasicComponents()
+          .build();
 }

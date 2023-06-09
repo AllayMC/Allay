@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDirt extends Block {
-    BlockType<BlockDirt> TYPE = BlockTypeBuilder
-            .builder(BlockDirt.class)
-            .vanillaBlock(VanillaBlockId.DIRT, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRT_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDirt> TYPE = BlockTypeBuilder
+          .builder(BlockDirt.class)
+          .vanillaBlock(VanillaBlockId.DIRT, true)
+          .withProperties(VanillaBlockPropertyTypes.DIRT_TYPE)
+          .addBasicComponents()
+          .build();
 }

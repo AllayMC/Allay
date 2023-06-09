@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityParrot extends Entity {
-    EntityType<EntityParrot> TYPE = EntityTypeBuilder
-            .builder(EntityParrot.class)
-            .vanillaEntity(VanillaEntityId.PARROT)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityParrot> TYPE = EntityTypeBuilder
+          .builder(EntityParrot.class)
+          .vanillaEntity(VanillaEntityId.PARROT)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

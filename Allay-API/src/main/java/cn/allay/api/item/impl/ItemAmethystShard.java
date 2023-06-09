@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemAmethystShard extends ItemStack {
-    ItemType<ItemAmethystShard> TYPE = ItemTypeBuilder
-            .builder(ItemAmethystShard.class)
-            .vanillaItem(VanillaItemId.AMETHYST_SHARD, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemAmethystShard> TYPE = ItemTypeBuilder
+          .builder(ItemAmethystShard.class)
+          .vanillaItem(VanillaItemId.AMETHYST_SHARD, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

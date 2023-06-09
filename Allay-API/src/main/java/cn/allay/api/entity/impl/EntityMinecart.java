@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityMinecart extends Entity {
-    EntityType<EntityMinecart> TYPE = EntityTypeBuilder
-            .builder(EntityMinecart.class)
-            .vanillaEntity(VanillaEntityId.MINECART)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityMinecart> TYPE = EntityTypeBuilder
+          .builder(EntityMinecart.class)
+          .vanillaEntity(VanillaEntityId.MINECART)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockDriedKelpBlock extends Block {
-    BlockType<BlockDriedKelpBlock> TYPE = BlockTypeBuilder
-            .builder(BlockDriedKelpBlock.class)
-            .vanillaBlock(VanillaBlockId.DRIED_KELP_BLOCK, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDriedKelpBlock> TYPE = BlockTypeBuilder
+          .builder(BlockDriedKelpBlock.class)
+          .vanillaBlock(VanillaBlockId.DRIED_KELP_BLOCK, true)
+          .addBasicComponents()
+          .build();
 }

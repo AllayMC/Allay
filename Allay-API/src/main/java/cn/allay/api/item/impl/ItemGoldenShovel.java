@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemGoldenShovel extends ItemStack {
-    ItemType<ItemGoldenShovel> TYPE = ItemTypeBuilder
-            .builder(ItemGoldenShovel.class)
-            .vanillaItem(VanillaItemId.GOLDEN_SHOVEL, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemGoldenShovel> TYPE = ItemTypeBuilder
+          .builder(ItemGoldenShovel.class)
+          .vanillaItem(VanillaItemId.GOLDEN_SHOVEL, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

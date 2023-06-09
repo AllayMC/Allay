@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCrossbow extends ItemStack {
-    ItemType<ItemCrossbow> TYPE = ItemTypeBuilder
-            .builder(ItemCrossbow.class)
-            .vanillaItem(VanillaItemId.CROSSBOW, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCrossbow> TYPE = ItemTypeBuilder
+          .builder(ItemCrossbow.class)
+          .vanillaItem(VanillaItemId.CROSSBOW, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

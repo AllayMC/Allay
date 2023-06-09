@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemTurtleHelmet extends ItemStack {
-    ItemType<ItemTurtleHelmet> TYPE = ItemTypeBuilder
-            .builder(ItemTurtleHelmet.class)
-            .vanillaItem(VanillaItemId.TURTLE_HELMET, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemTurtleHelmet> TYPE = ItemTypeBuilder
+          .builder(ItemTurtleHelmet.class)
+          .vanillaItem(VanillaItemId.TURTLE_HELMET, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

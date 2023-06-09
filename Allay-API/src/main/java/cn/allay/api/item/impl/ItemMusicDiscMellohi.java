@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMusicDiscMellohi extends ItemStack {
-    ItemType<ItemMusicDiscMellohi> TYPE = ItemTypeBuilder
-            .builder(ItemMusicDiscMellohi.class)
-            .vanillaItem(VanillaItemId.MUSIC_DISC_MELLOHI, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMusicDiscMellohi> TYPE = ItemTypeBuilder
+          .builder(ItemMusicDiscMellohi.class)
+          .vanillaItem(VanillaItemId.MUSIC_DISC_MELLOHI, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

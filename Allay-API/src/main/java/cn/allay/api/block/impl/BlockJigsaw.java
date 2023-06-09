@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockJigsaw extends Block {
-    BlockType<BlockJigsaw> TYPE = BlockTypeBuilder
-            .builder(BlockJigsaw.class)
-            .vanillaBlock(VanillaBlockId.JIGSAW, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.ROTATION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockJigsaw> TYPE = BlockTypeBuilder
+          .builder(BlockJigsaw.class)
+          .vanillaBlock(VanillaBlockId.JIGSAW, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.ROTATION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockFlowingWater extends Block {
-    BlockType<BlockFlowingWater> TYPE = BlockTypeBuilder
-            .builder(BlockFlowingWater.class)
-            .vanillaBlock(VanillaBlockId.FLOWING_WATER, true)
-            .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockFlowingWater> TYPE = BlockTypeBuilder
+          .builder(BlockFlowingWater.class)
+          .vanillaBlock(VanillaBlockId.FLOWING_WATER, true)
+          .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+          .addBasicComponents()
+          .build();
 }

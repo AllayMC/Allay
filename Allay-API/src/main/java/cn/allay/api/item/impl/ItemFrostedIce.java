@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemFrostedIce extends ItemStack {
-    ItemType<ItemFrostedIce> TYPE = ItemTypeBuilder
-            .builder(ItemFrostedIce.class)
-            .vanillaItem(VanillaItemId.FROSTED_ICE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemFrostedIce> TYPE = ItemTypeBuilder
+          .builder(ItemFrostedIce.class)
+          .vanillaItem(VanillaItemId.FROSTED_ICE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

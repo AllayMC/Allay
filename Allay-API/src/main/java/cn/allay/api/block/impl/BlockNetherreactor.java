@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockNetherreactor extends Block {
-    BlockType<BlockNetherreactor> TYPE = BlockTypeBuilder
-            .builder(BlockNetherreactor.class)
-            .vanillaBlock(VanillaBlockId.NETHERREACTOR, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockNetherreactor> TYPE = BlockTypeBuilder
+          .builder(BlockNetherreactor.class)
+          .vanillaBlock(VanillaBlockId.NETHERREACTOR, true)
+          .addBasicComponents()
+          .build();
 }

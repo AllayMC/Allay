@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockRedSandstone extends Block {
-    BlockType<BlockRedSandstone> TYPE = BlockTypeBuilder
-            .builder(BlockRedSandstone.class)
-            .vanillaBlock(VanillaBlockId.RED_SANDSTONE, true)
-            .withProperties(VanillaBlockPropertyTypes.SAND_STONE_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockRedSandstone> TYPE = BlockTypeBuilder
+          .builder(BlockRedSandstone.class)
+          .vanillaBlock(VanillaBlockId.RED_SANDSTONE, true)
+          .withProperties(VanillaBlockPropertyTypes.SAND_STONE_TYPE)
+          .addBasicComponents()
+          .build();
 }

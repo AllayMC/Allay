@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockAmethystCluster extends Block {
-    BlockType<BlockAmethystCluster> TYPE = BlockTypeBuilder
-            .builder(BlockAmethystCluster.class)
-            .vanillaBlock(VanillaBlockId.AMETHYST_CLUSTER, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockAmethystCluster> TYPE = BlockTypeBuilder
+          .builder(BlockAmethystCluster.class)
+          .vanillaBlock(VanillaBlockId.AMETHYST_CLUSTER, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

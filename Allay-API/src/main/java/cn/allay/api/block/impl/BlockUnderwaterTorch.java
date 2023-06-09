@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockUnderwaterTorch extends Block {
-    BlockType<BlockUnderwaterTorch> TYPE = BlockTypeBuilder
-            .builder(BlockUnderwaterTorch.class)
-            .vanillaBlock(VanillaBlockId.UNDERWATER_TORCH, true)
-            .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockUnderwaterTorch> TYPE = BlockTypeBuilder
+          .builder(BlockUnderwaterTorch.class)
+          .vanillaBlock(VanillaBlockId.UNDERWATER_TORCH, true)
+          .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

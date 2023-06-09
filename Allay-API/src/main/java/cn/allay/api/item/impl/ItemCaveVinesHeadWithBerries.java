@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCaveVinesHeadWithBerries extends ItemStack {
-    ItemType<ItemCaveVinesHeadWithBerries> TYPE = ItemTypeBuilder
-            .builder(ItemCaveVinesHeadWithBerries.class)
-            .vanillaItem(VanillaItemId.CAVE_VINES_HEAD_WITH_BERRIES, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCaveVinesHeadWithBerries> TYPE = ItemTypeBuilder
+          .builder(ItemCaveVinesHeadWithBerries.class)
+          .vanillaItem(VanillaItemId.CAVE_VINES_HEAD_WITH_BERRIES, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

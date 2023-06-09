@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCoralFanHang2 extends Block {
-    BlockType<BlockCoralFanHang2> TYPE = BlockTypeBuilder
-            .builder(BlockCoralFanHang2.class)
-            .vanillaBlock(VanillaBlockId.CORAL_FAN_HANG2, true)
-            .withProperties(VanillaBlockPropertyTypes.CORAL_DIRECTION,
-                    VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT,
-                    VanillaBlockPropertyTypes.DEAD_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCoralFanHang2> TYPE = BlockTypeBuilder
+          .builder(BlockCoralFanHang2.class)
+          .vanillaBlock(VanillaBlockId.CORAL_FAN_HANG2, true)
+          .withProperties(VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT, VanillaBlockPropertyTypes.CORAL_DIRECTION, VanillaBlockPropertyTypes.DEAD_BIT)
+          .addBasicComponents()
+          .build();
 }

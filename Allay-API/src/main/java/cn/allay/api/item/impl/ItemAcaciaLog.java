@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemAcaciaLog extends ItemStack {
-    ItemType<ItemAcaciaLog> TYPE = ItemTypeBuilder
-            .builder(ItemAcaciaLog.class)
-            .vanillaItem(VanillaItemId.ACACIA_LOG, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemAcaciaLog> TYPE = ItemTypeBuilder
+          .builder(ItemAcaciaLog.class)
+          .vanillaItem(VanillaItemId.ACACIA_LOG, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

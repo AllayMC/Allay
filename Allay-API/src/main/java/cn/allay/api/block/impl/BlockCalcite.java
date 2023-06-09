@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockCalcite extends Block {
-    BlockType<BlockCalcite> TYPE = BlockTypeBuilder
-            .builder(BlockCalcite.class)
-            .vanillaBlock(VanillaBlockId.CALCITE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCalcite> TYPE = BlockTypeBuilder
+          .builder(BlockCalcite.class)
+          .vanillaBlock(VanillaBlockId.CALCITE, true)
+          .addBasicComponents()
+          .build();
 }

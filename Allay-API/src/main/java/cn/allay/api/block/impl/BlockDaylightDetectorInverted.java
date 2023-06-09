@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDaylightDetectorInverted extends Block {
-    BlockType<BlockDaylightDetectorInverted> TYPE = BlockTypeBuilder
-            .builder(BlockDaylightDetectorInverted.class)
-            .vanillaBlock(VanillaBlockId.DAYLIGHT_DETECTOR_INVERTED, true)
-            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDaylightDetectorInverted> TYPE = BlockTypeBuilder
+          .builder(BlockDaylightDetectorInverted.class)
+          .vanillaBlock(VanillaBlockId.DAYLIGHT_DETECTOR_INVERTED, true)
+          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .addBasicComponents()
+          .build();
 }

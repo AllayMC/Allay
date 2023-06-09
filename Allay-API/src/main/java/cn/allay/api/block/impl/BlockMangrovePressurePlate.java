@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockMangrovePressurePlate extends Block {
-    BlockType<BlockMangrovePressurePlate> TYPE = BlockTypeBuilder
-            .builder(BlockMangrovePressurePlate.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_PRESSURE_PLATE, true)
-            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMangrovePressurePlate> TYPE = BlockTypeBuilder
+          .builder(BlockMangrovePressurePlate.class)
+          .vanillaBlock(VanillaBlockId.MANGROVE_PRESSURE_PLATE, true)
+          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .addBasicComponents()
+          .build();
 }

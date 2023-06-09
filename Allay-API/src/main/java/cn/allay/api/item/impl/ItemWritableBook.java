@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWritableBook extends ItemStack {
-    ItemType<ItemWritableBook> TYPE = ItemTypeBuilder
-            .builder(ItemWritableBook.class)
-            .vanillaItem(VanillaItemId.WRITABLE_BOOK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWritableBook> TYPE = ItemTypeBuilder
+          .builder(ItemWritableBook.class)
+          .vanillaItem(VanillaItemId.WRITABLE_BOOK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

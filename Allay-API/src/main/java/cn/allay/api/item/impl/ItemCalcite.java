@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCalcite extends ItemStack {
-    ItemType<ItemCalcite> TYPE = ItemTypeBuilder
-            .builder(ItemCalcite.class)
-            .vanillaItem(VanillaItemId.CALCITE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCalcite> TYPE = ItemTypeBuilder
+          .builder(ItemCalcite.class)
+          .vanillaItem(VanillaItemId.CALCITE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

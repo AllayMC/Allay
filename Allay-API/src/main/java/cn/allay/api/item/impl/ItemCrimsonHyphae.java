@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCrimsonHyphae extends ItemStack {
-    ItemType<ItemCrimsonHyphae> TYPE = ItemTypeBuilder
-            .builder(ItemCrimsonHyphae.class)
-            .vanillaItem(VanillaItemId.CRIMSON_HYPHAE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCrimsonHyphae> TYPE = ItemTypeBuilder
+          .builder(ItemCrimsonHyphae.class)
+          .vanillaItem(VanillaItemId.CRIMSON_HYPHAE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockComposter extends Block {
-    BlockType<BlockComposter> TYPE = BlockTypeBuilder
-            .builder(BlockComposter.class)
-            .vanillaBlock(VanillaBlockId.COMPOSTER, true)
-            .withProperties(VanillaBlockPropertyTypes.COMPOSTER_FILL_LEVEL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockComposter> TYPE = BlockTypeBuilder
+          .builder(BlockComposter.class)
+          .vanillaBlock(VanillaBlockId.COMPOSTER, true)
+          .withProperties(VanillaBlockPropertyTypes.COMPOSTER_FILL_LEVEL)
+          .addBasicComponents()
+          .build();
 }

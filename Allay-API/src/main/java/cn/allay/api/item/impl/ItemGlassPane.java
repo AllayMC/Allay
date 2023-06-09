@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemGlassPane extends ItemStack {
-    ItemType<ItemGlassPane> TYPE = ItemTypeBuilder
-            .builder(ItemGlassPane.class)
-            .vanillaItem(VanillaItemId.GLASS_PANE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemGlassPane> TYPE = ItemTypeBuilder
+          .builder(ItemGlassPane.class)
+          .vanillaItem(VanillaItemId.GLASS_PANE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

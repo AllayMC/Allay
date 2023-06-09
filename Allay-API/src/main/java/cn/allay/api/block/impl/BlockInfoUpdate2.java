@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockInfoUpdate2 extends Block {
-    BlockType<BlockInfoUpdate2> TYPE = BlockTypeBuilder
-            .builder(BlockInfoUpdate2.class)
-            .vanillaBlock(VanillaBlockId.INFO_UPDATE2, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockInfoUpdate2> TYPE = BlockTypeBuilder
+          .builder(BlockInfoUpdate2.class)
+          .vanillaBlock(VanillaBlockId.INFO_UPDATE2, true)
+          .addBasicComponents()
+          .build();
 }

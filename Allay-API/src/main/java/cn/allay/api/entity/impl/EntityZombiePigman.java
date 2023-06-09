@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityZombiePigman extends Entity {
-    EntityType<EntityZombiePigman> TYPE = EntityTypeBuilder
-            .builder(EntityZombiePigman.class)
-            .vanillaEntity(VanillaEntityId.ZOMBIE_PIGMAN)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityZombiePigman> TYPE = EntityTypeBuilder
+          .builder(EntityZombiePigman.class)
+          .vanillaEntity(VanillaEntityId.ZOMBIE_PIGMAN)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

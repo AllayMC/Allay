@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemLightningRod extends ItemStack {
-    ItemType<ItemLightningRod> TYPE = ItemTypeBuilder
-            .builder(ItemLightningRod.class)
-            .vanillaItem(VanillaItemId.LIGHTNING_ROD, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemLightningRod> TYPE = ItemTypeBuilder
+          .builder(ItemLightningRod.class)
+          .vanillaItem(VanillaItemId.LIGHTNING_ROD, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

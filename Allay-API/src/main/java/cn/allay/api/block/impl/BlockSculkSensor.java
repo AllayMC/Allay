@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSculkSensor extends Block {
-    BlockType<BlockSculkSensor> TYPE = BlockTypeBuilder
-            .builder(BlockSculkSensor.class)
-            .vanillaBlock(VanillaBlockId.SCULK_SENSOR, true)
-            .withProperties(VanillaBlockPropertyTypes.POWERED_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSculkSensor> TYPE = BlockTypeBuilder
+          .builder(BlockSculkSensor.class)
+          .vanillaBlock(VanillaBlockId.SCULK_SENSOR, true)
+          .withProperties(VanillaBlockPropertyTypes.SCULK_SENSOR_PHASE)
+          .addBasicComponents()
+          .build();
 }

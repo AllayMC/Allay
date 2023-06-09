@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityGlowSquid extends Entity {
-    EntityType<EntityGlowSquid> TYPE = EntityTypeBuilder
-            .builder(EntityGlowSquid.class)
-            .vanillaEntity(VanillaEntityId.GLOW_SQUID)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityGlowSquid> TYPE = EntityTypeBuilder
+          .builder(EntityGlowSquid.class)
+          .vanillaEntity(VanillaEntityId.GLOW_SQUID)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

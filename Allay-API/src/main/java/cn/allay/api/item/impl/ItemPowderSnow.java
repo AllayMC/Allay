@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemPowderSnow extends ItemStack {
-    ItemType<ItemPowderSnow> TYPE = ItemTypeBuilder
-            .builder(ItemPowderSnow.class)
-            .vanillaItem(VanillaItemId.POWDER_SNOW, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemPowderSnow> TYPE = ItemTypeBuilder
+          .builder(ItemPowderSnow.class)
+          .vanillaItem(VanillaItemId.POWDER_SNOW, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

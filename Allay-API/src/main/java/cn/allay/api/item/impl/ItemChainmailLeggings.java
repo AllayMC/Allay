@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemChainmailLeggings extends ItemStack {
-    ItemType<ItemChainmailLeggings> TYPE = ItemTypeBuilder
-            .builder(ItemChainmailLeggings.class)
-            .vanillaItem(VanillaItemId.CHAINMAIL_LEGGINGS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemChainmailLeggings> TYPE = ItemTypeBuilder
+          .builder(ItemChainmailLeggings.class)
+          .vanillaItem(VanillaItemId.CHAINMAIL_LEGGINGS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

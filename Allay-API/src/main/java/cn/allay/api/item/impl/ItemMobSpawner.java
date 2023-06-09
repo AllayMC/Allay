@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMobSpawner extends ItemStack {
-    ItemType<ItemMobSpawner> TYPE = ItemTypeBuilder
-            .builder(ItemMobSpawner.class)
-            .vanillaItem(VanillaItemId.MOB_SPAWNER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMobSpawner> TYPE = ItemTypeBuilder
+          .builder(ItemMobSpawner.class)
+          .vanillaItem(VanillaItemId.MOB_SPAWNER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntitySheep extends Entity {
-    EntityType<EntitySheep> TYPE = EntityTypeBuilder
-            .builder(EntitySheep.class)
-            .vanillaEntity(VanillaEntityId.SHEEP)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntitySheep> TYPE = EntityTypeBuilder
+          .builder(EntitySheep.class)
+          .vanillaEntity(VanillaEntityId.SHEEP)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

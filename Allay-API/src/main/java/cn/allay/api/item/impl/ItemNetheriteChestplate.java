@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNetheriteChestplate extends ItemStack {
-    ItemType<ItemNetheriteChestplate> TYPE = ItemTypeBuilder
-            .builder(ItemNetheriteChestplate.class)
-            .vanillaItem(VanillaItemId.NETHERITE_CHESTPLATE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNetheriteChestplate> TYPE = ItemTypeBuilder
+          .builder(ItemNetheriteChestplate.class)
+          .vanillaItem(VanillaItemId.NETHERITE_CHESTPLATE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

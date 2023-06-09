@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBeeNest extends Block {
-    BlockType<BlockBeeNest> TYPE = BlockTypeBuilder
-            .builder(BlockBeeNest.class)
-            .vanillaBlock(VanillaBlockId.BEE_NEST, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.HONEY_LEVEL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBeeNest> TYPE = BlockTypeBuilder
+          .builder(BlockBeeNest.class)
+          .vanillaBlock(VanillaBlockId.BEE_NEST, true)
+          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.HONEY_LEVEL)
+          .addBasicComponents()
+          .build();
 }

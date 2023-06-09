@@ -11,13 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBambooHangingSign extends Block {
-    BlockType<BlockBambooHangingSign> TYPE = BlockTypeBuilder
-            .builder(BlockBambooHangingSign.class)
-            .vanillaBlock(VanillaBlockId.BAMBOO_HANGING_SIGN, true)
-            .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT,
-                    VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION,
-                    VanillaBlockPropertyTypes.HANGING)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBambooHangingSign> TYPE = BlockTypeBuilder
+          .builder(BlockBambooHangingSign.class)
+          .vanillaBlock(VanillaBlockId.BAMBOO_HANGING_SIGN, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.HANGING)
+          .addBasicComponents()
+          .build();
 }

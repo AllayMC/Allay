@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCompass extends ItemStack {
-    ItemType<ItemCompass> TYPE = ItemTypeBuilder
-            .builder(ItemCompass.class)
-            .vanillaItem(VanillaItemId.COMPASS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCompass> TYPE = ItemTypeBuilder
+          .builder(ItemCompass.class)
+          .vanillaItem(VanillaItemId.COMPASS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

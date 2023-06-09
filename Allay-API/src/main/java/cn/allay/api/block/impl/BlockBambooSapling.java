@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBambooSapling extends Block {
-    BlockType<BlockBambooSapling> TYPE = BlockTypeBuilder
-            .builder(BlockBambooSapling.class)
-            .vanillaBlock(VanillaBlockId.BAMBOO_SAPLING, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE_BIT,
-                    VanillaBlockPropertyTypes.SAPLING_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBambooSapling> TYPE = BlockTypeBuilder
+          .builder(BlockBambooSapling.class)
+          .vanillaBlock(VanillaBlockId.BAMBOO_SAPLING, true)
+          .withProperties(VanillaBlockPropertyTypes.SAPLING_TYPE, VanillaBlockPropertyTypes.AGE_BIT)
+          .addBasicComponents()
+          .build();
 }

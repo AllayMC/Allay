@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSpruceSign extends ItemStack {
-    ItemType<ItemSpruceSign> TYPE = ItemTypeBuilder
-            .builder(ItemSpruceSign.class)
-            .vanillaItem(VanillaItemId.SPRUCE_SIGN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSpruceSign> TYPE = ItemTypeBuilder
+          .builder(ItemSpruceSign.class)
+          .vanillaItem(VanillaItemId.SPRUCE_SIGN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

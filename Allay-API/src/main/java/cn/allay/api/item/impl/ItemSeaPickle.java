@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSeaPickle extends ItemStack {
-    ItemType<ItemSeaPickle> TYPE = ItemTypeBuilder
-            .builder(ItemSeaPickle.class)
-            .vanillaItem(VanillaItemId.SEA_PICKLE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSeaPickle> TYPE = ItemTypeBuilder
+          .builder(ItemSeaPickle.class)
+          .vanillaItem(VanillaItemId.SEA_PICKLE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPumpkinStem extends Block {
-    BlockType<BlockPumpkinStem> TYPE = BlockTypeBuilder
-            .builder(BlockPumpkinStem.class)
-            .vanillaBlock(VanillaBlockId.PUMPKIN_STEM, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.GROWTH)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPumpkinStem> TYPE = BlockTypeBuilder
+          .builder(BlockPumpkinStem.class)
+          .vanillaBlock(VanillaBlockId.PUMPKIN_STEM, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROWTH)
+          .addBasicComponents()
+          .build();
 }

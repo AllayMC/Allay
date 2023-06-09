@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockStructureVoid extends Block {
-    BlockType<BlockStructureVoid> TYPE = BlockTypeBuilder
-            .builder(BlockStructureVoid.class)
-            .vanillaBlock(VanillaBlockId.STRUCTURE_VOID, true)
-            .withProperties(VanillaBlockPropertyTypes.STRUCTURE_VOID_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockStructureVoid> TYPE = BlockTypeBuilder
+          .builder(BlockStructureVoid.class)
+          .vanillaBlock(VanillaBlockId.STRUCTURE_VOID, true)
+          .withProperties(VanillaBlockPropertyTypes.STRUCTURE_VOID_TYPE)
+          .addBasicComponents()
+          .build();
 }

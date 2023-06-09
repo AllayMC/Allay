@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemHeavyWeightedPressurePlate extends ItemStack {
-    ItemType<ItemHeavyWeightedPressurePlate> TYPE = ItemTypeBuilder
-            .builder(ItemHeavyWeightedPressurePlate.class)
-            .vanillaItem(VanillaItemId.HEAVY_WEIGHTED_PRESSURE_PLATE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemHeavyWeightedPressurePlate> TYPE = ItemTypeBuilder
+          .builder(ItemHeavyWeightedPressurePlate.class)
+          .vanillaItem(VanillaItemId.HEAVY_WEIGHTED_PRESSURE_PLATE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

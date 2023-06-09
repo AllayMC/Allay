@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntitySplashPotion extends Entity {
-    EntityType<EntitySplashPotion> TYPE = EntityTypeBuilder
-            .builder(EntitySplashPotion.class)
-            .vanillaEntity(VanillaEntityId.SPLASH_POTION)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntitySplashPotion> TYPE = EntityTypeBuilder
+          .builder(EntitySplashPotion.class)
+          .vanillaEntity(VanillaEntityId.SPLASH_POTION)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

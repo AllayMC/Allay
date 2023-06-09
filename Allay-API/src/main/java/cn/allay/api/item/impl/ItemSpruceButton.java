@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSpruceButton extends ItemStack {
-    ItemType<ItemSpruceButton> TYPE = ItemTypeBuilder
-            .builder(ItemSpruceButton.class)
-            .vanillaItem(VanillaItemId.SPRUCE_BUTTON, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSpruceButton> TYPE = ItemTypeBuilder
+          .builder(ItemSpruceButton.class)
+          .vanillaItem(VanillaItemId.SPRUCE_BUTTON, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockRail extends Block {
-    BlockType<BlockRail> TYPE = BlockTypeBuilder
-            .builder(BlockRail.class)
-            .vanillaBlock(VanillaBlockId.RAIL, true)
-            .withProperties(VanillaBlockPropertyTypes.RAIL_DIRECTION_10)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockRail> TYPE = BlockTypeBuilder
+          .builder(BlockRail.class)
+          .vanillaBlock(VanillaBlockId.RAIL, true)
+          .withProperties(VanillaBlockPropertyTypes.RAIL_DIRECTION_10)
+          .addBasicComponents()
+          .build();
 }

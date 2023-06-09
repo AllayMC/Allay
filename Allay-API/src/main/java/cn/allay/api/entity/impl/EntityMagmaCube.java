@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityMagmaCube extends Entity {
-    EntityType<EntityMagmaCube> TYPE = EntityTypeBuilder
-            .builder(EntityMagmaCube.class)
-            .vanillaEntity(VanillaEntityId.MAGMA_CUBE)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityMagmaCube> TYPE = EntityTypeBuilder
+          .builder(EntityMagmaCube.class)
+          .vanillaEntity(VanillaEntityId.MAGMA_CUBE)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

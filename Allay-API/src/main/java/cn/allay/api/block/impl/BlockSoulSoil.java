@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockSoulSoil extends Block {
-    BlockType<BlockSoulSoil> TYPE = BlockTypeBuilder
-            .builder(BlockSoulSoil.class)
-            .vanillaBlock(VanillaBlockId.SOUL_SOIL, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSoulSoil> TYPE = BlockTypeBuilder
+          .builder(BlockSoulSoil.class)
+          .vanillaBlock(VanillaBlockId.SOUL_SOIL, true)
+          .addBasicComponents()
+          .build();
 }

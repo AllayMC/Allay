@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSuspiciousSand extends Block {
-    BlockType<BlockSuspiciousSand> TYPE = BlockTypeBuilder
-            .builder(BlockSuspiciousSand.class)
-            .vanillaBlock(VanillaBlockId.SUSPICIOUS_SAND, true)
-            .withProperties(VanillaBlockPropertyTypes.BRUSHED_PROGRESS,
-                    VanillaBlockPropertyTypes.HANGING)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSuspiciousSand> TYPE = BlockTypeBuilder
+          .builder(BlockSuspiciousSand.class)
+          .vanillaBlock(VanillaBlockId.SUSPICIOUS_SAND, true)
+          .withProperties(VanillaBlockPropertyTypes.BRUSHED_PROGRESS, VanillaBlockPropertyTypes.HANGING)
+          .addBasicComponents()
+          .build();
 }

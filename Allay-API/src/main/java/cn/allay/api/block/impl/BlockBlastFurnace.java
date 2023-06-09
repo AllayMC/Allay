@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBlastFurnace extends Block {
-    BlockType<BlockBlastFurnace> TYPE = BlockTypeBuilder
-            .builder(BlockBlastFurnace.class)
-            .vanillaBlock(VanillaBlockId.BLAST_FURNACE, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBlastFurnace> TYPE = BlockTypeBuilder
+          .builder(BlockBlastFurnace.class)
+          .vanillaBlock(VanillaBlockId.BLAST_FURNACE, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockLoom extends Block {
-    BlockType<BlockLoom> TYPE = BlockTypeBuilder
-            .builder(BlockLoom.class)
-            .vanillaBlock(VanillaBlockId.LOOM, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLoom> TYPE = BlockTypeBuilder
+          .builder(BlockLoom.class)
+          .vanillaBlock(VanillaBlockId.LOOM, true)
+          .withProperties(VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

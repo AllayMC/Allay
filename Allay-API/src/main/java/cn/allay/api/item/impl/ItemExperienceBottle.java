@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemExperienceBottle extends ItemStack {
-    ItemType<ItemExperienceBottle> TYPE = ItemTypeBuilder
-            .builder(ItemExperienceBottle.class)
-            .vanillaItem(VanillaItemId.EXPERIENCE_BOTTLE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemExperienceBottle> TYPE = ItemTypeBuilder
+          .builder(ItemExperienceBottle.class)
+          .vanillaItem(VanillaItemId.EXPERIENCE_BOTTLE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

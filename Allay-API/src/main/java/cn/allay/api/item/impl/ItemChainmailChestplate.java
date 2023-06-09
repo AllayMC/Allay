@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemChainmailChestplate extends ItemStack {
-    ItemType<ItemChainmailChestplate> TYPE = ItemTypeBuilder
-            .builder(ItemChainmailChestplate.class)
-            .vanillaItem(VanillaItemId.CHAINMAIL_CHESTPLATE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemChainmailChestplate> TYPE = ItemTypeBuilder
+          .builder(ItemChainmailChestplate.class)
+          .vanillaItem(VanillaItemId.CHAINMAIL_CHESTPLATE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

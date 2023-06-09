@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSculkShrieker extends Block {
-    BlockType<BlockSculkShrieker> TYPE = BlockTypeBuilder
-            .builder(BlockSculkShrieker.class)
-            .vanillaBlock(VanillaBlockId.SCULK_SHRIEKER, true)
-            .withProperties(VanillaBlockPropertyTypes.ACTIVE,
-                    VanillaBlockPropertyTypes.CAN_SUMMON)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSculkShrieker> TYPE = BlockTypeBuilder
+          .builder(BlockSculkShrieker.class)
+          .vanillaBlock(VanillaBlockId.SCULK_SHRIEKER, true)
+          .withProperties(VanillaBlockPropertyTypes.CAN_SUMMON, VanillaBlockPropertyTypes.ACTIVE)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemTrappedChest extends ItemStack {
-    ItemType<ItemTrappedChest> TYPE = ItemTypeBuilder
-            .builder(ItemTrappedChest.class)
-            .vanillaItem(VanillaItemId.TRAPPED_CHEST, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemTrappedChest> TYPE = ItemTypeBuilder
+          .builder(ItemTrappedChest.class)
+          .vanillaItem(VanillaItemId.TRAPPED_CHEST, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

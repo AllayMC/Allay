@@ -84,7 +84,12 @@ public class CodeGen {
             List<String> values;
 
             public String getEnumClassName() {
-                return convertToPascalCase(serializationName);
+                //minecraft:cardinal_direction WTF???
+                return convertToPascalCase(serializationName.replace(":", "_"));
+            }
+
+            public String getConstantValueName() {
+                return serializationName.replace(":", "_").toUpperCase();
             }
         }
 
@@ -123,10 +128,16 @@ public class CodeGen {
     }
 
     public static void main(String[] args) {
-//        VanillaBlockPropertyTypeGen.generate();
-//        VanillaBlockIdEnumGen.generate();
-//        VanillaItemIdEnumGen.generate();
-//        VanillaEntityIdEnumGen.generate();
+        //Constants
+        VanillaBlockIdEnumGen.generate();
+        VanillaBlockPropertyTypeGen.generate();
+        VanillaItemIdEnumGen.generate();
+        VanillaEntityIdEnumGen.generate();
         VanillaBiomeIdEnumGen.generate();
+
+        //Classes
+        VanillaBlockClassGen.generate();
+        VanillaEntityClassGen.generate();
+        VanillaItemClassGen.generate();
     }
 }

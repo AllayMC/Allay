@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityTadpole extends Entity {
-    EntityType<EntityTadpole> TYPE = EntityTypeBuilder
-            .builder(EntityTadpole.class)
-            .vanillaEntity(VanillaEntityId.TADPOLE)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityTadpole> TYPE = EntityTypeBuilder
+          .builder(EntityTadpole.class)
+          .vanillaEntity(VanillaEntityId.TADPOLE)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

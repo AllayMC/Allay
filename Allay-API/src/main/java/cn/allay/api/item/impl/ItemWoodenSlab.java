@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWoodenSlab extends ItemStack {
-    ItemType<ItemWoodenSlab> TYPE = ItemTypeBuilder
-            .builder(ItemWoodenSlab.class)
-            .vanillaItem(VanillaItemId.WOODEN_SLAB, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWoodenSlab> TYPE = ItemTypeBuilder
+          .builder(ItemWoodenSlab.class)
+          .vanillaItem(VanillaItemId.WOODEN_SLAB, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

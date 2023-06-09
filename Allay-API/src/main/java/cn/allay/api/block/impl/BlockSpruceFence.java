@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockSpruceFence extends Block {
-    BlockType<BlockSpruceFence> TYPE = BlockTypeBuilder
-            .builder(BlockSpruceFence.class)
-            .vanillaBlock(VanillaBlockId.SPRUCE_FENCE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSpruceFence> TYPE = BlockTypeBuilder
+          .builder(BlockSpruceFence.class)
+          .vanillaBlock(VanillaBlockId.SPRUCE_FENCE, true)
+          .addBasicComponents()
+          .build();
 }

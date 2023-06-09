@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockBeacon extends Block {
-    BlockType<BlockBeacon> TYPE = BlockTypeBuilder
-            .builder(BlockBeacon.class)
-            .vanillaBlock(VanillaBlockId.BEACON, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBeacon> TYPE = BlockTypeBuilder
+          .builder(BlockBeacon.class)
+          .vanillaBlock(VanillaBlockId.BEACON, true)
+          .addBasicComponents()
+          .build();
 }

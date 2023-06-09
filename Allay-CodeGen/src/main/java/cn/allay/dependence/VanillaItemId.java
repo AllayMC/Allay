@@ -1,7 +1,6 @@
 package cn.allay.dependence;
 
 import java.lang.String;
-
 import lombok.Getter;
 
 /**
@@ -58,17 +57,17 @@ public enum VanillaItemId {
 
   ANDESITE_STAIRS("minecraft:andesite_stairs"),
 
-  ANGLER_POTTERY_SHARD("minecraft:angler_pottery_shard"),
+  ANGLER_POTTERY_SHERD("minecraft:angler_pottery_sherd"),
 
   ANVIL("minecraft:anvil"),
 
   APPLE("minecraft:apple"),
 
-  ARCHER_POTTERY_SHARD("minecraft:archer_pottery_shard"),
+  ARCHER_POTTERY_SHERD("minecraft:archer_pottery_sherd"),
 
   ARMOR_STAND("minecraft:armor_stand"),
 
-  ARMS_UP_POTTERY_SHARD("minecraft:arms_up_pottery_shard"),
+  ARMS_UP_POTTERY_SHERD("minecraft:arms_up_pottery_sherd"),
 
   ARROW("minecraft:arrow"),
 
@@ -200,6 +199,8 @@ public enum VanillaItemId {
 
   BLACK_CANDLE_CAKE("minecraft:black_candle_cake"),
 
+  BLACK_CARPET("minecraft:black_carpet"),
+
   BLACK_DYE("minecraft:black_dye"),
 
   BLACK_GLAZED_TERRACOTTA("minecraft:black_glazed_terracotta"),
@@ -216,7 +217,7 @@ public enum VanillaItemId {
 
   BLACKSTONE_WALL("minecraft:blackstone_wall"),
 
-  BLADE_POTTERY_SHARD("minecraft:blade_pottery_shard"),
+  BLADE_POTTERY_SHERD("minecraft:blade_pottery_sherd"),
 
   BLAST_FURNACE("minecraft:blast_furnace"),
 
@@ -231,6 +232,8 @@ public enum VanillaItemId {
   BLUE_CANDLE("minecraft:blue_candle"),
 
   BLUE_CANDLE_CAKE("minecraft:blue_candle_cake"),
+
+  BLUE_CARPET("minecraft:blue_carpet"),
 
   BLUE_DYE("minecraft:blue_dye"),
 
@@ -260,9 +263,11 @@ public enum VanillaItemId {
 
   BOWL("minecraft:bowl"),
 
+  BRAIN_CORAL("minecraft:brain_coral"),
+
   BREAD("minecraft:bread"),
 
-  BREWER_POTTERY_SHARD("minecraft:brewer_pottery_shard"),
+  BREWER_POTTERY_SHERD("minecraft:brewer_pottery_sherd"),
 
   BREWING_STAND("minecraft:brewing_stand"),
 
@@ -275,6 +280,8 @@ public enum VanillaItemId {
   BROWN_CANDLE("minecraft:brown_candle"),
 
   BROWN_CANDLE_CAKE("minecraft:brown_candle_cake"),
+
+  BROWN_CARPET("minecraft:brown_carpet"),
 
   BROWN_DYE("minecraft:brown_dye"),
 
@@ -290,11 +297,13 @@ public enum VanillaItemId {
 
   BUBBLE_COLUMN("minecraft:bubble_column"),
 
+  BUBBLE_CORAL("minecraft:bubble_coral"),
+
   BUCKET("minecraft:bucket"),
 
   BUDDING_AMETHYST("minecraft:budding_amethyst"),
 
-  BURN_POTTERY_SHARD("minecraft:burn_pottery_shard"),
+  BURN_POTTERY_SHERD("minecraft:burn_pottery_sherd"),
 
   CACTUS("minecraft:cactus"),
 
@@ -586,13 +595,15 @@ public enum VanillaItemId {
 
   CYAN_CANDLE_CAKE("minecraft:cyan_candle_cake"),
 
+  CYAN_CARPET("minecraft:cyan_carpet"),
+
   CYAN_DYE("minecraft:cyan_dye"),
 
   CYAN_GLAZED_TERRACOTTA("minecraft:cyan_glazed_terracotta"),
 
   CYAN_WOOL("minecraft:cyan_wool"),
 
-  DANGER_POTTERY_SHARD("minecraft:danger_pottery_shard"),
+  DANGER_POTTERY_SHERD("minecraft:danger_pottery_sherd"),
 
   DARK_OAK_BOAT("minecraft:dark_oak_boat"),
 
@@ -627,6 +638,16 @@ public enum VanillaItemId {
   DAYLIGHT_DETECTOR("minecraft:daylight_detector"),
 
   DAYLIGHT_DETECTOR_INVERTED("minecraft:daylight_detector_inverted"),
+
+  DEAD_BRAIN_CORAL("minecraft:dead_brain_coral"),
+
+  DEAD_BUBBLE_CORAL("minecraft:dead_bubble_coral"),
+
+  DEAD_FIRE_CORAL("minecraft:dead_fire_coral"),
+
+  DEAD_HORN_CORAL("minecraft:dead_horn_coral"),
+
+  DEAD_TUBE_CORAL("minecraft:dead_tube_coral"),
 
   DEADBUSH("minecraft:deadbush"),
 
@@ -1038,7 +1059,7 @@ public enum VanillaItemId {
 
   EXPERIENCE_BOTTLE("minecraft:experience_bottle"),
 
-  EXPLORER_POTTERY_SHARD("minecraft:explorer_pottery_shard"),
+  EXPLORER_POTTERY_SHERD("minecraft:explorer_pottery_sherd"),
 
   EXPOSED_COPPER("minecraft:exposed_copper"),
 
@@ -1070,6 +1091,8 @@ public enum VanillaItemId {
 
   FIRE_CHARGE("minecraft:fire_charge"),
 
+  FIRE_CORAL("minecraft:fire_coral"),
+
   FIREWORK_ROCKET("minecraft:firework_rocket"),
 
   FIREWORK_STAR("minecraft:firework_star"),
@@ -1096,7 +1119,7 @@ public enum VanillaItemId {
 
   FRAME("minecraft:frame"),
 
-  FRIEND_POTTERY_SHARD("minecraft:friend_pottery_shard"),
+  FRIEND_POTTERY_SHERD("minecraft:friend_pottery_sherd"),
 
   FROG_SPAWN("minecraft:frog_spawn"),
 
@@ -1190,6 +1213,8 @@ public enum VanillaItemId {
 
   GRAY_CANDLE_CAKE("minecraft:gray_candle_cake"),
 
+  GRAY_CARPET("minecraft:gray_carpet"),
+
   GRAY_DYE("minecraft:gray_dye"),
 
   GRAY_GLAZED_TERRACOTTA("minecraft:gray_glazed_terracotta"),
@@ -1199,6 +1224,8 @@ public enum VanillaItemId {
   GREEN_CANDLE("minecraft:green_candle"),
 
   GREEN_CANDLE_CAKE("minecraft:green_candle_cake"),
+
+  GREEN_CARPET("minecraft:green_carpet"),
 
   GREEN_DYE("minecraft:green_dye"),
 
@@ -1228,9 +1255,9 @@ public enum VanillaItemId {
 
   HEART_OF_THE_SEA("minecraft:heart_of_the_sea"),
 
-  HEART_POTTERY_SHARD("minecraft:heart_pottery_shard"),
+  HEART_POTTERY_SHERD("minecraft:heart_pottery_sherd"),
 
-  HEARTBREAK_POTTERY_SHARD("minecraft:heartbreak_pottery_shard"),
+  HEARTBREAK_POTTERY_SHERD("minecraft:heartbreak_pottery_sherd"),
 
   HEAVY_WEIGHTED_PRESSURE_PLATE("minecraft:heavy_weighted_pressure_plate"),
 
@@ -1248,11 +1275,13 @@ public enum VanillaItemId {
 
   HOPPER_MINECART("minecraft:hopper_minecart"),
 
+  HORN_CORAL("minecraft:horn_coral"),
+
   HORSE_SPAWN_EGG("minecraft:horse_spawn_egg"),
 
   HOST_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:host_armor_trim_smithing_template"),
 
-  HOWL_POTTERY_SHARD("minecraft:howl_pottery_shard"),
+  HOWL_POTTERY_SHERD("minecraft:howl_pottery_sherd"),
 
   HUSK_SPAWN_EGG("minecraft:husk_spawn_egg"),
 
@@ -1414,8 +1443,6 @@ public enum VanillaItemId {
 
   LAVA_BUCKET("minecraft:lava_bucket"),
 
-  LAVA_CAULDRON("minecraft:lava_cauldron"),
-
   LEAD("minecraft:lead"),
 
   LEATHER("minecraft:leather"),
@@ -1444,6 +1471,8 @@ public enum VanillaItemId {
 
   LIGHT_BLUE_CANDLE_CAKE("minecraft:light_blue_candle_cake"),
 
+  LIGHT_BLUE_CARPET("minecraft:light_blue_carpet"),
+
   LIGHT_BLUE_DYE("minecraft:light_blue_dye"),
 
   LIGHT_BLUE_GLAZED_TERRACOTTA("minecraft:light_blue_glazed_terracotta"),
@@ -1453,6 +1482,8 @@ public enum VanillaItemId {
   LIGHT_GRAY_CANDLE("minecraft:light_gray_candle"),
 
   LIGHT_GRAY_CANDLE_CAKE("minecraft:light_gray_candle_cake"),
+
+  LIGHT_GRAY_CARPET("minecraft:light_gray_carpet"),
 
   LIGHT_GRAY_DYE("minecraft:light_gray_dye"),
 
@@ -1465,6 +1496,8 @@ public enum VanillaItemId {
   LIME_CANDLE("minecraft:lime_candle"),
 
   LIME_CANDLE_CAKE("minecraft:lime_candle_cake"),
+
+  LIME_CARPET("minecraft:lime_carpet"),
 
   LIME_DYE("minecraft:lime_dye"),
 
@@ -1503,6 +1536,8 @@ public enum VanillaItemId {
   MAGENTA_CANDLE("minecraft:magenta_candle"),
 
   MAGENTA_CANDLE_CAKE("minecraft:magenta_candle_cake"),
+
+  MAGENTA_CARPET("minecraft:magenta_carpet"),
 
   MAGENTA_DYE("minecraft:magenta_dye"),
 
@@ -1574,7 +1609,7 @@ public enum VanillaItemId {
 
   MINECART("minecraft:minecart"),
 
-  MINER_POTTERY_SHARD("minecraft:miner_pottery_shard"),
+  MINER_POTTERY_SHERD("minecraft:miner_pottery_sherd"),
 
   MOB_SPAWNER("minecraft:mob_spawner"),
 
@@ -1594,7 +1629,7 @@ public enum VanillaItemId {
 
   MOSSY_STONE_BRICK_STAIRS("minecraft:mossy_stone_brick_stairs"),
 
-  MOURNER_POTTERY_SHARD("minecraft:mourner_pottery_shard"),
+  MOURNER_POTTERY_SHERD("minecraft:mourner_pottery_sherd"),
 
   MOVING_BLOCK("minecraft:moving_block"),
 
@@ -1637,6 +1672,8 @@ public enum VanillaItemId {
   MUSIC_DISC_OTHERSIDE("minecraft:music_disc_otherside"),
 
   MUSIC_DISC_PIGSTEP("minecraft:music_disc_pigstep"),
+
+  MUSIC_DISC_RELIC("minecraft:music_disc_relic"),
 
   MUSIC_DISC_STAL("minecraft:music_disc_stal"),
 
@@ -1734,6 +1771,8 @@ public enum VanillaItemId {
 
   ORANGE_CANDLE_CAKE("minecraft:orange_candle_cake"),
 
+  ORANGE_CARPET("minecraft:orange_carpet"),
+
   ORANGE_DYE("minecraft:orange_dye"),
 
   ORANGE_GLAZED_TERRACOTTA("minecraft:orange_glazed_terracotta"),
@@ -1782,6 +1821,8 @@ public enum VanillaItemId {
 
   PINK_CANDLE_CAKE("minecraft:pink_candle_cake"),
 
+  PINK_CARPET("minecraft:pink_carpet"),
+
   PINK_DYE("minecraft:pink_dye"),
 
   PINK_GLAZED_TERRACOTTA("minecraft:pink_glazed_terracotta"),
@@ -1794,9 +1835,15 @@ public enum VanillaItemId {
 
   PISTON_ARM_COLLISION("minecraft:piston_arm_collision"),
 
+  PITCHER_CROP("minecraft:pitcher_crop"),
+
+  PITCHER_PLANT("minecraft:pitcher_plant"),
+
+  PITCHER_POD("minecraft:pitcher_pod"),
+
   PLANKS("minecraft:planks"),
 
-  PLENTY_POTTERY_SHARD("minecraft:plenty_pottery_shard"),
+  PLENTY_POTTERY_SHERD("minecraft:plenty_pottery_sherd"),
 
   PODZOL("minecraft:podzol"),
 
@@ -1878,7 +1925,7 @@ public enum VanillaItemId {
 
   PRISMARINE_STAIRS("minecraft:prismarine_stairs"),
 
-  PRIZE_POTTERY_SHARD("minecraft:prize_pottery_shard"),
+  PRIZE_POTTERY_SHERD("minecraft:prize_pottery_sherd"),
 
   PUFFERFISH("minecraft:pufferfish"),
 
@@ -1897,6 +1944,8 @@ public enum VanillaItemId {
   PURPLE_CANDLE("minecraft:purple_candle"),
 
   PURPLE_CANDLE_CAKE("minecraft:purple_candle_cake"),
+
+  PURPLE_CARPET("minecraft:purple_carpet"),
 
   PURPLE_DYE("minecraft:purple_dye"),
 
@@ -1953,6 +2002,8 @@ public enum VanillaItemId {
   RED_CANDLE("minecraft:red_candle"),
 
   RED_CANDLE_CAKE("minecraft:red_candle_cake"),
+
+  RED_CARPET("minecraft:red_carpet"),
 
   RED_DYE("minecraft:red_dye"),
 
@@ -2040,13 +2091,13 @@ public enum VanillaItemId {
 
   SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:shaper_armor_trim_smithing_template"),
 
-  SHEAF_POTTERY_SHARD("minecraft:sheaf_pottery_shard"),
+  SHEAF_POTTERY_SHERD("minecraft:sheaf_pottery_sherd"),
 
   SHEARS("minecraft:shears"),
 
   SHEEP_SPAWN_EGG("minecraft:sheep_spawn_egg"),
 
-  SHELTER_POTTERY_SHARD("minecraft:shelter_pottery_shard"),
+  SHELTER_POTTERY_SHERD("minecraft:shelter_pottery_sherd"),
 
   SHIELD("minecraft:shield"),
 
@@ -2072,7 +2123,7 @@ public enum VanillaItemId {
 
   SKULL_BANNER_PATTERN("minecraft:skull_banner_pattern"),
 
-  SKULL_POTTERY_SHARD("minecraft:skull_pottery_shard"),
+  SKULL_POTTERY_SHERD("minecraft:skull_pottery_sherd"),
 
   SLIME("minecraft:slime"),
 
@@ -2098,9 +2149,11 @@ public enum VanillaItemId {
 
   SMOOTH_STONE("minecraft:smooth_stone"),
 
+  SNIFFER_EGG("minecraft:sniffer_egg"),
+
   SNIFFER_SPAWN_EGG("minecraft:sniffer_spawn_egg"),
 
-  SNORT_POTTERY_SHARD("minecraft:snort_pottery_shard"),
+  SNORT_POTTERY_SHERD("minecraft:snort_pottery_sherd"),
 
   SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:snout_armor_trim_smithing_template"),
 
@@ -2320,6 +2373,8 @@ public enum VanillaItemId {
 
   TROPICAL_FISH_SPAWN_EGG("minecraft:tropical_fish_spawn_egg"),
 
+  TUBE_CORAL("minecraft:tube_coral"),
+
   TUFF("minecraft:tuff"),
 
   TURTLE_EGG("minecraft:turtle_egg"),
@@ -2476,6 +2531,8 @@ public enum VanillaItemId {
 
   WHITE_CANDLE_CAKE("minecraft:white_candle_cake"),
 
+  WHITE_CARPET("minecraft:white_carpet"),
+
   WHITE_DYE("minecraft:white_dye"),
 
   WHITE_GLAZED_TERRACOTTA("minecraft:white_glazed_terracotta"),
@@ -2523,6 +2580,8 @@ public enum VanillaItemId {
   YELLOW_CANDLE("minecraft:yellow_candle"),
 
   YELLOW_CANDLE_CAKE("minecraft:yellow_candle_cake"),
+
+  YELLOW_CARPET("minecraft:yellow_carpet"),
 
   YELLOW_DYE("minecraft:yellow_dye"),
 

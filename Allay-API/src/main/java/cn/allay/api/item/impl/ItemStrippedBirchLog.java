@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemStrippedBirchLog extends ItemStack {
-    ItemType<ItemStrippedBirchLog> TYPE = ItemTypeBuilder
-            .builder(ItemStrippedBirchLog.class)
-            .vanillaItem(VanillaItemId.STRIPPED_BIRCH_LOG, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemStrippedBirchLog> TYPE = ItemTypeBuilder
+          .builder(ItemStrippedBirchLog.class)
+          .vanillaItem(VanillaItemId.STRIPPED_BIRCH_LOG, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

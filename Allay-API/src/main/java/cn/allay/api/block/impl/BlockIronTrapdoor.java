@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockIronTrapdoor extends Block {
-    BlockType<BlockIronTrapdoor> TYPE = BlockTypeBuilder
-            .builder(BlockIronTrapdoor.class)
-            .vanillaBlock(VanillaBlockId.IRON_TRAPDOOR, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.OPEN_BIT,
-                    VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockIronTrapdoor> TYPE = BlockTypeBuilder
+          .builder(BlockIronTrapdoor.class)
+          .vanillaBlock(VanillaBlockId.IRON_TRAPDOOR, true)
+          .withProperties(VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

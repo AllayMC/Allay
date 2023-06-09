@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBordureIndentedBannerPattern extends ItemStack {
-    ItemType<ItemBordureIndentedBannerPattern> TYPE = ItemTypeBuilder
-            .builder(ItemBordureIndentedBannerPattern.class)
-            .vanillaItem(VanillaItemId.BORDURE_INDENTED_BANNER_PATTERN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemBordureIndentedBannerPattern> TYPE = ItemTypeBuilder
+          .builder(ItemBordureIndentedBannerPattern.class)
+          .vanillaItem(VanillaItemId.BORDURE_INDENTED_BANNER_PATTERN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

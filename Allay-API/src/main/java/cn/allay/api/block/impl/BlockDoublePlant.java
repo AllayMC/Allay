@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDoublePlant extends Block {
-    BlockType<BlockDoublePlant> TYPE = BlockTypeBuilder
-            .builder(BlockDoublePlant.class)
-            .vanillaBlock(VanillaBlockId.DOUBLE_PLANT, true)
-            .withProperties(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE,
-                    VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDoublePlant> TYPE = BlockTypeBuilder
+          .builder(BlockDoublePlant.class)
+          .vanillaBlock(VanillaBlockId.DOUBLE_PLANT, true)
+          .withProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT, VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE)
+          .addBasicComponents()
+          .build();
 }

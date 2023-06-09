@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSweetBerryBush extends Block {
-    BlockType<BlockSweetBerryBush> TYPE = BlockTypeBuilder
-            .builder(BlockSweetBerryBush.class)
-            .vanillaBlock(VanillaBlockId.SWEET_BERRY_BUSH, true)
-            .withProperties(VanillaBlockPropertyTypes.GROWTH)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSweetBerryBush> TYPE = BlockTypeBuilder
+          .builder(BlockSweetBerryBush.class)
+          .vanillaBlock(VanillaBlockId.SWEET_BERRY_BUSH, true)
+          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .addBasicComponents()
+          .build();
 }

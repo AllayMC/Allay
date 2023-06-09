@@ -11,13 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCrimsonHangingSign extends Block {
-    BlockType<BlockCrimsonHangingSign> TYPE = BlockTypeBuilder
-            .builder(BlockCrimsonHangingSign.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_HANGING_SIGN, true)
-            .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT,
-                    VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION,
-                    VanillaBlockPropertyTypes.HANGING)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCrimsonHangingSign> TYPE = BlockTypeBuilder
+          .builder(BlockCrimsonHangingSign.class)
+          .vanillaBlock(VanillaBlockId.CRIMSON_HANGING_SIGN, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.HANGING)
+          .addBasicComponents()
+          .build();
 }

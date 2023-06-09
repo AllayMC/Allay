@@ -1,5 +1,7 @@
 package cn.allay.api.data;
 
+import java.lang.Integer;
+import java.lang.String;
 import lombok.Getter;
 
 /**
@@ -9,185 +11,187 @@ import lombok.Getter;
  */
 @Getter
 public enum VanillaBiomeId {
-    OCEAN("ocean", 0, "OCEAN"),
+  OCEAN("ocean", 0, "OCEAN"),
 
-    PLAINS("plains", 1, "PLAINS"),
+  PLAINS("plains", 1, "PLAINS"),
 
-    DESERT("desert", 2, "DESERT"),
+  DESERT("desert", 2, "DESERT"),
 
-    EXTREME_HILLS("extreme_hills", 3, "EXTREME_HILLS"),
+  EXTREME_HILLS("extreme_hills", 3, "EXTREME_HILLS"),
 
-    FOREST("forest", 4, "FOREST"),
+  FOREST("forest", 4, "FOREST"),
 
-    TAIGA("taiga", 5, "TAIGA_FOREST"),
+  TAIGA("taiga", 5, "TAIGA_FOREST"),
 
-    SWAMPLAND("swampland", 6, "SWAMP"),
+  SWAMPLAND("swampland", 6, "SWAMP"),
 
-    RIVER("river", 7, "RIVER"),
+  RIVER("river", 7, "RIVER"),
 
-    HELL("hell", 8, "HELL"),
+  HELL("hell", 8, "HELL"),
 
-    THE_END("the_end", 9, "THE_END"),
+  THE_END("the_end", 9, "THE_END"),
 
-    LEGACY_FROZEN_OCEAN("legacy_frozen_ocean", 10, "OCEAN"),
+  LEGACY_FROZEN_OCEAN("legacy_frozen_ocean", 10, "OCEAN"),
 
-    FROZEN_RIVER("frozen_river", 11, "RIVER"),
+  FROZEN_RIVER("frozen_river", 11, "RIVER"),
 
-    ICE_PLAINS("ice_plains", 12, "ICE_PLAINS_SPIKES"),
+  ICE_PLAINS("ice_plains", 12, "ICE_PLAINS_SPIKES"),
 
-    ICE_MOUNTAINS("ice_mountains", 13, "ICE_PLAINS_SPIKES"),
+  ICE_MOUNTAINS("ice_mountains", 13, "ICE_PLAINS_SPIKES"),
 
-    MUSHROOM_ISLAND("mushroom_island", 14, "MUSHROOM_ISLAND"),
+  MUSHROOM_ISLAND("mushroom_island", 14, "MUSHROOM_ISLAND"),
 
-    MUSHROOM_ISLAND_SHORE("mushroom_island_shore", 15, "MUSHROOM_ISLAND"),
+  MUSHROOM_ISLAND_SHORE("mushroom_island_shore", 15, "MUSHROOM_ISLAND"),
 
-    BEACH("beach", 16, "BEACH"),
+  BEACH("beach", 16, "BEACH"),
 
-    DESERT_HILLS("desert_hills", 17, "DESERT"),
+  DESERT_HILLS("desert_hills", 17, "DESERT"),
 
-    FOREST_HILLS("forest_hills", 18, "FOREST"),
+  FOREST_HILLS("forest_hills", 18, "FOREST"),
 
-    TAIGA_HILLS("taiga_hills", 19, "TAIGA_FOREST"),
+  TAIGA_HILLS("taiga_hills", 19, "TAIGA_FOREST"),
 
-    EXTREME_HILLS_EDGE("extreme_hills_edge", 20, "EXTREME_HILLS"),
+  EXTREME_HILLS_EDGE("extreme_hills_edge", 20, "EXTREME_HILLS"),
 
-    JUNGLE("jungle", 21, "JUNGLE"),
+  JUNGLE("jungle", 21, "JUNGLE"),
 
-    JUNGLE_HILLS("jungle_hills", 22, "JUNGLE"),
+  JUNGLE_HILLS("jungle_hills", 22, "JUNGLE"),
 
-    JUNGLE_EDGE("jungle_edge", 23, "JUNGLE"),
+  JUNGLE_EDGE("jungle_edge", 23, "JUNGLE"),
 
-    DEEP_OCEAN("deep_ocean", 24, "OCEAN"),
+  DEEP_OCEAN("deep_ocean", 24, "OCEAN"),
 
-    STONE_BEACH("stone_beach", 25, "ROCKY_BEACH"),
+  STONE_BEACH("stone_beach", 25, "ROCKY_BEACH"),
 
-    COLD_BEACH("cold_beach", 26, "BEACH"),
+  COLD_BEACH("cold_beach", 26, "BEACH"),
 
-    BIRCH_FOREST("birch_forest", 27, "FOREST"),
+  BIRCH_FOREST("birch_forest", 27, "FOREST"),
 
-    BIRCH_FOREST_HILLS("birch_forest_hills", 28, "FOREST"),
+  BIRCH_FOREST_HILLS("birch_forest_hills", 28, "FOREST"),
 
-    ROOFED_FOREST("roofed_forest", 29, "FOREST"),
+  ROOFED_FOREST("roofed_forest", 29, "FOREST"),
 
-    COLD_TAIGA("cold_taiga", 30, "TAIGA_FOREST"),
+  COLD_TAIGA("cold_taiga", 30, "TAIGA_FOREST"),
 
-    COLD_TAIGA_HILLS("cold_taiga_hills", 31, "TAIGA_FOREST"),
+  COLD_TAIGA_HILLS("cold_taiga_hills", 31, "TAIGA_FOREST"),
 
-    MEGA_TAIGA("mega_taiga", 32, "TAIGA_FOREST"),
+  MEGA_TAIGA("mega_taiga", 32, "TAIGA_FOREST"),
 
-    MEGA_TAIGA_HILLS("mega_taiga_hills", 33, "TAIGA_FOREST"),
+  MEGA_TAIGA_HILLS("mega_taiga_hills", 33, "TAIGA_FOREST"),
 
-    EXTREME_HILLS_PLUS_TREES("extreme_hills_plus_trees", 34, "EXTREME_HILLS"),
+  EXTREME_HILLS_PLUS_TREES("extreme_hills_plus_trees", 34, "EXTREME_HILLS"),
 
-    SAVANNA("savanna", 35, "SAVANNA"),
+  SAVANNA("savanna", 35, "SAVANNA"),
 
-    SAVANNA_PLATEAU("savanna_plateau", 36, "SAVANNA"),
+  SAVANNA_PLATEAU("savanna_plateau", 36, "SAVANNA"),
 
-    MESA("mesa", 37, "MESA"),
+  MESA("mesa", 37, "MESA"),
 
-    MESA_PLATEAU_STONE("mesa_plateau_stone", 38, "MESA"),
+  MESA_PLATEAU_STONE("mesa_plateau_stone", 38, "MESA"),
 
-    MESA_PLATEAU("mesa_plateau", 39, "MESA"),
+  MESA_PLATEAU("mesa_plateau", 39, "MESA"),
 
-    WARM_OCEAN("warm_ocean", 40, "OCEAN"),
+  WARM_OCEAN("warm_ocean", 40, "OCEAN"),
 
-    DEEP_WARM_OCEAN("deep_warm_ocean", 41, "OCEAN"),
+  DEEP_WARM_OCEAN("deep_warm_ocean", 41, "OCEAN"),
 
-    LUKEWARM_OCEAN("lukewarm_ocean", 42, "OCEAN"),
+  LUKEWARM_OCEAN("lukewarm_ocean", 42, "OCEAN"),
 
-    DEEP_LUKEWARM_OCEAN("deep_lukewarm_ocean", 43, "OCEAN"),
+  DEEP_LUKEWARM_OCEAN("deep_lukewarm_ocean", 43, "OCEAN"),
 
-    COLD_OCEAN("cold_ocean", 44, "OCEAN"),
+  COLD_OCEAN("cold_ocean", 44, "OCEAN"),
 
-    DEEP_COLD_OCEAN("deep_cold_ocean", 45, "OCEAN"),
+  DEEP_COLD_OCEAN("deep_cold_ocean", 45, "OCEAN"),
 
-    FROZEN_OCEAN("frozen_ocean", 46, "OCEAN"),
+  FROZEN_OCEAN("frozen_ocean", 46, "OCEAN"),
 
-    DEEP_FROZEN_OCEAN("deep_frozen_ocean", 47, "OCEAN"),
+  DEEP_FROZEN_OCEAN("deep_frozen_ocean", 47, "OCEAN"),
 
-    BAMBOO_JUNGLE("bamboo_jungle", 48, "JUNGLE"),
+  BAMBOO_JUNGLE("bamboo_jungle", 48, "JUNGLE"),
 
-    BAMBOO_JUNGLE_HILLS("bamboo_jungle_hills", 49, "JUNGLE"),
+  BAMBOO_JUNGLE_HILLS("bamboo_jungle_hills", 49, "JUNGLE"),
 
-    SUNFLOWER_PLAINS("sunflower_plains", 129, "PLAINS"),
+  SUNFLOWER_PLAINS("sunflower_plains", 129, "PLAINS"),
 
-    DESERT_MUTATED("desert_mutated", 130, "DESERT"),
+  DESERT_MUTATED("desert_mutated", 130, "DESERT"),
 
-    EXTREME_HILLS_MUTATED("extreme_hills_mutated", 131, "EXTREME_HILLS"),
+  EXTREME_HILLS_MUTATED("extreme_hills_mutated", 131, "EXTREME_HILLS"),
 
-    FLOWER_FOREST("flower_forest", 132, "FOREST"),
+  FLOWER_FOREST("flower_forest", 132, "FOREST"),
 
-    TAIGA_MUTATED("taiga_mutated", 133, "TAIGA_FOREST"),
+  TAIGA_MUTATED("taiga_mutated", 133, "TAIGA_FOREST"),
 
-    SWAMPLAND_MUTATED("swampland_mutated", 134, "SWAMP"),
+  SWAMPLAND_MUTATED("swampland_mutated", 134, "SWAMP"),
 
-    ICE_PLAINS_SPIKES("ice_plains_spikes", 140, "ICE_PLAINS_SPIKES"),
+  ICE_PLAINS_SPIKES("ice_plains_spikes", 140, "ICE_PLAINS_SPIKES"),
 
-    JUNGLE_MUTATED("jungle_mutated", 149, "JUNGLE"),
+  JUNGLE_MUTATED("jungle_mutated", 149, "JUNGLE"),
 
-    JUNGLE_EDGE_MUTATED("jungle_edge_mutated", 151, "JUNGLE"),
+  JUNGLE_EDGE_MUTATED("jungle_edge_mutated", 151, "JUNGLE"),
 
-    BIRCH_FOREST_MUTATED("birch_forest_mutated", 155, "FOREST"),
+  BIRCH_FOREST_MUTATED("birch_forest_mutated", 155, "FOREST"),
 
-    BIRCH_FOREST_HILLS_MUTATED("birch_forest_hills_mutated", 156, "FOREST"),
+  BIRCH_FOREST_HILLS_MUTATED("birch_forest_hills_mutated", 156, "FOREST"),
 
-    ROOFED_FOREST_MUTATED("roofed_forest_mutated", 157, "FOREST"),
+  ROOFED_FOREST_MUTATED("roofed_forest_mutated", 157, "FOREST"),
 
-    COLD_TAIGA_MUTATED("cold_taiga_mutated", 158, "TAIGA_FOREST"),
+  COLD_TAIGA_MUTATED("cold_taiga_mutated", 158, "TAIGA_FOREST"),
 
-    REDWOOD_TAIGA_MUTATED("redwood_taiga_mutated", 160, "TAIGA_FOREST"),
+  REDWOOD_TAIGA_MUTATED("redwood_taiga_mutated", 160, "TAIGA_FOREST"),
 
-    REDWOOD_TAIGA_HILLS_MUTATED("redwood_taiga_hills_mutated", 161, "TAIGA_FOREST"),
+  REDWOOD_TAIGA_HILLS_MUTATED("redwood_taiga_hills_mutated", 161, "TAIGA_FOREST"),
 
-    EXTREME_HILLS_PLUS_TREES_MUTATED("extreme_hills_plus_trees_mutated", 162, "EXTREME_HILLS"),
+  EXTREME_HILLS_PLUS_TREES_MUTATED("extreme_hills_plus_trees_mutated", 162, "EXTREME_HILLS"),
 
-    SAVANNA_MUTATED("savanna_mutated", 163, "SAVANNA"),
+  SAVANNA_MUTATED("savanna_mutated", 163, "SAVANNA"),
 
-    SAVANNA_PLATEAU_MUTATED("savanna_plateau_mutated", 164, "SAVANNA"),
+  SAVANNA_PLATEAU_MUTATED("savanna_plateau_mutated", 164, "SAVANNA"),
 
-    MESA_BRYCE("mesa_bryce", 165, "MESA"),
+  MESA_BRYCE("mesa_bryce", 165, "MESA"),
 
-    MESA_PLATEAU_STONE_MUTATED("mesa_plateau_stone_mutated", 166, "MESA"),
+  MESA_PLATEAU_STONE_MUTATED("mesa_plateau_stone_mutated", 166, "MESA"),
 
-    MESA_PLATEAU_MUTATED("mesa_plateau_mutated", 167, "MESA"),
+  MESA_PLATEAU_MUTATED("mesa_plateau_mutated", 167, "MESA"),
 
-    SOULSAND_VALLEY("soulsand_valley", 178, "CUSTOM"),
+  SOULSAND_VALLEY("soulsand_valley", 178, "CUSTOM"),
 
-    CRIMSON_FOREST("crimson_forest", 179, "CUSTOM"),
+  CRIMSON_FOREST("crimson_forest", 179, "CUSTOM"),
 
-    WARPED_FOREST("warped_forest", 180, "CUSTOM"),
+  WARPED_FOREST("warped_forest", 180, "CUSTOM"),
 
-    BASALT_DELTAS("basalt_deltas", 181, "CUSTOM"),
+  BASALT_DELTAS("basalt_deltas", 181, "CUSTOM"),
 
-    JAGGED_PEAKS("jagged_peaks", 182, "CUSTOM"),
+  JAGGED_PEAKS("jagged_peaks", 182, "CUSTOM"),
 
-    FROZEN_PEAKS("frozen_peaks", 183, "CUSTOM"),
+  FROZEN_PEAKS("frozen_peaks", 183, "CUSTOM"),
 
-    SNOWY_SLOPES("snowy_slopes", 184, "CUSTOM"),
+  SNOWY_SLOPES("snowy_slopes", 184, "CUSTOM"),
 
-    GROVE("grove", 185, "CUSTOM"),
+  GROVE("grove", 185, "CUSTOM"),
 
-    MEADOW("meadow", 186, "CUSTOM"),
+  MEADOW("meadow", 186, "CUSTOM"),
 
-    LUSH_CAVES("lush_caves", 187, "CUSTOM"),
+  LUSH_CAVES("lush_caves", 187, "CUSTOM"),
 
-    DRIPSTONE_CAVES("dripstone_caves", 188, "CUSTOM"),
+  DRIPSTONE_CAVES("dripstone_caves", 188, "CUSTOM"),
 
-    STONY_PEAKS("stony_peaks", 189, "CUSTOM"),
+  STONY_PEAKS("stony_peaks", 189, "CUSTOM"),
 
-    DEEP_DARK("deep_dark", 190, "CUSTOM"),
+  DEEP_DARK("deep_dark", 190, "CUSTOM"),
 
-    MANGROVE_SWAMP("mangrove_swamp", 191, "CUSTOM");
+  MANGROVE_SWAMP("mangrove_swamp", 191, "CUSTOM"),
 
-    private final String name;
+  CHERRY_GROVE("cherry_grove", 192, "CUSTOM");
 
-    private final Integer id;
+  private final String name;
 
-    private final String type;
+  private final Integer id;
 
-    VanillaBiomeId(String name, Integer id, String type) {
-        this.name = name;
-        this.id = id;
-        this.type = type;
-    }
+  private final String type;
+
+  VanillaBiomeId(String name, Integer id, String type) {
+    this.name = name;
+    this.id = id;
+    this.type = type;
+  }
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMagmaCream extends ItemStack {
-    ItemType<ItemMagmaCream> TYPE = ItemTypeBuilder
-            .builder(ItemMagmaCream.class)
-            .vanillaItem(VanillaItemId.MAGMA_CREAM, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMagmaCream> TYPE = ItemTypeBuilder
+          .builder(ItemMagmaCream.class)
+          .vanillaItem(VanillaItemId.MAGMA_CREAM, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

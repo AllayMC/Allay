@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockMangroveButton extends Block {
-    BlockType<BlockMangroveButton> TYPE = BlockTypeBuilder
-            .builder(BlockMangroveButton.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_BUTTON, true)
-            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
-                    VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMangroveButton> TYPE = BlockTypeBuilder
+          .builder(BlockMangroveButton.class)
+          .vanillaBlock(VanillaBlockId.MANGROVE_BUTTON, true)
+          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

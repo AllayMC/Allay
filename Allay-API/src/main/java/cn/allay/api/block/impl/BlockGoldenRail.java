@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockGoldenRail extends Block {
-    BlockType<BlockGoldenRail> TYPE = BlockTypeBuilder
-            .builder(BlockGoldenRail.class)
-            .vanillaBlock(VanillaBlockId.GOLDEN_RAIL, true)
-            .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT,
-                    VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockGoldenRail> TYPE = BlockTypeBuilder
+          .builder(BlockGoldenRail.class)
+          .vanillaBlock(VanillaBlockId.GOLDEN_RAIL, true)
+          .withProperties(VanillaBlockPropertyTypes.RAIL_DIRECTION_6, VanillaBlockPropertyTypes.RAIL_DATA_BIT)
+          .addBasicComponents()
+          .build();
 }

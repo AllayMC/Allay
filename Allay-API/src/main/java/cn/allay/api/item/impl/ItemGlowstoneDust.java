@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemGlowstoneDust extends ItemStack {
-    ItemType<ItemGlowstoneDust> TYPE = ItemTypeBuilder
-            .builder(ItemGlowstoneDust.class)
-            .vanillaItem(VanillaItemId.GLOWSTONE_DUST, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemGlowstoneDust> TYPE = ItemTypeBuilder
+          .builder(ItemGlowstoneDust.class)
+          .vanillaItem(VanillaItemId.GLOWSTONE_DUST, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

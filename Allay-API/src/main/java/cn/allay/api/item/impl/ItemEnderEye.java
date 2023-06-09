@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemEnderEye extends ItemStack {
-    ItemType<ItemEnderEye> TYPE = ItemTypeBuilder
-            .builder(ItemEnderEye.class)
-            .vanillaItem(VanillaItemId.ENDER_EYE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemEnderEye> TYPE = ItemTypeBuilder
+          .builder(ItemEnderEye.class)
+          .vanillaItem(VanillaItemId.ENDER_EYE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

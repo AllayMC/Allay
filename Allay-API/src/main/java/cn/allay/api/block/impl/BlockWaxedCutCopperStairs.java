@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockWaxedCutCopperStairs extends Block {
-    BlockType<BlockWaxedCutCopperStairs> TYPE = BlockTypeBuilder
-            .builder(BlockWaxedCutCopperStairs.class)
-            .vanillaBlock(VanillaBlockId.WAXED_CUT_COPPER_STAIRS, true)
-            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
-                    VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWaxedCutCopperStairs> TYPE = BlockTypeBuilder
+          .builder(BlockWaxedCutCopperStairs.class)
+          .vanillaBlock(VanillaBlockId.WAXED_CUT_COPPER_STAIRS, true)
+          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

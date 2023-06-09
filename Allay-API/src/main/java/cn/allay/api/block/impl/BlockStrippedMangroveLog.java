@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockStrippedMangroveLog extends Block {
-    BlockType<BlockStrippedMangroveLog> TYPE = BlockTypeBuilder
-            .builder(BlockStrippedMangroveLog.class)
-            .vanillaBlock(VanillaBlockId.STRIPPED_MANGROVE_LOG, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockStrippedMangroveLog> TYPE = BlockTypeBuilder
+          .builder(BlockStrippedMangroveLog.class)
+          .vanillaBlock(VanillaBlockId.STRIPPED_MANGROVE_LOG, true)
+          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

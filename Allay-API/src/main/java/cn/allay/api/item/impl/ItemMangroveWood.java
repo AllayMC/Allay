@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMangroveWood extends ItemStack {
-    ItemType<ItemMangroveWood> TYPE = ItemTypeBuilder
-            .builder(ItemMangroveWood.class)
-            .vanillaItem(VanillaItemId.MANGROVE_WOOD, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMangroveWood> TYPE = ItemTypeBuilder
+          .builder(ItemMangroveWood.class)
+          .vanillaItem(VanillaItemId.MANGROVE_WOOD, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

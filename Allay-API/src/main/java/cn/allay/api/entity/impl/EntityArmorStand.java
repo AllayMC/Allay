@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityArmorStand extends Entity {
-    EntityType<EntityArmorStand> TYPE = EntityTypeBuilder
-            .builder(EntityArmorStand.class)
-            .vanillaEntity(VanillaEntityId.ARMOR_STAND)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityArmorStand> TYPE = EntityTypeBuilder
+          .builder(EntityArmorStand.class)
+          .vanillaEntity(VanillaEntityId.ARMOR_STAND)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMangroveHangingSign extends ItemStack {
-    ItemType<ItemMangroveHangingSign> TYPE = ItemTypeBuilder
-            .builder(ItemMangroveHangingSign.class)
-            .vanillaItem(VanillaItemId.MANGROVE_HANGING_SIGN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMangroveHangingSign> TYPE = ItemTypeBuilder
+          .builder(ItemMangroveHangingSign.class)
+          .vanillaItem(VanillaItemId.MANGROVE_HANGING_SIGN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

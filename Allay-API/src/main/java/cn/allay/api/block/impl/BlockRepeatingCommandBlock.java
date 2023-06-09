@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockRepeatingCommandBlock extends Block {
-    BlockType<BlockRepeatingCommandBlock> TYPE = BlockTypeBuilder
-            .builder(BlockRepeatingCommandBlock.class)
-            .vanillaBlock(VanillaBlockId.REPEATING_COMMAND_BLOCK, true)
-            .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT,
-                    VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockRepeatingCommandBlock> TYPE = BlockTypeBuilder
+          .builder(BlockRepeatingCommandBlock.class)
+          .vanillaBlock(VanillaBlockId.REPEATING_COMMAND_BLOCK, true)
+          .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

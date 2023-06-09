@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockHoneyBlock extends Block {
-    BlockType<BlockHoneyBlock> TYPE = BlockTypeBuilder
-            .builder(BlockHoneyBlock.class)
-            .vanillaBlock(VanillaBlockId.HONEY_BLOCK, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockHoneyBlock> TYPE = BlockTypeBuilder
+          .builder(BlockHoneyBlock.class)
+          .vanillaBlock(VanillaBlockId.HONEY_BLOCK, true)
+          .addBasicComponents()
+          .build();
 }

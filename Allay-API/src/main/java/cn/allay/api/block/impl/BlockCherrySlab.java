@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCherrySlab extends Block {
-    BlockType<BlockCherrySlab> TYPE = BlockTypeBuilder
-            .builder(BlockCherrySlab.class)
-            .vanillaBlock(VanillaBlockId.CHERRY_SLAB, true)
-            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCherrySlab> TYPE = BlockTypeBuilder
+          .builder(BlockCherrySlab.class)
+          .vanillaBlock(VanillaBlockId.CHERRY_SLAB, true)
+          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .addBasicComponents()
+          .build();
 }

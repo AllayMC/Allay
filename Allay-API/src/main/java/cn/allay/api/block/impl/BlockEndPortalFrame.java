@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockEndPortalFrame extends Block {
-    BlockType<BlockEndPortalFrame> TYPE = BlockTypeBuilder
-            .builder(BlockEndPortalFrame.class)
-            .vanillaBlock(VanillaBlockId.END_PORTAL_FRAME, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.END_PORTAL_EYE_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockEndPortalFrame> TYPE = BlockTypeBuilder
+          .builder(BlockEndPortalFrame.class)
+          .vanillaBlock(VanillaBlockId.END_PORTAL_FRAME, true)
+          .withProperties(VanillaBlockPropertyTypes.END_PORTAL_EYE_BIT, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityShulker extends Entity {
-    EntityType<EntityShulker> TYPE = EntityTypeBuilder
-            .builder(EntityShulker.class)
-            .vanillaEntity(VanillaEntityId.SHULKER)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityShulker> TYPE = EntityTypeBuilder
+          .builder(EntityShulker.class)
+          .vanillaEntity(VanillaEntityId.SHULKER)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

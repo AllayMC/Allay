@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemClientRequestPlaceholderBlock extends ItemStack {
-    ItemType<ItemClientRequestPlaceholderBlock> TYPE = ItemTypeBuilder
-            .builder(ItemClientRequestPlaceholderBlock.class)
-            .vanillaItem(VanillaItemId.CLIENT_REQUEST_PLACEHOLDER_BLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemClientRequestPlaceholderBlock> TYPE = ItemTypeBuilder
+          .builder(ItemClientRequestPlaceholderBlock.class)
+          .vanillaItem(VanillaItemId.CLIENT_REQUEST_PLACEHOLDER_BLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

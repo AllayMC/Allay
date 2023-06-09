@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemTotemOfUndying extends ItemStack {
-    ItemType<ItemTotemOfUndying> TYPE = ItemTypeBuilder
-            .builder(ItemTotemOfUndying.class)
-            .vanillaItem(VanillaItemId.TOTEM_OF_UNDYING, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemTotemOfUndying> TYPE = ItemTypeBuilder
+          .builder(ItemTotemOfUndying.class)
+          .vanillaItem(VanillaItemId.TOTEM_OF_UNDYING, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

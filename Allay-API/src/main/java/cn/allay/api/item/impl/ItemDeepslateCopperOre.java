@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDeepslateCopperOre extends ItemStack {
-    ItemType<ItemDeepslateCopperOre> TYPE = ItemTypeBuilder
-            .builder(ItemDeepslateCopperOre.class)
-            .vanillaItem(VanillaItemId.DEEPSLATE_COPPER_ORE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDeepslateCopperOre> TYPE = ItemTypeBuilder
+          .builder(ItemDeepslateCopperOre.class)
+          .vanillaItem(VanillaItemId.DEEPSLATE_COPPER_ORE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

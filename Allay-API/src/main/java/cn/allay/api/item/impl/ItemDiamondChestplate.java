@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDiamondChestplate extends ItemStack {
-    ItemType<ItemDiamondChestplate> TYPE = ItemTypeBuilder
-            .builder(ItemDiamondChestplate.class)
-            .vanillaItem(VanillaItemId.DIAMOND_CHESTPLATE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDiamondChestplate> TYPE = ItemTypeBuilder
+          .builder(ItemDiamondChestplate.class)
+          .vanillaItem(VanillaItemId.DIAMOND_CHESTPLATE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

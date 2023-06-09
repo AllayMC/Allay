@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityFox extends Entity {
-    EntityType<EntityFox> TYPE = EntityTypeBuilder
-            .builder(EntityFox.class)
-            .vanillaEntity(VanillaEntityId.FOX)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityFox> TYPE = EntityTypeBuilder
+          .builder(EntityFox.class)
+          .vanillaEntity(VanillaEntityId.FOX)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

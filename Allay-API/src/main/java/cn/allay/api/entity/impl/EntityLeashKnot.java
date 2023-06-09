@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityLeashKnot extends Entity {
-    EntityType<EntityLeashKnot> TYPE = EntityTypeBuilder
-            .builder(EntityLeashKnot.class)
-            .vanillaEntity(VanillaEntityId.LEASH_KNOT)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityLeashKnot> TYPE = EntityTypeBuilder
+          .builder(EntityLeashKnot.class)
+          .vanillaEntity(VanillaEntityId.LEASH_KNOT)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

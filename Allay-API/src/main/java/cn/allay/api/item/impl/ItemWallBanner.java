@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWallBanner extends ItemStack {
-    ItemType<ItemWallBanner> TYPE = ItemTypeBuilder
-            .builder(ItemWallBanner.class)
-            .vanillaItem(VanillaItemId.WALL_BANNER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWallBanner> TYPE = ItemTypeBuilder
+          .builder(ItemWallBanner.class)
+          .vanillaItem(VanillaItemId.WALL_BANNER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

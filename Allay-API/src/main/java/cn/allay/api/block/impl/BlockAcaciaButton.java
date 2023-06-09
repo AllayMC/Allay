@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockAcaciaButton extends Block {
-    BlockType<BlockAcaciaButton> TYPE = BlockTypeBuilder
-            .builder(BlockAcaciaButton.class)
-            .vanillaBlock(VanillaBlockId.ACACIA_BUTTON, true)
-            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
-                    VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockAcaciaButton> TYPE = BlockTypeBuilder
+          .builder(BlockAcaciaButton.class)
+          .vanillaBlock(VanillaBlockId.ACACIA_BUTTON, true)
+          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

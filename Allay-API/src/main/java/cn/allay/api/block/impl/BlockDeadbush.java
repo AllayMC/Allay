@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockDeadbush extends Block {
-    BlockType<BlockDeadbush> TYPE = BlockTypeBuilder
-            .builder(BlockDeadbush.class)
-            .vanillaBlock(VanillaBlockId.DEADBUSH, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDeadbush> TYPE = BlockTypeBuilder
+          .builder(BlockDeadbush.class)
+          .vanillaBlock(VanillaBlockId.DEADBUSH, true)
+          .addBasicComponents()
+          .build();
 }

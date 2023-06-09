@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSculkSensor extends ItemStack {
-    ItemType<ItemSculkSensor> TYPE = ItemTypeBuilder
-            .builder(ItemSculkSensor.class)
-            .vanillaItem(VanillaItemId.SCULK_SENSOR, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSculkSensor> TYPE = ItemTypeBuilder
+          .builder(ItemSculkSensor.class)
+          .vanillaItem(VanillaItemId.SCULK_SENSOR, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

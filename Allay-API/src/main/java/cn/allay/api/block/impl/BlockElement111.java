@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockElement111 extends Block {
-    BlockType<BlockElement111> TYPE = BlockTypeBuilder
-            .builder(BlockElement111.class)
-            .vanillaBlock(VanillaBlockId.ELEMENT_111, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockElement111> TYPE = BlockTypeBuilder
+          .builder(BlockElement111.class)
+          .vanillaBlock(VanillaBlockId.ELEMENT_111, true)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemEmeraldOre extends ItemStack {
-    ItemType<ItemEmeraldOre> TYPE = ItemTypeBuilder
-            .builder(ItemEmeraldOre.class)
-            .vanillaItem(VanillaItemId.EMERALD_ORE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemEmeraldOre> TYPE = ItemTypeBuilder
+          .builder(ItemEmeraldOre.class)
+          .vanillaItem(VanillaItemId.EMERALD_ORE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

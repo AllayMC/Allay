@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCommandBlock extends ItemStack {
-    ItemType<ItemCommandBlock> TYPE = ItemTypeBuilder
-            .builder(ItemCommandBlock.class)
-            .vanillaItem(VanillaItemId.COMMAND_BLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCommandBlock> TYPE = ItemTypeBuilder
+          .builder(ItemCommandBlock.class)
+          .vanillaItem(VanillaItemId.COMMAND_BLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

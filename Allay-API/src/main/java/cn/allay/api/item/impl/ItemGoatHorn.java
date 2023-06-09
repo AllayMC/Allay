@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemGoatHorn extends ItemStack {
-    ItemType<ItemGoatHorn> TYPE = ItemTypeBuilder
-            .builder(ItemGoatHorn.class)
-            .vanillaItem(VanillaItemId.GOAT_HORN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemGoatHorn> TYPE = ItemTypeBuilder
+          .builder(ItemGoatHorn.class)
+          .vanillaItem(VanillaItemId.GOAT_HORN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

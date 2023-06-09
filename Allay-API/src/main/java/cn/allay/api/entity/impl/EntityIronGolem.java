@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityIronGolem extends Entity {
-    EntityType<EntityIronGolem> TYPE = EntityTypeBuilder
-            .builder(EntityIronGolem.class)
-            .vanillaEntity(VanillaEntityId.IRON_GOLEM)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityIronGolem> TYPE = EntityTypeBuilder
+          .builder(EntityIronGolem.class)
+          .vanillaEntity(VanillaEntityId.IRON_GOLEM)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

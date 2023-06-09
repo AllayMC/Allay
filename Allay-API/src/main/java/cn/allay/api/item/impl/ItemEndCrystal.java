@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemEndCrystal extends ItemStack {
-    ItemType<ItemEndCrystal> TYPE = ItemTypeBuilder
-            .builder(ItemEndCrystal.class)
-            .vanillaItem(VanillaItemId.END_CRYSTAL, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemEndCrystal> TYPE = ItemTypeBuilder
+          .builder(ItemEndCrystal.class)
+          .vanillaItem(VanillaItemId.END_CRYSTAL, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

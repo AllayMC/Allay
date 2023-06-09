@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBlazeRod extends ItemStack {
-    ItemType<ItemBlazeRod> TYPE = ItemTypeBuilder
-            .builder(ItemBlazeRod.class)
-            .vanillaItem(VanillaItemId.BLAZE_ROD, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemBlazeRod> TYPE = ItemTypeBuilder
+          .builder(ItemBlazeRod.class)
+          .vanillaItem(VanillaItemId.BLAZE_ROD, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

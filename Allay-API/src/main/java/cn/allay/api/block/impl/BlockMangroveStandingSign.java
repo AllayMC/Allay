@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockMangroveStandingSign extends Block {
-    BlockType<BlockMangroveStandingSign> TYPE = BlockTypeBuilder
-            .builder(BlockMangroveStandingSign.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_STANDING_SIGN, true)
-            .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMangroveStandingSign> TYPE = BlockTypeBuilder
+          .builder(BlockMangroveStandingSign.class)
+          .vanillaBlock(VanillaBlockId.MANGROVE_STANDING_SIGN, true)
+          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

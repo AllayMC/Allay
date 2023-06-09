@@ -26,12 +26,12 @@ public class VanillaItemIdEnumGen {
 
     @SneakyThrows
     public static void generate() {
-        generateDependence();
-        generateAPI();
+        generateToDependenceModule();
+        generateToAPIModule();
     }
 
     @SneakyThrows
-    public static void generateDependence() {
+    public static void generateToDependenceModule() {
         var identifierClass = ClassName.get("cn.allay.dependence", "Identifier");
         TypeSpec.Builder codeBuilder = commonBuilder(identifierClass);
         addEnums(codeBuilder);
@@ -40,7 +40,7 @@ public class VanillaItemIdEnumGen {
     }
 
     @SneakyThrows
-    public static void generateAPI() {
+    public static void generateToAPIModule() {
         var identifierClass = ClassName.get("cn.allay.api.identifier", "Identifier");
         var itemTypeRegistryClass = ClassName.get("cn.allay.api.item.type", "ItemTypeRegistry");
         var itemTypeClass = ClassName.get("cn.allay.api.item.type", "ItemType");

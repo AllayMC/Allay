@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntitySkeleton extends Entity {
-    EntityType<EntitySkeleton> TYPE = EntityTypeBuilder
-            .builder(EntitySkeleton.class)
-            .vanillaEntity(VanillaEntityId.SKELETON)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntitySkeleton> TYPE = EntityTypeBuilder
+          .builder(EntitySkeleton.class)
+          .vanillaEntity(VanillaEntityId.SKELETON)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }
