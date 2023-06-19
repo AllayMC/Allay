@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemGravel extends ItemStack {
-    ItemType<ItemGravel> TYPE = ItemTypeBuilder
-            .builder(ItemGravel.class)
-            .vanillaItem(VanillaItemId.GRAVEL, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemGravel> TYPE = ItemTypeBuilder
+          .builder(ItemGravel.class)
+          .vanillaItem(VanillaItemId.GRAVEL, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

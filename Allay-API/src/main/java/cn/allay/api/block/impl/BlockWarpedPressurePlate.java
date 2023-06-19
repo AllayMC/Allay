@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockWarpedPressurePlate extends Block {
-    BlockType<BlockWarpedPressurePlate> TYPE = BlockTypeBuilder
-            .builder(BlockWarpedPressurePlate.class)
-            .vanillaBlock(VanillaBlockId.WARPED_PRESSURE_PLATE, true)
-            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWarpedPressurePlate> TYPE = BlockTypeBuilder
+          .builder(BlockWarpedPressurePlate.class)
+          .vanillaBlock(VanillaBlockId.WARPED_PRESSURE_PLATE, true)
+          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .addBasicComponents()
+          .build();
 }

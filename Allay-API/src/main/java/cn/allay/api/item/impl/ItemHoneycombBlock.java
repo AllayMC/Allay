@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemHoneycombBlock extends ItemStack {
-    ItemType<ItemHoneycombBlock> TYPE = ItemTypeBuilder
-            .builder(ItemHoneycombBlock.class)
-            .vanillaItem(VanillaItemId.HONEYCOMB_BLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemHoneycombBlock> TYPE = ItemTypeBuilder
+          .builder(ItemHoneycombBlock.class)
+          .vanillaItem(VanillaItemId.HONEYCOMB_BLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPointedDripstone extends Block {
-    BlockType<BlockPointedDripstone> TYPE = BlockTypeBuilder
-            .builder(BlockPointedDripstone.class)
-            .vanillaBlock(VanillaBlockId.POINTED_DRIPSTONE, true)
-            .withProperties(VanillaBlockPropertyTypes.DRIPSTONE_THICKNESS,
-                    VanillaBlockPropertyTypes.HANGING)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPointedDripstone> TYPE = BlockTypeBuilder
+          .builder(BlockPointedDripstone.class)
+          .vanillaBlock(VanillaBlockId.POINTED_DRIPSTONE, true)
+          .withProperties(VanillaBlockPropertyTypes.DRIPSTONE_THICKNESS, VanillaBlockPropertyTypes.HANGING)
+          .addBasicComponents()
+          .build();
 }

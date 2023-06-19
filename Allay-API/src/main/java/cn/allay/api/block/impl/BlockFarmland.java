@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockFarmland extends Block {
-    BlockType<BlockFarmland> TYPE = BlockTypeBuilder
-            .builder(BlockFarmland.class)
-            .vanillaBlock(VanillaBlockId.FARMLAND, true)
-            .withProperties(VanillaBlockPropertyTypes.MOISTURIZED_AMOUNT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockFarmland> TYPE = BlockTypeBuilder
+          .builder(BlockFarmland.class)
+          .vanillaBlock(VanillaBlockId.FARMLAND, true)
+          .withProperties(VanillaBlockPropertyTypes.MOISTURIZED_AMOUNT)
+          .addBasicComponents()
+          .build();
 }

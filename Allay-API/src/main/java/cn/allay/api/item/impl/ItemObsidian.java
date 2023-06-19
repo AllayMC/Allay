@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemObsidian extends ItemStack {
-    ItemType<ItemObsidian> TYPE = ItemTypeBuilder
-            .builder(ItemObsidian.class)
-            .vanillaItem(VanillaItemId.OBSIDIAN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemObsidian> TYPE = ItemTypeBuilder
+          .builder(ItemObsidian.class)
+          .vanillaItem(VanillaItemId.OBSIDIAN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

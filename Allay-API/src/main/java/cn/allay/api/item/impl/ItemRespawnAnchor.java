@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemRespawnAnchor extends ItemStack {
-    ItemType<ItemRespawnAnchor> TYPE = ItemTypeBuilder
-            .builder(ItemRespawnAnchor.class)
-            .vanillaItem(VanillaItemId.RESPAWN_ANCHOR, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemRespawnAnchor> TYPE = ItemTypeBuilder
+          .builder(ItemRespawnAnchor.class)
+          .vanillaItem(VanillaItemId.RESPAWN_ANCHOR, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

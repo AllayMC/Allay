@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemFlowingLava extends ItemStack {
-    ItemType<ItemFlowingLava> TYPE = ItemTypeBuilder
-            .builder(ItemFlowingLava.class)
-            .vanillaItem(VanillaItemId.FLOWING_LAVA, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemFlowingLava> TYPE = ItemTypeBuilder
+          .builder(ItemFlowingLava.class)
+          .vanillaItem(VanillaItemId.FLOWING_LAVA, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

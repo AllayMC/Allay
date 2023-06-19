@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockDeepslateEmeraldOre extends Block {
-    BlockType<BlockDeepslateEmeraldOre> TYPE = BlockTypeBuilder
-            .builder(BlockDeepslateEmeraldOre.class)
-            .vanillaBlock(VanillaBlockId.DEEPSLATE_EMERALD_ORE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDeepslateEmeraldOre> TYPE = BlockTypeBuilder
+          .builder(BlockDeepslateEmeraldOre.class)
+          .vanillaBlock(VanillaBlockId.DEEPSLATE_EMERALD_ORE, true)
+          .addBasicComponents()
+          .build();
 }

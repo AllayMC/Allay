@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockMelonStem extends Block {
-    BlockType<BlockMelonStem> TYPE = BlockTypeBuilder
-            .builder(BlockMelonStem.class)
-            .vanillaBlock(VanillaBlockId.MELON_STEM, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.GROWTH)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMelonStem> TYPE = BlockTypeBuilder
+          .builder(BlockMelonStem.class)
+          .vanillaBlock(VanillaBlockId.MELON_STEM, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROWTH)
+          .addBasicComponents()
+          .build();
 }

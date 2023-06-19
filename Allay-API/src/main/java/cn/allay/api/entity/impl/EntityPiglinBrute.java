@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityPiglinBrute extends Entity {
-    EntityType<EntityPiglinBrute> TYPE = EntityTypeBuilder
-            .builder(EntityPiglinBrute.class)
-            .vanillaEntity(VanillaEntityId.PIGLIN_BRUTE)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityPiglinBrute> TYPE = EntityTypeBuilder
+          .builder(EntityPiglinBrute.class)
+          .vanillaEntity(VanillaEntityId.PIGLIN_BRUTE)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSquidSpawnEgg extends ItemStack {
-    ItemType<ItemSquidSpawnEgg> TYPE = ItemTypeBuilder
-            .builder(ItemSquidSpawnEgg.class)
-            .vanillaItem(VanillaItemId.SQUID_SPAWN_EGG, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSquidSpawnEgg> TYPE = ItemTypeBuilder
+          .builder(ItemSquidSpawnEgg.class)
+          .vanillaItem(VanillaItemId.SQUID_SPAWN_EGG, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

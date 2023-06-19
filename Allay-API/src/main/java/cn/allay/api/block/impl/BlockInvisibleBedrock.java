@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockInvisibleBedrock extends Block {
-    BlockType<BlockInvisibleBedrock> TYPE = BlockTypeBuilder
-            .builder(BlockInvisibleBedrock.class)
-            .vanillaBlock(VanillaBlockId.INVISIBLE_BEDROCK, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockInvisibleBedrock> TYPE = BlockTypeBuilder
+          .builder(BlockInvisibleBedrock.class)
+          .vanillaBlock(VanillaBlockId.INVISIBLE_BEDROCK, true)
+          .addBasicComponents()
+          .build();
 }

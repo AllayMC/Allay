@@ -11,13 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockWarpedHangingSign extends Block {
-    BlockType<BlockWarpedHangingSign> TYPE = BlockTypeBuilder
-            .builder(BlockWarpedHangingSign.class)
-            .vanillaBlock(VanillaBlockId.WARPED_HANGING_SIGN, true)
-            .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT,
-                    VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION,
-                    VanillaBlockPropertyTypes.HANGING)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWarpedHangingSign> TYPE = BlockTypeBuilder
+          .builder(BlockWarpedHangingSign.class)
+          .vanillaBlock(VanillaBlockId.WARPED_HANGING_SIGN, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.HANGING)
+          .addBasicComponents()
+          .build();
 }

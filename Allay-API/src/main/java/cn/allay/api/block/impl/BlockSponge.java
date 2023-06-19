@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSponge extends Block {
-    BlockType<BlockSponge> TYPE = BlockTypeBuilder
-            .builder(BlockSponge.class)
-            .vanillaBlock(VanillaBlockId.SPONGE, true)
-            .withProperties(VanillaBlockPropertyTypes.SPONGE_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSponge> TYPE = BlockTypeBuilder
+          .builder(BlockSponge.class)
+          .vanillaBlock(VanillaBlockId.SPONGE, true)
+          .withProperties(VanillaBlockPropertyTypes.SPONGE_TYPE)
+          .addBasicComponents()
+          .build();
 }

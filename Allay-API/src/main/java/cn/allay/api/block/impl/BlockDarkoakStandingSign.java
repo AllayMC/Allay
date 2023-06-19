@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDarkoakStandingSign extends Block {
-    BlockType<BlockDarkoakStandingSign> TYPE = BlockTypeBuilder
-            .builder(BlockDarkoakStandingSign.class)
-            .vanillaBlock(VanillaBlockId.DARKOAK_STANDING_SIGN, true)
-            .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDarkoakStandingSign> TYPE = BlockTypeBuilder
+          .builder(BlockDarkoakStandingSign.class)
+          .vanillaBlock(VanillaBlockId.DARKOAK_STANDING_SIGN, true)
+          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

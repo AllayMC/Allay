@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityRavager extends Entity {
-    EntityType<EntityRavager> TYPE = EntityTypeBuilder
-            .builder(EntityRavager.class)
-            .vanillaEntity(VanillaEntityId.RAVAGER)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityRavager> TYPE = EntityTypeBuilder
+          .builder(EntityRavager.class)
+          .vanillaEntity(VanillaEntityId.RAVAGER)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

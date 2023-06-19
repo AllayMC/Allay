@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDropper extends Block {
-    BlockType<BlockDropper> TYPE = BlockTypeBuilder
-            .builder(BlockDropper.class)
-            .vanillaBlock(VanillaBlockId.DROPPER, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.TRIGGERED_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDropper> TYPE = BlockTypeBuilder
+          .builder(BlockDropper.class)
+          .vanillaBlock(VanillaBlockId.DROPPER, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.TRIGGERED_BIT)
+          .addBasicComponents()
+          .build();
 }

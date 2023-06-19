@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockSmithingTable extends Block {
-    BlockType<BlockSmithingTable> TYPE = BlockTypeBuilder
-            .builder(BlockSmithingTable.class)
-            .vanillaBlock(VanillaBlockId.SMITHING_TABLE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSmithingTable> TYPE = BlockTypeBuilder
+          .builder(BlockSmithingTable.class)
+          .vanillaBlock(VanillaBlockId.SMITHING_TABLE, true)
+          .addBasicComponents()
+          .build();
 }

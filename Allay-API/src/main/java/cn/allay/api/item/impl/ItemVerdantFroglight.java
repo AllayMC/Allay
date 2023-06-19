@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemVerdantFroglight extends ItemStack {
-    ItemType<ItemVerdantFroglight> TYPE = ItemTypeBuilder
-            .builder(ItemVerdantFroglight.class)
-            .vanillaItem(VanillaItemId.VERDANT_FROGLIGHT, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemVerdantFroglight> TYPE = ItemTypeBuilder
+          .builder(ItemVerdantFroglight.class)
+          .vanillaItem(VanillaItemId.VERDANT_FROGLIGHT, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

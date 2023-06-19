@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCaveVines extends Block {
-    BlockType<BlockCaveVines> TYPE = BlockTypeBuilder
-            .builder(BlockCaveVines.class)
-            .vanillaBlock(VanillaBlockId.CAVE_VINES, true)
-            .withProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCaveVines> TYPE = BlockTypeBuilder
+          .builder(BlockCaveVines.class)
+          .vanillaBlock(VanillaBlockId.CAVE_VINES, true)
+          .withProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
+          .addBasicComponents()
+          .build();
 }

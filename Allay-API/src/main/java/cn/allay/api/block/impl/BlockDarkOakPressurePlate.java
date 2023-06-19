@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDarkOakPressurePlate extends Block {
-    BlockType<BlockDarkOakPressurePlate> TYPE = BlockTypeBuilder
-            .builder(BlockDarkOakPressurePlate.class)
-            .vanillaBlock(VanillaBlockId.DARK_OAK_PRESSURE_PLATE, true)
-            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDarkOakPressurePlate> TYPE = BlockTypeBuilder
+          .builder(BlockDarkOakPressurePlate.class)
+          .vanillaBlock(VanillaBlockId.DARK_OAK_PRESSURE_PLATE, true)
+          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityWarden extends Entity {
-    EntityType<EntityWarden> TYPE = EntityTypeBuilder
-            .builder(EntityWarden.class)
-            .vanillaEntity(VanillaEntityId.WARDEN)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityWarden> TYPE = EntityTypeBuilder
+          .builder(EntityWarden.class)
+          .vanillaEntity(VanillaEntityId.WARDEN)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

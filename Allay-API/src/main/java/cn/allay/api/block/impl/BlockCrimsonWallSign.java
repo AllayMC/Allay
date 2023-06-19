@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCrimsonWallSign extends Block {
-    BlockType<BlockCrimsonWallSign> TYPE = BlockTypeBuilder
-            .builder(BlockCrimsonWallSign.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_WALL_SIGN, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCrimsonWallSign> TYPE = BlockTypeBuilder
+          .builder(BlockCrimsonWallSign.class)
+          .vanillaBlock(VanillaBlockId.CRIMSON_WALL_SIGN, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

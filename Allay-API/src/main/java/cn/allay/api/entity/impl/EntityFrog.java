@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityFrog extends Entity {
-    EntityType<EntityFrog> TYPE = EntityTypeBuilder
-            .builder(EntityFrog.class)
-            .vanillaEntity(VanillaEntityId.FROG)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityFrog> TYPE = EntityTypeBuilder
+          .builder(EntityFrog.class)
+          .vanillaEntity(VanillaEntityId.FROG)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

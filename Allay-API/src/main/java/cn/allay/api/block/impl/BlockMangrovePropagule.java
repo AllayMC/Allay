@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockMangrovePropagule extends Block {
-    BlockType<BlockMangrovePropagule> TYPE = BlockTypeBuilder
-            .builder(BlockMangrovePropagule.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_PROPAGULE, true)
-            .withProperties(VanillaBlockPropertyTypes.HANGING,
-                    VanillaBlockPropertyTypes.PROPAGULE_STAGE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMangrovePropagule> TYPE = BlockTypeBuilder
+          .builder(BlockMangrovePropagule.class)
+          .vanillaBlock(VanillaBlockId.MANGROVE_PROPAGULE, true)
+          .withProperties(VanillaBlockPropertyTypes.PROPAGULE_STAGE, VanillaBlockPropertyTypes.HANGING)
+          .addBasicComponents()
+          .build();
 }

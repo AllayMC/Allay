@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemPistonArmCollision extends ItemStack {
-    ItemType<ItemPistonArmCollision> TYPE = ItemTypeBuilder
-            .builder(ItemPistonArmCollision.class)
-            .vanillaItem(VanillaItemId.PISTON_ARM_COLLISION, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemPistonArmCollision> TYPE = ItemTypeBuilder
+          .builder(ItemPistonArmCollision.class)
+          .vanillaItem(VanillaItemId.PISTON_ARM_COLLISION, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

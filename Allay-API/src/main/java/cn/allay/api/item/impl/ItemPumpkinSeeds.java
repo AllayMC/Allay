@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemPumpkinSeeds extends ItemStack {
-    ItemType<ItemPumpkinSeeds> TYPE = ItemTypeBuilder
-            .builder(ItemPumpkinSeeds.class)
-            .vanillaItem(VanillaItemId.PUMPKIN_SEEDS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemPumpkinSeeds> TYPE = ItemTypeBuilder
+          .builder(ItemPumpkinSeeds.class)
+          .vanillaItem(VanillaItemId.PUMPKIN_SEEDS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWanderingTraderSpawnEgg extends ItemStack {
-    ItemType<ItemWanderingTraderSpawnEgg> TYPE = ItemTypeBuilder
-            .builder(ItemWanderingTraderSpawnEgg.class)
-            .vanillaItem(VanillaItemId.WANDERING_TRADER_SPAWN_EGG, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWanderingTraderSpawnEgg> TYPE = ItemTypeBuilder
+          .builder(ItemWanderingTraderSpawnEgg.class)
+          .vanillaItem(VanillaItemId.WANDERING_TRADER_SPAWN_EGG, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

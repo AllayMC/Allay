@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBarrel extends Block {
-    BlockType<BlockBarrel> TYPE = BlockTypeBuilder
-            .builder(BlockBarrel.class)
-            .vanillaBlock(VanillaBlockId.BARREL, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.OPEN_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBarrel> TYPE = BlockTypeBuilder
+          .builder(BlockBarrel.class)
+          .vanillaBlock(VanillaBlockId.BARREL, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT)
+          .addBasicComponents()
+          .build();
 }

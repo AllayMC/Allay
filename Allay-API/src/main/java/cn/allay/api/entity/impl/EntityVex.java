@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityVex extends Entity {
-    EntityType<EntityVex> TYPE = EntityTypeBuilder
-            .builder(EntityVex.class)
-            .vanillaEntity(VanillaEntityId.VEX)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityVex> TYPE = EntityTypeBuilder
+          .builder(EntityVex.class)
+          .vanillaEntity(VanillaEntityId.VEX)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

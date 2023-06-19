@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBigDripleaf extends Block {
-    BlockType<BlockBigDripleaf> TYPE = BlockTypeBuilder
-            .builder(BlockBigDripleaf.class)
-            .vanillaBlock(VanillaBlockId.BIG_DRIPLEAF, true)
-            .withProperties(VanillaBlockPropertyTypes.BIG_DRIPLEAF_HEAD,
-                    VanillaBlockPropertyTypes.BIG_DRIPLEAF_TILT,
-                    VanillaBlockPropertyTypes.DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBigDripleaf> TYPE = BlockTypeBuilder
+          .builder(BlockBigDripleaf.class)
+          .vanillaBlock(VanillaBlockId.BIG_DRIPLEAF, true)
+          .withProperties(VanillaBlockPropertyTypes.BIG_DRIPLEAF_TILT, VanillaBlockPropertyTypes.BIG_DRIPLEAF_HEAD, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

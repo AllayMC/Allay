@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockChemicalHeat extends Block {
-    BlockType<BlockChemicalHeat> TYPE = BlockTypeBuilder
-            .builder(BlockChemicalHeat.class)
-            .vanillaBlock(VanillaBlockId.CHEMICAL_HEAT, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockChemicalHeat> TYPE = BlockTypeBuilder
+          .builder(BlockChemicalHeat.class)
+          .vanillaBlock(VanillaBlockId.CHEMICAL_HEAT, true)
+          .addBasicComponents()
+          .build();
 }

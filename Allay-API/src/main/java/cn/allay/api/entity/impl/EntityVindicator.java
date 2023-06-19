@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityVindicator extends Entity {
-    EntityType<EntityVindicator> TYPE = EntityTypeBuilder
-            .builder(EntityVindicator.class)
-            .vanillaEntity(VanillaEntityId.VINDICATOR)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityVindicator> TYPE = EntityTypeBuilder
+          .builder(EntityVindicator.class)
+          .vanillaEntity(VanillaEntityId.VINDICATOR)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

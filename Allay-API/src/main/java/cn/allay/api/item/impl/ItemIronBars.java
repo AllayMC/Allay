@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemIronBars extends ItemStack {
-    ItemType<ItemIronBars> TYPE = ItemTypeBuilder
-            .builder(ItemIronBars.class)
-            .vanillaItem(VanillaItemId.IRON_BARS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemIronBars> TYPE = ItemTypeBuilder
+          .builder(ItemIronBars.class)
+          .vanillaItem(VanillaItemId.IRON_BARS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

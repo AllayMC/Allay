@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockWaxedWeatheredCopper extends Block {
-    BlockType<BlockWaxedWeatheredCopper> TYPE = BlockTypeBuilder
-            .builder(BlockWaxedWeatheredCopper.class)
-            .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_COPPER, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWaxedWeatheredCopper> TYPE = BlockTypeBuilder
+          .builder(BlockWaxedWeatheredCopper.class)
+          .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_COPPER, true)
+          .addBasicComponents()
+          .build();
 }

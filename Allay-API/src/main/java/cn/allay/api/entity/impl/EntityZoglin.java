@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityZoglin extends Entity {
-    EntityType<EntityZoglin> TYPE = EntityTypeBuilder
-            .builder(EntityZoglin.class)
-            .vanillaEntity(VanillaEntityId.ZOGLIN)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityZoglin> TYPE = EntityTypeBuilder
+          .builder(EntityZoglin.class)
+          .vanillaEntity(VanillaEntityId.ZOGLIN)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

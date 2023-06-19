@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDoubleStoneBlockSlab extends ItemStack {
-    ItemType<ItemDoubleStoneBlockSlab> TYPE = ItemTypeBuilder
-            .builder(ItemDoubleStoneBlockSlab.class)
-            .vanillaItem(VanillaItemId.DOUBLE_STONE_BLOCK_SLAB, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDoubleStoneBlockSlab> TYPE = ItemTypeBuilder
+          .builder(ItemDoubleStoneBlockSlab.class)
+          .vanillaItem(VanillaItemId.DOUBLE_STONE_BLOCK_SLAB, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

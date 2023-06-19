@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWeatheredCutCopperSlab extends ItemStack {
-    ItemType<ItemWeatheredCutCopperSlab> TYPE = ItemTypeBuilder
-            .builder(ItemWeatheredCutCopperSlab.class)
-            .vanillaItem(VanillaItemId.WEATHERED_CUT_COPPER_SLAB, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWeatheredCutCopperSlab> TYPE = ItemTypeBuilder
+          .builder(ItemWeatheredCutCopperSlab.class)
+          .vanillaItem(VanillaItemId.WEATHERED_CUT_COPPER_SLAB, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

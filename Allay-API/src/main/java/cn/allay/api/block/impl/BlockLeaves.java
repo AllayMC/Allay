@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockLeaves extends Block {
-    BlockType<BlockLeaves> TYPE = BlockTypeBuilder
-            .builder(BlockLeaves.class)
-            .vanillaBlock(VanillaBlockId.LEAVES, true)
-            .withProperties(VanillaBlockPropertyTypes.OLD_LEAF_TYPE,
-                    VanillaBlockPropertyTypes.PERSISTENT_BIT,
-                    VanillaBlockPropertyTypes.UPDATE_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLeaves> TYPE = BlockTypeBuilder
+          .builder(BlockLeaves.class)
+          .vanillaBlock(VanillaBlockId.LEAVES, true)
+          .withProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT, VanillaBlockPropertyTypes.OLD_LEAF_TYPE)
+          .addBasicComponents()
+          .build();
 }

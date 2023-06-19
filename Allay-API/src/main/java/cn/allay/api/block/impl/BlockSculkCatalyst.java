@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSculkCatalyst extends Block {
-    BlockType<BlockSculkCatalyst> TYPE = BlockTypeBuilder
-            .builder(BlockSculkCatalyst.class)
-            .vanillaBlock(VanillaBlockId.SCULK_CATALYST, true)
-            .withProperties(VanillaBlockPropertyTypes.BLOOM)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSculkCatalyst> TYPE = BlockTypeBuilder
+          .builder(BlockSculkCatalyst.class)
+          .vanillaBlock(VanillaBlockId.SCULK_CATALYST, true)
+          .withProperties(VanillaBlockPropertyTypes.BLOOM)
+          .addBasicComponents()
+          .build();
 }

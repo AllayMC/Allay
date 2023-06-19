@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDeepslateTiles extends ItemStack {
-    ItemType<ItemDeepslateTiles> TYPE = ItemTypeBuilder
-            .builder(ItemDeepslateTiles.class)
-            .vanillaItem(VanillaItemId.DEEPSLATE_TILES, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDeepslateTiles> TYPE = ItemTypeBuilder
+          .builder(ItemDeepslateTiles.class)
+          .vanillaItem(VanillaItemId.DEEPSLATE_TILES, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

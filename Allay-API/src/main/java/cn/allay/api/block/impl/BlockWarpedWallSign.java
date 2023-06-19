@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockWarpedWallSign extends Block {
-    BlockType<BlockWarpedWallSign> TYPE = BlockTypeBuilder
-            .builder(BlockWarpedWallSign.class)
-            .vanillaBlock(VanillaBlockId.WARPED_WALL_SIGN, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWarpedWallSign> TYPE = BlockTypeBuilder
+          .builder(BlockWarpedWallSign.class)
+          .vanillaBlock(VanillaBlockId.WARPED_WALL_SIGN, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDeny extends ItemStack {
-    ItemType<ItemDeny> TYPE = ItemTypeBuilder
-            .builder(ItemDeny.class)
-            .vanillaItem(VanillaItemId.DENY, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDeny> TYPE = ItemTypeBuilder
+          .builder(ItemDeny.class)
+          .vanillaItem(VanillaItemId.DENY, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSmallAmethystBud extends Block {
-    BlockType<BlockSmallAmethystBud> TYPE = BlockTypeBuilder
-            .builder(BlockSmallAmethystBud.class)
-            .vanillaBlock(VanillaBlockId.SMALL_AMETHYST_BUD, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSmallAmethystBud> TYPE = BlockTypeBuilder
+          .builder(BlockSmallAmethystBud.class)
+          .vanillaBlock(VanillaBlockId.SMALL_AMETHYST_BUD, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

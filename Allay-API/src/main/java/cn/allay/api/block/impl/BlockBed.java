@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBed extends Block {
-    BlockType<BlockBed> TYPE = BlockTypeBuilder
-            .builder(BlockBed.class)
-            .vanillaBlock(VanillaBlockId.BED, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.HEAD_PIECE_BIT,
-                    VanillaBlockPropertyTypes.OCCUPIED_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBed> TYPE = BlockTypeBuilder
+          .builder(BlockBed.class)
+          .vanillaBlock(VanillaBlockId.BED, true)
+          .withProperties(VanillaBlockPropertyTypes.HEAD_PIECE_BIT, VanillaBlockPropertyTypes.OCCUPIED_BIT, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

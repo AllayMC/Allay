@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemShroomlight extends ItemStack {
-    ItemType<ItemShroomlight> TYPE = ItemTypeBuilder
-            .builder(ItemShroomlight.class)
-            .vanillaItem(VanillaItemId.SHROOMLIGHT, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemShroomlight> TYPE = ItemTypeBuilder
+          .builder(ItemShroomlight.class)
+          .vanillaItem(VanillaItemId.SHROOMLIGHT, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemLodestoneCompass extends ItemStack {
-    ItemType<ItemLodestoneCompass> TYPE = ItemTypeBuilder
-            .builder(ItemLodestoneCompass.class)
-            .vanillaItem(VanillaItemId.LODESTONE_COMPASS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemLodestoneCompass> TYPE = ItemTypeBuilder
+          .builder(ItemLodestoneCompass.class)
+          .vanillaItem(VanillaItemId.LODESTONE_COMPASS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

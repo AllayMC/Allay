@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemHardStainedGlass extends ItemStack {
-    ItemType<ItemHardStainedGlass> TYPE = ItemTypeBuilder
-            .builder(ItemHardStainedGlass.class)
-            .vanillaItem(VanillaItemId.HARD_STAINED_GLASS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemHardStainedGlass> TYPE = ItemTypeBuilder
+          .builder(ItemHardStainedGlass.class)
+          .vanillaItem(VanillaItemId.HARD_STAINED_GLASS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

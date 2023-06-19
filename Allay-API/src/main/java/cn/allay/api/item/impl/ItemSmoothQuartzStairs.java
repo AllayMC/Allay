@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSmoothQuartzStairs extends ItemStack {
-    ItemType<ItemSmoothQuartzStairs> TYPE = ItemTypeBuilder
-            .builder(ItemSmoothQuartzStairs.class)
-            .vanillaItem(VanillaItemId.SMOOTH_QUARTZ_STAIRS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSmoothQuartzStairs> TYPE = ItemTypeBuilder
+          .builder(ItemSmoothQuartzStairs.class)
+          .vanillaItem(VanillaItemId.SMOOTH_QUARTZ_STAIRS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

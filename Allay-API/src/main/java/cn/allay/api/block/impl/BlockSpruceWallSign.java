@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSpruceWallSign extends Block {
-    BlockType<BlockSpruceWallSign> TYPE = BlockTypeBuilder
-            .builder(BlockSpruceWallSign.class)
-            .vanillaBlock(VanillaBlockId.SPRUCE_WALL_SIGN, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSpruceWallSign> TYPE = BlockTypeBuilder
+          .builder(BlockSpruceWallSign.class)
+          .vanillaBlock(VanillaBlockId.SPRUCE_WALL_SIGN, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

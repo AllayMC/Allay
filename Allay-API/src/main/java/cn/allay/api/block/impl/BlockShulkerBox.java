@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockShulkerBox extends Block {
-    BlockType<BlockShulkerBox> TYPE = BlockTypeBuilder
-            .builder(BlockShulkerBox.class)
-            .vanillaBlock(VanillaBlockId.SHULKER_BOX, true)
-            .withProperties(VanillaBlockPropertyTypes.COLOR)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockShulkerBox> TYPE = BlockTypeBuilder
+          .builder(BlockShulkerBox.class)
+          .vanillaBlock(VanillaBlockId.SHULKER_BOX, true)
+          .withProperties(VanillaBlockPropertyTypes.COLOR)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntitySquid extends Entity {
-    EntityType<EntitySquid> TYPE = EntityTypeBuilder
-            .builder(EntitySquid.class)
-            .vanillaEntity(VanillaEntityId.SQUID)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntitySquid> TYPE = EntityTypeBuilder
+          .builder(EntitySquid.class)
+          .vanillaEntity(VanillaEntityId.SQUID)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

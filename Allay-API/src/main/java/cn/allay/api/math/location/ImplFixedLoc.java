@@ -1,6 +1,6 @@
 package cn.allay.api.math.location;
 
-import cn.allay.api.level.Level;
+import cn.allay.api.world.World;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -17,32 +17,32 @@ class ImplFixedLoc<T extends Number> implements FixedLoc<T> {
     protected double yaw;
     protected double headYaw;
     protected double pitch;
-    protected Level level;
+    protected World world;
 
-    public ImplFixedLoc(T x, T y, T z, Level level) {
+    public ImplFixedLoc(T x, T y, T z, World world) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.level = level;
+        this.world = world;
     }
 
-    public ImplFixedLoc(T x, T y, T z, double yaw, double pitch, Level level) {
+    public ImplFixedLoc(T x, T y, T z, double yaw, double pitch, World world) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.yaw = yaw;
         this.pitch = pitch;
-        this.level = level;
+        this.world = world;
     }
 
-    public ImplFixedLoc(T x, T y, T z, double yaw, double headYaw, double pitch, Level level) {
+    public ImplFixedLoc(T x, T y, T z, double yaw, double headYaw, double pitch, World world) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.yaw = yaw;
         this.headYaw = headYaw;
         this.pitch = pitch;
-        this.level = level;
+        this.world = world;
     }
 
     @Override
@@ -60,9 +60,8 @@ class ImplFixedLoc<T extends Number> implements FixedLoc<T> {
         return z;
     }
 
-    @Override
-    public Level getLevel() {
-        return level;
+    public World getWorld() {
+        return world;
     }
 
     @Override

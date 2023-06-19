@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockRespawnAnchor extends Block {
-    BlockType<BlockRespawnAnchor> TYPE = BlockTypeBuilder
-            .builder(BlockRespawnAnchor.class)
-            .vanillaBlock(VanillaBlockId.RESPAWN_ANCHOR, true)
-            .withProperties(VanillaBlockPropertyTypes.RESPAWN_ANCHOR_CHARGE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockRespawnAnchor> TYPE = BlockTypeBuilder
+          .builder(BlockRespawnAnchor.class)
+          .vanillaBlock(VanillaBlockId.RESPAWN_ANCHOR, true)
+          .withProperties(VanillaBlockPropertyTypes.RESPAWN_ANCHOR_CHARGE)
+          .addBasicComponents()
+          .build();
 }

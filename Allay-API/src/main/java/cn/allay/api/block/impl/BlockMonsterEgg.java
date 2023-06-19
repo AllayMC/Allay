@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockMonsterEgg extends Block {
-    BlockType<BlockMonsterEgg> TYPE = BlockTypeBuilder
-            .builder(BlockMonsterEgg.class)
-            .vanillaBlock(VanillaBlockId.MONSTER_EGG, true)
-            .withProperties(VanillaBlockPropertyTypes.MONSTER_EGG_STONE_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMonsterEgg> TYPE = BlockTypeBuilder
+          .builder(BlockMonsterEgg.class)
+          .vanillaBlock(VanillaBlockId.MONSTER_EGG, true)
+          .withProperties(VanillaBlockPropertyTypes.MONSTER_EGG_STONE_TYPE)
+          .addBasicComponents()
+          .build();
 }

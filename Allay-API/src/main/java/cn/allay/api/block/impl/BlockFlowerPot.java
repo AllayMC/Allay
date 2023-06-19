@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockFlowerPot extends Block {
-    BlockType<BlockFlowerPot> TYPE = BlockTypeBuilder
-            .builder(BlockFlowerPot.class)
-            .vanillaBlock(VanillaBlockId.FLOWER_POT, true)
-            .withProperties(VanillaBlockPropertyTypes.UPDATE_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockFlowerPot> TYPE = BlockTypeBuilder
+          .builder(BlockFlowerPot.class)
+          .vanillaBlock(VanillaBlockId.FLOWER_POT, true)
+          .withProperties(VanillaBlockPropertyTypes.UPDATE_BIT)
+          .addBasicComponents()
+          .build();
 }

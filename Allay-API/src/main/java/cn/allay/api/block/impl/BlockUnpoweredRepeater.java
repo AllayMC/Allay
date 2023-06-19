@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockUnpoweredRepeater extends Block {
-    BlockType<BlockUnpoweredRepeater> TYPE = BlockTypeBuilder
-            .builder(BlockUnpoweredRepeater.class)
-            .vanillaBlock(VanillaBlockId.UNPOWERED_REPEATER, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.REPEATER_DELAY)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockUnpoweredRepeater> TYPE = BlockTypeBuilder
+          .builder(BlockUnpoweredRepeater.class)
+          .vanillaBlock(VanillaBlockId.UNPOWERED_REPEATER, true)
+          .withProperties(VanillaBlockPropertyTypes.REPEATER_DELAY, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

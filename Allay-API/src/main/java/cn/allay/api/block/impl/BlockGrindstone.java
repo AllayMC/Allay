@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockGrindstone extends Block {
-    BlockType<BlockGrindstone> TYPE = BlockTypeBuilder
-            .builder(BlockGrindstone.class)
-            .vanillaBlock(VanillaBlockId.GRINDSTONE, true)
-            .withProperties(VanillaBlockPropertyTypes.ATTACHMENT,
-                    VanillaBlockPropertyTypes.DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockGrindstone> TYPE = BlockTypeBuilder
+          .builder(BlockGrindstone.class)
+          .vanillaBlock(VanillaBlockId.GRINDSTONE, true)
+          .withProperties(VanillaBlockPropertyTypes.ATTACHMENT, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

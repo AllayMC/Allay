@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSnowLayer extends Block {
-    BlockType<BlockSnowLayer> TYPE = BlockTypeBuilder
-            .builder(BlockSnowLayer.class)
-            .vanillaBlock(VanillaBlockId.SNOW_LAYER, true)
-            .withProperties(VanillaBlockPropertyTypes.COVERED_BIT,
-                    VanillaBlockPropertyTypes.HEIGHT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSnowLayer> TYPE = BlockTypeBuilder
+          .builder(BlockSnowLayer.class)
+          .vanillaBlock(VanillaBlockId.SNOW_LAYER, true)
+          .withProperties(VanillaBlockPropertyTypes.COVERED_BIT, VanillaBlockPropertyTypes.HEIGHT)
+          .addBasicComponents()
+          .build();
 }

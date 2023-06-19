@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockCrimsonPlanks extends Block {
-    BlockType<BlockCrimsonPlanks> TYPE = BlockTypeBuilder
-            .builder(BlockCrimsonPlanks.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_PLANKS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCrimsonPlanks> TYPE = BlockTypeBuilder
+          .builder(BlockCrimsonPlanks.class)
+          .vanillaBlock(VanillaBlockId.CRIMSON_PLANKS, true)
+          .addBasicComponents()
+          .build();
 }

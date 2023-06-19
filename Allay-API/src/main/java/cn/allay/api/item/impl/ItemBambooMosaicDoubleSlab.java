@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBambooMosaicDoubleSlab extends ItemStack {
-    ItemType<ItemBambooMosaicDoubleSlab> TYPE = ItemTypeBuilder
-            .builder(ItemBambooMosaicDoubleSlab.class)
-            .vanillaItem(VanillaItemId.BAMBOO_MOSAIC_DOUBLE_SLAB, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemBambooMosaicDoubleSlab> TYPE = ItemTypeBuilder
+          .builder(ItemBambooMosaicDoubleSlab.class)
+          .vanillaItem(VanillaItemId.BAMBOO_MOSAIC_DOUBLE_SLAB, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

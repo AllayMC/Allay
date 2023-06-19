@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSeaPickle extends Block {
-    BlockType<BlockSeaPickle> TYPE = BlockTypeBuilder
-            .builder(BlockSeaPickle.class)
-            .vanillaBlock(VanillaBlockId.SEA_PICKLE, true)
-            .withProperties(VanillaBlockPropertyTypes.CLUSTER_COUNT,
-                    VanillaBlockPropertyTypes.DEAD_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSeaPickle> TYPE = BlockTypeBuilder
+          .builder(BlockSeaPickle.class)
+          .vanillaBlock(VanillaBlockId.SEA_PICKLE, true)
+          .withProperties(VanillaBlockPropertyTypes.CLUSTER_COUNT, VanillaBlockPropertyTypes.DEAD_BIT)
+          .addBasicComponents()
+          .build();
 }

@@ -1,7 +1,7 @@
 package cn.allay.api.math.position;
 
-import cn.allay.api.level.Level;
 import cn.allay.api.math.vector.Vec3;
+import cn.allay.api.world.World;
 
 /**
  * Author: daoge_cmd <br>
@@ -10,9 +10,9 @@ import cn.allay.api.math.vector.Vec3;
  */
 public interface Pos<T extends Number> extends FixedPos<T>, Vec3<T> {
 
-    static <T extends Number> Pos<T> of(T x, T y, T z, Level level) {
-        return new ImplPos<>(x, y, z, level);
+    static <T extends Number> Pos<T> of(T x, T y, T z, World world) {
+        return new ImplPos<>(x, y, z, world);
     }
 
-    void setLevel(Level level);
+    void setWorld(World world);
 }

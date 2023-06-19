@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBarrier extends ItemStack {
-    ItemType<ItemBarrier> TYPE = ItemTypeBuilder
-            .builder(ItemBarrier.class)
-            .vanillaItem(VanillaItemId.BARRIER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemBarrier> TYPE = ItemTypeBuilder
+          .builder(ItemBarrier.class)
+          .vanillaItem(VanillaItemId.BARRIER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

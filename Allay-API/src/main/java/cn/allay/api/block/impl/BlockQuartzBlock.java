@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockQuartzBlock extends Block {
-    BlockType<BlockQuartzBlock> TYPE = BlockTypeBuilder
-            .builder(BlockQuartzBlock.class)
-            .vanillaBlock(VanillaBlockId.QUARTZ_BLOCK, true)
-            .withProperties(VanillaBlockPropertyTypes.CHISEL_TYPE,
-                    VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockQuartzBlock> TYPE = BlockTypeBuilder
+          .builder(BlockQuartzBlock.class)
+          .vanillaBlock(VanillaBlockId.QUARTZ_BLOCK, true)
+          .withProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

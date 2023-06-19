@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityHusk extends Entity {
-    EntityType<EntityHusk> TYPE = EntityTypeBuilder
-            .builder(EntityHusk.class)
-            .vanillaEntity(VanillaEntityId.HUSK)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityHusk> TYPE = EntityTypeBuilder
+          .builder(EntityHusk.class)
+          .vanillaEntity(VanillaEntityId.HUSK)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

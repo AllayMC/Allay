@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockHayBlock extends Block {
-    BlockType<BlockHayBlock> TYPE = BlockTypeBuilder
-            .builder(BlockHayBlock.class)
-            .vanillaBlock(VanillaBlockId.HAY_BLOCK, true)
-            .withProperties(VanillaBlockPropertyTypes.DEPRECATED,
-                    VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockHayBlock> TYPE = BlockTypeBuilder
+          .builder(BlockHayBlock.class)
+          .vanillaBlock(VanillaBlockId.HAY_BLOCK, true)
+          .withProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

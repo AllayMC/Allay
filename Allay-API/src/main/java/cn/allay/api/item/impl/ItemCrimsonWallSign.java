@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCrimsonWallSign extends ItemStack {
-    ItemType<ItemCrimsonWallSign> TYPE = ItemTypeBuilder
-            .builder(ItemCrimsonWallSign.class)
-            .vanillaItem(VanillaItemId.CRIMSON_WALL_SIGN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCrimsonWallSign> TYPE = ItemTypeBuilder
+          .builder(ItemCrimsonWallSign.class)
+          .vanillaItem(VanillaItemId.CRIMSON_WALL_SIGN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSpruceFenceGate extends ItemStack {
-    ItemType<ItemSpruceFenceGate> TYPE = ItemTypeBuilder
-            .builder(ItemSpruceFenceGate.class)
-            .vanillaItem(VanillaItemId.SPRUCE_FENCE_GATE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSpruceFenceGate> TYPE = ItemTypeBuilder
+          .builder(ItemSpruceFenceGate.class)
+          .vanillaItem(VanillaItemId.SPRUCE_FENCE_GATE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

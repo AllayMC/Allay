@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSalmonBucket extends ItemStack {
-    ItemType<ItemSalmonBucket> TYPE = ItemTypeBuilder
-            .builder(ItemSalmonBucket.class)
-            .vanillaItem(VanillaItemId.SALMON_BUCKET, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSalmonBucket> TYPE = ItemTypeBuilder
+          .builder(ItemSalmonBucket.class)
+          .vanillaItem(VanillaItemId.SALMON_BUCKET, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

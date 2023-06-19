@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockNetherWart extends Block {
-    BlockType<BlockNetherWart> TYPE = BlockTypeBuilder
-            .builder(BlockNetherWart.class)
-            .vanillaBlock(VanillaBlockId.NETHER_WART, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE_4)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockNetherWart> TYPE = BlockTypeBuilder
+          .builder(BlockNetherWart.class)
+          .vanillaBlock(VanillaBlockId.NETHER_WART, true)
+          .withProperties(VanillaBlockPropertyTypes.AGE_4)
+          .addBasicComponents()
+          .build();
 }

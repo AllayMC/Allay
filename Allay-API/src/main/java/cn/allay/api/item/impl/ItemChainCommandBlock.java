@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemChainCommandBlock extends ItemStack {
-    ItemType<ItemChainCommandBlock> TYPE = ItemTypeBuilder
-            .builder(ItemChainCommandBlock.class)
-            .vanillaItem(VanillaItemId.CHAIN_COMMAND_BLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemChainCommandBlock> TYPE = ItemTypeBuilder
+          .builder(ItemChainCommandBlock.class)
+          .vanillaItem(VanillaItemId.CHAIN_COMMAND_BLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNetherGoldOre extends ItemStack {
-    ItemType<ItemNetherGoldOre> TYPE = ItemTypeBuilder
-            .builder(ItemNetherGoldOre.class)
-            .vanillaItem(VanillaItemId.NETHER_GOLD_ORE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNetherGoldOre> TYPE = ItemTypeBuilder
+          .builder(ItemNetherGoldOre.class)
+          .vanillaItem(VanillaItemId.NETHER_GOLD_ORE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

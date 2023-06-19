@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBubbleColumn extends Block {
-    BlockType<BlockBubbleColumn> TYPE = BlockTypeBuilder
-            .builder(BlockBubbleColumn.class)
-            .vanillaBlock(VanillaBlockId.BUBBLE_COLUMN, true)
-            .withProperties(VanillaBlockPropertyTypes.DRAG_DOWN)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBubbleColumn> TYPE = BlockTypeBuilder
+          .builder(BlockBubbleColumn.class)
+          .vanillaBlock(VanillaBlockId.BUBBLE_COLUMN, true)
+          .withProperties(VanillaBlockPropertyTypes.DRAG_DOWN)
+          .addBasicComponents()
+          .build();
 }

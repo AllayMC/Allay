@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockGrass extends Block {
-    BlockType<BlockGrass> TYPE = BlockTypeBuilder
-            .builder(BlockGrass.class)
-            .vanillaBlock(VanillaBlockId.GRASS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockGrass> TYPE = BlockTypeBuilder
+          .builder(BlockGrass.class)
+          .vanillaBlock(VanillaBlockId.GRASS, true)
+          .addBasicComponents()
+          .build();
 }

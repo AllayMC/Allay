@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemUnderwaterTorch extends ItemStack {
-    ItemType<ItemUnderwaterTorch> TYPE = ItemTypeBuilder
-            .builder(ItemUnderwaterTorch.class)
-            .vanillaItem(VanillaItemId.UNDERWATER_TORCH, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemUnderwaterTorch> TYPE = ItemTypeBuilder
+          .builder(ItemUnderwaterTorch.class)
+          .vanillaItem(VanillaItemId.UNDERWATER_TORCH, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

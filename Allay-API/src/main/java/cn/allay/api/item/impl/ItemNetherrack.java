@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNetherrack extends ItemStack {
-    ItemType<ItemNetherrack> TYPE = ItemTypeBuilder
-            .builder(ItemNetherrack.class)
-            .vanillaItem(VanillaItemId.NETHERRACK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNetherrack> TYPE = ItemTypeBuilder
+          .builder(ItemNetherrack.class)
+          .vanillaItem(VanillaItemId.NETHERRACK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

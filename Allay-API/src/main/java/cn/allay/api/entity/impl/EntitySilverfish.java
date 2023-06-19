@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntitySilverfish extends Entity {
-    EntityType<EntitySilverfish> TYPE = EntityTypeBuilder
-            .builder(EntitySilverfish.class)
-            .vanillaEntity(VanillaEntityId.SILVERFISH)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntitySilverfish> TYPE = EntityTypeBuilder
+          .builder(EntitySilverfish.class)
+          .vanillaEntity(VanillaEntityId.SILVERFISH)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

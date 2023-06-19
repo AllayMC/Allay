@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockHardStainedGlass extends Block {
-    BlockType<BlockHardStainedGlass> TYPE = BlockTypeBuilder
-            .builder(BlockHardStainedGlass.class)
-            .vanillaBlock(VanillaBlockId.HARD_STAINED_GLASS, true)
-            .withProperties(VanillaBlockPropertyTypes.COLOR)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockHardStainedGlass> TYPE = BlockTypeBuilder
+          .builder(BlockHardStainedGlass.class)
+          .vanillaBlock(VanillaBlockId.HARD_STAINED_GLASS, true)
+          .withProperties(VanillaBlockPropertyTypes.COLOR)
+          .addBasicComponents()
+          .build();
 }

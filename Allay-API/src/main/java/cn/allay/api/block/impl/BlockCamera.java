@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockCamera extends Block {
-    BlockType<BlockCamera> TYPE = BlockTypeBuilder
-            .builder(BlockCamera.class)
-            .vanillaBlock(VanillaBlockId.CAMERA, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCamera> TYPE = BlockTypeBuilder
+          .builder(BlockCamera.class)
+          .vanillaBlock(VanillaBlockId.CAMERA, true)
+          .addBasicComponents()
+          .build();
 }

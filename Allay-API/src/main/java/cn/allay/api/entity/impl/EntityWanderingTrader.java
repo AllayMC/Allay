@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityWanderingTrader extends Entity {
-    EntityType<EntityWanderingTrader> TYPE = EntityTypeBuilder
-            .builder(EntityWanderingTrader.class)
-            .vanillaEntity(VanillaEntityId.WANDERING_TRADER)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityWanderingTrader> TYPE = EntityTypeBuilder
+          .builder(EntityWanderingTrader.class)
+          .vanillaEntity(VanillaEntityId.WANDERING_TRADER)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

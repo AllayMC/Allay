@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMovingBlock extends ItemStack {
-    ItemType<ItemMovingBlock> TYPE = ItemTypeBuilder
-            .builder(ItemMovingBlock.class)
-            .vanillaItem(VanillaItemId.MOVING_BLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMovingBlock> TYPE = ItemTypeBuilder
+          .builder(ItemMovingBlock.class)
+          .vanillaItem(VanillaItemId.MOVING_BLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

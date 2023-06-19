@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSilverfishSpawnEgg extends ItemStack {
-    ItemType<ItemSilverfishSpawnEgg> TYPE = ItemTypeBuilder
-            .builder(ItemSilverfishSpawnEgg.class)
-            .vanillaItem(VanillaItemId.SILVERFISH_SPAWN_EGG, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSilverfishSpawnEgg> TYPE = ItemTypeBuilder
+          .builder(ItemSilverfishSpawnEgg.class)
+          .vanillaItem(VanillaItemId.SILVERFISH_SPAWN_EGG, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

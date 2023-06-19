@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockKelp extends Block {
-    BlockType<BlockKelp> TYPE = BlockTypeBuilder
-            .builder(BlockKelp.class)
-            .vanillaBlock(VanillaBlockId.KELP, true)
-            .withProperties(VanillaBlockPropertyTypes.KELP_AGE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockKelp> TYPE = BlockTypeBuilder
+          .builder(BlockKelp.class)
+          .vanillaBlock(VanillaBlockId.KELP, true)
+          .withProperties(VanillaBlockPropertyTypes.KELP_AGE)
+          .addBasicComponents()
+          .build();
 }

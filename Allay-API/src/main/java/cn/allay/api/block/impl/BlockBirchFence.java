@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockBirchFence extends Block {
-    BlockType<BlockBirchFence> TYPE = BlockTypeBuilder
-            .builder(BlockBirchFence.class)
-            .vanillaBlock(VanillaBlockId.BIRCH_FENCE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBirchFence> TYPE = BlockTypeBuilder
+          .builder(BlockBirchFence.class)
+          .vanillaBlock(VanillaBlockId.BIRCH_FENCE, true)
+          .addBasicComponents()
+          .build();
 }

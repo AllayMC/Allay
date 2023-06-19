@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockGlowLichen extends Block {
-    BlockType<BlockGlowLichen> TYPE = BlockTypeBuilder
-            .builder(BlockGlowLichen.class)
-            .vanillaBlock(VanillaBlockId.GLOW_LICHEN, true)
-            .withProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockGlowLichen> TYPE = BlockTypeBuilder
+          .builder(BlockGlowLichen.class)
+          .vanillaBlock(VanillaBlockId.GLOW_LICHEN, true)
+          .withProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+          .addBasicComponents()
+          .build();
 }

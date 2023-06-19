@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockLodestone extends Block {
-    BlockType<BlockLodestone> TYPE = BlockTypeBuilder
-            .builder(BlockLodestone.class)
-            .vanillaBlock(VanillaBlockId.LODESTONE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLodestone> TYPE = BlockTypeBuilder
+          .builder(BlockLodestone.class)
+          .vanillaBlock(VanillaBlockId.LODESTONE, true)
+          .addBasicComponents()
+          .build();
 }

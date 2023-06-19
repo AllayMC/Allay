@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNautilusShell extends ItemStack {
-    ItemType<ItemNautilusShell> TYPE = ItemTypeBuilder
-            .builder(ItemNautilusShell.class)
-            .vanillaItem(VanillaItemId.NAUTILUS_SHELL, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNautilusShell> TYPE = ItemTypeBuilder
+          .builder(ItemNautilusShell.class)
+          .vanillaItem(VanillaItemId.NAUTILUS_SHELL, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

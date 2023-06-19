@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBubbleColumn extends ItemStack {
-    ItemType<ItemBubbleColumn> TYPE = ItemTypeBuilder
-            .builder(ItemBubbleColumn.class)
-            .vanillaItem(VanillaItemId.BUBBLE_COLUMN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemBubbleColumn> TYPE = ItemTypeBuilder
+          .builder(ItemBubbleColumn.class)
+          .vanillaItem(VanillaItemId.BUBBLE_COLUMN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

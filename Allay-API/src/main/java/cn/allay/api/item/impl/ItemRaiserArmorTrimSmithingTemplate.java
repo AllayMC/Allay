@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemRaiserArmorTrimSmithingTemplate extends ItemStack {
-    ItemType<ItemRaiserArmorTrimSmithingTemplate> TYPE = ItemTypeBuilder
-            .builder(ItemRaiserArmorTrimSmithingTemplate.class)
-            .vanillaItem(VanillaItemId.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemRaiserArmorTrimSmithingTemplate> TYPE = ItemTypeBuilder
+          .builder(ItemRaiserArmorTrimSmithingTemplate.class)
+          .vanillaItem(VanillaItemId.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

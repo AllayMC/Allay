@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockNetherWartBlock extends Block {
-    BlockType<BlockNetherWartBlock> TYPE = BlockTypeBuilder
-            .builder(BlockNetherWartBlock.class)
-            .vanillaBlock(VanillaBlockId.NETHER_WART_BLOCK, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockNetherWartBlock> TYPE = BlockTypeBuilder
+          .builder(BlockNetherWartBlock.class)
+          .vanillaBlock(VanillaBlockId.NETHER_WART_BLOCK, true)
+          .addBasicComponents()
+          .build();
 }

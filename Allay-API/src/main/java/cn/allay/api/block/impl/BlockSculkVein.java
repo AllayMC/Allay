@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSculkVein extends Block {
-    BlockType<BlockSculkVein> TYPE = BlockTypeBuilder
-            .builder(BlockSculkVein.class)
-            .vanillaBlock(VanillaBlockId.SCULK_VEIN, true)
-            .withProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSculkVein> TYPE = BlockTypeBuilder
+          .builder(BlockSculkVein.class)
+          .vanillaBlock(VanillaBlockId.SCULK_VEIN, true)
+          .withProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+          .addBasicComponents()
+          .build();
 }

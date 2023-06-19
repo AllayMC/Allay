@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemPufferfishBucket extends ItemStack {
-    ItemType<ItemPufferfishBucket> TYPE = ItemTypeBuilder
-            .builder(ItemPufferfishBucket.class)
-            .vanillaItem(VanillaItemId.PUFFERFISH_BUCKET, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemPufferfishBucket> TYPE = ItemTypeBuilder
+          .builder(ItemPufferfishBucket.class)
+          .vanillaItem(VanillaItemId.PUFFERFISH_BUCKET, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

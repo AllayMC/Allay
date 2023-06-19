@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBirchHangingSign extends ItemStack {
-    ItemType<ItemBirchHangingSign> TYPE = ItemTypeBuilder
-            .builder(ItemBirchHangingSign.class)
-            .vanillaItem(VanillaItemId.BIRCH_HANGING_SIGN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemBirchHangingSign> TYPE = ItemTypeBuilder
+          .builder(ItemBirchHangingSign.class)
+          .vanillaItem(VanillaItemId.BIRCH_HANGING_SIGN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

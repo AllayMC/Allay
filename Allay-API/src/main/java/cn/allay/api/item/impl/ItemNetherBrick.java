@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNetherBrick extends ItemStack {
-    ItemType<ItemNetherBrick> TYPE = ItemTypeBuilder
-            .builder(ItemNetherBrick.class)
-            .vanillaItem(VanillaItemId.NETHER_BRICK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNetherBrick> TYPE = ItemTypeBuilder
+          .builder(ItemNetherBrick.class)
+          .vanillaItem(VanillaItemId.NETHER_BRICK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockFloweringAzalea extends Block {
-    BlockType<BlockFloweringAzalea> TYPE = BlockTypeBuilder
-            .builder(BlockFloweringAzalea.class)
-            .vanillaBlock(VanillaBlockId.FLOWERING_AZALEA, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockFloweringAzalea> TYPE = BlockTypeBuilder
+          .builder(BlockFloweringAzalea.class)
+          .vanillaBlock(VanillaBlockId.FLOWERING_AZALEA, true)
+          .addBasicComponents()
+          .build();
 }

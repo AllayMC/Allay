@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityArrow extends Entity {
-    EntityType<EntityArrow> TYPE = EntityTypeBuilder
-            .builder(EntityArrow.class)
-            .vanillaEntity(VanillaEntityId.ARROW)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityArrow> TYPE = EntityTypeBuilder
+          .builder(EntityArrow.class)
+          .vanillaEntity(VanillaEntityId.ARROW)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

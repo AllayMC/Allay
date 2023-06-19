@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSoulLantern extends Block {
-    BlockType<BlockSoulLantern> TYPE = BlockTypeBuilder
-            .builder(BlockSoulLantern.class)
-            .vanillaBlock(VanillaBlockId.SOUL_LANTERN, true)
-            .withProperties(VanillaBlockPropertyTypes.HANGING)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSoulLantern> TYPE = BlockTypeBuilder
+          .builder(BlockSoulLantern.class)
+          .vanillaBlock(VanillaBlockId.SOUL_LANTERN, true)
+          .withProperties(VanillaBlockPropertyTypes.HANGING)
+          .addBasicComponents()
+          .build();
 }

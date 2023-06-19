@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemEndPortalFrame extends ItemStack {
-    ItemType<ItemEndPortalFrame> TYPE = ItemTypeBuilder
-            .builder(ItemEndPortalFrame.class)
-            .vanillaItem(VanillaItemId.END_PORTAL_FRAME, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemEndPortalFrame> TYPE = ItemTypeBuilder
+          .builder(ItemEndPortalFrame.class)
+          .vanillaItem(VanillaItemId.END_PORTAL_FRAME, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

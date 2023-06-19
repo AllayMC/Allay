@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSmoothQuartzStairs extends Block {
-    BlockType<BlockSmoothQuartzStairs> TYPE = BlockTypeBuilder
-            .builder(BlockSmoothQuartzStairs.class)
-            .vanillaBlock(VanillaBlockId.SMOOTH_QUARTZ_STAIRS, true)
-            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
-                    VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSmoothQuartzStairs> TYPE = BlockTypeBuilder
+          .builder(BlockSmoothQuartzStairs.class)
+          .vanillaBlock(VanillaBlockId.SMOOTH_QUARTZ_STAIRS, true)
+          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

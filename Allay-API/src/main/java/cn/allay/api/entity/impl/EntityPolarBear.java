@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityPolarBear extends Entity {
-    EntityType<EntityPolarBear> TYPE = EntityTypeBuilder
-            .builder(EntityPolarBear.class)
-            .vanillaEntity(VanillaEntityId.POLAR_BEAR)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityPolarBear> TYPE = EntityTypeBuilder
+          .builder(EntityPolarBear.class)
+          .vanillaEntity(VanillaEntityId.POLAR_BEAR)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

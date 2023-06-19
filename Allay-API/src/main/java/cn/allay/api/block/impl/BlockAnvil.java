@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockAnvil extends Block {
-    BlockType<BlockAnvil> TYPE = BlockTypeBuilder
-            .builder(BlockAnvil.class)
-            .vanillaBlock(VanillaBlockId.ANVIL, true)
-            .withProperties(VanillaBlockPropertyTypes.DAMAGE,
-                    VanillaBlockPropertyTypes.DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockAnvil> TYPE = BlockTypeBuilder
+          .builder(BlockAnvil.class)
+          .vanillaBlock(VanillaBlockId.ANVIL, true)
+          .withProperties(VanillaBlockPropertyTypes.DAMAGE, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

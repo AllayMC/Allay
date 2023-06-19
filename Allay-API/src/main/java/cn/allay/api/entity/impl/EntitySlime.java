@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntitySlime extends Entity {
-    EntityType<EntitySlime> TYPE = EntityTypeBuilder
-            .builder(EntitySlime.class)
-            .vanillaEntity(VanillaEntityId.SLIME)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntitySlime> TYPE = EntityTypeBuilder
+          .builder(EntitySlime.class)
+          .vanillaEntity(VanillaEntityId.SLIME)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

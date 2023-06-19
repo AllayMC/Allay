@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockLitSmoker extends Block {
-    BlockType<BlockLitSmoker> TYPE = BlockTypeBuilder
-            .builder(BlockLitSmoker.class)
-            .vanillaBlock(VanillaBlockId.LIT_SMOKER, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLitSmoker> TYPE = BlockTypeBuilder
+          .builder(BlockLitSmoker.class)
+          .vanillaBlock(VanillaBlockId.LIT_SMOKER, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

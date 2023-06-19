@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemLapisOre extends ItemStack {
-    ItemType<ItemLapisOre> TYPE = ItemTypeBuilder
-            .builder(ItemLapisOre.class)
-            .vanillaItem(VanillaItemId.LAPIS_ORE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemLapisOre> TYPE = ItemTypeBuilder
+          .builder(ItemLapisOre.class)
+          .vanillaItem(VanillaItemId.LAPIS_ORE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

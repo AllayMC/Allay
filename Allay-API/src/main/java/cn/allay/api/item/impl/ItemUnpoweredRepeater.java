@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemUnpoweredRepeater extends ItemStack {
-    ItemType<ItemUnpoweredRepeater> TYPE = ItemTypeBuilder
-            .builder(ItemUnpoweredRepeater.class)
-            .vanillaItem(VanillaItemId.UNPOWERED_REPEATER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemUnpoweredRepeater> TYPE = ItemTypeBuilder
+          .builder(ItemUnpoweredRepeater.class)
+          .vanillaItem(VanillaItemId.UNPOWERED_REPEATER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

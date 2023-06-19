@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityHoglin extends Entity {
-    EntityType<EntityHoglin> TYPE = EntityTypeBuilder
-            .builder(EntityHoglin.class)
-            .vanillaEntity(VanillaEntityId.HOGLIN)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityHoglin> TYPE = EntityTypeBuilder
+          .builder(EntityHoglin.class)
+          .vanillaEntity(VanillaEntityId.HOGLIN)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

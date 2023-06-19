@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemRawGold extends ItemStack {
-    ItemType<ItemRawGold> TYPE = ItemTypeBuilder
-            .builder(ItemRawGold.class)
-            .vanillaItem(VanillaItemId.RAW_GOLD, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemRawGold> TYPE = ItemTypeBuilder
+          .builder(ItemRawGold.class)
+          .vanillaItem(VanillaItemId.RAW_GOLD, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

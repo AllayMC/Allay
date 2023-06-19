@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockRedGlazedTerracotta extends Block {
-    BlockType<BlockRedGlazedTerracotta> TYPE = BlockTypeBuilder
-            .builder(BlockRedGlazedTerracotta.class)
-            .vanillaBlock(VanillaBlockId.RED_GLAZED_TERRACOTTA, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockRedGlazedTerracotta> TYPE = BlockTypeBuilder
+          .builder(BlockRedGlazedTerracotta.class)
+          .vanillaBlock(VanillaBlockId.RED_GLAZED_TERRACOTTA, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

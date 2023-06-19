@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockUnpoweredComparator extends Block {
-    BlockType<BlockUnpoweredComparator> TYPE = BlockTypeBuilder
-            .builder(BlockUnpoweredComparator.class)
-            .vanillaBlock(VanillaBlockId.UNPOWERED_COMPARATOR, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.OUTPUT_LIT_BIT,
-                    VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockUnpoweredComparator> TYPE = BlockTypeBuilder
+          .builder(BlockUnpoweredComparator.class)
+          .vanillaBlock(VanillaBlockId.UNPOWERED_COMPARATOR, true)
+          .withProperties(VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT, VanillaBlockPropertyTypes.OUTPUT_LIT_BIT, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

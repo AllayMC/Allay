@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockLectern extends Block {
-    BlockType<BlockLectern> TYPE = BlockTypeBuilder
-            .builder(BlockLectern.class)
-            .vanillaBlock(VanillaBlockId.LECTERN, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.POWERED_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLectern> TYPE = BlockTypeBuilder
+          .builder(BlockLectern.class)
+          .vanillaBlock(VanillaBlockId.LECTERN, true)
+          .withProperties(VanillaBlockPropertyTypes.POWERED_BIT, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

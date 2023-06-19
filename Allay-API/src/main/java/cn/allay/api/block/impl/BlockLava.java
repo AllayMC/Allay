@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockLava extends Block {
-    BlockType<BlockLava> TYPE = BlockTypeBuilder
-            .builder(BlockLava.class)
-            .vanillaBlock(VanillaBlockId.LAVA, true)
-            .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLava> TYPE = BlockTypeBuilder
+          .builder(BlockLava.class)
+          .vanillaBlock(VanillaBlockId.LAVA, true)
+          .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+          .addBasicComponents()
+          .build();
 }

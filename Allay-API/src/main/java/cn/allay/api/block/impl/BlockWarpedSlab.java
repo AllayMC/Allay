@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockWarpedSlab extends Block {
-    BlockType<BlockWarpedSlab> TYPE = BlockTypeBuilder
-            .builder(BlockWarpedSlab.class)
-            .vanillaBlock(VanillaBlockId.WARPED_SLAB, true)
-            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWarpedSlab> TYPE = BlockTypeBuilder
+          .builder(BlockWarpedSlab.class)
+          .vanillaBlock(VanillaBlockId.WARPED_SLAB, true)
+          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .addBasicComponents()
+          .build();
 }

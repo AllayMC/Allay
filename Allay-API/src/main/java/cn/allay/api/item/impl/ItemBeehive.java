@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBeehive extends ItemStack {
-    ItemType<ItemBeehive> TYPE = ItemTypeBuilder
-            .builder(ItemBeehive.class)
-            .vanillaItem(VanillaItemId.BEEHIVE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemBeehive> TYPE = ItemTypeBuilder
+          .builder(ItemBeehive.class)
+          .vanillaItem(VanillaItemId.BEEHIVE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

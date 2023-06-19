@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemFlowerBannerPattern extends ItemStack {
-    ItemType<ItemFlowerBannerPattern> TYPE = ItemTypeBuilder
-            .builder(ItemFlowerBannerPattern.class)
-            .vanillaItem(VanillaItemId.FLOWER_BANNER_PATTERN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemFlowerBannerPattern> TYPE = ItemTypeBuilder
+          .builder(ItemFlowerBannerPattern.class)
+          .vanillaItem(VanillaItemId.FLOWER_BANNER_PATTERN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

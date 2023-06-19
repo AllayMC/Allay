@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemPoweredComparator extends ItemStack {
-    ItemType<ItemPoweredComparator> TYPE = ItemTypeBuilder
-            .builder(ItemPoweredComparator.class)
-            .vanillaItem(VanillaItemId.POWERED_COMPARATOR, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemPoweredComparator> TYPE = ItemTypeBuilder
+          .builder(ItemPoweredComparator.class)
+          .vanillaItem(VanillaItemId.POWERED_COMPARATOR, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

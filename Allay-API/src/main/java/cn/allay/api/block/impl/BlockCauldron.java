@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCauldron extends Block {
-    BlockType<BlockCauldron> TYPE = BlockTypeBuilder
-            .builder(BlockCauldron.class)
-            .vanillaBlock(VanillaBlockId.CAULDRON, true)
-            .withProperties(VanillaBlockPropertyTypes.CAULDRON_LIQUID,
-                    VanillaBlockPropertyTypes.FILL_LEVEL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCauldron> TYPE = BlockTypeBuilder
+          .builder(BlockCauldron.class)
+          .vanillaBlock(VanillaBlockId.CAULDRON, true)
+          .withProperties(VanillaBlockPropertyTypes.FILL_LEVEL, VanillaBlockPropertyTypes.CAULDRON_LIQUID)
+          .addBasicComponents()
+          .build();
 }

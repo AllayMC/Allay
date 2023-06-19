@@ -197,6 +197,30 @@
         "waterTransparency": 0.6499999761581421,
         "white_ash": 0.0
     },
+    "cherry_grove": {
+        "ash": 0.0,
+        "blue_spores": 0.0,
+        "depth": 0.10000000149011612,
+        "downfall": 0.800000011920929,
+        "height": 0.20000000298023224,
+        "name_hash": "cherry_grove",
+        "rain": 1,
+        "red_spores": 0.0,
+        "tags": [
+            "bee_habitat",
+            "cherry_grove",
+            "monster",
+            "mountains",
+            "overworld"
+        ],
+        "temperature": 0.30000001192092896,
+        "waterColorA": 1.0,
+        "waterColorB": 1.0,
+        "waterColorG": 0.7176470756530762,
+        "waterColorR": 0.3764706254005432,
+        "waterTransparency": 0.6499999761581421,
+        "white_ash": 0.0
+    },
     "cold_beach": {
         "ash": 0.0,
         "blue_spores": 0.0,

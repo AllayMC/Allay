@@ -29,14 +29,13 @@ public class VanillaBlockClassGen {
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/impl");
 
     @SneakyThrows
-    public static void main(String[] args) {
+    public static void generate() {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
             var className = "Block" + Utils.convertToPascalCase(block.getIdentifier().path());
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
-            if (!Files.exists(path)) {
-                generateBlockClass(block, className, path);
-            }
+            System.out.println("Generating " + className + ".java ...");
+            generateBlockClass(block, className, path);
         }
     }
 
@@ -49,22 +48,22 @@ public class VanillaBlockClassGen {
                 .addModifiers(Modifier.PUBLIC);
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T\n.builder($N.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, className)
-                .add(".vanillaBlock($T.$N, true)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
+                .add("$T\n        .builder($N.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, className)
+                .add("        .vanillaBlock($T.$N, true)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
         var blockPaletteData = CodeGen.MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
         var states = blockPaletteData.getCompound("states");
         if (states.size() != 0) {
-            initializer.add(".withProperties(");
+            initializer.add("        .withProperties(");
             AtomicInteger count = new AtomicInteger();
             states.forEach((name, value) -> {
-                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ",\n"), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME,
-                        BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name) ?
-                                BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(vanillaBlockId.getIdentifier().toString()).get(name) .toUpperCase(): name.toUpperCase());
+                var propertyName = BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name.replaceAll(":", "_")) && BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.containsKey(vanillaBlockId.getIdentifier().toString()) ?
+                        BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(vanillaBlockId.getIdentifier().toString()).get(name.replaceAll(":", "_")).toUpperCase() : name.replaceAll(":", "_").toUpperCase();
+                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME, propertyName);
             });
             initializer.add(")\n");
         }
-        initializer.add(".addBasicComponents()\n");
-        initializer.add(".build()");
+        initializer.add("        .addBasicComponents()\n");
+        initializer.add("        .build()");
         codeBuilder.addField(
                 FieldSpec
                         .builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, ClassName.get("", className)), "TYPE")
@@ -72,15 +71,6 @@ public class VanillaBlockClassGen {
                         .initializer(initializer.build())
                         .build());
         var javaFile = JavaFile.builder("cn.allay.api.block.impl", codeBuilder.build()).build();
-        if (!path.toFile().exists()) {
-            System.out.println("Generating " + className + ".java ...");
-            Files.writeString(path, javaFile.toString());
-            return;
-        }
-        if (Files.readString(path).equals(javaFile.toString())) {
-            System.out.println("Class " + className + " already exists, skipped");
-            return;
-        }
         System.out.println("Generating " + className + ".java ...");
         Files.writeString(path, javaFile.toString());
     }

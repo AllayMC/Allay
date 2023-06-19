@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCreeperBannerPattern extends ItemStack {
-    ItemType<ItemCreeperBannerPattern> TYPE = ItemTypeBuilder
-            .builder(ItemCreeperBannerPattern.class)
-            .vanillaItem(VanillaItemId.CREEPER_BANNER_PATTERN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCreeperBannerPattern> TYPE = ItemTypeBuilder
+          .builder(ItemCreeperBannerPattern.class)
+          .vanillaItem(VanillaItemId.CREEPER_BANNER_PATTERN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

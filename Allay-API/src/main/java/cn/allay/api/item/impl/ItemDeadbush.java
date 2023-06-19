@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDeadbush extends ItemStack {
-    ItemType<ItemDeadbush> TYPE = ItemTypeBuilder
-            .builder(ItemDeadbush.class)
-            .vanillaItem(VanillaItemId.DEADBUSH, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDeadbush> TYPE = ItemTypeBuilder
+          .builder(ItemDeadbush.class)
+          .vanillaItem(VanillaItemId.DEADBUSH, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

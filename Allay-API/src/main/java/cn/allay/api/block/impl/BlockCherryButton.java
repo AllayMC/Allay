@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCherryButton extends Block {
-    BlockType<BlockCherryButton> TYPE = BlockTypeBuilder
-            .builder(BlockCherryButton.class)
-            .vanillaBlock(VanillaBlockId.CHERRY_BUTTON, true)
-            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
-                    VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCherryButton> TYPE = BlockTypeBuilder
+          .builder(BlockCherryButton.class)
+          .vanillaBlock(VanillaBlockId.CHERRY_BUTTON, true)
+          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityWolf extends Entity {
-    EntityType<EntityWolf> TYPE = EntityTypeBuilder
-            .builder(EntityWolf.class)
-            .vanillaEntity(VanillaEntityId.WOLF)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityWolf> TYPE = EntityTypeBuilder
+          .builder(EntityWolf.class)
+          .vanillaEntity(VanillaEntityId.WOLF)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockTorchflowerCrop extends Block {
-    BlockType<BlockTorchflowerCrop> TYPE = BlockTypeBuilder
-            .builder(BlockTorchflowerCrop.class)
-            .vanillaBlock(VanillaBlockId.TORCHFLOWER_CROP, true)
-            .withProperties(VanillaBlockPropertyTypes.GROWTH)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTorchflowerCrop> TYPE = BlockTypeBuilder
+          .builder(BlockTorchflowerCrop.class)
+          .vanillaBlock(VanillaBlockId.TORCHFLOWER_CROP, true)
+          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .addBasicComponents()
+          .build();
 }

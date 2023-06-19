@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNetheritePickaxe extends ItemStack {
-    ItemType<ItemNetheritePickaxe> TYPE = ItemTypeBuilder
-            .builder(ItemNetheritePickaxe.class)
-            .vanillaItem(VanillaItemId.NETHERITE_PICKAXE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNetheritePickaxe> TYPE = ItemTypeBuilder
+          .builder(ItemNetheritePickaxe.class)
+          .vanillaItem(VanillaItemId.NETHERITE_PICKAXE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPrismarine extends Block {
-    BlockType<BlockPrismarine> TYPE = BlockTypeBuilder
-            .builder(BlockPrismarine.class)
-            .vanillaBlock(VanillaBlockId.PRISMARINE, true)
-            .withProperties(VanillaBlockPropertyTypes.PRISMARINE_BLOCK_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPrismarine> TYPE = BlockTypeBuilder
+          .builder(BlockPrismarine.class)
+          .vanillaBlock(VanillaBlockId.PRISMARINE, true)
+          .withProperties(VanillaBlockPropertyTypes.PRISMARINE_BLOCK_TYPE)
+          .addBasicComponents()
+          .build();
 }

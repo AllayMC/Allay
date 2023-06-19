@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockLitPumpkin extends Block {
-    BlockType<BlockLitPumpkin> TYPE = BlockTypeBuilder
-            .builder(BlockLitPumpkin.class)
-            .vanillaBlock(VanillaBlockId.LIT_PUMPKIN, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLitPumpkin> TYPE = BlockTypeBuilder
+          .builder(BlockLitPumpkin.class)
+          .vanillaBlock(VanillaBlockId.LIT_PUMPKIN, true)
+          .withProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

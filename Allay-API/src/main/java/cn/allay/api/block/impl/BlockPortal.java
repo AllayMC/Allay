@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPortal extends Block {
-    BlockType<BlockPortal> TYPE = BlockTypeBuilder
-            .builder(BlockPortal.class)
-            .vanillaBlock(VanillaBlockId.PORTAL, true)
-            .withProperties(VanillaBlockPropertyTypes.PORTAL_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPortal> TYPE = BlockTypeBuilder
+          .builder(BlockPortal.class)
+          .vanillaBlock(VanillaBlockId.PORTAL, true)
+          .withProperties(VanillaBlockPropertyTypes.PORTAL_AXIS)
+          .addBasicComponents()
+          .build();
 }

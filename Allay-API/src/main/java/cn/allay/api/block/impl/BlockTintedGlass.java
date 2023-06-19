@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockTintedGlass extends Block {
-    BlockType<BlockTintedGlass> TYPE = BlockTypeBuilder
-            .builder(BlockTintedGlass.class)
-            .vanillaBlock(VanillaBlockId.TINTED_GLASS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTintedGlass> TYPE = BlockTypeBuilder
+          .builder(BlockTintedGlass.class)
+          .vanillaBlock(VanillaBlockId.TINTED_GLASS, true)
+          .addBasicComponents()
+          .build();
 }

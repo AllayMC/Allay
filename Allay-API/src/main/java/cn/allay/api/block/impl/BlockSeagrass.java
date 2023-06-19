@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSeagrass extends Block {
-    BlockType<BlockSeagrass> TYPE = BlockTypeBuilder
-            .builder(BlockSeagrass.class)
-            .vanillaBlock(VanillaBlockId.SEAGRASS, true)
-            .withProperties(VanillaBlockPropertyTypes.SEA_GRASS_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSeagrass> TYPE = BlockTypeBuilder
+          .builder(BlockSeagrass.class)
+          .vanillaBlock(VanillaBlockId.SEAGRASS, true)
+          .withProperties(VanillaBlockPropertyTypes.SEA_GRASS_TYPE)
+          .addBasicComponents()
+          .build();
 }

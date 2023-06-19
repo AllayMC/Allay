@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMilkBucket extends ItemStack {
-    ItemType<ItemMilkBucket> TYPE = ItemTypeBuilder
-            .builder(ItemMilkBucket.class)
-            .vanillaItem(VanillaItemId.MILK_BUCKET, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMilkBucket> TYPE = ItemTypeBuilder
+          .builder(ItemMilkBucket.class)
+          .vanillaItem(VanillaItemId.MILK_BUCKET, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

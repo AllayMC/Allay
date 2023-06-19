@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemGlowStick extends ItemStack {
-    ItemType<ItemGlowStick> TYPE = ItemTypeBuilder
-            .builder(ItemGlowStick.class)
-            .vanillaItem(VanillaItemId.GLOW_STICK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemGlowStick> TYPE = ItemTypeBuilder
+          .builder(ItemGlowStick.class)
+          .vanillaItem(VanillaItemId.GLOW_STICK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockLapisOre extends Block {
-    BlockType<BlockLapisOre> TYPE = BlockTypeBuilder
-            .builder(BlockLapisOre.class)
-            .vanillaBlock(VanillaBlockId.LAPIS_ORE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLapisOre> TYPE = BlockTypeBuilder
+          .builder(BlockLapisOre.class)
+          .vanillaBlock(VanillaBlockId.LAPIS_ORE, true)
+          .addBasicComponents()
+          .build();
 }

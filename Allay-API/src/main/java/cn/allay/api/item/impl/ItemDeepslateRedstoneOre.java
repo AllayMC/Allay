@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDeepslateRedstoneOre extends ItemStack {
-    ItemType<ItemDeepslateRedstoneOre> TYPE = ItemTypeBuilder
-            .builder(ItemDeepslateRedstoneOre.class)
-            .vanillaItem(VanillaItemId.DEEPSLATE_REDSTONE_ORE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDeepslateRedstoneOre> TYPE = ItemTypeBuilder
+          .builder(ItemDeepslateRedstoneOre.class)
+          .vanillaItem(VanillaItemId.DEEPSLATE_REDSTONE_ORE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

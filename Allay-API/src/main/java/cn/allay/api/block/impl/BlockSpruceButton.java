@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockSpruceButton extends Block {
-    BlockType<BlockSpruceButton> TYPE = BlockTypeBuilder
-            .builder(BlockSpruceButton.class)
-            .vanillaBlock(VanillaBlockId.SPRUCE_BUTTON, true)
-            .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT,
-                    VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSpruceButton> TYPE = BlockTypeBuilder
+          .builder(BlockSpruceButton.class)
+          .vanillaBlock(VanillaBlockId.SPRUCE_BUTTON, true)
+          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

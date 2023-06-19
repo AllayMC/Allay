@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityTurtle extends Entity {
-    EntityType<EntityTurtle> TYPE = EntityTypeBuilder
-            .builder(EntityTurtle.class)
-            .vanillaEntity(VanillaEntityId.TURTLE)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityTurtle> TYPE = EntityTypeBuilder
+          .builder(EntityTurtle.class)
+          .vanillaEntity(VanillaEntityId.TURTLE)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

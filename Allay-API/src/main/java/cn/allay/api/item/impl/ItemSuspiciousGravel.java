@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSuspiciousGravel extends ItemStack {
-    ItemType<ItemSuspiciousGravel> TYPE = ItemTypeBuilder
-            .builder(ItemSuspiciousGravel.class)
-            .vanillaItem(VanillaItemId.SUSPICIOUS_GRAVEL, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSuspiciousGravel> TYPE = ItemTypeBuilder
+          .builder(ItemSuspiciousGravel.class)
+          .vanillaItem(VanillaItemId.SUSPICIOUS_GRAVEL, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

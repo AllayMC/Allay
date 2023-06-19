@@ -63,6 +63,13 @@
         "isVanilla": true,
         "legacyActorType": 90
     },
+    "minecraft:camel": {
+        "actorPropertyDataTag": {},
+        "canonicalName": "minecraft:camel",
+        "initEvent": "",
+        "isVanilla": true,
+        "legacyActorType": 5002
+    },
     "minecraft:cat": {
         "actorPropertyDataTag": {},
         "canonicalName": "minecraft:cat",
@@ -482,6 +489,13 @@
         "initEvent": "",
         "isVanilla": true,
         "legacyActorType": 2853
+    },
+    "minecraft:sniffer": {
+        "actorPropertyDataTag": {},
+        "canonicalName": "minecraft:sniffer",
+        "initEvent": "",
+        "isVanilla": true,
+        "legacyActorType": 5003
     },
     "minecraft:snow_golem": {
         "actorPropertyDataTag": {},

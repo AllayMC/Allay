@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWaterBucket extends ItemStack {
-    ItemType<ItemWaterBucket> TYPE = ItemTypeBuilder
-            .builder(ItemWaterBucket.class)
-            .vanillaItem(VanillaItemId.WATER_BUCKET, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWaterBucket> TYPE = ItemTypeBuilder
+          .builder(ItemWaterBucket.class)
+          .vanillaItem(VanillaItemId.WATER_BUCKET, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

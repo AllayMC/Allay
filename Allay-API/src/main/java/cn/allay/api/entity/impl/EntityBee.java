@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityBee extends Entity {
-    EntityType<EntityBee> TYPE = EntityTypeBuilder
-            .builder(EntityBee.class)
-            .vanillaEntity(VanillaEntityId.BEE)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityBee> TYPE = EntityTypeBuilder
+          .builder(EntityBee.class)
+          .vanillaEntity(VanillaEntityId.BEE)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemLingeringPotion extends ItemStack {
-    ItemType<ItemLingeringPotion> TYPE = ItemTypeBuilder
-            .builder(ItemLingeringPotion.class)
-            .vanillaItem(VanillaItemId.LINGERING_POTION, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemLingeringPotion> TYPE = ItemTypeBuilder
+          .builder(ItemLingeringPotion.class)
+          .vanillaItem(VanillaItemId.LINGERING_POTION, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDiamondHoe extends ItemStack {
-    ItemType<ItemDiamondHoe> TYPE = ItemTypeBuilder
-            .builder(ItemDiamondHoe.class)
-            .vanillaItem(VanillaItemId.DIAMOND_HOE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDiamondHoe> TYPE = ItemTypeBuilder
+          .builder(ItemDiamondHoe.class)
+          .vanillaItem(VanillaItemId.DIAMOND_HOE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

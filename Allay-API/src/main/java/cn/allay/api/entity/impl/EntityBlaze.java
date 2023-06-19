@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityBlaze extends Entity {
-    EntityType<EntityBlaze> TYPE = EntityTypeBuilder
-            .builder(EntityBlaze.class)
-            .vanillaEntity(VanillaEntityId.BLAZE)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityBlaze> TYPE = EntityTypeBuilder
+          .builder(EntityBlaze.class)
+          .vanillaEntity(VanillaEntityId.BLAZE)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

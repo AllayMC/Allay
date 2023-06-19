@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBleach extends ItemStack {
-    ItemType<ItemBleach> TYPE = ItemTypeBuilder
-            .builder(ItemBleach.class)
-            .vanillaItem(VanillaItemId.BLEACH, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemBleach> TYPE = ItemTypeBuilder
+          .builder(ItemBleach.class)
+          .vanillaItem(VanillaItemId.BLEACH, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

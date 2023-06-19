@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemTripWire extends ItemStack {
-    ItemType<ItemTripWire> TYPE = ItemTypeBuilder
-            .builder(ItemTripWire.class)
-            .vanillaItem(VanillaItemId.TRIP_WIRE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemTripWire> TYPE = ItemTypeBuilder
+          .builder(ItemTripWire.class)
+          .vanillaItem(VanillaItemId.TRIP_WIRE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

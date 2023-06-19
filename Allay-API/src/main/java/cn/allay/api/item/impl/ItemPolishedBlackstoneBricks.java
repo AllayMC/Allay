@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemPolishedBlackstoneBricks extends ItemStack {
-    ItemType<ItemPolishedBlackstoneBricks> TYPE = ItemTypeBuilder
-            .builder(ItemPolishedBlackstoneBricks.class)
-            .vanillaItem(VanillaItemId.POLISHED_BLACKSTONE_BRICKS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemPolishedBlackstoneBricks> TYPE = ItemTypeBuilder
+          .builder(ItemPolishedBlackstoneBricks.class)
+          .vanillaItem(VanillaItemId.POLISHED_BLACKSTONE_BRICKS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

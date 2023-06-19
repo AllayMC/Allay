@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockGreenCandleCake extends Block {
-    BlockType<BlockGreenCandleCake> TYPE = BlockTypeBuilder
-            .builder(BlockGreenCandleCake.class)
-            .vanillaBlock(VanillaBlockId.GREEN_CANDLE_CAKE, true)
-            .withProperties(VanillaBlockPropertyTypes.LIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockGreenCandleCake> TYPE = BlockTypeBuilder
+          .builder(BlockGreenCandleCake.class)
+          .vanillaBlock(VanillaBlockId.GREEN_CANDLE_CAKE, true)
+          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .addBasicComponents()
+          .build();
 }

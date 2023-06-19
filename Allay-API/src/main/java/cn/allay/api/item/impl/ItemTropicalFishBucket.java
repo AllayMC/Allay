@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemTropicalFishBucket extends ItemStack {
-    ItemType<ItemTropicalFishBucket> TYPE = ItemTypeBuilder
-            .builder(ItemTropicalFishBucket.class)
-            .vanillaItem(VanillaItemId.TROPICAL_FISH_BUCKET, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemTropicalFishBucket> TYPE = ItemTypeBuilder
+          .builder(ItemTropicalFishBucket.class)
+          .vanillaItem(VanillaItemId.TROPICAL_FISH_BUCKET, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

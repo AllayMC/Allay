@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWoodenPickaxe extends ItemStack {
-    ItemType<ItemWoodenPickaxe> TYPE = ItemTypeBuilder
-            .builder(ItemWoodenPickaxe.class)
-            .vanillaItem(VanillaItemId.WOODEN_PICKAXE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWoodenPickaxe> TYPE = ItemTypeBuilder
+          .builder(ItemWoodenPickaxe.class)
+          .vanillaItem(VanillaItemId.WOODEN_PICKAXE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

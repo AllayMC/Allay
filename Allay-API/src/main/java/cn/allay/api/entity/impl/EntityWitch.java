@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityWitch extends Entity {
-    EntityType<EntityWitch> TYPE = EntityTypeBuilder
-            .builder(EntityWitch.class)
-            .vanillaEntity(VanillaEntityId.WITCH)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityWitch> TYPE = EntityTypeBuilder
+          .builder(EntityWitch.class)
+          .vanillaEntity(VanillaEntityId.WITCH)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

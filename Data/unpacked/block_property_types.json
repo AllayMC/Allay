@@ -852,6 +852,16 @@
                 true
             ]
         },
+        "minecraft_cardinal_direction": {
+            "serializationName": "minecraft:cardinal_direction",
+            "valueType": "ENUM",
+            "values": [
+                "east",
+                "north",
+                "south",
+                "west"
+            ]
+        },
         "moisturized_amount": {
             "serializationName": "moisturized_amount",
             "valueType": "INTEGER",
@@ -1169,6 +1179,15 @@
                 "jungle",
                 "oak",
                 "spruce"
+            ]
+        },
+        "sculk_sensor_phase": {
+            "serializationName": "sculk_sensor_phase",
+            "valueType": "INTEGER",
+            "values": [
+                0,
+                1,
+                2
             ]
         },
         "sea_grass_type": {

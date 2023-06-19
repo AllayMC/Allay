@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBrewingStand extends Block {
-    BlockType<BlockBrewingStand> TYPE = BlockTypeBuilder
-            .builder(BlockBrewingStand.class)
-            .vanillaBlock(VanillaBlockId.BREWING_STAND, true)
-            .withProperties(VanillaBlockPropertyTypes.BREWING_STAND_SLOT_A_BIT,
-                    VanillaBlockPropertyTypes.BREWING_STAND_SLOT_B_BIT,
-                    VanillaBlockPropertyTypes.BREWING_STAND_SLOT_C_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBrewingStand> TYPE = BlockTypeBuilder
+          .builder(BlockBrewingStand.class)
+          .vanillaBlock(VanillaBlockId.BREWING_STAND, true)
+          .withProperties(VanillaBlockPropertyTypes.BREWING_STAND_SLOT_C_BIT, VanillaBlockPropertyTypes.BREWING_STAND_SLOT_A_BIT, VanillaBlockPropertyTypes.BREWING_STAND_SLOT_B_BIT)
+          .addBasicComponents()
+          .build();
 }

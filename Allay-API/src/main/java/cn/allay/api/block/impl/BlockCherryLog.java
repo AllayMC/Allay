@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCherryLog extends Block {
-    BlockType<BlockCherryLog> TYPE = BlockTypeBuilder
-            .builder(BlockCherryLog.class)
-            .vanillaBlock(VanillaBlockId.CHERRY_LOG, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCherryLog> TYPE = BlockTypeBuilder
+          .builder(BlockCherryLog.class)
+          .vanillaBlock(VanillaBlockId.CHERRY_LOG, true)
+          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

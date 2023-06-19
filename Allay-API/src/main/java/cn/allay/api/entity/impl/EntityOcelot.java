@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityOcelot extends Entity {
-    EntityType<EntityOcelot> TYPE = EntityTypeBuilder
-            .builder(EntityOcelot.class)
-            .vanillaEntity(VanillaEntityId.OCELOT)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityOcelot> TYPE = EntityTypeBuilder
+          .builder(EntityOcelot.class)
+          .vanillaEntity(VanillaEntityId.OCELOT)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

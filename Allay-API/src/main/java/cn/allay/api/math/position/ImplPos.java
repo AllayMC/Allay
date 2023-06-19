@@ -1,6 +1,6 @@
 package cn.allay.api.math.position;
 
-import cn.allay.api.level.Level;
+import cn.allay.api.world.World;
 
 /**
  * Author: daoge_cmd <br>
@@ -8,13 +8,13 @@ import cn.allay.api.level.Level;
  * Allay Project <br>
  */
 class ImplPos<T extends Number> extends ImplFixedPos<T> implements Pos<T> {
-    public ImplPos(T x, T y, T z, Level level) {
-        super(x, y, z, level);
+    public ImplPos(T x, T y, T z, World world) {
+        super(x, y, z, world);
     }
 
     @Override
-    public void setLevel(Level level) {
-        this.level = level;
+    public void setWorld(World world) {
+        this.world = world;
     }
 
     @Override
