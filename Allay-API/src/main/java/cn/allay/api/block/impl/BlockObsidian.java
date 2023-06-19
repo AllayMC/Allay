@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockObsidian extends Block {
-    BlockType<BlockObsidian> TYPE = BlockTypeBuilder
-            .builder(BlockObsidian.class)
-            .vanillaBlock(VanillaBlockId.OBSIDIAN, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockObsidian> TYPE = BlockTypeBuilder
+          .builder(BlockObsidian.class)
+          .vanillaBlock(VanillaBlockId.OBSIDIAN, true)
+          .addBasicComponents()
+          .build();
 }

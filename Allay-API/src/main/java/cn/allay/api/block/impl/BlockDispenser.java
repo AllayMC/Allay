@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDispenser extends Block {
-    BlockType<BlockDispenser> TYPE = BlockTypeBuilder
-            .builder(BlockDispenser.class)
-            .vanillaBlock(VanillaBlockId.DISPENSER, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.TRIGGERED_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDispenser> TYPE = BlockTypeBuilder
+          .builder(BlockDispenser.class)
+          .vanillaBlock(VanillaBlockId.DISPENSER, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.TRIGGERED_BIT)
+          .addBasicComponents()
+          .build();
 }

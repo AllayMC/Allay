@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDiscFragment5 extends ItemStack {
-    ItemType<ItemDiscFragment5> TYPE = ItemTypeBuilder
-            .builder(ItemDiscFragment5.class)
-            .vanillaItem(VanillaItemId.DISC_FRAGMENT_5, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDiscFragment5> TYPE = ItemTypeBuilder
+          .builder(ItemDiscFragment5.class)
+          .vanillaItem(VanillaItemId.DISC_FRAGMENT_5, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

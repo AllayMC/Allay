@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemJungleStandingSign extends ItemStack {
-    ItemType<ItemJungleStandingSign> TYPE = ItemTypeBuilder
-            .builder(ItemJungleStandingSign.class)
-            .vanillaItem(VanillaItemId.JUNGLE_STANDING_SIGN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemJungleStandingSign> TYPE = ItemTypeBuilder
+          .builder(ItemJungleStandingSign.class)
+          .vanillaItem(VanillaItemId.JUNGLE_STANDING_SIGN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

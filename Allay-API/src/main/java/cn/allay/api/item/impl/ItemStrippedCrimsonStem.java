@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemStrippedCrimsonStem extends ItemStack {
-    ItemType<ItemStrippedCrimsonStem> TYPE = ItemTypeBuilder
-            .builder(ItemStrippedCrimsonStem.class)
-            .vanillaItem(VanillaItemId.STRIPPED_CRIMSON_STEM, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemStrippedCrimsonStem> TYPE = ItemTypeBuilder
+          .builder(ItemStrippedCrimsonStem.class)
+          .vanillaItem(VanillaItemId.STRIPPED_CRIMSON_STEM, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

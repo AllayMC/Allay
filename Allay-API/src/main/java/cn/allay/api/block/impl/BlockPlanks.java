@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPlanks extends Block {
-    BlockType<BlockPlanks> TYPE = BlockTypeBuilder
-            .builder(BlockPlanks.class)
-            .vanillaBlock(VanillaBlockId.PLANKS, true)
-            .withProperties(VanillaBlockPropertyTypes.WOOD_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPlanks> TYPE = BlockTypeBuilder
+          .builder(BlockPlanks.class)
+          .vanillaBlock(VanillaBlockId.PLANKS, true)
+          .withProperties(VanillaBlockPropertyTypes.WOOD_TYPE)
+          .addBasicComponents()
+          .build();
 }

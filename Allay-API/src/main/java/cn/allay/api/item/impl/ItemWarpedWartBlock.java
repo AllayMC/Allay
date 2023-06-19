@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWarpedWartBlock extends ItemStack {
-    ItemType<ItemWarpedWartBlock> TYPE = ItemTypeBuilder
-            .builder(ItemWarpedWartBlock.class)
-            .vanillaItem(VanillaItemId.WARPED_WART_BLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWarpedWartBlock> TYPE = ItemTypeBuilder
+          .builder(ItemWarpedWartBlock.class)
+          .vanillaItem(VanillaItemId.WARPED_WART_BLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

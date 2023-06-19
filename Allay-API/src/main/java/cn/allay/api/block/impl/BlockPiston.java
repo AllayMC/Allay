@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPiston extends Block {
-    BlockType<BlockPiston> TYPE = BlockTypeBuilder
-            .builder(BlockPiston.class)
-            .vanillaBlock(VanillaBlockId.PISTON, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPiston> TYPE = BlockTypeBuilder
+          .builder(BlockPiston.class)
+          .vanillaBlock(VanillaBlockId.PISTON, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

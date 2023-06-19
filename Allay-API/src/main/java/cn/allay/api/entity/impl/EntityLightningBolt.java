@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityLightningBolt extends Entity {
-    EntityType<EntityLightningBolt> TYPE = EntityTypeBuilder
-            .builder(EntityLightningBolt.class)
-            .vanillaEntity(VanillaEntityId.LIGHTNING_BOLT)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityLightningBolt> TYPE = EntityTypeBuilder
+          .builder(EntityLightningBolt.class)
+          .vanillaEntity(VanillaEntityId.LIGHTNING_BOLT)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

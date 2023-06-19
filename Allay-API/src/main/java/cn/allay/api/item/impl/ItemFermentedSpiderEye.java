@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemFermentedSpiderEye extends ItemStack {
-    ItemType<ItemFermentedSpiderEye> TYPE = ItemTypeBuilder
-            .builder(ItemFermentedSpiderEye.class)
-            .vanillaItem(VanillaItemId.FERMENTED_SPIDER_EYE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemFermentedSpiderEye> TYPE = ItemTypeBuilder
+          .builder(ItemFermentedSpiderEye.class)
+          .vanillaItem(VanillaItemId.FERMENTED_SPIDER_EYE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

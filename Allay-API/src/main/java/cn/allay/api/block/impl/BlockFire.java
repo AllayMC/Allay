@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockFire extends Block {
-    BlockType<BlockFire> TYPE = BlockTypeBuilder
-            .builder(BlockFire.class)
-            .vanillaBlock(VanillaBlockId.FIRE, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE_16)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockFire> TYPE = BlockTypeBuilder
+          .builder(BlockFire.class)
+          .vanillaBlock(VanillaBlockId.FIRE, true)
+          .withProperties(VanillaBlockPropertyTypes.AGE_16)
+          .addBasicComponents()
+          .build();
 }

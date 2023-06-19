@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockJungleStairs extends Block {
-    BlockType<BlockJungleStairs> TYPE = BlockTypeBuilder
-            .builder(BlockJungleStairs.class)
-            .vanillaBlock(VanillaBlockId.JUNGLE_STAIRS, true)
-            .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT,
-                    VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockJungleStairs> TYPE = BlockTypeBuilder
+          .builder(BlockJungleStairs.class)
+          .vanillaBlock(VanillaBlockId.JUNGLE_STAIRS, true)
+          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

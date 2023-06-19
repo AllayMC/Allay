@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemLeatherHorseArmor extends ItemStack {
-    ItemType<ItemLeatherHorseArmor> TYPE = ItemTypeBuilder
-            .builder(ItemLeatherHorseArmor.class)
-            .vanillaItem(VanillaItemId.LEATHER_HORSE_ARMOR, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemLeatherHorseArmor> TYPE = ItemTypeBuilder
+          .builder(ItemLeatherHorseArmor.class)
+          .vanillaItem(VanillaItemId.LEATHER_HORSE_ARMOR, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockStrippedWarpedHyphae extends Block {
-    BlockType<BlockStrippedWarpedHyphae> TYPE = BlockTypeBuilder
-            .builder(BlockStrippedWarpedHyphae.class)
-            .vanillaBlock(VanillaBlockId.STRIPPED_WARPED_HYPHAE, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockStrippedWarpedHyphae> TYPE = BlockTypeBuilder
+          .builder(BlockStrippedWarpedHyphae.class)
+          .vanillaBlock(VanillaBlockId.STRIPPED_WARPED_HYPHAE, true)
+          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

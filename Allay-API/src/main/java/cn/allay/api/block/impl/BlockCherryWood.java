@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCherryWood extends Block {
-    BlockType<BlockCherryWood> TYPE = BlockTypeBuilder
-            .builder(BlockCherryWood.class)
-            .vanillaBlock(VanillaBlockId.CHERRY_WOOD, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS,
-                    VanillaBlockPropertyTypes.STRIPPED_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCherryWood> TYPE = BlockTypeBuilder
+          .builder(BlockCherryWood.class)
+          .vanillaBlock(VanillaBlockId.CHERRY_WOOD, true)
+          .withProperties(VanillaBlockPropertyTypes.STRIPPED_BIT, VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

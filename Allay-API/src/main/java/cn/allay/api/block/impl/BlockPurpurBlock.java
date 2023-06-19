@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPurpurBlock extends Block {
-    BlockType<BlockPurpurBlock> TYPE = BlockTypeBuilder
-            .builder(BlockPurpurBlock.class)
-            .vanillaBlock(VanillaBlockId.PURPUR_BLOCK, true)
-            .withProperties(VanillaBlockPropertyTypes.CHISEL_TYPE,
-                    VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPurpurBlock> TYPE = BlockTypeBuilder
+          .builder(BlockPurpurBlock.class)
+          .vanillaBlock(VanillaBlockId.PURPUR_BLOCK, true)
+          .withProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

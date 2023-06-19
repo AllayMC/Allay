@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSnowLayer extends ItemStack {
-    ItemType<ItemSnowLayer> TYPE = ItemTypeBuilder
-            .builder(ItemSnowLayer.class)
-            .vanillaItem(VanillaItemId.SNOW_LAYER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSnowLayer> TYPE = ItemTypeBuilder
+          .builder(ItemSnowLayer.class)
+          .vanillaItem(VanillaItemId.SNOW_LAYER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

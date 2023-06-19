@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemLightBlueWool extends ItemStack {
-    ItemType<ItemLightBlueWool> TYPE = ItemTypeBuilder
-            .builder(ItemLightBlueWool.class)
-            .vanillaItem(VanillaItemId.LIGHT_BLUE_WOOL, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemLightBlueWool> TYPE = ItemTypeBuilder
+          .builder(ItemLightBlueWool.class)
+          .vanillaItem(VanillaItemId.LIGHT_BLUE_WOOL, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

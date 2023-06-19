@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCoralBlock extends Block {
-    BlockType<BlockCoralBlock> TYPE = BlockTypeBuilder
-            .builder(BlockCoralBlock.class)
-            .vanillaBlock(VanillaBlockId.CORAL_BLOCK, true)
-            .withProperties(VanillaBlockPropertyTypes.CORAL_COLOR,
-                    VanillaBlockPropertyTypes.DEAD_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCoralBlock> TYPE = BlockTypeBuilder
+          .builder(BlockCoralBlock.class)
+          .vanillaBlock(VanillaBlockId.CORAL_BLOCK, true)
+          .withProperties(VanillaBlockPropertyTypes.CORAL_COLOR, VanillaBlockPropertyTypes.DEAD_BIT)
+          .addBasicComponents()
+          .build();
 }

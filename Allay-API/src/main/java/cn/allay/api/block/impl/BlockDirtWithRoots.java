@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockDirtWithRoots extends Block {
-    BlockType<BlockDirtWithRoots> TYPE = BlockTypeBuilder
-            .builder(BlockDirtWithRoots.class)
-            .vanillaBlock(VanillaBlockId.DIRT_WITH_ROOTS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDirtWithRoots> TYPE = BlockTypeBuilder
+          .builder(BlockDirtWithRoots.class)
+          .vanillaBlock(VanillaBlockId.DIRT_WITH_ROOTS, true)
+          .addBasicComponents()
+          .build();
 }

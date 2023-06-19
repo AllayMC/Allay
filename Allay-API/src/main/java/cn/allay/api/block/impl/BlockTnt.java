@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockTnt extends Block {
-    BlockType<BlockTnt> TYPE = BlockTypeBuilder
-            .builder(BlockTnt.class)
-            .vanillaBlock(VanillaBlockId.TNT, true)
-            .withProperties(VanillaBlockPropertyTypes.ALLOW_UNDERWATER_BIT,
-                    VanillaBlockPropertyTypes.EXPLODE_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTnt> TYPE = BlockTypeBuilder
+          .builder(BlockTnt.class)
+          .vanillaBlock(VanillaBlockId.TNT, true)
+          .withProperties(VanillaBlockPropertyTypes.EXPLODE_BIT, VanillaBlockPropertyTypes.ALLOW_UNDERWATER_BIT)
+          .addBasicComponents()
+          .build();
 }

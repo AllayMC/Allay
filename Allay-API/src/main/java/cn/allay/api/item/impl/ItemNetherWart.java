@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNetherWart extends ItemStack {
-    ItemType<ItemNetherWart> TYPE = ItemTypeBuilder
-            .builder(ItemNetherWart.class)
-            .vanillaItem(VanillaItemId.NETHER_WART, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNetherWart> TYPE = ItemTypeBuilder
+          .builder(ItemNetherWart.class)
+          .vanillaItem(VanillaItemId.NETHER_WART, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

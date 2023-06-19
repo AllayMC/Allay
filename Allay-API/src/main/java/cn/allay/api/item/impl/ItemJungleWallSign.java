@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemJungleWallSign extends ItemStack {
-    ItemType<ItemJungleWallSign> TYPE = ItemTypeBuilder
-            .builder(ItemJungleWallSign.class)
-            .vanillaItem(VanillaItemId.JUNGLE_WALL_SIGN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemJungleWallSign> TYPE = ItemTypeBuilder
+          .builder(ItemJungleWallSign.class)
+          .vanillaItem(VanillaItemId.JUNGLE_WALL_SIGN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

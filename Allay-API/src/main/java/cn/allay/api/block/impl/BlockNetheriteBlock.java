@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockNetheriteBlock extends Block {
-    BlockType<BlockNetheriteBlock> TYPE = BlockTypeBuilder
-            .builder(BlockNetheriteBlock.class)
-            .vanillaBlock(VanillaBlockId.NETHERITE_BLOCK, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockNetheriteBlock> TYPE = BlockTypeBuilder
+          .builder(BlockNetheriteBlock.class)
+          .vanillaBlock(VanillaBlockId.NETHERITE_BLOCK, true)
+          .addBasicComponents()
+          .build();
 }

@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockGrassPath extends Block {
-    BlockType<BlockGrassPath> TYPE = BlockTypeBuilder
-            .builder(BlockGrassPath.class)
-            .vanillaBlock(VanillaBlockId.GRASS_PATH, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockGrassPath> TYPE = BlockTypeBuilder
+          .builder(BlockGrassPath.class)
+          .vanillaBlock(VanillaBlockId.GRASS_PATH, true)
+          .addBasicComponents()
+          .build();
 }

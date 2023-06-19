@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCaveVinesBodyWithBerries extends Block {
-    BlockType<BlockCaveVinesBodyWithBerries> TYPE = BlockTypeBuilder
-            .builder(BlockCaveVinesBodyWithBerries.class)
-            .vanillaBlock(VanillaBlockId.CAVE_VINES_BODY_WITH_BERRIES, true)
-            .withProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCaveVinesBodyWithBerries> TYPE = BlockTypeBuilder
+          .builder(BlockCaveVinesBodyWithBerries.class)
+          .vanillaBlock(VanillaBlockId.CAVE_VINES_BODY_WITH_BERRIES, true)
+          .withProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
+          .addBasicComponents()
+          .build();
 }

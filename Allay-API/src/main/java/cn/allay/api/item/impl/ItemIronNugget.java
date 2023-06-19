@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemIronNugget extends ItemStack {
-    ItemType<ItemIronNugget> TYPE = ItemTypeBuilder
-            .builder(ItemIronNugget.class)
-            .vanillaItem(VanillaItemId.IRON_NUGGET, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemIronNugget> TYPE = ItemTypeBuilder
+          .builder(ItemIronNugget.class)
+          .vanillaItem(VanillaItemId.IRON_NUGGET, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

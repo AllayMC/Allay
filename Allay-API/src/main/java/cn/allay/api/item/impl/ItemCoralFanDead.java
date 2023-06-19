@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCoralFanDead extends ItemStack {
-    ItemType<ItemCoralFanDead> TYPE = ItemTypeBuilder
-            .builder(ItemCoralFanDead.class)
-            .vanillaItem(VanillaItemId.CORAL_FAN_DEAD, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCoralFanDead> TYPE = ItemTypeBuilder
+          .builder(ItemCoralFanDead.class)
+          .vanillaItem(VanillaItemId.CORAL_FAN_DEAD, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

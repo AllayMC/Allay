@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSugarCane extends ItemStack {
-    ItemType<ItemSugarCane> TYPE = ItemTypeBuilder
-            .builder(ItemSugarCane.class)
-            .vanillaItem(VanillaItemId.SUGAR_CANE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSugarCane> TYPE = ItemTypeBuilder
+          .builder(ItemSugarCane.class)
+          .vanillaItem(VanillaItemId.SUGAR_CANE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

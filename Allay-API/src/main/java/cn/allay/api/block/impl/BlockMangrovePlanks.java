@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockMangrovePlanks extends Block {
-    BlockType<BlockMangrovePlanks> TYPE = BlockTypeBuilder
-            .builder(BlockMangrovePlanks.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_PLANKS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMangrovePlanks> TYPE = BlockTypeBuilder
+          .builder(BlockMangrovePlanks.class)
+          .vanillaBlock(VanillaBlockId.MANGROVE_PLANKS, true)
+          .addBasicComponents()
+          .build();
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockConcrete extends Block {
-    BlockType<BlockConcrete> TYPE = BlockTypeBuilder
-            .builder(BlockConcrete.class)
-            .vanillaBlock(VanillaBlockId.CONCRETE, true)
-            .withProperties(VanillaBlockPropertyTypes.COLOR)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockConcrete> TYPE = BlockTypeBuilder
+          .builder(BlockConcrete.class)
+          .vanillaBlock(VanillaBlockId.CONCRETE, true)
+          .withProperties(VanillaBlockPropertyTypes.COLOR)
+          .addBasicComponents()
+          .build();
 }

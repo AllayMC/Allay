@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemQuartzOre extends ItemStack {
-    ItemType<ItemQuartzOre> TYPE = ItemTypeBuilder
-            .builder(ItemQuartzOre.class)
-            .vanillaItem(VanillaItemId.QUARTZ_ORE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemQuartzOre> TYPE = ItemTypeBuilder
+          .builder(ItemQuartzOre.class)
+          .vanillaItem(VanillaItemId.QUARTZ_ORE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

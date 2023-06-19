@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCampfire extends Block {
-    BlockType<BlockCampfire> TYPE = BlockTypeBuilder
-            .builder(BlockCampfire.class)
-            .vanillaBlock(VanillaBlockId.CAMPFIRE, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.EXTINGUISHED)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCampfire> TYPE = BlockTypeBuilder
+          .builder(BlockCampfire.class)
+          .vanillaBlock(VanillaBlockId.CAMPFIRE, true)
+          .withProperties(VanillaBlockPropertyTypes.EXTINGUISHED, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBedrock extends Block {
-    BlockType<BlockBedrock> TYPE = BlockTypeBuilder
-            .builder(BlockBedrock.class)
-            .vanillaBlock(VanillaBlockId.BEDROCK, true)
-            .withProperties(VanillaBlockPropertyTypes.INFINIBURN_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBedrock> TYPE = BlockTypeBuilder
+          .builder(BlockBedrock.class)
+          .vanillaBlock(VanillaBlockId.BEDROCK, true)
+          .withProperties(VanillaBlockPropertyTypes.INFINIBURN_BIT)
+          .addBasicComponents()
+          .build();
 }

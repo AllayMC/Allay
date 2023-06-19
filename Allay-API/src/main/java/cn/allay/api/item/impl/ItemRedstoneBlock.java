@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemRedstoneBlock extends ItemStack {
-    ItemType<ItemRedstoneBlock> TYPE = ItemTypeBuilder
-            .builder(ItemRedstoneBlock.class)
-            .vanillaItem(VanillaItemId.REDSTONE_BLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemRedstoneBlock> TYPE = ItemTypeBuilder
+          .builder(ItemRedstoneBlock.class)
+          .vanillaItem(VanillaItemId.REDSTONE_BLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

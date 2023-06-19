@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSculkCatalyst extends ItemStack {
-    ItemType<ItemSculkCatalyst> TYPE = ItemTypeBuilder
-            .builder(ItemSculkCatalyst.class)
-            .vanillaItem(VanillaItemId.SCULK_CATALYST, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSculkCatalyst> TYPE = ItemTypeBuilder
+          .builder(ItemSculkCatalyst.class)
+          .vanillaItem(VanillaItemId.SCULK_CATALYST, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

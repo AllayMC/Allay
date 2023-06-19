@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemStandingBanner extends ItemStack {
-    ItemType<ItemStandingBanner> TYPE = ItemTypeBuilder
-            .builder(ItemStandingBanner.class)
-            .vanillaItem(VanillaItemId.STANDING_BANNER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemStandingBanner> TYPE = ItemTypeBuilder
+          .builder(ItemStandingBanner.class)
+          .vanillaItem(VanillaItemId.STANDING_BANNER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

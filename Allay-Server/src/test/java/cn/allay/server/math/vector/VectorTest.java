@@ -1,9 +1,9 @@
 package cn.allay.server.math.vector;
 
-import cn.allay.api.level.Level;
 import cn.allay.api.math.location.Loc;
 import cn.allay.api.math.position.Pos;
 import cn.allay.api.math.vector.Vec3;
+import cn.allay.api.world.World;
 import net.bytebuddy.ByteBuddy;
 import org.junit.jupiter.api.Test;
 
@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 class VectorTest {
 
-    static Level mockLevel;
+    static World mockLevel;
 
     static {
         try {
             mockLevel = new ByteBuddy()
-                    .subclass(Level.class)
+                    .subclass(World.class)
                     .make()
                     .load(VectorTest.class.getClassLoader())
                     .getLoaded()
@@ -51,7 +51,7 @@ class VectorTest {
     @Test
     void position() {
         var pos = Pos.of(1, 1, 1, mockLevel);
-        assertNotNull(pos.getLevel());
+        assertNotNull(pos.getWorld());
         assertEquals(1, pos.getX());
         assertEquals(1, pos.getY());
         assertEquals(1, pos.getZ());
@@ -66,7 +66,7 @@ class VectorTest {
     @Test
     void location() {
         var loc = Loc.of(1, 1, 1, mockLevel);
-        assertNotNull(loc.getLevel());
+        assertNotNull(loc.getWorld());
         assertEquals(0d, loc.getYaw());
         assertEquals(0d, loc.getHeadYaw());
         assertEquals(0d, loc.getPitch());

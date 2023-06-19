@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemHangingRoots extends ItemStack {
-    ItemType<ItemHangingRoots> TYPE = ItemTypeBuilder
-            .builder(ItemHangingRoots.class)
-            .vanillaItem(VanillaItemId.HANGING_ROOTS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemHangingRoots> TYPE = ItemTypeBuilder
+          .builder(ItemHangingRoots.class)
+          .vanillaItem(VanillaItemId.HANGING_ROOTS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockLightGrayWool extends Block {
-    BlockType<BlockLightGrayWool> TYPE = BlockTypeBuilder
-            .builder(BlockLightGrayWool.class)
-            .vanillaBlock(VanillaBlockId.LIGHT_GRAY_WOOL, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLightGrayWool> TYPE = BlockTypeBuilder
+          .builder(BlockLightGrayWool.class)
+          .vanillaBlock(VanillaBlockId.LIGHT_GRAY_WOOL, true)
+          .addBasicComponents()
+          .build();
 }

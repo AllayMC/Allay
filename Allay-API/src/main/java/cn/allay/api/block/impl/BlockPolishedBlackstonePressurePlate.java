@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPolishedBlackstonePressurePlate extends Block {
-    BlockType<BlockPolishedBlackstonePressurePlate> TYPE = BlockTypeBuilder
-            .builder(BlockPolishedBlackstonePressurePlate.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE, true)
-            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPolishedBlackstonePressurePlate> TYPE = BlockTypeBuilder
+          .builder(BlockPolishedBlackstonePressurePlate.class)
+          .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE, true)
+          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .addBasicComponents()
+          .build();
 }

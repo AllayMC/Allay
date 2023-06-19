@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemPiglinBruteSpawnEgg extends ItemStack {
-    ItemType<ItemPiglinBruteSpawnEgg> TYPE = ItemTypeBuilder
-            .builder(ItemPiglinBruteSpawnEgg.class)
-            .vanillaItem(VanillaItemId.PIGLIN_BRUTE_SPAWN_EGG, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemPiglinBruteSpawnEgg> TYPE = ItemTypeBuilder
+          .builder(ItemPiglinBruteSpawnEgg.class)
+          .vanillaItem(VanillaItemId.PIGLIN_BRUTE_SPAWN_EGG, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

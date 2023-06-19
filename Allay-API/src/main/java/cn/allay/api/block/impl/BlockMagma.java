@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockMagma extends Block {
-    BlockType<BlockMagma> TYPE = BlockTypeBuilder
-            .builder(BlockMagma.class)
-            .vanillaBlock(VanillaBlockId.MAGMA, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMagma> TYPE = BlockTypeBuilder
+          .builder(BlockMagma.class)
+          .vanillaBlock(VanillaBlockId.MAGMA, true)
+          .addBasicComponents()
+          .build();
 }

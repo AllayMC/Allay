@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockTrappedChest extends Block {
-    BlockType<BlockTrappedChest> TYPE = BlockTypeBuilder
-            .builder(BlockTrappedChest.class)
-            .vanillaBlock(VanillaBlockId.TRAPPED_CHEST, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTrappedChest> TYPE = BlockTypeBuilder
+          .builder(BlockTrappedChest.class)
+          .vanillaBlock(VanillaBlockId.TRAPPED_CHEST, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemJigsaw extends ItemStack {
-    ItemType<ItemJigsaw> TYPE = ItemTypeBuilder
-            .builder(ItemJigsaw.class)
-            .vanillaItem(VanillaItemId.JIGSAW, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemJigsaw> TYPE = ItemTypeBuilder
+          .builder(ItemJigsaw.class)
+          .vanillaItem(VanillaItemId.JIGSAW, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

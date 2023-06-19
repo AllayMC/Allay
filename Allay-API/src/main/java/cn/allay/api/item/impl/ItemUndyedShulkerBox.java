@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemUndyedShulkerBox extends ItemStack {
-    ItemType<ItemUndyedShulkerBox> TYPE = ItemTypeBuilder
-            .builder(ItemUndyedShulkerBox.class)
-            .vanillaItem(VanillaItemId.UNDYED_SHULKER_BOX, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemUndyedShulkerBox> TYPE = ItemTypeBuilder
+          .builder(ItemUndyedShulkerBox.class)
+          .vanillaItem(VanillaItemId.UNDYED_SHULKER_BOX, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

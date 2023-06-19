@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockHangingRoots extends Block {
-    BlockType<BlockHangingRoots> TYPE = BlockTypeBuilder
-            .builder(BlockHangingRoots.class)
-            .vanillaBlock(VanillaBlockId.HANGING_ROOTS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockHangingRoots> TYPE = BlockTypeBuilder
+          .builder(BlockHangingRoots.class)
+          .vanillaBlock(VanillaBlockId.HANGING_ROOTS, true)
+          .addBasicComponents()
+          .build();
 }

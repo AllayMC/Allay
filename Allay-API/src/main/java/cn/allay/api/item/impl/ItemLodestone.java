@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemLodestone extends ItemStack {
-    ItemType<ItemLodestone> TYPE = ItemTypeBuilder
-            .builder(ItemLodestone.class)
-            .vanillaItem(VanillaItemId.LODESTONE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemLodestone> TYPE = ItemTypeBuilder
+          .builder(ItemLodestone.class)
+          .vanillaItem(VanillaItemId.LODESTONE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

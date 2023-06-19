@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockColoredTorchRg extends Block {
-    BlockType<BlockColoredTorchRg> TYPE = BlockTypeBuilder
-            .builder(BlockColoredTorchRg.class)
-            .vanillaBlock(VanillaBlockId.COLORED_TORCH_RG, true)
-            .withProperties(VanillaBlockPropertyTypes.COLOR_BIT,
-                    VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockColoredTorchRg> TYPE = BlockTypeBuilder
+          .builder(BlockColoredTorchRg.class)
+          .vanillaBlock(VanillaBlockId.COLORED_TORCH_RG, true)
+          .withProperties(VanillaBlockPropertyTypes.COLOR_BIT, VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockLantern extends Block {
-    BlockType<BlockLantern> TYPE = BlockTypeBuilder
-            .builder(BlockLantern.class)
-            .vanillaBlock(VanillaBlockId.LANTERN, true)
-            .withProperties(VanillaBlockPropertyTypes.HANGING)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLantern> TYPE = BlockTypeBuilder
+          .builder(BlockLantern.class)
+          .vanillaBlock(VanillaBlockId.LANTERN, true)
+          .withProperties(VanillaBlockPropertyTypes.HANGING)
+          .addBasicComponents()
+          .build();
 }

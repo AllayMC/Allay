@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemTorchflowerCrop extends ItemStack {
-    ItemType<ItemTorchflowerCrop> TYPE = ItemTypeBuilder
-            .builder(ItemTorchflowerCrop.class)
-            .vanillaItem(VanillaItemId.TORCHFLOWER_CROP, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemTorchflowerCrop> TYPE = ItemTypeBuilder
+          .builder(ItemTorchflowerCrop.class)
+          .vanillaItem(VanillaItemId.TORCHFLOWER_CROP, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

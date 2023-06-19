@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockFletchingTable extends Block {
-    BlockType<BlockFletchingTable> TYPE = BlockTypeBuilder
-            .builder(BlockFletchingTable.class)
-            .vanillaBlock(VanillaBlockId.FLETCHING_TABLE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockFletchingTable> TYPE = BlockTypeBuilder
+          .builder(BlockFletchingTable.class)
+          .vanillaBlock(VanillaBlockId.FLETCHING_TABLE, true)
+          .addBasicComponents()
+          .build();
 }

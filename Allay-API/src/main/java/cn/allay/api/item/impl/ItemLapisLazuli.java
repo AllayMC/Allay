@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemLapisLazuli extends ItemStack {
-    ItemType<ItemLapisLazuli> TYPE = ItemTypeBuilder
-            .builder(ItemLapisLazuli.class)
-            .vanillaItem(VanillaItemId.LAPIS_LAZULI, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemLapisLazuli> TYPE = ItemTypeBuilder
+          .builder(ItemLapisLazuli.class)
+          .vanillaItem(VanillaItemId.LAPIS_LAZULI, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

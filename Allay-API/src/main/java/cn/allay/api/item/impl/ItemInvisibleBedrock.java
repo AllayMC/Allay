@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemInvisibleBedrock extends ItemStack {
-    ItemType<ItemInvisibleBedrock> TYPE = ItemTypeBuilder
-            .builder(ItemInvisibleBedrock.class)
-            .vanillaItem(VanillaItemId.INVISIBLE_BEDROCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemInvisibleBedrock> TYPE = ItemTypeBuilder
+          .builder(ItemInvisibleBedrock.class)
+          .vanillaItem(VanillaItemId.INVISIBLE_BEDROCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

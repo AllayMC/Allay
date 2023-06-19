@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockWaxedOxidizedDoubleCutCopperSlab extends Block {
-    BlockType<BlockWaxedOxidizedDoubleCutCopperSlab> TYPE = BlockTypeBuilder
-            .builder(BlockWaxedOxidizedDoubleCutCopperSlab.class)
-            .vanillaBlock(VanillaBlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB, true)
-            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWaxedOxidizedDoubleCutCopperSlab> TYPE = BlockTypeBuilder
+          .builder(BlockWaxedOxidizedDoubleCutCopperSlab.class)
+          .vanillaBlock(VanillaBlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB, true)
+          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .addBasicComponents()
+          .build();
 }

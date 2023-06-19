@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockUndyedShulkerBox extends Block {
-    BlockType<BlockUndyedShulkerBox> TYPE = BlockTypeBuilder
-            .builder(BlockUndyedShulkerBox.class)
-            .vanillaBlock(VanillaBlockId.UNDYED_SHULKER_BOX, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockUndyedShulkerBox> TYPE = BlockTypeBuilder
+          .builder(BlockUndyedShulkerBox.class)
+          .vanillaBlock(VanillaBlockId.UNDYED_SHULKER_BOX, true)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemEndBrickStairs extends ItemStack {
-    ItemType<ItemEndBrickStairs> TYPE = ItemTypeBuilder
-            .builder(ItemEndBrickStairs.class)
-            .vanillaItem(VanillaItemId.END_BRICK_STAIRS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemEndBrickStairs> TYPE = ItemTypeBuilder
+          .builder(ItemEndBrickStairs.class)
+          .vanillaItem(VanillaItemId.END_BRICK_STAIRS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

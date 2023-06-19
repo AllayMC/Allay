@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDaylightDetectorInverted extends ItemStack {
-    ItemType<ItemDaylightDetectorInverted> TYPE = ItemTypeBuilder
-            .builder(ItemDaylightDetectorInverted.class)
-            .vanillaItem(VanillaItemId.DAYLIGHT_DETECTOR_INVERTED, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDaylightDetectorInverted> TYPE = ItemTypeBuilder
+          .builder(ItemDaylightDetectorInverted.class)
+          .vanillaItem(VanillaItemId.DAYLIGHT_DETECTOR_INVERTED, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

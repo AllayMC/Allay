@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemGunpowder extends ItemStack {
-    ItemType<ItemGunpowder> TYPE = ItemTypeBuilder
-            .builder(ItemGunpowder.class)
-            .vanillaItem(VanillaItemId.GUNPOWDER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemGunpowder> TYPE = ItemTypeBuilder
+          .builder(ItemGunpowder.class)
+          .vanillaItem(VanillaItemId.GUNPOWDER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

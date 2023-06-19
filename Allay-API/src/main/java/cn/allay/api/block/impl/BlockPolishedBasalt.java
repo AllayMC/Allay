@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPolishedBasalt extends Block {
-    BlockType<BlockPolishedBasalt> TYPE = BlockTypeBuilder
-            .builder(BlockPolishedBasalt.class)
-            .vanillaBlock(VanillaBlockId.POLISHED_BASALT, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPolishedBasalt> TYPE = BlockTypeBuilder
+          .builder(BlockPolishedBasalt.class)
+          .vanillaBlock(VanillaBlockId.POLISHED_BASALT, true)
+          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

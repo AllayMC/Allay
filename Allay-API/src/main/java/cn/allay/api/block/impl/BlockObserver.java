@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockObserver extends Block {
-    BlockType<BlockObserver> TYPE = BlockTypeBuilder
-            .builder(BlockObserver.class)
-            .vanillaBlock(VanillaBlockId.OBSERVER, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.POWERED_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockObserver> TYPE = BlockTypeBuilder
+          .builder(BlockObserver.class)
+          .vanillaBlock(VanillaBlockId.OBSERVER, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.POWERED_BIT)
+          .addBasicComponents()
+          .build();
 }

@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockReinforcedDeepslate extends Block {
-    BlockType<BlockReinforcedDeepslate> TYPE = BlockTypeBuilder
-            .builder(BlockReinforcedDeepslate.class)
-            .vanillaBlock(VanillaBlockId.REINFORCED_DEEPSLATE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockReinforcedDeepslate> TYPE = BlockTypeBuilder
+          .builder(BlockReinforcedDeepslate.class)
+          .vanillaBlock(VanillaBlockId.REINFORCED_DEEPSLATE, true)
+          .addBasicComponents()
+          .build();
 }

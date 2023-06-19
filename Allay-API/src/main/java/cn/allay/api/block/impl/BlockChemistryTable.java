@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockChemistryTable extends Block {
-    BlockType<BlockChemistryTable> TYPE = BlockTypeBuilder
-            .builder(BlockChemistryTable.class)
-            .vanillaBlock(VanillaBlockId.CHEMISTRY_TABLE, true)
-            .withProperties(VanillaBlockPropertyTypes.CHEMISTRY_TABLE_TYPE,
-                    VanillaBlockPropertyTypes.DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockChemistryTable> TYPE = BlockTypeBuilder
+          .builder(BlockChemistryTable.class)
+          .vanillaBlock(VanillaBlockId.CHEMISTRY_TABLE, true)
+          .withProperties(VanillaBlockPropertyTypes.CHEMISTRY_TABLE_TYPE, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityXpBottle extends Entity {
-    EntityType<EntityXpBottle> TYPE = EntityTypeBuilder
-            .builder(EntityXpBottle.class)
-            .vanillaEntity(VanillaEntityId.XP_BOTTLE)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityXpBottle> TYPE = EntityTypeBuilder
+          .builder(EntityXpBottle.class)
+          .vanillaEntity(VanillaEntityId.XP_BOTTLE)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

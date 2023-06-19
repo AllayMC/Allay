@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSplashPotion extends ItemStack {
-    ItemType<ItemSplashPotion> TYPE = ItemTypeBuilder
-            .builder(ItemSplashPotion.class)
-            .vanillaItem(VanillaItemId.SPLASH_POTION, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSplashPotion> TYPE = ItemTypeBuilder
+          .builder(ItemSplashPotion.class)
+          .vanillaItem(VanillaItemId.SPLASH_POTION, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

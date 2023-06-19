@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockGlassPane extends Block {
-    BlockType<BlockGlassPane> TYPE = BlockTypeBuilder
-            .builder(BlockGlassPane.class)
-            .vanillaBlock(VanillaBlockId.GLASS_PANE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockGlassPane> TYPE = BlockTypeBuilder
+          .builder(BlockGlassPane.class)
+          .vanillaBlock(VanillaBlockId.GLASS_PANE, true)
+          .addBasicComponents()
+          .build();
 }

@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockWarpedFungus extends Block {
-    BlockType<BlockWarpedFungus> TYPE = BlockTypeBuilder
-            .builder(BlockWarpedFungus.class)
-            .vanillaBlock(VanillaBlockId.WARPED_FUNGUS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWarpedFungus> TYPE = BlockTypeBuilder
+          .builder(BlockWarpedFungus.class)
+          .vanillaBlock(VanillaBlockId.WARPED_FUNGUS, true)
+          .addBasicComponents()
+          .build();
 }

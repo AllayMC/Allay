@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemRapidFertilizer extends ItemStack {
-    ItemType<ItemRapidFertilizer> TYPE = ItemTypeBuilder
-            .builder(ItemRapidFertilizer.class)
-            .vanillaItem(VanillaItemId.RAPID_FERTILIZER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemRapidFertilizer> TYPE = ItemTypeBuilder
+          .builder(ItemRapidFertilizer.class)
+          .vanillaItem(VanillaItemId.RAPID_FERTILIZER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

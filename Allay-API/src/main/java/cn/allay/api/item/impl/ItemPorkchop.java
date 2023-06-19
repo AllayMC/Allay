@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemPorkchop extends ItemStack {
-    ItemType<ItemPorkchop> TYPE = ItemTypeBuilder
-            .builder(ItemPorkchop.class)
-            .vanillaItem(VanillaItemId.PORKCHOP, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemPorkchop> TYPE = ItemTypeBuilder
+          .builder(ItemPorkchop.class)
+          .vanillaItem(VanillaItemId.PORKCHOP, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

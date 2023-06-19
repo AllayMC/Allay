@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockTorchflower extends Block {
-    BlockType<BlockTorchflower> TYPE = BlockTypeBuilder
-            .builder(BlockTorchflower.class)
-            .vanillaBlock(VanillaBlockId.TORCHFLOWER, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTorchflower> TYPE = BlockTypeBuilder
+          .builder(BlockTorchflower.class)
+          .vanillaBlock(VanillaBlockId.TORCHFLOWER, true)
+          .addBasicComponents()
+          .build();
 }

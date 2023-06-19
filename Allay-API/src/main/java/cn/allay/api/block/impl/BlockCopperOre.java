@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockCopperOre extends Block {
-    BlockType<BlockCopperOre> TYPE = BlockTypeBuilder
-            .builder(BlockCopperOre.class)
-            .vanillaBlock(VanillaBlockId.COPPER_ORE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCopperOre> TYPE = BlockTypeBuilder
+          .builder(BlockCopperOre.class)
+          .vanillaBlock(VanillaBlockId.COPPER_ORE, true)
+          .addBasicComponents()
+          .build();
 }

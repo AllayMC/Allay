@@ -4,7 +4,7 @@ log4j = "2.20.0"
 jline = "3.22.0"
 
 [libraries]
-nbt = { group = "com.github.AllayMC", name = "NBT", version = "971d5d6350" }
+nbt = { group = "com.github.AllayMC", name = "NBT", version = "3.0.5" }
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta1-SNAPSHOT" }
 guava = { group = "com.google.guava", name = "guava", version = "30.1.1-jre" }
 gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
@@ -13,6 +13,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.26" }
 disruptor = { group = "com.lmax", name = "disruptor", version = "3.4.4" }
 bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "24.0.0" }
+libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0.0.2-PNX" }
 
 # Logging dependencies
 log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j" }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemInkSac extends ItemStack {
-    ItemType<ItemInkSac> TYPE = ItemTypeBuilder
-            .builder(ItemInkSac.class)
-            .vanillaItem(VanillaItemId.INK_SAC, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemInkSac> TYPE = ItemTypeBuilder
+          .builder(ItemInkSac.class)
+          .vanillaItem(VanillaItemId.INK_SAC, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDarkoakWallSign extends ItemStack {
-    ItemType<ItemDarkoakWallSign> TYPE = ItemTypeBuilder
-            .builder(ItemDarkoakWallSign.class)
-            .vanillaItem(VanillaItemId.DARKOAK_WALL_SIGN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDarkoakWallSign> TYPE = ItemTypeBuilder
+          .builder(ItemDarkoakWallSign.class)
+          .vanillaItem(VanillaItemId.DARKOAK_WALL_SIGN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

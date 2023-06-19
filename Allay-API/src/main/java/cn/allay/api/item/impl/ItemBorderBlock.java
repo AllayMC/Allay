@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemBorderBlock extends ItemStack {
-    ItemType<ItemBorderBlock> TYPE = ItemTypeBuilder
-            .builder(ItemBorderBlock.class)
-            .vanillaItem(VanillaItemId.BORDER_BLOCK, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemBorderBlock> TYPE = ItemTypeBuilder
+          .builder(ItemBorderBlock.class)
+          .vanillaItem(VanillaItemId.BORDER_BLOCK, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

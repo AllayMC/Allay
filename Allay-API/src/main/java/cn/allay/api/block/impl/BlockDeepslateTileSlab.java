@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockDeepslateTileSlab extends Block {
-    BlockType<BlockDeepslateTileSlab> TYPE = BlockTypeBuilder
-            .builder(BlockDeepslateTileSlab.class)
-            .vanillaBlock(VanillaBlockId.DEEPSLATE_TILE_SLAB, true)
-            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockDeepslateTileSlab> TYPE = BlockTypeBuilder
+          .builder(BlockDeepslateTileSlab.class)
+          .vanillaBlock(VanillaBlockId.DEEPSLATE_TILE_SLAB, true)
+          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .addBasicComponents()
+          .build();
 }

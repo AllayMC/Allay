@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCutCopperSlab extends Block {
-    BlockType<BlockCutCopperSlab> TYPE = BlockTypeBuilder
-            .builder(BlockCutCopperSlab.class)
-            .vanillaBlock(VanillaBlockId.CUT_COPPER_SLAB, true)
-            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCutCopperSlab> TYPE = BlockTypeBuilder
+          .builder(BlockCutCopperSlab.class)
+          .vanillaBlock(VanillaBlockId.CUT_COPPER_SLAB, true)
+          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .addBasicComponents()
+          .build();
 }

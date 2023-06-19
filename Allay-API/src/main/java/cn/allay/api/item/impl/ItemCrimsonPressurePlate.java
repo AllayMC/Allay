@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCrimsonPressurePlate extends ItemStack {
-    ItemType<ItemCrimsonPressurePlate> TYPE = ItemTypeBuilder
-            .builder(ItemCrimsonPressurePlate.class)
-            .vanillaItem(VanillaItemId.CRIMSON_PRESSURE_PLATE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCrimsonPressurePlate> TYPE = ItemTypeBuilder
+          .builder(ItemCrimsonPressurePlate.class)
+          .vanillaItem(VanillaItemId.CRIMSON_PRESSURE_PLATE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

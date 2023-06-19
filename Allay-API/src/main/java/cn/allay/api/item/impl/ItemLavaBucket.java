@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemLavaBucket extends ItemStack {
-    ItemType<ItemLavaBucket> TYPE = ItemTypeBuilder
-            .builder(ItemLavaBucket.class)
-            .vanillaItem(VanillaItemId.LAVA_BUCKET, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemLavaBucket> TYPE = ItemTypeBuilder
+          .builder(ItemLavaBucket.class)
+          .vanillaItem(VanillaItemId.LAVA_BUCKET, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

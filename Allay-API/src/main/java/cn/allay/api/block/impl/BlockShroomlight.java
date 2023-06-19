@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockShroomlight extends Block {
-    BlockType<BlockShroomlight> TYPE = BlockTypeBuilder
-            .builder(BlockShroomlight.class)
-            .vanillaBlock(VanillaBlockId.SHROOMLIGHT, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockShroomlight> TYPE = BlockTypeBuilder
+          .builder(BlockShroomlight.class)
+          .vanillaBlock(VanillaBlockId.SHROOMLIGHT, true)
+          .addBasicComponents()
+          .build();
 }

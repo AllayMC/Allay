@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityPufferfish extends Entity {
-    EntityType<EntityPufferfish> TYPE = EntityTypeBuilder
-            .builder(EntityPufferfish.class)
-            .vanillaEntity(VanillaEntityId.PUFFERFISH)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityPufferfish> TYPE = EntityTypeBuilder
+          .builder(EntityPufferfish.class)
+          .vanillaEntity(VanillaEntityId.PUFFERFISH)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

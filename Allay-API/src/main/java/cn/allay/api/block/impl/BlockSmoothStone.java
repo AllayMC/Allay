@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockSmoothStone extends Block {
-    BlockType<BlockSmoothStone> TYPE = BlockTypeBuilder
-            .builder(BlockSmoothStone.class)
-            .vanillaBlock(VanillaBlockId.SMOOTH_STONE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSmoothStone> TYPE = BlockTypeBuilder
+          .builder(BlockSmoothStone.class)
+          .vanillaBlock(VanillaBlockId.SMOOTH_STONE, true)
+          .addBasicComponents()
+          .build();
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockTallgrass extends Block {
-    BlockType<BlockTallgrass> TYPE = BlockTypeBuilder
-            .builder(BlockTallgrass.class)
-            .vanillaBlock(VanillaBlockId.TALLGRASS, true)
-            .withProperties(VanillaBlockPropertyTypes.TALL_GRASS_TYPE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTallgrass> TYPE = BlockTypeBuilder
+          .builder(BlockTallgrass.class)
+          .vanillaBlock(VanillaBlockId.TALLGRASS, true)
+          .withProperties(VanillaBlockPropertyTypes.TALL_GRASS_TYPE)
+          .addBasicComponents()
+          .build();
 }

@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockBuddingAmethyst extends Block {
-    BlockType<BlockBuddingAmethyst> TYPE = BlockTypeBuilder
-            .builder(BlockBuddingAmethyst.class)
-            .vanillaBlock(VanillaBlockId.BUDDING_AMETHYST, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBuddingAmethyst> TYPE = BlockTypeBuilder
+          .builder(BlockBuddingAmethyst.class)
+          .vanillaBlock(VanillaBlockId.BUDDING_AMETHYST, true)
+          .addBasicComponents()
+          .build();
 }

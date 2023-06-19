@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSoulTorch extends ItemStack {
-    ItemType<ItemSoulTorch> TYPE = ItemTypeBuilder
-            .builder(ItemSoulTorch.class)
-            .vanillaItem(VanillaItemId.SOUL_TORCH, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSoulTorch> TYPE = ItemTypeBuilder
+          .builder(ItemSoulTorch.class)
+          .vanillaItem(VanillaItemId.SOUL_TORCH, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

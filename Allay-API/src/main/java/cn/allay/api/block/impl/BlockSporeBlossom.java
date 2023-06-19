@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockSporeBlossom extends Block {
-    BlockType<BlockSporeBlossom> TYPE = BlockTypeBuilder
-            .builder(BlockSporeBlossom.class)
-            .vanillaBlock(VanillaBlockId.SPORE_BLOSSOM, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockSporeBlossom> TYPE = BlockTypeBuilder
+          .builder(BlockSporeBlossom.class)
+          .vanillaBlock(VanillaBlockId.SPORE_BLOSSOM, true)
+          .addBasicComponents()
+          .build();
 }

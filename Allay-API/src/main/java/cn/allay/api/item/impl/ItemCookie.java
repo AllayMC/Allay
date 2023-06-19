@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCookie extends ItemStack {
-    ItemType<ItemCookie> TYPE = ItemTypeBuilder
-            .builder(ItemCookie.class)
-            .vanillaItem(VanillaItemId.COOKIE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCookie> TYPE = ItemTypeBuilder
+          .builder(ItemCookie.class)
+          .vanillaItem(VanillaItemId.COOKIE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockWarpedStandingSign extends Block {
-    BlockType<BlockWarpedStandingSign> TYPE = BlockTypeBuilder
-            .builder(BlockWarpedStandingSign.class)
-            .vanillaBlock(VanillaBlockId.WARPED_STANDING_SIGN, true)
-            .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWarpedStandingSign> TYPE = BlockTypeBuilder
+          .builder(BlockWarpedStandingSign.class)
+          .vanillaBlock(VanillaBlockId.WARPED_STANDING_SIGN, true)
+          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

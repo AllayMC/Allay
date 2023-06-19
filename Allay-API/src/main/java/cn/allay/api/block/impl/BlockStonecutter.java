@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockStonecutter extends Block {
-    BlockType<BlockStonecutter> TYPE = BlockTypeBuilder
-            .builder(BlockStonecutter.class)
-            .vanillaBlock(VanillaBlockId.STONECUTTER, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockStonecutter> TYPE = BlockTypeBuilder
+          .builder(BlockStonecutter.class)
+          .vanillaBlock(VanillaBlockId.STONECUTTER, true)
+          .addBasicComponents()
+          .build();
 }

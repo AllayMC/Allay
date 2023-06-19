@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockGlowFrame extends Block {
-    BlockType<BlockGlowFrame> TYPE = BlockTypeBuilder
-            .builder(BlockGlowFrame.class)
-            .vanillaBlock(VanillaBlockId.GLOW_FRAME, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION,
-                    VanillaBlockPropertyTypes.ITEM_FRAME_MAP_BIT,
-                    VanillaBlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockGlowFrame> TYPE = BlockTypeBuilder
+          .builder(BlockGlowFrame.class)
+          .vanillaBlock(VanillaBlockId.GLOW_FRAME, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.ITEM_FRAME_PHOTO_BIT, VanillaBlockPropertyTypes.ITEM_FRAME_MAP_BIT)
+          .addBasicComponents()
+          .build();
 }

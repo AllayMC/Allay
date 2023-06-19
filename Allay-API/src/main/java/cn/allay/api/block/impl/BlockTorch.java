@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockTorch extends Block {
-    BlockType<BlockTorch> TYPE = BlockTypeBuilder
-            .builder(BlockTorch.class)
-            .vanillaBlock(VanillaBlockId.TORCH, true)
-            .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTorch> TYPE = BlockTypeBuilder
+          .builder(BlockTorch.class)
+          .vanillaBlock(VanillaBlockId.TORCH, true)
+          .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

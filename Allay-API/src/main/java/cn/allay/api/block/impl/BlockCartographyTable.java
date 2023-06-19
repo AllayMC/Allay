@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockCartographyTable extends Block {
-    BlockType<BlockCartographyTable> TYPE = BlockTypeBuilder
-            .builder(BlockCartographyTable.class)
-            .vanillaBlock(VanillaBlockId.CARTOGRAPHY_TABLE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCartographyTable> TYPE = BlockTypeBuilder
+          .builder(BlockCartographyTable.class)
+          .vanillaBlock(VanillaBlockId.CARTOGRAPHY_TABLE, true)
+          .addBasicComponents()
+          .build();
 }

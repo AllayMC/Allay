@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCutCopper extends ItemStack {
-    ItemType<ItemCutCopper> TYPE = ItemTypeBuilder
-            .builder(ItemCutCopper.class)
-            .vanillaItem(VanillaItemId.CUT_COPPER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCutCopper> TYPE = ItemTypeBuilder
+          .builder(ItemCutCopper.class)
+          .vanillaItem(VanillaItemId.CUT_COPPER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

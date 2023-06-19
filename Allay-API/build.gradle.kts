@@ -11,6 +11,7 @@ dependencies {
         exclude(group = "org.cloudburstmc", module = "nbt")
         //use it.unimi.dsi.fastutil
         exclude(group = "com.nukkitx.fastutil")
+        exclude(group = "com.nukkitx", module = "natives")
     }
     api(libs.nbt)
     api(libs.fastutil)
@@ -19,4 +20,5 @@ dependencies {
     api(libs.snakeyaml)
     api(libs.annotations)
     api(libs.reflections)
+    implementation(libs.libdeflate)
 }

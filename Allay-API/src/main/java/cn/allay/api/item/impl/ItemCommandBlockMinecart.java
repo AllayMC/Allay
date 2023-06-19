@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemCommandBlockMinecart extends ItemStack {
-    ItemType<ItemCommandBlockMinecart> TYPE = ItemTypeBuilder
-            .builder(ItemCommandBlockMinecart.class)
-            .vanillaItem(VanillaItemId.COMMAND_BLOCK_MINECART, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemCommandBlockMinecart> TYPE = ItemTypeBuilder
+          .builder(ItemCommandBlockMinecart.class)
+          .vanillaItem(VanillaItemId.COMMAND_BLOCK_MINECART, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockLightningRod extends Block {
-    BlockType<BlockLightningRod> TYPE = BlockTypeBuilder
-            .builder(BlockLightningRod.class)
-            .vanillaBlock(VanillaBlockId.LIGHTNING_ROD, true)
-            .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockLightningRod> TYPE = BlockTypeBuilder
+          .builder(BlockLightningRod.class)
+          .vanillaBlock(VanillaBlockId.LIGHTNING_ROD, true)
+          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .addBasicComponents()
+          .build();
 }

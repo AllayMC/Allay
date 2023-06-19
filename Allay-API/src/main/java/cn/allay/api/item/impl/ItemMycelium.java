@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMycelium extends ItemStack {
-    ItemType<ItemMycelium> TYPE = ItemTypeBuilder
-            .builder(ItemMycelium.class)
-            .vanillaItem(VanillaItemId.MYCELIUM, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMycelium> TYPE = ItemTypeBuilder
+          .builder(ItemMycelium.class)
+          .vanillaItem(VanillaItemId.MYCELIUM, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

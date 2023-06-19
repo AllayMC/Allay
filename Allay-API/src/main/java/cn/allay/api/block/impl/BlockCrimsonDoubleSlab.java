@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCrimsonDoubleSlab extends Block {
-    BlockType<BlockCrimsonDoubleSlab> TYPE = BlockTypeBuilder
-            .builder(BlockCrimsonDoubleSlab.class)
-            .vanillaBlock(VanillaBlockId.CRIMSON_DOUBLE_SLAB, true)
-            .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCrimsonDoubleSlab> TYPE = BlockTypeBuilder
+          .builder(BlockCrimsonDoubleSlab.class)
+          .vanillaBlock(VanillaBlockId.CRIMSON_DOUBLE_SLAB, true)
+          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .addBasicComponents()
+          .build();
 }

@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockChiseledBookshelf extends Block {
-    BlockType<BlockChiseledBookshelf> TYPE = BlockTypeBuilder
-            .builder(BlockChiseledBookshelf.class)
-            .vanillaBlock(VanillaBlockId.CHISELED_BOOKSHELF, true)
-            .withProperties(VanillaBlockPropertyTypes.BOOKS_STORED,
-                    VanillaBlockPropertyTypes.DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockChiseledBookshelf> TYPE = BlockTypeBuilder
+          .builder(BlockChiseledBookshelf.class)
+          .vanillaBlock(VanillaBlockId.CHISELED_BOOKSHELF, true)
+          .withProperties(VanillaBlockPropertyTypes.BOOKS_STORED, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockCocoa extends Block {
-    BlockType<BlockCocoa> TYPE = BlockTypeBuilder
-            .builder(BlockCocoa.class)
-            .vanillaBlock(VanillaBlockId.COCOA, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE_3,
-                    VanillaBlockPropertyTypes.DIRECTION)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCocoa> TYPE = BlockTypeBuilder
+          .builder(BlockCocoa.class)
+          .vanillaBlock(VanillaBlockId.COCOA, true)
+          .withProperties(VanillaBlockPropertyTypes.AGE_3, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

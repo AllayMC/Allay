@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockCraftingTable extends Block {
-    BlockType<BlockCraftingTable> TYPE = BlockTypeBuilder
-            .builder(BlockCraftingTable.class)
-            .vanillaBlock(VanillaBlockId.CRAFTING_TABLE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCraftingTable> TYPE = BlockTypeBuilder
+          .builder(BlockCraftingTable.class)
+          .vanillaBlock(VanillaBlockId.CRAFTING_TABLE, true)
+          .addBasicComponents()
+          .build();
 }

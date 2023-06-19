@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityMule extends Entity {
-    EntityType<EntityMule> TYPE = EntityTypeBuilder
-            .builder(EntityMule.class)
-            .vanillaEntity(VanillaEntityId.MULE)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityMule> TYPE = EntityTypeBuilder
+          .builder(EntityMule.class)
+          .vanillaEntity(VanillaEntityId.MULE)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

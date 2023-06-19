@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockWheat extends Block {
-    BlockType<BlockWheat> TYPE = BlockTypeBuilder
-            .builder(BlockWheat.class)
-            .vanillaBlock(VanillaBlockId.WHEAT, true)
-            .withProperties(VanillaBlockPropertyTypes.GROWTH)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockWheat> TYPE = BlockTypeBuilder
+          .builder(BlockWheat.class)
+          .vanillaBlock(VanillaBlockId.WHEAT, true)
+          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .addBasicComponents()
+          .build();
 }

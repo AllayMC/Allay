@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemTintedGlass extends ItemStack {
-    ItemType<ItemTintedGlass> TYPE = ItemTypeBuilder
-            .builder(ItemTintedGlass.class)
-            .vanillaItem(VanillaItemId.TINTED_GLASS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemTintedGlass> TYPE = ItemTypeBuilder
+          .builder(ItemTintedGlass.class)
+          .vanillaItem(VanillaItemId.TINTED_GLASS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityXpOrb extends Entity {
-    EntityType<EntityXpOrb> TYPE = EntityTypeBuilder
-            .builder(EntityXpOrb.class)
-            .vanillaEntity(VanillaEntityId.XP_ORB)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityXpOrb> TYPE = EntityTypeBuilder
+          .builder(EntityXpOrb.class)
+          .vanillaEntity(VanillaEntityId.XP_ORB)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemTurtleEgg extends ItemStack {
-    ItemType<ItemTurtleEgg> TYPE = ItemTypeBuilder
-            .builder(ItemTurtleEgg.class)
-            .vanillaItem(VanillaItemId.TURTLE_EGG, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemTurtleEgg> TYPE = ItemTypeBuilder
+          .builder(ItemTurtleEgg.class)
+          .vanillaItem(VanillaItemId.TURTLE_EGG, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

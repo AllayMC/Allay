@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemFireworkRocket extends ItemStack {
-    ItemType<ItemFireworkRocket> TYPE = ItemTypeBuilder
-            .builder(ItemFireworkRocket.class)
-            .vanillaItem(VanillaItemId.FIREWORK_ROCKET, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemFireworkRocket> TYPE = ItemTypeBuilder
+          .builder(ItemFireworkRocket.class)
+          .vanillaItem(VanillaItemId.FIREWORK_ROCKET, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

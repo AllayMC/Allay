@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSponge extends ItemStack {
-    ItemType<ItemSponge> TYPE = ItemTypeBuilder
-            .builder(ItemSponge.class)
-            .vanillaItem(VanillaItemId.SPONGE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSponge> TYPE = ItemTypeBuilder
+          .builder(ItemSponge.class)
+          .vanillaItem(VanillaItemId.SPONGE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

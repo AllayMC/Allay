@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockMuddyMangroveRoots extends Block {
-    BlockType<BlockMuddyMangroveRoots> TYPE = BlockTypeBuilder
-            .builder(BlockMuddyMangroveRoots.class)
-            .vanillaBlock(VanillaBlockId.MUDDY_MANGROVE_ROOTS, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMuddyMangroveRoots> TYPE = BlockTypeBuilder
+          .builder(BlockMuddyMangroveRoots.class)
+          .vanillaBlock(VanillaBlockId.MUDDY_MANGROVE_ROOTS, true)
+          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

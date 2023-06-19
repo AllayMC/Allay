@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSparkler extends ItemStack {
-    ItemType<ItemSparkler> TYPE = ItemTypeBuilder
-            .builder(ItemSparkler.class)
-            .vanillaItem(VanillaItemId.SPARKLER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSparkler> TYPE = ItemTypeBuilder
+          .builder(ItemSparkler.class)
+          .vanillaItem(VanillaItemId.SPARKLER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

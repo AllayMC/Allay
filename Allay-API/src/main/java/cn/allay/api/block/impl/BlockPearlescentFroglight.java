@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockPearlescentFroglight extends Block {
-    BlockType<BlockPearlescentFroglight> TYPE = BlockTypeBuilder
-            .builder(BlockPearlescentFroglight.class)
-            .vanillaBlock(VanillaBlockId.PEARLESCENT_FROGLIGHT, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPearlescentFroglight> TYPE = BlockTypeBuilder
+          .builder(BlockPearlescentFroglight.class)
+          .vanillaBlock(VanillaBlockId.PEARLESCENT_FROGLIGHT, true)
+          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

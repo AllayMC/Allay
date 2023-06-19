@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNetheriteAxe extends ItemStack {
-    ItemType<ItemNetheriteAxe> TYPE = ItemTypeBuilder
-            .builder(ItemNetheriteAxe.class)
-            .vanillaItem(VanillaItemId.NETHERITE_AXE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNetheriteAxe> TYPE = ItemTypeBuilder
+          .builder(ItemNetheriteAxe.class)
+          .vanillaItem(VanillaItemId.NETHERITE_AXE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

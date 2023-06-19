@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemMojangBannerPattern extends ItemStack {
-    ItemType<ItemMojangBannerPattern> TYPE = ItemTypeBuilder
-            .builder(ItemMojangBannerPattern.class)
-            .vanillaItem(VanillaItemId.MOJANG_BANNER_PATTERN, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemMojangBannerPattern> TYPE = ItemTypeBuilder
+          .builder(ItemMojangBannerPattern.class)
+          .vanillaItem(VanillaItemId.MOJANG_BANNER_PATTERN, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

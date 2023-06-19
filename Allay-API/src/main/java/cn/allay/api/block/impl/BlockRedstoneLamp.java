@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockRedstoneLamp extends Block {
-    BlockType<BlockRedstoneLamp> TYPE = BlockTypeBuilder
-            .builder(BlockRedstoneLamp.class)
-            .vanillaBlock(VanillaBlockId.REDSTONE_LAMP, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockRedstoneLamp> TYPE = BlockTypeBuilder
+          .builder(BlockRedstoneLamp.class)
+          .vanillaBlock(VanillaBlockId.REDSTONE_LAMP, true)
+          .addBasicComponents()
+          .build();
 }

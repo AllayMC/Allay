@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockChiseledPolishedBlackstone extends Block {
-    BlockType<BlockChiseledPolishedBlackstone> TYPE = BlockTypeBuilder
-            .builder(BlockChiseledPolishedBlackstone.class)
-            .vanillaBlock(VanillaBlockId.CHISELED_POLISHED_BLACKSTONE, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockChiseledPolishedBlackstone> TYPE = BlockTypeBuilder
+          .builder(BlockChiseledPolishedBlackstone.class)
+          .vanillaBlock(VanillaBlockId.CHISELED_POLISHED_BLACKSTONE, true)
+          .addBasicComponents()
+          .build();
 }

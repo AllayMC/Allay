@@ -11,11 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockScaffolding extends Block {
-    BlockType<BlockScaffolding> TYPE = BlockTypeBuilder
-            .builder(BlockScaffolding.class)
-            .vanillaBlock(VanillaBlockId.SCAFFOLDING, true)
-            .withProperties(VanillaBlockPropertyTypes.STABILITY,
-                    VanillaBlockPropertyTypes.STABILITY_CHECK)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockScaffolding> TYPE = BlockTypeBuilder
+          .builder(BlockScaffolding.class)
+          .vanillaBlock(VanillaBlockId.SCAFFOLDING, true)
+          .withProperties(VanillaBlockPropertyTypes.STABILITY, VanillaBlockPropertyTypes.STABILITY_CHECK)
+          .addBasicComponents()
+          .build();
 }

@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemSeagrass extends ItemStack {
-    ItemType<ItemSeagrass> TYPE = ItemTypeBuilder
-            .builder(ItemSeagrass.class)
-            .vanillaItem(VanillaItemId.SEAGRASS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemSeagrass> TYPE = ItemTypeBuilder
+          .builder(ItemSeagrass.class)
+          .vanillaItem(VanillaItemId.SEAGRASS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

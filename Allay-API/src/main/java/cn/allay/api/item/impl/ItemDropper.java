@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemDropper extends ItemStack {
-    ItemType<ItemDropper> TYPE = ItemTypeBuilder
-            .builder(ItemDropper.class)
-            .vanillaItem(VanillaItemId.DROPPER, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemDropper> TYPE = ItemTypeBuilder
+          .builder(ItemDropper.class)
+          .vanillaItem(VanillaItemId.DROPPER, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

@@ -11,13 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBirchDoor extends Block {
-    BlockType<BlockBirchDoor> TYPE = BlockTypeBuilder
-            .builder(BlockBirchDoor.class)
-            .vanillaBlock(VanillaBlockId.BIRCH_DOOR, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.DOOR_HINGE_BIT,
-                    VanillaBlockPropertyTypes.OPEN_BIT,
-                    VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBirchDoor> TYPE = BlockTypeBuilder
+          .builder(BlockBirchDoor.class)
+          .vanillaBlock(VanillaBlockId.BIRCH_DOOR, true)
+          .withProperties(VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

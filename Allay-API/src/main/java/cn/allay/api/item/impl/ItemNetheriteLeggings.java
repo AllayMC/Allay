@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemNetheriteLeggings extends ItemStack {
-    ItemType<ItemNetheriteLeggings> TYPE = ItemTypeBuilder
-            .builder(ItemNetheriteLeggings.class)
-            .vanillaItem(VanillaItemId.NETHERITE_LEGGINGS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemNetheriteLeggings> TYPE = ItemTypeBuilder
+          .builder(ItemNetheriteLeggings.class)
+          .vanillaItem(VanillaItemId.NETHERITE_LEGGINGS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

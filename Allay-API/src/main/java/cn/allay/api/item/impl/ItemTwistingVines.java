@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemTwistingVines extends ItemStack {
-    ItemType<ItemTwistingVines> TYPE = ItemTypeBuilder
-            .builder(ItemTwistingVines.class)
-            .vanillaItem(VanillaItemId.TWISTING_VINES, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemTwistingVines> TYPE = ItemTypeBuilder
+          .builder(ItemTwistingVines.class)
+          .vanillaItem(VanillaItemId.TWISTING_VINES, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

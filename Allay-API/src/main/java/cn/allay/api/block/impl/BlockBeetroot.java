@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockBeetroot extends Block {
-    BlockType<BlockBeetroot> TYPE = BlockTypeBuilder
-            .builder(BlockBeetroot.class)
-            .vanillaBlock(VanillaBlockId.BEETROOT, true)
-            .withProperties(VanillaBlockPropertyTypes.GROWTH)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockBeetroot> TYPE = BlockTypeBuilder
+          .builder(BlockBeetroot.class)
+          .vanillaBlock(VanillaBlockId.BEETROOT, true)
+          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .addBasicComponents()
+          .build();
 }

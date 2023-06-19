@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockJungleLog extends Block {
-    BlockType<BlockJungleLog> TYPE = BlockTypeBuilder
-            .builder(BlockJungleLog.class)
-            .vanillaBlock(VanillaBlockId.JUNGLE_LOG, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockJungleLog> TYPE = BlockTypeBuilder
+          .builder(BlockJungleLog.class)
+          .vanillaBlock(VanillaBlockId.JUNGLE_LOG, true)
+          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

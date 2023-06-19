@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityPillager extends Entity {
-    EntityType<EntityPillager> TYPE = EntityTypeBuilder
-            .builder(EntityPillager.class)
-            .vanillaEntity(VanillaEntityId.PILLAGER)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityPillager> TYPE = EntityTypeBuilder
+          .builder(EntityPillager.class)
+          .vanillaEntity(VanillaEntityId.PILLAGER)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

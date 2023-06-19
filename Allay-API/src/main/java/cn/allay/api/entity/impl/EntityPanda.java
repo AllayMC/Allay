@@ -11,9 +11,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
  * Allay Project <br>
  */
 public interface EntityPanda extends Entity {
-    EntityType<EntityPanda> TYPE = EntityTypeBuilder
-            .builder(EntityPanda.class)
-            .vanillaEntity(VanillaEntityId.PANDA)
-            .addBasicComponents()
-            .build().register(EntityTypeRegistry.getRegistry());
+  EntityType<EntityPanda> TYPE = EntityTypeBuilder
+          .builder(EntityPanda.class)
+          .vanillaEntity(VanillaEntityId.PANDA)
+          .addBasicComponents()
+          .build()        .register(EntityTypeRegistry.getRegistry());
 }

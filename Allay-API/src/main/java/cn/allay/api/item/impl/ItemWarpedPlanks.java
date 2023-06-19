@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemWarpedPlanks extends ItemStack {
-    ItemType<ItemWarpedPlanks> TYPE = ItemTypeBuilder
-            .builder(ItemWarpedPlanks.class)
-            .vanillaItem(VanillaItemId.WARPED_PLANKS, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemWarpedPlanks> TYPE = ItemTypeBuilder
+          .builder(ItemWarpedPlanks.class)
+          .vanillaItem(VanillaItemId.WARPED_PLANKS, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

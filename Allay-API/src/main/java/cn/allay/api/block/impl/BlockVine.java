@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockVine extends Block {
-    BlockType<BlockVine> TYPE = BlockTypeBuilder
-            .builder(BlockVine.class)
-            .vanillaBlock(VanillaBlockId.VINE, true)
-            .withProperties(VanillaBlockPropertyTypes.VINE_DIRECTION_BITS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockVine> TYPE = BlockTypeBuilder
+          .builder(BlockVine.class)
+          .vanillaBlock(VanillaBlockId.VINE, true)
+          .withProperties(VanillaBlockPropertyTypes.VINE_DIRECTION_BITS)
+          .addBasicComponents()
+          .build();
 }

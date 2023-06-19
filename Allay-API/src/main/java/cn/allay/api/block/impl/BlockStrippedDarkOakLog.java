@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockStrippedDarkOakLog extends Block {
-    BlockType<BlockStrippedDarkOakLog> TYPE = BlockTypeBuilder
-            .builder(BlockStrippedDarkOakLog.class)
-            .vanillaBlock(VanillaBlockId.STRIPPED_DARK_OAK_LOG, true)
-            .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockStrippedDarkOakLog> TYPE = BlockTypeBuilder
+          .builder(BlockStrippedDarkOakLog.class)
+          .vanillaBlock(VanillaBlockId.STRIPPED_DARK_OAK_LOG, true)
+          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .addBasicComponents()
+          .build();
 }

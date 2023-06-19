@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockNetherSprouts extends Block {
-    BlockType<BlockNetherSprouts> TYPE = BlockTypeBuilder
-            .builder(BlockNetherSprouts.class)
-            .vanillaBlock(VanillaBlockId.NETHER_SPROUTS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockNetherSprouts> TYPE = BlockTypeBuilder
+          .builder(BlockNetherSprouts.class)
+          .vanillaBlock(VanillaBlockId.NETHER_SPROUTS, true)
+          .addBasicComponents()
+          .build();
 }

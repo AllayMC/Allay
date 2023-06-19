@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemRedSandstone extends ItemStack {
-    ItemType<ItemRedSandstone> TYPE = ItemTypeBuilder
-            .builder(ItemRedSandstone.class)
-            .vanillaItem(VanillaItemId.RED_SANDSTONE, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemRedSandstone> TYPE = ItemTypeBuilder
+          .builder(ItemRedSandstone.class)
+          .vanillaItem(VanillaItemId.RED_SANDSTONE, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

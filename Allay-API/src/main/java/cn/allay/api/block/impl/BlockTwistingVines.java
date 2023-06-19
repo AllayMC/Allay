@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockTwistingVines extends Block {
-    BlockType<BlockTwistingVines> TYPE = BlockTypeBuilder
-            .builder(BlockTwistingVines.class)
-            .vanillaBlock(VanillaBlockId.TWISTING_VINES, true)
-            .withProperties(VanillaBlockPropertyTypes.TWISTING_VINES_AGE)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockTwistingVines> TYPE = BlockTypeBuilder
+          .builder(BlockTwistingVines.class)
+          .vanillaBlock(VanillaBlockId.TWISTING_VINES, true)
+          .withProperties(VanillaBlockPropertyTypes.TWISTING_VINES_AGE)
+          .addBasicComponents()
+          .build();
 }

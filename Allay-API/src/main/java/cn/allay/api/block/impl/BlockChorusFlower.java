@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockChorusFlower extends Block {
-    BlockType<BlockChorusFlower> TYPE = BlockTypeBuilder
-            .builder(BlockChorusFlower.class)
-            .vanillaBlock(VanillaBlockId.CHORUS_FLOWER, true)
-            .withProperties(VanillaBlockPropertyTypes.AGE_6)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockChorusFlower> TYPE = BlockTypeBuilder
+          .builder(BlockChorusFlower.class)
+          .vanillaBlock(VanillaBlockId.CHORUS_FLOWER, true)
+          .withProperties(VanillaBlockPropertyTypes.AGE_6)
+          .addBasicComponents()
+          .build();
 }

@@ -1,6 +1,6 @@
 package cn.allay.api.math.position;
 
-import cn.allay.api.level.Level;
+import cn.allay.api.world.World;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -14,13 +14,13 @@ class ImplFixedPos<T extends Number> implements FixedPos<T> {
     protected T x;
     protected T y;
     protected T z;
-    protected Level level;
+    protected World world;
 
-    public ImplFixedPos(T x, T y, T z, Level level) {
+    public ImplFixedPos(T x, T y, T z, World world) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.level = level;
+        this.world = world;
     }
 
     @Override
@@ -38,8 +38,7 @@ class ImplFixedPos<T extends Number> implements FixedPos<T> {
         return z;
     }
 
-    @Override
-    public Level getLevel() {
-        return level;
+    public World getWorld() {
+        return world;
     }
 }

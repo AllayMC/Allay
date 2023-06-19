@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockGravel extends Block {
-    BlockType<BlockGravel> TYPE = BlockTypeBuilder
-            .builder(BlockGravel.class)
-            .vanillaBlock(VanillaBlockId.GRAVEL, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockGravel> TYPE = BlockTypeBuilder
+          .builder(BlockGravel.class)
+          .vanillaBlock(VanillaBlockId.GRAVEL, true)
+          .addBasicComponents()
+          .build();
 }

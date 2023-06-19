@@ -11,9 +11,9 @@ import cn.allay.api.item.type.ItemTypeRegistry;
  * Allay Project <br>
  */
 public interface ItemShulkerShell extends ItemStack {
-    ItemType<ItemShulkerShell> TYPE = ItemTypeBuilder
-            .builder(ItemShulkerShell.class)
-            .vanillaItem(VanillaItemId.SHULKER_SHELL, true)
-            .addBasicComponents()
-            .build().register(ItemTypeRegistry.getRegistry());
+  ItemType<ItemShulkerShell> TYPE = ItemTypeBuilder
+          .builder(ItemShulkerShell.class)
+          .vanillaItem(VanillaItemId.SHULKER_SHELL, true)
+          .addBasicComponents()
+          .build().register(ItemTypeRegistry.getRegistry());
 }

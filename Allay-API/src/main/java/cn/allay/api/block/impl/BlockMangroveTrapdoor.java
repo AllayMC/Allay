@@ -11,12 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockMangroveTrapdoor extends Block {
-    BlockType<BlockMangroveTrapdoor> TYPE = BlockTypeBuilder
-            .builder(BlockMangroveTrapdoor.class)
-            .vanillaBlock(VanillaBlockId.MANGROVE_TRAPDOOR, true)
-            .withProperties(VanillaBlockPropertyTypes.DIRECTION,
-                    VanillaBlockPropertyTypes.OPEN_BIT,
-                    VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMangroveTrapdoor> TYPE = BlockTypeBuilder
+          .builder(BlockMangroveTrapdoor.class)
+          .vanillaBlock(VanillaBlockId.MANGROVE_TRAPDOOR, true)
+          .withProperties(VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.DIRECTION)
+          .addBasicComponents()
+          .build();
 }

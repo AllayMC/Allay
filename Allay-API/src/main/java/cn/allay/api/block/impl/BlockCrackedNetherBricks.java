@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockCrackedNetherBricks extends Block {
-    BlockType<BlockCrackedNetherBricks> TYPE = BlockTypeBuilder
-            .builder(BlockCrackedNetherBricks.class)
-            .vanillaBlock(VanillaBlockId.CRACKED_NETHER_BRICKS, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockCrackedNetherBricks> TYPE = BlockTypeBuilder
+          .builder(BlockCrackedNetherBricks.class)
+          .vanillaBlock(VanillaBlockId.CRACKED_NETHER_BRICKS, true)
+          .addBasicComponents()
+          .build();
 }

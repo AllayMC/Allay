@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockMycelium extends Block {
-    BlockType<BlockMycelium> TYPE = BlockTypeBuilder
-            .builder(BlockMycelium.class)
-            .vanillaBlock(VanillaBlockId.MYCELIUM, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockMycelium> TYPE = BlockTypeBuilder
+          .builder(BlockMycelium.class)
+          .vanillaBlock(VanillaBlockId.MYCELIUM, true)
+          .addBasicComponents()
+          .build();
 }

@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockPowderSnow extends Block {
-    BlockType<BlockPowderSnow> TYPE = BlockTypeBuilder
-            .builder(BlockPowderSnow.class)
-            .vanillaBlock(VanillaBlockId.POWDER_SNOW, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockPowderSnow> TYPE = BlockTypeBuilder
+          .builder(BlockPowderSnow.class)
+          .vanillaBlock(VanillaBlockId.POWDER_SNOW, true)
+          .addBasicComponents()
+          .build();
 }

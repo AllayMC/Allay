@@ -10,9 +10,9 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockChorusPlant extends Block {
-    BlockType<BlockChorusPlant> TYPE = BlockTypeBuilder
-            .builder(BlockChorusPlant.class)
-            .vanillaBlock(VanillaBlockId.CHORUS_PLANT, true)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockChorusPlant> TYPE = BlockTypeBuilder
+          .builder(BlockChorusPlant.class)
+          .vanillaBlock(VanillaBlockId.CHORUS_PLANT, true)
+          .addBasicComponents()
+          .build();
 }

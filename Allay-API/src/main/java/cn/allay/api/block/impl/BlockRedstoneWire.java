@@ -11,10 +11,10 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockRedstoneWire extends Block {
-    BlockType<BlockRedstoneWire> TYPE = BlockTypeBuilder
-            .builder(BlockRedstoneWire.class)
-            .vanillaBlock(VanillaBlockId.REDSTONE_WIRE, true)
-            .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
-            .addBasicComponents()
-            .build();
+  BlockType<BlockRedstoneWire> TYPE = BlockTypeBuilder
+          .builder(BlockRedstoneWire.class)
+          .vanillaBlock(VanillaBlockId.REDSTONE_WIRE, true)
+          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .addBasicComponents()
+          .build();
 }
