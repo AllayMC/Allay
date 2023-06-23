@@ -129,15 +129,15 @@ public class CodeGen {
 
     public static void main(String[] args) {
         //Constants
-//        VanillaBlockIdEnumGen.generate();
-//        VanillaBlockPropertyTypeGen.generate();
-//        VanillaItemIdEnumGen.generate();
-//        VanillaEntityIdEnumGen.generate();
-//        VanillaBiomeIdEnumGen.generate();
+        VanillaBlockIdEnumGen.generate();
+        VanillaBlockPropertyTypeGen.generate();
+        VanillaItemIdEnumGen.generate();
+        VanillaEntityIdEnumGen.generate();
+        VanillaBiomeIdEnumGen.generate();
 
         //Classes
         VanillaBlockClassGen.generate();
-//        VanillaEntityClassGen.generate();
-//        VanillaItemClassGen.generate();
+        VanillaEntityClassGen.generate();
+        VanillaItemClassGen.generate();
     }
 }

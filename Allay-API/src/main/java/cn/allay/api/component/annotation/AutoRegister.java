@@ -1,4 +1,4 @@
-package cn.allay.api.block.component.annotation;
+package cn.allay.api.component.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface AutoRegisterComponent {
+public @interface AutoRegister {
     int order() default 0;
 }

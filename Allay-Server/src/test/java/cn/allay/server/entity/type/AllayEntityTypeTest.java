@@ -2,6 +2,7 @@ package cn.allay.server.entity.type;
 
 import cn.allay.api.entity.impl.EntitySheep;
 import cn.allay.api.entity.type.EntityInitInfo;
+import cn.allay.api.entity.type.VanillaEntityTypes;
 import cn.allay.api.math.location.Loc;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +22,7 @@ class AllayEntityTypeTest {
 
     @BeforeAll
     static void init() {
-        sheep = EntitySheep.TYPE.createEntity(new EntityInitInfo.Simple(Loc.of(0f, 1f, 2f, null)));
+        sheep = VanillaEntityTypes.SHEEP_TYPE.createEntity(new EntityInitInfo.Simple(Loc.of(0f, 1f, 2f, null)));
     }
 
     @Test

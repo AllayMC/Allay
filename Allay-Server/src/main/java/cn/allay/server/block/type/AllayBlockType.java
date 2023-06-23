@@ -2,7 +2,7 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
-import cn.allay.api.block.component.annotation.AutoRegisterComponent;
+import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.component.impl.base.BlockBaseComponentImpl;
@@ -251,9 +251,9 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         public Builder<T> addBasicComponents() {
             Arrays.stream(interfaceClass.getDeclaredFields())
                     .filter(field -> isStatic(field.getModifiers()))
-                    .filter(field -> field.getDeclaredAnnotation(AutoRegisterComponent.class) != null)
+                    .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
                     .filter(field -> ComponentProvider.class.isAssignableFrom(field.getType()))
-                    .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegisterComponent.class).order()))
+                    .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegister.class).order()))
                     .forEach(field -> {
                         try {
                             addComponent((ComponentProvider<? extends BlockComponentImpl>) field.get(null));
