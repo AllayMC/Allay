@@ -13,6 +13,7 @@ import cn.allay.api.item.component.impl.base.ItemBaseComponentImpl;
 import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeBuilder;
+import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.server.component.injector.AllayComponentInjector;
 import lombok.SneakyThrows;
 import lombok.ToString;
@@ -165,6 +166,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 throw new ItemTypeBuildException("identifier cannot be null!");
             var type = new AllayItemType<>(interfaceClass, componentProviders, identifier);
             componentProviders.add(ComponentProvider.of(info -> new ItemBaseComponentImpl(type, (ItemStackInitInfo) info), ItemBaseComponentImpl.class));
+            ItemTypeRegistry.getRegistry().register(identifier, type);
             return type.complete();
         }
     }

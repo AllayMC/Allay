@@ -20,7 +20,6 @@ public class VanillaItemClassGen {
     public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaItemId");
     public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.item.type", "ItemType");
     public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.item.type", "ItemTypeBuilder");
-    public static final ClassName ITEM_TYPE_REGISTRY = ClassName.get("cn.allay.api.item.type", "ItemTypeRegistry");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/item/impl");
 
     private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaItemTypes")
@@ -40,8 +39,10 @@ public class VanillaItemClassGen {
             var typeName = item.getIdentifier().path().replace(".", "_");
             var className = item == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0" : "Item" + Utils.convertToPascalCase(typeName);
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
-            System.out.println("Generating " + className + ".java ...");
-            generateItemClass(item, className, path);
+            if (!Files.exists(path)) {
+                System.out.println("Generating " + className + ".java ...");
+                generateItemClass(item, className, path);
+            }
             generateItemType(item, className);
             var typesJavaFile = JavaFile
                     .builder("cn.allay.api.item.type", TYPES_CLASS.build())
@@ -57,7 +58,7 @@ public class VanillaItemClassGen {
                 .add("$T\n        .builder($T.class)\n", ITEM_TYPE_BUILDER_CLASS_NAME, className)
                 .add("        .vanillaItem($T.$N, true)\n", VANILLA_ITEM_ID_CLASS_NAME, vanillaItemId.name())
                 .add("        .addBasicComponents()\n")
-                .add("        .build().register($T.getRegistry())", ITEM_TYPE_REGISTRY);
+                .add("        .build()");
         TYPES_CLASS.addField(
                 FieldSpec
                         .builder(ParameterizedTypeName.get(ITEM_TYPE_CLASS_NAME, className), vanillaItemId.name() + "_TYPE")

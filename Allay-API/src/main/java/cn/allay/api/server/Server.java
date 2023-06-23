@@ -5,6 +5,9 @@ import cn.allay.api.network.Client;
 import cn.allay.api.network.NetworkServer;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Map;
 
 /**
  * The server interface
@@ -37,7 +40,12 @@ public interface Server extends TaskCreator {
 
     NetworkServer getNetworkServer();
 
+    @UnmodifiableView
+    Map<String, Client> getOnlineClients();
+
     void onClientConnect(BedrockServerSession session);
+
+    void onLoginFinish(Client client);
 
     void onClientDisconnect(Client client);
 }

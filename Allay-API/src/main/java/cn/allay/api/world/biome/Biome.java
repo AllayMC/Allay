@@ -6,4 +6,5 @@ package cn.allay.api.world.biome;
  * Allay Project <br>
  */
 public interface Biome {
+
 }
