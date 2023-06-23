@@ -42,8 +42,10 @@ public class VanillaEntityClassGen {
             var typeName = entity.getIdentifier().path();
             var className = "Entity" + Utils.convertToPascalCase(typeName);
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
-            System.out.println("Generating " + className + ".java ...");
-            generateEntityClass(entity, className, path);
+            if (!Files.exists(path)) {
+                System.out.println("Generating " + className + ".java ...");
+                generateEntityClass(entity, className, path);
+            }
             generateEntityType(entity, className);
             var typesJavaFile = JavaFile
                     .builder("cn.allay.api.entity.type", TYPES_CLASS.build())
@@ -56,7 +58,7 @@ public class VanillaEntityClassGen {
         var className = ClassName.get("cn.allay.api.entity.impl", classNameStr);
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T\n        .builder($N.class)\n", ENTITY_TYPE_BUILDER_CLASS_NAME, classNameStr)
+                .add("$T\n        .builder($T.class)\n", ENTITY_TYPE_BUILDER_CLASS_NAME, className)
                 .add("        .vanillaEntity($T.$N)\n", VANILLA_ENTITY_ID_CLASS_NAME, vanillaEntityId.name())
                 .add("        .addBasicComponents()\n")
                 .add("        .build()")

@@ -23,6 +23,12 @@ public class VanillaItemClassGen {
     public static final ClassName ITEM_TYPE_REGISTRY = ClassName.get("cn.allay.api.item.type", "ItemTypeRegistry");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/item/impl");
 
+    private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaItemTypes")
+            .addModifiers(Modifier.PUBLIC)
+            .addJavadoc(
+                    "@author daoge_cmd <br>\n" +
+                    "Allay Project <br>\n");
+
     public static void main(String[] args) {
         generate();
     }
@@ -36,7 +42,28 @@ public class VanillaItemClassGen {
             var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
             System.out.println("Generating " + className + ".java ...");
             generateItemClass(item, className, path);
+            generateItemType(item, className);
+            var typesJavaFile = JavaFile
+                    .builder("cn.allay.api.item.type", TYPES_CLASS.build())
+                    .build();
+            Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/item/type/VanillaItemTypes.java"), typesJavaFile.toString());
         }
+    }
+
+    private static void generateItemType(VanillaItemId vanillaItemId, String classNameStr) {
+        var className = ClassName.get("cn.allay.api.item.impl", classNameStr);
+        var initializer = CodeBlock.builder();
+        initializer
+                .add("$T\n        .builder($T.class)\n", ITEM_TYPE_BUILDER_CLASS_NAME, className)
+                .add("        .vanillaItem($T.$N, true)\n", VANILLA_ITEM_ID_CLASS_NAME, vanillaItemId.name())
+                .add("        .addBasicComponents()\n")
+                .add("        .build().register($T.getRegistry())", ITEM_TYPE_REGISTRY);
+        TYPES_CLASS.addField(
+                FieldSpec
+                        .builder(ParameterizedTypeName.get(ITEM_TYPE_CLASS_NAME, className), vanillaItemId.name() + "_TYPE")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        .initializer(initializer.build())
+                        .build());
     }
 
     private static void generateItemClass(VanillaItemId vanillaItemId, String className, Path path) throws IOException {
@@ -46,18 +73,6 @@ public class VanillaItemClassGen {
                         "@author daoge_cmd <br>\n" +
                         "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
-        var initializer = CodeBlock.builder();
-        initializer
-                .add("$T\n        .builder($N.class)\n", ITEM_TYPE_BUILDER_CLASS_NAME, className)
-                .add("        .vanillaItem($T.$N, true)\n", VANILLA_ITEM_ID_CLASS_NAME, vanillaItemId.name())
-                .add("        .addBasicComponents()\n")
-                .add("        .build().register($T.getRegistry())", ITEM_TYPE_REGISTRY);
-        codeBuilder.addField(
-                FieldSpec
-                        .builder(ParameterizedTypeName.get(ITEM_TYPE_CLASS_NAME, ClassName.get("", className)), "TYPE")
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                        .initializer(initializer.build())
-                        .build());
         var javaFile = JavaFile.builder("cn.allay.api.item.impl", codeBuilder.build()).build();
         Files.writeString(path, javaFile.toString());
     }
