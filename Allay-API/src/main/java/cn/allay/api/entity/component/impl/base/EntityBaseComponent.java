@@ -16,4 +16,7 @@ public interface EntityBaseComponent {
 
     @Inject
     FixedLoc<Float> getLocation();
+
+    @Inject
+    long getUniqueId();
 }

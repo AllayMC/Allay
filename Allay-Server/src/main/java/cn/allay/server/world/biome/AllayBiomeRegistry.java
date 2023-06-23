@@ -28,7 +28,7 @@ public class AllayBiomeRegistry extends SimpleMappedRegistry<Identifier, Class<?
     @SneakyThrows
     private void loadVanillaBiomeDefinitionListTag() {
         //TODO: support custom biome
-        biomeDefinitionListTag = (NbtMap) NbtUtils.createNetworkReader(AllayBiomeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions.json")).readTag();
+        biomeDefinitionListTag = (NbtMap) NbtUtils.createNetworkReader(AllayBiomeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions_full.nbt")).readTag();
     }
 
     @Override

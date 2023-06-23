@@ -7,4 +7,5 @@ import cn.allay.api.entity.Entity;
  * Allay Project <br>
  */
 public interface EntityPlayer extends Entity {
+
 }

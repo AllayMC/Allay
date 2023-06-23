@@ -5,7 +5,10 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.entity.type.VanillaEntityTypes;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
+import cn.allay.server.world.biome.AllayBiomeRegistry;
 import lombok.SneakyThrows;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +19,12 @@ import java.util.Map;
  * Allay Project <br>
  */
 public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, EntityType<?>, Map<Identifier, EntityType<?>>> implements EntityTypeRegistry {
+
+    private NbtMap availableEntityIdentifierTag;
+
     public AllayEntityTypeRegistry() {
         super(null, input -> new HashMap<>());
+        loadVanillaEntityIdentifierTag();
     }
 
     @SneakyThrows
@@ -25,5 +32,16 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
         for (var field : VanillaEntityTypes.class.getDeclaredFields()) {
             var loaded = field.get(null);
         }
+    }
+
+    @SneakyThrows
+    private void loadVanillaEntityIdentifierTag() {
+        //TODO: Support custom entity
+        availableEntityIdentifierTag = (NbtMap) NbtUtils.createNetworkReader(AllayBiomeRegistry.class.getClassLoader().getResourceAsStream("entity_identifiers.nbt")).readTag();
+    }
+
+    @Override
+    public NbtMap getAvailableEntityIdentifierTag() {
+        return availableEntityIdentifierTag;
     }
 }

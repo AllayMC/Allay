@@ -4,6 +4,7 @@ import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.network.Client;
 import cn.allay.api.network.NetworkServer;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
+import cn.allay.api.world.World;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -48,4 +49,8 @@ public interface Server extends TaskCreator {
     void onLoginFinish(Client client);
 
     void onClientDisconnect(Client client);
+
+    Map<String, World> getWorlds();
+
+    World getDefaultWorld();
 }
