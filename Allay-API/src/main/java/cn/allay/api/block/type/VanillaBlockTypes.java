@@ -846,7 +846,7 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Author: daoge_cmd <br>
  * Allay Project <br>
  */
-public class BlockTypes {
+public class VanillaBlockTypes {
   public static final BlockType<BlockAcaciaButton> ACACIA_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaButton.class)
           .vanillaBlock(VanillaBlockId.ACACIA_BUTTON, true)
