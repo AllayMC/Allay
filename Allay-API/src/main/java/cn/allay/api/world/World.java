@@ -1,5 +1,7 @@
 package cn.allay.api.world;
 
+import cn.allay.api.math.location.Loc;
+
 /**
  * Describe a world
  * <p>
@@ -8,4 +10,11 @@ package cn.allay.api.world;
  * Allay Project <br>
  */
 public interface World {
+    String getName();
+
+    DimensionInfo getDimensionInfo();
+
+    Loc<Float> getSpawnLocation();
+
+    Difficulty getDifficulty();
 }

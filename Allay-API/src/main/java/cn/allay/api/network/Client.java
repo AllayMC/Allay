@@ -1,5 +1,6 @@
 package cn.allay.api.network;
 
+import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
@@ -24,4 +25,6 @@ public interface Client {
     void initializePlayer();
 
     String getName();
+
+    EntityPlayer getPlayerEntity();
 }

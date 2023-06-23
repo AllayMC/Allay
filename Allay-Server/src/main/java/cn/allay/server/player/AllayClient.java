@@ -1,14 +1,27 @@
 package cn.allay.server.player;
 
+import cn.allay.api.entity.impl.EntityPlayer;
+import cn.allay.api.entity.type.EntityInitInfo;
+import cn.allay.api.entity.type.EntityTypeRegistry;
+import cn.allay.api.entity.type.VanillaEntityTypes;
+import cn.allay.api.math.location.Loc;
 import cn.allay.api.network.Client;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
+import cn.allay.api.world.biome.BiomeRegistry;
 import lombok.Getter;
+import org.cloudburstmc.math.vector.Vector2f;
+import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.math.vector.Vector3i;
+import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
+import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
+import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 
+import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -21,12 +34,12 @@ public class AllayClient implements Client {
     private final BedrockServerSession session;
     @Getter
     private final Server server;
-    /**
-     * Null before receive LoginPacket
-     */
     @Getter
-    private LoginData loginData = null;
+    private LoginData loginData;
+    @Getter
     private String name;
+    @Getter
+    private EntityPlayer playerEntity;
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -65,18 +78,82 @@ public class AllayClient implements Client {
     @Override
     public void initializePlayer() {
         server.onLoginFinish(this);
-        //TODO: Load player data
-        //TODO: Init player entity
+        initPlayerEntity();
         sendStartGamePacket();
+    }
+
+    private void initPlayerEntity() {
+//        var spawnLocation = server.getDefaultWorld().getSpawnLocation();
+        var spawnLocation = Loc.of(0f, 64f, 0f, 0, 0, null);
+        //TODO: Load player data
+        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(spawnLocation));
     }
 
     private void sendStartGamePacket() {
         var startGamePacket = new StartGamePacket();
-    }
+        startGamePacket.setUniqueEntityId(playerEntity.getUniqueId());
+        //TODO: WOC?
+        startGamePacket.setRuntimeEntityId(playerEntity.getUniqueId());
+        //TODO
+        startGamePacket.setPlayerGameType(GameType.CREATIVE);
+        var loc = playerEntity.getLocation();
+        startGamePacket.setPlayerPosition(Vector3f.from(loc.getX(), loc.getY(), loc.getZ()));
+        startGamePacket.setRotation(Vector2f.from(loc.getPitch(), loc.getYaw()));
+        startGamePacket.setSeed(-1L);
+        //TODO
+//        startGamePacket.setDimensionId(server.getDefaultWorld().getDimensionInfo().dimensionId());
+        startGamePacket.setDimensionId(0);
+        startGamePacket.setGeneratorId(1);
+        //TODO
+        startGamePacket.setLevelGameType(GameType.CREATIVE);
+        //TODO
+        startGamePacket.setDifficulty(1);
+        startGamePacket.setTrustingPlayers(true);
+        startGamePacket.setDefaultSpawn(Vector3i.from(0, 64, 0));
+        startGamePacket.setDayCycleStopTime(7000);
+        startGamePacket.setLevelName(server.getServerSettings().motd());
+        //TODO
+        startGamePacket.setLevelId("world");
+        //TODO
+        startGamePacket.setDefaultPlayerPermission(PlayerPermission.OPERATOR);
+        startGamePacket.setServerChunkTickRange(4);
+        startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
+        startGamePacket.setPremiumWorldTemplateId("");
+        startGamePacket.setInventoriesServerAuthoritative(false);
+        //TODO
+        startGamePacket.setItemDefinitions(List.of());
+        //TODO
+        startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.CLIENT);
+        startGamePacket.setCommandsEnabled(true);
+        startGamePacket.setMultiplayerGame(true);
+        startGamePacket.setBroadcastingToLan(true);
+        startGamePacket.setMultiplayerCorrelationId(UUID.randomUUID().toString());
+        startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
+        startGamePacket.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
+        //TODO
+        startGamePacket.setCurrentTick(0);
+        startGamePacket.setServerEngine("Allay");
+        startGamePacket.setPlayerPropertyData(NbtMap.EMPTY);
+        startGamePacket.setWorldTemplateId(new UUID(0, 0));
+        startGamePacket.setWorldEditor(false);
+        startGamePacket.setChatRestrictionLevel(ChatRestrictionLevel.NONE);
+        startGamePacket.setSpawnBiomeType(SpawnBiomeType.DEFAULT);
+        startGamePacket.setCustomBiomeName("");
+        startGamePacket.setEducationProductionId("");
+        startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
+        sendPacket(startGamePacket);
 
-    @Override
-    public String getName() {
-        return name;
+        var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
+        biomeDefinitionListPacket.setDefinitions(BiomeRegistry.getRegistry().getBiomeDefinitionListTag());
+        sendPacket(biomeDefinitionListPacket);
+
+        var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();
+        availableEntityIdentifiersPacket.setIdentifiers(EntityTypeRegistry.getRegistry().getAvailableEntityIdentifierTag());
+        sendPacket(availableEntityIdentifiersPacket);
+
+        var playStatusPacket = new PlayStatusPacket();
+        playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
+        sendPacket(playStatusPacket);
     }
 
     private class AllayClientPacketHandler implements BedrockPacketHandler {

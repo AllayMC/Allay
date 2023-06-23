@@ -5,6 +5,7 @@ import cn.allay.api.network.NetworkServer;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.api.world.GameMode;
+import cn.allay.api.world.World;
 import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.player.AllayClient;
 import cn.allay.server.utils.GameLoop;
@@ -24,13 +25,21 @@ public final class AllayServer implements Server {
     private final Map<String, Client> clients = new ConcurrentHashMap<>();
     private ServerSettings serverSettings;
     private NetworkServer networkServer;
+    private final Map<String, World> worlds = new ConcurrentHashMap<>();
+    private World defaultWorld;
 
     @Override
     public void initServer() {
         this.serverSettings = readServerSettings();
         this.networkServer = initNetwork();
-        log.info("Starting up network...");
+        log.info("Starting up network server...");
         this.networkServer.start();
+        log.info("Network server started.");
+        loadWorlds();
+    }
+
+    private void loadWorlds() {
+        //TODO: World loading
     }
 
     @Override
