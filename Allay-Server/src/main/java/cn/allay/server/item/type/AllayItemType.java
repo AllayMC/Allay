@@ -1,5 +1,6 @@
 package cn.allay.server.item.type;
 
+import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaItemId;
@@ -18,7 +19,11 @@ import lombok.ToString;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+
+import static java.lang.reflect.Modifier.isStatic;
 
 /**
  * @author daoge_cmd <br>
@@ -130,8 +135,27 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
+        public ItemTypeBuilder<T> addComponent(ComponentProvider<? extends ItemComponentImpl> componentProvider) {
+            this.componentProviders.add(componentProvider);
+            return this;
+        }
+
+        @Override
         public ItemTypeBuilder<T> addBasicComponents() {
-            //保留以处理后续需求
+            Arrays.stream(interfaceClass.getDeclaredFields())
+                    .filter(field -> isStatic(field.getModifiers()))
+                    .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
+                    .filter(field -> ComponentProvider.class.isAssignableFrom(field.getType()))
+                    .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegister.class).order()))
+                    .forEach(field -> {
+                        try {
+                            addComponent((ComponentProvider<? extends ItemComponentImpl>) field.get(null));
+                        } catch (IllegalAccessException e) {
+                            throw new ItemTypeBuildException(e);
+                        } catch (ClassCastException e) {
+                            throw new ItemTypeBuildException("Field " + field.getName() + "in class" + interfaceClass + " is not a ComponentProvider<? extends ItemTypeBuildException>!", e);
+                        }
+                    });
             return this;
         }
 
