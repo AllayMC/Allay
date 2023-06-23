@@ -10,8 +10,8 @@ import java.nio.file.Path;
 import java.util.TreeMap;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/20 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/20 <br>
  * Allay Project <br>
  */
 public class VanillaEntityDataExtractor {

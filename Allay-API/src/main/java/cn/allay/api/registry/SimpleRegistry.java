@@ -7,8 +7,8 @@ import java.util.function.Supplier;
  * for simple registrations of any given type without restrictions on what
  * the input or output can be.
  * <p>
- * Author: GeyserMC | daoge_cmd <br>
- * Date: 2023/3/18 <br>
+ * @author GeyserMC | daoge_cmd <br>
+ * @date 2023/3/18 <br>
  * Allay Project <br>
  *
  * @param <CONTENT> the value being held by the registry

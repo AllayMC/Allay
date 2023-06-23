@@ -3,8 +3,8 @@ package cn.allay.api.world;
 import org.jetbrains.annotations.Range;
 
 /**
- * Author: Cool_Loong | daoge_cmd <br>
- * Date: 5/31/2023 <br>
+ * @author Cool_Loong | daoge_cmd <br>
+ * @date 5/31/2023 <br>
  * Allay Project
  */
 public record DimensionInfo(int dimensionId,

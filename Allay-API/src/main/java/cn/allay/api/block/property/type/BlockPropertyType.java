@@ -7,8 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/19 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/19 <br>
  * Allay Project <br>
  */
 public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyType {

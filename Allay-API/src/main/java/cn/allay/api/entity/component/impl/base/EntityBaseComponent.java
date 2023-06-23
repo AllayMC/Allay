@@ -6,8 +6,8 @@ import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.math.location.FixedLoc;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/26 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/26 <br>
  * Allay Project <br>
  */
 public interface EntityBaseComponent {

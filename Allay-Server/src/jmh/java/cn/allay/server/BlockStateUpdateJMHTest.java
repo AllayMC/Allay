@@ -12,8 +12,8 @@ import org.openjdk.jmh.annotations.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 6/1/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 6/1/2023 <br>
  * Allay Project
  */
 @State(Scope.Benchmark)

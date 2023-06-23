@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/4/28 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/4/28 <br>
  * Allay Project <br>
  */
 public final class BlockPaletteFileConverter {

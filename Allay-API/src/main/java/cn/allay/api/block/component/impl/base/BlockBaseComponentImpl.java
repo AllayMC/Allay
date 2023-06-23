@@ -16,8 +16,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/4/8 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/4/8 <br>
  * Allay Project <br>
  */
 public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponentImpl {

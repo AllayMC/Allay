@@ -13,8 +13,8 @@ import lombok.experimental.Accessors;
 import java.awt.*;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/1 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/1 <br>
  * Allay Project <br>
  */
 @Getter

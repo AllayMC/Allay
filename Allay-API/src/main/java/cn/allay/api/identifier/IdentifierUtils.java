@@ -7,8 +7,8 @@ import static cn.allay.api.utils.StringUtils.fastTwoPartSplit;
 /**
  * Some helper for {@link Identifier}
  * <p>
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/4 <br>
  * Allay Project <br>
  */
 public final class IdentifierUtils {

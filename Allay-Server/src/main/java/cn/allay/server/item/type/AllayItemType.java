@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/19 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/19 <br>
  * Allay Project <br>
  */
 public class AllayItemType<T extends ItemStack> implements ItemType<T> {

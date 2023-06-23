@@ -9,8 +9,8 @@ import cn.allay.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/19 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/19 <br>
  * Allay Project <br>
  */
 public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentImpl {

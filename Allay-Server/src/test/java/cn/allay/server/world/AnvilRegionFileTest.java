@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 6/7/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 6/7/2023 <br>
  * Allay Project
  */
 public class AnvilRegionFileTest {

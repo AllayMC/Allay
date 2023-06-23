@@ -7,8 +7,8 @@ import cn.allay.api.registry.MappedRegistry;
 import java.util.Map;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/19 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/19 <br>
  * Allay Project <br>
  */
 public interface ItemTypeRegistry extends MappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> {

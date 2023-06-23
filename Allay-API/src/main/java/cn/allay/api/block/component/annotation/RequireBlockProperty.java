@@ -5,8 +5,8 @@ import cn.allay.api.block.property.type.BlockPropertyType;
 import java.lang.annotation.*;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/4/15 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/4/15 <br>
  * Allay Project <br>
  */
 @Retention(RetentionPolicy.RUNTIME)

@@ -1,8 +1,8 @@
 package cn.allay.api.utils.zlib;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 6/6/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 6/6/2023 <br>
  * Allay Project
  */
 public enum ZlibProviderType {

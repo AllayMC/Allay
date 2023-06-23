@@ -25,8 +25,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Author: daoge_cmd | Cool_Loong<br>
- * Date: 2023/4/15 <br>
+ * @author daoge_cmd | Cool_Loong<br>
+ * @date 2023/4/15 <br>
  * Allay Project <br>
  */
 @Getter

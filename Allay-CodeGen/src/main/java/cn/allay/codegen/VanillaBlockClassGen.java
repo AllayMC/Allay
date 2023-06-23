@@ -16,8 +16,8 @@ import static cn.allay.codegen.CodeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 /**
  * Depend on VanillaBlockIdEnumGen execution
  * <p>
- * Author: daoge_cmd | Cool_Loong<br>
- * Date: 2023/4/8 <br>
+ * @author daoge_cmd | Cool_Loong<br>
+ * @date 2023/4/8 <br>
  * Allay Project <br>
  */
 public class VanillaBlockClassGen {
@@ -32,7 +32,7 @@ public class VanillaBlockClassGen {
     private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.classBuilder("VanillaBlockTypes")
             .addModifiers(Modifier.PUBLIC)
             .addJavadoc(
-                    "Author: daoge_cmd <br>\n" +
+                    "@author: daoge_cmd <br>\n" +
                     "Allay Project <br>\n");
 
     @SneakyThrows
@@ -57,7 +57,7 @@ public class VanillaBlockClassGen {
         TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(className)
                 .addSuperinterface(BLOCK_CLASS_NAME)
                 .addJavadoc(
-                        "Author: daoge_cmd | Cool_Loong <br>\n" +
+                        "@author: daoge_cmd | Cool_Loong <br>\n" +
                                 "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var javaFile = JavaFile.builder("cn.allay.api.block.impl", codeBuilder.build()).build();

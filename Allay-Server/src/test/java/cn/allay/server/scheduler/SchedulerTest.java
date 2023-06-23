@@ -11,8 +11,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/12 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/12 <br>
  * Allay Project <br>
  */
 class SchedulerTest {

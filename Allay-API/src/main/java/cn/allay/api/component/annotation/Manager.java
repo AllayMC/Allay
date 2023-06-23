@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/6 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/6 <br>
  * Allay Project <br>
  */
 @Retention(RetentionPolicy.RUNTIME)

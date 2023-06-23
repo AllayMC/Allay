@@ -6,8 +6,8 @@ import cn.allay.dependence.StringUtils;
 import java.util.List;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/4/8 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/4/8 <br>
  * Allay Project <br>
  */
 public class Utils {

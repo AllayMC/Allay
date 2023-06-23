@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 6/1/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 6/1/2023 <br>
  * Allay Project
  */
 @UtilityClass

@@ -7,8 +7,8 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.interfaces.TestDependencyComponent;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/4 <br>
  * Allay Project <br>
  */
 public class SimpleTestDependencyComponent implements ComponentImpl, TestDependencyComponent {

@@ -10,8 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/20 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/20 <br>
  * Allay Project <br>
  */
 public class VanillaItemClassGen {
@@ -39,7 +39,7 @@ public class VanillaItemClassGen {
         TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(className)
                 .addSuperinterface(ITEM_CLASS_NAME)
                 .addJavadoc(
-                        "Author: daoge_cmd <br>\n" +
+                        "@author: daoge_cmd <br>\n" +
                         "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var initializer = CodeBlock.builder();

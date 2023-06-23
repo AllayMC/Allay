@@ -10,8 +10,8 @@ import cn.allay.api.identifier.Identifier;
 import java.util.List;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/20 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/20 <br>
  * Allay Project <br>
  */
 public interface EntityTypeBuilder<T extends Entity> {

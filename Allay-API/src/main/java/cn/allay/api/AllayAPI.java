@@ -31,8 +31,8 @@ import java.util.function.Supplier;
  * <p>
  * Note that for each interface that needs to be implemented, there is only one instance of the implementation class in runtime
  * <p>
- * Author: daoge_cmd <br>
- * Date: 2023/3/11 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/11 <br>
  * Allay Project <br>
  */
 @Slf4j

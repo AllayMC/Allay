@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.TreeMap;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/4/30 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/4/30 <br>
  * Allay Project <br>
  */
 public class PaletteHashTest {

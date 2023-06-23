@@ -9,8 +9,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/4/28 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/4/28 <br>
  * Allay Project <br>
  */
 public class AllayScheduler implements Scheduler {

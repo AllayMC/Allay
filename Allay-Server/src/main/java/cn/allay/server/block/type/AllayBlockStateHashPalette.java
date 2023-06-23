@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 2023/5/29 <br>
+ * @author Cool_Loong <br>
+ * @date 2023/5/29 <br>
  * Allay Project
  */
 @Slf4j

@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/19 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/19 <br>
  * Allay Project <br>
  */
 @Getter

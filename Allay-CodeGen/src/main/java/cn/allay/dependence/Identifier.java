@@ -7,8 +7,8 @@ import static cn.allay.dependence.StringUtils.fastTwoPartSplit;
 /**
  * A simple logging class that implements the Identified interface
  * <p>
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/4 <br>
  * Allay Project <br>
  */
 public record Identifier(String namespace, String path) {

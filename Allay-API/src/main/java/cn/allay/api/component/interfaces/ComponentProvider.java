@@ -7,8 +7,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/4/15 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/4/15 <br>
  * Allay Project <br>
  */
 public interface ComponentProvider<T extends ComponentImpl> {

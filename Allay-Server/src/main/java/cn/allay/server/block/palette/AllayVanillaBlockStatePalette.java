@@ -20,8 +20,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/4/7 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/4/7 <br>
  * Allay Project <br>
  */
 @Deprecated

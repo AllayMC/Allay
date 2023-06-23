@@ -7,7 +7,7 @@ import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 
 /**
- * Author: daoge_cmd <br>
+ * @author daoge_cmd <br>
  * Allay Project <br>
  */
 public interface EntitySheep extends Entity {

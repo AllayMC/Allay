@@ -19,8 +19,8 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 5/30/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 5/30/2023 <br>
  * Allay Project
  */
 @ThreadSafe

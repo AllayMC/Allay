@@ -8,8 +8,8 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 6/6/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 6/6/2023 <br>
  * Allay Project
  */
 public final class ZlibThreadLocal implements ZlibProvider {
