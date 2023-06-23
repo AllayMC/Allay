@@ -9,6 +9,8 @@ import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
+import java.util.regex.Pattern;
+
 /**
  * @author daoge_cmd
  * @date 2023/6/23
@@ -61,21 +63,25 @@ public class AllayClient implements Client {
         var protocolVersion = packet.getProtocolVersion();
         var supportedProtocolVersion = Server.getInstance().getNetworkServer().getCodec().getProtocolVersion();
         if (protocolVersion != supportedProtocolVersion) {
-            String message;
-            if (protocolVersion < supportedProtocolVersion) {
-                message = "disconnectionScreen.outdatedClient";
+            var loginFailedPacket = new PlayStatusPacket();
+            if (protocolVersion > supportedProtocolVersion) {
+                loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
             } else {
-                message = "disconnectionScreen.outdatedServer";
+                loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
             }
-            disconnect(message, false);
+            session.sendPacketImmediately(loginFailedPacket);
+            return PacketSignal.HANDLED;
         }
         var settingsPacket = new NetworkSettingsPacket();
         //TODO: Support other compression algorithms
         settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.ZLIB);
-        settingsPacket.setCompressionThreshold(1);
+        settingsPacket.setCompressionThreshold(0);
         sendPacketImmediately(settingsPacket);
+        session.setCompression(settingsPacket.getCompressionAlgorithm());
         return PacketSignal.HANDLED;
     }
+
+    public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
     @Override
     public PacketSignal handle(LoginPacket packet) {
@@ -85,19 +91,51 @@ public class AllayClient implements Client {
         if (!loginData.isXboxAuthenticated()) {
             disconnect("disconnectionScreen.notAuthenticated");
             return PacketSignal.HANDLED;
+
         }
 
-        if (server.getOnlineClientCount() >= server.getServerSettings().maxClientCount()) {
-            disconnect("disconnectionScreen.serverFull");
+        var username = this.loginData.getDisplayName();
+        if (!NAME_PATTERN.matcher(username).matches()) {
+            disconnect("disconnectionScreen.invalidName");
             return PacketSignal.HANDLED;
         }
 
+        if (!loginData.getSkin().isValid()) {
+            this.session.disconnect("disconnectionScreen.invalidSkin");
+            return PacketSignal.HANDLED;
+        }
+        completeLogin();
+        //TODO 网络加密
+        return PacketSignal.HANDLED;
+    }
+
+    protected void completeLogin() {
+        var playStatusPacket = new PlayStatusPacket();
+        if (server.getOnlineClientCount() >= server.getServerSettings().maxClientCount()) {
+            playStatusPacket.setStatus(PlayStatusPacket.Status.FAILED_SERVER_FULL_SUB_CLIENT);
+        } else {
+            playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
+        }
+        sendPacket(playStatusPacket);
         //TODO: Resource Packs
-        ResourcePacksInfoPacket resourcePacksInfoPacket = new ResourcePacksInfoPacket();
-        resourcePacksInfoPacket.setForcedToAccept(false);
-        resourcePacksInfoPacket.setForcingServerPacksEnabled(false);
-        resourcePacksInfoPacket.setScriptingEnabled(false);
-        sendPacketImmediately(resourcePacksInfoPacket);
+        sendPacket(new ResourcePacksInfoPacket());
+    }
+
+    @Override
+    public PacketSignal handle(ResourcePackClientResponsePacket packet) {
+        switch (packet.getStatus()) {
+            case SEND_PACKS -> {
+                //TODO
+            }
+            case HAVE_ALL_PACKS -> {
+                var stackPacket = new ResourcePackStackPacket();
+                stackPacket.setGameVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
+                sendPacket(stackPacket);
+            }
+            case COMPLETED -> {
+                //TODO: Init player entity
+            }
+        }
         return PacketSignal.HANDLED;
     }
 }
