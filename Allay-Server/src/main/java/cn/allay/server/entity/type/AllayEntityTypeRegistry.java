@@ -2,9 +2,10 @@ package cn.allay.server.entity.type;
 
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeRegistry;
+import cn.allay.api.entity.type.VanillaEntityTypes;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
-import cn.allay.server.utils.PackageClassLoader;
+import lombok.SneakyThrows;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +16,14 @@ import java.util.Map;
  * Allay Project <br>
  */
 public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, EntityType<?>, Map<Identifier, EntityType<?>>> implements EntityTypeRegistry {
-    public <INPUT> AllayEntityTypeRegistry() {
+    public AllayEntityTypeRegistry() {
         super(null, input -> new HashMap<>());
     }
 
+    @SneakyThrows
     public void init() {
-        PackageClassLoader.loadClasses("cn.allay.entity.impl");
+        for (var field : VanillaEntityTypes.class.getDeclaredFields()) {
+            var loaded = field.get(null);
+        }
     }
 }

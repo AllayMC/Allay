@@ -32,7 +32,7 @@ public interface Server extends TaskCreator, NetworkProcessor {
      */
     ServerSettings getServerSettings();
 
-    int getOnlinePlayerCount();
+    int getOnlineClientCount();
 
     @Override
     default NetworkSettings getNetworkSetting() {

@@ -3,6 +3,7 @@ package cn.allay.server.player;
 import cn.allay.api.network.Client;
 import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
 /**
  * @author daoge_cmd
@@ -21,5 +22,10 @@ public class AllayClient implements Client {
 
     public static AllayClient hold(BedrockServerSession session) {
         return new AllayClient(session);
+    }
+
+    @Override
+    public void sendPacket(BedrockPacket packet) {
+        session.sendPacket(packet);
     }
 }

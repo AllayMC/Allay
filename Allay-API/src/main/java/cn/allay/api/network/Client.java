@@ -1,6 +1,7 @@
 package cn.allay.api.network;
 
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
 
 /**
@@ -12,4 +13,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
  */
 public interface Client extends BedrockPacketHandler {
     BedrockServerSession getSession();
+
+    void sendPacket(BedrockPacket packet);
 }
