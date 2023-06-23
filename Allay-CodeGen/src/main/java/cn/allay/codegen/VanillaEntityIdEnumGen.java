@@ -22,6 +22,10 @@ public class VanillaEntityIdEnumGen {
     public static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
     public static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
 
+    public static void main(String[] args) {
+        generate();
+    }
+
     public static void generate() {
         generateTo("cn.allay.api.data", Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaEntityId.java"), API_IDENTIFIER_CLASS);
         generateTo("cn.allay.dependence", Path.of("Allay-CodeGen/src/main/java/cn/allay/dependence/VanillaEntityId.java"), DEP_IDENTIFIER_CLASS);

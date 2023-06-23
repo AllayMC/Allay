@@ -23,6 +23,10 @@ public class VanillaItemClassGen {
     public static final ClassName ITEM_TYPE_REGISTRY = ClassName.get("cn.allay.api.item.type", "ItemTypeRegistry");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/item/impl");
 
+    public static void main(String[] args) {
+        generate();
+    }
+
     @SneakyThrows
     public static void generate() {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
