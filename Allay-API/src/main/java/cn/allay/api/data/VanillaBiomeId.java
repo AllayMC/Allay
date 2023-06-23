@@ -13,7 +13,7 @@ import lombok.Getter;
 public enum VanillaBiomeId {
   OCEAN("ocean", 0, "OCEAN"),
 
-  PLAINS("plains", 1, "PLAINS"),
+  PLAINS("plains", 1, "PLAIN"),
 
   DESERT("desert", 2, "DESERT"),
 
@@ -21,7 +21,7 @@ public enum VanillaBiomeId {
 
   FOREST("forest", 4, "FOREST"),
 
-  TAIGA("taiga", 5, "TAIGA_FOREST"),
+  TAIGA("taiga", 5, "TAIGA"),
 
   SWAMPLAND("swampland", 6, "SWAMP"),
 
@@ -35,9 +35,9 @@ public enum VanillaBiomeId {
 
   FROZEN_RIVER("frozen_river", 11, "RIVER"),
 
-  ICE_PLAINS("ice_plains", 12, "ICE_PLAINS_SPIKES"),
+  ICE_PLAINS("ice_plains", 12, "ICE"),
 
-  ICE_MOUNTAINS("ice_mountains", 13, "ICE_PLAINS_SPIKES"),
+  ICE_MOUNTAINS("ice_mountains", 13, "ICE"),
 
   MUSHROOM_ISLAND("mushroom_island", 14, "MUSHROOM_ISLAND"),
 
@@ -49,7 +49,7 @@ public enum VanillaBiomeId {
 
   FOREST_HILLS("forest_hills", 18, "FOREST"),
 
-  TAIGA_HILLS("taiga_hills", 19, "TAIGA_FOREST"),
+  TAIGA_HILLS("taiga_hills", 19, "TAIGA"),
 
   EXTREME_HILLS_EDGE("extreme_hills_edge", 20, "EXTREME_HILLS"),
 
@@ -61,7 +61,7 @@ public enum VanillaBiomeId {
 
   DEEP_OCEAN("deep_ocean", 24, "OCEAN"),
 
-  STONE_BEACH("stone_beach", 25, "ROCKY_BEACH"),
+  STONE_BEACH("stone_beach", 25, "STONE_BEACH"),
 
   COLD_BEACH("cold_beach", 26, "BEACH"),
 
@@ -71,13 +71,13 @@ public enum VanillaBiomeId {
 
   ROOFED_FOREST("roofed_forest", 29, "FOREST"),
 
-  COLD_TAIGA("cold_taiga", 30, "TAIGA_FOREST"),
+  COLD_TAIGA("cold_taiga", 30, "TAIGA"),
 
-  COLD_TAIGA_HILLS("cold_taiga_hills", 31, "TAIGA_FOREST"),
+  COLD_TAIGA_HILLS("cold_taiga_hills", 31, "TAIGA"),
 
-  MEGA_TAIGA("mega_taiga", 32, "TAIGA_FOREST"),
+  MEGA_TAIGA("mega_taiga", 32, "TAIGA"),
 
-  MEGA_TAIGA_HILLS("mega_taiga_hills", 33, "TAIGA_FOREST"),
+  MEGA_TAIGA_HILLS("mega_taiga_hills", 33, "TAIGA"),
 
   EXTREME_HILLS_PLUS_TREES("extreme_hills_plus_trees", 34, "EXTREME_HILLS"),
 
@@ -111,7 +111,7 @@ public enum VanillaBiomeId {
 
   BAMBOO_JUNGLE_HILLS("bamboo_jungle_hills", 49, "JUNGLE"),
 
-  SUNFLOWER_PLAINS("sunflower_plains", 129, "PLAINS"),
+  SUNFLOWER_PLAINS("sunflower_plains", 129, "PLAIN"),
 
   DESERT_MUTATED("desert_mutated", 130, "DESERT"),
 
@@ -119,11 +119,11 @@ public enum VanillaBiomeId {
 
   FLOWER_FOREST("flower_forest", 132, "FOREST"),
 
-  TAIGA_MUTATED("taiga_mutated", 133, "TAIGA_FOREST"),
+  TAIGA_MUTATED("taiga_mutated", 133, "TAIGA"),
 
   SWAMPLAND_MUTATED("swampland_mutated", 134, "SWAMP"),
 
-  ICE_PLAINS_SPIKES("ice_plains_spikes", 140, "ICE_PLAINS_SPIKES"),
+  ICE_PLAINS_SPIKES("ice_plains_spikes", 140, "ICE"),
 
   JUNGLE_MUTATED("jungle_mutated", 149, "JUNGLE"),
 
@@ -135,11 +135,11 @@ public enum VanillaBiomeId {
 
   ROOFED_FOREST_MUTATED("roofed_forest_mutated", 157, "FOREST"),
 
-  COLD_TAIGA_MUTATED("cold_taiga_mutated", 158, "TAIGA_FOREST"),
+  COLD_TAIGA_MUTATED("cold_taiga_mutated", 158, "TAIGA"),
 
-  REDWOOD_TAIGA_MUTATED("redwood_taiga_mutated", 160, "TAIGA_FOREST"),
+  REDWOOD_TAIGA_MUTATED("redwood_taiga_mutated", 160, "TAIGA"),
 
-  REDWOOD_TAIGA_HILLS_MUTATED("redwood_taiga_hills_mutated", 161, "TAIGA_FOREST"),
+  REDWOOD_TAIGA_HILLS_MUTATED("redwood_taiga_hills_mutated", 161, "TAIGA"),
 
   EXTREME_HILLS_PLUS_TREES_MUTATED("extreme_hills_plus_trees_mutated", 162, "EXTREME_HILLS"),
 
@@ -153,35 +153,35 @@ public enum VanillaBiomeId {
 
   MESA_PLATEAU_MUTATED("mesa_plateau_mutated", 167, "MESA"),
 
-  SOULSAND_VALLEY("soulsand_valley", 178, "CUSTOM"),
+  SOULSAND_VALLEY("soulsand_valley", 178, "DataDriven"),
 
-  CRIMSON_FOREST("crimson_forest", 179, "CUSTOM"),
+  CRIMSON_FOREST("crimson_forest", 179, "DataDriven"),
 
-  WARPED_FOREST("warped_forest", 180, "CUSTOM"),
+  WARPED_FOREST("warped_forest", 180, "DataDriven"),
 
-  BASALT_DELTAS("basalt_deltas", 181, "CUSTOM"),
+  BASALT_DELTAS("basalt_deltas", 181, "DataDriven"),
 
-  JAGGED_PEAKS("jagged_peaks", 182, "CUSTOM"),
+  JAGGED_PEAKS("jagged_peaks", 182, "DataDriven"),
 
-  FROZEN_PEAKS("frozen_peaks", 183, "CUSTOM"),
+  FROZEN_PEAKS("frozen_peaks", 183, "DataDriven"),
 
-  SNOWY_SLOPES("snowy_slopes", 184, "CUSTOM"),
+  SNOWY_SLOPES("snowy_slopes", 184, "DataDriven"),
 
-  GROVE("grove", 185, "CUSTOM"),
+  GROVE("grove", 185, "DataDriven"),
 
-  MEADOW("meadow", 186, "CUSTOM"),
+  MEADOW("meadow", 186, "DataDriven"),
 
-  LUSH_CAVES("lush_caves", 187, "CUSTOM"),
+  LUSH_CAVES("lush_caves", 187, "DataDriven"),
 
-  DRIPSTONE_CAVES("dripstone_caves", 188, "CUSTOM"),
+  DRIPSTONE_CAVES("dripstone_caves", 188, "DataDriven"),
 
-  STONY_PEAKS("stony_peaks", 189, "CUSTOM"),
+  STONY_PEAKS("stony_peaks", 189, "DataDriven"),
 
-  DEEP_DARK("deep_dark", 190, "CUSTOM"),
+  DEEP_DARK("deep_dark", 190, "DataDriven"),
 
-  MANGROVE_SWAMP("mangrove_swamp", 191, "CUSTOM"),
+  MANGROVE_SWAMP("mangrove_swamp", 191, "DataDriven"),
 
-  CHERRY_GROVE("cherry_grove", 192, "CUSTOM");
+  CHERRY_GROVE("cherry_grove", 192, "DataDriven");
 
   private final String name;
 
