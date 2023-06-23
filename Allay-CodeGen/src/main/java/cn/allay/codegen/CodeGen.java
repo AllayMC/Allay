@@ -133,10 +133,10 @@ public class CodeGen {
 //        VanillaBlockPropertyTypeGen.generate();
 //        VanillaItemIdEnumGen.generate();
 //        VanillaEntityIdEnumGen.generate();
-//        VanillaBiomeIdEnumGen.generate();
+        VanillaBiomeIdEnumGen.generate();
 
         //Classes
-        VanillaBlockClassGen.generate();
+//        VanillaBlockClassGen.generate();
 //        VanillaEntityClassGen.generate();
 //        VanillaItemClassGen.generate();
     }
