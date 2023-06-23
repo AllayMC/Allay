@@ -11,7 +11,6 @@ dependencies {
         exclude(group = "org.cloudburstmc", module = "nbt")
         //use it.unimi.dsi.fastutil
         exclude(group = "com.nukkitx.fastutil")
-        exclude(group = "com.nukkitx", module = "natives")
     }
     api(libs.nbt)
     api(libs.fastutil)

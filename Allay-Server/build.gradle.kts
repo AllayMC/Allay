@@ -30,3 +30,7 @@ tasks.processResources {
 tasks.jmh {
     jvmArgs.add("--enable-preview")
 }
+
+tasks.runShadow {
+    jvmArgs?.add("--enable-preview")
+}

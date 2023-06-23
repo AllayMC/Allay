@@ -1,6 +1,8 @@
 package cn.allay.api.player.skin;
 
 import cn.allay.api.utils.Utils;
+import com.nimbusds.jose.shaded.json.JSONObject;
+import com.nimbusds.jose.shaded.json.JSONValue;
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import lombok.Getter;
 import lombok.Setter;
@@ -214,5 +216,29 @@ public class Skin {
     public String generateSkinId(String name) {
         byte[] data = Utils.appendBytes(this.skinData.data(), this.resourcePatch.getBytes(StandardCharsets.UTF_8));
         return UUID.nameUUIDFromBytes(data) + "." + name;
+    }
+
+    public boolean isValid() {
+        return isValidSkin() && isValidResourcePatch();
+    }
+
+    private boolean isValidSkin() {
+        return skinId != null && !skinId.trim().isEmpty() &&
+               skinData != null && skinData.width() >= 64 && skinData.height() >= 32 &&
+               skinData.data().length >= SINGLE_SKIN_SIZE;
+    }
+
+    private boolean isValidResourcePatch() {
+        return resourcePatch != null && validateSkinResourcePatch(resourcePatch);
+    }
+
+    private static boolean validateSkinResourcePatch(String skinResourcePatch) {
+        try {
+            JSONObject object = (JSONObject) JSONValue.parse(skinResourcePatch);
+            JSONObject geometry = (JSONObject) object.get("geometry");
+            return geometry.containsKey("default") && geometry.get("default") instanceof String;
+        } catch (ClassCastException | NullPointerException e) {
+            return false;
+        }
     }
 }
