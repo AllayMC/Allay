@@ -2,9 +2,9 @@ package cn.allay.server;
 
 import cn.allay.api.network.Client;
 import cn.allay.api.network.NetworkServer;
-import cn.allay.api.network.NetworkSettings;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
+import cn.allay.api.world.GameMode;
 import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.player.AllayClient;
 import cn.allay.server.utils.GameLoop;
@@ -53,14 +53,12 @@ public final class AllayServer implements Server {
         //TODO
         return ServerSettings
                 .builder()
-                .networkSettings(NetworkSettings
-                        .builder()
-                        .ip("0.0.0.0")
-                        .port(19132)
-                        .motd("Allay Server")
-                        .subMotd("Powered by Allay")
-                        .maxClientCount(20)
-                        .build())
+                .ip("0.0.0.0")
+                .port(19132)
+                .motd("Allay Server")
+                .subMotd("Powered by Allay")
+                .maxClientCount(20)
+                .gameType(GameMode.CREATIVE)
                 .build();
     }
 

@@ -45,9 +45,13 @@ public class LoginData {
     private String gameVersion;
     private Skin skin;
 
-    public LoginData(LoginPacket loginPacket) {
+    private LoginData(LoginPacket loginPacket) {
         this.decodeChainData(loginPacket.getChain());
         this.decodeSkinData(loginPacket.getExtra());
+    }
+
+    public static LoginData decode(LoginPacket loginPacket) {
+        return new LoginData(loginPacket);
     }
 
     private static boolean verify(PublicKey publicKey, JWSObject jwsObject) throws JOSEException {

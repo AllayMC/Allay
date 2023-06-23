@@ -179,14 +179,12 @@ public class Skin {
             animationDataList.add(new AnimationData(ImageData.of(animation.image().width(), animation.image().height(), animation.image().data()), AnimatedTextureType.values()[animation.type()], animation.frames()));
         }
         List<PersonaPieceData> personaPieceDataList = new ArrayList<>();
-        for (PersonaPiece(
-                String pieceId, String pieceType, String packId, String productId, boolean isDefault
-        ) : this.personaPieces) {
-            personaPieceDataList.add(new PersonaPieceData(pieceId, pieceType, packId, isDefault, productId));
+        for (var personaPiece : this.personaPieces) {
+            personaPieceDataList.add(new PersonaPieceData(personaPiece.pieceId(), personaPiece.pieceType(), personaPiece.packId(), personaPiece.isDefault(), personaPiece.productId()));
         }
         List<PersonaPieceTintData> personaPieceTintList = new ArrayList<>();
-        for (PersonaPieceTint(String pieceType, List<String> colors) : this.personaPieceTints) {
-            personaPieceTintList.add(new PersonaPieceTintData(pieceType, colors));
+        for (var personaPieceTint : this.personaPieceTints) {
+            personaPieceTintList.add(new PersonaPieceTintData(personaPieceTint.pieceType(), personaPieceTint.colors()));
         }
         if (this.skinId == null) {
             this.skinId = generateSkinId("Custom");

@@ -1,7 +1,7 @@
 package cn.allay.server.player;
 
 import cn.allay.api.network.Client;
-import cn.allay.api.network.NetworkProcessor;
+import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
 import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
@@ -18,16 +18,21 @@ public class AllayClient implements Client {
 
     private final BedrockServerSession session;
     @Getter
-    private final NetworkProcessor networkProcessor;
+    private final Server server;
+    /**
+     * Null before receive LoginPacket
+     */
+    @Getter
+    private LoginData loginData = null;
 
-    private AllayClient(BedrockServerSession session, NetworkProcessor networkProcessor) {
+    private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
-        this.networkProcessor = networkProcessor;
+        this.server = server;
         session.setPacketHandler(this);
     }
 
-    public static AllayClient hold(BedrockServerSession session, NetworkProcessor networkProcessor) {
-        return new AllayClient(session, networkProcessor);
+    public static AllayClient hold(BedrockServerSession session, Server Server) {
+        return new AllayClient(session, Server);
     }
 
     @Override
@@ -47,7 +52,7 @@ public class AllayClient implements Client {
 
     @Override
     public void disconnect(String reason, boolean hideReason) {
-        networkProcessor.onClientDisconnect(this);
+        server.onClientDisconnect(this);
         session.disconnect(reason, hideReason);
     }
 
@@ -72,10 +77,27 @@ public class AllayClient implements Client {
         return PacketSignal.HANDLED;
     }
 
-
-
     @Override
     public PacketSignal handle(LoginPacket packet) {
+        this.loginData = LoginData.decode(packet);
 
+        //TODO: event
+        if (!loginData.isXboxAuthenticated()) {
+            disconnect("disconnectionScreen.notAuthenticated");
+            return PacketSignal.HANDLED;
+        }
+
+        if (server.getOnlineClientCount() >= server.getServerSettings().maxClientCount()) {
+            disconnect("disconnectionScreen.serverFull");
+            return PacketSignal.HANDLED;
+        }
+
+        //TODO: Resource Packs
+        ResourcePacksInfoPacket resourcePacksInfoPacket = new ResourcePacksInfoPacket();
+        resourcePacksInfoPacket.setForcedToAccept(false);
+        resourcePacksInfoPacket.setForcingServerPacksEnabled(false);
+        resourcePacksInfoPacket.setScriptingEnabled(false);
+        sendPacketImmediately(resourcePacksInfoPacket);
+        return PacketSignal.HANDLED;
     }
 }

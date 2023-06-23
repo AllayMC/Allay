@@ -1,8 +1,8 @@
 package cn.allay.server.network;
 
-import cn.allay.api.network.NetworkProcessor;
 import cn.allay.api.network.NetworkServer;
-import cn.allay.api.network.NetworkSettings;
+import cn.allay.api.server.Server;
+import cn.allay.api.server.ServerSettings;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -30,18 +30,18 @@ public class AllayNetworkServer implements NetworkServer {
     protected InetSocketAddress bindAddress;
     //TODO: Update PONG
     protected BedrockPong pong;
-    protected NetworkProcessor networkProcessor;
+    protected Server server;
     protected Channel channel;
 
-    public AllayNetworkServer(NetworkProcessor networkProcessor) {
-        this.networkProcessor = networkProcessor;
+    public AllayNetworkServer(Server server) {
+        this.server = server;
     }
 
     @Override
     public void start() {
-        var networkSettings = networkProcessor.getNetworkSetting();
-        this.pong = initPong(networkSettings);
-        this.bindAddress = new InetSocketAddress(networkSettings.ip(), networkSettings.port());
+        var settings = server.getServerSettings();
+        this.pong = initPong(settings);
+        this.bindAddress = new InetSocketAddress(settings.ip(), settings.port());
         this.channel = new ServerBootstrap()
                 .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
@@ -50,7 +50,7 @@ public class AllayNetworkServer implements NetworkServer {
                     @Override
                     protected void initSession(BedrockServerSession session) {
                         session.setCodec(CODEC);
-                        networkProcessor.onClientConnect(session);
+                        server.onClientConnect(session);
                     }
                 })
                 .bind(bindAddress)
@@ -63,14 +63,14 @@ public class AllayNetworkServer implements NetworkServer {
         return CODEC;
     }
 
-    protected BedrockPong initPong(NetworkSettings networkSettings) {
+    protected BedrockPong initPong(ServerSettings settings) {
         return new BedrockPong()
                 .edition("MCPE")
-                .motd(networkSettings.motd())
-                .subMotd(networkSettings.subMotd())
+                .motd(settings.motd())
+                .subMotd(settings.subMotd())
                 .playerCount(0)
-                .maximumPlayerCount(networkSettings.maxClientCount())
-                .gameType(networkSettings.gameType().name())
+                .maximumPlayerCount(settings.maxClientCount())
+                .gameType(settings.gameType().name())
                 .protocolVersion(CODEC.getProtocolVersion());
     }
 }
