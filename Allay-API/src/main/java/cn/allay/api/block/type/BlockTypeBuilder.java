@@ -40,6 +40,8 @@ public interface BlockTypeBuilder<T extends Block> {
 
     BlockTypeBuilder<T> addComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders);
 
+    BlockTypeBuilder<T> addComponent(ComponentProvider<? extends BlockComponentImpl> componentProvider);
+
     BlockTypeBuilder<T> addBasicComponents();
 
     BlockTypeBuilder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent);
