@@ -1,5 +1,6 @@
 package cn.allay.dependence;
 
+import java.lang.String;
 import lombok.Getter;
 
 /**
@@ -8,208 +9,258 @@ import lombok.Getter;
  * Allay Project <br>
  */
 public enum VanillaEntityId {
-  ALLAY("minecraft:allay"),
+  AGENT("minecraft:agent", 56),
 
-  ARMOR_STAND("minecraft:armor_stand"),
+  ALLAY("minecraft:allay", 134),
 
-  ARROW("minecraft:arrow"),
+  AREA_EFFECT_CLOUD("minecraft:area_effect_cloud", 95),
 
-  AXOLOTL("minecraft:axolotl"),
+  ARMOR_STAND("minecraft:armor_stand", 61),
 
-  BAT("minecraft:bat"),
+  ARROW("minecraft:arrow", 80),
 
-  BEE("minecraft:bee"),
+  AXOLOTL("minecraft:axolotl", 130),
 
-  BLAZE("minecraft:blaze"),
+  BALLOON("minecraft:balloon", 107),
 
-  BOAT("minecraft:boat"),
+  BAT("minecraft:bat", 19),
 
-  CAMEL("minecraft:camel"),
+  BEE("minecraft:bee", 122),
 
-  CAT("minecraft:cat"),
+  BLAZE("minecraft:blaze", 43),
 
-  CAVE_SPIDER("minecraft:cave_spider"),
+  BOAT("minecraft:boat", 90),
 
-  CHEST_BOAT("minecraft:chest_boat"),
+  CAMEL("minecraft:camel", 138),
 
-  CHEST_MINECART("minecraft:chest_minecart"),
+  CAT("minecraft:cat", 75),
 
-  CHICKEN("minecraft:chicken"),
+  CAVE_SPIDER("minecraft:cave_spider", 40),
 
-  COD("minecraft:cod"),
+  CHEST_BOAT("minecraft:chest_boat", 218),
 
-  COMMAND_BLOCK_MINECART("minecraft:command_block_minecart"),
+  CHEST_MINECART("minecraft:chest_minecart", 98),
 
-  COW("minecraft:cow"),
+  CHICKEN("minecraft:chicken", 10),
 
-  CREEPER("minecraft:creeper"),
+  COD("minecraft:cod", 112),
 
-  DOLPHIN("minecraft:dolphin"),
+  COMMAND_BLOCK_MINECART("minecraft:command_block_minecart", 100),
 
-  DONKEY("minecraft:donkey"),
+  COW("minecraft:cow", 11),
 
-  DROWNED("minecraft:drowned"),
+  CREEPER("minecraft:creeper", 33),
 
-  EGG("minecraft:egg"),
+  DOLPHIN("minecraft:dolphin", 31),
 
-  ELDER_GUARDIAN("minecraft:elder_guardian"),
+  DONKEY("minecraft:donkey", 24),
 
-  ELDER_GUARDIAN_GHOST("minecraft:elder_guardian_ghost"),
+  DRAGON_FIREBALL("minecraft:dragon_fireball", 79),
 
-  ENDER_CRYSTAL("minecraft:ender_crystal"),
+  DROWNED("minecraft:drowned", 110),
 
-  ENDER_DRAGON("minecraft:ender_dragon"),
+  EGG("minecraft:egg", 82),
 
-  ENDERMAN("minecraft:enderman"),
+  ELDER_GUARDIAN("minecraft:elder_guardian", 50),
 
-  ENDERMITE("minecraft:endermite"),
+  ELDER_GUARDIAN_GHOST("minecraft:elder_guardian_ghost", 120),
 
-  EVOCATION_FANG("minecraft:evocation_fang"),
+  ENDER_CRYSTAL("minecraft:ender_crystal", 71),
 
-  EVOCATION_ILLAGER("minecraft:evocation_illager"),
+  ENDER_DRAGON("minecraft:ender_dragon", 53),
 
-  FIREWORKS_ROCKET("minecraft:fireworks_rocket"),
+  ENDER_PEARL("minecraft:ender_pearl", 87),
 
-  FOX("minecraft:fox"),
+  ENDERMAN("minecraft:enderman", 38),
 
-  FROG("minecraft:frog"),
+  ENDERMITE("minecraft:endermite", 55),
 
-  GHAST("minecraft:ghast"),
+  EVOCATION_FANG("minecraft:evocation_fang", 103),
 
-  GLOW_SQUID("minecraft:glow_squid"),
+  EVOCATION_ILLAGER("minecraft:evocation_illager", 104),
 
-  GOAT("minecraft:goat"),
+  EYE_OF_ENDER_SIGNAL("minecraft:eye_of_ender_signal", 70),
 
-  GUARDIAN("minecraft:guardian"),
+  FALLING_BLOCK("minecraft:falling_block", 66),
 
-  HOGLIN("minecraft:hoglin"),
+  FIREBALL("minecraft:fireball", 85),
 
-  HOPPER_MINECART("minecraft:hopper_minecart"),
+  FIREWORKS_ROCKET("minecraft:fireworks_rocket", 72),
 
-  HORSE("minecraft:horse"),
+  FISHING_HOOK("minecraft:fishing_hook", 77),
 
-  HUSK("minecraft:husk"),
+  FOX("minecraft:fox", 121),
 
-  IRON_GOLEM("minecraft:iron_golem"),
+  FROG("minecraft:frog", 132),
 
-  LEASH_KNOT("minecraft:leash_knot"),
+  GHAST("minecraft:ghast", 41),
 
-  LIGHTNING_BOLT("minecraft:lightning_bolt"),
+  GLOW_SQUID("minecraft:glow_squid", 129),
 
-  LLAMA("minecraft:llama"),
+  GOAT("minecraft:goat", 128),
 
-  MAGMA_CUBE("minecraft:magma_cube"),
+  GUARDIAN("minecraft:guardian", 49),
 
-  MINECART("minecraft:minecart"),
+  HOGLIN("minecraft:hoglin", 124),
 
-  MOOSHROOM("minecraft:mooshroom"),
+  HOPPER_MINECART("minecraft:hopper_minecart", 96),
 
-  MULE("minecraft:mule"),
+  HORSE("minecraft:horse", 23),
 
-  NPC("minecraft:npc"),
+  HUSK("minecraft:husk", 47),
 
-  OCELOT("minecraft:ocelot"),
+  ICE_BOMB("minecraft:ice_bomb", 106),
 
-  PANDA("minecraft:panda"),
+  IRON_GOLEM("minecraft:iron_golem", 20),
 
-  PARROT("minecraft:parrot"),
+  ITEM("minecraft:item", 64),
 
-  PHANTOM("minecraft:phantom"),
+  LEASH_KNOT("minecraft:leash_knot", 88),
 
-  PIG("minecraft:pig"),
+  LIGHTNING_BOLT("minecraft:lightning_bolt", 93),
 
-  PIGLIN("minecraft:piglin"),
+  LINGERING_POTION("minecraft:lingering_potion", 101),
 
-  PIGLIN_BRUTE("minecraft:piglin_brute"),
+  LLAMA("minecraft:llama", 29),
 
-  PILLAGER("minecraft:pillager"),
+  LLAMA_SPIT("minecraft:llama_spit", 102),
 
-  POLAR_BEAR("minecraft:polar_bear"),
+  MAGMA_CUBE("minecraft:magma_cube", 42),
 
-  PUFFERFISH("minecraft:pufferfish"),
+  MINECART("minecraft:minecart", 84),
 
-  RABBIT("minecraft:rabbit"),
+  MOOSHROOM("minecraft:mooshroom", 16),
 
-  RAVAGER("minecraft:ravager"),
+  MULE("minecraft:mule", 25),
 
-  SALMON("minecraft:salmon"),
+  NPC("minecraft:npc", 51),
 
-  SHEEP("minecraft:sheep"),
+  OCELOT("minecraft:ocelot", 22),
 
-  SHULKER("minecraft:shulker"),
+  PAINTING("minecraft:painting", 83),
 
-  SILVERFISH("minecraft:silverfish"),
+  PANDA("minecraft:panda", 113),
 
-  SKELETON("minecraft:skeleton"),
+  PARROT("minecraft:parrot", 30),
 
-  SKELETON_HORSE("minecraft:skeleton_horse"),
+  PHANTOM("minecraft:phantom", 58),
 
-  SLIME("minecraft:slime"),
+  PIG("minecraft:pig", 12),
 
-  SNIFFER("minecraft:sniffer"),
+  PIGLIN("minecraft:piglin", 123),
 
-  SNOW_GOLEM("minecraft:snow_golem"),
+  PIGLIN_BRUTE("minecraft:piglin_brute", 127),
 
-  SNOWBALL("minecraft:snowball"),
+  PILLAGER("minecraft:pillager", 114),
 
-  SPIDER("minecraft:spider"),
+  PLAYER("minecraft:player", 257),
 
-  SPLASH_POTION("minecraft:splash_potion"),
+  POLAR_BEAR("minecraft:polar_bear", 28),
 
-  SQUID("minecraft:squid"),
+  PUFFERFISH("minecraft:pufferfish", 108),
 
-  STRAY("minecraft:stray"),
+  RABBIT("minecraft:rabbit", 18),
 
-  STRIDER("minecraft:strider"),
+  RAVAGER("minecraft:ravager", 59),
 
-  TADPOLE("minecraft:tadpole"),
+  SALMON("minecraft:salmon", 109),
 
-  TNT("minecraft:tnt"),
+  SHEEP("minecraft:sheep", 13),
 
-  TNT_MINECART("minecraft:tnt_minecart"),
+  SHULKER("minecraft:shulker", 54),
 
-  TRADER_LLAMA("minecraft:trader_llama"),
+  SHULKER_BULLET("minecraft:shulker_bullet", 76),
 
-  TROPICALFISH("minecraft:tropicalfish"),
+  SILVERFISH("minecraft:silverfish", 39),
 
-  TURTLE("minecraft:turtle"),
+  SKELETON("minecraft:skeleton", 34),
 
-  VEX("minecraft:vex"),
+  SKELETON_HORSE("minecraft:skeleton_horse", 26),
 
-  VILLAGER("minecraft:villager"),
+  SLIME("minecraft:slime", 37),
 
-  VINDICATOR("minecraft:vindicator"),
+  SMALL_FIREBALL("minecraft:small_fireball", 94),
 
-  WANDERING_TRADER("minecraft:wandering_trader"),
+  SNIFFER("minecraft:sniffer", 139),
 
-  WARDEN("minecraft:warden"),
+  SNOW_GOLEM("minecraft:snow_golem", 21),
 
-  WITCH("minecraft:witch"),
+  SNOWBALL("minecraft:snowball", 81),
 
-  WITHER("minecraft:wither"),
+  SPIDER("minecraft:spider", 35),
 
-  WITHER_SKELETON("minecraft:wither_skeleton"),
+  SPLASH_POTION("minecraft:splash_potion", 86),
 
-  WOLF("minecraft:wolf"),
+  SQUID("minecraft:squid", 17),
 
-  XP_BOTTLE("minecraft:xp_bottle"),
+  STRAY("minecraft:stray", 46),
 
-  XP_ORB("minecraft:xp_orb"),
+  STRIDER("minecraft:strider", 125),
 
-  ZOGLIN("minecraft:zoglin"),
+  TADPOLE("minecraft:tadpole", 133),
 
-  ZOMBIE("minecraft:zombie"),
+  THROWN_TRIDENT("minecraft:thrown_trident", 73),
 
-  ZOMBIE_HORSE("minecraft:zombie_horse"),
+  TNT("minecraft:tnt", 65),
 
-  ZOMBIE_PIGMAN("minecraft:zombie_pigman"),
+  TNT_MINECART("minecraft:tnt_minecart", 97),
 
-  ZOMBIE_VILLAGER("minecraft:zombie_villager");
+  TRADER_LLAMA("minecraft:trader_llama", 157),
+
+  TRIPOD_CAMERA("minecraft:tripod_camera", 62),
+
+  TROPICALFISH("minecraft:tropicalfish", 111),
+
+  TURTLE("minecraft:turtle", 74),
+
+  VEX("minecraft:vex", 105),
+
+  VILLAGER("minecraft:villager", 15),
+
+  VILLAGER_V2("minecraft:villager_v2", 115),
+
+  VINDICATOR("minecraft:vindicator", 57),
+
+  WANDERING_TRADER("minecraft:wandering_trader", 118),
+
+  WARDEN("minecraft:warden", 131),
+
+  WITCH("minecraft:witch", 45),
+
+  WITHER("minecraft:wither", 52),
+
+  WITHER_SKELETON("minecraft:wither_skeleton", 48),
+
+  WITHER_SKULL("minecraft:wither_skull", 89),
+
+  WITHER_SKULL_DANGEROUS("minecraft:wither_skull_dangerous", 91),
+
+  WOLF("minecraft:wolf", 14),
+
+  XP_BOTTLE("minecraft:xp_bottle", 68),
+
+  XP_ORB("minecraft:xp_orb", 69),
+
+  ZOGLIN("minecraft:zoglin", 126),
+
+  ZOMBIE("minecraft:zombie", 32),
+
+  ZOMBIE_HORSE("minecraft:zombie_horse", 27),
+
+  ZOMBIE_PIGMAN("minecraft:zombie_pigman", 36),
+
+  ZOMBIE_VILLAGER("minecraft:zombie_villager", 44),
+
+  ZOMBIE_VILLAGER_V2("minecraft:zombie_villager_v2", 116);
 
   @Getter
   private final Identifier identifier;
 
-  VanillaEntityId(String identifier) {
+  @Getter
+  private final int networkId;
+
+  VanillaEntityId(String identifier, int networkId) {
     this.identifier = new Identifier(identifier);
+    this.networkId = networkId;
   }
 }

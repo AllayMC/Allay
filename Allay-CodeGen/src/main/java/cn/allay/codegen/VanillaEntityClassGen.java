@@ -22,7 +22,6 @@ public class VanillaEntityClassGen {
     public static final ClassName VANILLA_ENTITY_ID_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaEntityId");
     public static final ClassName ENTITY_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.entity.type", "EntityType");
     public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.entity.type", "EntityTypeBuilder");
-    public static final ClassName ENTITY_TYPE_REGISTRY = ClassName.get("cn.allay.api.entity.type", "EntityTypeRegistry");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/entity/impl");
 
     private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaEntityTypes")
@@ -61,8 +60,7 @@ public class VanillaEntityClassGen {
                 .add("$T\n        .builder($T.class)\n", ENTITY_TYPE_BUILDER_CLASS_NAME, className)
                 .add("        .vanillaEntity($T.$N)\n", VANILLA_ENTITY_ID_CLASS_NAME, vanillaEntityId.name())
                 .add("        .addBasicComponents()\n")
-                .add("        .build()")
-                .add("        .register($T.getRegistry())", ENTITY_TYPE_REGISTRY);
+                .add("        .build()");
         TYPES_CLASS.addField(
                 FieldSpec
                         .builder(ParameterizedTypeName.get(ENTITY_TYPE_CLASS_NAME, className), vanillaEntityId.name() + "_TYPE")

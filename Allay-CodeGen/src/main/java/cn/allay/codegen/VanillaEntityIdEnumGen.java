@@ -8,7 +8,7 @@ import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static cn.allay.codegen.CodeGen.MAPPED_ENTITY_DATA;
+import static cn.allay.codegen.CodeGen.ENTITY_ID_MAP;
 
 /**
  * @author daoge_cmd <br>
@@ -42,17 +42,23 @@ public class VanillaEntityIdEnumGen {
                         .builder(identifierClassName, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(GETTER_CLASS)
                         .build())
+                .addField(FieldSpec
+                        .builder(int.class, "networkId", Modifier.PRIVATE, Modifier.FINAL)
+                        .addAnnotation(GETTER_CLASS)
+                        .build())
                 .addMethod(MethodSpec.constructorBuilder()
                         .addParameter(STRING_CLASS, "identifier")
+                        .addParameter(int.class, "networkId")
                         .addStatement("this.$N = new $T($N)", "identifier", identifierClassName, "identifier")
+                        .addStatement("this.$N = $N", "networkId", "networkId")
                         .build()
                 );
-        for (var entry : MAPPED_ENTITY_DATA.entrySet()) {
+        for (var entry : ENTITY_ID_MAP.entrySet()) {
             var valueName = StringUtils.fastTwoPartSplit(
                     entry.getKey(),
                     ":",
                     "")[1].toUpperCase();
-            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S", entry.getKey()).build());
+            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue()).build());
         }
 
         var javaFile = JavaFile.builder(packageName, codeBuilder.build()).build();

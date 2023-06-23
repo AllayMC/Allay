@@ -11,15 +11,17 @@ import cn.allay.server.utils.GameLoop;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Getter
 public final class AllayServer implements Server {
 
-    private final Set<Client> clients = new HashSet<>();
+    private final Map<String, Client> clients = new ConcurrentHashMap<>();
     private ServerSettings serverSettings;
     private NetworkServer networkServer;
 
@@ -49,6 +51,12 @@ public final class AllayServer implements Server {
         return clients.size();
     }
 
+    @Override
+    @UnmodifiableView
+    public Map<String, Client> getOnlineClients() {
+        return Collections.unmodifiableMap(clients);
+    }
+
     private ServerSettings readServerSettings() {
         //TODO
         return ServerSettings
@@ -73,14 +81,19 @@ public final class AllayServer implements Server {
 
     @Override
     public void onClientConnect(BedrockServerSession session) {
-        clients.add(AllayClient.hold(session, this));
+        AllayClient.hold(session, this);
+    }
+
+    @Override
+    public void onLoginFinish(Client client) {
+        clients.put(client.getName(), client);
     }
 
     @Override
     public void onClientDisconnect(Client client) {
-        var disconnected = clients.remove(client);
-        if (!disconnected) {
-            throw new IllegalArgumentException("Client is not connected: " + client);
+        var disconnected = clients.remove(client.getName());
+        if (disconnected != null) {
+            throw new IllegalArgumentException("Client is not connected: " + client.getName());
         }
     }
 }

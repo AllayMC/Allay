@@ -16,9 +16,4 @@ public interface EntityType<T extends Entity> extends Identified {
     List<ComponentProvider<? extends EntityComponentImpl>> getComponentProviders();
 
     T createEntity(EntityInitInfo info);
-
-    default EntityType<T> register(EntityTypeRegistry registry) {
-        registry.register(getIdentifier(), this);
-        return this;
-    }
 }

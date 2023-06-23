@@ -23,7 +23,6 @@ import static cn.allay.codegen.Utils.convertToPascalCase;
  * Allay Project <br>
  */
 public class CodeGen {
-    //TODO: 统一资源加载？eg: block_palette.nbt
     static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Data/block_palette.nbt");
     static final List<NbtMap> BLOCK_PALETTE_NBT;
@@ -55,15 +54,15 @@ public class CodeGen {
         }
     }
 
-    static final Path ENTITY_DATA_FILE_PATH = Path.of("Data/entity_data.json");
-    static final Map<String, Map<String, JsonElement>> MAPPED_ENTITY_DATA = new TreeMap<>();
+    static final Path ENTITY_ID_MAP_FILE_PATH = Path.of("Data/unpacked/entity_id_map.json");
+    static final Map<String, Integer> ENTITY_ID_MAP = new TreeMap<>();
 
     static {
         try {
-            var reader = JsonParser.parseReader(Files.newBufferedReader(ENTITY_DATA_FILE_PATH));
+            var reader = JsonParser.parseReader(Files.newBufferedReader(ENTITY_ID_MAP_FILE_PATH));
             reader.getAsJsonObject().entrySet().forEach(entry -> {
-                var obj = entry.getValue().getAsJsonObject();
-                MAPPED_ENTITY_DATA.put(obj.get("canonicalName").getAsString(), obj.asMap());
+                var id = entry.getValue().getAsInt();
+                ENTITY_ID_MAP.put(entry.getKey(), id);
             });
         } catch (IOException e) {
             throw new RuntimeException(e);

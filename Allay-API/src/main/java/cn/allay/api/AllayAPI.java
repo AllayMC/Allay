@@ -13,6 +13,7 @@ import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
+import cn.allay.api.world.biome.BiomeRegistry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -76,7 +77,7 @@ public final class AllayAPI {
             }
         }
         //TODO: multilingual support
-        log.info("This server is running " + coreName + ", implement Allay-API version §b" + API_VERSION);
+        log.info("This server is running " + coreName + ", implement Allay-API version " + API_VERSION);
         implemented = true;
     }
 
@@ -142,6 +143,9 @@ public final class AllayAPI {
         //Entity
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
         requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
+
+        //Biome
+        requireImpl(BiomeRegistry.class, BiomeRegistry.REGISTRY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {

@@ -10,6 +10,7 @@ import cn.allay.api.entity.component.impl.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
+import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.block.type.BlockTypeBuildException;
 import cn.allay.server.component.injector.AllayComponentInjector;
@@ -150,6 +151,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
                 throw new EntityTypeBuildException("identifier cannot be null!");
             var type = new AllayEntityType<>(interfaceClass, componentProviders, identifier);
             componentProviders.add(ComponentProvider.of(info -> new EntityBaseComponentImpl(type, (EntityInitInfo) info), EntityBaseComponentImpl.class));
+            EntityTypeRegistry.getRegistry().register(identifier, type);
             return type.complete();
         }
     }
