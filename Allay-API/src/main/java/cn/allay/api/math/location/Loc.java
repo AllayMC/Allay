@@ -4,8 +4,8 @@ import cn.allay.api.math.position.Pos;
 import cn.allay.api.world.World;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/11 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/11 <br>
  * Allay Project <br>
  */
 public interface Loc<T extends Number> extends FixedLoc<T>, Pos<T> {

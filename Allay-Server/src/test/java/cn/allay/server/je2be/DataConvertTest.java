@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.util.TreeMap;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 6/7/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 6/7/2023 <br>
  * Allay Project
  */
 public class DataConvertTest {

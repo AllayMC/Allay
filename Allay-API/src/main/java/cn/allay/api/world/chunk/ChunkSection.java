@@ -4,8 +4,8 @@ import cn.allay.api.block.type.BlockState;
 import org.jetbrains.annotations.Range;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 5/30/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 5/30/2023 <br>
  * Allay Project
  */
 public interface ChunkSection {

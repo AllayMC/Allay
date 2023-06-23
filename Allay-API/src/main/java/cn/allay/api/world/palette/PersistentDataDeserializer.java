@@ -3,8 +3,8 @@ package cn.allay.api.world.palette;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Author: JukeboxMC | daoge_cmd <br>
- * Date: 2023/4/14 <br>
+ * @author JukeboxMC | daoge_cmd <br>
+ * @date 2023/4/14 <br>
  * Allay Project <br>
  */
 public interface PersistentDataDeserializer<V> {

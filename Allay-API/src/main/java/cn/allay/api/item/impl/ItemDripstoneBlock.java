@@ -7,7 +7,7 @@ import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
 
 /**
- * Author: daoge_cmd <br>
+ * @author daoge_cmd <br>
  * Allay Project <br>
  */
 public interface ItemDripstoneBlock extends ItemStack {

@@ -20,8 +20,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 6/4/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 6/4/2023 <br>
  * Allay Project
  */
 public class AnvilWorldProvider implements NativeFileWorldProvider {

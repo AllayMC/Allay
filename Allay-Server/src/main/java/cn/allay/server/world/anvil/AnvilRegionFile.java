@@ -20,8 +20,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.BitSet;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 6/4/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 6/4/2023 <br>
  * Allay Project
  */
 public final class AnvilRegionFile implements Cloneable {

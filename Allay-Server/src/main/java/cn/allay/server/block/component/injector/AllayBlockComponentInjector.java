@@ -10,8 +10,8 @@ import cn.allay.server.component.injector.AllayComponentInjector;
 import java.util.Map;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/4/15 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/4/15 <br>
  * Allay Project <br>
  */
 public class AllayBlockComponentInjector<T extends Block> extends AllayComponentInjector<T> {

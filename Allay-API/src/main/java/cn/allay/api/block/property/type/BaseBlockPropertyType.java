@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/19 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/19 <br>
  * Allay Project <br>
  */
 public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPropertyType<DATATYPE> permits BooleanPropertyType, EnumPropertyType, IntPropertyType {

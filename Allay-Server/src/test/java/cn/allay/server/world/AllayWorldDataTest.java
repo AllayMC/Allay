@@ -11,8 +11,8 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 5/31/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 5/31/2023 <br>
  * Allay Project
  */
 

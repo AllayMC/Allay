@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/25 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/25 <br>
  * Allay Project <br>
  */
 public class BlockAttributeComponentImpl implements BlockAttributeComponent, BlockComponentImpl {

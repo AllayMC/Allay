@@ -5,8 +5,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 /**
- * Author: Jukebox | Cool_Loong <br>
- * Date: 2023/3/4 <br>
+ * @author Jukebox | Cool_Loong <br>
+ * @date 2023/3/4 <br>
  * Allay Project <br>
  */
 public enum GameRule {

@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/12 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/12 <br>
  * Allay Project <br>
  */
 public interface Task {

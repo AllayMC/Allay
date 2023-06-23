@@ -12,8 +12,8 @@ import java.nio.file.Path;
 /**
  * Depend on VanillaEntityIdEnumGen execution
  * <p>
- * Author: daoge_cmd | Cool_Loong<br>
- * Date: 2023/5/26 <br>
+ * @author daoge_cmd | Cool_Loong<br>
+ * @date 2023/5/26 <br>
  * Allay Project <br>
  */
 public class VanillaEntityClassGen {
@@ -41,7 +41,7 @@ public class VanillaEntityClassGen {
         TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(className)
                 .addSuperinterface(ENTITY_CLASS_NAME)
                 .addJavadoc(
-                        "Author: daoge_cmd <br>\n" +
+                        "@author: daoge_cmd <br>\n" +
                                 "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var initializer = CodeBlock.builder();

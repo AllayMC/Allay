@@ -11,8 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/26 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/26 <br>
  * Allay Project <br>
  */
 @ExtendWith(AllayTestExtension.class)

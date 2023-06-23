@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/4 <br>
  * Allay Project <br>
  * <p>
  * This annotation is used to mark a method as an injectable implementation <br/>

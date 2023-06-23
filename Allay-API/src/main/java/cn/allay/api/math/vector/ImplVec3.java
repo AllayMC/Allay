@@ -1,8 +1,8 @@
 package cn.allay.api.math.vector;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/11 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/11 <br>
  * Allay Project <br>
  */
 class ImplVec3<T extends Number> extends ImplFixedVec3<T> implements Vec3<T> {

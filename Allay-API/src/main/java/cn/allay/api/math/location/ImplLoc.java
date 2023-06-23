@@ -3,8 +3,8 @@ package cn.allay.api.math.location;
 import cn.allay.api.world.World;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/11 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/11 <br>
  * Allay Project <br>
  */
 class ImplLoc<T extends Number> extends ImplFixedLoc<T> implements Loc<T> {

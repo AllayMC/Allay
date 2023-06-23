@@ -1,8 +1,8 @@
 package cn.allay.api.math.vector;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/4 <br>
  * Allay Project <br>
  */
 public interface FixedVec2<T extends Number> {

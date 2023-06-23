@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/20 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/20 <br>
  * Allay Project <br>
  */
 @Slf4j

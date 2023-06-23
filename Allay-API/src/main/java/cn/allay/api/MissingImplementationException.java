@@ -1,8 +1,8 @@
 package cn.allay.api;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/11 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/11 <br>
  * Allay Project <br>
  * <p>
  * This exception is thrown when the API module is not fully implemented <br/>

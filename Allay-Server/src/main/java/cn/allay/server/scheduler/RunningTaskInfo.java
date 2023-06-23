@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/12 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/12 <br>
  * Allay Project <br>
  * <p>
  * Represents a running task that contains some run presets for this task

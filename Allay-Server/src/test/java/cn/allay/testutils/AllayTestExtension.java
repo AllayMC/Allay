@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/5/1 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/5/1 <br>
  * Allay Project <br>
  * <p>
  * This junit extension is used to prepare the test environment

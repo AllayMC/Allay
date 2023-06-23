@@ -6,8 +6,8 @@ import cn.allay.api.registry.MappedRegistry;
 import java.util.Map;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 2023/5/29 <br>
+ * @author Cool_Loong <br>
+ * @date 2023/5/29 <br>
  * Allay Project
  */
 public interface BlockStateHashPalette extends MappedRegistry<Integer, BlockState, Map<Integer, BlockState>> {

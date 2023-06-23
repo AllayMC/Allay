@@ -12,8 +12,8 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 /**
- * Author: Cool_Loong <br>
- * Date: 6/7/2023 <br>
+ * @author Cool_Loong <br>
+ * @date 6/7/2023 <br>
  * Allay Project
  */
 public final class DataConvert {

@@ -1,8 +1,8 @@
 package cn.allay.api.world;
 
 /**
- * Author: LucGamesYT | daoge_cmd <br>
- * Date: 5/31/2023 <br>
+ * @author LucGamesYT | daoge_cmd <br>
+ * @date 5/31/2023 <br>
  * Allay Project
  */
 public enum Difficulty {

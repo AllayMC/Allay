@@ -5,8 +5,8 @@ import lombok.Getter;
 import java.util.stream.IntStream;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/19 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/19 <br>
  * Allay Project <br>
  */
 public final class IntPropertyType extends BaseBlockPropertyType<Integer> {

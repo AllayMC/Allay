@@ -4,8 +4,8 @@ import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.scheduler.task.Task;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/12 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/12 <br>
  * Allay Project <br>
  * <p>
  * scheduler

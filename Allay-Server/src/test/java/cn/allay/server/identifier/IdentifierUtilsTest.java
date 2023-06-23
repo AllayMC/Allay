@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Author: daoge_cmd <br>
- * Date: 2023/3/4 <br>
+ * @author daoge_cmd <br>
+ * @date 2023/3/4 <br>
  * Allay Project <br>
  */
 class IdentifierUtilsTest {
