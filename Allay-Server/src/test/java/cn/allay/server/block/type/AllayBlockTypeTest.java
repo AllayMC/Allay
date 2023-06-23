@@ -12,7 +12,7 @@ import cn.allay.api.block.property.type.EnumPropertyType;
 import cn.allay.api.block.property.type.IntPropertyType;
 import cn.allay.api.block.type.BlockInitInfo;
 import cn.allay.api.block.type.BlockType;
-import cn.allay.api.block.type.BlockTypes;
+import cn.allay.api.block.type.VanillaBlockTypes;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 import cn.allay.api.math.position.Pos;
@@ -143,7 +143,7 @@ class AllayBlockTypeTest {
 
     @Test
     void testBlockStateHash() {
-        var b1 = BlockTypes.COBBLED_DEEPSLATE_WALL_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        var b1 = VanillaBlockTypes.COBBLED_DEEPSLATE_WALL_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
         b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
         b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
         b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
@@ -151,12 +151,12 @@ class AllayBlockTypeTest {
         b1.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
         assertEquals(1789459903, b1.getCurrentState().unsignedBlockStateHash());
 
-        var b2 = BlockTypes.BLUE_CANDLE_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        var b2 = VanillaBlockTypes.BLUE_CANDLE_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
         b2.setProperty(VanillaBlockPropertyTypes.CANDLES, 2);
         b2.setProperty(VanillaBlockPropertyTypes.LIT, false);
         assertEquals(4220034033L, b2.getCurrentState().unsignedBlockStateHash());
 
-        var b3 = BlockTypes.CORAL_FAN_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null)));
+        var b3 = VanillaBlockTypes.CORAL_FAN_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null)));
         b3.setProperty(VanillaBlockPropertyTypes.CORAL_COLOR, CoralColor.BLUE);
         b3.setProperty(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION, 0);
         assertEquals(781710940, b3.getCurrentState().unsignedBlockStateHash());
