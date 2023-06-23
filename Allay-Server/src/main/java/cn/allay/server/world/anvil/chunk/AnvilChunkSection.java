@@ -1,7 +1,7 @@
 package cn.allay.server.world.anvil.chunk;
 
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.block.type.BlockStateHashPalette;
+import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.server.utils.NibbleArray;

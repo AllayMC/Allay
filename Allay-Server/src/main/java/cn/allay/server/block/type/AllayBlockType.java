@@ -2,6 +2,7 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
+import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
