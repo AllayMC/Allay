@@ -2,9 +2,11 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.block.type.BlockTypes;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.server.utils.PackageClassLoader;
+import lombok.SneakyThrows;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +21,10 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
         super(null, input -> new HashMap<>());
     }
 
+    @SneakyThrows
     public void init() {
-        PackageClassLoader.loadClasses("cn.allay.api.block.impl");
+        for (var field : BlockTypes.class.getDeclaredFields()) {
+            var loaded = field.get(null);
+        }
     }
 }
