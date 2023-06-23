@@ -2,6 +2,7 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
+import cn.allay.api.block.component.annotation.AutoRegisterComponent;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.component.impl.base.BlockBaseComponentImpl;
@@ -23,6 +24,8 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.lang.reflect.Modifier.isStatic;
 
 /**
  * @author daoge_cmd | Cool_Loong<br>
@@ -182,20 +185,24 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
             this.interfaceClass = interfaceClass;
         }
 
+        @Override
         public Builder<T> identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
+        @Override
         public Builder<T> identifier(String identifier) {
             this.identifier = new Identifier(identifier);
             return this;
         }
 
+        @Override
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
             return vanillaBlock(vanillaBlockId, true);
         }
 
+        @Override
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId, boolean initVanillaBlockAttributeComponent) {
             this.identifier = vanillaBlockId.getIdentifier();
             if (initVanillaBlockAttributeComponent) {
@@ -208,16 +215,19 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
             return this;
         }
 
+        @Override
         public Builder<T> withProperties(BlockPropertyType<?>... properties) {
             this.properties = List.of(properties);
             return this;
         }
 
+        @Override
         public Builder<T> withProperties(List<BlockPropertyType<?>> properties) {
             this.properties = properties;
             return this;
         }
 
+        @Override
         public Builder<T> setComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders) {
             if (componentProviders == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
@@ -225,22 +235,45 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
             return this;
         }
 
+        @Override
         public Builder<T> addComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders) {
             this.componentProviders.addAll(componentProviders);
             return this;
         }
 
-        public Builder<T> addBasicComponents() {
-            //Unused
+        @Override
+        public Builder<T> addComponent(ComponentProvider<? extends BlockComponentImpl> componentProvider) {
+            this.componentProviders.add(componentProvider);
             return this;
         }
 
+        @Override
+        public Builder<T> addBasicComponents() {
+            Arrays.stream(interfaceClass.getDeclaredFields())
+                    .filter(field -> isStatic(field.getModifiers()))
+                    .filter(field -> field.getDeclaredAnnotation(AutoRegisterComponent.class) != null)
+                    .filter(field -> ComponentProvider.class.isAssignableFrom(field.getType()))
+                    .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegisterComponent.class).order()))
+                    .forEach(field -> {
+                        try {
+                            addComponent((ComponentProvider<? extends BlockComponentImpl>) field.get(null));
+                        } catch (IllegalAccessException e) {
+                            throw new BlockTypeBuildException(e);
+                        } catch (ClassCastException e) {
+                            throw new BlockTypeBuildException("Field " + field.getName() + "in class" + interfaceClass + " is not a ComponentProvider<? extends BlockComponentImpl>!", e);
+                        }
+                    });
+            return this;
+        }
+
+        @Override
         public Builder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent) {
             componentProviders.add(ComponentProvider.ofSingleton(customBlockComponent));
             isCustomBlock = true;
             return this;
         }
 
+        @Override
         public AllayBlockType<T> build() {
             if (identifier == null) throw new BlockTypeBuildException("identifier cannot be null!");
             var type = new AllayBlockType<>(interfaceClass, componentProviders, properties, identifier);

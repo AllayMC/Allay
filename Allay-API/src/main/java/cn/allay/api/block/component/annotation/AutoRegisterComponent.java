@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
  * Allay Project
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 public @interface AutoRegisterComponent {
+    int order() default 0;
 }

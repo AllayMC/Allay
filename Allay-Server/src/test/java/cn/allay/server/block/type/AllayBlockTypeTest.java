@@ -2,9 +2,6 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.BlockAttributes;
-import cn.allay.api.block.impl.BlockBlueCandle;
-import cn.allay.api.block.impl.BlockCobbledDeepslateWall;
-import cn.allay.api.block.impl.BlockCoralFan;
 import cn.allay.api.block.property.enums.*;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.property.type.BooleanPropertyType;
@@ -105,6 +102,8 @@ class AllayBlockTypeTest {
     @Test
     void testCommon() {
         var block = testBlockType1.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        //Auto-registered component
+        assertTrue(block.getTestFlag());
         assertEquals(1, block.getPosition().getX());
         assertEquals(2, block.getPosition().getY());
         assertEquals(3, block.getPosition().getZ());
