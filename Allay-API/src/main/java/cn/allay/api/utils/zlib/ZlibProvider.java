@@ -1,7 +1,6 @@
 package cn.allay.api.utils.zlib;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 /**
  * @author Cool_Loong <br>

@@ -1,7 +1,7 @@
 package cn.allay.server.block.type;
 
-import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.palette.BlockStateHashPalette;
+import cn.allay.api.block.type.BlockState;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.extern.slf4j.Slf4j;
 

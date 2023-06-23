@@ -3,7 +3,6 @@ package cn.allay.codegen;
 import cn.allay.dependence.VanillaBlockId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;

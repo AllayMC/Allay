@@ -1,7 +1,7 @@
 package cn.allay.server.item.type;
 
-import cn.allay.api.item.impl.ItemDiamond;
 import cn.allay.api.item.type.ItemStackInitInfo;
+import cn.allay.api.item.type.VanillaItemTypes;
 import cn.allay.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
@@ -20,11 +20,11 @@ public class AllayItemTypeTest {
 
     @Test
     void testCreation() {
-        var itemStack = ItemDiamond.TYPE.createItemStack(new ItemStackInitInfo.Simple(1, 0));
+        var itemStack = VanillaItemTypes.DIAMOND_TYPE.createItemStack(new ItemStackInitInfo.Simple(1, 0));
         assertEquals(1, itemStack.getCount());
         assertEquals(0, itemStack.getMeta());
         assertEquals(NbtMap.EMPTY, itemStack.getNbt());
-        assertEquals(ItemDiamond.TYPE, itemStack.getItemType());
+        assertEquals(VanillaItemTypes.DIAMOND_TYPE, itemStack.getItemType());
 
         itemStack.setCount(2);
         itemStack.setMeta(1);

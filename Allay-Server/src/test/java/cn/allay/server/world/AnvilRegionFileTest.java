@@ -1,6 +1,5 @@
 package cn.allay.server.world;
 
-import cn.allay.api.world.DimensionInfo;
 import cn.allay.server.world.anvil.AnvilRegionFile;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;

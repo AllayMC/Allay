@@ -1,12 +1,14 @@
 package cn.allay.api.server;
 
 import cn.allay.api.ApiInstanceHolder;
+import cn.allay.api.network.NetworkProcessor;
+import cn.allay.api.network.NetworkSettings;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
 
 /**
  * The server interface
  */
-public interface Server extends TaskCreator {
+public interface Server extends TaskCreator, NetworkProcessor {
     ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.of();
 
     static Server getInstance() {
@@ -31,4 +33,9 @@ public interface Server extends TaskCreator {
     ServerSettings getServerSettings();
 
     int getOnlinePlayerCount();
+
+    @Override
+    default NetworkSettings getNetworkSetting() {
+        return getServerSettings().networkSettings();
+    }
 }

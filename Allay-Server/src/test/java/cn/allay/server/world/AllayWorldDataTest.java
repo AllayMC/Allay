@@ -8,8 +8,6 @@ package cn.allay.server.world;
 
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 /**
  * @author Cool_Loong <br>
  * @date 5/31/2023 <br>

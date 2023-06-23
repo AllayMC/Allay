@@ -1,5 +1,6 @@
 package cn.allay.api.server;
 
+import cn.allay.api.network.NetworkSettings;
 import lombok.Builder;
 
 /**
@@ -7,10 +8,6 @@ import lombok.Builder;
  */
 @Builder
 public record ServerSettings(
-        String motd,
-        String subMotd,
-        int maxPlayerCount,
-        String ip,
-        int port
+        NetworkSettings networkSettings
 ) {
 }

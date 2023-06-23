@@ -1,8 +1,8 @@
 package cn.allay.server.block.palette;
 
+import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.palette.VanillaBlockStatePalette;
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.registry.RegistryLoader;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.HashUtils;
