@@ -43,7 +43,7 @@ public class VanillaItemClassGen {
         TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(className)
                 .addSuperinterface(ITEM_CLASS_NAME)
                 .addJavadoc(
-                        "@author: daoge_cmd <br>\n" +
+                        "@author daoge_cmd <br>\n" +
                         "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var initializer = CodeBlock.builder();

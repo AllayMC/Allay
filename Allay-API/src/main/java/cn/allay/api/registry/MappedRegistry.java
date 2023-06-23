@@ -15,7 +15,7 @@ import java.util.function.Function;
  * @param <VALUE>   the value
  * @param <MAPPING> the map
  *                  <p>
- *                  @author: daoge_cmd <br>
+ *                  @author daoge_cmd <br>
  *                  Date: 2023/3/18 <br>
  *                  Allay Project <br>
  */

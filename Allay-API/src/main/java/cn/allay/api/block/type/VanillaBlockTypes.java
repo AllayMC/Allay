@@ -843,7 +843,7 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 /**
- * @author: daoge_cmd <br>
+ * @author daoge_cmd <br>
  * Allay Project <br>
  */
 public interface VanillaBlockTypes {

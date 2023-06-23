@@ -102,7 +102,7 @@ import cn.allay.api.entity.impl.EntityZombiePigman;
 import cn.allay.api.entity.impl.EntityZombieVillager;
 
 /**
- * @author: daoge_cmd <br>
+ * @author daoge_cmd <br>
  * Allay Project <br>
  */
 public interface VanillaEntityTypes {
