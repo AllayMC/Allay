@@ -157,6 +157,12 @@ public class AllayClient implements Client {
     }
 
     private class AllayClientPacketHandler implements BedrockPacketHandler {
+
+        @Override
+        public void onDisconnect(String reason) {
+            server.onClientDisconnect(AllayClient.this);
+        }
+
         @Override
         public PacketSignal handle(RequestNetworkSettingsPacket packet) {
             var protocolVersion = packet.getProtocolVersion();
