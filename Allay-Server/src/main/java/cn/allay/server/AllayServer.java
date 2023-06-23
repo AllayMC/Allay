@@ -75,6 +75,14 @@ public final class AllayServer implements Server {
 
     @Override
     public void onClientConnect(BedrockServerSession session) {
-        clients.add(AllayClient.hold(session));
+        clients.add(AllayClient.hold(session, this));
+    }
+
+    @Override
+    public void onClientDisconnect(Client client) {
+        var disconnected = clients.remove(client);
+        if (!disconnected) {
+            throw new IllegalArgumentException("Client is not connected: " + client);
+        }
     }
 }
