@@ -2,6 +2,7 @@ package cn.allay.server;
 
 import cn.allay.api.network.Client;
 import cn.allay.api.network.NetworkServer;
+import cn.allay.api.network.NetworkSettings;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.server.network.AllayNetworkServer;
@@ -11,15 +12,16 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
 @Getter
 public final class AllayServer implements Server {
 
+    private final Set<Client> clients = new HashSet<>();
     private ServerSettings serverSettings;
     private NetworkServer networkServer;
-    private Set<Client> clients;
 
     @Override
     public void initServer() {
@@ -43,20 +45,22 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public int getOnlinePlayerCount() {
-        //TODO
-        return 0;
+    public int getOnlineClientCount() {
+        return clients.size();
     }
 
     private ServerSettings readServerSettings() {
         //TODO
         return ServerSettings
                 .builder()
-                .ip("0.0.0.0")
-                .port(19132)
-                .motd("Allay Server")
-                .subMotd("Powered by Allay")
-                .maxPlayerCount(20)
+                .networkSettings(NetworkSettings
+                        .builder()
+                        .ip("0.0.0.0")
+                        .port(19132)
+                        .motd("Allay Server")
+                        .subMotd("Powered by Allay")
+                        .maxClientCount(20)
+                        .build())
                 .build();
     }
 

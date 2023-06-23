@@ -3,8 +3,9 @@ package cn.allay.server.item.type;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeRegistry;
+import cn.allay.api.item.type.VanillaItemTypes;
 import cn.allay.api.registry.SimpleMappedRegistry;
-import cn.allay.server.utils.PackageClassLoader;
+import lombok.SneakyThrows;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,10 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
         super(null, input -> new HashMap<>());
     }
 
+    @SneakyThrows
     public void init() {
-        PackageClassLoader.loadClasses("cn.allay.api.item.impl");
+        for (var field : VanillaItemTypes.class.getDeclaredFields()) {
+            var loaded = field.get(null);
+        }
     }
 }
