@@ -1,6 +1,7 @@
 package cn.allay.api.network;
 
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
+import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 
 /**
  * @author daoge_cmd
@@ -11,4 +12,6 @@ public interface NetworkServer {
     void start();
 
     BedrockPong getPong();
+
+    BedrockCodec getCodec();
 }

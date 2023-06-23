@@ -58,6 +58,11 @@ public class AllayNetworkServer implements NetworkServer {
                 .channel();
     }
 
+    @Override
+    public BedrockCodec getCodec() {
+        return CODEC;
+    }
+
     protected BedrockPong initPong(NetworkSettings networkSettings) {
         return new BedrockPong()
                 .edition("MCPE")

@@ -11,5 +11,7 @@ public interface NetworkProcessor {
     //TODO
     void onClientConnect(BedrockServerSession session);
 
+    void onClientDisconnect(Client client);
+
     NetworkSettings getNetworkSetting();
 }

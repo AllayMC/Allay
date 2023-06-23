@@ -2,6 +2,7 @@ package cn.allay.api.server;
 
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.network.NetworkProcessor;
+import cn.allay.api.network.NetworkServer;
 import cn.allay.api.network.NetworkSettings;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
 
@@ -38,4 +39,8 @@ public interface Server extends TaskCreator, NetworkProcessor {
     default NetworkSettings getNetworkSetting() {
         return getServerSettings().networkSettings();
     }
+
+    NetworkServer getNetworkServer();
+
+
 }

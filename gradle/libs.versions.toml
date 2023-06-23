@@ -39,7 +39,12 @@ fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.11" }
 # Reflections
 reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
 
+# Fasterxml Jackson
+jackson-core = { group = "com.fasterxml.jackson.core", name = "jackson-core", version = "2.14.2" }
+jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.14.2" }
+
 [bundles]
+fasterxml = ["jackson-core", "jackson-databind"]
 log4j-api = ["log4j-api", "slf4j-api", "slf4j-provider"]
 log4j-impl = ["log4j-core"]
 terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader"]
