@@ -9,7 +9,7 @@
     },
     "basalt_deltas": {
         "id": 181,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "beach": {
         "id": 16,
@@ -33,7 +33,7 @@
     },
     "cherry_grove": {
         "id": 192,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "cold_beach": {
         "id": 26,
@@ -45,19 +45,19 @@
     },
     "cold_taiga": {
         "id": 30,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "cold_taiga_hills": {
         "id": 31,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "cold_taiga_mutated": {
         "id": 158,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "crimson_forest": {
         "id": 179,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "deep_cold_ocean": {
         "id": 45,
@@ -65,7 +65,7 @@
     },
     "deep_dark": {
         "id": 190,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "deep_frozen_ocean": {
         "id": 47,
@@ -97,7 +97,7 @@
     },
     "dripstone_caves": {
         "id": 188,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "extreme_hills": {
         "id": 3,
@@ -137,7 +137,7 @@
     },
     "frozen_peaks": {
         "id": 183,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "frozen_river": {
         "id": 11,
@@ -145,7 +145,7 @@
     },
     "grove": {
         "id": 185,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "hell": {
         "id": 8,
@@ -153,19 +153,19 @@
     },
     "ice_mountains": {
         "id": 13,
-        "type": "ICE_PLAINS_SPIKES"
+        "type": "ICE"
     },
     "ice_plains": {
         "id": 12,
-        "type": "ICE_PLAINS_SPIKES"
+        "type": "ICE"
     },
     "ice_plains_spikes": {
         "id": 140,
-        "type": "ICE_PLAINS_SPIKES"
+        "type": "ICE"
     },
     "jagged_peaks": {
         "id": 182,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "jungle": {
         "id": 21,
@@ -197,23 +197,23 @@
     },
     "lush_caves": {
         "id": 187,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "mangrove_swamp": {
         "id": 191,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "meadow": {
         "id": 186,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "mega_taiga": {
         "id": 32,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "mega_taiga_hills": {
         "id": 33,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "mesa": {
         "id": 37,
@@ -253,15 +253,15 @@
     },
     "plains": {
         "id": 1,
-        "type": "PLAINS"
+        "type": "PLAIN"
     },
     "redwood_taiga_hills_mutated": {
         "id": 161,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "redwood_taiga_mutated": {
         "id": 160,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "river": {
         "id": 7,
@@ -293,23 +293,23 @@
     },
     "snowy_slopes": {
         "id": 184,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "soulsand_valley": {
         "id": 178,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "stone_beach": {
         "id": 25,
-        "type": "ROCKY_BEACH"
+        "type": "STONE_BEACH"
     },
     "stony_peaks": {
         "id": 189,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     },
     "sunflower_plains": {
         "id": 129,
-        "type": "PLAINS"
+        "type": "PLAIN"
     },
     "swampland": {
         "id": 6,
@@ -321,15 +321,15 @@
     },
     "taiga": {
         "id": 5,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "taiga_hills": {
         "id": 19,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "taiga_mutated": {
         "id": 133,
-        "type": "TAIGA_FOREST"
+        "type": "TAIGA"
     },
     "the_end": {
         "id": 9,
@@ -341,6 +341,6 @@
     },
     "warped_forest": {
         "id": 180,
-        "type": "CUSTOM"
+        "type": "DataDriven"
     }
 }
