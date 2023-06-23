@@ -1,26 +1,32 @@
 package cn.allay.server;
 
-import cn.allay.api.network.Network;
+import cn.allay.api.network.Client;
+import cn.allay.api.network.NetworkServer;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
-import cn.allay.server.network.AllayNetwork;
+import cn.allay.server.network.AllayNetworkServer;
+import cn.allay.server.player.AllayClient;
 import cn.allay.server.utils.GameLoop;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+
+import java.util.Set;
 
 @Slf4j
 @Getter
 public final class AllayServer implements Server {
 
     private ServerSettings serverSettings;
-    private Network network;
+    private NetworkServer networkServer;
+    private Set<Client> clients;
 
     @Override
     public void initServer() {
         this.serverSettings = readServerSettings();
-        this.network = initNetwork();
+        this.networkServer = initNetwork();
         log.info("Starting up network...");
-        this.network.start();
+        this.networkServer.start();
     }
 
     @Override
@@ -54,12 +60,17 @@ public final class AllayServer implements Server {
                 .build();
     }
 
-    private Network initNetwork() {
-        return new AllayNetwork(this);
+    private NetworkServer initNetwork() {
+        return new AllayNetworkServer(this);
     }
 
     @Override
     public boolean isValid() {
         return true;
+    }
+
+    @Override
+    public void onClientConnect(BedrockServerSession session) {
+        clients.add(AllayClient.hold(session));
     }
 }

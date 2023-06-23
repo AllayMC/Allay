@@ -3,15 +3,12 @@ package cn.allay.api.network;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 
 /**
- * The network component of spray
+ * @author daoge_cmd
+ * @date 2023/6/23
+ * Allay Project
  */
-public interface Network {
-    /**
-     * Initialize the network component
-     */
+public interface NetworkServer {
     void start();
 
     BedrockPong getPong();
-
-    void updatePong();
 }

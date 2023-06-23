@@ -1,7 +1,5 @@
 package cn.allay.api.data;
 
-import java.lang.Integer;
-import java.lang.String;
 import lombok.Getter;
 
 /**

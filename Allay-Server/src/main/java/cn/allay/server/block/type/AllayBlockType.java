@@ -2,14 +2,14 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
-import cn.allay.api.block.palette.BlockStateHashPalette;
-import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.component.impl.base.BlockBaseComponentImpl;
 import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
+import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.type.*;
+import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;

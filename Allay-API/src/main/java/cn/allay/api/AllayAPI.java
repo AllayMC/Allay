@@ -1,8 +1,8 @@
 package cn.allay.api;
 
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
-import cn.allay.api.block.palette.VanillaBlockStatePalette;
 import cn.allay.api.block.palette.BlockStateHashPalette;
+import cn.allay.api.block.palette.VanillaBlockStatePalette;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;

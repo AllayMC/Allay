@@ -1,9 +1,8 @@
 package cn.allay.server.network;
 
-import cn.allay.api.network.Network;
-import cn.allay.api.server.Server;
-import cn.allay.api.server.ServerSettings;
-import cn.allay.server.network.handlers.LoginHandler;
+import cn.allay.api.network.NetworkProcessor;
+import cn.allay.api.network.NetworkServer;
+import cn.allay.api.network.NetworkSettings;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -14,38 +13,44 @@ import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v568.Bedrock_v568;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
 
+/**
+ * @author daoge_cmd
+ * @date 2023/6/23
+ * Allay Project
+ */
 @Getter
-public class AllayNetwork implements Network {
+public class AllayNetworkServer implements NetworkServer {
 
-    protected static final BedrockCodec CODEC = Bedrock_v568.CODEC;
+    protected static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
 
-    protected Server server;
-    protected BedrockPong pong;
-    protected Channel networkServer;
     protected InetSocketAddress bindAddress;
+    //TODO: Update PONG
+    protected BedrockPong pong;
+    protected NetworkProcessor networkProcessor;
+    protected Channel channel;
 
-    public AllayNetwork(Server server) {
-        this.server = server;
+    public AllayNetworkServer(NetworkProcessor networkProcessor) {
+        this.networkProcessor = networkProcessor;
     }
 
     @Override
     public void start() {
-        var serverSettings = server.getServerSettings();
-        this.pong = initPong(serverSettings);
-        this.bindAddress = new InetSocketAddress(serverSettings.ip(), serverSettings.port());
-        this.networkServer = new ServerBootstrap()
+        var networkSettings = networkProcessor.getNetworkSetting();
+        this.pong = initPong(networkSettings);
+        this.bindAddress = new InetSocketAddress(networkSettings.ip(), networkSettings.port());
+        this.channel = new ServerBootstrap()
                 .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
                 .group(new NioEventLoopGroup())
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
-                        session.setPacketHandler(new LoginHandler(session));
+                        session.setCodec(CODEC);
+                        networkProcessor.onClientConnect(session);
                     }
                 })
                 .bind(bindAddress)
@@ -53,21 +58,14 @@ public class AllayNetwork implements Network {
                 .channel();
     }
 
-    @Override
-    public void updatePong() {
-        pong.playerCount(server.getOnlinePlayerCount());
-        //TODO
-        //pong.gameType()
-    }
-
-    protected BedrockPong initPong(ServerSettings settings) {
+    protected BedrockPong initPong(NetworkSettings networkSettings) {
         return new BedrockPong()
                 .edition("MCPE")
-                .motd(settings.motd())
-                .subMotd(settings.subMotd())
+                .motd(networkSettings.motd())
+                .subMotd(networkSettings.subMotd())
                 .playerCount(0)
-                .maximumPlayerCount(settings.maxPlayerCount())
-                .gameType("Survival")
+                .maximumPlayerCount(networkSettings.maxClientCount())
+                .gameType(networkSettings.gameType().name())
                 .protocolVersion(CODEC.getProtocolVersion());
     }
 }

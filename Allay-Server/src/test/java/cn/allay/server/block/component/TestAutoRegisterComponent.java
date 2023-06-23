@@ -1,6 +1,5 @@
 package cn.allay.server.block.component;
 
-import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.component.annotation.Inject;
 
 /**

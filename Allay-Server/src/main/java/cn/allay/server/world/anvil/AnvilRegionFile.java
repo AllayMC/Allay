@@ -2,7 +2,6 @@ package cn.allay.server.world.anvil;
 
 import cn.allay.api.utils.zlib.CompressionType;
 import cn.allay.api.utils.zlib.ZlibProviderType;
-import cn.allay.api.world.DimensionInfo;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
