@@ -1,5 +1,6 @@
 package cn.allay.api.network;
 
+import cn.allay.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
 
@@ -11,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
  * 描述一个玩家客户端，玩家客户端可以持有一个EntityHuman并操控它
  */
 public interface Client extends BedrockPacketHandler {
-    NetworkProcessor getNetworkProcessor();
+    Server getServer();
 
     void sendPacket(BedrockPacket packet);
 

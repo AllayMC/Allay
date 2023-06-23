@@ -1,7 +1,5 @@
 package cn.allay.api.player.skin;
 
-import lombok.ToString;
-
 import java.util.List;
 
 /**
@@ -9,7 +7,6 @@ import java.util.List;
  * @date 2023/6/23
  * Allay Project
  */
-@ToString
 public record PersonaPieceTint(String pieceType, List<String> colors) {
 
 }

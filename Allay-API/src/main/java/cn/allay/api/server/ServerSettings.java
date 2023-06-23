@@ -1,6 +1,6 @@
 package cn.allay.api.server;
 
-import cn.allay.api.network.NetworkSettings;
+import cn.allay.api.world.GameMode;
 import lombok.Builder;
 
 /**
@@ -8,6 +8,12 @@ import lombok.Builder;
  */
 @Builder
 public record ServerSettings(
-        NetworkSettings networkSettings
+        String motd,
+        String subMotd,
+        String ip,
+        int port,
+        int maxClientCount,
+        GameMode gameType,
+        boolean xboxAuth
 ) {
 }

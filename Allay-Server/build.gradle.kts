@@ -6,7 +6,7 @@ plugins {
 description = "Allay-Server"
 
 application {
-    mainClass.set("cn.allay.Allay")
+    mainClass.set("cn.allay.server.Allay")
 }
 
 dependencies {
