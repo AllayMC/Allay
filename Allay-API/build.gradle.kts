@@ -19,9 +19,6 @@ dependencies {
     api(libs.snakeyaml)
     api(libs.annotations)
     api(libs.reflections)
-    //TODO: No idea why this not work
-//    api(libs.fasterxml)
-    api("com.fasterxml.jackson.core", "jackson-core", "2.14.2")
-    api("com.fasterxml.jackson.core", "jackson-databind", "2.14.2")
+    api(libs.bundles.fasterxml)
     implementation(libs.libdeflate)
 }
