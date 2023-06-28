@@ -1,4 +1,4 @@
-package cn.allay.api.je2be;
+package cn.allay.api.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @date 6/7/2023 <br>
  * Allay Project
  */
-public final class DataConvert {
+public final class JEBEDataConvertUtils {
     private static final Pattern NUMBER = Pattern.compile("^[0-9]*$");
     private static final Gson gson = new GsonBuilder().setObjectToNumberStrategy(jsonReader -> {
         String value = jsonReader.nextString();
@@ -28,7 +28,7 @@ public final class DataConvert {
     public static void loadBlockStateMapping() {
         BE_2_JE_BLOCKS_MAPPING = new Object2ObjectOpenHashMap<>();
         JE_2_BE_BLOCKS_MAPPING = new Object2ObjectOpenHashMap<>();
-        try (var input = DataConvert.class.getClassLoader().getResourceAsStream("mappings/blocks.json")) {
+        try (var input = JEBEDataConvertUtils.class.getClassLoader().getResourceAsStream("mappings/blocks.json")) {
             assert input != null;
             Map<String, Map<String, Object>> blocks = gson.fromJson(new InputStreamReader(input), Map.class);
             blocks.forEach((k, v) -> {

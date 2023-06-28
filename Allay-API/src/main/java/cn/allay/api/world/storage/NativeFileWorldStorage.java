@@ -7,6 +7,6 @@ import java.nio.file.Path;
  * @date 2023/6/10 <br>
  * Allay Project <br>
  */
-public interface NativeFileWorldProvider extends WorldProvider {
+public interface NativeFileWorldStorage extends WorldStorage {
     Path getWorldFolderPath();
 }
