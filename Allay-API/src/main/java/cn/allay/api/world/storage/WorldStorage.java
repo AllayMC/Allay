@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
  * @date 5/30/2023 <br>
  * Allay Project
  */
-public interface WorldProvider {
+public interface WorldStorage {
     CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionData);
     CompletableFuture<Void> writeChunk(Chunk chunk);
     void writeWorldData(WorldData worldData);
