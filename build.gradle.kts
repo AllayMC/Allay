@@ -72,6 +72,12 @@ subprojects {
         withSourcesJar()
     }
 
+    tasks {
+        shadowJar {
+            transform(Log4j2PluginsCacheFileTransformer())
+        }
+    }
+
     tasks.named<Test>("test") {
         useJUnitPlatform()
         jvmArgs = listOf("--enable-preview")
@@ -80,6 +86,13 @@ subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.compilerArgs.add("--enable-preview")
+    }
+
+    tasks.withType<Javadoc> {
+        val javadocOptions = options as CoreJavadocOptions
+
+//        javadocOptions.addStringOption("source", "20")
+        javadocOptions.addBooleanOption("-enable-preview", true)
     }
 
     tasks.withType<Copy> {
@@ -91,12 +104,6 @@ subprojects {
         //Suppress some meaningless warnings
         options {
             (this as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
-        }
-    }
-
-    tasks {
-        shadowJar {
-            transform(Log4j2PluginsCacheFileTransformer())
         }
     }
 }
