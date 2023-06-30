@@ -2,7 +2,7 @@ package cn.allay.api.block.type;
 
 import cn.allay.api.block.impl.*;
 import cn.allay.api.data.VanillaBlockId;
-import cn.allay.api.data.VanillaBlockPropertyTypes;
+import cn.allay.api.block.property.VanillaBlockPropertyTypes;
 
 /**
  * @author daoge_cmd <br>

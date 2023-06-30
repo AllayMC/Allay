@@ -1,4 +1,4 @@
-package cn.allay.api.data;
+package cn.allay.api.block.property;
 
 import cn.allay.api.block.property.enums.*;
 import cn.allay.api.block.property.type.BlockPropertyType;

@@ -11,7 +11,7 @@ import cn.allay.api.block.type.BlockInitInfo;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.VanillaBlockTypes;
 import cn.allay.api.component.interfaces.ComponentProvider;
-import cn.allay.api.data.VanillaBlockPropertyTypes;
+import cn.allay.api.block.property.VanillaBlockPropertyTypes;
 import cn.allay.api.math.position.Pos;
 import cn.allay.server.block.component.TestComponentImpl;
 import cn.allay.server.block.component.TestComponentImplV2;
