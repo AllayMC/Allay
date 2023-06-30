@@ -3,6 +3,7 @@ package cn.allay.server.scheduler;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.scheduler.task.Task;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,8 +27,8 @@ public class AllayScheduler implements Scheduler {
     protected long tickCounter;
     protected AtomicInteger taskCount = new AtomicInteger(0);
 
-    public AllayScheduler(ExecutorService asyncTaskExecutor) {
-        this.asyncTaskExecutor = asyncTaskExecutor;
+    public AllayScheduler(@Nullable ExecutorService asyncTaskExecutor) {
+        this.asyncTaskExecutor = asyncTaskExecutor != null ? asyncTaskExecutor : Executors.newVirtualThreadPerTaskExecutor();
     }
 
     @Override
