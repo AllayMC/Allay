@@ -15,9 +15,14 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class AllayScheduler implements Scheduler {
 
-    protected static final Comparator<RunningTaskInfo> COMPARATOR = Comparator.comparing(RunningTaskInfo::getNextRunTick).reversed();
+    protected static final Comparator<RunningTaskInfo> COMPARATOR =
+            Comparator
+                    .comparing(RunningTaskInfo::getNextRunTick)
+                    .reversed();
+    protected static final int INITIAL_CAPACITY = 11;
+
     protected final ExecutorService asyncTaskExecutor;
-    protected final PriorityBlockingQueue<RunningTaskInfo> queue = new PriorityBlockingQueue<>(11, COMPARATOR);
+    protected final PriorityBlockingQueue<RunningTaskInfo> queue = new PriorityBlockingQueue<>(INITIAL_CAPACITY, COMPARATOR);
     protected long tickCounter;
     protected AtomicInteger taskCount = new AtomicInteger(0);
 

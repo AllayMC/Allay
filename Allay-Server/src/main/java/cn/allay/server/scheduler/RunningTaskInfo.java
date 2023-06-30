@@ -26,15 +26,8 @@ public final class RunningTaskInfo {
 
     @Getter
     @Setter
-    private long lastRunTick;
-    @Getter
-    @Setter
     private long nextRunTick;
     private final AtomicBoolean cancelled = new AtomicBoolean(false);
-    /**
-     * This boolean indicates whether Task.onRun() is being calling <p/>
-     * If async is true, the last run will be checked before each scheduler makes an asynchronous task call to prevent unexpected additional calls
-     */
     private final AtomicBoolean running = new AtomicBoolean(false);
 
     public boolean isCancelled() {

@@ -18,7 +18,7 @@ jobs:
           java-version: '20'
           distribution: 'temurin'
           cache: 'gradle'
-      - run: gradle build
+      - run: gradle shadowJar
       - name: Upload Allay-API
         uses: actions/upload-artifact@v3
         if: success()
