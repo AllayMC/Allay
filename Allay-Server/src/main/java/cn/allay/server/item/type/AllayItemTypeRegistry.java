@@ -6,7 +6,12 @@ import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.item.type.VanillaItemTypes;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ProgressBar;
+import me.tongfei.progressbar.ProgressBarBuilder;
+import me.tongfei.progressbar.ProgressBarStyle;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +20,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> implements ItemTypeRegistry {
     public AllayItemTypeRegistry() {
         super(null, input -> new HashMap<>());
@@ -22,8 +28,9 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
 
     @SneakyThrows
     public void init() {
-        for (var field : VanillaItemTypes.class.getDeclaredFields()) {
-            var loaded = field.get(null);
-        }
+        var fields = VanillaItemTypes.class.getDeclaredFields();
+        log.info("Loading Item Types...");
+        fields[0].get(null);
+        log.info("Loaded " + fields.length + " Item Types");
     }
 }

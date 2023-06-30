@@ -7,6 +7,8 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.server.world.biome.AllayBiomeRegistry;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ProgressBar;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
@@ -18,6 +20,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, EntityType<?>, Map<Identifier, EntityType<?>>> implements EntityTypeRegistry {
 
     private NbtMap availableEntityIdentifierTag;
@@ -29,9 +32,10 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
 
     @SneakyThrows
     public void init() {
-        for (var field : VanillaEntityTypes.class.getDeclaredFields()) {
-            var loaded = field.get(null);
-        }
+        var fields = VanillaEntityTypes.class.getDeclaredFields();
+        log.info("Loading Entity Types...");
+        fields[0].get(null);
+        log.info("Loaded " + fields.length + " Entity Types");
     }
 
     @SneakyThrows

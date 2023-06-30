@@ -6,6 +6,8 @@ import cn.allay.api.block.type.VanillaBlockTypes;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ProgressBar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +17,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>> implements BlockTypeRegistry {
     public AllayBlockTypeRegistry() {
         super(null, input -> new HashMap<>());
@@ -22,8 +25,9 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
 
     @SneakyThrows
     public void init() {
-        for (var field : VanillaBlockTypes.class.getDeclaredFields()) {
-            var loaded = field.get(null);
-        }
+        var fields = VanillaBlockTypes.class.getDeclaredFields();
+        log.info("Loading Block Types...");
+        fields[0].get(null);
+        log.info("Loaded " + fields.length + " Block Types");
     }
 }

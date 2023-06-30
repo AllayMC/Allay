@@ -77,7 +77,7 @@ public final class AllayAPI {
             }
         }
         //TODO: multilingual support
-        log.info("This server is running " + coreName + ", implement Allay-API version " + API_VERSION);
+        log.info("This server is running " + coreName + ", implement Allay-API version §b" + API_VERSION);
         implemented = true;
     }
 
