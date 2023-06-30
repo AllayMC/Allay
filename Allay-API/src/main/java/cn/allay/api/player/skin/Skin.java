@@ -1,13 +1,13 @@
 package cn.allay.api.player.skin;
 
 import cn.allay.api.utils.Utils;
-import com.nimbusds.jose.shaded.json.JSONObject;
-import com.nimbusds.jose.shaded.json.JSONValue;
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.cloudburstmc.protocol.bedrock.data.skin.*;
+import org.jose4j.json.internal.json_simple.JSONObject;
+import org.jose4j.json.internal.json_simple.JSONValue;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,6 +19,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+;
 
 /**
  * Allay Project 2023/6/23

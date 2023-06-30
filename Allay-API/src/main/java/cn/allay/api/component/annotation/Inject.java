@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * <p>
  * Allay Project 2023/3/4
  *
- * @author daoge_cmd <br>
+ * @author daoge_cmd
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

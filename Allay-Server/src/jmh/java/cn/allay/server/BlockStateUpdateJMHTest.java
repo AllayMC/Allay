@@ -5,6 +5,7 @@ import cn.allay.api.block.impl.BlockWood;
 import cn.allay.api.block.property.enums.PillarAxis;
 import cn.allay.api.block.property.enums.WoodType;
 import cn.allay.api.block.type.BlockInitInfo;
+import cn.allay.api.block.type.VanillaBlockTypes;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 import cn.allay.api.math.position.Pos;
 import org.openjdk.jmh.annotations.*;
@@ -28,7 +29,7 @@ public class BlockStateUpdateJMHTest {
     @Setup
     public void init() throws MissingImplementationException {
         Allay.initAllayAPI();
-        wood = BlockWood.TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        wood = VanillaBlockTypes.WOOD_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
     }
 
     @Benchmark

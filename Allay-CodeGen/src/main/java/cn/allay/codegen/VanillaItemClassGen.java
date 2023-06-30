@@ -24,9 +24,7 @@ public class VanillaItemClassGen {
 
     private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaItemTypes")
             .addModifiers(Modifier.PUBLIC)
-            .addJavadoc(
-                    "@author daoge_cmd <br>\n" +
-                    "Allay Project <br>\n");
+            .addJavadoc("Allay Project <p>\n@author daoge_cmd");
 
     public static void main(String[] args) {
         generate();
@@ -72,7 +70,7 @@ public class VanillaItemClassGen {
                 .addSuperinterface(ITEM_CLASS_NAME)
                 .addJavadoc(
                         "@author daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
+                                "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var javaFile = JavaFile.builder("cn.allay.api.item.impl", codeBuilder.build()).build();
         Files.writeString(path, javaFile.toString());

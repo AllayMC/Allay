@@ -12,10 +12,10 @@ application {
 dependencies {
     implementation(project(":Allay-API"))
     implementation(libs.bundles.log4j.impl)
-    implementation(libs.bytebuddy)
     implementation(libs.bundles.terminal)
-    testImplementation(libs.bytebuddy)
+    implementation(libs.bytebuddy)
     testImplementation(libs.bundles.log4j.impl)
+    testImplementation(libs.bytebuddy)
 }
 
 tasks.processResources {

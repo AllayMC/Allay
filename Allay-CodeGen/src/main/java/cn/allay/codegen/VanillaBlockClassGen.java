@@ -30,9 +30,7 @@ public class VanillaBlockClassGen {
 
     private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaBlockTypes")
             .addModifiers(Modifier.PUBLIC)
-            .addJavadoc(
-                    "@author daoge_cmd <br>\n" +
-                    "Allay Project <br>\n");
+            .addJavadoc("Allay Project <p>\n@author daoge_cmd");
 
     public static void main(String[] args) {
         generate();
