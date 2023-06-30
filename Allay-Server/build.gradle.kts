@@ -31,6 +31,11 @@ tasks.jmh {
     jvmArgs.add("--enable-preview")
 }
 
+//Hiding this task should use runShadow
+tasks.named("run") {
+    group = ""
+}
+
 tasks.runShadow {
     jvmArgs?.add("--enable-preview")
 }
