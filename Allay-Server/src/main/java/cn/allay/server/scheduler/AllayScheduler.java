@@ -4,9 +4,9 @@ import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.scheduler.task.Task;
 
 import java.util.Comparator;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Allay Project 2023/4/28
@@ -16,39 +16,45 @@ import java.util.concurrent.PriorityBlockingQueue;
 public class AllayScheduler implements Scheduler {
 
     protected static final Comparator<RunningTaskInfo> COMPARATOR = Comparator.comparing(RunningTaskInfo::getNextRunTick).reversed();
-    protected final ExecutorService asyncTaskExecutor = getExecutorService();
+    protected final ExecutorService asyncTaskExecutor;
     protected final PriorityBlockingQueue<RunningTaskInfo> queue = new PriorityBlockingQueue<>(11, COMPARATOR);
     protected long tickCounter;
+    protected AtomicInteger taskCount = new AtomicInteger(0);
+
+    public AllayScheduler(ExecutorService asyncTaskExecutor) {
+        this.asyncTaskExecutor = asyncTaskExecutor;
+    }
 
     @Override
     public void ticking() {
         tickCounter++;
-        while (!this.queue.isEmpty() && this.queue.peek().getNextRunTick() <= tickCounter) {
-            var taskInfo = this.queue.poll();
-            Task task = taskInfo.getTask();
+        while (!queue.isEmpty() && queue.peek().getNextRunTick() <= tickCounter) {
+            var taskInfo = queue.poll();
+            var task = taskInfo.getTask();
             //1. Confirm validity
             if (taskInfo.isCancelled() || !task.getTaskCreator().isValid()) {
-                taskInfo.setCancelled(true);
-                task.onCancel();
+                cancelTask(taskInfo, task);
                 continue;
             }
 
             //2. Run it
-            if (taskInfo.isAsync()) asyncTaskExecutor.submit(() -> runTask(taskInfo));
-            else runTask(taskInfo);
+            if (taskInfo.isAsync())
+                asyncTaskExecutor.submit(() -> runTask(taskInfo));
+            else
+                runTask(taskInfo);
         }
     }
 
     @Override
     public void scheduleDelayed(Task task, int delay, boolean async) {
         var taskInfo = new RunningTaskInfo(task, delay, 0, async);
-        this.addInQueue(taskInfo);
+        addTask(taskInfo);
     }
 
     @Override
     public void scheduleRepeating(Task task, int period, boolean async) {
         var taskInfo = new RunningTaskInfo(task, 0, period, async);
-        this.addInQueue(taskInfo);
+        addTask(taskInfo);
     }
 
     @Override
@@ -58,16 +64,16 @@ public class AllayScheduler implements Scheduler {
 
     @Override
     public int getRunningTaskCount() {
-        return queue.size();
+        return taskCount.get();
     }
 
     @Override
     public void stop() {
-        this.queue.forEach(entry -> {
-            entry.setCancelled(true);
-            entry.getTask().onCancel();
+        queue.forEach(entry -> {
+            var task = entry.getTask();
+            cancelTask(entry, task);
         });
-        this.queue.clear();
+        queue.clear();
     }
 
     protected void runTask(RunningTaskInfo info) {
@@ -84,23 +90,29 @@ public class AllayScheduler implements Scheduler {
             if (!info.isRepeating()) {
                 cancelTask(info, task);
             } else {
-                addInQueue(info);
+                addTask(info, false);
             }
         }
     }
 
     protected void cancelTask(RunningTaskInfo info, Task task) {
+        if (info.isCancelled()) return;
         info.setCancelled(true);
         task.onCancel();
+        taskCount.decrementAndGet();
     }
 
-    protected void addInQueue(RunningTaskInfo taskInfo) {
-        if (taskInfo.isRepeating()) taskInfo.setNextRunTick(tickCounter + taskInfo.getPeriod());
-        else taskInfo.setNextRunTick(tickCounter + taskInfo.getDelay());
+    protected void addTask(RunningTaskInfo taskInfo) {
+        addTask(taskInfo, true);
+    }
+
+    protected void addTask(RunningTaskInfo taskInfo, boolean firstTime) {
+        if (taskInfo.isRepeating())
+            taskInfo.setNextRunTick(tickCounter + taskInfo.getPeriod());
+        else
+            taskInfo.setNextRunTick(tickCounter + taskInfo.getDelay());
         queue.add(taskInfo);
-    }
-
-    protected ExecutorService getExecutorService() {
-        return Executors.newVirtualThreadPerTaskExecutor();
+        if (firstTime)
+            taskCount.incrementAndGet();
     }
 }

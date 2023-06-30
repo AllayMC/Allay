@@ -140,7 +140,7 @@ public final class AllayServer implements Server {
     @Override
     public void onClientDisconnect(Client client) {
         var disconnected = clients.remove(client.getName());
-        if (disconnected != null) {
+        if (disconnected == null) {
             throw new IllegalArgumentException("Client is not connected: " + client.getName());
         }
     }
