@@ -8,6 +8,7 @@ import cn.allay.api.world.GameMode;
 import cn.allay.api.world.World;
 import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.player.AllayClient;
+import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.utils.GameLoop;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,25 +18,67 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
-@Getter
 public final class AllayServer implements Server {
 
+    @Getter
     private final Map<String, Client> clients = new ConcurrentHashMap<>();
+    @Getter
     private ServerSettings serverSettings;
+    @Getter
     private NetworkServer networkServer;
+    @Getter
     private final Map<String, World> worlds = new ConcurrentHashMap<>();
+    @Getter
     private World defaultWorld;
 
+    private Thread terminalConsoleThread;
+    private AllayTerminalConsole terminalConsole;
+    private final AtomicBoolean isRunning = new AtomicBoolean(true);
+
     @Override
-    public void initServer() {
+    public void start() {
+        initTerminalConsole();
         this.serverSettings = readServerSettings();
         this.networkServer = initNetwork();
         log.info("Starting up network server...");
         this.networkServer.start();
         log.info("Network server started.");
         loadWorlds();
+
+        loop();
+    }
+
+    private void loop() {
+        GameLoop.builder()
+                .loopCountPerSec(20)
+                .onTick(loop -> {
+                    if (isRunning.get())
+                        onTick();
+                    else loop.stop();
+                })
+                .onStop(() -> isRunning.set(false))
+                .build()
+                .startLoop();
+    }
+
+    private void initTerminalConsole() {
+        terminalConsole = new AllayTerminalConsole(this);
+        terminalConsoleThread = new AllayTerminalConsoleThread();
+        terminalConsoleThread.start();
+    }
+
+    private class AllayTerminalConsoleThread extends Thread {
+        public AllayTerminalConsoleThread() {
+            super("Console Thread");
+        }
+
+        @Override
+        public void run() {
+            terminalConsole.start();
+        }
     }
 
     private void loadWorlds() {
@@ -43,12 +86,8 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void startMainLoop() {
-        GameLoop.builder()
-                .loopCountPerSec(20)
-                .onTick(loop -> onTick())
-                .build()
-                .startLoop();
+    public void shutdown() {
+        isRunning.compareAndSet(true, false);
     }
 
     private void onTick() {
@@ -104,5 +143,10 @@ public final class AllayServer implements Server {
         if (disconnected != null) {
             throw new IllegalArgumentException("Client is not connected: " + client.getName());
         }
+    }
+
+    @Override
+    public boolean isRunning() {
+        return isRunning.get();
     }
 }

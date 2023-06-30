@@ -11,10 +11,7 @@ application {
 
 dependencies {
     implementation(project(":Allay-API"))
-    implementation(libs.bundles.log4j.impl)
-    implementation(libs.bundles.terminal)
     implementation(libs.bytebuddy)
-    testImplementation(libs.bundles.log4j.impl)
     testImplementation(libs.bytebuddy)
 }
 

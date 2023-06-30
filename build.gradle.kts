@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
+
 repositories {
     mavenLocal()
     mavenCentral()
@@ -89,6 +91,12 @@ subprojects {
         //Suppress some meaningless warnings
         options {
             (this as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
+        }
+    }
+
+    tasks {
+        shadowJar {
+            transform(Log4j2PluginsCacheFileTransformer())
         }
     }
 }

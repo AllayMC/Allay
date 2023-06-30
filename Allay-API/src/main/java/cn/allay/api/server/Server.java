@@ -21,14 +21,13 @@ public interface Server extends TaskCreator {
     }
 
     /**
-     * Initialize the server
+     * Start the server
      */
-    void initServer();
+    void start();
 
-    /**
-     * Start the server main loop
-     */
-    void startMainLoop();
+    void shutdown();
+
+    boolean isRunning();
 
     /**
      * Get the server settings

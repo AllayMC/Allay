@@ -32,7 +32,8 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  */
 public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
-    protected static final boolean DEBUG = true;
+    //TODO: remove this
+    protected static final boolean DEBUG = false;
 
     protected static final String COMPONENT_LIST_FIELD_NAME = "components";
     protected static final String INIT_METHOD_NAME = "initComponents";

@@ -5,7 +5,8 @@ plugins {
 description = "Allay-API"
 
 dependencies {
-    api(libs.bundles.log4j.api)
+    api(libs.bundles.logging)
+    api(libs.bundles.terminal)
     api(libs.network) {
         //use allay nbt
         exclude(group = "org.cloudburstmc", module = "nbt")
@@ -19,5 +20,6 @@ dependencies {
     api(libs.snakeyaml)
     api(libs.annotations)
     api(libs.reflections)
+    api(libs.progressbar)
     implementation(libs.libdeflate)
 }

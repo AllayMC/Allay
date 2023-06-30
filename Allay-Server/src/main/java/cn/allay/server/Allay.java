@@ -44,8 +44,7 @@ public final class Allay {
             e.printStackTrace();
             System.exit(1);
         }
-        Server.getInstance().initServer();
-        Server.getInstance().startMainLoop();
+        Server.getInstance().start();
     }
 
     @VisibleForTesting
