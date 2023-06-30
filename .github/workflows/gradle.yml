@@ -31,4 +31,4 @@ jobs:
         if: success()
         with:
           name: Allay-Server
-          path: Allay-Server/build/libs/Allay-Server.jar
+          path: Allay-Server/build/libs/Allay-Server-all.jar
