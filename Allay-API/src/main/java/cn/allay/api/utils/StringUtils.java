@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
- * <p>
  * String helpers
+ * <p>
+ * Allay Project 2023/3/4
+ *
+ * @author daoge_cmd
  */
 public class StringUtils {
     public static List<String> fastSplit(String str, String delimiter) {

@@ -3,9 +3,9 @@ package cn.allay.api.world.palette.bitarray;
 import io.netty.buffer.ByteBuf;
 
 /**
- * @author JukeboxMC | daoge_cmd <br>
- * @date 2023/4/14 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/14
+ *
+ * @author JukeboxMC | daoge_cmd
  */
 public final class SingletonBitArray implements BitArray {
 

@@ -5,9 +5,9 @@ import lombok.SneakyThrows;
 import java.nio.file.Path;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/26 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/26
+ *
+ * @author daoge_cmd
  */
 public final class TestUtils {
 

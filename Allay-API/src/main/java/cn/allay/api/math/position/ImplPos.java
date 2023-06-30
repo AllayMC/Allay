@@ -3,9 +3,9 @@ package cn.allay.api.math.position;
 import cn.allay.api.world.World;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/11 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/11
+ *
+ * @author daoge_cmd
  */
 class ImplPos<T extends Number> extends ImplFixedPos<T> implements Pos<T> {
     public ImplPos(T x, T y, T z, World world) {

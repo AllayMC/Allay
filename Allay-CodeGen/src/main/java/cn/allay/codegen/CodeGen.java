@@ -18,9 +18,9 @@ import java.util.zip.GZIPInputStream;
 import static cn.allay.codegen.Utils.convertToPascalCase;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/8 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/8
+ *
+ * @author daoge_cmd
  */
 public class CodeGen {
     static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

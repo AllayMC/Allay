@@ -5,9 +5,9 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/19 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/19
+ *
+ * @author daoge_cmd
  */
 public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockPropertyType<T> {
 

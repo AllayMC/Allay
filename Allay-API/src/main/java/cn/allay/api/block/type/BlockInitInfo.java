@@ -4,9 +4,9 @@ import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.math.position.Pos;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/21 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/21
+ *
+ * @author daoge_cmd
  */
 public interface BlockInitInfo extends ComponentInitInfo {
 

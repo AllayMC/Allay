@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 import static cn.allay.codegen.CodeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/8 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/8
+ *
+ * @author daoge_cmd
  */
 public class VanillaBlockPropertyTypeGen {
 

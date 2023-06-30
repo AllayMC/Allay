@@ -24,11 +24,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
- * <p>
  * The default injector which use byte-buddy
+ * <p>
+ * Allay Project 2023/3/4
+ *
+ * @author daoge_cmd
  */
 public class AllayComponentInjector<T> implements ComponentInjector<T> {
 

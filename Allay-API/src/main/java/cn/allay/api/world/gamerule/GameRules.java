@@ -6,9 +6,9 @@ import org.cloudburstmc.protocol.bedrock.packet.GameRulesChangedPacket;
 import java.util.*;
 
 /**
- * @author Jukebox | Cool_Loong <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/4
+ *
+ * @author Jukebox | Cool_Loong
  */
 public class GameRules {
 

@@ -9,11 +9,10 @@ package cn.allay.server.world;
 import java.nio.file.Path;
 
 /**
- * @author Cool_Loong <br>
- * @date 5/31/2023 <br>
- * Allay Project
+ * Allay Project 2023/5/31
+ *
+ * @author Cool_Loong
  */
-
 public class AllayWorldDataTest {
     final Path je = Path.of("src/test/resources/world/jelevel.dat");
     final Path be = Path.of("src/test/resources/world/belevel.dat");

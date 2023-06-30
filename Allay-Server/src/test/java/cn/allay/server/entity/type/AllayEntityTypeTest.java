@@ -12,9 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/26 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/26
+ *
+ * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
 class AllayEntityTypeTest {

@@ -8,9 +8,9 @@ import cn.allay.api.identifier.Identified;
 import java.util.List;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/20 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/20
+ *
+ * @author daoge_cmd
  */
 public interface EntityType<T extends Entity> extends Identified {
     List<ComponentProvider<? extends EntityComponentImpl>> getComponentProviders();

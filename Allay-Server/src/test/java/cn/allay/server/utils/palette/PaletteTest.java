@@ -1,9 +1,9 @@
 package cn.allay.server.utils.palette;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/14 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/14
+ *
+ * @author daoge_cmd
  */
 public class PaletteTest {
 }

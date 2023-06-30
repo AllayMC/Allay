@@ -1,9 +1,9 @@
 package cn.allay.api.component.interfaces;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/21 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/21
+ *
+ * @author daoge_cmd
  */
 public interface ComponentInitInfo {
 

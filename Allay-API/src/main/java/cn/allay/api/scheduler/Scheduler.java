@@ -4,11 +4,11 @@ import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.scheduler.task.Task;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/12 <br>
- * Allay Project <br>
- * <p>
  * scheduler
+ * <p>
+ * Allay Project 2023/3/12
+ *
+ * @author daoge_cmd
  */
 public interface Scheduler {
 

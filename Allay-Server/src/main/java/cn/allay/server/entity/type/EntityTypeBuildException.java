@@ -1,9 +1,9 @@
 package cn.allay.server.entity.type;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/15 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/15
+ *
+ * @author daoge_cmd
  */
 public class EntityTypeBuildException extends RuntimeException {
     public EntityTypeBuildException() {

@@ -9,10 +9,9 @@ import cn.allay.api.identifier.Identified;
  * <p>
  * The namespace ID of this component implementation will be used when injecting component dependencies
  * <p>
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/4
  *
+ * @author daoge_cmd
  * @see Dependency
  */
 public interface ComponentImpl extends Identified {

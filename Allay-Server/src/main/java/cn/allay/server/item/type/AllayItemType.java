@@ -27,9 +27,9 @@ import java.util.List;
 import static java.lang.reflect.Modifier.isStatic;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/19 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/19
+ *
+ * @author daoge_cmd
  */
 public class AllayItemType<T extends ItemStack> implements ItemType<T> {
     protected Class<T> interfaceClass;

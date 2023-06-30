@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.zip.DataFormatException;
 
 /**
- * @author Cool_Loong <br>
- * @date 6/6/2023 <br>
- * Allay Project
+ * Allay Project 2023/6/6
+ *
+ * @author Cool_Loong
  */
 public final class LibDeflateThreadLocal implements ZlibProvider {
     private CompressionType type;

@@ -6,9 +6,9 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.interfaces.TestInitArgComponent;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/21 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/21
+ *
+ * @author daoge_cmd
  */
 public class SimpleTestInitArgComponent implements TestInitArgComponent, ComponentImpl {
 

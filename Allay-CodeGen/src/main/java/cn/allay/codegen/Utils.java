@@ -6,9 +6,9 @@ import cn.allay.dependence.StringUtils;
 import java.util.List;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/8 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/8
+ *
+ * @author daoge_cmd
  */
 public class Utils {
     public static String convertToPascalCase(String str) {

@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Cool_Loong <br>
- * @date 2023/5/29 <br>
- * Allay Project
+ * Allay Project 2023/5/29
+ *
+ * @author Cool_Loong
  */
 @Slf4j
 public class AllayBlockStateHashPalette extends SimpleMappedRegistry<Integer, BlockState, Map<Integer, BlockState>> implements BlockStateHashPalette {

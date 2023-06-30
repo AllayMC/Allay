@@ -7,9 +7,9 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/19 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/19
+ *
+ * @author daoge_cmd
  */
 @Getter
 @Accessors(fluent = true)

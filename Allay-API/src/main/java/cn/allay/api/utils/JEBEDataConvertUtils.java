@@ -12,9 +12,9 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 /**
- * @author Cool_Loong <br>
- * @date 6/7/2023 <br>
- * Allay Project
+ * Allay Project 2023/6/7
+ *
+ * @author Cool_Loong
  */
 public final class JEBEDataConvertUtils {
     private static final Pattern NUMBER = Pattern.compile("^[0-9]*$");

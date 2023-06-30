@@ -6,12 +6,11 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/1 <br>
- * Allay Project <br>
- * <p>
  * This junit extension is used to prepare the test environment
- * TODO
+ * <p>
+ * Allay Project 2023/5/1
+ *
+ * @author daoge_cmd
  */
 public class AllayTestExtension implements BeforeAllCallback {
     @Override

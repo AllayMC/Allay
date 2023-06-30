@@ -6,9 +6,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/29 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/29
+ *
+ * @author daoge_cmd
  */
 public interface BlockState {
     BlockType<?> blockType();

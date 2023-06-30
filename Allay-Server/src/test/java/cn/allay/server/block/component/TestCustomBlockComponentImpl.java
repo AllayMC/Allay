@@ -4,9 +4,9 @@ import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
 import cn.allay.api.identifier.Identifier;
 
 /**
- * @author Cool_Loong <br>
- * @date 6/3/2023 <br>
- * Allay Project
+ * Allay Project 2023/6/3
+ *
+ * @author Cool_Loong
  */
 public class TestCustomBlockComponentImpl extends CustomBlockComponentImpl {
     @Override

@@ -1,9 +1,9 @@
 package cn.allay.api.player;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/26 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/26
+ *
+ * @author daoge_cmd
  */
 public interface Player {
 }

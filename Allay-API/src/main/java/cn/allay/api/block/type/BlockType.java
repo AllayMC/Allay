@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/19 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/19
+ *
+ * @author daoge_cmd
  */
 @SuppressWarnings("unchecked")
 public interface BlockType<T extends Block> extends Identified {

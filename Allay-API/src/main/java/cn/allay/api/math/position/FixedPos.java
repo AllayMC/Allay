@@ -4,9 +4,9 @@ import cn.allay.api.math.vector.FixedVec3;
 import cn.allay.api.world.World;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/4
+ *
+ * @author daoge_cmd
  */
 public interface FixedPos<T extends Number> extends FixedVec3<T> {
 

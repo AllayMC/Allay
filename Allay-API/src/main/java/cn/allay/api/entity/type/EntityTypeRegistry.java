@@ -8,9 +8,9 @@ import org.cloudburstmc.nbt.NbtMap;
 import java.util.Map;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/20 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/20
+ *
+ * @author daoge_cmd
  */
 public interface EntityTypeRegistry extends MappedRegistry<Identifier, EntityType<?>, Map<Identifier, EntityType<?>>> {
     ApiInstanceHolder<EntityTypeRegistry> REGISTRY = ApiInstanceHolder.of();

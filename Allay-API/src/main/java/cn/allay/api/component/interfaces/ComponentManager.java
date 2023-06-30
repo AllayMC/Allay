@@ -1,9 +1,9 @@
 package cn.allay.api.component.interfaces;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/6 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/6
+ *
+ * @author daoge_cmd
  */
 public interface ComponentManager {
     <T extends ComponentEvent> T callEvent(T event);

@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/6 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/6
+ *
+ * @author daoge_cmd
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

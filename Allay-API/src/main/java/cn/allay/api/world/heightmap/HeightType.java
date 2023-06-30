@@ -1,9 +1,9 @@
 package cn.allay.api.world.heightmap;
 
 /**
- * @author Cool_Loong <br>
- * @date 5/31/2023 <br>
- * Allay Project
+ * Allay Project 2023/5/31
+ *
+ * @author Cool_Loong
  */
 public enum HeightType {
     WORLD_SURFACE,

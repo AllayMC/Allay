@@ -5,11 +5,11 @@ import cn.allay.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
 /**
- * @author daoge_cmd
- * @date 2023/6/23
- * Allay Project
- * <br>
  * 描述一个玩家客户端，玩家客户端可以持有一个EntityHuman并操控它
+ * <p>
+ * Allay Project 2023/6/23
+ *
+ * @author daoge_cmd
  */
 public interface Client {
     Server getServer();

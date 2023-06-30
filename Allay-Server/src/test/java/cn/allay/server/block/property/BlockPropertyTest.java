@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/9 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/9
+ *
+ * @author daoge_cmd
  */
 public class BlockPropertyTest {
 

@@ -6,9 +6,9 @@ import org.cloudburstmc.math.GenericMath;
 import java.util.Arrays;
 
 /**
- * @author JukeboxMC | daoge_cmd <br>
- * @date 2023/4/14 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/14
+ *
+ * @author JukeboxMC | daoge_cmd
  */
 @Getter
 public final class Pow2BitArray implements BitArray {

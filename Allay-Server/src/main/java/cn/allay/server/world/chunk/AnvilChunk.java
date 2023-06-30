@@ -1,4 +1,4 @@
-package cn.allay.server.world.anvil.chunk;
+package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
@@ -19,9 +19,9 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * @author Cool_Loong <br>
- * @date 5/30/2023 <br>
- * Allay Project
+ * Allay Project 5/30/2023
+ *
+ * @author Cool_Loong
  */
 @ThreadSafe
 public class AnvilChunk implements Chunk {

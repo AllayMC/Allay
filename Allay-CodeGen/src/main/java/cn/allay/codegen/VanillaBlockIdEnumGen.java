@@ -11,9 +11,9 @@ import java.nio.file.Path;
 import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
 
 /**
- * @author daoge_cmd | Cool_Loong <br>
- * @date 2023/3/26 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/26
+ *
+ * @author daoge_cmd | Cool_Loong
  */
 public class VanillaBlockIdEnumGen {
     private static final ClassName stringClass = ClassName.get("java.lang", "String");

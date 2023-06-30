@@ -3,9 +3,9 @@ package cn.allay.api.item.component.impl.attribute;
 import cn.allay.api.component.annotation.Inject;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/19 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/19
+ *
+ * @author daoge_cmd
  */
 public interface ItemAttributeComponent {
     @Inject

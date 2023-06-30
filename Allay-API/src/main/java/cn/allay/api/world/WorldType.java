@@ -5,9 +5,9 @@ import lombok.Getter;
 import org.jetbrains.annotations.Range;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/6/3 <br>
- * Allay Project <br>
+ * Allay Project 2023/6/3
+ *
+ * @author daoge_cmd
  */
 @AllArgsConstructor
 @Getter

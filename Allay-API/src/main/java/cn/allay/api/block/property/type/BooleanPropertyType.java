@@ -3,9 +3,9 @@ package cn.allay.api.block.property.type;
 import java.util.List;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/19 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/19
+ *
+ * @author daoge_cmd
  */
 public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
 

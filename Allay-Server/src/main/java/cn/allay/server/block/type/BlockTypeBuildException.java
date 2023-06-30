@@ -1,9 +1,9 @@
 package cn.allay.server.block.type;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/15 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/15
+ *
+ * @author daoge_cmd
  */
 public class BlockTypeBuildException extends RuntimeException {
     public BlockTypeBuildException() {

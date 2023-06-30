@@ -18,9 +18,9 @@ import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitiali
 import java.net.InetSocketAddress;
 
 /**
+ * Allay Project 2023/6/23
+ *
  * @author daoge_cmd
- * @date 2023/6/23
- * Allay Project
  */
 @Getter
 public class AllayNetworkServer implements NetworkServer {

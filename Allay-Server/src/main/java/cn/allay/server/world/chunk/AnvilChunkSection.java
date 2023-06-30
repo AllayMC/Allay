@@ -1,4 +1,4 @@
-package cn.allay.server.world.anvil.chunk;
+package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockState;
@@ -12,9 +12,9 @@ import javax.annotation.concurrent.NotThreadSafe;
 import java.util.concurrent.locks.ReadWriteLock;
 
 /**
- * @author Cool_Loong <br>
- * @date 5/30/2023 <br>
- * Allay Project
+ * Allay Project 2023/5/30
+ *
+ * @author Cool_Loong
  */
 @NotThreadSafe
 public class AnvilChunkSection implements ChunkSection {

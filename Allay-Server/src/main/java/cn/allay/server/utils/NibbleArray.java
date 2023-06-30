@@ -8,9 +8,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
 
 /**
- * @author Cool_Loong <br>
- * @date 5/30/2023 <br>
- * Allay Project
+ * Allay Project 2023/5/30
+ *
+ * @author Cool_Loong
  */
 public final class NibbleArray implements Cloneable {
     private final int size;

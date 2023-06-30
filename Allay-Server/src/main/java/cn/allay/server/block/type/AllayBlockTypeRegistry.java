@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/26 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/26
+ *
+ * @author daoge_cmd
  */
 public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>> implements BlockTypeRegistry {
     public AllayBlockTypeRegistry() {

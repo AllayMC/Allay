@@ -1,9 +1,9 @@
 package cn.allay.api.player.info;
 
 /**
+ * Allay Project 2023/6/23
+ *
  * @author LucGamesYT | daoge_cmd
- * @date 2023/6/23
- * Allay Project
  */
 public enum UIProfile {
 

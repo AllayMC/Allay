@@ -11,9 +11,9 @@ import java.nio.file.Path;
 import static cn.allay.codegen.CodeGen.ENTITY_ID_MAP;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/20 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/20
+ *
+ * @author daoge_cmd
  */
 public class VanillaEntityIdEnumGen {
     public static final ClassName API_IDENTIFIER_CLASS = ClassName.get("cn.allay.api.identifier", "Identifier");

@@ -3,9 +3,9 @@ package cn.allay.api.utils.zlib;
 import java.io.IOException;
 
 /**
- * @author Cool_Loong <br>
- * @date 6/6/2023 <br>
- * Allay Project
+ * Allay Project 2023/6/6
+ *
+ * @author Cool_Loong
  */
 public interface ZlibProvider {
     byte[] deflate(byte[] data) throws IOException;

@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 import static java.lang.reflect.Modifier.isStatic;
 
 /**
- * @author daoge_cmd | Cool_Loong<br>
- * @date 2023/4/15 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/15
+ *
+ * @author daoge_cmd | Cool_Loong
  */
 @Getter
 public final class AllayBlockType<T extends Block> implements BlockType<T> {

@@ -3,9 +3,9 @@ package cn.allay.api.player.info;
 import lombok.ToString;
 
 /**
+ * Allay Project 2023/6/23
+ *
  * @author LucGamesYT | daoge_cmd
- * @date 2023/6/23
- * Allay Project
  */
 @ToString
 public class DeviceInfo {

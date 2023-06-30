@@ -1,9 +1,9 @@
 package cn.allay.api.math.aabb;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/25 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/25
+ *
+ * @author daoge_cmd
  */
 class ImplAABB extends ImplFixedAABB implements AABB {
 
