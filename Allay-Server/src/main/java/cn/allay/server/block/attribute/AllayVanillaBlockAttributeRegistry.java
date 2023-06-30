@@ -19,9 +19,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/26 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/26
+ *
+ * @author daoge_cmd
  */
 @Slf4j
 public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegistry<VanillaBlockId, Map<Integer, BlockAttributes>, Map<VanillaBlockId, Map<Integer, BlockAttributes>>> implements VanillaBlockAttributeRegistry {

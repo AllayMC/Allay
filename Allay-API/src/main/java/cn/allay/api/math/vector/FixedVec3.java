@@ -1,9 +1,9 @@
 package cn.allay.api.math.vector;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/4
+ *
+ * @author daoge_cmd
  */
 public interface FixedVec3<T extends Number> {
     static <T extends Number> FixedVec3<T> of(T x, T y, T z) {

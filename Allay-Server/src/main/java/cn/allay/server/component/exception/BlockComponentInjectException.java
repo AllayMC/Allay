@@ -3,9 +3,9 @@ package cn.allay.server.component.exception;
 import cn.allay.api.component.exception.ComponentInjectException;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/15 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/15
+ *
+ * @author daoge_cmd
  */
 public class BlockComponentInjectException extends ComponentInjectException {
     public BlockComponentInjectException() {

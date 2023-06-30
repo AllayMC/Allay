@@ -7,9 +7,9 @@ import static cn.allay.dependence.StringUtils.fastTwoPartSplit;
 /**
  * A simple logging class that implements the Identified interface
  * <p>
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/4
+ *
+ * @author daoge_cmd
  */
 public record Identifier(String namespace, String path) {
     public static final String NAMESPACE_SEPARATOR = ":";

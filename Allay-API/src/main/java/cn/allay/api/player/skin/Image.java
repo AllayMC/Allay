@@ -1,9 +1,9 @@
 package cn.allay.api.player.skin;
 
 /**
+ * Allay Project 2023/6/23
+ *
  * @author LucGamesYT | daoge_cmd
- * @date 2023/6/23
- * Allay Project
  */
 public record Image(int width, int height, byte[] data) {
 

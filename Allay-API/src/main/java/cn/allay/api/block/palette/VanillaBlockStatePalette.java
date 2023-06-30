@@ -7,11 +7,10 @@ import cn.allay.api.registry.MappedRegistry;
 import java.util.Map;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/8 <br>
- * Allay Project <br>
- * <p>
  * TODO: Replaced by blockStateHash, the block runtime id is not used anymore.
+ * Allay Project 2023/4/8
+ *
+ * @author daoge_cmd
  */
 @Deprecated
 public interface VanillaBlockStatePalette extends MappedRegistry<BlockState, Integer, Map<BlockState, Integer>> {

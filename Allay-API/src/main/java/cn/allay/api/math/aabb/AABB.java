@@ -3,9 +3,9 @@ package cn.allay.api.math.aabb;
 import cn.allay.api.math.vector.FixedVec3;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/25 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/25
+ *
+ * @author daoge_cmd
  */
 public interface AABB extends FixedAABB {
     static AABB of(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {

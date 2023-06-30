@@ -11,9 +11,9 @@ import java.nio.file.Path;
 import static cn.allay.codegen.CodeGen.MAPPED_ITEM_DATA;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/13 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/13
+ *
+ * @author daoge_cmd
  */
 public class VanillaItemIdEnumGen {
     private static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");

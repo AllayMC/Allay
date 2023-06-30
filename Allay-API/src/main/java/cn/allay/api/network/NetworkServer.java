@@ -4,9 +4,9 @@ import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 
 /**
+ * Allay Project 2023/6/23
+ *
  * @author daoge_cmd
- * @date 2023/6/23
- * Allay Project
  */
 public interface NetworkServer {
     void start();

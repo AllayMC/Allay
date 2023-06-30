@@ -3,9 +3,9 @@ package cn.allay.api.math.aabb;
 import lombok.EqualsAndHashCode;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/25 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/25
+ *
+ * @author daoge_cmd
  */
 @EqualsAndHashCode
 class ImplFixedAABB implements FixedAABB {

@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/14 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/14
+ *
+ * @author daoge_cmd
  */
 public final class GameLoop {
 

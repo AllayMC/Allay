@@ -1,9 +1,9 @@
 package cn.allay.api;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/17 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/17
+ *
+ * @author daoge_cmd
  */
 public final class ApiInstanceHolder<T> {
     private T instance;

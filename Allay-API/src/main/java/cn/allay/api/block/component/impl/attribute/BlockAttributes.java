@@ -13,9 +13,9 @@ import lombok.experimental.Accessors;
 import java.awt.*;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/1 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/1
+ *
+ * @author daoge_cmd
  */
 @Getter
 @Accessors(fluent = true)

@@ -1,12 +1,11 @@
 package cn.allay.api;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/11 <br>
- * Allay Project <br>
- * <p>
  * This exception is thrown when the API module is not fully implemented <br/>
+ * <p>
+ * Allay Project 2023/3/11
  *
+ * @author daoge_cmd
  * @see AllayAPI
  */
 public class MissingImplementationException extends Exception {

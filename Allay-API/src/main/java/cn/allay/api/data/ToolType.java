@@ -1,9 +1,9 @@
 package cn.allay.api.data;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/26 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/26
+ *
+ * @author daoge_cmd
  */
 public enum ToolType {
     NONE,

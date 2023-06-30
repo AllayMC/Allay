@@ -13,9 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/8 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/8
+ *
+ * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
 public class RegistryTest {

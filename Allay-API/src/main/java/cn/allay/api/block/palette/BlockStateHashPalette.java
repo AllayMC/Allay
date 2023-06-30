@@ -7,9 +7,9 @@ import cn.allay.api.registry.MappedRegistry;
 import java.util.Map;
 
 /**
- * @author Cool_Loong <br>
- * @date 2023/5/29 <br>
- * Allay Project
+ * Allay Project 2023/5/29
+ *
+ * @author Cool_Loong
  */
 public interface BlockStateHashPalette extends MappedRegistry<Integer, BlockState, Map<Integer, BlockState>> {
     ApiInstanceHolder<BlockStateHashPalette> REGISTRY = ApiInstanceHolder.of();

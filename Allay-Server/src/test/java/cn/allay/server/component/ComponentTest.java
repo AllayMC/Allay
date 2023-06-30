@@ -23,9 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/4
+ *
+ * @author daoge_cmd
  */
 class ComponentTest {
 

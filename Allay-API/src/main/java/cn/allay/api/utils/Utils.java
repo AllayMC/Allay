@@ -3,9 +3,9 @@ package cn.allay.api.utils;
 import lombok.experimental.UtilityClass;
 
 /**
+ * Allay Project 2023/6/23
+ *
  * @author daoge_cmd
- * @date 2023/6/23
- * Allay Project
  */
 @UtilityClass
 public class Utils {

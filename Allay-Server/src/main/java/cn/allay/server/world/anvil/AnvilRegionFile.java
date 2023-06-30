@@ -19,9 +19,9 @@ import java.nio.file.StandardOpenOption;
 import java.util.BitSet;
 
 /**
- * @author Cool_Loong <br>
- * @date 6/4/2023 <br>
- * Allay Project
+ * Allay Project 2023/6/4
+ *
+ * @author Cool_Loong
  */
 public final class AnvilRegionFile implements Cloneable {
     private static final byte GZIP_COMPRESSION = 1;

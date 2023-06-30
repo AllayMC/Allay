@@ -4,9 +4,9 @@ import cn.allay.api.block.type.BlockState;
 import org.jetbrains.annotations.Range;
 
 /**
- * @author Cool_Loong <br>
- * @date 5/30/2023 <br>
- * Allay Project
+ * Allay Project 2023/5/30
+ *
+ * @author Cool_Loong
  */
 public interface ChunkSection {
     int SECTION_SIZE = 16 * 16 * 16;

@@ -7,11 +7,10 @@ import java.util.function.Supplier;
  * for simple registrations of any given type without restrictions on what
  * the input or output can be.
  * <p>
- * @author GeyserMC | daoge_cmd <br>
- * @date 2023/3/18 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/18
  *
  * @param <CONTENT> the value being held by the registry
+ * @author GeyserMC | daoge_cmd
  */
 public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
 

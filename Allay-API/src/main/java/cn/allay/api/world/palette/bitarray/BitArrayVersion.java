@@ -3,9 +3,9 @@ package cn.allay.api.world.palette.bitarray;
 import org.cloudburstmc.math.GenericMath;
 
 /**
- * @author JukeboxMC | daoge_cmd <br>
- * @date 2023/4/14 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/14
+ *
+ * @author JukeboxMC | daoge_cmd
  */
 public enum BitArrayVersion {
 

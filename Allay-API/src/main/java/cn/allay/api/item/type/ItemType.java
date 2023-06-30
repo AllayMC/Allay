@@ -8,9 +8,9 @@ import cn.allay.api.item.component.ItemComponentImpl;
 import java.util.List;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/19 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/19
+ *
+ * @author daoge_cmd
  */
 public interface ItemType<T extends ItemStack> extends Identified {
     List<ComponentProvider<? extends ItemComponentImpl>> getComponentProviders();

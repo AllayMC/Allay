@@ -5,12 +5,11 @@ package cn.allay.api.registry;
  * but is commonly a file path or something similar. {@link O} represents the output
  * type returned by this, which can also be anything.
  * <p>
- * @author GeyserMC | daoge_cmd <br>
- * @date 2023/3/18 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/18
  *
  * @param <I> the input to load the registry from
  * @param <O> the output of the registry
+ * @author GeyserMC | daoge_cmd
  */
 @FunctionalInterface
 public interface RegistryLoader<I, O> {

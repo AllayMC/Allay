@@ -6,9 +6,9 @@ import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.identifier.Identifier;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/16 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/16
+ *
+ * @author daoge_cmd
  */
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "test_boolean")
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "test_enum")

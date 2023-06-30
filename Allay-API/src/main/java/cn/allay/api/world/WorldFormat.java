@@ -1,9 +1,11 @@
 package cn.allay.api.world;
 
 /**
- * @author Cool_Loong <br>
- * @date 5/30/2023 <br>
- * Allay Project
+ * Describe a world
+ * <p>
+ * Allay Project 2023/5/30
+ *
+ * @author Cool_Loong
  */
 public enum WorldFormat {
     ANVIL,

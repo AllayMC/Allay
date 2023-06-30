@@ -8,14 +8,18 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * @author Cool_Loong <br>
- * @date 5/30/2023 <br>
- * Allay Project
+ * Allay Project 2023/5/30
+ *
+ * @author Cool_Loong
  */
 public interface WorldStorage {
     CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionData);
+
     CompletableFuture<Void> writeChunk(Chunk chunk);
+
     void writeWorldData(WorldData worldData);
+
     WorldData readWorldData() throws IOException;
+
     void close();
 }

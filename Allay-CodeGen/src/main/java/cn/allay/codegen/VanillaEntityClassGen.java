@@ -12,9 +12,9 @@ import java.nio.file.Path;
 /**
  * Depend on VanillaEntityIdEnumGen execution
  * <p>
- * @author daoge_cmd | Cool_Loong<br>
- * @date 2023/5/26 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/26
+ *
+ * @author daoge_cmd | Cool_Loong
  */
 public class VanillaEntityClassGen {
 
@@ -28,7 +28,7 @@ public class VanillaEntityClassGen {
             .addModifiers(Modifier.PUBLIC)
             .addJavadoc(
                     "@author daoge_cmd <br>\n" +
-                    "Allay Project <br>\n");
+                            "Allay Project <br>\n");
 
     public static void main(String[] args) {
         generate();

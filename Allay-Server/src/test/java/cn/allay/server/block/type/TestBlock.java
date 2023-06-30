@@ -10,9 +10,9 @@ import cn.allay.server.block.component.TestAutoRegisterComponentImpl;
 import cn.allay.server.block.component.TestComponent;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/16 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/16
+ *
+ * @author daoge_cmd
  */
 public interface TestBlock extends Block, TestComponent, CustomBlockComponent, TestAutoRegisterComponent {
 

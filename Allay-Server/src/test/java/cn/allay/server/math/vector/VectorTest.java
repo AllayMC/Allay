@@ -11,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/11 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/11
+ *
+ * @author daoge_cmd
  */
 class VectorTest {
 

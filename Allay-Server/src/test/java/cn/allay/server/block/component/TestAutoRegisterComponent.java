@@ -3,9 +3,9 @@ package cn.allay.server.block.component;
 import cn.allay.api.component.annotation.Inject;
 
 /**
+ * Allay Project 2023/6/23
+ *
  * @author daoge_cmd
- * @date 2023/6/23
- * Allay Project
  */
 public interface TestAutoRegisterComponent {
     @Inject

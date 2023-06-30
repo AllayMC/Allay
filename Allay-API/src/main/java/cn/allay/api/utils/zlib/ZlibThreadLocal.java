@@ -8,9 +8,9 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 /**
- * @author Cool_Loong <br>
- * @date 6/6/2023 <br>
- * Allay Project
+ * Allay Project 2023/6/6
+ *
+ * @author Cool_Loong
  */
 public final class ZlibThreadLocal implements ZlibProvider {
     private static final ThreadLocal<FastByteArrayOutputStream> FBAO = ThreadLocal.withInitial(() -> new FastByteArrayOutputStream(1024));

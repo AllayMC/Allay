@@ -7,9 +7,9 @@ import cn.allay.server.component.event.TestEvent;
 import cn.allay.server.component.interfaces.TestEventListenerComponent;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/6 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/6
+ *
+ * @author daoge_cmd
  */
 public class SimpleTestEventListenerComponent implements TestEventListenerComponent, ComponentImpl {
 

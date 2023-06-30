@@ -3,9 +3,9 @@ package cn.allay.dataext;
 import java.nio.file.Path;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/20 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/20
+ *
+ * @author daoge_cmd
  */
 public class BedrockSampleDataExtractor {
 

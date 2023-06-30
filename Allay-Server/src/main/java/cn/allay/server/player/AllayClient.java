@@ -25,9 +25,9 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
+ * Allay Project 2023/6/23
+ *
  * @author daoge_cmd
- * @date 2023/6/23
- * Allay Project
  */
 public class AllayClient implements Client {
 

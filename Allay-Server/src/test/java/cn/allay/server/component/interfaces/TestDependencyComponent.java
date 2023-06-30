@@ -4,9 +4,9 @@ import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.component.interfaces.ComponentImpl;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/4
+ *
+ * @author daoge_cmd
  */
 public interface TestDependencyComponent {
     @Inject

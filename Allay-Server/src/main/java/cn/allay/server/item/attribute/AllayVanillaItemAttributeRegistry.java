@@ -19,9 +19,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/20 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/20
+ *
+ * @author daoge_cmd
  */
 @Slf4j
 public class AllayVanillaItemAttributeRegistry extends SimpleMappedRegistry<VanillaItemId, ItemAttributes, Map<VanillaItemId, ItemAttributes>> implements VanillaItemAttributeRegistry {

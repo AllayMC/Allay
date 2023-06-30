@@ -1,11 +1,11 @@
 package cn.allay.api.component.exception;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
- * <p>
  * Thrown when component injection encounters a problem
+ * <p>
+ * Allay Project 2023/3/4
+ *
+ * @author daoge_cmd
  */
 public class ComponentInjectException extends RuntimeException {
     public ComponentInjectException() {

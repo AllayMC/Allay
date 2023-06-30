@@ -28,11 +28,10 @@ import java.util.function.Consumer;
  * though, the first parameter would be a location of some sort, such as a file path
  * where the loader will load the mappings from.
  * <p>
- * @author GeyserMC | daoge_cmd <br>
- * @date 2023/3/18 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/18
  *
  * @param <CONTENT> the type of the value which is being held by the registry
+ * @author GeyserMC | daoge_cmd
  */
 public interface Registry<CONTENT> {
     /**

@@ -4,9 +4,9 @@ import cn.allay.api.world.World;
 import lombok.EqualsAndHashCode;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/11 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/11
+ *
+ * @author daoge_cmd
  */
 @EqualsAndHashCode
 class ImplFixedPos<T extends Number> implements FixedPos<T> {

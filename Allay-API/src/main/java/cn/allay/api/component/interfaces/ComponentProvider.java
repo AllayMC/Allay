@@ -7,9 +7,9 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/15 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/15
+ *
+ * @author daoge_cmd
  */
 public interface ComponentProvider<T extends ComponentImpl> {
     static <T extends ComponentImpl> ComponentProvider<T> of(Supplier<T> provider, Class<T> componentClass) {

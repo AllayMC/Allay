@@ -20,9 +20,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Cool_Loong <br>
- * @date 6/4/2023 <br>
- * Allay Project
+ * Allay Project 2023/6/4
+ *
+ * @author Cool_Loong
  */
 public class AnvilWorldStorage implements NativeFileWorldStorage {
     private final Path worldFolderPath;

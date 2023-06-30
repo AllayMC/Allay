@@ -15,9 +15,9 @@ import static cn.allay.codegen.CodeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 /**
  * Depend on VanillaBlockIdEnumGen execution
  * <p>
- * @author daoge_cmd | Cool_Loong<br>
- * @date 2023/4/8 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/8
+ *
+ * @author daoge_cmd | Cool_Loong
  */
 public class VanillaBlockClassGen {
 

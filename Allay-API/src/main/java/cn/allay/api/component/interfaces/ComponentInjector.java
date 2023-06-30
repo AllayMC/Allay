@@ -5,11 +5,11 @@ import cn.allay.api.ApiInstanceHolder;
 import java.util.List;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/4 <br>
- * Allay Project <br>
- * <p>
  * This interface describes a component injector
+ * <p>
+ * Allay Project 2023/3/4
+ *
+ * @author daoge_cmd
  */
 public interface ComponentInjector<T> {
 

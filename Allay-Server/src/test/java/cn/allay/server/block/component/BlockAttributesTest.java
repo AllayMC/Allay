@@ -17,9 +17,9 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/25 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/25
+ *
+ * @author Cool_Loong
  */
 @ExtendWith(AllayTestExtension.class)
 @Slf4j

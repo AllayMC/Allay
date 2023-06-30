@@ -9,13 +9,12 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.math.location.Loc;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/26 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/26
+ *
+ * @author daoge_cmd
  */
 public class EntityBaseComponentImpl implements EntityBaseComponent, EntityComponentImpl {
 

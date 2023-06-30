@@ -8,9 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/6/3 <br>
- * Allay Project <br>
+ * Allay Project 2023/6/3
+ *
+ * @author daoge_cmd
  */
 public class VanillaBiomeIdEnumGen {
     private static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");

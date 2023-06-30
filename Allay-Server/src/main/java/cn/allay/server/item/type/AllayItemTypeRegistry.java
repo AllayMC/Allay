@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/5/19 <br>
- * Allay Project <br>
+ * Allay Project 2023/5/19
+ *
+ * @author daoge_cmd
  */
 public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> implements ItemTypeRegistry {
     public AllayItemTypeRegistry() {

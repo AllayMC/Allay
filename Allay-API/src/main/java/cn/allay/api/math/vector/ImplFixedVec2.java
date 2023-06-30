@@ -3,9 +3,9 @@ package cn.allay.api.math.vector;
 import lombok.EqualsAndHashCode;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/3/11 <br>
- * Allay Project <br>
+ * Allay Project 2023/3/11
+ *
+ * @author daoge_cmd
  */
 @EqualsAndHashCode
 class ImplFixedVec2<T extends Number> implements FixedVec2<T> {

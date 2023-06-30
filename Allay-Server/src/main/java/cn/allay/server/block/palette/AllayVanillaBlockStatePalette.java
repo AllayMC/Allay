@@ -20,9 +20,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 
 /**
- * @author daoge_cmd <br>
- * @date 2023/4/7 <br>
- * Allay Project <br>
+ * Allay Project 2023/4/7
+ *
+ * @author daoge_cmd
  */
 @Deprecated
 @Slf4j

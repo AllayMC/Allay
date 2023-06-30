@@ -24,9 +24,9 @@ import java.security.PublicKey;
 import java.util.*;
 
 /**
+ * Allay Project 2023/6/23
+ *
  * @author LucGamesYT | daoge_cmd
- * @date 2023/6/23
- * Allay Project
  */
 @ToString
 @Getter
