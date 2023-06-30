@@ -6,7 +6,7 @@ import cn.allay.api.block.property.enums.PillarAxis;
 import cn.allay.api.block.property.enums.WoodType;
 import cn.allay.api.block.type.BlockInitInfo;
 import cn.allay.api.block.type.VanillaBlockTypes;
-import cn.allay.api.data.VanillaBlockPropertyTypes;
+import cn.allay.api.block.property.VanillaBlockPropertyTypes;
 import cn.allay.api.math.position.Pos;
 import org.openjdk.jmh.annotations.*;
 
