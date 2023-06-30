@@ -23,6 +23,20 @@ import static cn.allay.codegen.Utils.convertToPascalCase;
  * @author daoge_cmd
  */
 public class CodeGen {
+    public static void main(String[] args) {
+        //Constants
+        VanillaBlockIdEnumGen.generate();
+        VanillaBlockPropertyTypeGen.generate();
+        VanillaItemIdEnumGen.generate();
+        VanillaEntityIdEnumGen.generate();
+        VanillaBiomeIdEnumGen.generate();
+
+        //Classes
+        VanillaBlockClassGen.generate();
+        VanillaEntityClassGen.generate();
+        VanillaItemClassGen.generate();
+    }
+
     static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Data/block_palette.nbt");
     static final List<NbtMap> BLOCK_PALETTE_NBT;
@@ -124,19 +138,5 @@ public class CodeGen {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static void main(String[] args) {
-        //Constants
-        VanillaBlockIdEnumGen.generate();
-        VanillaBlockPropertyTypeGen.generate();
-        VanillaItemIdEnumGen.generate();
-        VanillaEntityIdEnumGen.generate();
-        VanillaBiomeIdEnumGen.generate();
-
-        //Classes
-        VanillaBlockClassGen.generate();
-        VanillaEntityClassGen.generate();
-        VanillaItemClassGen.generate();
     }
 }
