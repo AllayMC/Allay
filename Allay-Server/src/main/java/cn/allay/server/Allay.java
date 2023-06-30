@@ -50,6 +50,7 @@ public final class Allay {
     @VisibleForTesting
     public static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
+        if (api.isImplemented()) return;
         //Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::new);

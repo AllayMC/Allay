@@ -3,8 +3,8 @@ package cn.allay.api.scheduler;
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.scheduler.task.Task;
 
+import javax.annotation.Nullable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * scheduler
@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 public interface Scheduler {
 
     static Scheduler createScheduler() {
-        return SchedulerFactory.FACTORY.get().createScheduler(Executors.newVirtualThreadPerTaskExecutor());
+        return SchedulerFactory.FACTORY.get().createScheduler(null);
     }
 
     static Scheduler createScheduler(ExecutorService asyncTaskExecutor) {
@@ -49,6 +49,6 @@ public interface Scheduler {
 
         ApiInstanceHolder<SchedulerFactory> FACTORY = ApiInstanceHolder.of();
 
-        Scheduler createScheduler(ExecutorService asyncTaskExecutor);
+        Scheduler createScheduler(@Nullable ExecutorService asyncTaskExecutor);
     }
 }
