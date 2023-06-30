@@ -6,6 +6,7 @@ import cn.allay.api.scheduler.taskcreator.TaskCreator;
 import cn.allay.server.utils.GameLoop;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,11 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author daoge_cmd
  */
 class SchedulerTest {
-    protected static final Scheduler scheduler = new AllayScheduler();
+    protected static final Scheduler scheduler = new AllayScheduler(Executors.newVirtualThreadPerTaskExecutor());
 
     protected static final TaskCreator MOCK_TASK_CREATOR = new MockTaskCreator();
 
-    //@Test
+    @Test
     void testAsync() {
         AtomicLong total = new AtomicLong(0);
         for (int i = 0; i < 1000; i++) {
@@ -38,7 +39,7 @@ class SchedulerTest {
             }, 1, true);
         }
         GameLoop.builder()
-                .loopCountPerSec(1000)
+                .loopCountPerSec(20)
                 .onTick(loop -> {
                     if (scheduler.getRunningTaskCount() == 0)
                         loop.stop();
@@ -66,7 +67,7 @@ class SchedulerTest {
             }, 1);
         }
         GameLoop.builder()
-                .loopCountPerSec(1000)
+                .loopCountPerSec(20)
                 .onTick(loop -> {
                     if (scheduler.getRunningTaskCount() == 0)
                         loop.stop();

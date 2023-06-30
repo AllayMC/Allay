@@ -3,6 +3,9 @@ package cn.allay.api.scheduler;
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.scheduler.task.Task;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * scheduler
  * <p>
@@ -13,7 +16,11 @@ import cn.allay.api.scheduler.task.Task;
 public interface Scheduler {
 
     static Scheduler createScheduler() {
-        return SchedulerFactory.FACTORY.get().createScheduler();
+        return SchedulerFactory.FACTORY.get().createScheduler(Executors.newVirtualThreadPerTaskExecutor());
+    }
+
+    static Scheduler createScheduler(ExecutorService asyncTaskExecutor) {
+        return SchedulerFactory.FACTORY.get().createScheduler(asyncTaskExecutor);
     }
 
     void ticking();
@@ -42,6 +49,6 @@ public interface Scheduler {
 
         ApiInstanceHolder<SchedulerFactory> FACTORY = ApiInstanceHolder.of();
 
-        Scheduler createScheduler();
+        Scheduler createScheduler(ExecutorService asyncTaskExecutor);
     }
 }
