@@ -13,7 +13,7 @@ public interface ChunkHolder {
     @Nullable
     Chunk getChunk(int x, int z);
 
-    //TODO: setChunk ?
+    void setChunk(int x, int z, Chunk chunk);
 
     @Nullable
     default BlockState getBlock(int x, @Range(from = -512, to = 511) int y, int z, boolean layer) {

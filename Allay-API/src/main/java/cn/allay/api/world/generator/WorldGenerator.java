@@ -9,5 +9,7 @@ import cn.allay.api.world.WorldType;
  */
 public interface WorldGenerator {
 
+    void generate(LimitedWorldRegion region);
+
     WorldType getGeneratorWorldType();
 }
