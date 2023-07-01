@@ -4,6 +4,7 @@ import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.generator.WorldGenerationService;
+import cn.allay.api.world.storage.WorldStorage;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,11 +23,13 @@ public class AllayChunkService implements ChunkService {
     private final Map<Long, Chunk> loadedChunks = new Long2ObjectOpenHashMap<>();
 
     private final WorldGenerationService worldGenerationService;
+    private final WorldStorage worldStorage;
     private record ChunkAddingQueueEntry(Chunk chunk, long hashXZ) {}
     private final Queue<ChunkAddingQueueEntry> chunkAddingQueue = new ConcurrentLinkedQueue<>();
 
-    public AllayChunkService(Function<ChunkService, WorldGenerationService> worldGenerationServiceSupplier) {
+    public AllayChunkService(Function<ChunkService, WorldGenerationService> worldGenerationServiceSupplier, WorldStorage worldStorage) {
         this.worldGenerationService = worldGenerationServiceSupplier.apply(this);
+        this.worldStorage = worldStorage;
     }
 
     @Override

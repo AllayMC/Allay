@@ -40,11 +40,6 @@ public class AnvilChunk implements Chunk {
     }
 
     @Override
-    public void tick() {
-        //TODO
-    }
-
-    @Override
     public DimensionInfo getDimensionData() {
         return dimensionData;
     }
