@@ -60,7 +60,7 @@ public class AnvilChunk implements Chunk {
     }
 
     @Override
-    public @NotNull ChunkSection getOrCreateSection(@Range(from = 0, to = 24) int y) {
+    public @NotNull ChunkSection getOrCreateSection(@Range(from = 0, to = 23) int y) {
         try {
             readWriteLock.writeLock().lock();
             ChunkSection chunkSection = sections.get(y);

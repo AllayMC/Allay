@@ -3,19 +3,16 @@ package cn.allay.server.world;
 import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.math.location.Loc;
 import cn.allay.api.server.Server;
-import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.Difficulty;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldType;
 import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.generator.WorldGenerator;
 import cn.allay.api.world.storage.WorldStorage;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 /**
  * Allay Project 2023/7/1
@@ -37,7 +34,7 @@ public class AllayWorld implements World {
     private WorldType worldType;
     @Getter
     private int tickingRadius;
-    private final Map<Long, Chunk> chunks = new Long2ObjectOpenHashMap<>();
+    ChunkService chunkService;
     private Loc<Float> spawnLocation;
     private Difficulty difficulty;
 
@@ -51,6 +48,7 @@ public class AllayWorld implements World {
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
         this.server = server;
+        //TODO init chunk service
     }
 
     @Override
@@ -75,7 +73,12 @@ public class AllayWorld implements World {
 
     @Override
     public @Nullable Chunk getChunk(int x, int z) {
-        return chunks.get(HashUtils.hashXZ(x, z));
+        return chunkService.getChunk(x, z);
+    }
+
+    @Override
+    public void setChunk(int x, int z, Chunk chunk) {
+        chunkService.setChunk(x, z, chunk);
     }
 
     private static class WorldBuilder {
