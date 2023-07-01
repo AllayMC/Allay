@@ -54,7 +54,7 @@ public class AllayWorld implements World {
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
         this.server = server;
-        this.chunkService = new AllayChunkService(chunkService -> new AllayWorldGenerationService(threadPool, chunkService, worldGenerator));
+        this.chunkService = new AllayChunkService(chunkService -> new AllayWorldGenerationService(threadPool, chunkService, worldGenerator), worldStorage);
     }
 
     @Override
