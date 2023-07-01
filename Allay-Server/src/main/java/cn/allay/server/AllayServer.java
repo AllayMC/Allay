@@ -115,7 +115,7 @@ public final class AllayServer implements Server {
                 .subMotd("Powered by Allay")
                 .maxClientCount(20)
                 .gameType(GameMode.CREATIVE)
-                .tickingRadius(6)
+                .defaultTickingRadius(6)
                 .build();
     }
 
