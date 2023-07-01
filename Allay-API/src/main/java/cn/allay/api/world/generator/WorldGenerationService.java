@@ -6,5 +6,5 @@ package cn.allay.api.world.generator;
  * @author daoge_cmd
  */
 public interface WorldGenerationService {
-
+    WorldGenerator getWorldGenerator();
 }
