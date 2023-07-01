@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReadWriteLock;
  * @author Cool_Loong
  */
 @NotThreadSafe
-public class AnvilChunkSection implements ChunkSection {
+public class AllayChunkSection implements ChunkSection {
     private final Palette<BlockState> blockLayer0;
     private final Palette<BlockState> blockLayer1;
     private final NibbleArray blockLights;
@@ -24,7 +24,7 @@ public class AnvilChunkSection implements ChunkSection {
     private final ReadWriteLock parentChunkLock;
     //todo biome
 
-    public AnvilChunkSection(ReadWriteLock parentChunkLock) {
+    public AllayChunkSection(ReadWriteLock parentChunkLock) {
         var airState = BlockType.AIR.getDefaultState();
         blockLayer0 = new Palette<>(airState);
         blockLayer1 = new Palette<>(airState);
