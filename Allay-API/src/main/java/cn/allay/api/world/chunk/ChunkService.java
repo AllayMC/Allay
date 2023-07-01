@@ -5,6 +5,6 @@ package cn.allay.api.world.chunk;
  *
  * @author daoge_cmd
  */
-public interface ChunkService extends ChunkHolder {
+public interface ChunkService extends ChunkAccessible {
     void tick();
 }

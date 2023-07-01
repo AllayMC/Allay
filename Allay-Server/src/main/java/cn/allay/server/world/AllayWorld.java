@@ -11,8 +11,13 @@ import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.generator.WorldGenerator;
 import cn.allay.api.world.storage.WorldStorage;
+import cn.allay.server.world.chunk.AllayChunkService;
+import cn.allay.server.world.generator.AllayWorldGenerationService;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * Allay Project 2023/7/1
@@ -34,6 +39,7 @@ public class AllayWorld implements World {
     private WorldType worldType;
     @Getter
     private int tickingRadius;
+    ExecutorService threadPool = new ForkJoinPool();
     ChunkService chunkService;
     private Loc<Float> spawnLocation;
     private Difficulty difficulty;
@@ -48,12 +54,13 @@ public class AllayWorld implements World {
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
         this.server = server;
-        //TODO init chunk service
+        this.chunkService = new AllayChunkService(chunkService -> new AllayWorldGenerationService(threadPool, chunkService, worldGenerator));
     }
 
     @Override
     public void tick() {
         //TODO
+        chunkService.tick();
     }
 
     @Override

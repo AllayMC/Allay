@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Range;
  *
  * @author daoge_cmd
  */
-public interface ChunkHolder {
+public interface ChunkAccessible {
     @Nullable
     Chunk getChunk(int x, int z);
 
