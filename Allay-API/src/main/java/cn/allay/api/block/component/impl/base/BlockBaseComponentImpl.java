@@ -58,7 +58,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     @Override
     @Impl
     public void setState(BlockState state) {
-        if (blockType.getAllStates().contains(state))
+        if (blockType.getAllStates().containsValue(state))
             currentState = state;
         else throw new IllegalArgumentException("State " + state + " is not supported by this block");
     }
@@ -72,7 +72,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     @Override
     @Impl
     public BlockState getNextState() {
-        ArrayList<? extends BlockState> blockStates = Lists.newArrayList(getBlockType().getAllStates());
+        ArrayList<? extends BlockState> blockStates = Lists.newArrayList(getBlockType().getAllStates().values());
         int next = blockStates.indexOf(currentState) + 1;
         if (next == blockStates.size()) {
             return blockStates.get(0);

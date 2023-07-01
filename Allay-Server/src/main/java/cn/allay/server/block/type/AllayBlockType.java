@@ -17,6 +17,7 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.server.block.component.injector.AllayBlockComponentInjector;
 import com.google.common.collect.ImmutableList;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -45,7 +46,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
     private final Map<String, BlockPropertyType<?>> properties;
     private final Identifier identifier;
 
-    private final Set<BlockState> allStates;
+    private final Map<Integer, BlockState> allStates;
     private BlockState defaultState;
 
     private AllayBlockType(Class<T> interfaceClass,
@@ -76,20 +77,21 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
 
     @UnmodifiableView
     @Override
-    public Set<BlockState> getAllStates() {
+    public Map<Integer, BlockState> getAllStates() {
         return this.allStates;
     }
 
-    private Set<BlockState> initDefaultAndAllStates() {
+    private Map<Integer, BlockState> initDefaultAndAllStates() {
         List<BlockPropertyType<?>> propertyTypeList = this.properties.values().stream().toList();
         int size = propertyTypeList.size();
         if (size == 0) {
-            AllayBlockState allayBlockState = new AllayBlockState(this, List.of());
-            this.defaultState = allayBlockState;
-            return Set.of(allayBlockState);
+            this.defaultState = new AllayBlockState(this, List.of());
+            var singleBlockStateMap = new Int2ObjectArrayMap<BlockState>();
+            singleBlockStateMap.put(defaultState.blockStateHash(), defaultState);
+            return singleBlockStateMap;
         }
 
-        ImmutableList.Builder<BlockState> states = ImmutableList.builder();
+        var blockStates = new Int2ObjectArrayMap<BlockState>();
 
         // to keep track of next element in each of
         // the n arrays
@@ -105,7 +107,8 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
                 BlockPropertyType<?> type = propertyTypeList.get(i);
                 values.add(type.tryCreateValue(type.getValidValues().get(indices[i])));
             }
-            states.add(new AllayBlockState(this, values.build()));
+            var state = new AllayBlockState(this, values.build());
+            blockStates.put(state.blockStateHash(), state);
 
             // find the rightmost array that has more
             // elements left after the current element
@@ -130,15 +133,13 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
                 indices[i] = 0;
             }
         }
-        ImmutableList<BlockState> build = states.build();
-        Set<BlockState> blockStates = Collections.unmodifiableSet(new LinkedHashSet<>(build));
         int defaultStateHash = HashUtils.computeBlockStateHash(this.identifier, properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList()));
-        for (var s : blockStates) {
+        for (var s : blockStates.values()) {
             if (s.blockStateHash() == defaultStateHash) {
                 this.defaultState = s;
             }
         }
-        return blockStates;
+        return Collections.unmodifiableMap(blockStates);
     }
 
     /**
@@ -169,7 +170,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
                     newPropertyValues.add(newPropertyValue);
                 else newPropertyValues.add(value);
             }
-            return BlockStateHashPalette.getRegistry().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), newPropertyValues));
+            return blockType.getAllStates().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), newPropertyValues));
         }
     }
 
