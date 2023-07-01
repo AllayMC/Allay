@@ -13,6 +13,9 @@ import org.jetbrains.annotations.Range;
  * @author Cool_Loong
  */
 public interface Chunk {
+
+    void tick();
+
     DimensionInfo getDimensionData();
 
     @Nullable
