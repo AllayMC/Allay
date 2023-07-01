@@ -11,6 +11,7 @@ application {
 
 dependencies {
     implementation(project(":Allay-API"))
+    implementation(libs.bundles.logging)
     implementation(libs.bytebuddy)
     testImplementation(libs.bytebuddy)
 }

@@ -5,7 +5,6 @@ plugins {
 description = "Allay-API"
 
 dependencies {
-    api(libs.bundles.logging)
     api(libs.bundles.terminal)
     api(libs.network) {
         //use allay nbt
@@ -13,6 +12,8 @@ dependencies {
         //use it.unimi.dsi.fastutil
         exclude(group = "com.nukkitx.fastutil")
     }
+    api(libs.slf4j.api)
+    api(libs.disruptor)
     api(libs.nbt)
     api(libs.fastutil)
     api(libs.guava)
