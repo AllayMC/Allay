@@ -1,4 +1,4 @@
-package cn.allay.server.world.anvil;
+package cn.allay.server.world.storage.anvil;
 
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.WorldData;

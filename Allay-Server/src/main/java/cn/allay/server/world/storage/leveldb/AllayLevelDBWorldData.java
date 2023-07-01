@@ -1,4 +1,4 @@
-package cn.allay.server.world.leveldb;
+package cn.allay.server.world.storage.leveldb;
 
 /**
  * Allay Project 2023/6/3

@@ -1,6 +1,6 @@
 package cn.allay.server.world;
 
-import cn.allay.server.world.anvil.AnvilRegionFile;
+import cn.allay.server.world.storage.anvil.AnvilRegionFile;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
 

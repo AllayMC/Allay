@@ -1,4 +1,4 @@
-package cn.allay.server.world.anvil;
+package cn.allay.server.world.storage.anvil;
 
 /**
  * Allay Project 2023/6/7

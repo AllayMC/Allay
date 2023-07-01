@@ -1,6 +1,5 @@
 package cn.allay.server.world.chunk;
 
-import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.world.chunk.ChunkSection;
@@ -18,16 +17,17 @@ import java.util.concurrent.locks.ReadWriteLock;
  */
 @NotThreadSafe
 public class AnvilChunkSection implements ChunkSection {
-    private final Palette<Integer> blockLayer0;
-    private final Palette<Integer> blockLayer1;
+    private final Palette<BlockState> blockLayer0;
+    private final Palette<BlockState> blockLayer1;
     private final NibbleArray blockLights;
     private final NibbleArray skyLights;
     private final ReadWriteLock parentChunkLock;
     //todo biome
 
     public AnvilChunkSection(ReadWriteLock parentChunkLock) {
-        blockLayer0 = new Palette<>(BlockType.AIR.getDefaultState().blockStateHash());
-        blockLayer1 = new Palette<>(BlockType.AIR.getDefaultState().blockStateHash());
+        var airState = BlockType.AIR.getDefaultState();
+        blockLayer0 = new Palette<>(airState);
+        blockLayer1 = new Palette<>(airState);
         blockLights = new NibbleArray(2048);
         skyLights = new NibbleArray(2048);
         this.parentChunkLock = parentChunkLock;
@@ -38,9 +38,9 @@ public class AnvilChunkSection implements ChunkSection {
         try {
             parentChunkLock.readLock().lock();
             if (layer) {
-                return BlockStateHashPalette.getRegistry().get(blockLayer1.get(index(x, y, z)));
+                return blockLayer1.get(index(x, y, z));
             } else {
-                return BlockStateHashPalette.getRegistry().get(blockLayer0.get(index(x, y, z)));
+                return blockLayer0.get(index(x, y, z));
             }
         } finally {
             parentChunkLock.readLock().unlock();
@@ -52,9 +52,9 @@ public class AnvilChunkSection implements ChunkSection {
         try {
             parentChunkLock.writeLock().lock();
             if (layer) {
-                blockLayer1.set(index(x, y, z), blockState.blockStateHash());
+                blockLayer1.set(index(x, y, z), blockState);
             } else {
-                blockLayer0.set(index(x, y, z), blockState.blockStateHash());
+                blockLayer0.set(index(x, y, z), blockState);
             }
         } finally {
             parentChunkLock.writeLock().unlock();
