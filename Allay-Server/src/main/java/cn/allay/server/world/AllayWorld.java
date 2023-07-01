@@ -40,6 +40,7 @@ public class AllayWorld implements World {
     @Getter
     private int tickingRadius;
     ExecutorService threadPool = new ForkJoinPool();
+    @Getter
     ChunkService chunkService;
     private Loc<Float> spawnLocation;
     private Difficulty difficulty;
@@ -54,7 +55,13 @@ public class AllayWorld implements World {
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
         this.server = server;
-        this.chunkService = new AllayChunkService(chunkService -> new AllayWorldGenerationService(threadPool, chunkService, worldGenerator), worldStorage);
+        this.chunkService = new AllayChunkService(
+                this,
+                chunkService -> new AllayWorldGenerationService(
+                        threadPool,
+                        chunkService,
+                        worldGenerator),
+                worldStorage);
     }
 
     @Override
