@@ -62,4 +62,16 @@ public class HashUtils {
         }
         return hash;
     }
+
+    public long hashXZ(int x, int z) {
+        return ( (long) x << 32 ) | ( z & 0xffffffffL );
+    }
+
+    public int getXFromHashXZ(long hashXZ) {
+        return (int) ( hashXZ >> 32 );
+    }
+
+    public int getZFromHashXZ(long hashXZ) {
+        return (int) hashXZ;
+    }
 }

@@ -14,6 +14,7 @@ public record ServerSettings(
         int port,
         int maxClientCount,
         GameMode gameType,
-        boolean xboxAuth
+        boolean xboxAuth,
+        int defaultTickingRadius
 ) {
 }
