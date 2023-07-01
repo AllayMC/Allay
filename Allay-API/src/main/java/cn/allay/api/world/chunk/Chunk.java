@@ -2,7 +2,6 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.world.DimensionInfo;
-import cn.allay.api.world.heightmap.HeightType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -14,17 +13,19 @@ import org.jetbrains.annotations.Range;
  */
 public interface Chunk {
 
-    DimensionInfo getDimensionData();
+    void tick();
+
+    DimensionInfo getDimensionInfo();
 
     @Nullable
-    ChunkSection getSection(@Range(from = 0, to = 23) int y);
+    ChunkSection getSection(@Range(from = 0, to = 63) int y);
 
     @NotNull
-    ChunkSection getOrCreateSection(@Range(from = 0, to = 23) int y);
+    ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y);
 
-    int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, HeightType type);
+    int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
 
-    void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, HeightType type, int height);
+    void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height);
 
     BlockState getBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer);
 
@@ -40,10 +41,9 @@ public interface Chunk {
 
     @Range(from = 0, to = 15) byte getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z);
 
-    @Range(from = 0, to = 15) byte getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z);
-
     void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, byte light);
 
+    @Range(from = 0, to = 15) byte getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z);
+
     void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, byte light);
-    //todo biome
 }

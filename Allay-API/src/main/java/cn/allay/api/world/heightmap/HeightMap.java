@@ -8,6 +8,10 @@ package cn.allay.api.world.heightmap;
 public final class HeightMap {
     private final int[] heights;
 
+    public HeightMap() {
+        this.heights = new int[256];
+    }
+
     public HeightMap(long[] compact) {
         this.heights = unpack(compact, 9);
     }
@@ -18,6 +22,10 @@ public final class HeightMap {
 
     public void set(int x, int z, int height) {
         heights[(z << 4) + x] = height;
+    }
+
+    public void fill(int[] heights) {
+        System.arraycopy(heights, 0, this.heights, 0, 256);
     }
 
     /**
