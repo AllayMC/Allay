@@ -29,7 +29,7 @@ public interface BlockType<T extends Block> extends Identified {
     Map<String, BlockPropertyType<?>> getProperties();
 
     @UnmodifiableView
-    Set<BlockState> getAllStates();
+    Map<Integer, BlockState> getAllStates();
 
     BlockState getDefaultState();
 
@@ -46,7 +46,7 @@ public interface BlockType<T extends Block> extends Identified {
     }
 
     default void register(BlockStateHashPalette registry) {
-        for (var s : getAllStates()) {
+        for (var s : getAllStates().values()) {
             registry.register(s.blockStateHash(), s);
         }
     }
