@@ -39,7 +39,7 @@ public class AllayWorld implements World {
     private WorldType worldType;
     @Getter
     private int tickingRadius;
-    ExecutorService threadPool = new ForkJoinPool();
+    ForkJoinPool threadPool = new ForkJoinPool();
     @Getter
     ChunkService chunkService;
     private Loc<Float> spawnLocation;
