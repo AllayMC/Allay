@@ -88,13 +88,6 @@ subprojects {
         options.compilerArgs.add("--enable-preview")
     }
 
-    tasks.withType<Javadoc> {
-        val javadocOptions = options as CoreJavadocOptions
-
-        javadocOptions.addStringOption("source", "20")
-        javadocOptions.addBooleanOption("-enable-preview", true)
-    }
-
     tasks.withType<Copy> {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
