@@ -1,6 +1,8 @@
 package cn.allay.api.world;
 
+import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.math.location.Loc;
+import cn.allay.api.world.storage.WorldStorage;
 
 /**
  * Describe a world
@@ -10,11 +12,15 @@ import cn.allay.api.math.location.Loc;
  * @author daoge_cmd
  */
 public interface World {
+    WorldStorage getWorldStorage();
+
     String getName();
 
     DimensionInfo getDimensionInfo();
 
-    Loc<Float> getSpawnLocation();
+    FixedLoc<Float> getSpawnLocation();
+
+    void setSpawnLocation(Loc<Float> newSpawn);
 
     Difficulty getDifficulty();
 }
