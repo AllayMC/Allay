@@ -67,8 +67,14 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
     }
 
     @Override
-    public CompletableFuture<Void> writeChunk(Chunk chunk) {
+    public CompletableFuture<Void> writeChunk(int x, int z, Chunk chunk) {
         //TODO: write chunk
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Boolean> containChunk(int x, int z) {
+        //TODO
         return null;
     }
 

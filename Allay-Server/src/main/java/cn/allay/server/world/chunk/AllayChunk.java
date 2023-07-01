@@ -24,14 +24,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Cool_Loong
  */
 @ThreadSafe
-public class AnvilChunk implements Chunk {
+public class AllayChunk implements Chunk {
     private final List<ChunkSection> sections;
     //WORLD_SURFACE,OCEAN_FLOOR,MOTION_BLOCKING,MOTION_BLOCKING_NO_LEAVES
     private final HeightMap[] heightMaps;
     private final DimensionInfo dimensionData;
     private final ReadWriteLock readWriteLock;
 
-    public AnvilChunk(NbtMap data, DimensionInfo dimensionData) {
+    public AllayChunk(NbtMap data, DimensionInfo dimensionData) {
         this.sections = new ArrayList<>(16);
         //Only one height map is used now, and more may be used in the future
         this.heightMaps = new HeightMap[]{new HeightMap(new long[37])};
@@ -60,7 +60,7 @@ public class AnvilChunk implements Chunk {
             readWriteLock.writeLock().lock();
             ChunkSection chunkSection = sections.get(y);
             if (chunkSection == null) {
-                chunkSection = new AnvilChunkSection(readWriteLock);
+                chunkSection = new AllayChunkSection(readWriteLock);
                 this.sections.set(y, chunkSection);
             }
             return chunkSection;
