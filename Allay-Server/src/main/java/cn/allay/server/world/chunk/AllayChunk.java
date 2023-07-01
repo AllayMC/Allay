@@ -37,15 +37,11 @@ public class AllayChunk implements Chunk {
     }
 
     public AllayChunk(NbtMap data, DimensionInfo dimensionInfo) {
+        //todo complete create chunk from nbt data
         this.sections = new ArrayList<>(dimensionInfo.chunkSectionSize());
         this.heightMap = new HeightMap();
         this.dimensionInfo = dimensionInfo;
         this.readWriteLock = new ReentrantReadWriteLock();
-    }
-
-    @Override
-    public void tick() {
-        //TODO
     }
 
     @Override
