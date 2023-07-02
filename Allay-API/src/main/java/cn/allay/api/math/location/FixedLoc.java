@@ -27,4 +27,12 @@ public interface FixedLoc<T extends Number> extends FixedPos<T> {
     double getHeadYaw();
 
     double getYaw();
+
+    default FixedLoc<T> cloneFixedLoc() {
+        return of(getX(), getY(), getZ(), getYaw(), getHeadYaw(), getPitch(), getWorld());
+    }
+
+    default Loc<T> cloneLoc() {
+        return Loc.of(getX(), getY(), getZ(), getYaw(), getHeadYaw(), getPitch(), getWorld());
+    }
 }

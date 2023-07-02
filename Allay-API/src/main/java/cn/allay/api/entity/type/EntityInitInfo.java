@@ -1,6 +1,7 @@
 package cn.allay.api.entity.type;
 
 import cn.allay.api.component.interfaces.ComponentInitInfo;
+import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.math.location.Loc;
 
 /**
@@ -9,9 +10,9 @@ import cn.allay.api.math.location.Loc;
  * @author daoge_cmd
  */
 public interface EntityInitInfo extends ComponentInitInfo {
-    Loc<Float> location();
+    FixedLoc<Float> location();
 
-    record Simple(Loc<Float> location) implements EntityInitInfo {
+    record Simple(FixedLoc<Float> location) implements EntityInitInfo {
 
     }
 }

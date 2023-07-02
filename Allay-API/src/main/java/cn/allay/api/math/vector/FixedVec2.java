@@ -14,4 +14,20 @@ public interface FixedVec2<T extends Number> {
     T getX();
 
     T getZ();
+
+    default int getChunkX() {
+        return getX().intValue() >> 4;
+    }
+
+    default int getChunkZ() {
+        return getZ().intValue() >> 4;
+    }
+
+    default FixedVec2<T> cloneFixedVec2() {
+        return of(getX(), getZ());
+    }
+
+    default Vec2<T> cloneVec2() {
+        return Vec2.of(getX(), getZ());
+    }
 }

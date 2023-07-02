@@ -32,7 +32,7 @@ public class AllayScheduler implements Scheduler {
     }
 
     @Override
-    public void ticking() {
+    public void tick() {
         tickCounter++;
         while (!queue.isEmpty() && queue.peek().getNextRunTick() <= tickCounter) {
             var taskInfo = queue.poll();

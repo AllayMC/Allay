@@ -4,11 +4,13 @@ import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.entity.type.VanillaEntityTypes;
+import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.math.location.Loc;
 import cn.allay.api.network.Client;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.biome.BiomeRegistry;
+import cn.allay.api.world.chunk.Chunk;
 import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -40,6 +42,8 @@ public class AllayClient implements Client {
     private String name;
     @Getter
     private EntityPlayer playerEntity;
+    @Getter
+    private boolean online = false;
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -77,19 +81,20 @@ public class AllayClient implements Client {
      */
     @Override
     public void initializePlayer() {
+        online = true;
         server.onLoginFinish(this);
         initPlayerEntity();
         sendStartGamePacket();
     }
 
     private void initPlayerEntity() {
-//        var spawnLocation = server.getDefaultWorld().getSpawnLocation();
-        var spawnLocation = Loc.of(0f, 64f, 0f, 0, 0, null);
+        var spawnLocation = server.getDefaultWorld().getSpawnLocation();
         //TODO: Load player data
         playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(spawnLocation));
     }
 
     private void sendStartGamePacket() {
+        var spawnWorld = server.getDefaultWorld();
         var startGamePacket = new StartGamePacket();
         startGamePacket.setUniqueEntityId(playerEntity.getUniqueId());
         //TODO: WOC?
@@ -100,14 +105,11 @@ public class AllayClient implements Client {
         startGamePacket.setPlayerPosition(Vector3f.from(loc.getX(), loc.getY(), loc.getZ()));
         startGamePacket.setRotation(Vector2f.from(loc.getPitch(), loc.getYaw()));
         startGamePacket.setSeed(-1L);
-        //TODO
-//        startGamePacket.setDimensionId(server.getDefaultWorld().getDimensionInfo().dimensionId());
+        startGamePacket.setDimensionId(spawnWorld.getDimensionInfo().dimensionId());
         startGamePacket.setDimensionId(0);
         startGamePacket.setGeneratorId(1);
-        //TODO
-        startGamePacket.setLevelGameType(GameType.CREATIVE);
-        //TODO
-        startGamePacket.setDifficulty(1);
+        startGamePacket.setLevelGameType(spawnWorld.getWorldGameType());
+        startGamePacket.setDifficulty(spawnWorld.getDifficulty().ordinal());
         startGamePacket.setTrustingPlayers(true);
         startGamePacket.setDefaultSpawn(Vector3i.from(0, 64, 0));
         startGamePacket.setDayCycleStopTime(7000);
@@ -156,11 +158,33 @@ public class AllayClient implements Client {
         sendPacket(playStatusPacket);
     }
 
+    @Override
+    public FixedLoc<Float> getLocation() {
+        return playerEntity.getLocation();
+    }
+
+    @Override
+    public boolean isLoaderActive() {
+        return isOnline();
+    }
+
+    @Override
+    public void onChunkLoad(Chunk chunk, int hashXZ) {
+        //TODO
+    }
+
+    @Override
+    public void onChunkUnload(Chunk chunk, int hashXZ) {
+        //TODO
+    }
+
+
     private class AllayClientPacketHandler implements BedrockPacketHandler {
 
         @Override
         public void onDisconnect(String reason) {
             server.onClientDisconnect(AllayClient.this);
+            getLocation().getWorld().removeClient(AllayClient.this);
         }
 
         @Override

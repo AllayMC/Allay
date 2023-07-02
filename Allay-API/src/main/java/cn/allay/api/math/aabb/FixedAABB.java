@@ -27,4 +27,12 @@ public interface FixedAABB {
     float maxY();
 
     float maxZ();
+
+    default FixedAABB cloneFixedAABB() {
+        return of(minX(), minY(), minZ(), maxX(), maxY(), maxZ());
+    }
+
+    default AABB cloneAABB() {
+        return AABB.of(minX(), minY(), minZ(), maxX(), maxY(), maxZ());
+    }
 }

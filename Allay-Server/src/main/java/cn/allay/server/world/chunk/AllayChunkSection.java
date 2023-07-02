@@ -1,10 +1,13 @@
 package cn.allay.server.world.chunk;
 
+import cn.allay.api.block.Block;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.palette.Palette;
 import cn.allay.server.utils.NibbleArray;
+import io.netty.buffer.ByteBuf;
+import lombok.Getter;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -17,6 +20,9 @@ import java.util.concurrent.locks.ReadWriteLock;
  */
 @NotThreadSafe
 public class AllayChunkSection implements ChunkSection {
+    private static final int SUB_CHUNK_VERSION = 9;
+    @Getter
+    private final int sectionY;
     private final Palette<BlockState> blockLayer0;
     private final Palette<BlockState> blockLayer1;
     private final NibbleArray blockLights;
@@ -24,7 +30,8 @@ public class AllayChunkSection implements ChunkSection {
     private final ReadWriteLock parentChunkLock;
     //todo biome
 
-    public AllayChunkSection(ReadWriteLock parentChunkLock) {
+    public AllayChunkSection(ReadWriteLock parentChunkLock, int sectionY) {
+        this.sectionY = sectionY;
         var airState = BlockType.AIR.getDefaultState();
         blockLayer0 = new Palette<>(airState);
         blockLayer1 = new Palette<>(airState);
@@ -99,6 +106,15 @@ public class AllayChunkSection implements ChunkSection {
         } finally {
             parentChunkLock.writeLock().unlock();
         }
+    }
+
+    @Override
+    public void writeToNetwork(ByteBuf byteBuf) {
+        byteBuf.writeByte(SUB_CHUNK_VERSION);
+        byteBuf.writeByte(2);
+        byteBuf.writeByte(sectionY);
+        blockLayer0.writeToNetwork(byteBuf, BlockState::blockStateHash);
+        blockLayer1.writeToNetwork(byteBuf, BlockState::blockStateHash);
     }
 
     private @Range(from = 0, to = 4095) int index(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z) {

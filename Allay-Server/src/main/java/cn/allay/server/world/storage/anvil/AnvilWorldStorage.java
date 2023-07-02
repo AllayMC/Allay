@@ -4,6 +4,7 @@ import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.storage.NativeFileWorldStorage;
+import cn.allay.api.world.storage.WorldStorageException;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.nbt.NbtMap;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
@@ -85,10 +87,12 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
 
     @Override
     @NotNull
-    public WorldData readWorldData() throws IOException {
+    public WorldData readWorldData() throws WorldStorageException {
         File levelDat = worldFolderPath.resolve("level.dat").toFile();
         try (var input = NbtUtils.createGZIPReader(new FileInputStream(levelDat))) {
             return createWorldData(((NbtMap) input.readTag()).getCompound("Data"));
+        } catch (IOException e) {
+            throw new WorldStorageException(e);
         }
     }
 

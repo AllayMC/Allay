@@ -2,6 +2,7 @@ package cn.allay.api.network;
 
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.server.Server;
+import cn.allay.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
 /**
@@ -11,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
  *
  * @author daoge_cmd
  */
-public interface Client {
+public interface Client extends ChunkLoader {
     Server getServer();
 
     void sendPacket(BedrockPacket packet);
