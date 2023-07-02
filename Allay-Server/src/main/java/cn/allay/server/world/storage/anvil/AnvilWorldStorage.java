@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
@@ -75,9 +74,9 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
     }
 
     @Override
-    public CompletableFuture<Boolean> containChunk(int x, int z) {
+    public boolean containChunk(int x, int z) {
         //TODO
-        return null;
+        return false;
     }
 
     @Override

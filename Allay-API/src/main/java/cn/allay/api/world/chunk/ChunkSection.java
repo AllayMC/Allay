@@ -1,39 +1,60 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
-import io.netty.buffer.ByteBuf;
-import org.jetbrains.annotations.Range;
+import cn.allay.api.block.type.VanillaBlockTypes;
+import cn.allay.api.world.palette.Palette;
+import cn.allay.api.world.palette.bitarray.NibbleArray;
+
+import javax.annotation.concurrent.NotThreadSafe;
+
+import static cn.allay.api.world.chunk.Chunk.index;
 
 /**
  * Allay Project 2023/5/30
  *
  * @author Cool_Loong
  */
-public interface ChunkSection {
-    int SECTION_SIZE = 16 * 16 * 16;
-
-    BlockState getBlock(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, boolean layer);
-
-    default BlockState getBlock(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z) {
-        return getBlock(x, y, z, false);
+@NotThreadSafe
+public record ChunkSection(Palette<BlockState> blockLayer0,
+                           Palette<BlockState> blockLayer1,
+                           NibbleArray blockLights,
+                           NibbleArray skyLights) {
+    public ChunkSection() {
+        this(new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
+                new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
+                new NibbleArray(2048),
+                new NibbleArray(2048));
     }
 
-    void setBlock(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState);
-
-    default void setBlock(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, BlockState blockState) {
-        setBlock(x, y, z, false, blockState);
+    public BlockState getBlock(int x, int y, int z, boolean layer) {
+        if (layer) {
+            return blockLayer1.get(index(x, y, z));
+        } else {
+            return blockLayer0.get(index(x, y, z));
+        }
     }
 
-    @Range(from = 0, to = 15) byte getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z);
+    public void setBlock(int x, int y, int z, boolean layer, BlockState blockState) {
+        if (layer) {
+            blockLayer1.set(index(x, y, z), blockState);
+        } else {
+            blockLayer0.set(index(x, y, z), blockState);
+        }
+    }
 
-    @Range(from = 0, to = 15) byte getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z);
+    public byte getBlockLight(int x, int y, int z) {
+        return blockLights.get(index(x, y, z));
+    }
 
-    void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, byte light);
+    public byte getSkyLight(int x, int y, int z) {
+        return skyLights.get(index(x, y, z));
+    }
 
-    void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, byte light);
-    //todo biome
+    public void setBlockLight(int x, int y, int z, byte light) {
+        blockLights.set(index(x, y, z), light);
+    }
 
-    int getSectionY();
-
-    void writeToNetwork(ByteBuf byteBuf);
+    public void setSkyLight(int x, int y, int z, byte light) {
+        skyLights.set(index(x, y, z), light);
+    }
 }

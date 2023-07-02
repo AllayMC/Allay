@@ -93,6 +93,9 @@ public final class AnvilRegionFile implements Cloneable {
 
     public synchronized NbtMap readChunkData(int chunkX, int chunkZ) throws IOException {
         int loc = this.locations.getInt(index(chunkX, chunkZ));
+        if (loc == 0) {
+            return NbtMap.EMPTY;
+        }
         int fileOffset = sectorIndex(loc) * SECTOR_SIZE;
         int sectorCount = sectorCount(loc);
         // Seek to the sector position in file channel.
