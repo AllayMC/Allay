@@ -2,21 +2,26 @@ package cn.allay.server.world;
 
 import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.math.location.Loc;
+import cn.allay.api.network.Client;
+import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
-import cn.allay.api.world.Difficulty;
-import cn.allay.api.world.DimensionInfo;
-import cn.allay.api.world.World;
-import cn.allay.api.world.WorldType;
+import cn.allay.api.world.*;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.chunk.ChunkService;
+import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
 import cn.allay.api.world.storage.WorldStorage;
+import cn.allay.server.scheduler.AllayScheduler;
 import cn.allay.server.world.chunk.AllayChunkService;
+import cn.allay.server.world.entity.AllayEntityService;
 import cn.allay.server.world.generator.AllayWorldGenerationService;
 import lombok.Getter;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.ExecutorService;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -39,18 +44,28 @@ public class AllayWorld implements World {
     private WorldType worldType;
     @Getter
     private int tickingRadius;
+    @Getter
+    private int viewDistance;
     ForkJoinPool threadPool = new ForkJoinPool();
     @Getter
+    Scheduler worldScheduler;
+    @Getter
     ChunkService chunkService;
+    @Getter
+    EntityService entityService;
+    @Getter
+    private GameType worldGameType;
     private Loc<Float> spawnLocation;
     private Difficulty difficulty;
+    private final Map<Long, Client> clients = new ConcurrentHashMap<>();
 
-    public AllayWorld(Server server,
+    private AllayWorld(Server server,
                       WorldStorage worldStorage,
                       String name,
                       DimensionInfo dimensionInfo,
                       WorldGenerator worldGenerator) {
         this.worldStorage = worldStorage;
+        loadWorldData();
         this.name = name;
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
@@ -62,12 +77,27 @@ public class AllayWorld implements World {
                         chunkService,
                         worldGenerator),
                 worldStorage);
+        this.entityService = new AllayEntityService(this);
+        this.worldScheduler = new AllayScheduler(Executors.newVirtualThreadPerTaskExecutor());
     }
 
     @Override
     public void tick() {
         //TODO
         chunkService.tick();
+        worldScheduler.tick();
+    }
+
+    private void loadWorldData() {
+        var worldData = worldStorage.readWorldData();
+        worldGameType = GameType.from(worldData.GameType());
+        //TODO
+    }
+
+    @Override
+    public void setWorldGameType(GameType gameType) {
+        //TODO: Send to client
+        this.worldGameType = gameType;
     }
 
     @Override
@@ -86,6 +116,22 @@ public class AllayWorld implements World {
     }
 
     @Override
+    public void addClient(Client client) {
+        var playerEntity = client.getPlayerEntity();
+        clients.put(playerEntity.getUniqueId(), client);
+        addEntity(playerEntity);
+        chunkService.addChunkLoader(client);
+    }
+
+    @Override
+    public void removeClient(Client client) {
+        var playerEntity = client.getPlayerEntity();
+        clients.remove(playerEntity.getUniqueId());
+        removeEntity(playerEntity);
+        chunkService.removeChunkLoader(client);
+    }
+
+    @Override
     public @Nullable Chunk getChunk(int x, int z) {
         return chunkService.getChunk(x, z);
     }
@@ -95,7 +141,11 @@ public class AllayWorld implements World {
         chunkService.setChunk(x, z, chunk);
     }
 
-    private static class WorldBuilder {
+    public static WorldBuilder builder() {
+        return new WorldBuilder();
+    }
+
+    public static class WorldBuilder {
         private WorldType worldType = WorldType.INFINITE;
         private Server server = Server.getInstance();
         private String name = "world";
@@ -105,6 +155,9 @@ public class AllayWorld implements World {
         private WorldStorage worldStorage;
         private WorldGenerator worldGenerator;
         private int tickingRadius = server.getServerSettings().defaultTickingRadius();
+        private int viewDistance = server.getServerSettings().defaultViewDistance();
+
+        private WorldBuilder() {}
 
         public WorldBuilder setName(String name) {
             this.name = name;
@@ -152,12 +205,19 @@ public class AllayWorld implements World {
             return this;
         }
 
+        public WorldBuilder setViewDistance(int viewDistance) {
+            this.viewDistance = viewDistance;
+            return this;
+        }
+
         public World build() {
             var world = new AllayWorld(server, worldStorage, name, dimensionInfo, worldGenerator);
+            spawnLocation.setWorld(world);
             world.spawnLocation = spawnLocation;
             world.difficulty = difficulty;
             world.worldType = worldType;
             world.tickingRadius = tickingRadius;
+            world.viewDistance = viewDistance;
             return world;
         }
     }

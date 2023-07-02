@@ -9,5 +9,10 @@ import cn.allay.api.math.location.FixedLoc;
  */
 public interface ChunkLoader {
     FixedLoc<Float> getLocation();
+
     boolean isLoaderActive();
+
+    void onChunkLoad(Chunk chunk, int hashXZ);
+
+    void onChunkUnload(Chunk chunk, int hashXZ);
 }

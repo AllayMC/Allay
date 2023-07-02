@@ -1,18 +1,22 @@
 package cn.allay.server;
 
+import cn.allay.api.math.location.Loc;
 import cn.allay.api.network.Client;
 import cn.allay.api.network.NetworkServer;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
-import cn.allay.api.world.GameMode;
 import cn.allay.api.world.World;
+import cn.allay.api.world.WorldType;
 import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.player.AllayClient;
 import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.utils.GameLoop;
+import cn.allay.server.world.AllayWorld;
+import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
@@ -82,7 +86,16 @@ public final class AllayServer implements Server {
     }
 
     private void loadWorlds() {
-        //TODO: World loading
+        //TODO: Remove this hack
+        defaultWorld = AllayWorld
+                .builder()
+                .setServer(this)
+                .setName("Test Flat World")
+                .setWorldGenerator(null/*TODO*/)
+                .setWorldStorage(new AllayNonPersistentWorldStorage())
+                .setWorldType(WorldType.FLAT)
+                .setSpawnLocation(Loc.of(0f, 0f, 0f, null))
+                .build();
     }
 
     @Override
@@ -114,8 +127,9 @@ public final class AllayServer implements Server {
                 .motd("Allay Server")
                 .subMotd("Powered by Allay")
                 .maxClientCount(20)
-                .gameType(GameMode.CREATIVE)
-                .defaultTickingRadius(6)
+                .gameType(GameType.CREATIVE)
+                .defaultTickingRadius(8)
+                .defaultViewDistance(8)
                 .build();
     }
 

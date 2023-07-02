@@ -15,4 +15,12 @@ public interface FixedPos<T extends Number> extends FixedVec3<T> {
     }
 
     World getWorld();
+
+    default FixedPos<T> cloneFixedPos() {
+        return of(getX(), getY(), getZ(), getWorld());
+    }
+
+    default Pos<T> clonePos() {
+        return Pos.of(getX(), getY(), getZ(), getWorld());
+    }
 }

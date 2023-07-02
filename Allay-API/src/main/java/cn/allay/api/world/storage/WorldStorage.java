@@ -14,15 +14,15 @@ import java.util.concurrent.CompletableFuture;
  * @author Cool_Loong
  */
 public interface WorldStorage {
-    CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionData);
+    CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionData) throws WorldStorageException;
 
-    CompletableFuture<Void> writeChunk(int x, int z, Chunk chunk);
+    CompletableFuture<Void> writeChunk(int x, int z, Chunk chunk) throws WorldStorageException;
 
-    CompletableFuture<Boolean> containChunk(int x, int z);
+    CompletableFuture<Boolean> containChunk(int x, int z) throws WorldStorageException;
 
-    void writeWorldData(WorldData worldData);
+    void writeWorldData(WorldData worldData) throws WorldStorageException;
 
-    WorldData readWorldData() throws IOException;
+    WorldData readWorldData() throws WorldStorageException;
 
     void close();
 }

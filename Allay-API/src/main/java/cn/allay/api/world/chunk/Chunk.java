@@ -2,6 +2,7 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.world.DimensionInfo;
+import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -43,4 +44,6 @@ public interface Chunk {
     @Range(from = 0, to = 15) byte getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z);
 
     void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, byte light);
+
+    LevelChunkPacket createLevelChunkPacket();
 }

@@ -1,7 +1,7 @@
 package cn.allay.api.server;
 
-import cn.allay.api.world.GameMode;
 import lombok.Builder;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 /**
  * Server settings
@@ -13,8 +13,9 @@ public record ServerSettings(
         String ip,
         int port,
         int maxClientCount,
-        GameMode gameType,
+        GameType gameType,
         boolean xboxAuth,
-        int defaultTickingRadius
+        int defaultTickingRadius,
+        int defaultViewDistance
 ) {
 }

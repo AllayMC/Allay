@@ -1,6 +1,7 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
+import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -31,4 +32,8 @@ public interface ChunkSection {
 
     void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, byte light);
     //todo biome
+
+    int getSectionY();
+
+    void writeToNetwork(ByteBuf byteBuf);
 }

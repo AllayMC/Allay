@@ -23,7 +23,7 @@ public interface Scheduler {
         return SchedulerFactory.FACTORY.get().createScheduler(asyncTaskExecutor);
     }
 
-    void ticking();
+    void tick();
 
     void stop();
 

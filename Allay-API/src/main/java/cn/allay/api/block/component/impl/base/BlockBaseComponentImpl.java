@@ -31,7 +31,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     public BlockBaseComponentImpl(BlockType<? extends Block> blockType, BlockInitInfo info) {
         this.blockType = blockType;
         this.currentState = blockType.getDefaultState();
-        this.pos = info.position();
+        this.pos = info.position().clonePos();
     }
 
     @Override

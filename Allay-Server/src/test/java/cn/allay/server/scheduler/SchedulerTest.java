@@ -42,7 +42,7 @@ class SchedulerTest {
                 .onTick(loop -> {
                     if (scheduler.getRunningTaskCount() == 0)
                         loop.stop();
-                    scheduler.ticking();
+                    scheduler.tick();
                 })
                 .build().startLoop();
         assertEquals(1000, total.get());
@@ -70,7 +70,7 @@ class SchedulerTest {
                 .onTick(loop -> {
                     if (scheduler.getRunningTaskCount() == 0)
                         loop.stop();
-                    scheduler.ticking();
+                    scheduler.tick();
                 })
                 .build().startLoop();
         assertEquals(1000, total.get());
@@ -95,7 +95,7 @@ class SchedulerTest {
                 .onTick(loop -> {
                     if (scheduler.getRunningTaskCount() == 0)
                         loop.stop();
-                    scheduler.ticking();
+                    scheduler.tick();
                 })
                 .build().startLoop();
         assertEquals(1000, total.get());

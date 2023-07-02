@@ -1,6 +1,7 @@
 package cn.allay.api.block.type;
 
 import cn.allay.api.component.interfaces.ComponentInitInfo;
+import cn.allay.api.math.position.FixedPos;
 import cn.allay.api.math.position.Pos;
 
 /**
@@ -10,9 +11,9 @@ import cn.allay.api.math.position.Pos;
  */
 public interface BlockInitInfo extends ComponentInitInfo {
 
-    Pos<Integer> position();
+    FixedPos<Integer> position();
 
-    record Simple(Pos<Integer> position) implements BlockInitInfo {
+    record Simple(FixedPos<Integer> position) implements BlockInitInfo {
 
     }
 }
