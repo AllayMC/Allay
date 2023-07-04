@@ -26,6 +26,8 @@ tasks.processResources {
 }
 
 tasks.jmh {
+    //Add the executed test case
+    includes.add("ChunkJMHTest")
     jvmArgs.add("--enable-preview")
 }
 

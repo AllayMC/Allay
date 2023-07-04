@@ -12,23 +12,75 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(AllayTestExtension.class)
 public class AllayChunkTest {
-    public void update(Chunk chunk) {
-        chunk.compareAndSetBlock(0, 0, 0, false, VanillaBlockTypes.AIR_TYPE.getDefaultState(), VanillaBlockTypes.STONE_TYPE.getDefaultState());
-        chunk.setBlock(0, 0, 0, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
+    @Test
+    void testParallelUpdateBlock() throws InterruptedException {
+        final Chunk chunk = new AllayChunk(0, 0, DimensionInfo.of(0));
+        Thread first = new Thread(() -> {
+            for (int i = 0; i < 16; i++) {
+                for (int j = 0; j < 16; j++) {
+                    for (int k = 0; k < 100; k++) {
+                        chunk.setBlock(i, k, j, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
+                    }
+                }
+            }
+        });
+        Thread second = new Thread(() -> {
+            for (int i = 0; i < 16; i++) {
+                for (int j = 0; j < 16; j++) {
+                    for (int k = 0; k < 100; k++) {
+                        assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlock(i, k, j), "(" + i + "," + k + "," + j + ") GET BLOCK ERROR!");
+                    }
+                }
+            }
+        });
+        first.start();
+        second.start();
+        first.join();
+        second.join();
     }
 
     @Test
-    void testParallelOperate() throws InterruptedException {
-        for (int i = 1; i <= 1000; i++) {
-            final Chunk chunk = new AllayChunk(0, 0, DimensionInfo.of(0));
-            Thread first = new Thread(() -> update(chunk));
-            Thread second = new Thread(() -> update(chunk));
-            first.start();
-            second.start();
-            first.join();
-            second.join();
-            assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlock(0, 0, 0), "TEST" + i + "ERROR");
-            System.out.println("TEST" + i + "SUCCESS");
-        }
+    void testParallelUpdateLight() throws InterruptedException {
+        final Chunk chunk = new AllayChunk(0, 0, DimensionInfo.of(0));
+        Thread first = new Thread(() -> {
+            for (int i = 0; i < 16; i++) {
+                for (int j = 0; j < 16; j++) {
+                    for (int k = 0; k < 100; k++) {
+                        chunk.setBlockLight(i, k, j, 5);
+                        chunk.setSkyLight(i, k, j, 6);
+                    }
+                }
+            }
+        });
+        Thread second = new Thread(() -> {
+            for (int i = 0; i < 16; i++) {
+                for (int j = 0; j < 16; j++) {
+                    for (int k = 0; k < 100; k++) {
+                        assertEquals(5, chunk.getBlockLight(i, k, j), "(" + i + "," + k + "," + j + ") GET BLOCK LIGHT ERROR!");
+                        assertEquals(6, chunk.getSkyLight(i, k, j), "(" + i + "," + k + "," + j + ") GET SKY LIGHT ERROR!");
+                    }
+                }
+            }
+        });
+        first.start();
+        second.start();
+        first.join();
+        second.join();
+    }
+
+    @Test
+    void testBatchProcess() {
+//        for (int i = 1; i <= 1000; i++) {
+//            final Chunk chunk = new AllayChunk(0, 0, DimensionInfo.of(0));
+//            chunk.batchProcess(a1->{
+//                a1.setBlock();
+//            }, a2->{
+//
+//            },a3->{
+//
+//            },a4->{
+//
+//            });
+//        }
     }
 }

@@ -1,9 +1,10 @@
-package cn.allay.api.world.chunk;
+package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.VanillaBlockTypes;
+import cn.allay.api.datastruct.NibbleArray;
+import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.palette.Palette;
-import cn.allay.api.world.palette.bitarray.NibbleArray;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -22,8 +23,8 @@ public record ChunkSection(Palette<BlockState> blockLayer0,
     public ChunkSection() {
         this(new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
                 new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
-                new NibbleArray(2048),
-                new NibbleArray(2048));
+                new NibbleArray(Chunk.SECTION_SIZE),
+                new NibbleArray(Chunk.SECTION_SIZE));
     }
 
     public BlockState getBlock(int x, int y, int z, boolean layer) {

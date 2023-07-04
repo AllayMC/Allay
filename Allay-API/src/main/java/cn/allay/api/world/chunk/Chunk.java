@@ -5,7 +5,9 @@ import cn.allay.api.world.DimensionInfo;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.Range;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/5/30
@@ -13,7 +15,7 @@ import javax.annotation.concurrent.ThreadSafe;
  * @author Cool_Loong
  */
 @ThreadSafe
-public interface Chunk {
+public interface Chunk extends UnsafeChunk {
     int SUB_CHUNK_VERSION = 9;
     int SECTION_SIZE = 16 * 16 * 16;
 
@@ -24,33 +26,13 @@ public interface Chunk {
 
     DimensionInfo getDimensionInfo();
 
-    int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
-
-    void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height);
-
-    BlockState getBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer);
-
-    default BlockState getBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        return getBlock(x, y, z, false);
-    }
-
-    void setSection(@Range(from = -32, to = 31) int y, ChunkSection section);
-
-    void setBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState);
-
-    default void setBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState) {
-        setBlock(x, y, z, false, blockState);
-    }
-
     void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState expectedValue, BlockState newValue);
 
-    @Range(from = 0, to = 15) byte getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z);
+    void compareAndSetBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue);
 
-    void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, byte light);
+    void compareAndSetSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue);
 
-    @Range(from = 0, to = 15) byte getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z);
-
-    void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, byte light);
+    void batchProcess(@Nullable Consumer<BlockOperate> blockOperate, @Nullable Consumer<HeightOperate> heightOperate, @Nullable Consumer<SkyLightOperate> skyLightOperate, @Nullable Consumer<BlockLightOperate> blockLightOperate);
 
     LevelChunkPacket createLevelChunkPacket();
 }

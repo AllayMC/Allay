@@ -1,4 +1,4 @@
-package cn.allay.api.world.palette.bitarray;
+package cn.allay.api.datastruct;
 
 import com.google.common.base.Preconditions;
 
