@@ -20,8 +20,8 @@ public interface Chunk extends UnsafeChunk {
     int SECTION_SIZE = 16 * 16 * 16;
 
     static @Range(from = 0, to = 4095) int index(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z) {
-        //The chunk block order of je 1.19 is yzx
-        return (y << 8) + (z << 4) + x;
+        //The bedrock chunk order is xzy,the chunk order of java version is yzx
+        return (x << 8) + (z << 4) + y;
     }
 
     DimensionInfo getDimensionInfo();

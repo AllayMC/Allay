@@ -7,6 +7,6 @@ import cn.allay.api.world.DimensionInfo;
  *
  * @author Cool_Loong
  */
-public interface UnsafeChunk extends HeightOperate, BlockOperate, SkyLightOperate, BlockLightOperate {
+public interface UnsafeChunk extends BlockOperate, HeightOperate, SkyLightOperate, BlockLightOperate {
     DimensionInfo getDimensionInfo();
 }

@@ -2,9 +2,9 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.VanillaBlockTypes;
+import cn.allay.api.datastruct.NibbleArray;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.UnsafeChunk;
-import cn.allay.api.world.heightmap.HeightMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,22 +18,18 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final int chunkX;
     protected final int chunkZ;
     protected final AtomicReferenceArray<ChunkSection> sections;
-    protected final HeightMap heightMap;
+    protected final NibbleArray heightMap;
     protected final DimensionInfo dimensionInfo;
 
     public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
-        this.sections = new AtomicReferenceArray<>(dimensionInfo.chunkSectionSize());
-        this.heightMap = new HeightMap();
-        this.dimensionInfo = dimensionInfo;
+        this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
     }
 
     public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.sections = new AtomicReferenceArray<>(dimensionInfo.chunkSectionSize());
-        this.heightMap = new HeightMap();
+        this.heightMap = new NibbleArray(256);
         this.dimensionInfo = dimensionInfo;
     }
 
@@ -51,11 +47,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
-        return this.heightMap.get(x, z);
+        return this.heightMap.get((z << 4) + x);
     }
 
     public void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
-        this.heightMap.set(x, z, height);
+        this.heightMap.set((z << 4) + x, (byte) height);
     }
 
 
