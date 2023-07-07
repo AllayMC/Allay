@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static cn.allay.api.block.property.type.BlockPropertyType.computeSpecialValue;
 import static java.lang.reflect.Modifier.isStatic;
 
 /**
@@ -46,7 +47,8 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
     private final Map<String, BlockPropertyType<?>> properties;
     private final Identifier identifier;
 
-    private final Map<Integer, BlockState> allStates;
+    private final Map<Integer, BlockState> blockStateHashMap;
+    private final Map<Integer, BlockState> specialValueMap;
     private BlockState defaultState;
 
     private AllayBlockType(Class<T> interfaceClass,
@@ -57,7 +59,8 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         this.componentProviders = componentProviders;
         this.properties = Collections.unmodifiableMap(properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity())));
         this.identifier = identifier;
-        this.allStates = initDefaultAndAllStates();
+        this.blockStateHashMap = initStates();
+        this.specialValueMap = Collections.unmodifiableMap(blockStateHashMap.values().stream().collect(Collectors.toMap(BlockState::specialValue, Function.identity(), (v1, v2) -> v1, Int2ObjectArrayMap::new)));
     }
 
     public static <T extends Block> BlockTypeBuilder<T> builder(Class<T> interfaceClass) {
@@ -75,13 +78,13 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         return BlockStateHashPalette.getRegistry().get(HashUtils.computeBlockStateHash(identifier, propertyValues));
     }
 
-    @UnmodifiableView
     @Override
-    public Map<Integer, BlockState> getAllStates() {
-        return this.allStates;
+    @UnmodifiableView
+    public Collection<BlockState> getAllStates() {
+        return Collections.unmodifiableCollection(blockStateHashMap.values());
     }
 
-    private Map<Integer, BlockState> initDefaultAndAllStates() {
+    private Map<Integer, BlockState> initStates() {
         List<BlockPropertyType<?>> propertyTypeList = this.properties.values().stream().toList();
         int size = propertyTypeList.size();
         if (size == 0) {
@@ -145,34 +148,109 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
     /**
      * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateHashPalette AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
      */
-    record AllayBlockState(
-            BlockType<?> blockType,
-            Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues,
-            int blockStateHash) implements BlockState {
+    static final class AllayBlockState implements BlockState {
+
+        private final BlockType<?> blockType;
+        private final Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues;
+        private final BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValuesArray;
+        private final int blockStateHash;
+        private final int specialValue;
+
+        AllayBlockState(
+                BlockType<?> blockType,
+                Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues,
+                int blockStateHash,
+                int specialValue) {
+            this.blockType = blockType;
+            this.propertyValues = propertyValues;
+            this.blockStateHash = blockStateHash;
+            this.specialValue = specialValue;
+            this.propertyValuesArray = propertyValues.values().toArray(new BlockPropertyType.BlockPropertyValue<?, ?, ?>[0]);
+        }
+
         public AllayBlockState(BlockType<?> blockType, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-            this(blockType, propertyValues, HashUtils.computeBlockStateHash(blockType.getIdentifier(), propertyValues));
-        }
-
-        public AllayBlockState(BlockType<?> blockType, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues, int blockStateHash) {
-            this(blockType, Collections.unmodifiableMap(propertyValues.stream().collect(HashMap::new, (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue), HashMap::putAll)), blockStateHash);
-        }
-
-        @Override
-        public long unsignedBlockStateHash() {
-            return Integer.toUnsignedLong(blockStateHash);
-        }
-
-        @Override
-        public BlockState updatePropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> newPropertyValue) {
-            var newPropertyValues = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
-            for (var value : propertyValues.values()) {
-                if (value.getPropertyType() == newPropertyValue.getPropertyType())
-                    newPropertyValues.add(newPropertyValue);
-                else newPropertyValues.add(value);
+                this(blockType, propertyValues, HashUtils.computeBlockStateHash(blockType.getIdentifier(), propertyValues));
             }
-            return blockType.getAllStates().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), newPropertyValues));
+
+            public AllayBlockState(BlockType<?> blockType, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues, int blockStateHash) {
+                this(blockType, Collections.unmodifiableMap(propertyValues.stream().collect(HashMap::new, (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue), HashMap::putAll)), blockStateHash, computeSpecialValue(propertyValues));
+            }
+
+            @Override
+            public long unsignedBlockStateHash() {
+                return Integer.toUnsignedLong(blockStateHash);
+            }
+
+            @Override
+            public BlockState setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
+                var newPropertyValues = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[propertyValues.size()];
+                for (var index = 0; index < propertyValuesArray.length; index++) {
+                    var oldPropertyValue = propertyValuesArray[index];
+                    if (oldPropertyValue.getPropertyType() == propertyValue.getPropertyType())
+                        newPropertyValues[index] = propertyValue;
+                    else newPropertyValues[index] = oldPropertyValue;
+                }
+                return blockType.getSpecialValueMap().get(computeSpecialValue(newPropertyValues));
+            }
+
+            @Override
+            public BlockState setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
+                var values = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
+                for (var value : this.propertyValues.values()) {
+                    int index;
+                    if ((index = propertyValues.indexOf(value)) != -1) {
+                        values.add(propertyValues.get(index));
+                    } else values.add(value);
+                }
+                return blockType.getSpecialValueMap().get(computeSpecialValue(values));
+            }
+
+        @Override
+        public BlockType<?> blockType() {
+            return blockType;
         }
-    }
+
+        @Override
+        public Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues() {
+            return propertyValues;
+        }
+
+        @Override
+        public int blockStateHash() {
+            return blockStateHash;
+        }
+
+        @Override
+        public int specialValue() {
+            return specialValue;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (AllayBlockState) obj;
+            return Objects.equals(this.blockType, that.blockType) &&
+                   Objects.equals(this.propertyValues, that.propertyValues) &&
+                   this.blockStateHash == that.blockStateHash &&
+                   this.specialValue == that.specialValue;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(blockType, propertyValues, blockStateHash, specialValue);
+        }
+
+        @Override
+        public String toString() {
+            return "AllayBlockState[" +
+                   "blockType=" + blockType + ", " +
+                   "propertyValues=" + propertyValues + ", " +
+                   "blockStateHash=" + blockStateHash + ", " +
+                   "specialValue=" + specialValue + ']';
+        }
+
+        }
 
     public static class Builder<T extends Block> implements BlockTypeBuilder<T> {
         protected Class<T> interfaceClass;

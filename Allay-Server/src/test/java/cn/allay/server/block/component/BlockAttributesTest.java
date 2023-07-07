@@ -122,7 +122,7 @@ class BlockAttributesTest {
     void testBlockType(VanillaBlockId vanillaBlockId, BlockType<?> type) {
         var block = type.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null)));
         var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
-        for (var state : type.getAllStates().values()) {
+        for (var state : type.getBlockStateHashMap().values()) {
             block.setState(state);
             var expected = attributeMap.get(state.blockStateHash());
 //            if (expected == null) {

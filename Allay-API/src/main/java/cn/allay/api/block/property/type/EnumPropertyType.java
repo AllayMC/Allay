@@ -1,5 +1,7 @@
 package cn.allay.api.block.property.type;
 
+import cn.allay.api.utils.Utils;
+
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -15,7 +17,7 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
     private final Class<T> enumClass;
 
     private EnumPropertyType(String name, Class<T> enumClass, T defaultData) {
-        super(name, Arrays.asList(enumClass.getEnumConstants()), defaultData);
+        super(name, Arrays.asList(enumClass.getEnumConstants()), defaultData, Utils.computeRequiredBits(enumClass.getEnumConstants().length));
         this.enumClass = enumClass;
         var map = new HashMap<T, EnumPropertyValue>();
         for (var value : validValues) {
@@ -55,6 +57,11 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
         EnumPropertyValue(T value) {
             super(EnumPropertyType.this, value);
             serializedValue = value.name().toLowerCase();
+        }
+
+        @Override
+        public int getIndex() {
+            return value.ordinal();
         }
 
         @Override

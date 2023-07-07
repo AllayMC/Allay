@@ -13,7 +13,7 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
     private final BooleanPropertyValue TRUE = new BooleanPropertyValue(true);
 
     private BooleanPropertyType(String name, Boolean defaultData) {
-        super(name, List.of(true, false), defaultData);
+        super(name, List.of(true, false), defaultData, 1);
     }
 
     public static BooleanPropertyType of(String name, Boolean defaultData) {
@@ -44,8 +44,16 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
 
     final class BooleanPropertyValue extends BlockPropertyValue<Boolean, BooleanPropertyType, Byte> {
 
+        private final int index;
+
         BooleanPropertyValue(Boolean value) {
             super(BooleanPropertyType.this, value);
+            index = value ? 1 : 0;
+        }
+
+        @Override
+        public int getIndex() {
+            return index;
         }
 
         @Override
