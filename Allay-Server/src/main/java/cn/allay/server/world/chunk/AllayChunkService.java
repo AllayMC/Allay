@@ -163,7 +163,7 @@ public class AllayChunkService implements ChunkService {
                         setChunk(x, z, loadedChunk);
                         return loadedChunk;
                     }
-                    var chunk = new AllayChunk(world.getDimensionInfo(), x, z);
+                    var chunk = new AllayChunk(x, z, world.getDimensionInfo());
                     worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(chunk), single -> setChunk(x, z, chunk));
                     return chunk;
                 });

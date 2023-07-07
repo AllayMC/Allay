@@ -34,8 +34,8 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
     }
 
     @Override
-    public CompletableFuture<Boolean> containChunk(int x, int z) {
-        return CompletableFuture.completedFuture(chunks.containsKey(HashUtils.hashXZ(x, z)));
+    public boolean containChunk(int x, int z) {
+        return chunks.containsKey(HashUtils.hashXZ(x, z));
     }
 
     @Override
