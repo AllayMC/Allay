@@ -5,11 +5,10 @@ import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.entity.type.VanillaEntityTypes;
 import cn.allay.api.math.location.FixedLoc;
-import cn.allay.api.math.location.Loc;
 import cn.allay.api.network.Client;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
-import cn.allay.api.world.biome.BiomeRegistry;
+import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -146,7 +145,7 @@ public class AllayClient implements Client {
         sendPacket(startGamePacket);
 
         var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
-        biomeDefinitionListPacket.setDefinitions(BiomeRegistry.getRegistry().getBiomeDefinitionListTag());
+        biomeDefinitionListPacket.setDefinitions(BiomeTypeRegistry.getRegistry().getBiomeDefinitionListTag());
         sendPacket(biomeDefinitionListPacket);
 
         var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();

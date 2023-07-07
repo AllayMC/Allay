@@ -5,10 +5,9 @@ import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.entity.type.VanillaEntityTypes;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
-import cn.allay.server.world.biome.AllayBiomeRegistry;
+import cn.allay.server.world.biome.AllayBiomeTypeRegistry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import me.tongfei.progressbar.ProgressBar;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
@@ -41,7 +40,7 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
     @SneakyThrows
     private void loadVanillaEntityIdentifierTag() {
         //TODO: Support custom entity
-        availableEntityIdentifierTag = (NbtMap) NbtUtils.createNetworkReader(AllayBiomeRegistry.class.getClassLoader().getResourceAsStream("entity_identifiers.nbt")).readTag();
+        availableEntityIdentifierTag = (NbtMap) NbtUtils.createNetworkReader(AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("entity_identifiers.nbt")).readTag();
     }
 
     @Override
