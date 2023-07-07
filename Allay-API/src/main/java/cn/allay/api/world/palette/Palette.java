@@ -1,6 +1,6 @@
 package cn.allay.api.world.palette;
 
-import cn.allay.api.world.chunk.ChunkSection;
+import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.palette.bitarray.BitArray;
 import cn.allay.api.world.palette.bitarray.BitArrayVersion;
 import io.netty.buffer.ByteBuf;
@@ -36,7 +36,7 @@ public final class Palette<V> {
     }
 
     public Palette(V first, BitArrayVersion version) {
-        this.bitArray = version.createArray(ChunkSection.SECTION_SIZE);
+        this.bitArray = version.createArray(Chunk.SECTION_SIZE);
         this.palette = new ReferenceArrayList<>(16);
         this.palette.add(first);
     }
@@ -116,7 +116,7 @@ public final class Palette<V> {
 
         final BitArrayVersion version = Palette.getVersionFromPaletteHeader(header);
         if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(ChunkSection.SECTION_SIZE, null);
+            this.bitArray = version.createArray(Chunk.SECTION_SIZE, null);
             this.palette.clear();
             this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
 
@@ -152,17 +152,17 @@ public final class Palette<V> {
     }
 
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
-        final int wordCount = version.getWordsForSize(ChunkSection.SECTION_SIZE);
+        final int wordCount = version.getWordsForSize(Chunk.SECTION_SIZE);
         final int[] words = new int[wordCount];
         for (int i = 0; i < wordCount; i++) words[i] = byteBuf.readIntLE();
 
-        this.bitArray = version.createArray(ChunkSection.SECTION_SIZE, words);
+        this.bitArray = version.createArray(Chunk.SECTION_SIZE, words);
         this.palette.clear();
     }
 
     private void onResize(BitArrayVersion version) {
-        final BitArray newBitArray = version.createArray(ChunkSection.SECTION_SIZE);
-        for (int i = 0; i < ChunkSection.SECTION_SIZE; i++)
+        final BitArray newBitArray = version.createArray(Chunk.SECTION_SIZE);
+        for (int i = 0; i < Chunk.SECTION_SIZE; i++)
             newBitArray.set(i, this.bitArray.get(i));
 
         this.bitArray = newBitArray;

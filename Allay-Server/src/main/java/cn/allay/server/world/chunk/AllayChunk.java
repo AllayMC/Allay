@@ -1,30 +1,17 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.block.type.BlockType;
 import cn.allay.api.world.DimensionInfo;
-import cn.allay.api.world.biome.Biome;
-import cn.allay.api.world.chunk.Chunk;
-import cn.allay.api.world.chunk.ChunkSection;
-import cn.allay.api.world.heightmap.HeightMap;
+import cn.allay.api.world.chunk.*;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
-import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.concurrent.ThreadSafe;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.StampedLock;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 5/30/2023
@@ -32,126 +19,216 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Cool_Loong
  */
 @ThreadSafe
-public class AllayChunk implements Chunk {
-    private final int chunkX;
-    private final int chunkZ;
-    private final List<ChunkSection> sections;
-    private final HeightMap heightMap;
-    private final DimensionInfo dimensionInfo;
-    private final ReadWriteLock readWriteLock;
+public class AllayChunk extends AllayUnsafeChunk implements Chunk {
+    protected final StampedLock sectionLock;
+    protected final StampedLock heightLock;
+    protected final StampedLock skyLightLock;
+    protected final StampedLock blockLightLock;
 
-    public AllayChunk(DimensionInfo dimensionInfo, int chunkX, int chunkZ) {
-        this(dimensionInfo, chunkX, chunkZ, null);
+    public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+        this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
     }
 
-    public AllayChunk(DimensionInfo dimensionInfo, int chunkX, int chunkZ, @Nullable NbtMap data) {
-        //todo complete create chunk from nbt data
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
-        this.sections = new ArrayList<>(dimensionInfo.chunkSectionSize());
-        this.heightMap = new HeightMap();
-        this.dimensionInfo = dimensionInfo;
-        this.readWriteLock = new ReentrantReadWriteLock();
-    }
-
-    @Override
-    public DimensionInfo getDimensionInfo() {
-        return dimensionInfo;
-    }
-
-    @Override
-    public @Nullable ChunkSection getSection(@Range(from = 0, to = 63) int y) {
-        try {
-            readWriteLock.readLock().lock();
-            return sections.get(y);
-        } finally {
-            readWriteLock.readLock().unlock();
-        }
-    }
-
-    @Override
-    public @NotNull ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y) {
-        try {
-            readWriteLock.writeLock().lock();
-            ChunkSection chunkSection = sections.get(y);
-            if (chunkSection == null) {
-                chunkSection = new AllayChunkSection(readWriteLock, y);
-                this.sections.set(y, chunkSection);
-            }
-            return chunkSection;
-        } finally {
-            readWriteLock.writeLock().unlock();
-        }
+    public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
+        super(chunkX, chunkZ, dimensionInfo, data);
+        this.sectionLock = new StampedLock();
+        this.heightLock = new StampedLock();
+        this.skyLightLock = new StampedLock();
+        this.blockLightLock = new StampedLock();
     }
 
     @Override
     public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
+        long stamp = heightLock.tryOptimisticRead();
         try {
-            readWriteLock.readLock().lock();
-            return this.heightMap.get(x, z);
+            for (; ; stamp = heightLock.readLock()) {
+                if (stamp == 0L) continue;
+                int result = super.getHeight(x, z);
+                if (!heightLock.validate(stamp)) continue;
+                return result;
+            }
         } finally {
-            readWriteLock.readLock().unlock();
+            if (StampedLock.isReadLockStamp(stamp)) heightLock.unlockRead(stamp);
         }
     }
 
     @Override
     public void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
+        long stamp = heightLock.writeLock();
         try {
-            readWriteLock.writeLock().lock();
-            this.heightMap.set(x, z, height);
+            super.setHeight(x, z, height);
         } finally {
-            readWriteLock.writeLock().unlock();
+            heightLock.unlockWrite(stamp);
         }
     }
 
 
     @Override
     public BlockState getBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {
-        y = normalY(y) >>> 4;
-        ChunkSection section = this.getSection(y);
-        BlockState blockState;
-        if (section == null) {
-            blockState = BlockType.AIR.getDefaultState();
-        } else {
-            blockState = section.getBlock(x, y & 0xf, z, layer);
+        long stamp = sectionLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = sectionLock.readLock()) {
+                if (stamp == 0L) continue;
+                BlockState result = super.getBlock(x, y, z, layer);
+                if (!sectionLock.validate(stamp)) continue;
+                return result;
+            }
+        } finally {
+            if (StampedLock.isReadLockStamp(stamp)) sectionLock.unlockRead(stamp);
         }
-        return blockState;
     }
 
     @Override
     public void setBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState) {
-        y = normalY(y) >>> 4;
-        ChunkSection section = this.getSection(y);
-        if (section == null) {
-            section = this.getOrCreateSection(y);
+        long stamp = sectionLock.writeLock();
+        try {
+            super.setBlock(x, y, z, layer, blockState);
+        } finally {
+            sectionLock.unlockWrite(stamp);
         }
-        section.setBlock(x, y & 0xf, z, layer, blockState);
     }
 
     @Override
-    public @Range(from = 0, to = 15) byte getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        y = normalY(y) >>> 4;
-        ChunkSection section = this.getSection(y);
-        return section == null ? 0 : section.getBlockLight(x, y & 0xf, z);
+    public void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState expectedValue, BlockState newValue) {
+        long stamp = sectionLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = sectionLock.writeLock()) {
+                if (stamp == 0L) continue;
+                BlockState oldValue = super.getBlock(x, y, z, layer);
+                if (!sectionLock.validate(stamp)) continue;
+                if (oldValue != expectedValue) break;
+                stamp = sectionLock.tryConvertToWriteLock(stamp);
+                if (stamp == 0L) continue;
+                super.setBlock(x, y, z, layer, newValue);
+                return;
+            }
+        } finally {
+            if (StampedLock.isWriteLockStamp(stamp)) sectionLock.unlockWrite(stamp);
+        }
     }
 
     @Override
-    public @Range(from = 0, to = 15) byte getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        y = normalY(y) >>> 4;
-        ChunkSection section = this.getSection(y);
-        return section == null ? 0 : section.getSkyLight(x, y & 0xf, z);
+    public @Range(from = 0, to = 15) int getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
+        long stamp = blockLightLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = blockLightLock.readLock()) {
+                if (stamp == 0L) continue;
+                int result = super.getBlockLight(x, y, z);
+                if (!blockLightLock.validate(stamp)) continue;
+                return result;
+            }
+        } finally {
+            if (StampedLock.isReadLockStamp(stamp)) blockLightLock.unlockRead(stamp);
+        }
     }
 
     @Override
-    public void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, byte light) {
-        y = normalY(y) >>> 4;
-        this.getOrCreateSection(y).setBlockLight(x, y & 0xf, z, light);
+    public void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
+        long stamp = blockLightLock.writeLock();
+        try {
+            super.setBlockLight(x, y, z, light);
+        } finally {
+            blockLightLock.unlockWrite(stamp);
+        }
     }
 
     @Override
-    public void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, byte light) {
-        y = normalY(y) >>> 4;
-        this.getOrCreateSection(y).setSkyLight(x, y & 0xf, z, light);
+    public void compareAndSetBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue) {
+        long stamp = blockLightLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = blockLightLock.writeLock()) {
+                if (stamp == 0L) continue;
+                int oldValue = super.getBlockLight(x, y, z);
+                if (!blockLightLock.validate(stamp)) continue;
+                if (oldValue != expectedValue) break;
+                stamp = blockLightLock.tryConvertToWriteLock(stamp);
+                if (stamp == 0L) continue;
+                super.setBlockLight(x, y, z, newValue);
+                return;
+            }
+        } finally {
+            if (StampedLock.isWriteLockStamp(stamp)) blockLightLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public @Range(from = 0, to = 15) int getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
+        long stamp = skyLightLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = skyLightLock.readLock()) {
+                if (stamp == 0L) continue;
+                int result = super.getSkyLight(x, y, z);
+                if (!skyLightLock.validate(stamp)) continue;
+                return result;
+            }
+        } finally {
+            if (StampedLock.isReadLockStamp(stamp)) skyLightLock.unlockRead(stamp);
+        }
+    }
+
+    @Override
+    public void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
+        long stamp = skyLightLock.writeLock();
+        try {
+            super.setSkyLight(x, y, z, light);
+        } finally {
+            skyLightLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public void compareAndSetSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue) {
+        long stamp = skyLightLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = skyLightLock.writeLock()) {
+                if (stamp == 0L) continue;
+                int oldValue = super.getSkyLight(x, y, z);
+                if (!skyLightLock.validate(stamp)) continue;
+                if (oldValue != expectedValue) break;
+                stamp = skyLightLock.tryConvertToWriteLock(stamp);
+                if (stamp == 0L) continue;
+                super.setSkyLight(x, y, z, newValue);
+                return;
+            }
+        } finally {
+            if (StampedLock.isWriteLockStamp(stamp)) skyLightLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public void batchProcess(Consumer<BlockOperate> blockOperate, Consumer<HeightOperate> heightOperate, Consumer<SkyLightOperate> skyLightOperate, Consumer<BlockLightOperate> blockLightOperate) {
+        if (blockOperate != null) {
+            long stamp = sectionLock.writeLock();
+            try {
+                blockOperate.accept(this);
+            } finally {
+                sectionLock.unlockWrite(stamp);
+            }
+        }
+        if (heightOperate != null) {
+            long stamp = heightLock.writeLock();
+            try {
+                heightOperate.accept(this);
+            } finally {
+                heightLock.unlockWrite(stamp);
+            }
+        }
+        if (skyLightOperate != null) {
+            long stamp = skyLightLock.writeLock();
+            try {
+                skyLightOperate.accept(this);
+            } finally {
+                skyLightLock.unlockWrite(stamp);
+            }
+        }
+        if (blockLightOperate != null) {
+            long stamp = blockLightLock.writeLock();
+            try {
+                blockLightOperate.accept(this);
+            } finally {
+                blockLightLock.unlockWrite(stamp);
+            }
+        }
     }
 
     private void writeTo(ByteBuf byteBuf) {
@@ -188,7 +265,6 @@ public class AllayChunk implements Chunk {
 //        }
     }
 
-    @Override
     public LevelChunkPacket createLevelChunkPacket() {
         ByteBuf byteBuf = Unpooled.buffer();
         try {
@@ -204,9 +280,5 @@ public class AllayChunk implements Chunk {
         } finally {
             byteBuf.release();
         }
-    }
-
-    private int normalY(int y) {
-        return y - getDimensionInfo().minHeight();
     }
 }

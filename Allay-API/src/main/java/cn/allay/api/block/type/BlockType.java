@@ -2,27 +2,21 @@ package cn.allay.api.block.type;
 
 import cn.allay.api.block.Block;
 import cn.allay.api.block.component.BlockComponentImpl;
-import cn.allay.api.block.impl.BlockAir;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.component.interfaces.ComponentProvider;
-import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.identifier.Identified;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Allay Project 2023/3/19
  *
  * @author daoge_cmd
  */
-@SuppressWarnings("unchecked")
 public interface BlockType<T extends Block> extends Identified {
-    BlockType<BlockAir> AIR = (BlockType<BlockAir>) VanillaBlockId.AIR.getBlockType();
-
     List<ComponentProvider<? extends BlockComponentImpl>> getComponentProviders();
 
     @UnmodifiableView

@@ -33,12 +33,12 @@ public class AllayWorldGenerationService implements WorldGenerationService {
         executorService.submit(worldGenerationTask);
     }
 
-    public class WorldGenerationTask<T> extends RecursiveAction {
+    public class WorldGenerationTask<T extends LimitedWorldRegion> extends RecursiveAction {
 
-        private final LimitedWorldRegion limitedWorldRegion;
+        private final T limitedWorldRegion;
         private final FinishCallback<T> finishCallback;
 
-        public WorldGenerationTask(LimitedWorldRegion limitedWorldRegion, FinishCallback<T> finishCallback) {
+        public WorldGenerationTask(T limitedWorldRegion, FinishCallback<T> finishCallback) {
             this.limitedWorldRegion = limitedWorldRegion;
             this.finishCallback = finishCallback;
         }

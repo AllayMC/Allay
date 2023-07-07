@@ -28,7 +28,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
 
     public EntityBaseComponentImpl(EntityType<? extends Entity> entityType, EntityInitInfo info) {
         this.entityType = entityType;
-        this.location = info.location();
+        this.location = info.location().cloneLoc();
     }
 
     @Override
