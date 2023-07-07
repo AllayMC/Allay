@@ -8,8 +8,10 @@ import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.identifier.Identified;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Allay Project 2023/3/19
@@ -23,7 +25,13 @@ public interface BlockType<T extends Block> extends Identified {
     Map<String, BlockPropertyType<?>> getProperties();
 
     @UnmodifiableView
-    Map<Integer, BlockState> getAllStates();
+    Collection<BlockState> getAllStates();
+
+    @UnmodifiableView
+    Map<Integer, BlockState> getBlockStateHashMap();
+
+    @UnmodifiableView
+    Map<Integer, BlockState> getSpecialValueMap();
 
     BlockState getDefaultState();
 
@@ -40,7 +48,7 @@ public interface BlockType<T extends Block> extends Identified {
     }
 
     default void register(BlockStateHashPalette registry) {
-        for (var s : getAllStates().values()) {
+        for (var s : getBlockStateHashMap().values()) {
             registry.register(s.blockStateHash(), s);
         }
     }

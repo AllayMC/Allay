@@ -14,6 +14,7 @@ import com.google.common.collect.Lists;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Allay Project 2023/4/8
@@ -45,8 +46,27 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value) {
         if (!getBlockType().getProperties().containsKey(property.getName()))
             throw new IllegalArgumentException("Property " + property + " is not supported by this block");
-        currentState = currentState.updatePropertyValue(property.createValue(value));
+        currentState = currentState.setProperty(property.createValue(value));
     }
+
+    @Override
+    @Impl
+    public void setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
+        if (!getBlockType().getProperties().containsKey(propertyValue.getPropertyType().getName()))
+            throw new IllegalArgumentException("Property " + propertyValue.getPropertyType() + " is not supported by this block");
+        currentState = currentState.setProperty(propertyValue);
+    }
+
+    @Override
+    @Impl
+    public void setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
+        for (BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue : propertyValues) {
+            if (!getBlockType().getProperties().containsKey(propertyValue.getPropertyType().getName()))
+                throw new IllegalArgumentException("Property " + propertyValue.getPropertyType() + " is not supported by this block");
+        }
+        currentState = currentState.setProperties(propertyValues);
+    }
+
 
     @Override
     @Nullable
@@ -58,7 +78,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     @Override
     @Impl
     public void setState(BlockState state) {
-        if (blockType.getAllStates().containsValue(state))
+        if (blockType.getBlockStateHashMap().containsValue(state))
             currentState = state;
         else throw new IllegalArgumentException("State " + state + " is not supported by this block");
     }
@@ -72,7 +92,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     @Override
     @Impl
     public BlockState getNextState() {
-        ArrayList<? extends BlockState> blockStates = Lists.newArrayList(getBlockType().getAllStates().values());
+        ArrayList<? extends BlockState> blockStates = Lists.newArrayList(getBlockType().getBlockStateHashMap().values());
         int next = blockStates.indexOf(currentState) + 1;
         if (next == blockStates.size()) {
             return blockStates.get(0);

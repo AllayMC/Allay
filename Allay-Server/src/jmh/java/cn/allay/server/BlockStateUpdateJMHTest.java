@@ -10,6 +10,7 @@ import cn.allay.api.block.property.VanillaBlockPropertyTypes;
 import cn.allay.api.math.position.Pos;
 import org.openjdk.jmh.annotations.*;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,8 +40,10 @@ public class BlockStateUpdateJMHTest {
 
     @Benchmark
     public void test2() {
-        wood.setProperty(VanillaBlockPropertyTypes.PILLAR_AXIS, PillarAxis.Z);
-        wood.setProperty(VanillaBlockPropertyTypes.STRIPPED_BIT, true);
-        wood.setProperty(VanillaBlockPropertyTypes.WOOD_TYPE, WoodType.DARK_OAK);
+        wood.setProperties(List.of(
+                VanillaBlockPropertyTypes.PILLAR_AXIS.createValue(PillarAxis.Z),
+                VanillaBlockPropertyTypes.STRIPPED_BIT.createValue(true),
+                VanillaBlockPropertyTypes.WOOD_TYPE.createValue(WoodType.DARK_OAK)
+        ));
     }
 }

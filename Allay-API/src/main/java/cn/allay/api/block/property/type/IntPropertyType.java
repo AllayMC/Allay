@@ -1,5 +1,6 @@
 package cn.allay.api.block.property.type;
 
+import cn.allay.api.utils.Utils;
 import lombok.Getter;
 
 import java.util.stream.IntStream;
@@ -18,7 +19,7 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
     private final int max;
 
     private IntPropertyType(String name, int min, int max, Integer defaultData) {
-        super(name, IntStream.range(min, max + 1).boxed().toList(), defaultData);
+        super(name, IntStream.range(min, max + 1).boxed().toList(), defaultData, Utils.computeRequiredBits(max - min + 1));
         this.min = min;
         this.max = max;
         cachedValues = new IntPropertyValue[max + 1 - min];
@@ -53,6 +54,11 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
 
         IntPropertyValue(Integer value) {
             super(IntPropertyType.this, value);
+        }
+
+        @Override
+        public int getIndex() {
+            return value - min;
         }
 
         @Override

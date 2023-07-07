@@ -7,6 +7,8 @@ import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.math.position.FixedPos;
 
+import java.util.List;
+
 /**
  * Allay Project 2023/4/8
  *
@@ -18,6 +20,12 @@ public interface BlockBaseComponent {
 
     @Inject
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value);
+
+    @Inject
+    void setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
+
+    @Inject
+    void setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     @Inject
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getProperty(PROPERTY property);

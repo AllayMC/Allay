@@ -1,6 +1,10 @@
 package cn.allay.api.utils;
 
+import cn.allay.api.block.property.type.BlockPropertyType;
 import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.Range;
+
+import java.util.List;
 
 /**
  * Allay Project 2023/6/23
@@ -24,5 +28,15 @@ public class Utils {
             index += b.length;
         }
         return appendedBytes;
+    }
+
+    public static int computeRequiredBits(@Range(from = 1, to = Integer.MAX_VALUE) int size) {
+        if (size <= 2)
+            return 1;
+        int bits = 2;
+        while (size > (1 << bits)) {
+            bits++;
+        }
+        return bits;
     }
 }

@@ -21,6 +21,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static cn.allay.api.component.interfaces.ComponentProvider.of;
@@ -165,5 +166,18 @@ class AllayBlockTypeTest {
     void testBlockAttributes() {
         assertEquals(2, testBlockType1.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null))).getBlockAttributes().burnChance());
         assertEquals(3, testBlockType2.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null))).getBlockAttributes().burnChance());
+    }
+
+    @Test
+    void testSpecialValue() {
+        var values = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[3];
+        values[0] = (TEST_BOOLEAN_PROPERTY_TYPE.createValue(true));
+        values[1] = (TEST_INT_PROPERTY_TYPE.createValue(5));
+        values[2] = (TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.B));
+        assertEquals(0b1010101, BlockPropertyType.computeSpecialValue(values));
+        values[2] = TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.A);
+        assertEquals(0b1010100, BlockPropertyType.computeSpecialValue(values));
+        values[1] = TEST_INT_PROPERTY_TYPE.createValue(0);
+        assertEquals(0b1000000, BlockPropertyType.computeSpecialValue(values));
     }
 }
