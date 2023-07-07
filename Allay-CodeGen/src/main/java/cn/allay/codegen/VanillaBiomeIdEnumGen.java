@@ -1,5 +1,6 @@
 package cn.allay.codegen;
 
+import cn.allay.dependence.VanillaBiomeId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -21,10 +22,10 @@ public class VanillaBiomeIdEnumGen {
             Allay Project <p>
             @author daoge_cmd
             """;
-    private static final Path FILE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBiomeId.java");
 
     public static void main(String[] args) {
         generate();
+        generateTypes();
     }
 
     @SneakyThrows
@@ -58,7 +59,30 @@ public class VanillaBiomeIdEnumGen {
             codeBuilder.addEnumConstant(name.toUpperCase(), TypeSpec.anonymousClassBuilder("$S, $L, $S", name, id, type).build());
         }
 
-        var javaFile = JavaFile.builder("cn.allay.api.data", codeBuilder.build()).build();
-        Files.writeString(FILE_OUTPUT_PATH, javaFile.toString());
+        var builtCode = codeBuilder.build();
+        var javaFile = JavaFile.builder("cn.allay.api.data", builtCode).build();
+        Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBiomeId.java"), javaFile.toString());
+        var javaFile2 = JavaFile.builder("cn.allay.dependence", builtCode).build();
+        Files.writeString(Path.of("Allay-CodeGen/src/main/java/cn/allay/dependence/VanillaBiomeId.java"), javaFile2.toString());
+    }
+
+    @SneakyThrows
+    public static void generateTypes() {
+        var biomeTypeClassName = ClassName.get("cn.allay.api.world.biome", "BiomeType");
+        var vanillaBiomeIdEnumClassName = ClassName.get("cn.allay.api.data", "VanillaBiomeId");
+        var codeBuilder = TypeSpec.interfaceBuilder("VanillaBiomeTypes")
+                .addModifiers(Modifier.PUBLIC)
+                .addJavadoc(JAVA_DOC);
+        for (var id : VanillaBiomeId.values()) {
+            var constantName = id.getName().toUpperCase();
+            codeBuilder.addField(
+                    FieldSpec
+                            .builder(biomeTypeClassName, constantName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            .initializer("BiomeType.create($T.$N)", vanillaBiomeIdEnumClassName, id.name())
+                            .build());
+        }
+
+        var javaFile = JavaFile.builder("cn.allay.api.world.biome", codeBuilder.build()).build();
+        Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/world/biome/VanillaBiomeTypes.java"), javaFile.toString());
     }
 }

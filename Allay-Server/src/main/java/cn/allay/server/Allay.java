@@ -15,7 +15,7 @@ import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
-import cn.allay.api.world.biome.BiomeRegistry;
+import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.server.block.attribute.AllayVanillaBlockAttributeRegistry;
 import cn.allay.server.block.palette.AllayVanillaBlockStatePalette;
 import cn.allay.server.block.type.AllayBlockStateHashPalette;
@@ -28,7 +28,7 @@ import cn.allay.server.item.attribute.AllayVanillaItemAttributeRegistry;
 import cn.allay.server.item.type.AllayItemType;
 import cn.allay.server.item.type.AllayItemTypeRegistry;
 import cn.allay.server.scheduler.AllayScheduler;
-import cn.allay.server.world.biome.AllayBiomeRegistry;
+import cn.allay.server.world.biome.AllayBiomeTypeRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -73,7 +73,7 @@ public final class Allay {
         api.bind(EntityTypeRegistry.class, AllayEntityTypeRegistry::new, instance -> ((AllayEntityTypeRegistry) instance).init());
 
         //Biome
-        api.bind(BiomeRegistry.class, AllayBiomeRegistry::new);
+        api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
 
         api.implement("Allay");
     }

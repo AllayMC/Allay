@@ -13,7 +13,7 @@ import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
-import cn.allay.api.world.biome.BiomeRegistry;
+import cn.allay.api.world.biome.BiomeTypeRegistry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -145,7 +145,7 @@ public final class AllayAPI {
         requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
 
         //Biome
-        requireImpl(BiomeRegistry.class, BiomeRegistry.REGISTRY::set);
+        requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {

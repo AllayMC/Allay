@@ -1,4 +1,4 @@
-package cn.allay.api.data;
+package cn.allay.dependence;
 
 import java.lang.Integer;
 import java.lang.String;

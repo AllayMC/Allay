@@ -30,6 +30,7 @@ public class CodeGen {
         VanillaItemIdEnumGen.generate();
         VanillaEntityIdEnumGen.generate();
         VanillaBiomeIdEnumGen.generate();
+        //VanillaBiomeTypeGen.generate();
 
         //Classes
         VanillaBlockClassGen.generate();
