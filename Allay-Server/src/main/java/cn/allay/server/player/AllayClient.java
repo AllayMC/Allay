@@ -145,7 +145,7 @@ public class AllayClient implements Client {
         sendPacket(startGamePacket);
 
         var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
-        biomeDefinitionListPacket.setDefinitions(BiomeTypeRegistry.getRegistry().getBiomeDefinitionListTag());
+        biomeDefinitionListPacket.setDefinitions(BiomeTypeRegistry.getRegistry().getBiomeDefinition());
         sendPacket(biomeDefinitionListPacket);
 
         var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();
