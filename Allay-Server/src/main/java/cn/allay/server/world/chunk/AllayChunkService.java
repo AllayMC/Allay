@@ -17,7 +17,10 @@ import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -174,21 +177,21 @@ public class AllayChunkService implements ChunkService {
             return loadingChunk;
         }
         var future = worldStorage
-                .readChunk(x, z, world.getDimensionInfo())
-                .thenApply(loadedChunk -> {
-                    if (loadedChunk != null) {
-                        setChunk(x, z, loadedChunk);
-                        loadingChunks.remove(hashXZ);
-                        return loadedChunk;
-                    }
-                    var chunk = new AllayChunk(x, z, world.getDimensionInfo());
-                    worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(chunk), single -> {
-                        setChunk(x, z, chunk);
-                        loadingChunks.remove(hashXZ);
-                    });
-                    return chunk;
-                });
+                .readChunk(x, z, world.getDimensionInfo());
         loadingChunks.put(hashXZ, future);
+        future.thenApply(loadedChunk -> {
+            if (loadedChunk != null) {
+                setChunk(x, z, loadedChunk);
+                loadingChunks.remove(hashXZ);
+                return loadedChunk;
+            }
+            var chunk = new AllayChunk(x, z, world.getDimensionInfo());
+            worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(chunk), single -> {
+                setChunk(x, z, chunk);
+                loadingChunks.remove(hashXZ);
+            });
+            return chunk;
+        });
         return future;
     }
 
@@ -286,12 +289,13 @@ public class AllayChunkService implements ChunkService {
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             for (var sentChunkCount = 0; sentChunkCount < chunkSentPerTick; sentChunkCount++) {
                 if (chunkSendingQueue.isEmpty()) break;
-                var chunkHash = chunkSendingQueue.remove(0);
+                var chunkHash = chunkSendingQueue.get(0);
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
                     sentChunkCount--;
                     continue;
                 }
+                chunkSendingQueue.remove(0);
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             }

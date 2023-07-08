@@ -155,8 +155,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             levelChunkPacket.setChunkZ(this.chunkZ);
             levelChunkPacket.setCachingEnabled(false);
             levelChunkPacket.setRequestSubChunks(false);
-            levelChunkPacket.setSubChunksLength(this.dimensionInfo.chunkSectionSize());
-            this.writeChunkToBuffer(byteBuf.retain());
+            writeChunkDataToBuffer(levelChunkPacket, byteBuf.retain());
             levelChunkPacket.setData(byteBuf);
             return levelChunkPacket;
         } finally {
@@ -164,32 +163,35 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
     }
 
-    protected void writeChunkToBuffer(ByteBuf byteBuf) {
+    private void writeChunkDataToBuffer(LevelChunkPacket levelChunkPacket, ByteBuf retainedBuffer) {
         Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
 
         for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
             var section = getSection(sectionY);
-            if (section == null) break;
-            section.writeToNetwork(byteBuf);
+            if (section == null) {
+                levelChunkPacket.setSubChunksLength(sectionY);
+                break;
+            }
+            section.writeToNetwork(retainedBuffer);
         }
 
         for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
             var section = getSection(sectionY);
             if (section == null) {
-                lastBiomes.writeToNetwork(byteBuf, BiomeType::getId, lastBiomes);
+                lastBiomes.writeToNetwork(retainedBuffer, BiomeType::getId, lastBiomes);
                 continue;
             }
 
-            section.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+            section.biomes().writeToNetwork(retainedBuffer, BiomeType::getId);
             lastBiomes = section.biomes();
         }
 
-        byteBuf.writeByte(0); // edu - border blocks
+        retainedBuffer.writeByte(0); // edu - border blocks
 
         //TODO: BlockEntity
 //        Collection<BlockEntity> blockEntities = this.getBlockEntities();
 //        if (!blockEntities.isEmpty()) {
-//            try (NBTOutputStream writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(byteBuf))) {
+//            try (NBTOutputStream writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(retainedBuffer))) {
 //                for (BlockEntity blockEntity : blockEntities) {
 //                    NbtMap tag = blockEntity.toCompound().build();
 //                    writer.writeTag(tag);

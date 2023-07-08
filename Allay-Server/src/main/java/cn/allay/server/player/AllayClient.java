@@ -48,7 +48,7 @@ public class AllayClient implements Client {
     @Getter
     private LoginData loginData;
     @Getter
-    private String name;
+    private String name = "";
     @Getter
     private EntityPlayer playerEntity;
     @Getter
@@ -120,7 +120,8 @@ public class AllayClient implements Client {
     public void disconnect(String reason, boolean hideReason) {
         server.onClientDisconnect(this);
         session.disconnect(reason, hideReason);
-        playerEntity.getLocation().getWorld().removeClient(this);
+        if (playerEntity != null)
+            playerEntity.getLocation().getWorld().removeClient(this);
     }
 
     /**
@@ -138,7 +139,7 @@ public class AllayClient implements Client {
     public void sendPlayStatus(PlayStatusPacket.Status status) {
         var playStatusPacket = new PlayStatusPacket();
         playStatusPacket.setStatus(status);
-        sendPacketImmediately(playStatusPacket);
+        sendPacket(playStatusPacket);
     }
 
     private void initPlayerEntity() {
@@ -309,7 +310,7 @@ public class AllayClient implements Client {
             loginData = LoginData.decode(packet);
 
             //TODO: event
-            if (!loginData.isXboxAuthenticated()) {
+            if (!loginData.isXboxAuthenticated() && server.getServerSettings().xboxAuth()) {
                 disconnect("disconnectionScreen.notAuthenticated");
                 return PacketSignal.HANDLED;
             }

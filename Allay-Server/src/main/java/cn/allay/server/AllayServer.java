@@ -131,6 +131,7 @@ public final class AllayServer implements Server {
                 .subMotd("Powered by Allay")
                 .maxClientCount(20)
                 .gameType(GameType.CREATIVE)
+                .xboxAuth(false)
                 .defaultTickingRadius(8)
                 .defaultViewDistance(8)
                 .build();
@@ -157,10 +158,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void onClientDisconnect(Client client) {
-        var disconnected = clients.remove(client.getName());
-        if (disconnected == null) {
-            throw new IllegalArgumentException("Client is not connected: " + client.getName());
-        }
+        clients.remove(client.getName());
     }
 
     @Override
