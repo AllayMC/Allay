@@ -155,7 +155,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             levelChunkPacket.setChunkZ(this.chunkZ);
             levelChunkPacket.setCachingEnabled(false);
             levelChunkPacket.setRequestSubChunks(false);
-            writeChunkDataToBuffer(levelChunkPacket, byteBuf.retain());
+            //TODO: 不发送空section
+            levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionSize());
+            writeChunkDataToBuffer(byteBuf.retain());
             levelChunkPacket.setData(byteBuf);
             return levelChunkPacket;
         } finally {
@@ -163,15 +165,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
     }
 
-    private void writeChunkDataToBuffer(LevelChunkPacket levelChunkPacket, ByteBuf retainedBuffer) {
+    private void writeChunkDataToBuffer(ByteBuf retainedBuffer) {
         Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
 
         for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
-            var section = getSection(sectionY);
-            if (section == null) {
-                levelChunkPacket.setSubChunksLength(sectionY);
-                break;
-            }
+            var section = getOrCreateSection(sectionY);
             section.writeToNetwork(retainedBuffer);
         }
 

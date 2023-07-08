@@ -75,7 +75,7 @@ public record ChunkSection(int sectionY,
         skyLights.set(index(x, y, z), light);
     }
 
-    public void writeToNetwork( ByteBuf byteBuf ) {
+    public void writeToNetwork(ByteBuf byteBuf) {
         byteBuf.writeByte(SUB_CHUNK_VERSION);
         //block layer count
         byteBuf.writeByte(2);
