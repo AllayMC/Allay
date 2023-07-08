@@ -1299,8 +1299,9 @@ import cn.allay.api.item.impl.ItemZombieSpawnEgg;
 import cn.allay.api.item.impl.ItemZombieVillagerSpawnEgg;
 
 /**
- * @author daoge_cmd <br>
- * Allay Project <br>
+ * Allay Project <p>
+ *
+ * @author daoge_cmd
  */
 public interface VanillaItemTypes {
   ItemType<ItemAcaciaBoat> ACACIA_BOAT_TYPE = ItemTypeBuilder

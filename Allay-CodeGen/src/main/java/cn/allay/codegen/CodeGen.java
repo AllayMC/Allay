@@ -23,121 +23,12 @@ import static cn.allay.codegen.Utils.convertToPascalCase;
  * @author daoge_cmd
  */
 public class CodeGen {
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
     public static void main(String[] args) {
-        //Constants
-        VanillaBlockIdEnumGen.generate();
-        VanillaBlockPropertyTypeGen.generate();
-        VanillaItemIdEnumGen.generate();
-        VanillaEntityIdEnumGen.generate();
-        VanillaBiomeIdEnumGen.generate();
-        //VanillaBiomeTypeGen.generate();
-
-        //Classes
-        VanillaBlockClassGen.generate();
-        VanillaEntityClassGen.generate();
-        VanillaItemClassGen.generate();
-    }
-
-    static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Data/block_palette.nbt");
-    static final List<NbtMap> BLOCK_PALETTE_NBT;
-    static final Map<String, NbtMap> MAPPED_BLOCK_PALETTE_NBT = new HashMap<>();
-
-    static {
-        try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(CodeGen.BLOCK_PALETTE_FILE_PATH))))) {
-            BLOCK_PALETTE_NBT = ((NbtMap) nbtReader.readTag()).getList("blocks", NbtType.COMPOUND);
-            for (var entry : BLOCK_PALETTE_NBT) {
-                MAPPED_BLOCK_PALETTE_NBT.put(entry.getString("name"), entry);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    static final Path ITEM_DATA_FILE_PATH = Path.of("Data/item_data.json");
-    static final Map<String, Map<String, JsonElement>> MAPPED_ITEM_DATA = new TreeMap<>();
-
-    static {
-        try {
-            var reader = JsonParser.parseReader(Files.newBufferedReader(ITEM_DATA_FILE_PATH));
-            reader.getAsJsonArray().forEach(item -> {
-                var obj = item.getAsJsonObject();
-                MAPPED_ITEM_DATA.put(obj.get("name").getAsString(), obj.asMap());
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    static final Path ENTITY_ID_MAP_FILE_PATH = Path.of("Data/unpacked/entity_id_map.json");
-    static final Map<String, Integer> ENTITY_ID_MAP = new TreeMap<>();
-
-    static {
-        try {
-            var reader = JsonParser.parseReader(Files.newBufferedReader(ENTITY_ID_MAP_FILE_PATH));
-            reader.getAsJsonObject().entrySet().forEach(entry -> {
-                var id = entry.getValue().getAsInt();
-                ENTITY_ID_MAP.put(entry.getKey(), id);
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static final Path BLOCK_PROPERTY_TYPES_FILE = Path.of("Data/unpacked/block_property_types.json");
-    static final BlockPropertyTypeFile BLOCK_PROPERTY_TYPE_INFO_FILE;
-
-    public static class BlockPropertyTypeFile {
-        Map<String, BlockPropertyTypeInfo> propertyTypes;
-        List<String> differentSizePropertyTypes;
-        Map<String, Map<String, String>> specialBlockTypes;
-
-        public static class BlockPropertyTypeInfo {
-            String serializationName;
-            BlockPropertyType valueType;
-            List<String> values;
-
-            public String getEnumClassName() {
-                //minecraft:cardinal_direction WTF???
-                return convertToPascalCase(serializationName.replace(":", "_"));
-            }
-
-            public String getConstantValueName() {
-                return serializationName.replace(":", "_").toUpperCase();
-            }
-        }
-
-        protected enum BlockPropertyType {
-            BOOLEAN,
-            INTEGER,
-            ENUM
-        }
-    }
-
-    static {
-        try {
-            BLOCK_PROPERTY_TYPE_INFO_FILE = GSON.fromJson(Files.newBufferedReader(BLOCK_PROPERTY_TYPES_FILE), BlockPropertyTypeFile.class);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static final Map<String, BiomeData> BIOME_DATA = new LinkedHashMap<>();
-
-    public static class BiomeData {
-        int id;
-        String type;
-    }
-
-    static {
-        try {
-            Map<String, BiomeData> unsorted = GSON.fromJson(Files.newBufferedReader(Path.of("Data/unpacked/biome_id_and_type.json")), new HashMap<String, BiomeData>() {}.getClass().getGenericSuperclass());
-            unsorted.entrySet()
-                    .stream()
-                    .sorted(Map.Entry.comparingByValue(Comparator.comparingInt(o -> o.id)))
-                    .forEachOrdered(entry -> BIOME_DATA.put(entry.getKey(), entry.getValue()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        VanillaBiomeIdEnumGen.main(args);
+        VanillaBlockClassGen.main(args);
+        VanillaEntityClassGen.main(args);
+        VanillaItemClassGen.main(args);
     }
 }

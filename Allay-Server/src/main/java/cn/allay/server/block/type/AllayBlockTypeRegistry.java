@@ -2,12 +2,11 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
-import cn.allay.api.block.type.VanillaBlockTypes;
+import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import me.tongfei.progressbar.ProgressBar;
 
 import java.util.HashMap;
 import java.util.Map;

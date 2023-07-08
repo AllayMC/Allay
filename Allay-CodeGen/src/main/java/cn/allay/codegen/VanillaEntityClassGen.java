@@ -18,19 +18,22 @@ import java.nio.file.Path;
  */
 public class VanillaEntityClassGen {
 
+    public static void main(String[] args) {
+        VanillaEntityIdEnumGen.generate();
+        generate();
+    }
+
     public static final ClassName ENTITY_CLASS_NAME = ClassName.get("cn.allay.api.entity", "Entity");
     public static final ClassName VANILLA_ENTITY_ID_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaEntityId");
     public static final ClassName ENTITY_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.entity.type", "EntityType");
     public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.entity.type", "EntityTypeBuilder");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/entity/impl");
+    private static final String ENTITY_TYPE_PACKAGE_NAME = "cn.allay.api.data";
+    private static final Path ENTITY_TYPE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaEntityTypes.java");
 
     private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaEntityTypes")
             .addModifiers(Modifier.PUBLIC)
             .addJavadoc("Allay Project <p>\n@author daoge_cmd");
-
-    public static void main(String[] args) {
-        generate();
-    }
 
     @SneakyThrows
     public static void generate() {
@@ -45,9 +48,9 @@ public class VanillaEntityClassGen {
             }
             generateEntityType(entity, className);
             var typesJavaFile = JavaFile
-                    .builder("cn.allay.api.entity.type", TYPES_CLASS.build())
+                    .builder(ENTITY_TYPE_PACKAGE_NAME, TYPES_CLASS.build())
                     .build();
-            Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/entity/type/VanillaEntityTypes.java"), typesJavaFile.toString());
+            Files.writeString(ENTITY_TYPE_OUTPUT_PATH, typesJavaFile.toString());
         }
     }
 

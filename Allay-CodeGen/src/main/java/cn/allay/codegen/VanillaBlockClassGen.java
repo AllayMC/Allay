@@ -10,7 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static cn.allay.codegen.CodeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
+import static cn.allay.codegen.VanillaBlockIdEnumGen.MAPPED_BLOCK_PALETTE_NBT;
+import static cn.allay.codegen.VanillaBlockPropertyTypeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 
 /**
  * Depend on VanillaBlockIdEnumGen execution
@@ -27,12 +28,15 @@ public class VanillaBlockClassGen {
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockTypeBuilder");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/impl");
-
+    private static final Path BLOCK_TYPE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockTypes.java");
+    private static final String BLOCK_TYPE_PACKAGE_NAME = "cn.allay.api.data";
     private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaBlockTypes")
             .addModifiers(Modifier.PUBLIC)
             .addJavadoc("Allay Project <p>\n@author daoge_cmd");
 
     public static void main(String[] args) {
+        VanillaBlockIdEnumGen.generate();
+        VanillaBlockPropertyTypeGen.generate();
         generate();
     }
 
@@ -48,9 +52,9 @@ public class VanillaBlockClassGen {
             }
             generateBlockType(block, className);
             var typesJavaFile = JavaFile
-                    .builder("cn.allay.api.block.type", TYPES_CLASS.build())
+                    .builder(BLOCK_TYPE_PACKAGE_NAME, TYPES_CLASS.build())
                     .build();
-            Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/block/type/VanillaBlockTypes.java"), typesJavaFile.toString());
+            Files.writeString(BLOCK_TYPE_OUTPUT_PATH, typesJavaFile.toString());
         }
     }
 
@@ -72,7 +76,7 @@ public class VanillaBlockClassGen {
         initializer
                 .add("$T\n        .builder($T.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, className)
                 .add("        .vanillaBlock($T.$N, true)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
-        var blockPaletteData = CodeGen.MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
+        var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
         var states = blockPaletteData.getCompound("states");
         if (states.size() != 0) {
             initializer.add("        .withProperties(");

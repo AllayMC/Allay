@@ -1,12 +1,12 @@
-package cn.allay.api.block.type;
+package cn.allay.api.data;
 
 import cn.allay.api.block.impl.*;
-import cn.allay.api.data.VanillaBlockId;
-import cn.allay.api.block.property.VanillaBlockPropertyTypes;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeBuilder;
 
 /**
- * @author daoge_cmd <br>
- * Allay Project <br>
+ * Allay Project <p>
+ * @author daoge_cmd
  */
 public interface VanillaBlockTypes {
   BlockType<BlockAcaciaButton> ACACIA_BUTTON_TYPE = BlockTypeBuilder

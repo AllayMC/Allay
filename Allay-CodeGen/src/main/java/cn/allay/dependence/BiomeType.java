@@ -1,4 +1,4 @@
-package cn.allay.api.world.biome;
+package cn.allay.dependence;
 
 /**
  * Allay Project 2023/6/3
