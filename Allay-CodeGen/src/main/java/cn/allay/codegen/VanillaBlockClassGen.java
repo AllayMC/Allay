@@ -10,7 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static cn.allay.codegen.CodeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
+import static cn.allay.codegen.VanillaBlockIdEnumGen.MAPPED_BLOCK_PALETTE_NBT;
+import static cn.allay.codegen.VanillaBlockPropertyTypeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 
 /**
  * Depend on VanillaBlockIdEnumGen execution
@@ -33,6 +34,8 @@ public class VanillaBlockClassGen {
             .addJavadoc("Allay Project <p>\n@author daoge_cmd");
 
     public static void main(String[] args) {
+        VanillaBlockIdEnumGen.generate();
+        VanillaBlockPropertyTypeGen.generate();
         generate();
     }
 
@@ -72,7 +75,7 @@ public class VanillaBlockClassGen {
         initializer
                 .add("$T\n        .builder($T.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, className)
                 .add("        .vanillaBlock($T.$N, true)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
-        var blockPaletteData = CodeGen.MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
+        var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
         var states = blockPaletteData.getCompound("states");
         if (states.size() != 0) {
             initializer.add("        .withProperties(");

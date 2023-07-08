@@ -3,12 +3,19 @@ package cn.allay.codegen;
 import cn.allay.dependence.Identifier;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
+import org.cloudburstmc.nbt.NBTInputStream;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 
 import javax.lang.model.element.Modifier;
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Allay Project 2023/3/26
@@ -16,6 +23,25 @@ import static cn.allay.codegen.CodeGen.BLOCK_PALETTE_NBT;
  * @author daoge_cmd | Cool_Loong
  */
 public class VanillaBlockIdEnumGen {
+    public static void main(String[] args) {
+        generate();
+    }
+
+    static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Data/block_palette.nbt");
+    static final List<NbtMap> BLOCK_PALETTE_NBT;
+    public static final Map<String, NbtMap> MAPPED_BLOCK_PALETTE_NBT = new HashMap<>();
+
+    static {
+        try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(BLOCK_PALETTE_FILE_PATH))))) {
+            BLOCK_PALETTE_NBT = ((NbtMap) nbtReader.readTag()).getList("blocks", NbtType.COMPOUND);
+            for (var entry : BLOCK_PALETTE_NBT) {
+                MAPPED_BLOCK_PALETTE_NBT.put(entry.getString("name"), entry);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static final ClassName stringClass = ClassName.get("java.lang", "String");
     private static final ClassName getterClass = ClassName.get("lombok", "Getter");
     private static final String javaDoc = """
@@ -23,10 +49,7 @@ public class VanillaBlockIdEnumGen {
             Allay Project <p>
             @author daoge_cmd | Cool_Loong
             """;
-
-    public static void main(String[] args) {
-        generate();
-    }
+    private static final String PACKAGE_NAME = "cn.allay.api.data";
 
     @SneakyThrows
     public static void generate() {
@@ -56,7 +79,7 @@ public class VanillaBlockIdEnumGen {
                         .build()
                 );
         addEnums(codeBuilder);
-        var javaFile = JavaFile.builder("cn.allay.api.data", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build()).build();
         Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockId.java"), javaFile.toString().replace("public BlockType", "public BlockType<?>"));
     }
 

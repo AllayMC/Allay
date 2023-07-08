@@ -8,7 +8,8 @@ import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static cn.allay.codegen.CodeGen.MAPPED_ITEM_DATA;
+import static cn.allay.codegen.VanillaItemClassGen.MAPPED_ITEM_DATA;
+
 
 /**
  * Allay Project 2023/5/13
@@ -23,7 +24,7 @@ public class VanillaItemIdEnumGen {
             Allay Project <p>
             @author daoge_cmd | Cool_Loong
             """;
-
+    private static final String PACKAGE_NAME = "cn.allay.api.data";
     public static void main(String[] args) {
         generate();
     }
@@ -55,7 +56,7 @@ public class VanillaItemIdEnumGen {
                 .build()
         );
         addEnums(codeBuilder);
-        var javaFile = JavaFile.builder("cn.allay.api.data", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build()).build();
         Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaItemId.java"),
                 javaFile.toString().replace("public ItemType", "public ItemType<?>"));
     }
