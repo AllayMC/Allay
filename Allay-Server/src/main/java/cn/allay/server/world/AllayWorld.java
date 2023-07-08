@@ -57,6 +57,8 @@ public class AllayWorld implements World {
     EntityService entityService;
     @Getter
     private GameType worldGameType;
+    @Getter
+    private Thread worldMainThread;
     private Loc<Float> spawnLocation;
     private Difficulty difficulty;
     private final Map<Long, Client> clients = new ConcurrentHashMap<>();
@@ -85,7 +87,10 @@ public class AllayWorld implements World {
 
     @Override
     public void startTick() {
-        Thread.ofPlatform()
+        if (worldMainThread != null) {
+            throw new IllegalStateException("World is already ticking");
+        }
+        worldMainThread = Thread.ofPlatform()
                 .name("Allay World Main Thread")
                 .start(() -> {
                     GameLoop.builder()

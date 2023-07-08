@@ -10,6 +10,7 @@ import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.generator.WorldGenerationService;
 import cn.allay.api.world.storage.WorldStorage;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import lombok.Getter;
@@ -20,7 +21,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * Allay Project 2023/7/1
@@ -77,9 +77,7 @@ public class AllayChunkService implements ChunkService {
     }
 
     private void tickChunkLoaders() {
-        for (var chunkLoaderManager : chunkLoaders.values()) {
-            Thread.ofVirtual().start(chunkLoaderManager::tick);
-        }
+        chunkLoaders.values().stream().parallel().forEach(ChunkLoaderManager::tick);
     }
 
     @Override
@@ -175,14 +173,14 @@ public class AllayChunkService implements ChunkService {
                 .readChunk(x, z, world.getDimensionInfo())
                 .thenApply(loadedChunk -> {
                     if (loadedChunk != null) {
-                        loadingChunks.remove(hashXZ);
                         setChunk(x, z, loadedChunk);
+                        loadingChunks.remove(hashXZ);
                         return loadedChunk;
                     }
                     var chunk = new AllayChunk(x, z, world.getDimensionInfo());
                     worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(chunk), single -> {
-                        loadingChunks.remove(hashXZ);
                         setChunk(x, z, chunk);
+                        loadingChunks.remove(hashXZ);
                     });
                     return chunk;
                 });
@@ -280,7 +278,7 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void sendQueuedChunks() {
-            var chunkReadyToSend = Stream.<Chunk>builder();
+            var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             for (var sentChunkCount = 0; sentChunkCount < chunkSentPerTick; sentChunkCount++) {
                 if (chunkSendingQueue.isEmpty()) break;
                 var chunkHash = chunkSendingQueue.remove(0);
@@ -290,12 +288,10 @@ public class AllayChunkService implements ChunkService {
                     continue;
                 }
                 chunk.addChunkLoader(chunkLoader);
-                chunkReadyToSend.add(chunk);
+                chunkReadyToSend.put(chunkHash, chunk);
             }
-            chunkReadyToSend.build().parallel().forEach(chunk -> {
-                chunkLoader.sendChunk(chunk);
-                sentChunks.add(HashUtils.hashXZ(chunk.getChunkX(), chunk.getChunkZ()));
-            });
+            chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash));
+            chunkReadyToSend.values().stream().parallel().forEach(chunkLoader::sendChunk);
         }
 
         private void removeOutOfRadiusChunks() {

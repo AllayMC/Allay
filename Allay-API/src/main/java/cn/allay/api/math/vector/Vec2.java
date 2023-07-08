@@ -14,4 +14,9 @@ public interface Vec2<T extends Number> extends FixedVec2<T> {
     void setX(T value);
 
     void setZ(T value);
+
+    default void setVec2(FixedVec2<T> vec2) {
+        setX(vec2.getX());
+        setZ(vec2.getZ());
+    }
 }

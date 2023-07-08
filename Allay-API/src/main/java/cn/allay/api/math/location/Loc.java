@@ -27,4 +27,11 @@ public interface Loc<T extends Number> extends FixedLoc<T>, Pos<T> {
     void setYaw(double value);
 
     void setHeadYaw(double value);
+
+    default void setLoc(FixedLoc<T> loc) {
+        setPos(loc);
+        setYaw(loc.getYaw());
+        setHeadYaw(loc.getHeadYaw());
+        setPitch(loc.getPitch());
+    }
 }

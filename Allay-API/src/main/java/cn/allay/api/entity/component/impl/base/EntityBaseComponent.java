@@ -18,5 +18,8 @@ public interface EntityBaseComponent {
     FixedLoc<Float> getLocation();
 
     @Inject
+    void setLocation(FixedLoc<Float> location);
+
+    @Inject
     long getUniqueId();
 }

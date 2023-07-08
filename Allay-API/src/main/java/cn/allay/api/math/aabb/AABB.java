@@ -27,4 +27,13 @@ public interface AABB extends FixedAABB {
     void setMaxY(float maxY);
 
     void setMaxZ(float maxZ);
+
+    default void setAABB(FixedAABB aabb) {
+        setMinX(aabb.minX());
+        setMinY(aabb.minY());
+        setMinZ(aabb.minZ());
+        setMaxX(aabb.maxX());
+        setMaxY(aabb.maxY());
+        setMaxZ(aabb.maxZ());
+    }
 }
