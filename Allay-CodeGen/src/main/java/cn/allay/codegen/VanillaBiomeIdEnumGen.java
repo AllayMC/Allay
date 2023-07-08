@@ -44,7 +44,7 @@ public class VanillaBiomeIdEnumGen {
     }
 
     private static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
-    private static final ClassName INTEGER_CLASS = ClassName.get("java.lang", "Integer");
+    private static final Class<?> INT_CLASS = int.class;
     private static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
     private static final String PACKAGE_NAME = "cn.allay.api.data";
     private static final Path TARGET_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBiomeId.java");
@@ -64,14 +64,14 @@ public class VanillaBiomeIdEnumGen {
                         .builder(STRING_CLASS, "name", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
-                        .builder(INTEGER_CLASS, "id", Modifier.PRIVATE, Modifier.FINAL)
+                        .builder(INT_CLASS, "id", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
                         .builder(STRING_CLASS, "type", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
                         .addParameter(STRING_CLASS, "name")
-                        .addParameter(INTEGER_CLASS, "id")
+                        .addParameter(INT_CLASS, "id")
                         .addParameter(STRING_CLASS, "type")
                         .addStatement("this.name = name")
                         .addStatement("this.id = id")
