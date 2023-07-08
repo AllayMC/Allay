@@ -114,6 +114,8 @@ public class AllayClient implements Client {
         adventureSettings.set(AdventureSettings.Type.NO_PVM, gameType == GameType.SPECTATOR);
         adventureSettings.update();
 
+        //TODO: CommandData
+
         var updateAttributesPacket = new UpdateAttributesPacket();
         updateAttributesPacket.setRuntimeEntityId(playerEntity.getUniqueId());
         for (Attribute attribute : playerEntity.getAttributes()) {
@@ -122,7 +124,7 @@ public class AllayClient implements Client {
         updateAttributesPacket.setTick(server.getTicks());
         sendPacket(updateAttributesPacket);
 
-        //TODO: PlayerList
+        server.addToPlayerList(this);
 
         sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
 
@@ -173,8 +175,8 @@ public class AllayClient implements Client {
     }
 
     private void initPlayerEntity() {
-        var spawnLocation = server.getDefaultWorld().getSpawnLocation();
         //TODO: Load player data
+        var spawnLocation = server.getDefaultWorld().getSpawnLocation();
         playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(spawnLocation));
     }
 
@@ -185,22 +187,22 @@ public class AllayClient implements Client {
         //TODO: WOC?
         startGamePacket.setRuntimeEntityId(playerEntity.getUniqueId());
         //TODO
-        startGamePacket.setPlayerGameType(GameType.CREATIVE);
+        startGamePacket.setPlayerGameType(gameType);
         var loc = playerEntity.getLocation();
+        var worldSpawn = spawnWorld.getSpawnLocation();
+        startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.getX(), worldSpawn.getY(), worldSpawn.getZ()));
         startGamePacket.setPlayerPosition(Vector3f.from(loc.getX(), loc.getY(), loc.getZ()));
         startGamePacket.setRotation(Vector2f.from(loc.getPitch(), loc.getYaw()));
-        startGamePacket.setSeed(-1L);
+        startGamePacket.setSeed(0L);
         startGamePacket.setDimensionId(spawnWorld.getDimensionInfo().dimensionId());
-        startGamePacket.setDimensionId(0);
-        startGamePacket.setGeneratorId(1);
+        startGamePacket.setGeneratorId(spawnWorld.getWorldGenerator().getGeneratorWorldType().getId());
         startGamePacket.setLevelGameType(spawnWorld.getWorldGameType());
         startGamePacket.setDifficulty(spawnWorld.getDifficulty().ordinal());
         startGamePacket.setTrustingPlayers(true);
-        startGamePacket.setDefaultSpawn(Vector3i.from(0, 64, 0));
-        startGamePacket.setDayCycleStopTime(7000);
+        startGamePacket.setDayCycleStopTime(0);
         startGamePacket.setLevelName(server.getServerSettings().motd());
         //TODO
-        startGamePacket.setLevelId("world");
+        startGamePacket.setLevelId("");
         //TODO
         startGamePacket.setDefaultPlayerPermission(PlayerPermission.OPERATOR);
         startGamePacket.setServerChunkTickRange(spawnWorld.getTickingRadius());
@@ -220,6 +222,7 @@ public class AllayClient implements Client {
         //TODO
         startGamePacket.setCurrentTick(0);
         startGamePacket.setServerEngine("Allay");
+        startGamePacket.setBlockRegistryChecksum(0L);
         startGamePacket.setPlayerPropertyData(NbtMap.EMPTY);
         startGamePacket.setWorldTemplateId(new UUID(0, 0));
         startGamePacket.setWorldEditor(false);
