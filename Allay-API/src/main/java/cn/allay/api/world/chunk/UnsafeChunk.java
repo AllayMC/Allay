@@ -1,5 +1,6 @@
 package cn.allay.api.world.chunk;
 
+import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.DimensionInfo;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -16,6 +17,10 @@ public interface UnsafeChunk extends BlockOperate, HeightOperate, SkyLightOperat
     int getChunkX();
 
     int getChunkZ();
+
+    default long computeChunkHash() {
+        return HashUtils.hashXZ(getChunkX(), getChunkZ());
+    }
 
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();

@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface World extends ChunkAccessible {
 
-    void tick();
+    void startTick();
 
     Server getServer();
 

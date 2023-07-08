@@ -1,5 +1,6 @@
 package cn.allay.server.world.chunk;
 
+import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.World;
@@ -18,7 +19,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Allay Project 2023/7/1
@@ -156,6 +159,7 @@ public class AllayChunkService implements ChunkService {
         return loadChunk(x, z);
     }
 
+    @SlowOperation
     @Override
     public CompletableFuture<Chunk> loadChunk(int x, int z) {
         var hashXZ = HashUtils.hashXZ(x, z);
@@ -194,7 +198,7 @@ public class AllayChunkService implements ChunkService {
         if (chunk == null) {
             return;
         }
-        //TODO
+        worldStorage.writeChunk(chunk.getChunkX(), chunk.getChunkZ(), chunk);
     }
 
     @Override
@@ -267,20 +271,22 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void sendQueuedChunks() {
-            for (var sentChunkIndex = 0; sentChunkIndex < chunkSentPerTick; sentChunkIndex++) {
+            var chunkReadyToSend = Stream.<Chunk>builder();
+            for (var sentChunkCount = 0; sentChunkCount < chunkSentPerTick; sentChunkCount++) {
                 if (chunkSendingQueue.isEmpty()) break;
-                var chunkHash = chunkSendingQueue.remove(sentChunkIndex);
+                var chunkHash = chunkSendingQueue.remove(0);
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
-                    sentChunkIndex--;
+                    sentChunkCount--;
                     continue;
                 }
                 chunk.addChunkLoader(chunkLoader);
-                Thread.ofVirtual().start(() -> {
-                    chunkLoader.sendChunk(chunk);
-                    sentChunks.add(chunkHash);
-                });
+                chunkReadyToSend.add(chunk);
             }
+            chunkReadyToSend.build().parallel().forEach(chunk -> {
+                chunkLoader.sendChunk(chunk);
+                sentChunks.add(HashUtils.hashXZ(chunk.getChunkX(), chunk.getChunkZ()));
+            });
         }
 
         private void removeOutOfRadiusChunks() {
