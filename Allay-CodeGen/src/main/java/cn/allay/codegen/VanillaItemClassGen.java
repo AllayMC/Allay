@@ -1,6 +1,8 @@
 package cn.allay.codegen;
 
 import cn.allay.dependence.VanillaItemId;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -8,6 +10,8 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Allay Project 2023/5/20
@@ -15,6 +19,26 @@ import java.nio.file.Path;
  * @author daoge_cmd
  */
 public class VanillaItemClassGen {
+    public static void main(String[] args) {
+        VanillaItemIdEnumGen.generate();
+        generate();
+    }
+
+    public static final Map<String, Map<String, JsonElement>> MAPPED_ITEM_DATA = new TreeMap<>();
+    static final Path ITEM_DATA_FILE_PATH = Path.of("Data/item_data.json");
+
+    static {
+        try {
+            var reader = JsonParser.parseReader(Files.newBufferedReader(ITEM_DATA_FILE_PATH));
+            reader.getAsJsonArray().forEach(item -> {
+                var obj = item.getAsJsonObject();
+                MAPPED_ITEM_DATA.put(obj.get("name").getAsString(), obj.asMap());
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static final ClassName ITEM_CLASS_NAME = ClassName.get("cn.allay.api.item", "ItemStack");
     public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("cn.allay.api.data", "VanillaItemId");
@@ -25,10 +49,6 @@ public class VanillaItemClassGen {
     private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaItemTypes")
             .addModifiers(Modifier.PUBLIC)
             .addJavadoc("Allay Project <p>\n@author daoge_cmd");
-
-    public static void main(String[] args) {
-        generate();
-    }
 
     @SneakyThrows
     public static void generate() {

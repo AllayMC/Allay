@@ -9,9 +9,9 @@ import cn.allay.api.block.property.type.EnumPropertyType;
 import cn.allay.api.block.property.type.IntPropertyType;
 import cn.allay.api.block.type.BlockInitInfo;
 import cn.allay.api.block.type.BlockType;
-import cn.allay.api.block.type.VanillaBlockTypes;
 import cn.allay.api.component.interfaces.ComponentProvider;
-import cn.allay.api.block.property.VanillaBlockPropertyTypes;
+import cn.allay.api.data.VanillaBlockPropertyTypes;
+import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.math.position.Pos;
 import cn.allay.server.block.component.TestComponentImpl;
 import cn.allay.server.block.component.TestComponentImplV2;
@@ -21,7 +21,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static cn.allay.api.component.interfaces.ComponentProvider.of;

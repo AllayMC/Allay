@@ -1,6 +1,6 @@
 package cn.allay.server.world;
 
-import cn.allay.api.block.type.VanillaBlockTypes;
+import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.server.world.chunk.AllayChunk;

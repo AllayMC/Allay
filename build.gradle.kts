@@ -1,14 +1,11 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven {
         url = uri("https://plugins.gradle.org/m2/")
     }
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    mavenLocal()
 }
 
 group = "cn.allay"
@@ -41,7 +38,6 @@ subprojects {
     java.targetCompatibility = JavaVersion.VERSION_20
 
     repositories {
-        mavenLocal()
         mavenCentral()
         maven {
             url = uri("https://repo.opencollab.dev/maven-releases/")
@@ -50,11 +46,9 @@ subprojects {
             url = uri("https://repo.opencollab.dev/maven-snapshots/")
         }
         maven {
-            url = uri("https://repo.maven.apache.org/maven2/")
-        }
-        maven {
             url = uri("https://www.jitpack.io/")
         }
+        mavenLocal()
     }
 
     dependencies {

@@ -1,7 +1,6 @@
 package cn.allay.api.data;
 
-import java.lang.Integer;
-import java.lang.String;
+import cn.allay.api.world.biome.BiomeType;
 import lombok.Getter;
 
 /**
@@ -10,7 +9,7 @@ import lombok.Getter;
  * @author daoge_cmd
  */
 @Getter
-public enum VanillaBiomeId {
+public enum VanillaBiomeId implements BiomeType {
   OCEAN("ocean", 0, "OCEAN"),
 
   PLAINS("plains", 1, "PLAIN"),
@@ -185,11 +184,11 @@ public enum VanillaBiomeId {
 
   private final String name;
 
-  private final Integer id;
+  private final int id;
 
   private final String type;
 
-  VanillaBiomeId(String name, Integer id, String type) {
+  VanillaBiomeId(String name, int id, String type) {
     this.name = name;
     this.id = id;
     this.type = type;

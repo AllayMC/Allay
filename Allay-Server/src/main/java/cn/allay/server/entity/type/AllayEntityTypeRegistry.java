@@ -2,7 +2,7 @@ package cn.allay.server.entity.type;
 
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeRegistry;
-import cn.allay.api.entity.type.VanillaEntityTypes;
+import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.server.world.biome.AllayBiomeTypeRegistry;
