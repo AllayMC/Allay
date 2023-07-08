@@ -88,6 +88,8 @@ public class AllayChunkService implements ChunkService {
         if (isChunkLoaded(chunkHash)) {
             unloadChunk(chunkHash);
         }
+        if (chunk.getChunkX() != x) chunk.setChunkX(x);
+        if (chunk.getChunkZ() != z) chunk.setChunkZ(z);
         loadedChunks.put(chunkHash, chunk);
     }
 
@@ -146,7 +148,7 @@ public class AllayChunkService implements ChunkService {
 
     @Override
     public void removeChunkLoader(ChunkLoader chunkLoader) {
-        this.chunkLoaders.remove(chunkLoader);
+        this.chunkLoaders.remove(chunkLoader).onRemoved();
     }
 
     @Override
@@ -201,22 +203,22 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
-    public int maxX() {
+    public int maxChunkX() {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    public int maxZ() {
+    public int maxChunkZ() {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    public int minX() {
+    public int minChunkX() {
         return Integer.MIN_VALUE;
     }
 
     @Override
-    public int minZ() {
+    public int minChunkZ() {
         return Integer.MIN_VALUE;
     }
 
@@ -248,6 +250,14 @@ public class AllayChunkService implements ChunkService {
                 updateChunkSendingQueue();
             }
             sendQueuedChunks();
+        }
+
+        public void onRemoved() {
+            sentChunks.forEach(chunkHash -> {
+                var chunk = getChunk(chunkHash);
+                if (chunk != null)
+                    unloadChunk(chunkHash);
+            });
         }
 
         private void updateChunkSendingQueue() {
@@ -291,7 +301,13 @@ public class AllayChunkService implements ChunkService {
         private void removeOutOfRadiusChunks() {
             var outOfRadiusChunks = new LongOpenHashSet(sentChunks);
             outOfRadiusChunks.removeAll(inRadiusChunks);
+            outOfRadiusChunks.forEach(chunkHash -> {
+                var chunk = getChunk(chunkHash);
+                if (chunk != null)
+                    chunk.removeChunkLoader(chunkLoader);
+            });
             chunkLoader.unloadChunks(outOfRadiusChunks);
+            sentChunks.removeAll(outOfRadiusChunks);
         }
 
         private void updateAndLoadInRadiusChunks() {

@@ -1,5 +1,6 @@
 package cn.allay.server.world.chunk;
 
+import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.generator.LimitedWorldRegion;
 import org.jetbrains.annotations.Nullable;
@@ -31,36 +32,37 @@ public class GenerationLimitedWorldRegion implements LimitedWorldRegion {
     }
 
     @Override
-    public void setChunk(int x, int z, Chunk chunk) {
-        setChunk(x, z, chunk, c -> {});
+    public @Nullable Chunk getChunk(long chunkHash) {
+        return getChunk(
+                HashUtils.getXFromHashXZ(chunkHash) - centerChunkX,
+                HashUtils.getZFromHashXZ(chunkHash) - centerChunkZ);
     }
 
     @Override
-    public void setChunk(int x, int z, Chunk chunk, Consumer<Chunk> chunkAddingCallback) {
+    public void setChunk(int x, int z, Chunk chunk) {
         if (invalidXZ(x, z))
             return;
-        chunkAddingCallback.accept(chunk);
         chunks[x + 1][z + 1] = chunk;
     }
 
 
     @Override
-    public int maxX() {
+    public int maxChunkX() {
         return 1;
     }
 
     @Override
-    public int maxZ() {
+    public int maxChunkZ() {
         return 1;
     }
 
     @Override
-    public int minX() {
+    public int minChunkX() {
         return -1;
     }
 
     @Override
-    public int minZ() {
+    public int minChunkZ() {
         return -1;
     }
 

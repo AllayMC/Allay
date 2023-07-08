@@ -1,5 +1,6 @@
 package cn.allay.server.player;
 
+import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
@@ -175,9 +176,11 @@ public class AllayClient implements Client {
         return 8;//TODO
     }
 
+    @SlowOperation
     @Override
     public void sendChunk(Chunk chunk) {
-        //TODO
+        var levelChunkPacket = chunk.createLevelChunkPacket();
+        sendPacket(levelChunkPacket);
     }
 
     @Override

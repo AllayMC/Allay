@@ -2,9 +2,6 @@ package cn.allay.api.world.chunk;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 /**
  * Allay Project 2023/7/1
  *
@@ -19,11 +16,11 @@ public interface ChunkAccessible {
 
     void setChunk(int x, int z, Chunk chunk);
 
-    int maxX();
+    int maxChunkX();
 
-    int maxZ();
+    int maxChunkZ();
 
-    int minX();
+    int minChunkX();
 
-    int minZ();
+    int minChunkZ();
 }

@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AllayWorldPool implements WorldPool {
 
     private final Map<String, World> worlds = new ConcurrentHashMap<>();
+    private World defaultWorld;
 
     @Override
     public World getWorld(String name) {
@@ -24,5 +25,20 @@ public class AllayWorldPool implements WorldPool {
     @Override
     public Map<String, World> getWorlds() {
         return Collections.unmodifiableMap(worlds);
+    }
+
+    @Override
+    public void addWorld(World world) {
+        worlds.put(world.getName(), world);
+    }
+
+    @Override
+    public void setDefaultWorld(World world) {
+        this.defaultWorld = world;
+    }
+
+    @Override
+    public World getDefaultWorld() {
+        return defaultWorld;
     }
 }

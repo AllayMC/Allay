@@ -1,5 +1,6 @@
 package cn.allay.api.world.chunk;
 
+import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.math.location.FixedLoc;
 
 import java.util.Set;
@@ -16,6 +17,7 @@ public interface ChunkLoader {
 
     int getChunkLoadingRadius();
 
+    @SlowOperation
     void sendChunk(Chunk chunk);
 
     void unloadChunks(Set<Long> chunkHashes);

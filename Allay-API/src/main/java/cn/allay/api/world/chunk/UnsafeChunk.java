@@ -17,7 +17,11 @@ public interface UnsafeChunk extends BlockOperate, BiomeOperate, HeightOperate, 
 
     int getChunkX();
 
+    void setChunkX(int chunkX);
+
     int getChunkZ();
+
+    void setChunkZ(int chunkZ);
 
     default long computeChunkHash() {
         return HashUtils.hashXZ(getChunkX(), getChunkZ());

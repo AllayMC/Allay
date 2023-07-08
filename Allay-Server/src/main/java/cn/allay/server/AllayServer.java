@@ -6,12 +6,15 @@ import cn.allay.api.network.NetworkServer;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.api.world.World;
+import cn.allay.api.world.WorldPool;
 import cn.allay.api.world.WorldType;
 import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.player.AllayClient;
 import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.utils.GameLoop;
 import cn.allay.server.world.AllayWorld;
+import cn.allay.server.world.AllayWorldPool;
+import cn.allay.server.world.generator.flat.FlatWorldGenerator;
 import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +37,7 @@ public final class AllayServer implements Server {
     @Getter
     private NetworkServer networkServer;
     @Getter
-    private final Map<String, World> worlds = new ConcurrentHashMap<>();
-    @Getter
-    private World defaultWorld;
+    private final WorldPool worldPool = new AllayWorldPool();
 
     private Thread terminalConsoleThread;
     private AllayTerminalConsole terminalConsole;
@@ -87,15 +88,15 @@ public final class AllayServer implements Server {
 
     private void loadWorlds() {
         //TODO: Remove this hack
-        defaultWorld = AllayWorld
+        worldPool.setDefaultWorld(AllayWorld
                 .builder()
                 .setServer(this)
                 .setName("Test Flat World")
-                .setWorldGenerator(null/*TODO*/)
+                .setWorldGenerator(new FlatWorldGenerator())
                 .setWorldStorage(new AllayNonPersistentWorldStorage())
                 .setWorldType(WorldType.FLAT)
                 .setSpawnLocation(Loc.of(0f, 0f, 0f, null))
-                .build();
+                .build());
     }
 
     @Override
