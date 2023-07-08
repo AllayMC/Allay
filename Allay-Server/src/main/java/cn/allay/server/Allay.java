@@ -15,9 +15,7 @@ import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
-import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
-import cn.allay.api.world.biome.VanillaBiomeTypes;
 import cn.allay.server.block.attribute.AllayVanillaBlockAttributeRegistry;
 import cn.allay.server.block.palette.AllayVanillaBlockStatePalette;
 import cn.allay.server.block.type.AllayBlockStateHashPalette;
@@ -75,9 +73,7 @@ public final class Allay {
         api.bind(EntityTypeRegistry.class, AllayEntityTypeRegistry::new, instance -> ((AllayEntityTypeRegistry) instance).init());
 
         //Biome
-        api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new, (r) -> {
-            BiomeType ocean = VanillaBiomeTypes.OCEAN;
-        });
+        api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
 
         api.implement("Allay");
     }
