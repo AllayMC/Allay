@@ -306,4 +306,14 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
             }
         }
     }
+
+    @Override
+    protected void writeChunkToBuffer(ByteBuf byteBuf) {
+        long stamp = sectionLock.writeLock();
+        try {
+            super.writeChunkToBuffer(byteBuf);
+        } finally {
+            sectionLock.unlockWrite(stamp);
+        }
+    }
 }

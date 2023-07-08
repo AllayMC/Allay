@@ -153,7 +153,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             levelChunkPacket.setCachingEnabled(false);
             levelChunkPacket.setRequestSubChunks(false);
             levelChunkPacket.setSubChunksLength(this.dimensionInfo.chunkSectionSize());
-            this.writeTo(byteBuf.retain());
+            this.writeChunkToBuffer(byteBuf.retain());
             levelChunkPacket.setData(byteBuf);
             return levelChunkPacket;
         } finally {
@@ -161,7 +161,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
     }
 
-    private void writeTo(ByteBuf byteBuf) {
+    protected void writeChunkToBuffer(ByteBuf byteBuf) {
         Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
 
         for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
