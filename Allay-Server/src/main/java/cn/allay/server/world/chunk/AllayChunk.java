@@ -2,6 +2,7 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -27,6 +28,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     protected final StampedLock skyLightLock;
     protected final StampedLock blockLightLock;
     protected final StampedLock chunkLoaderLock;
+    protected final StampedLock biomeLock;
 
     public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
@@ -39,6 +41,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         this.skyLightLock = new StampedLock();
         this.blockLightLock = new StampedLock();
         this.chunkLoaderLock = new StampedLock();
+        this.biomeLock = new StampedLock();
     }
 
     @Override
@@ -89,6 +92,31 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
             super.setBlock(x, y, z, layer, blockState);
         } finally {
             sectionLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public BiomeType getBiomeType(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
+        long stamp = biomeLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = biomeLock.readLock()) {
+                if (stamp == 0L) continue;
+                var biomeType = super.getBiomeType(x, y, z);
+                if (!biomeLock.validate(stamp)) continue;
+                return biomeType;
+            }
+        } finally {
+            if (StampedLock.isReadLockStamp(stamp)) biomeLock.unlockRead(stamp);
+        }
+    }
+
+    @Override
+    public void setBiomeType(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
+        long stamp = biomeLock.writeLock();
+        try {
+            super.setBiomeType(x, y, z, biomeType);
+        } finally {
+            biomeLock.unlockWrite(stamp);
         }
     }
 
