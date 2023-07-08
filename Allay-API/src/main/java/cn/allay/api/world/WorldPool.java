@@ -14,4 +14,10 @@ public interface WorldPool {
 
     @UnmodifiableView
     Map<String, World> getWorlds();
+
+    void addWorld(World world);
+
+    void setDefaultWorld(World world);
+
+    World getDefaultWorld();
 }

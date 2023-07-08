@@ -75,22 +75,22 @@ public interface World extends ChunkAccessible {
     void removeClient(Client client);
 
     @Override
-    default int maxX() {
+    default int maxChunkX() {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    default int maxZ() {
+    default int maxChunkZ() {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    default int minX() {
+    default int minChunkX() {
         return Integer.MIN_VALUE;
     }
 
     @Override
-    default int minZ() {
+    default int minChunkZ() {
         return Integer.MIN_VALUE;
     }
 }

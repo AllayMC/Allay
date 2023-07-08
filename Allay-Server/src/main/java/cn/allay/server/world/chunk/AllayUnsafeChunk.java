@@ -12,6 +12,7 @@ import cn.allay.api.world.palette.Palette;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
+import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.NotNull;
@@ -28,9 +29,11 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 @NotThreadSafe
 public class AllayUnsafeChunk implements UnsafeChunk {
     @Getter
-    protected final int chunkX;
+    @Setter
+    protected int chunkX;
     @Getter
-    protected final int chunkZ;
+    @Setter
+    protected int chunkZ;
     protected final AtomicReferenceArray<ChunkSection> sections;
     protected final NibbleArray heightMap;
     protected final DimensionInfo dimensionInfo;
