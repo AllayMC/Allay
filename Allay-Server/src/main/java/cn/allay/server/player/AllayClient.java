@@ -3,6 +3,7 @@ package cn.allay.server.player;
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaEntityTypes;
+import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
@@ -98,7 +99,7 @@ public class AllayClient implements Client {
 
         var setEntityDataPacket = new SetEntityDataPacket();
         setEntityDataPacket.setRuntimeEntityId(playerEntity.getUniqueId());
-//        setEntityDataPacket.getMetadata().putAll(playerEntity.getMetadata().getEntityDataMap());
+        setEntityDataPacket.getMetadata().putAll(playerEntity.getMetadata().getEntityDataMap());
         setEntityDataPacket.setTick(server.getTicks());
         sendPacket(setEntityDataPacket);
 
@@ -113,13 +114,20 @@ public class AllayClient implements Client {
         adventureSettings.set(AdventureSettings.Type.NO_PVM, gameType == GameType.SPECTATOR);
         adventureSettings.update();
 
-        //TODO: UpdateAttributes
+        var updateAttributesPacket = new UpdateAttributesPacket();
+        updateAttributesPacket.setRuntimeEntityId(playerEntity.getUniqueId());
+        for (Attribute attribute : playerEntity.getAttributes()) {
+            updateAttributesPacket.getAttributes().add(attribute.toNetwork());
+        }
+        updateAttributesPacket.setTick(server.getTicks());
+        sendPacket(updateAttributesPacket);
 
         //TODO: PlayerList
 
+        sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
+
         //TODO: SetTime
 
-        sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         firstSpawned = true;
     }
 

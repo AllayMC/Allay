@@ -3,11 +3,14 @@ package cn.allay.api.entity.component.impl.base;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponentImpl;
+import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.math.location.Loc;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -21,14 +24,30 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
     protected static AtomicLong UNIQUE_ID_COUNTER = new AtomicLong(0);
-
-    protected EntityType<? extends Entity> entityType;
     protected final Loc<Float> location;
     protected final long uniqueId = UNIQUE_ID_COUNTER.getAndIncrement();
+    protected final Metadata metadata;
+    protected EntityType<? extends Entity> entityType;
 
-    public EntityBaseComponentImpl(EntityType<? extends Entity> entityType, EntityInitInfo info) {
+    public EntityBaseComponentImpl(EntityType<? extends Entity> entityType,
+                                   EntityInitInfo info) {
         this.entityType = entityType;
         this.location = info.location().cloneLoc();
+        metadata = new Metadata();
+        initMetadata();
+    }
+
+    private void initMetadata() {
+        metadata.setInt(EntityDataTypes.PLAYER_INDEX, 0);
+        metadata.setShort(EntityDataTypes.AIR_SUPPLY, (short) 400);
+        metadata.setShort(EntityDataTypes.AIR_SUPPLY_MAX, (short) 400);
+        metadata.setFloat(EntityDataTypes.SCALE, 1);
+        metadata.setFloat(EntityDataTypes.WIDTH, 0.6f);//TODO
+        metadata.setFloat(EntityDataTypes.HEIGHT, 1.8f);//TODO
+        metadata.setFlag(EntityFlag.HAS_GRAVITY, true);
+        metadata.setFlag(EntityFlag.HAS_COLLISION, true);
+        metadata.setFlag(EntityFlag.CAN_CLIMB, true);
+        metadata.setFlag(EntityFlag.BREATHING, true);
     }
 
     @Override
@@ -53,6 +72,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
     @Impl
     public long getUniqueId() {
         return uniqueId;
+    }
+
+    @Override
+    @Impl
+    public Metadata getMetadata() {
+        return metadata;
     }
 
     @Override
