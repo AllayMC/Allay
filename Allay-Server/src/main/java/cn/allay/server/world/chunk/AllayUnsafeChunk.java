@@ -4,6 +4,7 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.datastruct.NibbleArray;
 import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.ChunkLoader;
 import cn.allay.api.world.chunk.UnsafeChunk;
 import lombok.Getter;
@@ -126,5 +127,15 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     protected int normalY(int y) {
         return y - getDimensionInfo().minHeight();
+    }
+
+    @Override
+    public void setBiomeType(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
+        this.getOrCreateSection(normalY(y) >>> 4).setBiomeType(x, y & 0xf, z, biomeType);
+    }
+
+    @Override
+    public BiomeType getBiomeType(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
+        return this.getOrCreateSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
     }
 }

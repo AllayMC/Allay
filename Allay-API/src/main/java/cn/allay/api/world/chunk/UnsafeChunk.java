@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @author Cool_Loong
  */
-public interface UnsafeChunk extends BlockOperate, HeightOperate, SkyLightOperate, BlockLightOperate {
+public interface UnsafeChunk extends BlockOperate, BiomeOperate, HeightOperate, SkyLightOperate, BlockLightOperate {
     DimensionInfo getDimensionInfo();
 
     int getChunkX();
