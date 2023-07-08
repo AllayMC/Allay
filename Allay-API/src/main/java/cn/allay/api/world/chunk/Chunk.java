@@ -24,8 +24,6 @@ public interface Chunk extends UnsafeChunk {
         return (x << 8) + (z << 4) + y;
     }
 
-    DimensionInfo getDimensionInfo();
-
     void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState expectedValue, BlockState newValue);
 
     void compareAndSetBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue);

@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -36,7 +37,8 @@ public class AllayChunkService implements ChunkService {
     private final WorldGenerationService worldGenerationService;
     @Getter
     private final WorldStorage worldStorage;
-    private final Map<ChunkLoader, Set<Long>> chunkLoaders = new ConcurrentHashMap<>();
+    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaders = new ConcurrentHashMap<>();
+    private record ChunkAddingQueueEntry(Chunk chunk, long hashXZ, Consumer<Chunk> chunkAddingCallback) {}
     private final Queue<ChunkAddingQueueEntry> chunkAddingQueue = new ConcurrentLinkedQueue<>();
     private long tickCounter = 0;
 
@@ -49,57 +51,67 @@ public class AllayChunkService implements ChunkService {
     @Override
     public void tick() {
         tickCounter++;
-        addChunks();
-        updateChunks();
+        addInQueueChunks();
+        tickChunkLoaders();
+        //TODO: Remove unused chunk;
     }
 
-    private void addChunks() {
+    private void addInQueueChunks() {
         while (!chunkAddingQueue.isEmpty()) {
             var entry = chunkAddingQueue.poll();
+            entry.chunkAddingCallback().accept(entry.chunk());
             loadedChunks.put(entry.hashXZ(), entry.chunk());
             loadingChunks.remove(entry.hashXZ());
         }
     }
 
-    private void updateChunks() {
-        var neededChunkXZ = new HashSet<Long>();
-        for (var chunkLoaderEntry : chunkLoaders.entrySet()) {
-            var chunkLoader = chunkLoaderEntry.getKey();
-            if (!chunkLoader.isLoaderActive()) continue;
-            var loaderChunkX = chunkLoader.getLocation().getChunkX();
-            var loaderChunkZ = chunkLoader.getLocation().getChunkZ();
-            var viewDistance = world.getViewDistance();
-            for (int rx = -viewDistance; rx <= viewDistance; rx++) {
-                for (int rz = -viewDistance; rz <= viewDistance; rz++) {
-                    if (rx * rx + rz * rz > viewDistance * viewDistance) continue;
-                    neededChunkXZ.add(HashUtils.hashXZ(loaderChunkX + rx, loaderChunkZ + rz));
-                }
-            }
+    private void tickChunkLoaders() {
+        for (var chunkLoaderManager : chunkLoaders.values()) {
+            Thread.ofVirtual().start(chunkLoaderManager::tick);
         }
-        var loadedOrLoadingChunkXZ = new HashSet<>(loadedChunks.keySet());
-        loadedOrLoadingChunkXZ.addAll(loadingChunks.keySet());
-        var needToLoadChunkXZ = new HashSet<>(neededChunkXZ);
-        needToLoadChunkXZ.removeAll(loadedOrLoadingChunkXZ);
-
-        for (var hashXZ : needToLoadChunkXZ) {
-            var x = HashUtils.getXFromHashXZ(hashXZ);
-            var z = HashUtils.getZFromHashXZ(hashXZ);
-            loadChunk(x, z);
-        }
-
-        if (tickCounter % REMOVE_UNNEEDED_CHUNK_CYCLE == 0) {
-            var unneededChunkXZ = new HashSet<>(loadedOrLoadingChunkXZ);
-            unneededChunkXZ.removeAll(neededChunkXZ);
-
-            for (var hashXZ : unneededChunkXZ) {
-                loadedChunks.remove(hashXZ);
-            }
-        }
+//        var neededChunkXZ = new HashSet<Long>();
+//        for (var chunkLoaderEntry : chunkLoaders.entrySet()) {
+//            var chunkLoader = chunkLoaderEntry.getKey();
+//            if (!chunkLoader.isLoaderActive()) continue;
+//            var loaderChunkX = chunkLoader.getLocation().getChunkX();
+//            var loaderChunkZ = chunkLoader.getLocation().getChunkZ();
+//            var viewDistance = world.getViewDistance();
+//            for (int rx = -viewDistance; rx <= viewDistance; rx++) {
+//                for (int rz = -viewDistance; rz <= viewDistance; rz++) {
+//                    if (rx * rx + rz * rz > viewDistance * viewDistance) continue;
+//                    neededChunkXZ.add(HashUtils.hashXZ(loaderChunkX + rx, loaderChunkZ + rz));
+//                }
+//            }
+//        }
+//        var loadedOrLoadingChunkXZ = new HashSet<>(loadedChunks.keySet());
+//        loadedOrLoadingChunkXZ.addAll(loadingChunks.keySet());
+//        var needToLoadChunkXZ = new HashSet<>(neededChunkXZ);
+//        needToLoadChunkXZ.removeAll(loadedOrLoadingChunkXZ);
+//
+//        for (var hashXZ : needToLoadChunkXZ) {
+//            var x = HashUtils.getXFromHashXZ(hashXZ);
+//            var z = HashUtils.getZFromHashXZ(hashXZ);
+//            loadChunk(x, z);
+//        }
+//
+//        if (tickCounter % REMOVE_UNNEEDED_CHUNK_CYCLE == 0) {
+//            var unneededChunkXZ = new HashSet<>(loadedOrLoadingChunkXZ);
+//            unneededChunkXZ.removeAll(neededChunkXZ);
+//
+//            for (var hashXZ : unneededChunkXZ) {
+//                loadedChunks.remove(hashXZ);
+//            }
+//        }
     }
 
     @Override
     public void setChunk(int x, int z, Chunk chunk) {
-        chunkAddingQueue.offer(new ChunkAddingQueueEntry(chunk, HashUtils.hashXZ(x, z)));
+        setChunk(x, z, chunk, c -> {});
+    }
+
+    @Override
+    public void setChunk(int x, int z, Chunk chunk, Consumer<Chunk> chunkAddingCallback) {
+        chunkAddingQueue.offer(new ChunkAddingQueueEntry(chunk, HashUtils.hashXZ(x, z), chunkAddingCallback));
     }
 
     @Override
@@ -112,6 +124,7 @@ public class AllayChunkService implements ChunkService {
         return loadedChunks.containsKey(HashUtils.hashXZ(x, z));
     }
 
+    @Override
     public boolean isChunkLoaded(long hashXZ) {
         return loadedChunks.containsKey(hashXZ);
     }
@@ -121,8 +134,19 @@ public class AllayChunkService implements ChunkService {
         return loadingChunks.containsKey(HashUtils.hashXZ(x, z));
     }
 
+    @Override
     public boolean isChunkLoading(long hashXZ) {
         return loadingChunks.containsKey(hashXZ);
+    }
+
+    @Override
+    public boolean isChunkUnloaded(int x, int z) {
+        return isChunkUnloaded(HashUtils.hashXZ(x, z));
+    }
+
+    @Override
+    public boolean isChunkUnloaded(long hashXZ) {
+        return !isChunkLoaded(hashXZ) && !isChunkLoading(hashXZ);
     }
 
     @Override
@@ -133,7 +157,7 @@ public class AllayChunkService implements ChunkService {
 
     @Override
     public void addChunkLoader(ChunkLoader chunkLoader) {
-        this.chunkLoaders.put(chunkLoader, new LongOpenHashSet());
+        this.chunkLoaders.put(chunkLoader, new ChunkLoaderManager(chunkLoader));
     }
 
     @Override
@@ -143,15 +167,29 @@ public class AllayChunkService implements ChunkService {
 
     @Override
     public CompletableFuture<Chunk> getOrLoadChunk(int x, int z) {
+        return getOrLoadChunk(x, z, c -> {});
+    }
+
+    @Override
+    public CompletableFuture<Chunk> getOrLoadChunk(int x, int z, Consumer<Chunk> chunkAddingCallback) {
         var chunk = getChunk(x, z);
         if (chunk != null) {
             return CompletableFuture.completedFuture(chunk);
         }
-        return loadChunk(x, z);
+        return loadChunk(x, z, chunkAddingCallback);
     }
 
-    private CompletableFuture<Chunk> loadChunk(int x, int z) {
+    @Override
+    public CompletableFuture<Chunk> loadChunk(int x, int z) {
+        return loadChunk(x, z, c -> {});
+    }
+
+    @Override
+    public CompletableFuture<Chunk> loadChunk(int x, int z, Consumer<Chunk> chunkAddingCallback) {
         var hashXZ = HashUtils.hashXZ(x, z);
+        if (isChunkLoaded(hashXZ)) {
+            throw new IllegalStateException("Chunk is already loaded");
+        }
         var loadingChunk = loadingChunks.get(hashXZ);
         if (loadingChunk != null) {
             return loadingChunk;
@@ -164,7 +202,7 @@ public class AllayChunkService implements ChunkService {
                         return loadedChunk;
                     }
                     var chunk = new AllayChunk(x, z, world.getDimensionInfo());
-                    worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(chunk), single -> setChunk(x, z, chunk));
+                    worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(chunk), single -> setChunk(x, z, chunk, chunkAddingCallback));
                     return chunk;
                 });
         loadingChunks.put(hashXZ, future);
@@ -191,6 +229,48 @@ public class AllayChunkService implements ChunkService {
         return Integer.MIN_VALUE;
     }
 
-    private record ChunkAddingQueueEntry(Chunk chunk, long hashXZ) {
+    private final class ChunkLoaderManager {
+        @Getter
+        private final ChunkLoader chunkLoader;
+        private final Set<Long> heldChunks = new LongOpenHashSet();
+        private final Queue<Long> chunkSendingQueue = new ConcurrentLinkedQueue<>();
+        private long lastLoaderChunkPosHashed = -1;
+        private final int chunkSentPerTick;
+
+        ChunkLoaderManager(ChunkLoader chunkLoader) {
+            this.chunkLoader = chunkLoader;
+            this.chunkSentPerTick = 4;//TODO: Config
+        }
+
+        public void tick() {
+            if (!chunkLoader.isLoaderActive()) return;
+            var loaderChunkPosChanged = false;
+            long currentLoaderChunkPosHashed;
+            if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(chunkLoader.getLocation().getChunkX(), chunkLoader.getLocation().getChunkZ())) != lastLoaderChunkPosHashed) {
+                lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
+                loaderChunkPosChanged = true;
+            }
+            loadNeededChunk(loaderChunkPosChanged);
+        }
+
+        private void loadNeededChunk(boolean loaderChunkPosChanged) {
+            if (!loaderChunkPosChanged)
+                return;
+            var loaderChunkX = chunkLoader.getLocation().getChunkX();
+            var loaderChunkZ = chunkLoader.getLocation().getChunkZ();
+            var viewDistance = world.getViewDistance();
+            for (int rx = -viewDistance; rx <= viewDistance; rx++) {
+                for (int rz = -viewDistance; rz <= viewDistance; rz++) {
+                    if (rx * rx + rz * rz > viewDistance * viewDistance) continue;
+                    var chunkX = loaderChunkX + rx;
+                    var chunkZ = loaderChunkZ + rz;
+                    var hashXZ = HashUtils.hashXZ(chunkX, chunkZ);
+                    chunkSendingQueue.add(hashXZ);
+                    if (isChunkUnloaded(hashXZ)) {
+                        loadChunk(chunkX, chunkZ);
+                    }
+                }
+            }
+        }
     }
 }

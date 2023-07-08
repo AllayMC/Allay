@@ -4,22 +4,31 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.VanillaBlockTypes;
 import cn.allay.api.datastruct.NibbleArray;
 import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.chunk.ChunkLoader;
 import cn.allay.api.world.chunk.UnsafeChunk;
+import lombok.Getter;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.NotThreadSafe;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 @NotThreadSafe
 public class AllayUnsafeChunk implements UnsafeChunk {
+    @Getter
     protected final int chunkX;
+    @Getter
     protected final int chunkZ;
     protected final AtomicReferenceArray<ChunkSection> sections;
     protected final NibbleArray heightMap;
     protected final DimensionInfo dimensionInfo;
+    protected final Set<ChunkLoader> chunkLoaders;
 
     public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
@@ -31,6 +40,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.sections = new AtomicReferenceArray<>(dimensionInfo.chunkSectionSize());
         this.heightMap = new NibbleArray(256);
         this.dimensionInfo = dimensionInfo;
+        this.chunkLoaders = new HashSet<>();
     }
 
     protected @Nullable ChunkSection getSection(int y) {
@@ -44,6 +54,27 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public DimensionInfo getDimensionInfo() {
         return dimensionInfo;
+    }
+
+    @Override
+    @UnmodifiableView
+    public Set<ChunkLoader> getChunkLoaders() {
+        return Collections.unmodifiableSet(chunkLoaders);
+    }
+
+    @Override
+    public void addChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.add(chunkLoader);
+    }
+
+    @Override
+    public void removeChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.remove(chunkLoader);
+    }
+
+    @Override
+    public int getChunkLoaderCount() {
+        return chunkLoaders.size();
     }
 
     public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {

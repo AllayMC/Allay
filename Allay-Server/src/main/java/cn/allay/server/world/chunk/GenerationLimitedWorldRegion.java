@@ -4,6 +4,8 @@ import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.generator.LimitedWorldRegion;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 /**
  * Allay Project 2023/7/1
  *
@@ -30,8 +32,14 @@ public class GenerationLimitedWorldRegion implements LimitedWorldRegion {
 
     @Override
     public void setChunk(int x, int z, Chunk chunk) {
+        setChunk(x, z, chunk, c -> {});
+    }
+
+    @Override
+    public void setChunk(int x, int z, Chunk chunk, Consumer<Chunk> chunkAddingCallback) {
         if (invalidXZ(x, z))
             return;
+        chunkAddingCallback.accept(chunk);
         chunks[x + 1][z + 1] = chunk;
     }
 

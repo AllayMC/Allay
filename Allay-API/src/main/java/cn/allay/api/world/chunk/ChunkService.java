@@ -7,6 +7,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/7/1
@@ -18,9 +20,23 @@ public interface ChunkService extends ChunkAccessible {
 
     CompletableFuture<Chunk> getOrLoadChunk(int x, int z);
 
+    CompletableFuture<Chunk> getOrLoadChunk(int x, int z, Consumer<Chunk> chunkAddingCallback);
+
+    CompletableFuture<Chunk> loadChunk(int x, int z);
+
+    CompletableFuture<Chunk> loadChunk(int x, int z, Consumer<Chunk> chunkAddingCallback);
+
     boolean isChunkLoaded(int x, int z);
 
+    boolean isChunkLoaded(long hashXZ);
+
     boolean isChunkLoading(int x, int z);
+
+    boolean isChunkLoading(long hashXZ);
+
+    boolean isChunkUnloaded(int x, int z);
+
+    boolean isChunkUnloaded(long hashXZ);
 
     World getWorld();
 
