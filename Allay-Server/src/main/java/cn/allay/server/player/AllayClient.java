@@ -8,10 +8,12 @@ import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.network.Client;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
+import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector2f;
+import org.cloudburstmc.math.vector.Vector2i;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -22,6 +24,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -168,15 +171,27 @@ public class AllayClient implements Client {
     }
 
     @Override
-    public void onChunkLoad(Chunk chunk, int hashXZ) {
+    public int getChunkLoadingRadius() {
+        return 8;//TODO
+    }
+
+    @Override
+    public void sendChunk(Chunk chunk) {
         //TODO
     }
 
     @Override
-    public void onChunkUnload(Chunk chunk, int hashXZ) {
-        //TODO
-    }
+    public void unloadChunks(Set<Long> chunkHashes) {
+        var chunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
+        var loc = getLocation();
+        chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.getX(), loc.getY(), loc.getZ()));
+        chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
+        for (var chunkHash : chunkHashes) {
+            chunkPublisherUpdatePacket.getSavedChunks().add(Vector2i.from(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash)));
+        }
 
+        sendPacket(chunkPublisherUpdatePacket);
+    }
 
     private class AllayClientPacketHandler implements BedrockPacketHandler {
 
