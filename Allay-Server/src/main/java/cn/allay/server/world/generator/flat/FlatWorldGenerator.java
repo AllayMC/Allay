@@ -24,13 +24,15 @@ public class FlatWorldGenerator implements WorldGenerator {
     }
 
     private Chunk createFlatChunk(int cx, int cz) {
+        var bedrock = VanillaBlockTypes.BEDROCK_TYPE.getDefaultState();
+        var grass = VanillaBlockTypes.GRASS_TYPE.getDefaultState();
         var flatChunk = new AllayChunk(cx, cz, DimensionInfo.OVERWORLD);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 0; y < 5; y++) {
                     if (y == 0) {
-                        flatChunk.setBlock(x, y, z, VanillaBlockTypes.BEDROCK_TYPE.getDefaultState());
-                    } else flatChunk.setBlock(x, y, z, VanillaBlockTypes.GRASS_TYPE.getDefaultState());
+                        flatChunk.setBlock(x, y, z, bedrock);
+                    } else flatChunk.setBlock(x, y, z, grass);
                 }
             }
         }

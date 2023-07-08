@@ -1,6 +1,7 @@
 package cn.allay.server.player;
 
 import cn.allay.api.annotation.SlowOperation;
+import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
@@ -21,8 +22,12 @@ import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
+import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 
 import java.util.List;
@@ -77,6 +82,21 @@ public class AllayClient implements Client {
         if (firstSpawned) {
             return;
         }
+
+        var setEntityDataPacket = new SetEntityDataPacket();
+        setEntityDataPacket.setRuntimeEntityId(playerEntity.getUniqueId());
+//        setEntityDataPacket.getMetadata().putAll(playerEntity.getMetadata().getEntityDataMap());
+        setEntityDataPacket.setTick(server.getTicks());
+        sendPacket(setEntityDataPacket);
+
+        //TODO: AdventureSettings
+
+        //TODO: UpdateAttributes
+
+        //TODO: PlayerList
+
+        //TODO: SetTime
+
         sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         firstSpawned = true;
     }
@@ -100,6 +120,7 @@ public class AllayClient implements Client {
     public void disconnect(String reason, boolean hideReason) {
         server.onClientDisconnect(this);
         session.disconnect(reason, hideReason);
+        playerEntity.getLocation().getWorld().removeClient(this);
     }
 
     /**
@@ -109,17 +130,9 @@ public class AllayClient implements Client {
     public void initializePlayer() {
         server.onLoginFinish(this);
         initPlayerEntity();
-        sendStartGamePacket();
-        server.getDefaultWorld().addClient(this);
+        sendBasicGameData();
         online = true;
-        Thread.ofVirtual().start(() -> {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
-        });
+        server.getDefaultWorld().addClient(this);
     }
 
     public void sendPlayStatus(PlayStatusPacket.Status status) {
@@ -134,7 +147,7 @@ public class AllayClient implements Client {
         playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(spawnLocation));
     }
 
-    private void sendStartGamePacket() {
+    private void sendBasicGameData() {
         var spawnWorld = server.getDefaultWorld();
         var startGamePacket = new StartGamePacket();
         startGamePacket.setUniqueEntityId(playerEntity.getUniqueId());
@@ -188,13 +201,35 @@ public class AllayClient implements Client {
         startGamePacket.setBlockNetworkIdsHashed(true);
         sendPacket(startGamePacket);
 
-        var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
-        biomeDefinitionListPacket.setDefinitions(BiomeTypeRegistry.getRegistry().getBiomeDefinition());
-        sendPacket(biomeDefinitionListPacket);
+        session.getPeer().getCodecHelper().setItemDefinitions(
+                SimpleDefinitionRegistry
+                        .<ItemDefinition>builder()
+                        .addAll(startGamePacket.getItemDefinitions())
+                        .build()
+        );
+
+        session.getPeer().getCodecHelper().setBlockDefinitions(
+                SimpleDefinitionRegistry
+                        .<BlockDefinition>builder()
+                        .addAll(BlockTypeRegistry.getRegistry().getSimpleBlockDefinitions())
+                        .build()
+        );
 
         var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();
         availableEntityIdentifiersPacket.setIdentifiers(EntityTypeRegistry.getRegistry().getAvailableEntityIdentifierTag());
         sendPacket(availableEntityIdentifiersPacket);
+
+        var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
+        biomeDefinitionListPacket.setDefinitions(BiomeTypeRegistry.getRegistry().getBiomeDefinition());
+        sendPacket(biomeDefinitionListPacket);
+
+        var creativeContentPacket = new CreativeContentPacket();
+        creativeContentPacket.setContents(new ItemData[0]);
+        sendPacket(creativeContentPacket);
+
+        var craftingDataPacket = new CraftingDataPacket();
+        craftingDataPacket.setCleanRecipes(true);
+        sendPacket(craftingDataPacket);
     }
 
     @Override
@@ -350,6 +385,12 @@ public class AllayClient implements Client {
                     rot.getZ(),
                     getLocation().getWorld()
             ));
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
+            //TODO: PlayerJoinEvent
             return PacketSignal.HANDLED;
         }
     }
