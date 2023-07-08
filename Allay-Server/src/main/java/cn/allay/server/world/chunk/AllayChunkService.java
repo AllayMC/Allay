@@ -55,6 +55,10 @@ public class AllayChunkService implements ChunkService {
     }
 
     private void removeUnusedChunks() {
+        unusedChunkClearCountDown.entrySet().removeIf(entry -> {
+            var chunk = getChunk(entry.getKey());
+            return chunk == null || chunk.getChunkLoaderCount() > 0;
+        });
         //Update countdown
         unusedChunkClearCountDown.replaceAll((chunkHash, countDown) -> countDown - 1);
         //Remove countdown ended unused chunks
@@ -197,6 +201,7 @@ public class AllayChunkService implements ChunkService {
         if (chunk == null) {
             return;
         }
+        loadedChunks.remove(chunkHash);
         worldStorage.writeChunk(chunk.getChunkX(), chunk.getChunkZ(), chunk);
     }
 
@@ -231,7 +236,7 @@ public class AllayChunkService implements ChunkService {
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
-            this.chunkSentPerTick = 4;//TODO: Config
+            this.chunkSentPerTick = 8;//TODO: Config
         }
 
         public void tick() {
@@ -254,7 +259,7 @@ public class AllayChunkService implements ChunkService {
             sentChunks.forEach(chunkHash -> {
                 var chunk = getChunk(chunkHash);
                 if (chunk != null)
-                    unloadChunk(chunkHash);
+                    chunk.removeChunkLoader(chunkLoader);
             });
         }
 

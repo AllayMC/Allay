@@ -7,8 +7,11 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleBlockDefinition;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +30,21 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
         var fields = VanillaBlockTypes.class.getDeclaredFields();
         log.info("Loading Block Types...");
         fields[0].get(null);
+        rebuildDefinitionList();
         log.info("Loaded " + fields.length + " Block Types");
+    }
+
+    private List<SimpleBlockDefinition> simpleBlockDefinitions = new ArrayList<>();
+
+    @Override
+    public List<SimpleBlockDefinition> getSimpleBlockDefinitions() {
+        return simpleBlockDefinitions;
+    }
+
+    private void rebuildDefinitionList() {
+        simpleBlockDefinitions.clear();
+        for (var blockType : this.getContent().values()) {
+            blockType.getAllStates().forEach(state -> simpleBlockDefinitions.add(state.toBlockDefinition()));
+        }
     }
 }

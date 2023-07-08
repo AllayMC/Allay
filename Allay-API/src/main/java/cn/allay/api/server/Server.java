@@ -55,4 +55,6 @@ public interface Server extends TaskCreator {
     default World getDefaultWorld() {
         return getWorldPool().getDefaultWorld();
     }
+
+    long getTicks();
 }

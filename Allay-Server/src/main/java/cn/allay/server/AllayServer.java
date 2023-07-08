@@ -42,6 +42,8 @@ public final class AllayServer implements Server {
     private Thread terminalConsoleThread;
     private AllayTerminalConsole terminalConsole;
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
+    @Getter
+    private long ticks = 0;
 
     @Override
     public void start() {
@@ -105,7 +107,7 @@ public final class AllayServer implements Server {
     }
 
     private void onTick() {
-        //TODO
+        ticks++;
     }
 
     @Override
