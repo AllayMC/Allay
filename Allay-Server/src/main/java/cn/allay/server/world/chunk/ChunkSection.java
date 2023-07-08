@@ -1,8 +1,10 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.datastruct.NibbleArray;
+import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.palette.Palette;
 
@@ -18,11 +20,13 @@ import static cn.allay.api.world.chunk.Chunk.index;
 @NotThreadSafe
 public record ChunkSection(Palette<BlockState> blockLayer0,
                            Palette<BlockState> blockLayer1,
+                           Palette<BiomeType> biomes,
                            NibbleArray blockLights,
                            NibbleArray skyLights) {
     public ChunkSection() {
         this(new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
                 new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
+                new Palette<>(VanillaBiomeId.PLAINS),
                 new NibbleArray(Chunk.SECTION_SIZE),
                 new NibbleArray(Chunk.SECTION_SIZE));
     }
@@ -41,6 +45,14 @@ public record ChunkSection(Palette<BlockState> blockLayer0,
         } else {
             blockLayer0.set(index(x, y, z), blockState);
         }
+    }
+
+    public void setBiomeType(int x, int y, int z, BiomeType biomeType) {
+        biomes.set(index(x, y, z), biomeType);
+    }
+
+    public BiomeType getBiomeType(int x, int y, int z) {
+        return biomes.get(index(x, y, z));
     }
 
     public byte getBlockLight(int x, int y, int z) {
