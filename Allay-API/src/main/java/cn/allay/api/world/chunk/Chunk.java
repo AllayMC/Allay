@@ -30,7 +30,11 @@ public interface Chunk extends UnsafeChunk {
 
     void compareAndSetSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue);
 
-    void batchProcess(@Nullable Consumer<BlockOperate> blockOperate, @Nullable Consumer<HeightOperate> heightOperate, @Nullable Consumer<SkyLightOperate> skyLightOperate, @Nullable Consumer<BlockLightOperate> blockLightOperate);
+    void batchProcess(@Nullable Consumer<BlockOperate> blockOperate,
+                      @Nullable Consumer<HeightOperate> heightOperate,
+                      @Nullable Consumer<SkyLightOperate> skyLightOperate,
+                      @Nullable Consumer<BlockLightOperate> blockLightOperate,
+                      @Nullable Consumer<BiomeOperate> biomeOperate);
 
     LevelChunkPacket createLevelChunkPacket();
 }

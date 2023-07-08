@@ -258,7 +258,11 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     }
 
     @Override
-    public void batchProcess(Consumer<BlockOperate> blockOperate, Consumer<HeightOperate> heightOperate, Consumer<SkyLightOperate> skyLightOperate, Consumer<BlockLightOperate> blockLightOperate) {
+    public void batchProcess(Consumer<BlockOperate> blockOperate,
+                             Consumer<HeightOperate> heightOperate,
+                             Consumer<SkyLightOperate> skyLightOperate,
+                             Consumer<BlockLightOperate> blockLightOperate,
+                             Consumer<BiomeOperate> biomeOperate) {
         if (blockOperate != null) {
             long stamp = sectionLock.writeLock();
             try {
@@ -289,6 +293,14 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
                 blockLightOperate.accept(this);
             } finally {
                 blockLightLock.unlockWrite(stamp);
+            }
+        }
+        if (biomeOperate != null) {
+            long stamp = biomeLock.writeLock();
+            try {
+                biomeOperate.accept(this);
+            } finally {
+                biomeLock.unlockWrite(stamp);
             }
         }
     }
