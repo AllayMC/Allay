@@ -12,6 +12,7 @@ import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.server.scheduler.AllayScheduler;
+import cn.allay.server.utils.GameLoop;
 import cn.allay.server.world.chunk.AllayChunkService;
 import cn.allay.server.world.entity.AllayEntityService;
 import cn.allay.server.world.generator.AllayWorldGenerationService;
@@ -83,9 +84,20 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public void tick() {
-        //TODO
+    public void startTick() {
+        Thread.ofPlatform()
+                .name("Allay World Main Thread")
+                .start(() -> {
+                    GameLoop.builder()
+                            .onTick(gameLoop -> tick())
+                            .build()
+                            .startLoop();
+                });
+    }
+
+    private void tick() {
         chunkService.tick();
+        entityService.tick();
         worldScheduler.tick();
     }
 
@@ -138,13 +150,13 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public void setChunk(int x, int z, Chunk chunk) {
-        chunkService.setChunk(x, z, chunk);
+    public @Nullable Chunk getChunk(long chunkHash) {
+        return null;
     }
 
     @Override
-    public void setChunk(int x, int z, Chunk chunk, Consumer<Chunk> chunkAddingCallback) {
-        chunkService.setChunk(x, z, chunk, chunkAddingCallback);
+    public void setChunk(int x, int z, Chunk chunk) {
+        chunkService.setChunk(x, z, chunk);
     }
 
     public static WorldBuilder builder() {

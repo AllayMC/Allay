@@ -1,5 +1,6 @@
 package cn.allay.api.world.chunk;
 
+import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.world.World;
 import cn.allay.api.world.generator.WorldGenerationService;
 import cn.allay.api.world.storage.WorldStorage;
@@ -20,6 +21,7 @@ public interface ChunkService extends ChunkAccessible {
 
     CompletableFuture<Chunk> getOrLoadChunk(int x, int z);
 
+    @SlowOperation
     CompletableFuture<Chunk> loadChunk(int x, int z);
 
     void unloadChunk(int x, int z);
