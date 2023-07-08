@@ -45,6 +45,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
 
     @Override
     @Impl
+    public void setLocation(FixedLoc<Float> location) {
+        this.location.setLoc(location);
+    }
+
+    @Override
+    @Impl
     public long getUniqueId() {
         return uniqueId;
     }

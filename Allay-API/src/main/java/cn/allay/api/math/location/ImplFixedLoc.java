@@ -26,22 +26,22 @@ class ImplFixedLoc<T extends Number> implements FixedLoc<T> {
         this.world = world;
     }
 
-    public ImplFixedLoc(T x, T y, T z, double yaw, double pitch, World world) {
+    public ImplFixedLoc(T x, T y, T z, double pitch, double yaw, World world) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.yaw = yaw;
         this.pitch = pitch;
+        this.yaw = yaw;
         this.world = world;
     }
 
-    public ImplFixedLoc(T x, T y, T z, double yaw, double headYaw, double pitch, World world) {
+    public ImplFixedLoc(T x, T y, T z, double pitch, double yaw, double headYaw, World world) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
-        this.pitch = pitch;
         this.world = world;
     }
 

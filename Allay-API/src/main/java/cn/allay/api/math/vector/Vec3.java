@@ -12,4 +12,9 @@ public interface Vec3<T extends Number> extends FixedVec3<T>, Vec2<T>{
     }
 
     void setY(T value);
+
+    default void setVec3(FixedVec3<T> vec3) {
+        setVec2(vec3);
+        setY(vec3.getY());
+    }
 }

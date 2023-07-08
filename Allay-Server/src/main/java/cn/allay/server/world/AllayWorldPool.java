@@ -29,11 +29,16 @@ public class AllayWorldPool implements WorldPool {
 
     @Override
     public void addWorld(World world) {
+        if (worlds.containsKey(world.getName()))
+            throw new IllegalArgumentException("World " + world.getName() + " already exists");
         worlds.put(world.getName(), world);
+        world.startTick();
     }
 
     @Override
     public void setDefaultWorld(World world) {
+        if (!worlds.containsKey(world.getName()))
+            addWorld(world);
         this.defaultWorld = world;
     }
 

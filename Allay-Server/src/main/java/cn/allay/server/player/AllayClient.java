@@ -13,6 +13,7 @@ import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import lombok.Getter;
+import lombok.Setter;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector2i;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -47,15 +48,37 @@ public class AllayClient implements Client {
     private EntityPlayer playerEntity;
     @Getter
     private boolean online = false;
+    @Getter
+    private int chunkLoadingRadius;
+    @Getter
+    @Setter
+    private boolean firstSpawned = false;
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
         this.server = server;
+        this.chunkLoadingRadius = server.getServerSettings().defaultViewDistance();
         session.setPacketHandler(new AllayClientPacketHandler());
     }
 
     public static AllayClient hold(BedrockServerSession session, Server Server) {
         return new AllayClient(session, Server);
+    }
+
+    @Override
+    public void setChunkLoadingRadius(int radius) {
+        chunkLoadingRadius = Math.min(radius, server.getServerSettings().defaultViewDistance());
+        var chunkRadiusUpdatedPacket = new ChunkRadiusUpdatedPacket();
+        chunkRadiusUpdatedPacket.setRadius(chunkLoadingRadius);
+        sendPacket(chunkRadiusUpdatedPacket);
+    }
+
+    private void doFirstSpawn() {
+        if (firstSpawned) {
+            return;
+        }
+        sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
+        firstSpawned = true;
     }
 
     @Override
@@ -84,10 +107,25 @@ public class AllayClient implements Client {
      */
     @Override
     public void initializePlayer() {
-        online = true;
         server.onLoginFinish(this);
         initPlayerEntity();
         sendStartGamePacket();
+        server.getDefaultWorld().addClient(this);
+        online = true;
+        Thread.ofVirtual().start(() -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
+        });
+    }
+
+    public void sendPlayStatus(PlayStatusPacket.Status status) {
+        var playStatusPacket = new PlayStatusPacket();
+        playStatusPacket.setStatus(status);
+        sendPacketImmediately(playStatusPacket);
     }
 
     private void initPlayerEntity() {
@@ -121,7 +159,7 @@ public class AllayClient implements Client {
         startGamePacket.setLevelId("world");
         //TODO
         startGamePacket.setDefaultPlayerPermission(PlayerPermission.OPERATOR);
-        startGamePacket.setServerChunkTickRange(4);
+        startGamePacket.setServerChunkTickRange(spawnWorld.getTickingRadius());
         startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
         startGamePacket.setPremiumWorldTemplateId("");
         startGamePacket.setInventoriesServerAuthoritative(false);
@@ -146,6 +184,8 @@ public class AllayClient implements Client {
         startGamePacket.setCustomBiomeName("");
         startGamePacket.setEducationProductionId("");
         startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
+        //Hashed runtime ids
+        startGamePacket.setBlockNetworkIdsHashed(true);
         sendPacket(startGamePacket);
 
         var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
@@ -155,10 +195,6 @@ public class AllayClient implements Client {
         var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();
         availableEntityIdentifiersPacket.setIdentifiers(EntityTypeRegistry.getRegistry().getAvailableEntityIdentifierTag());
         sendPacket(availableEntityIdentifiersPacket);
-
-        var playStatusPacket = new PlayStatusPacket();
-        playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
-        sendPacket(playStatusPacket);
     }
 
     @Override
@@ -171,16 +207,20 @@ public class AllayClient implements Client {
         return isOnline();
     }
 
-    @Override
-    public int getChunkLoadingRadius() {
-        return 8;//TODO
-    }
+    private static final int DO_FIRST_SPAWN_CHUNK_THRESHOLD = 25;
+    private int doFirstSpawnChunkThreshold = DO_FIRST_SPAWN_CHUNK_THRESHOLD;
 
     @SlowOperation
     @Override
     public void sendChunk(Chunk chunk) {
         var levelChunkPacket = chunk.createLevelChunkPacket();
         sendPacket(levelChunkPacket);
+        if (doFirstSpawnChunkThreshold > 0) {
+            doFirstSpawnChunkThreshold--;
+            if (doFirstSpawnChunkThreshold == 0) {
+                doFirstSpawn();
+            }
+        }
     }
 
     @Override
@@ -288,6 +328,28 @@ public class AllayClient implements Client {
                     initializePlayer();
                 }
             }
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(RequestChunkRadiusPacket packet) {
+            setChunkLoadingRadius(packet.getRadius());
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(MovePlayerPacket packet) {
+            var pos = packet.getPosition();
+            var rot = packet.getRotation();
+            playerEntity.setLocation(FixedLoc.of(
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ(),
+                    rot.getX(),
+                    rot.getY(),
+                    rot.getZ(),
+                    getLocation().getWorld()
+            ));
             return PacketSignal.HANDLED;
         }
     }

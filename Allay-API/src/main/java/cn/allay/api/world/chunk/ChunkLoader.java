@@ -17,6 +17,8 @@ public interface ChunkLoader {
 
     int getChunkLoadingRadius();
 
+    void setChunkLoadingRadius(int radius);
+
     @SlowOperation
     void sendChunk(Chunk chunk);
 
