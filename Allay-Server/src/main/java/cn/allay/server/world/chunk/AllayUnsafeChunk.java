@@ -1,14 +1,19 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.datastruct.NibbleArray;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.ChunkLoader;
 import cn.allay.api.world.chunk.UnsafeChunk;
+import cn.allay.api.world.palette.Palette;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -49,7 +54,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     protected @NotNull ChunkSection getOrCreateSection(int y) {
-        sections.compareAndSet(y, null, new ChunkSection());
+        sections.compareAndSet(y, null, new ChunkSection(y));
         return sections.get(y);
     }
 
@@ -137,5 +142,58 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public BiomeType getBiomeType(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
         return this.getOrCreateSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
+    }
+
+    public LevelChunkPacket createLevelChunkPacket() {
+        ByteBuf byteBuf = Unpooled.buffer();
+        try {
+            final LevelChunkPacket levelChunkPacket = new LevelChunkPacket();
+            levelChunkPacket.setChunkX(this.chunkX);
+            levelChunkPacket.setChunkZ(this.chunkZ);
+            levelChunkPacket.setCachingEnabled(false);
+            levelChunkPacket.setRequestSubChunks(false);
+            levelChunkPacket.setSubChunksLength(this.dimensionInfo.chunkSectionSize());
+            this.writeTo(byteBuf.retain());
+            levelChunkPacket.setData(byteBuf);
+            return levelChunkPacket;
+        } finally {
+            byteBuf.release();
+        }
+    }
+
+    private void writeTo(ByteBuf byteBuf) {
+        Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
+
+        for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
+            var section = getSection(sectionY);
+            if (section == null) break;
+            section.writeToNetwork(byteBuf);
+        }
+
+        for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
+            var section = getSection(sectionY);
+            if (section == null) {
+                lastBiomes.writeToNetwork(byteBuf, BiomeType::getId, lastBiomes);
+                continue;
+            }
+
+            section.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+            lastBiomes = section.biomes();
+        }
+
+        byteBuf.writeByte(0); // edu - border blocks
+
+        //TODO: BlockEntity
+//        Collection<BlockEntity> blockEntities = this.getBlockEntities();
+//        if (!blockEntities.isEmpty()) {
+//            try (NBTOutputStream writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(byteBuf))) {
+//                for (BlockEntity blockEntity : blockEntities) {
+//                    NbtMap tag = blockEntity.toCompound().build();
+//                    writer.writeTag(tag);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 }

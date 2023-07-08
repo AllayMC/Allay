@@ -2,6 +2,7 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.DimensionInfo;
+import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Set;
@@ -21,6 +22,8 @@ public interface UnsafeChunk extends BlockOperate, BiomeOperate, HeightOperate, 
     default long computeChunkHash() {
         return HashUtils.hashXZ(getChunkX(), getChunkZ());
     }
+
+    LevelChunkPacket createLevelChunkPacket();
 
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();

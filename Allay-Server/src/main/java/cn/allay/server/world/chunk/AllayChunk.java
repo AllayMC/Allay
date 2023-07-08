@@ -1,9 +1,11 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
+import cn.allay.api.world.palette.Palette;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.cloudburstmc.nbt.NbtMap;
@@ -302,57 +304,6 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
             } finally {
                 biomeLock.unlockWrite(stamp);
             }
-        }
-    }
-
-    private void writeTo(ByteBuf byteBuf) {
-        //TODO
-////        Palette<Biome> lastBiomes = new Palette<>( Biome.PLAINS );
-//
-//        for (ChunkSection section : this.sections) {
-////            if (subChunk == null) break;
-//            section.writeToNetwork(byteBuf);
-//        }
-//
-//        for (ChunkSection section : this.sections) {
-//            if (section == null) {
-//                lastBiomes.writeToNetwork(byteBuf, Biome::getId, lastBiomes);
-//                continue;
-//            }
-//
-//            section.getBiomes().writeToNetwork(byteBuf, Biome::getId);
-//            lastBiomes = section.getBiomes();
-//        }
-//
-//        byteBuf.writeByte(0); // edu - border blocks
-//
-//        Collection<BlockEntity> blockEntities = this.getBlockEntities();
-//        if (!blockEntities.isEmpty()) {
-//            try (NBTOutputStream writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(byteBuf))) {
-//                for (BlockEntity blockEntity : blockEntities) {
-//                    NbtMap tag = blockEntity.toCompound().build();
-//                    writer.writeTag(tag);
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-    }
-
-    public LevelChunkPacket createLevelChunkPacket() {
-        ByteBuf byteBuf = Unpooled.buffer();
-        try {
-            final LevelChunkPacket levelChunkPacket = new LevelChunkPacket();
-            levelChunkPacket.setChunkX(this.chunkX);
-            levelChunkPacket.setChunkZ(this.chunkZ);
-            levelChunkPacket.setCachingEnabled(false);
-            levelChunkPacket.setRequestSubChunks(false);
-            levelChunkPacket.setSubChunksLength(this.dimensionInfo.chunkSectionSize());
-            this.writeTo(byteBuf.retain());
-            levelChunkPacket.setData(byteBuf);
-            return levelChunkPacket;
-        } finally {
-            byteBuf.release();
         }
     }
 }
