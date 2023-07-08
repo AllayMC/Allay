@@ -1,7 +1,6 @@
 package cn.allay.api.world.biome;
 
 import cn.allay.api.ApiInstanceHolder;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.MappedRegistry;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -19,5 +18,5 @@ public interface BiomeTypeRegistry extends MappedRegistry<String, BiomeType, Map
         return REGISTRY.get();
     }
 
-    NbtMap getBiomeDefinitionListTag();
+    NbtMap getBiomeDefinition();
 }

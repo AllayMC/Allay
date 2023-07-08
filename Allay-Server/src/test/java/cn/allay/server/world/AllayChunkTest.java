@@ -5,11 +5,13 @@ import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.server.world.chunk.AllayChunk;
 import cn.allay.testutils.AllayTestExtension;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Slf4j
 @ExtendWith(AllayTestExtension.class)
 public class AllayChunkTest {
     @Test
@@ -20,6 +22,7 @@ public class AllayChunkTest {
                 for (int j = 0; j < 16; j++) {
                     for (int k = 0; k < 100; k++) {
                         chunk.setBlock(i, k, j, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
+                        log.info("%d %d %d write".formatted(i, k, j));
                     }
                 }
             }
@@ -29,6 +32,7 @@ public class AllayChunkTest {
                 for (int j = 0; j < 16; j++) {
                     for (int k = 0; k < 100; k++) {
                         assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlock(i, k, j), "(" + i + "," + k + "," + j + ") GET BLOCK ERROR!");
+                        log.info("%d %d %d read".formatted(i, k, j));
                     }
                 }
             }
