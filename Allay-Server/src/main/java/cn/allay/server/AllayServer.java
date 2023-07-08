@@ -54,7 +54,6 @@ public final class AllayServer implements Server {
         this.networkServer.start();
         log.info("Network server started.");
         loadWorlds();
-
         loop();
     }
 
@@ -97,7 +96,7 @@ public final class AllayServer implements Server {
                 .setWorldGenerator(new FlatWorldGenerator())
                 .setWorldStorage(new AllayNonPersistentWorldStorage())
                 .setWorldType(WorldType.FLAT)
-                .setSpawnLocation(Loc.of(0f, 0f, 0f, null))
+                .setSpawnLocation(Loc.of(0f, 6f, 0f, null))
                 .build());
     }
 

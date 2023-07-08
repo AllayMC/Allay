@@ -11,6 +11,7 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface ChunkLoader {
+
     FixedLoc<Float> getLocation();
 
     boolean isLoaderActive();

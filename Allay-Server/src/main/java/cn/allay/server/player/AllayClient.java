@@ -29,6 +29,7 @@ import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -234,6 +235,7 @@ public class AllayClient implements Client {
     }
 
     @Override
+    @Nullable
     public FixedLoc<Float> getLocation() {
         return playerEntity.getLocation();
     }
@@ -277,7 +279,9 @@ public class AllayClient implements Client {
         @Override
         public void onDisconnect(String reason) {
             server.onClientDisconnect(AllayClient.this);
-            getLocation().getWorld().removeClient(AllayClient.this);
+            var loc = getLocation();
+            if (loc != null)
+                loc.getWorld().removeClient(AllayClient.this);
         }
 
         @Override
