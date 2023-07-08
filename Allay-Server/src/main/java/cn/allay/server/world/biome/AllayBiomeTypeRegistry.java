@@ -1,14 +1,14 @@
 package cn.allay.server.world.biome;
 
-import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
-import cn.allay.api.world.biome.VanillaBiomeTypes;
 import lombok.SneakyThrows;
+import org.cloudburstmc.nbt.MutableNbtMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,23 +19,23 @@ import java.util.Map;
  */
 public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<String, BiomeType, Map<String, BiomeType>> implements BiomeTypeRegistry {
 
-    private NbtMap biomeDefinitionListTag;
+    private MutableNbtMap biomeDefinition;
 
     public AllayBiomeTypeRegistry() {
         super(null, input -> new HashMap<>());
-        //Load vanilla biome type constants
-        BiomeType ocean = VanillaBiomeTypes.OCEAN;
-        loadVanillaBiomeDefinitionListTag();
+        loadVanillaBiomeDefinition();
     }
 
     @SneakyThrows
-    private void loadVanillaBiomeDefinitionListTag() {
-        //TODO: Support custom biome
-        biomeDefinitionListTag = (NbtMap) NbtUtils.createNetworkReader(AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions_full.nbt")).readTag();
+    private void loadVanillaBiomeDefinition() {
+        try (InputStream stream = AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions_full.nbt")) {
+            assert stream != null;
+            biomeDefinition = MutableNbtMap.from((NbtMap) NbtUtils.createNetworkReader(stream).readTag());
+        }
     }
 
     @Override
-    public NbtMap getBiomeDefinitionListTag() {
-        return biomeDefinitionListTag;
+    public NbtMap getBiomeDefinition() {
+        return biomeDefinition.build();
     }
 }

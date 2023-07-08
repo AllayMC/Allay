@@ -2,6 +2,7 @@
 /.gradle/
 buildSrc/**
 **/build
+**/logs
 /Data/bedrock-samples/behavior_pack/
 /Data/bedrock-samples/documentation/
 /Data/bedrock-samples/resource_pack/
