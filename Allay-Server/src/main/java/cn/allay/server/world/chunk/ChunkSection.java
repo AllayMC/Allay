@@ -1,7 +1,7 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.block.type.VanillaBlockTypes;
+import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.datastruct.NibbleArray;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.palette.Palette;

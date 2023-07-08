@@ -28,7 +28,8 @@ public class VanillaBlockClassGen {
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockTypeBuilder");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/impl");
-
+    private static final Path BLOCK_TYPE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockTypes.java");
+    private static final String BLOCK_TYPE_PACKAGE_NAME = "cn.allay.api.data";
     private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaBlockTypes")
             .addModifiers(Modifier.PUBLIC)
             .addJavadoc("Allay Project <p>\n@author daoge_cmd");
@@ -51,9 +52,9 @@ public class VanillaBlockClassGen {
             }
             generateBlockType(block, className);
             var typesJavaFile = JavaFile
-                    .builder("cn.allay.api.block.type", TYPES_CLASS.build())
+                    .builder(BLOCK_TYPE_PACKAGE_NAME, TYPES_CLASS.build())
                     .build();
-            Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/block/type/VanillaBlockTypes.java"), typesJavaFile.toString());
+            Files.writeString(BLOCK_TYPE_OUTPUT_PATH, typesJavaFile.toString());
         }
     }
 
