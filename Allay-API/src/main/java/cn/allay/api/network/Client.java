@@ -1,8 +1,10 @@
 package cn.allay.api.network;
 
 import cn.allay.api.entity.impl.EntityPlayer;
+import cn.allay.api.player.AdventureSettings;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.chunk.ChunkLoader;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayStatusPacket;
 
@@ -33,4 +35,14 @@ public interface Client extends ChunkLoader {
     String getName();
 
     EntityPlayer getPlayerEntity();
+
+    boolean isOp();
+
+    void setOp(boolean op);
+
+    GameType getGameType();
+
+    void setGameType(GameType gameType);
+
+    AdventureSettings getAdventureSettings();
 }

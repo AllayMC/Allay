@@ -2,12 +2,13 @@ package cn.allay.server.player;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
-import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.network.Client;
+import cn.allay.api.player.AdventureSettings;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.HashUtils;
@@ -43,9 +44,12 @@ import java.util.regex.Pattern;
  */
 public class AllayClient implements Client {
 
+    private static final int DO_FIRST_SPAWN_CHUNK_THRESHOLD = 25;
     private final BedrockServerSession session;
     @Getter
     private final Server server;
+    @Getter
+    private final AdventureSettings adventureSettings;
     @Getter
     private LoginData loginData;
     @Getter
@@ -59,11 +63,19 @@ public class AllayClient implements Client {
     @Getter
     @Setter
     private boolean firstSpawned = false;
+    @Getter
+    @Setter
+    private boolean op = true;
+    @Getter
+    @Setter
+    private GameType gameType = GameType.CREATIVE;
+    private int doFirstSpawnChunkThreshold = DO_FIRST_SPAWN_CHUNK_THRESHOLD;
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
         this.server = server;
         this.chunkLoadingRadius = server.getServerSettings().defaultViewDistance();
+        this.adventureSettings = new AdventureSettings(this);
         session.setPacketHandler(new AllayClientPacketHandler());
     }
 
@@ -90,7 +102,16 @@ public class AllayClient implements Client {
         setEntityDataPacket.setTick(server.getTicks());
         sendPacket(setEntityDataPacket);
 
-        //TODO: AdventureSettings
+        adventureSettings.set(AdventureSettings.Type.OPERATOR, isOp());
+        adventureSettings.set(AdventureSettings.Type.TELEPORT, true);
+        adventureSettings.set(AdventureSettings.Type.WORLD_IMMUTABLE, gameType == GameType.SPECTATOR);
+        adventureSettings.set(AdventureSettings.Type.ALLOW_FLIGHT, gameType != GameType.SURVIVAL && gameType != GameType.ADVENTURE);
+        adventureSettings.set(AdventureSettings.Type.NO_CLIP, gameType == GameType.SPECTATOR);
+        adventureSettings.set(AdventureSettings.Type.FLYING, gameType == GameType.SPECTATOR);
+        adventureSettings.set(AdventureSettings.Type.ATTACK_MOBS, gameType == GameType.SURVIVAL || gameType == GameType.CREATIVE);
+        adventureSettings.set(AdventureSettings.Type.ATTACK_PLAYERS, gameType == GameType.SURVIVAL || gameType == GameType.CREATIVE);
+        adventureSettings.set(AdventureSettings.Type.NO_PVM, gameType == GameType.SPECTATOR);
+        adventureSettings.update();
 
         //TODO: UpdateAttributes
 
@@ -245,9 +266,6 @@ public class AllayClient implements Client {
         return isOnline();
     }
 
-    private static final int DO_FIRST_SPAWN_CHUNK_THRESHOLD = 25;
-    private int doFirstSpawnChunkThreshold = DO_FIRST_SPAWN_CHUNK_THRESHOLD;
-
     @SlowOperation
     @Override
     public void sendChunk(Chunk chunk) {
@@ -275,6 +293,8 @@ public class AllayClient implements Client {
     }
 
     private class AllayClientPacketHandler implements BedrockPacketHandler {
+
+        public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
         @Override
         public void onDisconnect(String reason) {
@@ -306,8 +326,6 @@ public class AllayClient implements Client {
             session.setCompression(settingsPacket.getCompressionAlgorithm());
             return PacketSignal.HANDLED;
         }
-
-        public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
         @Override
         public PacketSignal handle(LoginPacket packet) {
