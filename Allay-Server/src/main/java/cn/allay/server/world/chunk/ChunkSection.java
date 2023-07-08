@@ -7,9 +7,11 @@ import cn.allay.api.datastruct.NibbleArray;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.palette.Palette;
+import io.netty.buffer.ByteBuf;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
+import static cn.allay.api.world.chunk.Chunk.SUB_CHUNK_VERSION;
 import static cn.allay.api.world.chunk.Chunk.index;
 
 /**
@@ -18,13 +20,15 @@ import static cn.allay.api.world.chunk.Chunk.index;
  * @author Cool_Loong
  */
 @NotThreadSafe
-public record ChunkSection(Palette<BlockState> blockLayer0,
+public record ChunkSection(int sectionY,
+                           Palette<BlockState> blockLayer0,
                            Palette<BlockState> blockLayer1,
                            Palette<BiomeType> biomes,
                            NibbleArray blockLights,
                            NibbleArray skyLights) {
-    public ChunkSection() {
-        this(new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
+    public ChunkSection(int sectionY) {
+        this(sectionY,
+                new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
                 new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
                 new Palette<>(VanillaBiomeId.PLAINS),
                 new NibbleArray(Chunk.SECTION_SIZE),
@@ -69,5 +73,15 @@ public record ChunkSection(Palette<BlockState> blockLayer0,
 
     public void setSkyLight(int x, int y, int z, byte light) {
         skyLights.set(index(x, y, z), light);
+    }
+
+    public void writeToNetwork( ByteBuf byteBuf ) {
+        byteBuf.writeByte(SUB_CHUNK_VERSION);
+        //block layer count
+        byteBuf.writeByte(2);
+        byteBuf.writeByte(sectionY);
+
+        blockLayer0.writeToNetwork(byteBuf, BlockState::blockStateHash);
+        blockLayer1.writeToNetwork(byteBuf, BlockState::blockStateHash);
     }
 }
