@@ -3,7 +3,7 @@ package cn.allay.server.player;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
-import cn.allay.api.entity.type.VanillaEntityTypes;
+import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.math.location.FixedLoc;
 import cn.allay.api.network.Client;
 import cn.allay.api.player.data.LoginData;

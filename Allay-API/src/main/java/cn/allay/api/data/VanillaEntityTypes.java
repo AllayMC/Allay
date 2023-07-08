@@ -1,4 +1,4 @@
-package cn.allay.api.entity.type;
+package cn.allay.api.data;
 
 import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.impl.EntityAgent;
@@ -123,6 +123,8 @@ import cn.allay.api.entity.impl.EntityZombieHorse;
 import cn.allay.api.entity.impl.EntityZombiePigman;
 import cn.allay.api.entity.impl.EntityZombieVillager;
 import cn.allay.api.entity.impl.EntityZombieVillagerV2;
+import cn.allay.api.entity.type.EntityType;
+import cn.allay.api.entity.type.EntityTypeBuilder;
 
 /**
  * @author daoge_cmd <br>

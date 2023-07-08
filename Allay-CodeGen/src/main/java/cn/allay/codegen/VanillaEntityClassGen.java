@@ -29,6 +29,7 @@ public class VanillaEntityClassGen {
             .addJavadoc("Allay Project <p>\n@author daoge_cmd");
 
     public static void main(String[] args) {
+        VanillaEntityIdEnumGen.generate();
         generate();
     }
 
