@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/7/1
@@ -139,6 +140,11 @@ public class AllayWorld implements World {
     @Override
     public void setChunk(int x, int z, Chunk chunk) {
         chunkService.setChunk(x, z, chunk);
+    }
+
+    @Override
+    public void setChunk(int x, int z, Chunk chunk, Consumer<Chunk> chunkAddingCallback) {
+        chunkService.setChunk(x, z, chunk, chunkAddingCallback);
     }
 
     public static WorldBuilder builder() {

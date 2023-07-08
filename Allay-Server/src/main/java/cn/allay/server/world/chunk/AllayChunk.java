@@ -8,8 +8,10 @@ import io.netty.buffer.Unpooled;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.Set;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 
@@ -24,6 +26,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     protected final StampedLock heightLock;
     protected final StampedLock skyLightLock;
     protected final StampedLock blockLightLock;
+    protected final StampedLock chunkLoaderLock;
 
     public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
@@ -35,6 +38,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         this.heightLock = new StampedLock();
         this.skyLightLock = new StampedLock();
         this.blockLightLock = new StampedLock();
+        this.chunkLoaderLock = new StampedLock();
     }
 
     @Override
@@ -129,6 +133,36 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
             super.setBlockLight(x, y, z, light);
         } finally {
             blockLightLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public @UnmodifiableView Set<ChunkLoader> getChunkLoaders() {
+        return super.getChunkLoaders();
+    }
+
+    @Override
+    public int getChunkLoaderCount() {
+        return super.getChunkLoaderCount();
+    }
+
+    @Override
+    public void addChunkLoader(ChunkLoader chunkLoader) {
+        long stamp = chunkLoaderLock.writeLock();
+        try {
+            super.addChunkLoader(chunkLoader);
+        } finally {
+            chunkLoaderLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public void removeChunkLoader(ChunkLoader chunkLoader) {
+        long stamp = chunkLoaderLock.writeLock();
+        try {
+            super.removeChunkLoader(chunkLoader);
+        } finally {
+            chunkLoaderLock.unlockWrite(stamp);
         }
     }
 
