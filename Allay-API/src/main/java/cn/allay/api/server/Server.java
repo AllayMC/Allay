@@ -3,13 +3,18 @@ package cn.allay.api.server;
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.network.Client;
 import cn.allay.api.network.NetworkServer;
+import cn.allay.api.player.info.DeviceInfo;
+import cn.allay.api.player.skin.Skin;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldPool;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * The server interface
@@ -57,4 +62,16 @@ public interface Server extends TaskCreator {
     }
 
     long getTicks();
+
+    void addToPlayerList(Client client);
+
+    void addToPlayerList(UUID uuid, long entityId, String name, DeviceInfo deviceInfo, String xuid, Skin skin);
+
+    void removeFromPlayerList(Client client);
+
+    void removeFromPlayerList(UUID uuid);
+
+    Map<UUID, PlayerListPacket.Entry> getPlayerListEntryMap();
+
+    void broadcastPacket(BedrockPacket packet);
 }
