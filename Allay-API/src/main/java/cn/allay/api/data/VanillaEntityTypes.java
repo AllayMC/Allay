@@ -1,8 +1,13 @@
 package cn.allay.api.data;
 
+import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.entity.attribute.AttributeType;
+import cn.allay.api.entity.component.impl.attribute.EntityAttributeComponentImpl;
 import cn.allay.api.entity.impl.*;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
+
+import java.util.List;
 
 /**
  * Allay Project <p>
@@ -445,6 +450,23 @@ public interface VanillaEntityTypes {
   EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder
           .builder(EntityPlayer.class)
           .vanillaEntity(VanillaEntityId.PLAYER)
+          .addComponent(ComponentProvider.of(
+                  () -> new EntityAttributeComponentImpl(
+                          List.of(
+                                  //Common
+                                  AttributeType.HEALTH,
+                                  AttributeType.ABSORPTION,
+                                  AttributeType.ATTACK_DAMAGE,
+                                  AttributeType.FOLLOW_RANGE,
+                                  AttributeType.MOVEMENT,
+                                  AttributeType.KNOCKBACK_RESISTENCE,
+                                  //Player
+                                  AttributeType.PLAYER_HUNGER,
+                                  AttributeType.PLAYER_SATURATION,
+                                  AttributeType.PLAYER_EXHAUSTION,
+                                  AttributeType.PLAYER_EXPERIENCE,
+                                  AttributeType.PLAYER_LEVEL
+                          )), EntityAttributeComponentImpl.class))
           .addBasicComponents()
           .build();
 
