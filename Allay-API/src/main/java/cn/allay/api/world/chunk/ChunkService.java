@@ -20,11 +20,11 @@ public interface ChunkService extends ChunkAccessible {
 
     CompletableFuture<Chunk> getOrLoadChunk(int x, int z);
 
-    CompletableFuture<Chunk> getOrLoadChunk(int x, int z, Consumer<Chunk> chunkAddingCallback);
-
     CompletableFuture<Chunk> loadChunk(int x, int z);
 
-    CompletableFuture<Chunk> loadChunk(int x, int z, Consumer<Chunk> chunkAddingCallback);
+    void unloadChunk(int x, int z);
+
+    void unloadChunk(long chunkHash);
 
     boolean isChunkLoaded(int x, int z);
 

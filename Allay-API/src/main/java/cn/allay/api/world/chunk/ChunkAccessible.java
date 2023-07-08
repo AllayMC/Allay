@@ -14,9 +14,10 @@ public interface ChunkAccessible {
     @Nullable
     Chunk getChunk(int x, int z);
 
-    void setChunk(int x, int z, Chunk chunk);
+    @Nullable
+    Chunk getChunk(long chunkHash);
 
-    void setChunk(int x, int z, Chunk chunk, Consumer<Chunk> chunkAddingCallback);
+    void setChunk(int x, int z, Chunk chunk);
 
     int maxX();
 
