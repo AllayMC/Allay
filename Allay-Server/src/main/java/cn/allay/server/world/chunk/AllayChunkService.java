@@ -291,7 +291,7 @@ public class AllayChunkService implements ChunkService {
             var loadList = new LongArrayList();
             for (int rx = -chunkLoadingRadius; rx <= chunkLoadingRadius; rx++) {
                 for (int rz = -chunkLoadingRadius; rz <= chunkLoadingRadius; rz++) {
-                    if (isChunkInRadius(rx, rz, chunkLoadingRadius)) continue;
+                    if (!isChunkInRadius(rx, rz, chunkLoadingRadius)) continue;
                     var chunkX = loaderChunkX + rx;
                     var chunkZ = loaderChunkZ + rz;
                     var hashXZ = HashUtils.hashXZ(chunkX, chunkZ);
