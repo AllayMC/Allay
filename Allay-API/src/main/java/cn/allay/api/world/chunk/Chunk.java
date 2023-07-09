@@ -1,6 +1,7 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.world.biome.BiomeType;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -27,11 +28,13 @@ public interface Chunk extends UnsafeChunk {
 
     void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState expectedValue, BlockState newValue);
 
+    void compareAndSetBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType expectedValue, BiomeType newValue);
+
     void compareAndSetBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue);
 
     void compareAndSetSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue);
 
-    void batchProcess(@Nullable Consumer<SectionOperate> blockOperate,
+    void batchProcess(@Nullable Consumer<SectionOperate> sectionOperate,
                       @Nullable Consumer<HeightOperate> heightOperate,
                       @Nullable Consumer<SkyLightOperate> skyLightOperate,
                       @Nullable Consumer<BlockLightOperate> blockLightOperate);
