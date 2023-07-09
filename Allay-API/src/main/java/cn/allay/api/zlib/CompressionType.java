@@ -1,4 +1,4 @@
-package cn.allay.api.utils.zlib;
+package cn.allay.api.zlib;
 
 /**
  * Allay Project 2023/6/6
