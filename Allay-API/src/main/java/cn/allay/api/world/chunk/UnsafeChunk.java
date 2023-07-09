@@ -2,17 +2,16 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.DimensionInfo;
-import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
-import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Set;
+import javax.annotation.concurrent.NotThreadSafe;
 
 /**
  * Allay Project 2023/7/4
  *
  * @author Cool_Loong
  */
-public interface UnsafeChunk extends BlockOperate, BiomeOperate, HeightOperate, SkyLightOperate, BlockLightOperate {
+@NotThreadSafe
+public interface UnsafeChunk extends SectionOperate, HeightOperate, SkyLightOperate, BlockLightOperate {
     DimensionInfo getDimensionInfo();
 
     int getChunkX();
@@ -26,15 +25,4 @@ public interface UnsafeChunk extends BlockOperate, BiomeOperate, HeightOperate, 
     default long computeChunkHash() {
         return HashUtils.hashXZ(getChunkX(), getChunkZ());
     }
-
-    LevelChunkPacket createLevelChunkPacket();
-
-    @UnmodifiableView
-    Set<ChunkLoader> getChunkLoaders();
-
-    void addChunkLoader(ChunkLoader chunkLoader);
-
-    void removeChunkLoader(ChunkLoader chunkLoader);
-
-    int getChunkLoaderCount();
 }

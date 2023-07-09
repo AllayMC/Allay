@@ -15,8 +15,10 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 5/30/2023
@@ -29,8 +31,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     protected final StampedLock heightLock;
     protected final StampedLock skyLightLock;
     protected final StampedLock blockLightLock;
-    protected final StampedLock chunkLoaderLock;
-    protected final StampedLock biomeLock;
+    protected final Vector<ChunkLoader> chunkLoaders;
 
     public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
@@ -42,8 +43,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         this.heightLock = new StampedLock();
         this.skyLightLock = new StampedLock();
         this.blockLightLock = new StampedLock();
-        this.chunkLoaderLock = new StampedLock();
-        this.biomeLock = new StampedLock();
+        this.chunkLoaders = new Vector<>();
     }
 
     @Override
@@ -99,26 +99,26 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
 
     @Override
     public BiomeType getBiomeType(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        long stamp = biomeLock.tryOptimisticRead();
+        long stamp = sectionLock.tryOptimisticRead();
         try {
-            for (; ; stamp = biomeLock.readLock()) {
+            for (; ; stamp = sectionLock.readLock()) {
                 if (stamp == 0L) continue;
                 var biomeType = super.getBiomeType(x, y, z);
-                if (!biomeLock.validate(stamp)) continue;
+                if (!sectionLock.validate(stamp)) continue;
                 return biomeType;
             }
         } finally {
-            if (StampedLock.isReadLockStamp(stamp)) biomeLock.unlockRead(stamp);
+            if (StampedLock.isReadLockStamp(stamp)) sectionLock.unlockRead(stamp);
         }
     }
 
     @Override
     public void setBiomeType(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
-        long stamp = biomeLock.writeLock();
+        long stamp = sectionLock.writeLock();
         try {
             super.setBiomeType(x, y, z, biomeType);
         } finally {
-            biomeLock.unlockWrite(stamp);
+            sectionLock.unlockWrite(stamp);
         }
     }
 
@@ -163,36 +163,6 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
             super.setBlockLight(x, y, z, light);
         } finally {
             blockLightLock.unlockWrite(stamp);
-        }
-    }
-
-    @Override
-    public @UnmodifiableView Set<ChunkLoader> getChunkLoaders() {
-        return super.getChunkLoaders();
-    }
-
-    @Override
-    public int getChunkLoaderCount() {
-        return super.getChunkLoaderCount();
-    }
-
-    @Override
-    public void addChunkLoader(ChunkLoader chunkLoader) {
-        long stamp = chunkLoaderLock.writeLock();
-        try {
-            super.addChunkLoader(chunkLoader);
-        } finally {
-            chunkLoaderLock.unlockWrite(stamp);
-        }
-    }
-
-    @Override
-    public void removeChunkLoader(ChunkLoader chunkLoader) {
-        long stamp = chunkLoaderLock.writeLock();
-        try {
-            super.removeChunkLoader(chunkLoader);
-        } finally {
-            chunkLoaderLock.unlockWrite(stamp);
         }
     }
 
@@ -260,15 +230,14 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     }
 
     @Override
-    public void batchProcess(Consumer<BlockOperate> blockOperate,
+    public void batchProcess(Consumer<SectionOperate> sectionOperate,
                              Consumer<HeightOperate> heightOperate,
                              Consumer<SkyLightOperate> skyLightOperate,
-                             Consumer<BlockLightOperate> blockLightOperate,
-                             Consumer<BiomeOperate> biomeOperate) {
-        if (blockOperate != null) {
+                             Consumer<BlockLightOperate> blockLightOperate) {
+        if (sectionOperate != null) {
             long stamp = sectionLock.writeLock();
             try {
-                blockOperate.accept(this);
+                sectionOperate.accept(this);
             } finally {
                 sectionLock.unlockWrite(stamp);
             }
@@ -297,25 +266,90 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
                 blockLightLock.unlockWrite(stamp);
             }
         }
-        if (biomeOperate != null) {
-            long stamp = biomeLock.writeLock();
-            try {
-                biomeOperate.accept(this);
-            } finally {
-                biomeLock.unlockWrite(stamp);
-            }
-        }
     }
 
     @Override
     public LevelChunkPacket createLevelChunkPacket() {
         long stamp = sectionLock.writeLock();
-        LevelChunkPacket levelChunkPacket;
+        ByteBuf byteBuf = Unpooled.buffer();
         try {
-            levelChunkPacket = super.createLevelChunkPacket();
+            final LevelChunkPacket levelChunkPacket = new LevelChunkPacket();
+            levelChunkPacket.setChunkX(this.chunkX);
+            levelChunkPacket.setChunkZ(this.chunkZ);
+            levelChunkPacket.setCachingEnabled(false);
+            levelChunkPacket.setRequestSubChunks(false);
+            levelChunkPacket.setSubChunksLength(computeNotNullSectionCount());
+            writeChunkDataToBuffer(byteBuf.retain());
+            levelChunkPacket.setData(byteBuf);
+            return levelChunkPacket;
         } finally {
+            byteBuf.release();
             sectionLock.unlockWrite(stamp);
         }
-        return levelChunkPacket;
+    }
+
+    @Override
+    @UnmodifiableView
+    public Set<ChunkLoader> getChunkLoaders() {
+        return chunkLoaders.stream().collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public void addChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.add(chunkLoader);
+    }
+
+    @Override
+    public void removeChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.remove(chunkLoader);
+    }
+
+    @Override
+    public int getChunkLoaderCount() {
+        return chunkLoaders.size();
+    }
+
+    private void writeChunkDataToBuffer(ByteBuf retainedBuffer) {
+        Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
+
+        for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
+            var section = getSection(sectionY);
+            if (section == null) break;
+            section.writeToNetwork(retainedBuffer);
+        }
+
+        for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
+            var section = getSection(sectionY);
+            if (section == null) {
+                lastBiomes.writeToNetwork(retainedBuffer, BiomeType::getId, lastBiomes);
+                continue;
+            }
+
+            section.biomes().writeToNetwork(retainedBuffer, BiomeType::getId);
+            lastBiomes = section.biomes();
+        }
+
+        retainedBuffer.writeByte(0); // edu - border blocks
+
+        //TODO: BlockEntity
+//        Collection<BlockEntity> blockEntities = this.getBlockEntities();
+//        if (!blockEntities.isEmpty()) {
+//            try (NBTOutputStream writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(retainedBuffer))) {
+//                for (BlockEntity blockEntity : blockEntities) {
+//                    NbtMap tag = blockEntity.toCompound().build();
+//                    writer.writeTag(tag);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+    }
+
+    private int computeNotNullSectionCount() {
+        for (var count = 0; count < getDimensionInfo().chunkSectionSize(); count++) {
+            if (getSection(count) == null)
+                return count;
+        }
+        return getDimensionInfo().chunkSectionSize();
     }
 }
