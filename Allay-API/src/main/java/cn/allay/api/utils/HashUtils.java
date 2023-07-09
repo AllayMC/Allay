@@ -63,14 +63,31 @@ public class HashUtils {
         return hash;
     }
 
+    /**
+     * Shift int x to the left by 32 bits and int z to form a long value
+     *
+     * @param x the int x
+     * @param z the int z
+     * @return the long
+     */
     public long hashXZ(int x, int z) {
-        return ( (long) x << 32 ) | ( z & 0xffffffffL );
+        return ((long) x << 32) | (z & 0xffffffffL);
     }
 
+    /**
+     * Gets x from {@link #hashXZ(int, int)}
+     *
+     * @param hashXZ a long value
+     */
     public int getXFromHashXZ(long hashXZ) {
-        return (int) (hashXZ >>> 32);
+        return (int) (hashXZ >> 32);
     }
 
+    /**
+     * Gets z from {@link #hashXZ(int, int)}
+     *
+     * @param hashXZ a long value
+     */
     public int getZFromHashXZ(long hashXZ) {
         return (int) hashXZ;
     }
