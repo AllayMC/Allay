@@ -92,6 +92,19 @@ public class AllayClient implements Client {
         sendPacket(chunkRadiusUpdatedPacket);
     }
 
+    @Override
+    public void preSendChunks(Set<Long> chunkHashes) {
+        var chunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
+        var loc = getLocation();
+        chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.getX(), loc.getY(), loc.getZ()));
+        chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
+        for (var chunkHash : chunkHashes) {
+            chunkPublisherUpdatePacket.getSavedChunks().add(Vector2i.from(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash)));
+        }
+
+        sendPacket(chunkPublisherUpdatePacket);
+    }
+
     private void doFirstSpawn() {
         if (firstSpawned) {
             return;
@@ -292,15 +305,7 @@ public class AllayClient implements Client {
 
     @Override
     public void unloadChunks(Set<Long> chunkHashes) {
-        var chunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
-        var loc = getLocation();
-        chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.getX(), loc.getY(), loc.getZ()));
-        chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
-        for (var chunkHash : chunkHashes) {
-            chunkPublisherUpdatePacket.getSavedChunks().add(Vector2i.from(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash)));
-        }
 
-        sendPacket(chunkPublisherUpdatePacket);
     }
 
     private class AllayClientPacketHandler implements BedrockPacketHandler {
