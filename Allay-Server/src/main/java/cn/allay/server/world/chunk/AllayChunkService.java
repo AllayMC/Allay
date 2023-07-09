@@ -179,18 +179,16 @@ public class AllayChunkService implements ChunkService {
         var future = worldStorage
                 .readChunk(x, z, world.getDimensionInfo());
         loadingChunks.put(hashXZ, future);
-        future.thenApply(loadedChunk -> {
+        future.thenAcceptAsync(loadedChunk -> {
             if (loadedChunk != null) {
                 setChunk(x, z, loadedChunk);
                 loadingChunks.remove(hashXZ);
-                return loadedChunk;
+                return;
             }
-            var chunk = new AllayChunk(x, z, world.getDimensionInfo());
-            worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(chunk), single -> {
-                setChunk(x, z, chunk);
+            worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(null), single -> {
+                setChunk(x, z, single.getChunk(0, 0));
                 loadingChunks.remove(hashXZ);
             });
-            return chunk;
         });
         return future;
     }
@@ -287,18 +285,23 @@ public class AllayChunkService implements ChunkService {
 
         private void sendQueuedChunks() {
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
-            for (var sentChunkCount = 0; sentChunkCount < chunkSentPerTick; sentChunkCount++) {
+            var index = 0;
+            var sentChunkCount = 0;
+            while (sentChunkCount < chunkSentPerTick) {
                 if (chunkSendingQueue.isEmpty()) break;
-                var chunkHash = chunkSendingQueue.get(0);
+                var chunkHash = chunkSendingQueue.get(index);
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
-                    sentChunkCount--;
-                    continue;
+                    index++;
+                    if (index == chunkSendingQueue.size()) break;
+                    else continue;
                 }
-                chunkSendingQueue.remove(0);
+                sentChunkCount++;
+                chunkSendingQueue.remove(index);
                 chunk.addChunkLoader(chunkLoader);
-                chunkReadyToSend.put(chunkHash, chunk);
+                chunkReadyToSend.put(chunkHash.longValue(), chunk);
             }
+            if (chunkReadyToSend.isEmpty()) return;
             chunkLoader.preSendChunks(chunkReadyToSend.keySet());
             chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash));
             chunkReadyToSend.values().stream().parallel().forEach(chunkLoader::sendChunk);

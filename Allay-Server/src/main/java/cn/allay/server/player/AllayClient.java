@@ -15,6 +15,7 @@ import cn.allay.api.server.Server;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.gamerule.GameRule;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -98,9 +99,6 @@ public class AllayClient implements Client {
         var loc = getLocation();
         chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.getX(), loc.getY(), loc.getZ()));
         chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
-        for (var chunkHash : chunkHashes) {
-            chunkPublisherUpdatePacket.getSavedChunks().add(Vector2i.from(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash)));
-        }
 
         sendPacket(chunkPublisherUpdatePacket);
     }
@@ -196,6 +194,7 @@ public class AllayClient implements Client {
     private void sendBasicGameData() {
         var spawnWorld = server.getDefaultWorld();
         var startGamePacket = new StartGamePacket();
+        startGamePacket.getGamerules().add(GameRule.SHOW_COORDINATES.toNetwork());
         startGamePacket.setUniqueEntityId(playerEntity.getUniqueId());
         //TODO: WOC?
         startGamePacket.setRuntimeEntityId(playerEntity.getUniqueId());
