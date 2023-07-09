@@ -19,6 +19,7 @@ import cn.allay.server.block.component.injector.AllayBlockComponentInjector;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -155,6 +156,8 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         private final BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValuesArray;
         private final int blockStateHash;
         private final int specialValue;
+        @Setter
+        private int paletteIndex = -1;
 
         AllayBlockState(
                 BlockType<?> blockType,
@@ -223,6 +226,11 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         @Override
         public int specialValue() {
             return specialValue;
+        }
+
+        @Override
+        public int paletteIndex() {
+            return paletteIndex;
         }
 
         @Override
@@ -354,7 +362,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         @Override
-        public AllayBlockType<T> build() {
+        public AllayBlockType<T> build(boolean assignPaletteIndex) {
             if (identifier == null) throw new BlockTypeBuildException("identifier cannot be null!");
             var type = new AllayBlockType<>(interfaceClass, componentProviders, properties, identifier);
             componentProviders.add(ComponentProvider.of(info -> new BlockBaseComponentImpl(type, (BlockInitInfo) info), BlockBaseComponentImpl.class));
@@ -369,7 +377,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
                 throw new BlockTypeBuildException("Failed to create block type!", e);
             }
             type.register(BlockTypeRegistry.getRegistry());
-            type.register(BlockStateHashPalette.getRegistry());
+            type.register(BlockStateHashPalette.getRegistry(), assignPaletteIndex);
             return type;
         }
     }

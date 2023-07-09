@@ -46,7 +46,11 @@ public interface BlockTypeBuilder<T extends Block> {
 
     BlockTypeBuilder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent);
 
-    BlockType<T> build();
+    default BlockType<T> build() {
+        return build(true);
+    }
+
+    BlockType<T> build(boolean assignPaletteIndex);
 
     interface BlockTypeBuilderFactory {
         <T extends Block> BlockTypeBuilder<T> create(Class<T> clazz);

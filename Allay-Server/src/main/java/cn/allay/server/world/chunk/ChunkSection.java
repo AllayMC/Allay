@@ -81,7 +81,7 @@ public record ChunkSection(int sectionY,
         byteBuf.writeByte(2);
         byteBuf.writeByte(sectionY);
 
-        blockLayer0.writeToNetwork(byteBuf, BlockState::blockStateHash);
-        blockLayer1.writeToNetwork(byteBuf, BlockState::blockStateHash);
+        blockLayer0.writeToNetwork(byteBuf, BlockState::paletteIndex);
+        blockLayer1.writeToNetwork(byteBuf, BlockState::paletteIndex);
     }
 }
