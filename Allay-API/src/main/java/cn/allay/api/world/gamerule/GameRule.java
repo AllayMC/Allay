@@ -1,5 +1,6 @@
 package cn.allay.api.world.gamerule;
 
+import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -50,6 +51,10 @@ public enum GameRule {
         this.name = name;
         this.defaultValue = defaultValue;
         this.type = type;
+    }
+
+    public GameRuleData<?> toNetwork() {
+        return new GameRuleData<>(this.name, this.defaultValue);
     }
 
     public String getName() {

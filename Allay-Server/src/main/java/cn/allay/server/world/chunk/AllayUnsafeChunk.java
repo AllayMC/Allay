@@ -57,7 +57,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     protected @NotNull ChunkSection getOrCreateSection(int y) {
-        sections.compareAndSet(y, null, new ChunkSection(y));
+        for (var i = 0; i < y; i++) {
+            sections.compareAndSet(i, null, new ChunkSection(i + 1));
+        }
         return sections.get(y);
     }
 
@@ -147,6 +149,14 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return this.getOrCreateSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
     }
 
+    protected int computeNotNullSectionCount() {
+        for (var y = 0; y < getDimensionInfo().chunkSectionSize(); y++) {
+            if (getSection(y) == null)
+                return y + 1;
+        }
+        return getDimensionInfo().chunkSectionSize();
+    }
+
     public LevelChunkPacket createLevelChunkPacket() {
         ByteBuf byteBuf = Unpooled.buffer();
         try {
@@ -155,8 +165,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             levelChunkPacket.setChunkZ(this.chunkZ);
             levelChunkPacket.setCachingEnabled(false);
             levelChunkPacket.setRequestSubChunks(false);
-            //TODO: 不发送空section
-            levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionSize());
+            levelChunkPacket.setSubChunksLength(computeNotNullSectionCount());
             writeChunkDataToBuffer(byteBuf.retain());
             levelChunkPacket.setData(byteBuf);
             return levelChunkPacket;
@@ -169,7 +178,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
 
         for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
-            var section = getOrCreateSection(sectionY);
+            var section = getSection(sectionY);
+            if (section == null) break;
             section.writeToNetwork(retainedBuffer);
         }
 
