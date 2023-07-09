@@ -288,7 +288,6 @@ public class AllayChunkService implements ChunkService {
             var loaderChunkZ = chunkLoader.getLocation().getChunkZ();
             var chunkLoadingRadius = chunkLoader.getChunkLoadingRadius();
             inRadiusChunks.clear();
-            var loadList = new LongArrayList();
             for (int rx = -chunkLoadingRadius; rx <= chunkLoadingRadius; rx++) {
                 for (int rz = -chunkLoadingRadius; rz <= chunkLoadingRadius; rz++) {
                     if (!isChunkInRadius(rx, rz, chunkLoadingRadius)) continue;
@@ -297,12 +296,10 @@ public class AllayChunkService implements ChunkService {
                     var hashXZ = HashUtils.hashXZ(chunkX, chunkZ);
                     inRadiusChunks.add(hashXZ);
                     if (isChunkUnloaded(hashXZ)) {
-                        loadList.add(hashXZ);
+                        loadChunk(chunkX, chunkZ);
                     }
                 }
             }
-            loadList.sort(chunkDistanceComparator);
-            loadList.forEach(chunkHash -> loadChunk(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash)));
         }
 
         private void removeOutOfRadiusChunks() {
