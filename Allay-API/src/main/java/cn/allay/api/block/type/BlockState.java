@@ -34,18 +34,10 @@ public interface BlockState {
     default SimpleBlockDefinition toBlockDefinition() {
         var statesBuilder = NbtMap.builder();
         for (var propertyValue : propertyValues().values()) {
-            var propertyType = propertyValue.getPropertyType();
-            switch (propertyType.getType()) {
-                case INT -> {
-                    statesBuilder.putInt(propertyType.getName(), (int) propertyValue.getSerializedValue());
-                }
-                case BOOLEAN -> {
-                    statesBuilder.putByte(propertyType.getName(), (byte) propertyValue.getSerializedValue());
-                }
-                case ENUM -> {
-                    statesBuilder.putString(propertyType.getName(), (String) propertyValue.getSerializedValue());
-                }
-            }
+            statesBuilder.put(
+                    propertyValue.getPropertyType().getName(),
+                    propertyValue.getSerializedValue()
+            );
         }
         return new SimpleBlockDefinition(
                 blockType().getIdentifier().toString(),
