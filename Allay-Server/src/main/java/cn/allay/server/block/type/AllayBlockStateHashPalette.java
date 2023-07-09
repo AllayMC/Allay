@@ -50,7 +50,7 @@ public class AllayBlockStateHashPalette extends SimpleMappedRegistry<Integer, Bl
         paletteIndexList.clear();
         paletteIndexList.addAll(mappings.keySet());
         paletteIndexList.sort(Integer::compareUnsigned);
-        for (var blockState : getContent().values()) {
+        for (var blockState : mappings.values()) {
             ((AllayBlockType.AllayBlockState) blockState).setPaletteIndex(paletteIndexList.indexOf(blockState.blockStateHash()));
         }
     }

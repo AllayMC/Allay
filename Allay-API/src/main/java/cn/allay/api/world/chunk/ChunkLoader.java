@@ -20,6 +20,8 @@ public interface ChunkLoader {
 
     void setChunkLoadingRadius(int radius);
 
+    void preSendChunks(Set<Long> chunkHashes);
+
     @SlowOperation
     void sendChunk(Chunk chunk);
 
