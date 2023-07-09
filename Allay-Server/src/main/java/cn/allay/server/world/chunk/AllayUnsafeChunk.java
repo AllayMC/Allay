@@ -150,9 +150,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     protected int computeNotNullSectionCount() {
-        for (var y = 0; y < getDimensionInfo().chunkSectionSize(); y++) {
-            if (getSection(y) == null)
-                return y + 1;
+        for (var count = 1; count <= getDimensionInfo().chunkSectionSize(); count++) {
+            if (getSection(count - 1) == null)
+                return count;
         }
         return getDimensionInfo().chunkSectionSize();
     }
