@@ -1,12 +1,13 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.world.DimensionInfo;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -30,11 +31,19 @@ public interface Chunk extends UnsafeChunk {
 
     void compareAndSetSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue);
 
-    void batchProcess(@Nullable Consumer<BlockOperate> blockOperate,
+    void batchProcess(@Nullable Consumer<SectionOperate> blockOperate,
                       @Nullable Consumer<HeightOperate> heightOperate,
                       @Nullable Consumer<SkyLightOperate> skyLightOperate,
-                      @Nullable Consumer<BlockLightOperate> blockLightOperate,
-                      @Nullable Consumer<BiomeOperate> biomeOperate);
+                      @Nullable Consumer<BlockLightOperate> blockLightOperate);
 
     LevelChunkPacket createLevelChunkPacket();
+
+    @UnmodifiableView
+    Set<ChunkLoader> getChunkLoaders();
+
+    void addChunkLoader(ChunkLoader chunkLoader);
+
+    void removeChunkLoader(ChunkLoader chunkLoader);
+
+    int getChunkLoaderCount();
 }
