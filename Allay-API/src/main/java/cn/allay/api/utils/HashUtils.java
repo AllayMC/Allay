@@ -68,7 +68,7 @@ public class HashUtils {
     }
 
     public int getXFromHashXZ(long hashXZ) {
-        return (int) ( hashXZ >> 32 );
+        return (int) (hashXZ >>> 32);
     }
 
     public int getZFromHashXZ(long hashXZ) {
