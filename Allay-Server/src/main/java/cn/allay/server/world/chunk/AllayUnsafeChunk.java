@@ -57,8 +57,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     protected @NotNull ChunkSection getOrCreateSection(int y) {
-        for (var i = 0; i < y; i++) {
-            sections.compareAndSet(i, null, new ChunkSection(i + 1));
+        for (var i = 0; i <= y; i++) {
+            sections.compareAndSet(i, null, new ChunkSection(i));
         }
         return sections.get(y);
     }
