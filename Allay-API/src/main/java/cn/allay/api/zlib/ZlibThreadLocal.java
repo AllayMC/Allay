@@ -1,4 +1,4 @@
-package cn.allay.api.utils.zlib;
+package cn.allay.api.zlib;
 
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 
@@ -31,7 +31,7 @@ public final class ZlibThreadLocal implements ZlibProvider {
     }
 
     @Override
-    public void setLevel(int level) {
+    public void setCompressionLevel(int level) {
         this.level = level;
     }
 

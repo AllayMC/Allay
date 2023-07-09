@@ -1,4 +1,4 @@
-package cn.allay.api.utils.zlib;
+package cn.allay.api.zlib;
 
 import cn.powernukkitx.libdeflate.LibdeflateCompressor;
 import cn.powernukkitx.libdeflate.LibdeflateDecompressor;
@@ -28,7 +28,7 @@ public final class LibDeflateThreadLocal implements ZlibProvider {
     }
 
     @Override
-    public void setLevel(int level) {
+    public void setCompressionLevel(int level) {
         this.level = level;
     }
 

@@ -1,7 +1,7 @@
 package cn.allay.server.world.storage.anvil;
 
-import cn.allay.api.utils.zlib.CompressionType;
-import cn.allay.api.utils.zlib.ZlibProviderType;
+import cn.allay.api.zlib.CompressionType;
+import cn.allay.api.zlib.ZlibProviderType;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
