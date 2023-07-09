@@ -304,7 +304,8 @@ public class AllayChunkService implements ChunkService {
             if (chunkReadyToSend.isEmpty()) return;
             chunkLoader.preSendChunks(chunkReadyToSend.keySet());
             chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash));
-            chunkReadyToSend.values().stream().parallel().forEach(chunkLoader::sendChunk);
+            //TODO: 并行发送
+            chunkReadyToSend.values().forEach(chunkLoader::sendChunk);
         }
 
         private void removeOutOfRadiusChunks() {

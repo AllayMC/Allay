@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 /**
@@ -71,7 +72,7 @@ public class AllayClient implements Client {
     @Getter
     @Setter
     private GameType gameType = GameType.CREATIVE;
-    private int doFirstSpawnChunkThreshold = DO_FIRST_SPAWN_CHUNK_THRESHOLD;
+    private AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(DO_FIRST_SPAWN_CHUNK_THRESHOLD);
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -294,9 +295,8 @@ public class AllayClient implements Client {
     public void sendChunk(Chunk chunk) {
         var levelChunkPacket = chunk.createLevelChunkPacket();
         sendPacket(levelChunkPacket);
-        if (doFirstSpawnChunkThreshold > 0) {
-            doFirstSpawnChunkThreshold--;
-            if (doFirstSpawnChunkThreshold == 0) {
+        if (doFirstSpawnChunkThreshold.get() > 0) {
+            if (doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
                 doFirstSpawn();
             }
         }
