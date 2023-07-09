@@ -98,12 +98,31 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     }
 
     @Override
-    public BiomeType getBiomeType(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
+    public void compareAndSetBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType expectedValue, BiomeType newValue) {
+        long stamp = sectionLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = sectionLock.writeLock()) {
+                if (stamp == 0L) continue;
+                BiomeType oldValue = super.getBiome(x, y, z);
+                if (!sectionLock.validate(stamp)) continue;
+                if (oldValue != expectedValue) break;
+                stamp = sectionLock.tryConvertToWriteLock(stamp);
+                if (stamp == 0L) continue;
+                super.setBiome(x, y, z, newValue);
+                return;
+            }
+        } finally {
+            if (StampedLock.isWriteLockStamp(stamp)) sectionLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public BiomeType getBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
         long stamp = sectionLock.tryOptimisticRead();
         try {
             for (; ; stamp = sectionLock.readLock()) {
                 if (stamp == 0L) continue;
-                var biomeType = super.getBiomeType(x, y, z);
+                var biomeType = super.getBiome(x, y, z);
                 if (!sectionLock.validate(stamp)) continue;
                 return biomeType;
             }
@@ -113,10 +132,10 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     }
 
     @Override
-    public void setBiomeType(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
+    public void setBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
         long stamp = sectionLock.writeLock();
         try {
-            super.setBiomeType(x, y, z, biomeType);
+            super.setBiome(x, y, z, biomeType);
         } finally {
             sectionLock.unlockWrite(stamp);
         }
