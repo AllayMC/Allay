@@ -328,19 +328,19 @@ public class AllayChunkService implements ChunkService {
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int sentChunkCount = 0;
             do {
-                sentChunkCount++;
-                long chunkHash = chunkSendQueue.dequeueLong();
+                long chunkHash = chunkSendQueue.firstLong();
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
-                    sentChunkCount--;
                     continue;
                 }
+                sentChunkCount++;
+                chunkSendQueue.dequeueLong();
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && sentChunkCount < chunkSentPerTick);
             chunkLoader.preSendChunks(chunkReadyToSend.keySet());
             chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash.longValue()));
-            chunkReadyToSend.values().stream().forEach(chunkLoader::sendChunk);
+            chunkReadyToSend.values().forEach(chunkLoader::sendChunk);
         }
 
         private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {
