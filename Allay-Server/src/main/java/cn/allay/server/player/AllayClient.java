@@ -282,7 +282,7 @@ public class AllayClient implements Client {
     @Override
     @Nullable
     public FixedLoc<Float> getLocation() {
-        return playerEntity.getLocation();
+        return playerEntity != null ? playerEntity.getLocation() : null;
     }
 
     @Override
