@@ -324,6 +324,7 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void sendQueuedChunks() {
+            if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int sentChunkCount = 0;
             do {
@@ -336,7 +337,7 @@ public class AllayChunkService implements ChunkService {
                 }
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
-            } while (chunkSendQueue.isEmpty() || sentChunkCount > chunkSentPerTick);
+            } while (!chunkSendQueue.isEmpty() && sentChunkCount < chunkSentPerTick);
             chunkLoader.preSendChunks(chunkReadyToSend.keySet());
             chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash.longValue()));
             chunkReadyToSend.values().stream().forEach(chunkLoader::sendChunk);

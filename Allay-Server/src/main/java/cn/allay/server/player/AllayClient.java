@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
  */
 public class AllayClient implements Client {
 
-    private static final int DO_FIRST_SPAWN_CHUNK_THRESHOLD = 25;
+    private static final int DO_FIRST_SPAWN_CHUNK_THRESHOLD = 36;
     private final BedrockServerSession session;
     @Getter
     private final Server server;
@@ -72,7 +72,7 @@ public class AllayClient implements Client {
     @Getter
     @Setter
     private GameType gameType = GameType.CREATIVE;
-    private AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(DO_FIRST_SPAWN_CHUNK_THRESHOLD);
+    private final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(DO_FIRST_SPAWN_CHUNK_THRESHOLD);
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
