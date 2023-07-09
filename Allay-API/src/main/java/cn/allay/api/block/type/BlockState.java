@@ -1,9 +1,6 @@
 package cn.allay.api.block.type;
 
 import cn.allay.api.block.property.type.BlockPropertyType;
-import cn.allay.api.block.property.type.BooleanPropertyType;
-import cn.allay.api.block.property.type.EnumPropertyType;
-import cn.allay.api.block.property.type.IntPropertyType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleBlockDefinition;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -28,9 +25,11 @@ public interface BlockState {
 
     int blockStateHash();
 
+    long unsignedBlockStateHash();
+
     int specialValue();
 
-    long unsignedBlockStateHash();
+    int paletteIndex();
 
     default SimpleBlockDefinition toBlockDefinition() {
         var statesBuilder = NbtMap.builder();

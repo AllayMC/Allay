@@ -1,5 +1,6 @@
 package cn.allay.server.block.type;
 
+import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockTypes;
@@ -31,6 +32,8 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
         log.info("Loading Block Types...");
         fields[0].get(null);
         rebuildDefinitionList();
+        //Assign palette index for block state
+        BlockStateHashPalette.getRegistry().rebuildPaletteIndexList();
         log.info("Loaded " + fields.length + " Block Types");
     }
 

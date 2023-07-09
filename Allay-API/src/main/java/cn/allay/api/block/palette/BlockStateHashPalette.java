@@ -18,11 +18,9 @@ public interface BlockStateHashPalette extends MappedRegistry<Integer, BlockStat
         return REGISTRY.get();
     }
 
-    @Override
-    default BlockState register(Integer hash, BlockState blockState) {
-        if (getContent().containsKey(hash)) throw new BlockStateHashCollisionException("Checked for possible block state hash collisions! Hash: " + hash + " ,BlockState: " + blockState);
-        else return MappedRegistry.super.register(hash, blockState);
-    }
+    BlockState register(Integer hash, BlockState blockState, boolean assignPaletteIndex);
+
+    void rebuildPaletteIndexList();
 
     class BlockStateHashCollisionException extends RuntimeException {
         public BlockStateHashCollisionException() {
