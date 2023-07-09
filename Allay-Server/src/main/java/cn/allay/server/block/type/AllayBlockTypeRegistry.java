@@ -31,9 +31,9 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
         var fields = VanillaBlockTypes.class.getDeclaredFields();
         log.info("Loading Block Types...");
         fields[0].get(null);
-        rebuildDefinitionList();
         //Assign palette index for block state
         BlockStateHashPalette.getRegistry().rebuildPaletteIndexList();
+        rebuildDefinitionList();
         log.info("Loaded " + fields.length + " Block Types");
     }
 
