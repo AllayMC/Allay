@@ -41,7 +41,7 @@ public interface BlockState {
         }
         return new SimpleBlockDefinition(
                 blockType().getIdentifier().toString(),
-                paletteIndex(),
+                blockStateHash(),
                 statesBuilder.build()
         );
     }
