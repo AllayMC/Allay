@@ -20,7 +20,6 @@ import cn.allay.server.block.component.injector.AllayBlockComponentInjector;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -172,36 +171,22 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
     /**
      * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateHashPalette AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
      */
-    static final class AllayBlockState implements BlockState {
-        private final BlockType<?> blockType;
-        private final UnmodifiableLinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues;
-        private final int blockStateHash;
-        private final int specialValue;
-        @Setter
-        private int paletteIndex = -1;
-
-        AllayBlockState(
-                BlockType<?> blockType,
-                LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues,
-                int blockStateHash,
-                int specialValue) {
-            this.blockType = blockType;
-            this.propertyValues = UnmodifiableLinkedHashMap.warp(propertyValues);
-            this.blockStateHash = blockStateHash;
-            this.specialValue = specialValue;
+    record AllayBlockState(BlockType<?> blockType,
+                           Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues,
+                           int blockStateHash,
+                           int specialValue) implements BlockState {
+        public AllayBlockState(BlockType<?> blockType, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues, int blockStateHash) {
+            this(blockType,
+                    UnmodifiableLinkedHashMap.warp(propertyValues.stream().collect(
+                            LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
+                            (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue),
+                            LinkedHashMap::putAll)),
+                    blockStateHash,
+                    AllayBlockType.computeSpecialValue(propertyValues));
         }
 
         public AllayBlockState(BlockType<?> blockType, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
             this(blockType, propertyValues, HashUtils.computeBlockStateHash(blockType.getIdentifier(), propertyValues));
-        }
-
-        public AllayBlockState(BlockType<?> blockType, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues, int blockStateHash) {
-            this(blockType,
-                    propertyValues.stream().collect(LinkedHashMap<BlockPropertyType<?>,
-                                    BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
-                            (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue), LinkedHashMap::putAll),
-                    blockStateHash,
-                    AllayBlockType.computeSpecialValue(propertyValues));
         }
 
         @Override
@@ -241,57 +226,6 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
             } else {
                 return blockType.getBlockStateHashMap().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), values));
             }
-        }
-
-        @Override
-        public BlockType<?> blockType() {
-            return blockType;
-        }
-
-        @UnmodifiableView
-        @Override
-        public Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues() {
-            return propertyValues;
-        }
-
-        @Override
-        public int blockStateHash() {
-            return blockStateHash;
-        }
-
-        @Override
-        public int specialValue() {
-            return specialValue;
-        }
-
-        @Override
-        public int paletteIndex() {
-            return paletteIndex;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) return true;
-            if (obj == null || obj.getClass() != this.getClass()) return false;
-            var that = (AllayBlockState) obj;
-            return Objects.equals(this.blockType, that.blockType) &&
-                    Objects.equals(this.propertyValues, that.propertyValues) &&
-                    this.blockStateHash == that.blockStateHash &&
-                    this.specialValue == that.specialValue;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(blockType, propertyValues, blockStateHash, specialValue);
-        }
-
-        @Override
-        public String toString() {
-            return "AllayBlockState[" +
-                    "blockType=" + blockType + ", " +
-                    "propertyValues=" + propertyValues + ", " +
-                    "blockStateHash=" + blockStateHash + ", " +
-                    "specialValue=" + specialValue + ']';
         }
     }
 
@@ -397,7 +331,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         @Override
-        public AllayBlockType<T> build(boolean assignPaletteIndex) {
+        public AllayBlockType<T> build() {
             if (identifier == null) throw new BlockTypeBuildException("identifier cannot be null!");
             var type = new AllayBlockType<>(interfaceClass, componentProviders, properties, identifier);
             componentProviders.add(ComponentProvider.of(info -> new BlockBaseComponentImpl(type, (BlockInitInfo) info), BlockBaseComponentImpl.class));
@@ -412,7 +346,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
                 throw new BlockTypeBuildException("Failed to create block type!", e);
             }
             type.register(BlockTypeRegistry.getRegistry());
-            type.register(BlockStateHashPalette.getRegistry(), assignPaletteIndex);
+            type.register(BlockStateHashPalette.getRegistry());
             return type;
         }
     }
