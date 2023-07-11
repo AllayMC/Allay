@@ -38,13 +38,13 @@ import static java.lang.reflect.Modifier.isStatic;
  */
 @Getter
 public final class AllayBlockType<T extends Block> implements BlockType<T> {
-    public static int computeSpecialValue(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
+    public static int computeSpecialValue(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
         int nbits = 0;
         for (var value : propertyValues) nbits += value.getPropertyType().getBitSize();
         return computeSpecialValue(nbits, propertyValues);
     }
 
-    public static int computeSpecialValue(int nbits, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
+    public static int computeSpecialValue(int nbits, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
         int specialValue = 0;
         for (var value : propertyValues) {
             specialValue |= value.getIndex() << (nbits - value.getPropertyType().getBitSize());
@@ -111,7 +111,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         List<BlockPropertyType<?>> propertyTypeList = this.properties.values().stream().toList();
         int size = propertyTypeList.size();
         if (size == 0) {
-            this.defaultState = new AllayBlockState(this, List.of());
+            this.defaultState = new AllayBlockState(this, new BlockPropertyType.BlockPropertyValue[]{});
             var singleBlockStateMap = new Int2ObjectArrayMap<BlockState>();
             singleBlockStateMap.put(defaultState.blockStateHash(), defaultState);
             return singleBlockStateMap;
@@ -133,7 +133,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
                 BlockPropertyType<?> type = propertyTypeList.get(i);
                 values.add(type.tryCreateValue(type.getValidValues().get(indices[i])));
             }
-            var state = new AllayBlockState(this, values.build());
+            var state = new AllayBlockState(this, values.build().toArray(BlockPropertyType.BlockPropertyValue[]::new));
             blockStates.put(state.blockStateHash(), state);
 
             // find the rightmost array that has more
@@ -172,21 +172,18 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
      * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateHashPalette AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
      */
     record AllayBlockState(BlockType<?> blockType,
-                           Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues,
+                           BlockPropertyType.BlockPropertyValue<?, ?, ?>[] values,
                            int blockStateHash,
                            int specialValue) implements BlockState {
-        public AllayBlockState(BlockType<?> blockType, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues, int blockStateHash) {
+        public AllayBlockState(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues, int blockStateHash) {
             this(blockType,
-                    UnmodifiableLinkedHashMap.warp(propertyValues.stream().collect(
-                            LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
-                            (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue),
-                            LinkedHashMap::putAll)),
+                    propertyValues,
                     blockStateHash,
                     AllayBlockType.computeSpecialValue(propertyValues));
         }
 
-        public AllayBlockState(BlockType<?> blockType, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-            this(blockType, propertyValues, HashUtils.computeBlockStateHash(blockType.getIdentifier(), propertyValues));
+        public AllayBlockState(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
+            this(blockType, propertyValues, HashUtils.computeBlockStateHash(blockType.getIdentifier(), Arrays.stream(propertyValues).toList()));
         }
 
         @Override
@@ -195,29 +192,37 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         }
 
         @Override
+        public @UnmodifiableView Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues() {
+            return UnmodifiableLinkedHashMap.warp(Arrays.stream(values).collect(
+                    LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
+                    (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue),
+                    LinkedHashMap::putAll));
+        }
+
+        @Override
         public BlockState setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
-            var newPropertyValues = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>(propertyValues.size());
-            for (var oldPropertyValue : propertyValues.values()) {
-                if (oldPropertyValue.getPropertyType() == propertyValue.getPropertyType())
-                    newPropertyValues.add(propertyValue);
-                else newPropertyValues.add(oldPropertyValue);
+            var newPropertyValues = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[this.values.length];
+            for (int i = 0; i < values.length; i++) {
+                if (values[i].getPropertyType() == propertyValue.getPropertyType()) {
+                    newPropertyValues[i] = propertyValue;
+                } else newPropertyValues[i] = values[i];
             }
             return getNewBlockState(newPropertyValues);
         }
 
         @Override
         public BlockState setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-            var values = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
-            for (var value : this.propertyValues.values()) {
+            var newPropertyValues = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[this.values.length];
+            for (int i = 0; i < values.length; i++) {
                 int index;
-                if ((index = propertyValues.indexOf(value)) != -1) {
-                    values.add(propertyValues.get(index));
-                } else values.add(value);
+                if ((index = propertyValues.indexOf(values[i])) != -1) {
+                    newPropertyValues[i] = propertyValues.get(index);
+                } else newPropertyValues[i] = values[i];
             }
             return getNewBlockState(values);
         }
 
-        private BlockState getNewBlockState(ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>> values) {
+        private BlockState getNewBlockState(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] values) {
             int bits = blockType.getSpecialValueBits();
             if (bits < 32) {
                 Map<Integer, BlockState> specialValueMap = blockType.getSpecialValueMap();
