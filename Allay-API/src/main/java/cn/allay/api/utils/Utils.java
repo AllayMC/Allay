@@ -1,10 +1,7 @@
 package cn.allay.api.utils;
 
-import cn.allay.api.block.property.type.BlockPropertyType;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Range;
-
-import java.util.List;
 
 /**
  * Allay Project 2023/6/23
@@ -30,11 +27,17 @@ public class Utils {
         return appendedBytes;
     }
 
-    public static int computeRequiredBits(@Range(from = 1, to = Integer.MAX_VALUE) int size) {
-        if (size <= 2)
+    /**
+     * Calculates the number of bit that the specified value convert to binary
+     *
+     * @param value the value
+     * @return the bits
+     */
+    public static int computeRequiredBits(@Range(from = 0, to = Integer.MAX_VALUE) int value) {
+        if (value <= 1)
             return 1;
-        int bits = 2;
-        while (size > (1 << bits)) {
+        int bits = 1;
+        while (value >= (1 << bits)) {
             bits++;
         }
         return bits;
