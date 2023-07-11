@@ -50,9 +50,9 @@ public interface BlockType<T extends Block> extends Identified {
         registry.register(getIdentifier(), this);
     }
 
-    default void register(BlockStateHashPalette registry, boolean assignPaletteIndex) {
+    default void register(BlockStateHashPalette registry) {
         for (var s : getBlockStateHashMap().values()) {
-            registry.register(s.blockStateHash(), s, assignPaletteIndex);
+            registry.register(s.blockStateHash(), s);
         }
     }
 }

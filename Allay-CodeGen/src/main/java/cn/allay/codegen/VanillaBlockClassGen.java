@@ -89,7 +89,7 @@ public class VanillaBlockClassGen {
             initializer.add(")\n");
         }
         initializer.add("        .addBasicComponents()\n");
-        initializer.add("        .build(false)");
+        initializer.add("        .build()");
         TYPES_CLASS.addField(
                 FieldSpec
                         .builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, className), vanillaBlockId.name() + "_TYPE")
