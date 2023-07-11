@@ -41,6 +41,24 @@ public class HashUtils {
         return fnv1a_32_nbt(tag);
     }
 
+    public int computeBlockStateHash(Identifier identifier, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
+        if (identifier.equals(VanillaBlockId.UNKNOWN.getIdentifier())) {
+            return -2; // This is special case
+        }
+
+        var states = new TreeMap<String, Object>();
+        for (var value : propertyValues) {
+            states.put(value.getPropertyType().getName(), value.getSerializedValue());
+        }
+
+        var tag = NbtMap.builder()
+                .putString("name", identifier.toString())
+                .putCompound("states", NbtMap.fromMap(states))
+                .build();
+
+        return fnv1a_32_nbt(tag);
+    }
+
     public int fnv1a_32_nbt(NbtMap tag) {
         byte[] bytes;
         try (var stream = new ByteArrayOutputStream();
