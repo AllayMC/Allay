@@ -33,7 +33,7 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     }
 
     static int computeSpecialValue(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        return computeSpecialValue(propertyValues.toArray(new BlockPropertyType.BlockPropertyValue<?, ?, ?>[0]));
+        return computeSpecialValue(propertyValues.toArray(BlockPropertyType.BlockPropertyValue<?, ?, ?>[]::new));
     }
 
     String getName();
