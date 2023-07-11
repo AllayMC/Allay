@@ -21,10 +21,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static cn.allay.api.component.interfaces.ComponentProvider.of;
 import static cn.allay.api.component.interfaces.ComponentProvider.ofSingleton;
+import static cn.allay.server.block.type.AllayBlockType.computeSpecialValue;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -34,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @ExtendWith(AllayTestExtension.class)
 class AllayBlockTypeTest {
-
     static BlockType<TestBlock> testBlockType1;
     static BlockType<TestBlock> testBlockType2;
     static BlockPropertyType<Boolean> TEST_BOOLEAN_PROPERTY_TYPE;
@@ -169,14 +170,19 @@ class AllayBlockTypeTest {
 
     @Test
     void testSpecialValue() {
-        var values = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[3];
-        values[0] = (TEST_BOOLEAN_PROPERTY_TYPE.createValue(true));
-        values[1] = (TEST_INT_PROPERTY_TYPE.createValue(5));
-        values[2] = (TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.B));
-        assertEquals(0b1010101, BlockPropertyType.computeSpecialValue(values));
-        values[2] = TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.A);
-        assertEquals(0b1010100, BlockPropertyType.computeSpecialValue(values));
-        values[1] = TEST_INT_PROPERTY_TYPE.createValue(0);
-        assertEquals(0b1000000, BlockPropertyType.computeSpecialValue(values));
+        var values = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
+        values.add(TEST_BOOLEAN_PROPERTY_TYPE.createValue(true));//1 bit
+        values.add(TEST_INT_PROPERTY_TYPE.createValue(5));//4 bit
+        values.add(TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.B));//2 bit
+        int offset = 0;
+        for (var value : values) offset += value.getPropertyType().getBitSize();
+        //                      1 0101 01
+        assertEquals(0b1010101, computeSpecialValue(offset, values));
+        //                      1 0101 00
+        values.set(2, TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.A));
+        assertEquals(0b1010100, computeSpecialValue(offset, values));
+        //                      1 0000 00
+        values.set(1, TEST_INT_PROPERTY_TYPE.createValue(0));
+        assertEquals(0b1000000, computeSpecialValue(offset, values));
     }
 }
