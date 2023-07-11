@@ -13,6 +13,7 @@ import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
+import cn.allay.api.datastruct.UnmodifiableLinkedHashMap;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.server.block.component.injector.AllayBlockComponentInjector;
@@ -173,7 +174,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
      */
     static final class AllayBlockState implements BlockState {
         private final BlockType<?> blockType;
-        private final Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues;
+        private final UnmodifiableLinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues;
         private final int blockStateHash;
         private final int specialValue;
         @Setter
@@ -181,11 +182,11 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
 
         AllayBlockState(
                 BlockType<?> blockType,
-                Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues,
+                LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues,
                 int blockStateHash,
                 int specialValue) {
             this.blockType = blockType;
-            this.propertyValues = propertyValues;
+            this.propertyValues = UnmodifiableLinkedHashMap.warp(propertyValues);
             this.blockStateHash = blockStateHash;
             this.specialValue = specialValue;
         }
@@ -196,13 +197,11 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
 
         public AllayBlockState(BlockType<?> blockType, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues, int blockStateHash) {
             this(blockType,
-                    Collections.unmodifiableMap(propertyValues.stream().collect(
-                            LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
-                            (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue), LinkedHashMap::putAll)
-                    ),
+                    propertyValues.stream().collect(LinkedHashMap<BlockPropertyType<?>,
+                                    BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
+                            (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue), LinkedHashMap::putAll),
                     blockStateHash,
-                    AllayBlockType.computeSpecialValue(propertyValues)
-            );
+                    AllayBlockType.computeSpecialValue(propertyValues));
         }
 
         @Override
