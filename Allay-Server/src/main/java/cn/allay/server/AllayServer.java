@@ -1,6 +1,6 @@
 package cn.allay.server;
 
-import cn.allay.api.math.location.Loc;
+import cn.allay.api.math.vector.Loc3f;
 import cn.allay.api.network.Client;
 import cn.allay.api.network.NetworkServer;
 import cn.allay.api.player.info.DeviceInfo;
@@ -91,7 +91,7 @@ public final class AllayServer implements Server {
                 .setWorldGenerator(new FlatWorldGenerator())
                 .setWorldStorage(new AllayNonPersistentWorldStorage())
                 .setWorldType(WorldType.FLAT)
-                .setSpawnLocation(Loc.of(0f, 6f, 0f, null))
+                .setSpawnLocation(Loc3f.of(0f, 6f, 0f, 0, 0, 0, null))
                 .build());
     }
 

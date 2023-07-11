@@ -1,8 +1,7 @@
 package cn.allay.api.world;
 
 import cn.allay.api.entity.Entity;
-import cn.allay.api.math.location.FixedLoc;
-import cn.allay.api.math.location.Loc;
+import cn.allay.api.math.vector.Loc3f;
 import cn.allay.api.network.Client;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
@@ -45,9 +44,9 @@ public interface World extends ChunkAccessible {
 
     int getViewDistance();
 
-    FixedLoc<Float> getSpawnLocation();
+    Loc3f getSpawnLocation();
 
-    void setSpawnLocation(Loc<Float> newSpawn);
+    void setSpawnLocation(Loc3f newSpawn);
 
     Difficulty getDifficulty();
 
