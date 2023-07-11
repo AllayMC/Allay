@@ -6,12 +6,12 @@ import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.identifier.Identified;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Allay Project 2023/3/19
@@ -31,7 +31,10 @@ public interface BlockType<T extends Block> extends Identified {
     Map<Integer, BlockState> getBlockStateHashMap();
 
     @UnmodifiableView
+    @Nullable
     Map<Integer, BlockState> getSpecialValueMap();
+
+    int getSpecialValueBits();
 
     BlockState getDefaultState();
 

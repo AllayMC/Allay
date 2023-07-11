@@ -20,22 +20,6 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
         else return null;
     }
 
-    static int computeSpecialValue(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-        int specialValue = 0;
-        int offset = 0;
-        for (var value : propertyValues) offset += value.getPropertyType().getBitSize();
-        if (offset > 32) throw new IllegalArgumentException("The number of bits required to store the block state's special value exceeds 32 bits");
-        for (var value : propertyValues) {
-            specialValue |= value.getIndex() << (offset - value.getPropertyType().getBitSize());
-            offset -= value.getPropertyType().getBitSize();
-        }
-        return specialValue;
-    }
-
-    static int computeSpecialValue(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        return computeSpecialValue(propertyValues.toArray(BlockPropertyType.BlockPropertyValue<?, ?, ?>[]::new));
-    }
-
     String getName();
 
     DATATYPE getDefaultValue();
@@ -43,6 +27,7 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     List<DATATYPE> getValidValues();
 
     Type getType();
+
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createValue(DATATYPE value);
 
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> tryCreateValue(Object value);
