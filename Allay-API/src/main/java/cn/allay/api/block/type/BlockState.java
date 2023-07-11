@@ -16,6 +16,10 @@ import java.util.Map;
 public interface BlockState {
     BlockType<?> blockType();
 
+    int blockStateHash();
+
+    int specialValue();
+
     @UnmodifiableView
     Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues();
 
@@ -23,13 +27,7 @@ public interface BlockState {
 
     BlockState setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
-    int blockStateHash();
-
     long unsignedBlockStateHash();
-
-    int specialValue();
-
-    int paletteIndex();
 
     default SimpleBlockDefinition toBlockDefinition() {
         var statesBuilder = NbtMap.builder();
