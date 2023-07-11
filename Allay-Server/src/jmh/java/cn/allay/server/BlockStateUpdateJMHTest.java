@@ -7,7 +7,7 @@ import cn.allay.api.block.property.enums.WoodType;
 import cn.allay.api.block.type.BlockInitInfo;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 import cn.allay.api.data.VanillaBlockTypes;
-import cn.allay.api.math.position.Pos;
+import cn.allay.api.math.vector.Pos3i;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class BlockStateUpdateJMHTest {
     @Setup
     public void init() throws MissingImplementationException {
         Allay.initAllayAPI();
-        wood = VanillaBlockTypes.WOOD_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        wood = VanillaBlockTypes.WOOD_TYPE.createBlock(new BlockInitInfo.Simple(Pos3i.of(1, 2, 3, null)));
     }
 
     @Benchmark
@@ -40,10 +40,8 @@ public class BlockStateUpdateJMHTest {
 
     @Benchmark
     public void test2() {
-        wood.setProperties(List.of(
-                VanillaBlockPropertyTypes.PILLAR_AXIS.createValue(PillarAxis.Z),
-                VanillaBlockPropertyTypes.STRIPPED_BIT.createValue(true),
-                VanillaBlockPropertyTypes.WOOD_TYPE.createValue(WoodType.DARK_OAK)
-        ));
+        wood.setProperty(VanillaBlockPropertyTypes.PILLAR_AXIS, PillarAxis.Z);
+        wood.setProperty(VanillaBlockPropertyTypes.STRIPPED_BIT, true);
+        wood.setProperty(VanillaBlockPropertyTypes.WOOD_TYPE, WoodType.DARK_OAK);
     }
 }

@@ -7,8 +7,8 @@ import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.math.location.FixedLoc;
-import cn.allay.api.math.location.Loc;
+import cn.allay.api.math.vector.Loc3f;
+import cn.allay.api.math.vector.MutableLoc3f;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
@@ -24,7 +24,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
     protected static AtomicLong UNIQUE_ID_COUNTER = new AtomicLong(0);
-    protected final Loc<Float> location;
+    protected final MutableLoc3f location;
     protected final long uniqueId = UNIQUE_ID_COUNTER.getAndIncrement();
     protected final Metadata metadata;
     protected EntityType<? extends Entity> entityType;
@@ -32,7 +32,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
     public EntityBaseComponentImpl(EntityType<? extends Entity> entityType,
                                    EntityInitInfo info) {
         this.entityType = entityType;
-        this.location = info.location().cloneLoc();
+        this.location = info.location().mut();
         metadata = new Metadata();
         initMetadata();
     }
@@ -58,14 +58,14 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
 
     @Override
     @Impl
-    public FixedLoc<Float> getLocation() {
+    public MutableLoc3f getLocation() {
         return location;
     }
 
     @Override
     @Impl
-    public void setLocation(FixedLoc<Float> location) {
-        this.location.setLoc(location);
+    public void setLocation(Loc3f location) {
+        this.location.setLocation(location);
     }
 
     @Override

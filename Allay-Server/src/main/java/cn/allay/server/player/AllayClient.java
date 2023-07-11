@@ -7,19 +7,17 @@ import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
-import cn.allay.api.math.location.FixedLoc;
+import cn.allay.api.math.vector.Loc3f;
 import cn.allay.api.network.Client;
 import cn.allay.api.player.AdventureSettings;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
-import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.gamerule.GameRule;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.math.vector.Vector2f;
-import org.cloudburstmc.math.vector.Vector2i;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -98,7 +96,7 @@ public class AllayClient implements Client {
     public void preSendChunks(Set<Long> chunkHashes) {
         var chunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
         var loc = getLocation();
-        chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.getX(), loc.getY(), loc.getZ()));
+        chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
         chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
 
         sendPacket(chunkPublisherUpdatePacket);
@@ -165,7 +163,7 @@ public class AllayClient implements Client {
         server.onClientDisconnect(this);
         session.disconnect(reason, hideReason);
         if (playerEntity != null)
-            playerEntity.getLocation().getWorld().removeClient(this);
+            playerEntity.getLocation().world().removeClient(this);
     }
 
     /**
@@ -203,9 +201,9 @@ public class AllayClient implements Client {
         startGamePacket.setPlayerGameType(gameType);
         var loc = playerEntity.getLocation();
         var worldSpawn = spawnWorld.getSpawnLocation();
-        startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.getX(), worldSpawn.getY(), worldSpawn.getZ()));
-        startGamePacket.setPlayerPosition(Vector3f.from(loc.getX(), loc.getY(), loc.getZ()));
-        startGamePacket.setRotation(Vector2f.from(loc.getPitch(), loc.getYaw()));
+        startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
+        startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
+        startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
         startGamePacket.setSeed(0L);
         startGamePacket.setDimensionId(spawnWorld.getDimensionInfo().dimensionId());
         startGamePacket.setGeneratorId(spawnWorld.getWorldGenerator().getGeneratorWorldType().getId());
@@ -281,7 +279,7 @@ public class AllayClient implements Client {
 
     @Override
     @Nullable
-    public FixedLoc<Float> getLocation() {
+    public Loc3f getLocation() {
         return playerEntity != null ? playerEntity.getLocation() : null;
     }
 
@@ -316,7 +314,7 @@ public class AllayClient implements Client {
             server.onClientDisconnect(AllayClient.this);
             var loc = getLocation();
             if (loc != null)
-                loc.getWorld().removeClient(AllayClient.this);
+                loc.world().removeClient(AllayClient.this);
         }
 
         @Override
@@ -414,14 +412,14 @@ public class AllayClient implements Client {
         public PacketSignal handle(MovePlayerPacket packet) {
             var pos = packet.getPosition();
             var rot = packet.getRotation();
-            playerEntity.setLocation(FixedLoc.of(
+            playerEntity.setLocation(Loc3f.of(
                     pos.getX(),
                     pos.getY(),
                     pos.getZ(),
                     rot.getX(),
                     rot.getY(),
                     rot.getZ(),
-                    getLocation().getWorld()
+                    getLocation().world()
             ));
             return PacketSignal.HANDLED;
         }

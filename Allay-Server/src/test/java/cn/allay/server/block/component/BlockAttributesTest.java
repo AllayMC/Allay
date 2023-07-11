@@ -6,7 +6,7 @@ import cn.allay.api.block.type.BlockInitInfo;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockId;
-import cn.allay.api.math.position.Pos;
+import cn.allay.api.math.vector.Pos3i;
 import cn.allay.testutils.AllayTestExtension;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -120,7 +120,7 @@ class BlockAttributesTest {
 
 
     void testBlockType(VanillaBlockId vanillaBlockId, BlockType<?> type) {
-        var block = type.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null)));
+        var block = type.createBlock(new BlockInitInfo.Simple(Pos3i.of(0, 1, 2, null)));
         var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
         for (var state : type.getBlockStateHashMap().values()) {
             block.setState(state);

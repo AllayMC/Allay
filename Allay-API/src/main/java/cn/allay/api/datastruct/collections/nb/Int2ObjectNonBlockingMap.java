@@ -30,8 +30,7 @@ import java.util.function.Function;
  * Linear scaling up to all cpus has been observed on a 32-way Sun US2 box,
  * 32-way Sun Niagra box, 8-way Intel box and a 4-way Power box.
  *
- * <p><strong>The main benefit of this class</strong> over using plain {@link
- * cn.nukkit.utils.collection.nb.Int2ObjectNonBlockingMap} with {@link Integer} keys is
+ * <p><strong>The main benefit of this class</strong> over using plain {@link Int2ObjectNonBlockingMap} with {@link Integer} keys is
  * that it avoids the auto-boxing and unboxing costs.  Since auto-boxing is
  * <em>automatic</em>, it is easy to accidentally cause auto-boxing and negate
  * the space and speed benefits.
@@ -618,7 +617,7 @@ public class Int2ObjectNonBlockingMap<TypeV>
      *
      * <p><strong>Warning:</strong> the iterator associated with this Set
      * requires the creation of {@link Entry} objects with each
-     * iteration.  The {@link cn.nukkit.utils.collection.nb.Int2ObjectNonBlockingMap}
+     * iteration.  The {@link Int2ObjectNonBlockingMap}
      * does not normally create or using {@link Entry} objects so
      * they will be created soley to support this iteration.  Iterating using
      * {@link Map#keySet} or {@link Map#values} will be more efficient.  In addition,

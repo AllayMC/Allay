@@ -1,6 +1,6 @@
 package cn.allay.api.block.component.impl.attribute;
 
-import cn.allay.api.math.aabb.FixedAABB;
+import cn.allay.api.math.aabb.AABB;
 import cn.allay.api.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,9 +23,9 @@ import java.awt.*;
 @EqualsAndHashCode
 public class BlockAttributes {
     protected static Gson SERIALIZER = new GsonBuilder()
-            .registerTypeAdapter(FixedAABB.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
+            .registerTypeAdapter(AABB.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var numbers = StringUtils.fastSplit(json.getAsString(), ",").stream().map(Float::valueOf).toList();
-                return FixedAABB.of(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
+                return AABB.of(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
             })
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var r = json.getAsJsonObject().get("r").getAsInt();
@@ -43,7 +43,7 @@ public class BlockAttributes {
     }
 
     @Builder.Default
-    protected FixedAABB aabb = FixedAABB.of(0, 0, 0, 1, 1, 1);
+    protected AABB aabb = AABB.of(0, 0, 0, 1, 1, 1);
     @Builder.Default
     protected boolean blocksPrecipitation = true;
     @Builder.Default

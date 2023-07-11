@@ -1,39 +1,34 @@
 package cn.allay.api.math.aabb;
 
-import cn.allay.api.math.vector.FixedVec3;
+import cn.allay.api.math.vector.Vec3f;
 
 /**
  * Allay Project 2023/3/25
  *
  * @author daoge_cmd
  */
-public interface AABB extends FixedAABB {
+public interface AABB {
     static AABB of(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
         return new ImplAABB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    static AABB of(FixedVec3<Float> min, FixedVec3<Float> max) {
-        return new ImplAABB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
+    static AABB of(Vec3f min, Vec3f max) {
+        return new ImplAABB(min.x(), min.y(), min.z(), max.x(), max.y(), max.z());
     }
 
-    void setMinX(float minX);
+    float minX();
 
-    void setMinY(float minY);
+    float minY();
 
-    void setMinZ(float minZ);
+    float minZ();
 
-    void setMaxX(float maxX);
+    float maxX();
 
-    void setMaxY(float maxY);
+    float maxY();
 
-    void setMaxZ(float maxZ);
+    float maxZ();
 
-    default void setAABB(FixedAABB aabb) {
-        setMinX(aabb.minX());
-        setMinY(aabb.minY());
-        setMinZ(aabb.minZ());
-        setMaxX(aabb.maxX());
-        setMaxY(aabb.maxY());
-        setMaxZ(aabb.maxZ());
+    default MutableAABB mut() {
+        return new ImplMutableAABB(minX(), minY(), minZ(), maxX(), maxY(), maxZ());
     }
 }

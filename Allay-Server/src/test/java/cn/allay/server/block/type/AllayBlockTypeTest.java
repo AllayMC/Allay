@@ -12,7 +12,7 @@ import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 import cn.allay.api.data.VanillaBlockTypes;
-import cn.allay.api.math.position.Pos;
+import cn.allay.api.math.vector.Pos3i;
 import cn.allay.server.block.component.TestComponentImpl;
 import cn.allay.server.block.component.TestComponentImplV2;
 import cn.allay.server.block.component.TestCustomBlockComponentImpl;
@@ -101,12 +101,12 @@ class AllayBlockTypeTest {
 
     @Test
     void testCommon() {
-        var block = testBlockType1.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        var block = testBlockType1.createBlock(new BlockInitInfo.Simple(Pos3i.of(1, 2, 3, null)));
         //Auto-registered component
         assertTrue(block.getTestFlag());
-        assertEquals(1, block.getPosition().getX());
-        assertEquals(2, block.getPosition().getY());
-        assertEquals(3, block.getPosition().getZ());
+        assertEquals(1, block.getPosition().x());
+        assertEquals(2, block.getPosition().y());
+        assertEquals(3, block.getPosition().z());
         assertEquals(testBlockType1, block.getBlockType());
         //Test block properties
         assertFalse(block.getProperty(TEST_BOOLEAN_PROPERTY_TYPE));
@@ -142,7 +142,7 @@ class AllayBlockTypeTest {
 
     @Test
     void testBlockStateHash() {
-        var b1 = VanillaBlockTypes.COBBLED_DEEPSLATE_WALL_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        var b1 = VanillaBlockTypes.COBBLED_DEEPSLATE_WALL_TYPE.createBlock(new BlockInitInfo.Simple(Pos3i.of(1, 2, 3, null)));
         b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
         b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
         b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
@@ -150,12 +150,12 @@ class AllayBlockTypeTest {
         b1.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
         assertEquals(1789459903, b1.getCurrentState().unsignedBlockStateHash());
 
-        var b2 = VanillaBlockTypes.BLUE_CANDLE_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(1, 2, 3, null)));
+        var b2 = VanillaBlockTypes.BLUE_CANDLE_TYPE.createBlock(new BlockInitInfo.Simple(Pos3i.of(1, 2, 3, null)));
         b2.setProperty(VanillaBlockPropertyTypes.CANDLES, 2);
         b2.setProperty(VanillaBlockPropertyTypes.LIT, false);
         assertEquals(4220034033L, b2.getCurrentState().unsignedBlockStateHash());
 
-        var b3 = VanillaBlockTypes.CORAL_FAN_TYPE.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null)));
+        var b3 = VanillaBlockTypes.CORAL_FAN_TYPE.createBlock(new BlockInitInfo.Simple(Pos3i.of(0, 1, 2, null)));
         b3.setProperty(VanillaBlockPropertyTypes.CORAL_COLOR, CoralColor.BLUE);
         b3.setProperty(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION, 0);
         assertEquals(781710940, b3.getCurrentState().unsignedBlockStateHash());
@@ -163,8 +163,8 @@ class AllayBlockTypeTest {
 
     @Test
     void testBlockAttributes() {
-        assertEquals(2, testBlockType1.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null))).getBlockAttributes().burnChance());
-        assertEquals(3, testBlockType2.createBlock(new BlockInitInfo.Simple(Pos.of(0, 1, 2, null))).getBlockAttributes().burnChance());
+        assertEquals(2, testBlockType1.createBlock(new BlockInitInfo.Simple(Pos3i.of(0, 1, 2, null))).getBlockAttributes().burnChance());
+        assertEquals(3, testBlockType2.createBlock(new BlockInitInfo.Simple(Pos3i.of(0, 1, 2, null))).getBlockAttributes().burnChance());
     }
 
     @Test

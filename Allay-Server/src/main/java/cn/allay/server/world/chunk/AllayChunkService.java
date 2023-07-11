@@ -227,8 +227,8 @@ public class AllayChunkService implements ChunkService {
         LongComparator chunkDistanceComparator = new LongComparator() {
             @Override
             public int compare(long chunkHash1, long chunkHash2) {
-                var loaderChunkX = chunkLoader.getLocation().getChunkX();
-                var loaderChunkZ = chunkLoader.getLocation().getChunkZ();
+                var loaderChunkX = chunkLoader.getLocation().floorX() >> 4;
+                var loaderChunkZ = chunkLoader.getLocation().floorZ() >> 4;
                 var chunkDX1 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash1);
                 var chunkDZ1 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash1);
                 var chunkDX2 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash2);
@@ -271,7 +271,7 @@ public class AllayChunkService implements ChunkService {
             if (!chunkLoader.isLoaderActive()) return;
             var loaderChunkPosChanged = false;
             long currentLoaderChunkPosHashed;
-            if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(chunkLoader.getLocation().getChunkX(), chunkLoader.getLocation().getChunkZ())) != lastLoaderChunkPosHashed) {
+            if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(chunkLoader.getLocation().floorX() >> 4, chunkLoader.getLocation().floorZ() >> 4)) != lastLoaderChunkPosHashed) {
                 lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
                 loaderChunkPosChanged = true;
             }
@@ -284,8 +284,8 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void updateAndLoadInRadiusChunks() {
-            var loaderChunkX = chunkLoader.getLocation().getChunkX();
-            var loaderChunkZ = chunkLoader.getLocation().getChunkZ();
+            var loaderChunkX = chunkLoader.getLocation().floorX() >> 4;
+            var loaderChunkZ = chunkLoader.getLocation().floorZ() >> 4;
             var chunkLoadingRadius = chunkLoader.getChunkLoadingRadius();
             inRadiusChunks.clear();
             for (int rx = -chunkLoadingRadius; rx <= chunkLoadingRadius; rx++) {

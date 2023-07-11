@@ -1,7 +1,7 @@
 package cn.allay.server.world;
 
-import cn.allay.api.math.location.FixedLoc;
-import cn.allay.api.math.location.Loc;
+import cn.allay.api.math.vector.Loc3f;
+import cn.allay.api.math.vector.MutableLoc3f;
 import cn.allay.api.network.Client;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
-import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/7/1
@@ -59,15 +58,15 @@ public class AllayWorld implements World {
     private GameType worldGameType;
     @Getter
     private Thread worldMainThread;
-    private Loc<Float> spawnLocation;
+    private Loc3f spawnLocation;
     private Difficulty difficulty;
     private final Map<Long, Client> clients = new ConcurrentHashMap<>();
 
     private AllayWorld(Server server,
-                      WorldStorage worldStorage,
-                      String name,
-                      DimensionInfo dimensionInfo,
-                      WorldGenerator worldGenerator) {
+                       WorldStorage worldStorage,
+                       String name,
+                       DimensionInfo dimensionInfo,
+                       WorldGenerator worldGenerator) {
         this.worldStorage = worldStorage;
         loadWorldData();
         this.name = name;
@@ -119,12 +118,12 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public FixedLoc<Float> getSpawnLocation() {
+    public Loc3f getSpawnLocation() {
         return spawnLocation;
     }
 
     @Override
-    public void setSpawnLocation(Loc<Float> newSpawn) {
+    public void setSpawnLocation(Loc3f newSpawn) {
         this.spawnLocation = newSpawn;
     }
 
@@ -173,14 +172,15 @@ public class AllayWorld implements World {
         private Server server = Server.getInstance();
         private String name = "world";
         private DimensionInfo dimensionInfo = DimensionInfo.OVERWORLD;
-        private Loc<Float> spawnLocation = Loc.of(0f, 60f, 0f, null);
+        private MutableLoc3f spawnLocation = Loc3f.of(0f, 60f, 0f, 0, 0, 0, null).mut();
         private Difficulty difficulty = Difficulty.EASY;
         private WorldStorage worldStorage;
         private WorldGenerator worldGenerator;
         private int tickingRadius = server.getServerSettings().defaultTickingRadius();
         private int viewDistance = server.getServerSettings().defaultViewDistance();
 
-        private WorldBuilder() {}
+        private WorldBuilder() {
+        }
 
         public WorldBuilder setName(String name) {
             this.name = name;
@@ -192,8 +192,8 @@ public class AllayWorld implements World {
             return this;
         }
 
-        public WorldBuilder setSpawnLocation(Loc<Float> spawnLocation) {
-            this.spawnLocation = spawnLocation;
+        public WorldBuilder setSpawnLocation(Loc3f spawnLocation) {
+            this.spawnLocation = spawnLocation.mut();
             return this;
         }
 

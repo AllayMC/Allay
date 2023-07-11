@@ -5,7 +5,7 @@ import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.Inject;
-import cn.allay.api.math.position.FixedPos;
+import cn.allay.api.math.vector.Pos3i;
 
 import java.util.List;
 
@@ -40,5 +40,5 @@ public interface BlockBaseComponent {
     BlockState getNextState();
 
     @Inject
-    FixedPos<Integer> getPosition();
+    Pos3i getPosition();
 }

@@ -8,8 +8,7 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.math.position.FixedPos;
-import cn.allay.api.math.position.Pos;
+import cn.allay.api.math.vector.Pos3i;
 import com.google.common.collect.Lists;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,12 +26,12 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     protected BlockState currentState;
     protected BlockType<? extends Block> blockType;
-    protected final Pos<Integer> pos;
+    protected final Pos3i pos;
 
     public BlockBaseComponentImpl(BlockType<? extends Block> blockType, BlockInitInfo info) {
         this.blockType = blockType;
         this.currentState = blockType.getDefaultState();
-        this.pos = info.position().clonePos();
+        this.pos = info.position();
     }
 
     @Override
@@ -103,7 +102,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     @Override
     @Impl
-    public FixedPos<Integer> getPosition() {
+    public Pos3i getPosition() {
         return pos;
     }
 

@@ -1,8 +1,7 @@
 package cn.allay.api.entity.type;
 
 import cn.allay.api.component.interfaces.ComponentInitInfo;
-import cn.allay.api.math.location.FixedLoc;
-import cn.allay.api.math.location.Loc;
+import cn.allay.api.math.vector.Loc3f;
 
 /**
  * Allay Project 2023/5/20
@@ -10,9 +9,9 @@ import cn.allay.api.math.location.Loc;
  * @author daoge_cmd
  */
 public interface EntityInitInfo extends ComponentInitInfo {
-    FixedLoc<Float> location();
+    Loc3f location();
 
-    record Simple(FixedLoc<Float> location) implements EntityInitInfo {
+    record Simple(Loc3f location) implements EntityInitInfo {
 
     }
 }
