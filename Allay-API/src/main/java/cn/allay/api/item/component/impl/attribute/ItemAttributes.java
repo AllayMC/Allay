@@ -16,14 +16,8 @@ import lombok.experimental.Accessors;
 @Builder
 @EqualsAndHashCode
 public class ItemAttributes {
-    protected static Gson SERIALIZER = new Gson();
-
     public static ItemAttributes DEFAULT = ItemAttributes.builder().build();
-
-    public static ItemAttributes of(String json) {
-        return SERIALIZER.fromJson(json, ItemAttributes.class);
-    }
-
+    protected static Gson SERIALIZER = new Gson();
     @Builder.Default
     protected int armorValue = 0;
     @Builder.Default
@@ -79,4 +73,8 @@ public class ItemAttributes {
     protected int toughnessValue = 0;
     @Builder.Default
     protected float viewDamping = 1.0f;
+
+    public static ItemAttributes of(String json) {
+        return SERIALIZER.fromJson(json, ItemAttributes.class);
+    }
 }

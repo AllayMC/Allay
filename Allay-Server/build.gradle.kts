@@ -27,9 +27,9 @@ tasks.processResources {
 
 tasks.jmh {
     //Add the executed test case
-    //includes.add("BlockStateUpdateJMHTest")
+    includes.add("BlockStateUpdateJMHTest")
     //includes.add("ChunkJMHTest")
-    includes.add("ThroughList2Array")
+//    includes.add("ThroughList2Array")
     jvmArgs.add("--enable-preview")
 }
 

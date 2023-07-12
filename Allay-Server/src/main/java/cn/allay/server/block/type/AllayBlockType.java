@@ -1,6 +1,6 @@
 package cn.allay.server.block.type;
 
-import cn.allay.api.block.Block;
+import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
@@ -37,7 +37,7 @@ import static java.lang.reflect.Modifier.isStatic;
  * @author daoge_cmd | Cool_Loong
  */
 @Getter
-public final class AllayBlockType<T extends Block> implements BlockType<T> {
+public final class AllayBlockType<T extends BlockBehavior> implements BlockType<T> {
     public static int computeSpecialValue(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
         int nbits = 0;
         for (var value : propertyValues) nbits += value.getPropertyType().getBitSize();
@@ -86,7 +86,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         }
     }
 
-    public static <T extends Block> BlockTypeBuilder<T> builder(Class<T> interfaceClass) {
+    public static <T extends BlockBehavior> BlockTypeBuilder<T> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
 
@@ -234,7 +234,7 @@ public final class AllayBlockType<T extends Block> implements BlockType<T> {
         }
     }
 
-    public static class Builder<T extends Block> implements BlockTypeBuilder<T> {
+    public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
         protected Class<T> interfaceClass;
         protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders = new ArrayList<>();
         protected List<BlockPropertyType<?>> properties = new ArrayList<>();

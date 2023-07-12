@@ -1,7 +1,5 @@
 package cn.allay.api.math.aabb;
 
-import cn.allay.api.math.vector.Vec3f;
-
 /**
  * Allay Project 2023/3/25
  *

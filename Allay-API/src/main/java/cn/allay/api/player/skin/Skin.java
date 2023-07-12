@@ -149,6 +149,16 @@ public class Skin {
         }
     }
 
+    private static boolean validateSkinResourcePatch(String skinResourcePatch) {
+        try {
+            JSONObject object = (JSONObject) JSONValue.parse(skinResourcePatch);
+            JSONObject geometry = (JSONObject) object.get("geometry");
+            return geometry.containsKey("default") && geometry.get("default") instanceof String;
+        } catch (ClassCastException | NullPointerException e) {
+            return false;
+        }
+    }
+
     public String getResourcePatch() {
         return this.resourcePatch == null ? "" : this.resourcePatch;
     }
@@ -232,15 +242,5 @@ public class Skin {
 
     private boolean isValidResourcePatch() {
         return resourcePatch != null && validateSkinResourcePatch(resourcePatch);
-    }
-
-    private static boolean validateSkinResourcePatch(String skinResourcePatch) {
-        try {
-            JSONObject object = (JSONObject) JSONValue.parse(skinResourcePatch);
-            JSONObject geometry = (JSONObject) object.get("geometry");
-            return geometry.containsKey("default") && geometry.get("default") instanceof String;
-        } catch (ClassCastException | NullPointerException e) {
-            return false;
-        }
     }
 }

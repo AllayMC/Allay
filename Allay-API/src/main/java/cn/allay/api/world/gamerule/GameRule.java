@@ -53,6 +53,15 @@ public enum GameRule {
         this.type = type;
     }
 
+    @Nullable
+    public static GameRule fromName(String name) {
+        return Arrays.stream(values()).filter(gameRule -> gameRule.getName().equals(name)).findFirst().orElseGet(null);
+    }
+
+    public static boolean parseByteToBoolean(byte value) {
+        return value == 1;
+    }
+
     public GameRuleData<?> toNetwork() {
         return new GameRuleData<>(this.name, this.defaultValue);
     }
@@ -67,15 +76,6 @@ public enum GameRule {
 
     public Type getType() {
         return this.type;
-    }
-
-    @Nullable
-    public static GameRule fromName(String name) {
-        return Arrays.stream(values()).filter(gameRule -> gameRule.getName().equals(name)).findFirst().orElseGet(null);
-    }
-
-    public static boolean parseByteToBoolean(byte value) {
-        return value == 1;
     }
 
     public enum Type {

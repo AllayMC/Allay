@@ -842,6 +842,7 @@ public class Int2ObjectNonBlockingMap<TypeV>
         private ConcurrentAutoIntTable _size;
         // Count of used slots, to tell when table is full of dead unusable slots
         private ConcurrentAutoIntTable _slots;
+
         // Simple constructor
         CHM(final Int2ObjectNonBlockingMap nbhml, ConcurrentAutoIntTable size, final int logsize) {
             _nbhml = nbhml;

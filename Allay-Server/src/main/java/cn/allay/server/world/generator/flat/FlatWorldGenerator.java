@@ -31,8 +31,8 @@ public class FlatWorldGenerator implements WorldGenerator {
             for (int z = 0; z < 16; z++) {
                 for (int y = 0; y < 5; y++) {
                     if (y == 0) {
-                        flatChunk.setBlock(x, y, z, bedrock);
-                    } else flatChunk.setBlock(x, y, z, grass);
+                        flatChunk.setBlockState(x, y, z, bedrock);
+                    } else flatChunk.setBlockState(x, y, z, grass);
                 }
             }
         }

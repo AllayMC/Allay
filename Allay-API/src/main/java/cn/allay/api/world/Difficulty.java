@@ -12,8 +12,8 @@ public enum Difficulty {
     NORMAL,
     HARD;
 
-    public static Difficulty getDifficulty( int value ) {
-        return switch ( value ) {
+    public static Difficulty getDifficulty(int value) {
+        return switch (value) {
             case 0 -> Difficulty.PEACEFUL;
             case 1 -> Difficulty.EASY;
             case 2 -> Difficulty.NORMAL;

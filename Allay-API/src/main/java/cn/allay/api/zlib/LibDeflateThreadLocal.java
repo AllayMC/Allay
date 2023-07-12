@@ -12,9 +12,9 @@ import java.util.zip.DataFormatException;
  * @author Cool_Loong
  */
 public final class LibDeflateThreadLocal implements ZlibProvider {
+    private final ThreadLocal<LibdeflateDecompressor> PNX_INFLATER = ThreadLocal.withInitial(LibdeflateDecompressor::new);
     private CompressionType type;
     private int level;
-    private final ThreadLocal<LibdeflateDecompressor> PNX_INFLATER = ThreadLocal.withInitial(LibdeflateDecompressor::new);
     private final ThreadLocal<LibdeflateCompressor> DEFLATER = ThreadLocal.withInitial(() -> new LibdeflateCompressor(level));
 
     LibDeflateThreadLocal(CompressionType type, int level) {

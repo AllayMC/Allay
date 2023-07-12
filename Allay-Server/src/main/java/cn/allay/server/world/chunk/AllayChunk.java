@@ -73,12 +73,12 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
 
 
     @Override
-    public BlockState getBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {
+    public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {
         long stamp = sectionLock.tryOptimisticRead();
         try {
             for (; ; stamp = sectionLock.readLock()) {
                 if (stamp == 0L) continue;
-                BlockState result = super.getBlock(x, y, z, layer);
+                BlockState result = super.getBlockState(x, y, z, layer);
                 if (!sectionLock.validate(stamp)) continue;
                 return result;
             }
@@ -88,10 +88,10 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     }
 
     @Override
-    public void setBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState) {
+    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState) {
         long stamp = sectionLock.writeLock();
         try {
-            super.setBlock(x, y, z, layer, blockState);
+            super.setBlockState(x, y, z, layer, blockState);
         } finally {
             sectionLock.unlockWrite(stamp);
         }
@@ -147,12 +147,12 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = sectionLock.writeLock()) {
                 if (stamp == 0L) continue;
-                BlockState oldValue = super.getBlock(x, y, z, layer);
+                BlockState oldValue = super.getBlockState(x, y, z, layer);
                 if (!sectionLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = sectionLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
-                super.setBlock(x, y, z, layer, newValue);
+                super.setBlockState(x, y, z, layer, newValue);
                 return;
             }
         } finally {

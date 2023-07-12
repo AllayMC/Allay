@@ -1,6 +1,6 @@
 package cn.allay.api.block.component.impl.base;
 
-import cn.allay.api.block.Block;
+import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.type.BlockInitInfo;
@@ -23,12 +23,11 @@ import java.util.List;
 public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponentImpl {
 
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
-
-    protected BlockState currentState;
-    protected BlockType<? extends Block> blockType;
     protected final Pos3i pos;
+    protected BlockState currentState;
+    protected BlockType<? extends BlockBehavior> blockType;
 
-    public BlockBaseComponentImpl(BlockType<? extends Block> blockType, BlockInitInfo info) {
+    public BlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockInitInfo info) {
         this.blockType = blockType;
         this.currentState = blockType.getDefaultState();
         this.pos = info.position();
@@ -36,7 +35,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
 
     @Override
     @Impl
-    public BlockType<? extends Block> getBlockType() {
+    public BlockType<? extends BlockBehavior> getBlockType() {
         return blockType;
     }
 

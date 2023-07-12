@@ -363,11 +363,11 @@ record ImplLoc3i(int x, int y, int z, double pitch, double yaw, double headYaw, 
         if (this == o) return true;
         if (!(o instanceof Loc3i that)) return false;
         return Objects.equals(x, that.x()) &&
-                Objects.equals(y, that.y()) &&
-                Objects.equals(z, that.z()) &&
-                Objects.equals(pitch, that.pitch()) &&
-                Objects.equals(yaw, that.yaw()) &&
-                Objects.equals(headYaw, that.headYaw()) &&
-                Objects.equals(world, that.world());
+               Objects.equals(y, that.y()) &&
+               Objects.equals(z, that.z()) &&
+               Objects.equals(pitch, that.pitch()) &&
+               Objects.equals(yaw, that.yaw()) &&
+               Objects.equals(headYaw, that.headYaw()) &&
+               Objects.equals(world, that.world());
     }
 }

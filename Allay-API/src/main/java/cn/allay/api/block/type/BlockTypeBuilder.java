@@ -1,7 +1,7 @@
 package cn.allay.api.block.type;
 
 import cn.allay.api.ApiInstanceHolder;
-import cn.allay.api.block.Block;
+import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.property.type.BlockPropertyType;
@@ -16,11 +16,11 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-public interface BlockTypeBuilder<T extends Block> {
+public interface BlockTypeBuilder<T extends BlockBehavior> {
 
     ApiInstanceHolder<BlockTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
 
-    static <T extends Block> BlockTypeBuilder<T> builder(Class<T> clazz) {
+    static <T extends BlockBehavior> BlockTypeBuilder<T> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);
     }
 
@@ -49,6 +49,6 @@ public interface BlockTypeBuilder<T extends Block> {
     BlockType<T> build();
 
     interface BlockTypeBuilderFactory {
-        <T extends Block> BlockTypeBuilder<T> create(Class<T> clazz);
+        <T extends BlockBehavior> BlockTypeBuilder<T> create(Class<T> clazz);
     }
 }

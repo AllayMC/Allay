@@ -3,7 +3,6 @@ package cn.allay.api.world;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.gamerule.GameRules;
 import lombok.Builder;
-import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.Ability;
 
 import java.util.List;
@@ -153,8 +152,8 @@ public record WorldData(
             .NetherScale(0)
             .useMsaGamertagsOnly(false)
             .FlatWorldLayers("""
-                        {"biome_id":1,"block_layers":[{"block_name":"minecraft:bedrock","count":1},{"block_name":"minecraft:dirt","count":2},{"block_name":"minecraft:grass","count":1}],"encoding_version":6,"structure_options":null,"world_version":"version.post_1_18"}
-                        """)
+                    {"biome_id":1,"block_layers":[{"block_name":"minecraft:bedrock","count":1},{"block_name":"minecraft:dirt","count":2},{"block_name":"minecraft:grass","count":1}],"encoding_version":6,"structure_options":null,"world_version":"version.post_1_18"}
+                    """)
             .immutableWorld(false)
             .playerPermissionsLevel(1)
             .build();

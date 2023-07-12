@@ -21,7 +21,7 @@ public class AllayChunkTest {
             for (int i = 0; i < 16; i++) {
                 for (int j = 0; j < 16; j++) {
                     for (int k = 0; k < 100; k++) {
-                        chunk.setBlock(i, k, j, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
+                        chunk.setBlockState(i, k, j, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
                     }
                 }
             }
@@ -30,7 +30,7 @@ public class AllayChunkTest {
             for (int i = 0; i < 16; i++) {
                 for (int j = 0; j < 16; j++) {
                     for (int k = 0; k < 100; k++) {
-                        assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlock(i, k, j), "(" + i + "," + k + "," + j + ") GET BLOCK ERROR!");
+                        assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlockState(i, k, j), "(" + i + "," + k + "," + j + ") GET BLOCK ERROR!");
                     }
                 }
             }
@@ -74,7 +74,7 @@ public class AllayChunkTest {
     void testBatchProcess() {
 //        for (int i = 1; i <= 1000; i++) {
 //            final Chunk chunk = new AllayChunk(0, 0, DimensionInfo.of(0));
-//            chunk.batchProcess(a1-> a1.setBlock(), a2->{
+//            chunk.batchProcess(a1-> a1.setBlockState(), a2->{
 //
 //            },a3->{
 //
