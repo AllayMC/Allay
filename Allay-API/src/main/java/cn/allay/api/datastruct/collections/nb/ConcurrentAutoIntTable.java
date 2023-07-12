@@ -139,6 +139,7 @@ public class ConcurrentAutoIntTable implements Serializable {
         private final int[] _t;     // Power-of-2 array of ints
         private volatile long _fuzzy_sum_cache;
         private volatile long _fuzzy_time;
+
         CAT(CAT next, int sz, int init) {
             _next = next;
             _t = new int[sz];

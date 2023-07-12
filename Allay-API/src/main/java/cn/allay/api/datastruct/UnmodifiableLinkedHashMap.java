@@ -10,13 +10,13 @@ import java.util.function.Function;
 
 public class UnmodifiableLinkedHashMap<K, V> extends LinkedHashMap<K, V> {
 
+    private UnmodifiableLinkedHashMap(LinkedHashMap<K, V> maps) {
+        super(maps);
+    }
+
     @Contract("_ -> new")
     public static <K, V> @NotNull UnmodifiableLinkedHashMap<K, V> warp(LinkedHashMap<K, V> maps) {
         return new UnmodifiableLinkedHashMap<>(maps);
-    }
-
-    private UnmodifiableLinkedHashMap(LinkedHashMap<K, V> maps) {
-        super(maps);
     }
 
     @Override

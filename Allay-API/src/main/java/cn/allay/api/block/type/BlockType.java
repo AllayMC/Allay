@@ -1,6 +1,6 @@
 package cn.allay.api.block.type;
 
-import cn.allay.api.block.Block;
+import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public interface BlockType<T extends Block> extends Identified {
+public interface BlockType<T extends BlockBehavior> extends Identified {
     List<ComponentProvider<? extends BlockComponentImpl>> getComponentProviders();
 
     @UnmodifiableView

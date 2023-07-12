@@ -139,6 +139,7 @@ public class ConcurrentAutoLongTable implements Serializable {
         private final long[] _t;     // Power-of-2 array of longs
         private volatile long _fuzzy_sum_cache;
         private volatile long _fuzzy_time;
+
         CAT(CAT next, int sz, long init) {
             _next = next;
             _t = new long[sz];

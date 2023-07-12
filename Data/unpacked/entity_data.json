@@ -1,703 +1,703 @@
 {
-    "minecraft:allay": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:allay",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 390
-    },
-    "minecraft:armor_stand": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:armor_stand",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 317
-    },
-    "minecraft:arrow": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:arrow",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 12582992
-    },
-    "minecraft:axolotl": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:axolotl",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4994
-    },
-    "minecraft:bat": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:bat",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 33043
-    },
-    "minecraft:bee": {
-        "actorPropertyDataTag": {
-            "properties": [
-                {
-                    "name": "minecraft:has_nectar",
-                    "type": 2
-                }
-            ],
-            "type": "minecraft:bee"
-        },
-        "canonicalName": "minecraft:bee",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 378
-    },
-    "minecraft:blaze": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:blaze",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2859
-    },
-    "minecraft:boat": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:boat",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 90
-    },
-    "minecraft:camel": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:camel",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 5002
-    },
-    "minecraft:cat": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:cat",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 21323
-    },
-    "minecraft:cave_spider": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:cave_spider",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 265000
-    },
-    "minecraft:chest_boat": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:chest_boat",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 218
-    },
-    "minecraft:chest_minecart": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:chest_minecart",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 524386
-    },
-    "minecraft:chicken": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:chicken",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4874
-    },
-    "minecraft:cod": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:cod",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 9072
-    },
-    "minecraft:command_block_minecart": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:command_block_minecart",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 524388
-    },
-    "minecraft:cow": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:cow",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4875
-    },
-    "minecraft:creeper": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:creeper",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2849
-    },
-    "minecraft:dolphin": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:dolphin",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 8991
-    },
-    "minecraft:donkey": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:donkey",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2118424
-    },
-    "minecraft:drowned": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:drowned",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 199534
-    },
-    "minecraft:egg": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:egg",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4194386
-    },
-    "minecraft:elder_guardian": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:elder_guardian",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2866
-    },
-    "minecraft:elder_guardian_ghost": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:elder_guardian_ghost",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2936
-    },
-    "minecraft:ender_crystal": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:ender_crystal",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 71
-    },
-    "minecraft:ender_dragon": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:ender_dragon",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2869
-    },
-    "minecraft:enderman": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:enderman",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2854
-    },
-    "minecraft:endermite": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:endermite",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 265015
-    },
-    "minecraft:evocation_fang": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:evocation_fang",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4194407
-    },
-    "minecraft:evocation_illager": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:evocation_illager",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2920
-    },
-    "minecraft:fireworks_rocket": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:fireworks_rocket",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 72
-    },
-    "minecraft:fox": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:fox",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4985
-    },
-    "minecraft:frog": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:frog",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4996
-    },
-    "minecraft:ghast": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:ghast",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2857
-    },
-    "minecraft:glow_squid": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:glow_squid",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 9089
-    },
-    "minecraft:goat": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:goat",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4992
-    },
-    "minecraft:guardian": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:guardian",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2865
-    },
-    "minecraft:hoglin": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:hoglin",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4988
-    },
-    "minecraft:hopper_minecart": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:hopper_minecart",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 524384
-    },
-    "minecraft:horse": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:horse",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2118423
-    },
-    "minecraft:husk": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:husk",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 199471
-    },
-    "minecraft:iron_golem": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:iron_golem",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 788
-    },
-    "minecraft:leash_knot": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:leash_knot",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 88
-    },
-    "minecraft:lightning_bolt": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:lightning_bolt",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 93
-    },
-    "minecraft:llama": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:llama",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4893
-    },
-    "minecraft:magma_cube": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:magma_cube",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2858
-    },
-    "minecraft:minecart": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:minecart",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 524372
-    },
-    "minecraft:mooshroom": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:mooshroom",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4880
-    },
-    "minecraft:mule": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:mule",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2118425
-    },
-    "minecraft:npc": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:npc",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 307
-    },
-    "minecraft:ocelot": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:ocelot",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 21270
-    },
-    "minecraft:panda": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:panda",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4977
-    },
-    "minecraft:parrot": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:parrot",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 21278
-    },
-    "minecraft:phantom": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:phantom",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 68410
-    },
-    "minecraft:pig": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:pig",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4876
-    },
-    "minecraft:piglin": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:piglin",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 379
-    },
-    "minecraft:piglin_brute": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:piglin_brute",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 383
-    },
-    "minecraft:pillager": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:pillager",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2930
-    },
-    "minecraft:polar_bear": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:polar_bear",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4892
-    },
-    "minecraft:pufferfish": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:pufferfish",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 9068
-    },
-    "minecraft:rabbit": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:rabbit",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4882
-    },
-    "minecraft:ravager": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:ravager",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2875
-    },
-    "minecraft:salmon": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:salmon",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 9069
-    },
-    "minecraft:sheep": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:sheep",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4877
-    },
-    "minecraft:shulker": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:shulker",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2870
-    },
-    "minecraft:silverfish": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:silverfish",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 264999
-    },
-    "minecraft:skeleton": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:skeleton",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 1116962
-    },
-    "minecraft:skeleton_horse": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:skeleton_horse",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2186010
-    },
-    "minecraft:slime": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:slime",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2853
-    },
-    "minecraft:sniffer": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:sniffer",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 5003
-    },
-    "minecraft:snow_golem": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:snow_golem",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 789
-    },
-    "minecraft:snowball": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:snowball",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4194385
-    },
-    "minecraft:spider": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:spider",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 264995
-    },
-    "minecraft:splash_potion": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:splash_potion",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4194390
-    },
-    "minecraft:squid": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:squid",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 8977
-    },
-    "minecraft:stray": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:stray",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 1116974
-    },
-    "minecraft:strider": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:strider",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4989
-    },
-    "minecraft:tadpole": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:tadpole",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 9093
-    },
-    "minecraft:tnt": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:tnt",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 65
-    },
-    "minecraft:tnt_minecart": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:tnt_minecart",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 524385
-    },
-    "minecraft:trader_llama": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:trader_llama",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 5021
-    },
-    "minecraft:tropicalfish": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:tropicalfish",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 9071
-    },
-    "minecraft:turtle": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:turtle",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4938
-    },
-    "minecraft:vex": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:vex",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2921
-    },
-    "minecraft:villager": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:villager",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 16777999
-    },
-    "minecraft:vindicator": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:vindicator",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2873
-    },
-    "minecraft:wandering_trader": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:wandering_trader",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 886
-    },
-    "minecraft:warden": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:warden",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2947
-    },
-    "minecraft:witch": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:witch",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2861
-    },
-    "minecraft:wither": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:wither",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 68404
-    },
-    "minecraft:wither_skeleton": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:wither_skeleton",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 1116976
-    },
-    "minecraft:wolf": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:wolf",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 21262
-    },
-    "minecraft:xp_bottle": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:xp_bottle",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 4194372
-    },
-    "minecraft:xp_orb": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:xp_orb",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 69
-    },
-    "minecraft:zoglin": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:zoglin",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 68478
-    },
-    "minecraft:zombie": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:zombie",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 199456
-    },
-    "minecraft:zombie_horse": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:zombie_horse",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 2186011
-    },
-    "minecraft:zombie_pigman": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:zombie_pigman",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 68388
-    },
-    "minecraft:zombie_villager": {
-        "actorPropertyDataTag": {},
-        "canonicalName": "minecraft:zombie_villager",
-        "initEvent": "",
-        "isVanilla": true,
-        "legacyActorType": 199468
-    }
+  "minecraft:allay": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:allay",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 390
+  },
+  "minecraft:armor_stand": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:armor_stand",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 317
+  },
+  "minecraft:arrow": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:arrow",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 12582992
+  },
+  "minecraft:axolotl": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:axolotl",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4994
+  },
+  "minecraft:bat": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:bat",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 33043
+  },
+  "minecraft:bee": {
+    "actorPropertyDataTag": {
+      "properties": [
+        {
+          "name": "minecraft:has_nectar",
+          "type": 2
+        }
+      ],
+      "type": "minecraft:bee"
+    },
+    "canonicalName": "minecraft:bee",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 378
+  },
+  "minecraft:blaze": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:blaze",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2859
+  },
+  "minecraft:boat": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:boat",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 90
+  },
+  "minecraft:camel": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:camel",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 5002
+  },
+  "minecraft:cat": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:cat",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 21323
+  },
+  "minecraft:cave_spider": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:cave_spider",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 265000
+  },
+  "minecraft:chest_boat": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:chest_boat",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 218
+  },
+  "minecraft:chest_minecart": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:chest_minecart",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 524386
+  },
+  "minecraft:chicken": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:chicken",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4874
+  },
+  "minecraft:cod": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:cod",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 9072
+  },
+  "minecraft:command_block_minecart": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:command_block_minecart",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 524388
+  },
+  "minecraft:cow": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:cow",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4875
+  },
+  "minecraft:creeper": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:creeper",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2849
+  },
+  "minecraft:dolphin": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:dolphin",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 8991
+  },
+  "minecraft:donkey": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:donkey",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2118424
+  },
+  "minecraft:drowned": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:drowned",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 199534
+  },
+  "minecraft:egg": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:egg",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4194386
+  },
+  "minecraft:elder_guardian": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:elder_guardian",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2866
+  },
+  "minecraft:elder_guardian_ghost": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:elder_guardian_ghost",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2936
+  },
+  "minecraft:ender_crystal": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:ender_crystal",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 71
+  },
+  "minecraft:ender_dragon": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:ender_dragon",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2869
+  },
+  "minecraft:enderman": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:enderman",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2854
+  },
+  "minecraft:endermite": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:endermite",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 265015
+  },
+  "minecraft:evocation_fang": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:evocation_fang",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4194407
+  },
+  "minecraft:evocation_illager": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:evocation_illager",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2920
+  },
+  "minecraft:fireworks_rocket": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:fireworks_rocket",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 72
+  },
+  "minecraft:fox": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:fox",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4985
+  },
+  "minecraft:frog": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:frog",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4996
+  },
+  "minecraft:ghast": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:ghast",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2857
+  },
+  "minecraft:glow_squid": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:glow_squid",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 9089
+  },
+  "minecraft:goat": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:goat",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4992
+  },
+  "minecraft:guardian": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:guardian",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2865
+  },
+  "minecraft:hoglin": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:hoglin",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4988
+  },
+  "minecraft:hopper_minecart": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:hopper_minecart",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 524384
+  },
+  "minecraft:horse": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:horse",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2118423
+  },
+  "minecraft:husk": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:husk",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 199471
+  },
+  "minecraft:iron_golem": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:iron_golem",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 788
+  },
+  "minecraft:leash_knot": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:leash_knot",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 88
+  },
+  "minecraft:lightning_bolt": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:lightning_bolt",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 93
+  },
+  "minecraft:llama": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:llama",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4893
+  },
+  "minecraft:magma_cube": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:magma_cube",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2858
+  },
+  "minecraft:minecart": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:minecart",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 524372
+  },
+  "minecraft:mooshroom": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:mooshroom",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4880
+  },
+  "minecraft:mule": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:mule",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2118425
+  },
+  "minecraft:npc": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:npc",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 307
+  },
+  "minecraft:ocelot": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:ocelot",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 21270
+  },
+  "minecraft:panda": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:panda",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4977
+  },
+  "minecraft:parrot": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:parrot",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 21278
+  },
+  "minecraft:phantom": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:phantom",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 68410
+  },
+  "minecraft:pig": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:pig",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4876
+  },
+  "minecraft:piglin": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:piglin",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 379
+  },
+  "minecraft:piglin_brute": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:piglin_brute",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 383
+  },
+  "minecraft:pillager": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:pillager",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2930
+  },
+  "minecraft:polar_bear": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:polar_bear",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4892
+  },
+  "minecraft:pufferfish": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:pufferfish",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 9068
+  },
+  "minecraft:rabbit": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:rabbit",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4882
+  },
+  "minecraft:ravager": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:ravager",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2875
+  },
+  "minecraft:salmon": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:salmon",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 9069
+  },
+  "minecraft:sheep": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:sheep",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4877
+  },
+  "minecraft:shulker": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:shulker",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2870
+  },
+  "minecraft:silverfish": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:silverfish",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 264999
+  },
+  "minecraft:skeleton": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:skeleton",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 1116962
+  },
+  "minecraft:skeleton_horse": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:skeleton_horse",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2186010
+  },
+  "minecraft:slime": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:slime",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2853
+  },
+  "minecraft:sniffer": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:sniffer",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 5003
+  },
+  "minecraft:snow_golem": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:snow_golem",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 789
+  },
+  "minecraft:snowball": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:snowball",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4194385
+  },
+  "minecraft:spider": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:spider",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 264995
+  },
+  "minecraft:splash_potion": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:splash_potion",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4194390
+  },
+  "minecraft:squid": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:squid",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 8977
+  },
+  "minecraft:stray": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:stray",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 1116974
+  },
+  "minecraft:strider": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:strider",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4989
+  },
+  "minecraft:tadpole": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:tadpole",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 9093
+  },
+  "minecraft:tnt": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:tnt",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 65
+  },
+  "minecraft:tnt_minecart": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:tnt_minecart",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 524385
+  },
+  "minecraft:trader_llama": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:trader_llama",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 5021
+  },
+  "minecraft:tropicalfish": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:tropicalfish",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 9071
+  },
+  "minecraft:turtle": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:turtle",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4938
+  },
+  "minecraft:vex": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:vex",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2921
+  },
+  "minecraft:villager": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:villager",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 16777999
+  },
+  "minecraft:vindicator": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:vindicator",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2873
+  },
+  "minecraft:wandering_trader": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:wandering_trader",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 886
+  },
+  "minecraft:warden": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:warden",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2947
+  },
+  "minecraft:witch": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:witch",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2861
+  },
+  "minecraft:wither": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:wither",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 68404
+  },
+  "minecraft:wither_skeleton": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:wither_skeleton",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 1116976
+  },
+  "minecraft:wolf": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:wolf",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 21262
+  },
+  "minecraft:xp_bottle": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:xp_bottle",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 4194372
+  },
+  "minecraft:xp_orb": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:xp_orb",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 69
+  },
+  "minecraft:zoglin": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:zoglin",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 68478
+  },
+  "minecraft:zombie": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:zombie",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 199456
+  },
+  "minecraft:zombie_horse": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:zombie_horse",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 2186011
+  },
+  "minecraft:zombie_pigman": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:zombie_pigman",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 68388
+  },
+  "minecraft:zombie_villager": {
+    "actorPropertyDataTag": {},
+    "canonicalName": "minecraft:zombie_villager",
+    "initEvent": "",
+    "isVanilla": true,
+    "legacyActorType": 199468
+  }
 }

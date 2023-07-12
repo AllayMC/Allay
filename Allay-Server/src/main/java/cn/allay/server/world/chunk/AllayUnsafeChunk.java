@@ -63,7 +63,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.heightMap.set((z << 4) + x, (byte) height);
     }
 
-    public BlockState getBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {
+    public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {
         ChunkSection section = this.getSection(normalY(y) >>> 4);
         BlockState blockState;
         if (section == null) {
@@ -74,7 +74,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return blockState;
     }
 
-    public void setBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState) {
+    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState) {
         int sectionY = normalY(y) >>> 4;
         ChunkSection section = this.getSection(sectionY);
         if (section == null) {

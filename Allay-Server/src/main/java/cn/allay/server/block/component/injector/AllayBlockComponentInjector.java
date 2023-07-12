@@ -1,6 +1,6 @@
 package cn.allay.server.block.component.injector;
 
-import cn.allay.api.block.Block;
+import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.annotation.RequireBlockProperty;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.type.BlockType;
@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public class AllayBlockComponentInjector<T extends Block> extends AllayComponentInjector<T> {
+public class AllayBlockComponentInjector<T extends BlockBehavior> extends AllayComponentInjector<T> {
 
     protected Map<String, BlockPropertyType<?>> mappedProperties;
     protected BlockType<T> type;

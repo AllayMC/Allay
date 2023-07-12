@@ -17,7 +17,7 @@ public interface WorldPool {
 
     void addWorld(World world);
 
-    void setDefaultWorld(World world);
-
     World getDefaultWorld();
+
+    void setDefaultWorld(World world);
 }

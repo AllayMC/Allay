@@ -41,6 +41,22 @@ public final class Palette<V> {
         this.palette.add(first);
     }
 
+    private static int getPaletteHeader(BitArrayVersion version, boolean runtime) {
+        return (version.bits << 1) | (runtime ? 1 : 0);
+    }
+
+    private static BitArrayVersion getVersionFromPaletteHeader(short header) {
+        return BitArrayVersion.get(header >> 1, true);
+    }
+
+    private static boolean hasCopyLastFlag(short header) {
+        return (header >> 1) == 0x7F;
+    }
+
+    private static boolean isPersistent(short header) {
+        return (header & 1) == 0;
+    }
+
     public V get(int index) {
         return this.palette.get(this.bitArray.get(index));
     }
@@ -128,22 +144,6 @@ public final class Palette<V> {
 
         final int paletteSize = byteBuf.readIntLE();
         for (int i = 0; i < paletteSize; i++) this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
-    }
-
-    private static int getPaletteHeader(BitArrayVersion version, boolean runtime) {
-        return (version.bits << 1) | (runtime ? 1 : 0);
-    }
-
-    private static BitArrayVersion getVersionFromPaletteHeader(short header) {
-        return BitArrayVersion.get(header >> 1, true);
-    }
-
-    private static boolean hasCopyLastFlag(short header) {
-        return (header >> 1) == 0x7F;
-    }
-
-    private static boolean isPersistent(short header) {
-        return (header & 1) == 0;
     }
 
     private BitArrayVersion readBitArrayVersion(ByteBuf byteBuf) {

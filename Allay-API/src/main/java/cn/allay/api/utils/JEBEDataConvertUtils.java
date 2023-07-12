@@ -87,6 +87,7 @@ public final class JEBEDataConvertUtils {
      * }
      *
      * </pre>
+     *
      * @param beBlockState the BlockState NBT
      * @return the nbt map
      */

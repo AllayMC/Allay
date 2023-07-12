@@ -1,7 +1,5 @@
 package cn.allay.api.math.aabb;
 
-import lombok.EqualsAndHashCode;
-
 /**
  * Allay Project 2023/3/25
  *

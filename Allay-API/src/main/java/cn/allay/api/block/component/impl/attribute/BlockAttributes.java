@@ -22,6 +22,7 @@ import java.awt.*;
 @Builder
 @EqualsAndHashCode
 public class BlockAttributes {
+    public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
     protected static Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(AABB.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var numbers = StringUtils.fastSplit(json.getAsString(), ",").stream().map(Float::valueOf).toList();
@@ -35,13 +36,6 @@ public class BlockAttributes {
                 return new Color(r, g, b, a);
             })
             .create();
-
-    public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
-
-    public static BlockAttributes of(String json) {
-        return SERIALIZER.fromJson(json, BlockAttributes.class);
-    }
-
     @Builder.Default
     protected AABB aabb = AABB.of(0, 0, 0, 1, 1, 1);
     @Builder.Default
@@ -104,4 +98,8 @@ public class BlockAttributes {
     protected float translucency = 0;
     @Builder.Default
     protected boolean waterSpreadCausesSpawn = false;
+
+    public static BlockAttributes of(String json) {
+        return SERIALIZER.fromJson(json, BlockAttributes.class);
+    }
 }

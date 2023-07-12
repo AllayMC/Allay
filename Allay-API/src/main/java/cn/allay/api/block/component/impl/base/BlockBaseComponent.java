@@ -1,6 +1,6 @@
 package cn.allay.api.block.component.impl.base;
 
-import cn.allay.api.block.Block;
+import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface BlockBaseComponent {
     @Inject
-    BlockType<? extends Block> getBlockType();
+    BlockType<? extends BlockBehavior> getBlockType();
 
     @Inject
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value);

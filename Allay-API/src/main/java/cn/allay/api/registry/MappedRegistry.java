@@ -15,9 +15,9 @@ import java.util.function.Function;
  * @param <VALUE>   the value
  * @param <MAPPING> the map
  *                  <p>
- *                  @author daoge_cmd <br>
- *                  Date: 2023/3/18 <br>
- *                  Allay Project <br>
+ * @author daoge_cmd <br>
+ * Date: 2023/3/18 <br>
+ * Allay Project <br>
  */
 public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> extends Registry<MAPPING> {
     /**

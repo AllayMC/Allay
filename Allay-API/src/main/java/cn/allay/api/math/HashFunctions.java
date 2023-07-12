@@ -42,6 +42,9 @@ package cn.allay.api.math;
  * @version 1.0, 09/24/99
  */
 public final class HashFunctions {
+    private HashFunctions() {
+    }
+
     /**
      * In profiling, it has been found to be faster to have our own local implementation of "ceil" rather than to call to {@link Math#ceil(double)}.
      *
@@ -54,9 +57,6 @@ public final class HashFunctions {
             possible_result++;
         }
         return possible_result;
-    }
-
-    private HashFunctions() {
     }
 
 }

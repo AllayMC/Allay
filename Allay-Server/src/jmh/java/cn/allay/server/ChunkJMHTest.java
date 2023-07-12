@@ -26,7 +26,7 @@ public class ChunkJMHTest {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {
-                    chunk.setBlock(i, k, j, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
+                    chunk.setBlockState(i, k, j, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
                 }
             }
         }
@@ -34,23 +34,23 @@ public class ChunkJMHTest {
 
     /*@Benchmark
     public void test1() {
-        chunk.setBlock(0, 0, 0, VanillaBlockTypes.STONE_TYPE.getDefaultState());
+        chunk.setBlockState(0, 0, 0, VanillaBlockTypes.STONE_TYPE.getDefaultState());
     }
 
     @Benchmark
     public void test2(Blackhole blackhole) {
-        blackhole.consume(chunk.getBlock(0, 0, 0));
+        blackhole.consume(chunk.getBlockState(0, 0, 0));
     }*/
 
     @Threads(Threads.MAX)
     @Benchmark
     public void test3() {
-        chunk.setBlock(0, 0, 0, VanillaBlockTypes.STONE_TYPE.getDefaultState());
+        chunk.setBlockState(0, 0, 0, VanillaBlockTypes.STONE_TYPE.getDefaultState());
     }
 
     @Threads(Threads.MAX)
     @Benchmark
     public void test4(Blackhole blackhole) {
-        blackhole.consume(chunk.getBlock(0, 0, 0));
+        blackhole.consume(chunk.getBlockState(0, 0, 0));
     }
 }
