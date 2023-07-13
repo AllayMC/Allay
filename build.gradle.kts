@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
-
 repositories {
     mavenCentral()
     maven {
@@ -66,13 +64,17 @@ subprojects {
         withSourcesJar()
     }
 
-    tasks {
-        shadowJar {
-            transform(Log4j2PluginsCacheFileTransformer())
-        }
+    tasks.build {
+        dependsOn("shadowJar")
     }
 
-    tasks.named<Test>("test") {
+    //disable
+    tasks.assemble {
+        group = ""
+        enabled = false
+    }
+
+    tasks.test {
         useJUnitPlatform()
         jvmArgs = listOf("--enable-preview")
     }
