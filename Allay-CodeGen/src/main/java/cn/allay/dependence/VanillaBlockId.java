@@ -1,5 +1,6 @@
 package cn.allay.dependence;
 
+import java.lang.String;
 import lombok.Getter;
 
 /**
@@ -142,7 +143,11 @@ public enum VanillaBlockId {
 
   BLACK_CARPET("minecraft:black_carpet"),
 
+  BLACK_CONCRETE("minecraft:black_concrete"),
+
   BLACK_GLAZED_TERRACOTTA("minecraft:black_glazed_terracotta"),
+
+  BLACK_SHULKER_BOX("minecraft:black_shulker_box"),
 
   BLACK_WOOL("minecraft:black_wool"),
 
@@ -164,9 +169,13 @@ public enum VanillaBlockId {
 
   BLUE_CARPET("minecraft:blue_carpet"),
 
+  BLUE_CONCRETE("minecraft:blue_concrete"),
+
   BLUE_GLAZED_TERRACOTTA("minecraft:blue_glazed_terracotta"),
 
   BLUE_ICE("minecraft:blue_ice"),
+
+  BLUE_SHULKER_BOX("minecraft:blue_shulker_box"),
 
   BLUE_WOOL("minecraft:blue_wool"),
 
@@ -190,11 +199,15 @@ public enum VanillaBlockId {
 
   BROWN_CARPET("minecraft:brown_carpet"),
 
+  BROWN_CONCRETE("minecraft:brown_concrete"),
+
   BROWN_GLAZED_TERRACOTTA("minecraft:brown_glazed_terracotta"),
 
   BROWN_MUSHROOM("minecraft:brown_mushroom"),
 
   BROWN_MUSHROOM_BLOCK("minecraft:brown_mushroom_block"),
+
+  BROWN_SHULKER_BOX("minecraft:brown_shulker_box"),
 
   BROWN_WOOL("minecraft:brown_wool"),
 
@@ -322,8 +335,6 @@ public enum VanillaBlockId {
 
   COMPOSTER("minecraft:composter"),
 
-  CONCRETE("minecraft:concrete"),
-
   CONCRETE_POWDER("minecraft:concrete_powder"),
 
   CONDUIT("minecraft:conduit"),
@@ -404,7 +415,11 @@ public enum VanillaBlockId {
 
   CYAN_CARPET("minecraft:cyan_carpet"),
 
+  CYAN_CONCRETE("minecraft:cyan_concrete"),
+
   CYAN_GLAZED_TERRACOTTA("minecraft:cyan_glazed_terracotta"),
+
+  CYAN_SHULKER_BOX("minecraft:cyan_shulker_box"),
 
   CYAN_WOOL("minecraft:cyan_wool"),
 
@@ -856,7 +871,11 @@ public enum VanillaBlockId {
 
   GRAY_CARPET("minecraft:gray_carpet"),
 
+  GRAY_CONCRETE("minecraft:gray_concrete"),
+
   GRAY_GLAZED_TERRACOTTA("minecraft:gray_glazed_terracotta"),
+
+  GRAY_SHULKER_BOX("minecraft:gray_shulker_box"),
 
   GRAY_WOOL("minecraft:gray_wool"),
 
@@ -866,7 +885,11 @@ public enum VanillaBlockId {
 
   GREEN_CARPET("minecraft:green_carpet"),
 
+  GREEN_CONCRETE("minecraft:green_concrete"),
+
   GREEN_GLAZED_TERRACOTTA("minecraft:green_glazed_terracotta"),
+
+  GREEN_SHULKER_BOX("minecraft:green_shulker_box"),
 
   GREEN_WOOL("minecraft:green_wool"),
 
@@ -972,7 +995,11 @@ public enum VanillaBlockId {
 
   LIGHT_BLUE_CARPET("minecraft:light_blue_carpet"),
 
+  LIGHT_BLUE_CONCRETE("minecraft:light_blue_concrete"),
+
   LIGHT_BLUE_GLAZED_TERRACOTTA("minecraft:light_blue_glazed_terracotta"),
+
+  LIGHT_BLUE_SHULKER_BOX("minecraft:light_blue_shulker_box"),
 
   LIGHT_BLUE_WOOL("minecraft:light_blue_wool"),
 
@@ -981,6 +1008,10 @@ public enum VanillaBlockId {
   LIGHT_GRAY_CANDLE_CAKE("minecraft:light_gray_candle_cake"),
 
   LIGHT_GRAY_CARPET("minecraft:light_gray_carpet"),
+
+  LIGHT_GRAY_CONCRETE("minecraft:light_gray_concrete"),
+
+  LIGHT_GRAY_SHULKER_BOX("minecraft:light_gray_shulker_box"),
 
   LIGHT_GRAY_WOOL("minecraft:light_gray_wool"),
 
@@ -994,7 +1025,11 @@ public enum VanillaBlockId {
 
   LIME_CARPET("minecraft:lime_carpet"),
 
+  LIME_CONCRETE("minecraft:lime_concrete"),
+
   LIME_GLAZED_TERRACOTTA("minecraft:lime_glazed_terracotta"),
+
+  LIME_SHULKER_BOX("minecraft:lime_shulker_box"),
 
   LIME_WOOL("minecraft:lime_wool"),
 
@@ -1022,7 +1057,11 @@ public enum VanillaBlockId {
 
   MAGENTA_CARPET("minecraft:magenta_carpet"),
 
+  MAGENTA_CONCRETE("minecraft:magenta_concrete"),
+
   MAGENTA_GLAZED_TERRACOTTA("minecraft:magenta_glazed_terracotta"),
+
+  MAGENTA_SHULKER_BOX("minecraft:magenta_shulker_box"),
 
   MAGENTA_WOOL("minecraft:magenta_wool"),
 
@@ -1146,7 +1185,11 @@ public enum VanillaBlockId {
 
   ORANGE_CARPET("minecraft:orange_carpet"),
 
+  ORANGE_CONCRETE("minecraft:orange_concrete"),
+
   ORANGE_GLAZED_TERRACOTTA("minecraft:orange_glazed_terracotta"),
+
+  ORANGE_SHULKER_BOX("minecraft:orange_shulker_box"),
 
   ORANGE_WOOL("minecraft:orange_wool"),
 
@@ -1172,9 +1215,13 @@ public enum VanillaBlockId {
 
   PINK_CARPET("minecraft:pink_carpet"),
 
+  PINK_CONCRETE("minecraft:pink_concrete"),
+
   PINK_GLAZED_TERRACOTTA("minecraft:pink_glazed_terracotta"),
 
   PINK_PETALS("minecraft:pink_petals"),
+
+  PINK_SHULKER_BOX("minecraft:pink_shulker_box"),
 
   PINK_WOOL("minecraft:pink_wool"),
 
@@ -1260,7 +1307,11 @@ public enum VanillaBlockId {
 
   PURPLE_CARPET("minecraft:purple_carpet"),
 
+  PURPLE_CONCRETE("minecraft:purple_concrete"),
+
   PURPLE_GLAZED_TERRACOTTA("minecraft:purple_glazed_terracotta"),
+
+  PURPLE_SHULKER_BOX("minecraft:purple_shulker_box"),
 
   PURPLE_WOOL("minecraft:purple_wool"),
 
@@ -1290,6 +1341,8 @@ public enum VanillaBlockId {
 
   RED_CARPET("minecraft:red_carpet"),
 
+  RED_CONCRETE("minecraft:red_concrete"),
+
   RED_FLOWER("minecraft:red_flower"),
 
   RED_GLAZED_TERRACOTTA("minecraft:red_glazed_terracotta"),
@@ -1305,6 +1358,8 @@ public enum VanillaBlockId {
   RED_SANDSTONE("minecraft:red_sandstone"),
 
   RED_SANDSTONE_STAIRS("minecraft:red_sandstone_stairs"),
+
+  RED_SHULKER_BOX("minecraft:red_shulker_box"),
 
   RED_WOOL("minecraft:red_wool"),
 
@@ -1355,8 +1410,6 @@ public enum VanillaBlockId {
   SEAGRASS("minecraft:seagrass"),
 
   SHROOMLIGHT("minecraft:shroomlight"),
-
-  SHULKER_BOX("minecraft:shulker_box"),
 
   SILVER_GLAZED_TERRACOTTA("minecraft:silver_glazed_terracotta"),
 
@@ -1658,7 +1711,11 @@ public enum VanillaBlockId {
 
   WHITE_CARPET("minecraft:white_carpet"),
 
+  WHITE_CONCRETE("minecraft:white_concrete"),
+
   WHITE_GLAZED_TERRACOTTA("minecraft:white_glazed_terracotta"),
+
+  WHITE_SHULKER_BOX("minecraft:white_shulker_box"),
 
   WHITE_WOOL("minecraft:white_wool"),
 
@@ -1680,9 +1737,13 @@ public enum VanillaBlockId {
 
   YELLOW_CARPET("minecraft:yellow_carpet"),
 
+  YELLOW_CONCRETE("minecraft:yellow_concrete"),
+
   YELLOW_FLOWER("minecraft:yellow_flower"),
 
   YELLOW_GLAZED_TERRACOTTA("minecraft:yellow_glazed_terracotta"),
+
+  YELLOW_SHULKER_BOX("minecraft:yellow_shulker_box"),
 
   YELLOW_WOOL("minecraft:yellow_wool");
 

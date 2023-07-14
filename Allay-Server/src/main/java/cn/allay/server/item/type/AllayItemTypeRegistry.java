@@ -3,15 +3,11 @@ package cn.allay.server.item.type;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeRegistry;
-import cn.allay.api.item.type.VanillaItemTypes;
+import cn.allay.api.data.VanillaItemTypes;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarBuilder;
-import me.tongfei.progressbar.ProgressBarStyle;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
