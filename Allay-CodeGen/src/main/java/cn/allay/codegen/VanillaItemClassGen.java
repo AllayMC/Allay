@@ -63,9 +63,9 @@ public class VanillaItemClassGen {
             }
             generateItemType(item, className);
             var typesJavaFile = JavaFile
-                    .builder("cn.allay.api.item.type", TYPES_CLASS.build())
+                    .builder("cn.allay.api.data", TYPES_CLASS.build())
                     .build();
-            Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/item/type/VanillaItemTypes.java"), typesJavaFile.toString());
+            Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaItemTypes.java"), typesJavaFile.toString());
         }
     }
 

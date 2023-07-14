@@ -6,5 +6,5 @@ import cn.allay.api.block.BlockBehavior;
  * @author daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
  */
-public interface BlockShulkerBoxBehavior extends BlockBehavior {
+public interface BlockBrownShulkerBoxBehavior extends BlockBehavior {
 }

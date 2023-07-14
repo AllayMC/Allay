@@ -4,7 +4,6 @@ import cn.allay.api.AllayAPI;
 import cn.allay.api.MissingImplementationException;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.palette.BlockStateHashPalette;
-import cn.allay.api.block.palette.VanillaBlockStatePalette;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;
@@ -17,7 +16,6 @@ import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.server.block.attribute.AllayVanillaBlockAttributeRegistry;
-import cn.allay.server.block.palette.AllayVanillaBlockStatePalette;
 import cn.allay.server.block.type.AllayBlockStateHashPalette;
 import cn.allay.server.block.type.AllayBlockType;
 import cn.allay.server.block.type.AllayBlockTypeRegistry;
@@ -61,7 +59,6 @@ public final class Allay {
         api.bind(VanillaBlockAttributeRegistry.class, () -> new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));
         api.bind(BlockStateHashPalette.class, AllayBlockStateHashPalette::new);
         api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
-        api.bind(VanillaBlockStatePalette.class, () -> new AllayVanillaBlockStatePalette(new AllayVanillaBlockStatePalette.Loader()));
 
         //Item
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);

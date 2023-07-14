@@ -27,7 +27,7 @@ public class VanillaBlockIdEnumGen {
         generate();
     }
 
-    static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Data/block_palette.nbt");
+    static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Data/unpacked/block_palette.nbt");
     static final List<NbtMap> BLOCK_PALETTE_NBT;
     public static final Map<String, NbtMap> MAPPED_BLOCK_PALETTE_NBT = new HashMap<>();
 

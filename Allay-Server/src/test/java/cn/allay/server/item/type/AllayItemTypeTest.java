@@ -1,7 +1,7 @@
 package cn.allay.server.item.type;
 
 import cn.allay.api.item.type.ItemStackInitInfo;
-import cn.allay.api.item.type.VanillaItemTypes;
+import cn.allay.api.data.VanillaItemTypes;
 import cn.allay.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
