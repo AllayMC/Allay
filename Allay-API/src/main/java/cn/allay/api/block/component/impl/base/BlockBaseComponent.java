@@ -17,28 +17,4 @@ import java.util.List;
 public interface BlockBaseComponent {
     @Inject
     BlockType<? extends BlockBehavior> getBlockType();
-
-    @Inject
-    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> void setProperty(PROPERTY property, DATATYPE value);
-
-    @Inject
-    void setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
-
-    @Inject
-    void setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
-
-    @Inject
-    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getProperty(PROPERTY property);
-
-    @Inject
-    void setState(BlockState state);
-
-    @Inject
-    BlockState getCurrentState();
-
-    @Inject
-    BlockState getNextState();
-
-    @Inject
-    Pos3i getPosition();
 }

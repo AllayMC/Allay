@@ -79,7 +79,7 @@ public class VanillaBlockBehaviorInterfaceGen {
         var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
         var states = blockPaletteData.getCompound("states");
         if (states.size() != 0) {
-            initializer.add("        .withProperties(");
+            initializer.add("        .setProperties(");
             AtomicInteger count = new AtomicInteger();
             states.forEach((name, value) -> {
                 var propertyName = BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name.replaceAll(":", "_")) && BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.containsKey(vanillaBlockId.getIdentifier().toString()) ?

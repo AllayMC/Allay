@@ -3,6 +3,7 @@ package cn.allay.api.block.type;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleBlockDefinition;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
@@ -21,9 +22,13 @@ public interface BlockState {
     int specialValue();
 
     @UnmodifiableView
-    Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues();
+    Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues();
+
+    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getPropertyValue(PROPERTY property);
 
     BlockState setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
+
+    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setProperty(PROPERTY property, DATATYPE value);
 
     BlockState setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
@@ -31,7 +36,7 @@ public interface BlockState {
 
     default SimpleBlockDefinition toBlockDefinition() {
         var statesBuilder = NbtMap.builder();
-        for (var propertyValue : propertyValues().values()) {
+        for (var propertyValue : getPropertyValues().values()) {
             statesBuilder.put(
                     propertyValue.getPropertyType().getName(),
                     propertyValue.getSerializedValue()
