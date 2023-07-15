@@ -19,7 +19,10 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface BlockType<T extends BlockBehavior> extends Identified {
-    List<ComponentProvider<? extends BlockComponentImpl>> getComponentProviders();
+
+    T getBlockBehavior();
+
+    List<? extends BlockComponentImpl> getComponents();
 
     @UnmodifiableView
     Map<String, BlockPropertyType<?>> getProperties();
@@ -37,8 +40,6 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     int getSpecialValueBits();
 
     BlockState getDefaultState();
-
-    T createBlock(BlockInitInfo info);
 
     BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 

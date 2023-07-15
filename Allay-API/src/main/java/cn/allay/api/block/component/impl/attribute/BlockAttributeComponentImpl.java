@@ -50,7 +50,7 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
 
     @Override
     @Impl
-    public BlockAttributes getBlockAttributes() {
-        return attributeAccessor.apply(baseComponent.getCurrentState());
+    public BlockAttributes getBlockAttributes(BlockState blockState) {
+        return attributeAccessor.apply(blockState);
     }
 }

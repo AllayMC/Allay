@@ -17,5 +17,5 @@ import cn.allay.server.block.component.TestComponent;
 public interface TestBlock extends BlockBehavior, TestComponent, CustomBlockComponent, TestAutoRegisterComponent {
 
     @AutoRegister
-    ComponentProvider<? extends BlockComponentImpl> TEST_AUTO_REGISTER_COMPONENT = ComponentProvider.ofSingleton(new TestAutoRegisterComponentImpl(true));
+    BlockComponentImpl TEST_AUTO_REGISTER_COMPONENT = new TestAutoRegisterComponentImpl(true);
 }

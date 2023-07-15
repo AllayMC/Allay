@@ -2,6 +2,7 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponentImpl;
+import cn.allay.api.block.component.annotation.RequireBlockProperty;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.component.impl.base.BlockBaseComponentImpl;
@@ -10,21 +11,19 @@ import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.type.*;
 import cn.allay.api.component.annotation.AutoRegister;
-import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.datastruct.UnmodifiableLinkedHashMap;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.utils.HashUtils;
-import cn.allay.server.block.component.injector.AllayBlockComponentInjector;
+import cn.allay.server.component.exception.BlockComponentInjectException;
+import cn.allay.server.component.injector.AllayComponentInjector;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -55,31 +54,28 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     private final Class<T> interfaceClass;
     private Class<T> injectedClass;
-    /**
-     * The constructor of the block implementation class
-     */
-    private Constructor<T> constructor;
-    private final List<ComponentProvider<? extends BlockComponentImpl>> componentProviders;
+    private final List<BlockComponentImpl> components;
     private final Map<String, BlockPropertyType<?>> properties;
     private final Identifier identifier;
     private final Map<Integer, BlockState> blockStateHashMap;
     private final int specialValueBits;
     private BlockState defaultState;
+    private T blockBehavior;
     @Nullable
     private Map<Integer, BlockState> specialValueMap;
 
 
     private AllayBlockType(Class<T> interfaceClass,
-                           List<ComponentProvider<? extends BlockComponentImpl>> componentProviders,
-                           List<BlockPropertyType<?>> properties,
+                           List<BlockComponentImpl> components,
+                           Map<String, BlockPropertyType<?>> properties,
                            Identifier identifier) {
         this.interfaceClass = interfaceClass;
-        this.componentProviders = componentProviders;
-        this.properties = Collections.unmodifiableMap(properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity())));
+        this.components = components;
+        this.properties = Collections.unmodifiableMap(properties);
         this.identifier = identifier;
         this.blockStateHashMap = initStates();
         int nbits = 0;
-        for (var value : properties) nbits += value.getBitSize();
+        for (var value : properties.values()) nbits += value.getBitSize();
         this.specialValueBits = nbits;
         if (nbits <= 32) {
             this.specialValueMap = Collections.unmodifiableMap(blockStateHashMap.values().stream().collect(Collectors.toMap(BlockState::specialValue, Function.identity(), (v1, v2) -> v1, Int2ObjectArrayMap::new)));
@@ -88,12 +84,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     public static <T extends BlockBehavior> BlockTypeBuilder<T> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
-    }
-
-    @SneakyThrows
-    @Override
-    public T createBlock(BlockInitInfo info) {
-        return constructor.newInstance(info);
     }
 
     @Override
@@ -172,7 +162,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
      * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateHashPalette AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
      */
     record AllayBlockState(BlockType<?> blockType,
-                           BlockPropertyType.BlockPropertyValue<?, ?, ?>[] values,
+                           BlockPropertyType.BlockPropertyValue<?, ?, ?>[] blockPropertyValues,
                            int blockStateHash,
                            int specialValue) implements BlockState {
         public AllayBlockState(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues, int blockStateHash) {
@@ -192,34 +182,70 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public @UnmodifiableView Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues() {
-            return UnmodifiableLinkedHashMap.warp(Arrays.stream(values).collect(
+        public @UnmodifiableView Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues() {
+            return UnmodifiableLinkedHashMap.warp(Arrays.stream(blockPropertyValues).collect(
                     LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
                     (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue),
                     LinkedHashMap::putAll));
         }
 
         @Override
+        public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getPropertyValue(PROPERTY p) {
+            for (var property : blockPropertyValues) {
+                if (property.getPropertyType() == p) {
+                    return (DATATYPE) property.getValue();
+                }
+            }
+            throw new IllegalArgumentException("Property " + p + " is not supported by this block");
+        }
+
+        @Override
         public BlockState setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
-            var newPropertyValues = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[this.values.length];
-            for (int i = 0; i < values.length; i++) {
-                if (values[i].getPropertyType() == propertyValue.getPropertyType()) {
+            var newPropertyValues = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[this.blockPropertyValues.length];
+            var succeed = false;
+            for (int i = 0; i < blockPropertyValues.length; i++) {
+                if (blockPropertyValues[i].getPropertyType() == propertyValue.getPropertyType()) {
+                    succeed = true;
                     newPropertyValues[i] = propertyValue;
-                } else newPropertyValues[i] = values[i];
+                } else newPropertyValues[i] = blockPropertyValues[i];
+            }
+            if (!succeed) {
+                throw new IllegalArgumentException("Property " + propertyValue.getPropertyType() + " is not supported by this block");
             }
             return getNewBlockState(newPropertyValues);
         }
 
         @Override
+        public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setProperty(PROPERTY property, DATATYPE value) {
+            return setProperty(property.createValue(value));
+        }
+
+        @Override
         public BlockState setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-            var newPropertyValues = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[this.values.length];
-            for (int i = 0; i < values.length; i++) {
+            var newPropertyValues = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[this.blockPropertyValues.length];
+            var succeedCount = 0;
+            var succeed = new boolean[propertyValues.size()];
+            for (int i = 0; i < blockPropertyValues.length; i++) {
                 int index;
-                if ((index = propertyValues.indexOf(values[i])) != -1) {
+                if ((index = propertyValues.indexOf(blockPropertyValues[i])) != -1) {
+                    succeedCount++;
+                    succeed[index] = true;
                     newPropertyValues[i] = propertyValues.get(index);
-                } else newPropertyValues[i] = values[i];
+                } else newPropertyValues[i] = blockPropertyValues[i];
             }
-            return getNewBlockState(values);
+            if (succeedCount != propertyValues.size()) {
+                var errorMsgBuilder = new StringBuilder("Properties ");
+                for (int i = 0; i < propertyValues.size(); i++) {
+                    if (!succeed[i]) {
+                        errorMsgBuilder.append(propertyValues.get(i).getPropertyType().getName());
+                        if (i != propertyValues.size() - 1)
+                            errorMsgBuilder.append(", ");
+                    }
+                }
+                errorMsgBuilder.append(" are not supported by this block");
+                throw new IllegalArgumentException(errorMsgBuilder.toString());
+            }
+            return getNewBlockState(newPropertyValues);
         }
 
         private BlockState getNewBlockState(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] values) {
@@ -236,8 +262,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
         protected Class<T> interfaceClass;
-        protected List<ComponentProvider<? extends BlockComponentImpl>> componentProviders = new ArrayList<>();
-        protected List<BlockPropertyType<?>> properties = new ArrayList<>();
+        protected List<BlockComponentImpl> components = new ArrayList<>();
+        protected Map<String, BlockPropertyType<?>> properties = new HashMap<>();
         protected Identifier identifier;
         protected boolean isCustomBlock = false;
 
@@ -271,41 +297,40 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
                 if (attributeMap == null)
                     throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
-                var attributeComponent = BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap);
-                componentProviders.add(ComponentProvider.ofSingleton(attributeComponent));
+                components.add(BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap));
             }
             return this;
         }
 
         @Override
-        public Builder<T> withProperties(BlockPropertyType<?>... properties) {
-            this.properties = List.of(properties);
+        public Builder<T> setProperties(BlockPropertyType<?>... properties) {
+            this.properties = Arrays.stream(properties).collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
             return this;
         }
 
         @Override
-        public Builder<T> withProperties(List<BlockPropertyType<?>> properties) {
-            this.properties = properties;
+        public Builder<T> setProperties(List<BlockPropertyType<?>> properties) {
+            this.properties = properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
             return this;
         }
 
         @Override
-        public Builder<T> setComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders) {
-            if (componentProviders == null)
+        public Builder<T> setComponents(List<BlockComponentImpl> components) {
+            if (components == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
-            this.componentProviders = new ArrayList<>(componentProviders);
+            this.components = new ArrayList<>(components);
             return this;
         }
 
         @Override
-        public Builder<T> addComponents(List<ComponentProvider<? extends BlockComponentImpl>> componentProviders) {
-            this.componentProviders.addAll(componentProviders);
+        public Builder<T> addComponents(List<BlockComponentImpl> components) {
+            this.components.addAll(components);
             return this;
         }
 
         @Override
-        public Builder<T> addComponent(ComponentProvider<? extends BlockComponentImpl> componentProvider) {
-            this.componentProviders.add(componentProvider);
+        public Builder<T> addComponent(BlockComponentImpl component) {
+            this.components.add(component);
             return this;
         }
 
@@ -314,11 +339,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             Arrays.stream(interfaceClass.getDeclaredFields())
                     .filter(field -> isStatic(field.getModifiers()))
                     .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
-                    .filter(field -> ComponentProvider.class.isAssignableFrom(field.getType()))
+                    .filter(field -> BlockComponentImpl.class.isAssignableFrom(field.getType()))
                     .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegister.class).order()))
                     .forEach(field -> {
                         try {
-                            addComponent((ComponentProvider<? extends BlockComponentImpl>) field.get(null));
+                            addComponent((BlockComponentImpl) field.get(null));
                         } catch (IllegalAccessException e) {
                             throw new BlockTypeBuildException(e);
                         } catch (ClassCastException e) {
@@ -330,7 +355,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public Builder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent) {
-            componentProviders.add(ComponentProvider.ofSingleton(customBlockComponent));
+            components.add(customBlockComponent);
             isCustomBlock = true;
             return this;
         }
@@ -338,21 +363,39 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public AllayBlockType<T> build() {
             if (identifier == null) throw new BlockTypeBuildException("identifier cannot be null!");
-            var type = new AllayBlockType<>(interfaceClass, componentProviders, properties, identifier);
-            componentProviders.add(ComponentProvider.of(info -> new BlockBaseComponentImpl(type, (BlockInitInfo) info), BlockBaseComponentImpl.class));
+            var type = new AllayBlockType<>(interfaceClass, components, properties, identifier);
+            components.add(new BlockBaseComponentImpl(type));
             try {
-                type.injectedClass = new AllayBlockComponentInjector<>(type)
+                checkPropertyValid();
+                type.injectedClass = new AllayComponentInjector<T>()
                         .interfaceClass(interfaceClass)
-                        .component(new ArrayList<>(componentProviders))
+                        .component(components.stream().map(ComponentProvider::ofSingleton).collect(Collectors.toList()))
                         .inject();
                 //Cache constructor
-                type.constructor = type.injectedClass.getConstructor(ComponentInitInfo.class);
+                type.blockBehavior = type.injectedClass.getConstructor().newInstance();
             } catch (Exception e) {
                 throw new BlockTypeBuildException("Failed to create block type!", e);
             }
             type.register(BlockTypeRegistry.getRegistry());
             type.register(BlockStateHashPalette.getRegistry());
             return type;
+        }
+
+        private void checkPropertyValid() {
+            for (var component : components) {
+                var annotation = component.getClass().getAnnotation(RequireBlockProperty.Requirements.class);
+                if (annotation == null) continue;
+                var requirements = annotation.value();
+                for (var requirement : requirements) {
+                    var type = requirement.type();
+                    var name = requirement.name();
+                    var match = properties.get(name);
+                    if (match == null)
+                        throw new BlockComponentInjectException("Component " + component.getClass().getSimpleName() + " expects a block property of type " + type + " named " + name + ", but there is no match");
+                    if (match.getType() != type)
+                        throw new BlockComponentInjectException("Component " + component.getClass().getSimpleName() + " expects a block property of type " + type + " named " + name + ", but the type is " + properties.get(name).getType());
+                }
+            }
         }
     }
 }

@@ -880,14 +880,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockAcaciaButtonBehavior> ACACIA_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAcaciaDoorBehavior> ACACIA_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
@@ -900,63 +900,63 @@ public interface VanillaBlockTypes {
   BlockType<BlockAcaciaFenceGateBehavior> ACACIA_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAcaciaHangingSignBehavior> ACACIA_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAcaciaLogBehavior> ACACIA_LOG_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaLogBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAcaciaPressurePlateBehavior> ACACIA_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAcaciaStairsBehavior> ACACIA_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAcaciaStandingSignBehavior> ACACIA_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAcaciaTrapdoorBehavior> ACACIA_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAcaciaWallSignBehavior> ACACIA_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockAcaciaWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.ACACIA_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockActivatorRailBehavior> ACTIVATOR_RAIL_TYPE = BlockTypeBuilder
           .builder(BlockActivatorRailBehavior.class)
           .vanillaBlock(VanillaBlockId.ACTIVATOR_RAIL, true)
-          .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT, VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
+          .setProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT, VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
           .addBasicComponents()
           .build();
 
@@ -981,7 +981,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockAmethystClusterBehavior> AMETHYST_CLUSTER_TYPE = BlockTypeBuilder
           .builder(BlockAmethystClusterBehavior.class)
           .vanillaBlock(VanillaBlockId.AMETHYST_CLUSTER, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -994,14 +994,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockAndesiteStairsBehavior> ANDESITE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockAndesiteStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.ANDESITE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAnvilBehavior> ANVIL_TYPE = BlockTypeBuilder
           .builder(BlockAnvilBehavior.class)
           .vanillaBlock(VanillaBlockId.ANVIL, true)
-          .withProperties(VanillaBlockPropertyTypes.DAMAGE, VanillaBlockPropertyTypes.DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.DAMAGE, VanillaBlockPropertyTypes.DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -1014,49 +1014,49 @@ public interface VanillaBlockTypes {
   BlockType<BlockAzaleaLeavesBehavior> AZALEA_LEAVES_TYPE = BlockTypeBuilder
           .builder(BlockAzaleaLeavesBehavior.class)
           .vanillaBlock(VanillaBlockId.AZALEA_LEAVES, true)
-          .withProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockAzaleaLeavesFloweredBehavior> AZALEA_LEAVES_FLOWERED_TYPE = BlockTypeBuilder
           .builder(BlockAzaleaLeavesFloweredBehavior.class)
           .vanillaBlock(VanillaBlockId.AZALEA_LEAVES_FLOWERED, true)
-          .withProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooBehavior> BAMBOO_TYPE = BlockTypeBuilder
           .builder(BlockBambooBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_BIT, VanillaBlockPropertyTypes.BAMBOO_LEAF_SIZE, VanillaBlockPropertyTypes.BAMBOO_STALK_THICKNESS)
+          .setProperties(VanillaBlockPropertyTypes.AGE_BIT, VanillaBlockPropertyTypes.BAMBOO_LEAF_SIZE, VanillaBlockPropertyTypes.BAMBOO_STALK_THICKNESS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooBlockBehavior> BAMBOO_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockBambooBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooButtonBehavior> BAMBOO_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockBambooButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooDoorBehavior> BAMBOO_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockBambooDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooDoubleSlabBehavior> BAMBOO_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockBambooDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -1069,14 +1069,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockBambooFenceGateBehavior> BAMBOO_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockBambooFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooHangingSignBehavior> BAMBOO_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockBambooHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
@@ -1089,21 +1089,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockBambooMosaicDoubleSlabBehavior> BAMBOO_MOSAIC_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockBambooMosaicDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooMosaicSlabBehavior> BAMBOO_MOSAIC_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockBambooMosaicSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooMosaicStairsBehavior> BAMBOO_MOSAIC_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockBambooMosaicStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -1116,56 +1116,56 @@ public interface VanillaBlockTypes {
   BlockType<BlockBambooPressurePlateBehavior> BAMBOO_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockBambooPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooSaplingBehavior> BAMBOO_SAPLING_TYPE = BlockTypeBuilder
           .builder(BlockBambooSaplingBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_SAPLING, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_BIT, VanillaBlockPropertyTypes.SAPLING_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.AGE_BIT, VanillaBlockPropertyTypes.SAPLING_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooSlabBehavior> BAMBOO_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockBambooSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooStairsBehavior> BAMBOO_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockBambooStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooStandingSignBehavior> BAMBOO_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockBambooStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooTrapdoorBehavior> BAMBOO_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockBambooTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBambooWallSignBehavior> BAMBOO_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockBambooWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBarrelBehavior> BARREL_TYPE = BlockTypeBuilder
           .builder(BlockBarrelBehavior.class)
           .vanillaBlock(VanillaBlockId.BARREL, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
@@ -1178,7 +1178,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockBasaltBehavior> BASALT_TYPE = BlockTypeBuilder
           .builder(BlockBasaltBehavior.class)
           .vanillaBlock(VanillaBlockId.BASALT, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -1191,63 +1191,63 @@ public interface VanillaBlockTypes {
   BlockType<BlockBedBehavior> BED_TYPE = BlockTypeBuilder
           .builder(BlockBedBehavior.class)
           .vanillaBlock(VanillaBlockId.BED, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.HEAD_PIECE_BIT, VanillaBlockPropertyTypes.OCCUPIED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.HEAD_PIECE_BIT, VanillaBlockPropertyTypes.OCCUPIED_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBedrockBehavior> BEDROCK_TYPE = BlockTypeBuilder
           .builder(BlockBedrockBehavior.class)
           .vanillaBlock(VanillaBlockId.BEDROCK, true)
-          .withProperties(VanillaBlockPropertyTypes.INFINIBURN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.INFINIBURN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBeeNestBehavior> BEE_NEST_TYPE = BlockTypeBuilder
           .builder(BlockBeeNestBehavior.class)
           .vanillaBlock(VanillaBlockId.BEE_NEST, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.HONEY_LEVEL)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.HONEY_LEVEL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBeehiveBehavior> BEEHIVE_TYPE = BlockTypeBuilder
           .builder(BlockBeehiveBehavior.class)
           .vanillaBlock(VanillaBlockId.BEEHIVE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.HONEY_LEVEL)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.HONEY_LEVEL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBeetrootBehavior> BEETROOT_TYPE = BlockTypeBuilder
           .builder(BlockBeetrootBehavior.class)
           .vanillaBlock(VanillaBlockId.BEETROOT, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.GROWTH)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBellBehavior> BELL_TYPE = BlockTypeBuilder
           .builder(BlockBellBehavior.class)
           .vanillaBlock(VanillaBlockId.BELL, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHMENT, VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.TOGGLE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHMENT, VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.TOGGLE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBigDripleafBehavior> BIG_DRIPLEAF_TYPE = BlockTypeBuilder
           .builder(BlockBigDripleafBehavior.class)
           .vanillaBlock(VanillaBlockId.BIG_DRIPLEAF, true)
-          .withProperties(VanillaBlockPropertyTypes.BIG_DRIPLEAF_HEAD, VanillaBlockPropertyTypes.BIG_DRIPLEAF_TILT, VanillaBlockPropertyTypes.DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BIG_DRIPLEAF_HEAD, VanillaBlockPropertyTypes.BIG_DRIPLEAF_TILT, VanillaBlockPropertyTypes.DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBirchButtonBehavior> BIRCH_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockBirchButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBirchDoorBehavior> BIRCH_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockBirchDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
@@ -1260,70 +1260,70 @@ public interface VanillaBlockTypes {
   BlockType<BlockBirchFenceGateBehavior> BIRCH_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockBirchFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBirchHangingSignBehavior> BIRCH_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockBirchHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBirchLogBehavior> BIRCH_LOG_TYPE = BlockTypeBuilder
           .builder(BlockBirchLogBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBirchPressurePlateBehavior> BIRCH_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockBirchPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBirchStairsBehavior> BIRCH_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockBirchStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBirchStandingSignBehavior> BIRCH_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockBirchStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBirchTrapdoorBehavior> BIRCH_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockBirchTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBirchWallSignBehavior> BIRCH_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockBirchWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.BIRCH_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBlackCandleBehavior> BLACK_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockBlackCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.BLACK_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBlackCandleCakeBehavior> BLACK_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockBlackCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.BLACK_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -1342,7 +1342,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockBlackGlazedTerracottaBehavior> BLACK_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockBlackGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.BLACK_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -1367,49 +1367,49 @@ public interface VanillaBlockTypes {
   BlockType<BlockBlackstoneDoubleSlabBehavior> BLACKSTONE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockBlackstoneDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.BLACKSTONE_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBlackstoneSlabBehavior> BLACKSTONE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockBlackstoneSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.BLACKSTONE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBlackstoneStairsBehavior> BLACKSTONE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockBlackstoneStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.BLACKSTONE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBlackstoneWallBehavior> BLACKSTONE_WALL_TYPE = BlockTypeBuilder
           .builder(BlockBlackstoneWallBehavior.class)
           .vanillaBlock(VanillaBlockId.BLACKSTONE_WALL, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBlastFurnaceBehavior> BLAST_FURNACE_TYPE = BlockTypeBuilder
           .builder(BlockBlastFurnaceBehavior.class)
           .vanillaBlock(VanillaBlockId.BLAST_FURNACE, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBlueCandleBehavior> BLUE_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockBlueCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.BLUE_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBlueCandleCakeBehavior> BLUE_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockBlueCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.BLUE_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -1428,7 +1428,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockBlueGlazedTerracottaBehavior> BLUE_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockBlueGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.BLUE_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -1453,7 +1453,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockBoneBlockBehavior> BONE_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockBoneBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.BONE_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -1466,7 +1466,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockBorderBlockBehavior> BORDER_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockBorderBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.BORDER_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
@@ -1479,7 +1479,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockBrewingStandBehavior> BREWING_STAND_TYPE = BlockTypeBuilder
           .builder(BlockBrewingStandBehavior.class)
           .vanillaBlock(VanillaBlockId.BREWING_STAND, true)
-          .withProperties(VanillaBlockPropertyTypes.BREWING_STAND_SLOT_A_BIT, VanillaBlockPropertyTypes.BREWING_STAND_SLOT_B_BIT, VanillaBlockPropertyTypes.BREWING_STAND_SLOT_C_BIT)
+          .setProperties(VanillaBlockPropertyTypes.BREWING_STAND_SLOT_A_BIT, VanillaBlockPropertyTypes.BREWING_STAND_SLOT_B_BIT, VanillaBlockPropertyTypes.BREWING_STAND_SLOT_C_BIT)
           .addBasicComponents()
           .build();
 
@@ -1492,21 +1492,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockBrickStairsBehavior> BRICK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockBrickStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.BRICK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBrownCandleBehavior> BROWN_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockBrownCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.BROWN_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockBrownCandleCakeBehavior> BROWN_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockBrownCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.BROWN_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -1525,7 +1525,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockBrownGlazedTerracottaBehavior> BROWN_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockBrownGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.BROWN_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -1538,7 +1538,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockBrownMushroomBlockBehavior> BROWN_MUSHROOM_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockBrownMushroomBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.BROWN_MUSHROOM_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.HUGE_MUSHROOM_BITS)
+          .setProperties(VanillaBlockPropertyTypes.HUGE_MUSHROOM_BITS)
           .addBasicComponents()
           .build();
 
@@ -1557,7 +1557,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockBubbleColumnBehavior> BUBBLE_COLUMN_TYPE = BlockTypeBuilder
           .builder(BlockBubbleColumnBehavior.class)
           .vanillaBlock(VanillaBlockId.BUBBLE_COLUMN, true)
-          .withProperties(VanillaBlockPropertyTypes.DRAG_DOWN)
+          .setProperties(VanillaBlockPropertyTypes.DRAG_DOWN)
           .addBasicComponents()
           .build();
 
@@ -1576,14 +1576,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockCactusBehavior> CACTUS_TYPE = BlockTypeBuilder
           .builder(BlockCactusBehavior.class)
           .vanillaBlock(VanillaBlockId.CACTUS, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_16)
+          .setProperties(VanillaBlockPropertyTypes.AGE_16)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCakeBehavior> CAKE_TYPE = BlockTypeBuilder
           .builder(BlockCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.BITE_COUNTER)
+          .setProperties(VanillaBlockPropertyTypes.BITE_COUNTER)
           .addBasicComponents()
           .build();
 
@@ -1596,7 +1596,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockCalibratedSculkSensorBehavior> CALIBRATED_SCULK_SENSOR_TYPE = BlockTypeBuilder
           .builder(BlockCalibratedSculkSensorBehavior.class)
           .vanillaBlock(VanillaBlockId.CALIBRATED_SCULK_SENSOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.SCULK_SENSOR_PHASE)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.SCULK_SENSOR_PHASE)
           .addBasicComponents()
           .build();
 
@@ -1609,28 +1609,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockCampfireBehavior> CAMPFIRE_TYPE = BlockTypeBuilder
           .builder(BlockCampfireBehavior.class)
           .vanillaBlock(VanillaBlockId.CAMPFIRE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.EXTINGUISHED)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.EXTINGUISHED)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCandleBehavior> CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCandleCakeBehavior> CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCarrotsBehavior> CARROTS_TYPE = BlockTypeBuilder
           .builder(BlockCarrotsBehavior.class)
           .vanillaBlock(VanillaBlockId.CARROTS, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.GROWTH)
           .addBasicComponents()
           .build();
 
@@ -1643,49 +1643,49 @@ public interface VanillaBlockTypes {
   BlockType<BlockCarvedPumpkinBehavior> CARVED_PUMPKIN_TYPE = BlockTypeBuilder
           .builder(BlockCarvedPumpkinBehavior.class)
           .vanillaBlock(VanillaBlockId.CARVED_PUMPKIN, true)
-          .withProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCauldronBehavior> CAULDRON_TYPE = BlockTypeBuilder
           .builder(BlockCauldronBehavior.class)
           .vanillaBlock(VanillaBlockId.CAULDRON, true)
-          .withProperties(VanillaBlockPropertyTypes.CAULDRON_LIQUID, VanillaBlockPropertyTypes.FILL_LEVEL)
+          .setProperties(VanillaBlockPropertyTypes.CAULDRON_LIQUID, VanillaBlockPropertyTypes.FILL_LEVEL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCaveVinesBehavior> CAVE_VINES_TYPE = BlockTypeBuilder
           .builder(BlockCaveVinesBehavior.class)
           .vanillaBlock(VanillaBlockId.CAVE_VINES, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
+          .setProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCaveVinesBodyWithBerriesBehavior> CAVE_VINES_BODY_WITH_BERRIES_TYPE = BlockTypeBuilder
           .builder(BlockCaveVinesBodyWithBerriesBehavior.class)
           .vanillaBlock(VanillaBlockId.CAVE_VINES_BODY_WITH_BERRIES, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
+          .setProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCaveVinesHeadWithBerriesBehavior> CAVE_VINES_HEAD_WITH_BERRIES_TYPE = BlockTypeBuilder
           .builder(BlockCaveVinesHeadWithBerriesBehavior.class)
           .vanillaBlock(VanillaBlockId.CAVE_VINES_HEAD_WITH_BERRIES, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
+          .setProperties(VanillaBlockPropertyTypes.GROWING_PLANT_AGE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockChainBehavior> CHAIN_TYPE = BlockTypeBuilder
           .builder(BlockChainBehavior.class)
           .vanillaBlock(VanillaBlockId.CHAIN, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockChainCommandBlockBehavior> CHAIN_COMMAND_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockChainCommandBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.CHAIN_COMMAND_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -1698,28 +1698,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockChemistryTableBehavior> CHEMISTRY_TABLE_TYPE = BlockTypeBuilder
           .builder(BlockChemistryTableBehavior.class)
           .vanillaBlock(VanillaBlockId.CHEMISTRY_TABLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CHEMISTRY_TABLE_TYPE, VanillaBlockPropertyTypes.DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.CHEMISTRY_TABLE_TYPE, VanillaBlockPropertyTypes.DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryButtonBehavior> CHERRY_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockCherryButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryDoorBehavior> CHERRY_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockCherryDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryDoubleSlabBehavior> CHERRY_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockCherryDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -1732,28 +1732,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockCherryFenceGateBehavior> CHERRY_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockCherryFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryHangingSignBehavior> CHERRY_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockCherryHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryLeavesBehavior> CHERRY_LEAVES_TYPE = BlockTypeBuilder
           .builder(BlockCherryLeavesBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_LEAVES, true)
-          .withProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryLogBehavior> CHERRY_LOG_TYPE = BlockTypeBuilder
           .builder(BlockCherryLogBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -1766,70 +1766,70 @@ public interface VanillaBlockTypes {
   BlockType<BlockCherryPressurePlateBehavior> CHERRY_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockCherryPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherrySaplingBehavior> CHERRY_SAPLING_TYPE = BlockTypeBuilder
           .builder(BlockCherrySaplingBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_SAPLING, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.AGE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherrySlabBehavior> CHERRY_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockCherrySlabBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryStairsBehavior> CHERRY_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockCherryStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryStandingSignBehavior> CHERRY_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockCherryStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryTrapdoorBehavior> CHERRY_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockCherryTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryWallSignBehavior> CHERRY_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockCherryWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCherryWoodBehavior> CHERRY_WOOD_TYPE = BlockTypeBuilder
           .builder(BlockCherryWoodBehavior.class)
           .vanillaBlock(VanillaBlockId.CHERRY_WOOD, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS, VanillaBlockPropertyTypes.STRIPPED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS, VanillaBlockPropertyTypes.STRIPPED_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockChestBehavior> CHEST_TYPE = BlockTypeBuilder
           .builder(BlockChestBehavior.class)
           .vanillaBlock(VanillaBlockId.CHEST, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockChiseledBookshelfBehavior> CHISELED_BOOKSHELF_TYPE = BlockTypeBuilder
           .builder(BlockChiseledBookshelfBehavior.class)
           .vanillaBlock(VanillaBlockId.CHISELED_BOOKSHELF, true)
-          .withProperties(VanillaBlockPropertyTypes.BOOKS_STORED, VanillaBlockPropertyTypes.DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BOOKS_STORED, VanillaBlockPropertyTypes.DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -1854,7 +1854,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockChorusFlowerBehavior> CHORUS_FLOWER_TYPE = BlockTypeBuilder
           .builder(BlockChorusFlowerBehavior.class)
           .vanillaBlock(VanillaBlockId.CHORUS_FLOWER, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_6)
+          .setProperties(VanillaBlockPropertyTypes.AGE_6)
           .addBasicComponents()
           .build();
 
@@ -1897,28 +1897,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockCobbledDeepslateDoubleSlabBehavior> COBBLED_DEEPSLATE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockCobbledDeepslateDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCobbledDeepslateSlabBehavior> COBBLED_DEEPSLATE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockCobbledDeepslateSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCobbledDeepslateStairsBehavior> COBBLED_DEEPSLATE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockCobbledDeepslateStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCobbledDeepslateWallBehavior> COBBLED_DEEPSLATE_WALL_TYPE = BlockTypeBuilder
           .builder(BlockCobbledDeepslateWallBehavior.class)
           .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE_WALL, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
@@ -1931,49 +1931,49 @@ public interface VanillaBlockTypes {
   BlockType<BlockCobblestoneWallBehavior> COBBLESTONE_WALL_TYPE = BlockTypeBuilder
           .builder(BlockCobblestoneWallBehavior.class)
           .vanillaBlock(VanillaBlockId.COBBLESTONE_WALL, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_BLOCK_TYPE, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_BLOCK_TYPE, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCocoaBehavior> COCOA_TYPE = BlockTypeBuilder
           .builder(BlockCocoaBehavior.class)
           .vanillaBlock(VanillaBlockId.COCOA, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_3, VanillaBlockPropertyTypes.DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.AGE_3, VanillaBlockPropertyTypes.DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockColoredTorchBpBehavior> COLORED_TORCH_BP_TYPE = BlockTypeBuilder
           .builder(BlockColoredTorchBpBehavior.class)
           .vanillaBlock(VanillaBlockId.COLORED_TORCH_BP, true)
-          .withProperties(VanillaBlockPropertyTypes.COLOR_BIT, VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.COLOR_BIT, VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockColoredTorchRgBehavior> COLORED_TORCH_RG_TYPE = BlockTypeBuilder
           .builder(BlockColoredTorchRgBehavior.class)
           .vanillaBlock(VanillaBlockId.COLORED_TORCH_RG, true)
-          .withProperties(VanillaBlockPropertyTypes.COLOR_BIT, VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.COLOR_BIT, VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCommandBlockBehavior> COMMAND_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockCommandBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.COMMAND_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockComposterBehavior> COMPOSTER_TYPE = BlockTypeBuilder
           .builder(BlockComposterBehavior.class)
           .vanillaBlock(VanillaBlockId.COMPOSTER, true)
-          .withProperties(VanillaBlockPropertyTypes.COMPOSTER_FILL_LEVEL)
+          .setProperties(VanillaBlockPropertyTypes.COMPOSTER_FILL_LEVEL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockConcretePowderBehavior> CONCRETE_POWDER_TYPE = BlockTypeBuilder
           .builder(BlockConcretePowderBehavior.class)
           .vanillaBlock(VanillaBlockId.CONCRETE_POWDER, true)
-          .withProperties(VanillaBlockPropertyTypes.COLOR)
+          .setProperties(VanillaBlockPropertyTypes.COLOR)
           .addBasicComponents()
           .build();
 
@@ -1998,42 +1998,42 @@ public interface VanillaBlockTypes {
   BlockType<BlockCoralBlockBehavior> CORAL_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockCoralBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.CORAL_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.CORAL_COLOR, VanillaBlockPropertyTypes.DEAD_BIT)
+          .setProperties(VanillaBlockPropertyTypes.CORAL_COLOR, VanillaBlockPropertyTypes.DEAD_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCoralFanBehavior> CORAL_FAN_TYPE = BlockTypeBuilder
           .builder(BlockCoralFanBehavior.class)
           .vanillaBlock(VanillaBlockId.CORAL_FAN, true)
-          .withProperties(VanillaBlockPropertyTypes.CORAL_COLOR, VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.CORAL_COLOR, VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCoralFanDeadBehavior> CORAL_FAN_DEAD_TYPE = BlockTypeBuilder
           .builder(BlockCoralFanDeadBehavior.class)
           .vanillaBlock(VanillaBlockId.CORAL_FAN_DEAD, true)
-          .withProperties(VanillaBlockPropertyTypes.CORAL_COLOR, VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.CORAL_COLOR, VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCoralFanHangBehavior> CORAL_FAN_HANG_TYPE = BlockTypeBuilder
           .builder(BlockCoralFanHangBehavior.class)
           .vanillaBlock(VanillaBlockId.CORAL_FAN_HANG, true)
-          .withProperties(VanillaBlockPropertyTypes.CORAL_DIRECTION, VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT, VanillaBlockPropertyTypes.DEAD_BIT)
+          .setProperties(VanillaBlockPropertyTypes.CORAL_DIRECTION, VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT, VanillaBlockPropertyTypes.DEAD_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCoralFanHang2Behavior> CORAL_FAN_HANG2_TYPE = BlockTypeBuilder
           .builder(BlockCoralFanHang2Behavior.class)
           .vanillaBlock(VanillaBlockId.CORAL_FAN_HANG2, true)
-          .withProperties(VanillaBlockPropertyTypes.CORAL_DIRECTION, VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT, VanillaBlockPropertyTypes.DEAD_BIT)
+          .setProperties(VanillaBlockPropertyTypes.CORAL_DIRECTION, VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT, VanillaBlockPropertyTypes.DEAD_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCoralFanHang3Behavior> CORAL_FAN_HANG3_TYPE = BlockTypeBuilder
           .builder(BlockCoralFanHang3Behavior.class)
           .vanillaBlock(VanillaBlockId.CORAL_FAN_HANG3, true)
-          .withProperties(VanillaBlockPropertyTypes.CORAL_DIRECTION, VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT, VanillaBlockPropertyTypes.DEAD_BIT)
+          .setProperties(VanillaBlockPropertyTypes.CORAL_DIRECTION, VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT, VanillaBlockPropertyTypes.DEAD_BIT)
           .addBasicComponents()
           .build();
 
@@ -2070,21 +2070,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockCrimsonButtonBehavior> CRIMSON_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCrimsonDoorBehavior> CRIMSON_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCrimsonDoubleSlabBehavior> CRIMSON_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -2097,7 +2097,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockCrimsonFenceGateBehavior> CRIMSON_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
@@ -2110,14 +2110,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockCrimsonHangingSignBehavior> CRIMSON_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCrimsonHyphaeBehavior> CRIMSON_HYPHAE_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonHyphaeBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_HYPHAE, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -2136,7 +2136,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockCrimsonPressurePlateBehavior> CRIMSON_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
@@ -2149,42 +2149,42 @@ public interface VanillaBlockTypes {
   BlockType<BlockCrimsonSlabBehavior> CRIMSON_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCrimsonStairsBehavior> CRIMSON_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCrimsonStandingSignBehavior> CRIMSON_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCrimsonStemBehavior> CRIMSON_STEM_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonStemBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_STEM, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCrimsonTrapdoorBehavior> CRIMSON_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCrimsonWallSignBehavior> CRIMSON_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -2203,28 +2203,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockCutCopperSlabBehavior> CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCutCopperStairsBehavior> CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockCutCopperStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.CUT_COPPER_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCyanCandleBehavior> CYAN_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockCyanCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.CYAN_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockCyanCandleCakeBehavior> CYAN_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockCyanCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.CYAN_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -2243,7 +2243,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockCyanGlazedTerracottaBehavior> CYAN_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockCyanGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.CYAN_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -2262,14 +2262,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockDarkOakButtonBehavior> DARK_OAK_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockDarkOakButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.DARK_OAK_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDarkOakDoorBehavior> DARK_OAK_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockDarkOakDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.DARK_OAK_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
@@ -2282,77 +2282,77 @@ public interface VanillaBlockTypes {
   BlockType<BlockDarkOakFenceGateBehavior> DARK_OAK_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockDarkOakFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.DARK_OAK_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDarkOakHangingSignBehavior> DARK_OAK_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockDarkOakHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.DARK_OAK_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDarkOakLogBehavior> DARK_OAK_LOG_TYPE = BlockTypeBuilder
           .builder(BlockDarkOakLogBehavior.class)
           .vanillaBlock(VanillaBlockId.DARK_OAK_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDarkOakPressurePlateBehavior> DARK_OAK_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockDarkOakPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.DARK_OAK_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDarkOakStairsBehavior> DARK_OAK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockDarkOakStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.DARK_OAK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDarkOakTrapdoorBehavior> DARK_OAK_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockDarkOakTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.DARK_OAK_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDarkPrismarineStairsBehavior> DARK_PRISMARINE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockDarkPrismarineStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.DARK_PRISMARINE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDarkoakStandingSignBehavior> DARKOAK_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockDarkoakStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.DARKOAK_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDarkoakWallSignBehavior> DARKOAK_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockDarkoakWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.DARKOAK_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDaylightDetectorBehavior> DAYLIGHT_DETECTOR_TYPE = BlockTypeBuilder
           .builder(BlockDaylightDetectorBehavior.class)
           .vanillaBlock(VanillaBlockId.DAYLIGHT_DETECTOR, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDaylightDetectorInvertedBehavior> DAYLIGHT_DETECTOR_INVERTED_TYPE = BlockTypeBuilder
           .builder(BlockDaylightDetectorInvertedBehavior.class)
           .vanillaBlock(VanillaBlockId.DAYLIGHT_DETECTOR_INVERTED, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
@@ -2395,42 +2395,42 @@ public interface VanillaBlockTypes {
   BlockType<BlockDecoratedPotBehavior> DECORATED_POT_TYPE = BlockTypeBuilder
           .builder(BlockDecoratedPotBehavior.class)
           .vanillaBlock(VanillaBlockId.DECORATED_POT, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDeepslateBehavior> DEEPSLATE_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDeepslateBrickDoubleSlabBehavior> DEEPSLATE_BRICK_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateBrickDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_BRICK_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDeepslateBrickSlabBehavior> DEEPSLATE_BRICK_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateBrickSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_BRICK_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDeepslateBrickStairsBehavior> DEEPSLATE_BRICK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateBrickStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_BRICK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDeepslateBrickWallBehavior> DEEPSLATE_BRICK_WALL_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateBrickWallBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_BRICK_WALL, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
@@ -2491,28 +2491,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockDeepslateTileDoubleSlabBehavior> DEEPSLATE_TILE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateTileDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_TILE_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDeepslateTileSlabBehavior> DEEPSLATE_TILE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateTileSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_TILE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDeepslateTileStairsBehavior> DEEPSLATE_TILE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateTileStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_TILE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDeepslateTileWallBehavior> DEEPSLATE_TILE_WALL_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateTileWallBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_TILE_WALL, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
@@ -2531,7 +2531,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockDetectorRailBehavior> DETECTOR_RAIL_TYPE = BlockTypeBuilder
           .builder(BlockDetectorRailBehavior.class)
           .vanillaBlock(VanillaBlockId.DETECTOR_RAIL, true)
-          .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT, VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
+          .setProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT, VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
           .addBasicComponents()
           .build();
 
@@ -2550,14 +2550,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockDioriteStairsBehavior> DIORITE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockDioriteStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.DIORITE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDirtBehavior> DIRT_TYPE = BlockTypeBuilder
           .builder(BlockDirtBehavior.class)
           .vanillaBlock(VanillaBlockId.DIRT, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRT_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.DIRT_TYPE)
           .addBasicComponents()
           .build();
 
@@ -2570,56 +2570,56 @@ public interface VanillaBlockTypes {
   BlockType<BlockDispenserBehavior> DISPENSER_TYPE = BlockTypeBuilder
           .builder(BlockDispenserBehavior.class)
           .vanillaBlock(VanillaBlockId.DISPENSER, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.TRIGGERED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.TRIGGERED_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDoubleCutCopperSlabBehavior> DOUBLE_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockDoubleCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.DOUBLE_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDoublePlantBehavior> DOUBLE_PLANT_TYPE = BlockTypeBuilder
           .builder(BlockDoublePlantBehavior.class)
           .vanillaBlock(VanillaBlockId.DOUBLE_PLANT, true)
-          .withProperties(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDoubleStoneBlockSlabBehavior> DOUBLE_STONE_BLOCK_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockDoubleStoneBlockSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.DOUBLE_STONE_BLOCK_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDoubleStoneBlockSlab2Behavior> DOUBLE_STONE_BLOCK_SLAB2_TYPE = BlockTypeBuilder
           .builder(BlockDoubleStoneBlockSlab2Behavior.class)
           .vanillaBlock(VanillaBlockId.DOUBLE_STONE_BLOCK_SLAB2, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_2, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_2, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDoubleStoneBlockSlab3Behavior> DOUBLE_STONE_BLOCK_SLAB3_TYPE = BlockTypeBuilder
           .builder(BlockDoubleStoneBlockSlab3Behavior.class)
           .vanillaBlock(VanillaBlockId.DOUBLE_STONE_BLOCK_SLAB3, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_3, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_3, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDoubleStoneBlockSlab4Behavior> DOUBLE_STONE_BLOCK_SLAB4_TYPE = BlockTypeBuilder
           .builder(BlockDoubleStoneBlockSlab4Behavior.class)
           .vanillaBlock(VanillaBlockId.DOUBLE_STONE_BLOCK_SLAB4, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockDoubleWoodenSlabBehavior> DOUBLE_WOODEN_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockDoubleWoodenSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.DOUBLE_WOODEN_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT, VanillaBlockPropertyTypes.WOOD_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT, VanillaBlockPropertyTypes.WOOD_TYPE)
           .addBasicComponents()
           .build();
 
@@ -2644,7 +2644,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockDropperBehavior> DROPPER_TYPE = BlockTypeBuilder
           .builder(BlockDropperBehavior.class)
           .vanillaBlock(VanillaBlockId.DROPPER, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.TRIGGERED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.TRIGGERED_BIT)
           .addBasicComponents()
           .build();
 
@@ -3383,7 +3383,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockEndBrickStairsBehavior> END_BRICK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockEndBrickStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.END_BRICK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -3408,14 +3408,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockEndPortalFrameBehavior> END_PORTAL_FRAME_TYPE = BlockTypeBuilder
           .builder(BlockEndPortalFrameBehavior.class)
           .vanillaBlock(VanillaBlockId.END_PORTAL_FRAME, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.END_PORTAL_EYE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.END_PORTAL_EYE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockEndRodBehavior> END_ROD_TYPE = BlockTypeBuilder
           .builder(BlockEndRodBehavior.class)
           .vanillaBlock(VanillaBlockId.END_ROD, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -3428,7 +3428,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockEnderChestBehavior> ENDER_CHEST_TYPE = BlockTypeBuilder
           .builder(BlockEnderChestBehavior.class)
           .vanillaBlock(VanillaBlockId.ENDER_CHEST, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -3447,42 +3447,42 @@ public interface VanillaBlockTypes {
   BlockType<BlockExposedCutCopperSlabBehavior> EXPOSED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockExposedCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.EXPOSED_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockExposedCutCopperStairsBehavior> EXPOSED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockExposedCutCopperStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.EXPOSED_CUT_COPPER_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockExposedDoubleCutCopperSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockExposedDoubleCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockFarmlandBehavior> FARMLAND_TYPE = BlockTypeBuilder
           .builder(BlockFarmlandBehavior.class)
           .vanillaBlock(VanillaBlockId.FARMLAND, true)
-          .withProperties(VanillaBlockPropertyTypes.MOISTURIZED_AMOUNT)
+          .setProperties(VanillaBlockPropertyTypes.MOISTURIZED_AMOUNT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockFenceGateBehavior> FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockFireBehavior> FIRE_TYPE = BlockTypeBuilder
           .builder(BlockFireBehavior.class)
           .vanillaBlock(VanillaBlockId.FIRE, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_16)
+          .setProperties(VanillaBlockPropertyTypes.AGE_16)
           .addBasicComponents()
           .build();
 
@@ -3501,7 +3501,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockFlowerPotBehavior> FLOWER_POT_TYPE = BlockTypeBuilder
           .builder(BlockFlowerPotBehavior.class)
           .vanillaBlock(VanillaBlockId.FLOWER_POT, true)
-          .withProperties(VanillaBlockPropertyTypes.UPDATE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.UPDATE_BIT)
           .addBasicComponents()
           .build();
 
@@ -3514,21 +3514,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockFlowingLavaBehavior> FLOWING_LAVA_TYPE = BlockTypeBuilder
           .builder(BlockFlowingLavaBehavior.class)
           .vanillaBlock(VanillaBlockId.FLOWING_LAVA, true)
-          .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+          .setProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
           .addBasicComponents()
           .build();
 
   BlockType<BlockFlowingWaterBehavior> FLOWING_WATER_TYPE = BlockTypeBuilder
           .builder(BlockFlowingWaterBehavior.class)
           .vanillaBlock(VanillaBlockId.FLOWING_WATER, true)
-          .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+          .setProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
           .addBasicComponents()
           .build();
 
   BlockType<BlockFrameBehavior> FRAME_TYPE = BlockTypeBuilder
           .builder(BlockFrameBehavior.class)
           .vanillaBlock(VanillaBlockId.FRAME, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.ITEM_FRAME_MAP_BIT, VanillaBlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.ITEM_FRAME_MAP_BIT, VanillaBlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
           .addBasicComponents()
           .build();
 
@@ -3541,14 +3541,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockFrostedIceBehavior> FROSTED_ICE_TYPE = BlockTypeBuilder
           .builder(BlockFrostedIceBehavior.class)
           .vanillaBlock(VanillaBlockId.FROSTED_ICE, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_4)
+          .setProperties(VanillaBlockPropertyTypes.AGE_4)
           .addBasicComponents()
           .build();
 
   BlockType<BlockFurnaceBehavior> FURNACE_TYPE = BlockTypeBuilder
           .builder(BlockFurnaceBehavior.class)
           .vanillaBlock(VanillaBlockId.FURNACE, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -3573,14 +3573,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockGlowFrameBehavior> GLOW_FRAME_TYPE = BlockTypeBuilder
           .builder(BlockGlowFrameBehavior.class)
           .vanillaBlock(VanillaBlockId.GLOW_FRAME, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.ITEM_FRAME_MAP_BIT, VanillaBlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.ITEM_FRAME_MAP_BIT, VanillaBlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockGlowLichenBehavior> GLOW_LICHEN_TYPE = BlockTypeBuilder
           .builder(BlockGlowLichenBehavior.class)
           .vanillaBlock(VanillaBlockId.GLOW_LICHEN, true)
-          .withProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+          .setProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
           .addBasicComponents()
           .build();
 
@@ -3611,14 +3611,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockGoldenRailBehavior> GOLDEN_RAIL_TYPE = BlockTypeBuilder
           .builder(BlockGoldenRailBehavior.class)
           .vanillaBlock(VanillaBlockId.GOLDEN_RAIL, true)
-          .withProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT, VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
+          .setProperties(VanillaBlockPropertyTypes.RAIL_DATA_BIT, VanillaBlockPropertyTypes.RAIL_DIRECTION_6)
           .addBasicComponents()
           .build();
 
   BlockType<BlockGraniteStairsBehavior> GRANITE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockGraniteStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.GRANITE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -3643,14 +3643,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockGrayCandleBehavior> GRAY_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockGrayCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.GRAY_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockGrayCandleCakeBehavior> GRAY_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockGrayCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.GRAY_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -3669,7 +3669,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockGrayGlazedTerracottaBehavior> GRAY_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockGrayGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.GRAY_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -3688,14 +3688,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockGreenCandleBehavior> GREEN_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockGreenCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.GREEN_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockGreenCandleCakeBehavior> GREEN_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockGreenCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.GREEN_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -3714,7 +3714,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockGreenGlazedTerracottaBehavior> GREEN_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockGreenGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.GREEN_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -3733,7 +3733,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockGrindstoneBehavior> GRINDSTONE_TYPE = BlockTypeBuilder
           .builder(BlockGrindstoneBehavior.class)
           .vanillaBlock(VanillaBlockId.GRINDSTONE, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHMENT, VanillaBlockPropertyTypes.DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHMENT, VanillaBlockPropertyTypes.DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -3758,14 +3758,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockHardStainedGlassBehavior> HARD_STAINED_GLASS_TYPE = BlockTypeBuilder
           .builder(BlockHardStainedGlassBehavior.class)
           .vanillaBlock(VanillaBlockId.HARD_STAINED_GLASS, true)
-          .withProperties(VanillaBlockPropertyTypes.COLOR)
+          .setProperties(VanillaBlockPropertyTypes.COLOR)
           .addBasicComponents()
           .build();
 
   BlockType<BlockHardStainedGlassPaneBehavior> HARD_STAINED_GLASS_PANE_TYPE = BlockTypeBuilder
           .builder(BlockHardStainedGlassPaneBehavior.class)
           .vanillaBlock(VanillaBlockId.HARD_STAINED_GLASS_PANE, true)
-          .withProperties(VanillaBlockPropertyTypes.COLOR)
+          .setProperties(VanillaBlockPropertyTypes.COLOR)
           .addBasicComponents()
           .build();
 
@@ -3778,14 +3778,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockHayBlockBehavior> HAY_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockHayBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.HAY_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockHeavyWeightedPressurePlateBehavior> HEAVY_WEIGHTED_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockHeavyWeightedPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.HEAVY_WEIGHTED_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
@@ -3804,7 +3804,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockHopperBehavior> HOPPER_TYPE = BlockTypeBuilder
           .builder(BlockHopperBehavior.class)
           .vanillaBlock(VanillaBlockId.HOPPER, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.TOGGLE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.TOGGLE_BIT)
           .addBasicComponents()
           .build();
 
@@ -3823,7 +3823,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockInfestedDeepslateBehavior> INFESTED_DEEPSLATE_TYPE = BlockTypeBuilder
           .builder(BlockInfestedDeepslateBehavior.class)
           .vanillaBlock(VanillaBlockId.INFESTED_DEEPSLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -3860,7 +3860,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockIronDoorBehavior> IRON_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockIronDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.IRON_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
@@ -3873,14 +3873,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockIronTrapdoorBehavior> IRON_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockIronTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.IRON_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockJigsawBehavior> JIGSAW_TYPE = BlockTypeBuilder
           .builder(BlockJigsawBehavior.class)
           .vanillaBlock(VanillaBlockId.JIGSAW, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.ROTATION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.ROTATION)
           .addBasicComponents()
           .build();
 
@@ -3893,14 +3893,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockJungleButtonBehavior> JUNGLE_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockJungleButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockJungleDoorBehavior> JUNGLE_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockJungleDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
@@ -3913,77 +3913,77 @@ public interface VanillaBlockTypes {
   BlockType<BlockJungleFenceGateBehavior> JUNGLE_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockJungleFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockJungleHangingSignBehavior> JUNGLE_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockJungleHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockJungleLogBehavior> JUNGLE_LOG_TYPE = BlockTypeBuilder
           .builder(BlockJungleLogBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockJunglePressurePlateBehavior> JUNGLE_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockJunglePressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockJungleStairsBehavior> JUNGLE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockJungleStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockJungleStandingSignBehavior> JUNGLE_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockJungleStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockJungleTrapdoorBehavior> JUNGLE_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockJungleTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockJungleWallSignBehavior> JUNGLE_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockJungleWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.JUNGLE_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockKelpBehavior> KELP_TYPE = BlockTypeBuilder
           .builder(BlockKelpBehavior.class)
           .vanillaBlock(VanillaBlockId.KELP, true)
-          .withProperties(VanillaBlockPropertyTypes.KELP_AGE)
+          .setProperties(VanillaBlockPropertyTypes.KELP_AGE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLadderBehavior> LADDER_TYPE = BlockTypeBuilder
           .builder(BlockLadderBehavior.class)
           .vanillaBlock(VanillaBlockId.LADDER, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLanternBehavior> LANTERN_TYPE = BlockTypeBuilder
           .builder(BlockLanternBehavior.class)
           .vanillaBlock(VanillaBlockId.LANTERN, true)
-          .withProperties(VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
@@ -4002,63 +4002,63 @@ public interface VanillaBlockTypes {
   BlockType<BlockLargeAmethystBudBehavior> LARGE_AMETHYST_BUD_TYPE = BlockTypeBuilder
           .builder(BlockLargeAmethystBudBehavior.class)
           .vanillaBlock(VanillaBlockId.LARGE_AMETHYST_BUD, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLavaBehavior> LAVA_TYPE = BlockTypeBuilder
           .builder(BlockLavaBehavior.class)
           .vanillaBlock(VanillaBlockId.LAVA, true)
-          .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+          .setProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLeavesBehavior> LEAVES_TYPE = BlockTypeBuilder
           .builder(BlockLeavesBehavior.class)
           .vanillaBlock(VanillaBlockId.LEAVES, true)
-          .withProperties(VanillaBlockPropertyTypes.OLD_LEAF_TYPE, VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.OLD_LEAF_TYPE, VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLeaves2Behavior> LEAVES2_TYPE = BlockTypeBuilder
           .builder(BlockLeaves2Behavior.class)
           .vanillaBlock(VanillaBlockId.LEAVES2, true)
-          .withProperties(VanillaBlockPropertyTypes.NEW_LEAF_TYPE, VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.NEW_LEAF_TYPE, VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLecternBehavior> LECTERN_TYPE = BlockTypeBuilder
           .builder(BlockLecternBehavior.class)
           .vanillaBlock(VanillaBlockId.LECTERN, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.POWERED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.POWERED_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLeverBehavior> LEVER_TYPE = BlockTypeBuilder
           .builder(BlockLeverBehavior.class)
           .vanillaBlock(VanillaBlockId.LEVER, true)
-          .withProperties(VanillaBlockPropertyTypes.LEVER_DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.LEVER_DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockLightBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.LIGHT_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.BLOCK_LIGHT_LEVEL)
+          .setProperties(VanillaBlockPropertyTypes.BLOCK_LIGHT_LEVEL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLightBlueCandleBehavior> LIGHT_BLUE_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockLightBlueCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.LIGHT_BLUE_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLightBlueCandleCakeBehavior> LIGHT_BLUE_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockLightBlueCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.LIGHT_BLUE_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -4077,7 +4077,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockLightBlueGlazedTerracottaBehavior> LIGHT_BLUE_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockLightBlueGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.LIGHT_BLUE_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4096,14 +4096,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockLightGrayCandleBehavior> LIGHT_GRAY_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockLightGrayCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.LIGHT_GRAY_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLightGrayCandleCakeBehavior> LIGHT_GRAY_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockLightGrayCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.LIGHT_GRAY_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -4134,28 +4134,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockLightWeightedPressurePlateBehavior> LIGHT_WEIGHTED_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockLightWeightedPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.LIGHT_WEIGHTED_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLightningRodBehavior> LIGHTNING_ROD_TYPE = BlockTypeBuilder
           .builder(BlockLightningRodBehavior.class)
           .vanillaBlock(VanillaBlockId.LIGHTNING_ROD, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLimeCandleBehavior> LIME_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockLimeCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.LIME_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLimeCandleCakeBehavior> LIME_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockLimeCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.LIME_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -4174,7 +4174,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockLimeGlazedTerracottaBehavior> LIME_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockLimeGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.LIME_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4193,7 +4193,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockLitBlastFurnaceBehavior> LIT_BLAST_FURNACE_TYPE = BlockTypeBuilder
           .builder(BlockLitBlastFurnaceBehavior.class)
           .vanillaBlock(VanillaBlockId.LIT_BLAST_FURNACE, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4206,14 +4206,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockLitFurnaceBehavior> LIT_FURNACE_TYPE = BlockTypeBuilder
           .builder(BlockLitFurnaceBehavior.class)
           .vanillaBlock(VanillaBlockId.LIT_FURNACE, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockLitPumpkinBehavior> LIT_PUMPKIN_TYPE = BlockTypeBuilder
           .builder(BlockLitPumpkinBehavior.class)
           .vanillaBlock(VanillaBlockId.LIT_PUMPKIN, true)
-          .withProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4232,7 +4232,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockLitSmokerBehavior> LIT_SMOKER_TYPE = BlockTypeBuilder
           .builder(BlockLitSmokerBehavior.class)
           .vanillaBlock(VanillaBlockId.LIT_SMOKER, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4245,21 +4245,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockLoomBehavior> LOOM_TYPE = BlockTypeBuilder
           .builder(BlockLoomBehavior.class)
           .vanillaBlock(VanillaBlockId.LOOM, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMagentaCandleBehavior> MAGENTA_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockMagentaCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.MAGENTA_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMagentaCandleCakeBehavior> MAGENTA_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockMagentaCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.MAGENTA_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -4278,7 +4278,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockMagentaGlazedTerracottaBehavior> MAGENTA_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockMagentaGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.MAGENTA_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4303,21 +4303,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockMangroveButtonBehavior> MANGROVE_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockMangroveButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveDoorBehavior> MANGROVE_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockMangroveDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveDoubleSlabBehavior> MANGROVE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockMangroveDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -4330,28 +4330,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockMangroveFenceGateBehavior> MANGROVE_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockMangroveFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveHangingSignBehavior> MANGROVE_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockMangroveHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveLeavesBehavior> MANGROVE_LEAVES_TYPE = BlockTypeBuilder
           .builder(BlockMangroveLeavesBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_LEAVES, true)
-          .withProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveLogBehavior> MANGROVE_LOG_TYPE = BlockTypeBuilder
           .builder(BlockMangroveLogBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -4364,14 +4364,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockMangrovePressurePlateBehavior> MANGROVE_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockMangrovePressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangrovePropaguleBehavior> MANGROVE_PROPAGULE_TYPE = BlockTypeBuilder
           .builder(BlockMangrovePropaguleBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_PROPAGULE, true)
-          .withProperties(VanillaBlockPropertyTypes.HANGING, VanillaBlockPropertyTypes.PROPAGULE_STAGE)
+          .setProperties(VanillaBlockPropertyTypes.HANGING, VanillaBlockPropertyTypes.PROPAGULE_STAGE)
           .addBasicComponents()
           .build();
 
@@ -4384,49 +4384,49 @@ public interface VanillaBlockTypes {
   BlockType<BlockMangroveSlabBehavior> MANGROVE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockMangroveSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveStairsBehavior> MANGROVE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockMangroveStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveStandingSignBehavior> MANGROVE_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockMangroveStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveTrapdoorBehavior> MANGROVE_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockMangroveTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveWallSignBehavior> MANGROVE_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockMangroveWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMangroveWoodBehavior> MANGROVE_WOOD_TYPE = BlockTypeBuilder
           .builder(BlockMangroveWoodBehavior.class)
           .vanillaBlock(VanillaBlockId.MANGROVE_WOOD, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS, VanillaBlockPropertyTypes.STRIPPED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS, VanillaBlockPropertyTypes.STRIPPED_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMediumAmethystBudBehavior> MEDIUM_AMETHYST_BUD_TYPE = BlockTypeBuilder
           .builder(BlockMediumAmethystBudBehavior.class)
           .vanillaBlock(VanillaBlockId.MEDIUM_AMETHYST_BUD, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4439,7 +4439,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockMelonStemBehavior> MELON_STEM_TYPE = BlockTypeBuilder
           .builder(BlockMelonStemBehavior.class)
           .vanillaBlock(VanillaBlockId.MELON_STEM, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROWTH)
           .addBasicComponents()
           .build();
 
@@ -4452,7 +4452,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockMonsterEggBehavior> MONSTER_EGG_TYPE = BlockTypeBuilder
           .builder(BlockMonsterEggBehavior.class)
           .vanillaBlock(VanillaBlockId.MONSTER_EGG, true)
-          .withProperties(VanillaBlockPropertyTypes.MONSTER_EGG_STONE_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.MONSTER_EGG_STONE_TYPE)
           .addBasicComponents()
           .build();
 
@@ -4477,14 +4477,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockMossyCobblestoneStairsBehavior> MOSSY_COBBLESTONE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockMossyCobblestoneStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.MOSSY_COBBLESTONE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMossyStoneBrickStairsBehavior> MOSSY_STONE_BRICK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockMossyStoneBrickStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.MOSSY_STONE_BRICK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4503,28 +4503,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockMudBrickDoubleSlabBehavior> MUD_BRICK_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockMudBrickDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.MUD_BRICK_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMudBrickSlabBehavior> MUD_BRICK_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockMudBrickSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.MUD_BRICK_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMudBrickStairsBehavior> MUD_BRICK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockMudBrickStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.MUD_BRICK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockMudBrickWallBehavior> MUD_BRICK_WALL_TYPE = BlockTypeBuilder
           .builder(BlockMudBrickWallBehavior.class)
           .vanillaBlock(VanillaBlockId.MUD_BRICK_WALL, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
@@ -4537,7 +4537,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockMuddyMangroveRootsBehavior> MUDDY_MANGROVE_ROOTS_TYPE = BlockTypeBuilder
           .builder(BlockMuddyMangroveRootsBehavior.class)
           .vanillaBlock(VanillaBlockId.MUDDY_MANGROVE_ROOTS, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -4562,7 +4562,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockNetherBrickStairsBehavior> NETHER_BRICK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockNetherBrickStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.NETHER_BRICK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4581,7 +4581,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockNetherWartBehavior> NETHER_WART_TYPE = BlockTypeBuilder
           .builder(BlockNetherWartBehavior.class)
           .vanillaBlock(VanillaBlockId.NETHER_WART, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_4)
+          .setProperties(VanillaBlockPropertyTypes.AGE_4)
           .addBasicComponents()
           .build();
 
@@ -4612,7 +4612,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockNormalStoneStairsBehavior> NORMAL_STONE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockNormalStoneStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.NORMAL_STONE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4631,28 +4631,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockOakHangingSignBehavior> OAK_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockOakHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.OAK_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockOakLogBehavior> OAK_LOG_TYPE = BlockTypeBuilder
           .builder(BlockOakLogBehavior.class)
           .vanillaBlock(VanillaBlockId.OAK_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockOakStairsBehavior> OAK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockOakStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.OAK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockObserverBehavior> OBSERVER_TYPE = BlockTypeBuilder
           .builder(BlockObserverBehavior.class)
           .vanillaBlock(VanillaBlockId.OBSERVER, true)
-          .withProperties(VanillaBlockPropertyTypes.MINECRAFT_FACING_DIRECTION, VanillaBlockPropertyTypes.POWERED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_FACING_DIRECTION, VanillaBlockPropertyTypes.POWERED_BIT)
           .addBasicComponents()
           .build();
 
@@ -4665,21 +4665,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockOchreFroglightBehavior> OCHRE_FROGLIGHT_TYPE = BlockTypeBuilder
           .builder(BlockOchreFroglightBehavior.class)
           .vanillaBlock(VanillaBlockId.OCHRE_FROGLIGHT, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockOrangeCandleBehavior> ORANGE_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockOrangeCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.ORANGE_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockOrangeCandleCakeBehavior> ORANGE_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockOrangeCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.ORANGE_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -4698,7 +4698,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockOrangeGlazedTerracottaBehavior> ORANGE_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockOrangeGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.ORANGE_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -4729,21 +4729,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockOxidizedCutCopperSlabBehavior> OXIDIZED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockOxidizedCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.OXIDIZED_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockOxidizedCutCopperStairsBehavior> OXIDIZED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockOxidizedCutCopperStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.OXIDIZED_CUT_COPPER_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockOxidizedDoubleCutCopperSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockOxidizedDoubleCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -4762,21 +4762,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockPearlescentFroglightBehavior> PEARLESCENT_FROGLIGHT_TYPE = BlockTypeBuilder
           .builder(BlockPearlescentFroglightBehavior.class)
           .vanillaBlock(VanillaBlockId.PEARLESCENT_FROGLIGHT, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPinkCandleBehavior> PINK_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockPinkCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.PINK_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPinkCandleCakeBehavior> PINK_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockPinkCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.PINK_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -4795,14 +4795,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockPinkGlazedTerracottaBehavior> PINK_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockPinkGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.PINK_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPinkPetalsBehavior> PINK_PETALS_TYPE = BlockTypeBuilder
           .builder(BlockPinkPetalsBehavior.class)
           .vanillaBlock(VanillaBlockId.PINK_PETALS, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.GROWTH)
           .addBasicComponents()
           .build();
 
@@ -4821,35 +4821,35 @@ public interface VanillaBlockTypes {
   BlockType<BlockPistonBehavior> PISTON_TYPE = BlockTypeBuilder
           .builder(BlockPistonBehavior.class)
           .vanillaBlock(VanillaBlockId.PISTON, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPistonArmCollisionBehavior> PISTON_ARM_COLLISION_TYPE = BlockTypeBuilder
           .builder(BlockPistonArmCollisionBehavior.class)
           .vanillaBlock(VanillaBlockId.PISTON_ARM_COLLISION, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPitcherCropBehavior> PITCHER_CROP_TYPE = BlockTypeBuilder
           .builder(BlockPitcherCropBehavior.class)
           .vanillaBlock(VanillaBlockId.PITCHER_CROP, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWTH, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.GROWTH, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPitcherPlantBehavior> PITCHER_PLANT_TYPE = BlockTypeBuilder
           .builder(BlockPitcherPlantBehavior.class)
           .vanillaBlock(VanillaBlockId.PITCHER_PLANT, true)
-          .withProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPlanksBehavior> PLANKS_TYPE = BlockTypeBuilder
           .builder(BlockPlanksBehavior.class)
           .vanillaBlock(VanillaBlockId.PLANKS, true)
-          .withProperties(VanillaBlockPropertyTypes.WOOD_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.WOOD_TYPE)
           .addBasicComponents()
           .build();
 
@@ -4862,21 +4862,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockPointedDripstoneBehavior> POINTED_DRIPSTONE_TYPE = BlockTypeBuilder
           .builder(BlockPointedDripstoneBehavior.class)
           .vanillaBlock(VanillaBlockId.POINTED_DRIPSTONE, true)
-          .withProperties(VanillaBlockPropertyTypes.DRIPSTONE_THICKNESS, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.DRIPSTONE_THICKNESS, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedAndesiteStairsBehavior> POLISHED_ANDESITE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockPolishedAndesiteStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_ANDESITE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedBasaltBehavior> POLISHED_BASALT_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBasaltBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BASALT, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -4889,28 +4889,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockPolishedBlackstoneBrickDoubleSlabBehavior> POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneBrickDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedBlackstoneBrickSlabBehavior> POLISHED_BLACKSTONE_BRICK_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneBrickSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICK_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedBlackstoneBrickStairsBehavior> POLISHED_BLACKSTONE_BRICK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneBrickStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedBlackstoneBrickWallBehavior> POLISHED_BLACKSTONE_BRICK_WALL_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneBrickWallBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICK_WALL, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
@@ -4923,42 +4923,42 @@ public interface VanillaBlockTypes {
   BlockType<BlockPolishedBlackstoneButtonBehavior> POLISHED_BLACKSTONE_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedBlackstoneDoubleSlabBehavior> POLISHED_BLACKSTONE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedBlackstonePressurePlateBehavior> POLISHED_BLACKSTONE_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstonePressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedBlackstoneSlabBehavior> POLISHED_BLACKSTONE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedBlackstoneStairsBehavior> POLISHED_BLACKSTONE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedBlackstoneWallBehavior> POLISHED_BLACKSTONE_WALL_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneWallBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_WALL, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
@@ -4971,56 +4971,56 @@ public interface VanillaBlockTypes {
   BlockType<BlockPolishedDeepslateDoubleSlabBehavior> POLISHED_DEEPSLATE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockPolishedDeepslateDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedDeepslateSlabBehavior> POLISHED_DEEPSLATE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockPolishedDeepslateSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedDeepslateStairsBehavior> POLISHED_DEEPSLATE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockPolishedDeepslateStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedDeepslateWallBehavior> POLISHED_DEEPSLATE_WALL_TYPE = BlockTypeBuilder
           .builder(BlockPolishedDeepslateWallBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_WALL, true)
-          .withProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
+          .setProperties(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, VanillaBlockPropertyTypes.WALL_POST_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedDioriteStairsBehavior> POLISHED_DIORITE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockPolishedDioriteStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_DIORITE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPolishedGraniteStairsBehavior> POLISHED_GRANITE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockPolishedGraniteStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_GRANITE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPortalBehavior> PORTAL_TYPE = BlockTypeBuilder
           .builder(BlockPortalBehavior.class)
           .vanillaBlock(VanillaBlockId.PORTAL, true)
-          .withProperties(VanillaBlockPropertyTypes.PORTAL_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PORTAL_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPotatoesBehavior> POTATOES_TYPE = BlockTypeBuilder
           .builder(BlockPotatoesBehavior.class)
           .vanillaBlock(VanillaBlockId.POTATOES, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.GROWTH)
           .addBasicComponents()
           .build();
 
@@ -5033,63 +5033,63 @@ public interface VanillaBlockTypes {
   BlockType<BlockPoweredComparatorBehavior> POWERED_COMPARATOR_TYPE = BlockTypeBuilder
           .builder(BlockPoweredComparatorBehavior.class)
           .vanillaBlock(VanillaBlockId.POWERED_COMPARATOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OUTPUT_LIT_BIT, VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OUTPUT_LIT_BIT, VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPoweredRepeaterBehavior> POWERED_REPEATER_TYPE = BlockTypeBuilder
           .builder(BlockPoweredRepeaterBehavior.class)
           .vanillaBlock(VanillaBlockId.POWERED_REPEATER, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.REPEATER_DELAY)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.REPEATER_DELAY)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPrismarineBehavior> PRISMARINE_TYPE = BlockTypeBuilder
           .builder(BlockPrismarineBehavior.class)
           .vanillaBlock(VanillaBlockId.PRISMARINE, true)
-          .withProperties(VanillaBlockPropertyTypes.PRISMARINE_BLOCK_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.PRISMARINE_BLOCK_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPrismarineBricksStairsBehavior> PRISMARINE_BRICKS_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockPrismarineBricksStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.PRISMARINE_BRICKS_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPrismarineStairsBehavior> PRISMARINE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockPrismarineStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.PRISMARINE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPumpkinBehavior> PUMPKIN_TYPE = BlockTypeBuilder
           .builder(BlockPumpkinBehavior.class)
           .vanillaBlock(VanillaBlockId.PUMPKIN, true)
-          .withProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPumpkinStemBehavior> PUMPKIN_STEM_TYPE = BlockTypeBuilder
           .builder(BlockPumpkinStemBehavior.class)
           .vanillaBlock(VanillaBlockId.PUMPKIN_STEM, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROWTH)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPurpleCandleBehavior> PURPLE_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockPurpleCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.PURPLE_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPurpleCandleCakeBehavior> PURPLE_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockPurpleCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.PURPLE_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -5108,7 +5108,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockPurpleGlazedTerracottaBehavior> PURPLE_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockPurpleGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.PURPLE_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -5127,21 +5127,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockPurpurBlockBehavior> PURPUR_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockPurpurBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.PURPUR_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockPurpurStairsBehavior> PURPUR_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockPurpurStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.PURPUR_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockQuartzBlockBehavior> QUARTZ_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockQuartzBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.QUARTZ_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -5160,14 +5160,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockQuartzStairsBehavior> QUARTZ_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockQuartzStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.QUARTZ_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockRailBehavior> RAIL_TYPE = BlockTypeBuilder
           .builder(BlockRailBehavior.class)
           .vanillaBlock(VanillaBlockId.RAIL, true)
-          .withProperties(VanillaBlockPropertyTypes.RAIL_DIRECTION_10)
+          .setProperties(VanillaBlockPropertyTypes.RAIL_DIRECTION_10)
           .addBasicComponents()
           .build();
 
@@ -5192,14 +5192,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockRedCandleBehavior> RED_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockRedCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.RED_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockRedCandleCakeBehavior> RED_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockRedCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.RED_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -5218,14 +5218,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockRedFlowerBehavior> RED_FLOWER_TYPE = BlockTypeBuilder
           .builder(BlockRedFlowerBehavior.class)
           .vanillaBlock(VanillaBlockId.RED_FLOWER, true)
-          .withProperties(VanillaBlockPropertyTypes.FLOWER_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.FLOWER_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockRedGlazedTerracottaBehavior> RED_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockRedGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.RED_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -5238,7 +5238,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockRedMushroomBlockBehavior> RED_MUSHROOM_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockRedMushroomBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.RED_MUSHROOM_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.HUGE_MUSHROOM_BITS)
+          .setProperties(VanillaBlockPropertyTypes.HUGE_MUSHROOM_BITS)
           .addBasicComponents()
           .build();
 
@@ -5251,21 +5251,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockRedNetherBrickStairsBehavior> RED_NETHER_BRICK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockRedNetherBrickStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.RED_NETHER_BRICK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockRedSandstoneBehavior> RED_SANDSTONE_TYPE = BlockTypeBuilder
           .builder(BlockRedSandstoneBehavior.class)
           .vanillaBlock(VanillaBlockId.RED_SANDSTONE, true)
-          .withProperties(VanillaBlockPropertyTypes.SAND_STONE_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.SAND_STONE_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockRedSandstoneStairsBehavior> RED_SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockRedSandstoneStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.RED_SANDSTONE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -5302,21 +5302,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockRedstoneTorchBehavior> REDSTONE_TORCH_TYPE = BlockTypeBuilder
           .builder(BlockRedstoneTorchBehavior.class)
           .vanillaBlock(VanillaBlockId.REDSTONE_TORCH, true)
-          .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockRedstoneWireBehavior> REDSTONE_WIRE_TYPE = BlockTypeBuilder
           .builder(BlockRedstoneWireBehavior.class)
           .vanillaBlock(VanillaBlockId.REDSTONE_WIRE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockReedsBehavior> REEDS_TYPE = BlockTypeBuilder
           .builder(BlockReedsBehavior.class)
           .vanillaBlock(VanillaBlockId.REEDS, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_16)
+          .setProperties(VanillaBlockPropertyTypes.AGE_16)
           .addBasicComponents()
           .build();
 
@@ -5329,7 +5329,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockRepeatingCommandBlockBehavior> REPEATING_COMMAND_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockRepeatingCommandBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.REPEATING_COMMAND_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.CONDITIONAL_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -5342,42 +5342,42 @@ public interface VanillaBlockTypes {
   BlockType<BlockRespawnAnchorBehavior> RESPAWN_ANCHOR_TYPE = BlockTypeBuilder
           .builder(BlockRespawnAnchorBehavior.class)
           .vanillaBlock(VanillaBlockId.RESPAWN_ANCHOR, true)
-          .withProperties(VanillaBlockPropertyTypes.RESPAWN_ANCHOR_CHARGE)
+          .setProperties(VanillaBlockPropertyTypes.RESPAWN_ANCHOR_CHARGE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSandBehavior> SAND_TYPE = BlockTypeBuilder
           .builder(BlockSandBehavior.class)
           .vanillaBlock(VanillaBlockId.SAND, true)
-          .withProperties(VanillaBlockPropertyTypes.SAND_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.SAND_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSandstoneBehavior> SANDSTONE_TYPE = BlockTypeBuilder
           .builder(BlockSandstoneBehavior.class)
           .vanillaBlock(VanillaBlockId.SANDSTONE, true)
-          .withProperties(VanillaBlockPropertyTypes.SAND_STONE_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.SAND_STONE_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSandstoneStairsBehavior> SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockSandstoneStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.SANDSTONE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSaplingBehavior> SAPLING_TYPE = BlockTypeBuilder
           .builder(BlockSaplingBehavior.class)
           .vanillaBlock(VanillaBlockId.SAPLING, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_BIT, VanillaBlockPropertyTypes.SAPLING_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.AGE_BIT, VanillaBlockPropertyTypes.SAPLING_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockScaffoldingBehavior> SCAFFOLDING_TYPE = BlockTypeBuilder
           .builder(BlockScaffoldingBehavior.class)
           .vanillaBlock(VanillaBlockId.SCAFFOLDING, true)
-          .withProperties(VanillaBlockPropertyTypes.STABILITY, VanillaBlockPropertyTypes.STABILITY_CHECK)
+          .setProperties(VanillaBlockPropertyTypes.STABILITY, VanillaBlockPropertyTypes.STABILITY_CHECK)
           .addBasicComponents()
           .build();
 
@@ -5390,28 +5390,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockSculkCatalystBehavior> SCULK_CATALYST_TYPE = BlockTypeBuilder
           .builder(BlockSculkCatalystBehavior.class)
           .vanillaBlock(VanillaBlockId.SCULK_CATALYST, true)
-          .withProperties(VanillaBlockPropertyTypes.BLOOM)
+          .setProperties(VanillaBlockPropertyTypes.BLOOM)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSculkSensorBehavior> SCULK_SENSOR_TYPE = BlockTypeBuilder
           .builder(BlockSculkSensorBehavior.class)
           .vanillaBlock(VanillaBlockId.SCULK_SENSOR, true)
-          .withProperties(VanillaBlockPropertyTypes.SCULK_SENSOR_PHASE)
+          .setProperties(VanillaBlockPropertyTypes.SCULK_SENSOR_PHASE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSculkShriekerBehavior> SCULK_SHRIEKER_TYPE = BlockTypeBuilder
           .builder(BlockSculkShriekerBehavior.class)
           .vanillaBlock(VanillaBlockId.SCULK_SHRIEKER, true)
-          .withProperties(VanillaBlockPropertyTypes.ACTIVE, VanillaBlockPropertyTypes.CAN_SUMMON)
+          .setProperties(VanillaBlockPropertyTypes.ACTIVE, VanillaBlockPropertyTypes.CAN_SUMMON)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSculkVeinBehavior> SCULK_VEIN_TYPE = BlockTypeBuilder
           .builder(BlockSculkVeinBehavior.class)
           .vanillaBlock(VanillaBlockId.SCULK_VEIN, true)
-          .withProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
+          .setProperties(VanillaBlockPropertyTypes.MULTI_FACE_DIRECTION_BITS)
           .addBasicComponents()
           .build();
 
@@ -5424,14 +5424,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockSeaPickleBehavior> SEA_PICKLE_TYPE = BlockTypeBuilder
           .builder(BlockSeaPickleBehavior.class)
           .vanillaBlock(VanillaBlockId.SEA_PICKLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CLUSTER_COUNT, VanillaBlockPropertyTypes.DEAD_BIT)
+          .setProperties(VanillaBlockPropertyTypes.CLUSTER_COUNT, VanillaBlockPropertyTypes.DEAD_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSeagrassBehavior> SEAGRASS_TYPE = BlockTypeBuilder
           .builder(BlockSeagrassBehavior.class)
           .vanillaBlock(VanillaBlockId.SEAGRASS, true)
-          .withProperties(VanillaBlockPropertyTypes.SEA_GRASS_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.SEA_GRASS_TYPE)
           .addBasicComponents()
           .build();
 
@@ -5444,14 +5444,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockSilverGlazedTerracottaBehavior> SILVER_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockSilverGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.SILVER_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSkullBehavior> SKULL_TYPE = BlockTypeBuilder
           .builder(BlockSkullBehavior.class)
           .vanillaBlock(VanillaBlockId.SKULL, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -5464,14 +5464,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockSmallAmethystBudBehavior> SMALL_AMETHYST_BUD_TYPE = BlockTypeBuilder
           .builder(BlockSmallAmethystBudBehavior.class)
           .vanillaBlock(VanillaBlockId.SMALL_AMETHYST_BUD, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSmallDripleafBlockBehavior> SMALL_DRIPLEAF_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockSmallDripleafBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.SMALL_DRIPLEAF_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
@@ -5484,7 +5484,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockSmokerBehavior> SMOKER_TYPE = BlockTypeBuilder
           .builder(BlockSmokerBehavior.class)
           .vanillaBlock(VanillaBlockId.SMOKER, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -5497,21 +5497,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockSmoothQuartzStairsBehavior> SMOOTH_QUARTZ_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockSmoothQuartzStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.SMOOTH_QUARTZ_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSmoothRedSandstoneStairsBehavior> SMOOTH_RED_SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockSmoothRedSandstoneStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.SMOOTH_RED_SANDSTONE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSmoothSandstoneStairsBehavior> SMOOTH_SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockSmoothSandstoneStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.SMOOTH_SANDSTONE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -5524,7 +5524,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockSnifferEggBehavior> SNIFFER_EGG_TYPE = BlockTypeBuilder
           .builder(BlockSnifferEggBehavior.class)
           .vanillaBlock(VanillaBlockId.SNIFFER_EGG, true)
-          .withProperties(VanillaBlockPropertyTypes.CRACKED_STATE)
+          .setProperties(VanillaBlockPropertyTypes.CRACKED_STATE)
           .addBasicComponents()
           .build();
 
@@ -5537,28 +5537,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockSnowLayerBehavior> SNOW_LAYER_TYPE = BlockTypeBuilder
           .builder(BlockSnowLayerBehavior.class)
           .vanillaBlock(VanillaBlockId.SNOW_LAYER, true)
-          .withProperties(VanillaBlockPropertyTypes.COVERED_BIT, VanillaBlockPropertyTypes.HEIGHT)
+          .setProperties(VanillaBlockPropertyTypes.COVERED_BIT, VanillaBlockPropertyTypes.HEIGHT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSoulCampfireBehavior> SOUL_CAMPFIRE_TYPE = BlockTypeBuilder
           .builder(BlockSoulCampfireBehavior.class)
           .vanillaBlock(VanillaBlockId.SOUL_CAMPFIRE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.EXTINGUISHED)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.EXTINGUISHED)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSoulFireBehavior> SOUL_FIRE_TYPE = BlockTypeBuilder
           .builder(BlockSoulFireBehavior.class)
           .vanillaBlock(VanillaBlockId.SOUL_FIRE, true)
-          .withProperties(VanillaBlockPropertyTypes.AGE_16)
+          .setProperties(VanillaBlockPropertyTypes.AGE_16)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSoulLanternBehavior> SOUL_LANTERN_TYPE = BlockTypeBuilder
           .builder(BlockSoulLanternBehavior.class)
           .vanillaBlock(VanillaBlockId.SOUL_LANTERN, true)
-          .withProperties(VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
@@ -5577,14 +5577,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockSoulTorchBehavior> SOUL_TORCH_TYPE = BlockTypeBuilder
           .builder(BlockSoulTorchBehavior.class)
           .vanillaBlock(VanillaBlockId.SOUL_TORCH, true)
-          .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSpongeBehavior> SPONGE_TYPE = BlockTypeBuilder
           .builder(BlockSpongeBehavior.class)
           .vanillaBlock(VanillaBlockId.SPONGE, true)
-          .withProperties(VanillaBlockPropertyTypes.SPONGE_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.SPONGE_TYPE)
           .addBasicComponents()
           .build();
 
@@ -5597,14 +5597,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockSpruceButtonBehavior> SPRUCE_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockSpruceButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSpruceDoorBehavior> SPRUCE_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockSpruceDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
@@ -5617,175 +5617,175 @@ public interface VanillaBlockTypes {
   BlockType<BlockSpruceFenceGateBehavior> SPRUCE_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockSpruceFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSpruceHangingSignBehavior> SPRUCE_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockSpruceHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSpruceLogBehavior> SPRUCE_LOG_TYPE = BlockTypeBuilder
           .builder(BlockSpruceLogBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSprucePressurePlateBehavior> SPRUCE_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockSprucePressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSpruceStairsBehavior> SPRUCE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockSpruceStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSpruceStandingSignBehavior> SPRUCE_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockSpruceStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSpruceTrapdoorBehavior> SPRUCE_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockSpruceTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSpruceWallSignBehavior> SPRUCE_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockSpruceWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.SPRUCE_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStainedGlassBehavior> STAINED_GLASS_TYPE = BlockTypeBuilder
           .builder(BlockStainedGlassBehavior.class)
           .vanillaBlock(VanillaBlockId.STAINED_GLASS, true)
-          .withProperties(VanillaBlockPropertyTypes.COLOR)
+          .setProperties(VanillaBlockPropertyTypes.COLOR)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStainedGlassPaneBehavior> STAINED_GLASS_PANE_TYPE = BlockTypeBuilder
           .builder(BlockStainedGlassPaneBehavior.class)
           .vanillaBlock(VanillaBlockId.STAINED_GLASS_PANE, true)
-          .withProperties(VanillaBlockPropertyTypes.COLOR)
+          .setProperties(VanillaBlockPropertyTypes.COLOR)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStainedHardenedClayBehavior> STAINED_HARDENED_CLAY_TYPE = BlockTypeBuilder
           .builder(BlockStainedHardenedClayBehavior.class)
           .vanillaBlock(VanillaBlockId.STAINED_HARDENED_CLAY, true)
-          .withProperties(VanillaBlockPropertyTypes.COLOR)
+          .setProperties(VanillaBlockPropertyTypes.COLOR)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStandingBannerBehavior> STANDING_BANNER_TYPE = BlockTypeBuilder
           .builder(BlockStandingBannerBehavior.class)
           .vanillaBlock(VanillaBlockId.STANDING_BANNER, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStandingSignBehavior> STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStickyPistonBehavior> STICKY_PISTON_TYPE = BlockTypeBuilder
           .builder(BlockStickyPistonBehavior.class)
           .vanillaBlock(VanillaBlockId.STICKY_PISTON, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStickyPistonArmCollisionBehavior> STICKY_PISTON_ARM_COLLISION_TYPE = BlockTypeBuilder
           .builder(BlockStickyPistonArmCollisionBehavior.class)
           .vanillaBlock(VanillaBlockId.STICKY_PISTON_ARM_COLLISION, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStoneBehavior> STONE_TYPE = BlockTypeBuilder
           .builder(BlockStoneBehavior.class)
           .vanillaBlock(VanillaBlockId.STONE, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.STONE_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStoneBlockSlabBehavior> STONE_BLOCK_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockStoneBlockSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.STONE_BLOCK_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStoneBlockSlab2Behavior> STONE_BLOCK_SLAB2_TYPE = BlockTypeBuilder
           .builder(BlockStoneBlockSlab2Behavior.class)
           .vanillaBlock(VanillaBlockId.STONE_BLOCK_SLAB2, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_2, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_2, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStoneBlockSlab3Behavior> STONE_BLOCK_SLAB3_TYPE = BlockTypeBuilder
           .builder(BlockStoneBlockSlab3Behavior.class)
           .vanillaBlock(VanillaBlockId.STONE_BLOCK_SLAB3, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_3, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_3, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStoneBlockSlab4Behavior> STONE_BLOCK_SLAB4_TYPE = BlockTypeBuilder
           .builder(BlockStoneBlockSlab4Behavior.class)
           .vanillaBlock(VanillaBlockId.STONE_BLOCK_SLAB4, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStoneBrickStairsBehavior> STONE_BRICK_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockStoneBrickStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.STONE_BRICK_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStoneButtonBehavior> STONE_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockStoneButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.STONE_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStonePressurePlateBehavior> STONE_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockStonePressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.STONE_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStoneStairsBehavior> STONE_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockStoneStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.STONE_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStonebrickBehavior> STONEBRICK_TYPE = BlockTypeBuilder
           .builder(BlockStonebrickBehavior.class)
           .vanillaBlock(VanillaBlockId.STONEBRICK, true)
-          .withProperties(VanillaBlockPropertyTypes.STONE_BRICK_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.STONE_BRICK_TYPE)
           .addBasicComponents()
           .build();
 
@@ -5798,154 +5798,154 @@ public interface VanillaBlockTypes {
   BlockType<BlockStonecutterBlockBehavior> STONECUTTER_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockStonecutterBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.STONECUTTER_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedAcaciaLogBehavior> STRIPPED_ACACIA_LOG_TYPE = BlockTypeBuilder
           .builder(BlockStrippedAcaciaLogBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_ACACIA_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedBambooBlockBehavior> STRIPPED_BAMBOO_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockStrippedBambooBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_BAMBOO_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedBirchLogBehavior> STRIPPED_BIRCH_LOG_TYPE = BlockTypeBuilder
           .builder(BlockStrippedBirchLogBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_BIRCH_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedCherryLogBehavior> STRIPPED_CHERRY_LOG_TYPE = BlockTypeBuilder
           .builder(BlockStrippedCherryLogBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_CHERRY_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedCherryWoodBehavior> STRIPPED_CHERRY_WOOD_TYPE = BlockTypeBuilder
           .builder(BlockStrippedCherryWoodBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_CHERRY_WOOD, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedCrimsonHyphaeBehavior> STRIPPED_CRIMSON_HYPHAE_TYPE = BlockTypeBuilder
           .builder(BlockStrippedCrimsonHyphaeBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_CRIMSON_HYPHAE, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedCrimsonStemBehavior> STRIPPED_CRIMSON_STEM_TYPE = BlockTypeBuilder
           .builder(BlockStrippedCrimsonStemBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_CRIMSON_STEM, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedDarkOakLogBehavior> STRIPPED_DARK_OAK_LOG_TYPE = BlockTypeBuilder
           .builder(BlockStrippedDarkOakLogBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_DARK_OAK_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedJungleLogBehavior> STRIPPED_JUNGLE_LOG_TYPE = BlockTypeBuilder
           .builder(BlockStrippedJungleLogBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_JUNGLE_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedMangroveLogBehavior> STRIPPED_MANGROVE_LOG_TYPE = BlockTypeBuilder
           .builder(BlockStrippedMangroveLogBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_MANGROVE_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedMangroveWoodBehavior> STRIPPED_MANGROVE_WOOD_TYPE = BlockTypeBuilder
           .builder(BlockStrippedMangroveWoodBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_MANGROVE_WOOD, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedOakLogBehavior> STRIPPED_OAK_LOG_TYPE = BlockTypeBuilder
           .builder(BlockStrippedOakLogBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_OAK_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedSpruceLogBehavior> STRIPPED_SPRUCE_LOG_TYPE = BlockTypeBuilder
           .builder(BlockStrippedSpruceLogBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_SPRUCE_LOG, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedWarpedHyphaeBehavior> STRIPPED_WARPED_HYPHAE_TYPE = BlockTypeBuilder
           .builder(BlockStrippedWarpedHyphaeBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_WARPED_HYPHAE, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStrippedWarpedStemBehavior> STRIPPED_WARPED_STEM_TYPE = BlockTypeBuilder
           .builder(BlockStrippedWarpedStemBehavior.class)
           .vanillaBlock(VanillaBlockId.STRIPPED_WARPED_STEM, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStructureBlockBehavior> STRUCTURE_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockStructureBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.STRUCTURE_BLOCK, true)
-          .withProperties(VanillaBlockPropertyTypes.STRUCTURE_BLOCK_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.STRUCTURE_BLOCK_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockStructureVoidBehavior> STRUCTURE_VOID_TYPE = BlockTypeBuilder
           .builder(BlockStructureVoidBehavior.class)
           .vanillaBlock(VanillaBlockId.STRUCTURE_VOID, true)
-          .withProperties(VanillaBlockPropertyTypes.STRUCTURE_VOID_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.STRUCTURE_VOID_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSuspiciousGravelBehavior> SUSPICIOUS_GRAVEL_TYPE = BlockTypeBuilder
           .builder(BlockSuspiciousGravelBehavior.class)
           .vanillaBlock(VanillaBlockId.SUSPICIOUS_GRAVEL, true)
-          .withProperties(VanillaBlockPropertyTypes.BRUSHED_PROGRESS, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.BRUSHED_PROGRESS, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSuspiciousSandBehavior> SUSPICIOUS_SAND_TYPE = BlockTypeBuilder
           .builder(BlockSuspiciousSandBehavior.class)
           .vanillaBlock(VanillaBlockId.SUSPICIOUS_SAND, true)
-          .withProperties(VanillaBlockPropertyTypes.BRUSHED_PROGRESS, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.BRUSHED_PROGRESS, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockSweetBerryBushBehavior> SWEET_BERRY_BUSH_TYPE = BlockTypeBuilder
           .builder(BlockSweetBerryBushBehavior.class)
           .vanillaBlock(VanillaBlockId.SWEET_BERRY_BUSH, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.GROWTH)
           .addBasicComponents()
           .build();
 
   BlockType<BlockTallgrassBehavior> TALLGRASS_TYPE = BlockTypeBuilder
           .builder(BlockTallgrassBehavior.class)
           .vanillaBlock(VanillaBlockId.TALLGRASS, true)
-          .withProperties(VanillaBlockPropertyTypes.TALL_GRASS_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.TALL_GRASS_TYPE)
           .addBasicComponents()
           .build();
 
@@ -5964,14 +5964,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockTntBehavior> TNT_TYPE = BlockTypeBuilder
           .builder(BlockTntBehavior.class)
           .vanillaBlock(VanillaBlockId.TNT, true)
-          .withProperties(VanillaBlockPropertyTypes.ALLOW_UNDERWATER_BIT, VanillaBlockPropertyTypes.EXPLODE_BIT)
+          .setProperties(VanillaBlockPropertyTypes.ALLOW_UNDERWATER_BIT, VanillaBlockPropertyTypes.EXPLODE_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockTorchBehavior> TORCH_TYPE = BlockTypeBuilder
           .builder(BlockTorchBehavior.class)
           .vanillaBlock(VanillaBlockId.TORCH, true)
-          .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -5984,35 +5984,35 @@ public interface VanillaBlockTypes {
   BlockType<BlockTorchflowerCropBehavior> TORCHFLOWER_CROP_TYPE = BlockTypeBuilder
           .builder(BlockTorchflowerCropBehavior.class)
           .vanillaBlock(VanillaBlockId.TORCHFLOWER_CROP, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.GROWTH)
           .addBasicComponents()
           .build();
 
   BlockType<BlockTrapdoorBehavior> TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockTrappedChestBehavior> TRAPPED_CHEST_TYPE = BlockTypeBuilder
           .builder(BlockTrappedChestBehavior.class)
           .vanillaBlock(VanillaBlockId.TRAPPED_CHEST, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockTripWireBehavior> TRIP_WIRE_TYPE = BlockTypeBuilder
           .builder(BlockTripWireBehavior.class)
           .vanillaBlock(VanillaBlockId.TRIP_WIRE, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.DISARMED_BIT, VanillaBlockPropertyTypes.POWERED_BIT, VanillaBlockPropertyTypes.SUSPENDED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.DISARMED_BIT, VanillaBlockPropertyTypes.POWERED_BIT, VanillaBlockPropertyTypes.SUSPENDED_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockTripwireHookBehavior> TRIPWIRE_HOOK_TYPE = BlockTypeBuilder
           .builder(BlockTripwireHookBehavior.class)
           .vanillaBlock(VanillaBlockId.TRIPWIRE_HOOK, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.POWERED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.POWERED_BIT)
           .addBasicComponents()
           .build();
 
@@ -6031,21 +6031,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockTurtleEggBehavior> TURTLE_EGG_TYPE = BlockTypeBuilder
           .builder(BlockTurtleEggBehavior.class)
           .vanillaBlock(VanillaBlockId.TURTLE_EGG, true)
-          .withProperties(VanillaBlockPropertyTypes.CRACKED_STATE, VanillaBlockPropertyTypes.TURTLE_EGG_COUNT)
+          .setProperties(VanillaBlockPropertyTypes.CRACKED_STATE, VanillaBlockPropertyTypes.TURTLE_EGG_COUNT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockTwistingVinesBehavior> TWISTING_VINES_TYPE = BlockTypeBuilder
           .builder(BlockTwistingVinesBehavior.class)
           .vanillaBlock(VanillaBlockId.TWISTING_VINES, true)
-          .withProperties(VanillaBlockPropertyTypes.TWISTING_VINES_AGE)
+          .setProperties(VanillaBlockPropertyTypes.TWISTING_VINES_AGE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockUnderwaterTorchBehavior> UNDERWATER_TORCH_TYPE = BlockTypeBuilder
           .builder(BlockUnderwaterTorchBehavior.class)
           .vanillaBlock(VanillaBlockId.UNDERWATER_TORCH, true)
-          .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -6064,70 +6064,70 @@ public interface VanillaBlockTypes {
   BlockType<BlockUnlitRedstoneTorchBehavior> UNLIT_REDSTONE_TORCH_TYPE = BlockTypeBuilder
           .builder(BlockUnlitRedstoneTorchBehavior.class)
           .vanillaBlock(VanillaBlockId.UNLIT_REDSTONE_TORCH, true)
-          .withProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockUnpoweredComparatorBehavior> UNPOWERED_COMPARATOR_TYPE = BlockTypeBuilder
           .builder(BlockUnpoweredComparatorBehavior.class)
           .vanillaBlock(VanillaBlockId.UNPOWERED_COMPARATOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OUTPUT_LIT_BIT, VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OUTPUT_LIT_BIT, VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockUnpoweredRepeaterBehavior> UNPOWERED_REPEATER_TYPE = BlockTypeBuilder
           .builder(BlockUnpoweredRepeaterBehavior.class)
           .vanillaBlock(VanillaBlockId.UNPOWERED_REPEATER, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.REPEATER_DELAY)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.REPEATER_DELAY)
           .addBasicComponents()
           .build();
 
   BlockType<BlockVerdantFroglightBehavior> VERDANT_FROGLIGHT_TYPE = BlockTypeBuilder
           .builder(BlockVerdantFroglightBehavior.class)
           .vanillaBlock(VanillaBlockId.VERDANT_FROGLIGHT, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockVineBehavior> VINE_TYPE = BlockTypeBuilder
           .builder(BlockVineBehavior.class)
           .vanillaBlock(VanillaBlockId.VINE, true)
-          .withProperties(VanillaBlockPropertyTypes.VINE_DIRECTION_BITS)
+          .setProperties(VanillaBlockPropertyTypes.VINE_DIRECTION_BITS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWallBannerBehavior> WALL_BANNER_TYPE = BlockTypeBuilder
           .builder(BlockWallBannerBehavior.class)
           .vanillaBlock(VanillaBlockId.WALL_BANNER, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWallSignBehavior> WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWarpedButtonBehavior> WARPED_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockWarpedButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWarpedDoorBehavior> WARPED_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockWarpedDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWarpedDoubleSlabBehavior> WARPED_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWarpedDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_DOUBLE_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -6140,7 +6140,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockWarpedFenceGateBehavior> WARPED_FENCE_GATE_TYPE = BlockTypeBuilder
           .builder(BlockWarpedFenceGateBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_FENCE_GATE, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.IN_WALL_BIT, VanillaBlockPropertyTypes.OPEN_BIT)
           .addBasicComponents()
           .build();
 
@@ -6153,14 +6153,14 @@ public interface VanillaBlockTypes {
   BlockType<BlockWarpedHangingSignBehavior> WARPED_HANGING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockWarpedHangingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_HANGING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+          .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWarpedHyphaeBehavior> WARPED_HYPHAE_TYPE = BlockTypeBuilder
           .builder(BlockWarpedHyphaeBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_HYPHAE, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
@@ -6179,7 +6179,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockWarpedPressurePlateBehavior> WARPED_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockWarpedPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
@@ -6192,42 +6192,42 @@ public interface VanillaBlockTypes {
   BlockType<BlockWarpedSlabBehavior> WARPED_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWarpedSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWarpedStairsBehavior> WARPED_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockWarpedStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWarpedStandingSignBehavior> WARPED_STANDING_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockWarpedStandingSignBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_STANDING_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWarpedStemBehavior> WARPED_STEM_TYPE = BlockTypeBuilder
           .builder(BlockWarpedStemBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_STEM, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWarpedTrapdoorBehavior> WARPED_TRAPDOOR_TYPE = BlockTypeBuilder
           .builder(BlockWarpedTrapdoorBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_TRAPDOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWarpedWallSignBehavior> WARPED_WALL_SIGN_TYPE = BlockTypeBuilder
           .builder(BlockWarpedWallSignBehavior.class)
           .vanillaBlock(VanillaBlockId.WARPED_WALL_SIGN, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -6240,7 +6240,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockWaterBehavior> WATER_TYPE = BlockTypeBuilder
           .builder(BlockWaterBehavior.class)
           .vanillaBlock(VanillaBlockId.WATER, true)
-          .withProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
+          .setProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
           .addBasicComponents()
           .build();
 
@@ -6265,21 +6265,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockWaxedCutCopperSlabBehavior> WAXED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWaxedCutCopperStairsBehavior> WAXED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockWaxedCutCopperStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_CUT_COPPER_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWaxedDoubleCutCopperSlabBehavior> WAXED_DOUBLE_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedDoubleCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_DOUBLE_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -6298,21 +6298,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockWaxedExposedCutCopperSlabBehavior> WAXED_EXPOSED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedExposedCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_EXPOSED_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWaxedExposedCutCopperStairsBehavior> WAXED_EXPOSED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockWaxedExposedCutCopperStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWaxedExposedDoubleCutCopperSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedExposedDoubleCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -6331,21 +6331,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockWaxedOxidizedCutCopperSlabBehavior> WAXED_OXIDIZED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedOxidizedCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWaxedOxidizedCutCopperStairsBehavior> WAXED_OXIDIZED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockWaxedOxidizedCutCopperStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWaxedOxidizedDoubleCutCopperSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedOxidizedDoubleCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -6364,21 +6364,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockWaxedWeatheredCutCopperSlabBehavior> WAXED_WEATHERED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedWeatheredCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWaxedWeatheredCutCopperStairsBehavior> WAXED_WEATHERED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockWaxedWeatheredCutCopperStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWaxedWeatheredDoubleCutCopperSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedWeatheredDoubleCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -6397,21 +6397,21 @@ public interface VanillaBlockTypes {
   BlockType<BlockWeatheredCutCopperSlabBehavior> WEATHERED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWeatheredCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WEATHERED_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWeatheredCutCopperStairsBehavior> WEATHERED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
           .builder(BlockWeatheredCutCopperStairsBehavior.class)
           .vanillaBlock(VanillaBlockId.WEATHERED_CUT_COPPER_STAIRS, true)
-          .withProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWeatheredDoubleCutCopperSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWeatheredDoubleCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WEATHERED_DOUBLE_CUT_COPPER_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
           .addBasicComponents()
           .build();
 
@@ -6424,28 +6424,28 @@ public interface VanillaBlockTypes {
   BlockType<BlockWeepingVinesBehavior> WEEPING_VINES_TYPE = BlockTypeBuilder
           .builder(BlockWeepingVinesBehavior.class)
           .vanillaBlock(VanillaBlockId.WEEPING_VINES, true)
-          .withProperties(VanillaBlockPropertyTypes.WEEPING_VINES_AGE)
+          .setProperties(VanillaBlockPropertyTypes.WEEPING_VINES_AGE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWheatBehavior> WHEAT_TYPE = BlockTypeBuilder
           .builder(BlockWheatBehavior.class)
           .vanillaBlock(VanillaBlockId.WHEAT, true)
-          .withProperties(VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.GROWTH)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWhiteCandleBehavior> WHITE_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockWhiteCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.WHITE_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWhiteCandleCakeBehavior> WHITE_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockWhiteCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.WHITE_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -6464,7 +6464,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockWhiteGlazedTerracottaBehavior> WHITE_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockWhiteGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.WHITE_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
@@ -6489,49 +6489,49 @@ public interface VanillaBlockTypes {
   BlockType<BlockWoodBehavior> WOOD_TYPE = BlockTypeBuilder
           .builder(BlockWoodBehavior.class)
           .vanillaBlock(VanillaBlockId.WOOD, true)
-          .withProperties(VanillaBlockPropertyTypes.PILLAR_AXIS, VanillaBlockPropertyTypes.STRIPPED_BIT, VanillaBlockPropertyTypes.WOOD_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS, VanillaBlockPropertyTypes.STRIPPED_BIT, VanillaBlockPropertyTypes.WOOD_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWoodenButtonBehavior> WOODEN_BUTTON_TYPE = BlockTypeBuilder
           .builder(BlockWoodenButtonBehavior.class)
           .vanillaBlock(VanillaBlockId.WOODEN_BUTTON, true)
-          .withProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWoodenDoorBehavior> WOODEN_DOOR_TYPE = BlockTypeBuilder
           .builder(BlockWoodenDoorBehavior.class)
           .vanillaBlock(VanillaBlockId.WOODEN_DOOR, true)
-          .withProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWoodenPressurePlateBehavior> WOODEN_PRESSURE_PLATE_TYPE = BlockTypeBuilder
           .builder(BlockWoodenPressurePlateBehavior.class)
           .vanillaBlock(VanillaBlockId.WOODEN_PRESSURE_PLATE, true)
-          .withProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+          .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
           .addBasicComponents()
           .build();
 
   BlockType<BlockWoodenSlabBehavior> WOODEN_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWoodenSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WOODEN_SLAB, true)
-          .withProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT, VanillaBlockPropertyTypes.WOOD_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT, VanillaBlockPropertyTypes.WOOD_TYPE)
           .addBasicComponents()
           .build();
 
   BlockType<BlockYellowCandleBehavior> YELLOW_CANDLE_TYPE = BlockTypeBuilder
           .builder(BlockYellowCandleBehavior.class)
           .vanillaBlock(VanillaBlockId.YELLOW_CANDLE, true)
-          .withProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.CANDLES, VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
   BlockType<BlockYellowCandleCakeBehavior> YELLOW_CANDLE_CAKE_TYPE = BlockTypeBuilder
           .builder(BlockYellowCandleCakeBehavior.class)
           .vanillaBlock(VanillaBlockId.YELLOW_CANDLE_CAKE, true)
-          .withProperties(VanillaBlockPropertyTypes.LIT)
+          .setProperties(VanillaBlockPropertyTypes.LIT)
           .addBasicComponents()
           .build();
 
@@ -6556,7 +6556,7 @@ public interface VanillaBlockTypes {
   BlockType<BlockYellowGlazedTerracottaBehavior> YELLOW_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
           .builder(BlockYellowGlazedTerracottaBehavior.class)
           .vanillaBlock(VanillaBlockId.YELLOW_GLAZED_TERRACOTTA, true)
-          .withProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
           .addBasicComponents()
           .build();
 

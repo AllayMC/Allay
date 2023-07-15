@@ -1,5 +1,6 @@
 package cn.allay.api.block.component.impl.attribute;
 
+import cn.allay.api.block.type.BlockState;
 import cn.allay.api.component.annotation.Inject;
 
 /**
@@ -9,5 +10,5 @@ import cn.allay.api.component.annotation.Inject;
  */
 public interface BlockAttributeComponent {
     @Inject
-    BlockAttributes getBlockAttributes();
+    BlockAttributes getBlockAttributes(BlockState blockState);
 }

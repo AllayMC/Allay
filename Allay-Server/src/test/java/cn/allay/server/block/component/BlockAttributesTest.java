@@ -2,7 +2,6 @@ package cn.allay.server.block.component;
 
 import cn.allay.api.block.component.impl.attribute.BlockAttributes;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
-import cn.allay.api.block.type.BlockInitInfo;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockId;
@@ -120,17 +119,16 @@ class BlockAttributesTest {
 
 
     void testBlockType(VanillaBlockId vanillaBlockId, BlockType<?> type) {
-        var block = type.createBlock(new BlockInitInfo.Simple(Pos3i.of(0, 1, 2, null)));
+        var block = type.getBlockBehavior();
         var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
         for (var state : type.getBlockStateHashMap().values()) {
-            block.setState(state);
             var expected = attributeMap.get(state.blockStateHash());
 //            if (expected == null) {
 //                missing.add(state);
 //                continue;
 //            }
             assertNotNull(expected, "Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
-            assertEquals(attributeMap.get(state.blockStateHash()), block.getBlockAttributes());
+            assertEquals(attributeMap.get(state.blockStateHash()), block.getBlockAttributes(state));
         }
     }
 }
