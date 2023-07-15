@@ -1,7 +1,7 @@
 package cn.allay.server;
 
 import cn.allay.api.math.vector.Loc3f;
-import cn.allay.api.network.Client;
+import cn.allay.api.player.Client;
 import cn.allay.api.network.NetworkServer;
 import cn.allay.api.player.info.DeviceInfo;
 import cn.allay.api.player.skin.Skin;

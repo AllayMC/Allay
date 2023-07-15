@@ -2,7 +2,7 @@ package cn.allay.server.world;
 
 import cn.allay.api.math.vector.Loc3f;
 import cn.allay.api.math.vector.MutableLoc3f;
-import cn.allay.api.network.Client;
+import cn.allay.api.player.Client;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.*;
