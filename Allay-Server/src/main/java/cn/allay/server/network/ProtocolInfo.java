@@ -2,6 +2,7 @@ package cn.allay.server.network;
 
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v589.Bedrock_v589;
+import org.cloudburstmc.protocol.bedrock.codec.v594.Bedrock_v594;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnegative;
@@ -18,7 +19,7 @@ public final class ProtocolInfo {
     private static BedrockCodec DEFAULT_PACKET_CODEC;
 
     static {
-        registerDefaultPacketCodec(Bedrock_v589.CODEC);
+        registerDefaultPacketCodec(Bedrock_v594.CODEC);
     }
 
     private ProtocolInfo() {

@@ -1,4 +1,4 @@
-package cn.allay.api.network;
+package cn.allay.api.player;
 
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.player.AdventureSettings;

@@ -8,7 +8,7 @@ import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.math.vector.Loc3f;
-import cn.allay.api.network.Client;
+import cn.allay.api.player.Client;
 import cn.allay.api.player.AdventureSettings;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
@@ -219,10 +219,10 @@ public class AllayClient implements Client {
         startGamePacket.setServerChunkTickRange(spawnWorld.getTickingRadius());
         startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
         startGamePacket.setPremiumWorldTemplateId("");
-        startGamePacket.setInventoriesServerAuthoritative(false);
+        startGamePacket.setInventoriesServerAuthoritative(true);
         //TODO
         startGamePacket.setItemDefinitions(List.of());
-        //TODO
+        //TODO: server-auth-movement
         startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.CLIENT);
         startGamePacket.setCommandsEnabled(true);
         startGamePacket.setMultiplayerGame(true);
