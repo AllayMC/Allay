@@ -3,6 +3,7 @@ package cn.allay.api.item.type;
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.registry.MappedRegistry;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
 import java.util.Map;
 
@@ -17,4 +18,8 @@ public interface CreativeItemRegistry extends MappedRegistry<Integer, ItemStack,
     static CreativeItemRegistry getRegistry() {
         return REGISTRY.get();
     }
+
+    ItemData[] getNetworkItemDataArray();
+
+    void rebuildNetworkItemDataArray();
 }

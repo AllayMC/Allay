@@ -27,6 +27,8 @@ public interface ItemTypeBuilder<T extends ItemStack> {
 
     ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId);
 
+    ItemTypeBuilder<T> runtimeId(int runtimeId);
+
     ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId, boolean initVanillaItemAttributeComponent);
 
     ItemTypeBuilder<T> setComponents(List<ComponentProvider<? extends ItemComponentImpl>> componentProviders);
