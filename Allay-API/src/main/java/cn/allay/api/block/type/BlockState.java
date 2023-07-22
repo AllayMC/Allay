@@ -3,7 +3,6 @@ package cn.allay.api.block.type;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleBlockDefinition;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
@@ -34,7 +33,8 @@ public interface BlockState {
 
     long unsignedBlockStateHash();
 
-    default SimpleBlockDefinition toBlockDefinition() {
+    //TODO: 确认是否只需要实现BlockDefinition::getRuntimeId(), 现有实现较为复杂且低效
+    default SimpleBlockDefinition toNetworkBlockDefinition() {
         var statesBuilder = NbtMap.builder();
         for (var propertyValue : getPropertyValues().values()) {
             statesBuilder.put(

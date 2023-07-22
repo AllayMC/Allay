@@ -89,7 +89,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                 }
             }
             if (methodDelegation == null)
-                throw new ComponentInjectException("Missing implementation for method: " + methodShouldBeInject.getName());
+                throw new ComponentInjectException("Missing implementation for method: " + interfaceClass.getSimpleName() + "::" + methodShouldBeInject.getName());
             bb = bb.method(is(methodShouldBeInject))
                     .intercept(methodDelegation);
         }

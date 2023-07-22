@@ -67,7 +67,7 @@ public class VanillaItemIdEnumGen {
                     StringUtils.fastTwoPartSplit(entry.getKey(), ":", "")[1],
                     ".", "");
             var valueName = split[0].isBlank() ? split[1].toUpperCase() : split[0].toUpperCase() + "_" + split[1].toUpperCase();
-            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S", entry.getKey()).build());
+            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue().get("id").getAsInt()).build());
         }
     }
 
@@ -79,9 +79,15 @@ public class VanillaItemIdEnumGen {
                         .builder(identifierClass, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(GETTER_CLASS)
                         .build())
+                .addField(FieldSpec
+                        .builder(int.class, "runtimeId", Modifier.PRIVATE, Modifier.FINAL)
+                        .addAnnotation(GETTER_CLASS)
+                        .build())
                 .addMethod(MethodSpec.constructorBuilder()
                         .addParameter(STRING_CLASS, "identifier")
+                        .addParameter(int.class, "runtimeId")
                         .addStatement("this.$N = new $T($N)", "identifier", identifierClass, "identifier")
+                        .addStatement("this.runtimeId = runtimeId")
                         .build()
                 );
     }

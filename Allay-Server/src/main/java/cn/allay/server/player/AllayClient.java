@@ -7,6 +7,7 @@ import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
+import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.math.vector.Loc3f;
 import cn.allay.api.player.Client;
 import cn.allay.api.player.AdventureSettings;
@@ -269,7 +270,7 @@ public class AllayClient implements Client {
         sendPacket(biomeDefinitionListPacket);
 
         var creativeContentPacket = new CreativeContentPacket();
-        creativeContentPacket.setContents(new ItemData[0]);
+        creativeContentPacket.setContents(CreativeItemRegistry.getRegistry().getNetworkItemDataArray());
         sendPacket(creativeContentPacket);
 
         var craftingDataPacket = new CraftingDataPacket();

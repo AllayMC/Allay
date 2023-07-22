@@ -44,7 +44,7 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
     private void rebuildDefinitionList() {
         simpleBlockDefinitions.clear();
         for (var blockType : this.getContent().values()) {
-            blockType.getAllStates().forEach(state -> simpleBlockDefinitions.add(state.toBlockDefinition()));
+            blockType.getAllStates().forEach(state -> simpleBlockDefinitions.add(state.toNetworkBlockDefinition()));
         }
     }
 }

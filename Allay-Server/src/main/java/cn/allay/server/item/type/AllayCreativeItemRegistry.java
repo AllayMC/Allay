@@ -13,10 +13,14 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.SNBTParser;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
 import java.io.InputStream;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -27,8 +31,21 @@ import java.util.function.Supplier;
 @Slf4j
 public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, ItemStack, Map<Integer, ItemStack>> implements CreativeItemRegistry {
 
+    protected ItemData[] cachedNetworkItemDataArray;
+
     public AllayCreativeItemRegistry(RegistryLoader<Void, Map<Integer, ItemStack>> loader) {
         super(null, loader);
+        rebuildNetworkItemDataArray();
+    }
+
+    @Override
+    public ItemData[] getNetworkItemDataArray() {
+        return cachedNetworkItemDataArray;
+    }
+
+    @Override
+    public void rebuildNetworkItemDataArray() {
+        cachedNetworkItemDataArray = mappings.values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new);
     }
 
     public static class Loader implements RegistryLoader<Void, Map<Integer, ItemStack>> {
@@ -47,7 +64,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
         @Override
         public Map<Integer, ItemStack> load(Void input) {
             log.info("Start loading creative item registry...");
-            var map = new Int2ObjectOpenHashMap<ItemStack>();
+            var map = new TreeMap<Integer, ItemStack>();
             NbtMap nbt;
             try (var stream = inputStreamSupplier.get()) {
                 nbt = (NbtMap) SNBTParser.parse(new String(Objects.requireNonNull(stream).readAllBytes()));

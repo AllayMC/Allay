@@ -2,6 +2,7 @@ package cn.allay.api.item.type;
 
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.identifier.Identified;
+import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponentImpl;
 
@@ -16,4 +17,6 @@ public interface ItemType<T extends ItemStack> extends Identified {
     List<ComponentProvider<? extends ItemComponentImpl>> getComponentProviders();
 
     T createItemStack(ItemStackInitInfo info);
+
+    int getRuntimeId();
 }
