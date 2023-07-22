@@ -19,14 +19,13 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
 
     protected ItemType<? extends ItemStack> itemType;
     protected int count;
-    protected int meta;
-    //todo: damage
+    protected int damage;
     protected NbtMap nbt;
 
     public ItemBaseComponentImpl(ItemType<? extends ItemStack> itemType, ItemStackInitInfo initInfo) {
         this.itemType = itemType;
         this.count = initInfo.count();
-        this.meta = initInfo.meta();
+        this.damage = initInfo.damage();
         this.nbt = initInfo.nbt();
     }
 
@@ -51,14 +50,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
 
     @Override
     @Impl
-    public int getMeta() {
-        return meta;
+    public int getDamage() {
+        return damage;
     }
 
     @Override
     @Impl
-    public void setMeta(int meta) {
-        this.meta = meta;
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     @Override
