@@ -13,10 +13,10 @@ import java.util.Map;
  */
 public interface InventoryHolder {
     @UnmodifiableView
-    Map<ContainerType, Inventory> getInventories();
+    Map<Class<? extends Inventory>, Inventory> getInventories();
 
     @Nullable
-    Inventory getInventory(ContainerType type);
+    Inventory getInventory(Class<? extends Inventory> type);
 
     void addInventory(Inventory inventory);
 }

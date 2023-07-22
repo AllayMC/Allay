@@ -3,7 +3,7 @@ package cn.allay.api.block.type;
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.MappedRegistry;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleBlockDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 
 import java.util.List;
 import java.util.Map;
@@ -20,5 +20,5 @@ public interface BlockTypeRegistry extends MappedRegistry<Identifier, BlockType<
         return REGISTRY.get();
     }
 
-    List<SimpleBlockDefinition> getSimpleBlockDefinitions();
+    List<BlockDefinition> getBlockDefinitions();
 }

@@ -18,12 +18,12 @@ public interface EntityInventoryHolderComponent extends InventoryHolder {
     @UnmodifiableView
     @Override
     @Inject
-    Map<ContainerType, Inventory> getInventories();
+    Map<Class<? extends Inventory>, Inventory> getInventories();
 
     @Override
     @Nullable
     @Inject
-    Inventory getInventory(ContainerType type);
+    Inventory getInventory(Class<? extends Inventory> type);
 
     @Override
     @Inject

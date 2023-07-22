@@ -7,7 +7,11 @@ import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
+import cn.allay.api.inventory.impl.PlayerArmorInventory;
+import cn.allay.api.inventory.impl.PlayerCursorInventory;
+import cn.allay.api.inventory.impl.PlayerInventory;
 import cn.allay.api.item.type.CreativeItemRegistry;
+import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.vector.Loc3f;
 import cn.allay.api.player.Client;
 import cn.allay.api.player.AdventureSettings;
@@ -26,14 +30,12 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -137,11 +139,24 @@ public class AllayClient implements Client {
 
         server.addToPlayerList(this);
 
+        sendInventories();
+
         sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
 
         //TODO: SetTime
 
         firstSpawned = true;
+    }
+
+    private void sendInventories() {
+        var inv = playerEntity.getInventory(PlayerInventory.class);
+        inv.sendContents(playerEntity);
+
+        var cursor = playerEntity.getInventory(PlayerCursorInventory.class);
+        cursor.sendContents(playerEntity);
+
+        var armor = playerEntity.getInventory(PlayerArmorInventory.class);
+        armor.sendContents(playerEntity);
     }
 
     @Override
@@ -189,6 +204,7 @@ public class AllayClient implements Client {
         //TODO: Load player data
         var spawnLocation = server.getDefaultWorld().getSpawnLocation();
         playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(spawnLocation));
+        playerEntity.setClient(this);
     }
 
     private void sendBasicGameData() {
@@ -222,7 +238,7 @@ public class AllayClient implements Client {
         startGamePacket.setPremiumWorldTemplateId("");
         startGamePacket.setInventoriesServerAuthoritative(true);
         //TODO
-        startGamePacket.setItemDefinitions(List.of());
+        startGamePacket.setItemDefinitions(ItemTypeRegistry.getRegistry().getItemDefinitions());
         //TODO: server-auth-movement
         startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.CLIENT);
         startGamePacket.setCommandsEnabled(true);
@@ -257,7 +273,7 @@ public class AllayClient implements Client {
         session.getPeer().getCodecHelper().setBlockDefinitions(
                 SimpleDefinitionRegistry
                         .<BlockDefinition>builder()
-                        .addAll(BlockTypeRegistry.getRegistry().getSimpleBlockDefinitions())
+                        .addAll(BlockTypeRegistry.getRegistry().getBlockDefinitions())
                         .build()
         );
 
@@ -428,6 +444,25 @@ public class AllayClient implements Client {
         @Override
         public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
             //TODO: PlayerJoinEvent
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(InteractPacket packet) {
+            switch (packet.getAction()) {
+                case OPEN_INVENTORY -> {
+                    playerEntity.getInventory(PlayerInventory.class).addViewer(playerEntity);
+                }
+            }
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(ContainerClosePacket packet) {
+            var opened = playerEntity.getOpenedInventory();
+            if (opened == null)
+                throw new IllegalStateException("Player is not viewing an inventory");
+            opened.removeViewer(playerEntity);
             return PacketSignal.HANDLED;
         }
     }
