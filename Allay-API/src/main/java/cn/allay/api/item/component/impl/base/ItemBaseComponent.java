@@ -22,10 +22,10 @@ public interface ItemBaseComponent {
     void setCount(int count);
 
     @Inject
-    int getMeta();
+    int getDamage();
 
     @Inject
-    void setMeta(int meta);
+    void setDamage(int damage);
 
     @Inject
     NbtMap getNbt();

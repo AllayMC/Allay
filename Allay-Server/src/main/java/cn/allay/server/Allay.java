@@ -10,6 +10,7 @@ import cn.allay.api.component.interfaces.ComponentInjector;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.component.impl.attribute.VanillaItemAttributeRegistry;
+import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.scheduler.Scheduler;
@@ -23,6 +24,7 @@ import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.entity.type.AllayEntityType;
 import cn.allay.server.entity.type.AllayEntityTypeRegistry;
 import cn.allay.server.item.attribute.AllayVanillaItemAttributeRegistry;
+import cn.allay.server.item.type.AllayCreativeItemRegistry;
 import cn.allay.server.item.type.AllayItemType;
 import cn.allay.server.item.type.AllayItemTypeRegistry;
 import cn.allay.server.scheduler.AllayScheduler;
@@ -64,6 +66,7 @@ public final class Allay {
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
         api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));
         api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());
+        api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
 
         //Entity
         api.bind(EntityTypeBuilder.EntityTypeBuilderFactory.class, () -> AllayEntityType::builder);

@@ -17,6 +17,7 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * Allay Project 2023/3/26
@@ -31,11 +32,29 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
 
     public static class Loader implements RegistryLoader<Void, Map<VanillaBlockId, Map<Integer, BlockAttributes>>> {
 
+        protected Supplier<Reader> readerSupplier;
+
+        public Loader(Supplier<Reader> readerSupplier) {
+            this.readerSupplier = readerSupplier;
+        }
+
+        public Loader() {
+            this(() -> new BufferedReader(
+                    new InputStreamReader(
+                            Objects.requireNonNull(
+                                    AllayVanillaBlockAttributeRegistry.class
+                                            .getClassLoader()
+                                            .getResourceAsStream("block_attributes.json"),
+                                    "block_attributes.json is missing!")
+                    )
+            ));
+        }
+
         @SneakyThrows
         @Override
         public Map<VanillaBlockId, Map<Integer, BlockAttributes>> load(Void input) {
             log.info("Start loading vanilla block attribute data registry...");
-            try (var reader = getReader()) {
+            try (var reader = readerSupplier.get()) {
                 var element = JsonParser.parseReader(reader);
                 var loaded = new HashMap<VanillaBlockId, Map<Integer, BlockAttributes>>();
                 for (JsonElement jsonElement : element.getAsJsonArray()) {
@@ -58,18 +77,6 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
                 log.info("Loaded vanilla block attribute data registry successfully");
                 return loaded;
             }
-        }
-
-        protected Reader getReader() {
-            return new BufferedReader(
-                    new InputStreamReader(
-                            Objects.requireNonNull(
-                                    AllayVanillaBlockAttributeRegistry.class
-                                            .getClassLoader()
-                                            .getResourceAsStream("block_attributes.json"),
-                                    "block_attributes.json is missing!")
-                    )
-            );
         }
     }
 }
