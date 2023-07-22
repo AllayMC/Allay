@@ -7,7 +7,7 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleBlockDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,17 +34,17 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
         log.info("Loaded " + fields.length + " Block Types");
     }
 
-    private List<SimpleBlockDefinition> simpleBlockDefinitions = new ArrayList<>();
+    private final List<BlockDefinition> blockDefinitions = new ArrayList<>();
 
     @Override
-    public List<SimpleBlockDefinition> getSimpleBlockDefinitions() {
-        return simpleBlockDefinitions;
+    public List<BlockDefinition> getBlockDefinitions() {
+        return blockDefinitions;
     }
 
     private void rebuildDefinitionList() {
-        simpleBlockDefinitions.clear();
+        blockDefinitions.clear();
         for (var blockType : this.getContent().values()) {
-            blockType.getAllStates().forEach(state -> simpleBlockDefinitions.add(state.toNetworkBlockDefinition()));
+            blockType.getAllStates().forEach(state -> blockDefinitions.add(state.toNetworkBlockDefinition()));
         }
     }
 }

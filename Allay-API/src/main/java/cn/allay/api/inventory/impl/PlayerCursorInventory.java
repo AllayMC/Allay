@@ -1,7 +1,6 @@
-package cn.allay.server.inventory.impl;
+package cn.allay.api.inventory.impl;
 
-import cn.allay.api.entity.impl.EntityPlayer;
-import cn.allay.server.inventory.BaseInventory;
+import cn.allay.api.inventory.BaseInventory;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType;
 
 /**
@@ -10,12 +9,13 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType;
  * @author daoge_cmd
  */
 public class PlayerCursorInventory extends BaseInventory {
-    public PlayerCursorInventory(EntityPlayer holder) {
-        super(holder, 1);
+    public PlayerCursorInventory() {
+        super(1);
     }
 
     @Override
     public ContainerType getType() {
+        //TODO: ContainerType.HAND?
         return ContainerType.INVENTORY;
     }
 }

@@ -7,8 +7,12 @@ import cn.allay.api.data.VanillaItemTypes;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,5 +32,21 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
         log.info("Loading Item Types...");
         fields[0].get(null);
         log.info("Loaded " + fields.length + " Item Types");
+        rebuildDefinitionList();
+    }
+
+    private final List<ItemDefinition> itemDefinitions = new ArrayList<>();
+
+    @Override
+    public List<ItemDefinition> getItemDefinitions() {
+        return itemDefinitions;
+    }
+
+    @Override
+    public void rebuildDefinitionList() {
+        itemDefinitions.clear();
+        for (var itemType : this.getContent().values()) {
+            itemDefinitions.add(itemType.toNetworkDefinition());
+        }
     }
 }

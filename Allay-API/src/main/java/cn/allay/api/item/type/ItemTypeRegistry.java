@@ -3,7 +3,9 @@ package cn.allay.api.item.type;
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.MappedRegistry;
+import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,4 +20,8 @@ public interface ItemTypeRegistry extends MappedRegistry<Identifier, ItemType<?>
     static ItemTypeRegistry getRegistry() {
         return REGISTRY.get();
     }
+
+    List<ItemDefinition> getItemDefinitions();
+
+    void rebuildDefinitionList();
 }
