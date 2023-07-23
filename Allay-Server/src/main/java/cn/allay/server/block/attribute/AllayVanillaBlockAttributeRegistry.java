@@ -6,14 +6,14 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.registry.RegistryLoader;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.StringUtils;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.nbt.NbtUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,21 +32,19 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
 
     public static class Loader implements RegistryLoader<Void, Map<VanillaBlockId, Map<Integer, BlockAttributes>>> {
 
-        protected Supplier<Reader> readerSupplier;
+        protected Supplier<InputStream> streamSupplier;
 
-        public Loader(Supplier<Reader> readerSupplier) {
-            this.readerSupplier = readerSupplier;
+        public Loader(Supplier<InputStream> streamSupplier) {
+            this.streamSupplier = streamSupplier;
         }
 
         public Loader() {
-            this(() -> new BufferedReader(
-                    new InputStreamReader(
-                            Objects.requireNonNull(
-                                    AllayVanillaBlockAttributeRegistry.class
-                                            .getClassLoader()
-                                            .getResourceAsStream("block_attributes.json"),
-                                    "block_attributes.json is missing!")
-                    )
+            this(() -> new BufferedInputStream(
+                    Objects.requireNonNull(
+                            AllayVanillaBlockAttributeRegistry.class
+                                    .getClassLoader()
+                                    .getResourceAsStream("block_attributes.nbt"),
+                            "block_attributes.nbt is missing!")
             ));
         }
 
@@ -54,25 +52,21 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
         @Override
         public Map<VanillaBlockId, Map<Integer, BlockAttributes>> load(Void input) {
             log.info("Start loading vanilla block attribute data registry...");
-            try (var reader = readerSupplier.get()) {
-                var element = JsonParser.parseReader(reader);
+            try (var reader = NbtUtils.createGZIPReader(streamSupplier.get())) {
+                var blocks = ((NbtMap) reader.readTag()).getList("block", NbtType.COMPOUND);
                 var loaded = new HashMap<VanillaBlockId, Map<Integer, BlockAttributes>>();
-                for (JsonElement jsonElement : element.getAsJsonArray()) {
+                for (var dataEntry : blocks) {
                     VanillaBlockId type;
                     try {
-                        type = VanillaBlockId.valueOf(StringUtils.fastTwoPartSplit(jsonElement.getAsJsonObject().get("name").getAsString(), ":", "")[1].toUpperCase());
+                        type = VanillaBlockId.valueOf(StringUtils.fastTwoPartSplit(dataEntry.getString("name"), ":", "")[1].toUpperCase());
                     } catch (IllegalArgumentException ignore) {
-                        log.error("Unknown block name: " + jsonElement.getAsJsonObject().get("name"));
+                        log.error("Unknown block name: " + dataEntry.getString("name"));
                         continue;
                     }
-                    var blockAttributes = BlockAttributes.of(jsonElement.toString());
+                    var blockAttributes = BlockAttributes.fromNBT(dataEntry);
                     if (!loaded.containsKey(type))
                         loaded.put(type, new HashMap<>());
-                    //TODO: check
-                    if (type != VanillaBlockId.UNKNOWN)
-                        loaded.get(type).put(Integer.parseUnsignedInt(jsonElement.getAsJsonObject().get("blockStateHash").getAsString()), blockAttributes);
-                    else //Special case
-                        loaded.get(type).put(jsonElement.getAsJsonObject().get("blockStateHash").getAsInt(), blockAttributes);
+                    loaded.get(type).put(dataEntry.getInt("blockStateHash"), blockAttributes);
                 }
                 log.info("Loaded vanilla block attribute data registry successfully");
                 return loaded;

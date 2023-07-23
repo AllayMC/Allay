@@ -7,8 +7,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/5/20
@@ -23,7 +22,7 @@ public class AllayItemTypeTest {
         var itemStack = VanillaItemTypes.DIAMOND_TYPE.createItemStack(new ItemStackInitInfo.Simple(1, 0));
         assertEquals(1, itemStack.getCount());
         assertEquals(0, itemStack.getDamage());
-        assertEquals(NbtMap.EMPTY, itemStack.getNbt());
+        assertNull(itemStack.getNbt());
         assertEquals(VanillaItemTypes.DIAMOND_TYPE, itemStack.getItemType());
 
         itemStack.setCount(2);

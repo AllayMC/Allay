@@ -5,7 +5,6 @@ import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockId;
-import cn.allay.api.math.vector.Pos3i;
 import cn.allay.testutils.AllayTestExtension;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -69,7 +68,7 @@ class BlockAttributesTest {
 
     @Test
     void testDeserialization() {
-        var blockAttributes = BlockAttributes.of(json);
+        var blockAttributes = BlockAttributes.fromJson(json);
         //Check all the values
         assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.aabb().minX()));
         assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.aabb().minY()));

@@ -8,19 +8,15 @@ import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.registry.RegistryLoader;
 import cn.allay.api.registry.SimpleMappedRegistry;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.SNBTParser;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
 import java.io.InputStream;
-import java.util.Comparator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -57,7 +53,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
         }
 
         public Loader() {
-            this(() -> AllayCreativeItemRegistry.class.getClassLoader().getResourceAsStream("creative_items.snbt"));
+            this(() -> AllayCreativeItemRegistry.class.getClassLoader().getResourceAsStream("creative_items.nbt"));
         }
 
         @SneakyThrows
@@ -66,8 +62,8 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
             log.info("Start loading creative item registry...");
             var map = new TreeMap<Integer, ItemStack>();
             NbtMap nbt;
-            try (var stream = inputStreamSupplier.get()) {
-                nbt = (NbtMap) SNBTParser.parse(new String(Objects.requireNonNull(stream).readAllBytes()));
+            try (var reader = NbtUtils.createGZIPReader(inputStreamSupplier.get())) {
+                nbt = (NbtMap) reader.readTag();
             }
             nbt.forEach((key, value) -> {
                 var index = Integer.parseInt(key);

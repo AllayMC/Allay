@@ -1,10 +1,11 @@
 package cn.allay.codegen;
 
 import cn.allay.dependence.VanillaItemId;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.nbt.NbtUtils;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
@@ -24,15 +25,14 @@ public class VanillaItemClassGen {
         generate();
     }
 
-    public static final Map<String, Map<String, JsonElement>> MAPPED_ITEM_DATA = new TreeMap<>();
-    static final Path ITEM_DATA_FILE_PATH = Path.of("Data/item_data.json");
+    public static final Map<String, NbtMap> MAPPED_ITEM_DATA = new TreeMap<>();
+    static final Path ITEM_DATA_FILE_PATH = Path.of("Data/item_data.nbt");
 
     static {
         try {
-            var reader = JsonParser.parseReader(Files.newBufferedReader(ITEM_DATA_FILE_PATH));
-            reader.getAsJsonArray().forEach(item -> {
-                var obj = item.getAsJsonObject();
-                MAPPED_ITEM_DATA.put(obj.get("name").getAsString(), obj.asMap());
+            NbtMap reader = (NbtMap) NbtUtils.createGZIPReader(Files.newInputStream(ITEM_DATA_FILE_PATH)).readTag();
+            reader.getList("item", NbtType.COMPOUND).forEach(item -> {
+                MAPPED_ITEM_DATA.put(item.getString("name"), item);
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -62,11 +62,11 @@ public class VanillaItemClassGen {
                 generateItemClass(item, className, path);
             }
             generateItemType(item, className);
-            var typesJavaFile = JavaFile
-                    .builder("cn.allay.api.data", TYPES_CLASS.build())
-                    .build();
-            Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaItemTypes.java"), typesJavaFile.toString());
         }
+        var typesJavaFile = JavaFile
+                .builder("cn.allay.api.data", TYPES_CLASS.build())
+                .build();
+        Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaItemTypes.java"), typesJavaFile.toString());
     }
 
     private static void generateItemType(VanillaItemId vanillaItemId, String classNameStr) {
