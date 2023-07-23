@@ -1,6 +1,7 @@
 package cn.allay.server.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.file.PathUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -52,15 +53,20 @@ public final class ComponentClassCacheUtils {
             }
             String arg = properties.get("git.commit.message.short").toString();
             if (arg.contains("+cb")) {
-                Files.deleteIfExists(CACHE_ROOT.resolve(CACHE_PACKAGE_BLOCK));
+                PathUtils.deleteDirectory(CACHE_ROOT.resolve(CACHE_PACKAGE_BLOCK));
             } else if (arg.contains("+ci")) {
-                Files.deleteIfExists(CACHE_ROOT.resolve(CACHE_PACKAGE_ITEM));
+                PathUtils.deleteDirectory(CACHE_ROOT.resolve(CACHE_PACKAGE_ITEM));
             } else if (arg.contains("+ce")) {
-                Files.deleteIfExists(CACHE_ROOT.resolve(CACHE_PACKAGE_ENTITY));
+                PathUtils.deleteDirectory(CACHE_ROOT.resolve(CACHE_PACKAGE_ENTITY));
             }
-            Files.writeString(CACHE_ROOT.resolve("cache.valid"), properties.getProperty("git.commit.id.abbrev"), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                Files.writeString(CACHE_ROOT.resolve("cache.valid"), properties.getProperty("git.commit.id.abbrev"), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
