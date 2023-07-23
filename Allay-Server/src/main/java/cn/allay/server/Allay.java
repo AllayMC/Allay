@@ -28,6 +28,7 @@ import cn.allay.server.item.type.AllayCreativeItemRegistry;
 import cn.allay.server.item.type.AllayItemType;
 import cn.allay.server.item.type.AllayItemTypeRegistry;
 import cn.allay.server.scheduler.AllayScheduler;
+import cn.allay.server.utils.ComponentClassCacheUtils;
 import cn.allay.server.world.biome.AllayBiomeTypeRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -51,6 +52,7 @@ public final class Allay {
     public static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
+        ComponentClassCacheUtils.checkCacheValid();
         //Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::new);

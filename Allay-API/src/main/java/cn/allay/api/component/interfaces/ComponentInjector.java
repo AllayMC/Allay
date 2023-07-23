@@ -47,7 +47,7 @@ public interface ComponentInjector<T> {
      *
      * @return the class
      */
-    Class<T> inject();
+    Class<T> inject(boolean cache);
 
     interface ComponentInjectorFactory {
 
