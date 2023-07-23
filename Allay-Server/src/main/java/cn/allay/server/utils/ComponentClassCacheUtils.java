@@ -58,6 +58,8 @@ public final class ComponentClassCacheUtils {
                 PathUtils.deleteDirectory(CACHE_ROOT.resolve(CACHE_PACKAGE_ITEM));
             } else if (arg.contains("+ce")) {
                 PathUtils.deleteDirectory(CACHE_ROOT.resolve(CACHE_PACKAGE_ENTITY));
+            } else if (arg.contains("+ca")) {
+                PathUtils.deleteDirectory(CACHE_ROOT.resolve("cn"));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
