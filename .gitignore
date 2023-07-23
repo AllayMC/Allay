@@ -10,3 +10,4 @@ buildSrc/**
 /Data/bedrock-samples/LICENSE.md
 /Data/bedrock-samples/README.md
 /Data/bedrock-samples/version.json
+/Allay-Server/cache/*

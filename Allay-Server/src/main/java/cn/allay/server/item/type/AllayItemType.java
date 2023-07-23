@@ -1,6 +1,7 @@
 package cn.allay.server.item.type;
 
 import cn.allay.api.component.annotation.AutoRegister;
+import cn.allay.api.component.interfaces.ComponentImpl;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaItemId;
@@ -15,6 +16,7 @@ import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.server.component.injector.AllayComponentInjector;
+import cn.allay.server.utils.ComponentClassCacheUtils;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
@@ -55,10 +57,17 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @SneakyThrows
     protected AllayItemType<T> complete() {
         try {
-            injectedClass = new AllayComponentInjector<T>()
-                    .interfaceClass(interfaceClass)
-                    .component(new ArrayList<>(componentProviders))
-                    .inject();
+            Class<T> clazz = ComponentClassCacheUtils.loadItemType(interfaceClass);
+            ArrayList<ComponentProvider<? extends ComponentImpl>> components = new ArrayList<>(componentProviders);
+            if (clazz == null) {
+                injectedClass = new AllayComponentInjector<T>()
+                        .interfaceClass(interfaceClass)
+                        .component(components)
+                        .inject(true);
+            } else {
+                injectedClass = clazz;
+            }
+            AllayComponentInjector.injectInitializer(injectedClass, components);
         } catch (Exception e) {
             throw new ItemTypeBuildException("Failed to create item type!", e);
         }

@@ -4,6 +4,7 @@ import cn.allay.api.component.annotation.*;
 import cn.allay.api.component.exception.ComponentInjectException;
 import cn.allay.api.component.interfaces.*;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.server.utils.ComponentClassCacheUtils;
 import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
@@ -13,8 +14,8 @@ import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
 
-import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -31,10 +32,9 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * @author daoge_cmd
  */
 public class AllayComponentInjector<T> implements ComponentInjector<T> {
-
     //TODO: remove this
     protected static final boolean DEBUG = false;
-
+    public static final String INITIALIZER_FIELD_NAME = "initializer";
     protected static final String COMPONENT_LIST_FIELD_NAME = "components";
     protected static final String INIT_METHOD_NAME = "initComponents";
     protected Class<T> interfaceClass;
@@ -60,7 +60,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     @SneakyThrows
     @SuppressWarnings("unchecked")
     @Override
-    public Class<T> inject() {
+    public Class<T> inject(boolean cache) {
         var bb = new ByteBuddy().subclass(interfaceClass);
         var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
         int num = 0;
@@ -95,10 +95,8 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
         bb = afterInject(componentProviders, bb);
         try (var unloaded = bb.make()) {
-            if (DEBUG) {
-                //TODO: improve this
-                var file = new File("./build/outclass");
-                unloaded.saveIn(file);
+            if (cache) {
+                unloaded.saveIn(ComponentClassCacheUtils.CACHE_ROOT.toFile());
             }
             return (Class<T>) unloaded
                     .load(getClass().getClassLoader())
@@ -109,9 +107,10 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     }
 
     protected DynamicType.Builder<T> buildInitializer(DynamicType.Builder<T> bb, HashMap<ComponentProvider<?>, String> componentFieldNameMapping) {
+        bb = bb.defineField(INITIALIZER_FIELD_NAME, Initializer.class, Modifier.STATIC | Modifier.PRIVATE);
         bb = bb.defineMethod(INIT_METHOD_NAME, void.class, Modifier.PUBLIC)
                 .withParameters(Object.class, ComponentInitInfo.class)
-                .intercept(MethodDelegation.to(new Initializer(componentProviders, componentFieldNameMapping)));
+                .intercept(MethodDelegation.toField(INITIALIZER_FIELD_NAME));
         return bb;
     }
 
@@ -183,13 +182,34 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
+    public static void injectInitializer(Class<?> clazz, List<ComponentProvider<? extends ComponentImpl>> componentProviders) {
+        Field initializer = null;
+        try {
+            initializer = clazz.getDeclaredField(AllayComponentInjector.INITIALIZER_FIELD_NAME);
+            initializer.setAccessible(true);
+            //inject initializer instance
+            initializer.set(clazz, new AllayComponentInjector.Initializer(componentProviders));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (initializer != null) {
+                initializer.setAccessible(false);
+            }
+        }
+    }
+
     public static class Initializer {
 
         private final List<ComponentProvider<? extends ComponentImpl>> componentProviders;
         private final Map<ComponentProvider<? extends ComponentImpl>, String> componentFieldNameMapping;
 
-        public Initializer(List<ComponentProvider<? extends ComponentImpl>> componentProviders,
-                           Map<ComponentProvider<? extends ComponentImpl>, String> componentFieldNameMapping) {
+        public Initializer(List<ComponentProvider<? extends ComponentImpl>> componentProviders) {
+            var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
+            int num = 0;
+            for (var provider : componentProviders) {
+                var fieldName = "f" + num++;
+                componentFieldNameMapping.put(provider, fieldName);
+            }
             this.componentProviders = componentProviders;
             this.componentFieldNameMapping = componentFieldNameMapping;
         }
@@ -207,11 +227,13 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             for (var component : components) {
                 for (var field : component.getClass().getDeclaredFields()) {
                     if (field.isAnnotationPresent(Manager.class)) {
-                        field.setAccessible(true);
                         try {
+                            field.setAccessible(true);
                             field.set(component, manager);
                         } catch (IllegalAccessException e) {
                             throw new ComponentInjectException("Cannot inject component manager to component: " + component.getClass().getName(), e);
+                        } finally {
+                            field.setAccessible(false);
                         }
                     }
                 }
@@ -222,8 +244,12 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                         throw new ComponentInjectException("Component event listener method must be void: " + method.getName() + " in component: " + component.getClass().getName());
                     if (method.getParameterCount() != 1 || !ComponentEvent.class.isAssignableFrom(method.getParameters()[0].getType()))
                         throw new ComponentInjectException("Component event listener method must have one parameter and the parameter must be a subclass of ComponentEvent: " + method.getName() + " in component: " + component.getClass().getName());
-                    method.setAccessible(true);
-                    manager.registerListener((Class<? extends ComponentEvent>) method.getParameters()[0].getType(), AllayComponentManager.Listener.wrap(method, component));
+                    try {
+                        method.setAccessible(true);
+                        manager.registerListener((Class<? extends ComponentEvent>) method.getParameters()[0].getType(), AllayComponentManager.Listener.wrap(method, component));
+                    } finally {
+                        method.setAccessible(false);
+                    }
                 }
             }
         }
@@ -231,15 +257,23 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         protected void injectComponentInstances(Object instance, List<? extends ComponentImpl> components) {
             try {
                 var componentListField = instance.getClass().getDeclaredField(COMPONENT_LIST_FIELD_NAME);
-                componentListField.setAccessible(true);
-                componentListField.set(instance, components);
+                try {
+                    componentListField.setAccessible(true);
+                    componentListField.set(instance, components);
+                } finally {
+                    componentListField.setAccessible(false);
+                }
                 for (int index = 0; index < components.size(); index++) {
                     var provider = componentProviders.get(index);
                     var component = components.get(index);
                     injectDependency(components, component);
                     var field = instance.getClass().getDeclaredField(componentFieldNameMapping.get(provider));
-                    field.setAccessible(true);
-                    field.set(instance, component);
+                    try {
+                        field.setAccessible(true);
+                        field.set(instance, component);
+                    } finally {
+                        field.setAccessible(false);
+                    }
                 }
             } catch (IllegalAccessException | NoSuchFieldException e) {
                 throw new RuntimeException(e);
