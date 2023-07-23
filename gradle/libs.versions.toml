@@ -14,6 +14,7 @@ bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "24.0.1" }
 libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0.0.2-PNX" }
 disruptor = { group = "com.lmax", name = "disruptor", version = "3.4.4" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.13.0" }
 
 # Logging dependencies
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.7" }

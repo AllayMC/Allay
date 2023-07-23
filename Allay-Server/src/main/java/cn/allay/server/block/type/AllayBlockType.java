@@ -9,8 +9,12 @@ import cn.allay.api.block.component.impl.base.BlockBaseComponentImpl;
 import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
-import cn.allay.api.block.type.*;
+import cn.allay.api.block.type.BlockState;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeBuilder;
+import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.annotation.AutoRegister;
+import cn.allay.api.component.interfaces.ComponentImpl;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.datastruct.UnmodifiableLinkedHashMap;
@@ -18,6 +22,7 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.server.component.exception.BlockComponentInjectException;
 import cn.allay.server.component.injector.AllayComponentInjector;
+import cn.allay.server.utils.ComponentClassCacheUtils;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import lombok.Getter;
@@ -365,12 +370,19 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             if (identifier == null) throw new BlockTypeBuildException("identifier cannot be null!");
             var type = new AllayBlockType<>(interfaceClass, components, properties, identifier);
             components.add(new BlockBaseComponentImpl(type));
+            List<ComponentProvider<? extends ComponentImpl>> componentProviders = components.stream().map(ComponentProvider::ofSingleton).collect(Collectors.toList());
             try {
                 checkPropertyValid();
-                type.injectedClass = new AllayComponentInjector<T>()
-                        .interfaceClass(interfaceClass)
-                        .component(components.stream().map(ComponentProvider::ofSingleton).collect(Collectors.toList()))
-                        .inject();
+                Class<T> clazz = ComponentClassCacheUtils.loadBlockType(interfaceClass);
+                if (clazz == null) {
+                    type.injectedClass = new AllayComponentInjector<T>()
+                            .interfaceClass(interfaceClass)
+                            .component(componentProviders)
+                            .inject(true);
+                } else {
+                    type.injectedClass = clazz;
+                }
+                AllayComponentInjector.injectInitializer(type.injectedClass, componentProviders);
                 //Cache constructor
                 type.blockBehavior = type.injectedClass.getConstructor().newInstance();
             } catch (Exception e) {

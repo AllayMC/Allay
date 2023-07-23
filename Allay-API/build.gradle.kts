@@ -20,5 +20,6 @@ dependencies {
     api(libs.snakeyaml)
     api(libs.annotations)
     api(libs.reflections)
+    api(libs.commonsio)
     compileOnly(libs.libdeflate)
 }
