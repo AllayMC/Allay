@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.cloudburstmc.nbt.NbtMap;
 
 import java.awt.*;
 
@@ -24,10 +25,7 @@ import java.awt.*;
 public class BlockAttributes {
     public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
     protected static Gson SERIALIZER = new GsonBuilder()
-            .registerTypeAdapter(AABB.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
-                var numbers = StringUtils.fastSplit(json.getAsString(), ",").stream().map(Float::valueOf).toList();
-                return AABB.of(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
-            })
+            .registerTypeAdapter(AABB.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> parseAABBStr(json.getAsString()))
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var r = json.getAsJsonObject().get("r").getAsInt();
                 var g = json.getAsJsonObject().get("g").getAsInt();
@@ -36,6 +34,11 @@ public class BlockAttributes {
                 return new Color(r, g, b, a);
             })
             .create();
+
+    protected static AABB parseAABBStr(String str) {
+        var numbers = StringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
+        return AABB.of(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
+    }
     @Builder.Default
     protected AABB aabb = AABB.of(0, 0, 0, 1, 1, 1);
     @Builder.Default
@@ -99,7 +102,52 @@ public class BlockAttributes {
     @Builder.Default
     protected boolean waterSpreadCausesSpawn = false;
 
-    public static BlockAttributes of(String json) {
+    public static BlockAttributes fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockAttributes.class);
+    }
+
+    //TODO: test
+    public static BlockAttributes fromNBT(NbtMap nbt) {
+        var colorObj = nbt.getCompound("color");
+        var color = new Color(
+                colorObj.getInt("r"),
+                colorObj.getInt("g"),
+                colorObj.getInt("b"),
+                colorObj.getInt("a")
+        );
+        return BlockAttributes
+                .builder()
+                .aabb(parseAABBStr(nbt.getString("aabb")))
+                .blocksPrecipitation(nbt.getBoolean("blocksPrecipitation"))
+                .canBeMovingBlock(nbt.getBoolean("canBeMovingBlock"))
+                .breaksFallingBlocks(nbt.getBoolean("breaksFallingBlocks"))
+                .burnAbility(nbt.getInt("burnAbility"))
+                .burnChance(nbt.getInt("burnChance"))
+                .canBeBrokenFromFalling(nbt.getBoolean("canBeBrokenFromFalling"))
+                .canContainLiquid(nbt.getBoolean("canContainLiquid"))
+                .color(color)
+                .explosionResistance(nbt.getFloat("explosionResistance"))
+                .friction(nbt.getFloat("friction"))
+                .hardness(nbt.getFloat("hardness"))
+                .hasBlockEntity(nbt.getBoolean("hasBlockEntity"))
+                .hasComparatorSignal(nbt.getBoolean("hasComparatorSignal"))
+                .isAlwaysDestroyable(nbt.getBoolean("isAlwaysDestroyable"))
+                .isContainerBlock(nbt.getBoolean("isContainerBlock"))
+                .isLiquid(nbt.getBoolean("isLiquid"))
+                .isMotionBlockingBlock(nbt.getBoolean("isMotionBlockingBlock"))
+                .isPowerSource(nbt.getBoolean("isPowerSource"))
+                .isSolid(nbt.getBoolean("isSolid"))
+                .isSolidBlocking(nbt.getBoolean("isSolidBlocking"))
+                .isUnbreakable(nbt.getBoolean("isUnbreakable"))
+                .isWaterBlocking(nbt.getBoolean("isWaterBlocking"))
+                .flammable(nbt.getBoolean("flammable"))
+                .light(nbt.getInt("light"))
+                .lightEmission(nbt.getInt("lightEmission"))
+                .pushesUpFallingBlocks(nbt.getBoolean("pushesUpFallingBlocks"))
+                .superHot(nbt.getBoolean("superHot"))
+                .thickness(nbt.getFloat("thickness"))
+                .translucency(nbt.getFloat("translucency"))
+                .waterSpreadCausesSpawn(nbt.getBoolean("waterSpreadCausesSpawn"))
+                .build();
     }
 }

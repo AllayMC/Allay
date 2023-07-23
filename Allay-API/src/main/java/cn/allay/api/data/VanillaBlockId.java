@@ -3,7 +3,6 @@ package cn.allay.api.data;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.identifier.Identifier;
-import java.lang.String;
 import lombok.Getter;
 
 /**
@@ -237,8 +236,6 @@ public enum VanillaBlockId {
   CANDLE_CAKE("minecraft:candle_cake"),
 
   CARROTS("minecraft:carrots"),
-
-  CARTOGRAPHY_TABLE("minecraft:cartography_table"),
 
   CARVED_PUMPKIN("minecraft:carved_pumpkin"),
 

@@ -1,6 +1,5 @@
 package cn.allay.dependence;
 
-import java.lang.String;
 import lombok.Getter;
 
 /**
@@ -234,8 +233,6 @@ public enum VanillaBlockId {
   CANDLE_CAKE("minecraft:candle_cake"),
 
   CARROTS("minecraft:carrots"),
-
-  CARTOGRAPHY_TABLE("minecraft:cartography_table"),
 
   CARVED_PUMPKIN("minecraft:carved_pumpkin"),
 

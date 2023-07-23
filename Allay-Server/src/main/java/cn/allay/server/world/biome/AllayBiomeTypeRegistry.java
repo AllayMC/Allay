@@ -30,7 +30,7 @@ public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, Biom
 
     @SneakyThrows
     private void loadVanillaBiomeDefinition() {
-        try (InputStream stream = AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions.nbt")) {
+        try (InputStream stream = AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions_network.nbt")) {
             assert stream != null;
             biomeDefinition = MutableNbtMap.from((NbtMap) NbtUtils.createNetworkReader(stream).readTag());
             int i = 0;

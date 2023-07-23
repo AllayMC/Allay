@@ -47,11 +47,11 @@ public class VanillaEntityClassGen {
                 generateEntityClass(entity, className, path);
             }
             generateEntityType(entity, className);
-            var typesJavaFile = JavaFile
-                    .builder(ENTITY_TYPE_PACKAGE_NAME, TYPES_CLASS.build())
-                    .build();
-            Files.writeString(ENTITY_TYPE_OUTPUT_PATH, typesJavaFile.toString());
         }
+        var typesJavaFile = JavaFile
+                .builder(ENTITY_TYPE_PACKAGE_NAME, TYPES_CLASS.build())
+                .build();
+        Files.writeString(ENTITY_TYPE_OUTPUT_PATH, typesJavaFile.toString());
     }
 
     private static void generateEntityType(VanillaEntityId vanillaEntityId, String classNameStr) {

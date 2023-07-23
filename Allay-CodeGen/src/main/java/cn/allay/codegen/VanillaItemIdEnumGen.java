@@ -67,7 +67,7 @@ public class VanillaItemIdEnumGen {
                     StringUtils.fastTwoPartSplit(entry.getKey(), ":", "")[1],
                     ".", "");
             var valueName = split[0].isBlank() ? split[1].toUpperCase() : split[0].toUpperCase() + "_" + split[1].toUpperCase();
-            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue().get("id").getAsInt()).build());
+            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue().getInt("id")).build());
         }
     }
 

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.cloudburstmc.nbt.NbtMap;
 
 /**
  * Allay Project 2023/5/19
@@ -74,7 +75,41 @@ public class ItemAttributes {
     @Builder.Default
     protected float viewDamping = 1.0f;
 
-    public static ItemAttributes of(String json) {
+    public static ItemAttributes fromJson(String json) {
         return SERIALIZER.fromJson(json, ItemAttributes.class);
+    }
+
+    //TODO: test
+    public static ItemAttributes fromNBT(NbtMap nbt) {
+        return ItemAttributes
+                .builder()
+                .armorValue(nbt.getInt("armorValue"))
+                .attackDamage(nbt.getInt("attackDamage"))
+                .canBeCharged(nbt.getBoolean("canBeCharged"))
+                .canBeDepleted(nbt.getBoolean("canBeDepleted"))
+                .canDestroyInCreative(nbt.getBoolean("canDestroyInCreative"))
+                .canUseOnSimTick(nbt.getBoolean("canUseOnSimTick"))
+                .cooldownTime(nbt.getInt("cooldownTime"))
+                .cooldownType(nbt.getString("cooldownType"))
+                .creativeCategory(nbt.getInt("creativeCategory"))
+                .creativeGroup(nbt.getString("creativeGroup"))
+                .id(nbt.getInt("id"))
+                .isArmor(nbt.getBoolean("isArmor"))
+                .isBlockPlanterItem(nbt.getBoolean("isBlockPlanterItem"))
+                .isDamageable(nbt.getBoolean("isDamageable"))
+                .isDye(nbt.getBoolean("isDye"))
+                .isDyeable(nbt.getBoolean("isDyeable"))
+                .isElytra(nbt.getBoolean("isElytra"))
+                .isFertilizer(nbt.getBoolean("isFertilizer"))
+                .isFood(nbt.getBoolean("isFood"))
+                .isThrowable(nbt.getBoolean("isThrowable"))
+                .isUseable(nbt.getBoolean("isUseable"))
+                .itemColorName(nbt.getString("itemColorName"))
+                .itemColorRGB(nbt.getInt("itemColorRGB"))
+                .maxDamage(nbt.getInt("maxDamage"))
+                .name(nbt.getString("name"))
+                .toughnessValue(nbt.getInt("toughnessValue"))
+                .viewDamping(nbt.getFloat("viewDamping"))
+                .build();
     }
 }

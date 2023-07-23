@@ -51,11 +51,11 @@ public class VanillaBlockBehaviorInterfaceGen {
                 generateBlockClass(className, path);
             }
             generateBlockType(block, className);
-            var typesJavaFile = JavaFile
-                    .builder(BLOCK_TYPE_PACKAGE_NAME, TYPES_CLASS.build())
-                    .build();
-            Files.writeString(BLOCK_TYPE_OUTPUT_PATH, typesJavaFile.toString());
         }
+        var typesJavaFile = JavaFile
+                .builder(BLOCK_TYPE_PACKAGE_NAME, TYPES_CLASS.build())
+                .build();
+        Files.writeString(BLOCK_TYPE_OUTPUT_PATH, typesJavaFile.toString());
     }
 
     private static void generateBlockClass(String className, Path path) throws IOException {
