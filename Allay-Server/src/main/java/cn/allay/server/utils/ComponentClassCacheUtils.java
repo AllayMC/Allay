@@ -9,8 +9,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,9 +43,13 @@ public final class ComponentClassCacheUtils {
      * Check cache valid.
      */
     public static void checkCacheValid() {
+        Path cacheValid = CACHE_ROOT.resolve("cache.valid");
         Properties properties = new Properties();
         try {
             properties.load(new InputStreamReader(Objects.requireNonNull(LOADER.getResourceAsStream("git.properties"))));
+            if (Files.exists(cacheValid) && Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev"))) {
+                return;
+            }
             String arg = properties.get("git.commit.message.short").toString();
             if (arg.contains("+cb")) {
                 Files.deleteIfExists(CACHE_ROOT.resolve(CACHE_PACKAGE_BLOCK));
@@ -52,6 +58,7 @@ public final class ComponentClassCacheUtils {
             } else if (arg.contains("+ce")) {
                 Files.deleteIfExists(CACHE_ROOT.resolve(CACHE_PACKAGE_ENTITY));
             }
+            Files.writeString(CACHE_ROOT.resolve("cache.valid"), properties.getProperty("git.commit.id.abbrev"), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
