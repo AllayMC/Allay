@@ -66,8 +66,7 @@ public final class ComponentClassCacheUtils {
         } finally {
             try {
                 Files.writeString(CACHE_ROOT.resolve("cache.valid"), properties.getProperty("git.commit.id.abbrev"), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException ignore) {
             }
         }
     }
