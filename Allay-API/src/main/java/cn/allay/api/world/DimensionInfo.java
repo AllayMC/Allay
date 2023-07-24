@@ -1,5 +1,6 @@
 package cn.allay.api.world;
 
+import cn.allay.api.identifier.Identifier;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -27,6 +28,15 @@ public record DimensionInfo(int dimensionId,
             case 0 -> OVERWORLD;
             case 1 -> NETHER;
             case 2 -> THE_END;
+            default -> null;
+        };
+    }
+
+    public static DimensionInfo fromName(Identifier name) {
+        return switch (name.toString()) {
+            case "minecraft:overworld" -> OVERWORLD;
+            case "minecraft:nether" -> NETHER;
+            case "minecraft:the_end" -> THE_END;
             default -> null;
         };
     }

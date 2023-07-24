@@ -55,7 +55,7 @@ public enum GameRule {
 
     @Nullable
     public static GameRule fromName(String name) {
-        return Arrays.stream(values()).filter(gameRule -> gameRule.getName().equals(name)).findFirst().orElseGet(null);
+        return Arrays.stream(values()).filter(gameRule -> gameRule.getName().equals(name)).findFirst().orElse(null);
     }
 
     public static boolean parseByteToBoolean(byte value) {
