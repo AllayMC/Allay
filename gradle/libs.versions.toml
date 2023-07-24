@@ -30,6 +30,8 @@ terminalconsoleappender = { group = "net.minecrell", name = "terminalconsoleappe
 # Testing dependencies
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+mockito = { group = "org.mockito", name = "mockito-core", version = "5.4.0" }
+mockito-junit = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.4.0" }
 
 # Code generating
 javapoet = { group = "com.squareup", name = "javapoet", version = "1.13.0" }
@@ -46,4 +48,4 @@ progressbar = { group = "me.tongfei", name = "progressbar", version = "0.9.4" }
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader", "terminalconsoleappender"]
-junit = ["junit-jupiter-api", "junit-jupiter-engine"]
+test = ["junit-jupiter-api", "junit-jupiter-engine", "mockito", "mockito-junit"]

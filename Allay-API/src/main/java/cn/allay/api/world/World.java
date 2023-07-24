@@ -1,7 +1,7 @@
 package cn.allay.api.world;
 
 import cn.allay.api.entity.Entity;
-import cn.allay.api.math.vector.Loc3f;
+import cn.allay.api.math.vector.Pos3i;
 import cn.allay.api.player.Client;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
@@ -9,7 +9,6 @@ import cn.allay.api.world.chunk.ChunkAccessible;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
-import cn.allay.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,8 +27,6 @@ public interface World extends ChunkAccessible {
 
     Scheduler getWorldScheduler();
 
-    WorldStorage getWorldStorage();
-
     GameType getWorldGameType();
 
     void setWorldGameType(GameType gameType);
@@ -44,9 +41,9 @@ public interface World extends ChunkAccessible {
 
     int getViewDistance();
 
-    Loc3f getSpawnLocation();
+    Pos3i getSpawnPosition();
 
-    void setSpawnLocation(Loc3f newSpawn);
+    void setSpawnPosition(Pos3i newSpawn);
 
     Difficulty getDifficulty();
 

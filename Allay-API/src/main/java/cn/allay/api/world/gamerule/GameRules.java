@@ -2,6 +2,7 @@ package cn.allay.api.world.gamerule;
 
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.packet.GameRulesChangedPacket;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 
@@ -11,6 +12,7 @@ import java.util.*;
  * @author Jukebox | Cool_Loong
  */
 public class GameRules {
+    public static final GameRules DEFAULT = new GameRules();
 
     private final Map<GameRule, Object> gameRules = new HashMap<>();
 
@@ -26,13 +28,9 @@ public class GameRules {
         this.gameRules.putAll(gameRules);
     }
 
-    public List<GameRuleData<?>> getGameRules() {
-        final Set<Map.Entry<GameRule, Object>> entrySet = this.gameRules.entrySet();
-        final List<GameRuleData<?>> networkList = new ArrayList<>(entrySet.size());
-        for (Map.Entry<GameRule, Object> entry : entrySet) {
-            networkList.add(new GameRuleData<>(entry.getKey().getName().toString(), entry.getValue()));
-        }
-        return networkList;
+    @UnmodifiableView
+    public Map<GameRule, Object> getGameRules() {
+        return Collections.unmodifiableMap(gameRules);
     }
 
     public void put(GameRule gameRule, Object o) {
@@ -54,7 +52,11 @@ public class GameRules {
             return this.changedPacket;
         }
         this.changedPacket = new GameRulesChangedPacket();
-        this.changedPacket.getGameRules().addAll(this.getGameRules());
+        List<GameRuleData<?>> gameRuleData = new ArrayList<>();
+        for (var entry : this.getGameRules().entrySet()) {
+            gameRuleData.add(new GameRuleData<>(entry.getKey().getName(), entry.getValue()));
+        }
+        this.changedPacket.getGameRules().addAll(gameRuleData);
         return this.changedPacket;
     }
 
