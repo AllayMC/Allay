@@ -13,8 +13,9 @@ import cn.allay.api.inventory.impl.PlayerInventory;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.vector.Loc3f;
-import cn.allay.api.player.Client;
+import cn.allay.api.math.vector.Pos3i;
 import cn.allay.api.player.AdventureSettings;
+import cn.allay.api.player.Client;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
@@ -202,8 +203,8 @@ public class AllayClient implements Client {
 
     private void initPlayerEntity() {
         //TODO: Load player data
-        var spawnLocation = server.getDefaultWorld().getSpawnLocation();
-        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(spawnLocation));
+        Pos3i spawnPos = server.getDefaultWorld().getSpawnPosition();
+        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(Loc3f.of(spawnPos.x(), spawnPos.y(), spawnPos.z(), 0, 0, 0, spawnPos.world())));
         playerEntity.setClient(this);
     }
 
@@ -217,7 +218,7 @@ public class AllayClient implements Client {
         //TODO
         startGamePacket.setPlayerGameType(gameType);
         var loc = playerEntity.getLocation();
-        var worldSpawn = spawnWorld.getSpawnLocation();
+        var worldSpawn = spawnWorld.getSpawnPosition();
         startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
         startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
         startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));

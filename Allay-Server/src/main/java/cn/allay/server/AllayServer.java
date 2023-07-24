@@ -1,12 +1,13 @@
 package cn.allay.server;
 
-import cn.allay.api.math.vector.Loc3f;
-import cn.allay.api.player.Client;
+import cn.allay.api.math.vector.Vec3i;
 import cn.allay.api.network.NetworkServer;
+import cn.allay.api.player.Client;
 import cn.allay.api.player.info.DeviceInfo;
 import cn.allay.api.player.skin.Skin;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
+import cn.allay.api.world.WorldData;
 import cn.allay.api.world.WorldPool;
 import cn.allay.api.world.WorldType;
 import cn.allay.server.network.AllayNetworkServer;
@@ -83,15 +84,15 @@ public final class AllayServer implements Server {
     }
 
     private void loadWorlds() {
-        //TODO: Remove this hack
+        WorldData worldData = WorldData.DEFAULT;
+        worldData.setLevelName("Test Flat World");
+        worldData.setSpawnPoint(Vec3i.of(0, 6, 0));
         worldPool.setDefaultWorld(AllayWorld
                 .builder()
-                .setServer(this)
-                .setName("Test Flat World")
+                .worldData(worldData)
                 .setWorldGenerator(new FlatWorldGenerator())
                 .setWorldStorage(new AllayNonPersistentWorldStorage())
                 .setWorldType(WorldType.FLAT)
-                .setSpawnLocation(Loc3f.of(0f, 6f, 0f, 0, 0, 0, null))
                 .build());
     }
 

@@ -1,7 +1,7 @@
 package cn.allay.server.world;
 
-import cn.allay.api.math.vector.Loc3f;
-import cn.allay.api.math.vector.MutableLoc3f;
+import cn.allay.api.math.vector.Pos3i;
+import cn.allay.api.math.vector.Vec3i;
 import cn.allay.api.player.Client;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
@@ -31,12 +31,9 @@ import java.util.concurrent.ForkJoinPool;
  * @author daoge_cmd
  */
 public class AllayWorld implements World {
-    @Getter
     private final WorldStorage worldStorage;
     @Getter
-    private final String name;
-    @Getter
-    private final DimensionInfo dimensionInfo;
+    private final WorldData worldData;
     @Getter
     private final WorldGenerator worldGenerator;
     @Getter
@@ -44,9 +41,6 @@ public class AllayWorld implements World {
     @Getter
     private WorldType worldType;
     @Getter
-    private int tickingRadius;
-    @Getter
-    private int viewDistance;
     ForkJoinPool threadPool = new ForkJoinPool();
     @Getter
     Scheduler worldScheduler;
@@ -55,22 +49,15 @@ public class AllayWorld implements World {
     @Getter
     EntityService entityService;
     @Getter
-    private GameType worldGameType;
-    @Getter
     private Thread worldMainThread;
-    private Loc3f spawnLocation;
-    private Difficulty difficulty;
     private final Map<Long, Client> clients = new ConcurrentHashMap<>();
 
     private AllayWorld(Server server,
                        WorldStorage worldStorage,
-                       String name,
-                       DimensionInfo dimensionInfo,
+                       WorldData worldData,
                        WorldGenerator worldGenerator) {
         this.worldStorage = worldStorage;
-        loadWorldData();
-        this.name = name;
-        this.dimensionInfo = dimensionInfo;
+        this.worldData = worldData;
         this.worldGenerator = worldGenerator;
         this.server = server;
         this.chunkService = new AllayChunkService(
@@ -99,37 +86,56 @@ public class AllayWorld implements World {
                 });
     }
 
+    @Override
+    public GameType getWorldGameType() {
+        return this.worldData.getGameType();
+    }
+
     private void tick() {
         chunkService.tick();
         entityService.tick();
         worldScheduler.tick();
     }
 
-    private void loadWorldData() {
-        var worldData = worldStorage.readWorldData();
-        worldGameType = GameType.from(worldData.GameType());
-        //TODO
-    }
-
     @Override
     public void setWorldGameType(GameType gameType) {
-        //TODO: Send to client
-        this.worldGameType = gameType;
+        this.worldData.setGameType(gameType);
     }
 
     @Override
-    public Loc3f getSpawnLocation() {
-        return spawnLocation;
+    public String getName() {
+        return this.worldData.getLevelName();
     }
 
     @Override
-    public void setSpawnLocation(Loc3f newSpawn) {
-        this.spawnLocation = newSpawn;
+    public DimensionInfo getDimensionInfo() {
+        return this.worldData.getDimensionInfo();
+    }
+
+    @Override
+    public int getTickingRadius() {
+        return this.worldData.getTickingRadius();
+    }
+
+    @Override
+    public int getViewDistance() {
+        return this.worldData.getViewDistance();
+    }
+
+    @Override
+    public Pos3i getSpawnPosition() {
+        Vec3i spawnPoint = this.worldData.getSpawnPoint();
+        return Pos3i.of(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), this);
+    }
+
+    @Override
+    public void setSpawnPosition(Pos3i newSpawn) {
+        this.worldData.setSpawnPoint(newSpawn);
     }
 
     @Override
     public Difficulty getDifficulty() {
-        return difficulty;
+        return this.worldData.getDifficulty();
     }
 
     @Override
@@ -168,37 +174,16 @@ public class AllayWorld implements World {
     }
 
     public static class WorldBuilder {
+        private WorldData worldData;
         private WorldType worldType = WorldType.INFINITE;
-        private Server server = Server.getInstance();
-        private String name = "world";
-        private DimensionInfo dimensionInfo = DimensionInfo.OVERWORLD;
-        private MutableLoc3f spawnLocation = Loc3f.of(0f, 60f, 0f, 0, 0, 0, null).mut();
-        private Difficulty difficulty = Difficulty.EASY;
         private WorldStorage worldStorage;
         private WorldGenerator worldGenerator;
-        private int tickingRadius = server.getServerSettings().defaultTickingRadius();
-        private int viewDistance = server.getServerSettings().defaultViewDistance();
 
         private WorldBuilder() {
         }
 
-        public WorldBuilder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public WorldBuilder setDimensionInfo(DimensionInfo dimensionInfo) {
-            this.dimensionInfo = dimensionInfo;
-            return this;
-        }
-
-        public WorldBuilder setSpawnLocation(Loc3f spawnLocation) {
-            this.spawnLocation = spawnLocation.mut();
-            return this;
-        }
-
-        public WorldBuilder setDifficulty(Difficulty difficulty) {
-            this.difficulty = difficulty;
+        public WorldBuilder worldData(WorldData worldData) {
+            this.worldData = worldData;
             return this;
         }
 
@@ -213,34 +198,14 @@ public class AllayWorld implements World {
             return this;
         }
 
-        public WorldBuilder setServer(Server server) {
-            this.server = server;
-            return this;
-        }
-
         public WorldBuilder setWorldType(WorldType worldType) {
             this.worldType = worldType;
             return this;
         }
 
-        public WorldBuilder setTickingRadius(int tickingRadius) {
-            this.tickingRadius = tickingRadius;
-            return this;
-        }
-
-        public WorldBuilder setViewDistance(int viewDistance) {
-            this.viewDistance = viewDistance;
-            return this;
-        }
-
         public World build() {
-            var world = new AllayWorld(server, worldStorage, name, dimensionInfo, worldGenerator);
-            spawnLocation.setWorld(world);
-            world.spawnLocation = spawnLocation;
-            world.difficulty = difficulty;
+            var world = new AllayWorld(Server.getInstance(), worldStorage, worldData, worldGenerator);
             world.worldType = worldType;
-            world.tickingRadius = tickingRadius;
-            world.viewDistance = viewDistance;
             return world;
         }
     }

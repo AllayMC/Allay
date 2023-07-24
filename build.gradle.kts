@@ -50,7 +50,7 @@ subprojects {
     }
 
     dependencies {
-        testImplementation(rootProject.libs.bundles.junit)
+        testImplementation(rootProject.libs.bundles.test)
 
         compileOnly(rootProject.libs.lombok)
         annotationProcessor(rootProject.libs.lombok)
