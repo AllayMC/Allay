@@ -36,6 +36,7 @@ public class LoginData {
     private String languageCode;
     private String gameVersion;
     private Skin skin;
+    private String identityPublicKey;
 
     private LoginData(LoginPacket loginPacket) {
         this.decodeChainData(loginPacket.getChain());
@@ -64,6 +65,7 @@ public class LoginData {
                 this.uuid = UUID.fromString(extraData.get("identity").getAsString());
                 this.xuid = extraData.get("XUID").getAsString();
             }
+            this.identityPublicKey = chainMap.get("identityPublicKey").getAsString();
         }
     }
 

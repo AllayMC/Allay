@@ -9,6 +9,8 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayStatusPacket;
 
+import javax.crypto.SecretKey;
+
 /**
  * 描述一个玩家客户端，玩家客户端可以持有一个EntityHuman并操控它
  * <p>
@@ -48,4 +50,8 @@ public interface Client extends ChunkLoader {
     void setGameType(GameType gameType);
 
     AdventureSettings getAdventureSettings();
+
+    boolean isNetworkEncryptionEnabled();
+
+    SecretKey getEncryptionSecretKey();
 }

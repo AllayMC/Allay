@@ -16,6 +16,7 @@ public record ServerSettings(
         GameType gameType,
         boolean xboxAuth,
         int defaultTickingRadius,
-        int defaultViewDistance
+        int defaultViewDistance,
+        boolean enableNetworkEncryption
 ) {
 }

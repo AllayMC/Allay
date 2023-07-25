@@ -111,6 +111,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
                 .count(count)
                 .damage(damage)
                 .tag(nbt)
+                .usingNetId(false)
                 .build();
     }
 
