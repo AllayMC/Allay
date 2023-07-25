@@ -129,6 +129,7 @@ public final class AllayServer implements Server {
                 .xboxAuth(false)
                 .defaultTickingRadius(8)
                 .defaultViewDistance(8)
+                .enableNetworkEncryption(true)
                 .build();
     }
 

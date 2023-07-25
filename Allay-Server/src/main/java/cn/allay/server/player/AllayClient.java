@@ -23,6 +23,7 @@ import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.gamerule.GameRule;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -32,11 +33,13 @@ import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.jetbrains.annotations.Nullable;
 
+import javax.crypto.SecretKey;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -47,10 +50,15 @@ import java.util.regex.Pattern;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class AllayClient implements Client {
 
     private static final int DO_FIRST_SPAWN_CHUNK_THRESHOLD = 36;
     private final BedrockServerSession session;
+    @Getter
+    private boolean networkEncryptionEnabled;
+    @Getter
+    private SecretKey encryptionSecretKey;
     @Getter
     private final Server server;
     @Getter
@@ -353,8 +361,10 @@ public class AllayClient implements Client {
             //TODO: Support other compression algorithms
             settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.ZLIB);
             settingsPacket.setCompressionThreshold(0);
+//            settingsPacket.setCompressionThreshold(1);
             sendPacketImmediately(settingsPacket);
             session.setCompression(settingsPacket.getCompressionAlgorithm());
+//            session.setCompressionLevel(settingsPacket.getCompressionThreshold());
             return PacketSignal.HANDLED;
         }
 
@@ -384,9 +394,38 @@ public class AllayClient implements Client {
                 return PacketSignal.HANDLED;
             }
 
-            //TODO 网络加密
-            completeLogin();
+            if (!server.getServerSettings().enableNetworkEncryption()) {
+                completeLogin();
+            } else {
+                try {
+                    var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
+                    var encryptionKeyPair = EncryptionUtils.createKeyPair();
+                    var encryptionToken = EncryptionUtils.generateRandomToken();
+                    encryptionSecretKey = EncryptionUtils.getSecretKey(
+                            encryptionKeyPair.getPrivate(), clientKey,
+                            encryptionToken
+                    );
+                    var encryptionJWT = EncryptionUtils.createHandshakeJwt(encryptionKeyPair, encryptionToken);
+                    networkEncryptionEnabled = true;
+                    var handshakePacket = new ServerToClientHandshakePacket();
+                    handshakePacket.setJwt(encryptionJWT);
+                    sendPacketImmediately(handshakePacket);
+                    session.enableEncryption(encryptionSecretKey);
+                    //completeLogin() when client send back ClientToServerHandshakePacket
+                } catch (Exception exception) {
+                    log.warn("Failed to initialize encryption for client " + name, exception);
+                    disconnect("disconnectionScreen.internalError");
+                }
+            }
 
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(ClientToServerHandshakePacket packet) {
+            if (isNetworkEncryptionEnabled()) {
+                completeLogin();
+            } else log.warn("Client " + name + " sent ClientToServerHandshakePacket without encryption enabled");
             return PacketSignal.HANDLED;
         }
 
