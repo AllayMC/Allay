@@ -1,5 +1,6 @@
 package cn.allay.server.utils;
 
+import cn.allay.api.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.file.PathUtils;
 import org.jetbrains.annotations.Nullable;
@@ -77,7 +78,7 @@ public final class ComponentClassCacheUtils {
         File file = path.toFile();
         if (file.exists()) {
             Optional<String> first = Arrays.stream(file.listFiles())
-                    .filter(f -> f.getName().contains(interfaceClassName.getSimpleName()))
+                    .filter(f -> StringUtils.fastSplit(f.getName(), "$").get(0).equals(interfaceClassName.getSimpleName()))
                     .map(f -> f.getName().replace(".class", ""))
                     .findFirst();
             if (first.isPresent()) {
@@ -99,7 +100,7 @@ public final class ComponentClassCacheUtils {
         File file = path.toFile();
         if (file.exists()) {
             Optional<String> first = Arrays.stream(file.listFiles())
-                    .filter(f -> f.getName().contains(interfaceClassName.getSimpleName()))
+                    .filter(f -> StringUtils.fastSplit(f.getName(), "$").get(0).equals(interfaceClassName.getSimpleName()))
                     .map(f -> f.getName().replace(".class", ""))
                     .findFirst();
             if (first.isPresent()) {
@@ -121,7 +122,7 @@ public final class ComponentClassCacheUtils {
         File file = path.toFile();
         if (file.exists()) {
             Optional<String> first = Arrays.stream(file.listFiles())
-                    .filter(f -> f.getName().contains(interfaceClassName.getSimpleName()))
+                    .filter(f -> StringUtils.fastSplit(f.getName(), "$").get(0).equals(interfaceClassName.getSimpleName()))
                     .map(f -> f.getName().replace(".class", ""))
                     .findFirst();
             if (first.isPresent()) {
