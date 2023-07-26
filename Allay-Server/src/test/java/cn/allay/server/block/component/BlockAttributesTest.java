@@ -70,12 +70,12 @@ class BlockAttributesTest {
     void testDeserialization() {
         var blockAttributes = BlockAttributes.fromJson(json);
         //Check all the values
-        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.aabb().minX()));
-        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.aabb().minY()));
-        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.aabb().minZ()));
-        assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockAttributes.aabb().maxX()));
-        assertEquals(Float.toHexString(0.1825f), Float.toHexString(blockAttributes.aabb().maxY()));
-        assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockAttributes.aabb().maxZ()));
+        assertEquals(Double.toHexString(0.0005), Double.toHexString(blockAttributes.aabb().minX()));
+        assertEquals(Double.toHexString(0.0005), Double.toHexString(blockAttributes.aabb().minY()));
+        assertEquals(Double.toHexString(0.0005), Double.toHexString(blockAttributes.aabb().minZ()));
+        assertEquals(Double.toHexString(0.9995), Double.toHexString(blockAttributes.aabb().maxX()));
+        assertEquals(Double.toHexString(0.1825), Double.toHexString(blockAttributes.aabb().maxY()));
+        assertEquals(Double.toHexString(0.9995), Double.toHexString(blockAttributes.aabb().maxZ()));
         assertTrue(blockAttributes.canBeMovingBlock());
         assertTrue(blockAttributes.blocksPrecipitation());
         assertTrue(blockAttributes.breaksFallingBlocks());

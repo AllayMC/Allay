@@ -41,6 +41,8 @@ public interface ComponentInjector<T> {
      */
     ComponentInjector<T> component(List<ComponentProvider<? extends ComponentImpl>> providers);
 
+    ComponentInjector<T> useCachedClass(Class<T> cachedClass);
+
     /**
      * Build the class<br/>
      * Note that we guarantee that the returned class implements the {@link ComponentedObject} interface

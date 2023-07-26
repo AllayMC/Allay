@@ -38,6 +38,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     protected static final String COMPONENT_LIST_FIELD_NAME = "components";
     protected static final String INIT_METHOD_NAME = "initComponents";
     protected Class<T> interfaceClass;
+    protected Class<T> injectedClass;
     protected List<ComponentProvider<? extends ComponentImpl>> componentProviders = new ArrayList<>();
 
     public AllayComponentInjector() {
@@ -57,10 +58,23 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         return this;
     }
 
+    @Override
+    public ComponentInjector<T> useCachedClass(Class<T> cachedClass) {
+        injectedClass = cachedClass;
+        return this;
+    }
+
     @SneakyThrows
-    @SuppressWarnings("unchecked")
     @Override
     public Class<T> inject(boolean cache) {
+        if (injectedClass == null)
+            injectedClass = buildClass(cache);
+        injectInitializer();
+        return injectedClass;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Class<T> buildClass(boolean cache) {
         var bb = new ByteBuddy().subclass(interfaceClass);
         var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
         int num = 0;
@@ -103,6 +117,22 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                     .getLoaded();
         } catch (IOException e) {
             throw new ComponentInjectException(e);
+        }
+    }
+
+    protected void injectInitializer() {
+        Field initializer = null;
+        try {
+            initializer = injectedClass.getDeclaredField(AllayComponentInjector.INITIALIZER_FIELD_NAME);
+            initializer.setAccessible(true);
+            //inject initializer instance
+            initializer.set(injectedClass, new AllayComponentInjector.Initializer(componentProviders));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (initializer != null) {
+                initializer.setAccessible(false);
+            }
         }
     }
 
@@ -182,22 +212,6 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
-    public static void injectInitializer(Class<?> clazz, List<ComponentProvider<? extends ComponentImpl>> componentProviders) {
-        Field initializer = null;
-        try {
-            initializer = clazz.getDeclaredField(AllayComponentInjector.INITIALIZER_FIELD_NAME);
-            initializer.setAccessible(true);
-            //inject initializer instance
-            initializer.set(clazz, new AllayComponentInjector.Initializer(componentProviders));
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (initializer != null) {
-                initializer.setAccessible(false);
-            }
-        }
-    }
-
     public static class Initializer {
 
         private final List<ComponentProvider<? extends ComponentImpl>> componentProviders;
@@ -244,12 +258,8 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                         throw new ComponentInjectException("Component event listener method must be void: " + method.getName() + " in component: " + component.getClass().getName());
                     if (method.getParameterCount() != 1 || !ComponentEvent.class.isAssignableFrom(method.getParameters()[0].getType()))
                         throw new ComponentInjectException("Component event listener method must have one parameter and the parameter must be a subclass of ComponentEvent: " + method.getName() + " in component: " + component.getClass().getName());
-                    try {
-                        method.setAccessible(true);
-                        manager.registerListener((Class<? extends ComponentEvent>) method.getParameters()[0].getType(), AllayComponentManager.Listener.wrap(method, component));
-                    } finally {
-                        method.setAccessible(false);
-                    }
+                    method.setAccessible(true);
+                    manager.registerListener((Class<? extends ComponentEvent>) method.getParameters()[0].getType(), AllayComponentManager.Listener.wrap(method, component));
                 }
             }
         }

@@ -6,17 +6,17 @@ package cn.allay.api.math.aabb;
  * @author daoge_cmd
  */
 public interface MutableAABB extends AABB {
-    void setMinX(float minX);
+    void setMinX(double minX);
 
-    void setMinY(float minY);
+    void setMinY(double minY);
 
-    void setMinZ(float minZ);
+    void setMinZ(double minZ);
 
-    void setMaxX(float maxX);
+    void setMaxX(double maxX);
 
-    void setMaxY(float maxY);
+    void setMaxY(double maxY);
 
-    void setMaxZ(float maxZ);
+    void setMaxZ(double maxZ);
 
     void setAABB(AABB aabb);
 }
