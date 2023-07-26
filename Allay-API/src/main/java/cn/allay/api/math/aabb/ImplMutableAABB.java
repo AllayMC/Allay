@@ -6,14 +6,14 @@ package cn.allay.api.math.aabb;
  * @author daoge_cmd
  */
 class ImplMutableAABB implements MutableAABB {
-    protected float minX;
-    protected float minY;
-    protected float minZ;
-    protected float maxX;
-    protected float maxY;
-    protected float maxZ;
+    protected double minX;
+    protected double minY;
+    protected double minZ;
+    protected double maxX;
+    protected double maxY;
+    protected double maxZ;
 
-    public ImplMutableAABB(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+    public ImplMutableAABB(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;
@@ -23,62 +23,62 @@ class ImplMutableAABB implements MutableAABB {
     }
 
     @Override
-    public float minX() {
+    public double minX() {
         return minX;
     }
 
     @Override
-    public float minY() {
+    public double minY() {
         return minY;
     }
 
     @Override
-    public float minZ() {
+    public double minZ() {
         return minZ;
     }
 
     @Override
-    public float maxX() {
+    public double maxX() {
         return maxX;
     }
 
     @Override
-    public float maxY() {
+    public double maxY() {
         return maxY;
     }
 
     @Override
-    public float maxZ() {
+    public double maxZ() {
         return maxZ;
     }
 
     @Override
-    public void setMinX(float minX) {
+    public void setMinX(double minX) {
         this.minX = minX;
     }
 
     @Override
-    public void setMinY(float minY) {
+    public void setMinY(double minY) {
         this.minY = minY;
     }
 
     @Override
-    public void setMinZ(float minZ) {
+    public void setMinZ(double minZ) {
         this.minZ = minZ;
     }
 
     @Override
-    public void setMaxX(float maxX) {
+    public void setMaxX(double maxX) {
         this.maxX = maxX;
     }
 
     @Override
-    public void setMaxY(float maxY) {
+    public void setMaxY(double maxY) {
         this.maxY = maxY;
     }
 
     @Override
-    public void setMaxZ(float maxZ) {
+    public void setMaxZ(double maxZ) {
         this.maxZ = maxZ;
     }
 

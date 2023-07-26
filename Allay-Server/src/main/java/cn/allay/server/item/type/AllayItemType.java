@@ -57,17 +57,12 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @SneakyThrows
     protected AllayItemType<T> complete() {
         try {
-            Class<T> clazz = ComponentClassCacheUtils.loadItemType(interfaceClass);
             ArrayList<ComponentProvider<? extends ComponentImpl>> components = new ArrayList<>(componentProviders);
-            if (clazz == null) {
-                injectedClass = new AllayComponentInjector<T>()
-                        .interfaceClass(interfaceClass)
-                        .component(components)
-                        .inject(true);
-            } else {
-                injectedClass = clazz;
-            }
-            AllayComponentInjector.injectInitializer(injectedClass, components);
+            injectedClass = new AllayComponentInjector<T>()
+                    .interfaceClass(interfaceClass)
+                    .component(components)
+                    .useCachedClass(ComponentClassCacheUtils.loadItemType(interfaceClass))
+                    .inject(true);
         } catch (Exception e) {
             throw new ItemTypeBuildException("Failed to create item type!", e);
         }

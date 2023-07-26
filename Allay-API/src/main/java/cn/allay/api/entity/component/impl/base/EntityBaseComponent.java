@@ -4,6 +4,7 @@ import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
+import cn.allay.api.math.vector.Loc3d;
 import cn.allay.api.math.vector.Loc3f;
 
 /**
@@ -16,10 +17,10 @@ public interface EntityBaseComponent {
     EntityType<? extends Entity> getEntityType();
 
     @Inject
-    Loc3f getLocation();
+    Loc3d getLocation();
 
     @Inject
-    void setLocation(Loc3f location);
+    void setLocation(Loc3d location);
 
     @Inject
     long getUniqueId();

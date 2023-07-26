@@ -8,7 +8,7 @@ import cn.allay.api.math.vector.Vec3f;
  * @author daoge_cmd
  */
 public interface AABB {
-    static AABB of(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+    static AABB of(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         return new ImplAABB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
@@ -16,17 +16,17 @@ public interface AABB {
         return new ImplAABB(min.x(), min.y(), min.z(), max.x(), max.y(), max.z());
     }
 
-    float minX();
+    double minX();
 
-    float minY();
+    double minY();
 
-    float minZ();
+    double minZ();
 
-    float maxX();
+    double maxX();
 
-    float maxY();
+    double maxY();
 
-    float maxZ();
+    double maxZ();
 
     default MutableAABB mut() {
         return new ImplMutableAABB(minX(), minY(), minZ(), maxX(), maxY(), maxZ());

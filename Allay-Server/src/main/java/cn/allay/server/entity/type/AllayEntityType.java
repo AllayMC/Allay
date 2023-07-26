@@ -49,17 +49,12 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     @SneakyThrows
     protected AllayEntityType<T> complete() {
         try {
-            Class<T> clazz = ComponentClassCacheUtils.loadEntityType(interfaceClass);
             ArrayList<ComponentProvider<? extends ComponentImpl>> components = new ArrayList<>(componentProviders);
-            if (clazz == null) {
-                injectedClass = new AllayComponentInjector<T>()
-                        .interfaceClass(interfaceClass)
-                        .component(components)
-                        .inject(true);
-            } else {
-                injectedClass = clazz;
-            }
-            AllayComponentInjector.injectInitializer(injectedClass, components);
+            injectedClass = new AllayComponentInjector<T>()
+                    .interfaceClass(interfaceClass)
+                    .component(components)
+                    .useCachedClass(ComponentClassCacheUtils.loadEntityType(interfaceClass))
+                    .inject(true);
         } catch (Exception e) {
             throw new EntityTypeBuildException("Failed to create entity type!", e);
         }

@@ -5,5 +5,5 @@ package cn.allay.api.math.aabb;
  *
  * @author daoge_cmd
  */
-record ImplAABB(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) implements AABB {
+record ImplAABB(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) implements AABB {
 }

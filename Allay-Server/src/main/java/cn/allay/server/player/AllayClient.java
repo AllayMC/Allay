@@ -12,6 +12,7 @@ import cn.allay.api.inventory.impl.PlayerCursorInventory;
 import cn.allay.api.inventory.impl.PlayerInventory;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
+import cn.allay.api.math.vector.Loc3d;
 import cn.allay.api.math.vector.Loc3f;
 import cn.allay.api.math.vector.Pos3i;
 import cn.allay.api.player.AdventureSettings;
@@ -212,7 +213,7 @@ public class AllayClient implements Client {
     private void initPlayerEntity() {
         //TODO: Load player data
         Pos3i spawnPos = server.getDefaultWorld().getSpawnPosition();
-        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(Loc3f.of(spawnPos.x(), spawnPos.y(), spawnPos.z(), 0, 0, 0, spawnPos.world())));
+        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(Loc3d.of(spawnPos.x(), spawnPos.y(), spawnPos.z(), 0, 0, 0, spawnPos.world())));
         playerEntity.setClient(this);
     }
 
@@ -305,7 +306,7 @@ public class AllayClient implements Client {
 
     @Override
     @Nullable
-    public Loc3f getLocation() {
+    public Loc3d getLocation() {
         return playerEntity != null ? playerEntity.getLocation() : null;
     }
 
@@ -469,7 +470,7 @@ public class AllayClient implements Client {
         public PacketSignal handle(MovePlayerPacket packet) {
             var pos = packet.getPosition();
             var rot = packet.getRotation();
-            playerEntity.setLocation(Loc3f.of(
+            playerEntity.setLocation(Loc3d.of(
                     pos.getX(),
                     pos.getY(),
                     pos.getZ(),

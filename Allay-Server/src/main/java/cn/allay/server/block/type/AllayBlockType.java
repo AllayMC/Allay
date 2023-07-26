@@ -373,16 +373,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             List<ComponentProvider<? extends ComponentImpl>> componentProviders = components.stream().map(ComponentProvider::ofSingleton).collect(Collectors.toList());
             try {
                 checkPropertyValid();
-                Class<T> clazz = ComponentClassCacheUtils.loadBlockType(interfaceClass);
-                if (clazz == null) {
-                    type.injectedClass = new AllayComponentInjector<T>()
-                            .interfaceClass(interfaceClass)
-                            .component(componentProviders)
-                            .inject(true);
-                } else {
-                    type.injectedClass = clazz;
-                }
-                AllayComponentInjector.injectInitializer(type.injectedClass, componentProviders);
+                type.injectedClass = new AllayComponentInjector<T>()
+                        .interfaceClass(interfaceClass)
+                        .component(componentProviders)
+                        .useCachedClass(ComponentClassCacheUtils.loadBlockType(interfaceClass))
+                        .inject(true);
                 //Cache constructor
                 type.blockBehavior = type.injectedClass.getConstructor().newInstance();
             } catch (Exception e) {
