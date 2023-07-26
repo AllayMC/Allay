@@ -13,7 +13,6 @@ import cn.allay.api.inventory.impl.PlayerInventory;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.vector.Loc3d;
-import cn.allay.api.math.vector.Loc3f;
 import cn.allay.api.math.vector.Pos3i;
 import cn.allay.api.player.AdventureSettings;
 import cn.allay.api.player.Client;

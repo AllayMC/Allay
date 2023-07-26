@@ -46,4 +46,8 @@ public interface ItemBaseComponent {
 
     @Inject
     ItemData toNetworkItemData();
+
+    @Nullable
+    @Inject
+    Integer getStackNetworkId();
 }
