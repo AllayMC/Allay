@@ -33,7 +33,7 @@ public class AllayChunkService implements ChunkService {
     public static final int REMOVE_UNNEEDED_CHUNK_CYCLE = 600;
     private final Long2ObjectNonBlockingMap<Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
     private final Long2ObjectNonBlockingMap<CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
-    private final Hashtable<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Hashtable<>();
+    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new ConcurrentHashMap<>();
     @Getter
     private final World world;
     @Getter
