@@ -22,12 +22,27 @@ public interface ItemStackInitInfo extends ComponentInitInfo {
     @Nullable
     BlockState blockState();
 
-    record Simple(int count, int damage, @Nullable NbtMap nbt, @Nullable BlockState blockState) implements ItemStackInitInfo {
-        public Simple(int count, int damage, NbtMap nbt, BlockState blockState) {
+    @Nullable
+    Integer stackNetworkId();
+
+    boolean autoAssignStackNetworkId();
+
+    record Simple(int count, int damage, @Nullable NbtMap nbt, @Nullable BlockState blockState, @Nullable Integer stackNetworkId, boolean autoAssignStackNetworkId) implements ItemStackInitInfo {
+        public Simple(int count, int damage, NbtMap nbt, BlockState blockState, Integer stackNetworkId, boolean autoAssignStackNetworkId) {
             this.count = count;
             this.damage = damage;
             this.nbt = nbt;
             this.blockState = blockState;
+            this.stackNetworkId = stackNetworkId;
+            this.autoAssignStackNetworkId = autoAssignStackNetworkId;
+        }
+
+        public Simple(int count, int damage, NbtMap nbt, BlockState blockState, Integer stackNetworkId) {
+            this(count, damage, nbt, blockState, stackNetworkId, true);
+        }
+
+        public Simple(int count, int damage, NbtMap nbt, BlockState blockState) {
+            this(count, damage, nbt, blockState, null);
         }
 
         public Simple(int count, int damage, @Nullable NbtMap nbt) {

@@ -9,8 +9,6 @@ import cn.allay.api.item.component.ItemComponentImpl;
 import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +21,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
 
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
+    private static int STACK_NETWORK_ID_COUNTER = 0;
+
     protected ItemType<? extends ItemStack> itemType;
     protected int count;
     protected int damage;
@@ -30,6 +30,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
     protected NbtMap nbt;
     @Nullable
     protected BlockState blockState;
+    @Nullable
+    protected final Integer stackNetworkId;
 
     public ItemBaseComponentImpl(ItemType<? extends ItemStack> itemType, ItemStackInitInfo initInfo) {
         this.itemType = itemType;
@@ -37,6 +39,15 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
         this.damage = initInfo.damage();
         this.nbt = initInfo.nbt();
         this.blockState = initInfo.blockState();
+        if (initInfo.stackNetworkId() != null) {
+            if (initInfo.stackNetworkId() < 0)
+                throw new IllegalArgumentException("stack network id cannot be negative");
+            this.stackNetworkId = initInfo.stackNetworkId();
+        } else if (initInfo.autoAssignStackNetworkId()) {
+            this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
+        } else {
+            this.stackNetworkId = null;
+        }
     }
 
     @Override
@@ -113,6 +124,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
                 .tag(nbt)
                 .usingNetId(false)
                 .build();
+    }
+
+    @Nullable
+    @Override
+    public Integer getStackNetworkId() {
+        return stackNetworkId;
     }
 
     @Override
