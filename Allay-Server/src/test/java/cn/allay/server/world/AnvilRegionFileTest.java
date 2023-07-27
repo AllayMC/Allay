@@ -13,7 +13,7 @@ import java.nio.file.Path;
  * @author Cool_Loong
  */
 public class AnvilRegionFileTest {
-    final Path regionPath = Path.of("src/test/resources/world");
+    final Path regionPath = Path.of("src/test/resources/jeworld/region");
 
     @Test
     void loadMCA() throws IOException {
