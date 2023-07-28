@@ -2,7 +2,6 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockTypes;
-import cn.allay.api.datastruct.NibbleArray;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.UnsafeChunk;
@@ -25,7 +24,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Setter
     protected int chunkZ;
     protected final AtomicReferenceArray<ChunkSection> sections;
-    protected final NibbleArray heightMap;
+    protected final HeightMap heightMap;
     protected final DimensionInfo dimensionInfo;
 
     public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
@@ -36,7 +35,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.sections = new AtomicReferenceArray<>(dimensionInfo.chunkSectionSize());
-        this.heightMap = new NibbleArray(256);
+        this.heightMap = new HeightMap();
         this.dimensionInfo = dimensionInfo;
     }
 
@@ -56,11 +55,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
-        return this.heightMap.get((z << 4) + x);
+        return this.heightMap.get(x, z);
     }
 
     public void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
-        this.heightMap.set((z << 4) + x, (byte) height);
+        this.heightMap.set(x, z, height);
     }
 
     public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {

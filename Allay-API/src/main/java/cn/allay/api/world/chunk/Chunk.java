@@ -36,8 +36,7 @@ public interface Chunk extends UnsafeChunk {
 
     void batchProcess(@Nullable Consumer<SectionOperate> sectionOperate,
                       @Nullable Consumer<HeightOperate> heightOperate,
-                      @Nullable Consumer<SkyLightOperate> skyLightOperate,
-                      @Nullable Consumer<BlockLightOperate> blockLightOperate);
+                      @Nullable Consumer<LightOperate> lightOperate);
 
     LevelChunkPacket createLevelChunkPacket();
 
