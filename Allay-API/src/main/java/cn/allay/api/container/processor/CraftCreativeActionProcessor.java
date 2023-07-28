@@ -26,9 +26,9 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor {
     }
 
     public List<ItemStackResponse> handle(CraftCreativeAction action, int requestId, Container destination, int slot) {
-        var item = CreativeItemRegistry.getRegistry().get(action.getCreativeItemNetworkId());
+        var item = CreativeItemRegistry.getRegistry().get(action.getCreativeItemNetworkId() - 1);
         if (item == null) {
-            log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId());
+            log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId() - 1);
             return error(requestId);
         }
         item = item.copy(true);
