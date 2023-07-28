@@ -20,7 +20,7 @@ import cn.allay.api.server.Server;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.gamerule.GameRule;
-import cn.allay.server.inventory.SimpleInventoryActionProcessorHolder;
+import cn.allay.server.inventory.SimpleContainerActionProcessorHolder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +35,7 @@ import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DestroyAction;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -88,7 +89,7 @@ public class AllayClient implements Client {
     private GameType gameType = GameType.CREATIVE;
     private final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(DO_FIRST_SPAWN_CHUNK_THRESHOLD);
     @Getter
-    private final InventoryActionProcessorHolder inventoryActionProcessorHolder;
+    private final ContainerActionProcessorHolder containerActionProcessorHolder;
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -96,8 +97,8 @@ public class AllayClient implements Client {
         this.chunkLoadingRadius = server.getServerSettings().defaultViewDistance();
         this.adventureSettings = new AdventureSettings(this);
         session.setPacketHandler(new AllayClientPacketHandler());
-        inventoryActionProcessorHolder = new SimpleInventoryActionProcessorHolder();
-        InventoryActionProcessorHolder.registerDefaultInventoryActionProcessors(inventoryActionProcessorHolder);
+        containerActionProcessorHolder = new SimpleContainerActionProcessorHolder();
+        ContainerActionProcessorHolder.registerDefaultInventoryActionProcessors(containerActionProcessorHolder);
     }
 
     public static AllayClient hold(BedrockServerSession session, Server Server) {
@@ -529,49 +530,49 @@ public class AllayClient implements Client {
 
         private void handleItemStackRequest(ItemStackRequest request, List<ItemStackResponse> responses) {
             for (var action : request.getActions()) {
-                var processor = inventoryActionProcessorHolder.getProcessor(action.getType());
+                ContainerActionProcessor<ItemStackRequestAction> processor = containerActionProcessorHolder.getProcessor(action.getType());
                 if (processor == null) {
                     log.warn("Unhandled inventory action type " + action.getType());
                     continue;
                 }
-                //TODO: 使用访问者模式将方法调用移动到ActionProcessor
-                switch (action.getType()) {
-                    case CRAFT_CREATIVE -> {
-                        var craftCreativeAction = (CraftCreativeAction) action;
-                        responses.addAll(((CraftCreativeActionProcessor) processor).handle(
-                                craftCreativeAction,
-                                request.getRequestId(),
-                                playerEntity.getContainer(FullContainerType.CREATED_OUTPUT),
-                                0));
-                    }
-                    case TAKE, PLACE -> {
-                        var transferAction = (TransferItemStackRequestAction) action;
-                        var slot1 = transferAction.getSource().getSlot();
-                        var stackNetworkId1 = transferAction.getSource().getStackNetworkId();
-                        var slot2 = transferAction.getDestination().getSlot();
-                        var stackNetworkId2 = transferAction.getDestination().getStackNetworkId();
-                        var source = playerEntity.getContainerBySlotType(transferAction.getSource().getContainer());
-                        var destination = playerEntity.getContainerBySlotType(transferAction.getDestination().getContainer());
-                        Objects.requireNonNull(source, "source container");
-                        Objects.requireNonNull(destination, "destination container");
-                        responses.addAll(((TransferItemActionProcessor) processor).handle(
-                                request.getRequestId(),
-                                source, slot1, stackNetworkId1,
-                                destination, slot2, stackNetworkId2,
-                                transferAction.getCount()));
-                    }
-                    case DESTROY -> {
-                        var destroyAction = (DestroyAction) action;
-                        Objects.requireNonNull(playerEntity.getContainerBySlotType(destroyAction.getSource().getContainer()), "source container");
-                        responses.addAll(((DestroyActionProcessor) processor).handle(
-                                request.getRequestId(),
-                                playerEntity.getContainerBySlotType(destroyAction.getSource().getContainer()),
-                                destroyAction.getSource().getSlot(),
-                                destroyAction.getSource().getStackNetworkId(),
-                                destroyAction.getCount()
-                        ));
-                    }
-                }
+                responses.addAll(processor.handle(action, AllayClient.this, request.getRequestId()));
+//                switch (action.getType()) {
+//                    case CRAFT_CREATIVE -> {
+//                        var craftCreativeAction = (CraftCreativeAction) action;
+//                        responses.addAll(((CraftCreativeActionProcessor) processor).handle(
+//                                craftCreativeAction,
+//                                request.getRequestId(),
+//                                playerEntity.getContainer(FullContainerType.CREATED_OUTPUT),
+//                                0));
+//                    }
+//                    case TAKE, PLACE -> {
+//                        var transferAction = (TransferItemStackRequestAction) action;
+//                        var slot1 = transferAction.getSource().getSlot();
+//                        var stackNetworkId1 = transferAction.getSource().getStackNetworkId();
+//                        var slot2 = transferAction.getDestination().getSlot();
+//                        var stackNetworkId2 = transferAction.getDestination().getStackNetworkId();
+//                        var source = playerEntity.getContainerBySlotType(transferAction.getSource().getContainer());
+//                        var destination = playerEntity.getContainerBySlotType(transferAction.getDestination().getContainer());
+//                        Objects.requireNonNull(source, "source container");
+//                        Objects.requireNonNull(destination, "destination container");
+//                        responses.addAll(((TransferItemActionProcessor) processor).handle(
+//                                request.getRequestId(),
+//                                source, slot1, stackNetworkId1,
+//                                destination, slot2, stackNetworkId2,
+//                                transferAction.getCount()));
+//                    }
+//                    case DESTROY -> {
+//                        var destroyAction = (DestroyAction) action;
+//                        Objects.requireNonNull(playerEntity.getContainerBySlotType(destroyAction.getSource().getContainer()), "source container");
+//                        responses.addAll(((DestroyActionProcessor) processor).handle(
+//                                request.getRequestId(),
+//                                playerEntity.getContainerBySlotType(destroyAction.getSource().getContainer()),
+//                                destroyAction.getSource().getSlot(),
+//                                destroyAction.getSource().getStackNetworkId(),
+//                                destroyAction.getCount()
+//                        ));
+//                    }
+//                }
             }
         }
     }

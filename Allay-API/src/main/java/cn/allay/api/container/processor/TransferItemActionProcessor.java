@@ -3,7 +3,9 @@ package cn.allay.api.container.processor;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.player.Client;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
@@ -21,9 +23,17 @@ import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.respons
  * @author daoge_cmd
  */
 @Slf4j
-public abstract class TransferItemActionProcessor implements ContainerActionProcessor {
+public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
-    public List<ItemStackResponse> handle(int requestId, Container source, int slot1, int stackNetworkId1, Container destination, int slot2, int stackNetworkId2, int count) {
+    @Override
+    public List<ItemStackResponse> handle(T action, Client client, int requestId) {
+        var slot1 = action.getSource().getSlot();
+        var stackNetworkId1 = action.getSource().getStackNetworkId();
+        var slot2 = action.getDestination().getSlot();
+        var stackNetworkId2 = action.getDestination().getStackNetworkId();
+        var source = client.getPlayerEntity().getContainerBySlotType(action.getSource().getContainer());
+        var destination = client.getPlayerEntity().getContainerBySlotType(action.getDestination().getContainer());
+        var count = action.getCount();
         var sourItem = source.getItemStack(slot1);
         if (sourItem.getItemType() == AIR_TYPE) {
             log.warn("place an air item is not allowed");

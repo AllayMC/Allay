@@ -1,7 +1,10 @@
 package cn.allay.api.container.processor;
 
 import cn.allay.api.container.Container;
+import cn.allay.api.player.Client;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DestroyAction;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
@@ -20,15 +23,19 @@ import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.respons
  * @author daoge_cmd
  */
 @Slf4j
-public class DestroyActionProcessor implements ContainerActionProcessor {
+public class DestroyActionProcessor implements ContainerActionProcessor<DestroyAction> {
     @Override
     public ItemStackRequestActionType getType() {
         return ItemStackRequestActionType.DESTROY;
     }
 
-    public List<ItemStackResponse> handle(int requestId, Container container, int slot, int stackNetworkId, int count) {
+    @Override
+    public List<ItemStackResponse> handle(DestroyAction action, Client client, int requestId) {
+        var container = client.getPlayerEntity().getContainerBySlotType(action.getSource().getContainer());
+        var count = action.getCount();
+        var slot = action.getSource().getSlot();
         var item = container.getItemStack(slot);
-        if (item.getStackNetworkId() != stackNetworkId) {
+        if (item.getStackNetworkId() != action.getSource().getStackNetworkId()) {
             log.warn("mismatch stack network id!");
             return error(requestId);
         }
