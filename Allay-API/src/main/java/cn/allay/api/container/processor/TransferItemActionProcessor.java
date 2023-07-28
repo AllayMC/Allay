@@ -1,0 +1,135 @@
+package cn.allay.api.container.processor;
+
+import cn.allay.api.container.Container;
+import cn.allay.api.container.FullContainerType;
+import cn.allay.api.item.ItemStack;
+import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
+
+import java.util.List;
+
+import static cn.allay.api.data.VanillaItemTypes.AIR_TYPE;
+import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus.ERROR;
+import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus.OK;
+
+/**
+ * Allay Project 2023/7/28
+ *
+ * @author daoge_cmd
+ */
+@Slf4j
+public abstract class TransferItemActionProcessor implements ContainerActionProcessor {
+
+    public List<ItemStackResponse> handle(int requestId, Container source, int slot1, int stackNetworkId1, Container destination, int slot2, int stackNetworkId2, int count) {
+        var sourItem = source.getItemStack(slot1);
+        if (sourItem.getItemType() == AIR_TYPE) {
+            log.warn("place an air item is not allowed");
+            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+        }
+        //若客户端发来的stackNetworkId小于0，说明客户端要求遵从服务端的数据并跳过检查
+        //这通常发生在当一个ItemStackRequest中有多个action时且多个action有相同的source/destination container
+        //第一个action检查完id后后面的action就不需要重复检查了
+        //注意，服务端分配的网络堆栈id是从1开始分配的，不存在刷物品的可能性
+        if (sourItem.getStackNetworkId() != stackNetworkId1 && stackNetworkId1 > 0) {
+            log.warn("mismatch source stack network id!");
+            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+        }
+        if (sourItem.getCount() < count) {
+            log.warn("place an item that has not enough count is not allowed");
+            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+        }
+        if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
+            //HACK: 若是从CREATED_OUTPUT拿出的，需要服务端自行新建个网络堆栈id
+            sourItem = sourItem.copy(true);
+        }
+        var destItem = destination.getItemStack(slot2);
+        if (destItem.getItemType() != AIR_TYPE && destItem.getItemType() != sourItem.getItemType()) {
+            log.warn("place an item to a slot that has a different item is not allowed");
+            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+        }
+        if (destItem.getStackNetworkId() != stackNetworkId2 && stackNetworkId2 > 0) {
+            log.warn("mismatch destination stack network id!");
+            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+        }
+        if (destItem.getCount() + count > destItem.getItemAttributes().maxStackSize()) {
+            log.warn("destination stack size bigger than the max stack size!");
+            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+        }
+        ItemStack resultSourItem;
+        ItemStack resultDestItem;
+        if (sourItem.getCount() == count) {
+            //第一种：全部拿走
+            resultSourItem = Container.AIR_STACK;
+            source.setItemStack(slot1, resultSourItem);
+            if (destItem.getItemType() != AIR_TYPE) {
+                resultDestItem = destItem;
+                //目标物品不为空，直接添加数量，目标物品网络堆栈id不变
+                resultDestItem.setCount(destItem.getCount() + count);
+                destination.onSlotChange(slot2, resultDestItem);
+            } else {
+                //目标物品为空，直接移动原有堆栈到新位置，网络堆栈id使用源物品的网络堆栈id（相当于换个位置）
+                resultDestItem = sourItem;
+                destination.setItemStack(slot2, resultDestItem);
+            }
+        } else {
+            //第二种：拿走一部分
+            resultSourItem = sourItem;
+            resultSourItem.setCount(resultSourItem.getCount() - count);
+            source.onSlotChange(slot1, resultSourItem);
+            if (destItem.getItemType() != AIR_TYPE) {
+                //目标物品不为空
+                resultDestItem = destItem;
+                resultDestItem.setCount(destItem.getCount() + count);
+                destination.onSlotChange(slot2, resultDestItem);
+            } else {
+                //目标物品为空，为分出来的子物品堆栈新建网络堆栈id
+                resultDestItem = sourItem.copy(true);
+                resultDestItem.setCount(count);
+                destination.setItemStack(slot2, resultDestItem);
+            }
+        }
+        var destItemStackResponseSlot =
+                new ItemStackResponseContainer(
+                        destination.getSlotType(slot2),
+                        List.of(
+                                new ItemStackResponseSlot(
+                                        slot2,
+                                        slot2,
+                                        resultDestItem.getCount(),
+                                        resultDestItem.getStackNetworkId(),
+                                        "",
+                                        0
+                                )
+                        )
+                );
+        //CREATED_OUTPUT不需要发响应（mjの奇妙hack）
+        if (source.getContainerType() != FullContainerType.CREATED_OUTPUT) {
+            return List.of(
+                    new ItemStackResponse(
+                            OK,
+                            requestId,
+                            List.of(
+                                    new ItemStackResponseContainer(
+                                            source.getSlotType(slot1),
+                                            List.of(
+                                                    new ItemStackResponseSlot(
+                                                            slot1,
+                                                            slot1,
+                                                            resultSourItem.getCount(),
+                                                            resultSourItem.getStackNetworkId(),
+                                                            "",
+                                                            0
+                                                    )
+                                            )
+                                    ), destItemStackResponseSlot)));
+        } else {
+            return List.of(
+                    new ItemStackResponse(
+                            OK,
+                            requestId,
+                            List.of(destItemStackResponseSlot)));
+        }
+    }
+}

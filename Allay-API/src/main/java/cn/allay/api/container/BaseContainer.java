@@ -1,4 +1,4 @@
-package cn.allay.api.inventory;
+package cn.allay.api.container;
 
 import cn.allay.api.item.ItemStack;
 import com.google.common.collect.BiMap;
@@ -17,19 +17,19 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public abstract class BaseInventory implements Inventory {
-    protected final BiMap<Byte, InventoryViewer> viewers = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
+public abstract class BaseContainer implements Container {
+    protected final BiMap<Byte, ContainerViewer> viewers = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
     protected int size;
     protected ItemStack[] content;
 
-    public BaseInventory(int size) {
+    public BaseContainer(int size) {
         this.size = size;
         this.content = new ItemStack[size];
-        Arrays.fill(this.content, AIR);
+        Arrays.fill(this.content, AIR_STACK);
     }
 
     @Override
-    public Map<Byte, InventoryViewer> getViewers() {
+    public Map<Byte, ContainerViewer> getViewers() {
         return Collections.unmodifiableMap(viewers);
     }
 
@@ -52,10 +52,11 @@ public abstract class BaseInventory implements Inventory {
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
         content[slot] = itemStack;
+        onSlotChange(slot, itemStack);
     }
 
     @Override
-    public void addViewer(InventoryViewer viewer) {
+    public void addViewer(ContainerViewer viewer) {
         if (viewers.containsValue(viewer))
             throw new IllegalArgumentException("viewer already exists");
         var assignedId = viewer.assignInventoryId();
@@ -67,14 +68,21 @@ public abstract class BaseInventory implements Inventory {
     }
 
     @Override
-    public void removeViewer(InventoryViewer viewer) {
+    public void removeViewer(ContainerViewer viewer) {
         viewer.onClose(viewers.inverse().remove(viewer), this);
     }
 
     @Override
-    public InventoryViewer removeViewer(byte assignedId) {
+    public ContainerViewer removeViewer(byte assignedId) {
         var removed = viewers.remove(assignedId);
         if (removed != null) removed.onClose(assignedId, this);
         return removed;
+    }
+
+    @Override
+    public void onSlotChange(int slot, ItemStack current) {
+        for (var viewer : viewers.values()) {
+            viewer.onSlotChange(this, slot, current);
+        }
     }
 }

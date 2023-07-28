@@ -21,7 +21,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
 
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
-    private static int STACK_NETWORK_ID_COUNTER = 0;
+    private static int STACK_NETWORK_ID_COUNTER = 1;
 
     protected ItemType<? extends ItemStack> itemType;
     protected int count;
@@ -31,7 +31,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
     @Nullable
     protected BlockState blockState;
     @Nullable
-    protected final Integer stackNetworkId;
+    protected Integer stackNetworkId;
 
     public ItemBaseComponentImpl(ItemType<? extends ItemStack> itemType, ItemStackInitInfo initInfo) {
         this.itemType = itemType;
@@ -39,12 +39,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
         this.damage = initInfo.damage();
         this.nbt = initInfo.nbt();
         this.blockState = initInfo.blockState();
-        if (initInfo.stackNetworkId() != null) {
+        if (initInfo.autoAssignStackNetworkId()) {
+            this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
+        } else if (initInfo.stackNetworkId() != null) {
             if (initInfo.stackNetworkId() < 0)
                 throw new IllegalArgumentException("stack network id cannot be negative");
             this.stackNetworkId = initInfo.stackNetworkId();
-        } else if (initInfo.autoAssignStackNetworkId()) {
-            this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
         } else {
             this.stackNetworkId = null;
         }
@@ -122,14 +122,34 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
                 .count(count)
                 .damage(damage)
                 .tag(nbt)
-                .usingNetId(false)
+                .usingNetId(stackNetworkId != null)
+                .netId(stackNetworkId != null ? stackNetworkId : 0)
                 .build();
     }
 
     @Nullable
     @Override
+    @Impl
     public Integer getStackNetworkId() {
         return stackNetworkId;
+    }
+
+    @Override
+    @Impl
+    public void setStackNetworkId(int newStackNetworkId) {
+        this.stackNetworkId = newStackNetworkId;
+    }
+
+    @Override
+    @Impl
+    public ItemStack copy(boolean newStackNetworkId) {
+        return itemType.createItemStack(new ItemStackInitInfo.Simple(count, damage, nbt, blockState, stackNetworkId, newStackNetworkId));
+    }
+
+    @Override
+    @Impl
+    public ItemStack copy() {
+        return copy(true);
     }
 
     @Override

@@ -69,6 +69,8 @@ public class ItemAttributes {
     @Builder.Default
     protected int maxDamage = 0;
     @Builder.Default
+    protected int maxStackSize = 64;
+    @Builder.Default
     protected String name = "";
     @Builder.Default
     protected int toughnessValue = 0;
@@ -107,6 +109,7 @@ public class ItemAttributes {
                 .itemColorName(nbt.getString("itemColorName"))
                 .itemColorRGB(nbt.getInt("itemColorRGB"))
                 .maxDamage(nbt.getInt("maxDamage"))
+                .maxStackSize(nbt.getInt("maxStackSize"))
                 .name(nbt.getString("name"))
                 .toughnessValue(nbt.getInt("toughnessValue"))
                 .viewDamping(nbt.getFloat("viewDamping"))
