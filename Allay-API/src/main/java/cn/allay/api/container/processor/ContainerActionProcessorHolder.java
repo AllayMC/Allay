@@ -23,7 +23,7 @@ public interface ContainerActionProcessorHolder {
     @UnmodifiableView
     Map<ItemStackRequestActionType, ContainerActionProcessor<?>> getProcessors();
 
-    static void registerDefaultInventoryActionProcessors(ContainerActionProcessorHolder holder) {
+    static void registerDefaultContainerActionProcessors(ContainerActionProcessorHolder holder) {
         holder.registerProcessor(new CraftCreativeActionProcessor());
         holder.registerProcessor(new DeprecatedActionProcessor<CraftResultsDeprecatedAction>(CRAFT_RESULTS_DEPRECATED));
         holder.registerProcessor(new PlaceActionProcessor());

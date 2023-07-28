@@ -4,7 +4,6 @@ import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
-import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.identifier.Identified;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;

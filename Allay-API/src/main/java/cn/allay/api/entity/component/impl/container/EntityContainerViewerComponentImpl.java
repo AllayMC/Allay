@@ -20,9 +20,7 @@ import org.cloudburstmc.protocol.bedrock.packet.InventoryContentPacket;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Allay Project 2023/7/15

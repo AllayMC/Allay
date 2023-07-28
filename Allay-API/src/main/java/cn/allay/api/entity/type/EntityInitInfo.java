@@ -2,7 +2,6 @@ package cn.allay.api.entity.type;
 
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.math.vector.Loc3d;
-import cn.allay.api.math.vector.Loc3f;
 
 /**
  * Allay Project 2023/5/20

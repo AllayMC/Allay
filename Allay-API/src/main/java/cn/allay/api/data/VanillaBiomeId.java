@@ -1,7 +1,6 @@
 package cn.allay.api.data;
 
 import cn.allay.api.world.biome.BiomeType;
-import java.lang.String;
 import lombok.Getter;
 
 /**

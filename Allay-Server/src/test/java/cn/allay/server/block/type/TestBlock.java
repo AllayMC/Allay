@@ -4,7 +4,6 @@ import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.component.impl.custom.CustomBlockComponent;
 import cn.allay.api.component.annotation.AutoRegister;
-import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.server.block.component.TestAutoRegisterComponent;
 import cn.allay.server.block.component.TestAutoRegisterComponentImpl;
 import cn.allay.server.block.component.TestComponent;

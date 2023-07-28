@@ -2,7 +2,6 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.math.vector.Loc3d;
-import cn.allay.api.math.vector.Loc3f;
 
 import java.util.Set;
 

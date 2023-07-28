@@ -2,7 +2,6 @@ package cn.allay.api.item;
 
 import cn.allay.api.item.component.impl.attribute.ItemAttributeComponent;
 import cn.allay.api.item.component.impl.base.ItemBaseComponent;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
 /**
  * Allay Project 2023/5/19

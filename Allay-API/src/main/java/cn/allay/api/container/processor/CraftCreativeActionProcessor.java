@@ -1,6 +1,5 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.player.Client;
@@ -8,12 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
 import java.util.List;
-
-import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus.OK;
 
 /**
  * Allay Project 2023/7/26
