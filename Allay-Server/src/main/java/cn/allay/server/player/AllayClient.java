@@ -34,6 +34,7 @@ import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DestroyAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -551,13 +552,24 @@ public class AllayClient implements Client {
                         var stackNetworkId2 = transferAction.getDestination().getStackNetworkId();
                         var source = playerEntity.getContainerBySlotType(transferAction.getSource().getContainer());
                         var destination = playerEntity.getContainerBySlotType(transferAction.getDestination().getContainer());
-                        Objects.requireNonNull(source);
-                        Objects.requireNonNull(destination);
+                        Objects.requireNonNull(source, "source container");
+                        Objects.requireNonNull(destination, "destination container");
                         responses.addAll(((TransferItemActionProcessor) processor).handle(
                                 request.getRequestId(),
                                 source, slot1, stackNetworkId1,
                                 destination, slot2, stackNetworkId2,
                                 transferAction.getCount()));
+                    }
+                    case DESTROY -> {
+                        var destroyAction = (DestroyAction) action;
+                        Objects.requireNonNull(playerEntity.getContainerBySlotType(destroyAction.getSource().getContainer()), "source container");
+                        responses.addAll(((DestroyActionProcessor) processor).handle(
+                                request.getRequestId(),
+                                playerEntity.getContainerBySlotType(destroyAction.getSource().getContainer()),
+                                destroyAction.getSource().getSlot(),
+                                destroyAction.getSource().getStackNetworkId(),
+                                destroyAction.getCount()
+                        ));
                     }
                 }
             }

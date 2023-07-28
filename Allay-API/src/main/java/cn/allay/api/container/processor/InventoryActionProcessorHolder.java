@@ -24,5 +24,6 @@ public interface InventoryActionProcessorHolder {
         holder.registerProcessor(new CraftCreativeActionProcessor());
         holder.registerProcessor(new PlaceActionProcessor());
         holder.registerProcessor(new TakeActionProcessor());
+        holder.registerProcessor(new DestroyActionProcessor());
     }
 }

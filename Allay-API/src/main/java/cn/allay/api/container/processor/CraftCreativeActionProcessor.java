@@ -29,7 +29,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor {
         var item = CreativeItemRegistry.getRegistry().get(action.getCreativeItemNetworkId());
         if (item == null) {
             log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId());
-            return List.of();
+            return error(requestId);
         }
         item = item.copy(true);
         item.setCount(item.getItemAttributes().maxStackSize());
