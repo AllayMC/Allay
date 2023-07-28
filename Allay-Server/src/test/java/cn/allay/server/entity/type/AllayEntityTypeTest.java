@@ -1,10 +1,9 @@
 package cn.allay.server.entity.type;
 
+import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.impl.EntitySheep;
 import cn.allay.api.entity.type.EntityInitInfo;
-import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.math.vector.Loc3d;
-import cn.allay.api.math.vector.Loc3f;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

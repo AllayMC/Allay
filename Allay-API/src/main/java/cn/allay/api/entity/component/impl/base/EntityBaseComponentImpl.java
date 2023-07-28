@@ -8,9 +8,7 @@ import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.vector.Loc3d;
-import cn.allay.api.math.vector.Loc3f;
 import cn.allay.api.math.vector.MutableLoc3d;
-import cn.allay.api.math.vector.MutableLoc3f;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 

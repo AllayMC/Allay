@@ -12,8 +12,6 @@ import cn.allay.api.entity.component.impl.container.EntityContainerViewerCompone
 import cn.allay.api.entity.component.impl.container.EntityContainerViewerComponentImpl;
 import cn.allay.api.entity.component.impl.playercontroller.EntityPlayerControllerComponent;
 import cn.allay.api.entity.component.impl.playercontroller.EntityPlayerControllerComponentImpl;
-import cn.allay.api.container.impl.PlayerInventoryContainer;
-import cn.allay.api.container.impl.PlayerOffhandContainer;
 
 import static cn.allay.api.entity.component.impl.attribute.EntityAttributeComponentImpl.basicAttributes;
 

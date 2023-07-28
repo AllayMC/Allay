@@ -5,7 +5,6 @@ import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.math.vector.Loc3d;
-import cn.allay.api.math.vector.Loc3f;
 
 /**
  * Allay Project 2023/5/26

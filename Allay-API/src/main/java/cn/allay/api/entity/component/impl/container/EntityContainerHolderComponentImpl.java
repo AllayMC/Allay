@@ -5,7 +5,6 @@ import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.entity.component.EntityComponentImpl;
 import cn.allay.api.identifier.Identifier;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 

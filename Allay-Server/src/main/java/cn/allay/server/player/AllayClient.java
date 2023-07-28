@@ -3,7 +3,8 @@ package cn.allay.server.player;
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.container.FullContainerType;
-import cn.allay.api.container.processor.*;
+import cn.allay.api.container.processor.ContainerActionProcessor;
+import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
@@ -33,10 +34,7 @@ import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DestroyAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
@@ -46,7 +44,10 @@ import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -98,7 +99,7 @@ public class AllayClient implements Client {
         this.adventureSettings = new AdventureSettings(this);
         session.setPacketHandler(new AllayClientPacketHandler());
         containerActionProcessorHolder = new SimpleContainerActionProcessorHolder();
-        ContainerActionProcessorHolder.registerDefaultInventoryActionProcessors(containerActionProcessorHolder);
+        ContainerActionProcessorHolder.registerDefaultContainerActionProcessors(containerActionProcessorHolder);
     }
 
     public static AllayClient hold(BedrockServerSession session, Server Server) {

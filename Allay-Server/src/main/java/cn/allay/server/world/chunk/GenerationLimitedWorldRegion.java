@@ -5,8 +5,6 @@ import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.generator.LimitedWorldRegion;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
-
 /**
  * Allay Project 2023/7/1
  *
