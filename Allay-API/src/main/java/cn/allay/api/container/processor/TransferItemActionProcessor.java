@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -26,19 +27,18 @@ public abstract class TransferItemActionProcessor implements ContainerActionProc
         var sourItem = source.getItemStack(slot1);
         if (sourItem.getItemType() == AIR_TYPE) {
             log.warn("place an air item is not allowed");
-            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+            return error(requestId);
         }
-        //若客户端发来的stackNetworkId小于0，说明客户端要求遵从服务端的数据并跳过检查
+        //若客户端发来的stackNetworkId小于0，说明客户端保证数据无误并要求遵从服务端的数据
         //这通常发生在当一个ItemStackRequest中有多个action时且多个action有相同的source/destination container
         //第一个action检查完id后后面的action就不需要重复检查了
-        //注意，服务端分配的网络堆栈id是从1开始分配的，不存在刷物品的可能性
         if (sourItem.getStackNetworkId() != stackNetworkId1 && stackNetworkId1 > 0) {
             log.warn("mismatch source stack network id!");
-            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+            return error(requestId);
         }
         if (sourItem.getCount() < count) {
             log.warn("place an item that has not enough count is not allowed");
-            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+            return error(requestId);
         }
         if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
             //HACK: 若是从CREATED_OUTPUT拿出的，需要服务端自行新建个网络堆栈id
@@ -47,15 +47,15 @@ public abstract class TransferItemActionProcessor implements ContainerActionProc
         var destItem = destination.getItemStack(slot2);
         if (destItem.getItemType() != AIR_TYPE && destItem.getItemType() != sourItem.getItemType()) {
             log.warn("place an item to a slot that has a different item is not allowed");
-            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+            return error(requestId);
         }
         if (destItem.getStackNetworkId() != stackNetworkId2 && stackNetworkId2 > 0) {
             log.warn("mismatch destination stack network id!");
-            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+            return error(requestId);
         }
         if (destItem.getCount() + count > destItem.getItemAttributes().maxStackSize()) {
             log.warn("destination stack size bigger than the max stack size!");
-            return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+            return error(requestId);
         }
         ItemStack resultSourItem;
         ItemStack resultDestItem;
