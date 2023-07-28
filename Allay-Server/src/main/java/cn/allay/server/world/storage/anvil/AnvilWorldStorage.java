@@ -108,7 +108,7 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
     public synchronized WorldData readWorldData() throws WorldStorageException {
         File levelDat = worldFolderPath.resolve("level.dat").toFile();
         try (var input = NbtUtils.createGZIPReader(new FileInputStream(levelDat))) {
-            return createWorldData(((NbtMap) input.readTag()).getCompound("Data"));
+            return createWorldData(((NbtMap) input.readTag()));
         } catch (IOException e) {
             throw new WorldStorageException(e);
         }
@@ -121,6 +121,7 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
 
     private WorldData createWorldData(NbtMap data) {
         boolean allay = data.containsKey("allay");
+        data = allay ? data : data.getCompound("Data");
         WorldData.WorldDataBuilder builder = WorldData.builder();
         NbtMap gameRulesNbt = data.getCompound("GameRules");
         GameRules gameRules = new GameRules();
@@ -143,8 +144,7 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
                 .rainTick(data.getInt("rainTime"))
                 .gameType(GameType.from(data.getInt("GameType")))
                 .levelName(data.getString("LevelName"))
-                .allay(true)
-        ;
+                .allay(true);
         if (allay) {
             NbtMap dimensionInfo = data.getCompound("DimensionInfo");
             return builder

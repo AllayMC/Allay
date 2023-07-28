@@ -11,7 +11,7 @@ import javax.annotation.concurrent.NotThreadSafe;
  * @author Cool_Loong
  */
 @NotThreadSafe
-public interface UnsafeChunk extends SectionOperate, HeightOperate, SkyLightOperate, BlockLightOperate {
+public interface UnsafeChunk extends SectionOperate, HeightOperate, LightOperate {
     DimensionInfo getDimensionInfo();
 
     int getChunkX();

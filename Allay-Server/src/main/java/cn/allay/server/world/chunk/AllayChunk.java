@@ -29,8 +29,7 @@ import java.util.stream.Collectors;
 public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     protected final StampedLock sectionLock;
     protected final StampedLock heightLock;
-    protected final StampedLock skyLightLock;
-    protected final StampedLock blockLightLock;
+    protected final StampedLock lightLock;
     protected final Vector<ChunkLoader> chunkLoaders;
 
     public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
@@ -41,8 +40,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         super(chunkX, chunkZ, dimensionInfo, data);
         this.sectionLock = new StampedLock();
         this.heightLock = new StampedLock();
-        this.skyLightLock = new StampedLock();
-        this.blockLightLock = new StampedLock();
+        this.lightLock = new StampedLock();
         this.chunkLoaders = new Vector<>();
     }
 
@@ -162,97 +160,96 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
 
     @Override
     public @Range(from = 0, to = 15) int getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        long stamp = blockLightLock.tryOptimisticRead();
+        long stamp = lightLock.tryOptimisticRead();
         try {
-            for (; ; stamp = blockLightLock.readLock()) {
+            for (; ; stamp = lightLock.readLock()) {
                 if (stamp == 0L) continue;
                 int result = super.getBlockLight(x, y, z);
-                if (!blockLightLock.validate(stamp)) continue;
+                if (!lightLock.validate(stamp)) continue;
                 return result;
             }
         } finally {
-            if (StampedLock.isReadLockStamp(stamp)) blockLightLock.unlockRead(stamp);
+            if (StampedLock.isReadLockStamp(stamp)) lightLock.unlockRead(stamp);
         }
     }
 
     @Override
     public void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
-        long stamp = blockLightLock.writeLock();
+        long stamp = lightLock.writeLock();
         try {
             super.setBlockLight(x, y, z, light);
         } finally {
-            blockLightLock.unlockWrite(stamp);
+            lightLock.unlockWrite(stamp);
         }
     }
 
     @Override
     public void compareAndSetBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue) {
-        long stamp = blockLightLock.tryOptimisticRead();
+        long stamp = lightLock.tryOptimisticRead();
         try {
-            for (; ; stamp = blockLightLock.writeLock()) {
+            for (; ; stamp = lightLock.writeLock()) {
                 if (stamp == 0L) continue;
                 int oldValue = super.getBlockLight(x, y, z);
-                if (!blockLightLock.validate(stamp)) continue;
+                if (!lightLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
-                stamp = blockLightLock.tryConvertToWriteLock(stamp);
+                stamp = lightLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
                 super.setBlockLight(x, y, z, newValue);
                 return;
             }
         } finally {
-            if (StampedLock.isWriteLockStamp(stamp)) blockLightLock.unlockWrite(stamp);
+            if (StampedLock.isWriteLockStamp(stamp)) lightLock.unlockWrite(stamp);
         }
     }
 
     @Override
     public @Range(from = 0, to = 15) int getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        long stamp = skyLightLock.tryOptimisticRead();
+        long stamp = lightLock.tryOptimisticRead();
         try {
-            for (; ; stamp = skyLightLock.readLock()) {
+            for (; ; stamp = lightLock.readLock()) {
                 if (stamp == 0L) continue;
                 int result = super.getSkyLight(x, y, z);
-                if (!skyLightLock.validate(stamp)) continue;
+                if (!lightLock.validate(stamp)) continue;
                 return result;
             }
         } finally {
-            if (StampedLock.isReadLockStamp(stamp)) skyLightLock.unlockRead(stamp);
+            if (StampedLock.isReadLockStamp(stamp)) lightLock.unlockRead(stamp);
         }
     }
 
     @Override
     public void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
-        long stamp = skyLightLock.writeLock();
+        long stamp = lightLock.writeLock();
         try {
             super.setSkyLight(x, y, z, light);
         } finally {
-            skyLightLock.unlockWrite(stamp);
+            lightLock.unlockWrite(stamp);
         }
     }
 
     @Override
     public void compareAndSetSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue) {
-        long stamp = skyLightLock.tryOptimisticRead();
+        long stamp = lightLock.tryOptimisticRead();
         try {
-            for (; ; stamp = skyLightLock.writeLock()) {
+            for (; ; stamp = lightLock.writeLock()) {
                 if (stamp == 0L) continue;
                 int oldValue = super.getSkyLight(x, y, z);
-                if (!skyLightLock.validate(stamp)) continue;
+                if (!lightLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
-                stamp = skyLightLock.tryConvertToWriteLock(stamp);
+                stamp = lightLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
                 super.setSkyLight(x, y, z, newValue);
                 return;
             }
         } finally {
-            if (StampedLock.isWriteLockStamp(stamp)) skyLightLock.unlockWrite(stamp);
+            if (StampedLock.isWriteLockStamp(stamp)) lightLock.unlockWrite(stamp);
         }
     }
 
     @Override
     public void batchProcess(Consumer<SectionOperate> sectionOperate,
                              Consumer<HeightOperate> heightOperate,
-                             Consumer<SkyLightOperate> skyLightOperate,
-                             Consumer<BlockLightOperate> blockLightOperate) {
+                             Consumer<LightOperate> lightOperate) {
         if (sectionOperate != null) {
             long stamp = sectionLock.writeLock();
             try {
@@ -269,20 +266,12 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
                 heightLock.unlockWrite(stamp);
             }
         }
-        if (skyLightOperate != null) {
-            long stamp = skyLightLock.writeLock();
+        if (lightOperate != null) {
+            long stamp = lightLock.writeLock();
             try {
-                skyLightOperate.accept(this);
+                lightOperate.accept(this);
             } finally {
-                skyLightLock.unlockWrite(stamp);
-            }
-        }
-        if (blockLightOperate != null) {
-            long stamp = blockLightLock.writeLock();
-            try {
-                blockLightOperate.accept(this);
-            } finally {
-                blockLightLock.unlockWrite(stamp);
+                lightLock.unlockWrite(stamp);
             }
         }
     }
