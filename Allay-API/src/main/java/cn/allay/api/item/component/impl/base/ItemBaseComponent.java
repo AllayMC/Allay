@@ -50,4 +50,13 @@ public interface ItemBaseComponent {
     @Nullable
     @Inject
     Integer getStackNetworkId();
+
+    @Inject
+    void setStackNetworkId(int newStackNetworkId);
+
+    @Inject
+    ItemStack copy();
+
+    @Inject
+    ItemStack copy(boolean newStackNetworkId);
 }

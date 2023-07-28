@@ -2,19 +2,18 @@ package cn.allay.api.entity.impl;
 
 import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.container.impl.*;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.impl.attribute.EntityAttributeComponent;
 import cn.allay.api.entity.component.impl.attribute.EntityAttributeComponentImpl;
-import cn.allay.api.entity.component.impl.inventory.EntityInventoryHolderComponent;
-import cn.allay.api.entity.component.impl.inventory.EntityInventoryHolderComponentImpl;
-import cn.allay.api.entity.component.impl.inventory.EntityInventoryViewerComponent;
-import cn.allay.api.entity.component.impl.inventory.EntityInventoryViewerComponentImpl;
+import cn.allay.api.entity.component.impl.container.EntityContainerHolderComponent;
+import cn.allay.api.entity.component.impl.container.EntityContainerHolderComponentImpl;
+import cn.allay.api.entity.component.impl.container.EntityContainerViewerComponent;
+import cn.allay.api.entity.component.impl.container.EntityContainerViewerComponentImpl;
 import cn.allay.api.entity.component.impl.playercontroller.EntityPlayerControllerComponent;
 import cn.allay.api.entity.component.impl.playercontroller.EntityPlayerControllerComponentImpl;
-import cn.allay.api.inventory.impl.PlayerArmorInventory;
-import cn.allay.api.inventory.impl.PlayerCursorInventory;
-import cn.allay.api.inventory.impl.PlayerInventory;
-import cn.allay.api.inventory.impl.PlayerOffhandInventory;
+import cn.allay.api.container.impl.PlayerInventoryContainer;
+import cn.allay.api.container.impl.PlayerOffhandContainer;
 
 import static cn.allay.api.entity.component.impl.attribute.EntityAttributeComponentImpl.basicAttributes;
 
@@ -25,8 +24,8 @@ import static cn.allay.api.entity.component.impl.attribute.EntityAttributeCompon
 public interface EntityPlayer extends
         Entity,
         EntityAttributeComponent,
-        EntityInventoryHolderComponent,
-        EntityInventoryViewerComponent,
+        EntityContainerHolderComponent,
+        EntityContainerViewerComponent,
         EntityPlayerControllerComponent {
     @AutoRegister
     ComponentProvider<EntityAttributeComponentImpl> ATTRIBUTE_COMPONENT =
@@ -36,22 +35,23 @@ public interface EntityPlayer extends
             );
 
     @AutoRegister
-    ComponentProvider<EntityInventoryHolderComponentImpl> INVENTORY_HOLDER_COMPONENT =
+    ComponentProvider<EntityContainerHolderComponentImpl> CONTAINER_HOLDER_COMPONENT =
             ComponentProvider.of(
-                    () -> new EntityInventoryHolderComponentImpl(
-                            new PlayerInventory(),
-                            new PlayerCursorInventory(),
-                            new PlayerArmorInventory(),
-                            new PlayerOffhandInventory()
+                    () -> new EntityContainerHolderComponentImpl(
+                            new PlayerInventoryContainer(),
+                            new PlayerCursorContainer(),
+                            new PlayerCreatedOutputContainer(),
+                            new PlayerArmorContainer(),
+                            new PlayerOffhandContainer()
                     ),
-                    EntityInventoryHolderComponentImpl.class
+                    EntityContainerHolderComponentImpl.class
             );
 
     @AutoRegister
-    ComponentProvider<EntityInventoryViewerComponentImpl> INVENTORY_VIEWER_COMPONENT =
+    ComponentProvider<EntityContainerViewerComponentImpl> CONTAINER_VIEWER_COMPONENT =
             ComponentProvider.of(
-                    EntityInventoryViewerComponentImpl::new,
-                    EntityInventoryViewerComponentImpl.class
+                    EntityContainerViewerComponentImpl::new,
+                    EntityContainerViewerComponentImpl.class
             );
 
     @AutoRegister

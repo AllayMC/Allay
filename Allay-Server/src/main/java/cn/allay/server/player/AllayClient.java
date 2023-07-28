@@ -2,14 +2,13 @@ package cn.allay.server.player;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.container.FullContainerType;
+import cn.allay.api.container.processor.*;
 import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
-import cn.allay.api.inventory.impl.PlayerArmorInventory;
-import cn.allay.api.inventory.impl.PlayerCursorInventory;
-import cn.allay.api.inventory.impl.PlayerInventory;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.vector.Loc3d;
@@ -21,6 +20,7 @@ import cn.allay.api.server.Server;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.gamerule.GameRule;
+import cn.allay.server.inventory.SimpleInventoryActionProcessorHolder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +32,10 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
@@ -40,8 +44,7 @@ import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -83,6 +86,8 @@ public class AllayClient implements Client {
     @Setter
     private GameType gameType = GameType.CREATIVE;
     private final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(DO_FIRST_SPAWN_CHUNK_THRESHOLD);
+    @Getter
+    private final InventoryActionProcessorHolder inventoryActionProcessorHolder;
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -90,6 +95,8 @@ public class AllayClient implements Client {
         this.chunkLoadingRadius = server.getServerSettings().defaultViewDistance();
         this.adventureSettings = new AdventureSettings(this);
         session.setPacketHandler(new AllayClientPacketHandler());
+        inventoryActionProcessorHolder = new SimpleInventoryActionProcessorHolder();
+        InventoryActionProcessorHolder.registerDefaultInventoryActionProcessors(inventoryActionProcessorHolder);
     }
 
     public static AllayClient hold(BedrockServerSession session, Server Server) {
@@ -158,13 +165,14 @@ public class AllayClient implements Client {
     }
 
     private void sendInventories() {
-        var inv = playerEntity.getInventory(PlayerInventory.class);
+        var inv = playerEntity.getContainer(FullContainerType.PLAYER_INVENTORY);
+        //TODO: setHolder
         inv.sendContents(playerEntity);
 
-        var cursor = playerEntity.getInventory(PlayerCursorInventory.class);
+        var cursor = playerEntity.getContainer(FullContainerType.CURSOR);
         cursor.sendContents(playerEntity);
 
-        var armor = playerEntity.getInventory(PlayerArmorInventory.class);
+        var armor = playerEntity.getContainer(FullContainerType.ARMOR);
         armor.sendContents(playerEntity);
     }
 
@@ -491,7 +499,7 @@ public class AllayClient implements Client {
         public PacketSignal handle(InteractPacket packet) {
             switch (packet.getAction()) {
                 case OPEN_INVENTORY -> {
-                    playerEntity.getInventory(PlayerInventory.class).addViewer(playerEntity);
+                    playerEntity.getContainer(FullContainerType.PLAYER_INVENTORY).addViewer(playerEntity);
                 }
             }
             return PacketSignal.HANDLED;
@@ -499,11 +507,60 @@ public class AllayClient implements Client {
 
         @Override
         public PacketSignal handle(ContainerClosePacket packet) {
-            var opened = playerEntity.getOpenedInventory();
+            var opened = playerEntity.getOpenedContainer(packet.getId());
             if (opened == null)
                 throw new IllegalStateException("Player is not viewing an inventory");
             opened.removeViewer(playerEntity);
             return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(ItemStackRequestPacket packet) {
+            List<ItemStackResponse> responses = new LinkedList<>();
+            for (var request : packet.getRequests()) {
+                handleItemStackRequest(request, responses);
+            }
+            var itemStackResponsePacket = new ItemStackResponsePacket();
+            itemStackResponsePacket.getEntries().addAll(responses);
+            sendPacket(itemStackResponsePacket);
+            return PacketSignal.HANDLED;
+        }
+
+        private void handleItemStackRequest(ItemStackRequest request, List<ItemStackResponse> responses) {
+            for (var action : request.getActions()) {
+                var processor = inventoryActionProcessorHolder.getProcessor(action.getType());
+                if (processor == null) {
+                    log.warn("Unhandled inventory action type " + action.getType());
+                    continue;
+                }
+                //TODO: 使用访问者模式将方法调用移动到ActionProcessor
+                switch (action.getType()) {
+                    case CRAFT_CREATIVE -> {
+                        var craftCreativeAction = (CraftCreativeAction) action;
+                        responses.addAll(((CraftCreativeActionProcessor) processor).handle(
+                                craftCreativeAction,
+                                request.getRequestId(),
+                                playerEntity.getContainer(FullContainerType.CREATED_OUTPUT),
+                                0));
+                    }
+                    case TAKE, PLACE -> {
+                        var transferAction = (TransferItemStackRequestAction) action;
+                        var slot1 = transferAction.getSource().getSlot();
+                        var stackNetworkId1 = transferAction.getSource().getStackNetworkId();
+                        var slot2 = transferAction.getDestination().getSlot();
+                        var stackNetworkId2 = transferAction.getDestination().getStackNetworkId();
+                        var source = playerEntity.getContainerBySlotType(transferAction.getSource().getContainer());
+                        var destination = playerEntity.getContainerBySlotType(transferAction.getDestination().getContainer());
+                        Objects.requireNonNull(source);
+                        Objects.requireNonNull(destination);
+                        responses.addAll(((TransferItemActionProcessor) processor).handle(
+                                request.getRequestId(),
+                                source, slot1, stackNetworkId1,
+                                destination, slot2, stackNetworkId2,
+                                transferAction.getCount()));
+                    }
+                }
+            }
         }
     }
 }

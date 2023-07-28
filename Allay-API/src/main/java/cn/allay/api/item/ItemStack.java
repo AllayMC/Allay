@@ -12,4 +12,5 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 public interface ItemStack extends
         ItemBaseComponent,
         ItemAttributeComponent {
+
 }
