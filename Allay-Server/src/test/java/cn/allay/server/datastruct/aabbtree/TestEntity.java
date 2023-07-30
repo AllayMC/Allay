@@ -2,6 +2,7 @@ package cn.allay.server.datastruct.aabbtree;
 
 import cn.allay.api.datastruct.aabbtree.Boundable;
 import cn.allay.api.datastruct.aabbtree.Identifiable;
+import cn.allay.api.math.aabb.AABB;
 import org.joml.primitives.AABBf;
 
 public class TestEntity implements Boundable, Identifiable {
