@@ -415,7 +415,7 @@ public final class AABBTree<T extends Boundable & Identifiable> {
         stack.offer(root);
 
         while (!stack.isEmpty()) {
-            Integer nodeIndex = stack.pop();
+            int nodeIndex = stack.pop();
             if (nodeIndex == AABBTreeNode.INVALID_NODE_INDEX) {
                 continue;
             }
