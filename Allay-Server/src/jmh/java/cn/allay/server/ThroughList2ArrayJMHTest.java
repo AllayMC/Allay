@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Threads(1)
 @Fork(1)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class ThroughList2Array {
+public class ThroughList2ArrayJMHTest {
     private final BlockPropertyType.BlockPropertyValue<?, ?, ?>[] data1 = new BlockPropertyType.BlockPropertyValue[3];
     private final ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>> data2 = new ArrayList<>(3);
 
