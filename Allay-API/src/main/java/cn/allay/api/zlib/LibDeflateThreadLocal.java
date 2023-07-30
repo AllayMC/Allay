@@ -34,9 +34,8 @@ public final class LibDeflateThreadLocal implements ZlibProvider {
 
     @Override
     public byte[] deflate(byte[] data) throws IOException {
-        try {
+        try (LibdeflateCompressor deflater = DEFLATER.get();) {
             var t = type == CompressionType.ZLIB ? cn.powernukkitx.libdeflate.CompressionType.ZLIB : cn.powernukkitx.libdeflate.CompressionType.GZIP;
-            var deflater = DEFLATER.get();
             byte[] buffer = deflater.getCompressBound(data.length, t) < 8192 ? new byte[8192] : new byte[data.length];
             int compressedSize = deflater.compress(data, buffer, t);
             byte[] output = new byte[compressedSize];
@@ -51,18 +50,19 @@ public final class LibDeflateThreadLocal implements ZlibProvider {
     @Override
     public byte[] inflate(byte[] data, int maxSize) throws IOException {
         var t = type == CompressionType.ZLIB ? cn.powernukkitx.libdeflate.CompressionType.ZLIB : cn.powernukkitx.libdeflate.CompressionType.GZIP;
-        var pnxInflater = PNX_INFLATER.get();
-        byte[] buffer = new byte[maxSize];
-        try {
-            var result = pnxInflater.decompressUnknownSize(data, 0, data.length, buffer, 0, buffer.length, t);
-            if (maxSize > 0 && result >= maxSize) {
-                throw new IOException("Inflated data exceeds maximum size");
+        try (LibdeflateDecompressor pnxInflater = PNX_INFLATER.get()) {
+            byte[] buffer = new byte[maxSize];
+            try {
+                var result = pnxInflater.decompressUnknownSize(data, 0, data.length, buffer, 0, buffer.length, t);
+                if (maxSize > 0 && result >= maxSize) {
+                    throw new IOException("Inflated data exceeds maximum size");
+                }
+                byte[] output = new byte[(int) result];
+                System.arraycopy(buffer, 0, output, 0, output.length);
+                return output;
+            } catch (DataFormatException e) {
+                throw new IOException("Unable to inflate zlib stream", e);
             }
-            byte[] output = new byte[(int) result];
-            System.arraycopy(buffer, 0, output, 0, output.length);
-            return output;
-        } catch (DataFormatException e) {
-            throw new IOException("Unable to inflate zlib stream", e);
         }
     }
 }

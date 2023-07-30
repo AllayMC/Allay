@@ -80,7 +80,12 @@ tasks.named("run") {
 }
 
 tasks.runShadow {
+    this.jarFile = file("build/libs/Allay-Server-all.jar")
     jvmArgs?.add("--enable-preview")
+}
+
+tasks.installShadowDist {
+    enabled = false
 }
 
 tasks.shadowJar {

@@ -58,13 +58,10 @@ public final class ZlibThreadLocal implements ZlibProvider {
     @Override
     public byte[] inflate(byte[] data, int maxSize) throws IOException {
         Inflater inflater = INFLATER.get();
-        try {
+        try (FastByteArrayOutputStream bos = FBAO.get()) {
             inflater.reset();
             inflater.setInput(data);
-            inflater.finished();
-            FastByteArrayOutputStream bos = FBAO.get();
             bos.reset();
-
             byte[] buffer = BUFFER.get();
             try {
                 int length = 0;
@@ -81,7 +78,7 @@ public final class ZlibThreadLocal implements ZlibProvider {
                 throw new IOException("Unable to inflate zlib stream", e);
             }
         } finally {
-            inflater.reset();
+            inflater.end();
         }
     }
 }
