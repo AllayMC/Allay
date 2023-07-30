@@ -21,5 +21,7 @@ dependencies {
     api(libs.annotations)
     api(libs.reflections)
     api(libs.commonsio)
+    api(libs.joml)
+    api(libs.joml.primitives)
     compileOnly(libs.libdeflate)
 }
