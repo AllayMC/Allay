@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class AABBTreeJMHTest {
-    private final int TEST_ENTITY_COUNT = 500;
+    private final int TEST_ENTITY_COUNT = 2000;
     private final int ENTITY_SIZE = 2;
-    private final int RANGE = 300;
+    private final int RANGE = 500;
     private AABBTree<TestEntity> aabbTree;
     private TestEntity[] testEntities;
     private AABBf[] testEntityAABBs;
