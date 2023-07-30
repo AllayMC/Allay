@@ -22,7 +22,9 @@ public class AdventureSettings {
 
     private final Client client;
     private final Map<Type, Boolean> values = new EnumMap<>(Type.class);
+    @Getter
     private float walkSpeed = 0.1f;
+    @Getter
     private float flySpeed = 0.05f;
 
     public AdventureSettings(Client client) {
@@ -39,16 +41,8 @@ public class AdventureSettings {
         return value == null ? type.getDefaultValue() : value;
     }
 
-    public float getFlySpeed() {
-        return this.flySpeed;
-    }
-
     public void setFlySpeed(float value) {
         this.flySpeed = value;
-    }
-
-    public float getWalkSpeed() {
-        return this.walkSpeed;
     }
 
     public void setWalkSpeed(float value) {

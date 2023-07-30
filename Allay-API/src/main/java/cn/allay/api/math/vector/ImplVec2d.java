@@ -43,7 +43,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
     }
 
     public ImplVec2d(final float x, final float y) {
-        this((double) x, (double) y);
+        this(x, (double) y);
     }
 
     @Override
@@ -63,7 +63,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public Vec2d add(final float x, final float y) {
-        return this.add((double) x, (double) y);
+        return this.add(x, (double) y);
     }
 
     @Override
@@ -78,7 +78,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public Vec2d sub(final float x, final float y) {
-        return this.sub((double) x, (double) y);
+        return this.sub(x, (double) y);
     }
 
     @Override
@@ -103,7 +103,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public Vec2d mul(final float x, final float y) {
-        return this.mul((double) x, (double) y);
+        return this.mul(x, (double) y);
     }
 
     @Override
@@ -128,7 +128,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public Vec2d div(final float x, final float y) {
-        return this.div((double) x, (double) y);
+        return this.div(x, (double) y);
     }
 
     @Override
@@ -143,7 +143,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public double dot(final float x, final float y) {
-        return this.dot((double) x, (double) y);
+        return this.dot(x, (double) y);
     }
 
     @Override
@@ -158,7 +158,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public Vec2d project(final float x, final float y) {
-        return this.project((double) x, (double) y);
+        return this.project(x, (double) y);
     }
 
     @Override
@@ -213,7 +213,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public Vec2d min(final float x, final float y) {
-        return this.min((double) x, (double) y);
+        return this.min(x, (double) y);
     }
 
     @Override
@@ -228,7 +228,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public Vec2d max(final float x, final float y) {
-        return this.max((double) x, (double) y);
+        return this.max(x, (double) y);
     }
 
     @Override
@@ -243,7 +243,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public double distanceSquared(final float x, final float y) {
-        return this.distanceSquared((double) x, (double) y);
+        return this.distanceSquared(x, (double) y);
     }
 
     @Override
@@ -260,12 +260,12 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public double distance(final float x, final float y) {
-        return this.distance((double) x, (double) y);
+        return this.distance(x, (double) y);
     }
 
     @Override
     public double distance(final double x, final double y) {
-        return (double) Math.sqrt(this.distanceSquared(x, y));
+        return Math.sqrt(this.distanceSquared(x, y));
     }
 
     @Override
@@ -275,7 +275,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public double length() {
-        return (double) Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     @Override
@@ -329,7 +329,7 @@ record ImplVec2d(double x, double y) implements Vec2d {
 
     @Override
     public Vec4d toVec4(final float z, final float w) {
-        return this.toVec4((double) z, (double) w);
+        return this.toVec4(z, (double) w);
     }
 
     @Override
@@ -377,16 +377,12 @@ record ImplVec2d(double x, double y) implements Vec2d {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec2d)) {
+        if (!(other instanceof Vec2d that)) {
             return false;
         }
-        final Vec2d that = (Vec2d) other;
         if (Double.compare(that.x(), this.x) != 0) {
             return false;
         }
-        if (Double.compare(that.y(), this.y) != 0) {
-            return false;
-        }
-        return true;
+        return Double.compare(that.y(), this.y) == 0;
     }
 }

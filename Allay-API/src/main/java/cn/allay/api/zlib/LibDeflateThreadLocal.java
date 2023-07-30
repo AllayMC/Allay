@@ -34,7 +34,7 @@ public final class LibDeflateThreadLocal implements ZlibProvider {
 
     @Override
     public byte[] deflate(byte[] data) throws IOException {
-        try (LibdeflateCompressor deflater = DEFLATER.get();) {
+        try (LibdeflateCompressor deflater = DEFLATER.get()) {
             var t = type == CompressionType.ZLIB ? cn.powernukkitx.libdeflate.CompressionType.ZLIB : cn.powernukkitx.libdeflate.CompressionType.GZIP;
             byte[] buffer = deflater.getCompressBound(data.length, t) < 8192 ? new byte[8192] : new byte[data.length];
             int compressedSize = deflater.compress(data, buffer, t);

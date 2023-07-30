@@ -401,19 +401,15 @@ record ImplVec3f(float x, float y, float z) implements Vec3f {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec3f)) {
+        if (!(other instanceof Vec3f that)) {
             return false;
         }
-        final Vec3f that = (Vec3f) other;
         if (Float.compare(that.x(), this.x) != 0) {
             return false;
         }
         if (Float.compare(that.y(), this.y) != 0) {
             return false;
         }
-        if (Float.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return Float.compare(that.z(), this.z) == 0;
     }
 }

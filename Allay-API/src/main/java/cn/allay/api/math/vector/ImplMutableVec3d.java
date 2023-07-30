@@ -53,7 +53,7 @@ final class ImplMutableVec3d implements MutableVec3d {
     }
 
     public ImplMutableVec3d(final float x, final float y, final float z) {
-        this((double) x, (double) y, (double) z);
+        this(x, y, (double) z);
     }
 
     public ImplMutableVec3d(final double x, final double y, final double z) {
@@ -136,7 +136,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public MutableVec3d add(final float x, final float y, final float z) {
-        return this.add((double) x, (double) y, (double) z);
+        return this.add(x, y, (double) z);
     }
 
     @Override
@@ -151,7 +151,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public MutableVec3d sub(final float x, final float y, final float z) {
-        return this.sub((double) x, (double) y, (double) z);
+        return this.sub(x, y, (double) z);
     }
 
     @Override
@@ -176,7 +176,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public MutableVec3d mul(final float x, final float y, final float z) {
-        return this.mul((double) x, (double) y, (double) z);
+        return this.mul(x, y, (double) z);
     }
 
     @Override
@@ -201,7 +201,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public MutableVec3d div(final float x, final float y, final float z) {
-        return this.div((double) x, (double) y, (double) z);
+        return this.div(x, y, (double) z);
     }
 
     @Override
@@ -216,7 +216,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public double dot(final float x, final float y, final float z) {
-        return this.dot((double) x, (double) y, (double) z);
+        return this.dot(x, y, (double) z);
     }
 
     @Override
@@ -231,7 +231,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public MutableVec3d project(final float x, final float y, final float z) {
-        return this.project((double) x, (double) y, (double) z);
+        return this.project(x, y, (double) z);
     }
 
     @Override
@@ -251,7 +251,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public MutableVec3d cross(final float x, final float y, final float z) {
-        return this.cross((double) x, (double) y, (double) z);
+        return this.cross(x, y, (double) z);
     }
 
     @Override
@@ -301,7 +301,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public MutableVec3d min(final float x, final float y, final float z) {
-        return this.min((double) x, (double) y, (double) z);
+        return this.min(x, y, (double) z);
     }
 
     @Override
@@ -316,7 +316,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public MutableVec3d max(final float x, final float y, final float z) {
-        return this.max((double) x, (double) y, (double) z);
+        return this.max(x, y, (double) z);
     }
 
     @Override
@@ -331,7 +331,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public double distanceSquared(final float x, final float y, final float z) {
-        return this.distanceSquared((double) x, (double) y, (double) z);
+        return this.distanceSquared(x, y, (double) z);
     }
 
     @Override
@@ -349,12 +349,12 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public double distance(final float x, final float y, final float z) {
-        return this.distance((double) x, (double) y, (double) z);
+        return this.distance(x, y, (double) z);
     }
 
     @Override
     public double distance(final double x, final double y, final double z) {
-        return (double) Math.sqrt(this.distanceSquared(x, y, z));
+        return Math.sqrt(this.distanceSquared(x, y, z));
     }
 
     @Override
@@ -364,7 +364,7 @@ final class ImplMutableVec3d implements MutableVec3d {
 
     @Override
     public double length() {
-        return (double) Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     @Override
@@ -461,20 +461,16 @@ final class ImplMutableVec3d implements MutableVec3d {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec3d)) {
+        if (!(other instanceof Vec3d that)) {
             return false;
         }
-        final Vec3d that = (Vec3d) other;
         if (Double.compare(that.x(), this.x) != 0) {
             return false;
         }
         if (Double.compare(that.y(), this.y) != 0) {
             return false;
         }
-        if (Double.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return Double.compare(that.z(), this.z) == 0;
     }
 
     @Override

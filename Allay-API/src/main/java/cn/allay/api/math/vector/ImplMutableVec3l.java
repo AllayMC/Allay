@@ -309,7 +309,7 @@ final class ImplMutableVec3l implements MutableVec3l {
 
     @Override
     public double distance(final long x, final long y, final long z) {
-        return (double) Math.sqrt(this.distanceSquared(x, y, z));
+        return Math.sqrt(this.distanceSquared(x, y, z));
     }
 
     @Override
@@ -319,7 +319,7 @@ final class ImplMutableVec3l implements MutableVec3l {
 
     @Override
     public double length() {
-        return (double) Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     /**
@@ -407,20 +407,16 @@ final class ImplMutableVec3l implements MutableVec3l {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec3l)) {
+        if (!(other instanceof Vec3l that)) {
             return false;
         }
-        final Vec3l that = (Vec3l) other;
-        if (Long.compare(that.x(), this.x) != 0) {
+        if (that.x() != this.x) {
             return false;
         }
-        if (Long.compare(that.y(), this.y) != 0) {
+        if (that.y() != this.y) {
             return false;
         }
-        if (Long.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return that.z() == this.z;
     }
 
     @Override

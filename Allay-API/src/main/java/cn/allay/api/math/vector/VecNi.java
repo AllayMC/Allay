@@ -364,7 +364,7 @@ public class VecNi implements Vec, Comparable<VecNi>, Cloneable {
         final int size = this.axisCount();
         final int[] intVec = new int[size];
         for (int comp = 0; comp < size; comp++) {
-            intVec[comp] = (int) this.vec[comp];
+            intVec[comp] = this.vec[comp];
         }
         return new VecNi(intVec);
     }
@@ -373,7 +373,7 @@ public class VecNi implements Vec, Comparable<VecNi>, Cloneable {
         final int size = this.axisCount();
         final long[] longVec = new long[size];
         for (int comp = 0; comp < size; comp++) {
-            longVec[comp] = (long) this.vec[comp];
+            longVec[comp] = this.vec[comp];
         }
         return new VecNl(longVec);
     }
@@ -391,7 +391,7 @@ public class VecNi implements Vec, Comparable<VecNi>, Cloneable {
         final int size = this.axisCount();
         final double[] doubleVec = new double[size];
         for (int comp = 0; comp < size; comp++) {
-            doubleVec[comp] = (double) this.vec[comp];
+            doubleVec[comp] = this.vec[comp];
         }
         return new VecNd(doubleVec);
     }

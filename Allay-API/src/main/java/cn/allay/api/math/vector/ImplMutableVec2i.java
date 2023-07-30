@@ -373,17 +373,13 @@ final class ImplMutableVec2i implements MutableVec2i {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec2i)) {
+        if (!(other instanceof Vec2i that)) {
             return false;
         }
-        final Vec2i that = (Vec2i) other;
         if (that.x() != this.x) {
             return false;
         }
-        if (that.y() != this.y) {
-            return false;
-        }
-        return true;
+        return that.y() == this.y;
     }
 
     @Override

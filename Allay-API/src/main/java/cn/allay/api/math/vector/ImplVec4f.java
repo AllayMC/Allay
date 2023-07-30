@@ -411,10 +411,9 @@ record ImplVec4f(float x, float y, float z, float w) implements Vec4f {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec4f)) {
+        if (!(other instanceof Vec4f that)) {
             return false;
         }
-        final Vec4f that = (Vec4f) other;
         if (Float.compare(that.w(), this.w) != 0) {
             return false;
         }
@@ -424,9 +423,6 @@ record ImplVec4f(float x, float y, float z, float w) implements Vec4f {
         if (Float.compare(that.y(), this.y) != 0) {
             return false;
         }
-        if (Float.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return Float.compare(that.z(), this.z) == 0;
     }
 }

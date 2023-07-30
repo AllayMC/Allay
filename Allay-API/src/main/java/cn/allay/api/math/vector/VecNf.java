@@ -359,7 +359,7 @@ public class VecNf implements Vec, Comparable<VecNf>, Cloneable {
         final int size = this.axisCount();
         final VecNf d = new VecNf(size);
         for (int comp = 0; comp < size; comp++) {
-            d.vec[comp] = (float) (this.vec[comp] / length);
+            d.vec[comp] = this.vec[comp] / length;
         }
         return d;
     }
@@ -430,7 +430,7 @@ public class VecNf implements Vec, Comparable<VecNf>, Cloneable {
         final int size = this.axisCount();
         final float[] floatVec = new float[size];
         for (int comp = 0; comp < size; comp++) {
-            floatVec[comp] = (float) this.vec[comp];
+            floatVec[comp] = this.vec[comp];
         }
         return new VecNf(floatVec);
     }
@@ -439,7 +439,7 @@ public class VecNf implements Vec, Comparable<VecNf>, Cloneable {
         final int size = this.axisCount();
         final double[] doubleVec = new double[size];
         for (int comp = 0; comp < size; comp++) {
-            doubleVec[comp] = (double) this.vec[comp];
+            doubleVec[comp] = this.vec[comp];
         }
         return new VecNd(doubleVec);
     }

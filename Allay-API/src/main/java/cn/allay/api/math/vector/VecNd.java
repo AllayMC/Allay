@@ -231,7 +231,7 @@ public class VecNd implements Vec, Comparable<VecNd>, Cloneable {
         final int size = this.axisCount();
         final VecNd d = new VecNd(size);
         for (int comp = 0; comp < size; comp++) {
-            d.vec[comp] = (double) Math.pow(this.vec[comp], power);
+            d.vec[comp] = Math.pow(this.vec[comp], power);
         }
         return d;
     }
@@ -240,7 +240,7 @@ public class VecNd implements Vec, Comparable<VecNd>, Cloneable {
         final int size = this.axisCount();
         final VecNd d = new VecNd(size);
         for (int comp = 0; comp < size; comp++) {
-            d.vec[comp] = (double) Math.ceil(this.vec[comp]);
+            d.vec[comp] = Math.ceil(this.vec[comp]);
         }
         return d;
     }
@@ -335,7 +335,7 @@ public class VecNd implements Vec, Comparable<VecNd>, Cloneable {
     }
 
     public double distance(final double... v) {
-        return (double) Math.sqrt(this.distanceSquared(v));
+        return Math.sqrt(this.distanceSquared(v));
     }
 
     public double lengthSquared() {
@@ -348,7 +348,7 @@ public class VecNd implements Vec, Comparable<VecNd>, Cloneable {
     }
 
     public double length() {
-        return (double) Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     public VecNd normalize() {
@@ -359,7 +359,7 @@ public class VecNd implements Vec, Comparable<VecNd>, Cloneable {
         final int size = this.axisCount();
         final VecNd d = new VecNd(size);
         for (int comp = 0; comp < size; comp++) {
-            d.vec[comp] = (double) (this.vec[comp] / length);
+            d.vec[comp] = this.vec[comp] / length;
         }
         return d;
     }
@@ -439,7 +439,7 @@ public class VecNd implements Vec, Comparable<VecNd>, Cloneable {
         final int size = this.axisCount();
         final double[] doubleVec = new double[size];
         for (int comp = 0; comp < size; comp++) {
-            doubleVec[comp] = (double) this.vec[comp];
+            doubleVec[comp] = this.vec[comp];
         }
         return new VecNd(doubleVec);
     }
