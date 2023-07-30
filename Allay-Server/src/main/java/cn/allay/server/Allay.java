@@ -42,7 +42,7 @@ public final class Allay {
             initAllayAPI();
         } catch (Exception e) {
             log.error("Cannot init Allay API!");
-            e.printStackTrace();
+            log.error(e.getMessage());
             System.exit(1);
         }
         Server.getInstance().start();

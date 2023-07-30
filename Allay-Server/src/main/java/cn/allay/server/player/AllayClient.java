@@ -405,9 +405,7 @@ public class AllayClient implements Client {
                 return PacketSignal.HANDLED;
             }
 
-            if (!server.getServerSettings().enableNetworkEncryption()) {
-                completeLogin();
-            } else {
+            if (server.getServerSettings().enableNetworkEncryption()) {
                 try {
                     var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
                     var encryptionKeyPair = EncryptionUtils.createKeyPair();
@@ -427,6 +425,8 @@ public class AllayClient implements Client {
                     log.warn("Failed to initialize encryption for client " + name, exception);
                     disconnect("disconnectionScreen.internalError");
                 }
+            } else {
+                completeLogin();
             }
 
             return PacketSignal.HANDLED;
