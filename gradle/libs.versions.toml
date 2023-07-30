@@ -45,6 +45,10 @@ reflections = { group = "org.reflections", name = "reflections", version = "0.10
 # Progress Bar
 progressbar = { group = "me.tongfei", name = "progressbar", version = "0.9.4" }
 
+#3D math computing
+joml = { group = "org.joml", name = "joml", version = "1.10.5" }
+joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.10.0" }
+
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader", "terminalconsoleappender"]
