@@ -42,11 +42,11 @@ public interface Vec4d extends Vec, Comparable<Vec4d> {
     }
 
     static Vec4d of(final float n) {
-        return n == 0 ? Vec4d.ZERO : new ImplVec4d((double) n, (double) n, (double) n, (double) n);
+        return n == 0 ? Vec4d.ZERO : new ImplVec4d(n, n, n, (double) n);
     }
 
     static Vec4d of(final float x, final float y, final float z, final float w) {
-        return x == 0 && y == 0 ? Vec4d.ZERO : new ImplVec4d((double) x, (double) y, (double) z, (double) w);
+        return x == 0 && y == 0 ? Vec4d.ZERO : new ImplVec4d(x, y, z, (double) w);
     }
 
     double x();

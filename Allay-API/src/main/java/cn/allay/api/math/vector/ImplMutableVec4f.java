@@ -489,10 +489,9 @@ final class ImplMutableVec4f implements MutableVec4f {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec4f)) {
+        if (!(other instanceof Vec4f that)) {
             return false;
         }
-        final Vec4f that = (Vec4f) other;
         if (Float.compare(that.w(), this.w) != 0) {
             return false;
         }
@@ -502,10 +501,7 @@ final class ImplMutableVec4f implements MutableVec4f {
         if (Float.compare(that.y(), this.y) != 0) {
             return false;
         }
-        if (Float.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return Float.compare(that.z(), this.z) == 0;
     }
 
     @Override

@@ -35,11 +35,11 @@ public interface Vec3i extends Vec, Comparable<Vec3i> {
     Vec3i UP = ImplVec3i.UNIT_Y;
     Vec3i FORWARD = ImplVec3i.UNIT_Z;
 
-    public static Vec3i of(final int n) {
+    static Vec3i of(final int n) {
         return n == 0 ? Vec3i.ZERO : new ImplVec3i(n, n, n);
     }
 
-    public static Vec3i of(final int x, final int y, final int z) {
+    static Vec3i of(final int x, final int y, final int z) {
         return x == 0 && y == 0 && z == 0 ? Vec3i.ZERO : new ImplVec3i(x, y, z);
     }
 

@@ -1,5 +1,6 @@
 package cn.allay.api.entity.attribute;
 
+import lombok.Getter;
 import lombok.ToString;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 
@@ -11,10 +12,14 @@ import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 @ToString
 public class Attribute implements Cloneable {
 
+    @Getter
     private final String key;
     private final float defaultValue;
+    @Getter
     private float minValue;
+    @Getter
     private float maxValue;
+    @Getter
     private float currentValue;
     private boolean dirty;
 
@@ -27,28 +32,12 @@ public class Attribute implements Cloneable {
         this.dirty = true;
     }
 
-    public String getKey() {
-        return this.key;
-    }
-
-    public float getMinValue() {
-        return this.minValue;
-    }
-
     public void setMinValue(float minValue) {
         this.minValue = minValue;
     }
 
-    public float getMaxValue() {
-        return this.maxValue;
-    }
-
     public void setMaxValue(float maxValue) {
         this.maxValue = maxValue;
-    }
-
-    public float getCurrentValue() {
-        return this.currentValue;
     }
 
     public void setCurrentValue(float currentValue) {

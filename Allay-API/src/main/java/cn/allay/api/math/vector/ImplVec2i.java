@@ -328,7 +328,7 @@ record ImplVec2i(int x, int y) implements Vec2i {
 
     @Override
     public Vec2d toDouble() {
-        return new ImplVec2d((double) this.x, (double) this.y);
+        return new ImplVec2d(this.x, (double) this.y);
     }
 
     @Override
@@ -341,16 +341,12 @@ record ImplVec2i(int x, int y) implements Vec2i {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec2i)) {
+        if (!(other instanceof Vec2i that)) {
             return false;
         }
-        final Vec2i that = (Vec2i) other;
         if (that.x() != this.x) {
             return false;
         }
-        if (that.y() != this.y) {
-            return false;
-        }
-        return true;
+        return that.y() == this.y;
     }
 }

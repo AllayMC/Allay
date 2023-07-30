@@ -419,17 +419,13 @@ final class ImplMutableVec2f implements MutableVec2f {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec2f)) {
+        if (!(other instanceof Vec2f that)) {
             return false;
         }
-        final Vec2f that = (Vec2f) other;
         if (Float.compare(that.x(), this.x) != 0) {
             return false;
         }
-        if (Float.compare(that.y(), this.y) != 0) {
-            return false;
-        }
-        return true;
+        return Float.compare(that.y(), this.y) == 0;
     }
 
     @Override

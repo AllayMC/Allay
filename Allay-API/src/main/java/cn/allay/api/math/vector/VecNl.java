@@ -300,7 +300,7 @@ public class VecNl implements Vec, Comparable<VecNl>, Cloneable {
     }
 
     public double distance(final long... v) {
-        return (double) Math.sqrt(this.distanceSquared(v));
+        return Math.sqrt(this.distanceSquared(v));
     }
 
     public long lengthSquared() {
@@ -313,7 +313,7 @@ public class VecNl implements Vec, Comparable<VecNl>, Cloneable {
     }
 
     public double length() {
-        return (double) Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     @Override
@@ -373,7 +373,7 @@ public class VecNl implements Vec, Comparable<VecNl>, Cloneable {
         final int size = this.axisCount();
         final long[] longVec = new long[size];
         for (int comp = 0; comp < size; comp++) {
-            longVec[comp] = (long) this.vec[comp];
+            longVec[comp] = this.vec[comp];
         }
         return new VecNl(longVec);
     }

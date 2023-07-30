@@ -35,11 +35,11 @@ public interface Vec3l extends Vec, Comparable<Vec3l> {
     Vec3l UP = ImplVec3l.UNIT_Y;
     Vec3l FORWARD = ImplVec3l.UNIT_Z;
 
-    public static Vec3l of(final long n) {
+    static Vec3l of(final long n) {
         return n == 0 ? Vec3l.ZERO : new ImplVec3l(n, n, n);
     }
 
-    public static Vec3l of(final long x, final long y, final long z) {
+    static Vec3l of(final long x, final long y, final long z) {
         return x == 0 && y == 0 && z == 0 ? Vec3l.ZERO : new ImplVec3l(x, y, z);
     }
 

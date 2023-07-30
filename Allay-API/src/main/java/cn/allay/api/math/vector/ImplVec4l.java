@@ -258,7 +258,7 @@ record ImplVec4l(long x, long y, long z, long w) implements Vec4l {
 
     @Override
     public double distance(final long x, final long y, final long z, final long w) {
-        return (double) Math.sqrt(this.distanceSquared(x, y, z, w));
+        return Math.sqrt(this.distanceSquared(x, y, z, w));
     }
 
     @Override
@@ -268,7 +268,7 @@ record ImplVec4l(long x, long y, long z, long w) implements Vec4l {
 
     @Override
     public double length() {
-        return (double) Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     /**
@@ -367,22 +367,18 @@ record ImplVec4l(long x, long y, long z, long w) implements Vec4l {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec4l)) {
+        if (!(other instanceof Vec4l that)) {
             return false;
         }
-        final Vec4l that = (Vec4l) other;
-        if (Long.compare(that.w(), this.w) != 0) {
+        if (that.w() != this.w) {
             return false;
         }
-        if (Long.compare(that.x(), this.x) != 0) {
+        if (that.x() != this.x) {
             return false;
         }
-        if (Long.compare(that.y(), this.y) != 0) {
+        if (that.y() != this.y) {
             return false;
         }
-        if (Long.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return that.z() == this.z;
     }
 }

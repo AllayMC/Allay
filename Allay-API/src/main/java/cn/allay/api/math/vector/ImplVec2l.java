@@ -238,7 +238,7 @@ record ImplVec2l(long x, long y) implements Vec2l {
 
     @Override
     public double distance(final long x, final long y) {
-        return (double) Math.sqrt(this.distanceSquared(x, y));
+        return Math.sqrt(this.distanceSquared(x, y));
     }
 
     @Override
@@ -248,7 +248,7 @@ record ImplVec2l(long x, long y) implements Vec2l {
 
     @Override
     public double length() {
-        return (double) Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     /**
@@ -341,16 +341,12 @@ record ImplVec2l(long x, long y) implements Vec2l {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec2l)) {
+        if (!(other instanceof Vec2l that)) {
             return false;
         }
-        final Vec2l that = (Vec2l) other;
         if (that.x() != this.x) {
             return false;
         }
-        if (that.y() != this.y) {
-            return false;
-        }
-        return true;
+        return that.y() == this.y;
     }
 }

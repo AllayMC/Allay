@@ -372,7 +372,7 @@ public final class GenericMath {
      */
     public static double inverseSqrt(double a) {
         final double halfA = 0.5d * a;
-        a = Double.longBitsToDouble(0x5FE6EB50C7B537AAl - (Double.doubleToRawLongBits(a) >> 1));
+        a = Double.longBitsToDouble(0x5FE6EB50C7B537AAL - (Double.doubleToRawLongBits(a) >> 1));
         return a * (1.5d - halfA * a * a);
     }
 

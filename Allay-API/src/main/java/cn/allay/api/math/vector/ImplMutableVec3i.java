@@ -407,20 +407,16 @@ final class ImplMutableVec3i implements MutableVec3i {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec3i)) {
+        if (!(other instanceof Vec3i that)) {
             return false;
         }
-        final Vec3i that = (Vec3i) other;
-        if (Integer.compare(that.x(), this.x) != 0) {
+        if (that.x() != this.x) {
             return false;
         }
-        if (Integer.compare(that.y(), this.y) != 0) {
+        if (that.y() != this.y) {
             return false;
         }
-        if (Integer.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return that.z() == this.z;
     }
 
     @Override

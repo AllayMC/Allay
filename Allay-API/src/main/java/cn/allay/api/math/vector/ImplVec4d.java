@@ -35,7 +35,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
     }
 
     public ImplVec4d(final Vec2d v, final float z, final float w) {
-        this(v, (double) z, (double) w);
+        this(v, z, (double) w);
     }
 
     public ImplVec4d(final Vec2d v, final double z, final double w) {
@@ -59,7 +59,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
     }
 
     public ImplVec4d(final float x, final float y, final float z, final float w) {
-        this((double) x, (double) y, (double) z, (double) w);
+        this(x, y, z, (double) w);
     }
 
     @Override
@@ -89,7 +89,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public ImplVec4d add(final float x, final float y, final float z, final float w) {
-        return this.add((double) x, (double) y, (double) z, (double) w);
+        return this.add(x, y, z, (double) w);
     }
 
     @Override
@@ -104,7 +104,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public ImplVec4d sub(final float x, final float y, final float z, final float w) {
-        return this.sub((double) x, (double) y, (double) z, (double) w);
+        return this.sub(x, y, z, (double) w);
     }
 
     @Override
@@ -129,7 +129,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public ImplVec4d mul(final float x, final float y, final float z, final float w) {
-        return this.mul((double) x, (double) y, (double) z, (double) w);
+        return this.mul(x, y, z, (double) w);
     }
 
     @Override
@@ -154,7 +154,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public ImplVec4d div(final float x, final float y, final float z, final float w) {
-        return this.div((double) x, (double) y, (double) z, (double) w);
+        return this.div(x, y, z, (double) w);
     }
 
     @Override
@@ -169,7 +169,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public double dot(final float x, final float y, final float z, final float w) {
-        return this.dot((double) x, (double) y, (double) z, (double) w);
+        return this.dot(x, y, z, (double) w);
     }
 
     @Override
@@ -184,7 +184,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public ImplVec4d project(final float x, final float y, final float z, final float w) {
-        return this.project((double) x, (double) y, (double) z, (double) w);
+        return this.project(x, y, z, (double) w);
     }
 
     @Override
@@ -239,7 +239,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public ImplVec4d min(final float x, final float y, final float z, final float w) {
-        return this.min((double) x, (double) y, (double) z, (double) w);
+        return this.min(x, y, z, (double) w);
     }
 
     @Override
@@ -254,7 +254,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public ImplVec4d max(final float x, final float y, final float z, final float w) {
-        return this.max((double) x, (double) y, (double) z, (double) w);
+        return this.max(x, y, z, (double) w);
     }
 
     @Override
@@ -269,7 +269,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public double distanceSquared(final float x, final float y, final float z, final float w) {
-        return this.distanceSquared((double) x, (double) y, (double) z, (double) w);
+        return this.distanceSquared(x, y, z, (double) w);
     }
 
     @Override
@@ -288,12 +288,12 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public double distance(final float x, final float y, final float z, final float w) {
-        return this.distance((double) x, (double) y, (double) z, (double) w);
+        return this.distance(x, y, z, (double) w);
     }
 
     @Override
     public double distance(final double x, final double y, final double z, final double w) {
-        return (double) Math.sqrt(this.distanceSquared(x, y, z, w));
+        return Math.sqrt(this.distanceSquared(x, y, z, w));
     }
 
     @Override
@@ -303,7 +303,7 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
 
     @Override
     public double length() {
-        return (double) Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     @Override
@@ -411,10 +411,9 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec4d)) {
+        if (!(other instanceof Vec4d that)) {
             return false;
         }
-        final Vec4d that = (Vec4d) other;
         if (Double.compare(that.w(), this.w) != 0) {
             return false;
         }
@@ -424,9 +423,6 @@ record ImplVec4d(double x, double y, double z, double w) implements Vec4d {
         if (Double.compare(that.y(), this.y) != 0) {
             return false;
         }
-        if (Double.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return Double.compare(that.z(), this.z) == 0;
     }
 }

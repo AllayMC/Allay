@@ -44,11 +44,11 @@ public interface Vec2d extends Vec, Comparable<Vec2d> {
     }
 
     static Vec2d of(final float n) {
-        return n == 0 ? Vec2d.ZERO : new ImplVec2d((double) n, (double) n);
+        return n == 0 ? Vec2d.ZERO : new ImplVec2d(n, (double) n);
     }
 
     static Vec2d of(final float x, final float y) {
-        return x == 0 && y == 0 ? Vec2d.ZERO : new ImplVec2d((double) x, (double) y);
+        return x == 0 && y == 0 ? Vec2d.ZERO : new ImplVec2d(x, (double) y);
     }
 
     /**
@@ -58,7 +58,7 @@ public interface Vec2d extends Vec, Comparable<Vec2d> {
      * @return the random direction vector
      */
     static Vec2d ofRandomDirection(final Random random) {
-        return Vec2d.ofDirectionRad(random.nextDouble() * (double) TrigMath.TWO_PI);
+        return Vec2d.ofDirectionRad(random.nextDouble() * TrigMath.TWO_PI);
     }
 
     /**
@@ -78,7 +78,7 @@ public interface Vec2d extends Vec, Comparable<Vec2d> {
      * @return the direction vector
      */
     static Vec2d ofDirectionDeg(final double angle) {
-        return Vec2d.ofDirectionRad((double) Math.toRadians(angle));
+        return Vec2d.ofDirectionRad(Math.toRadians(angle));
     }
 
     /**

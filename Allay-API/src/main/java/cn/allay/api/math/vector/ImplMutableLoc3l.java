@@ -379,7 +379,7 @@ final class ImplMutableLoc3l implements MutableLoc3l {
 
     @Override
     public double distance(final long x, final long y, final long z) {
-        return (double) Math.sqrt(this.distanceSquared(x, y, z));
+        return Math.sqrt(this.distanceSquared(x, y, z));
     }
 
     @Override
@@ -389,7 +389,7 @@ final class ImplMutableLoc3l implements MutableLoc3l {
 
     @Override
     public double length() {
-        return (double) Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     /**

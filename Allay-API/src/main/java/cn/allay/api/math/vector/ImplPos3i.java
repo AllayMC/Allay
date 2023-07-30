@@ -351,7 +351,7 @@ record ImplPos3i(int x, int y, int z, World world) implements Pos3i {
 
     @Override
     public Pos3d toDouble() {
-        return new ImplPos3d((double) this.x, (double) this.y, (double) this.z, world);
+        return new ImplPos3d(this.x, this.y, (double) this.z, world);
     }
 
     @Override

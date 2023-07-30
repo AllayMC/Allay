@@ -354,7 +354,7 @@ record ImplVec4i(int x, int y, int z, int w) implements Vec4i {
 
     @Override
     public Vec4d toDouble() {
-        return new ImplVec4d((double) this.x, (double) this.y, (double) this.z, (double) this.w);
+        return new ImplVec4d(this.x, this.y, this.z, (double) this.w);
     }
 
     @Override
@@ -367,22 +367,18 @@ record ImplVec4i(int x, int y, int z, int w) implements Vec4i {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec4i)) {
+        if (!(other instanceof Vec4i that)) {
             return false;
         }
-        final Vec4i that = (Vec4i) other;
-        if (Integer.compare(that.w(), this.w) != 0) {
+        if (that.w() != this.w) {
             return false;
         }
-        if (Integer.compare(that.x(), this.x) != 0) {
+        if (that.x() != this.x) {
             return false;
         }
-        if (Integer.compare(that.y(), this.y) != 0) {
+        if (that.y() != this.y) {
             return false;
         }
-        if (Integer.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return that.z() == this.z;
     }
 }

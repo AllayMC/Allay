@@ -48,11 +48,11 @@ public interface Vec3d extends Vec, Comparable<Vec3d> {
     }
 
     static Vec3d of(final float n) {
-        return n == 0 ? Vec3d.ZERO : new ImplVec3d((double) n, (double) n, (double) n);
+        return n == 0 ? Vec3d.ZERO : new ImplVec3d(n, n, (double) n);
     }
 
     static Vec3d of(final float x, final float y, final float z) {
-        return x == 0 && y == 0 ? Vec3d.ZERO : new ImplVec3d((double) x, (double) y, (double) z);
+        return x == 0 && y == 0 ? Vec3d.ZERO : new ImplVec3d(x, y, (double) z);
     }
 
     /**
@@ -62,8 +62,8 @@ public interface Vec3d extends Vec, Comparable<Vec3d> {
      * @return the random direction vector
      */
     static Vec3d ofRandomDirection(final Random random) {
-        return Vec3d.ofDirectionRad(random.nextDouble() * (double) TrigMath.TWO_PI,
-                random.nextDouble() * (double) TrigMath.TWO_PI);
+        return Vec3d.ofDirectionRad(random.nextDouble() * TrigMath.TWO_PI,
+                random.nextDouble() * TrigMath.TWO_PI);
     }
 
     /**
@@ -74,7 +74,7 @@ public interface Vec3d extends Vec, Comparable<Vec3d> {
      * @return the direction vector
      */
     static Vec3d ofDirectionDeg(final float theta, final float phi) {
-        return Vec3d.ofDirectionDeg((double) theta, (double) phi);
+        return Vec3d.ofDirectionDeg(theta, (double) phi);
     }
 
     /**
@@ -85,7 +85,7 @@ public interface Vec3d extends Vec, Comparable<Vec3d> {
      * @return the direction vector
      */
     static Vec3d ofDirectionDeg(final double theta, final double phi) {
-        return Vec3d.ofDirectionRad((double) Math.toRadians(theta), (double) Math.toRadians(phi));
+        return Vec3d.ofDirectionRad(Math.toRadians(theta), Math.toRadians(phi));
     }
 
     /**
@@ -96,7 +96,7 @@ public interface Vec3d extends Vec, Comparable<Vec3d> {
      * @return the direction vector
      */
     static Vec3d ofDirectionRad(final float theta, final float phi) {
-        return Vec3d.ofDirectionRad((double) theta, (double) phi);
+        return Vec3d.ofDirectionRad(theta, (double) phi);
     }
 
     /**

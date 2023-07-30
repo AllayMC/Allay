@@ -425,23 +425,19 @@ final class ImplMutableVec4i implements MutableVec4i {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vec4i)) {
+        if (!(other instanceof Vec4i that)) {
             return false;
         }
-        final Vec4i that = (Vec4i) other;
-        if (Integer.compare(that.w(), this.w) != 0) {
+        if (that.w() != this.w) {
             return false;
         }
-        if (Integer.compare(that.x(), this.x) != 0) {
+        if (that.x() != this.x) {
             return false;
         }
-        if (Integer.compare(that.y(), this.y) != 0) {
+        if (that.y() != this.y) {
             return false;
         }
-        if (Integer.compare(that.z(), this.z) != 0) {
-            return false;
-        }
-        return true;
+        return that.z() == this.z;
     }
 
     @Override

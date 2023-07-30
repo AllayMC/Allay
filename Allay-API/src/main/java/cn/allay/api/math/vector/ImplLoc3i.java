@@ -350,7 +350,7 @@ record ImplLoc3i(int x, int y, int z, double pitch, double yaw, double headYaw, 
 
     @Override
     public Loc3d toDouble() {
-        return new ImplLoc3d((double) this.x, (double) this.y, (double) this.z, this.pitch, this.yaw, this.headYaw, this.world);
+        return new ImplLoc3d(this.x, this.y, (double) this.z, this.pitch, this.yaw, this.headYaw, this.world);
     }
 
     @Override

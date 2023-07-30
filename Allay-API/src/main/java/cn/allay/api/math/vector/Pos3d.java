@@ -28,7 +28,7 @@ package cn.allay.api.math.vector;
 import cn.allay.api.world.World;
 
 public interface Pos3d extends Vec3d {
-    public static Pos3d of(final double x, final double y, final double z, final World world) {
+    static Pos3d of(final double x, final double y, final double z, final World world) {
         return new ImplPos3d(x, y, z, world);
     }
 
