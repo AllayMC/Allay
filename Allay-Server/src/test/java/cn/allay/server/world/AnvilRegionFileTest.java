@@ -17,8 +17,8 @@ public class AnvilRegionFileTest {
 
     @Test
     void loadMCA() throws IOException {
-        AnvilRegionFile anvilRegionFile = new AnvilRegionFile(regionPath, -1, -1);
-        NbtMap nbtMap = anvilRegionFile.readChunkData(31, 31);
+        AnvilRegionFile anvilRegionFile = new AnvilRegionFile(regionPath, 0, 0);
+        NbtMap nbtMap = anvilRegionFile.readChunkData(0, 0);
         System.out.println(nbtMap.toSNBT(4));
     }
     @Test
