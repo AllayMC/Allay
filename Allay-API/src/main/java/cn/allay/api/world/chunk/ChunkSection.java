@@ -1,11 +1,10 @@
-package cn.allay.server.world.chunk;
+package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.datastruct.NibbleArray;
 import cn.allay.api.world.biome.BiomeType;
-import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.palette.Palette;
 import io.netty.buffer.ByteBuf;
 
@@ -73,6 +72,10 @@ public record ChunkSection(int sectionY,
 
     public void setSkyLight(int x, int y, int z, byte light) {
         skyLights.set(index(x, y, z), light);
+    }
+
+    public boolean isEmpty() {
+        return this.blockLayer0.isEmpty() && this.blockLayer0.get(0) == VanillaBlockTypes.AIR_TYPE.getDefaultState();
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {
