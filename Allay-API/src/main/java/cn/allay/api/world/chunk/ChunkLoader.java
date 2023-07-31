@@ -1,8 +1,12 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.math.Location3dc;
+import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
+import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/7/1
@@ -21,11 +25,13 @@ public interface ChunkLoader {
 
     void preSendChunks(Set<Long> chunkHashes);
 
-    void sendChunk(Chunk chunk);
+    void notifyChunkLoaded(Chunk chunk);
 
     void unloadChunks(Set<Long> chunkHashes);
 
     default void unloadChunk(Long chunkHash) {
         unloadChunks(Set.of(chunkHash));
     }
+
+    void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler);
 }

@@ -43,6 +43,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 public final class AllayServer implements Server {
 
+    private final boolean DEBUG = false;
+
     private final Map<String, Client> clients = new ConcurrentHashMap<>();
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
@@ -62,8 +64,7 @@ public final class AllayServer implements Server {
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         Configuration log4jConfig = ctx.getConfiguration();
         LoggerConfig loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
-        Level currentLevel = loggerConfig.getLevel();
-        if (Level.TRACE.isLessSpecificThan(currentLevel)) {
+        if (DEBUG && Level.TRACE.isLessSpecificThan(loggerConfig.getLevel())) {
             loggerConfig.setLevel(Level.TRACE);
             ctx.updateLoggers();
         }
