@@ -7,6 +7,7 @@ import lombok.Getter;
  * Allay Project <p>
  * @author daoge_cmd | Cool_Loong
  */
+@Getter
 public enum VanillaItemId {
   ACACIA_BOAT("minecraft:acacia_boat", 381),
 
@@ -2664,7 +2665,6 @@ public enum VanillaItemId {
 
   ZOMBIE_VILLAGER_SPAWN_EGG("minecraft:zombie_villager_spawn_egg", 479);
 
-  @Getter
   private final Identifier identifier;
 
   @Getter

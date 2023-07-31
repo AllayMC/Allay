@@ -7,6 +7,7 @@ import lombok.Getter;
  * Allay Project <p>
  * @author daoge_cmd | Cool_Loong
  */
+@Getter
 public enum VanillaBlockId {
   ACACIA_BUTTON("minecraft:acacia_button"),
 
@@ -1744,7 +1745,6 @@ public enum VanillaBlockId {
 
   YELLOW_WOOL("minecraft:yellow_wool");
 
-  @Getter
   private final Identifier identifier;
 
   VanillaBlockId(String identifier) {

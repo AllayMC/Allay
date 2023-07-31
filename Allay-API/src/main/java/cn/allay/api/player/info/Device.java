@@ -1,10 +1,13 @@
 package cn.allay.api.player.info;
 
+import lombok.Getter;
+
 /**
  * Allay Project 2023/6/23
  *
  * @author LucGamesYT | daoge_cmd
  */
+@Getter
 public enum Device {
 
     UNKNOWN(-1),
@@ -49,7 +52,4 @@ public enum Device {
         };
     }
 
-    public int getId() {
-        return id;
-    }
 }

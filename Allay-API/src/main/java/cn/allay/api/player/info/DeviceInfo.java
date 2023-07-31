@@ -1,5 +1,6 @@
 package cn.allay.api.player.info;
 
+import lombok.Getter;
 import lombok.ToString;
 
 /**
@@ -7,6 +8,7 @@ import lombok.ToString;
  *
  * @author LucGamesYT | daoge_cmd
  */
+@Getter
 @ToString
 public class DeviceInfo {
 
@@ -24,23 +26,4 @@ public class DeviceInfo {
         this.UIProfile = UIProfile;
     }
 
-    public String getDeviceName() {
-        return this.deviceName;
-    }
-
-    public String getDeviceId() {
-        return this.deviceId;
-    }
-
-    public long getClientId() {
-        return this.clientId;
-    }
-
-    public Device getDevice() {
-        return this.device;
-    }
-
-    public UIProfile getUIProfile() {
-        return this.UIProfile;
-    }
 }

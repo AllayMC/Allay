@@ -1,5 +1,6 @@
 package cn.allay.api.datastruct.aabbtree;
 
+import lombok.Getter;
 import org.joml.FrustumIntersection;
 import org.joml.Matrix4fc;
 import org.joml.RayAabIntersection;
@@ -14,6 +15,7 @@ import static java.lang.Math.max;
 /**
  * Created by pateman.
  */
+@Getter
 public final class AABBTree<T extends Boundable & Identifiable> {
 
     public static final float DEFAULT_FAT_AABB_MARGIN = 0.2f;
@@ -27,8 +29,9 @@ public final class AABBTree<T extends Boundable & Identifiable> {
     private final FrustumIntersection frustumIntersection;
     private final RayAabIntersection rayIntersection;
 
+    @Getter
     private int root;
-    private float fatAABBMargin;
+    private final float fatAABBMargin;
 
     public AABBTree() {
         this(new AreaAABBHeuristicFunction<>(), DEFAULT_FAT_AABB_MARGIN);
@@ -412,7 +415,7 @@ public final class AABBTree<T extends Boundable & Identifiable> {
         stack.offer(root);
 
         while (!stack.isEmpty()) {
-            Integer nodeIndex = stack.pop();
+            int nodeIndex = stack.pop();
             if (nodeIndex == AABBTreeNode.INVALID_NODE_INDEX) {
                 continue;
             }
@@ -441,15 +444,4 @@ public final class AABBTree<T extends Boundable & Identifiable> {
         return objects.size();
     }
 
-    public List<AABBTreeNode<T>> getNodes() {
-        return nodes;
-    }
-
-    public int getRoot() {
-        return root;
-    }
-
-    public Deque<Integer> getFreeNodes() {
-        return freeNodes;
-    }
 }

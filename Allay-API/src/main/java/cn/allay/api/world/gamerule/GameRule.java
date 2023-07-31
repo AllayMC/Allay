@@ -1,5 +1,6 @@
 package cn.allay.api.world.gamerule;
 
+import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +11,7 @@ import java.util.Arrays;
  *
  * @author Jukebox | Cool_Loong
  */
+@Getter
 public enum GameRule {
 
     COMMAND_BLOCKS_ENABLED("commandBlocksEnabled", true, Type.BOOLEAN),
@@ -64,18 +66,6 @@ public enum GameRule {
 
     public GameRuleData<?> toNetwork() {
         return new GameRuleData<>(this.name, this.defaultValue);
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Object getDefaultValue() {
-        return this.defaultValue;
-    }
-
-    public Type getType() {
-        return this.type;
     }
 
     public enum Type {

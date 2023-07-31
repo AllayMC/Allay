@@ -34,10 +34,10 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Getter
 @Slf4j
 public final class AllayServer implements Server {
 
-    @Getter
     private final Map<String, Client> clients = new ConcurrentHashMap<>();
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
