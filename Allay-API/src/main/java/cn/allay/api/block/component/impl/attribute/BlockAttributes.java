@@ -1,6 +1,5 @@
 package cn.allay.api.block.component.impl.attribute;
 
-import cn.allay.api.math.aabb.AABB;
 import cn.allay.api.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.cloudburstmc.nbt.NbtMap;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import java.awt.*;
 
@@ -25,7 +26,7 @@ import java.awt.*;
 public class BlockAttributes {
     public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
     protected static Gson SERIALIZER = new GsonBuilder()
-            .registerTypeAdapter(AABB.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> parseAABBStr(json.getAsString()))
+            .registerTypeAdapter(AABBdc.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> parseAABBStr(json.getAsString()))
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var r = json.getAsJsonObject().get("r").getAsInt();
                 var g = json.getAsJsonObject().get("g").getAsInt();
@@ -35,12 +36,12 @@ public class BlockAttributes {
             })
             .create();
 
-    protected static AABB parseAABBStr(String str) {
+    protected static AABBd parseAABBStr(String str) {
         var numbers = StringUtils.fastSplit(str, ",").stream().map(Double::valueOf).toList();
-        return AABB.of(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
+        return new AABBd(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
     }
     @Builder.Default
-    protected AABB aabb = AABB.of(0, 0, 0, 1, 1, 1);
+    protected AABBdc aabb = new AABBd(0, 0, 0, 1, 1, 1);
     @Builder.Default
     protected boolean blocksPrecipitation = true;
     @Builder.Default

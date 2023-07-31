@@ -1,7 +1,7 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.annotation.SlowOperation;
-import cn.allay.api.math.vector.Loc3d;
+import cn.allay.api.math.Location3dc;
 
 import java.util.Set;
 
@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public interface ChunkLoader {
 
-    Loc3d getLocation();
+    Location3dc getLocation();
 
     boolean isLoaderActive();
 

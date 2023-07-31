@@ -7,8 +7,8 @@ import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.math.vector.Loc3d;
-import cn.allay.api.math.vector.MutableLoc3d;
+import cn.allay.api.math.Location3d;
+import cn.allay.api.math.Location3dc;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
@@ -24,7 +24,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
     protected static AtomicLong UNIQUE_ID_COUNTER = new AtomicLong(0);
-    protected final MutableLoc3d location;
+    protected final Location3d location;
     protected final long uniqueId = UNIQUE_ID_COUNTER.getAndIncrement();
     protected final Metadata metadata;
     protected EntityType<? extends Entity> entityType;
@@ -32,7 +32,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
     public EntityBaseComponentImpl(EntityType<? extends Entity> entityType,
                                    EntityInitInfo info) {
         this.entityType = entityType;
-        this.location = info.location().mut();
+        this.location = info.location();
         metadata = new Metadata();
         initMetadata();
     }
@@ -58,14 +58,18 @@ public class EntityBaseComponentImpl implements EntityBaseComponent, EntityCompo
 
     @Override
     @Impl
-    public Loc3d getLocation() {
+    public Location3dc getLocation() {
         return location;
     }
 
     @Override
     @Impl
-    public void setLocation(Loc3d location) {
-        this.location.setLocation(location);
+    public void setLocation(Location3dc location) {
+        this.location.set(location);
+        this.location.setYaw(location.yaw());
+        this.location.setHeadYaw(location.headYaw());
+        this.location.setPitch(location.pitch());
+        this.location.setWorld(location.world());
     }
 
     @Override

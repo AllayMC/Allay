@@ -12,16 +12,23 @@ import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
-import cn.allay.api.math.vector.Loc3d;
-import cn.allay.api.math.vector.Pos3i;
+import cn.allay.api.math.Location3d;
+import cn.allay.api.math.Location3dc;
+import cn.allay.api.math.Position3ic;
 import cn.allay.api.player.AdventureSettings;
 import cn.allay.api.player.Client;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
+import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.chunk.ChunkSection;
+import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.gamerule.GameRule;
 import cn.allay.server.inventory.SimpleContainerActionProcessorHolder;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -41,13 +48,9 @@ import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
-import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -222,8 +225,8 @@ public class AllayClient implements Client {
 
     private void initPlayerEntity() {
         //TODO: Load player data
-        Pos3i spawnPos = server.getDefaultWorld().getSpawnPosition();
-        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(Loc3d.of(spawnPos.x(), spawnPos.y(), spawnPos.z(), 0, 0, 0, spawnPos.world())));
+        Position3ic spawnPos = server.getDefaultWorld().getSpawnPosition();
+        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(new Location3d(spawnPos.x(), spawnPos.y(), spawnPos.z(), 0, 0, 0, spawnPos.world())));
         playerEntity.setClient(this);
     }
 
@@ -315,9 +318,8 @@ public class AllayClient implements Client {
     }
 
     @Override
-    @Nullable
-    public Loc3d getLocation() {
-        return playerEntity != null ? playerEntity.getLocation() : null;
+    public Location3dc getLocation() {
+        return playerEntity.getLocation();
     }
 
     @Override
@@ -480,7 +482,7 @@ public class AllayClient implements Client {
         public PacketSignal handle(MovePlayerPacket packet) {
             var pos = packet.getPosition();
             var rot = packet.getRotation();
-            playerEntity.setLocation(Loc3d.of(
+            playerEntity.setLocation(new Location3d(
                     pos.getX(),
                     pos.getY(),
                     pos.getZ(),

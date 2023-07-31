@@ -1,17 +1,18 @@
 package cn.allay.api.world;
 
-import cn.allay.api.math.vector.Vec3i;
 import cn.allay.api.world.gamerule.GameRules;
 import lombok.Builder;
 import lombok.Data;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 @Data
 @Builder
 public final class WorldData {
     public static WorldData DEFAULT = WorldData.builder()
             .gameRules(GameRules.DEFAULT)
-            .spawnPoint(Vec3i.of(0, 64, 0))
+            .spawnPoint(new Vector3i(0, 64, 0))
             .difficulty(Difficulty.NORMAL)
             .storageVersion(0)
             .randomSeed(114514)
@@ -29,7 +30,7 @@ public final class WorldData {
             .build();
 
     GameRules gameRules;
-    Vec3i spawnPoint;
+    Vector3ic spawnPoint;
     Difficulty difficulty;
     int storageVersion;
     int tickingRadius;

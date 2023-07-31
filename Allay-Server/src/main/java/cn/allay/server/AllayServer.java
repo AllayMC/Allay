@@ -1,6 +1,5 @@
 package cn.allay.server;
 
-import cn.allay.api.math.vector.Vec3i;
 import cn.allay.api.network.NetworkServer;
 import cn.allay.api.player.Client;
 import cn.allay.api.player.info.DeviceInfo;
@@ -27,6 +26,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3i;
 
 import java.util.Collections;
 import java.util.Map;
@@ -86,7 +86,7 @@ public final class AllayServer implements Server {
     private void loadWorlds() {
         WorldData worldData = WorldData.DEFAULT;
         worldData.setLevelName("Test Flat World");
-        worldData.setSpawnPoint(Vec3i.of(0, 6, 0));
+        worldData.setSpawnPoint(new Vector3i(0, 6, 0));
         worldPool.setDefaultWorld(AllayWorld
                 .builder()
                 .worldData(worldData)

@@ -1,7 +1,5 @@
 package cn.allay.server.world;
 
-import cn.allay.api.math.vector.Loc3i;
-import cn.allay.api.math.vector.Vec3i;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.api.world.Difficulty;
@@ -9,6 +7,7 @@ import cn.allay.api.world.WorldData;
 import cn.allay.server.world.storage.anvil.AnvilWorldStorage;
 import lombok.SneakyThrows;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.joml.Vector3i;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
@@ -51,8 +50,8 @@ public class AllayWorldDataTest {
     @SneakyThrows
     @Test
     @Order(1)
-    void testLoadJeWorldData() {
-        final AnvilWorldStorage je = new AnvilWorldStorage(Path.of("src/test/resources/jeworld"));
+    void testLoadAllayWorldData() {
+        final AnvilWorldStorage je = new AnvilWorldStorage(Path.of("src/test/resources/allayworld"));
         WorldData worldData = je.readWorldData();
         Assertions.assertEquals(Vec3i.of(-32, 68, 48), worldData.getSpawnPoint());
         Assertions.assertEquals(19133, worldData.getStorageVersion());
@@ -63,14 +62,14 @@ public class AllayWorldDataTest {
     @SneakyThrows
     @Test
     @Order(2)
-    void testWriteJeWorldData() {
-        final AnvilWorldStorage je = new AnvilWorldStorage(Path.of("src/test/resources/jeworld/write"));
+    void testWriteAllayWorldData() {
+        final AnvilWorldStorage je = new AnvilWorldStorage(Path.of("src/test/resources/allayworld/write"));
         WorldData worldData = je.readWorldData();
-        worldData.setSpawnPoint(Loc3i.ONE);
+        worldData.setSpawnPoint(new Vector3i(1, 1, 1));
         je.writeWorldData(worldData);
         WorldData worldDataAllay = je.readWorldData();
         Assertions.assertTrue(worldDataAllay.isAllay());
-        Assertions.assertEquals(Vec3i.of(1, 1, 1), worldData.getSpawnPoint());
+        Assertions.assertEquals(new Vector3i(1, 1, 1), worldData.getSpawnPoint());
     }
 
     @Test
@@ -81,7 +80,7 @@ public class AllayWorldDataTest {
     @AfterAll
     static void end() {
         try {
-            Files.copy(Path.of("src/test/resources/jeworld/level.dat"), Path.of("src/test/resources/jeworld/write/level.dat"), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(Path.of("src/test/resources/allayworld/level.dat"), Path.of("src/test/resources/allayworld/write/level.dat"), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -3,6 +3,7 @@ package cn.allay.server.world.chunk;
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.utils.HashUtils;
+import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.World;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.chunk.ChunkLoader;
@@ -14,6 +15,7 @@ import it.unimi.dsi.fastutil.longs.*;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3i;
 
 import java.util.Collections;
 import java.util.Map;
@@ -226,8 +228,9 @@ public class AllayChunkService implements ChunkService {
         LongComparator chunkDistanceComparator = new LongComparator() {
             @Override
             public int compare(long chunkHash1, long chunkHash2) {
-                var loaderChunkX = chunkLoader.getLocation().floorX() >> 4;
-                var loaderChunkZ = chunkLoader.getLocation().floorZ() >> 4;
+                Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
+                var loaderChunkX = floor.x >> 4;
+                var loaderChunkZ = floor.z >> 4;
                 var chunkDX1 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash1);
                 var chunkDZ1 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash1);
                 var chunkDX2 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash2);
@@ -270,7 +273,8 @@ public class AllayChunkService implements ChunkService {
             if (!chunkLoader.isLoaderActive()) return;
             var loaderChunkPosChanged = false;
             long currentLoaderChunkPosHashed;
-            if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(chunkLoader.getLocation().floorX() >> 4, chunkLoader.getLocation().floorZ() >> 4)) != lastLoaderChunkPosHashed) {
+            Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
+            if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
                 lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
                 loaderChunkPosChanged = true;
             }
@@ -283,8 +287,9 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void updateAndLoadInRadiusChunks() {
-            var loaderChunkX = chunkLoader.getLocation().floorX() >> 4;
-            var loaderChunkZ = chunkLoader.getLocation().floorZ() >> 4;
+            Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
+            var loaderChunkX = floor.x >> 4;
+            var loaderChunkZ = floor.z >> 4;
             var chunkLoadingRadius = chunkLoader.getChunkLoadingRadius();
             inRadiusChunks.clear();
             for (int rx = -chunkLoadingRadius; rx <= chunkLoadingRadius; rx++) {
