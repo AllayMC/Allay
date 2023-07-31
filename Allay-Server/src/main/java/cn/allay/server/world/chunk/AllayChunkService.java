@@ -249,7 +249,7 @@ public class AllayChunkService implements ChunkService {
         //保存着上tick已经发送的全部区块hash值
         private final LongOpenHashSet sentChunks = new LongOpenHashSet();
 
-        //保存着这tick要发送的全部区块hash值
+        //保存着这tick将要发送的全部区块hash值
         private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
         private final LongArrayPriorityQueue chunkSendQueue = new LongArrayPriorityQueue(100, chunkDistanceComparator);
         private final int chunkSentPerTick;
@@ -321,6 +321,7 @@ public class AllayChunkService implements ChunkService {
 
         private void updateChunkSendingQueue() {
             chunkSendQueue.clear();
+            //已经发送的区块不再二次发送
             Sets.SetView<Long> difference = Sets.difference(inRadiusChunks, sentChunks);
             for (long hash : difference) {
                 chunkSendQueue.enqueue(hash);
