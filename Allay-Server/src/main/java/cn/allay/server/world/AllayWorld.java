@@ -1,7 +1,7 @@
 package cn.allay.server.world;
 
-import cn.allay.api.math.vector.Pos3i;
-import cn.allay.api.math.vector.Vec3i;
+import cn.allay.api.math.Position3i;
+import cn.allay.api.math.Position3ic;
 import cn.allay.api.player.Client;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
@@ -19,6 +19,7 @@ import cn.allay.server.world.generator.AllayWorldGenerationService;
 import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3ic;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -123,13 +124,13 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public Pos3i getSpawnPosition() {
-        Vec3i spawnPoint = this.worldData.getSpawnPoint();
-        return Pos3i.of(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), this);
+    public Position3ic getSpawnPosition() {
+        Vector3ic spawnPoint = this.worldData.getSpawnPoint();
+        return new Position3i(spawnPoint, this);
     }
 
     @Override
-    public void setSpawnPosition(Pos3i newSpawn) {
+    public void setSpawnPosition(Position3ic newSpawn) {
         this.worldData.setSpawnPoint(newSpawn);
     }
 

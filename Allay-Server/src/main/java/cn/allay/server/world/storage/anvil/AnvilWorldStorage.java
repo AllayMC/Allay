@@ -1,8 +1,5 @@
 package cn.allay.server.world.storage.anvil;
 
-import cn.allay.api.identifier.IdentifierUtils;
-import cn.allay.api.math.vector.Vec3i;
-import cn.allay.api.server.Server;
 import cn.allay.api.world.Difficulty;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.WorldData;
@@ -18,6 +15,7 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3i;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -185,7 +183,7 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
                 .putInt("chunkSectionSize", data.getDimensionInfo().chunkSectionSize());
 
         return builder.putCompound("GameRules", builder2.build())
-                .putInt("SpawnX", data.getSpawnPoint().z())
+                .putInt("SpawnX", data.getSpawnPoint().x())
                 .putInt("SpawnY", data.getSpawnPoint().y())
                 .putInt("SpawnZ", data.getSpawnPoint().z())
                 .putInt("Difficulty", data.getDifficulty().ordinal())

@@ -1,7 +1,7 @@
 package cn.allay.api.world;
 
 import cn.allay.api.entity.Entity;
-import cn.allay.api.math.vector.Pos3i;
+import cn.allay.api.math.Position3ic;
 import cn.allay.api.player.Client;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
@@ -41,9 +41,9 @@ public interface World extends ChunkAccessible {
 
     int getViewDistance();
 
-    Pos3i getSpawnPosition();
+    Position3ic getSpawnPosition();
 
-    void setSpawnPosition(Pos3i newSpawn);
+    void setSpawnPosition(Position3ic newSpawn);
 
     Difficulty getDifficulty();
 
