@@ -185,13 +185,12 @@ public final class Palette<V> {
     }
 
     public boolean isEmpty() {
-        if (this.palette.size() == 1) return true;
-
+        boolean result = true;
+        if (this.palette.size() > 1) result = false;
         for (int word : this.bitArray.getWords())
             if (Integer.toUnsignedLong(word) != 0L)
-                return false;
-
-        return true;
+                result = false;
+        return result;
     }
 
     public void copyTo(Palette<V> palette) {

@@ -278,22 +278,14 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
 
     @Override
     public LevelChunkPacket createLevelChunkPacket() {
-        long stamp = sectionLock.writeLock();
-        ByteBuf byteBuf = Unpooled.buffer();
-        try {
-            final LevelChunkPacket levelChunkPacket = new LevelChunkPacket();
-            levelChunkPacket.setChunkX(this.chunkX);
-            levelChunkPacket.setChunkZ(this.chunkZ);
-            levelChunkPacket.setCachingEnabled(false);
-            levelChunkPacket.setRequestSubChunks(false);
-            levelChunkPacket.setSubChunksLength(computeNotNullSectionCount());
-            writeChunkDataToBuffer(byteBuf.retain());
-            levelChunkPacket.setData(byteBuf);
-            return levelChunkPacket;
-        } finally {
-            byteBuf.release();
-            sectionLock.unlockWrite(stamp);
-        }
+        final LevelChunkPacket levelChunkPacket = new LevelChunkPacket();
+        levelChunkPacket.setChunkX(this.chunkX);
+        levelChunkPacket.setChunkZ(this.chunkZ);
+        levelChunkPacket.setCachingEnabled(false);
+        levelChunkPacket.setRequestSubChunks(true);
+        levelChunkPacket.setSubChunkLimit(8);
+        levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
+        return levelChunkPacket;
     }
 
     @Override

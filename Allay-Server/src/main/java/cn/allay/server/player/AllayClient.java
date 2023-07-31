@@ -19,10 +19,16 @@ import cn.allay.api.player.AdventureSettings;
 import cn.allay.api.player.Client;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
+import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.chunk.ChunkSection;
+import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.gamerule.GameRule;
 import cn.allay.server.inventory.SimpleContainerActionProcessorHolder;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +48,10 @@ import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -120,7 +124,6 @@ public class AllayClient implements Client {
         var loc = getLocation();
         chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
         chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
-
         sendPacket(chunkPublisherUpdatePacket);
     }
 
@@ -315,8 +318,9 @@ public class AllayClient implements Client {
     }
 
     @Override
+    @Nullable
     public Location3dc getLocation() {
-        return playerEntity.getLocation();
+        return playerEntity != null ? playerEntity.getLocation() : null;
     }
 
     @Override
@@ -573,6 +577,105 @@ public class AllayClient implements Client {
 //                        ));
 //                    }
 //                }
+            }
+        }
+
+        @Override
+        public PacketSignal handle(SubChunkRequestPacket packet) {
+            ChunkService chunkService = AllayClient.this.getLocation().world().getChunkService();
+            List<SubChunkData> response = new ArrayList<>();
+            Vector3i subChunkPosition = packet.getSubChunkPosition();
+            List<Vector3i> positionOffsets = packet.getPositionOffsets();
+            DimensionInfo dimensionInfo = DimensionInfo.of(packet.getDimension());
+            for (var offset : positionOffsets) {
+
+                int sectionY = subChunkPosition.getY() + offset.getY() - (dimensionInfo.minHeight() >> 4);
+
+                HeightMapDataType hMapType = HeightMapDataType.NO_DATA;
+                if (sectionY < 0 || sectionY > (dimensionInfo.maxHeight() >> 4)) {
+                    createSubChunkData(response, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null);
+                    continue;
+                }
+
+                int cx = subChunkPosition.getX() + offset.getX(), cz = subChunkPosition.getZ() + offset.getZ();
+                Chunk chunk = chunkService.getChunk(cx, cz);
+
+                if (chunk == null) {
+                    chunkService.loadChunk(cx, cz);
+                    createSubChunkData(response, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null);
+                    continue;
+                }
+
+                byte[] hMap = new byte[256];
+                boolean higher = false, lower = false;
+                for (int x = 0; x < 16; x++) {
+                    for (int z = 0; z < 16; z++) {
+                        int y = chunk.getHeight(x, z);
+                        int i = (z << 4) | x;
+                        int otherInd = (y - dimensionInfo.minHeight()) >> 4;
+                        if (otherInd > sectionY) {
+                            higher = true;
+                        } else if (otherInd < sectionY) {
+                            lower = true;
+                        } else {
+                            hMap[i] = (byte) (y - (otherInd << 4) + dimensionInfo.minHeight());
+                        }
+                    }
+                }
+                if (higher) {
+                    hMapType = HeightMapDataType.TOO_HIGH;
+                    hMap = null;
+                } else if (lower) {
+                    hMapType = HeightMapDataType.TOO_LOW;
+                    hMap = null;
+                }
+                var subChunk = chunk.getOrCreateSection(sectionY);
+                if (subChunk.isEmpty()) {
+                    if (hMap == null) {
+                        createSubChunkData(response, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, hMapType, null, subChunk);
+                    } else {
+                        createSubChunkData(response, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
+                    }
+                    continue;
+                }
+                if (hMap == null) {
+                    createSubChunkData(response, SubChunkRequestResult.SUCCESS, offset, hMapType, null, subChunk);
+                } else {
+                    createSubChunkData(response, SubChunkRequestResult.SUCCESS, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
+                }
+            }
+            SubChunkPacket subChunkPacket = new SubChunkPacket();
+            subChunkPacket.setSubChunks(response);
+            subChunkPacket.setDimension(packet.getDimension());
+            subChunkPacket.setCenterPosition(subChunkPosition);
+            sendPacket(subChunkPacket);
+            return PacketSignal.HANDLED;
+        }
+
+        private void createSubChunkData(List<SubChunkData> response,
+                                        SubChunkRequestResult result,
+                                        Vector3i offset,
+                                        HeightMapDataType type,
+                                        ByteBuf heightMapData,
+                                        ChunkSection subchunk) {
+            SubChunkData subChunkData = new SubChunkData();
+            subChunkData.setResult(result);
+            subChunkData.setPosition(offset);
+            subChunkData.setHeightMapType(type);
+            if (result == SubChunkRequestResult.SUCCESS || result == SubChunkRequestResult.SUCCESS_ALL_AIR) {
+                if (type == HeightMapDataType.HAS_DATA) {
+                    subChunkData.setHeightMapData(heightMapData);
+                }
+                ByteBuf byteBuf = Unpooled.buffer();
+                subchunk.writeToNetwork(byteBuf);
+                subchunk.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+                byteBuf.writeByte(0); // edu - border blocks
+                //TODO: BlockEntity
+                subChunkData.setData(byteBuf);
+                response.add(subChunkData);
+            } else {
+                subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
+                subChunkData.setData(Unpooled.EMPTY_BUFFER);
             }
         }
     }
