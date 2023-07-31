@@ -4,14 +4,16 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
+import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.chunk.UnsafeChunk;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
@@ -39,11 +41,15 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.dimensionInfo = dimensionInfo;
     }
 
-    protected @Nullable ChunkSection getSection(int y) {
+    @ApiStatus.Internal
+    @Nullable
+    public ChunkSection getSection(int y) {
         return sections.get(y);
     }
 
-    protected @NotNull ChunkSection getOrCreateSection(int y) {
+    @ApiStatus.Internal
+    @NotNull
+    public ChunkSection getOrCreateSection(int y) {
         for (var i = 0; i <= y; i++) {
             sections.compareAndSet(i, null, new ChunkSection(i));
         }

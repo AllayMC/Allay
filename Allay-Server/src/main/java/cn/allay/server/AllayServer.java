@@ -21,6 +21,11 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -54,6 +59,15 @@ public final class AllayServer implements Server {
 
     @Override
     public void start() {
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        Configuration log4jConfig = ctx.getConfiguration();
+        LoggerConfig loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
+        Level currentLevel = loggerConfig.getLevel();
+        if (Level.TRACE.isLessSpecificThan(currentLevel)) {
+            loggerConfig.setLevel(Level.TRACE);
+            ctx.updateLoggers();
+        }
+
         initTerminalConsole();
         this.serverSettings = readServerSettings();
         this.networkServer = initNetwork();

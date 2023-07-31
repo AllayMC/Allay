@@ -49,6 +49,7 @@ public class AllayNetworkServer implements NetworkServer {
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
+                        session.setLogging(true);
                         session.setCodec(CODEC);
                         server.onClientConnect(session);
                     }
