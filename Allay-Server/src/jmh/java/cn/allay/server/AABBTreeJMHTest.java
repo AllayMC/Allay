@@ -75,8 +75,8 @@ public class AABBTreeJMHTest {
 
     private int indexCounter = 0;
 
-    @Benchmark
-    public void testAABBTree() {
+//    @Benchmark
+    public void testAABBTreeDetectOverlaps() {
         aabbTree.detectOverlaps(testAABBs[indexCounter], new ArrayList<>());
         indexCounter++;
         if (indexCounter == TEST_ENTITY_COUNT) {
@@ -84,9 +84,18 @@ public class AABBTreeJMHTest {
         }
     }
 
-    @Benchmark
+//    @Benchmark
     public void testForEach() {
         forEachDetect(testAABBs[indexCounter], new ArrayList<>());
+        indexCounter++;
+        if (indexCounter == TEST_ENTITY_COUNT) {
+            indexCounter = 0;
+        }
+    }
+
+    @Benchmark
+    public void testAABBTreeUpdate() {
+        aabbTree.update(testEntities[indexCounter]);
         indexCounter++;
         if (indexCounter == TEST_ENTITY_COUNT) {
             indexCounter = 0;
