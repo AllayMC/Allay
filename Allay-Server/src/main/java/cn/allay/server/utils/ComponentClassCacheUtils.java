@@ -52,7 +52,16 @@ public final class ComponentClassCacheUtils {
             if (Files.exists(cacheValid) && Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev"))) {
                 return;
             }
-            PathUtils.deleteDirectory(CACHE_ROOT.resolve("cn"));
+            String arg = properties.get("git.commit.message.short").toString();
+            if (arg.contains("+cb")) {
+                PathUtils.deleteDirectory(CACHE_ROOT.resolve(CACHE_PACKAGE_BLOCK));
+            } else if (arg.contains("+ci")) {
+                PathUtils.deleteDirectory(CACHE_ROOT.resolve(CACHE_PACKAGE_ITEM));
+            } else if (arg.contains("+ce")) {
+                PathUtils.deleteDirectory(CACHE_ROOT.resolve(CACHE_PACKAGE_ENTITY));
+            } else if (arg.contains("+ca")) {
+                PathUtils.deleteDirectory(CACHE_ROOT.resolve("cn"));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
