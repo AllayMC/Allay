@@ -119,7 +119,6 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
 
     private WorldData createWorldData(NbtMap data) {
         boolean allay = data.containsKey("allay");
-        data = allay ? data : data.getCompound("Data");
         WorldData.WorldDataBuilder builder = WorldData.builder();
         NbtMap gameRulesNbt = data.getCompound("GameRules");
         GameRules gameRules = new GameRules();
@@ -133,8 +132,9 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
                 }
             }
         }
-        builder.gameRules(gameRules)
-                .spawnPoint(Vec3i.of(data.getInt("SpawnX"), data.getInt("SpawnY"), data.getInt("SpawnZ")))
+        NbtMap dimensionInfo = data.getCompound("DimensionInfo");
+        return builder.gameRules(gameRules)
+                .spawnPoint(new Vector3i(data.getInt("SpawnX"), data.getInt("SpawnY"), data.getInt("SpawnZ")))
                 .difficulty(Difficulty.getDifficulty(data.getInt("Difficulty")))
                 .storageVersion(data.getInt("version"))
                 .time(data.getLong("Time"))
@@ -142,29 +142,17 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
                 .rainTick(data.getInt("rainTime"))
                 .gameType(GameType.from(data.getInt("GameType")))
                 .levelName(data.getString("LevelName"))
-                .allay(true);
-        if (allay) {
-            NbtMap dimensionInfo = data.getCompound("DimensionInfo");
-            return builder
-                    .dimensionInfo(new DimensionInfo(dimensionInfo.getInt("dimensionId"),
-                            dimensionInfo.getInt("minHeight"),
-                            dimensionInfo.getInt("maxHeight"),
-                            dimensionInfo.getInt("chunkSectionSize")
-                    ))
-                    .tickingRadius(data.getInt("tickingRadius"))
-                    .viewDistance(data.getInt("viewDistance"))
-                    .generatorOptions(data.getString("generatorOptions"))
-                    .randomSeed(data.getLong("seed"))
-                    .build();
-        } else {
-            return builder
-                    .dimensionInfo(DimensionInfo.fromName(IdentifierUtils.tryParse(data.getCompound("Player").getString("Dimension", "minecraft:overworld"))))
-                    .tickingRadius(Server.getInstance().getServerSettings().defaultTickingRadius())
-                    .viewDistance(Server.getInstance().getServerSettings().defaultViewDistance())
-                    .generatorOptions("")
-                    .randomSeed(data.getCompound("WorldGenSettings").getLong("seed"))
-                    .build();
-        }
+                .dimensionInfo(new DimensionInfo(dimensionInfo.getInt("dimensionId"),
+                        dimensionInfo.getInt("minHeight"),
+                        dimensionInfo.getInt("maxHeight"),
+                        dimensionInfo.getInt("chunkSectionSize")
+                ))
+                .tickingRadius(data.getInt("tickingRadius"))
+                .viewDistance(data.getInt("viewDistance"))
+                .generatorOptions(data.getString("generatorOptions"))
+                .randomSeed(data.getLong("seed"))
+                .allay(true)
+                .build();
     }
 
     private NbtMap createWorldDataNBT(WorldData data) {

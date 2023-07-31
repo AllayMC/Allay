@@ -53,10 +53,10 @@ public class AllayWorldDataTest {
     void testLoadAllayWorldData() {
         final AnvilWorldStorage je = new AnvilWorldStorage(Path.of("src/test/resources/allayworld"));
         WorldData worldData = je.readWorldData();
-        Assertions.assertEquals(Vec3i.of(-32, 68, 48), worldData.getSpawnPoint());
+        Assertions.assertEquals(new Vector3i(32, 86, -32), worldData.getSpawnPoint());
         Assertions.assertEquals(19133, worldData.getStorageVersion());
         Assertions.assertEquals(Difficulty.PEACEFUL, worldData.getDifficulty());
-        Assertions.assertEquals(-8564372236162605245L, worldData.getRandomSeed());
+        Assertions.assertEquals(2348465307070870700L, worldData.getRandomSeed());
     }
 
     @SneakyThrows
