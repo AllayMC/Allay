@@ -44,7 +44,6 @@ public class AllayChunkService implements ChunkService {
     private final Long2ObjectNonBlockingMap<Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
     private final Long2ObjectNonBlockingMap<CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new ConcurrentHashMap<>();
-    @Getter
     private final World world;
     @Getter
     private final WorldGenerationService worldGenerationService;
@@ -232,6 +231,10 @@ public class AllayChunkService implements ChunkService {
         return Integer.MIN_VALUE;
     }
 
+    private record SubChunkRequestData(org.cloudburstmc.math.vector.Vector3i center,
+                                       org.cloudburstmc.math.vector.Vector3i offset) {
+    }
+
     private final class ChunkLoaderManager {
         LongComparator chunkDistanceComparator = new LongComparator() {
             @Override
@@ -250,14 +253,11 @@ public class AllayChunkService implements ChunkService {
                 );
             }
         };
-
-        @Getter
         private final ChunkLoader chunkLoader;
-
         //保存着上tick已经发送的全部区块hash值
         private final LongOpenHashSet sentChunks = new LongOpenHashSet();
+        //保存着上tick已经发送的SubChunkRequestData
         private final Map<Long, Set<SubChunkRequestData>> sentSubChunks = new Long2ObjectOpenHashMap<>();
-
         //保存着这tick将要发送的全部区块hash值
         private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
         private final LongArrayPriorityQueue chunkSendQueue = new LongArrayPriorityQueue(100, chunkDistanceComparator);
@@ -266,38 +266,37 @@ public class AllayChunkService implements ChunkService {
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
-            this.chunkSentPerTick = 8;//TODO: Config
+            //TODO: Config
+            this.chunkSentPerTick = 8;
             chunkLoader.setSubChunkRequestHandler(subChunkRequestPacket -> {
-                List<SubChunkData> response = new ArrayList<>();
-                org.cloudburstmc.math.vector.Vector3i subChunkPosition = subChunkRequestPacket.getSubChunkPosition();
-                List<org.cloudburstmc.math.vector.Vector3i> positionOffsets = subChunkRequestPacket.getPositionOffsets();
+                List<SubChunkData> responseData = new ArrayList<>();
+                var centerPosition = subChunkRequestPacket.getSubChunkPosition();
+                var positionOffsets = subChunkRequestPacket.getPositionOffsets();
                 DimensionInfo dimensionInfo = DimensionInfo.of(subChunkRequestPacket.getDimension());
                 for (var offset : positionOffsets) {
-
-                    int sectionY = subChunkPosition.getY() + offset.getY() - (dimensionInfo.minHeight() >> 4);
+                    int sectionY = centerPosition.getY() + offset.getY() - (dimensionInfo.minHeight() >> 4);
 
                     HeightMapDataType hMapType = HeightMapDataType.NO_DATA;
                     if (sectionY < 0 || sectionY > (dimensionInfo.maxHeight() >> 4)) {
-                        createSubChunkData(response, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null);
+                        createSubChunkData(responseData, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null);
                         continue;
                     }
 
-                    int cx = subChunkPosition.getX() + offset.getX(), cz = subChunkPosition.getZ() + offset.getZ();
+                    int cx = centerPosition.getX() + offset.getX(), cz = centerPosition.getZ() + offset.getZ();
                     Chunk chunk = getChunk(cx, cz);
 
                     if (chunk == null) {
                         log.warn("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
-                        createSubChunkData(response, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null);
+                        createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null);
                         continue;
                     }
 
                     var chunkHash = chunk.computeChunkHash();
                     var sent = this.sentSubChunks.get(chunkHash);
-                    SubChunkRequestData requestData = new SubChunkRequestData(subChunkPosition, offset);
+                    SubChunkRequestData requestData = new SubChunkRequestData(centerPosition, offset);
                     if (sent != null) {
                         if (sent.contains(requestData)) {
-                            log.warn("base = " + subChunkPosition + " offset = " + offset);
-                            //log.warn("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
+                            log.warn("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
                             continue;
                         } else {
                             sent.add(requestData);
@@ -334,24 +333,52 @@ public class AllayChunkService implements ChunkService {
                     var subChunk = chunk.getOrCreateSection(sectionY);
                     if (subChunk.isEmpty()) {
                         if (hMap == null) {
-                            createSubChunkData(response, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, hMapType, null, subChunk);
+                            createSubChunkData(responseData, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, hMapType, null, subChunk);
                         } else {
-                            createSubChunkData(response, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
+                            createSubChunkData(responseData, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
                         }
                         continue;
                     }
                     if (hMap == null) {
-                        createSubChunkData(response, SubChunkRequestResult.SUCCESS, offset, hMapType, null, subChunk);
+                        createSubChunkData(responseData, SubChunkRequestResult.SUCCESS, offset, hMapType, null, subChunk);
                     } else {
-                        createSubChunkData(response, SubChunkRequestResult.SUCCESS, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
+                        createSubChunkData(responseData, SubChunkRequestResult.SUCCESS, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
                     }
                 }
                 SubChunkPacket subChunkPacket = new SubChunkPacket();
-                subChunkPacket.setSubChunks(response);
+                subChunkPacket.setSubChunks(responseData);
                 subChunkPacket.setDimension(subChunkRequestPacket.getDimension());
-                subChunkPacket.setCenterPosition(subChunkPosition);
+                subChunkPacket.setCenterPosition(centerPosition);
                 return subChunkPacket;
             });
+        }
+
+        private void createSubChunkData(List<SubChunkData> response,
+                                        SubChunkRequestResult result,
+                                        org.cloudburstmc.math.vector.Vector3i offset,
+                                        HeightMapDataType type,
+                                        ByteBuf heightMapData,
+                                        ChunkSection subchunk) {
+            SubChunkData subChunkData = new SubChunkData();
+            subChunkData.setResult(result);
+            subChunkData.setPosition(offset);
+            subChunkData.setHeightMapType(type);
+            if (result == SubChunkRequestResult.SUCCESS || result == SubChunkRequestResult.SUCCESS_ALL_AIR) {
+                if (type == HeightMapDataType.HAS_DATA) {
+                    subChunkData.setHeightMapData(heightMapData);
+                }
+                ByteBuf byteBuf = Unpooled.buffer();
+                subchunk.writeToNetwork(byteBuf);
+                subchunk.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+                // edu - border blocks
+                byteBuf.writeByte(0);
+                //TODO: BlockEntity
+                subChunkData.setData(byteBuf);
+                response.add(subChunkData);
+            } else {
+                subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
+                subChunkData.setData(Unpooled.EMPTY_BUFFER);
+            }
         }
 
         public void onRemoved() {
@@ -378,33 +405,6 @@ public class AllayChunkService implements ChunkService {
                 updateChunkSendingQueue();
             }
             sendQueuedChunks();
-        }
-
-        private void createSubChunkData(List<SubChunkData> response,
-                                        SubChunkRequestResult result,
-                                        org.cloudburstmc.math.vector.Vector3i offset,
-                                        HeightMapDataType type,
-                                        ByteBuf heightMapData,
-                                        ChunkSection subchunk) {
-            SubChunkData subChunkData = new SubChunkData();
-            subChunkData.setResult(result);
-            subChunkData.setPosition(offset);
-            subChunkData.setHeightMapType(type);
-            if (result == SubChunkRequestResult.SUCCESS || result == SubChunkRequestResult.SUCCESS_ALL_AIR) {
-                if (type == HeightMapDataType.HAS_DATA) {
-                    subChunkData.setHeightMapData(heightMapData);
-                }
-                ByteBuf byteBuf = Unpooled.buffer();
-                subchunk.writeToNetwork(byteBuf);
-                subchunk.biomes().writeToNetwork(byteBuf, BiomeType::getId);
-                byteBuf.writeByte(0); // edu - border blocks
-                //TODO: BlockEntity
-                subChunkData.setData(byteBuf);
-                response.add(subChunkData);
-            } else {
-                subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
-                subChunkData.setData(Unpooled.EMPTY_BUFFER);
-            }
         }
 
         private void updateAndLoadInRadiusChunks() {
@@ -471,10 +471,6 @@ public class AllayChunkService implements ChunkService {
 
         private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {
             return chunkX * chunkX + chunkZ * chunkZ <= radius * radius;
-        }
-
-        private record SubChunkRequestData(org.cloudburstmc.math.vector.Vector3i base,
-                                           org.cloudburstmc.math.vector.Vector3i offset) {
         }
     }
 }
