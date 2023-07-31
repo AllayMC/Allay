@@ -15,9 +15,9 @@ import org.jetbrains.annotations.Range;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
+@Getter
 @NotThreadSafe
 public class AllayUnsafeChunk implements UnsafeChunk {
-    @Getter
     @Setter
     protected int chunkX;
     @Getter
@@ -48,10 +48,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             sections.compareAndSet(i, null, new ChunkSection(i));
         }
         return sections.get(y);
-    }
-
-    public DimensionInfo getDimensionInfo() {
-        return dimensionInfo;
     }
 
     public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {

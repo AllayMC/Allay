@@ -1,5 +1,6 @@
 package cn.allay.api.entity.metadata;
 
+import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -11,6 +12,7 @@ import java.util.Objects;
  *
  * @author JukeboxMC | daoge_cmd
  */
+@Getter
 public class Metadata {
 
     private final EntityDataMap entityDataMap = new EntityDataMap();
@@ -99,7 +101,4 @@ public class Metadata {
         return this.entityDataMap.getOrCreateFlags().contains(entityFlag);
     }
 
-    public EntityDataMap getEntityDataMap() {
-        return this.entityDataMap;
-    }
 }

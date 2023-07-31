@@ -1,7 +1,10 @@
 package cn.allay.api.datastruct.aabbtree;
 
+import lombok.Getter;
+
 import java.util.Objects;
 
+@Getter
 public final class CollisionPair<T extends Boundable & Identifiable> {
    private final T objectA;
    private final T objectB;
@@ -11,15 +14,7 @@ public final class CollisionPair<T extends Boundable & Identifiable> {
       this.objectB = objectB;
    }
 
-   public T getObjectA() {
-      return objectA;
-   }
-
-   public T getObjectB() {
-      return objectB;
-   }
-
-   @Override
+    @Override
    public boolean equals(Object o) {
       if (this == o) {
          return true;

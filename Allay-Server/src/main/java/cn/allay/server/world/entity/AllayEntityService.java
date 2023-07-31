@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author daoge_cmd
  */
+@Getter
 public class AllayEntityService implements EntityService {
 
-    @Getter
     private final World world;
     private final Map<Long, Entity> entities = new ConcurrentHashMap<>();
 

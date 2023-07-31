@@ -14,8 +14,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author daoge_cmd
  */
+@Getter
 public final class RunningTaskInfo {
-    @Getter
     private final Task task;
     @Getter
     private final int delay;
