@@ -63,10 +63,7 @@ public class AllayWorld implements World {
         this.server = server;
         this.chunkService = new AllayChunkService(
                 this,
-                chunkService -> new AllayWorldGenerationService(
-                        threadPool,
-                        chunkService,
-                        worldGenerator),
+                chunkService -> new AllayWorldGenerationService(threadPool, worldGenerator),
                 worldStorage);
         this.entityService = new AllayEntityService(this);
         this.worldScheduler = new AllayScheduler(Executors.newVirtualThreadPerTaskExecutor());

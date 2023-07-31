@@ -1,7 +1,5 @@
 package cn.allay.api.world.generator;
 
-import cn.allay.api.world.chunk.ChunkService;
-
 /**
  * Allay Project 2023/7/1
  *
@@ -9,8 +7,6 @@ import cn.allay.api.world.chunk.ChunkService;
  */
 public interface WorldGenerationService {
     WorldGenerator getWorldGenerator();
-
-    ChunkService getChunkService();
 
     <T extends LimitedWorldRegion> void submitGenerationTask(T limitedWorldRegion, FinishCallback<T> finishCallback);
 

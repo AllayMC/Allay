@@ -1,6 +1,5 @@
 package cn.allay.server.world.generator;
 
-import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.generator.LimitedWorldRegion;
 import cn.allay.api.world.generator.WorldGenerationService;
 import cn.allay.api.world.generator.WorldGenerator;
@@ -18,13 +17,10 @@ public class AllayWorldGenerationService implements WorldGenerationService {
 
     private final ForkJoinPool executorService;
     @Getter
-    private final ChunkService chunkService;
-    @Getter
     private final WorldGenerator worldGenerator;
 
-    public AllayWorldGenerationService(ForkJoinPool executorService, ChunkService chunkService, WorldGenerator worldGenerator) {
+    public AllayWorldGenerationService(ForkJoinPool executorService, WorldGenerator worldGenerator) {
         this.executorService = executorService;
-        this.chunkService = chunkService;
         this.worldGenerator = worldGenerator;
     }
 
