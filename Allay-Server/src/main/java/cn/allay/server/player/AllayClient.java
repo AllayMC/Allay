@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.crypto.SecretKey;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -95,6 +96,8 @@ public class AllayClient implements Client {
     private final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(DO_FIRST_SPAWN_CHUNK_THRESHOLD);
     @Getter
     private final ContainerActionProcessorHolder containerActionProcessorHolder;
+    @Setter
+    private Function<SubChunkRequestPacket, SubChunkPacket> subChunkRequestHandler;
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -330,7 +333,7 @@ public class AllayClient implements Client {
 
     @SlowOperation
     @Override
-    public void sendChunk(Chunk chunk) {
+    public void notifyChunkLoaded(Chunk chunk) {
         var levelChunkPacket = chunk.createLevelChunkPacket();
         sendPacket(levelChunkPacket);
         if (doFirstSpawnChunkThreshold.get() > 0) {
@@ -540,143 +543,13 @@ public class AllayClient implements Client {
                     continue;
                 }
                 responses.addAll(processor.handle(action, AllayClient.this, request.getRequestId()));
-//                switch (action.getType()) {
-//                    case CRAFT_CREATIVE -> {
-//                        var craftCreativeAction = (CraftCreativeAction) action;
-//                        responses.addAll(((CraftCreativeActionProcessor) processor).handle(
-//                                craftCreativeAction,
-//                                request.getRequestId(),
-//                                playerEntity.getContainer(FullContainerType.CREATED_OUTPUT),
-//                                0));
-//                    }
-//                    case TAKE, PLACE -> {
-//                        var transferAction = (TransferItemStackRequestAction) action;
-//                        var slot1 = transferAction.getSource().getSlot();
-//                        var stackNetworkId1 = transferAction.getSource().getStackNetworkId();
-//                        var slot2 = transferAction.getDestination().getSlot();
-//                        var stackNetworkId2 = transferAction.getDestination().getStackNetworkId();
-//                        var source = playerEntity.getContainerBySlotType(transferAction.getSource().getContainer());
-//                        var destination = playerEntity.getContainerBySlotType(transferAction.getDestination().getContainer());
-//                        Objects.requireNonNull(source, "source container");
-//                        Objects.requireNonNull(destination, "destination container");
-//                        responses.addAll(((TransferItemActionProcessor) processor).handle(
-//                                request.getRequestId(),
-//                                source, slot1, stackNetworkId1,
-//                                destination, slot2, stackNetworkId2,
-//                                transferAction.getCount()));
-//                    }
-//                    case DESTROY -> {
-//                        var destroyAction = (DestroyAction) action;
-//                        Objects.requireNonNull(playerEntity.getContainerBySlotType(destroyAction.getSource().getContainer()), "source container");
-//                        responses.addAll(((DestroyActionProcessor) processor).handle(
-//                                request.getRequestId(),
-//                                playerEntity.getContainerBySlotType(destroyAction.getSource().getContainer()),
-//                                destroyAction.getSource().getSlot(),
-//                                destroyAction.getSource().getStackNetworkId(),
-//                                destroyAction.getCount()
-//                        ));
-//                    }
-//                }
             }
         }
 
         @Override
         public PacketSignal handle(SubChunkRequestPacket packet) {
-            ChunkService chunkService = AllayClient.this.getLocation().world().getChunkService();
-            List<SubChunkData> response = new ArrayList<>();
-            Vector3i subChunkPosition = packet.getSubChunkPosition();
-            List<Vector3i> positionOffsets = packet.getPositionOffsets();
-            DimensionInfo dimensionInfo = DimensionInfo.of(packet.getDimension());
-            for (var offset : positionOffsets) {
-
-                int sectionY = subChunkPosition.getY() + offset.getY() - (dimensionInfo.minHeight() >> 4);
-
-                HeightMapDataType hMapType = HeightMapDataType.NO_DATA;
-                if (sectionY < 0 || sectionY > (dimensionInfo.maxHeight() >> 4)) {
-                    createSubChunkData(response, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null);
-                    continue;
-                }
-
-                int cx = subChunkPosition.getX() + offset.getX(), cz = subChunkPosition.getZ() + offset.getZ();
-                Chunk chunk = chunkService.getChunk(cx, cz);
-
-                if (chunk == null) {
-                    chunkService.loadChunk(cx, cz);
-                    createSubChunkData(response, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null);
-                    continue;
-                }
-
-                byte[] hMap = new byte[256];
-                boolean higher = false, lower = false;
-                for (int x = 0; x < 16; x++) {
-                    for (int z = 0; z < 16; z++) {
-                        int y = chunk.getHeight(x, z);
-                        int i = (z << 4) | x;
-                        int otherInd = (y - dimensionInfo.minHeight()) >> 4;
-                        if (otherInd > sectionY) {
-                            higher = true;
-                        } else if (otherInd < sectionY) {
-                            lower = true;
-                        } else {
-                            hMap[i] = (byte) (y - (otherInd << 4) + dimensionInfo.minHeight());
-                        }
-                    }
-                }
-                if (higher) {
-                    hMapType = HeightMapDataType.TOO_HIGH;
-                    hMap = null;
-                } else if (lower) {
-                    hMapType = HeightMapDataType.TOO_LOW;
-                    hMap = null;
-                }
-                var subChunk = chunk.getOrCreateSection(sectionY);
-                if (subChunk.isEmpty()) {
-                    if (hMap == null) {
-                        createSubChunkData(response, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, hMapType, null, subChunk);
-                    } else {
-                        createSubChunkData(response, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
-                    }
-                    continue;
-                }
-                if (hMap == null) {
-                    createSubChunkData(response, SubChunkRequestResult.SUCCESS, offset, hMapType, null, subChunk);
-                } else {
-                    createSubChunkData(response, SubChunkRequestResult.SUCCESS, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
-                }
-            }
-            SubChunkPacket subChunkPacket = new SubChunkPacket();
-            subChunkPacket.setSubChunks(response);
-            subChunkPacket.setDimension(packet.getDimension());
-            subChunkPacket.setCenterPosition(subChunkPosition);
-            sendPacket(subChunkPacket);
+            sendPacket(subChunkRequestHandler.apply(packet));
             return PacketSignal.HANDLED;
-        }
-
-        private void createSubChunkData(List<SubChunkData> response,
-                                        SubChunkRequestResult result,
-                                        Vector3i offset,
-                                        HeightMapDataType type,
-                                        ByteBuf heightMapData,
-                                        ChunkSection subchunk) {
-            SubChunkData subChunkData = new SubChunkData();
-            subChunkData.setResult(result);
-            subChunkData.setPosition(offset);
-            subChunkData.setHeightMapType(type);
-            if (result == SubChunkRequestResult.SUCCESS || result == SubChunkRequestResult.SUCCESS_ALL_AIR) {
-                if (type == HeightMapDataType.HAS_DATA) {
-                    subChunkData.setHeightMapData(heightMapData);
-                }
-                ByteBuf byteBuf = Unpooled.buffer();
-                subchunk.writeToNetwork(byteBuf);
-                subchunk.biomes().writeToNetwork(byteBuf, BiomeType::getId);
-                byteBuf.writeByte(0); // edu - border blocks
-                //TODO: BlockEntity
-                subChunkData.setData(byteBuf);
-                response.add(subChunkData);
-            } else {
-                subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
-                subChunkData.setData(Unpooled.EMPTY_BUFFER);
-            }
         }
     }
 }
