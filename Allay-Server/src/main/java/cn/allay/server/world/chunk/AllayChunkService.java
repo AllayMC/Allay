@@ -13,7 +13,6 @@ import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.generator.WorldGenerationService;
 import cn.allay.api.world.storage.WorldStorage;
-import cn.allay.server.player.AllayClient;
 import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -257,7 +256,7 @@ public class AllayChunkService implements ChunkService {
 
         //保存着上tick已经发送的全部区块hash值
         private final LongOpenHashSet sentChunks = new LongOpenHashSet();
-        private final Map<Long, boolean[]> sentSubChunks = new Long2ObjectOpenHashMap<>();
+        private final Map<Long, Set<SubChunkRequestData>> sentSubChunks = new Long2ObjectOpenHashMap<>();
 
         //保存着这tick将要发送的全部区块hash值
         private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
@@ -294,16 +293,18 @@ public class AllayChunkService implements ChunkService {
 
                     var chunkHash = chunk.computeChunkHash();
                     var sent = this.sentSubChunks.get(chunkHash);
+                    SubChunkRequestData requestData = new SubChunkRequestData(subChunkPosition, offset);
                     if (sent != null) {
-                        if (sent[sectionY]) {
-                            log.warn("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
-//                            continue;
+                        if (sent.contains(requestData)) {
+                            log.warn("base = " + subChunkPosition + " offset = " + offset);
+                            //log.warn("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
+                            continue;
                         } else {
-                            sent[sectionY] = true;
+                            sent.add(requestData);
                         }
                     } else {
-                        sent = new boolean[world.getDimensionInfo().chunkSectionSize()];
-                        sent[sectionY] = true;
+                        sent = new HashSet<>();
+                        sent.add(requestData);
                         this.sentSubChunks.put(chunkHash, sent);
                     }
 
@@ -470,6 +471,10 @@ public class AllayChunkService implements ChunkService {
 
         private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {
             return chunkX * chunkX + chunkZ * chunkZ <= radius * radius;
+        }
+
+        private record SubChunkRequestData(org.cloudburstmc.math.vector.Vector3i base,
+                                           org.cloudburstmc.math.vector.Vector3i offset) {
         }
     }
 }
