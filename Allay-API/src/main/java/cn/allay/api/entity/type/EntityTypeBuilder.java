@@ -40,8 +40,6 @@ public interface EntityTypeBuilder<T extends Entity> {
 
     <U extends Object & EntityComponentImpl & EntityBaseComponent> EntityTypeBuilder<T> setBaseComponentProvider(ComponentProvider<U> baseComponentProvider);
 
-    EntityTypeBuilder<T> setAABBUpdater(Function<T, AABBdc> aabbUpdater);
-
     EntityType<T> build();
 
     interface EntityTypeBuilderFactory {

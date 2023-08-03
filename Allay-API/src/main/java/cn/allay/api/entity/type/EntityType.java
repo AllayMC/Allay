@@ -17,6 +17,4 @@ public interface EntityType<T extends Entity> extends Identified {
     List<ComponentProvider<? extends EntityComponentImpl>> getComponentProviders();
 
     T createEntity(EntityInitInfo<T> info);
-
-    AABBdc updateAABB(T entity);
 }
