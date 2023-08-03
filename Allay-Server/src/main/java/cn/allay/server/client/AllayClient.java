@@ -1,4 +1,4 @@
-package cn.allay.server.player;
+package cn.allay.server.client;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.type.BlockTypeRegistry;
@@ -19,16 +19,10 @@ import cn.allay.api.player.AdventureSettings;
 import cn.allay.api.player.Client;
 import cn.allay.api.player.data.LoginData;
 import cn.allay.api.server.Server;
-import cn.allay.api.world.DimensionInfo;
-import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
-import cn.allay.api.world.chunk.ChunkSection;
-import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.gamerule.GameRule;
 import cn.allay.server.inventory.SimpleContainerActionProcessorHolder;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +34,6 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -51,7 +44,10 @@ import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -97,7 +93,10 @@ public class AllayClient implements Client {
     @Getter
     private final ContainerActionProcessorHolder containerActionProcessorHolder;
     @Setter
-    private Function<SubChunkRequestPacket, SubChunkPacket> subChunkRequestHandler;
+    private Function<SubChunkRequestPacket, SubChunkPacket> subChunkRequestHandler =
+            packet -> {
+                throw new UnsupportedOperationException();
+            };
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -527,23 +526,19 @@ public class AllayClient implements Client {
         public PacketSignal handle(ItemStackRequestPacket packet) {
             List<ItemStackResponse> responses = new LinkedList<>();
             for (var request : packet.getRequests()) {
-                handleItemStackRequest(request, responses);
+                for (var action : request.getActions()) {
+                    ContainerActionProcessor<ItemStackRequestAction> processor = containerActionProcessorHolder.getProcessor(action.getType());
+                    if (processor == null) {
+                        log.warn("Unhandled inventory action type " + action.getType());
+                        continue;
+                    }
+                    responses.addAll(processor.handle(action, AllayClient.this, request.getRequestId()));
+                }
             }
             var itemStackResponsePacket = new ItemStackResponsePacket();
             itemStackResponsePacket.getEntries().addAll(responses);
             sendPacket(itemStackResponsePacket);
             return PacketSignal.HANDLED;
-        }
-
-        private void handleItemStackRequest(ItemStackRequest request, List<ItemStackResponse> responses) {
-            for (var action : request.getActions()) {
-                ContainerActionProcessor<ItemStackRequestAction> processor = containerActionProcessorHolder.getProcessor(action.getType());
-                if (processor == null) {
-                    log.warn("Unhandled inventory action type " + action.getType());
-                    continue;
-                }
-                responses.addAll(processor.handle(action, AllayClient.this, request.getRequestId()));
-            }
         }
 
         @Override

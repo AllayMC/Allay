@@ -59,8 +59,13 @@ public class AllayChunkService implements ChunkService {
 
     @Override
     public void tick() {
+        sendChunkPackets();
         tickChunkLoaders();
         removeUnusedChunks();
+    }
+
+    private void sendChunkPackets() {
+        loadedChunks.values().forEach(Chunk::sendChunkPackets);
     }
 
     private void tickChunkLoaders() {

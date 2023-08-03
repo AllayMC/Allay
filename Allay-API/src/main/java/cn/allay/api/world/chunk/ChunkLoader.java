@@ -1,6 +1,7 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.math.Location3dc;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 
@@ -34,4 +35,8 @@ public interface ChunkLoader {
     }
 
     void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler);
+
+    default void sendPacket(BedrockPacket packet) {}
+
+    default void sendPacketImmediately(BedrockPacket packet) {}
 }

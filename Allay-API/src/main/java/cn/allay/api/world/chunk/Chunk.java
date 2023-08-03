@@ -2,6 +2,7 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.world.biome.BiomeType;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -48,4 +49,8 @@ public interface Chunk extends UnsafeChunk {
     void removeChunkLoader(ChunkLoader chunkLoader);
 
     int getChunkLoaderCount();
+
+    void addChunkPacket(BedrockPacket packet);
+
+    void sendChunkPackets();
 }

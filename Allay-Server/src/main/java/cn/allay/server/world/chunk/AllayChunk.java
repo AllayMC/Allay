@@ -9,13 +9,16 @@ import cn.allay.api.world.palette.Palette;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -31,6 +34,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     protected final StampedLock heightLock;
     protected final StampedLock lightLock;
     protected final Vector<ChunkLoader> chunkLoaders;
+    protected final Queue<BedrockPacket> chunkPacketQueue;
 
     public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
@@ -42,6 +46,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         this.heightLock = new StampedLock();
         this.lightLock = new StampedLock();
         this.chunkLoaders = new Vector<>();
+        this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
     }
 
     @Override
@@ -307,6 +312,22 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     @Override
     public int getChunkLoaderCount() {
         return chunkLoaders.size();
+    }
+
+    @Override
+    public void addChunkPacket(BedrockPacket packet) {
+        chunkPacketQueue.add(packet);
+    }
+
+    @Override
+    public void sendChunkPackets() {
+        if (chunkPacketQueue.isEmpty()) return;
+        BedrockPacket packet;
+        while ((packet = chunkPacketQueue.poll()) != null) {
+            for (ChunkLoader chunkLoader : chunkLoaders) {
+                chunkLoader.sendPacket(packet);
+            }
+        }
     }
 
     private void writeChunkDataToBuffer(ByteBuf retainedBuffer) {
