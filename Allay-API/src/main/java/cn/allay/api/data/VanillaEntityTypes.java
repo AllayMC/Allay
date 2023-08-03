@@ -3,6 +3,7 @@ package cn.allay.api.data;
 import cn.allay.api.entity.impl.*;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
+import org.joml.primitives.AABBd;
 
 /**
  * Allay Project <p>
@@ -445,6 +446,7 @@ public interface VanillaEntityTypes {
           .builder(EntityPlayer.class)
           .vanillaEntity(VanillaEntityId.PLAYER)
           .addBasicComponents()
+          .setAABBUpdater(e -> new AABBd(-0.3, 0, -0.3, 0.3, 1.8, 0.3))
           .build();
 
   EntityType<EntityPolarBear> POLAR_BEAR_TYPE = EntityTypeBuilder
