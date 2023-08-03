@@ -17,7 +17,7 @@ import java.util.List;
 public interface ItemType<T extends ItemStack> extends Identified {
     List<ComponentProvider<? extends ItemComponentImpl>> getComponentProviders();
 
-    T createItemStack(ItemStackInitInfo info);
+    T createItemStack(ItemStackInitInfo<T> info);
 
     int getRuntimeId();
 

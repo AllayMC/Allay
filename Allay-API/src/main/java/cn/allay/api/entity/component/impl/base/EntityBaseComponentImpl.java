@@ -55,9 +55,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Vector3d speed = new Vector3d();
     protected Vector3d motion = new Vector3d();
 
-    public EntityBaseComponentImpl(EntityType<T> entityType,
-                                   EntityInitInfo info) {
-        this.entityType = entityType;
+    public EntityBaseComponentImpl(EntityInitInfo<T> info) {
+        this.entityType = info.getEntityType();
         this.aabb = entityType.updateAABB(manager.getComponentedObject());
         if (info.location().world() == null)
             throw new IllegalArgumentException("World cannot be null!");

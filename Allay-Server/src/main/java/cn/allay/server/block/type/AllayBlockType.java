@@ -5,6 +5,7 @@ import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.component.annotation.RequireBlockProperty;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.api.block.component.impl.base.BlockBaseComponent;
 import cn.allay.api.block.component.impl.base.BlockBaseComponentImpl;
 import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.palette.BlockStateHashPalette;
@@ -26,6 +27,7 @@ import cn.allay.server.utils.ComponentClassCacheUtils;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -271,6 +273,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected Map<String, BlockPropertyType<?>> properties = new HashMap<>();
         protected Identifier identifier;
         protected boolean isCustomBlock = false;
+        @Setter
+        protected Function<BlockType<T>, BlockComponentImpl> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -369,7 +373,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         public AllayBlockType<T> build() {
             if (identifier == null) throw new BlockTypeBuildException("identifier cannot be null!");
             var type = new AllayBlockType<>(interfaceClass, components, properties, identifier);
-            components.add(new BlockBaseComponentImpl(type));
+            components.add(blockBaseComponentSupplier.apply(type));
             List<ComponentProvider<? extends ComponentImpl>> componentProviders = components.stream().map(ComponentProvider::ofSingleton).collect(Collectors.toList());
             try {
                 checkPropertyValid();

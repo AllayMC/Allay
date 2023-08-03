@@ -39,8 +39,9 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     protected Constructor<T> constructor;
     protected List<ComponentProvider<? extends EntityComponentImpl>> componentProviders;
     protected Identifier identifier;
-    Function<T, AABBdc> aabbUpdater;
+    protected Function<T, AABBdc> aabbUpdater;
 
+    @SneakyThrows
     protected AllayEntityType(Class<T> interfaceClass,
                               List<ComponentProvider<? extends EntityComponentImpl>> componentProviders,
                               Identifier identifier,
@@ -49,10 +50,6 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         this.componentProviders = componentProviders;
         this.identifier = identifier;
         this.aabbUpdater = aabbUpdater;
-    }
-
-    @SneakyThrows
-    protected AllayEntityType<T> complete() {
         try {
             ArrayList<ComponentProvider<? extends ComponentImpl>> components = new ArrayList<>(componentProviders);
             injectedClass = new AllayComponentInjector<T>()
@@ -65,9 +62,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
         //Cache constructor
         constructor = injectedClass.getConstructor(ComponentInitInfo.class);
-        return this;
     }
-
     @Override
     public List<ComponentProvider<? extends EntityComponentImpl>> getComponentProviders() {
         return componentProviders;
@@ -75,7 +70,8 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
     @SneakyThrows
     @Override
-    public T createEntity(EntityInitInfo info) {
+    public T createEntity(EntityInitInfo<T> info) {
+        info.setEntityType(this);
         return constructor.newInstance(info);
     }
 
@@ -143,6 +139,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
         @Override
         public EntityTypeBuilder<T> addBasicComponents() {
+            addComponent(ComponentProvider.of(info -> new EntityBaseComponentImpl<>((EntityInitInfo<T>) info), EntityBaseComponentImpl.class));
             Arrays.stream(interfaceClass.getDeclaredFields())
                     .filter(field -> isStatic(field.getModifiers()))
                     .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
@@ -171,9 +168,8 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
             if (identifier == null)
                 throw new EntityTypeBuildException("identifier cannot be null!");
             var type = new AllayEntityType<>(interfaceClass, componentProviders, identifier, aabbUpdater);
-            componentProviders.add(ComponentProvider.of(info -> new EntityBaseComponentImpl<>(type, (EntityInitInfo) info), EntityBaseComponentImpl.class));
             EntityTypeRegistry.getRegistry().register(identifier, type);
-            return type.complete();
+            return type;
         }
     }
 }
