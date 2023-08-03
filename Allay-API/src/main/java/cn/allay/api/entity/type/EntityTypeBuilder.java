@@ -5,6 +5,7 @@ import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponentImpl;
+import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
 import cn.allay.api.identifier.Identifier;
 import org.joml.primitives.AABBdc;
 
@@ -36,6 +37,8 @@ public interface EntityTypeBuilder<T extends Entity> {
     EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponentImpl> componentProvider);
 
     EntityTypeBuilder<T> addBasicComponents();
+
+    <U extends Object & EntityComponentImpl & EntityBaseComponent> EntityTypeBuilder<T> setBaseComponentProvider(ComponentProvider<U> baseComponentProvider);
 
     EntityTypeBuilder<T> setAABBUpdater(Function<T, AABBdc> aabbUpdater);
 
