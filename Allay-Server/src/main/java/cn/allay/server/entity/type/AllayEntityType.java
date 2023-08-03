@@ -171,7 +171,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
             if (identifier == null)
                 throw new EntityTypeBuildException("identifier cannot be null!");
             var type = new AllayEntityType<>(interfaceClass, componentProviders, identifier, aabbUpdater);
-            componentProviders.add(ComponentProvider.of(info -> new EntityBaseComponentImpl(type, (EntityInitInfo) info), EntityBaseComponentImpl.class));
+            componentProviders.add(ComponentProvider.of(info -> new EntityBaseComponentImpl<>(type, (EntityInitInfo) info), EntityBaseComponentImpl.class));
             EntityTypeRegistry.getRegistry().register(identifier, type);
             return type.complete();
         }
