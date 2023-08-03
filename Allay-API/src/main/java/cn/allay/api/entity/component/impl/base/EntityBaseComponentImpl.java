@@ -11,13 +11,26 @@ import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.Location3d;
 import cn.allay.api.math.Location3dc;
+import cn.allay.api.player.Client;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.packet.AddEntityPacket;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.RemoveEntityPacket;
+import org.cloudburstmc.protocol.bedrock.packet.SetEntityDataPacket;
+import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -37,11 +50,17 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected AABBdc aabb;
     @Manager
     protected ComponentManager<T> manager;
+    protected boolean hasCollision = true;
+    protected Map<Long, Client> viewers = new Long2ObjectOpenHashMap<>();
+    protected Vector3d speed = new Vector3d();
+    protected Vector3d motion = new Vector3d();
 
     public EntityBaseComponentImpl(EntityType<T> entityType,
                                    EntityInitInfo info) {
         this.entityType = entityType;
         this.aabb = entityType.updateAABB(manager.getComponentedObject());
+        if (info.location().world() == null)
+            throw new IllegalArgumentException("World cannot be null!");
         this.location = info.location();
         metadata = new Metadata();
         initMetadata();
@@ -51,9 +70,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         metadata.setInt(EntityDataTypes.PLAYER_INDEX, 0);
         metadata.setShort(EntityDataTypes.AIR_SUPPLY, (short) 400);
         metadata.setShort(EntityDataTypes.AIR_SUPPLY_MAX, (short) 400);
-//        metadata.setFloat(EntityDataTypes.SCALE, 1);
-//        metadata.setFloat(EntityDataTypes.WIDTH, (float) (aabb.maxX() - aabb.minX()));
-//        metadata.setFloat(EntityDataTypes.HEIGHT, (float) (aabb.maxY() - aabb.minY()));
         updateHitBoxAndCollisionBoxMetadata();
         metadata.setFlag(EntityFlag.HAS_GRAVITY, true);
         metadata.setFlag(EntityFlag.HAS_COLLISION, true);
@@ -78,7 +94,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     private void updateHitBoxAndCollisionBoxMetadata() {
         metadata.setNBT(EntityDataTypes.HITBOX, buildAABBTag());
         metadata.setVector3f(EntityDataTypes.COLLISION_BOX,
-                Vector3f.from(
+                org.cloudburstmc.math.vector.Vector3f.from(
                         aabb.maxX() - aabb.minX(),
                         aabb.maxY() - aabb.minY(),
                         aabb.maxZ() - aabb.minZ())
@@ -120,6 +136,26 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return metadata;
     }
 
+    protected void sendEntityData(EntityDataType<?>... dataTypes) {
+        var pk = new SetEntityDataPacket();
+        pk.setRuntimeEntityId(uniqueId);
+        for (EntityDataType<?> type : dataTypes) {
+            pk.getMetadata().put(type, metadata.getEntityDataMap().get(type));
+        }
+        pk.setTick(location.world().getServer().getTicks());
+        sendPacketToViewers(pk);
+    }
+
+    protected void sendEntityFlags(EntityFlag... flags) {
+        var pk = new SetEntityDataPacket();
+        pk.setRuntimeEntityId(uniqueId);
+        for (EntityFlag flag : flags) {
+            pk.getMetadata().setFlag(flag, metadata.getFlag(flag));
+        }
+        pk.setTick(location.world().getServer().getTicks());
+        sendPacketToViewers(pk);
+    }
+
     @Override
     @Impl
     public AABBdc getAABB() {
@@ -130,7 +166,101 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Impl
     public void setAABB(AABBd aabb) {
         this.aabb = aabb;
+        updateHitBoxAndCollisionBoxMetadata();
+        sendEntityData(EntityDataTypes.HITBOX, EntityDataTypes.COLLISION_BOX);
     }
+
+    @Override
+    @Impl
+    public boolean hasCollision() {
+        return hasCollision;
+    }
+
+    @Override
+    @Impl
+    public void setHasCollision(boolean hasCollision) {
+        this.hasCollision = hasCollision;
+        metadata.setFlag(EntityFlag.HAS_COLLISION, hasCollision);
+        sendEntityFlags(EntityFlag.HAS_COLLISION);
+    }
+
+    @Override
+    @Impl
+    public @UnmodifiableView Map<Long, Client> getViewers() {
+        return Collections.unmodifiableMap(viewers);
+    }
+
+    @Override
+    @Impl
+    public Vector3dc getSpeed() {
+        return speed;
+    }
+
+    @Override
+    public void setSpeed(Vector3dc speed) {
+        this.speed = new Vector3d(speed);
+    }
+
+    @Override
+    @Impl
+    public Vector3dc getMotion() {
+        return motion;
+    }
+
+    @Override
+    public void setMotion(Vector3dc motion) {
+        this.motion = new Vector3d(motion);
+    }
+
+    @Override
+    @Impl
+    public void spawnTo(Client client) {
+        var pk = createSpawnPacket();
+        client.sendPacket(pk);
+        viewers.put(client.getPlayerEntity().getUniqueId(), client);
+    }
+
+    @Override
+    @Impl
+    public void despawnFrom(Client client) {
+        var pk = new RemoveEntityPacket();
+        pk.setUniqueEntityId(uniqueId);
+        client.sendPacket(pk);
+        viewers.remove(client.getPlayerEntity().getUniqueId());
+    }
+
+    @Override
+    @Impl
+    public void despawnFromAll() {
+        viewers.values().forEach(this::despawnFrom);
+    }
+
+    @Override
+    @Impl
+    public BedrockPacket createSpawnPacket() {
+        var addEntityPacket = new AddEntityPacket();
+        addEntityPacket.setRuntimeEntityId(uniqueId);
+        addEntityPacket.setUniqueEntityId(uniqueId);
+        addEntityPacket.setIdentifier(entityType.getIdentifier().toString());
+        addEntityPacket.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
+        addEntityPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
+        addEntityPacket.setRotation(Vector2f.from(location.pitch(), location.yaw()));
+        addEntityPacket.getMetadata().putAll(metadata.getEntityDataMap());
+        return addEntityPacket;
+    }
+
+    @Override
+    @Impl
+    public void sendPacketToViewers(BedrockPacket packet) {
+        viewers.values().forEach(client -> client.sendPacket(packet));
+    }
+
+    @Override
+    @Impl
+    public void sendPacketToViewersImmediately(BedrockPacket packet) {
+        viewers.values().forEach(client -> client.sendPacketImmediately(packet));
+    }
+
 
     @Override
     public Identifier getIdentifier() {
