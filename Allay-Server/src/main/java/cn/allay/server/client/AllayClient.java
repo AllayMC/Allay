@@ -482,22 +482,6 @@ public class AllayClient implements Client {
         }
 
         @Override
-        public PacketSignal handle(MovePlayerPacket packet) {
-            var pos = packet.getPosition();
-            var rot = packet.getRotation();
-            playerEntity.setLocation(new Location3d(
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ(),
-                    rot.getX(),
-                    rot.getY(),
-                    rot.getZ(),
-                    getLocation().world()
-            ));
-            return PacketSignal.HANDLED;
-        }
-
-        @Override
         public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
             //TODO: PlayerJoinEvent
             return PacketSignal.HANDLED;
@@ -544,6 +528,28 @@ public class AllayClient implements Client {
         @Override
         public PacketSignal handle(SubChunkRequestPacket packet) {
             sendPacket(subChunkRequestHandler.apply(packet));
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(MovePlayerPacket packet) {
+            var pos = packet.getPosition();
+            var rot = packet.getRotation();
+            playerEntity.setLocation(new Location3d(
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ(),
+                    rot.getX(),
+                    rot.getY(),
+                    rot.getZ(),
+                    getLocation().world()
+            ));
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(PlayerAuthInputPacket packet) {
+            //TODO
             return PacketSignal.HANDLED;
         }
     }
