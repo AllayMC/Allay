@@ -446,7 +446,6 @@ public interface VanillaEntityTypes {
           .builder(EntityPlayer.class)
           .vanillaEntity(VanillaEntityId.PLAYER)
           .addBasicComponents()
-          .setAABBUpdater(e -> new AABBd(-0.3, 0, -0.3, 0.3, 1.8, 0.3))
           .build();
 
   EntityType<EntityPolarBear> POLAR_BEAR_TYPE = EntityTypeBuilder

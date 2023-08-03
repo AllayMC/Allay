@@ -32,6 +32,7 @@ import org.joml.primitives.AABBdc;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/5/26
@@ -50,14 +51,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected AABBdc aabb;
     @Manager
     protected ComponentManager<T> manager;
+    protected Function<T, AABBdc> aabbGetter;
     protected boolean hasCollision = true;
     protected Map<Long, Client> viewers = new Long2ObjectOpenHashMap<>();
     protected Vector3d speed = new Vector3d();
     protected Vector3d motion = new Vector3d();
 
-    public EntityBaseComponentImpl(EntityInitInfo<T> info) {
+    public EntityBaseComponentImpl(EntityInitInfo<T> info, Function<T, AABBdc> aabbGetter) {
         this.entityType = info.getEntityType();
-        this.aabb = entityType.updateAABB(manager.getComponentedObject());
+        this.aabbGetter = aabbGetter;
+        this.aabb = aabbGetter.apply(manager.getComponentedObject());
         if (info.location().world() == null)
             throw new IllegalArgumentException("World cannot be null!");
         this.location = info.location();
