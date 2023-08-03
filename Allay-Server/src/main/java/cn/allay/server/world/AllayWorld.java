@@ -1,5 +1,6 @@
 package cn.allay.server.world;
 
+import cn.allay.api.entity.Entity;
 import cn.allay.api.math.Position3i;
 import cn.allay.api.math.Position3ic;
 import cn.allay.api.player.Client;
@@ -21,7 +22,9 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3ic;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -51,7 +54,7 @@ public class AllayWorld implements World {
     EntityService entityService;
     @Getter
     private Thread worldMainThread;
-    private final Map<Long, Client> clients = new ConcurrentHashMap<>();
+    private final Set<Client> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private AllayWorld(Server server,
                        WorldStorage worldStorage,
@@ -137,19 +140,34 @@ public class AllayWorld implements World {
     }
 
     @Override
+    public void addEntity(Entity entity) {
+        entityService.addEntity(entity);
+        clients.forEach(entity::spawnTo);
+    }
+
+    @Override
+    public void removeEntity(Entity entity) {
+        entityService.removeEntity(entity);
+        entity.despawnFromAll();
+    }
+
+    @Override
     public void addClient(Client client) {
-        var playerEntity = client.getPlayerEntity();
-        clients.put(playerEntity.getUniqueId(), client);
-        addEntity(playerEntity);
+        clients.add(client);
+        addEntity(client.getPlayerEntity());
         chunkService.addChunkLoader(client);
     }
 
     @Override
     public void removeClient(Client client) {
-        var playerEntity = client.getPlayerEntity();
-        clients.remove(playerEntity.getUniqueId());
-        removeEntity(playerEntity);
+        clients.remove(client);
+        removeEntity(client.getPlayerEntity());
         chunkService.removeChunkLoader(client);
+    }
+
+    @Override
+    public Collection<Client> getClients() {
+        return Collections.unmodifiableCollection(clients);
     }
 
     @Override

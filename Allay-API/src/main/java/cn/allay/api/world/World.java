@@ -11,6 +11,9 @@ import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Collection;
 
 /**
  * Describe a world
@@ -53,13 +56,9 @@ public interface World extends ChunkAccessible {
 
     EntityService getEntityService();
 
-    default void addEntity(Entity entity) {
-        getEntityService().addEntity(entity);
-    }
+    void addEntity(Entity entity);
 
-    default void removeEntity(Entity entity) {
-        getEntityService().removeEntity(entity);
-    }
+    void removeEntity(Entity entity);
 
     @Nullable
     default Entity removeEntity(long entityUniqueId) {
@@ -69,6 +68,9 @@ public interface World extends ChunkAccessible {
     void addClient(Client client);
 
     void removeClient(Client client);
+
+    @UnmodifiableView
+    Collection<Client> getClients();
 
     @Override
     default int maxChunkX() {
