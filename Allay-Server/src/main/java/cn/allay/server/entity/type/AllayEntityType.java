@@ -7,6 +7,7 @@ import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponentImpl;
+import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
 import cn.allay.api.entity.component.impl.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
@@ -93,7 +94,8 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         protected Class<T> interfaceClass;
         protected List<ComponentProvider<? extends EntityComponentImpl>> componentProviders = new ArrayList<>();
         protected Identifier identifier;
-        Function<T, AABBdc> aabbUpdater;
+        protected ComponentProvider<? extends EntityComponentImpl> baseComponentProvider = ComponentProvider.of(info -> new EntityBaseComponentImpl<>((EntityInitInfo<T>) info), EntityBaseComponentImpl.class);
+        protected Function<T, AABBdc> aabbUpdater;
 
         public Builder(Class<T> interfaceClass) {
             this.interfaceClass = interfaceClass;
@@ -139,7 +141,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
         @Override
         public EntityTypeBuilder<T> addBasicComponents() {
-            addComponent(ComponentProvider.of(info -> new EntityBaseComponentImpl<>((EntityInitInfo<T>) info), EntityBaseComponentImpl.class));
+            addComponent(baseComponentProvider);
             Arrays.stream(interfaceClass.getDeclaredFields())
                     .filter(field -> isStatic(field.getModifiers()))
                     .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
@@ -154,6 +156,12 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
                             throw new EntityTypeBuildException("Field " + field.getName() + "in class" + interfaceClass + " is not a ComponentProvider<? extends EntityComponentImpl>!", e);
                         }
                     });
+            return this;
+        }
+
+        @Override
+        public <U extends EntityComponentImpl & EntityBaseComponent> EntityTypeBuilder<T> setBaseComponentProvider(ComponentProvider<U> baseComponentProvider) {
+            this.baseComponentProvider = baseComponentProvider;
             return this;
         }
 

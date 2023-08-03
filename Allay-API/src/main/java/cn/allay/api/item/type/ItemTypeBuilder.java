@@ -6,6 +6,7 @@ import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponentImpl;
+import cn.allay.api.item.component.impl.base.ItemBaseComponent;
 
 import java.util.List;
 
@@ -38,6 +39,8 @@ public interface ItemTypeBuilder<T extends ItemStack> {
     ItemTypeBuilder<T> addComponent(ComponentProvider<? extends ItemComponentImpl> componentProvider);
 
     ItemTypeBuilder<T> addBasicComponents();
+
+    <U extends Object & ItemComponentImpl & ItemBaseComponent> ItemTypeBuilder<T> setBaseComponentProvider(ComponentProvider<U> baseComponentProvider);
 
     ItemType<T> build();
 

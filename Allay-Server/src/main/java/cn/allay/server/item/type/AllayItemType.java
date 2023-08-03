@@ -10,6 +10,7 @@ import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponentImpl;
 import cn.allay.api.item.component.impl.attribute.ItemAttributeComponentImpl;
 import cn.allay.api.item.component.impl.attribute.VanillaItemAttributeRegistry;
+import cn.allay.api.item.component.impl.base.ItemBaseComponent;
 import cn.allay.api.item.component.impl.base.ItemBaseComponentImpl;
 import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
@@ -87,6 +88,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
     public static class Builder<T extends ItemStack> implements ItemTypeBuilder<T> {
         protected Class<T> interfaceClass;
         protected List<ComponentProvider<? extends ItemComponentImpl>> componentProviders = new ArrayList<>();
+        protected ComponentProvider<? extends ItemComponentImpl> baseComponentProvider = ComponentProvider.of(info -> new ItemBaseComponentImpl<>((ItemStackInitInfo<T>) info), ItemBaseComponentImpl.class);
         protected Identifier identifier;
         protected int runtimeId = Integer.MAX_VALUE;
 
@@ -153,7 +155,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
         @Override
         public ItemTypeBuilder<T> addBasicComponents() {
-            addComponent(ComponentProvider.of(info -> new ItemBaseComponentImpl<>((ItemStackInitInfo<T>) info), ItemBaseComponentImpl.class));
+            addComponent(baseComponentProvider);
             Arrays.stream(interfaceClass.getDeclaredFields())
                     .filter(field -> isStatic(field.getModifiers()))
                     .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
@@ -168,6 +170,12 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
                             throw new ItemTypeBuildException("Field " + field.getName() + "in class" + interfaceClass + " is not a ComponentProvider<? extends ItemTypeBuildException>!", e);
                         }
                     });
+            return this;
+        }
+
+        @Override
+        public <U extends ItemComponentImpl & ItemBaseComponent> ItemTypeBuilder<T> setBaseComponentProvider(ComponentProvider<U> baseComponentProvider) {
+            this.baseComponentProvider = baseComponentProvider;
             return this;
         }
 
