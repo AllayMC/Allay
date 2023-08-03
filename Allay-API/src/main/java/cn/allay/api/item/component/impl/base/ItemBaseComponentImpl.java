@@ -17,13 +17,13 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author daoge_cmd
  */
-public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentImpl {
+public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseComponent, ItemComponentImpl {
 
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
     private static int STACK_NETWORK_ID_COUNTER = 1;
 
-    protected ItemType<? extends ItemStack> itemType;
+    protected ItemType<T> itemType;
     protected int count;
     protected int damage;
     @Nullable
@@ -33,8 +33,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent, ItemComponentIm
     @Nullable
     protected Integer stackNetworkId;
 
-    public ItemBaseComponentImpl(ItemType<? extends ItemStack> itemType, ItemStackInitInfo initInfo) {
-        this.itemType = itemType;
+    public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
+        this.itemType = initInfo.getItemType();
         this.count = initInfo.count();
         this.damage = initInfo.damage();
         this.nbt = initInfo.nbt();

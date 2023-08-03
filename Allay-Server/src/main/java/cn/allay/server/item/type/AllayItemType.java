@@ -44,6 +44,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @Getter
     protected int runtimeId;
 
+    @SneakyThrows
     protected AllayItemType(Class<T> interfaceClass,
                             List<ComponentProvider<? extends ItemComponentImpl>> componentProviders,
                             Identifier identifier,
@@ -52,10 +53,6 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
         this.componentProviders = componentProviders;
         this.identifier = identifier;
         this.runtimeId = runtimeId;
-    }
-
-    @SneakyThrows
-    protected AllayItemType<T> complete() {
         try {
             ArrayList<ComponentProvider<? extends ComponentImpl>> components = new ArrayList<>(componentProviders);
             injectedClass = new AllayComponentInjector<T>()
@@ -68,7 +65,6 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
         //Cache constructor
         constructor = injectedClass.getConstructor(ComponentInitInfo.class);
-        return this;
     }
 
     public static <T extends ItemStack> ItemTypeBuilder<T> builder(Class<T> interfaceClass) {
@@ -82,7 +78,8 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
     @SneakyThrows
     @Override
-    public T createItemStack(ItemStackInitInfo info) {
+    public T createItemStack(ItemStackInitInfo<T> info) {
+        info.setItemType(this);
         return constructor.newInstance(info);
     }
 
@@ -156,6 +153,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
         @Override
         public ItemTypeBuilder<T> addBasicComponents() {
+            addComponent(ComponentProvider.of(info -> new ItemBaseComponentImpl<>((ItemStackInitInfo<T>) info), ItemBaseComponentImpl.class));
             Arrays.stream(interfaceClass.getDeclaredFields())
                     .filter(field -> isStatic(field.getModifiers()))
                     .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
@@ -180,9 +178,8 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
             if (runtimeId == Integer.MAX_VALUE)
                 throw new ItemTypeBuildException("runtimeId unassigned!");
             var type = new AllayItemType<>(interfaceClass, componentProviders, identifier, runtimeId);
-            componentProviders.add(ComponentProvider.of(info -> new ItemBaseComponentImpl(type, (ItemStackInitInfo) info), ItemBaseComponentImpl.class));
             ItemTypeRegistry.getRegistry().register(identifier, type);
-            return type.complete();
+            return type;
         }
     }
 }

@@ -9,6 +9,7 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.identifier.Identifier;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/3/19
@@ -44,6 +45,8 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
     BlockTypeBuilder<T> addBasicComponents();
 
     BlockTypeBuilder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent);
+
+    BlockTypeBuilder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockComponentImpl> blockBaseComponentSupplier);
 
     BlockType<T> build();
 
