@@ -10,7 +10,7 @@ import cn.allay.api.world.WorldData;
 import cn.allay.api.world.WorldPool;
 import cn.allay.api.world.WorldType;
 import cn.allay.server.network.AllayNetworkServer;
-import cn.allay.server.player.AllayClient;
+import cn.allay.server.client.AllayClient;
 import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.utils.GameLoop;
 import cn.allay.server.world.AllayWorld;
