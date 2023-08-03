@@ -1,6 +1,8 @@
 package cn.allay.api.entity.metadata;
 
 import lombok.Getter;
+import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -101,4 +103,27 @@ public class Metadata {
         return this.entityDataMap.getOrCreateFlags().contains(entityFlag);
     }
 
+    public Metadata setNBT(EntityDataType<NbtMap> entityData, NbtMap value) {
+        NbtMap oldValue = this.getNBT(entityData);
+        if (!oldValue.equals(value)) {
+            this.entityDataMap.put(entityData, value);
+        }
+        return this;
+    }
+
+    public NbtMap getNBT(EntityDataType<NbtMap> entityData) {
+        return this.entityDataMap.containsKey(entityData) ? this.entityDataMap.get(entityData) : NbtMap.EMPTY;
+    }
+
+    public Vector3f getVector3f(EntityDataType<Vector3f> entityData) {
+        return this.entityDataMap.containsKey(entityData) ? this.entityDataMap.get(entityData) : Vector3f.ZERO;
+    }
+
+    public Metadata setVector3f(EntityDataType<Vector3f> entityData, Vector3f value) {
+        Vector3f oldValue = this.getVector3f(entityData);
+        if (!oldValue.equals(value)) {
+            this.entityDataMap.put(entityData, value);
+        }
+        return this;
+    }
 }

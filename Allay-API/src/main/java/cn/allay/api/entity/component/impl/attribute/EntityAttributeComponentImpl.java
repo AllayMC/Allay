@@ -43,7 +43,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent, E
     @Override
     @Impl
     public void addAttribute(AttributeType attributeType) {
-        this.attributes.put(attributeType, attributeType.getAttribute());
+        this.attributes.put(attributeType, attributeType.newAttributeInstance());
     }
 
     @Override

@@ -6,8 +6,10 @@ import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponentImpl;
 import cn.allay.api.identifier.Identifier;
+import org.joml.primitives.AABBdc;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/5/20
@@ -34,6 +36,8 @@ public interface EntityTypeBuilder<T extends Entity> {
     EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponentImpl> componentProvider);
 
     EntityTypeBuilder<T> addBasicComponents();
+
+    EntityTypeBuilder<T> setAABBUpdater(Function<T, AABBdc> aabbUpdater);
 
     EntityType<T> build();
 

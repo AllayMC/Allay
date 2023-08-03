@@ -5,6 +5,8 @@ import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.math.Location3dc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 /**
  * Allay Project 2023/5/26
@@ -26,4 +28,10 @@ public interface EntityBaseComponent {
 
     @Inject
     Metadata getMetadata();
+
+    @Inject
+    AABBdc getAABB();
+
+    @Inject
+    void setAABB(AABBd aabb);
 }
