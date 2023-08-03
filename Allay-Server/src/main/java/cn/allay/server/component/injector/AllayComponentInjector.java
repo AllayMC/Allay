@@ -67,10 +67,23 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     @SneakyThrows
     @Override
     public Class<T> inject(boolean cache) {
-        if (injectedClass == null)
+        if (injectedClass == null) {
+            checkComponentDuplicate();
             injectedClass = buildClass(cache);
+        }
         injectInitializer();
         return injectedClass;
+    }
+
+    protected void checkComponentDuplicate() {
+        Set<Identifier> identifiers = new HashSet<>();
+        for (var provider : componentProviders) {
+            var identifier = provider.findComponentIdentifier();
+            if (identifiers.contains(identifier))
+                throw new ComponentInjectException("Duplicate component " + identifier);
+            else
+                identifiers.add(identifier);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -239,9 +252,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
 
         public void init(T instance, ComponentInitInfo initInfo) {
-            //TODO: 有一些操作可以在构建类的时候完成，这边有待优化
             List<? extends ComponentImpl> components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
-            checkComponentValid(components);
             injectComponentInstances(instance, components);
             var componentManager = new AllayComponentManager<>(instance);
             injectComponentManager(componentManager, components);
@@ -297,17 +308,6 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                 }
             } catch (IllegalAccessException | NoSuchFieldException e) {
                 throw new RuntimeException(e);
-            }
-        }
-
-        protected void checkComponentValid(List<? extends ComponentImpl> components) {
-            Set<Identifier> identifiers = new HashSet<>();
-            for (var component : components) {
-                var identifier = component.getIdentifier();
-                if (identifiers.contains(identifier))
-                    throw new ComponentInjectException("Duplicate component " + component.getIdentifier());
-                else
-                    identifiers.add(identifier);
             }
         }
 

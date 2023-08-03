@@ -1,10 +1,17 @@
 package cn.allay.api.component.interfaces;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.identifier.Identifier;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Modifier;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static java.lang.reflect.Modifier.isStatic;
 
 /**
  * Allay Project 2023/4/15
@@ -27,6 +34,20 @@ public interface ComponentProvider<T extends ComponentImpl> {
     T provide(ComponentInitInfo info);
 
     Class<T> getComponentClass();
+
+    @SneakyThrows
+    @Nullable
+    default Identifier findComponentIdentifier() {
+        var clazz = getComponentClass();
+        for (var field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(ComponentIdentifier.class) &&
+                Identifier.class == field.getType() &&
+                isStatic(field.getModifiers())) {
+                return (Identifier) field.get(null);
+            }
+        }
+        return null;
+    }
 
     @AllArgsConstructor
     class SimpleComponentProvider<T extends ComponentImpl> implements ComponentProvider<T> {
