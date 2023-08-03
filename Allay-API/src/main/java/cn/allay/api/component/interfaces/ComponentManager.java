@@ -5,6 +5,8 @@ package cn.allay.api.component.interfaces;
  *
  * @author daoge_cmd
  */
-public interface ComponentManager {
-    <T extends ComponentEvent> T callEvent(T event);
+public interface ComponentManager<T> {
+    <E extends ComponentEvent> E callEvent(E event);
+
+    T getComponentedObject();
 }

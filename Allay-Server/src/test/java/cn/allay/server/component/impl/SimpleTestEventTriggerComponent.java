@@ -17,7 +17,7 @@ public class SimpleTestEventTriggerComponent implements TestEventTriggerComponen
 
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:test_event_trigger_component");
     @Manager
-    protected ComponentManager manager;
+    protected ComponentManager<?> manager;
 
     @Override
     public Identifier getIdentifier() {

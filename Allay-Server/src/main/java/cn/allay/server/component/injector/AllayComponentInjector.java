@@ -126,7 +126,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             initializer = injectedClass.getDeclaredField(AllayComponentInjector.INITIALIZER_FIELD_NAME);
             initializer.setAccessible(true);
             //inject initializer instance
-            initializer.set(injectedClass, new AllayComponentInjector.Initializer(componentProviders));
+            initializer.set(injectedClass, new AllayComponentInjector.Initializer<T>(componentProviders));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         } finally {
@@ -171,17 +171,27 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         return bb;
     }
 
-    protected static class AllayComponentManager implements ComponentManager {
+    protected static class AllayComponentManager<T> implements ComponentManager<T> {
 
         Map<Class<? extends ComponentEvent>, List<Listener>> listenerMap = new ConcurrentHashMap<>();
+        T componentedObject;
+
+        public AllayComponentManager(T componentedObject) {
+            this.componentedObject = componentedObject;
+        }
 
         @Override
-        public <T extends ComponentEvent> T callEvent(T event) {
+        public <E extends ComponentEvent> E callEvent(E event) {
             if (!listenerMap.containsKey(event.getClass()))
                 return event;
             for (var listener : listenerMap.get(event.getClass()))
                 listener.access(event);
             return event;
+        }
+
+        @Override
+        public T getComponentedObject() {
+            return componentedObject;
         }
 
         private void registerListener(Class<? extends ComponentEvent> eventClass, Listener listener) {
@@ -212,7 +222,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
-    public static class Initializer {
+    public static class Initializer<T> {
 
         private final List<ComponentProvider<? extends ComponentImpl>> componentProviders;
         private final Map<ComponentProvider<? extends ComponentImpl>, String> componentFieldNameMapping;
@@ -228,12 +238,12 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             this.componentFieldNameMapping = componentFieldNameMapping;
         }
 
-        public void init(Object instance, ComponentInitInfo initInfo) {
+        public void init(T instance, ComponentInitInfo initInfo) {
             //TODO: 有一些操作可以在构建类的时候完成，这边有待优化
             List<? extends ComponentImpl> components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
             checkComponentValid(components);
             injectComponentInstances(instance, components);
-            var componentManager = new AllayComponentManager();
+            var componentManager = new AllayComponentManager<>(instance);
             injectComponentManager(componentManager, components);
         }
 
