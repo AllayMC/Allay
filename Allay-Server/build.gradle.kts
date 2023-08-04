@@ -28,8 +28,6 @@ tasks.processResources {
     from("${rootProject.projectDir}/Data")
     // exclude unpacked folder and block palette.nbt
     exclude("**/unpacked/**")
-    //todo Confirm that the state hash is valid and remove it
-    //exclude("**/block_palette.nbt")
 }
 
 //disable ,please use `java -jar` to start directly

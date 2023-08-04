@@ -64,6 +64,35 @@ public class AllayNetworkServer implements NetworkServer {
         return CODEC;
     }
 
+    @Override
+    public void updatePong() {
+        this.channel.config().setOption(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf());
+    }
+
+    @Override
+    public void setMotd(String motd, boolean update) {
+        pong.motd(motd);
+        if (update) updatePong();
+    }
+
+    @Override
+    public void setSubMotd(String subMotd, boolean update) {
+        pong.subMotd(subMotd);
+        if (update) updatePong();
+    }
+
+    @Override
+    public void setPlayerCount(int count, boolean update) {
+        pong.playerCount(count);
+        if (update) updatePong();
+    }
+
+    @Override
+    public void setMaxPlayerCount(int maxPlayerCount, boolean update) {
+        pong.maximumPlayerCount(maxPlayerCount);
+        if (update) updatePong();
+    }
+
     protected BedrockPong initPong(ServerSettings settings) {
         return new BedrockPong()
                 .edition("MCPE")

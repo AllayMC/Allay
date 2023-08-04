@@ -165,11 +165,13 @@ public final class AllayServer implements Server {
     @Override
     public void onLoginFinish(Client client) {
         clients.put(client.getName(), client);
+        networkServer.setPlayerCount(clients.size());
     }
 
     @Override
     public void onClientDisconnect(Client client) {
         clients.remove(client.getName());
+        networkServer.setPlayerCount(clients.size());
     }
 
     @Override
