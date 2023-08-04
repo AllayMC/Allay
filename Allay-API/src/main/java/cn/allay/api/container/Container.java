@@ -20,7 +20,7 @@ public interface Container {
 
     ItemStack AIR_STACK = VanillaItemTypes.AIR_TYPE.createItemStack(new ItemStackInitInfo.Simple(0, 0, null, null, 0, false));
 
-    FullContainerType getContainerType();
+    FullContainerType<?> getContainerType();
 
     ContainerSlotType getSlotType(int slot);
 

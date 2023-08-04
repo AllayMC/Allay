@@ -41,7 +41,7 @@ public interface EntityContainerViewerComponent extends ContainerViewer {
 
     @Override
     @Inject
-    @Nullable Container getOpenedContainer(FullContainerType type);
+    @Nullable <T extends Container> T getOpenedContainer(FullContainerType<T> type);
 
     @Override
     @Inject
@@ -53,5 +53,5 @@ public interface EntityContainerViewerComponent extends ContainerViewer {
 
     @Override
     @Inject
-    @UnmodifiableView BiMap<FullContainerType, Container> getType2ContainerBiMap();
+    @UnmodifiableView BiMap<FullContainerType<?>, Container> getType2ContainerBiMap();
 }
