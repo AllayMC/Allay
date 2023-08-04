@@ -5,10 +5,13 @@ import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.identifier.Identifier;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -36,9 +39,28 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
 
     BlockTypeBuilder<T> setProperties(List<BlockPropertyType<?>> properties);
 
-    BlockTypeBuilder<T> setComponents(List<BlockComponentImpl> components);
+    default BlockTypeBuilder<T> setComponents(List<BlockComponentImpl> components) {
+        return setComponents(listComponentToMap(components));
+    }
 
-    BlockTypeBuilder<T> addComponents(List<BlockComponentImpl> components);
+    BlockTypeBuilder<T> setComponents(Map<Identifier, BlockComponentImpl> components);
+
+    default BlockTypeBuilder<T> addComponents(List<BlockComponentImpl> components) {
+        return addComponents(listComponentToMap(components));
+    }
+
+    BlockTypeBuilder<T> addComponents(Map<Identifier, BlockComponentImpl> components);
+
+    private Map<Identifier, BlockComponentImpl> listComponentToMap(List<BlockComponentImpl> components) {
+        var map = new HashMap<Identifier, BlockComponentImpl>();
+        components.forEach(component -> {
+            var id = ComponentProvider.findComponentIdentifier(component.getClass());
+            if (map.containsKey(id))
+                throw new IllegalArgumentException("Duplicate component: " + id);
+            map.put(id, component);
+        });
+        return map;
+    }
 
     BlockTypeBuilder<T> addComponent(BlockComponentImpl component);
 

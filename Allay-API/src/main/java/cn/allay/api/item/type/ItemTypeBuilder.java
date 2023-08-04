@@ -9,6 +9,9 @@ import cn.allay.api.item.component.ItemComponentImpl;
 import cn.allay.api.item.component.impl.base.ItemBaseComponent;
 
 import java.util.List;
+import java.util.Map;
+
+import static cn.allay.api.component.interfaces.ComponentProvider.toMap;
 
 /**
  * Allay Project 2023/5/19
@@ -32,15 +35,21 @@ public interface ItemTypeBuilder<T extends ItemStack> {
 
     ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId, boolean initVanillaItemAttributeComponent);
 
-    ItemTypeBuilder<T> setComponents(List<ComponentProvider<? extends ItemComponentImpl>> componentProviders);
+    ItemTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends ItemComponentImpl>> componentProviders);
 
-    ItemTypeBuilder<T> addComponents(List<ComponentProvider<? extends ItemComponentImpl>> componentProviders);
+    default ItemTypeBuilder<T> setComponents(List<ComponentProvider<? extends ItemComponentImpl>> componentProviders) {
+        return setComponents(toMap(componentProviders));
+    }
+
+    ItemTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends ItemComponentImpl>> componentProviders);
+
+    default ItemTypeBuilder<T> addComponents(List<ComponentProvider<? extends ItemComponentImpl>> componentProviders) {
+        return addComponents(toMap(componentProviders));
+    }
 
     ItemTypeBuilder<T> addComponent(ComponentProvider<? extends ItemComponentImpl> componentProvider);
 
     ItemTypeBuilder<T> addBasicComponents();
-
-    <U extends Object & ItemComponentImpl & ItemBaseComponent> ItemTypeBuilder<T> setBaseComponentProvider(ComponentProvider<U> baseComponentProvider);
 
     ItemType<T> build();
 

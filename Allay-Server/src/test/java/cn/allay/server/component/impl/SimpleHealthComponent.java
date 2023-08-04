@@ -1,5 +1,6 @@
 package cn.allay.server.component.impl;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.ComponentImpl;
 import cn.allay.api.identifier.Identifier;
@@ -12,7 +13,8 @@ import cn.allay.server.component.interfaces.HealthComponent;
  */
 public class SimpleHealthComponent implements HealthComponent, ComponentImpl {
 
-    private static final Identifier IDENTIFIER = new Identifier("minecraft:health_component");
+    @ComponentIdentifier
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:health_component");
 
     protected final int maxHealth;
     protected int health;
@@ -48,10 +50,5 @@ public class SimpleHealthComponent implements HealthComponent, ComponentImpl {
     @Override
     public boolean isDead() {
         return health <= 0;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
     }
 }

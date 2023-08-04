@@ -1,6 +1,7 @@
 package cn.allay.api.component.interfaces;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.entity.component.EntityComponentImpl;
 import cn.allay.api.identifier.Identifier;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,9 @@ import lombok.SneakyThrows;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -31,6 +35,17 @@ public interface ComponentProvider<T extends ComponentImpl> {
         return of((info) -> singleton, (Class<T>) singleton.getClass());
     }
 
+    static <P extends ComponentImpl> Map<Identifier, ComponentProvider<? extends P>> toMap(List<ComponentProvider<? extends P>> componentProviders) {
+        var map = new HashMap<Identifier, ComponentProvider<? extends P>>();
+        componentProviders.forEach(componentProvider -> {
+            var id = componentProvider.findComponentIdentifier();
+            if (map.containsKey(id))
+                throw new IllegalArgumentException("Duplicate component: " + id);
+            map.put(id, componentProvider);
+        });
+        return map;
+    }
+
     T provide(ComponentInitInfo info);
 
     Class<T> getComponentClass();
@@ -38,12 +53,22 @@ public interface ComponentProvider<T extends ComponentImpl> {
     @SneakyThrows
     @Nullable
     default Identifier findComponentIdentifier() {
-        var clazz = getComponentClass();
+        return findComponentIdentifier(getComponentClass());
+    }
+
+    @SneakyThrows
+    @Nullable
+    static Identifier findComponentIdentifier(Class<? extends ComponentImpl> clazz) {
         for (var field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(ComponentIdentifier.class) &&
                 Identifier.class == field.getType() &&
                 isStatic(field.getModifiers())) {
-                return (Identifier) field.get(null);
+                try {
+                    field.setAccessible(true);
+                    return (Identifier) field.get(null);
+                } finally {
+                    field.setAccessible(false);
+                }
             }
         }
         return null;

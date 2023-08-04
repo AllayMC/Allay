@@ -5,12 +5,12 @@ import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponentImpl;
-import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
 import cn.allay.api.identifier.Identifier;
-import org.joml.primitives.AABBdc;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
+
+import static cn.allay.api.component.interfaces.ComponentProvider.toMap;
 
 /**
  * Allay Project 2023/5/20
@@ -30,15 +30,22 @@ public interface EntityTypeBuilder<T extends Entity> {
 
     EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId);
 
-    EntityTypeBuilder<T> setComponents(List<ComponentProvider<? extends EntityComponentImpl>> componentProviders);
+    default EntityTypeBuilder<T> setComponents(List<ComponentProvider<? extends EntityComponentImpl>> componentProviders) {
+        return setComponents(toMap(componentProviders));
+    }
 
-    EntityTypeBuilder<T> addComponents(List<ComponentProvider<? extends EntityComponentImpl>> componentProviders);
+    EntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponentImpl>> componentProviders);
+
+
+    default EntityTypeBuilder<T> addComponents(List<ComponentProvider<? extends EntityComponentImpl>> componentProviders) {
+        return addComponents(toMap(componentProviders));
+    }
+
+    EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponentImpl>> componentProviders);
 
     EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponentImpl> componentProvider);
 
     EntityTypeBuilder<T> addBasicComponents();
-
-    <U extends Object & EntityComponentImpl & EntityBaseComponent> EntityTypeBuilder<T> setBaseComponentProvider(ComponentProvider<U> baseComponentProvider);
 
     EntityType<T> build();
 

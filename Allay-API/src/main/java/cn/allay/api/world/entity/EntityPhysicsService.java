@@ -3,6 +3,7 @@ package cn.allay.api.world.entity;
 import cn.allay.api.entity.Entity;
 import org.joml.primitives.AABBdc;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,7 +24,9 @@ public interface EntityPhysicsService {
     void containEntity(Entity entity);
 
     default List<Entity> getCollidingEntities(Entity entity) {
-        return getCollidingEntities(entity.)
+        if (entity.hasCollision())
+            return getCollidingEntities(entity.getAABB());
+        else return Collections.emptyList();
     }
 
     List<Entity> getCollidingEntities(AABBdc aabb);

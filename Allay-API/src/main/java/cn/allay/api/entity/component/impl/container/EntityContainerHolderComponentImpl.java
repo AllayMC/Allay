@@ -1,5 +1,6 @@
 package cn.allay.api.entity.component.impl.container;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
@@ -19,6 +20,7 @@ import java.util.Map;
  */
 public class EntityContainerHolderComponentImpl implements EntityContainerHolderComponent, EntityComponentImpl {
 
+    @ComponentIdentifier
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_holder_component");
     protected final Map<FullContainerType, Container> containers = new HashMap<>();
 
@@ -50,10 +52,5 @@ public class EntityContainerHolderComponentImpl implements EntityContainerHolder
         if (containers.containsKey(container.getClass()))
             throw new IllegalArgumentException("Inventory " + container.getClass().getSimpleName() + "already exists");
         containers.put(container.getContainerType(), container);
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
     }
 }

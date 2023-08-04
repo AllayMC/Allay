@@ -52,7 +52,10 @@ public final class ComponentClassCacheUtils {
             if (Files.exists(cacheValid) && Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev"))) {
                 return;
             }
-            PathUtils.deleteDirectory(CACHE_ROOT.resolve("cn"));
+            var cn = CACHE_ROOT.resolve("cn");
+            if (Files.exists(cn)) {
+                PathUtils.deleteDirectory(cn);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {

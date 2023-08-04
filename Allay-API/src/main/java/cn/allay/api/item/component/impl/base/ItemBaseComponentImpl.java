@@ -1,6 +1,7 @@
 package cn.allay.api.item.component.impl.base;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.data.VanillaItemTypes;
 import cn.allay.api.identifier.Identifier;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseComponent, ItemComponentImpl {
 
+    @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
     private static int STACK_NETWORK_ID_COUNTER = 1;
@@ -150,10 +152,5 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Impl
     public ItemStack copy() {
         return copy(true);
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
     }
 }

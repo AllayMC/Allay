@@ -1,5 +1,6 @@
 package cn.allay.server.component;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.exception.ComponentInjectException;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
@@ -93,15 +94,11 @@ class ComponentTest {
 
     public static class SimpleNameComponentV2 extends SimpleNameComponent {
 
-        private static final Identifier IDENTIFIER = new Identifier("minecraft:name_component_2");
+        @ComponentIdentifier
+        public static final Identifier IDENTIFIER = new Identifier("minecraft:name_component_2");
 
         public SimpleNameComponentV2(String name) {
             super(name);
-        }
-
-        @Override
-        public Identifier getIdentifier() {
-            return IDENTIFIER;
         }
     }
 }

@@ -256,9 +256,10 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             injectComponentInstances(instance, components);
             var componentManager = new AllayComponentManager<>(instance);
             injectComponentManager(componentManager, components);
+            components.forEach(ComponentImpl::onInitFinish);
         }
 
-        protected void injectComponentManager(AllayComponentManager manager, List<? extends ComponentImpl> components) {
+        protected void injectComponentManager(AllayComponentManager<T> manager, List<? extends ComponentImpl> components) {
             for (var component : components) {
                 for (var field : component.getClass().getDeclaredFields()) {
                     if (field.isAnnotationPresent(Manager.class)) {
@@ -322,7 +323,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                     //Try to find dependencies through inheritance
                     //Try to match by namespace ID
                     if (!requireCompId.isBlank())
-                        dependencies = dependencies.stream().filter(dependency -> dependency.getIdentifier().toString().equals(requireCompId)).toList();
+                        dependencies = dependencies.stream().filter(dependency -> ComponentProvider.findComponentIdentifier(dependency.getClass()).toString().equals(requireCompId)).toList();
                     else
                         dependencies = dependencies.stream().filter(type::isInstance).toList();
                     count = dependencies.size();
