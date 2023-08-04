@@ -301,8 +301,9 @@ public class AllayChunkService implements ChunkService {
                     SubChunkRequestData requestData = new SubChunkRequestData(centerPosition, offset);
                     if (sent != null) {
                         if (sent.contains(requestData)) {
-                            log.warn("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
-                            continue;
+                            log.trace("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
+                            //TODO: 按理说客户端不应该重复请求，不过在实际测试中我们确实注意到原版客户端在某些情况下也会有重复请求的情况，这可能是一个原版漏洞
+//                            continue;
                         } else {
                             sent.add(requestData);
                         }

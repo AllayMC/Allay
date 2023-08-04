@@ -23,16 +23,16 @@ import static java.lang.reflect.Modifier.isStatic;
  * @author daoge_cmd
  */
 public interface ComponentProvider<T extends ComponentImpl> {
-    static <T extends ComponentImpl> ComponentProvider<T> of(Supplier<T> provider, Class<T> componentClass) {
+    static <T extends ComponentImpl> ComponentProvider<T> of(Supplier<T> provider, Class<?> componentClass) {
         return new SimpleComponentProvider<>((info) -> provider.get(), componentClass);
     }
 
-    static <T extends ComponentImpl> ComponentProvider<T> of(Function<ComponentInitInfo, T> provider, Class<T> componentClass) {
+    static <T extends ComponentImpl> ComponentProvider<T> of(Function<ComponentInitInfo, T> provider, Class<?> componentClass) {
         return new SimpleComponentProvider<>(provider, componentClass);
     }
 
     static <T extends ComponentImpl> ComponentProvider<T> ofSingleton(T singleton) {
-        return of((info) -> singleton, (Class<T>) singleton.getClass());
+        return of((info) -> singleton, singleton.getClass());
     }
 
     static <P extends ComponentImpl> Map<Identifier, ComponentProvider<? extends P>> toMap(List<ComponentProvider<? extends P>> componentProviders) {
@@ -48,7 +48,7 @@ public interface ComponentProvider<T extends ComponentImpl> {
 
     T provide(ComponentInitInfo info);
 
-    Class<T> getComponentClass();
+    Class<?> getComponentClass();
 
     @SneakyThrows
     @Nullable
@@ -58,7 +58,7 @@ public interface ComponentProvider<T extends ComponentImpl> {
 
     @SneakyThrows
     @Nullable
-    static Identifier findComponentIdentifier(Class<? extends ComponentImpl> clazz) {
+    static Identifier findComponentIdentifier(Class<?> clazz) {
         for (var field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(ComponentIdentifier.class) &&
                 Identifier.class == field.getType() &&
@@ -78,7 +78,7 @@ public interface ComponentProvider<T extends ComponentImpl> {
     class SimpleComponentProvider<T extends ComponentImpl> implements ComponentProvider<T> {
         private Function<ComponentInitInfo, T> provider;
         @Getter
-        private Class<T> componentClass;
+        private Class<?> componentClass;
 
         @Override
         public T provide(ComponentInitInfo info) {
