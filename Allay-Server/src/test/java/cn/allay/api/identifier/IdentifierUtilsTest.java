@@ -1,4 +1,4 @@
-package cn.allay.server.identifier;
+package cn.allay.api.identifier;
 
 import cn.allay.api.identifier.IdentifierUtils;
 import cn.allay.api.identifier.InvalidIdentifierException;

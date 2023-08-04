@@ -1,4 +1,4 @@
-package cn.allay.server.datastruct.aabbtree;
+package cn.allay.api.datastruct.aabbtree;
 
 import cn.allay.api.datastruct.aabbtree.Boundable;
 import cn.allay.api.datastruct.aabbtree.Identifiable;

@@ -1,4 +1,4 @@
-package cn.allay.server.mapping;
+package cn.allay.api.mapping;
 
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.mapping.JeBlockState;

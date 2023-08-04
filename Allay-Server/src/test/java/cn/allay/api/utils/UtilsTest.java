@@ -1,4 +1,4 @@
-package cn.allay.server.utils;
+package cn.allay.api.utils;
 
 import cn.allay.api.utils.Utils;
 import org.junit.jupiter.api.Test;

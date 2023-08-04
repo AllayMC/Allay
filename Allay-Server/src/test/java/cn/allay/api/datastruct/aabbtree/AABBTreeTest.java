@@ -1,8 +1,5 @@
-package cn.allay.server.datastruct.aabbtree;
+package cn.allay.api.datastruct.aabbtree;
 
-import cn.allay.api.datastruct.aabbtree.AABBTree;
-import cn.allay.api.datastruct.aabbtree.AABBTreeNode;
-import cn.allay.api.datastruct.aabbtree.CollisionPair;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.Rayf;
 import org.junit.jupiter.api.Test;

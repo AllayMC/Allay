@@ -1,7 +1,7 @@
 package cn.allay.server;
 
 import cn.allay.api.datastruct.aabbtree.AABBTree;
-import cn.allay.server.datastruct.aabbtree.TestEntity;
+import cn.allay.api.datastruct.aabbtree.TestEntity;
 import org.joml.primitives.AABBf;
 import org.openjdk.jmh.annotations.*;
 
