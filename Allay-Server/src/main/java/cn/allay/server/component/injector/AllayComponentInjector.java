@@ -99,20 +99,14 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         bb = buildInitializer(bb, componentFieldNameMapping);
         bb = buildConstructor(bb);
         for (var methodShouldBeInject : Arrays.stream(interfaceClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
-            var canDuplicate = methodShouldBeInject.getReturnType().equals(Void.class);
             Implementation.Composable methodDelegation = null;
             for (var provider : componentProviders) {
                 var componentFieldName = componentFieldNameMapping.get(provider);
                 try {
                     Method methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
                     if (!methodImpl.isAnnotationPresent(Impl.class)) continue;
-                    //TODO: 这边得加个测试
                     if (methodDelegation == null) methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
-                    //TODO: 删除对多重调用的支持
-                    else if (canDuplicate)
-                        methodDelegation = methodDelegation.andThen(MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments());
-                    else
-                        throw new ComponentInjectException("Duplicate implementation for non-void-return method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
+                    else throw new ComponentInjectException("Duplicate implementation for method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
                 } catch (NoSuchMethodException ignored) {
                 }
             }
