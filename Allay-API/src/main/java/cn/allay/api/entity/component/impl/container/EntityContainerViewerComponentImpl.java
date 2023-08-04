@@ -40,7 +40,7 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
     protected EntityBaseComponent baseComponent;
 
     protected HashBiMap<Byte, Container> id2ContainerBiMap = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
-    protected HashBiMap<FullContainerType, Container> type2ContainerBiMap = HashBiMap.create(new Object2ObjectOpenHashMap<>());
+    protected HashBiMap<FullContainerType<?>, Container> type2ContainerBiMap = HashBiMap.create(new Object2ObjectOpenHashMap<>());
 
     @Override
     @Impl
@@ -119,8 +119,8 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
     @Override
     @Nullable
     @Impl
-    public Container getOpenedContainer(FullContainerType type) {
-        return id2ContainerBiMap.get(type);
+    public <T extends Container> T getOpenedContainer(FullContainerType<T> type) {
+        return (T) id2ContainerBiMap.get(type);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
 
     @Override
     @Impl
-    public @UnmodifiableView BiMap<FullContainerType, Container> getType2ContainerBiMap() {
+    public @UnmodifiableView BiMap<FullContainerType<?>, Container> getType2ContainerBiMap() {
         return type2ContainerBiMap;
     }
 }

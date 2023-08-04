@@ -25,7 +25,7 @@ public interface ContainerViewer {
     void onSlotChange(Container container, int slot, ItemStack current);
 
     @Nullable
-    Container getOpenedContainer(FullContainerType type);
+    <T extends Container> T getOpenedContainer(FullContainerType<T> type);
 
     @Nullable
     Container getOpenedContainer(byte id);
@@ -34,5 +34,5 @@ public interface ContainerViewer {
     BiMap<Byte, Container> getId2ContainerBiMap();
 
     @UnmodifiableView
-    BiMap<FullContainerType, Container> getType2ContainerBiMap();
+    BiMap<FullContainerType<?>, Container> getType2ContainerBiMap();
 }
