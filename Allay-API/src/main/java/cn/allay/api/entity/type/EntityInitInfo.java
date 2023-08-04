@@ -20,7 +20,7 @@ public interface EntityInitInfo<T extends Entity> extends ComponentInitInfo {
 
     void setEntityType(EntityType<T> entityType);
 
-    final class Simple<T extends Entity> implements EntityInitInfo<T> {
+    class Simple<T extends Entity> implements EntityInitInfo<T> {
         private final Location3d location;
         @Getter
         @Setter

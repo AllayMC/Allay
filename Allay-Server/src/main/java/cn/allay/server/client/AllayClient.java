@@ -8,6 +8,7 @@ import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.attribute.Attribute;
+import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.type.CreativeItemRegistry;
@@ -205,8 +206,16 @@ public class AllayClient extends BaseClient {
     private void initPlayerEntity() {
         //TODO: Load player data
         Position3ic spawnPos = server.getDefaultWorld().getSpawnPosition();
-        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(new EntityInitInfo.Simple(new Location3d(spawnPos.x(), spawnPos.y(), spawnPos.z(), 0, 0, 0, spawnPos.world())));
-        playerEntity.setClient(this);
+        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(
+                new EntityPlayer.EntityPlayerInitInfo.Simple(
+                        this,
+                        new Location3d(
+                                spawnPos.x(), spawnPos.y(), spawnPos.z(),
+                                0, 0, 0,
+                                spawnPos.world()
+                        )
+                )
+        );
     }
 
     private void sendBasicGameData() {

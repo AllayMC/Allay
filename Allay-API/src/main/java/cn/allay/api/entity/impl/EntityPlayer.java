@@ -1,27 +1,23 @@
 package cn.allay.api.entity.impl;
 
-import cn.allay.api.component.annotation.AutoRegister;
-import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Dependency;
-import cn.allay.api.component.annotation.Impl;
+import cn.allay.api.client.Client;
+import cn.allay.api.component.annotation.*;
 import cn.allay.api.component.interfaces.ComponentProvider;
-import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.*;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.impl.attribute.EntityAttributeComponent;
 import cn.allay.api.entity.component.impl.attribute.EntityAttributeComponentImpl;
 import cn.allay.api.entity.component.impl.base.EntityBaseComponentImpl;
+import cn.allay.api.entity.component.impl.base.EntityPlayerBaseComponent;
 import cn.allay.api.entity.component.impl.container.EntityContainerHolderComponent;
 import cn.allay.api.entity.component.impl.container.EntityContainerHolderComponentImpl;
 import cn.allay.api.entity.component.impl.container.EntityContainerViewerComponent;
 import cn.allay.api.entity.component.impl.container.EntityContainerViewerComponentImpl;
-import cn.allay.api.entity.component.impl.playercontroller.EntityPlayerControllerComponent;
-import cn.allay.api.entity.component.impl.playercontroller.EntityPlayerControllerComponentImpl;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.identifier.Identifier;
-import org.cloudburstmc.math.vector.Vector2f;
+import cn.allay.api.math.Location3d;
+import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.packet.AddPlayerPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -38,10 +34,10 @@ import static cn.allay.api.entity.component.impl.attribute.EntityAttributeCompon
  */
 public interface EntityPlayer extends
         Entity,
+        EntityPlayerBaseComponent,
         EntityAttributeComponent,
         EntityContainerHolderComponent,
-        EntityContainerViewerComponent,
-        EntityPlayerControllerComponent {
+        EntityContainerViewerComponent {
     @AutoRegister
     ComponentProvider<EntityBaseComponentImpl<EntityPlayer>> BASE_COMPONENT =
             ComponentProvider.of(
@@ -76,25 +72,34 @@ public interface EntityPlayer extends
                     EntityContainerViewerComponentImpl.class
             );
 
-    @AutoRegister
-    ComponentProvider<EntityPlayerControllerComponentImpl> PLAYER_CONTROLLER_COMPONENT =
-            ComponentProvider.of(
-                    EntityPlayerControllerComponentImpl::new,
-                    EntityPlayerControllerComponentImpl.class
-            );
+    interface EntityPlayerInitInfo extends EntityInitInfo<EntityPlayer> {
 
-    class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> {
+        Client getClient();
+
+        @Getter
+        class Simple extends EntityInitInfo.Simple<EntityPlayer> implements EntityPlayerInitInfo {
+            private final Client client;
+            public Simple(Client client, Location3d location) {
+                super(location);
+                this.client = client;
+            }
+        }
+    }
+
+    class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
 
         @ComponentIdentifier
         public static final Identifier IDENTIFIER = EntityBaseComponentImpl.IDENTIFIER;
 
-        @Dependency
-        protected EntityPlayerControllerComponent playerControllerComponent;
-        @Dependency
-        protected EntityContainerHolderComponent containerHolderComponent;
+        protected Client client;
 
         public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info, Function<EntityPlayer, AABBdc> aabbGetter) {
             super(info, aabbGetter);
+            if (info instanceof EntityPlayerInitInfo playerInitInfo) {
+                client = playerInitInfo.getClient();
+            } else {
+                throw new IllegalArgumentException("EntityPlayerInitInfo is required for EntityPlayer");
+            }
         }
 
         @Override
@@ -103,7 +108,6 @@ public interface EntityPlayer extends
             var addPlayerPacket = new AddPlayerPacket();
             addPlayerPacket.setRuntimeEntityId(uniqueId);
             addPlayerPacket.setUniqueEntityId(uniqueId);
-            var client = playerControllerComponent.getClient();
             addPlayerPacket.setUuid(client.getLoginData().getUuid());
             addPlayerPacket.setUsername(client.getName());
             addPlayerPacket.setPlatformChatId(client.getLoginData().getDeviceInfo().getDeviceId());
@@ -116,5 +120,12 @@ public interface EntityPlayer extends
             addPlayerPacket.setHand(ItemData.AIR);//TODO: itemInHand
             return addPlayerPacket;
         }
+
+        @Override
+        @Impl
+        public Client getClient() {
+            return client;
+        }
     }
 }
+

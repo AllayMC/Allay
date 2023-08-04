@@ -39,7 +39,6 @@ public class EntityContainerHolderComponentImpl implements EntityContainerHolder
         return Collections.unmodifiableMap(containers);
     }
 
-
     @Override
     @Nullable
     @Impl
