@@ -291,7 +291,7 @@ public class AllayChunkService implements ChunkService {
                     Chunk chunk = getChunk(cx, cz);
 
                     if (chunk == null) {
-                        log.warn("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
+                        log.trace("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
                         createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null);
                         continue;
                     }

@@ -223,9 +223,7 @@ public class AllayClient extends BaseClient {
         var startGamePacket = new StartGamePacket();
         startGamePacket.getGamerules().add(GameRule.SHOW_COORDINATES.toNetwork());
         startGamePacket.setUniqueEntityId(playerEntity.getUniqueId());
-        //TODO: WOC?
         startGamePacket.setRuntimeEntityId(playerEntity.getUniqueId());
-        //TODO
         startGamePacket.setPlayerGameType(gameType);
         var loc = playerEntity.getLocation();
         var worldSpawn = spawnWorld.getSpawnPosition();

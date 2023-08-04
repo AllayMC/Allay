@@ -103,6 +103,18 @@ public interface EntityPlayer extends
         }
 
         @Override
+        public void spawnTo(Client client) {
+            if (this.client != client)
+                super.spawnTo(client);
+        }
+
+        @Override
+        public void despawnFrom(Client client) {
+            if (this.client != client)
+                super.despawnFrom(client);
+        }
+
+        @Override
         @Impl
         public BedrockPacket createSpawnPacket() {
             var addPlayerPacket = new AddPlayerPacket();
