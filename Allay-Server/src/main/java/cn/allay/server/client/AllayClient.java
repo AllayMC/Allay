@@ -249,7 +249,8 @@ public class AllayClient extends BaseClient {
         //TODO
         startGamePacket.setItemDefinitions(ItemTypeRegistry.getRegistry().getItemDefinitions());
         //TODO: server-auth-movement
-        startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.CLIENT);
+        startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
+        startGamePacket.setServerAuthoritativeBlockBreaking(true);
         startGamePacket.setCommandsEnabled(true);
         startGamePacket.setMultiplayerGame(true);
         startGamePacket.setBroadcastingToLan(true);
@@ -533,8 +534,34 @@ public class AllayClient extends BaseClient {
 
         @Override
         public PacketSignal handle(PlayerAuthInputPacket packet) {
-            //TODO
+            handleBlockAction(packet.getPlayerActions());
+            handleInputData(packet.getInputData());
             return PacketSignal.HANDLED;
+        }
+
+        protected void handleBlockAction(List<PlayerBlockActionData> blockActions) {
+            if (blockActions.isEmpty()) return;
+            for (var action : blockActions) {
+                //TODO
+            }
+        }
+
+        protected void handleInputData(Set<PlayerAuthInputData> inputData) {
+            for (var input : inputData) {
+                switch (input) {
+                    case START_SPRINTING -> playerEntity.setSprinting(true);
+                    case STOP_SPRINTING -> playerEntity.setSprinting(false);
+                    case START_SNEAKING -> playerEntity.setSneaking(true);
+                    case STOP_SNEAKING -> playerEntity.setSneaking(false);
+                    case START_SWIMMING -> playerEntity.setSwimming(true);
+                    case STOP_SWIMMING -> playerEntity.setSwimming(false);
+                    case START_GLIDING -> playerEntity.setGliding(true);
+                    case STOP_GLIDING -> playerEntity.setGliding(false);
+                    case START_CRAWLING -> playerEntity.setCrawling(true);
+                    case STOP_CRAWLING -> playerEntity.setCrawling(false);
+                    case START_JUMPING -> {/*TODO*/}
+                }
+            }
         }
     }
 }

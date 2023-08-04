@@ -92,6 +92,10 @@ public interface EntityPlayer extends
         public static final Identifier IDENTIFIER = EntityBaseComponentImpl.IDENTIFIER;
 
         protected Client client;
+        protected boolean sprinting;
+        protected boolean sneaking;
+        protected boolean swimming;
+        protected boolean gliding;
 
         public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info, Function<EntityPlayer, AABBdc> aabbGetter) {
             super(info, aabbGetter);
@@ -137,6 +141,54 @@ public interface EntityPlayer extends
         @Impl
         public Client getClient() {
             return client;
+        }
+
+        @Override
+        @Impl
+        public void setSprinting(boolean sprinting) {
+            this.sprinting = sprinting;
+        }
+
+        @Override
+        @Impl
+        public boolean isSprinting() {
+            return sprinting;
+        }
+
+        @Override
+        @Impl
+        public void setSneaking(boolean sneaking) {
+            this.sneaking = sneaking;
+        }
+
+        @Override
+        @Impl
+        public boolean isSneaking() {
+            return sneaking;
+        }
+
+        @Override
+        @Impl
+        public void setSwimming(boolean swimming) {
+            this.swimming = swimming;
+        }
+
+        @Override
+        @Impl
+        public boolean isSwimming() {
+            return swimming;
+        }
+
+        @Override
+        @Impl
+        public void setGliding(boolean gliding) {
+            this.gliding = gliding;
+        }
+
+        @Override
+        @Impl
+        public boolean isGliding() {
+            return gliding;
         }
     }
 }

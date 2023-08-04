@@ -7,4 +7,34 @@ import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
 public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     @Inject
     Client getClient();
+
+    @Inject
+    void setSprinting(boolean sprinting);
+
+    @Inject
+    boolean isSprinting();
+
+    @Inject
+    void setSneaking(boolean sneaking);
+
+    @Inject
+    boolean isSneaking();
+
+    @Inject
+    void setSwimming(boolean swimming);
+
+    @Inject
+    boolean isSwimming();
+
+    @Inject
+    void setGliding(boolean gliding);
+
+    @Inject
+    boolean isGliding();
+
+    @Inject
+    void setCrawling(boolean crawling);
+
+    @Inject
+    boolean isCrawling();
 }
