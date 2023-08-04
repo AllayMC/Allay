@@ -4,6 +4,7 @@ import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerHolder;
 import cn.allay.api.container.FullContainerType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -17,11 +18,12 @@ import java.util.Map;
 public interface EntityContainerHolderComponent extends ContainerHolder {
     @Override
     @Inject
-    @UnmodifiableView Map<FullContainerType, Container> getContainers();
+    @UnmodifiableView
+    Map<FullContainerType<?>, Container> getContainers();
 
     @Override
     @Inject
-    @Nullable Container getContainer(FullContainerType type);
+    <T extends Container> @Nullable T getContainer(FullContainerType<T> type);
 
     @Override
     @Inject

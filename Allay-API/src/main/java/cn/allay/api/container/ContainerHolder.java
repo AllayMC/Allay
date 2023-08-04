@@ -13,13 +13,13 @@ import java.util.Map;
  */
 public interface ContainerHolder {
     @UnmodifiableView
-    Map<FullContainerType, Container> getContainers();
+    Map<FullContainerType<?>, Container> getContainers();
 
     @Nullable
-    Container getContainer(FullContainerType type);
+    <T extends Container> T getContainer(FullContainerType<T> type);
 
     @Nullable
-    default Container getContainerBySlotType(ContainerSlotType slotType) {
+    default <T extends Container> T getContainerBySlotType(ContainerSlotType slotType) {
         return getContainer(FullContainerType.fromSlotType(slotType));
     }
 
