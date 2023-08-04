@@ -20,7 +20,7 @@ public class PlayerOffhandContainer extends BaseContainer {
     }
 
     @Override
-    public FullContainerType getContainerType() {
+    public FullContainerType<PlayerOffhandContainer> getContainerType() {
         return FullContainerType.OFFHAND;
     }
 }

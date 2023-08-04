@@ -30,7 +30,7 @@ public class PlayerCreatedOutputContainer extends BaseContainer {
     }
 
     @Override
-    public FullContainerType getContainerType() {
+    public FullContainerType<PlayerCreatedOutputContainer> getContainerType() {
         return CREATED_OUTPUT;
     }
 

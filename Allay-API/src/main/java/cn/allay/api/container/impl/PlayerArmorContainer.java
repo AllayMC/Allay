@@ -21,7 +21,7 @@ public class PlayerArmorContainer extends BaseContainer {
     }
 
     @Override
-    public FullContainerType getContainerType() {
+    public FullContainerType<PlayerArmorContainer> getContainerType() {
         return FullContainerType.ARMOR;
     }
 }
