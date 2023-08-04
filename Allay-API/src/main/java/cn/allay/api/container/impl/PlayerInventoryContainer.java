@@ -26,7 +26,7 @@ public class PlayerInventoryContainer extends BaseContainer {
     }
 
     @Override
-    public FullContainerType getContainerType() {
+    public FullContainerType<PlayerInventoryContainer> getContainerType() {
         return FullContainerType.PLAYER_INVENTORY;
     }
 }

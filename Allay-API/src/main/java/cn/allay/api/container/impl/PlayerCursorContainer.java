@@ -20,7 +20,7 @@ public class PlayerCursorContainer extends BaseContainer {
     }
 
     @Override
-    public FullContainerType getContainerType() {
+    public FullContainerType<PlayerCursorContainer> getContainerType() {
         return FullContainerType.CURSOR;
     }
 }
