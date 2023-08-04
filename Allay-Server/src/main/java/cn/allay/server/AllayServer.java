@@ -1,9 +1,9 @@
 package cn.allay.server;
 
 import cn.allay.api.network.NetworkServer;
-import cn.allay.api.player.Client;
-import cn.allay.api.player.info.DeviceInfo;
-import cn.allay.api.player.skin.Skin;
+import cn.allay.api.client.Client;
+import cn.allay.api.client.info.DeviceInfo;
+import cn.allay.api.client.skin.Skin;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.api.world.WorldData;

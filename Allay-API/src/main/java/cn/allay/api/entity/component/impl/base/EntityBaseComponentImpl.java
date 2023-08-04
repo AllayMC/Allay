@@ -1,7 +1,6 @@
 package cn.allay.api.entity.component.impl.base;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentManager;
@@ -13,7 +12,7 @@ import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.Location3d;
 import cn.allay.api.math.Location3dc;
-import cn.allay.api.player.Client;
+import cn.allay.api.client.Client;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;

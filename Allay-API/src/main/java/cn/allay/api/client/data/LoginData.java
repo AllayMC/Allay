@@ -1,13 +1,15 @@
-package cn.allay.api.player.data;
+package cn.allay.api.client.data;
 
-import cn.allay.api.player.info.Device;
-import cn.allay.api.player.info.DeviceInfo;
-import cn.allay.api.player.info.UIProfile;
-import cn.allay.api.player.skin.*;
+import cn.allay.api.client.info.Device;
+import cn.allay.api.client.info.DeviceInfo;
+import cn.allay.api.client.info.UIProfile;
+import cn.allay.api.client.skin.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
@@ -26,6 +28,8 @@ import java.util.UUID;
  */
 @ToString
 @Getter
+@Builder
+@AllArgsConstructor
 public class LoginData {
     private static final Gson GSON = new Gson();
     private boolean xboxAuthenticated;

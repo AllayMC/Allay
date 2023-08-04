@@ -1,4 +1,4 @@
-package cn.allay.api.player.skin;
+package cn.allay.api.client.skin;
 
 import java.util.List;
 

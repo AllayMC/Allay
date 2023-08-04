@@ -1,6 +1,6 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.player.Client;
+import cn.allay.api.client.Client;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DestroyAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;

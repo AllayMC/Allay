@@ -1,4 +1,4 @@
-package cn.allay.api.player.skin;
+package cn.allay.api.client.skin;
 
 /**
  * Allay Project 2023/6/23

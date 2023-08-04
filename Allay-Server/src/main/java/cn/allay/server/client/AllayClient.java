@@ -2,12 +2,12 @@ package cn.allay.server.client;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.client.BaseClient;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.attribute.Attribute;
-import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.type.CreativeItemRegistry;
@@ -15,14 +15,13 @@ import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.Location3d;
 import cn.allay.api.math.Location3dc;
 import cn.allay.api.math.Position3ic;
-import cn.allay.api.player.AdventureSettings;
-import cn.allay.api.player.Client;
-import cn.allay.api.player.data.LoginData;
+import cn.allay.api.client.AdventureSettings;
+import cn.allay.api.client.data.LoginData;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.gamerule.GameRule;
-import cn.allay.server.inventory.SimpleContainerActionProcessorHolder;
+import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +40,8 @@ import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,37 +57,15 @@ import java.util.regex.Pattern;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayClient implements Client {
+public class AllayClient extends BaseClient {
 
     private static final int DO_FIRST_SPAWN_CHUNK_THRESHOLD = 36;
     private final BedrockServerSession session;
     @Getter
-    private boolean networkEncryptionEnabled;
-    @Getter
-    private SecretKey encryptionSecretKey;
-    @Getter
-    private final Server server;
-    @Getter
-    private final AdventureSettings adventureSettings;
-    @Getter
-    private LoginData loginData;
-    @Getter
-    private String name = "";
-    @Getter
-    private EntityPlayer playerEntity;
-    @Getter
     private boolean online = false;
-    @Getter
-    private int chunkLoadingRadius;
     @Getter
     @Setter
     private boolean firstSpawned = false;
-    @Getter
-    @Setter
-    private boolean op = true;
-    @Getter
-    @Setter
-    private GameType gameType = GameType.CREATIVE;
     private final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(DO_FIRST_SPAWN_CHUNK_THRESHOLD);
     @Getter
     private final ContainerActionProcessorHolder containerActionProcessorHolder;

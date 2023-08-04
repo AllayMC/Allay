@@ -4,7 +4,7 @@ import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.entity.component.EntityComponentImpl;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.player.Client;
+import cn.allay.api.client.Client;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,6 +23,7 @@ public class EntityPlayerControllerComponentImpl implements EntityPlayerControll
     @Nullable
     @Impl
     public Client getClient() {
+        //TODO: 使用空对象优化这玩意
         return client;
     }
 

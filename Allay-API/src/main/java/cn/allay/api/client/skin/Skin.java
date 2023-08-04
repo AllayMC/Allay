@@ -1,4 +1,4 @@
-package cn.allay.api.player.skin;
+package cn.allay.api.client.skin;
 
 import cn.allay.api.utils.Utils;
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;

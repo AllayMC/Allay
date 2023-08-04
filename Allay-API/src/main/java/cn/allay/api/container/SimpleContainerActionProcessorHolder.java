@@ -1,4 +1,4 @@
-package cn.allay.server.inventory;
+package cn.allay.api.container;
 
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
