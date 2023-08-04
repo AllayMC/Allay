@@ -2,7 +2,7 @@ package cn.allay.api.container.processor;
 
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.item.type.CreativeItemRegistry;
-import cn.allay.api.player.Client;
+import cn.allay.api.client.Client;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;

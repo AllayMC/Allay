@@ -1,4 +1,4 @@
-package cn.allay.api.player.info;
+package cn.allay.api.client.info;
 
 /**
  * Allay Project 2023/6/23

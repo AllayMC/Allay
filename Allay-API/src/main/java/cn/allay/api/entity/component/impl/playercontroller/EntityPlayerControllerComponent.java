@@ -1,7 +1,7 @@
 package cn.allay.api.entity.component.impl.playercontroller;
 
 import cn.allay.api.component.annotation.Inject;
-import cn.allay.api.player.Client;
+import cn.allay.api.client.Client;
 import org.jetbrains.annotations.Nullable;
 
 /**

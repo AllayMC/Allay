@@ -1,6 +1,6 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.player.Client;
+import cn.allay.api.client.Client;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;

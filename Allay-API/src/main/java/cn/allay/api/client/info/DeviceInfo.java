@@ -1,4 +1,4 @@
-package cn.allay.api.player.info;
+package cn.allay.api.client.info;
 
 import lombok.Getter;
 import lombok.ToString;
