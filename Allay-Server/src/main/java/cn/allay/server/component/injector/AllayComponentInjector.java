@@ -33,8 +33,6 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * @author daoge_cmd
  */
 public class AllayComponentInjector<T> implements ComponentInjector<T> {
-    //TODO: remove this
-    protected static final boolean DEBUG = false;
     public static final String INITIALIZER_FIELD_NAME = "initializer";
     protected static final String COMPONENT_LIST_FIELD_NAME = "components";
     protected static final String INIT_METHOD_NAME = "initComponents";
@@ -108,9 +106,11 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                 try {
                     Method methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
                     if (!methodImpl.isAnnotationPresent(Impl.class)) continue;
-                    if (methodDelegation == null) methodDelegation = MethodDelegation.toField(componentFieldName);
+                    //TODO: 这边得加个测试
+                    if (methodDelegation == null) methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
+                    //TODO: 删除对多重调用的支持
                     else if (canDuplicate)
-                        methodDelegation = methodDelegation.andThen(MethodDelegation.toField(componentFieldName));
+                        methodDelegation = methodDelegation.andThen(MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments());
                     else
                         throw new ComponentInjectException("Duplicate implementation for non-void-return method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
                 } catch (NoSuchMethodException ignored) {
