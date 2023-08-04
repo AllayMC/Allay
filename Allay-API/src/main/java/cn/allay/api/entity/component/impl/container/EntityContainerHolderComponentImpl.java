@@ -22,7 +22,7 @@ public class EntityContainerHolderComponentImpl implements EntityContainerHolder
 
     @ComponentIdentifier
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_holder_component");
-    protected final Map<FullContainerType, Container> containers = new HashMap<>();
+    protected final Map<FullContainerType<?>, Container> containers = new HashMap<>();
 
     public EntityContainerHolderComponentImpl() {
     }
@@ -35,21 +35,22 @@ public class EntityContainerHolderComponentImpl implements EntityContainerHolder
 
     @Override
     @Impl
-    public @UnmodifiableView Map<FullContainerType, Container> getContainers() {
+    public @UnmodifiableView Map<FullContainerType<?>, Container> getContainers() {
         return Collections.unmodifiableMap(containers);
     }
+
 
     @Override
     @Nullable
     @Impl
-    public Container getContainer(FullContainerType type) {
-        return containers.get(type);
+    public <T extends Container> T getContainer(FullContainerType<T> type) {
+        return (T) containers.get(type);
     }
 
     @Override
     @Impl
     public void addContainer(Container container) {
-        if (containers.containsKey(container.getClass()))
+        if (containers.containsKey(container.getContainerType()))
             throw new IllegalArgumentException("Inventory " + container.getClass().getSimpleName() + "already exists");
         containers.put(container.getContainerType(), container);
     }
