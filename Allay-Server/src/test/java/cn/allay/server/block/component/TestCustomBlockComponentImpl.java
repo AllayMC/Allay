@@ -1,6 +1,7 @@
 package cn.allay.server.block.component;
 
 import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.identifier.Identifier;
 
 /**
@@ -9,8 +10,7 @@ import cn.allay.api.identifier.Identifier;
  * @author Cool_Loong
  */
 public class TestCustomBlockComponentImpl extends CustomBlockComponentImpl {
-    @Override
-    public Identifier getIdentifier() {
-        return new Identifier("minecraft:test_custom_block_component");
-    }
+
+    @ComponentIdentifier
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:test_custom_block_component");
 }

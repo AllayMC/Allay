@@ -3,6 +3,7 @@ package cn.allay.api.block.component.impl.attribute;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.component.impl.base.BlockBaseComponent;
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
@@ -17,6 +18,7 @@ import java.util.function.Function;
  */
 public class BlockAttributeComponentImpl implements BlockAttributeComponent, BlockComponentImpl {
 
+    @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_attribute_component");
 
     @Dependency
@@ -41,11 +43,6 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
 
     public static BlockAttributeComponentImpl ofMappedBlockStateHash(Map<Integer, BlockAttributes> attributeMap, BlockAttributes defaultAttributes) {
         return new BlockAttributeComponentImpl(state -> attributeMap.getOrDefault(state.blockStateHash(), defaultAttributes));
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
     }
 
     @Override

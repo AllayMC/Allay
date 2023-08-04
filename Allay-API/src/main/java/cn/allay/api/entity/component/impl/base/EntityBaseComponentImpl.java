@@ -1,5 +1,6 @@
 package cn.allay.api.entity.component.impl.base;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentManager;
@@ -41,6 +42,7 @@ import java.util.function.Function;
  */
 public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComponent, EntityComponentImpl {
 
+    @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
     protected static AtomicLong UNIQUE_ID_COUNTER = new AtomicLong(0);
@@ -58,13 +60,17 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Vector3d motion = new Vector3d();
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, Function<T, AABBdc> aabbGetter) {
-        this.entityType = info.getEntityType();
-        this.aabbGetter = aabbGetter;
-        this.aabb = aabbGetter.apply(manager.getComponentedObject());
         if (info.location().world() == null)
             throw new IllegalArgumentException("World cannot be null!");
+        this.entityType = info.getEntityType();
+        this.aabbGetter = aabbGetter;
         this.location = info.location();
-        metadata = new Metadata();
+        this.metadata = new Metadata();
+    }
+
+    @Override
+    public void onInitFinish() {
+        this.aabb = aabbGetter.apply(manager.getComponentedObject());
         initMetadata();
     }
 
@@ -199,6 +205,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    @Impl
     public void setSpeed(Vector3dc speed) {
         this.speed = new Vector3d(speed);
     }
@@ -210,6 +217,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    @Impl
     public void setMotion(Vector3dc motion) {
         this.motion = new Vector3d(motion);
     }
@@ -261,11 +269,5 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Impl
     public void sendPacketToViewersImmediately(BedrockPacket packet) {
         viewers.values().forEach(client -> client.sendPacketImmediately(packet));
-    }
-
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
     }
 }

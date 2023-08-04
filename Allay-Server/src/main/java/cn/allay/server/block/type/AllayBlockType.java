@@ -5,7 +5,6 @@ import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.component.annotation.RequireBlockProperty;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
-import cn.allay.api.block.component.impl.base.BlockBaseComponent;
 import cn.allay.api.block.component.impl.base.BlockBaseComponentImpl;
 import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.palette.BlockStateHashPalette;
@@ -27,7 +26,6 @@ import cn.allay.server.utils.ComponentClassCacheUtils;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -35,6 +33,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static cn.allay.api.component.interfaces.ComponentProvider.findComponentIdentifier;
 import static java.lang.reflect.Modifier.isStatic;
 
 /**
@@ -269,11 +268,10 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
         protected Class<T> interfaceClass;
-        protected List<BlockComponentImpl> components = new ArrayList<>();
+        protected Map<Identifier, BlockComponentImpl> components = new HashMap<>();
         protected Map<String, BlockPropertyType<?>> properties = new HashMap<>();
         protected Identifier identifier;
         protected boolean isCustomBlock = false;
-        @Setter
         protected Function<BlockType<T>, BlockComponentImpl> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
 
         public Builder(Class<T> interfaceClass) {
@@ -306,7 +304,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
                 if (attributeMap == null)
                     throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
-                components.add(BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap));
+                components.put(BlockAttributeComponentImpl.IDENTIFIER, BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap));
             }
             return this;
         }
@@ -324,22 +322,22 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public Builder<T> setComponents(List<BlockComponentImpl> components) {
+        public Builder<T> setComponents(Map<Identifier, BlockComponentImpl> components) {
             if (components == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
-            this.components = new ArrayList<>(components);
+            this.components = new HashMap<>(components);
             return this;
         }
 
         @Override
-        public Builder<T> addComponents(List<BlockComponentImpl> components) {
-            this.components.addAll(components);
+        public Builder<T> addComponents(Map<Identifier, BlockComponentImpl> components) {
+            this.components.putAll(components);
             return this;
         }
 
         @Override
         public Builder<T> addComponent(BlockComponentImpl component) {
-            this.components.add(component);
+            this.components.put(findComponentIdentifier(component.getClass()), component);
             return this;
         }
 
@@ -364,17 +362,25 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public Builder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent) {
-            components.add(customBlockComponent);
+            components.put(findComponentIdentifier(customBlockComponent.getClass()) ,customBlockComponent);
             isCustomBlock = true;
+            return this;
+        }
+
+        @Override
+        public Builder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockComponentImpl> blockBaseComponentSupplier) {
+            this.blockBaseComponentSupplier = blockBaseComponentSupplier;
             return this;
         }
 
         @Override
         public AllayBlockType<T> build() {
             if (identifier == null) throw new BlockTypeBuildException("identifier cannot be null!");
-            var type = new AllayBlockType<>(interfaceClass, components, properties, identifier);
-            components.add(blockBaseComponentSupplier.apply(type));
-            List<ComponentProvider<? extends ComponentImpl>> componentProviders = components.stream().map(ComponentProvider::ofSingleton).collect(Collectors.toList());
+            var listComponents = new ArrayList<>(components.values());
+            var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier);
+            if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
+                listComponents.add(blockBaseComponentSupplier.apply(type));
+            List<ComponentProvider<? extends ComponentImpl>> componentProviders = listComponents.stream().map(ComponentProvider::ofSingleton).collect(Collectors.toList());
             try {
                 checkPropertyValid();
                 type.injectedClass = new AllayComponentInjector<T>()
@@ -393,7 +399,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         private void checkPropertyValid() {
-            for (var component : components) {
+            for (var component : components.values()) {
                 var annotation = component.getClass().getAnnotation(RequireBlockProperty.Requirements.class);
                 if (annotation == null) continue;
                 var requirements = annotation.value();

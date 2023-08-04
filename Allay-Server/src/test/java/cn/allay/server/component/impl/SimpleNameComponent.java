@@ -1,5 +1,6 @@
 package cn.allay.server.component.impl;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.ComponentImpl;
 import cn.allay.api.identifier.Identifier;
@@ -12,7 +13,8 @@ import cn.allay.server.component.interfaces.NameComponent;
  */
 public class SimpleNameComponent implements NameComponent, ComponentImpl {
 
-    private static final Identifier IDENTIFIER = new Identifier("minecraft:name_component");
+    @ComponentIdentifier
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:name_component");
 
     protected String name;
 
@@ -24,10 +26,5 @@ public class SimpleNameComponent implements NameComponent, ComponentImpl {
     @Impl
     public String getName() {
         return name;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
     }
 }

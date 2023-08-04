@@ -1,5 +1,6 @@
 package cn.allay.api.entity.component.impl.playercontroller;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.entity.component.EntityComponentImpl;
 import cn.allay.api.identifier.Identifier;
@@ -13,14 +14,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EntityPlayerControllerComponentImpl implements EntityPlayerControllerComponent, EntityComponentImpl {
 
+    @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_player_controller_component");
 
     protected Client client;
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
-    }
 
     @Override
     @Nullable

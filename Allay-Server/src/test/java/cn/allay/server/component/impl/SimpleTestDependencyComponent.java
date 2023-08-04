@@ -1,5 +1,6 @@
 package cn.allay.server.component.impl;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.ComponentImpl;
@@ -13,7 +14,9 @@ import cn.allay.server.component.interfaces.TestDependencyComponent;
  */
 public class SimpleTestDependencyComponent implements ComponentImpl, TestDependencyComponent {
 
-    private static final Identifier IDENTIFIER = new Identifier("minecraft:test_component");
+
+    @ComponentIdentifier
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:test_component");
 
 
     @Dependency(identifier = "minecraft:name_component")
@@ -24,11 +27,6 @@ public class SimpleTestDependencyComponent implements ComponentImpl, TestDepende
 
     @Dependency(identifier = "minecraft:attack_component")
     protected ComponentImpl attackComponent;
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
-    }
 
     @Impl
     @Override

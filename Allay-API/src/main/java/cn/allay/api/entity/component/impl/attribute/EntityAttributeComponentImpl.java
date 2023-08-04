@@ -1,5 +1,6 @@
 package cn.allay.api.entity.component.impl.attribute;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.attribute.AttributeType;
@@ -16,6 +17,7 @@ import java.util.*;
  */
 public class EntityAttributeComponentImpl implements EntityAttributeComponent, EntityComponentImpl {
 
+    @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_attribute_component");
 
     protected final Map<AttributeType, Attribute> attributes = new EnumMap<>(AttributeType.class);
@@ -33,11 +35,6 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent, E
                 AttributeType.MOVEMENT,
                 AttributeType.KNOCKBACK_RESISTENCE
         );
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
     }
 
     @Override

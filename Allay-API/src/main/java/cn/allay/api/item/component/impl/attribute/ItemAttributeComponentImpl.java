@@ -1,5 +1,6 @@
 package cn.allay.api.item.component.impl.attribute;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.component.ItemComponentImpl;
@@ -11,6 +12,7 @@ import cn.allay.api.item.component.ItemComponentImpl;
  */
 public class ItemAttributeComponentImpl implements ItemAttributeComponent, ItemComponentImpl {
 
+    @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_attribute_component");
 
     protected ItemAttributes itemAttributes;
@@ -23,10 +25,5 @@ public class ItemAttributeComponentImpl implements ItemAttributeComponent, ItemC
     @Impl
     public ItemAttributes getItemAttributes() {
         return itemAttributes;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
     }
 }

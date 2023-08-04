@@ -1,5 +1,6 @@
 package cn.allay.api.entity.component.impl.container;
 
+import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.container.Container;
@@ -29,6 +30,7 @@ import java.util.List;
  */
 public class EntityContainerViewerComponentImpl implements EntityContainerViewerComponent, EntityComponentImpl {
 
+    @ComponentIdentifier
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_viewer_component");
 
     protected byte idCounter = 0;
@@ -39,11 +41,6 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
 
     protected HashBiMap<Byte, Container> id2ContainerBiMap = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
     protected HashBiMap<FullContainerType, Container> type2ContainerBiMap = HashBiMap.create(new Object2ObjectOpenHashMap<>());
-
-    @Override
-    public Identifier getIdentifier() {
-        return IDENTIFIER;
-    }
 
     @Override
     @Impl
