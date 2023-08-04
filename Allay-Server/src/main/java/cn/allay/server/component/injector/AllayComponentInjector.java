@@ -4,6 +4,7 @@ import cn.allay.api.component.annotation.*;
 import cn.allay.api.component.exception.ComponentInjectException;
 import cn.allay.api.component.interfaces.*;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.utils.ReflectionUtils;
 import cn.allay.server.utils.ComponentClassCacheUtils;
 import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
@@ -261,7 +262,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
         protected void injectComponentManager(AllayComponentManager<T> manager, List<? extends ComponentImpl> components) {
             for (var component : components) {
-                for (var field : component.getClass().getDeclaredFields()) {
+                for (var field : ReflectionUtils.getAllFields(component.getClass())) {
                     if (field.isAnnotationPresent(Manager.class)) {
                         try {
                             field.setAccessible(true);
@@ -273,7 +274,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                         }
                     }
                 }
-                for (var method : component.getClass().getDeclaredMethods()) {
+                for (var method : ReflectionUtils.getAllMethods(component.getClass())) {
                     if (!method.isAnnotationPresent(ComponentEventListener.class))
                         continue;
                     if (!(method.getReturnType() == void.class))
@@ -313,7 +314,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
 
         protected void injectDependency(List<? extends ComponentImpl> components, ComponentImpl component) {
-            for (var field : component.getClass().getDeclaredFields()) {
+            for (var field : ReflectionUtils.getAllFields(component.getClass())) {
                 var annotation = field.getAnnotation(Dependency.class);
                 if (annotation != null) {
                     var type = field.getType();

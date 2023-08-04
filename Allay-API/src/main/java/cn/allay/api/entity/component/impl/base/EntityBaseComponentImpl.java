@@ -1,6 +1,7 @@
 package cn.allay.api.entity.component.impl.base;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentManager;
@@ -44,15 +45,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
-
     protected static AtomicLong UNIQUE_ID_COUNTER = new AtomicLong(0);
+
+    @Manager
+    protected ComponentManager<T> manager;
+
     protected final Location3d location;
     protected final long uniqueId = UNIQUE_ID_COUNTER.getAndIncrement();
     protected final Metadata metadata;
     protected EntityType<T> entityType;
     protected AABBdc aabb;
-    @Manager
-    protected ComponentManager<T> manager;
     protected Function<T, AABBdc> aabbGetter;
     protected boolean hasCollision = true;
     protected Map<Long, Client> viewers = new Long2ObjectOpenHashMap<>();
