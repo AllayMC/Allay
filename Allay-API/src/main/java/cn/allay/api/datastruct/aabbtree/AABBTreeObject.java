@@ -2,14 +2,14 @@ package cn.allay.api.datastruct.aabbtree;
 
 import java.util.Objects;
 
-final class AABBTreeObject<E extends Identifiable> {
+final class AABBTreeObject<E extends HasLongId> {
    private final E data;
 
    private AABBTreeObject(E data) {
       this.data = data;
    }
 
-   static <E extends Identifiable> AABBTreeObject<E> create(E data) {
+   static <E extends HasLongId> AABBTreeObject<E> create(E data) {
       return new AABBTreeObject<>(data);
    }
 
@@ -22,12 +22,12 @@ final class AABBTreeObject<E extends Identifiable> {
          return false;
       }
       AABBTreeObject<?> that = (AABBTreeObject<?>) o;
-      return Objects.equals(data.getID(), that.data.getID());
+      return Objects.equals(data.getId(), that.data.getId());
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(data.getID());
+      return Objects.hash(data.getId());
    }
 
    E getData() {

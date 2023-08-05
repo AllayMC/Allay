@@ -3,6 +3,7 @@ package cn.allay.api.client;
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
 import cn.allay.api.client.info.DeviceInfo;
+import cn.allay.api.client.movement.ClientMovementValidator;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.impl.EntityPlayer;
@@ -69,6 +70,10 @@ public interface Client extends ChunkLoader {
 
     @Nullable
     SecretKey getEncryptionSecretKey();
+
+    ClientMovementValidator getMovementValidator();
+
+    void setMovementValidator(ClientMovementValidator validator);
 
     default String getXuid() {
         return getLoginData().getXuid();

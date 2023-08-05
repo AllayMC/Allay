@@ -1,15 +1,16 @@
 package cn.allay.api.datastruct.aabbtree;
 
 import lombok.Getter;
+import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBf;
 
-public final class AABBTreeNode<E extends Boundable> {
+public final class AABBTreeNode<E extends HasAABB> {
     public static final int INVALID_NODE_INDEX = -1;
     public static final int LEFT_CHILD = 0;
     public static final int RIGHT_CHILD = 1;
     private static final int MAX_NUM_OF_CHILDREN_PER_NODE = 2;
     private final int[] children;
-    private final AABBf aabb;
+    private final AABBd aabb;
 
     @Getter
     private int parent;
@@ -24,7 +25,7 @@ public final class AABBTreeNode<E extends Boundable> {
         children = new int[MAX_NUM_OF_CHILDREN_PER_NODE];
         assignChildren(INVALID_NODE_INDEX, INVALID_NODE_INDEX);
 
-        aabb = new AABBf();
+        aabb = new AABBd();
         parent = INVALID_NODE_INDEX;
         index = INVALID_NODE_INDEX;
     }
@@ -50,25 +51,25 @@ public final class AABBTreeNode<E extends Boundable> {
         assignChild(RIGHT_CHILD, childB);
     }
 
-    void computeAABBWithMargin(float margin) {
+    void computeAABBWithMargin(double margin) {
         if (data == null) {
             return;
         }
-        AABBf dataAABB = data.getAABB(aabb);
+        AABBd dataAABB = data.copyAABBTo(aabb);
         aabb.setMin(dataAABB.minX - margin, dataAABB.minY - margin, dataAABB.minZ - margin);
         aabb.setMax(dataAABB.maxX + margin, dataAABB.maxY + margin, dataAABB.maxZ + margin);
     }
 
     public void resetForReuse() {
         assignChildren(INVALID_NODE_INDEX, INVALID_NODE_INDEX);
-        aabb.setMin(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-        aabb.setMax(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
+        aabb.setMin(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        aabb.setMax(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
         setParent(INVALID_NODE_INDEX);
         setHeight(0);
         setData(null);
 
-        aabb.setMin(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-        aabb.setMax(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
+        aabb.setMin(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        aabb.setMax(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
     }
 
     public int getLeftChild() {
@@ -79,7 +80,7 @@ public final class AABBTreeNode<E extends Boundable> {
         return children[RIGHT_CHILD];
     }
 
-    public AABBf getAABB() {
+    public AABBd getAABB() {
         return aabb;
     }
 

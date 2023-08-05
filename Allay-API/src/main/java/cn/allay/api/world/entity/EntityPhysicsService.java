@@ -25,7 +25,7 @@ public interface EntityPhysicsService {
 
     void containEntity(Entity entity);
 
-    void offerNewLocation(Entity entity, Location3dc location);
+    void offerScheduledMove(Entity entity, Location3dc newLoc);
 
     default List<Entity> getCollidingEntities(Entity entity) {
         if (entity.hasCollision())

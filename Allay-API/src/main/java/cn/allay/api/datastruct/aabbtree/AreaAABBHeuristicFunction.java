@@ -1,21 +1,21 @@
 package cn.allay.api.datastruct.aabbtree;
 
-import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBd;
 
 import static cn.allay.api.datastruct.aabbtree.AABBUtils.getArea;
 
 
-public class AreaAABBHeuristicFunction<T extends Boundable> implements AABBTreeHeuristicFunction<T> {
-   private final AABBf temp;
+public class AreaAABBHeuristicFunction<T extends HasAABB> implements AABBTreeHeuristicFunction<T> {
+   private final AABBd temp;
 
    public AreaAABBHeuristicFunction() {
-      temp = new AABBf();
+      temp = new AABBd();
    }
 
    @Override
-   public HeuristicResult getInsertionHeuristic(AABBf left, AABBf right, T object, AABBf objectAABB) {
-      float diffA = getArea(left.union(objectAABB, temp)) - getArea(left);
-      float diffB = getArea(right.union(objectAABB, temp)) - getArea(right);
+   public HeuristicResult getInsertionHeuristic(AABBd left, AABBd right, T object, AABBd objectAABB) {
+      double diffA = getArea(left.union(objectAABB, temp)) - getArea(left);
+      double diffB = getArea(right.union(objectAABB, temp)) - getArea(right);
       return diffA < diffB ? HeuristicResult.LEFT : HeuristicResult.RIGHT;
    }
 }
