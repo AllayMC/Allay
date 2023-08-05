@@ -1,6 +1,6 @@
 package cn.allay.api.datastruct.aabbtree;
 
-import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBd;
 
 public class TestEntity implements HasAABB, HasLongId {
 
@@ -33,9 +33,9 @@ public class TestEntity implements HasAABB, HasLongId {
    }
 
    @Override
-   public AABBf copyAABBTo(AABBf dest) {
+   public AABBd copyAABBTo(AABBd dest) {
       if (dest == null) {
-         dest = new AABBf();
+         dest = new AABBd();
       }
       dest.setMin(x, y, z);
       dest.setMax(x + width, y + height, z + length);
@@ -43,7 +43,7 @@ public class TestEntity implements HasAABB, HasLongId {
    }
 
    @Override
-   public long getId() {
+   public long getUniqueId() {
       return id;
    }
 }

@@ -16,12 +16,12 @@ public record CollisionPair<T extends HasAABB & HasLongId>(T objectA, T objectB)
          return false;
       }
       CollisionPair<?> that = (CollisionPair<?>) o;
-      return (Objects.equals(objectA.getId(), that.objectA.getId()) || Objects.equals(objectA.getId(), that.objectB.getId())) &&
-             (Objects.equals(objectB.getId(), that.objectB.getId()) || Objects.equals(objectB.getId(), that.objectA.getId()));
+      return (Objects.equals(objectA.getUniqueId(), that.objectA.getUniqueId()) || Objects.equals(objectA.getUniqueId(), that.objectB.getUniqueId())) &&
+             (Objects.equals(objectB.getUniqueId(), that.objectB.getUniqueId()) || Objects.equals(objectB.getUniqueId(), that.objectA.getUniqueId()));
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(objectA.getId(), objectB.getId()) ^ Objects.hash(objectB.getId(), objectA.getId());
+      return Objects.hash(objectA.getUniqueId(), objectB.getUniqueId()) ^ Objects.hash(objectB.getUniqueId(), objectA.getUniqueId());
    }
 }

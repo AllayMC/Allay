@@ -274,7 +274,7 @@ public class AABBTreeTest {
 
       // Then
       assertEquals(1, result.size());
-      assertEquals(2, result.get(0).getId());
+      assertEquals(2, result.get(0).getUniqueId());
    }
 
    @Test
@@ -291,12 +291,12 @@ public class AABBTreeTest {
       List<TestEntity> result = new ArrayList<>();
       List<TestEntity> filteredResult = new ArrayList<>();
       tree.detectOverlaps(testForOverlap, result);
-      tree.detectOverlaps(testForOverlap, e -> e.getId() != 2, filteredResult);
+      tree.detectOverlaps(testForOverlap, e -> e.getUniqueId() != 2, filteredResult);
 
       // Then
       assertEquals(2, result.size());
       assertEquals(1, filteredResult.size());
-      assertEquals(1, filteredResult.get(0).getId());
+      assertEquals(1, filteredResult.get(0).getUniqueId());
    }
 
    @Test
@@ -339,7 +339,7 @@ public class AABBTreeTest {
       List<CollisionPair<TestEntity>> pairs = new ArrayList<>();
       List<CollisionPair<TestEntity>> filteredPairs = new ArrayList<>();
       tree.detectCollisionPairs(pairs);
-      tree.detectCollisionPairs((a, b) -> a.getId() == 2 && b.getId() == 4, filteredPairs);
+      tree.detectCollisionPairs((a, b) -> a.getUniqueId() == 2 && b.getUniqueId() == 4, filteredPairs);
 
       // Then
       assertEquals(2, pairs.size());
@@ -364,7 +364,7 @@ public class AABBTreeTest {
 
       // Then
       assertEquals(1, intersecting.size());
-      assertEquals(1L, intersecting.get(0).getId());
+      assertEquals(1L, intersecting.get(0).getUniqueId());
    }
 
    @Test

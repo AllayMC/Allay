@@ -16,11 +16,6 @@ public interface Entity extends
         HasAABB, HasLongId {
 
     @Override
-    default long getId() {
-        return getUniqueId();
-    }
-
-    @Override
     default AABBd copyAABBTo(AABBd dest) {
         var aabb = getAABB();
         dest.setMin(aabb.minX(), aabb.minY(), aabb.minZ());
