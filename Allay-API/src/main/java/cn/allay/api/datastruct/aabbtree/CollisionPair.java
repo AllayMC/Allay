@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.Objects;
 
 @Getter
-public record CollisionPair<T extends Boundable & Identifiable>(T objectA, T objectB) {
+public record CollisionPair<T extends HasAABB & HasLongId>(T objectA, T objectB) {
 
    @Override
    public boolean equals(Object o) {
@@ -16,12 +16,12 @@ public record CollisionPair<T extends Boundable & Identifiable>(T objectA, T obj
          return false;
       }
       CollisionPair<?> that = (CollisionPair<?>) o;
-      return (Objects.equals(objectA.getID(), that.objectA.getID()) || Objects.equals(objectA.getID(), that.objectB.getID())) &&
-             (Objects.equals(objectB.getID(), that.objectB.getID()) || Objects.equals(objectB.getID(), that.objectA.getID()));
+      return (Objects.equals(objectA.getId(), that.objectA.getId()) || Objects.equals(objectA.getId(), that.objectB.getId())) &&
+             (Objects.equals(objectB.getId(), that.objectB.getId()) || Objects.equals(objectB.getId(), that.objectA.getId()));
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(objectA.getID(), objectB.getID()) ^ Objects.hash(objectB.getID(), objectA.getID());
+      return Objects.hash(objectA.getId(), objectB.getId()) ^ Objects.hash(objectB.getId(), objectA.getId());
    }
 }

@@ -2,6 +2,7 @@ package cn.allay.api.client;
 
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
+import cn.allay.api.client.movement.ClientMovementValidator;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.server.Server;
@@ -38,4 +39,7 @@ public abstract class BaseClient implements Client {
     protected boolean networkEncryptionEnabled = false;
     @Nullable
     protected SecretKey encryptionSecretKey;
+    @Getter
+    @Setter
+    protected ClientMovementValidator movementValidator = ClientMovementValidator.EMPTY_VALIDATOR;
 }

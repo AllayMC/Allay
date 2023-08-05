@@ -1,6 +1,6 @@
 package cn.allay.api.datastruct.aabbtree;
 
-import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBd;
 
 /**
  * Created by pateman.
@@ -11,22 +11,22 @@ public final class AABBUtils {
 
   }
 
-  public static float getWidth(AABBf aabb) {
+  public static double getWidth(AABBd aabb) {
     return aabb.maxX - aabb.minX;
   }
 
-  public static float getHeight(AABBf aabb) {
+  public static double getHeight(AABBd aabb) {
     return aabb.maxY - aabb.minY;
   }
 
-  public static float getDepth(AABBf aabb) {
+  public static double getDepth(AABBd aabb) {
     return aabb.maxZ - aabb.minZ;
   }
 
-  public static float getArea(AABBf aabb) {
-    final float width = getWidth(aabb);
-    final float height = getHeight(aabb);
-    final float depth = getDepth(aabb);
-    return 2.0f * (width * height + width * depth + height * depth);
+  public static double getArea(AABBd aabb) {
+    final double width = getWidth(aabb);
+    final double height = getHeight(aabb);
+    final double depth = getDepth(aabb);
+    return 2.0 * (width * height + width * depth + height * depth);
   }
 }

@@ -1,10 +1,8 @@
 package cn.allay.api.datastruct.aabbtree;
 
-import cn.allay.api.datastruct.aabbtree.Boundable;
-import cn.allay.api.datastruct.aabbtree.Identifiable;
 import org.joml.primitives.AABBf;
 
-public class TestEntity implements Boundable, Identifiable {
+public class TestEntity implements HasAABB, HasLongId {
 
    private final float x;
 
@@ -35,7 +33,7 @@ public class TestEntity implements Boundable, Identifiable {
    }
 
    @Override
-   public AABBf getAABB(AABBf dest) {
+   public AABBf copyAABBTo(AABBf dest) {
       if (dest == null) {
          dest = new AABBf();
       }
@@ -45,7 +43,7 @@ public class TestEntity implements Boundable, Identifiable {
    }
 
    @Override
-   public long getID() {
+   public long getId() {
       return id;
    }
 }

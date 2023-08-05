@@ -40,7 +40,7 @@ public class AABBTreeJMHTest {
         }
         testEntityAABBs = new AABBf[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {
-            testEntityAABBs[i] = testEntities[i].getAABB(null);
+            testEntityAABBs[i] = testEntities[i].copyAABBTo(null);
         }
         testAABBs = new AABBf[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {
