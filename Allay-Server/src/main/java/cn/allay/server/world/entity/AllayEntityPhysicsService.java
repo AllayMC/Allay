@@ -7,10 +7,7 @@ import cn.allay.api.math.Location3dc;
 import cn.allay.api.world.entity.EntityPhysicsService;
 import org.joml.primitives.AABBdc;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -20,7 +17,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class AllayEntityPhysicsService implements EntityPhysicsService {
     protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
-    protected Queue<ScheduledMove> scheduledMoveQueue = new ConcurrentLinkedQueue<>();
+    protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectNonBlockingMap<>();
     protected Map<Long, Set<Long>> entityCollisionMap = new Long2ObjectNonBlockingMap<>();
     protected AABBTree<Entity> entityAABBTree = new AABBTree<>();
 
@@ -59,12 +56,15 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     @Override
     public void offerScheduledMove(Entity entity, Location3dc newLoc) {
-
+        if (!entities.containsKey(entity.getUniqueId()))
+            throw new IllegalArgumentException("Entity " + entity.getUniqueId() + " is not registered in this service");
+        scheduledMoveQueue.computeIfAbsent(entity.getUniqueId(), k -> new ConcurrentLinkedQueue<>()).offer(new ScheduledMove(entity, newLoc));
     }
 
     @Override
     public List<Entity> getCollidingEntities(AABBdc aabb) {
-        return null;
+        var result = new ArrayList<Entity>();
+        return entityAABBTree.detectOverlaps(aabb, result);
     }
 
     protected record ScheduledMove(Entity entity, Location3dc newLoc) {};

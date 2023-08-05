@@ -5,6 +5,7 @@ import org.joml.FrustumIntersection;
 import org.joml.Matrix4fc;
 import org.joml.RayAabIntersection;
 import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 import org.joml.primitives.Rayf;
 
 import java.util.*;
@@ -392,7 +393,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
 
     public void detectInFrustum(Matrix4fc worldViewProjection, AABBOverlapFilter<T> filter, List<T> result) {
         frustumIntersection.set(worldViewProjection, false);
-        traverseTree(aabb -> frustumIntersection.testAab((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ), filter, result);
+        traverseTree(aabb -> frustumIntersection.testAab((float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(), (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()), filter, result);
     }
 
     public void detectRayIntersection(Rayf ray, List<T> result) {
@@ -401,10 +402,10 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
 
     public void detectRayIntersection(Rayf ray, AABBOverlapFilter<T> filter, List<T> result) {
         rayIntersection.set(ray.oX, ray.oY, ray.oZ, ray.dX, ray.dY, ray.dZ);
-        traverseTree(aabb -> rayIntersection.test((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ), filter, result);
+        traverseTree(aabb -> rayIntersection.test((float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(), (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()), filter, result);
     }
 
-    private void traverseTree(Predicate<AABBd> nodeTest, AABBOverlapFilter<T> filter, List<T> result) {
+    private void traverseTree(Predicate<AABBdc> nodeTest, AABBOverlapFilter<T> filter, List<T> result) {
         result.clear();
         if (root == AABBTreeNode.INVALID_NODE_INDEX) {
             return;
