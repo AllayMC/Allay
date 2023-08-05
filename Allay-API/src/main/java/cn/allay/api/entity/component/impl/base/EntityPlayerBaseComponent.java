@@ -1,9 +1,7 @@
 package cn.allay.api.entity.component.impl.base;
 
 import cn.allay.api.client.Client;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Inject;
-import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     @Inject
@@ -47,5 +45,10 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     @Override
     default boolean enableHeadYaw() {
         return true;
+    }
+
+    @Override
+    default boolean computeMovementServerSide() {
+        return getClient().computeMovementServerSide();
     }
 }

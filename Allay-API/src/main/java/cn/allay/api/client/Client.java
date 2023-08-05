@@ -73,6 +73,8 @@ public interface Client extends ChunkLoader {
 
     ClientMovementValidator getMovementValidator();
 
+    boolean computeMovementServerSide();
+
     void setMovementValidator(ClientMovementValidator validator);
 
     default String getXuid() {

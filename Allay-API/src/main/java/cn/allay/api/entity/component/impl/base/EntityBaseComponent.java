@@ -97,4 +97,8 @@ public interface EntityBaseComponent {
     default AABBdc getOffsetAABB() {
         return new AABBd(getAABB()).translate(getLocation());
     }
+
+    default boolean computeMovementServerSide() {
+        return true;
+    }
 }

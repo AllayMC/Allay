@@ -195,6 +195,11 @@ public class AllayClient extends BaseClient {
         server.getDefaultWorld().addClient(this);
     }
 
+    @Override
+    public boolean computeMovementServerSide() {
+        return false;
+    }
+
     public void sendPlayStatus(PlayStatusPacket.Status status) {
         var playStatusPacket = new PlayStatusPacket();
         playStatusPacket.setStatus(status);
