@@ -7,12 +7,14 @@ import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.math.Location3dc;
 import cn.allay.api.client.Client;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Allay Project 2023/5/26
@@ -82,7 +84,17 @@ public interface EntityBaseComponent {
     void sendPacketToViewersImmediately(BedrockPacket packet);
 
     @Inject
+    void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3dc newLoc);
+
+    default boolean enableHeadYaw() {
+        return false;
+    }
+
     default double getBaseOffset() {
         return 0;
+    }
+
+    default AABBdc getOffsetAABB() {
+        return new AABBd(getAABB()).translate(getLocation());
     }
 }

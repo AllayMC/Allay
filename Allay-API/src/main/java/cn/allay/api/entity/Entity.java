@@ -16,8 +16,8 @@ public interface Entity extends
         HasAABB, HasLongId {
 
     @Override
-    default AABBd copyAABBTo(AABBd dest) {
-        var aabb = getAABB();
+    default AABBd copyOffsetAABBTo(AABBd dest) {
+        var aabb = getOffsetAABB();
         dest.setMin(aabb.minX(), aabb.minY(), aabb.minZ());
         dest.setMax(aabb.maxX(), aabb.maxY(), aabb.maxZ());
         return dest;

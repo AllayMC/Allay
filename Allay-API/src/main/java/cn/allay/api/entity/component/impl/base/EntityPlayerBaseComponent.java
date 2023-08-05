@@ -1,6 +1,7 @@
 package cn.allay.api.entity.component.impl.base;
 
 import cn.allay.api.client.Client;
+import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
 
@@ -37,4 +38,14 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
 
     @Inject
     boolean isCrawling();
+
+    @Override
+    default double getBaseOffset() {
+        return 1.62;
+    }
+
+    @Override
+    default boolean enableHeadYaw() {
+        return true;
+    }
 }

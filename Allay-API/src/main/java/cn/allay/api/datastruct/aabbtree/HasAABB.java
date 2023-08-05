@@ -8,5 +8,5 @@ import org.joml.primitives.AABBd;
  */
 public interface HasAABB {
 
-    AABBd copyAABBTo(AABBd dest);
+    AABBd copyOffsetAABBTo(AABBd dest);
 }

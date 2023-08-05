@@ -3,7 +3,6 @@ package cn.allay.server;
 import cn.allay.api.datastruct.aabbtree.AABBTree;
 import cn.allay.api.datastruct.aabbtree.TestEntity;
 import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBf;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class AABBTreeJMHTest {
         }
         testEntityAABBs = new AABBd[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {
-            testEntityAABBs[i] = testEntities[i].copyAABBTo(null);
+            testEntityAABBs[i] = testEntities[i].copyOffsetAABBTo(null);
         }
         testAABBs = new AABBd[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {

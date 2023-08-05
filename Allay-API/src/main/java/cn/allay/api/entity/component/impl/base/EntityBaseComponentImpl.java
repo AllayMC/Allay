@@ -20,10 +20,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.AddEntityPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.RemoveEntityPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SetEntityDataPacket;
+import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -32,6 +29,7 @@ import org.joml.primitives.AABBdc;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
@@ -270,5 +268,20 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Impl
     public void sendPacketToViewersImmediately(BedrockPacket packet) {
         viewers.values().forEach(client -> client.sendPacketImmediately(packet));
+    }
+
+    @Override
+    @Impl
+    public void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3dc newLoc) {
+        var pk = new MoveEntityDeltaPacket();
+        pk.setRuntimeEntityId(getUniqueId());
+        pk.getFlags().addAll(moveFlags);
+        pk.setX((float) newLoc.x());
+        pk.setY((float) newLoc.y());
+        pk.setZ((float) newLoc.z());
+        pk.setPitch((float) newLoc.pitch());
+        pk.setYaw((float) newLoc.yaw());
+        pk.setHeadYaw((float) newLoc.headYaw());
+        sendPacketToViewers(pk);
     }
 }

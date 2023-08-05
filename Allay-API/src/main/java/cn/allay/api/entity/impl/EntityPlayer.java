@@ -201,12 +201,6 @@ public interface EntityPlayer extends
         public boolean isCrawling() {
             return crawling;
         }
-
-        @Override
-        @Impl
-        public double getBaseOffset() {
-            return 1.62;
-        }
     }
 }
 
