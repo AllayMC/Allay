@@ -32,10 +32,15 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public void tick() {
         handleEntityUpdateQueue();
         handleScheduledMoveQueue();
-        checkEntityCollision();
+        computeEntityCollision();
+        updateEntityMotion();
     }
 
-    protected void checkEntityCollision() {
+    protected void updateEntityMotion() {
+
+    }
+
+    protected void computeEntityCollision() {
         entities.values().parallelStream().forEach(entity -> {
             var result = new ObjectArrayList<Entity>();
             entityAABBTree.detectOverlaps(entity.getOffsetAABB(), result);

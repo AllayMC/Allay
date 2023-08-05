@@ -193,11 +193,13 @@ public interface EntityPlayer extends
         }
 
         @Override
+        @Impl
         public void setCrawling(boolean crawling) {
             this.crawling = crawling;
         }
 
         @Override
+        @Impl
         public boolean isCrawling() {
             return crawling;
         }

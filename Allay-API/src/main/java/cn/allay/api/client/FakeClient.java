@@ -36,11 +36,14 @@ public class FakeClient extends BaseClient {
 
     @Setter
     protected boolean loaderActive;
+    @Setter
+    protected boolean computeMovement;
 
     protected FakeClient(LoginData loginData, boolean loaderActive,
                          Skin skin, String displayName,
                          boolean op, GameType gameType,
-                         EntityPlayer playerEntity) {
+                         EntityPlayer playerEntity,
+                         boolean computeMovement) {
         this.loginData = loginData;
         this.loaderActive = loaderActive;
         this.skin = skin;
@@ -48,10 +51,16 @@ public class FakeClient extends BaseClient {
         this.op = op;
         this.gameType = gameType;
         this.playerEntity = playerEntity;
+        this.computeMovement = computeMovement;
     }
 
     public static FakeClientBuilder builder() {
         return new FakeClientBuilder();
+    }
+
+    @Override
+    public boolean computeMovementServerSide() {
+        return computeMovement;
     }
 
     @Override public boolean isFirstSpawned() {return true;}
@@ -87,6 +96,7 @@ public class FakeClient extends BaseClient {
         private String languageCode = "en_US";
         private String gameVersion = Server.getInstance().getNetworkServer().getCodec().getMinecraftVersion();
         private String identityPublicKey = "";
+        private boolean computeMovement = true;
 
         FakeClientBuilder() {}
 
@@ -155,12 +165,23 @@ public class FakeClient extends BaseClient {
             return this;
         }
 
+        public FakeClientBuilder playerEntity(EntityPlayer playerEntity) {
+            this.playerEntity = playerEntity;
+            return this;
+        }
+
+        public FakeClientBuilder computeMovement(boolean computeMovement) {
+            this.computeMovement = computeMovement;
+            return this;
+        }
+
         public FakeClient build() {
             return new FakeClient(
                     buildLoginData(),
                     loaderActive, skin,
                     displayName, op,
-                    gameType, playerEntity
+                    gameType, playerEntity,
+                    computeMovement
             );
         }
 
