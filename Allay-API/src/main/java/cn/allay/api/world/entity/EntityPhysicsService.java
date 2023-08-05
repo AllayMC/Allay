@@ -2,7 +2,6 @@ package cn.allay.api.world.entity;
 
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.Location3dc;
-import org.joml.Vector3dc;
 import org.joml.primitives.AABBdc;
 
 import java.util.Collections;
@@ -23,7 +22,7 @@ public interface EntityPhysicsService {
 
     void removeEntity(Entity entity);
 
-    void containEntity(Entity entity);
+    boolean containEntity(Entity entity);
 
     void offerScheduledMove(Entity entity, Location3dc newLoc);
 
