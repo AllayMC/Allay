@@ -33,7 +33,7 @@ public class TestEntity implements HasAABB, HasLongId {
    }
 
    @Override
-   public AABBd copyAABBTo(AABBd dest) {
+   public AABBd copyOffsetAABBTo(AABBd dest) {
       if (dest == null) {
          dest = new AABBd();
       }

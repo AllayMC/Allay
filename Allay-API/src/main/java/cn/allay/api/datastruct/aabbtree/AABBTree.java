@@ -1,5 +1,6 @@
 package cn.allay.api.datastruct.aabbtree;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import org.joml.FrustumIntersection;
 import org.joml.Matrix4fc;
@@ -39,7 +40,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
     }
 
     public AABBTree(AABBTreeHeuristicFunction<T> insertionHeuristicFunction, double fatAABBMargin) {
-        nodes = new ArrayList<>();
+        nodes = new ObjectArrayList<>();
         root = AABBTreeNode.INVALID_NODE_INDEX;
         this.insertionHeuristicFunction = insertionHeuristicFunction;
         if (this.insertionHeuristicFunction == null) {
@@ -358,12 +359,13 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
         syncUpHierarchy(nodeGrandparent);
     }
 
-    public void detectOverlaps(AABBd overlapWith, List<T> result) {
+    public void detectOverlaps(AABBdc overlapWith, List<T> result) {
         detectOverlaps(overlapWith, defaultAABBOverlapFilter, result);
     }
 
-    public void detectOverlaps(AABBd overlapWith, AABBOverlapFilter<T> filter, List<T> result) {
-        traverseTree(aabb -> aabb.intersectsAABB(overlapWith), filter, result);
+    public void detectOverlaps(AABBdc overlapWith, AABBOverlapFilter<T> filter, List<T> result) {
+        var copy = new AABBd(overlapWith);
+        traverseTree(aabb -> aabb.intersectsAABB(copy), filter, result);
     }
 
     public void detectCollisionPairs(List<CollisionPair<T>> result) {

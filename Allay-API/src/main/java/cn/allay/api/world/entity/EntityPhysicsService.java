@@ -26,11 +26,13 @@ public interface EntityPhysicsService {
 
     void offerScheduledMove(Entity entity, Location3dc newLoc);
 
-    default List<Entity> getCollidingEntities(Entity entity) {
+    default List<Entity> computeCollidingEntities(Entity entity) {
         if (entity.hasCollision())
-            return getCollidingEntities(entity.getAABB());
+            return computeCollidingEntities(entity.getOffsetAABB());
         else return Collections.emptyList();
     }
 
-    List<Entity> getCollidingEntities(AABBdc aabb);
+    List<Entity> computeCollidingEntities(AABBdc aabb);
+
+    List<Entity> getCachedEntityCollidingResult(Entity entity);
 }

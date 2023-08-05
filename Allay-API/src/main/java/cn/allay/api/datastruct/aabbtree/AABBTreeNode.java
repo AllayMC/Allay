@@ -2,7 +2,6 @@ package cn.allay.api.datastruct.aabbtree;
 
 import lombok.Getter;
 import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBf;
 
 public final class AABBTreeNode<E extends HasAABB> {
     public static final int INVALID_NODE_INDEX = -1;
@@ -55,7 +54,7 @@ public final class AABBTreeNode<E extends HasAABB> {
         if (data == null) {
             return;
         }
-        AABBd dataAABB = data.copyAABBTo(aabb);
+        AABBd dataAABB = data.copyOffsetAABBTo(aabb);
         aabb.setMin(dataAABB.minX - margin, dataAABB.minY - margin, dataAABB.minZ - margin);
         aabb.setMax(dataAABB.maxX + margin, dataAABB.maxY + margin, dataAABB.maxZ + margin);
     }
