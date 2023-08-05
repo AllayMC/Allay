@@ -25,17 +25,17 @@ public final class SingletonBitArray implements BitArray {
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return 1;
     }
 
     @Override
-    public int[] getWords() {
+    public int[] words() {
         return EMPTY_ARRAY;
     }
 
     @Override
-    public BitArrayVersion getVersion() {
+    public BitArrayVersion version() {
         return BitArrayVersion.V0;
     }
 

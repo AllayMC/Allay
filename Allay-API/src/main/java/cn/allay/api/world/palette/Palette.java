@@ -85,9 +85,9 @@ public final class Palette<V> {
     }
 
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
-        byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.getVersion(), false));
+        byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), false));
 
-        for (int word : this.bitArray.getWords()) byteBuf.writeIntLE(word);
+        for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
 
         byteBuf.writeIntLE(this.palette.size());
 
@@ -103,8 +103,8 @@ public final class Palette<V> {
         if (writeLast(byteBuf, last)) return;
         if (writeEmpty(byteBuf, serializer)) return;
 
-        byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.getVersion(), true));
-        for (int word : this.bitArray.getWords()) byteBuf.writeIntLE(word);
+        byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), true));
+        for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
         byteBuf.writeIntLE(this.palette.size());
         for (V value : this.palette) byteBuf.writeIntLE(serializer.serialize(value));
     }
@@ -175,7 +175,7 @@ public final class Palette<V> {
         index = this.palette.size();
         this.palette.add(value);
 
-        final BitArrayVersion version = this.bitArray.getVersion();
+        final BitArrayVersion version = this.bitArray.version();
         if (index > version.maxEntryValue) {
             final BitArrayVersion next = version.next;
             if (next != null) this.onResize(next);
@@ -185,11 +185,12 @@ public final class Palette<V> {
     }
 
     public boolean isEmpty() {
-        boolean result = true;
-        if (this.palette.size() > 1) result = false;
-        for (int word : this.bitArray.getWords())
-            if (Integer.toUnsignedLong(word) != 0L)
+        boolean result = this.palette.size() <= 1;
+        for (int word : this.bitArray.words())
+            if (Integer.toUnsignedLong(word) != 0L) {
                 result = false;
+                break;
+            }
         return result;
     }
 
@@ -217,9 +218,9 @@ public final class Palette<V> {
     }
 
     private void writeWords(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer) {
-        byteBuf.writeByte(getPaletteHeader(this.bitArray.getVersion(), true));
+        byteBuf.writeByte(getPaletteHeader(this.bitArray.version(), true));
 
-        for (int word : this.bitArray.getWords()) byteBuf.writeIntLE(word);
+        for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
 
         this.bitArray.writeSizeToNetwork(byteBuf, this.palette.size());
         for (V value : this.palette) VarInts.writeInt(byteBuf, serializer.serialize(value));

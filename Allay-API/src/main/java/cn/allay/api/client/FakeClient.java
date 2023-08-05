@@ -29,11 +29,11 @@ import java.util.function.Function;
  *
  * @author daoge_cmd
  */
+@Getter
 public class FakeClient extends BaseClient {
 
     protected static final ContainerActionProcessorHolder EMPTY_CONTAINER_ACTION_PROCESSOR_HOLDER = new SimpleContainerActionProcessorHolder();
 
-    @Getter
     @Setter
     protected boolean loaderActive;
 

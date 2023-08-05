@@ -74,7 +74,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                 var blockStateHash = obj.getInt("blockStateHash");
                 var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
                 var tag = obj.getCompound("tag", null);
-                var itemStack = itemType.createItemStack(new ItemStackInitInfo.Simple(count, damage, tag, blockState, index + 1, false));
+                var itemStack = itemType.createItemStack(new ItemStackInitInfo.Simple<>(count, damage, tag, blockState, index + 1, false));
                 map.put(index, itemStack);
             });
             log.info("Loaded creative item registry successfully");

@@ -49,15 +49,15 @@ public class ThroughList2ArrayJMHTest {
 
     @Benchmark
     public void arrayForI(Blackhole blackhole) {
-        for (int i = 0; i < data1.length; i++) {
-            blackhole.consume(data1[i]);
+        for (BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue : data1) {
+            blackhole.consume(propertyValue);
         }
     }
 
     @Benchmark
     public void listForI(Blackhole blackhole) {
-        for (int i = 0; i < data2.size(); i++) {
-            blackhole.consume(data2.get(i));
+        for (BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue : data2) {
+            blackhole.consume(propertyValue);
         }
     }
 }

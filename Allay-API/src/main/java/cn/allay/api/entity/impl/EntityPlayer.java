@@ -96,6 +96,7 @@ public interface EntityPlayer extends
         protected boolean sneaking;
         protected boolean swimming;
         protected boolean gliding;
+        protected boolean crawling;
 
         public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info, Function<EntityPlayer, AABBdc> aabbGetter) {
             super(info, aabbGetter);
@@ -127,7 +128,7 @@ public interface EntityPlayer extends
             addPlayerPacket.setUuid(client.getLoginData().getUuid());
             addPlayerPacket.setUsername(client.getName());
             addPlayerPacket.setPlatformChatId(client.getLoginData().getDeviceInfo().getDeviceId());
-            addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
+            addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
             addPlayerPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
             addPlayerPacket.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
             addPlayerPacket.setGameType(client.getGameType());
@@ -189,6 +190,22 @@ public interface EntityPlayer extends
         @Impl
         public boolean isGliding() {
             return gliding;
+        }
+
+        @Override
+        public void setCrawling(boolean crawling) {
+            this.crawling = crawling;
+        }
+
+        @Override
+        public boolean isCrawling() {
+            return crawling;
+        }
+
+        @Override
+        @Impl
+        public double getBaseOffset() {
+            return 1.62;
         }
     }
 }

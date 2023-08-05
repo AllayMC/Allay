@@ -3,6 +3,7 @@ package cn.allay.api.datastruct.collections.nb;
 import it.unimi.dsi.fastutil.longs.AbstractLongSet;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -433,7 +434,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
     /**
      * Auto-boxing version of {@link #remove(long, Object)}.
      */
-    public boolean remove(Object key, Object Val) {
+    public boolean remove(@NotNull Object key, Object Val) {
         return (key instanceof Long) && remove(((Long) key).longValue(), Val);
     }
 
@@ -808,7 +809,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
         static private final AtomicLongFieldUpdater<CHM> _copyDoneUpdater =
                 AtomicLongFieldUpdater.newUpdater(CHM.class, "_copyDone");
         // Back-pointer to top-level structure
-        final Long2ObjectNonBlockingMap _nbhml;
+        final Long2ObjectNonBlockingMap<?> _nbhml;
         final long[] _keys;
         final Object[] _vals;
         // ---
@@ -849,7 +850,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
         private ConcurrentAutoLongTable _slots;
 
         // Simple constructor
-        CHM(final Long2ObjectNonBlockingMap nbhml, ConcurrentAutoLongTable size, final int logsize) {
+        CHM(final Long2ObjectNonBlockingMap<?> nbhml, ConcurrentAutoLongTable size, final int logsize) {
             _nbhml = nbhml;
             _size = size;
             _slots = new ConcurrentAutoLongTable();

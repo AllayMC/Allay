@@ -11,11 +11,7 @@ import java.util.Arrays;
  * @author JukeboxMC | daoge_cmd
  */
 @Getter
-public final class PaddedBitArray implements BitArray {
-
-    private final int[] words;
-    private final BitArrayVersion version;
-    private final int size;
+public record PaddedBitArray(BitArrayVersion version, int size, int[] words) implements BitArray {
 
     public PaddedBitArray(BitArrayVersion version, int size, int[] words) {
         this.size = size;

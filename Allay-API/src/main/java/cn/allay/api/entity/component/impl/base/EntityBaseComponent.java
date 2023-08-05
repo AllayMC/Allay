@@ -80,4 +80,9 @@ public interface EntityBaseComponent {
 
     @Inject
     void sendPacketToViewersImmediately(BedrockPacket packet);
+
+    @Inject
+    default double getBaseOffset() {
+        return 0;
+    }
 }

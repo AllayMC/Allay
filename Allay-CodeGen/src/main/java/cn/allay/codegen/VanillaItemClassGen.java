@@ -31,9 +31,7 @@ public class VanillaItemClassGen {
     static {
         try {
             NbtMap reader = (NbtMap) NbtUtils.createGZIPReader(Files.newInputStream(ITEM_DATA_FILE_PATH)).readTag();
-            reader.getList("item", NbtType.COMPOUND).forEach(item -> {
-                MAPPED_ITEM_DATA.put(item.getString("name"), item);
-            });
+            reader.getList("item", NbtType.COMPOUND).forEach(item -> MAPPED_ITEM_DATA.put(item.getString("name"), item));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

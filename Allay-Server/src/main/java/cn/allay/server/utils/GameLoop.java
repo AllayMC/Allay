@@ -1,6 +1,7 @@
 package cn.allay.server.utils;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -11,6 +12,7 @@ import java.util.function.Consumer;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public final class GameLoop {
 
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
@@ -58,7 +60,7 @@ public final class GameLoop {
             try {
                 Thread.sleep(Math.max(TimeUnit.NANOSECONDS.toMillis(nanoSleepTime), 0));
             } catch (InterruptedException exception) {
-                exception.printStackTrace();
+                log.error("GameLoop interrupted", exception);
                 onStop.run();
                 return;
             }

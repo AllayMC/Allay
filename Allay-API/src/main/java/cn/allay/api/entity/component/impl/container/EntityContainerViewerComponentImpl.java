@@ -108,7 +108,7 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
     @Nullable
     @Impl
     public <T extends Container> T getOpenedContainer(FullContainerType<T> type) {
-        return (T) id2ContainerBiMap.get(type);
+        return (T) type2ContainerBiMap.get(type);
     }
 
     @Override

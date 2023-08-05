@@ -92,7 +92,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     @Impl
-    public void setNbt(NbtMap nbt) {
+    public void setNbt(@Nullable NbtMap nbt) {
         this.nbt = nbt;
     }
 
@@ -145,7 +145,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     @Impl
     public ItemStack copy(boolean newStackNetworkId) {
-        return itemType.createItemStack(new ItemStackInitInfo.Simple(count, damage, nbt, blockState, stackNetworkId, newStackNetworkId));
+        return itemType.createItemStack(new ItemStackInitInfo.Simple<>(count, damage, nbt, blockState, stackNetworkId, newStackNetworkId));
     }
 
     @Override

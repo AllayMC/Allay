@@ -1,5 +1,6 @@
 package cn.allay.api.client;
 
+import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.entity.impl.EntityPlayer;

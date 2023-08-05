@@ -5,16 +5,9 @@ import lombok.Getter;
 import java.util.Objects;
 
 @Getter
-public final class CollisionPair<T extends Boundable & Identifiable> {
-   private final T objectA;
-   private final T objectB;
+public record CollisionPair<T extends Boundable & Identifiable>(T objectA, T objectB) {
 
-   public CollisionPair(T objectA, T objectB) {
-      this.objectA = objectA;
-      this.objectB = objectB;
-   }
-
-    @Override
+   @Override
    public boolean equals(Object o) {
       if (this == o) {
          return true;
