@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.skin.*;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.json.internal.json_simple.JSONValue;
@@ -28,6 +29,7 @@ import java.util.UUID;
 @ToString
 @Getter
 @Setter
+@Slf4j
 public class Skin {
 
     public static final int SINGLE_SKIN_SIZE = 8192;
@@ -102,7 +104,7 @@ public class Skin {
         try {
             skinData = ImageIO.read(inputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error while reading skin from input stream", e);
         }
         if (skinData != null) {
             skin.setSkinData(skinData);

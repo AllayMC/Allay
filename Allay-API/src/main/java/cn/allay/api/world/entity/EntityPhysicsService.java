@@ -1,6 +1,8 @@
 package cn.allay.api.world.entity;
 
 import cn.allay.api.entity.Entity;
+import cn.allay.api.math.Location3dc;
+import org.joml.Vector3dc;
 import org.joml.primitives.AABBdc;
 
 import java.util.Collections;
@@ -23,6 +25,8 @@ public interface EntityPhysicsService {
 
     void containEntity(Entity entity);
 
+    void offerNewLocation(Entity entity, Location3dc location);
+
     default List<Entity> getCollidingEntities(Entity entity) {
         if (entity.hasCollision())
             return getCollidingEntities(entity.getAABB());
@@ -30,6 +34,4 @@ public interface EntityPhysicsService {
     }
 
     List<Entity> getCollidingEntities(AABBdc aabb);
-
-
 }

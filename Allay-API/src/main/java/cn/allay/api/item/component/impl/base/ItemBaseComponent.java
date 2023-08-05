@@ -35,7 +35,7 @@ public interface ItemBaseComponent {
     NbtMap getNbt();
 
     @Inject
-    void setNbt(@Nullable  NbtMap nbt);
+    void setNbt(@Nullable NbtMap nbt);
 
     @Nullable
     @Inject

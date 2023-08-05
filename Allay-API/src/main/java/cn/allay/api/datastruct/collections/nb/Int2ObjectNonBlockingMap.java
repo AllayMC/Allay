@@ -2,6 +2,7 @@ package cn.allay.api.datastruct.collections.nb;
 
 import it.unimi.dsi.fastutil.ints.AbstractIntSet;
 import it.unimi.dsi.fastutil.ints.IntIterator;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -431,7 +432,7 @@ public class Int2ObjectNonBlockingMap<TypeV>
     /**
      * Auto-boxing version of {@link #remove(int, Object)}.
      */
-    public boolean remove(Object key, Object Val) {
+    public boolean remove(@NotNull Object key, Object Val) {
         return (key instanceof Integer) && remove(((Integer) key).intValue(), Val);
     }
 
@@ -803,7 +804,7 @@ public class Int2ObjectNonBlockingMap<TypeV>
         static private final AtomicLongFieldUpdater<CHM> _copyDoneUpdater =
                 AtomicLongFieldUpdater.newUpdater(CHM.class, "_copyDone");
         // Back-pointer to top-level structure
-        final Int2ObjectNonBlockingMap _nbhml;
+        final Int2ObjectNonBlockingMap<?> _nbhml;
         final int[] _keys;
         final Object[] _vals;
         // ---
@@ -844,7 +845,7 @@ public class Int2ObjectNonBlockingMap<TypeV>
         private ConcurrentAutoIntTable _slots;
 
         // Simple constructor
-        CHM(final Int2ObjectNonBlockingMap nbhml, ConcurrentAutoIntTable size, final int logsize) {
+        CHM(final Int2ObjectNonBlockingMap<?> nbhml, ConcurrentAutoIntTable size, final int logsize) {
             _nbhml = nbhml;
             _size = size;
             _slots = new ConcurrentAutoIntTable();

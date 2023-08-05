@@ -253,7 +253,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         addEntityPacket.setRuntimeEntityId(uniqueId);
         addEntityPacket.setUniqueEntityId(uniqueId);
         addEntityPacket.setIdentifier(entityType.getIdentifier().toString());
-        addEntityPacket.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
+        addEntityPacket.setPosition(Vector3f.from(location.x(), location.y()  + getBaseOffset(), location.z()));
         addEntityPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         addEntityPacket.setRotation(Vector2f.from(location.pitch(), location.yaw()));
         addEntityPacket.getMetadata().putAll(metadata.getEntityDataMap());

@@ -38,7 +38,7 @@ public final class HeightMap {
         int intPerLong = (int) Math.floor(64.0 / lengthInBits);
         int intCount = (int) Math.ceil((double) longs.length * intPerLong);
         int[] ints = new int[intCount];
-        int intPerLongCeil = (int) Math.ceil(intPerLong);
+        int intPerLongCeil = (int) (double) intPerLong;
         long mask = (1L << lengthInBits) - 1L;
         for (int i = 0; i < ints.length; i++) {
             int longIndex = i / intPerLongCeil;

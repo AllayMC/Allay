@@ -45,7 +45,7 @@ public interface ItemStackInitInfo<T extends ItemStack> extends ComponentInitInf
         @Setter
         private ItemType<T> itemType;
 
-        public Simple(int count, int damage, NbtMap nbt, BlockState blockState, Integer stackNetworkId, boolean autoAssignStackNetworkId) {
+        public Simple(int count, int damage, @Nullable NbtMap nbt, @Nullable BlockState blockState, @Nullable Integer stackNetworkId, boolean autoAssignStackNetworkId) {
             this.count = count;
             this.damage = damage;
             this.nbt = nbt;

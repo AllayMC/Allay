@@ -119,16 +119,13 @@ public final class AnvilRegionFile implements Cloneable {
         byte[] input = new byte[chunk.readableBytes()];
         byte[] output;
         chunk.readBytes(input);
-        switch (compressionType) {
-            case GZIP_COMPRESSION:
-                output = ZlibProviderType.LibDeflateThreadLocal.of(CompressionType.GZIP, 6).inflate(input, CHUNK_SIZE_LIMIT);
-                break;
-            case ZLIB_COMPRESSION:
-                output = ZlibProviderType.LibDeflateThreadLocal.of(CompressionType.ZLIB, 6).inflate(input, CHUNK_SIZE_LIMIT);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown compression type: " + compressionType);
-        }
+        output = switch (compressionType) {
+            case GZIP_COMPRESSION ->
+                    ZlibProviderType.LibDeflateThreadLocal.of(CompressionType.GZIP, 6).inflate(input, CHUNK_SIZE_LIMIT);
+            case ZLIB_COMPRESSION ->
+                    ZlibProviderType.LibDeflateThreadLocal.of(CompressionType.ZLIB, 6).inflate(input, CHUNK_SIZE_LIMIT);
+            default -> throw new IllegalArgumentException("Unknown compression type: " + compressionType);
+        };
         NBTInputStream reader = NbtUtils.createReader(new BufferedInputStream(new ByteArrayInputStream(output)));
         return (NbtMap) reader.readTag();
     }

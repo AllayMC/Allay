@@ -79,12 +79,10 @@ public class AllayWorld implements World {
         }
         worldMainThread = Thread.ofPlatform()
                 .name("Allay World Main Thread")
-                .start(() -> {
-                    GameLoop.builder()
-                            .onTick(gameLoop -> tick())
-                            .build()
-                            .startLoop();
-                });
+                .start(() -> GameLoop.builder()
+                        .onTick(gameLoop -> tick())
+                        .build()
+                        .startLoop());
     }
 
     @Override

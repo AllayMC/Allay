@@ -1,5 +1,6 @@
-package cn.allay.api.client;
+package cn.allay.api.client.data;
 
+import cn.allay.api.client.Client;
 import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.AbilityLayer;

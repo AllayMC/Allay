@@ -22,11 +22,11 @@ public interface BitArray {
         return VarInts.readInt(buffer);
     }
 
-    int getSize();
+    int size();
 
-    int[] getWords();
+    int[] words();
 
-    BitArrayVersion getVersion();
+    BitArrayVersion version();
 
     BitArray copy();
 

@@ -260,7 +260,7 @@ public final class AABBTree<T extends Boundable & Identifiable> {
         AABBf overlapWith = nodeToTest.getAABB();
 
         while (!stack.isEmpty()) {
-            Integer nodeIndex = stack.pop();
+            int nodeIndex = stack.pop();
             if (nodeIndex == AABBTreeNode.INVALID_NODE_INDEX) {
                 continue;
             }
@@ -377,8 +377,7 @@ public final class AABBTree<T extends Boundable & Identifiable> {
 
         Set<CollisionPair<T>> alreadyTested = new HashSet<>();
 
-        for (int i = 0; i < nodes.size(); i++) {
-            AABBTreeNode<T> testedNode = nodes.get(i);
+        for (AABBTreeNode<T> testedNode : nodes) {
             if (!testedNode.isLeaf()) {
                 continue;
             }
