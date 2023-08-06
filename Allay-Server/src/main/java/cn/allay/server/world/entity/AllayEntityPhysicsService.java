@@ -12,13 +12,13 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
-import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
+
+import static cn.allay.api.block.component.impl.attribute.BlockAttributes.DEFAULT_FRICTION;
 
 /**
  * Allay Project 2023/8/5 <br>
@@ -49,23 +49,45 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         handleEntityUpdateQueue();
         handleScheduledMoveQueue();
         computeEntityCollision();
-        updateEntityMotion();
-        moveEntity();
-        simulateResistance();
+        entities.values().parallelStream().forEach(entity -> {
+            updateMotion(entity);
+            applyMotion(entity);
+        });
     }
 
-    protected void updateEntityMotion() {
-
-    }
-
-    protected void moveEntity() {
-        entities.values().parallelStream().forEach(this::applyMotion);
+    protected void updateMotion(Entity entity) {
+        //TODO: 效果乘数
+        var effectFactor = 1;
+        var blockUnder = world.getBlockState((int) entity.getLocation().x(), (int) (entity.getLocation().y() - 0.5), (int) entity.getLocation().z());
+        double slipperyFactor = blockUnder != null ?
+                blockUnder.blockType().getBlockBehavior().getBlockAttributes(blockUnder).friction() :
+                DEFAULT_FRICTION;
+        var mx = entity.getMotion().x();
+        var my = entity.getMotion().y();
+        var mz = entity.getMotion().z();
+        //https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas
+        double newMx;
+        double newMz;
+        var approachMx = mx * slipperyFactor * 0.91;
+        var approachMz = mz * slipperyFactor * 0.91;
+        double yaw = entity.getLocation().yaw();
+        if (entity.isOnGround()) {
+            newMx = approachMx + 0.1 * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.sin(yaw);
+            newMz = approachMz + 0.1 * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.cos(yaw);
+        } else {
+            newMx = approachMx + 0.02 * Math.sin(yaw);
+            newMz = approachMz + 0.02 * Math.cos(yaw);
+        }
+        double newMy = (my - 0.08) * 0.98;
+        if (Math.abs(newMx) < MOTION_THRESHOLD) newMx = 0;
+        if (Math.abs(newMy) < MOTION_THRESHOLD) newMy = 0;
+        if (Math.abs(newMz) < MOTION_THRESHOLD) newMz = 0;
+        entity.setMotion(new Vector3d(newMx, newMy, newMz));
     }
 
     protected void applyMotion(Entity entity) {
         var pos = new Location3d(entity.getLocation());
         var motion = entity.getMotion();
-        if (motion.equals(0, 0, 0)) return;
         var mx = motion.x();
         var my = motion.y();
         var mz = motion.z();
@@ -74,7 +96,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         //先沿着Y轴移动
         my = moveYAxis(aabb, my, pos, entity);
 
-        if (Math.abs(mx) > Math.abs(mz)) {
+        if (Math.abs(mx) >= Math.abs(mz)) {
             //先处理X轴
             mx = moveXAxis(aabb, mx, pos);
             //再处理Z轴
@@ -91,6 +113,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected double moveZAxis(AABBd aabb, double mz, Vector3d pos) {
+        if (mz == 0) return mz;
         var extendZ = new AABBd(aabb);
         //计算射线Z轴起点坐标
         double z;
@@ -134,6 +157,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected double moveXAxis(AABBd aabb, double mx, Vector3d pos) {
+        if (mx == 0) return mx;
         var extendX = new AABBd(aabb);
         //计算射线X轴起点坐标
         double x;
@@ -177,6 +201,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected double moveYAxis(AABBd aabb, double my, Vector3d pos, Entity entity) {
+        if (my == 0) return my;
         AABBd extendY = new AABBd(aabb);
         //计算射线Y轴起点坐标
         double y;
@@ -239,10 +264,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             }
         }
         return unionAABB;
-    }
-
-    protected void simulateResistance() {
-
     }
 
     protected void computeEntityCollision() {
