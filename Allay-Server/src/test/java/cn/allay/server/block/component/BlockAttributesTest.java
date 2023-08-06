@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BlockAttributesTest {
     private static final String json = """
             {
-                "aabb": "0.0005,0.0005,0.0005,0.9995,0.1825,0.9995",
+                "aabbCollision": "0.0005,0.0005,0.0005,0.9995,0.1825,0.9995",
                 "canBeMovingBlock": true,
                 "blocksPrecipitation": true,
                 "breaksFallingBlocks": true,
@@ -45,6 +45,7 @@ class BlockAttributesTest {
                 "hardness": 3,
                 "hasBlockEntity": false,
                 "hasComparatorSignal": false,
+                "hasCollision": true,
                 "name": "minecraft:trapdoor",
                 "isAlwaysDestroyable": true,
                 "isContainerBlock": false,
@@ -70,12 +71,12 @@ class BlockAttributesTest {
     void testDeserialization() {
         var blockAttributes = BlockAttributes.fromJson(json);
         //Check all the values
-        assertEquals(Double.toHexString(0.0005), Double.toHexString(blockAttributes.aabb().minX()));
-        assertEquals(Double.toHexString(0.0005), Double.toHexString(blockAttributes.aabb().minY()));
-        assertEquals(Double.toHexString(0.0005), Double.toHexString(blockAttributes.aabb().minZ()));
-        assertEquals(Double.toHexString(0.9995), Double.toHexString(blockAttributes.aabb().maxX()));
-        assertEquals(Double.toHexString(0.1825), Double.toHexString(blockAttributes.aabb().maxY()));
-        assertEquals(Double.toHexString(0.9995), Double.toHexString(blockAttributes.aabb().maxZ()));
+        assertEquals(Double.toHexString(0.0005), Double.toHexString(blockAttributes.aabbCollision().minX()));
+        assertEquals(Double.toHexString(0.0005), Double.toHexString(blockAttributes.aabbCollision().minY()));
+        assertEquals(Double.toHexString(0.0005), Double.toHexString(blockAttributes.aabbCollision().minZ()));
+        assertEquals(Double.toHexString(0.9995), Double.toHexString(blockAttributes.aabbCollision().maxX()));
+        assertEquals(Double.toHexString(0.1825), Double.toHexString(blockAttributes.aabbCollision().maxY()));
+        assertEquals(Double.toHexString(0.9995), Double.toHexString(blockAttributes.aabbCollision().maxZ()));
         assertTrue(blockAttributes.canBeMovingBlock());
         assertTrue(blockAttributes.blocksPrecipitation());
         assertTrue(blockAttributes.breaksFallingBlocks());

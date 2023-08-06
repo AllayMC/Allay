@@ -22,6 +22,13 @@ public class Location3d extends Position3d implements Location3dc {
     public double yaw;
     public double headYaw;
 
+    public Location3d(Location3dc l) {
+        super(l);
+        this.pitch = l.pitch();
+        this.yaw = l.yaw();
+        this.headYaw = l.headYaw();
+    }
+
     public Location3d(double x, double y, double z, World world) {
         super(x, y, z, world);
     }

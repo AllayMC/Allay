@@ -41,7 +41,9 @@ public class BlockAttributes {
         return new AABBd(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
     }
     @Builder.Default
-    protected AABBdc aabb = new AABBd(0, 0, 0, 1, 1, 1);
+    protected AABBdc aabbCollision = new AABBd(0, 0, 0, 1, 1, 1);
+    @Builder.Default
+    protected boolean hasCollision = true;
     @Builder.Default
     protected boolean blocksPrecipitation = true;
     @Builder.Default
@@ -118,7 +120,7 @@ public class BlockAttributes {
         );
         return BlockAttributes
                 .builder()
-                .aabb(parseAABBStr(nbt.getString("aabb")))
+                .aabbCollision(parseAABBStr(nbt.getString("aabbCollision")))
                 .blocksPrecipitation(nbt.getBoolean("blocksPrecipitation"))
                 .canBeMovingBlock(nbt.getBoolean("canBeMovingBlock"))
                 .breaksFallingBlocks(nbt.getBoolean("breaksFallingBlocks"))
