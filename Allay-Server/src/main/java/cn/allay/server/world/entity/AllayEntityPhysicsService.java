@@ -18,6 +18,7 @@ import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Allay Project 2023/8/5 <br>
@@ -71,13 +72,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var aabb = new AABBd(entity.getOffsetAABB());
 
         //先沿着Y轴移动
-        my = moveYAxis(aabb, my, pos);
-        if (my == 0) {
-            //y没变化，触地了
-            entity.setOnGround(true);
-        } else {
-            entity.setOnGround(false);
-        }
+        my = moveYAxis(aabb, my, pos, entity);
 
         if (Math.abs(mx) > Math.abs(mz)) {
             //先处理X轴
@@ -181,13 +176,15 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return mx;
     }
 
-    protected double moveYAxis(AABBd aabb, double my, Vector3d pos) {
+    protected double moveYAxis(AABBd aabb, double my, Vector3d pos, Entity entity) {
         AABBd extendY = new AABBd(aabb);
         //计算射线Y轴起点坐标
         double y;
+        boolean down = false;
         //检查范围不包括实体aabb
         if (my < 0) {
             //向下移动
+            down = true;
             y = aabb.minY;
             extendY.maxY -= extendY.lengthY();
             extendY.minY += my;
@@ -201,6 +198,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var deltaY = my;
         if (blocks.length != 0) {
             //存在碰撞
+            if (down) entity.setOnGround(true);
             //union为一个能将所有方块aabb包含的最小aabb
             var union = unionBlockAABBs(blocks);
             //result包含射线与union求交的两个交点的参数
@@ -217,7 +215,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             deltaY = my * result.x;
             //y轴方向速度归零
             my = 0;
-        }
+        } else entity.setOnGround(false);
         //移动碰撞箱
         aabb.translate(0, deltaY, 0);
         //更新坐标
