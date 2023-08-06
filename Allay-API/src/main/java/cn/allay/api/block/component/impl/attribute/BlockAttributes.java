@@ -24,6 +24,7 @@ import java.awt.*;
 @Builder
 @EqualsAndHashCode
 public class BlockAttributes {
+    public static final float DEFAULT_FRICTION = 0.6f;
     public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
     protected static Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(AABBdc.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> parseAABBStr(json.getAsString()))
@@ -63,7 +64,7 @@ public class BlockAttributes {
     @Builder.Default
     protected float explosionResistance = 15;
     @Builder.Default
-    protected float friction = 0.6f;
+    protected float friction = DEFAULT_FRICTION;
     @Builder.Default
     protected float hardness = 1;
     @Builder.Default
