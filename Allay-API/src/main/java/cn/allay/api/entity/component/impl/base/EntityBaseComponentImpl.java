@@ -280,6 +280,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         pk.setPitch((float) newLoc.pitch());
         pk.setYaw((float) newLoc.yaw());
         pk.setHeadYaw((float) newLoc.headYaw());
+        if (onGround) pk.getFlags().add(MoveEntityDeltaPacket.Flag.ON_GROUND);
         sendPacketToViewers(pk);
     }
 }
