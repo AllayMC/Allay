@@ -55,8 +55,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Function<T, AABBdc> aabbGetter;
     protected boolean hasCollision = true;
     protected Map<Long, Client> viewers = new Long2ObjectOpenHashMap<>();
-    protected Vector3d speed = new Vector3d();
     protected Vector3d motion = new Vector3d();
+    protected boolean onGround = true;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, Function<T, AABBdc> aabbGetter) {
         if (info.location().world() == null)
@@ -199,18 +199,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     @Impl
-    public Vector3dc getSpeed() {
-        return speed;
-    }
-
-    @Override
-    @Impl
-    public void setSpeed(Vector3dc speed) {
-        this.speed = new Vector3d(speed);
-    }
-
-    @Override
-    @Impl
     public Vector3dc getMotion() {
         return motion;
     }
@@ -219,6 +207,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Impl
     public void setMotion(Vector3dc motion) {
         this.motion = new Vector3d(motion);
+    }
+
+    @Override
+    public boolean isOnGround() {
+        return onGround;
+    }
+
+    @Override
+    public void setOnGround(boolean onGround) {
+        this.onGround = onGround;
     }
 
     @Override

@@ -1,32 +1,47 @@
 package cn.allay.server.world.entity;
 
+import cn.allay.api.block.type.BlockState;
 import cn.allay.api.datastruct.aabbtree.AABBTree;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
+import cn.allay.api.math.Location3d;
 import cn.allay.api.math.Location3dc;
+import cn.allay.api.world.World;
 import cn.allay.api.world.entity.EntityPhysicsService;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
+import org.joml.Vector2d;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Allay Project 2023/8/5
+ * Allay Project 2023/8/5 <br>
+ * Special thanks to <a href="https://www.mcpk.wiki">MCPK Wiki</a>
  *
  * @author daoge_cmd
  */
 public class AllayEntityPhysicsService implements EntityPhysicsService {
 
-    public static final double DIFF_POSITION_THRESHOLD = 0.0001;
+    public static final double DIFF_POSITION_THRESHOLD = 0.001;
     public static final double DIFF_ROTATION_THRESHOLD = 0.1;
 
+    public static final double MOTION_THRESHOLD = 0.003;
+
+    protected World world;
     protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
     protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectNonBlockingMap<>();
     protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectNonBlockingMap<>();
     protected AABBTree<Entity> entityAABBTree = new AABBTree<>();
     protected Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
+
+    public AllayEntityPhysicsService(World world) {
+        this.world = world;
+    }
 
     @Override
     public void tick() {
@@ -34,9 +49,201 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         handleScheduledMoveQueue();
         computeEntityCollision();
         updateEntityMotion();
+        moveEntity();
+        simulateResistance();
     }
 
     protected void updateEntityMotion() {
+
+    }
+
+    protected void moveEntity() {
+        entities.values().parallelStream().forEach(this::applyMotion);
+    }
+
+    protected void applyMotion(Entity entity) {
+        var pos = new Location3d(entity.getLocation());
+        var motion = entity.getMotion();
+        if (motion.equals(0, 0, 0)) return;
+        var mx = motion.x();
+        var my = motion.y();
+        var mz = motion.z();
+        var aabb = new AABBd(entity.getOffsetAABB());
+
+        //先沿着Y轴移动
+        my = moveYAxis(aabb, my, pos);
+        if (my == 0) {
+            //y没变化，触地了
+            entity.setOnGround(true);
+        } else {
+            entity.setOnGround(false);
+        }
+
+        if (Math.abs(mx) > Math.abs(mz)) {
+            //先处理X轴
+            mx = moveXAxis(aabb, mx, pos);
+            //再处理Z轴
+            mz = moveZAxis(aabb, mz, pos);
+        } else {
+            //先处理Z轴
+            mz = moveZAxis(aabb, mz, pos);
+            //再处理X轴
+            mx = moveXAxis(aabb, mx, pos);
+        }
+
+        entity.setMotion(new Vector3d(mx, my, mz));
+        updateEntityLocation(entity, pos);
+    }
+
+    protected double moveZAxis(AABBd aabb, double mz, Vector3d pos) {
+        var extendZ = new AABBd(aabb);
+        //计算射线Z轴起点坐标
+        double z;
+        if (mz < 0) {
+            //向Z轴负方向移动
+            z = aabb.minZ;
+            extendZ.maxZ -= extendZ.lengthZ();
+            extendZ.minZ += mz;
+        } else {
+            //向Z轴正方向移动
+            z = aabb.maxZ;
+            extendZ.minZ += extendZ.lengthZ();
+            extendZ.maxZ += mz;
+        }
+        var blocks = world.getCollidingBlocks(extendZ);
+        var deltaZ = mz;
+        if (blocks.length != 0) {
+            //存在碰撞
+            //union为一个能将所有方块aabb包含的最小aabb
+            var union = unionBlockAABBs(blocks);
+            //result包含射线与union求交的两个交点的参数
+            var result = new Vector2d(0, 0);
+            //计算射线XY轴起点坐标
+            var x = (aabb.maxX + aabb.minX) / 2d;
+            var y = (aabb.maxY + aabb.minY) / 2d;
+            union.intersectsRay(
+                    x, y, z,
+                    0, 0, mz,
+                    result
+            );
+            //计算Z轴坐标变化量
+            deltaZ = mz * result.x;
+            //z轴方向速度归零
+            mz = 0;
+        }
+        //移动碰撞箱
+        aabb.translate(0, 0, deltaZ);
+        //更新坐标
+        pos.z += deltaZ;
+        return mz;
+    }
+
+    protected double moveXAxis(AABBd aabb, double mx, Vector3d pos) {
+        var extendX = new AABBd(aabb);
+        //计算射线X轴起点坐标
+        double x;
+        if (mx < 0) {
+            //向X轴负方向移动
+            x = aabb.minX;
+            extendX.maxX -= extendX.lengthX();
+            extendX.minX += mx;
+        } else {
+            //向X轴正方向移动
+            x = aabb.maxX;
+            extendX.minX += extendX.lengthX();
+            extendX.maxX += mx;
+        }
+        var blocks = world.getCollidingBlocks(extendX);
+        var deltaX = mx;
+        if (blocks.length != 0) {
+            //存在碰撞
+            //union为一个能将所有方块aabb包含的最小aabb
+            var union = unionBlockAABBs(blocks);
+            //result包含射线与union求交的两个交点的参数
+            var result = new Vector2d(0, 0);
+            //计算射线YZ轴起点坐标
+            var y = (aabb.maxY + aabb.minY) / 2d;
+            var z = (aabb.maxZ + aabb.minZ) / 2d;
+            union.intersectsRay(
+                    x, y, z,
+                    mx, 0, 0,
+                    result
+            );
+            //计算X轴坐标变化量
+            deltaX = mx * result.x;
+            //x轴方向速度归零
+            mx = 0;
+        }
+        //移动碰撞箱
+        aabb.translate(deltaX, 0, 0);
+        //更新坐标
+        pos.x += deltaX;
+        return mx;
+    }
+
+    protected double moveYAxis(AABBd aabb, double my, Vector3d pos) {
+        AABBd extendY = new AABBd(aabb);
+        //计算射线Y轴起点坐标
+        double y;
+        //检查范围不包括实体aabb
+        if (my < 0) {
+            //向下移动
+            y = aabb.minY;
+            extendY.maxY -= extendY.lengthY();
+            extendY.minY += my;
+        } else {
+            //向上移动
+            y = aabb.maxY;
+            extendY.minY += extendY.lengthY();
+            extendY.maxY += my;
+        }
+        var blocks = world.getCollidingBlocks(extendY);
+        var deltaY = my;
+        if (blocks.length != 0) {
+            //存在碰撞
+            //union为一个能将所有方块aabb包含的最小aabb
+            var union = unionBlockAABBs(blocks);
+            //result包含射线与union求交的两个交点的参数
+            var result = new Vector2d(0, 0);
+            //计算射线XZ轴起点坐标
+            var x = (aabb.maxX + aabb.minX) / 2d;
+            var z = (aabb.maxZ + aabb.minZ) / 2d;
+            union.intersectsRay(
+                    x, y, z,
+                    0, my, 0,
+                    result
+            );
+            //计算Y轴坐标变化量
+            deltaY = my * result.x;
+            //y轴方向速度归零
+            my = 0;
+        }
+        //移动碰撞箱
+        aabb.translate(0, deltaY, 0);
+        //更新坐标
+        pos.y += deltaY;
+        return my;
+    }
+
+    protected AABBd unionBlockAABBs(BlockState[][][] blocks) {
+        AABBd unionAABB = null;
+        for (var sub1 : blocks) {
+            for (var sub2 : sub1) {
+                for (var block : sub2) {
+                    if (block == null) continue;
+                    var blockAABB = block.blockType().getBlockBehavior().getBlockAttributes(block).aabbCollision();
+                    if (unionAABB == null) {
+                        unionAABB = new AABBd();
+                    } else {
+                        unionAABB.union(blockAABB);
+                    }
+                }
+            }
+        }
+        return unionAABB;
+    }
+
+    protected void simulateResistance() {
 
     }
 
@@ -53,10 +260,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var queue = entry.getValue();
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
-                var entity = scheduledMove.entity;
-                var newLoc = scheduledMove.newLoc;
-                entity.broadcastMoveToViewers(computeMoveFlags(entity, entity.getLocation(), newLoc), newLoc);
-                entity.setLocation(newLoc);
+                updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc);
             }
         }
     }
@@ -78,6 +282,11 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 case UPDATE -> entityAABBTree.update(entity);
             }
         }
+    }
+
+    protected void updateEntityLocation(Entity entity, Location3dc newLoc) {
+        entity.broadcastMoveToViewers(computeMoveFlags(entity, entity.getLocation(), newLoc), newLoc);
+        entity.setLocation(newLoc);
     }
 
     protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Entity entity, Location3dc oldLoc, Location3dc newLoc) {

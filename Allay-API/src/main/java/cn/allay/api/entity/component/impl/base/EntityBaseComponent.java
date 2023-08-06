@@ -9,6 +9,7 @@ import cn.allay.api.client.Client;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -54,16 +55,20 @@ public interface EntityBaseComponent {
     Map<Long, Client> getViewers();
 
     @Inject
-    Vector3dc getSpeed();
-
-    @Inject
-    void setSpeed(Vector3dc speed);
-
-    @Inject
     Vector3dc getMotion();
 
     @Inject
     void setMotion(Vector3dc motion);
+
+    default void addMotion(Vector3dc add) {
+        setMotion(getMotion().add(add, new Vector3d()));
+    }
+
+    @Inject
+    boolean isOnGround();
+
+    @Inject
+    void setOnGround(boolean onGround);
 
     @Inject
     void spawnTo(Client client);

@@ -21,6 +21,11 @@ import java.text.NumberFormat;
 public class Position3d extends Vector3d implements Position3dc {
     public World world;
 
+    public Position3d(Position3dc p) {
+        super(p);
+        this.world = p.world();
+    }
+
     public Position3d(World world) {
         super();
         this.world = world;
