@@ -15,6 +15,8 @@ annotations = { group = "org.jetbrains", name = "annotations", version = "24.0.1
 libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0.0.2-PNX" }
 disruptor = { group = "com.lmax", name = "disruptor", version = "3.4.4" }
 commonsio = { group = "commons-io", name = "commons-io", version = "2.13.0" }
+hephaistos = { group = "io.github.jglrxavpok.hephaistos", name = "common", version = "2.6.0" }
+picocli = { group = "info.picocli", name = "picocli", version = "4.7.4" }
 
 # Logging dependencies
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.7" }
