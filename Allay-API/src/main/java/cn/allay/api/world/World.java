@@ -189,5 +189,6 @@ public interface World extends ChunkAccessible {
                 }
             }
         }
+        return blockStates;
     }
 }

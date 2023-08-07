@@ -50,6 +50,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         handleScheduledMoveQueue();
         computeEntityCollision();
         entities.values().parallelStream().forEach(entity -> {
+            //TODO: 碰撞箱挤压 水流作用
             updateMotion(entity);
             applyMotion(entity);
         });

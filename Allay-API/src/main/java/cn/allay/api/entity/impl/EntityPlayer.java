@@ -108,12 +108,14 @@ public interface EntityPlayer extends
         }
 
         @Override
+        @Impl
         public void spawnTo(Client client) {
             if (this.client != client)
                 super.spawnTo(client);
         }
 
         @Override
+        @Impl
         public void despawnFrom(Client client) {
             if (this.client != client)
                 super.despawnFrom(client);

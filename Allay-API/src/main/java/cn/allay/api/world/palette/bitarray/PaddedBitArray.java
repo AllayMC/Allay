@@ -10,7 +10,6 @@ import java.util.Arrays;
  *
  * @author JukeboxMC | daoge_cmd
  */
-@Getter
 public record PaddedBitArray(BitArrayVersion version, int size, int[] words) implements BitArray {
 
     public PaddedBitArray(BitArrayVersion version, int size, int[] words) {

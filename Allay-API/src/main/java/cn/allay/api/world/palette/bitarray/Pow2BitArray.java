@@ -10,7 +10,6 @@ import java.util.Arrays;
  *
  * @author JukeboxMC | daoge_cmd
  */
-@Getter
 public record Pow2BitArray(BitArrayVersion version, int size, int[] words) implements BitArray {
 
     public Pow2BitArray(BitArrayVersion version, int size, int[] words) {
