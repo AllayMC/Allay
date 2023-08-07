@@ -13,7 +13,7 @@ import org.cloudburstmc.protocol.common.util.VarInts;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/4/14
@@ -139,8 +139,11 @@ public final class Palette<V> {
     }
 
     //仅Anvil使用
-    public NbtList<Integer> toNBT() {
-        return new NbtList<>(NbtType.INT, IntStream.of(this.bitArray.words()).boxed().toList());
+    public <R> NbtMap toNBT(Function<V, R> converter) {
+        NbtMapBuilder builder = NbtMap.builder().putIntArray("data", this.bitArray.words());
+        List<R> list = this.palette.stream().map(converter).toList();
+        builder.putList("palette", (NbtType<R>) NbtType.byClass(list.get(0).getClass()), list);
+        return builder.build();
     }
 
 
