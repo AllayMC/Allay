@@ -81,7 +81,7 @@ public class AllayChunkService implements ChunkService {
         unusedChunkClearCountDown.replaceAll((chunkHash, countDown) -> countDown - 1);
         //Remove countdown ended unused chunks
         unusedChunkClearCountDown.entrySet().removeIf(entry -> {
-            var shouldRemove = entry.getValue() == 0;
+            boolean shouldRemove = entry.getValue() == 0;
             if (shouldRemove) {
                 unloadChunk(entry.getKey());
             }
@@ -90,7 +90,7 @@ public class AllayChunkService implements ChunkService {
 
         //Add unused chunk to the clear countdown map
         for (var entry : loadedChunks.entrySet()) {
-            var chunkHash = entry.getKey();
+            Long chunkHash = entry.getKey();
             var loadedChunk = entry.getValue();
             if (loadedChunk.getChunkLoaderCount() == 0 && !unusedChunkClearCountDown.containsKey(chunkHash)) {
                 unusedChunkClearCountDown.put(chunkHash, REMOVE_UNNEEDED_CHUNK_CYCLE);

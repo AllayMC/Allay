@@ -1,33 +1,28 @@
 package cn.allay.api.world.palette;
 
+import cn.allay.api.world.bitarray.BitArray;
+import cn.allay.api.world.bitarray.BitArrayVersion;
 import cn.allay.api.world.chunk.Chunk;
-import cn.allay.api.world.palette.bitarray.BitArray;
-import cn.allay.api.world.palette.bitarray.BitArrayVersion;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import org.cloudburstmc.nbt.NBTInputStream;
-import org.cloudburstmc.nbt.NBTOutputStream;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.nbt.*;
 import org.cloudburstmc.protocol.common.util.VarInts;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/4/14
  *
  * @author JukeboxMC | daoge_cmd
  */
-@Getter
 @EqualsAndHashCode
 public final class Palette<V> {
     public static final int COPY_LAST_FLAG_HEADER = (0x7F << 1) | 1;// 11111111b (1byte)
-
     private final List<V> palette;
     private BitArray bitArray;
 
@@ -41,22 +36,6 @@ public final class Palette<V> {
         this.palette.add(first);
     }
 
-    private static int getPaletteHeader(BitArrayVersion version, boolean runtime) {
-        return (version.bits << 1) | (runtime ? 1 : 0);
-    }
-
-    private static BitArrayVersion getVersionFromPaletteHeader(short header) {
-        return BitArrayVersion.get(header >> 1, true);
-    }
-
-    private static boolean hasCopyLastFlag(short header) {
-        return (header >> 1) == 0x7F;
-    }
-
-    private static boolean isPersistent(short header) {
-        return (header & 1) == 0;
-    }
-
     public V get(int index) {
         return this.palette.get(this.bitArray.get(index));
     }
@@ -66,10 +45,18 @@ public final class Palette<V> {
         this.bitArray.set(index, paletteIndex);
     }
 
+    /**
+     * Write the Palette data to the network buffer
+     *
+     * @param byteBuf    the byte buf
+     * @param serializer the serializer
+     */
+    //Anvil Level 公用
     public void writeToNetwork(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer) {
         writeWords(byteBuf, serializer);
     }
 
+    //Anvil Level 公用
     public void writeToNetwork(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
         if (writeLast(byteBuf, last)) return;
         if (writeEmpty(byteBuf, serializer)) return;
@@ -77,6 +64,7 @@ public final class Palette<V> {
         writeWords(byteBuf, serializer);
     }
 
+    //Anvil Level 公用
     public void readFromNetwork(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer) {
         readWords(byteBuf, readBitArrayVersion(byteBuf));
 
@@ -84,6 +72,7 @@ public final class Palette<V> {
         for (int i = 0; i < size; i++) this.palette.add(deserializer.deserialize(VarInts.readInt(byteBuf)));
     }
 
+    //Anvil Level 公用
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
         byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), false));
 
@@ -99,6 +88,7 @@ public final class Palette<V> {
         }
     }
 
+    //仅LevelDB使用
     public void writeToStorageRuntime(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
         if (writeLast(byteBuf, last)) return;
         if (writeEmpty(byteBuf, serializer)) return;
@@ -109,6 +99,7 @@ public final class Palette<V> {
         for (V value : this.palette) byteBuf.writeIntLE(serializer.serialize(value));
     }
 
+    //仅LevelDB使用
     public void readFromStoragePersistent(ByteBuf byteBuf, PersistentDataDeserializer<V> deserializer) {
         readWords(byteBuf, readBitArrayVersion(byteBuf));
 
@@ -122,6 +113,7 @@ public final class Palette<V> {
         }
     }
 
+    //仅LevelDB使用
     public void readFromStorageRuntime(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer, Palette<V> last) {
         final short header = byteBuf.readUnsignedByte();
 
@@ -146,27 +138,14 @@ public final class Palette<V> {
         for (int i = 0; i < paletteSize; i++) this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
     }
 
-    private BitArrayVersion readBitArrayVersion(ByteBuf byteBuf) {
-        short header = byteBuf.readUnsignedByte();
-        return Palette.getVersionFromPaletteHeader(header);
+    //仅Anvil使用
+    public <R> NbtMap toNBT(Function<V, R> converter) {
+        NbtMapBuilder builder = NbtMap.builder().putIntArray("data", this.bitArray.words());
+        List<R> list = this.palette.stream().map(converter).toList();
+        builder.putList("palette", (NbtType<R>) NbtType.byClass(list.get(0).getClass()), list);
+        return builder.build();
     }
 
-    private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
-        final int wordCount = version.getWordsForSize(Chunk.SECTION_SIZE);
-        final int[] words = new int[wordCount];
-        for (int i = 0; i < wordCount; i++) words[i] = byteBuf.readIntLE();
-
-        this.bitArray = version.createArray(Chunk.SECTION_SIZE, words);
-        this.palette.clear();
-    }
-
-    private void onResize(BitArrayVersion version) {
-        final BitArray newBitArray = version.createArray(Chunk.SECTION_SIZE);
-        for (int i = 0; i < Chunk.SECTION_SIZE; i++)
-            newBitArray.set(i, this.bitArray.get(i));
-
-        this.bitArray = newBitArray;
-    }
 
     public int paletteIndexFor(V value) {
         int index = this.palette.indexOf(value);
@@ -224,5 +203,44 @@ public final class Palette<V> {
 
         this.bitArray.writeSizeToNetwork(byteBuf, this.palette.size());
         for (V value : this.palette) VarInts.writeInt(byteBuf, serializer.serialize(value));
+    }
+
+
+    private BitArrayVersion readBitArrayVersion(ByteBuf byteBuf) {
+        short header = byteBuf.readUnsignedByte();
+        return Palette.getVersionFromPaletteHeader(header);
+    }
+
+    private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
+        final int wordCount = version.getWordsForSize(Chunk.SECTION_SIZE);
+        final int[] words = new int[wordCount];
+        for (int i = 0; i < wordCount; i++) words[i] = byteBuf.readIntLE();
+
+        this.bitArray = version.createArray(Chunk.SECTION_SIZE, words);
+        this.palette.clear();
+    }
+
+    private void onResize(BitArrayVersion version) {
+        final BitArray newBitArray = version.createArray(Chunk.SECTION_SIZE);
+        for (int i = 0; i < Chunk.SECTION_SIZE; i++)
+            newBitArray.set(i, this.bitArray.get(i));
+
+        this.bitArray = newBitArray;
+    }
+
+    private static int getPaletteHeader(BitArrayVersion version, boolean runtime) {
+        return (version.bits << 1) | (runtime ? 1 : 0);
+    }
+
+    private static BitArrayVersion getVersionFromPaletteHeader(short header) {
+        return BitArrayVersion.get(header >> 1, true);
+    }
+
+    private static boolean hasCopyLastFlag(short header) {
+        return (header >> 1) == 0x7F;
+    }
+
+    private static boolean isPersistent(short header) {
+        return (header & 1) == 0;
     }
 }
