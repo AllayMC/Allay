@@ -1,10 +1,7 @@
 package cn.allay.api.datastruct.aabbtree;
 
-import lombok.Getter;
-
 import java.util.Objects;
 
-@Getter
 public record CollisionPair<T extends HasAABB & HasLongId>(T objectA, T objectB) {
 
    @Override

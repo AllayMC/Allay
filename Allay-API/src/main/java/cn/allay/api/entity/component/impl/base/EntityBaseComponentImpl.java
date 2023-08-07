@@ -210,11 +210,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    @Impl
     public boolean isOnGround() {
         return onGround;
     }
 
     @Override
+    @Impl
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
     }
