@@ -25,10 +25,7 @@ public interface EntityPhysicsService {
     boolean containEntity(Entity entity);
 
     default void offerScheduledMove(Entity entity, Location3dc newLoc) {
-        offerScheduledMove(entity, newLoc, true);
     }
-
-    void offerScheduledMove(Entity entity, Location3dc newLoc);
 
     default List<Entity> computeCollidingEntities(Entity entity) {
         if (entity.hasCollision())

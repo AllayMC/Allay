@@ -1,9 +1,9 @@
 package cn.allay.api.world;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.client.Client;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.Position3ic;
-import cn.allay.api.client.Client;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.chunk.ChunkAccessible;
@@ -17,7 +17,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBdc;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Describe a world
@@ -189,5 +188,6 @@ public interface World extends ChunkAccessible {
                 }
             }
         }
+        return blockStates;
     }
 }
