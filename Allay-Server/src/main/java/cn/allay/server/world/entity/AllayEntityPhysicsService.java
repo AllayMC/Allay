@@ -95,25 +95,25 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var aabb = new AABBd(entity.getOffsetAABB());
 
         //先沿着Y轴移动
-        my = moveYAxis(aabb, my, pos, entity);
+        my = moveAlongYAxisAndStopWhenCollision(aabb, my, pos, entity);
 
         if (Math.abs(mx) >= Math.abs(mz)) {
             //先处理X轴
-            mx = moveXAxis(aabb, mx, pos);
+            mx = moveAlongXAxisAndStopWhenCollision(aabb, mx, pos);
             //再处理Z轴
-            mz = moveZAxis(aabb, mz, pos);
+            mz = moveAlongZAxisAndStopWhenCollision(aabb, mz, pos);
         } else {
             //先处理Z轴
-            mz = moveZAxis(aabb, mz, pos);
+            mz = moveAlongZAxisAndStopWhenCollision(aabb, mz, pos);
             //再处理X轴
-            mx = moveXAxis(aabb, mx, pos);
+            mx = moveAlongXAxisAndStopWhenCollision(aabb, mx, pos);
         }
 
         entity.setMotion(new Vector3d(mx, my, mz));
         updateEntityLocation(entity, pos);
     }
 
-    protected double moveZAxis(AABBd aabb, double mz, Vector3d pos) {
+    protected double moveAlongZAxisAndStopWhenCollision(AABBd aabb, double mz, Vector3d pos) {
         if (mz == 0) return mz;
         var extendZ = new AABBd(aabb);
         //计算射线Z轴起点坐标
@@ -157,7 +157,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return mz;
     }
 
-    protected double moveXAxis(AABBd aabb, double mx, Vector3d pos) {
+    protected double moveAlongXAxisAndStopWhenCollision(AABBd aabb, double mx, Vector3d pos) {
         if (mx == 0) return mx;
         var extendX = new AABBd(aabb);
         //计算射线X轴起点坐标
@@ -201,7 +201,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return mx;
     }
 
-    protected double moveYAxis(AABBd aabb, double my, Vector3d pos, Entity entity) {
+    protected double moveAlongYAxisAndStopWhenCollision(AABBd aabb, double my, Vector3d pos, Entity entity) {
         if (my == 0) return my;
         AABBd extendY = new AABBd(aabb);
         //计算射线Y轴起点坐标
