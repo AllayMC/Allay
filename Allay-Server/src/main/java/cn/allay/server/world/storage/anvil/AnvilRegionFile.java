@@ -145,11 +145,11 @@ public final class AnvilRegionFile implements Cloneable {
         }
 
         // Get the sector index and size previously used by this chunk
-        var index = index(chunkX, chunkZ);
-        var previousSectorCount = sectorCount(locations.getInt(index));
-        var previousSectorStart = sectorIndex(locations.getInt(index));
+        int index = index(chunkX, chunkZ);
+        int previousSectorCount = sectorCount(locations.getInt(index));
+        int previousSectorStart = sectorIndex(locations.getInt(index));
 
-        var appendToEnd = false;
+        boolean appendToEnd = false;
         long position;
         int sectorStartCount;
 
@@ -221,7 +221,7 @@ public final class AnvilRegionFile implements Cloneable {
 
     private void alignment4K() throws IOException {
         // file is not a multiple of 4kib, add padding
-        var missingPadding = channel.size() % SECTOR_SIZE;
+        long missingPadding = channel.size() % SECTOR_SIZE;
         if (missingPadding > 0) {
             channel.write(ByteBuffer.allocate((int) (SECTOR_SIZE - missingPadding)));
         }

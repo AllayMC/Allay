@@ -50,7 +50,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @ApiStatus.Internal
     @NotNull
     public ChunkSection getOrCreateSection(int y) {
-        for (var i = 0; i <= y; i++) {
+        for (int i = 0; i <= y; i++) {
             sections.compareAndSet(i, null, new ChunkSection(i));
         }
         return sections.get(y);

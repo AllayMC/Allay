@@ -333,13 +333,13 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     private void writeChunkDataToBuffer(ByteBuf retainedBuffer) {
         Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
 
-        for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
+        for (int sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
             var section = getSection(sectionY);
             if (section == null) break;
             section.writeToNetwork(retainedBuffer);
         }
 
-        for (var sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
+        for (int sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
             var section = getSection(sectionY);
             if (section == null) {
                 lastBiomes.writeToNetwork(retainedBuffer, BiomeType::getId, lastBiomes);
@@ -367,7 +367,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     }
 
     private int computeNotNullSectionCount() {
-        for (var count = 0; count < getDimensionInfo().chunkSectionSize(); count++) {
+        for (int count = 0; count < getDimensionInfo().chunkSectionSize(); count++) {
             if (getSection(count) == null)
                 return count;
         }

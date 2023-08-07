@@ -1,9 +1,9 @@
 package cn.allay.api.container.processor;
 
+import cn.allay.api.client.Client;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.client.Client;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
@@ -25,13 +25,13 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
     @Override
     public List<ItemStackResponse> handle(T action, Client client, int requestId) {
-        var slot1 = action.getSource().getSlot();
-        var stackNetworkId1 = action.getSource().getStackNetworkId();
-        var slot2 = action.getDestination().getSlot();
-        var stackNetworkId2 = action.getDestination().getStackNetworkId();
+        int slot1 = action.getSource().getSlot();
+        int stackNetworkId1 = action.getSource().getStackNetworkId();
+        int slot2 = action.getDestination().getSlot();
+        int stackNetworkId2 = action.getDestination().getStackNetworkId();
         var source = client.getPlayerEntity().getContainerBySlotType(action.getSource().getContainer());
         var destination = client.getPlayerEntity().getContainerBySlotType(action.getDestination().getContainer());
-        var count = action.getCount();
+        int count = action.getCount();
         var sourItem = source.getItemStack(slot1);
         if (sourItem.getItemType() == AIR_TYPE) {
             log.warn("place an air item is not allowed");
