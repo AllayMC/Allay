@@ -2,9 +2,7 @@ package cn.allay.api.client.skin;
 
 import cn.allay.api.utils.Utils;
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.skin.*;
 import org.jose4j.json.internal.json_simple.JSONObject;
@@ -26,9 +24,7 @@ import java.util.UUID;
  *
  * @author LucGamesYT | daoge_cmd
  */
-@ToString
-@Getter
-@Setter
+@Data
 @Slf4j
 public class Skin {
 
