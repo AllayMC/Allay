@@ -69,9 +69,9 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                 var index = Integer.parseInt(key);
                 var obj = (NbtMap) value;
                 var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(obj.getString("name")));
-                var count = obj.getInt("count");
-                var damage = obj.getInt("damage");
-                var blockStateHash = obj.getInt("blockStateHash");
+                int count = obj.getInt("count");
+                int damage = obj.getInt("damage");
+                int blockStateHash = obj.getInt("blockStateHash");
                 var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
                 var tag = obj.getCompound("tag", null);
                 var itemStack = itemType.createItemStack(new ItemStackInitInfo.Simple<>(count, damage, tag, blockState, index + 1, false));
