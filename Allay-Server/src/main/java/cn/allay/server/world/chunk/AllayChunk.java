@@ -9,9 +9,12 @@ import io.netty.buffer.Unpooled;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Queue;
 import java.util.Set;
@@ -27,7 +30,8 @@ import java.util.stream.Collectors;
  * @author Cool_Loong
  */
 @ThreadSafe
-public class AllayChunk extends AllayUnsafeChunk implements Chunk {
+public class AllayChunk implements Chunk {
+    protected final UnsafeChunk unsafeChunk;
     protected final StampedLock sectionLock;
     protected final StampedLock heightLock;
     protected final StampedLock lightLock;
@@ -39,7 +43,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     }
 
     public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
-        super(chunkX, chunkZ, dimensionInfo, data);
+        this.unsafeChunk = new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo, data);
         this.sectionLock = new StampedLock();
         this.heightLock = new StampedLock();
         this.lightLock = new StampedLock();
@@ -53,7 +57,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = heightLock.readLock()) {
                 if (stamp == 0L) continue;
-                int result = super.getHeight(type, x, z);
+                int result = unsafeChunk.getHeight(type, x, z);
                 if (!heightLock.validate(stamp)) continue;
                 return result;
             }
@@ -66,7 +70,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     public void setHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
         long stamp = heightLock.writeLock();
         try {
-            super.setHeight(type, x, z, height);
+            unsafeChunk.setHeight(type, x, z, height);
         } finally {
             heightLock.unlockWrite(stamp);
         }
@@ -79,7 +83,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = sectionLock.readLock()) {
                 if (stamp == 0L) continue;
-                BlockState result = super.getBlockState(x, y, z, layer);
+                BlockState result = unsafeChunk.getBlockState(x, y, z, layer);
                 if (!sectionLock.validate(stamp)) continue;
                 return result;
             }
@@ -92,7 +96,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState) {
         long stamp = sectionLock.writeLock();
         try {
-            super.setBlockState(x, y, z, layer, blockState);
+            unsafeChunk.setBlockState(x, y, z, layer, blockState);
         } finally {
             sectionLock.unlockWrite(stamp);
         }
@@ -104,12 +108,12 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = sectionLock.writeLock()) {
                 if (stamp == 0L) continue;
-                BiomeType oldValue = super.getBiome(x, y, z);
+                BiomeType oldValue = unsafeChunk.getBiome(x, y, z);
                 if (!sectionLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = sectionLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
-                super.setBiome(x, y, z, newValue);
+                unsafeChunk.setBiome(x, y, z, newValue);
                 return;
             }
         } finally {
@@ -123,7 +127,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = sectionLock.readLock()) {
                 if (stamp == 0L) continue;
-                var biomeType = super.getBiome(x, y, z);
+                var biomeType = unsafeChunk.getBiome(x, y, z);
                 if (!sectionLock.validate(stamp)) continue;
                 return biomeType;
             }
@@ -136,7 +140,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     public void setBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
         long stamp = sectionLock.writeLock();
         try {
-            super.setBiome(x, y, z, biomeType);
+            unsafeChunk.setBiome(x, y, z, biomeType);
         } finally {
             sectionLock.unlockWrite(stamp);
         }
@@ -148,12 +152,12 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = sectionLock.writeLock()) {
                 if (stamp == 0L) continue;
-                BlockState oldValue = super.getBlockState(x, y, z, layer);
+                BlockState oldValue = unsafeChunk.getBlockState(x, y, z, layer);
                 if (!sectionLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = sectionLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
-                super.setBlockState(x, y, z, layer, newValue);
+                unsafeChunk.setBlockState(x, y, z, layer, newValue);
                 return;
             }
         } finally {
@@ -167,7 +171,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = lightLock.readLock()) {
                 if (stamp == 0L) continue;
-                int result = super.getBlockLight(x, y, z);
+                int result = unsafeChunk.getBlockLight(x, y, z);
                 if (!lightLock.validate(stamp)) continue;
                 return result;
             }
@@ -180,7 +184,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     public void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
         long stamp = lightLock.writeLock();
         try {
-            super.setBlockLight(x, y, z, light);
+            unsafeChunk.setBlockLight(x, y, z, light);
         } finally {
             lightLock.unlockWrite(stamp);
         }
@@ -192,12 +196,12 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = lightLock.writeLock()) {
                 if (stamp == 0L) continue;
-                int oldValue = super.getBlockLight(x, y, z);
+                int oldValue = unsafeChunk.getBlockLight(x, y, z);
                 if (!lightLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = lightLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
-                super.setBlockLight(x, y, z, newValue);
+                unsafeChunk.setBlockLight(x, y, z, newValue);
                 return;
             }
         } finally {
@@ -211,7 +215,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = lightLock.readLock()) {
                 if (stamp == 0L) continue;
-                int result = super.getSkyLight(x, y, z);
+                int result = unsafeChunk.getSkyLight(x, y, z);
                 if (!lightLock.validate(stamp)) continue;
                 return result;
             }
@@ -224,7 +228,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     public void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
         long stamp = lightLock.writeLock();
         try {
-            super.setSkyLight(x, y, z, light);
+            unsafeChunk.setSkyLight(x, y, z, light);
         } finally {
             lightLock.unlockWrite(stamp);
         }
@@ -236,12 +240,12 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         try {
             for (; ; stamp = lightLock.writeLock()) {
                 if (stamp == 0L) continue;
-                int oldValue = super.getSkyLight(x, y, z);
+                int oldValue = unsafeChunk.getSkyLight(x, y, z);
                 if (!lightLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = lightLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
-                super.setSkyLight(x, y, z, newValue);
+                unsafeChunk.setSkyLight(x, y, z, newValue);
                 return;
             }
         } finally {
@@ -256,7 +260,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         if (sectionOperate != null) {
             long stamp = sectionLock.writeLock();
             try {
-                sectionOperate.accept(this);
+                sectionOperate.accept(unsafeChunk);
             } finally {
                 sectionLock.unlockWrite(stamp);
             }
@@ -264,7 +268,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         if (heightOperate != null) {
             long stamp = heightLock.writeLock();
             try {
-                heightOperate.accept(this);
+                heightOperate.accept(unsafeChunk);
             } finally {
                 heightLock.unlockWrite(stamp);
             }
@@ -272,7 +276,7 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
         if (lightOperate != null) {
             long stamp = lightLock.writeLock();
             try {
-                lightOperate.accept(this);
+                lightOperate.accept(unsafeChunk);
             } finally {
                 lightLock.unlockWrite(stamp);
             }
@@ -282,8 +286,8 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     @Override
     public LevelChunkPacket createLevelChunkPacket() {
         final LevelChunkPacket levelChunkPacket = new LevelChunkPacket();
-        levelChunkPacket.setChunkX(this.chunkX);
-        levelChunkPacket.setChunkZ(this.chunkZ);
+        levelChunkPacket.setChunkX(this.getChunkX());
+        levelChunkPacket.setChunkZ(this.getChunkZ());
         levelChunkPacket.setCachingEnabled(false);
         levelChunkPacket.setRequestSubChunks(true);
         levelChunkPacket.setSubChunkLimit(8);
@@ -325,6 +329,60 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
             for (ChunkLoader chunkLoader : chunkLoaders) {
                 chunkLoader.sendPacket(packet);
             }
+        }
+    }
+
+    @Override
+    public DimensionInfo getDimensionInfo() {
+        return unsafeChunk.getDimensionInfo();
+    }
+
+    @Override
+    public int getChunkX() {
+        return unsafeChunk.getChunkX();
+    }
+
+    @Override
+    public void setChunkX(int chunkX) {
+        unsafeChunk.setChunkX(chunkX);
+    }
+
+    @Override
+    public int getChunkZ() {
+        return unsafeChunk.getChunkZ();
+    }
+
+    @Override
+    public void setChunkZ(int chunkZ) {
+        unsafeChunk.setChunkZ(chunkZ);
+    }
+
+    @Override
+    @Nullable
+    @ApiStatus.Internal
+    public ChunkSection getSection(int y) {
+        long stamp = sectionLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = sectionLock.readLock()) {
+                if (stamp == 0L) continue;
+                ChunkSection section = unsafeChunk.getSection(y);
+                if (!sectionLock.validate(stamp)) continue;
+                return section;
+            }
+        } finally {
+            if (StampedLock.isReadLockStamp(stamp)) sectionLock.unlockRead(stamp);
+        }
+    }
+
+    @Override
+    @ApiStatus.Internal
+    @NotNull
+    public ChunkSection getOrCreateSection(int y) {
+        long stamp = sectionLock.writeLock();
+        try {
+            return unsafeChunk.getOrCreateSection(y);
+        } finally {
+            sectionLock.unlockWrite(stamp);
         }
     }
 }
