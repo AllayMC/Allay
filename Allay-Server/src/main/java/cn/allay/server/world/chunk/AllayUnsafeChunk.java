@@ -17,19 +17,18 @@ import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 @NotThreadSafe
 public class AllayUnsafeChunk implements UnsafeChunk {
     @Getter
     @Setter
-    protected int chunkX;
+    protected volatile int chunkX;
     @Getter
     @Setter
-    protected int chunkZ;
+    protected volatile int chunkZ;
     @Getter
     protected final DimensionInfo dimensionInfo;
-    protected final AtomicReferenceArray<ChunkSection> sections;
+    protected final ChunkSection[] sections;
     protected final HeightMap[] heightMap;
 
     public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
@@ -39,7 +38,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
-        this.sections = new AtomicReferenceArray<>(dimensionInfo.chunkSectionSize());
+        this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
         this.heightMap = new HeightMap[]{new HeightMap()};
         this.dimensionInfo = dimensionInfo;
     }
@@ -47,16 +46,18 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @ApiStatus.Internal
     @Nullable
     public ChunkSection getSection(int y) {
-        return sections.get(y);
+        return sections[y];
     }
 
     @ApiStatus.Internal
     @NotNull
     public ChunkSection getOrCreateSection(int y) {
         for (int i = 0; i <= y; i++) {
-            sections.compareAndSet(i, null, new ChunkSection(i));
+            if (sections[i] == null) {
+                sections[i] = new ChunkSection(i);
+            }
         }
-        return sections.get(y);
+        return sections[y];
     }
 
     public int getHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
