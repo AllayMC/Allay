@@ -107,7 +107,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         );
     }
 
-
     @Override
     @Impl
     public EntityType<? extends Entity> getEntityType() {

@@ -122,7 +122,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             newMx = approachMx + 0.02 * movementFactor * Math.sin(yaw);
             newMz = approachMz + 0.02 * movementFactor * Math.cos(yaw);
         }
-        double newMy = (my - entity.getGravity()) * 0.98;
+        double newMy = (my - (entity.hasGravity() ? entity.getGravity() : 0)) * 0.98;
         if (Math.abs(newMx) < MOTION_THRESHOLD) newMx = 0;
         if (Math.abs(newMy) < MOTION_THRESHOLD) newMy = 0;
         if (Math.abs(newMz) < MOTION_THRESHOLD) newMz = 0;
