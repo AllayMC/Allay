@@ -124,7 +124,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
             if (zResult.right()) {
                 //有碰撞，尝试跨步
-                if (tryStepping(aabb, stepHeight, mz > 0, true)) {
+                if (tryStepping(aabb, stepHeight, mz > 0, false)) {
                     //跨步成功
                     zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
                 }
