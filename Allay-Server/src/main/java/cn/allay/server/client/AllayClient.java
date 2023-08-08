@@ -520,26 +520,24 @@ public class AllayClient extends BaseClient {
         }
 
         @Override
-        public PacketSignal handle(MovePlayerPacket packet) {
-            var pos = packet.getPosition();
-            var rot = packet.getRotation();
-            playerEntity.setLocation(new Location3d(
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ(),
-                    rot.getX(),
-                    rot.getY(),
-                    rot.getZ(),
-                    getLocation().world()
-            ));
-            return PacketSignal.HANDLED;
-        }
-
-        @Override
         public PacketSignal handle(PlayerAuthInputPacket packet) {
+            handleMovement(packet);
             handleBlockAction(packet.getPlayerActions());
             handleInputData(packet.getInputData());
             return PacketSignal.HANDLED;
+        }
+
+        protected void handleMovement(PlayerAuthInputPacket packet) {
+            var newPos = packet.getPosition();
+            var newRot = packet.getRotation();
+            playerEntity.getLocation().world().getEntityPhysicsService()
+                    .offerScheduledMove(
+                            playerEntity,
+                            new Location3d(
+                                    newPos.getX(), newPos.getY(), newPos.getZ(),
+                                    newRot.getX(), newRot.getY(), newRot.getZ(),
+                                    getLocation().world())
+                    );
         }
 
         protected void handleBlockAction(List<PlayerBlockActionData> blockActions) {
