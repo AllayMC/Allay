@@ -4,6 +4,7 @@ import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.heightmap.HeightMapType;
 import cn.allay.server.world.chunk.AllayChunk;
 import cn.allay.testutils.AllayTestExtension;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class AllayChunkTest {
 
     @Test
     void testUpdateHeight() {
-        chunk.setHeight(0, 0, 100);
-        Assertions.assertEquals(100, chunk.getHeight(0, 0));
+        chunk.setHeight(HeightMapType.WORLD_SURFACE, 0, 0, 100);
+        Assertions.assertEquals(100, chunk.getHeight(HeightMapType.WORLD_SURFACE, 0, 0));
     }
 }

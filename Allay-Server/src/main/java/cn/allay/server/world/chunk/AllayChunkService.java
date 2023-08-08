@@ -12,6 +12,7 @@ import cn.allay.api.world.chunk.ChunkLoader;
 import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.generator.WorldGenerationService;
+import cn.allay.api.world.heightmap.HeightMapType;
 import cn.allay.api.world.storage.WorldStorage;
 import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
@@ -317,7 +318,7 @@ public class AllayChunkService implements ChunkService {
                     boolean higher = false, lower = false;
                     for (int x = 0; x < 16; x++) {
                         for (int z = 0; z < 16; z++) {
-                            int y = chunk.getHeight(x, z);
+                            int y = chunk.getHeight(HeightMapType.WORLD_SURFACE, x, z);
                             int i = (z << 4) | x;
                             int otherInd = (y - dimensionInfo.minHeight()) >> 4;
                             if (otherInd > sectionY) {

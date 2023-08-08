@@ -1,12 +1,10 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
-import cn.allay.api.world.palette.Palette;
-import io.netty.buffer.ByteBuf;
+import cn.allay.api.world.heightmap.HeightMapType;
 import io.netty.buffer.Unpooled;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -50,12 +48,12 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     }
 
     @Override
-    public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
+    public int getHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
         long stamp = heightLock.tryOptimisticRead();
         try {
             for (; ; stamp = heightLock.readLock()) {
                 if (stamp == 0L) continue;
-                int result = super.getHeight(x, z);
+                int result = super.getHeight(type, x, z);
                 if (!heightLock.validate(stamp)) continue;
                 return result;
             }
@@ -65,10 +63,10 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
     }
 
     @Override
-    public void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
+    public void setHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
         long stamp = heightLock.writeLock();
         try {
-            super.setHeight(x, z, height);
+            super.setHeight(type, x, z, height);
         } finally {
             heightLock.unlockWrite(stamp);
         }
@@ -328,49 +326,5 @@ public class AllayChunk extends AllayUnsafeChunk implements Chunk {
                 chunkLoader.sendPacket(packet);
             }
         }
-    }
-
-    private void writeChunkDataToBuffer(ByteBuf retainedBuffer) {
-        Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
-
-        for (int sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
-            var section = getSection(sectionY);
-            if (section == null) break;
-            section.writeToNetwork(retainedBuffer);
-        }
-
-        for (int sectionY = 0; sectionY < getDimensionInfo().chunkSectionSize(); sectionY++) {
-            var section = getSection(sectionY);
-            if (section == null) {
-                lastBiomes.writeToNetwork(retainedBuffer, BiomeType::getId, lastBiomes);
-                continue;
-            }
-
-            section.biomes().writeToNetwork(retainedBuffer, BiomeType::getId);
-            lastBiomes = section.biomes();
-        }
-
-        retainedBuffer.writeByte(0); // edu - border blocks
-
-        //TODO: BlockEntity
-//        Collection<BlockEntity> blockEntities = this.getBlockEntities();
-//        if (!blockEntities.isEmpty()) {
-//            try (NBTOutputStream writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(retainedBuffer))) {
-//                for (BlockEntity blockEntity : blockEntities) {
-//                    NbtMap tag = blockEntity.toCompound().build();
-//                    writer.writeTag(tag);
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-    }
-
-    private int computeNotNullSectionCount() {
-        for (int count = 0; count < getDimensionInfo().chunkSectionSize(); count++) {
-            if (getSection(count) == null)
-                return count;
-        }
-        return getDimensionInfo().chunkSectionSize();
     }
 }

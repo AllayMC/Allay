@@ -119,7 +119,7 @@ public class WorldConverter implements Callable<Integer> {
             return 1;
         }
         convertLevelDat();
-//        ConvertFactory.of(path, convertLevelDat(), dimension);
+        ConvertFactory.of(path, convertLevelDat(), dimension);
         return 0;
     }
 }

@@ -1,4 +1,4 @@
-package cn.allay.server.world.chunk;
+package cn.allay.api.world.heightmap;
 
 /**
  * Allay Project 2023/5/30

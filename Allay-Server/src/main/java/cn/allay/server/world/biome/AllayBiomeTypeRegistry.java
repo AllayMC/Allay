@@ -46,7 +46,7 @@ public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, Biom
 
     @Override
     public BiomeData register(BiomeType biomeType, BiomeData biomeData) {
-        biomeDefinition.putCompound(biomeType.getName(), NbtMap.fromRecord(biomeData));
+        biomeDefinition.putCompound(biomeType.getIdentifier().path(), NbtMap.fromRecord(biomeData));
         return super.register(biomeType, biomeData);
     }
 

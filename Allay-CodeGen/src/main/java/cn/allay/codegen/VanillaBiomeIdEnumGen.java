@@ -1,6 +1,7 @@
 package cn.allay.codegen;
 
 import cn.allay.dependence.BiomeType;
+import cn.allay.dependence.Identifier;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
@@ -44,6 +45,7 @@ public class VanillaBiomeIdEnumGen {
     }
 
     private static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
+    private static final Class<?> IDENTIFIER_CLASS = Identifier.class;
     private static final Class<?> INT_CLASS = int.class;
     private static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
     private static final String PACKAGE_NAME = "cn.allay.api.data";
@@ -61,7 +63,7 @@ public class VanillaBiomeIdEnumGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(GETTER_CLASS)
                 .addField(FieldSpec
-                        .builder(STRING_CLASS, "name", Modifier.PRIVATE, Modifier.FINAL)
+                        .builder(IDENTIFIER_CLASS, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
                         .builder(INT_CLASS, "id", Modifier.PRIVATE, Modifier.FINAL)
@@ -70,24 +72,26 @@ public class VanillaBiomeIdEnumGen {
                         .builder(STRING_CLASS, "type", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(STRING_CLASS, "name")
+                        .addParameter(IDENTIFIER_CLASS, "identifier")
                         .addParameter(INT_CLASS, "id")
                         .addParameter(STRING_CLASS, "type")
-                        .addStatement("this.name = name")
+                        .addStatement("this.identifier = identifier")
                         .addStatement("this.id = id")
                         .addStatement("this.type = type")
                         .build()
                 );
         for (var entry : BIOME_DATA.entrySet()) {
-            var name = entry.getKey();
+            var identifier = """
+                    new Identifier("minecraft", "%s")""".formatted(entry.getKey());
             var id = entry.getValue().id;
             var type = entry.getValue().type;
-            codeBuilder.addEnumConstant(name.toUpperCase(), TypeSpec.anonymousClassBuilder("$S, $L, $S", name, id, type).build());
+            codeBuilder.addEnumConstant(entry.getKey().toUpperCase(), TypeSpec.anonymousClassBuilder("$L, $L, $S", identifier, id, type).build());
         }
         codeBuilder.addSuperinterface(BiomeType.class);
         var builtCode = codeBuilder.build();
         var javaFile = JavaFile.builder(PACKAGE_NAME, builtCode).build();
         String result = javaFile.toString().replace("import cn.allay.dependence.BiomeType", "import cn.allay.api.world.biome.BiomeType");
+        result = result.replace("import cn.allay.dependence.Identifier", "import cn.allay.api.identifier.Identifier");
         Files.writeString(TARGET_PATH, result);
     }
 }

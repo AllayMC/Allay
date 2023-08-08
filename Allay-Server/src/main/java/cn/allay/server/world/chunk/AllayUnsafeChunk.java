@@ -6,6 +6,8 @@ import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.chunk.UnsafeChunk;
+import cn.allay.api.world.heightmap.HeightMap;
+import cn.allay.api.world.heightmap.HeightMapType;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;
@@ -17,17 +19,18 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
-@Getter
 @NotThreadSafe
 public class AllayUnsafeChunk implements UnsafeChunk {
+    @Getter
     @Setter
     protected int chunkX;
     @Getter
     @Setter
     protected int chunkZ;
-    protected final AtomicReferenceArray<ChunkSection> sections;
-    protected final HeightMap heightMap;
+    @Getter
     protected final DimensionInfo dimensionInfo;
+    protected final AtomicReferenceArray<ChunkSection> sections;
+    protected final HeightMap[] heightMap;
 
     public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
@@ -37,7 +40,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.sections = new AtomicReferenceArray<>(dimensionInfo.chunkSectionSize());
-        this.heightMap = new HeightMap();
+        this.heightMap = new HeightMap[]{new HeightMap()};
         this.dimensionInfo = dimensionInfo;
     }
 
@@ -56,12 +59,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return sections.get(y);
     }
 
-    public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
-        return this.heightMap.get(x, z);
+    public int getHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
+        return this.heightMap[type.ordinal()].get(x, z);
     }
 
-    public void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
-        this.heightMap.set(x, z, height);
+    public void setHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
+        this.heightMap[type.ordinal()].set(x, z, height);
     }
 
     public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {
