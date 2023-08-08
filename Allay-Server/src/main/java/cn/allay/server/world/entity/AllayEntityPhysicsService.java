@@ -174,10 +174,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             extendX.minX += extendX.lengthX();
             extendX.maxX += mx;
         }
-        var blocks = world.getCollidingBlocks(extendX);
         var deltaX = mx;
         var collision = false;
-        if (blocks.length != 0) {
+        var blocks = world.getCollidingBlocks(extendX);
+        if (blocks != null) {
             collision = true;
             //存在碰撞
             //union为一个能将所有方块aabb包含的最小aabb
@@ -210,7 +210,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var recorder = new Vector3d();
         moveAlongYAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder);
         moveAlongYAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder);
-        if (world.getCollidingBlocks(offsetAABB).length != 0) {
+        if (world.getCollidingBlocks(offsetAABB) != null) {
             return false;
         } else {
             aabb.set(offsetAABB.translate(xAxis ? -offset : 0, 0, xAxis ? 0 : -offset));
@@ -234,10 +234,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             extendZ.minZ += extendZ.lengthZ();
             extendZ.maxZ += mz;
         }
-        var blocks = world.getCollidingBlocks(extendZ);
         var deltaZ = mz;
         var collision = false;
-        if (blocks.length != 0) {
+        var blocks = world.getCollidingBlocks(extendZ);
+        if (blocks != null) {
             collision = true;
             //存在碰撞
             //union为一个能将所有方块aabb包含的最小aabb
@@ -283,10 +283,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             extendY.minY += extendY.lengthY();
             extendY.maxY += my;
         }
-        var blocks = world.getCollidingBlocks(extendY);
         var deltaY = my;
         var onGround = false;
-        if (blocks.length != 0) {
+        var blocks = world.getCollidingBlocks(extendY);
+        if (blocks != null) {
             //存在碰撞
             if (down) onGround = true;
             //union为一个能将所有方块aabb包含的最小aabb

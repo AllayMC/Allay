@@ -9,6 +9,7 @@ import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
+import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
@@ -364,11 +365,11 @@ public class AllayClient extends BaseClient {
             var settingsPacket = new NetworkSettingsPacket();
             //TODO: Support other compression algorithms
             settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.ZLIB);
-            settingsPacket.setCompressionThreshold(0);
-//            settingsPacket.setCompressionThreshold(1);
+//            settingsPacket.setCompressionThreshold(0);
+            settingsPacket.setCompressionThreshold(1);
             sendPacketImmediately(settingsPacket);
             session.setCompression(settingsPacket.getCompressionAlgorithm());
-//            session.setCompressionLevel(settingsPacket.getCompressionThreshold());
+            session.setCompressionLevel(settingsPacket.getCompressionThreshold());
             return PacketSignal.HANDLED;
         }
 
@@ -552,7 +553,13 @@ public class AllayClient extends BaseClient {
                 switch (input) {
                     case START_SPRINTING -> playerEntity.setSprinting(true);
                     case STOP_SPRINTING -> playerEntity.setSprinting(false);
-                    case START_SNEAKING -> playerEntity.setSneaking(true);
+                    case START_SNEAKING -> {
+                        playerEntity.setSneaking(true);
+                        //debug only
+                        var loc = getLocation();
+                        var entity = VanillaEntityTypes.VILLAGER_V2_TYPE.createEntity(new EntityInitInfo.Simple<>(new Location3d(loc)));
+                        loc.world().addEntity(entity);
+                    }
                     case STOP_SNEAKING -> playerEntity.setSneaking(false);
                     case START_SWIMMING -> playerEntity.setSwimming(true);
                     case STOP_SWIMMING -> playerEntity.setSwimming(false);
