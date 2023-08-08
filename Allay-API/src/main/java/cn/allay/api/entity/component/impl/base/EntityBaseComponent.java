@@ -110,4 +110,8 @@ public interface EntityBaseComponent {
     default double getStepHeight() {
         return 0.6;
     }
+
+    default double getGravity() {
+        return 0.08;
+    }
 }
