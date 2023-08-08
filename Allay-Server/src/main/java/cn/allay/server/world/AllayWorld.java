@@ -9,12 +9,14 @@ import cn.allay.api.server.Server;
 import cn.allay.api.world.*;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.chunk.ChunkService;
+import cn.allay.api.world.entity.EntityPhysicsService;
 import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.server.scheduler.AllayScheduler;
 import cn.allay.server.utils.GameLoop;
 import cn.allay.server.world.chunk.AllayChunkService;
+import cn.allay.server.world.entity.AllayEntityPhysicsService;
 import cn.allay.server.world.entity.AllayEntityService;
 import cn.allay.server.world.generator.AllayWorldGenerationService;
 import lombok.Getter;
@@ -53,6 +55,9 @@ public class AllayWorld implements World {
     @Getter
     EntityService entityService;
     @Getter
+    EntityPhysicsService entityPhysicsService;
+
+    @Getter
     private Thread worldMainThread;
     private final Set<Client> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
@@ -69,6 +74,7 @@ public class AllayWorld implements World {
                 chunkService -> new AllayWorldGenerationService(threadPool, worldGenerator),
                 worldStorage);
         this.entityService = new AllayEntityService(this);
+        this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.worldScheduler = new AllayScheduler(Executors.newVirtualThreadPerTaskExecutor());
     }
 
@@ -93,6 +99,7 @@ public class AllayWorld implements World {
     private void tick() {
         chunkService.tick();
         entityService.tick();
+        entityPhysicsService.tick();
         worldScheduler.tick();
     }
 

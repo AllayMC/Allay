@@ -8,6 +8,7 @@ import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.chunk.ChunkAccessible;
 import cn.allay.api.world.chunk.ChunkService;
+import cn.allay.api.world.entity.EntityPhysicsService;
 import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -58,6 +59,8 @@ public interface World extends ChunkAccessible {
     ChunkService getChunkService();
 
     EntityService getEntityService();
+
+    EntityPhysicsService getEntityPhysicsService();
 
     void addEntity(Entity entity);
 
