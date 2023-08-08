@@ -8,6 +8,10 @@ import cn.allay.api.math.Location3d;
 import cn.allay.api.math.Location3dc;
 import cn.allay.api.world.World;
 import cn.allay.api.world.entity.EntityPhysicsService;
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.booleans.BooleanObjectImmutablePair;
+import it.unimi.dsi.fastutil.doubles.DoubleBooleanImmutablePair;
+import it.unimi.dsi.fastutil.doubles.DoubleBooleanMutablePair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.joml.Vector2d;
@@ -32,6 +36,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final double DIFF_ROTATION_THRESHOLD = 0.1;
 
     public static final double MOTION_THRESHOLD = 0.003;
+    public static final double STEPPING_OFFSET = 0.00001;
 
     protected World world;
     protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
@@ -95,70 +100,63 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var aabb = new AABBd(entity.getOffsetAABB());
 
         //先沿着Y轴移动
-        my = moveAlongYAxisAndStopWhenCollision(aabb, my, pos, entity);
+        var yResult = moveAlongYAxisAndStopWhenCollision(aabb, my, pos);
+        my = yResult.left();
+        entity.setOnGround(yResult.right());
 
         if (Math.abs(mx) >= Math.abs(mz)) {
-            //先处理X轴
-            mx = moveAlongXAxisAndStopWhenCollision(aabb, mx, pos);
-            //再处理Z轴
-            mz = moveAlongZAxisAndStopWhenCollision(aabb, mz, pos);
+            //先处理X轴, 然后处理Z轴
+            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb);
+            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb);
         } else {
-            //先处理Z轴
-            mz = moveAlongZAxisAndStopWhenCollision(aabb, mz, pos);
-            //再处理X轴
-            mx = moveAlongXAxisAndStopWhenCollision(aabb, mx, pos);
+            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb);
+            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb);
         }
 
         entity.setMotion(new Vector3d(mx, my, mz));
         updateEntityLocation(entity, pos);
     }
 
-    protected double moveAlongZAxisAndStopWhenCollision(AABBd aabb, double mz, Vector3d pos) {
-        if (mz == 0) return mz;
-        var extendZ = new AABBd(aabb);
-        //计算射线Z轴起点坐标
-        double z;
-        if (mz < 0) {
-            //向Z轴负方向移动
-            z = aabb.minZ;
-            extendZ.maxZ -= extendZ.lengthZ();
-            extendZ.minZ += mz;
-        } else {
-            //向Z轴正方向移动
-            z = aabb.maxZ;
-            extendZ.minZ += extendZ.lengthZ();
-            extendZ.maxZ += mz;
+    private double applyMotionZ(double stepHeight, Location3d pos, double mz, AABBd aabb) {
+        if (mz != 0) {
+            var resultAABB = new AABBd(aabb);
+            var resultPos = new Vector3d(pos);
+            var zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
+            if (zResult.right()) {
+                //有碰撞，尝试跨步
+                if (tryStepping(aabb, stepHeight, mz > 0, true)) {
+                    //跨步成功
+                    zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
+                }
+            }
+            mz = zResult.left();
+            aabb.set(resultAABB);
+            pos.set(resultPos);
         }
-        var blocks = world.getCollidingBlocks(extendZ);
-        var deltaZ = mz;
-        if (blocks.length != 0) {
-            //存在碰撞
-            //union为一个能将所有方块aabb包含的最小aabb
-            var union = unionBlockAABBs(blocks);
-            //result包含射线与union求交的两个交点的参数
-            var result = new Vector2d(0, 0);
-            //计算射线XY轴起点坐标
-            var x = (aabb.maxX + aabb.minX) / 2d;
-            var y = (aabb.maxY + aabb.minY) / 2d;
-            union.intersectsRay(
-                    x, y, z,
-                    0, 0, mz,
-                    result
-            );
-            //计算Z轴坐标变化量
-            deltaZ = mz * result.x;
-            //z轴方向速度归零
-            mz = 0;
-        }
-        //移动碰撞箱
-        aabb.translate(0, 0, deltaZ);
-        //更新坐标
-        pos.z += deltaZ;
         return mz;
     }
 
-    protected double moveAlongXAxisAndStopWhenCollision(AABBd aabb, double mx, Vector3d pos) {
-        if (mx == 0) return mx;
+    private double applyMotionX(double stepHeight, Location3d pos, double mx, AABBd aabb) {
+        if (mx != 0) {
+            var resultAABB = new AABBd(aabb);
+            var resultPos = new Vector3d(pos);
+            var xResult = moveAlongXAxisAndStopWhenCollision(resultAABB, mx, resultPos);
+            if (xResult.right()) {
+                //有碰撞，尝试跨步
+                if (tryStepping(aabb, stepHeight, mx > 0, true)) {
+                    //跨步成功
+                    xResult = moveAlongXAxisAndStopWhenCollision(resultAABB, mx, resultPos);
+                }
+            }
+            mx = xResult.left();
+            aabb.set(resultAABB);
+            pos.set(resultPos);
+        }
+        return mx;
+    }
+
+    protected Pair<Double, Boolean> moveAlongXAxisAndStopWhenCollision(AABBd aabb, double mx, Vector3d recorder) {
+        if (mx == 0) return new DoubleBooleanImmutablePair(0, false);
         var extendX = new AABBd(aabb);
         //计算射线X轴起点坐标
         double x;
@@ -175,7 +173,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var blocks = world.getCollidingBlocks(extendX);
         var deltaX = mx;
+        var collision = false;
         if (blocks.length != 0) {
+            collision = true;
             //存在碰撞
             //union为一个能将所有方块aabb包含的最小aabb
             var union = unionBlockAABBs(blocks);
@@ -197,12 +197,72 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         //移动碰撞箱
         aabb.translate(deltaX, 0, 0);
         //更新坐标
-        pos.x += deltaX;
-        return mx;
+        recorder.x += deltaX;
+        return new DoubleBooleanImmutablePair(mx, collision);
     }
 
-    protected double moveAlongYAxisAndStopWhenCollision(AABBd aabb, double my, Vector3d pos, Entity entity) {
-        if (my == 0) return my;
+    protected boolean tryStepping(AABBd aabb, double stepHeight, boolean positive, boolean xAxis) {
+        var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
+        var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBd());
+        var recorder = new Vector3d();
+        moveAlongYAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder);
+        moveAlongYAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder);
+        if (world.getCollidingBlocks(offsetAABB).length != 0) {
+            return false;
+        } else {
+            aabb.set(offsetAABB.translate(xAxis ? -offset : 0, 0, xAxis ? 0 : -offset));
+            return true;
+        }
+    }
+
+    protected Pair<Double, Boolean> moveAlongZAxisAndStopWhenCollision(AABBd aabb, double mz, Vector3d recorder) {
+        if (mz == 0) return new DoubleBooleanImmutablePair(0, false);
+        var extendZ = new AABBd(aabb);
+        //计算射线Z轴起点坐标
+        double z;
+        if (mz < 0) {
+            //向Z轴负方向移动
+            z = aabb.minZ;
+            extendZ.maxZ -= extendZ.lengthZ();
+            extendZ.minZ += mz;
+        } else {
+            //向Z轴正方向移动
+            z = aabb.maxZ;
+            extendZ.minZ += extendZ.lengthZ();
+            extendZ.maxZ += mz;
+        }
+        var blocks = world.getCollidingBlocks(extendZ);
+        var deltaZ = mz;
+        var collision = false;
+        if (blocks.length != 0) {
+            collision = true;
+            //存在碰撞
+            //union为一个能将所有方块aabb包含的最小aabb
+            var union = unionBlockAABBs(blocks);
+            //result包含射线与union求交的两个交点的参数
+            var result = new Vector2d(0, 0);
+            //计算射线XY轴起点坐标
+            var x = (aabb.maxX + aabb.minX) / 2d;
+            var y = (aabb.maxY + aabb.minY) / 2d;
+            union.intersectsRay(
+                    x, y, z,
+                    0, 0, mz,
+                    result
+            );
+            //计算Z轴坐标变化量
+            deltaZ = mz * result.x;
+            //z轴方向速度归零
+            mz = 0;
+        }
+        //移动碰撞箱
+        aabb.translate(0, 0, deltaZ);
+        //更新坐标
+        recorder.z += deltaZ;
+        return new DoubleBooleanImmutablePair(mz, collision);
+    }
+
+    protected Pair<Double, Boolean> moveAlongYAxisAndStopWhenCollision(AABBd aabb, double my, Vector3d recorder) {
+        if (my == 0) return new DoubleBooleanImmutablePair(0, false);
         AABBd extendY = new AABBd(aabb);
         //计算射线Y轴起点坐标
         double y;
@@ -222,9 +282,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var blocks = world.getCollidingBlocks(extendY);
         var deltaY = my;
+        var onGround = false;
         if (blocks.length != 0) {
             //存在碰撞
-            if (down) entity.setOnGround(true);
+            if (down) onGround = true;
             //union为一个能将所有方块aabb包含的最小aabb
             var union = unionBlockAABBs(blocks);
             //result包含射线与union求交的两个交点的参数
@@ -241,12 +302,12 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             deltaY = my * result.x;
             //y轴方向速度归零
             my = 0;
-        } else entity.setOnGround(false);
+        }
         //移动碰撞箱
         aabb.translate(0, deltaY, 0);
         //更新坐标
-        pos.y += deltaY;
-        return my;
+        recorder.y += deltaY;
+        return new DoubleBooleanImmutablePair(my, onGround);
     }
 
     protected AABBd unionBlockAABBs(BlockState[][][] blocks) {
