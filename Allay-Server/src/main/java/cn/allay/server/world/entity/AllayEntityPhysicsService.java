@@ -335,14 +335,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return unionAABB;
     }
 
-    protected void computeEntityCollision() {
-        entities.values().parallelStream().forEach(entity -> {
-            var result = new ObjectArrayList<Entity>();
-            entityAABBTree.detectOverlaps(entity.getOffsetAABB(), result);
-            entityCollisionCache.put(entity.getUniqueId(), result);
-        });
-    }
-
     protected void handleScheduledMoveQueue() {
         for (var entry : scheduledMoveQueue.entrySet()) {
             var queue = entry.getValue();
