@@ -106,4 +106,8 @@ public interface EntityBaseComponent {
     default boolean computeMovementServerSide() {
         return true;
     }
+
+    default double getStepHeight() {
+        return 0.6;
+    }
 }
