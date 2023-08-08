@@ -162,14 +162,17 @@ public interface World extends ChunkAccessible {
         return blockStates;
     }
 
+    @Nullable
     default BlockState[][][] getCollidingBlocks(AABBdc aabb) {
         return getCollidingBlocks(aabb, false);
     }
 
+    @Nullable
     default BlockState[][][] getCollidingBlocks(AABBdc aabb, boolean layer) {
         return getCollidingBlocks(aabb, layer, false);
     }
 
+    @Nullable
     default BlockState[][][] getCollidingBlocks(AABBdc aabb, boolean layer, boolean ignoreCollision) {
         int maxX = (int) Math.ceil(aabb.maxX());
         int maxY = (int) Math.ceil(aabb.maxY());
@@ -178,6 +181,7 @@ public interface World extends ChunkAccessible {
         int minY = (int) Math.floor(aabb.minY());
         int minZ = (int) Math.floor(aabb.minZ());
         var blockStates = getBlockStates(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ, layer);
+        boolean notEmpty = false;
         if (!ignoreCollision) {
             //过滤掉没有碰撞的方块
             for (int x = 0; x < blockStates.length; x++) {
@@ -186,11 +190,13 @@ public interface World extends ChunkAccessible {
                         var blockState = blockStates[x][y][z];
                         if (blockState != null && !blockState.blockType().getBlockBehavior().getBlockAttributes(blockState).hasCollision()) {
                             blockStates[x][y][z] = null;
+                        } else if (blockState != null) {
+                            notEmpty = true;
                         }
                     }
                 }
             }
         }
-        return blockStates;
+        return notEmpty ? blockStates : null;
     }
 }

@@ -101,7 +101,7 @@ public final class AllayServer implements Server {
     private void loadWorlds() {
         WorldData worldData = WorldData.DEFAULT;
         worldData.setLevelName("Test Flat World");
-        worldData.setSpawnPoint(new Vector3i(0, 6, 0));
+        worldData.setSpawnPoint(new Vector3i(0, 7, 0));
         worldPool.setDefaultWorld(AllayWorld
                 .builder()
                 .worldData(worldData)
