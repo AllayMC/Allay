@@ -37,29 +37,29 @@ import java.util.concurrent.ForkJoinPool;
  * @author daoge_cmd
  */
 public class AllayWorld implements World {
-    private final WorldStorage worldStorage;
+    protected final WorldStorage worldStorage;
     @Getter
-    private final WorldData worldData;
+    protected final WorldData worldData;
     @Getter
-    private final WorldGenerator worldGenerator;
+    protected final WorldGenerator worldGenerator;
     @Getter
-    private final Server server;
+    protected final Server server;
     @Getter
-    private WorldType worldType;
+    protected final WorldType worldType;
     @Getter
-    ForkJoinPool threadPool = new ForkJoinPool();
+    protected final ForkJoinPool threadPool = new ForkJoinPool();
     @Getter
-    Scheduler worldScheduler;
+    protected final ChunkService chunkService;
     @Getter
-    ChunkService chunkService;
+    protected final EntityService entityService;
     @Getter
-    EntityService entityService;
+    protected final EntityPhysicsService entityPhysicsService;
     @Getter
-    EntityPhysicsService entityPhysicsService;
+    protected final Scheduler worldScheduler;
+    @Getter
+    protected final Thread worldMainThread;
 
-    @Getter
-    private Thread worldMainThread;
-    private final Set<Client> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    protected final Set<Client> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private AllayWorld(Server server,
                        WorldStorage worldStorage,
@@ -68,6 +68,7 @@ public class AllayWorld implements World {
         this.worldStorage = worldStorage;
         this.worldData = worldData;
         this.worldGenerator = worldGenerator;
+        this.worldType = worldGenerator.getGeneratorWorldType();
         this.server = server;
         this.chunkService = new AllayChunkService(
                 this,
@@ -76,19 +77,19 @@ public class AllayWorld implements World {
         this.entityService = new AllayEntityService(this);
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.worldScheduler = new AllayScheduler(Executors.newVirtualThreadPerTaskExecutor());
+        this.worldMainThread = Thread.ofPlatform()
+                .name("World Thread - " + worldData.getLevelName())
+                .unstarted(() -> GameLoop.builder()
+                        .onTick(gameLoop -> tick())
+                        .build()
+                        .startLoop());
     }
 
     @Override
     public void startTick() {
-        if (worldMainThread != null) {
-            throw new IllegalStateException("World is already ticking");
-        }
-        worldMainThread = Thread.ofPlatform()
-                .name("Allay World Main Thread")
-                .start(() -> GameLoop.builder()
-                        .onTick(gameLoop -> tick())
-                        .build()
-                        .startLoop());
+        if (worldMainThread.getState() != Thread.State.NEW) {
+            throw new IllegalStateException("World is already start ticking!");
+        } else worldMainThread.start();
     }
 
     @Override
