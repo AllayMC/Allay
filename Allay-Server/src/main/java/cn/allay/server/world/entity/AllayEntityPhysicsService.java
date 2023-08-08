@@ -56,7 +56,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide()) return;
-            //TODO: 水流作用 etc...
+            //TODO: 水流作用 方块推出作用 etc...
             if (entity.hasCollision()) computeCollisionMotion(entity);
             if (applyMotion(entity)) {
                 updatedEntities.put(entity.getUniqueId(), entity);

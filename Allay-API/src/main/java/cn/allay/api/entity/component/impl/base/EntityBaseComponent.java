@@ -6,6 +6,7 @@ import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.math.Location3dc;
 import cn.allay.api.client.Client;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -44,8 +45,9 @@ public interface EntityBaseComponent {
     @Inject
     void setAABB(AABBd aabb);
 
-    @Inject
-    boolean hasCollision();
+    default boolean hasCollision() {
+        return getMetadata().getFlag(EntityFlag.HAS_COLLISION);
+    }
 
     @Inject
     void setHasCollision(boolean hasCollision);
@@ -114,6 +116,12 @@ public interface EntityBaseComponent {
     default double getGravity() {
         return 0.08;
     }
+
+    default boolean hasGravity() {
+        return getMetadata().getFlag(EntityFlag.HAS_GRAVITY);
+    }
+
+    void setHasGravity(boolean hasGravity);
 
     double SPRINTING_MOVEMENT_FACTOR = 1.3;
     double WALKING_MOVEMENT_FACTOR = 1;

@@ -53,7 +53,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected EntityType<T> entityType;
     protected AABBdc aabb;
     protected Function<T, AABBdc> aabbGetter;
-    protected boolean hasCollision = true;
     protected Map<Long, Client> viewers = new Long2ObjectOpenHashMap<>();
     protected Vector3d motion = new Vector3d();
     protected boolean onGround = true;
@@ -179,14 +178,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     @Impl
-    public boolean hasCollision() {
-        return hasCollision;
-    }
-
-    @Override
-    @Impl
     public void setHasCollision(boolean hasCollision) {
-        this.hasCollision = hasCollision;
         metadata.setFlag(EntityFlag.HAS_COLLISION, hasCollision);
         sendEntityFlags(EntityFlag.HAS_COLLISION);
     }
@@ -219,6 +211,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Impl
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
+    }
+
+    @Override
+    @Impl
+    public void setHasGravity(boolean hasGravity) {
+        metadata.setFlag(EntityFlag.HAS_GRAVITY, hasGravity);
+        sendEntityFlags(EntityFlag.HAS_GRAVITY);
     }
 
     @Override
