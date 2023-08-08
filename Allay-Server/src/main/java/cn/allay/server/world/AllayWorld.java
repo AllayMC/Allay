@@ -148,12 +148,14 @@ public class AllayWorld implements World {
     @Override
     public void addEntity(Entity entity) {
         entityService.addEntity(entity);
+        entityPhysicsService.addEntity(entity);
         clients.forEach(entity::spawnTo);
     }
 
     @Override
     public void removeEntity(Entity entity) {
         entityService.removeEntity(entity);
+        entityPhysicsService.removeEntity(entity);
         entity.despawnFromAll();
     }
 

@@ -8,6 +8,7 @@ import cn.allay.api.math.Location3d;
 import cn.allay.api.math.Location3dc;
 import cn.allay.api.world.World;
 import cn.allay.api.world.entity.EntityPhysicsService;
+import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.booleans.BooleanObjectImmutablePair;
 import it.unimi.dsi.fastutil.doubles.DoubleBooleanImmutablePair;
@@ -53,12 +54,16 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public void tick() {
         handleEntityUpdateQueue();
         handleScheduledMoveQueue();
-        computeEntityCollision();
+        var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
         entities.values().parallelStream().forEach(entity -> {
+            if (!entity.computeMovementServerSide()) return;
             //TODO: 碰撞箱挤压 水流作用
             updateMotion(entity);
-            applyMotion(entity);
+            if (applyMotion(entity)) {
+                updatedEntities.put(entity.getUniqueId(), entity);
+            }
         });
+        updatedEntities.values().forEach(entity -> entityAABBTree.update(entity));
     }
 
     protected void updateMotion(Entity entity) {
@@ -91,7 +96,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         entity.setMotion(new Vector3d(newMx, newMy, newMz));
     }
 
-    protected void applyMotion(Entity entity) {
+    protected boolean applyMotion(Entity entity) {
         var pos = new Location3d(entity.getLocation());
         var motion = entity.getMotion();
         var mx = motion.x();
@@ -114,7 +119,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
 
         entity.setMotion(new Vector3d(mx, my, mz));
+        var updated = !pos.equals(entity.getLocation());
         updateEntityLocation(entity, pos);
+        return updated;
     }
 
     protected double applyMotionZ(double stepHeight, Location3d pos, double mz, AABBd aabb) {
@@ -342,6 +349,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
                 updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc);
+                entityAABBTree.update(scheduledMove.entity);
             }
         }
     }
