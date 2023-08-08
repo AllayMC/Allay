@@ -103,7 +103,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         section.setBlock(x, y & 0xf, z, layer, blockState);
         if (send) {
             var updateBlockPacket = new UpdateBlockPacket();
-            updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
+            updateBlockPacket.setBlockPosition(Vector3i.from((chunkX << 4) + x, y, (chunkZ << 4) + z));
             updateBlockPacket.setDefinition(blockState.toNetworkBlockDefinition());
             updateBlockPacket.setDataLayer(layer ? 1 : 0);
             updateBlockPacket.getFlags().addAll( UpdateBlockPacket.FLAG_ALL_PRIORITY );

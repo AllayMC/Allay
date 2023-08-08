@@ -11,11 +11,16 @@ import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.entity.EntityPhysicsService;
 import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
+import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
+import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBdc;
+import org.slf4j.Logger;
 
 import java.util.Collection;
 
@@ -27,6 +32,8 @@ import java.util.Collection;
  * @author daoge_cmd
  */
 public interface World extends ChunkAccessible {
+
+    Logger getLogger();
 
     void startTick();
 
@@ -206,5 +213,15 @@ public interface World extends ChunkAccessible {
             }
         }
         return notEmpty ? blockStates : null;
+    }
+
+    default void sendLevelEventPacket(Vector3i pos, LevelEventType blockStopBreak, int data) {
+        var chunk = getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+        if (chunk == null) return;
+        var levelEventPacket = new LevelEventPacket();
+        levelEventPacket.setPosition(pos.toFloat());
+        levelEventPacket.setType(blockStopBreak);
+        levelEventPacket.setData(data);
+        chunk.sendChunkPacket(levelEventPacket);
     }
 }

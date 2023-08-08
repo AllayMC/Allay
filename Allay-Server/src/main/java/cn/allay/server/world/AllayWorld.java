@@ -20,9 +20,11 @@ import cn.allay.server.world.entity.AllayEntityPhysicsService;
 import cn.allay.server.world.entity.AllayEntityService;
 import cn.allay.server.world.generator.AllayWorldGenerationService;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3ic;
+import org.slf4j.Logger;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,6 +38,7 @@ import java.util.concurrent.ForkJoinPool;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class AllayWorld implements World {
     protected final WorldStorage worldStorage;
     @Getter
@@ -83,6 +86,11 @@ public class AllayWorld implements World {
                         .onTick(gameLoop -> tick())
                         .build()
                         .startLoop());
+    }
+
+    @Override
+    public Logger getLogger() {
+        return log;
     }
 
     @Override

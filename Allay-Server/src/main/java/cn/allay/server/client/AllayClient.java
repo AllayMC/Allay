@@ -6,6 +6,7 @@ import cn.allay.api.client.BaseClient;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
+import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
@@ -19,6 +20,7 @@ import cn.allay.api.math.Position3ic;
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
 import cn.allay.api.server.Server;
+import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.gamerule.GameRule;
@@ -309,12 +311,6 @@ public class AllayClient extends BaseClient {
     }
 
     @Override
-    @Nullable
-    public Location3dc getLocation() {
-        return playerEntity != null ? playerEntity.getLocation() : null;
-    }
-
-    @Override
     public boolean isLoaderActive() {
         return isOnline();
     }
@@ -531,20 +527,30 @@ public class AllayClient extends BaseClient {
         protected void handleMovement(PlayerAuthInputPacket packet) {
             var newPos = packet.getPosition();
             var newRot = packet.getRotation();
-            playerEntity.getLocation().world().getEntityPhysicsService()
+            getWorld().getEntityPhysicsService()
                     .offerScheduledMove(
                             playerEntity,
                             new Location3d(
                                     newPos.getX(), newPos.getY(), newPos.getZ(),
                                     newRot.getX(), newRot.getY(), newRot.getZ(),
-                                    getLocation().world())
+                                    getWorld())
                     );
         }
 
         protected void handleBlockAction(List<PlayerBlockActionData> blockActions) {
             if (blockActions.isEmpty()) return;
             for (var action : blockActions) {
-                //TODO
+                var pos = action.getBlockPosition();
+                //TODO: checking
+                switch(action.getAction()) {
+                    case START_BREAK -> {
+                        getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_START_BREAK, 65535);
+                    }
+                    case BLOCK_PREDICT_DESTROY -> {
+                        getWorld().setBlockState(pos.getX(), pos.getY(), pos.getZ(), VanillaBlockTypes.AIR_TYPE.getDefaultState());
+                        getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_STOP_BREAK, 1);
+                    }
+                }
             }
         }
 
