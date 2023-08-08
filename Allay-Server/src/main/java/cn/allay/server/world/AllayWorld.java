@@ -197,7 +197,6 @@ public class AllayWorld implements World {
 
     public static class WorldBuilder {
         private WorldData worldData;
-        private WorldType worldType = WorldType.INFINITE;
         private WorldStorage worldStorage;
         private WorldGenerator worldGenerator;
 
@@ -216,19 +215,11 @@ public class AllayWorld implements World {
 
         public WorldBuilder setWorldGenerator(WorldGenerator worldGenerator) {
             this.worldGenerator = worldGenerator;
-            this.worldType = worldGenerator.getGeneratorWorldType();
-            return this;
-        }
-
-        public WorldBuilder setWorldType(WorldType worldType) {
-            this.worldType = worldType;
             return this;
         }
 
         public World build() {
-            var world = new AllayWorld(Server.getInstance(), worldStorage, worldData, worldGenerator);
-            world.worldType = worldType;
-            return world;
+            return new AllayWorld(Server.getInstance(), worldStorage, worldData, worldGenerator);
         }
     }
 }
