@@ -114,4 +114,17 @@ public interface EntityBaseComponent {
     default double getGravity() {
         return 0.08;
     }
+
+    double SPRINTING_MOVEMENT_FACTOR = 1.3;
+    double WALKING_MOVEMENT_FACTOR = 1;
+    double SNEAKING_MOVEMENT_FACTOR = 0.3;
+    double STOP_MOVEMENT_FACTOR = 0;
+
+    /**
+     * 给定yaw，若移动乘数不为0实体将往yaw指定的方向前进 <p>
+     * 参见：<a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas/zh">...</a>
+     */
+    default double getMovementFactor() {
+        return STOP_MOVEMENT_FACTOR;
+    }
 }

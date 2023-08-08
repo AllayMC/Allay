@@ -122,6 +122,7 @@ public class BlockAttributes {
         return BlockAttributes
                 .builder()
                 .aabbCollision(parseAABBStr(nbt.getString("aabbCollision")))
+                .hasCollision(nbt.getBoolean("hasCollision"))
                 .blocksPrecipitation(nbt.getBoolean("blocksPrecipitation"))
                 .canBeMovingBlock(nbt.getBoolean("canBeMovingBlock"))
                 .breaksFallingBlocks(nbt.getBoolean("breaksFallingBlocks"))

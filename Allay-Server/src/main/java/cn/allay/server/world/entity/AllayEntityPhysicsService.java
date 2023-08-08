@@ -65,6 +65,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     protected void updateMotion(Entity entity) {
         //TODO: 效果乘数
         var effectFactor = 1;
+        double movementFactor = entity.getMovementFactor();
         var blockUnder = world.getBlockState((int) entity.getLocation().x(), (int) (entity.getLocation().y() - 0.5), (int) entity.getLocation().z());
         double slipperyFactor = blockUnder != null ?
                 blockUnder.blockType().getBlockBehavior().getBlockAttributes(blockUnder).friction() :
@@ -79,11 +80,11 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var approachMz = mz * slipperyFactor * 0.91;
         double yaw = entity.getLocation().yaw();
         if (entity.isOnGround()) {
-            newMx = approachMx + 0.1 * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.sin(yaw);
-            newMz = approachMz + 0.1 * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.cos(yaw);
+            newMx = approachMx + 0.1 * movementFactor * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.sin(yaw);
+            newMz = approachMz + 0.1 * movementFactor * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.cos(yaw);
         } else {
-            newMx = approachMx + 0.02 * Math.sin(yaw);
-            newMz = approachMz + 0.02 * Math.cos(yaw);
+            newMx = approachMx + 0.02 * movementFactor * Math.sin(yaw);
+            newMz = approachMz + 0.02 * movementFactor * Math.cos(yaw);
         }
         double newMy = (my - entity.getGravity()) * 0.98;
         if (Math.abs(newMx) < MOTION_THRESHOLD) newMx = 0;
