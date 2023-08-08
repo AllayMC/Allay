@@ -117,7 +117,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         updateEntityLocation(entity, pos);
     }
 
-    private double applyMotionZ(double stepHeight, Location3d pos, double mz, AABBd aabb) {
+    protected double applyMotionZ(double stepHeight, Location3d pos, double mz, AABBd aabb) {
         if (mz != 0) {
             var resultAABB = new AABBd(aabb);
             var resultPos = new Vector3d(pos);
@@ -136,7 +136,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return mz;
     }
 
-    private double applyMotionX(double stepHeight, Location3d pos, double mx, AABBd aabb) {
+    protected double applyMotionX(double stepHeight, Location3d pos, double mx, AABBd aabb) {
         if (mx != 0) {
             var resultAABB = new AABBd(aabb);
             var resultPos = new Vector3d(pos);
