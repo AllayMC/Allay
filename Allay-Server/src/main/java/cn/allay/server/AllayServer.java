@@ -107,7 +107,6 @@ public final class AllayServer implements Server {
                 .worldData(worldData)
                 .setWorldGenerator(new FlatWorldGenerator())
                 .setWorldStorage(new AllayNonPersistentWorldStorage())
-                .setWorldType(WorldType.FLAT)
                 .build());
     }
 
