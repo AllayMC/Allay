@@ -127,4 +127,10 @@ public interface EntityBaseComponent {
     default double getMovementFactor() {
         return STOP_MOVEMENT_FACTOR;
     }
+
+    double DEFAULT_PUSH_SPEED_REDUCTION = 1;
+
+    default double getPushSpeedReduction() {
+        return DEFAULT_PUSH_SPEED_REDUCTION;
+    }
 }
