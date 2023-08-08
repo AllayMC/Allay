@@ -6,6 +6,7 @@ import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.Location3d;
 import cn.allay.api.math.Location3dc;
+import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.World;
 import cn.allay.api.world.entity.EntityPhysicsService;
 import it.unimi.dsi.fastutil.Pair;
@@ -20,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static cn.allay.api.block.component.impl.attribute.BlockAttributes.DEFAULT_FRICTION;
+import static java.lang.Double.isNaN;
 
 /**
  * Allay Project 2023/8/5 <br>
@@ -50,16 +52,50 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public void tick() {
         handleEntityUpdateQueue();
         handleScheduledMoveQueue();
+        cacheEntityCollisionResult();
         var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide()) return;
-            //TODO: 碰撞箱挤压 水流作用
-            updateMotion(entity);
+            //TODO: 水流作用 etc...
+            if (entity.hasCollision()) computeCollisionMotion(entity);
             if (applyMotion(entity)) {
                 updatedEntities.put(entity.getUniqueId(), entity);
             }
+            updateMotion(entity);
         });
         updatedEntities.values().forEach(entity -> entityAABBTree.update(entity));
+    }
+
+    protected void cacheEntityCollisionResult() {
+        entityCollisionCache.clear();
+        entities.values().forEach(entity -> {
+            var collidedEntities = computeCollidingEntities(entity);
+            if (collidedEntities.isEmpty()) return;
+            entityCollisionCache.put(entity.getUniqueId(), collidedEntities);
+        });
+    }
+
+    protected void computeCollisionMotion(Entity entity) {
+        var collidedEntities = getCachedEntityCollidingResult(entity);
+        var collisionMotion = new Vector3d(0, 0, 0);
+        var loc = entity.getLocation();
+        double r = entity.getPushSpeedReduction();
+        for (var other : collidedEntities) {
+            //https://github.com/lovexyn0827/Discovering-Minecraft/blob/master/Minecraft%E5%AE%9E%E4%BD%93%E8%BF%90%E5%8A%A8%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%BA%94%E7%94%A8/5-Chapter-5.md
+            var ol = other.getLocation();
+            var direction = new Vector3d(entity.getLocation()).sub(other.getLocation(), new Vector3d()).normalize();
+            double distance = Math.max(ol.x() - loc.x(), ol.z() - loc.z());
+            double k;
+            if (distance <= 0.01) continue;
+            if (distance <= 1) {
+                k = (0.05 * r) * MathUtils.fastDoubleInverseSqrtD(distance);
+            } else {
+                k = (0.05 * r) / distance;
+            }
+            collisionMotion.add(direction.mul(k));
+        }
+        collisionMotion.setComponent(1, 0);
+        entity.addMotion(collisionMotion);
     }
 
     protected void updateMotion(Entity entity) {
@@ -420,7 +456,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return result;
     }
 
-    @Override
     public List<Entity> getCachedEntityCollidingResult(Entity entity) {
         return entityCollisionCache.getOrDefault(entity.getUniqueId(), Collections.emptyList());
     }
