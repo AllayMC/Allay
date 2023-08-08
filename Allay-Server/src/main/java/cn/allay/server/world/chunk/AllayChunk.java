@@ -370,6 +370,11 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
+    public void sendChunkPacket(BedrockPacket packet) {
+        unsafeChunk.sendChunkPacket(packet);
+    }
+
+    @Override
     public void sendChunkPackets() {
         unsafeChunk.sendChunkPackets();
     }

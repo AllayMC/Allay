@@ -9,6 +9,7 @@ import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.math.Location3dc;
 import cn.allay.api.server.Server;
+import cn.allay.api.world.World;
 import cn.allay.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -104,5 +105,9 @@ public interface Client extends ChunkLoader {
     @Override
     default Location3dc getLocation() {
         return getPlayerEntity().getLocation();
+    }
+
+    default World getWorld() {
+        return getLocation().world();
     }
 }
