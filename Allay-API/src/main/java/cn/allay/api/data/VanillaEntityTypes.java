@@ -1,6 +1,10 @@
 package cn.allay.api.data;
 
+import cn.allay.api.component.annotation.AutoRegister;
+import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.entity.component.impl.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.impl.*;
+import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import org.joml.primitives.AABBd;
@@ -631,12 +635,28 @@ public interface VanillaEntityTypes {
   EntityType<EntityVillager> VILLAGER_TYPE = EntityTypeBuilder
           .builder(EntityVillager.class)
           .vanillaEntity(VanillaEntityId.VILLAGER)
+          .addComponent(
+                  ComponentProvider.of(
+                          info -> new EntityBaseComponentImpl<>(
+                                  (EntityInitInfo<EntityVillager>) info,
+                                  //TODO: 小村民
+                                  e -> new AABBd(-0.3, 0, -0.3, 0.3, 1.8, 0.3)
+                          ), EntityBaseComponentImpl.class
+                  ))
           .addBasicComponents()
           .build();
 
   EntityType<EntityVillagerV2> VILLAGER_V2_TYPE = EntityTypeBuilder
           .builder(EntityVillagerV2.class)
           .vanillaEntity(VanillaEntityId.VILLAGER_V2)
+          .addComponent(
+                  ComponentProvider.of(
+                          info -> new EntityBaseComponentImpl<>(
+                                  (EntityInitInfo<EntityVillagerV2>) info,
+                                  //TODO: 小村民
+                                  e -> new AABBd(-0.3, 0, -0.3, 0.3, 1.8, 0.3)
+                          ), EntityBaseComponentImpl.class
+                  ))
           .addBasicComponents()
           .build();
 
