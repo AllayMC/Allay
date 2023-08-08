@@ -1,7 +1,6 @@
 package cn.allay.api.datastruct;
 
 import com.google.common.base.Preconditions;
-import lombok.Getter;
 
 import java.util.Arrays;
 
@@ -15,7 +14,6 @@ import static com.google.common.base.Preconditions.checkElementIndex;
  */
 public final class NibbleArray implements Cloneable {
     private final int size;
-    @Getter
     private final byte[] data;
 
     public NibbleArray(int size) {
@@ -66,6 +64,10 @@ public final class NibbleArray implements Cloneable {
     public void copyFrom(NibbleArray array) {
         Preconditions.checkNotNull(array, "array");
         copyFrom(array.data);
+    }
+
+    public byte[] getData() {
+        return Arrays.copyOf(this.data, this.data.length);
     }
 
     @Override

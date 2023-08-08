@@ -139,11 +139,16 @@ public final class Palette<V> {
     }
 
     //仅Anvil使用
+    @SuppressWarnings("unchecked")
     public <R> NbtMap toNBT(Function<V, R> converter) {
-        NbtMapBuilder builder = NbtMap.builder().putIntArray("data", this.bitArray.words());
         List<R> list = this.palette.stream().map(converter).toList();
-        builder.putList("palette", (NbtType<R>) NbtType.byClass(list.get(0).getClass()), list);
-        return builder.build();
+        if (this.isEmpty()) {
+            return NbtMap.builder().putList("palette", (NbtType<R>) NbtType.byClass(list.get(0).getClass()), list).build();
+        } else {
+            NbtMapBuilder builder = NbtMap.builder().putIntArray("data", this.bitArray.words());
+            builder.putList("palette", (NbtType<R>) NbtType.byClass(list.get(0).getClass()), list);
+            return builder.build();
+        }
     }
 
 
