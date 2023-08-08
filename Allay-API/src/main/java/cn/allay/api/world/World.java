@@ -103,9 +103,17 @@ public interface World extends ChunkAccessible {
     }
 
     default void setBlockState(int x, int y, int z, BlockState state, boolean layer) {
+        setBlockState(x, y, z, state, layer, true);
+    }
+
+    default void setBlockState(int x, int y, int z, BlockState state, boolean layer, boolean send) {
+        setBlockState(x, y, z, state, layer, send, true);
+    }
+
+    default void setBlockState(int x, int y, int z, BlockState state, boolean layer, boolean send, boolean update) {
         var chunk = getChunk(x >> 4, z >> 4);
         if (chunk == null) return;
-        chunk.setBlockState(x & 15, y, z & 15, layer, state);
+        chunk.setBlockState(x & 15, y, z & 15, state, layer, send, update);
     }
 
     @Nullable

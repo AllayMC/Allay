@@ -27,7 +27,7 @@ public interface Chunk extends UnsafeChunk {
         return (x << 8) + (z << 4) + y;
     }
 
-    void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState expectedValue, BlockState newValue);
+    void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, boolean layer, boolean send, boolean update);
 
     void compareAndSetBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType expectedValue, BiomeType newValue);
 
@@ -40,17 +40,4 @@ public interface Chunk extends UnsafeChunk {
                       @Nullable Consumer<LightOperate> lightOperate);
 
     LevelChunkPacket createLevelChunkPacket();
-
-    @UnmodifiableView
-    Set<ChunkLoader> getChunkLoaders();
-
-    void addChunkLoader(ChunkLoader chunkLoader);
-
-    void removeChunkLoader(ChunkLoader chunkLoader);
-
-    int getChunkLoaderCount();
-
-    void addChunkPacket(BedrockPacket packet);
-
-    void sendChunkPackets();
 }

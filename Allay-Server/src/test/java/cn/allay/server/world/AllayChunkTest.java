@@ -19,7 +19,7 @@ public class AllayChunkTest {
 
     @Test
     void testUpdateBlockState() {
-        chunk.setBlockState(0, 0, 0, false, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
+        chunk.setBlockState(0, 0, 0, VanillaBlockTypes.WOOD_TYPE.getDefaultState(), false);
         Assertions.assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, false));
     }
 

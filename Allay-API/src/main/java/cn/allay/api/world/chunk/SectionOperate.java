@@ -10,12 +10,20 @@ import org.jetbrains.annotations.Range;
  * @author Cool_Loong
  */
 public interface SectionOperate {
-    void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState);
+    void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer, boolean send, boolean update);
 
     BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer);
 
+    default void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer, boolean send) {
+        setBlockState(x, y, z, blockState, layer, send, true);
+    }
+
     default void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState) {
-        setBlockState(x, y, z, false, blockState);
+        setBlockState(x, y, z, blockState, false, true);
+    }
+
+    default void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer) {
+        setBlockState(x, y, z, blockState, layer, true);
     }
 
     default BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
