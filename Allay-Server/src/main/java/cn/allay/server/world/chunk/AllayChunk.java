@@ -35,8 +35,6 @@ public class AllayChunk implements Chunk {
     protected final StampedLock sectionLock;
     protected final StampedLock heightLock;
     protected final StampedLock lightLock;
-    protected final Vector<ChunkLoader> chunkLoaders;
-    protected final Queue<BedrockPacket> chunkPacketQueue;
 
     public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
@@ -47,8 +45,6 @@ public class AllayChunk implements Chunk {
         this.sectionLock = new StampedLock();
         this.heightLock = new StampedLock();
         this.lightLock = new StampedLock();
-        this.chunkLoaders = new Vector<>();
-        this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
     }
 
     @Override
@@ -76,7 +72,6 @@ public class AllayChunk implements Chunk {
         }
     }
 
-
     @Override
     public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {
         long stamp = sectionLock.tryOptimisticRead();
@@ -93,10 +88,10 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState) {
+    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer, boolean send, boolean update) {
         long stamp = sectionLock.writeLock();
         try {
-            unsafeChunk.setBlockState(x, y, z, layer, blockState);
+            unsafeChunk.setBlockState(x, y, z, blockState, layer, send, update);
         } finally {
             sectionLock.unlockWrite(stamp);
         }
@@ -147,7 +142,7 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState expectedValue, BlockState newValue) {
+    public void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, boolean layer, boolean send, boolean update) {
         long stamp = sectionLock.tryOptimisticRead();
         try {
             for (; ; stamp = sectionLock.writeLock()) {
@@ -157,7 +152,7 @@ public class AllayChunk implements Chunk {
                 if (oldValue != expectedValue) break;
                 stamp = sectionLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
-                unsafeChunk.setBlockState(x, y, z, layer, newValue);
+                unsafeChunk.setBlockState(x, y, z, newValue, layer, send);
                 return;
             }
         } finally {
@@ -296,43 +291,6 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    @UnmodifiableView
-    public Set<ChunkLoader> getChunkLoaders() {
-        return chunkLoaders.stream().collect(Collectors.toUnmodifiableSet());
-    }
-
-    @Override
-    public void addChunkLoader(ChunkLoader chunkLoader) {
-        chunkLoaders.add(chunkLoader);
-    }
-
-    @Override
-    public void removeChunkLoader(ChunkLoader chunkLoader) {
-        chunkLoaders.remove(chunkLoader);
-    }
-
-    @Override
-    public int getChunkLoaderCount() {
-        return chunkLoaders.size();
-    }
-
-    @Override
-    public void addChunkPacket(BedrockPacket packet) {
-        chunkPacketQueue.add(packet);
-    }
-
-    @Override
-    public void sendChunkPackets() {
-        if (chunkPacketQueue.isEmpty()) return;
-        BedrockPacket packet;
-        while ((packet = chunkPacketQueue.poll()) != null) {
-            for (ChunkLoader chunkLoader : chunkLoaders) {
-                chunkLoader.sendPacket(packet);
-            }
-        }
-    }
-
-    @Override
     public DimensionInfo getDimensionInfo() {
         return unsafeChunk.getDimensionInfo();
     }
@@ -384,5 +342,35 @@ public class AllayChunk implements Chunk {
         } finally {
             sectionLock.unlockWrite(stamp);
         }
+    }
+
+    @Override
+    public @UnmodifiableView Set<ChunkLoader> getChunkLoaders() {
+        return unsafeChunk.getChunkLoaders();
+    }
+
+    @Override
+    public void addChunkLoader(ChunkLoader chunkLoader) {
+        unsafeChunk.addChunkLoader(chunkLoader);
+    }
+
+    @Override
+    public void removeChunkLoader(ChunkLoader chunkLoader) {
+        unsafeChunk.removeChunkLoader(chunkLoader);
+    }
+
+    @Override
+    public int getChunkLoaderCount() {
+        return unsafeChunk.getChunkLoaderCount();
+    }
+
+    @Override
+    public void addChunkPacket(BedrockPacket packet) {
+        unsafeChunk.addChunkPacket(packet);
+    }
+
+    @Override
+    public void sendChunkPackets() {
+        unsafeChunk.sendChunkPackets();
     }
 }

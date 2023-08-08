@@ -99,6 +99,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected void updateMotion(Entity entity) {
+        //https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas
         //TODO: 效果乘数
         var effectFactor = 1;
         double movementFactor = entity.getMovementFactor();
@@ -109,7 +110,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var mx = entity.getMotion().x();
         var my = entity.getMotion().y();
         var mz = entity.getMotion().z();
-        //https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas
         double newMx;
         double newMz;
         var approachMx = mx * slipperyFactor * 0.91;

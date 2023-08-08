@@ -4,23 +4,33 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
+import cn.allay.api.world.chunk.ChunkLoader;
 import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.chunk.UnsafeChunk;
 import cn.allay.api.world.heightmap.HeightMap;
 import cn.allay.api.world.heightmap.HeightMapType;
 import lombok.Getter;
 import lombok.Setter;
+import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
+@Getter
 @NotThreadSafe
 public class AllayUnsafeChunk implements UnsafeChunk {
-    @Getter
     @Setter
     protected volatile int chunkX;
     @Getter
@@ -30,6 +40,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final DimensionInfo dimensionInfo;
     protected final ChunkSection[] sections;
     protected final HeightMap[] heightMap;
+    protected final Vector<ChunkLoader> chunkLoaders;
+    protected final Queue<BedrockPacket> chunkPacketQueue;
 
     public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
@@ -41,6 +53,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
         this.heightMap = new HeightMap[]{new HeightMap()};
         this.dimensionInfo = dimensionInfo;
+        this.chunkLoaders = new Vector<>();
+        this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
     }
 
     @ApiStatus.Internal
@@ -79,13 +93,22 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return blockState;
     }
 
-    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer, BlockState blockState) {
+    //TODO: block update
+    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer, boolean send, boolean update) {
         int sectionY = normalY(y) >>> 4;
         ChunkSection section = this.getSection(sectionY);
         if (section == null) {
             section = this.getOrCreateSection(sectionY);
         }
         section.setBlock(x, y & 0xf, z, layer, blockState);
+        if (send) {
+            var updateBlockPacket = new UpdateBlockPacket();
+            updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
+            updateBlockPacket.setDefinition(blockState.toNetworkBlockDefinition());
+            updateBlockPacket.setDataLayer(layer ? 1 : 0);
+            updateBlockPacket.getFlags().addAll( UpdateBlockPacket.FLAG_ALL_PRIORITY );
+            sendChunkPacket(updateBlockPacket);
+        }
     }
 
     public @Range(from = 0, to = 15) int getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
@@ -118,5 +141,47 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public BiomeType getBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
         return this.getOrCreateSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
+    }
+
+    @Override
+    @UnmodifiableView
+    public Set<ChunkLoader> getChunkLoaders() {
+        return chunkLoaders.stream().collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public void addChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.add(chunkLoader);
+    }
+
+    @Override
+    public void removeChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.remove(chunkLoader);
+    }
+
+    @Override
+    public int getChunkLoaderCount() {
+        return chunkLoaders.size();
+    }
+
+    @Override
+    public void addChunkPacket(BedrockPacket packet) {
+        chunkPacketQueue.add(packet);
+    }
+
+    @Override
+    public void sendChunkPacket(BedrockPacket packet) {
+        for (ChunkLoader chunkLoader : chunkLoaders) {
+            chunkLoader.sendPacket(packet);
+        }
+    }
+
+    @Override
+    public void sendChunkPackets() {
+        if (chunkPacketQueue.isEmpty()) return;
+        BedrockPacket packet;
+        while ((packet = chunkPacketQueue.poll()) != null) {
+            sendChunkPacket(packet);
+        }
     }
 }
