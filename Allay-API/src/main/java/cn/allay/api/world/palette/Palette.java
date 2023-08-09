@@ -6,12 +6,12 @@ import cn.allay.api.world.chunk.Chunk;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import lombok.EqualsAndHashCode;
 import org.cloudburstmc.nbt.*;
 import org.cloudburstmc.protocol.common.util.VarInts;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -32,7 +32,7 @@ public final class Palette<V> {
 
     public Palette(V first, BitArrayVersion version) {
         this.bitArray = version.createArray(Chunk.SECTION_SIZE);
-        this.palette = new ReferenceArrayList<>(16);
+        this.palette = new ArrayList<>(16);
         this.palette.add(first);
     }
 

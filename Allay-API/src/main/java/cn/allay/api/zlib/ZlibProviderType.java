@@ -15,7 +15,7 @@ public enum ZlibProviderType {
                 return new LibDeflateThreadLocal(type, level);
             }
             default -> {
-                return new ZlibThreadLocal(type, level);
+                return new JavaZibThreadLocal(type, level);
             }
         }
     }

@@ -1,5 +1,6 @@
 package cn.allay.api.zlib;
 
+
 import cn.powernukkitx.libdeflate.LibdeflateCompressor;
 import cn.powernukkitx.libdeflate.LibdeflateDecompressor;
 
@@ -36,7 +37,8 @@ public final class LibDeflateThreadLocal implements ZlibProvider {
     public byte[] deflate(byte[] data) throws IOException {
         try (LibdeflateCompressor deflater = DEFLATER.get()) {
             var t = type == CompressionType.ZLIB ? cn.powernukkitx.libdeflate.CompressionType.ZLIB : cn.powernukkitx.libdeflate.CompressionType.GZIP;
-            byte[] buffer = deflater.getCompressBound(data.length, t) < 8192 ? new byte[8192] : new byte[data.length];
+            int compressUpperBound = (int) deflater.getCompressBound(data.length, t);
+            byte[] buffer = new byte[compressUpperBound];
             int compressedSize = deflater.compress(data, buffer, t);
             byte[] output = new byte[compressedSize];
             System.arraycopy(buffer, 0, output, 0, compressedSize);
@@ -53,8 +55,8 @@ public final class LibDeflateThreadLocal implements ZlibProvider {
         try (LibdeflateDecompressor pnxInflater = PNX_INFLATER.get()) {
             byte[] buffer = new byte[maxSize];
             try {
-                var result = pnxInflater.decompressUnknownSize(data, 0, data.length, buffer, 0, buffer.length, t);
-                if (maxSize > 0 && result >= maxSize) {
+                var result = pnxInflater.decompressUnknownSize(data, 0, data.length, buffer, 0, maxSize, t);
+                if (maxSize > 0 && result > maxSize) {
                     throw new IOException("Inflated data exceeds maximum size");
                 }
                 byte[] output = new byte[(int) result];

@@ -90,9 +90,10 @@ subprojects {
 
     tasks.withType<Javadoc> {
         options.encoding = "UTF-8"
+        val javadocOptions = options as CoreJavadocOptions
+        javadocOptions.addStringOption("source", "20")
+        javadocOptions.addBooleanOption("-enable-preview", true)
         //Suppress some meaningless warnings
-        options {
-            (this as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
-        }
+        javadocOptions.addStringOption("Xdoclint:none", "-quiet")
     }
 }

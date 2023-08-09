@@ -6,6 +6,7 @@ import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.gamerule.GameRule;
 import cn.allay.api.world.gamerule.GameRules;
+import cn.allay.api.world.storage.AnvilRegionFile;
 import cn.allay.api.world.storage.NativeFileWorldStorage;
 import cn.allay.api.world.storage.WorldStorageException;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
