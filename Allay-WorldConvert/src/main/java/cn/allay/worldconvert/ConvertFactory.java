@@ -1,17 +1,17 @@
 package cn.allay.worldconvert;
 
+import cn.allay.api.world.storage.AnvilRegionFile;
 import cn.allay.worldconvert.tasks.VanillaRegionConvertTask;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.jglrxavpok.hephaistos.mca.AnvilException;
 import org.jglrxavpok.hephaistos.mca.RegionFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class ConvertFactory {
@@ -28,21 +28,19 @@ public class ConvertFactory {
             log.error("The region folder does not exist!");
             WorldConverter.close(1);
         }
-        try {
-            File target = output.resolve("region").toFile();
-            FileUtils.copyDirectory(files, target);
-            for (var file : Objects.requireNonNull(target.listFiles())) {
-                try {
-                    String name = file.getName();
-                    String[] split = name.split("\\.");
-                    RegionFile region = new RegionFile(new RandomAccessFile(file, "rw"), Integer.parseInt(split[1]), Integer.parseInt(split[2]), dimension.getDimensionInfo().minHeight(), dimension.getDimensionInfo().maxHeight());
-                    THREAD_POOL.submit(new VanillaRegionConvertTask(region, 1023));
-                } catch (AnvilException | IOException e) {
-                    throw new RuntimeException(e);
-                }
+        for (var f : Objects.requireNonNull(files.listFiles())) {
+            Path p = output.resolve("region");
+            try {
+                String name = f.getName();
+                String[] split = name.split("\\.");
+                RegionFile srcRegion = new RegionFile(new RandomAccessFile(f, "r"), Integer.parseInt(split[1]), Integer.parseInt(split[2]), dimension.getDimensionInfo().minHeight(), dimension.getDimensionInfo().maxHeight());
+                AnvilRegionFile targetRegion = new AnvilRegionFile(p, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+                THREAD_POOL.execute(new VanillaRegionConvertTask(srcRegion, targetRegion));
+                break;
+            } catch (AnvilException | IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+        THREAD_POOL.awaitQuiescence(1, TimeUnit.DAYS);
     }
 }

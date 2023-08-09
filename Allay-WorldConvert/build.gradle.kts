@@ -39,6 +39,12 @@ tasks.startShadowScripts {
     enabled = false
 }
 
+tasks.distTar { enabled = false }
+tasks.distZip { enabled = false }
+tasks.shadowDistTar { enabled = false }
+tasks.shadowDistZip { enabled = false }
+
+
 tasks.shadowJar {
     transform(Log4j2PluginsCacheFileTransformer())
 }

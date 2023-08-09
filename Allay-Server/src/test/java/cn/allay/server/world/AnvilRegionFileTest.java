@@ -1,6 +1,6 @@
 package cn.allay.server.world;
 
-import cn.allay.server.world.storage.anvil.AnvilRegionFile;
+import cn.allay.api.world.storage.AnvilRegionFile;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,11 @@ public class AnvilRegionFileTest {
         NbtMap nbtMap = anvilRegionFile.readChunkData(0, 0);
         System.out.println(nbtMap.toSNBT(4));
     }
+
     @Test
-    void writeMCA() throws IOException {
+    void loadMCA1() throws IOException {
+        AnvilRegionFile anvilRegionFile = new AnvilRegionFile(regionPath, -1, -1);
+        NbtMap nbtMap = anvilRegionFile.readChunkData(31, 31);
+        System.out.println(nbtMap.toSNBT(4));
     }
 }

@@ -23,5 +23,11 @@ dependencies {
     api(libs.commonsio)
     api(libs.joml)
     api(libs.joml.primitives)
-    compileOnly(libs.libdeflate)
+    implementation(libs.libdeflate)
+}
+
+tasks.processResources {
+    // input directory
+    from("${rootProject.projectDir}/Data")
+    include("mappings/")
 }

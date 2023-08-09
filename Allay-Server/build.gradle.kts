@@ -28,6 +28,7 @@ tasks.processResources {
     from("${rootProject.projectDir}/Data")
     // exclude unpacked folder and block palette.nbt
     exclude("**/unpacked/**")
+    exclude("**/mappings/**")
 }
 
 //disable ,please use `java -jar` to start directly
