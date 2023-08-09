@@ -2,6 +2,8 @@ package cn.allay.codegen;
 
 
 import cn.allay.dependence.StringUtils;
+import cn.allay.dependence.VanillaBlockId;
+import cn.allay.dependence.VanillaItemId;
 
 import java.util.List;
 
