@@ -22,6 +22,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static cn.allay.api.block.component.impl.attribute.BlockAttributes.DEFAULT_FRICTION;
 import static java.lang.Double.isNaN;
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
 
 /**
  * Allay Project 2023/8/5 <br>
@@ -84,7 +86,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             //https://github.com/lovexyn0827/Discovering-Minecraft/blob/master/Minecraft%E5%AE%9E%E4%BD%93%E8%BF%90%E5%8A%A8%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%BA%94%E7%94%A8/5-Chapter-5.md
             var ol = other.getLocation();
             var direction = new Vector3d(entity.getLocation()).sub(other.getLocation(), new Vector3d()).normalize();
-            double distance = Math.max(ol.x() - loc.x(), ol.z() - loc.z());
+            double distance = max(abs(ol.x() - loc.x()), abs(ol.z() - loc.z()));
             double k;
             if (distance <= 0.01) continue;
             if (distance <= 1) {
@@ -123,9 +125,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             newMz = approachMz + 0.02 * movementFactor * Math.cos(yaw);
         }
         double newMy = (my - (entity.hasGravity() ? entity.getGravity() : 0)) * 0.98;
-        if (Math.abs(newMx) < MOTION_THRESHOLD) newMx = 0;
-        if (Math.abs(newMy) < MOTION_THRESHOLD) newMy = 0;
-        if (Math.abs(newMz) < MOTION_THRESHOLD) newMz = 0;
+        if (abs(newMx) < MOTION_THRESHOLD) newMx = 0;
+        if (abs(newMy) < MOTION_THRESHOLD) newMy = 0;
+        if (abs(newMz) < MOTION_THRESHOLD) newMz = 0;
         entity.setMotion(new Vector3d(newMx, newMy, newMz));
     }
 
@@ -142,7 +144,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         my = yResult.left();
         entity.setOnGround(yResult.right());
 
-        if (Math.abs(mx) >= Math.abs(mz)) {
+        if (abs(mx) >= abs(mz)) {
             //先处理X轴, 然后处理Z轴
             mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb);
             mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb);
@@ -405,12 +407,12 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Entity entity, Location3dc oldLoc, Location3dc newLoc) {
         var flags = EnumSet.noneOf(MoveEntityDeltaPacket.Flag.class);
-        if (Math.abs(oldLoc.x() - newLoc.x()) > DIFF_POSITION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_X);
-        if (Math.abs(oldLoc.y() - newLoc.y()) > DIFF_POSITION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_Y);
-        if (Math.abs(oldLoc.z() - newLoc.z()) > DIFF_POSITION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_Z);
-        if (Math.abs(oldLoc.yaw() - newLoc.yaw()) > DIFF_ROTATION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_YAW);
-        if (Math.abs(oldLoc.pitch() - newLoc.pitch()) > DIFF_ROTATION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_PITCH);
-        if (entity.enableHeadYaw() && Math.abs(oldLoc.headYaw() - newLoc.headYaw()) > DIFF_ROTATION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_HEAD_YAW);
+        if (abs(oldLoc.x() - newLoc.x()) > DIFF_POSITION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_X);
+        if (abs(oldLoc.y() - newLoc.y()) > DIFF_POSITION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_Y);
+        if (abs(oldLoc.z() - newLoc.z()) > DIFF_POSITION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_Z);
+        if (abs(oldLoc.yaw() - newLoc.yaw()) > DIFF_ROTATION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_YAW);
+        if (abs(oldLoc.pitch() - newLoc.pitch()) > DIFF_ROTATION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_PITCH);
+        if (entity.enableHeadYaw() && abs(oldLoc.headYaw() - newLoc.headYaw()) > DIFF_ROTATION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_HEAD_YAW);
         return flags;
     }
 
