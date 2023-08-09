@@ -60,6 +60,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             if (!entity.computeMovementServerSide()) return;
             //TODO: 水流作用 方块推出作用 etc...
             if (entity.hasCollision()) computeCollisionMotion(entity);
+            entity.setMotion(checkMotionThreshold(new Vector3d(entity.getMotion())));
             if (applyMotion(entity)) {
                 updatedEntities.put(entity.getUniqueId(), entity);
             }
@@ -125,10 +126,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             newMz = approachMz + 0.02 * movementFactor * Math.cos(yaw);
         }
         double newMy = (my - (entity.hasGravity() ? entity.getGravity() : 0)) * 0.98;
-        if (abs(newMx) < MOTION_THRESHOLD) newMx = 0;
-        if (abs(newMy) < MOTION_THRESHOLD) newMy = 0;
-        if (abs(newMz) < MOTION_THRESHOLD) newMz = 0;
-        entity.setMotion(new Vector3d(newMx, newMy, newMz));
+        entity.setMotion(checkMotionThreshold(new Vector3d(newMx, newMy, newMz)));
+    }
+
+    protected Vector3d checkMotionThreshold(Vector3d motion) {
+        if (abs(motion.x) < MOTION_THRESHOLD) motion.x = 0;
+        if (abs(motion.y) < MOTION_THRESHOLD) motion.y = 0;
+        if (abs(motion.z) < MOTION_THRESHOLD) motion.z = 0;
+        return motion;
     }
 
     protected boolean applyMotion(Entity entity) {
@@ -228,7 +233,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var z = (aabb.maxZ + aabb.minZ) / 2d;
             union.intersectsRay(
                     x, y, z,
-                    mx, 0, 0,
+                    x + mx, y, z,
                     result
             );
             //计算X轴坐标变化量
@@ -288,7 +293,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var y = (aabb.maxY + aabb.minY) / 2d;
             union.intersectsRay(
                     x, y, z,
-                    0, 0, mz,
+                    x, y, z + mz,
                     result
             );
             //计算Z轴坐标变化量
@@ -337,7 +342,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var z = (aabb.maxZ + aabb.minZ) / 2d;
             union.intersectsRay(
                     x, y, z,
-                    0, my, 0,
+                    x, y + my, z,
                     result
             );
             //计算Y轴坐标变化量
