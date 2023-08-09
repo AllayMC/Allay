@@ -2,6 +2,7 @@ package cn.allay.api.block.type;
 
 import cn.allay.api.block.property.type.BlockPropertyType;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleBlockDefinition;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -47,5 +48,9 @@ public interface BlockState {
                 blockStateHash(),
                 statesBuilder.build()
         );
+    }
+
+    default BlockDefinition toNetworkBlockDefinitionRuntime() {
+        return this::blockStateHash;
     }
 }
