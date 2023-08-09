@@ -3,6 +3,7 @@ package cn.allay.api.world.storage;
 import cn.allay.api.zlib.CompressionType;
 import cn.allay.api.zlib.ZlibProviderType;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import lombok.Getter;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
@@ -42,9 +43,21 @@ public final class AnvilRegionFile implements Cloneable {
     private final IntArrayList locations = new IntArrayList(SECTOR_SIZE);
     private final IntArrayList timestamps = new IntArrayList(SECTOR_SIZE);
     private final BitSet usedSectors = new BitSet();
+    @Getter
     private final int regionX;
+    @Getter
     private final int regionZ;
 
+    /**
+     * Open the region file in the specified path, which requires the path to exist <br>
+     * If the region file does not exist, it will be created
+     *
+     * @param region  the region folder path
+     * @param regionX the x pos of region file
+     * @param regionZ the zpos of region file
+     * @throws IOException the io exception
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public AnvilRegionFile(Path region, int regionX, int regionZ) throws IOException {
         this.regionX = regionX;
         this.regionZ = regionZ;
@@ -74,7 +87,7 @@ public final class AnvilRegionFile implements Cloneable {
         if (channel.read(locations) == -1) {
             throw new EOFException();
         }
-        // `locations` buffer to complete the preparation for reading
+        //`locations` buffer to complete the preparation for reading
         locations.flip();
         IntBuffer ints = locations.asIntBuffer();
         // init locations and timestamps
@@ -95,6 +108,14 @@ public final class AnvilRegionFile implements Cloneable {
         }
     }
 
+    /**
+     * Read chunk data
+     *
+     * @param chunkX the chunk x
+     * @param chunkZ the chunk z
+     * @return the nbt map
+     * @throws IOException the io exception
+     */
     @NotNull
     public synchronized NbtMap readChunkData(@Range(from = 0, to = 31) int chunkX, @Range(from = 0, to = 31) int chunkZ) throws IOException {
         int loc = this.locations.getInt(index(chunkX, chunkZ));
@@ -114,7 +135,7 @@ public final class AnvilRegionFile implements Cloneable {
             throw new EOFException();
         }
         buffer.flip();
-        // The first byte represent the compression type, and the remain of the data is raw chunk data
+        // The first 4 bytes represent the chunk data length,The next 1 byte is the compression type and the remain of the data is raw chunk data
         // Read the chunk data length
         int length = buffer.getInt();
         byte compressionType = buffer.get();
@@ -133,7 +154,7 @@ public final class AnvilRegionFile implements Cloneable {
     }
 
     /**
-     * Write chunk.
+     * write chunk data
      *
      * @param chunkX    the chunk x
      * @param chunkZ    the chunk z
@@ -147,12 +168,8 @@ public final class AnvilRegionFile implements Cloneable {
         writer.writeTag(chunkData);
         byte[] deflateData = ZlibProviderType.LibDeflateThreadLocal.of(CompressionType.ZLIB, 6).deflate(byteArrayOutputStream.toByteArray());
         writer.close();
-        // Calculate the number of sector needed for the chunk
-        int sectorCount = (int) Math.ceil((double) (deflateData.length + CHUNK_HEADER_LENGTH) / SECTOR_SIZE);
-        // The maximum sector count of a chunk can use 256 sector, that is to say, the maximum size of a chunk is 256 * 4096 = 1M
-        if (sectorCount >= SECTOR_COUNT_PER1M) {
-            throw new IllegalArgumentException("Writing this chunk would take too many sectors (limit is 255, but " + sectorCount + " is needed)");
-        }
+
+        int sectorCount = getSectorCount(deflateData);
 
         // Get the sector index and size previously used by this chunk
         int index = index(chunkX, chunkZ);
@@ -212,6 +229,16 @@ public final class AnvilRegionFile implements Cloneable {
         System.out.println(channel.write(timestamp, index * 4L + 4096));
         // the data has been written, now free previous storage
         usedSectors.set(previousSectorStart, previousSectorStart + previousSectorCount, false);
+    }
+
+    // Calculate the number of sector needed for the chunk data
+    private static int getSectorCount(byte[] deflateData) {
+        int sectorCount = (int) Math.ceil((double) (deflateData.length + CHUNK_HEADER_LENGTH) / SECTOR_SIZE);
+        // The maximum sector count of a chunk can use 256 sector, that is to say, the maximum size of a chunk is 256 * 4096 = 1M
+        if (sectorCount >= SECTOR_COUNT_PER1M) {
+            throw new IllegalArgumentException("Writing this chunk would take too many sectors (limit is 255, but " + sectorCount + " is needed)");
+        }
+        return sectorCount;
     }
 
     /**
