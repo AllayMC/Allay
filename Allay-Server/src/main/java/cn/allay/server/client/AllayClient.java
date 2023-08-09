@@ -544,11 +544,17 @@ public class AllayClient extends BaseClient {
                 //TODO: checking
                 switch(action.getAction()) {
                     case START_BREAK -> {
-                        getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_START_BREAK, 65535);
+                        getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_START_BREAK, 0);
                     }
                     case BLOCK_PREDICT_DESTROY -> {
+                        var oldState = getWorld().getBlockState(pos.getX(), pos.getY(), pos.getZ());
+                        if (oldState == null) {
+                            log.warn("Player " + name + " tried to break block at " + pos + " but it is air");
+                            continue;
+                        }
                         getWorld().setBlockState(pos.getX(), pos.getY(), pos.getZ(), VanillaBlockTypes.AIR_TYPE.getDefaultState());
-                        getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_STOP_BREAK, 1);
+                        getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_STOP_BREAK, 0);
+                        getWorld().sendLevelEventPacket(pos, LevelEvent.PARTICLE_DESTROY_BLOCK, oldState.blockStateHash());
                     }
                 }
             }
