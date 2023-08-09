@@ -131,7 +131,8 @@ public interface World extends ChunkAccessible {
     @Nullable
     default BlockState getBlockState(int x, int y, int z, boolean layer) {
         var chunk = getChunk(x >> 4, z >> 4);
-        if (chunk == null) return null;
+        if (chunk == null)
+            return null;
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
