@@ -28,6 +28,8 @@ public class VanillaBlockIdEnumGen {
     }
 
     static final Path BLOCK_PALETTE_FILE_PATH = Path.of("Data/unpacked/block_palette.nbt");
+    static final Path BLOCK_ID_TO_ITEM_ID_MAP_PATH = Path.of("Data/unpacked/block_id_to_item_id_map.nbt");
+    static final NbtMap BLOCK_ID_TO_ITEM_ID_MAP;
     static final List<NbtMap> BLOCK_PALETTE_NBT;
     public static final Map<String, NbtMap> MAPPED_BLOCK_PALETTE_NBT = new HashMap<>();
 
@@ -37,6 +39,11 @@ public class VanillaBlockIdEnumGen {
             for (var entry : BLOCK_PALETTE_NBT) {
                 MAPPED_BLOCK_PALETTE_NBT.put(entry.getString("name"), entry);
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(BLOCK_ID_TO_ITEM_ID_MAP_PATH))))) {
+            BLOCK_ID_TO_ITEM_ID_MAP = (NbtMap) nbtReader.readTag();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -86,7 +93,18 @@ public class VanillaBlockIdEnumGen {
     private static void addEnums(TypeSpec.Builder codeBuilder) {
         var sortedidentifier = BLOCK_PALETTE_NBT.stream().map(block -> block.getString("name")).sorted(String::compareTo).map(Identifier::new).toList();
         for (var identifier : sortedidentifier) {
-            codeBuilder.addEnumConstant(identifier.path().toUpperCase(), TypeSpec.anonymousClassBuilder("$S", identifier.toString()).build());
+            var itemId = BLOCK_ID_TO_ITEM_ID_MAP.getString(identifier.toString());
+            if (itemId == null) {
+                codeBuilder.addEnumConstant(
+                        identifier.path().toUpperCase(),
+                        TypeSpec.anonymousClassBuilder("$S", identifier.toString()).build()
+                );
+            } else {
+                codeBuilder.addEnumConstant(
+                        identifier.path().toUpperCase(),
+                        TypeSpec.anonymousClassBuilder("$S, $S", identifier.toString(), itemId).build()
+                );
+            }
         }
     }
 
@@ -98,9 +116,15 @@ public class VanillaBlockIdEnumGen {
                         .builder(identifierClass, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(getterClass)
                         .build())
+                .addField(FieldSpec
+                        .builder(identifierClass, "itemIdentifier", Modifier.PRIVATE, Modifier.FINAL)
+                        .addAnnotation(getterClass)
+                        .build())
                 .addMethod(MethodSpec.constructorBuilder()
                         .addParameter(stringClass, "identifier")
+                        .addParameter(stringClass, "itemIdentifier")
                         .addStatement("this.$N = new $T($N)", "identifier", identifierClass, "identifier")
+                        .addStatement("this.$N = new $T($N)", "itemIdentifier", identifierClass, "itemIdentifier")
                         .build()
                 );
     }
