@@ -67,7 +67,12 @@ public class VanillaItemIdEnumGen {
                     StringUtils.fastTwoPartSplit(entry.getKey(), ":", "")[1],
                     ".", "");
             var valueName = split[0].isBlank() ? split[1].toUpperCase() : split[0].toUpperCase() + "_" + split[1].toUpperCase();
-            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue().getShort("id")).build());
+            var blockId = CodeGen.ITEM_ID_TO_BLOCK_ID_MAP.get(entry.getKey());
+            if (blockId == null) {
+                codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue().getShort("id")).build());
+            } else {
+                codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L, $S", entry.getKey(), entry.getValue().getShort("id"), blockId).build());
+            }
         }
     }
 
@@ -83,11 +88,29 @@ public class VanillaItemIdEnumGen {
                         .builder(int.class, "runtimeId", Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(GETTER_CLASS)
                         .build())
+                .addField(FieldSpec
+                        .builder(identifierClass, "blockIdentifier", Modifier.PRIVATE, Modifier.FINAL)
+                        .addAnnotation(GETTER_CLASS)
+                        .build())
                 .addMethod(MethodSpec.constructorBuilder()
                         .addParameter(STRING_CLASS, "identifier")
                         .addParameter(int.class, "runtimeId")
-                        .addStatement("this.$N = new $T($N)", "identifier", identifierClass, "identifier")
+                        .addStatement("this(identifier, runtimeId, null)")
+                        .build()
+                )
+                .addMethod(MethodSpec.constructorBuilder()
+                        .addParameter(STRING_CLASS, "identifier")
+                        .addParameter(int.class, "runtimeId")
+                        .addParameter(STRING_CLASS, "blockIdentifier")
+                        .addStatement("this.identifier = new $T(identifier)", identifierClass)
                         .addStatement("this.runtimeId = runtimeId")
+                        .addStatement("this.blockIdentifier = new $T(blockIdentifier)", identifierClass)
+                        .build()
+                )
+                .addMethod(MethodSpec.methodBuilder("hasBlock")
+                        .returns(boolean.class)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addStatement("return blockIdentifier != null")
                         .build()
                 );
     }
