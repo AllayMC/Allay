@@ -75,7 +75,7 @@ public class VanillaBlockBehaviorInterfaceGen {
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T\n        .builder($T.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, className)
-                .add("        .vanillaBlock($T.$N, true)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
+                .add("        .vanillaBlock($T.$N)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
         var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
         var states = blockPaletteData.getCompound("states");
         if (!states.isEmpty()) {

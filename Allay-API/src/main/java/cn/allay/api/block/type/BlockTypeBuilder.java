@@ -29,11 +29,13 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
 
     BlockTypeBuilder<T> identifier(Identifier identifier);
 
-    BlockTypeBuilder<T> identifier(String identifier);
+    default BlockTypeBuilder<T> identifier(String identifier) {
+        return identifier(new Identifier(identifier));
+    }
+
+    BlockTypeBuilder<T> itemIdentifier(Identifier itemIdentifier);
 
     BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId);
-
-    BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId, boolean initVanillaBlockAttributeComponent);
 
     BlockTypeBuilder<T> setProperties(BlockPropertyType<?>... properties);
 
