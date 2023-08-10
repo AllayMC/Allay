@@ -5,6 +5,8 @@ import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.identifier.Identified;
+import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.type.ItemType;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -41,6 +43,12 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     BlockState getDefaultState();
 
     BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
+
+    @Nullable
+    Identifier getItemIdentifier();
+
+    @Nullable
+    ItemType<?> getItemType();
 
     default BlockState ofState(BlockPropertyType.BlockPropertyValue<?, ?, ?>... propertyValues) {
         return ofState(List.of(propertyValues));
