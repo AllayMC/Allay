@@ -6,7 +6,6 @@ import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponentImpl;
-import cn.allay.api.item.component.impl.base.ItemBaseComponent;
 
 import java.util.List;
 import java.util.Map;
@@ -25,15 +24,21 @@ public interface ItemTypeBuilder<T extends ItemStack> {
         return FACTORY.get().create(clazz);
     }
 
-    ItemTypeBuilder<T> namespace(Identifier identifier);
+    ItemTypeBuilder<T> identifier(Identifier identifier);
 
-    ItemTypeBuilder<T> namespace(String identifier);
+    default ItemTypeBuilder<T> identifier(String identifier) {
+        return identifier(new Identifier(identifier));
+    }
+
+    ItemTypeBuilder<T> blockIdentifier(Identifier blockIdentifier);
+
+    default ItemTypeBuilder<T> blockIdentifier(String blockIdentifier) {
+        return blockIdentifier(new Identifier(blockIdentifier));
+    }
 
     ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId);
 
     ItemTypeBuilder<T> runtimeId(int runtimeId);
-
-    ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId, boolean initVanillaItemAttributeComponent);
 
     ItemTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends ItemComponentImpl>> componentProviders);
 

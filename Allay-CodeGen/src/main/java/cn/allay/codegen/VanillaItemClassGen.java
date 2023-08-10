@@ -72,7 +72,7 @@ public class VanillaItemClassGen {
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T\n        .builder($T.class)\n", ITEM_TYPE_BUILDER_CLASS_NAME, className)
-                .add("        .vanillaItem($T.$N, true)\n", VANILLA_ITEM_ID_CLASS_NAME, vanillaItemId.name())
+                .add("        .vanillaItem($T.$N)\n", VANILLA_ITEM_ID_CLASS_NAME, vanillaItemId.name())
                 .add("        .addBasicComponents()\n")
                 .add("        .build()");
         TYPES_CLASS.addField(

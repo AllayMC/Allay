@@ -17,7 +17,7 @@ public enum VanillaBlockId {
 
   ACACIA_FENCE_GATE("minecraft:acacia_fence_gate", "minecraft:acacia_fence_gate"),
 
-  ACACIA_HANGING_SIGN("minecraft:acacia_hanging_sign"),
+  ACACIA_HANGING_SIGN("minecraft:acacia_hanging_sign", "minecraft:acacia_hanging_sign"),
 
   ACACIA_LOG("minecraft:acacia_log", "minecraft:acacia_log"),
 
@@ -59,7 +59,7 @@ public enum VanillaBlockId {
 
   BAMBOO_BUTTON("minecraft:bamboo_button", "minecraft:bamboo_button"),
 
-  BAMBOO_DOOR("minecraft:bamboo_door"),
+  BAMBOO_DOOR("minecraft:bamboo_door", "minecraft:bamboo_door"),
 
   BAMBOO_DOUBLE_SLAB("minecraft:bamboo_double_slab", "minecraft:bamboo_double_slab"),
 
@@ -67,7 +67,7 @@ public enum VanillaBlockId {
 
   BAMBOO_FENCE_GATE("minecraft:bamboo_fence_gate", "minecraft:bamboo_fence_gate"),
 
-  BAMBOO_HANGING_SIGN("minecraft:bamboo_hanging_sign"),
+  BAMBOO_HANGING_SIGN("minecraft:bamboo_hanging_sign", "minecraft:bamboo_hanging_sign"),
 
   BAMBOO_MOSAIC("minecraft:bamboo_mosaic", "minecraft:bamboo_mosaic"),
 
@@ -123,7 +123,7 @@ public enum VanillaBlockId {
 
   BIRCH_FENCE_GATE("minecraft:birch_fence_gate", "minecraft:birch_fence_gate"),
 
-  BIRCH_HANGING_SIGN("minecraft:birch_hanging_sign"),
+  BIRCH_HANGING_SIGN("minecraft:birch_hanging_sign", "minecraft:birch_hanging_sign"),
 
   BIRCH_LOG("minecraft:birch_log", "minecraft:birch_log"),
 
@@ -255,7 +255,7 @@ public enum VanillaBlockId {
 
   CHERRY_BUTTON("minecraft:cherry_button", "minecraft:cherry_button"),
 
-  CHERRY_DOOR("minecraft:cherry_door"),
+  CHERRY_DOOR("minecraft:cherry_door", "minecraft:cherry_door"),
 
   CHERRY_DOUBLE_SLAB("minecraft:cherry_double_slab", "minecraft:cherry_double_slab"),
 
@@ -263,7 +263,7 @@ public enum VanillaBlockId {
 
   CHERRY_FENCE_GATE("minecraft:cherry_fence_gate", "minecraft:cherry_fence_gate"),
 
-  CHERRY_HANGING_SIGN("minecraft:cherry_hanging_sign"),
+  CHERRY_HANGING_SIGN("minecraft:cherry_hanging_sign", "minecraft:cherry_hanging_sign"),
 
   CHERRY_LEAVES("minecraft:cherry_leaves", "minecraft:cherry_leaves"),
 
@@ -375,7 +375,7 @@ public enum VanillaBlockId {
 
   CRIMSON_FUNGUS("minecraft:crimson_fungus", "minecraft:crimson_fungus"),
 
-  CRIMSON_HANGING_SIGN("minecraft:crimson_hanging_sign"),
+  CRIMSON_HANGING_SIGN("minecraft:crimson_hanging_sign", "minecraft:crimson_hanging_sign"),
 
   CRIMSON_HYPHAE("minecraft:crimson_hyphae", "minecraft:crimson_hyphae"),
 
@@ -429,7 +429,7 @@ public enum VanillaBlockId {
 
   DARK_OAK_FENCE_GATE("minecraft:dark_oak_fence_gate", "minecraft:dark_oak_fence_gate"),
 
-  DARK_OAK_HANGING_SIGN("minecraft:dark_oak_hanging_sign"),
+  DARK_OAK_HANGING_SIGN("minecraft:dark_oak_hanging_sign", "minecraft:dark_oak_hanging_sign"),
 
   DARK_OAK_LOG("minecraft:dark_oak_log", "minecraft:dark_oak_log"),
 
@@ -949,7 +949,7 @@ public enum VanillaBlockId {
 
   JUNGLE_FENCE_GATE("minecraft:jungle_fence_gate", "minecraft:jungle_fence_gate"),
 
-  JUNGLE_HANGING_SIGN("minecraft:jungle_hanging_sign"),
+  JUNGLE_HANGING_SIGN("minecraft:jungle_hanging_sign", "minecraft:jungle_hanging_sign"),
 
   JUNGLE_LOG("minecraft:jungle_log", "minecraft:jungle_log"),
 
@@ -1075,7 +1075,7 @@ public enum VanillaBlockId {
 
   MANGROVE_FENCE_GATE("minecraft:mangrove_fence_gate", "minecraft:mangrove_fence_gate"),
 
-  MANGROVE_HANGING_SIGN("minecraft:mangrove_hanging_sign"),
+  MANGROVE_HANGING_SIGN("minecraft:mangrove_hanging_sign", "minecraft:mangrove_hanging_sign"),
 
   MANGROVE_LEAVES("minecraft:mangrove_leaves", "minecraft:mangrove_leaves"),
 
@@ -1165,7 +1165,7 @@ public enum VanillaBlockId {
 
   OAK_FENCE("minecraft:oak_fence", "minecraft:oak_fence"),
 
-  OAK_HANGING_SIGN("minecraft:oak_hanging_sign"),
+  OAK_HANGING_SIGN("minecraft:oak_hanging_sign", "minecraft:oak_hanging_sign"),
 
   OAK_LOG("minecraft:oak_log", "minecraft:oak_log"),
 
@@ -1463,7 +1463,7 @@ public enum VanillaBlockId {
 
   SPRUCE_FENCE_GATE("minecraft:spruce_fence_gate", "minecraft:spruce_fence_gate"),
 
-  SPRUCE_HANGING_SIGN("minecraft:spruce_hanging_sign"),
+  SPRUCE_HANGING_SIGN("minecraft:spruce_hanging_sign", "minecraft:spruce_hanging_sign"),
 
   SPRUCE_LOG("minecraft:spruce_log", "minecraft:spruce_log"),
 
@@ -1617,7 +1617,7 @@ public enum VanillaBlockId {
 
   WARPED_FUNGUS("minecraft:warped_fungus", "minecraft:warped_fungus"),
 
-  WARPED_HANGING_SIGN("minecraft:warped_hanging_sign"),
+  WARPED_HANGING_SIGN("minecraft:warped_hanging_sign", "minecraft:warped_hanging_sign"),
 
   WARPED_HYPHAE("minecraft:warped_hyphae", "minecraft:warped_hyphae"),
 

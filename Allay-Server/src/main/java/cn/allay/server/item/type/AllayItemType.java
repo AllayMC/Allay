@@ -1,5 +1,7 @@
 package cn.allay.server.item.type;
 
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.ComponentImpl;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
@@ -10,7 +12,6 @@ import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponentImpl;
 import cn.allay.api.item.component.impl.attribute.ItemAttributeComponentImpl;
 import cn.allay.api.item.component.impl.attribute.VanillaItemAttributeRegistry;
-import cn.allay.api.item.component.impl.base.ItemBaseComponent;
 import cn.allay.api.item.component.impl.base.ItemBaseComponentImpl;
 import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
@@ -21,6 +22,7 @@ import cn.allay.server.utils.ComponentClassCacheUtils;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -32,25 +34,33 @@ import static java.lang.reflect.Modifier.isStatic;
  *
  * @author daoge_cmd
  */
-public class AllayItemType<T extends ItemStack> implements ItemType<T> {
-    protected Class<T> interfaceClass;
-    protected Class<T> injectedClass;
-    protected Constructor<T> constructor;
-    protected List<ComponentProvider<? extends ItemComponentImpl>> componentProviders;
+public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
+    private final Class<T> interfaceClass;
+    private final Class<T> injectedClass;
+    private final Constructor<T> constructor;
+    private final List<ComponentProvider<? extends ItemComponentImpl>> componentProviders;
     @Getter
-    protected Identifier identifier;
+    private final Identifier identifier;
     @Getter
-    protected int runtimeId;
+    private final int runtimeId;
+    @Getter
+    @Nullable
+    private final Identifier blockIdentifier;
+    @Getter
+    @Nullable
+    private BlockType<?> blockTypeCache;
 
     @SneakyThrows
-    protected AllayItemType(Class<T> interfaceClass,
-                            List<ComponentProvider<? extends ItemComponentImpl>> componentProviders,
-                            Identifier identifier,
-                            int runtimeId) {
+    private AllayItemType(Class<T> interfaceClass,
+                          List<ComponentProvider<? extends ItemComponentImpl>> componentProviders,
+                          Identifier identifier,
+                          int runtimeId,
+                          @Nullable Identifier blockIdentifier) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
         this.identifier = identifier;
         this.runtimeId = runtimeId;
+        this.blockIdentifier = blockIdentifier;
         try {
             ArrayList<ComponentProvider<? extends ComponentImpl>> components = new ArrayList<>(componentProviders);
             injectedClass = new AllayComponentInjector<T>()
@@ -81,11 +91,23 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
         return constructor.newInstance(info);
     }
 
+    @Override
+    public @Nullable BlockType<?> getBlockType() {
+        if (blockTypeCache != null) return blockTypeCache;
+        if (blockIdentifier == null) return null;
+        blockTypeCache = BlockTypeRegistry.getRegistry().get(blockIdentifier);
+        if (blockTypeCache == null)
+            throw new IllegalStateException("Block type " + blockIdentifier + " not registered");
+        return blockTypeCache;
+    }
+
     @ToString
     public static class Builder<T extends ItemStack> implements ItemTypeBuilder<T> {
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends ItemComponentImpl>> componentProviders = new HashMap<>();
         protected Identifier identifier;
+        @Nullable
+        protected Identifier blockIdentifier;
         protected int runtimeId = Integer.MAX_VALUE;
 
         public Builder(Class<T> interfaceClass) {
@@ -95,33 +117,26 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
-        public ItemTypeBuilder<T> namespace(Identifier identifier) {
+        public ItemTypeBuilder<T> identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
         @Override
-        public ItemTypeBuilder<T> namespace(String identifier) {
-            this.identifier = new Identifier(identifier);
+        public ItemTypeBuilder<T> blockIdentifier(Identifier blockIdentifier) {
+            this.blockIdentifier = blockIdentifier;
             return this;
         }
 
         @Override
         public ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId) {
-            return vanillaItem(vanillaItemId, true);
-        }
-
-        @Override
-        public ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId, boolean initVanillaItemAttributeComponent) {
             this.identifier = vanillaItemId.getIdentifier();
             this.runtimeId = vanillaItemId.getRuntimeId();
-            if (initVanillaItemAttributeComponent) {
-                var attributes = VanillaItemAttributeRegistry.getRegistry().get(vanillaItemId);
-                if (attributes == null)
-                    throw new ItemTypeBuildException("Cannot find vanilla item attribute component for " + vanillaItemId + " from vanilla item attribute registry!");
-                var attributeComponent = new ItemAttributeComponentImpl(attributes);
-                componentProviders.put(ItemAttributeComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
-            }
+            var attributes = VanillaItemAttributeRegistry.getRegistry().get(vanillaItemId);
+            if (attributes == null)
+                throw new ItemTypeBuildException("Cannot find vanilla item attribute component for " + vanillaItemId + " from vanilla item attribute registry!");
+            var attributeComponent = new ItemAttributeComponentImpl(attributes);
+            componentProviders.put(ItemAttributeComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
             return this;
         }
 
@@ -176,7 +191,7 @@ public class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 throw new ItemTypeBuildException("identifier cannot be null!");
             if (runtimeId == Integer.MAX_VALUE)
                 throw new ItemTypeBuildException("runtimeId unassigned!");
-            var type = new AllayItemType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier, runtimeId);
+            var type = new AllayItemType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier, runtimeId, blockIdentifier);
             ItemTypeRegistry.getRegistry().register(identifier, type);
             return type;
         }
