@@ -1,6 +1,7 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.utils.HashUtils;
+import cn.allay.api.world.World;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.generator.LimitedWorldRegion;
 import org.jetbrains.annotations.Nullable;
@@ -14,10 +15,12 @@ public class GenerationLimitedWorldRegion implements LimitedWorldRegion {
 
     private final Chunk[][] chunks = new Chunk[3][3];
 
+    private final World world;
     private final int centerChunkX;
     private final int centerChunkZ;
 
-    public GenerationLimitedWorldRegion(int centerChunkX, int centerChunkZ) {
+    public GenerationLimitedWorldRegion(World world, int centerChunkX, int centerChunkZ) {
+        this.world = world;
         this.centerChunkX = centerChunkX;
         this.centerChunkZ = centerChunkZ;
     }
@@ -66,5 +69,10 @@ public class GenerationLimitedWorldRegion implements LimitedWorldRegion {
 
     private boolean invalidXZ(int x, int z) {
         return x < -1 || x > 1 || z < -1 || z > 1;
+    }
+
+    @Override
+    public World getWorld() {
+        return world;
     }
 }

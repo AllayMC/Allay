@@ -2,6 +2,7 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
 import cn.allay.api.world.heightmap.HeightMapType;
@@ -16,13 +17,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
-import java.util.Queue;
 import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Allay Project 5/30/2023
@@ -36,12 +33,12 @@ public class AllayChunk implements Chunk {
     protected final StampedLock heightLock;
     protected final StampedLock lightLock;
 
-    public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
+    public AllayChunk(World world, int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+        this(world, chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
     }
 
-    public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
-        this.unsafeChunk = new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo, data);
+    public AllayChunk(World world, int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
+        this.unsafeChunk = new AllayUnsafeChunk(world, chunkX, chunkZ, dimensionInfo, data);
         this.sectionLock = new StampedLock();
         this.heightLock = new StampedLock();
         this.lightLock = new StampedLock();
@@ -296,6 +293,11 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
+    public World getWorld() {
+        return unsafeChunk.getWorld();
+    }
+
+    @Override
     public int getChunkX() {
         return unsafeChunk.getChunkX();
     }
@@ -335,10 +337,10 @@ public class AllayChunk implements Chunk {
     @Override
     @ApiStatus.Internal
     @NotNull
-    public ChunkSection getOrCreateSection(int y) {
+    public ChunkSection createAndGetSection(int y) {
         long stamp = sectionLock.writeLock();
         try {
-            return unsafeChunk.getOrCreateSection(y);
+            return unsafeChunk.createAndGetSection(y);
         } finally {
             sectionLock.unlockWrite(stamp);
         }

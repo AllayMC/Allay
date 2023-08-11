@@ -1,5 +1,6 @@
 package cn.allay.api.world.chunk;
 
+import cn.allay.api.world.World;
 import org.jetbrains.annotations.Nullable;
 
 /**

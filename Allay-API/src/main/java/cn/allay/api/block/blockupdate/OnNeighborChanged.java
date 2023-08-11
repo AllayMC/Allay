@@ -1,6 +1,6 @@
 package cn.allay.api.block.blockupdate;
 
-import cn.allay.api.block.BlockStateWithPos;
+import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.data.BlockFace;
 
 /**

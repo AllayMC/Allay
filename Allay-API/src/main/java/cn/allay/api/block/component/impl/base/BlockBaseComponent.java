@@ -1,7 +1,7 @@
 package cn.allay.api.block.component.impl.base;
 
 import cn.allay.api.block.BlockBehavior;
-import cn.allay.api.block.BlockStateWithPos;
+import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.blockupdate.*;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
@@ -24,7 +24,7 @@ public interface BlockBaseComponent extends OnNeighborChanged, OnPlace, OnRandom
 
     @Override
     @Inject
-    void onPlace(Vector3i pos, BlockState currentBlockState, BlockState newBlockState);
+    void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState);
 
     @Override
     @Inject
@@ -32,7 +32,7 @@ public interface BlockBaseComponent extends OnNeighborChanged, OnPlace, OnRandom
 
     @Override
     @Inject
-    void onReplace(Vector3i pos, BlockState currentBlockState, BlockState newBlockState);
+    void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState);
 
     @Override
     @Inject

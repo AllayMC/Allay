@@ -104,7 +104,7 @@ public class VanillaItemIdEnumGen {
                         .addParameter(STRING_CLASS, "blockIdentifier")
                         .addStatement("this.identifier = new $T(identifier)", identifierClass)
                         .addStatement("this.runtimeId = runtimeId")
-                        .addStatement("this.blockIdentifier = new $T(blockIdentifier)", identifierClass)
+                        .addStatement("this.blockIdentifier = blockIdentifier != null ? new $T(blockIdentifier) : null", identifierClass)
                         .build()
                 )
                 .addMethod(MethodSpec.methodBuilder("hasBlock")

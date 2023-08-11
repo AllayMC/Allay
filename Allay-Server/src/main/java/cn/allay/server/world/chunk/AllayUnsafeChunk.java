@@ -1,8 +1,11 @@
 package cn.allay.server.world.chunk;
 
+import cn.allay.api.block.data.BlockPos;
+import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.ChunkLoader;
 import cn.allay.api.world.chunk.ChunkSection;
@@ -37,17 +40,20 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Setter
     protected volatile int chunkZ;
     @Getter
+    protected final World world;
+    @Getter
     protected final DimensionInfo dimensionInfo;
     protected final ChunkSection[] sections;
     protected final HeightMap[] heightMap;
     protected final Vector<ChunkLoader> chunkLoaders;
     protected final Queue<BedrockPacket> chunkPacketQueue;
 
-    public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
+    public AllayUnsafeChunk(World world, int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+        this(world, chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
     }
 
-    public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
+    public AllayUnsafeChunk(World world, int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
+        this.world = world;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
@@ -65,7 +71,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @ApiStatus.Internal
     @NotNull
-    public ChunkSection getOrCreateSection(int y) {
+    public ChunkSection createAndGetSection(int y) {
         for (int i = 0; i <= y; i++) {
             if (sections[i] == null) {
                 sections[i] = new ChunkSection(i);
@@ -98,8 +104,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         int sectionY = normalY(y) >>> 4;
         ChunkSection section = this.getSection(sectionY);
         if (section == null) {
-            section = this.getOrCreateSection(sectionY);
+            section = this.createAndGetSection(sectionY);
         }
+        var blockPos = new BlockPos(world, x, y & 0xf, z, layer);
+        var oldBlockState = section.getBlock(x, y & 0xf, z, layer);
+        oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos), blockState);
+        blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos), blockState);
         section.setBlock(x, y & 0xf, z, layer, blockState);
         if (send) {
             var updateBlockPacket = new UpdateBlockPacket();
@@ -122,11 +132,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
-        this.getOrCreateSection(normalY(y) >>> 4).setBlockLight(x, y & 0xf, z, (byte) light);
+        this.createAndGetSection(normalY(y) >>> 4).setBlockLight(x, y & 0xf, z, (byte) light);
     }
 
     public void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
-        this.getOrCreateSection(normalY(y) >>> 4).setSkyLight(x, y & 0xf, z, (byte) light);
+        this.createAndGetSection(normalY(y) >>> 4).setSkyLight(x, y & 0xf, z, (byte) light);
     }
 
     protected int normalY(int y) {
@@ -135,12 +145,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public void setBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
-        this.getOrCreateSection(normalY(y) >>> 4).setBiomeType(x, y & 0xf, z, biomeType);
+        this.createAndGetSection(normalY(y) >>> 4).setBiomeType(x, y & 0xf, z, biomeType);
     }
 
     @Override
     public BiomeType getBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        return this.getOrCreateSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
+        return this.createAndGetSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
     }
 
     @Override
