@@ -42,10 +42,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Nullable
     protected Integer stackNetworkId;
     protected UseItemOn useItemOn = (player, itemStack, world, blockPos, placePos, clickPos, blockFace) -> {
-        if (itemType.getBlockType() == null) {
+        if (blockState == null) {
             return false;
         }
-        var blockState = itemType.getBlockType().getDefaultState();
         world.setBlockState(placePos.x(), placePos.y(), placePos.z(), blockState);
         if (player == null || player.getClient().getGameType() != GameType.CREATIVE)
             itemStack.setCount(itemStack.getCount() - 1);
