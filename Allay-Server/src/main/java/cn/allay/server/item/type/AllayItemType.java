@@ -131,6 +131,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         @Override
         public ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId) {
             this.identifier = vanillaItemId.getIdentifier();
+            this.blockIdentifier = vanillaItemId.getBlockIdentifier();
             this.runtimeId = vanillaItemId.getRuntimeId();
             var attributes = VanillaItemAttributeRegistry.getRegistry().get(vanillaItemId);
             if (attributes == null)

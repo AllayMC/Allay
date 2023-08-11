@@ -235,6 +235,8 @@ public enum VanillaBlockId {
 
   CARROTS("minecraft:carrots", "minecraft:carrots"),
 
+  CARTOGRAPHY_TABLE("minecraft:cartography_table", "minecraft:cartography_table"),
+
   CARVED_PUMPKIN("minecraft:carved_pumpkin", "minecraft:carved_pumpkin"),
 
   CAULDRON("minecraft:cauldron", "minecraft:item.cauldron"),

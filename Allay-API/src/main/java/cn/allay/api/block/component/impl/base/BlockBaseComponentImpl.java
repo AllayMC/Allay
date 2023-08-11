@@ -12,6 +12,7 @@ import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
 import lombok.Builder;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
 /**
@@ -19,27 +20,39 @@ import org.joml.Vector3i;
  *
  * @author daoge_cmd
  */
-@Builder
 public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponentImpl {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
+
     protected BlockType<? extends BlockBehavior> blockType;
-    @Builder.Default
     protected OnNeighborChanged onNeighborChanged = (blockState, neighborBlockState, blockFace) -> {};
-    @Builder.Default
     protected OnPlace onPlace = (currentBlockState, newBlockState) -> {};
-    @Builder.Default
     protected OnRandomUpdate onRandomUpdate = blockState -> {};
-    @Builder.Default
     protected OnReplace onReplace = (currentBlockState, newBlockState) -> {};
-    @Builder.Default
     protected OnScheduledUpdate onScheduledUpdate = blockState -> {};
-    @Builder.Default
     protected CanPlaceOn canPlaceOn = pos -> true;
 
     public BlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         this.blockType = blockType;
+    }
+
+    @Builder
+    public BlockBaseComponentImpl(
+            BlockType<? extends BlockBehavior> blockType,
+            @Nullable OnNeighborChanged onNeighborChanged,
+            @Nullable OnPlace onPlace,
+            @Nullable OnRandomUpdate onRandomUpdate,
+            @Nullable OnReplace onReplace,
+            @Nullable OnScheduledUpdate onScheduledUpdate,
+            @Nullable CanPlaceOn canPlaceOn) {
+        this.blockType = blockType;
+        if (onNeighborChanged != null) this.onNeighborChanged = onNeighborChanged;
+        if (onPlace != null) this.onPlace = onPlace;
+        if (onRandomUpdate != null) this.onRandomUpdate = onRandomUpdate;
+        if (onReplace != null) this.onReplace = onReplace;
+        if (onScheduledUpdate != null) this.onScheduledUpdate = onScheduledUpdate;
+        if (canPlaceOn != null) this.canPlaceOn = canPlaceOn;
     }
 
     @Override
@@ -67,6 +80,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     }
 
     @Override
+    @Impl
     public boolean canPlaceOn(BlockStateWithPos pos) {
         return canPlaceOn.canPlaceOn(pos);
     }

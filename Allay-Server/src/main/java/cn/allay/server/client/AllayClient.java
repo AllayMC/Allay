@@ -1,8 +1,12 @@
 package cn.allay.server.client;
 
 import cn.allay.api.annotation.SlowOperation;
+import cn.allay.api.block.data.BlockFace;
+import cn.allay.api.block.type.BlockState;
+import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.client.BaseClient;
+import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
@@ -12,6 +16,7 @@ import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
+import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.Location3d;
@@ -20,6 +25,7 @@ import cn.allay.api.math.Position3ic;
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
 import cn.allay.api.server.Server;
+import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
@@ -38,11 +44,14 @@ import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
+import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventoryTransactionType;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.joml.Vector3fc;
+import org.joml.Vector3ic;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -339,9 +348,8 @@ public class AllayClient extends BaseClient {
         @Override
         public void onDisconnect(String reason) {
             server.onClientDisconnect(AllayClient.this);
-            var loc = getLocation();
-            if (loc != null)
-                loc.world().removeClient(AllayClient.this);
+            if (playerEntity != null)
+                playerEntity.getLocation().world().removeClient(AllayClient.this);
         }
 
         @Override
@@ -361,7 +369,6 @@ public class AllayClient extends BaseClient {
             var settingsPacket = new NetworkSettingsPacket();
             //TODO: Support other compression algorithms
             settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.ZLIB);
-//            settingsPacket.setCompressionThreshold(0);
             settingsPacket.setCompressionThreshold(1);
             sendPacketImmediately(settingsPacket);
             session.setCompression(settingsPacket.getCompressionAlgorithm());
@@ -517,16 +524,89 @@ public class AllayClient extends BaseClient {
         }
 
         @Override
+        public PacketSignal handle(MobEquipmentPacket packet) {
+            var handSlot = packet.getHotbarSlot();
+            playerEntity.setHandSlot(handSlot);
+            return PacketSignal.HANDLED;
+        }
+
+        protected long spamCheckTime;
+
+        @Override
+        public PacketSignal handle(InventoryTransactionPacket packet) {
+            if (packet.getTransactionType() == InventoryTransactionType.ITEM_USE) {
+                Vector3ic blockPos = MathUtils.cbVecToJOMLVec(packet.getBlockPosition());
+                Vector3fc clickPos = MathUtils.cbVecToJOMLVec(packet.getClickPosition());
+                BlockFace blockFace = BlockFace.fromId(packet.getBlockFace());
+                var inv = playerEntity.getContainer(FullContainerType.PLAYER_INVENTORY);
+                var itemStack = inv.getItemInHand();
+                switch(packet.getActionType()) {
+                    case 0 -> {
+                        var placePos = blockFace.offsetPos(blockPos);
+                        if (!canInteract()) {
+                            //TODO: 确认是否需要发送UpdateBlockPacket
+                            var blockState = getWorld().getBlockStateNonNull(placePos.x(), placePos.y(), placePos.z());
+                            blockState.getBehavior().sendBlockUpdateTo(blockState, placePos.x(), placePos.y(), placePos.z(), false, AllayClient.this);
+                            return PacketSignal.HANDLED;
+                        }
+                        this.spamCheckTime = System.currentTimeMillis();
+
+                        //尝试使用失败
+                        if (!itemStack.useItemOn(playerEntity, itemStack, getWorld(), blockPos, placePos, clickPos, blockFace)) {
+                            var blockStateClicked = getWorld().getBlockStateNonNull(blockPos.x(), blockPos.y(), blockPos.z());
+                            blockStateClicked.getBehavior().sendBlockUpdateTo(blockStateClicked, blockPos.x(), blockPos.y(), blockPos.z(), false, AllayClient.this);
+
+                            var blockStateReplaced = getWorld().getBlockStateNonNull(placePos.x(), placePos.y(), placePos.z());
+                            blockStateReplaced.getBehavior().sendBlockUpdateTo(blockStateReplaced, placePos.x(), placePos.y(), placePos.z(), false, AllayClient.this);
+                        } else {
+                            if (itemStack.getCount() != 0) {
+                                inv.onSlotChange(inv.getHandSlot(), itemStack);
+                            } else {
+                                inv.setItemInHand(Container.AIR_STACK);
+                            }
+                        }
+                    }
+                }
+            }
+            return PacketSignal.HANDLED;
+        }
+
+        protected boolean canInteract() {
+            return System.currentTimeMillis() - this.spamCheckTime >= 100;
+        }
+
+        @Override
         public PacketSignal handle(PlayerAuthInputPacket packet) {
-            handleMovement(packet);
+            handleMovement(packet.getPosition(), packet.getRotation());
             handleBlockAction(packet.getPlayerActions());
             handleInputData(packet.getInputData());
             return PacketSignal.HANDLED;
         }
 
-        protected void handleMovement(PlayerAuthInputPacket packet) {
-            var newPos = packet.getPosition();
-            var newRot = packet.getRotation();
+        @Override
+        public PacketSignal handle(MovePlayerPacket packet) {
+            if (!packet.isOnGround()) {
+                log.warn("Player " + name + " send a invalid MovePlayerPacket (onGround=false) while using server-auth movement!");
+                return PacketSignal.HANDLED;
+            }
+            if (!movementValidator.validateOnGround()) {
+                log.warn("Player " + name + " thinks he landed but didn't in fact!");
+                return PacketSignal.HANDLED;
+            }
+            playerEntity.setOnGround(true);
+            return PacketSignal.HANDLED;
+        }
+
+        protected void handleMovement(Vector3f newPos, Vector3f newRot) {
+            var valid = movementValidator.validate(new Location3d(
+                    newPos.getX(), newPos.getY(), newPos.getZ(),
+                    newRot.getX(), newRot.getY(), newRot.getZ(),
+                    getWorld())
+            );
+            if (!valid) {
+                log.warn("Player " + name + " tried to move to invalid location");
+                return;
+            }
             getWorld().getEntityPhysicsService()
                     .offerScheduledMove(
                             playerEntity,
@@ -567,7 +647,7 @@ public class AllayClient extends BaseClient {
                     case STOP_SPRINTING -> playerEntity.setSprinting(false);
                     case START_SNEAKING -> {
                         playerEntity.setSneaking(true);
-                        //debug only
+                        //TODO: debug only
                         var loc = getLocation();
                         var entity = VanillaEntityTypes.VILLAGER_V2_TYPE.createEntity(new EntityInitInfo.Simple<>(new Location3d(loc)));
                         loc.world().addEntity(entity);
@@ -579,7 +659,7 @@ public class AllayClient extends BaseClient {
                     case STOP_GLIDING -> playerEntity.setGliding(false);
                     case START_CRAWLING -> playerEntity.setCrawling(true);
                     case STOP_CRAWLING -> playerEntity.setCrawling(false);
-                    case START_JUMPING -> {/*TODO*/}
+                    case START_JUMPING -> {playerEntity.setOnGround(false);}
                 }
             }
         }

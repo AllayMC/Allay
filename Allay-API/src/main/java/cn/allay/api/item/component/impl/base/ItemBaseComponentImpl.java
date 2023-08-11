@@ -1,17 +1,24 @@
 package cn.allay.api.item.component.impl.base;
 
+import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.data.VanillaItemTypes;
+import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.UseItemOn;
 import cn.allay.api.item.component.ItemComponentImpl;
 import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
+import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3fc;
+import org.joml.Vector3ic;
 
 /**
  * Allay Project 2023/5/19
@@ -34,13 +41,32 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected BlockState blockState;
     @Nullable
     protected Integer stackNetworkId;
+    protected UseItemOn useItemOn = (player, itemStack, world, blockPos, placePos, clickPos, blockFace) -> {
+        if (itemType.getBlockType() == null) {
+            return false;
+        }
+        var blockState = itemType.getBlockType().getDefaultState();
+        world.setBlockState(placePos.x(), placePos.y(), placePos.z(), blockState);
+        if (player == null || player.getClient().getGameType() != GameType.CREATIVE)
+            itemStack.setCount(itemStack.getCount() - 1);
+        return true;
+    };
 
     public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
+        this(initInfo, null);
+    }
+
+    public ItemBaseComponentImpl(
+            ItemStackInitInfo<T> initInfo,
+            @Nullable UseItemOn useItemOn
+    ) {
         this.itemType = initInfo.getItemType();
         this.count = initInfo.count();
         this.damage = initInfo.damage();
         this.nbt = initInfo.nbt();
         this.blockState = initInfo.blockState();
+        if (this.blockState == null && itemType.getBlockType() != null)
+            this.blockState = itemType.getBlockType().getDefaultState();
         if (initInfo.autoAssignStackNetworkId()) {
             this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
         } else if (initInfo.stackNetworkId() != null) {
@@ -50,6 +76,8 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         } else {
             this.stackNetworkId = null;
         }
+        if (useItemOn != null)
+            this.useItemOn = useItemOn;
     }
 
     @Override
@@ -83,6 +111,18 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         this.damage = damage;
     }
 
+    @Override
+    @Impl
+    public @Nullable BlockState toBlockState() {
+        return blockState;
+    }
+
+    @Override
+    @Impl
+    public void setBlockStateStyle(@Nullable BlockState blockState) {
+        this.blockState = blockState;
+    }
+
     @Nullable
     @Override
     @Impl
@@ -96,27 +136,13 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         this.nbt = nbt;
     }
 
-    @Override
-    @Impl
-    @Nullable
-    public BlockState getBlockState() {
-        return blockState;
-    }
-
-    @Override
-    @Impl
-    public void setBlockState(@Nullable BlockState blockState) {
-        this.blockState = blockState;
-    }
-
     //TODO: 缓存ItemData
     @Override
     @Impl
     public ItemData toNetworkItemData() {
-        //TODO: 移动这个判断到airtype
-        if (itemType == VanillaItemTypes.AIR_TYPE)
+        if (itemType == VanillaItemTypes.AIR_TYPE) {
             return ItemData.AIR;
-        else
+        } else {
             return ItemData
                 .builder()
                 .definition(itemType.toNetworkDefinition())
@@ -127,6 +153,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
                 .usingNetId(stackNetworkId != null)
                 .netId(stackNetworkId != null ? stackNetworkId : 0)
                 .build();
+        }
     }
 
     @Nullable
@@ -146,6 +173,15 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Impl
     public ItemStack copy(boolean newStackNetworkId) {
         return itemType.createItemStack(new ItemStackInitInfo.Simple<>(count, damage, nbt, blockState, stackNetworkId, newStackNetworkId));
+    }
+
+    @Override
+    @Impl
+    public boolean useItemOn(
+            @Nullable EntityPlayer player, ItemStack itemStack,
+            World world, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos,
+            BlockFace blockFace) {
+        return useItemOn.useItemOn(player, itemStack, world, blockPos, placePos, clickPos, blockFace);
     }
 
     @Override

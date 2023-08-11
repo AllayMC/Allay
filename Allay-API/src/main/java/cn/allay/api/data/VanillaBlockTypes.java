@@ -113,6 +113,7 @@ import cn.allay.api.block.behavior.BlockCampfireBehavior;
 import cn.allay.api.block.behavior.BlockCandleBehavior;
 import cn.allay.api.block.behavior.BlockCandleCakeBehavior;
 import cn.allay.api.block.behavior.BlockCarrotsBehavior;
+import cn.allay.api.block.behavior.BlockCartographyTableBehavior;
 import cn.allay.api.block.behavior.BlockCarvedPumpkinBehavior;
 import cn.allay.api.block.behavior.BlockCauldronBehavior;
 import cn.allay.api.block.behavior.BlockCaveVinesBehavior;
@@ -1630,6 +1631,12 @@ public interface VanillaBlockTypes {
           .builder(BlockCarrotsBehavior.class)
           .vanillaBlock(VanillaBlockId.CARROTS)
           .setProperties(VanillaBlockPropertyTypes.GROWTH)
+          .addBasicComponents()
+          .build();
+
+  BlockType<BlockCartographyTableBehavior> CARTOGRAPHY_TABLE_TYPE = BlockTypeBuilder
+          .builder(BlockCartographyTableBehavior.class)
+          .vanillaBlock(VanillaBlockId.CARTOGRAPHY_TABLE)
           .addBasicComponents()
           .build();
 

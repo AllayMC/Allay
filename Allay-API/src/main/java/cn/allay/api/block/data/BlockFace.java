@@ -1,27 +1,44 @@
 package cn.allay.api.block.data;
 
-import lombok.Getter;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 /**
- * @author LucGamesYT
- * @version 1.0
+ * Allay Project 2023/8/11
+ *
+ * @author JukeboxMC | daoge_cmd
  */
-@Getter
 public enum BlockFace {
 
-    WEST(new Vector3i( -1, 0, 0 ) ),
-    EAST(new Vector3i( 1, 0, 0 ) ),
-    DOWN(new Vector3i( 0, -1, 0 ) ),
-    UP(new Vector3i( 0, 1, 0 ) ),
-    NORTH(new Vector3i( 0, 0, -1 ) ),
-    SOUTH(new Vector3i( 0, 0, 1 ) );
+    DOWN( -1, new Vector3i( 0, -1, 0 ) ),
+    UP( -1, new Vector3i( 0, 1, 0 ) ),
+    NORTH( 2, new Vector3i( 0, 0, -1 ) ),
+    SOUTH( 0, new Vector3i( 0, 0, 1 ) ),
+    WEST( 1, new Vector3i( -1, 0, 0 ) ),
+    EAST( 3, new Vector3i( 1, 0, 0 ) );
 
+    private final int horizontalIndex;
     private final Vector3ic offset;
 
-    BlockFace(Vector3ic offset) {
+    BlockFace( int horizontalIndex, Vector3ic offset ) {
+        this.horizontalIndex = horizontalIndex;
         this.offset = offset;
+    }
+
+    public Vector3ic getOffset() {
+        return offset;
+    }
+
+    public Vector3ic offsetPos(int x, int y, int z) {
+        return offset.add(x, y, z, new Vector3i());
+    }
+
+    public Vector3ic offsetPos(Vector3ic pos) {
+        return offset.add(pos, new Vector3i());
+    }
+
+    public int getHorizontalIndex() {
+        return horizontalIndex;
     }
 
     public BlockFace opposite() {
@@ -35,20 +52,20 @@ public enum BlockFace {
         };
     }
 
-    public Vector3ic offsetPos(Vector3ic pos) {
-        return pos.add(this.offset, new Vector3i());
-    }
-
-    public Vector3ic offsetPos(int x, int y, int z) {
-        return new Vector3i(x, y, z).add(offset);
+    public static BlockFace fromId( int value ) {
+        return switch ( value ) {
+            case 0 -> BlockFace.DOWN;
+            case 1 -> BlockFace.UP;
+            case 2 -> BlockFace.NORTH;
+            case 3 -> BlockFace.SOUTH;
+            case 4 -> BlockFace.WEST;
+            case 5 -> BlockFace.EAST;
+            default -> null;
+        };
     }
 
     public static BlockFace[] getHorizontal() {
         return new BlockFace[]{ NORTH, EAST, SOUTH, WEST };
-    }
-
-    public static BlockFace[] getVertical() {
-        return new BlockFace[]{ UP, DOWN };
     }
 
     public boolean isHorizontal() {
