@@ -76,6 +76,8 @@ public interface Client extends ChunkLoader {
 
     boolean computeMovementServerSide();
 
+    boolean isLocalInitialized();
+
     void setMovementValidator(ClientMovementValidator validator);
 
     default String getXuid() {

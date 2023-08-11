@@ -85,6 +85,8 @@ public class AllayClient extends BaseClient {
             packet -> {
                 throw new UnsupportedOperationException();
             };
+    @Getter
+    private boolean localInitialized;
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -475,7 +477,7 @@ public class AllayClient extends BaseClient {
 
         @Override
         public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
-            //TODO: PlayerJoinEvent
+            localInitialized = true;
             return PacketSignal.HANDLED;
         }
 
@@ -577,6 +579,7 @@ public class AllayClient extends BaseClient {
 
         @Override
         public PacketSignal handle(PlayerAuthInputPacket packet) {
+            if (!isLocalInitialized()) return PacketSignal.HANDLED;
             handleMovement(packet.getPosition(), packet.getRotation());
             handleBlockAction(packet.getPlayerActions());
             handleInputData(packet.getInputData());
@@ -585,6 +588,7 @@ public class AllayClient extends BaseClient {
 
         @Override
         public PacketSignal handle(MovePlayerPacket packet) {
+            if (!isLocalInitialized()) return PacketSignal.HANDLED;
             if (!packet.isOnGround()) {
                 log.warn("Player " + name + " send a invalid MovePlayerPacket (onGround=false) while using server-auth movement!");
                 return PacketSignal.HANDLED;
