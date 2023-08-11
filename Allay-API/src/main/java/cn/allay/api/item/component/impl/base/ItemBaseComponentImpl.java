@@ -19,6 +19,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
+import org.joml.primitives.AABBd;
 
 /**
  * Allay Project 2023/5/19
@@ -42,8 +43,16 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Nullable
     protected Integer stackNetworkId;
     protected UseItemOn useItemOn = (player, itemStack, world, blockPos, placePos, clickPos, blockFace) -> {
-        if (blockState == null) {
+        if (blockState == null)
             return false;
+        if (player != null) {
+            var aabb = player.getOffsetAABB();
+            var block_aabb = new AABBd(
+                    placePos.x(), placePos.y(), placePos.z(),
+                    placePos.x() + 1, placePos.y() + 1, placePos.z() + 1
+            );
+            if (aabb.intersectsAABB(block_aabb))
+                return false;
         }
         world.setBlockState(placePos.x(), placePos.y(), placePos.z(), blockState);
         if (player == null || player.getClient().getGameType() != GameType.CREATIVE)

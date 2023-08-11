@@ -580,7 +580,8 @@ public class AllayClient extends BaseClient {
         @Override
         public PacketSignal handle(PlayerAuthInputPacket packet) {
             if (!isLocalInitialized()) return PacketSignal.HANDLED;
-            handleMovement(packet.getPosition(), packet.getRotation());
+            //客户端发送给服务端的坐标比实际坐标高了一个BaseOffset，我们需要减掉它
+            handleMovement(packet.getPosition().sub(0, playerEntity.getBaseOffset(), 0), packet.getRotation());
             handleBlockAction(packet.getPlayerActions());
             handleInputData(packet.getInputData());
             return PacketSignal.HANDLED;
