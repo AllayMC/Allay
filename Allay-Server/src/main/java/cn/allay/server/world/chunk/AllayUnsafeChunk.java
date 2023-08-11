@@ -99,7 +99,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return blockState;
     }
 
-    //TODO: block update
     public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer, boolean send, boolean update) {
         int sectionY = normalY(y) >>> 4;
         ChunkSection section = this.getSection(sectionY);
@@ -111,6 +110,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos), blockState);
         blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos), blockState);
         section.setBlock(x, y & 0xf, z, layer, blockState);
+        if (update) {
+            neighborUpdateAround(x, y, z);
+        }
         if (send) {
             var updateBlockPacket = new UpdateBlockPacket();
             updateBlockPacket.setBlockPosition(Vector3i.from((chunkX << 4) + x, y, (chunkZ << 4) + z));

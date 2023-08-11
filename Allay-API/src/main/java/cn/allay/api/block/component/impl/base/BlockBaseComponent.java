@@ -1,6 +1,7 @@
 package cn.allay.api.block.component.impl.base;
 
 import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.CanPlaceOn;
 import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.blockupdate.*;
 import cn.allay.api.block.data.BlockFace;
@@ -14,7 +15,7 @@ import org.joml.Vector3i;
  *
  * @author daoge_cmd
  */
-public interface BlockBaseComponent extends OnNeighborChanged, OnPlace, OnRandomUpdate, OnReplace, OnScheduledUpdate {
+public interface BlockBaseComponent extends OnNeighborChanged, OnPlace, OnRandomUpdate, OnReplace, OnScheduledUpdate, CanPlaceOn {
     @Inject
     BlockType<? extends BlockBehavior> getBlockType();
 
@@ -37,4 +38,8 @@ public interface BlockBaseComponent extends OnNeighborChanged, OnPlace, OnRandom
     @Override
     @Inject
     void onScheduledUpdate(BlockStateWithPos blockState);
+
+    @Override
+    @Inject
+    boolean canPlaceOn(BlockStateWithPos pos);
 }
