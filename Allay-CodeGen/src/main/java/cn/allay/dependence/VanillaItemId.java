@@ -21,7 +21,7 @@ public enum VanillaItemId {
 
   ACACIA_FENCE_GATE("minecraft:acacia_fence_gate", 187, "minecraft:acacia_fence_gate"),
 
-  ACACIA_HANGING_SIGN("minecraft:acacia_hanging_sign", -504),
+  ACACIA_HANGING_SIGN("minecraft:acacia_hanging_sign", -504, "minecraft:acacia_hanging_sign"),
 
   ACACIA_LOG("minecraft:acacia_log", 162, "minecraft:acacia_log"),
 
@@ -93,7 +93,7 @@ public enum VanillaItemId {
 
   BAMBOO_CHEST_RAFT("minecraft:bamboo_chest_raft", 661),
 
-  BAMBOO_DOOR("minecraft:bamboo_door", -517),
+  BAMBOO_DOOR("minecraft:bamboo_door", -517, "minecraft:bamboo_door"),
 
   BAMBOO_DOUBLE_SLAB("minecraft:bamboo_double_slab", -521, "minecraft:bamboo_double_slab"),
 
@@ -101,7 +101,7 @@ public enum VanillaItemId {
 
   BAMBOO_FENCE_GATE("minecraft:bamboo_fence_gate", -516, "minecraft:bamboo_fence_gate"),
 
-  BAMBOO_HANGING_SIGN("minecraft:bamboo_hanging_sign", -522),
+  BAMBOO_HANGING_SIGN("minecraft:bamboo_hanging_sign", -522, "minecraft:bamboo_hanging_sign"),
 
   BAMBOO_MOSAIC("minecraft:bamboo_mosaic", -509, "minecraft:bamboo_mosaic"),
 
@@ -179,7 +179,7 @@ public enum VanillaItemId {
 
   BIRCH_FENCE_GATE("minecraft:birch_fence_gate", 184, "minecraft:birch_fence_gate"),
 
-  BIRCH_HANGING_SIGN("minecraft:birch_hanging_sign", -502),
+  BIRCH_HANGING_SIGN("minecraft:birch_hanging_sign", -502, "minecraft:birch_hanging_sign"),
 
   BIRCH_LOG("minecraft:birch_log", -570, "minecraft:birch_log"),
 
@@ -383,7 +383,7 @@ public enum VanillaItemId {
 
   CHERRY_CHEST_BOAT("minecraft:cherry_chest_boat", 657),
 
-  CHERRY_DOOR("minecraft:cherry_door", -531),
+  CHERRY_DOOR("minecraft:cherry_door", -531, "minecraft:cherry_door"),
 
   CHERRY_DOUBLE_SLAB("minecraft:cherry_double_slab", -540, "minecraft:cherry_double_slab"),
 
@@ -391,7 +391,7 @@ public enum VanillaItemId {
 
   CHERRY_FENCE_GATE("minecraft:cherry_fence_gate", -533, "minecraft:cherry_fence_gate"),
 
-  CHERRY_HANGING_SIGN("minecraft:cherry_hanging_sign", -534),
+  CHERRY_HANGING_SIGN("minecraft:cherry_hanging_sign", -534, "minecraft:cherry_hanging_sign"),
 
   CHERRY_LEAVES("minecraft:cherry_leaves", -548, "minecraft:cherry_leaves"),
 
@@ -567,7 +567,7 @@ public enum VanillaItemId {
 
   CRIMSON_FUNGUS("minecraft:crimson_fungus", -228, "minecraft:crimson_fungus"),
 
-  CRIMSON_HANGING_SIGN("minecraft:crimson_hanging_sign", -506),
+  CRIMSON_HANGING_SIGN("minecraft:crimson_hanging_sign", -506, "minecraft:crimson_hanging_sign"),
 
   CRIMSON_HYPHAE("minecraft:crimson_hyphae", -299, "minecraft:crimson_hyphae"),
 
@@ -633,7 +633,7 @@ public enum VanillaItemId {
 
   DARK_OAK_FENCE_GATE("minecraft:dark_oak_fence_gate", 186, "minecraft:dark_oak_fence_gate"),
 
-  DARK_OAK_HANGING_SIGN("minecraft:dark_oak_hanging_sign", -505),
+  DARK_OAK_HANGING_SIGN("minecraft:dark_oak_hanging_sign", -505, "minecraft:dark_oak_hanging_sign"),
 
   DARK_OAK_LOG("minecraft:dark_oak_log", -572, "minecraft:dark_oak_log"),
 
@@ -1433,7 +1433,7 @@ public enum VanillaItemId {
 
   JUNGLE_FENCE_GATE("minecraft:jungle_fence_gate", 185, "minecraft:jungle_fence_gate"),
 
-  JUNGLE_HANGING_SIGN("minecraft:jungle_hanging_sign", -503),
+  JUNGLE_HANGING_SIGN("minecraft:jungle_hanging_sign", -503, "minecraft:jungle_hanging_sign"),
 
   JUNGLE_LOG("minecraft:jungle_log", -571, "minecraft:jungle_log"),
 
@@ -1605,7 +1605,7 @@ public enum VanillaItemId {
 
   MANGROVE_FENCE_GATE("minecraft:mangrove_fence_gate", -492, "minecraft:mangrove_fence_gate"),
 
-  MANGROVE_HANGING_SIGN("minecraft:mangrove_hanging_sign", -508),
+  MANGROVE_HANGING_SIGN("minecraft:mangrove_hanging_sign", -508, "minecraft:mangrove_hanging_sign"),
 
   MANGROVE_LEAVES("minecraft:mangrove_leaves", -472, "minecraft:mangrove_leaves"),
 
@@ -1791,7 +1791,7 @@ public enum VanillaItemId {
 
   OAK_FENCE("minecraft:oak_fence", 85, "minecraft:oak_fence"),
 
-  OAK_HANGING_SIGN("minecraft:oak_hanging_sign", -500),
+  OAK_HANGING_SIGN("minecraft:oak_hanging_sign", -500, "minecraft:oak_hanging_sign"),
 
   OAK_LOG("minecraft:oak_log", 17, "minecraft:oak_log"),
 
@@ -2261,7 +2261,7 @@ public enum VanillaItemId {
 
   SPRUCE_FENCE_GATE("minecraft:spruce_fence_gate", 183, "minecraft:spruce_fence_gate"),
 
-  SPRUCE_HANGING_SIGN("minecraft:spruce_hanging_sign", -501),
+  SPRUCE_HANGING_SIGN("minecraft:spruce_hanging_sign", -501, "minecraft:spruce_hanging_sign"),
 
   SPRUCE_LOG("minecraft:spruce_log", -569, "minecraft:spruce_log"),
 
@@ -2489,7 +2489,7 @@ public enum VanillaItemId {
 
   WARPED_FUNGUS_ON_A_STICK("minecraft:warped_fungus_on_a_stick", 625),
 
-  WARPED_HANGING_SIGN("minecraft:warped_hanging_sign", -507),
+  WARPED_HANGING_SIGN("minecraft:warped_hanging_sign", -507, "minecraft:warped_hanging_sign"),
 
   WARPED_HYPHAE("minecraft:warped_hyphae", -298, "minecraft:warped_hyphae"),
 
@@ -2681,7 +2681,7 @@ public enum VanillaItemId {
   VanillaItemId(String identifier, int runtimeId, String blockIdentifier) {
     this.identifier = new Identifier(identifier);
     this.runtimeId = runtimeId;
-    this.blockIdentifier = new Identifier(blockIdentifier);
+    this.blockIdentifier = blockIdentifier != null ? new Identifier(blockIdentifier) : null;
   }
 
   public boolean hasBlock() {

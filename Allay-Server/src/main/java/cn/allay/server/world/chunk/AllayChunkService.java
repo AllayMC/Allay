@@ -194,7 +194,7 @@ public class AllayChunkService implements ChunkService {
                 loadingChunks.remove(hashXZ);
                 return loadedChunk;
             }
-            worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(null), single -> {
+            worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(world, null), single -> {
                 setChunk(x, z, single.getChunk(0, 0));
                 loadingChunks.remove(hashXZ);
             });
@@ -337,7 +337,7 @@ public class AllayChunkService implements ChunkService {
                         hMapType = HeightMapDataType.TOO_LOW;
                         hMap = null;
                     }
-                    var subChunk = chunk.getOrCreateSection(sectionY);
+                    var subChunk = chunk.createAndGetSection(sectionY);
                     if (subChunk.isEmpty()) {
                         if (hMap == null) {
                             createSubChunkData(responseData, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, hMapType, null, subChunk);

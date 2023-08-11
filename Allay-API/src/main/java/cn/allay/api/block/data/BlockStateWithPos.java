@@ -1,7 +1,6 @@
-package cn.allay.api.block;
+package cn.allay.api.block.data;
 
 import cn.allay.api.block.type.BlockState;
-import org.joml.Vector3ic;
 
 /**
  * Allay Project 2023/8/11
@@ -10,6 +9,6 @@ import org.joml.Vector3ic;
  */
 public record BlockStateWithPos(
         BlockState blockState,
-        Vector3ic pos
+        BlockPos blockPos
 ) {
 }

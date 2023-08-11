@@ -3,6 +3,7 @@ package cn.allay.server.world;
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.World;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.heightmap.HeightMapType;
 import cn.allay.server.world.chunk.AllayChunk;
@@ -11,11 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
 @Slf4j
 @ExtendWith(AllayTestExtension.class)
 public class AllayChunkTest {
-    final Chunk chunk = new AllayChunk(0, 0, DimensionInfo.of(0));
+    final World world = Mockito.mock(World.class);
+    final Chunk chunk = new AllayChunk(world, 0, 0, DimensionInfo.of(0));
 
     @Test
     void testUpdateBlockState() {

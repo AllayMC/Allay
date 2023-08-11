@@ -1,5 +1,6 @@
 package cn.allay.api.block.blockupdate;
 
+import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.type.BlockState;
 import org.joml.Vector3i;
 
@@ -10,5 +11,5 @@ import org.joml.Vector3i;
  */
 @FunctionalInterface
 public interface OnPlace {
-    void onPlace(Vector3i pos, BlockState currentBlockState, BlockState newBlockState);
+    void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState);
 }

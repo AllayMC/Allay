@@ -2,6 +2,7 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.World;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,8 @@ import java.util.Set;
 public interface UnsafeChunk extends SectionOperate, HeightOperate, LightOperate {
     DimensionInfo getDimensionInfo();
 
+    World getWorld();
+
     int getChunkX();
 
     void setChunkX(int chunkX);
@@ -34,7 +37,7 @@ public interface UnsafeChunk extends SectionOperate, HeightOperate, LightOperate
 
     @ApiStatus.Internal
     @NotNull
-    ChunkSection getOrCreateSection(int y);
+    ChunkSection createAndGetSection(int y);
 
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();

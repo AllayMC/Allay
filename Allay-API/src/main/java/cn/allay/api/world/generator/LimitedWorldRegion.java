@@ -1,5 +1,6 @@
 package cn.allay.api.world.generator;
 
+import cn.allay.api.world.World;
 import cn.allay.api.world.chunk.ChunkAccessible;
 
 /**
@@ -8,4 +9,5 @@ import cn.allay.api.world.chunk.ChunkAccessible;
  * @author daoge_cmd
  */
 public interface LimitedWorldRegion extends ChunkAccessible {
+    World getWorld();
 }

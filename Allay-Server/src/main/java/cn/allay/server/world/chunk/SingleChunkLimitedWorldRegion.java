@@ -1,5 +1,6 @@
 package cn.allay.server.world.chunk;
 
+import cn.allay.api.world.World;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.generator.LimitedWorldRegion;
 import org.jetbrains.annotations.Nullable;
@@ -11,9 +12,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SingleChunkLimitedWorldRegion implements LimitedWorldRegion {
 
+    private final World world;
     private Chunk chunk;
 
-    public SingleChunkLimitedWorldRegion(Chunk chunk) {
+    public SingleChunkLimitedWorldRegion(World world, Chunk chunk) {
+        this.world = world;
         this.chunk = chunk;
     }
 
@@ -60,5 +63,10 @@ public class SingleChunkLimitedWorldRegion implements LimitedWorldRegion {
     @Override
     public int minChunkZ() {
         return 0;
+    }
+
+    @Override
+    public World getWorld() {
+        return world;
     }
 }
