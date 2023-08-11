@@ -9,7 +9,19 @@ import cn.allay.api.math.Location3dc;
  */
 public interface ClientMovementValidator {
 
-    ClientMovementValidator EMPTY_VALIDATOR = newLoc -> true;
+    ClientMovementValidator EMPTY_VALIDATOR = new ClientMovementValidator() {
+        @Override
+        public boolean validate(Location3dc newLoc) {
+            return true;
+        }
+
+        @Override
+        public boolean validateOnGround() {
+            return true;
+        }
+    };
 
     boolean validate(Location3dc newLoc);
+
+    boolean validateOnGround();
 }

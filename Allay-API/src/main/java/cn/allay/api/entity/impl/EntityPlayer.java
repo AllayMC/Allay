@@ -3,6 +3,7 @@ package cn.allay.api.entity.impl;
 import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.*;
 import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.*;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.impl.attribute.EntityAttributeComponent;
@@ -21,6 +22,8 @@ import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.packet.AddPlayerPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
+import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -91,6 +94,8 @@ public interface EntityPlayer extends
         @ComponentIdentifier
         public static final Identifier IDENTIFIER = EntityBaseComponentImpl.IDENTIFIER;
 
+        @Dependency
+        protected EntityContainerHolderComponent containerHolderComponent;
         protected Client client;
         protected boolean sprinting;
         protected boolean sneaking;
@@ -204,6 +209,28 @@ public interface EntityPlayer extends
         @Impl
         public boolean isCrawling() {
             return crawling;
+        }
+
+        @Override
+        @Impl
+        public int getHandSlot() {
+            return containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getHandSlot();
+        }
+
+        @Override
+        @Impl
+        public void setHandSlot(@Range(from = 0, to = 8) int handSlot) {
+            var inv = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
+            inv.setHandSlot(handSlot);
+            var itemStack = inv.getItemStack(handSlot);
+
+            var mobEquipmentPacket = new MobEquipmentPacket();
+            mobEquipmentPacket.setRuntimeEntityId(uniqueId);
+            mobEquipmentPacket.setItem(itemStack.toNetworkItemData());
+            mobEquipmentPacket.setInventorySlot(handSlot);
+            mobEquipmentPacket.setHotbarSlot(handSlot);
+
+            sendPacketToViewers(mobEquipmentPacket);
         }
     }
 }

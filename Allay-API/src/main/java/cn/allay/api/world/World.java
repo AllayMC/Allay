@@ -2,6 +2,7 @@ package cn.allay.api.world;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.client.Client;
+import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.Position3ic;
 import cn.allay.api.scheduler.Scheduler;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBdc;
 import org.slf4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 /**
@@ -126,6 +128,17 @@ public interface World extends ChunkAccessible {
     @Nullable
     default BlockState getBlockState(int x, int y, int z) {
         return getBlockState(x, y, z, false);
+    }
+
+    default BlockState getBlockStateNonNull(int x, int y, int z) {
+        return getBlockStateNonNull(x, y, z, false);
+    }
+
+    default BlockState getBlockStateNonNull(int x, int y, int z, boolean layer) {
+        var blockState = getBlockState(x, y, z, layer);
+        if (blockState == null)
+            blockState = VanillaBlockTypes.AIR_TYPE.getDefaultState();
+        return blockState;
     }
 
     @Nullable

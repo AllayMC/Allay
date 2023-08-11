@@ -2,6 +2,7 @@ package cn.allay.api.entity.component.impl.base;
 
 import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.Inject;
+import org.jetbrains.annotations.Range;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     @Inject
@@ -36,6 +37,12 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
 
     @Inject
     boolean isCrawling();
+
+    @Inject
+    int getHandSlot();
+
+    @Inject
+    void setHandSlot(@Range(from = 0, to = 8) int handSlot);
 
     @Override
     default double getBaseOffset() {

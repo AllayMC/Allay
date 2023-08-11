@@ -1,8 +1,9 @@
 package cn.allay.api.utils;
 
 import lombok.experimental.UtilityClass;
-import org.joml.Vector3dc;
-import org.joml.Vector3i;
+import org.joml.*;
+
+import java.lang.Math;
 
 /**
  * Allay Project 7/31/2023
@@ -11,6 +12,31 @@ import org.joml.Vector3i;
  */
 @UtilityClass
 public class MathUtils {
+
+    public Vector3ic cbVecToJOMLVec(org.cloudburstmc.math.vector.Vector3i cbVec) {
+        return new Vector3i(cbVec.getX(), cbVec.getY(), cbVec.getZ());
+    }
+
+    public org.cloudburstmc.math.vector.Vector3i JOMLVecTocbVec(Vector3ic JOMLVec) {
+        return org.cloudburstmc.math.vector.Vector3i.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
+    }
+
+    public Vector3dc cbVecToJOMLVec(org.cloudburstmc.math.vector.Vector3d cbVec) {
+        return new Vector3d(cbVec.getX(), cbVec.getY(), cbVec.getZ());
+    }
+
+    public org.cloudburstmc.math.vector.Vector3d JOMLVecTocbVec(Vector3dc JOMLVec) {
+        return org.cloudburstmc.math.vector.Vector3d.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
+    }
+
+    public Vector3fc cbVecToJOMLVec(org.cloudburstmc.math.vector.Vector3f cbVec) {
+        return new Vector3f(cbVec.getX(), cbVec.getY(), cbVec.getZ());
+    }
+
+    public org.cloudburstmc.math.vector.Vector3f JOMLVecTocbVec(Vector3fc JOMLVec) {
+        return org.cloudburstmc.math.vector.Vector3f.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
+    }
+
     public Vector3i floor(Vector3dc vector3d) {
         return new Vector3i((int) Math.floor(vector3d.x()), (int) Math.floor(vector3d.y()), (int) Math.floor(vector3d.z()));
     }
