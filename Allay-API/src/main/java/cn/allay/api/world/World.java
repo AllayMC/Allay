@@ -20,6 +20,7 @@ import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 import org.slf4j.Logger;
 
@@ -217,9 +218,11 @@ public interface World extends ChunkAccessible {
                 for (int y = 0; y < blockStates[x].length; y++) {
                     for (int z = 0; z < blockStates[x][y].length; z++) {
                         var blockState = blockStates[x][y][z];
-                        if (blockState != null && !blockState.blockType().getBlockBehavior().getBlockAttributes(blockState).hasCollision()) {
+                        if (blockState == null) continue;
+                        var attributes = blockState.blockType().getBlockBehavior().getBlockAttributes(blockState);
+                        if (!attributes.hasCollision() || !aabb.intersectsAABB(attributes.aabbCollision().translate(minX + x, minY + y, minZ + z, new AABBd()))) {
                             blockStates[x][y][z] = null;
-                        } else if (blockState != null) {
+                        } else {
                             notEmpty = true;
                         }
                     }

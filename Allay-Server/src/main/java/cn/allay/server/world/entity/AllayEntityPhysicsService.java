@@ -37,7 +37,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final double DIFF_ROTATION_THRESHOLD = 0.1;
 
     public static final double MOTION_THRESHOLD = 0.003;
-    public static final double STEPPING_OFFSET = 0.00001;
+    public static final double STEPPING_OFFSET = 0.1;
 
     protected World world;
     protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
@@ -168,10 +168,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         if (mz != 0) {
             var resultAABB = new AABBd(aabb);
             var resultPos = new Vector3d(pos);
+            //第一次直接移动
             var zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
             if (zResult.right()) {
                 //有碰撞，尝试跨步
-                if (tryStepping(aabb, stepHeight, mz > 0, false)) {
+                //计算剩余速度
+                mz = mz - (resultPos.z - pos.z);
+                if (tryStepping(resultPos, resultAABB, stepHeight, mz > 0, false)) {
                     //跨步成功
                     zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
                 }
@@ -187,10 +190,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         if (mx != 0) {
             var resultAABB = new AABBd(aabb);
             var resultPos = new Vector3d(pos);
+            //第一次直接移动
             var xResult = moveAlongXAxisAndStopWhenCollision(resultAABB, mx, resultPos);
             if (xResult.right()) {
                 //有碰撞，尝试跨步
-                if (tryStepping(aabb, stepHeight, mx > 0, true)) {
+                //计算剩余速度
+                mx = mx - (resultPos.x - pos.x);
+                if (tryStepping(resultPos, resultAABB, stepHeight, mx > 0, true)) {
                     //跨步成功
                     xResult = moveAlongXAxisAndStopWhenCollision(resultAABB, mx, resultPos);
                 }
@@ -248,16 +254,17 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return new DoubleBooleanImmutablePair(mx, collision);
     }
 
-    protected boolean tryStepping(AABBd aabb, double stepHeight, boolean positive, boolean xAxis) {
+    protected boolean tryStepping(Vector3d pos, AABBd aabb, double stepHeight, boolean positive, boolean xAxis) {
         var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
         var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBd());
         var recorder = new Vector3d();
         moveAlongYAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder);
         moveAlongYAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder);
-        if (world.getCollidingBlocks(offsetAABB) != null) {
+        if (recorder.y == 0 || world.getCollidingBlocks(offsetAABB) != null) {
             return false;
         } else {
             aabb.set(offsetAABB.translate(xAxis ? -offset : 0, 0, xAxis ? 0 : -offset));
+            pos.add(recorder);
             return true;
         }
     }
@@ -438,7 +445,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     @Override
     public void removeEntity(Entity entity) {
         if (!entities.containsKey(entity.getUniqueId()))
-            throw new IllegalArgumentException("Entity " + entity.getUniqueId() + " is not added!");
+            return;
         entityUpdateOperationQueue.offer(new EntityUpdateOperation(entity, EntityUpdateType.REMOVE));
     }
 

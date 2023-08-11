@@ -21,8 +21,6 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent, Blo
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_attribute_component");
 
-    @Dependency
-    protected BlockBaseComponent baseComponent;
     protected Function<BlockState, BlockAttributes> attributeAccessor;
 
     protected BlockAttributeComponentImpl(Function<BlockState, BlockAttributes> attributeAccessor) {
