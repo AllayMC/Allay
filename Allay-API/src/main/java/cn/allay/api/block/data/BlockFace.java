@@ -35,6 +35,14 @@ public enum BlockFace {
         };
     }
 
+    public Vector3ic offsetPos(Vector3ic pos) {
+        return pos.add(this.offset, new Vector3i());
+    }
+
+    public Vector3ic offsetPos(int x, int y, int z) {
+        return new Vector3i(x, y, z).add(offset);
+    }
+
     public static BlockFace[] getHorizontal() {
         return new BlockFace[]{ NORTH, EAST, SOUTH, WEST };
     }

@@ -1,6 +1,7 @@
 package cn.allay.api.block.component.impl.base;
 
 import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.CanPlaceOn;
 import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.blockupdate.*;
 import cn.allay.api.block.component.BlockComponentImpl;
@@ -18,35 +19,27 @@ import org.joml.Vector3i;
  *
  * @author daoge_cmd
  */
+@Builder
 public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponentImpl {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
     protected BlockType<? extends BlockBehavior> blockType;
+    @Builder.Default
     protected OnNeighborChanged onNeighborChanged = (blockState, neighborBlockState, blockFace) -> {};
+    @Builder.Default
     protected OnPlace onPlace = (currentBlockState, newBlockState) -> {};
+    @Builder.Default
     protected OnRandomUpdate onRandomUpdate = blockState -> {};
+    @Builder.Default
     protected OnReplace onReplace = (currentBlockState, newBlockState) -> {};
+    @Builder.Default
     protected OnScheduledUpdate onScheduledUpdate = blockState -> {};
+    @Builder.Default
+    protected CanPlaceOn canPlaceOn = pos -> true;
 
     public BlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         this.blockType = blockType;
-    }
-
-    @Builder
-    public BlockBaseComponentImpl(
-            BlockType<? extends BlockBehavior> blockType,
-            OnNeighborChanged onNeighborChanged,
-            OnPlace onPlace,
-            OnRandomUpdate onRandomUpdate,
-            OnReplace onReplace,
-            OnScheduledUpdate onScheduledUpdate) {
-        this.blockType = blockType;
-        this.onNeighborChanged = onNeighborChanged;
-        this.onPlace = onPlace;
-        this.onRandomUpdate = onRandomUpdate;
-        this.onReplace = onReplace;
-        this.onScheduledUpdate = onScheduledUpdate;
     }
 
     @Override
@@ -71,6 +64,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent, BlockComponen
     @Impl
     public void onScheduledUpdate(BlockStateWithPos blockState) {
         onScheduledUpdate.onScheduledUpdate(blockState);
+    }
+
+    @Override
+    public boolean canPlaceOn(BlockStateWithPos pos) {
+        return canPlaceOn.canPlaceOn(pos);
     }
 
     @Override
