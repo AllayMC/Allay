@@ -3,6 +3,7 @@ package cn.allay.server.world.chunk;
 import cn.allay.api.world.World;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.generator.LimitedWorldRegion;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -34,6 +35,7 @@ public class SingleChunkLimitedWorldRegion implements LimitedWorldRegion {
         return chunk;
     }
 
+    @ApiStatus.Internal
     @Override
     public void setChunk(int x, int z, Chunk chunk) {
         if (invalidXZ(x, z))

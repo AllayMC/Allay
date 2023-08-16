@@ -1,11 +1,8 @@
 package cn.allay.server.world.chunk;
 
-import cn.allay.api.block.data.BlockPos;
-import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
-import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.ChunkLoader;
 import cn.allay.api.world.chunk.ChunkSection;
@@ -14,10 +11,8 @@ import cn.allay.api.world.heightmap.HeightMap;
 import cn.allay.api.world.heightmap.HeightMapType;
 import lombok.Getter;
 import lombok.Setter;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -40,20 +35,17 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Setter
     protected volatile int chunkZ;
     @Getter
-    protected final World world;
-    @Getter
     protected final DimensionInfo dimensionInfo;
     protected final ChunkSection[] sections;
     protected final HeightMap[] heightMap;
     protected final Vector<ChunkLoader> chunkLoaders;
     protected final Queue<BedrockPacket> chunkPacketQueue;
 
-    public AllayUnsafeChunk(World world, int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        this(world, chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
+    public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+        this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
     }
 
-    public AllayUnsafeChunk(World world, int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
-        this.world = world;
+    public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
@@ -94,30 +86,18 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         if (section == null) {
             blockState = VanillaBlockTypes.AIR_TYPE.getDefaultState();
         } else {
-            blockState = section.getBlock(x, y & 0xf, z, layer);
+            blockState = section.getBlockState(x, y & 0xf, z, layer);
         }
         return blockState;
     }
 
-    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer, boolean send, boolean update) {
+    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer) {
         int sectionY = normalY(y) >>> 4;
         ChunkSection section = this.getSection(sectionY);
         if (section == null) {
             section = this.createAndGetSection(sectionY);
         }
-        var blockPos = new BlockPos(world, x, y & 0xf, z, layer);
-        var oldBlockState = section.getBlock(x, y & 0xf, z, layer);
-        oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos), blockState);
-        blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos), blockState);
-        section.setBlock(x, y & 0xf, z, layer, blockState);
-        if (update) {
-            neighborUpdateAround(x, y, z);
-        }
-        if (send) {
-            sendChunkPacket(
-                    blockState.getBehavior().createBlockUpdatePacket(blockState, (chunkX << 4) + x, y, (chunkZ << 4) + z, layer)
-            );
-        }
+        section.setBlockState(x, y & 0xf, z, layer, blockState);
     }
 
     public @Range(from = 0, to = 15) int getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {

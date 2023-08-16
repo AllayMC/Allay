@@ -34,7 +34,7 @@ public record ChunkSection(int sectionY,
                 new NibbleArray(Chunk.SECTION_SIZE));
     }
 
-    public BlockState getBlock(int x, int y, int z, boolean layer) {
+    public BlockState getBlockState(int x, int y, int z, boolean layer) {
         if (layer) {
             return blockLayer1.get(index(x, y, z));
         } else {
@@ -42,7 +42,7 @@ public record ChunkSection(int sectionY,
         }
     }
 
-    public void setBlock(int x, int y, int z, boolean layer, BlockState blockState) {
+    public void setBlockState(int x, int y, int z, boolean layer, BlockState blockState) {
         if (layer) {
             blockLayer1.set(index(x, y, z), blockState);
         } else {

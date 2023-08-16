@@ -24,6 +24,7 @@ import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkRequestResult;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
@@ -40,7 +41,6 @@ import java.util.function.Function;
  */
 @Slf4j
 public class AllayChunkService implements ChunkService {
-
     public static final int REMOVE_UNNEEDED_CHUNK_CYCLE = 600;
     private final Long2ObjectNonBlockingMap<Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
     private final Long2ObjectNonBlockingMap<CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
@@ -99,6 +99,7 @@ public class AllayChunkService implements ChunkService {
         }
     }
 
+    @ApiStatus.Internal
     @Override
     public void setChunk(int x, int z, Chunk chunk) {
         var chunkHash = HashUtils.hashXZ(x, z);
