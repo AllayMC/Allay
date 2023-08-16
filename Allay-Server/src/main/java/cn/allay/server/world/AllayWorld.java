@@ -1,13 +1,12 @@
 package cn.allay.server.world;
 
+import cn.allay.api.client.Client;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.Position3i;
 import cn.allay.api.math.Position3ic;
-import cn.allay.api.client.Client;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.*;
-import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.entity.EntityPhysicsService;
 import cn.allay.api.world.entity.EntityService;
@@ -22,7 +21,6 @@ import cn.allay.server.world.generator.AllayWorldGenerationService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3ic;
 import org.slf4j.Logger;
 
@@ -184,21 +182,6 @@ public class AllayWorld implements World {
     @Override
     public Collection<Client> getClients() {
         return Collections.unmodifiableCollection(clients);
-    }
-
-    @Override
-    public @Nullable Chunk getChunk(int x, int z) {
-        return chunkService.getChunk(x, z);
-    }
-
-    @Override
-    public @Nullable Chunk getChunk(long chunkHash) {
-        return null;
-    }
-
-    @Override
-    public void setChunk(int x, int z, Chunk chunk) {
-        chunkService.setChunk(x, z, chunk);
     }
 
     public static WorldBuilder builder() {

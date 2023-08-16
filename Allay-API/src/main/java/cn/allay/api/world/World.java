@@ -1,18 +1,19 @@
 package cn.allay.api.world;
 
+import cn.allay.api.block.data.BlockFace;
+import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.client.Client;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.entity.Entity;
+import cn.allay.api.math.Position3i;
 import cn.allay.api.math.Position3ic;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
-import cn.allay.api.world.chunk.ChunkAccessible;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.entity.EntityPhysicsService;
 import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
-import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
@@ -24,7 +25,6 @@ import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 import org.slf4j.Logger;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 
 /**
@@ -34,7 +34,7 @@ import java.util.Collection;
  *
  * @author daoge_cmd
  */
-public interface World extends ChunkAccessible {
+public interface World {
 
     Logger getLogger();
 
@@ -88,42 +88,36 @@ public interface World extends ChunkAccessible {
     @UnmodifiableView
     Collection<Client> getClients();
 
-    @Override
-    default int maxChunkX() {
-        return Integer.MAX_VALUE;
+    default void setBlockState(int x, int y, int z, BlockState blockState) {
+        setBlockState(x, y, z, blockState, false);
     }
 
-    @Override
-    default int maxChunkZ() {
-        return Integer.MAX_VALUE;
+    default void setBlockState(int x, int y, int z, BlockState blockState, boolean layer) {
+        setBlockState(x, y, z, blockState, layer, true);
     }
 
-    @Override
-    default int minChunkX() {
-        return Integer.MIN_VALUE;
+    default void setBlockState(int x, int y, int z, BlockState blockState, boolean layer, boolean send) {
+        setBlockState(x, y, z, blockState, layer, send, true);
     }
 
-    @Override
-    default int minChunkZ() {
-        return Integer.MIN_VALUE;
-    }
-
-    default void setBlockState(int x, int y, int z, BlockState state) {
-        setBlockState(x, y, z, state, false);
-    }
-
-    default void setBlockState(int x, int y, int z, BlockState state, boolean layer) {
-        setBlockState(x, y, z, state, layer, true);
-    }
-
-    default void setBlockState(int x, int y, int z, BlockState state, boolean layer, boolean send) {
-        setBlockState(x, y, z, state, layer, send, true);
-    }
-
-    default void setBlockState(int x, int y, int z, BlockState state, boolean layer, boolean send, boolean update) {
-        var chunk = getChunk(x >> 4, z >> 4);
+    default void setBlockState(int x, int y, int z, BlockState blockState, boolean layer, boolean send, boolean update) {
+        var chunk = getChunkService().getChunk(x >> 4, z >> 4);
         if (chunk == null) return;
-        chunk.setBlockState(x & 15, y, z & 15, state, layer, send, update);
+
+        int xIndex = x & 15;
+        int zIndex = z & 15;
+        Position3i blockPos = new Position3i(x, y & 0xf, z, this);
+
+        BlockState oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
+        oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState);
+        blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState);
+        chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
+        if (update) {
+            updateAround(x, y, z);
+        }
+        if (send) {
+            chunk.sendChunkPacket(blockState.getBehavior().createBlockUpdatePacket(blockState, x, y, z, layer));
+        }
     }
 
     @Nullable
@@ -144,7 +138,7 @@ public interface World extends ChunkAccessible {
 
     @Nullable
     default BlockState getBlockState(int x, int y, int z, boolean layer) {
-        var chunk = getChunk(x >> 4, z >> 4);
+        var chunk = getChunkService().getChunk(x >> 4, z >> 4);
         if (chunk == null)
             return null;
         return chunk.getBlockState(x & 15, y, z & 15, layer);
@@ -167,7 +161,7 @@ public interface World extends ChunkAccessible {
                 int localEndX = Math.min(x + sizeX - cX, 16);
                 int localEndZ = Math.min(z + sizeZ - cZ, 16);
 
-                var chunk = getChunk(chunkX, chunkZ);
+                var chunk = getChunkService().getChunk(chunkX, chunkZ);
                 if (chunk != null) {
                     chunk.batchProcess(
                             sectionOperate -> {
@@ -232,13 +226,55 @@ public interface World extends ChunkAccessible {
         return notEmpty ? blockStates : null;
     }
 
-    default void sendLevelEventPacket(Vector3i pos, LevelEventType blockStopBreak, int data) {
-        var chunk = getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+    default void sendLevelEventPacket(Vector3i pos, LevelEventType levelEventType, int data) {
+        var chunk = getChunkService().getChunk(pos.getX() >> 4, pos.getZ() >> 4);
         if (chunk == null) return;
         var levelEventPacket = new LevelEventPacket();
         levelEventPacket.setPosition(pos.toFloat());
-        levelEventPacket.setType(blockStopBreak);
+        levelEventPacket.setType(levelEventType);
         levelEventPacket.setData(data);
         chunk.sendChunkPacket(levelEventPacket);
+    }
+
+    default void updateAroundIgnoreFace(int x, int y, int z, BlockFace... ignoreFaces) {
+        for (var face : BlockFace.values()) {
+            if (ignoreFaces != null && ignoreFaces.length > 0) {
+                var ignore = false;
+                for (var ignoreFace : ignoreFaces) {
+                    if (ignoreFace == face) {
+                        ignore = true;
+                        break;
+                    }
+                }
+                if (ignore) {
+                    continue;
+                }
+            }
+            updateAtFace(x, y, z, face);
+        }
+    }
+
+    default void updateAround(int x, int y, int z) {
+        for (var face : BlockFace.values()) {
+            updateAtFace(x, y, z, face);
+        }
+    }
+
+    default void updateAtFace(int x, int y, int z, BlockFace face) {
+        var offsetPos = face.offsetPos(x, y, z);
+        var blockState = getBlockState(x, y, z, false);
+        blockState.getBehavior().onNeighborChanged(
+                new BlockStateWithPos(
+                        blockState,
+                        new Position3i(offsetPos.x(), offsetPos.y(), offsetPos.z(), this),
+                        false
+                ),
+                new BlockStateWithPos(
+                        blockState,
+                        new Position3i(x, y, z, this),
+                        false
+                ),
+                face.opposite()
+        );
     }
 }

@@ -2,7 +2,6 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.world.DimensionInfo;
-import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
 import cn.allay.api.world.heightmap.HeightMapType;
@@ -33,12 +32,12 @@ public class AllayChunk implements Chunk {
     protected final StampedLock heightLock;
     protected final StampedLock lightLock;
 
-    public AllayChunk(World world, int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        this(world, chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
+    public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+        this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
     }
 
-    public AllayChunk(World world, int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
-        this.unsafeChunk = new AllayUnsafeChunk(world, chunkX, chunkZ, dimensionInfo, data);
+    public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
+        this.unsafeChunk = new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo, data);
         this.sectionLock = new StampedLock();
         this.heightLock = new StampedLock();
         this.lightLock = new StampedLock();
@@ -85,10 +84,10 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer, boolean send, boolean update) {
+    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer) {
         long stamp = sectionLock.writeLock();
         try {
-            unsafeChunk.setBlockState(x, y, z, blockState, layer, send, update);
+            unsafeChunk.setBlockState(x, y, z, blockState, layer);
         } finally {
             sectionLock.unlockWrite(stamp);
         }
@@ -139,7 +138,7 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, boolean layer, boolean send, boolean update) {
+    public void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, boolean layer) {
         long stamp = sectionLock.tryOptimisticRead();
         try {
             for (; ; stamp = sectionLock.writeLock()) {
@@ -149,7 +148,7 @@ public class AllayChunk implements Chunk {
                 if (oldValue != expectedValue) break;
                 stamp = sectionLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
-                unsafeChunk.setBlockState(x, y, z, newValue, layer, send);
+                unsafeChunk.setBlockState(x, y, z, newValue, layer);
                 return;
             }
         } finally {
@@ -290,11 +289,6 @@ public class AllayChunk implements Chunk {
     @Override
     public DimensionInfo getDimensionInfo() {
         return unsafeChunk.getDimensionInfo();
-    }
-
-    @Override
-    public World getWorld() {
-        return unsafeChunk.getWorld();
     }
 
     @Override

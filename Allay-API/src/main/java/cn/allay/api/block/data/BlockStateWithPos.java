@@ -1,6 +1,7 @@
 package cn.allay.api.block.data;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.math.Position3ic;
 
 /**
  * Allay Project 2023/8/11
@@ -9,6 +10,7 @@ import cn.allay.api.block.type.BlockState;
  */
 public record BlockStateWithPos(
         BlockState blockState,
-        BlockPos blockPos
+        Position3ic pos,
+        boolean layer
 ) {
 }

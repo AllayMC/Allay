@@ -2,14 +2,11 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.world.biome.BiomeType;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.Range;
-import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
-import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -27,7 +24,7 @@ public interface Chunk extends UnsafeChunk {
         return (x << 8) + (z << 4) + y;
     }
 
-    void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, boolean layer, boolean send, boolean update);
+    void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, boolean layer);
 
     void compareAndSetBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType expectedValue, BiomeType newValue);
 

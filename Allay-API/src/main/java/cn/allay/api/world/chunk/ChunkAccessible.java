@@ -1,6 +1,6 @@
 package cn.allay.api.world.chunk;
 
-import cn.allay.api.world.World;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,6 +15,7 @@ public interface ChunkAccessible {
     @Nullable
     Chunk getChunk(long chunkHash);
 
+    @ApiStatus.Internal
     void setChunk(int x, int z, Chunk chunk);
 
     int maxChunkX();
