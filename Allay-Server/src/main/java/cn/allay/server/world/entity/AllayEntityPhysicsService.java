@@ -34,7 +34,7 @@ import static java.lang.Math.*;
  */
 public class AllayEntityPhysicsService implements EntityPhysicsService {
 
-    public static final double DIFF_POSITION_THRESHOLD = 0.001;
+    public static final double DIFF_POSITION_THRESHOLD = 0.0001;
     public static final double DIFF_ROTATION_THRESHOLD = 0.1;
 
     public static final double MOTION_THRESHOLD = 0.003;
