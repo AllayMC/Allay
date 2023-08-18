@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.cloudburstmc.nbt.NbtMap;
+import org.joml.Vector3dc;
+import org.joml.Vector3ic;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -43,6 +45,15 @@ public class BlockAttributes {
     }
     @Builder.Default
     protected AABBdc aabbCollision = new AABBd(0, 0, 0, 1, 1, 1);
+
+    public AABBd computeOffsetAABB(double x, double y, double z) {
+        return aabbCollision.translate(x, y, z, new AABBd());
+    }
+
+    public AABBd computeOffsetAABB(Vector3dc vector) {
+        return computeOffsetAABB(vector.x(), vector.y(), vector.z());
+    }
+
     @Builder.Default
     protected boolean hasCollision = true;
     @Builder.Default
