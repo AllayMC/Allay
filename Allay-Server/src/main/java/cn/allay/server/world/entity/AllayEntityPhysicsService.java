@@ -12,6 +12,8 @@ import cn.allay.api.world.entity.EntityPhysicsService;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.doubles.DoubleBooleanImmutablePair;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
@@ -22,8 +24,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static cn.allay.api.block.component.impl.attribute.BlockAttributes.DEFAULT_FRICTION;
 import static java.lang.Double.isNaN;
-import static java.lang.Math.abs;
-import static java.lang.Math.max;
+import static java.lang.Math.*;
 
 /**
  * Allay Project 2023/8/5 <br>
@@ -151,11 +152,11 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         if (abs(mx) >= abs(mz)) {
             //先处理X轴, 然后处理Z轴
-            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb);
-            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb);
+            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround());
+            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround());
         } else {
-            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb);
-            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb);
+            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround());
+            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround());
         }
 
         entity.setMotion(new Vector3d(mx, my, mz));
@@ -164,7 +165,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return updated;
     }
 
-    protected double applyMotionZ(double stepHeight, Location3d pos, double mz, AABBd aabb) {
+    protected double applyMotionZ(double stepHeight, Location3d pos, double mz, AABBd aabb, boolean enableStepping) {
         if (mz != 0) {
             var resultAABB = new AABBd(aabb);
             var resultPos = new Vector3d(pos);
@@ -174,7 +175,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 //有碰撞，尝试跨步
                 //计算剩余速度
                 mz = mz - (resultPos.z - pos.z);
-                if (tryStepping(resultPos, resultAABB, stepHeight, mz > 0, false)) {
+                if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, mz > 0, false)) {
                     //跨步成功
                     zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
                 }
@@ -186,7 +187,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return mz;
     }
 
-    protected double applyMotionX(double stepHeight, Location3d pos, double mx, AABBd aabb) {
+    protected double applyMotionX(double stepHeight, Location3d pos, double mx, AABBd aabb, boolean enableStepping) {
         if (mx != 0) {
             var resultAABB = new AABBd(aabb);
             var resultPos = new Vector3d(pos);
@@ -196,7 +197,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 //有碰撞，尝试跨步
                 //计算剩余速度
                 mx = mx - (resultPos.x - pos.x);
-                if (tryStepping(resultPos, resultAABB, stepHeight, mx > 0, true)) {
+                if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, mx > 0, true)) {
                     //跨步成功
                     xResult = moveAlongXAxisAndStopWhenCollision(resultAABB, mx, resultPos);
                 }
@@ -231,19 +232,25 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             collision = true;
             //存在碰撞
             //union为一个能将所有方块aabb包含的最小aabb
-            var union = unionBlockAABBs(blocks);
+            var union = unionBlockAABBs(floor(extendX.minX), floor(extendX.minY), floor(extendX.minZ), blocks);
             //result包含射线与union求交的两个交点的参数
             var result = new Vector2d(0, 0);
             //计算射线YZ轴起点坐标
-            var y = (aabb.maxY + aabb.minY) / 2d;
-            var z = (aabb.maxZ + aabb.minZ) / 2d;
+            //让射线通过union的YZ面中心
+            var y = (union.maxY + union.minY) / 2d;
+            var z = (union.maxZ + union.minZ) / 2d;
             union.intersectsRay(
                     x, y, z,
-                    x + mx, y, z,
+                    mx, 0, 0,
                     result
             );
-            //计算X轴坐标变化量
-            deltaX = mx * result.x;
+            if (result.x < 0) {
+                //卡方块里面了
+                deltaX = 0;
+            } else {
+                //计算X轴坐标变化量
+                deltaX = mx * result.x;
+            }
             //x轴方向速度归零
             mx = 0;
         }
@@ -252,21 +259,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         //更新坐标
         recorder.x += deltaX;
         return new DoubleBooleanImmutablePair(mx, collision);
-    }
-
-    protected boolean tryStepping(Vector3d pos, AABBd aabb, double stepHeight, boolean positive, boolean xAxis) {
-        var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
-        var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBd());
-        var recorder = new Vector3d();
-        moveAlongYAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder);
-        moveAlongYAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder);
-        if (recorder.y == 0 || world.getCollidingBlocks(offsetAABB) != null) {
-            return false;
-        } else {
-            aabb.set(offsetAABB.translate(xAxis ? -offset : 0, 0, xAxis ? 0 : -offset));
-            pos.add(recorder);
-            return true;
-        }
     }
 
     protected Pair<Double, Boolean> moveAlongZAxisAndStopWhenCollision(AABBd aabb, double mz, Vector3d recorder) {
@@ -292,19 +284,25 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             collision = true;
             //存在碰撞
             //union为一个能将所有方块aabb包含的最小aabb
-            var union = unionBlockAABBs(blocks);
+            var union = unionBlockAABBs(floor(extendZ.minX), floor(extendZ.minY), floor(extendZ.minZ), blocks);
             //result包含射线与union求交的两个交点的参数
             var result = new Vector2d(0, 0);
             //计算射线XY轴起点坐标
-            var x = (aabb.maxX + aabb.minX) / 2d;
-            var y = (aabb.maxY + aabb.minY) / 2d;
+            //让射线通过union的XY面中心
+            var x = (union.maxX + union.minX) / 2d;
+            var y = (union.maxY + union.minY) / 2d;
             union.intersectsRay(
                     x, y, z,
-                    x, y, z + mz,
+                    0, 0, mz,
                     result
             );
-            //计算Z轴坐标变化量
-            deltaZ = mz * result.x;
+            if (result.x < 0) {
+                //卡方块里面了
+                deltaZ = 0;
+            } else {
+                //计算Z轴坐标变化量
+                deltaZ = mz * result.x;
+            }
             //z轴方向速度归零
             mz = 0;
         }
@@ -341,19 +339,25 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             //存在碰撞
             if (down) onGround = true;
             //union为一个能将所有方块aabb包含的最小aabb
-            var union = unionBlockAABBs(blocks);
+            var union = unionBlockAABBs(floor(extendY.minX), floor(extendY.minY), floor(extendY.minZ), blocks);
             //result包含射线与union求交的两个交点的参数
             var result = new Vector2d(0, 0);
             //计算射线XZ轴起点坐标
-            var x = (aabb.maxX + aabb.minX) / 2d;
-            var z = (aabb.maxZ + aabb.minZ) / 2d;
+            //让射线通过union的XZ面中心
+            var x = (union.maxX + union.minX) / 2d;
+            var z = (union.maxZ + union.minZ) / 2d;
             union.intersectsRay(
                     x, y, z,
-                    x, y + my, z,
+                    0, my, 0,
                     result
             );
-            //计算Y轴坐标变化量
-            deltaY = my * result.x;
+            if (result.x < 0) {
+                //卡方块里面了
+                deltaY = 0;
+            } else {
+                //计算Y轴坐标变化量
+                deltaY = my * result.x;
+            }
             //y轴方向速度归零
             my = 0;
         }
@@ -364,15 +368,33 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return new DoubleBooleanImmutablePair(my, onGround);
     }
 
-    protected AABBd unionBlockAABBs(BlockState[][][] blocks) {
+    protected boolean tryStepping(Vector3d pos, AABBd aabb, double stepHeight, boolean positive, boolean xAxis) {
+        var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
+        var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBd());
+        var recorder = new Vector3d();
+        moveAlongYAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder);
+        moveAlongYAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder);
+        if (recorder.y == 0 || world.getCollidingBlocks(offsetAABB) != null) {
+            return false;
+        } else {
+            aabb.set(offsetAABB.translate(xAxis ? -offset : 0, 0, xAxis ? 0 : -offset));
+            pos.add(recorder);
+            return true;
+        }
+    }
+
+    protected AABBd unionBlockAABBs(double startX, double startY, double startZ, BlockState[][][] blocks) {
         AABBd unionAABB = null;
-        for (var sub1 : blocks) {
-            for (var sub2 : sub1) {
-                for (var block : sub2) {
+        for (int offsetX = 0; offsetX < blocks.length; offsetX++) {
+            var sub1 = blocks[offsetX];
+            for (int offsetY = 0; offsetY < sub1.length; offsetY++) {
+                var sub2 = sub1[offsetY];
+                for (int offsetZ = 0; offsetZ < sub2.length; offsetZ++) {
+                    var block = sub2[offsetZ];
                     if (block == null) continue;
-                    var blockAABB = block.blockType().getBlockBehavior().getBlockAttributes(block).aabbCollision();
+                    var blockAABB = block.blockType().getBlockBehavior().getBlockAttributes(block).computeOffsetAABB(startX + offsetX, startY + offsetY, startZ + offsetZ);
                     if (unionAABB == null) {
-                        unionAABB = new AABBd();
+                        unionAABB = blockAABB;
                     } else {
                         unionAABB.union(blockAABB);
                     }

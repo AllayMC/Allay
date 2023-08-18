@@ -46,12 +46,11 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (blockState == null)
             return false;
         if (player != null) {
-            var aabb = player.getOffsetAABB();
             var block_aabb = new AABBd(
                     placePos.x(), placePos.y(), placePos.z(),
                     placePos.x() + 1, placePos.y() + 1, placePos.z() + 1
             );
-            if (aabb.intersectsAABB(block_aabb))
+            if (!world.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty())
                 return false;
         }
         world.setBlockState(placePos.x(), placePos.y(), placePos.z(), blockState);
