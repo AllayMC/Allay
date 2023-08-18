@@ -492,6 +492,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return result;
     }
 
+    @Override
     public List<Entity> getCachedEntityCollidingResult(Entity entity) {
         return entityCollisionCache.getOrDefault(entity.getUniqueId(), Collections.emptyList());
     }

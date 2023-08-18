@@ -35,4 +35,6 @@ public interface EntityPhysicsService {
     }
 
     List<Entity> computeCollidingEntities(AABBdc aabb);
+
+    List<Entity> getCachedEntityCollidingResult(Entity entity);
 }
