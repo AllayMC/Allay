@@ -2,6 +2,7 @@ package cn.allay.api.entity.attribute;
 
 import lombok.Getter;
 import lombok.ToString;
+import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 
 /**
@@ -23,7 +24,7 @@ public class Attribute implements Cloneable {
     private float currentValue;
     private boolean dirty;
 
-    public Attribute(String key, float minValue, float maxValue, float currentValue) {
+    public Attribute(String key, float minValue, float maxValue, float currentValue, float defaultValue) {
         this.key = key;
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -58,6 +59,16 @@ public class Attribute implements Cloneable {
 
     public AttributeData toNetwork() {
         return new AttributeData(this.key, this.minValue, this.maxValue, this.currentValue, this.defaultValue);
+    }
+
+    public NbtMap toNBT() {
+        return NbtMap.builder()
+                .putString("Name", this.key)
+                .putFloat("Min", this.minValue)
+                .putFloat("Max", this.maxValue)
+                .putFloat("Current", this.currentValue)
+                .putFloat("Base", this.defaultValue)
+                .build();
     }
 
     @Override

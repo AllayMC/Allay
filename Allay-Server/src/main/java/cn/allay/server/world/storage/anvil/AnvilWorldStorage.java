@@ -1,5 +1,6 @@
 package cn.allay.server.world.storage.anvil;
 
+import cn.allay.api.entity.Entity;
 import cn.allay.api.world.Difficulty;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.WorldData;
@@ -23,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -83,6 +85,18 @@ public class AnvilWorldStorage implements NativeFileWorldStorage {
     @Override
     public CompletableFuture<Void> writeChunk(int x, int z, Chunk chunk) {
         //TODO: write chunk
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Set<NbtMap>> readEntities(int chunkX, int chunkZ) throws WorldStorageException {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> writeEntities(int chunkX, int chunkZ, Set<Entity> entities) throws WorldStorageException {
+        //TODO
         return null;
     }
 

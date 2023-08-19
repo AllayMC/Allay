@@ -3,6 +3,8 @@ package cn.allay.api.container;
 import cn.allay.api.data.VanillaItemTypes;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.type.ItemStackInitInfo;
+import org.cloudburstmc.nbt.NbtList;
+import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -43,6 +45,10 @@ public interface Container {
     ContainerViewer removeViewer(byte viewerId);
 
     void onSlotChange(int slot, ItemStack current);
+
+    NbtList<NbtMap> save();
+
+    void load(List<NbtMap> nbtList);
 
     default void sendContents(ContainerViewer viewer) {
         viewer.sendContents(this);
