@@ -1,7 +1,10 @@
 package cn.allay.api.entity.impl;
 
 import cn.allay.api.client.Client;
-import cn.allay.api.component.annotation.*;
+import cn.allay.api.component.annotation.AutoRegister;
+import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.component.annotation.Dependency;
+import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.*;
@@ -19,6 +22,8 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.Location3d;
 import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.packet.AddPlayerPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -231,6 +236,39 @@ public interface EntityPlayer extends
             mobEquipmentPacket.setHotbarSlot(handSlot);
 
             sendPacketToViewers(mobEquipmentPacket);
+        }
+
+        @Override
+        @Impl
+        public NbtMap save() {
+            return super.save().toBuilder()
+                    .putList(
+                            "Offhand",
+                            NbtType.COMPOUND,
+                            containerHolderComponent.getContainer(FullContainerType.OFFHAND).save())
+                    .putList(
+                            "Inventory",
+                            NbtType.COMPOUND,
+                            containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).save())
+                    .putList(
+                            "Armor",
+                            NbtType.COMPOUND,
+                            containerHolderComponent.getContainer(FullContainerType.ARMOR).save())
+                    .build();
+        }
+
+        @Override
+        public void load(NbtMap nbt) {
+            super.load(nbt);
+            if (nbt.containsKey("Offhand")) {
+                containerHolderComponent.getContainer(FullContainerType.OFFHAND).load(nbt.getList("Offhand", NbtType.COMPOUND));
+            }
+            if (nbt.containsKey("Inventory")) {
+                containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).load(nbt.getList("Inventory", NbtType.COMPOUND));
+            }
+            if (nbt.containsKey("Armor")) {
+                containerHolderComponent.getContainer(FullContainerType.ARMOR).load(nbt.getList("Armor", NbtType.COMPOUND));
+            }
         }
     }
 }

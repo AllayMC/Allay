@@ -1,5 +1,7 @@
 package cn.allay.api.entity.attribute;
 
+import org.cloudburstmc.nbt.NbtMap;
+
 /**
  * Allay Project 2023/7/9
  *
@@ -43,6 +45,16 @@ public enum AttributeType {
     }
 
     public Attribute newAttributeInstance() {
-        return new Attribute(this.key, this.minValue, this.maxValue, this.defaultValue);
+        return new Attribute(this.key, this.minValue, this.maxValue, this.defaultValue, this.defaultValue);
+    }
+
+    public static Attribute fromNBT(NbtMap nbt) {
+        return new Attribute(
+                nbt.getString("Name"),
+                nbt.getFloat("Min"),
+                nbt.getFloat("Max"),
+                nbt.getFloat("Current"),
+                nbt.getFloat("Base")
+        );
     }
 }

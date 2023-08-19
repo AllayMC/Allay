@@ -1,11 +1,12 @@
 package cn.allay.api.entity.component.impl.base;
 
+import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.math.Location3dc;
-import cn.allay.api.client.Client;
+import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
@@ -92,6 +93,12 @@ public interface EntityBaseComponent {
 
     @Inject
     void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3dc newLoc);
+
+    @Inject
+    NbtMap save();
+
+    @Inject
+    void load(NbtMap nbt);
 
     default boolean enableHeadYaw() {
         return false;

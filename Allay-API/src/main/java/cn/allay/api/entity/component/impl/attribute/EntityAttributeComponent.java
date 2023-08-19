@@ -3,6 +3,9 @@ package cn.allay.api.entity.component.impl.attribute;
 import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.attribute.AttributeType;
+import org.cloudburstmc.nbt.NbtList;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 
 import java.util.Collection;
 
@@ -22,8 +25,19 @@ public interface EntityAttributeComponent {
     Attribute getAttribute(AttributeType attributeType);
 
     @Inject
-    void setAttributes(AttributeType attributes, float value);
+    void setAttribute(AttributeType attributeType, float value);
+
+    @Inject
+    void setAttribute(Attribute attribute);
 
     @Inject
     float getAttributeValue(AttributeType attributeType);
+
+    default NbtList<NbtMap> saveAttributes() {
+        NbtList<NbtMap> list = new NbtList<>(NbtType.COMPOUND);
+        for (Attribute attribute : this.getAttributes()) {
+            list.add(attribute.toNBT());
+        }
+        return list;
+    }
 }

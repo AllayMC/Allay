@@ -1,22 +1,26 @@
 package cn.allay.api.entity.component.impl.base;
 
+import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.entity.Entity;
+import cn.allay.api.entity.attribute.AttributeType;
 import cn.allay.api.entity.component.EntityComponentImpl;
+import cn.allay.api.entity.component.impl.attribute.EntityAttributeComponent;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.Location3d;
 import cn.allay.api.math.Location3dc;
-import cn.allay.api.client.Client;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -47,6 +51,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Manager
     protected ComponentManager<T> manager;
 
+    @Dependency
+    protected EntityAttributeComponent attributeComponent;
+
     protected final Location3d location;
     protected final long uniqueId = UNIQUE_ID_COUNTER.getAndIncrement();
     protected final Metadata metadata;
@@ -64,6 +71,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         this.aabbGetter = aabbGetter;
         this.location = info.location();
         this.metadata = new Metadata();
+        var nbt = info.nbt();
+        if (nbt != null)
+            load(nbt);
     }
 
     @Override
@@ -282,5 +292,71 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         pk.setHeadYaw((float) newLoc.headYaw());
         if (onGround) pk.getFlags().add(MoveEntityDeltaPacket.Flag.ON_GROUND);
         sendPacketToViewers(pk);
+    }
+
+    @Override
+    @Impl
+    public NbtMap save() {
+        return NbtMap.builder()
+                .putString("identifier", entityType.getIdentifier().toString())
+                .putList(
+                        "Attributes",
+                        NbtType.COMPOUND,
+                        attributeComponent.saveAttributes()
+                )
+                .putCompound("Pos",
+                        NbtMap.builder()
+                                .putFloat("x", (float) location.x())
+                                .putFloat("y", (float) location.y())
+                                .putFloat("z", (float) location.z())
+                                .build())
+                .putCompound("Rotation",
+                        NbtMap.builder()
+                                .putFloat("yaw", (float) location.yaw())
+                                .putFloat("pitch", (float) location.pitch())
+                                .build())
+                .putCompound("Motion",
+                        NbtMap.builder()
+                                .putFloat("dx", (float) motion.x())
+                                .putFloat("dy", (float) motion.y())
+                                .putFloat("dz", (float) motion.z())
+                                .build())
+                .putBoolean("OnGround", onGround)
+                .build();
+    }
+
+    @Override
+    @Impl
+    public void load(NbtMap nbt) {
+        if (nbt.containsKey("Attributes")) {
+            var attributes = nbt.getList("Attributes", NbtType.COMPOUND);
+            for (NbtMap attribute : attributes) {
+                attributeComponent.setAttribute(AttributeType.fromNBT(attribute));
+            }
+        }
+        if (nbt.containsKey("Pos")) {
+            NbtMap pos = nbt.getCompound("Pos");
+            location.set(
+                    pos.getFloat("x"),
+                    pos.getFloat("y"),
+                    pos.getFloat("z")
+            );
+        }
+        if (nbt.containsKey("Rotation")) {
+            NbtMap rotation = nbt.getCompound("Rotation");
+            location.setYaw(rotation.getFloat("yaw"));
+            location.setPitch(rotation.getFloat("pitch"));
+        }
+        if (nbt.containsKey("Motion")) {
+            NbtMap motion = nbt.getCompound("Motion");
+            this.motion.set(
+                    motion.getFloat("dx"),
+                    motion.getFloat("dy"),
+                    motion.getFloat("dz")
+            );
+        }
+        if (nbt.containsKey("OnGround")) {
+            onGround = nbt.getBoolean("OnGround");
+        }
     }
 }

@@ -12,8 +12,6 @@ import cn.allay.api.world.entity.EntityPhysicsService;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.doubles.DoubleBooleanImmutablePair;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
@@ -23,7 +21,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static cn.allay.api.block.component.impl.attribute.BlockAttributes.DEFAULT_FRICTION;
-import static java.lang.Double.isNaN;
 import static java.lang.Math.*;
 
 /**
@@ -38,7 +35,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final double DIFF_ROTATION_THRESHOLD = 0.1;
 
     public static final double MOTION_THRESHOLD = 0.003;
-    public static final double STEPPING_OFFSET = 0.1;
+    public static final double STEPPING_OFFSET = 0.01;
 
     protected World world;
     protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
@@ -60,13 +57,18 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide()) return;
             //TODO: 水流作用 方块推出作用 etc...
+            System.out.println("computeCollisionMotion");
             if (entity.hasCollision()) computeCollisionMotion(entity);
+            System.out.println("setMotion");
             entity.setMotion(checkMotionThreshold(new Vector3d(entity.getMotion())));
+            System.out.println("applyMotion");
             if (applyMotion(entity)) {
                 updatedEntities.put(entity.getUniqueId(), entity);
             }
+            System.out.println("updateMotion");
             updateMotion(entity);
         });
+        System.out.println("entityAABBTree");
         updatedEntities.values().forEach(entity -> entityAABBTree.update(entity));
     }
 

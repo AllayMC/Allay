@@ -57,10 +57,16 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent, E
 
     @Override
     @Impl
-    public void setAttributes(AttributeType attributes, float value) {
-        Attribute attribute = this.attributes.get(attributes);
+    public void setAttribute(AttributeType attributeType, float value) {
+        Attribute attribute = this.attributes.get(attributeType);
         if (attribute != null)
             attribute.setCurrentValue(value);
+    }
+
+    @Override
+    @Impl
+    public void setAttribute(Attribute attribute) {
+        this.attributes.put(AttributeType.valueOf(attribute.getKey()), attribute);
     }
 
     @Override
