@@ -100,6 +100,9 @@ public interface EntityBaseComponent {
     @Inject
     void load(NbtMap nbt);
 
+    @Inject
+    default void tick() {}
+
     default boolean enableHeadYaw() {
         return false;
     }

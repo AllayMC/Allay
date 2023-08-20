@@ -258,6 +258,7 @@ public interface EntityPlayer extends
         }
 
         @Override
+        @Impl
         public void load(NbtMap nbt) {
             super.load(nbt);
             if (nbt.containsKey("Offhand")) {

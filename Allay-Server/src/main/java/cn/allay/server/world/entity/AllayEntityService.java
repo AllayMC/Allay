@@ -1,6 +1,7 @@
 package cn.allay.server.world.entity;
 
 import cn.allay.api.entity.Entity;
+import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
 import cn.allay.api.world.World;
 import cn.allay.api.world.entity.EntityService;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class AllayEntityService implements EntityService {
 
     @Override
     public void tick() {
-        //TODO entity tick
+        entities.values().forEach(Entity::tick);
     }
 
     @Override
