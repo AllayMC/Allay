@@ -25,4 +25,6 @@ public @interface Dependency {
      * This value is used to specify the identifier of the component that needs to be dependent
      */
     String identifier() default "";
+
+    boolean soft() default false;
 }
