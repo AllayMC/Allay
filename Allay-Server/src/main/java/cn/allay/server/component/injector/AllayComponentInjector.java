@@ -321,6 +321,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                     List<ComponentImpl> dependencies = new ArrayList<>(components);
                     var count = Integer.MAX_VALUE;
                     var requireCompId = annotation.identifier();
+                    var soft = annotation.soft();
                     //Try to find dependencies through inheritance
                     //Try to match by namespace ID
                     if (!requireCompId.isBlank())
@@ -332,8 +333,11 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                     if (count > 1)
                         throw new ComponentInjectException("Found multiple dependencies " + type.getName() + " for " + component.getClass().getName());
                     //No dependencies available
-                    if (count == 0)
-                        throw new ComponentInjectException("Cannot find dependency " + type.getName() + " for " + component.getClass().getName());
+                    if (count == 0) {
+                        if (!soft)
+                            throw new ComponentInjectException("Cannot find dependency " + type.getName() + " for " + component.getClass().getName());
+                        else continue;
+                    }
                     //Inject dependencies
                     var dependency = dependencies.get(0);
                     field.setAccessible(true);
