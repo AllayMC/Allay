@@ -57,18 +57,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide()) return;
             //TODO: 水流作用 方块推出作用 etc...
-            System.out.println("computeCollisionMotion");
             if (entity.hasCollision()) computeCollisionMotion(entity);
-            System.out.println("setMotion");
             entity.setMotion(checkMotionThreshold(new Vector3d(entity.getMotion())));
-            System.out.println("applyMotion");
             if (applyMotion(entity)) {
                 updatedEntities.put(entity.getUniqueId(), entity);
             }
-            System.out.println("updateMotion");
             updateMotion(entity);
         });
-        System.out.println("entityAABBTree");
         updatedEntities.values().forEach(entity -> entityAABBTree.update(entity));
     }
 
