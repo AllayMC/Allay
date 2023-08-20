@@ -25,6 +25,7 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -51,7 +52,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Manager
     protected ComponentManager<T> manager;
 
-    @Dependency
+    @Dependency(soft = true)
+    @Nullable
     protected EntityAttributeComponent attributeComponent;
 
     protected final Location3d location;
@@ -297,13 +299,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     @Impl
     public NbtMap save() {
-        return NbtMap.builder()
+        var builder = NbtMap.builder()
                 .putString("identifier", entityType.getIdentifier().toString())
-                .putList(
-                        "Attributes",
-                        NbtType.COMPOUND,
-                        attributeComponent.saveAttributes()
-                )
                 .putCompound("Pos",
                         NbtMap.builder()
                                 .putFloat("x", (float) location.x())
@@ -321,14 +318,21 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                                 .putFloat("dy", (float) motion.y())
                                 .putFloat("dz", (float) motion.z())
                                 .build())
-                .putBoolean("OnGround", onGround)
-                .build();
+                .putBoolean("OnGround", onGround);
+        if (attributeComponent != null) {
+            builder.putList(
+                    "Attributes",
+                    NbtType.COMPOUND,
+                    attributeComponent.saveAttributes()
+            );
+        }
+        return builder.build();
     }
 
     @Override
     @Impl
     public void load(NbtMap nbt) {
-        if (nbt.containsKey("Attributes")) {
+        if (attributeComponent != null && nbt.containsKey("Attributes")) {
             var attributes = nbt.getList("Attributes", NbtType.COMPOUND);
             for (NbtMap attribute : attributes) {
                 attributeComponent.setAttribute(AttributeType.fromNBT(attribute));
