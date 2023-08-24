@@ -10,8 +10,7 @@ import io.netty.buffer.ByteBuf;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
-import static cn.allay.api.world.chunk.Chunk.SUB_CHUNK_VERSION;
-import static cn.allay.api.world.chunk.Chunk.index;
+import static cn.allay.api.world.chunk.BaseChunk.index;
 
 /**
  * Allay Project 2023/5/30
@@ -20,34 +19,27 @@ import static cn.allay.api.world.chunk.Chunk.index;
  */
 @NotThreadSafe
 public record ChunkSection(int sectionY,
-                           Palette<BlockState> blockLayer0,
-                           Palette<BlockState> blockLayer1,
+                           Palette<BlockState>[] blockLayer,
                            Palette<BiomeType> biomes,
                            NibbleArray blockLights,
                            NibbleArray skyLights) {
+    public static final int LAYER_COUNT = 2;
+    public static final int VERSION = 9;
+
     public ChunkSection(int sectionY) {
         this(sectionY,
-                new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
-                new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()),
+                new Palette[]{new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()), new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState())},
                 new Palette<>(VanillaBiomeId.PLAINS),
                 new NibbleArray(Chunk.SECTION_SIZE),
                 new NibbleArray(Chunk.SECTION_SIZE));
     }
 
-    public BlockState getBlockState(int x, int y, int z, boolean layer) {
-        if (layer) {
-            return blockLayer1.get(index(x, y, z));
-        } else {
-            return blockLayer0.get(index(x, y, z));
-        }
+    public BlockState getBlockState(int x, int y, int z, int layer) {
+        return blockLayer[layer].get(index(x, y, z));
     }
 
-    public void setBlockState(int x, int y, int z, boolean layer, BlockState blockState) {
-        if (layer) {
-            blockLayer1.set(index(x, y, z), blockState);
-        } else {
-            blockLayer0.set(index(x, y, z), blockState);
-        }
+    public void setBlockState(int x, int y, int z, int layer, BlockState blockState) {
+        blockLayer[layer].set(index(x, y, z), blockState);
     }
 
     public void setBiomeType(int x, int y, int z, BiomeType biomeType) {
@@ -75,16 +67,16 @@ public record ChunkSection(int sectionY,
     }
 
     public boolean isEmpty() {
-        return this.blockLayer0.isEmpty() && this.blockLayer0.get(0) == VanillaBlockTypes.AIR_TYPE.getDefaultState();
+        return blockLayer[0].isEmpty() && blockLayer[0].get(0) == VanillaBlockTypes.AIR_TYPE.getDefaultState();
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {
-        byteBuf.writeByte(SUB_CHUNK_VERSION);
+        byteBuf.writeByte(VERSION);
         //block layer count
-        byteBuf.writeByte(2);
+        byteBuf.writeByte(LAYER_COUNT);
         byteBuf.writeByte(sectionY);
 
-        blockLayer0.writeToNetwork(byteBuf, BlockState::blockStateHash);
-        blockLayer1.writeToNetwork(byteBuf, BlockState::blockStateHash);
+        blockLayer[0].writeToNetwork(byteBuf, BlockState::blockStateHash);
+        blockLayer[1].writeToNetwork(byteBuf, BlockState::blockStateHash);
     }
 }

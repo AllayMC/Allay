@@ -1,7 +1,6 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.annotation.SlowOperation;
-import cn.allay.api.world.generator.WorldGenerationService;
 import cn.allay.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -36,8 +35,6 @@ public interface ChunkService extends ChunkAccessible {
     boolean isChunkUnloaded(int x, int z);
 
     boolean isChunkUnloaded(long hashXZ);
-
-    WorldGenerationService getWorldGenerationService();
 
     WorldStorage getWorldStorage();
 

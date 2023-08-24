@@ -14,7 +14,6 @@ public final class WorldData {
             .gameRules(GameRules.DEFAULT)
             .spawnPoint(new Vector3i(0, 64, 0))
             .difficulty(Difficulty.NORMAL)
-            .storageVersion(0)
             .randomSeed(114514)
             .time(0)
             .lightningTick(0)
@@ -32,7 +31,6 @@ public final class WorldData {
     GameRules gameRules;
     Vector3ic spawnPoint;
     Difficulty difficulty;
-    int storageVersion;
     int tickingRadius;
     int viewDistance;
     long randomSeed;
@@ -43,9 +41,5 @@ public final class WorldData {
     String levelName;
     String generatorOptions;
     DimensionInfo dimensionInfo;
-    /**
-     * 用来标识这个level.dat是不是经过Allay修改过的
-     */
-    boolean allay;
 }
 

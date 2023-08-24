@@ -2,12 +2,13 @@ package cn.allay.server.client;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.data.BlockFace;
-import cn.allay.api.block.type.BlockState;
-import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.client.BaseClient;
+import cn.allay.api.client.data.AdventureSettings;
+import cn.allay.api.client.data.LoginData;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
+import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.data.VanillaBlockTypes;
@@ -16,21 +17,15 @@ import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.impl.EntityPlayer;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
-import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.Location3d;
-import cn.allay.api.math.Location3dc;
 import cn.allay.api.math.Position3ic;
-import cn.allay.api.client.data.AdventureSettings;
-import cn.allay.api.client.data.LoginData;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.MathUtils;
-import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.gamerule.GameRule;
-import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +48,6 @@ import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -249,7 +243,7 @@ public class AllayClient extends BaseClient {
         startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
         startGamePacket.setSeed(0L);
         startGamePacket.setDimensionId(spawnWorld.getDimensionInfo().dimensionId());
-        startGamePacket.setGeneratorId(spawnWorld.getWorldGenerator().getGeneratorWorldType().getId());
+        startGamePacket.setGeneratorId(spawnWorld.getWorldGenerator().getType().getId());
         startGamePacket.setLevelGameType(spawnWorld.getWorldGameType());
         startGamePacket.setDifficulty(spawnWorld.getDifficulty().ordinal());
         startGamePacket.setTrustingPlayers(true);
@@ -542,13 +536,13 @@ public class AllayClient extends BaseClient {
                 BlockFace blockFace = BlockFace.fromId(packet.getBlockFace());
                 var inv = playerEntity.getContainer(FullContainerType.PLAYER_INVENTORY);
                 var itemStack = inv.getItemInHand();
-                switch(packet.getActionType()) {
+                switch (packet.getActionType()) {
                     case 0 -> {
                         var placePos = blockFace.offsetPos(blockPos);
                         if (!canInteract()) {
                             //TODO: 确认是否需要发送UpdateBlockPacket
                             var blockState = getWorld().getBlockStateNonNull(placePos.x(), placePos.y(), placePos.z());
-                            blockState.getBehavior().sendBlockUpdateTo(blockState, placePos.x(), placePos.y(), placePos.z(), false, AllayClient.this);
+                            blockState.getBehavior().sendBlockUpdateTo(blockState, placePos.x(), placePos.y(), placePos.z(), 0, AllayClient.this);
                             return PacketSignal.HANDLED;
                         }
                         this.spamCheckTime = System.currentTimeMillis();
@@ -556,10 +550,10 @@ public class AllayClient extends BaseClient {
                         //尝试使用失败
                         if (!itemStack.useItemOn(playerEntity, itemStack, getWorld(), blockPos, placePos, clickPos, blockFace)) {
                             var blockStateClicked = getWorld().getBlockStateNonNull(blockPos.x(), blockPos.y(), blockPos.z());
-                            blockStateClicked.getBehavior().sendBlockUpdateTo(blockStateClicked, blockPos.x(), blockPos.y(), blockPos.z(), false, AllayClient.this);
+                            blockStateClicked.getBehavior().sendBlockUpdateTo(blockStateClicked, blockPos.x(), blockPos.y(), blockPos.z(), 0, AllayClient.this);
 
                             var blockStateReplaced = getWorld().getBlockStateNonNull(placePos.x(), placePos.y(), placePos.z());
-                            blockStateReplaced.getBehavior().sendBlockUpdateTo(blockStateReplaced, placePos.x(), placePos.y(), placePos.z(), false, AllayClient.this);
+                            blockStateReplaced.getBehavior().sendBlockUpdateTo(blockStateReplaced, placePos.x(), placePos.y(), placePos.z(), 0, AllayClient.this);
                         } else {
                             if (itemStack.getCount() != 0) {
                                 inv.onSlotChange(inv.getHandSlot(), itemStack);
@@ -627,7 +621,7 @@ public class AllayClient extends BaseClient {
             for (var action : blockActions) {
                 var pos = action.getBlockPosition();
                 //TODO: checking
-                switch(action.getAction()) {
+                switch (action.getAction()) {
                     case START_BREAK -> {
                         getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_START_BREAK, 0);
                     }
@@ -664,7 +658,9 @@ public class AllayClient extends BaseClient {
                     case STOP_GLIDING -> playerEntity.setGliding(false);
                     case START_CRAWLING -> playerEntity.setCrawling(true);
                     case STOP_CRAWLING -> playerEntity.setCrawling(false);
-                    case START_JUMPING -> {playerEntity.setOnGround(false);}
+                    case START_JUMPING -> {
+                        playerEntity.setOnGround(false);
+                    }
                 }
             }
         }

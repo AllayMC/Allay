@@ -15,7 +15,7 @@ public class MappingUtils {
         Map<String, String> properties = blockState.getProperties();
         StringBuilder ret = new StringBuilder(name).append('[');
         String join = String.join(",", properties.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).toList());
-        return new JeBlockState(ret.append(join).append(']').toString());
+        return JeBlockState.of(ret.append(join).append(']').toString());
     }
 
     public static NBTCompound convertNBT(NbtMap blockState) {

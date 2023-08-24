@@ -1,12 +1,11 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.entity.Entity;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
-import cn.allay.api.world.heightmap.HeightMapType;
 import io.netty.buffer.Unpooled;
-import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -18,7 +17,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Set;
 import java.util.concurrent.locks.StampedLock;
-import java.util.function.Consumer;
 
 /**
  * Allay Project 5/30/2023
@@ -28,131 +26,161 @@ import java.util.function.Consumer;
 @ThreadSafe
 public class AllayChunk implements Chunk {
     protected final UnsafeChunk unsafeChunk;
-    protected final StampedLock sectionLock;
-    protected final StampedLock heightLock;
+    protected final StampedLock blockLock;
+    protected final StampedLock heightAndBiomeLock;
     protected final StampedLock lightLock;
 
-    public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
-    }
-
-    public AllayChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
-        this.unsafeChunk = new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo, data);
-        this.sectionLock = new StampedLock();
-        this.heightLock = new StampedLock();
+    public AllayChunk(UnsafeChunk unsafeChunk) {
+        this.unsafeChunk = unsafeChunk;
+        this.blockLock = new StampedLock();
+        this.heightAndBiomeLock = new StampedLock();
         this.lightLock = new StampedLock();
     }
 
     @Override
-    public int getHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
-        long stamp = heightLock.tryOptimisticRead();
+    public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
+        long stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
-            for (; ; stamp = heightLock.readLock()) {
+            for (; ; stamp = heightAndBiomeLock.readLock()) {
                 if (stamp == 0L) continue;
-                int result = unsafeChunk.getHeight(type, x, z);
-                if (!heightLock.validate(stamp)) continue;
+                int result = unsafeChunk.getHeight(x, z);
+                if (!heightAndBiomeLock.validate(stamp)) continue;
                 return result;
             }
         } finally {
-            if (StampedLock.isReadLockStamp(stamp)) heightLock.unlockRead(stamp);
+            if (StampedLock.isReadLockStamp(stamp)) heightAndBiomeLock.unlockRead(stamp);
         }
     }
 
     @Override
-    public void setHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
-        long stamp = heightLock.writeLock();
+    public short[] getHeights() {
+        long stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
-            unsafeChunk.setHeight(type, x, z, height);
+            for (; ; stamp = heightAndBiomeLock.readLock()) {
+                if (stamp == 0L) continue;
+                short[] result = unsafeChunk.getHeights();
+                if (!heightAndBiomeLock.validate(stamp)) continue;
+                return result;
+            }
         } finally {
-            heightLock.unlockWrite(stamp);
+            if (StampedLock.isReadLockStamp(stamp)) heightAndBiomeLock.unlockRead(stamp);
         }
     }
 
     @Override
-    public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {
-        long stamp = sectionLock.tryOptimisticRead();
+    public void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, @Range(from = -512, to = 511) int height) {
+        long stamp = heightAndBiomeLock.writeLock();
         try {
-            for (; ; stamp = sectionLock.readLock()) {
+            unsafeChunk.setHeight(x, z, height);
+        } finally {
+            heightAndBiomeLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public void compareAndSetHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, @Range(from = -512, to = 511) int expectedValue, @Range(from = -512, to = 511) int newValue) {
+        long stamp = heightAndBiomeLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = heightAndBiomeLock.writeLock()) {
+                if (stamp == 0L) continue;
+                int oldValue = unsafeChunk.getHeight(x, z);
+                if (!heightAndBiomeLock.validate(stamp)) continue;
+                if (oldValue != expectedValue) break;
+                stamp = heightAndBiomeLock.tryConvertToWriteLock(stamp);
+                if (stamp == 0L) continue;
+                unsafeChunk.setHeight(x, z, newValue);
+                return;
+            }
+        } finally {
+            if (StampedLock.isWriteLockStamp(stamp)) heightAndBiomeLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int layer) {
+        long stamp = blockLock.tryOptimisticRead();
+        try {
+            for (; ; stamp = blockLock.readLock()) {
                 if (stamp == 0L) continue;
                 BlockState result = unsafeChunk.getBlockState(x, y, z, layer);
-                if (!sectionLock.validate(stamp)) continue;
+                if (!blockLock.validate(stamp)) continue;
                 return result;
             }
         } finally {
-            if (StampedLock.isReadLockStamp(stamp)) sectionLock.unlockRead(stamp);
+            if (StampedLock.isReadLockStamp(stamp)) blockLock.unlockRead(stamp);
         }
     }
 
     @Override
-    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer) {
-        long stamp = sectionLock.writeLock();
+    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer) {
+        long stamp = blockLock.writeLock();
         try {
             unsafeChunk.setBlockState(x, y, z, blockState, layer);
         } finally {
-            sectionLock.unlockWrite(stamp);
+            blockLock.unlockWrite(stamp);
         }
     }
 
     @Override
     public void compareAndSetBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType expectedValue, BiomeType newValue) {
-        long stamp = sectionLock.tryOptimisticRead();
+        long stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
-            for (; ; stamp = sectionLock.writeLock()) {
+            for (; ; stamp = heightAndBiomeLock.writeLock()) {
                 if (stamp == 0L) continue;
                 BiomeType oldValue = unsafeChunk.getBiome(x, y, z);
-                if (!sectionLock.validate(stamp)) continue;
+                if (!heightAndBiomeLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
-                stamp = sectionLock.tryConvertToWriteLock(stamp);
+                stamp = heightAndBiomeLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
                 unsafeChunk.setBiome(x, y, z, newValue);
                 return;
             }
         } finally {
-            if (StampedLock.isWriteLockStamp(stamp)) sectionLock.unlockWrite(stamp);
+            if (StampedLock.isWriteLockStamp(stamp)) heightAndBiomeLock.unlockWrite(stamp);
         }
     }
 
     @Override
     public BiomeType getBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        long stamp = sectionLock.tryOptimisticRead();
+        long stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
-            for (; ; stamp = sectionLock.readLock()) {
+            for (; ; stamp = heightAndBiomeLock.readLock()) {
                 if (stamp == 0L) continue;
                 var biomeType = unsafeChunk.getBiome(x, y, z);
-                if (!sectionLock.validate(stamp)) continue;
+                if (!heightAndBiomeLock.validate(stamp)) continue;
                 return biomeType;
             }
         } finally {
-            if (StampedLock.isReadLockStamp(stamp)) sectionLock.unlockRead(stamp);
+            if (StampedLock.isReadLockStamp(stamp)) heightAndBiomeLock.unlockRead(stamp);
         }
     }
 
     @Override
     public void setBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
-        long stamp = sectionLock.writeLock();
+        long stamp = heightAndBiomeLock.writeLock();
         try {
             unsafeChunk.setBiome(x, y, z, biomeType);
         } finally {
-            sectionLock.unlockWrite(stamp);
+            heightAndBiomeLock.unlockWrite(stamp);
         }
     }
 
     @Override
-    public void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, boolean layer) {
-        long stamp = sectionLock.tryOptimisticRead();
+    public void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, int layer) {
+        long stamp = blockLock.tryOptimisticRead();
         try {
-            for (; ; stamp = sectionLock.writeLock()) {
+            for (; ; stamp = blockLock.writeLock()) {
                 if (stamp == 0L) continue;
                 BlockState oldValue = unsafeChunk.getBlockState(x, y, z, layer);
-                if (!sectionLock.validate(stamp)) continue;
+                if (!blockLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
-                stamp = sectionLock.tryConvertToWriteLock(stamp);
+                stamp = blockLock.tryConvertToWriteLock(stamp);
                 if (stamp == 0L) continue;
                 unsafeChunk.setBlockState(x, y, z, newValue, layer);
                 return;
             }
         } finally {
-            if (StampedLock.isWriteLockStamp(stamp)) sectionLock.unlockWrite(stamp);
+            if (StampedLock.isWriteLockStamp(stamp)) blockLock.unlockWrite(stamp);
         }
     }
 
@@ -245,40 +273,15 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void batchProcess(Consumer<SectionOperate> sectionOperate,
-                             Consumer<HeightOperate> heightOperate,
-                             Consumer<LightOperate> lightOperate) {
-        if (sectionOperate != null) {
-            long stamp = sectionLock.writeLock();
-            try {
-                sectionOperate.accept(unsafeChunk);
-            } finally {
-                sectionLock.unlockWrite(stamp);
-            }
-        }
-        if (heightOperate != null) {
-            long stamp = heightLock.writeLock();
-            try {
-                heightOperate.accept(unsafeChunk);
-            } finally {
-                heightLock.unlockWrite(stamp);
-            }
-        }
-        if (lightOperate != null) {
-            long stamp = lightLock.writeLock();
-            try {
-                lightOperate.accept(unsafeChunk);
-            } finally {
-                lightLock.unlockWrite(stamp);
-            }
-        }
+    public void batchProcess(UnsafeChunkOperate operate) {
+        operate.run(this.blockLock, heightAndBiomeLock, lightLock, this.unsafeChunk);
     }
 
     @Override
     public LevelChunkPacket createLevelChunkPacket() {
         final LevelChunkPacket levelChunkPacket = new LevelChunkPacket();
-        levelChunkPacket.setChunkX(this.getChunkX());
-        levelChunkPacket.setChunkZ(this.getChunkZ());
+        levelChunkPacket.setChunkX(this.getX());
+        levelChunkPacket.setChunkZ(this.getZ());
         levelChunkPacket.setCachingEnabled(false);
         levelChunkPacket.setRequestSubChunks(true);
         levelChunkPacket.setSubChunkLimit(8);
@@ -287,56 +290,70 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
+    public int getState() {
+        return unsafeChunk.getState();
+    }
+
+    @Override
+    public void setState(int next) {
+    }
+
+    @Override
     public DimensionInfo getDimensionInfo() {
         return unsafeChunk.getDimensionInfo();
     }
 
     @Override
-    public int getChunkX() {
-        return unsafeChunk.getChunkX();
+    public int getX() {
+        return unsafeChunk.getX();
     }
 
     @Override
-    public void setChunkX(int chunkX) {
-        unsafeChunk.setChunkX(chunkX);
+    public int getZ() {
+        return unsafeChunk.getZ();
     }
 
     @Override
-    public int getChunkZ() {
-        return unsafeChunk.getChunkZ();
+    public void addEntity(@NotNull Entity entity) {
+        unsafeChunk.addEntity(entity);
     }
 
     @Override
-    public void setChunkZ(int chunkZ) {
-        unsafeChunk.setChunkZ(chunkZ);
+    public void removeEntity(@NotNull Entity entity) {
+        unsafeChunk.removeEntity(entity);
+    }
+
+    @Override
+    public @UnmodifiableView Set<Entity> getEntities() {
+        return unsafeChunk.getEntities();
     }
 
     @Override
     @Nullable
     @ApiStatus.Internal
-    public ChunkSection getSection(int y) {
-        long stamp = sectionLock.tryOptimisticRead();
+    public ChunkSection getSection(@Range(from = 0, to = 63) int y) {
+        long stamp = blockLock.tryOptimisticRead();
         try {
-            for (; ; stamp = sectionLock.readLock()) {
+            for (; ; stamp = blockLock.readLock()) {
                 if (stamp == 0L) continue;
                 ChunkSection section = unsafeChunk.getSection(y);
-                if (!sectionLock.validate(stamp)) continue;
+                if (!blockLock.validate(stamp)) continue;
                 return section;
             }
         } finally {
-            if (StampedLock.isReadLockStamp(stamp)) sectionLock.unlockRead(stamp);
+            if (StampedLock.isReadLockStamp(stamp)) blockLock.unlockRead(stamp);
         }
     }
 
     @Override
     @ApiStatus.Internal
     @NotNull
-    public ChunkSection createAndGetSection(int y) {
-        long stamp = sectionLock.writeLock();
+    public ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y) {
+        long stamp = blockLock.writeLock();
         try {
-            return unsafeChunk.createAndGetSection(y);
+            return unsafeChunk.getOrCreateSection(y);
         } finally {
-            sectionLock.unlockWrite(stamp);
+            blockLock.unlockWrite(stamp);
         }
     }
 

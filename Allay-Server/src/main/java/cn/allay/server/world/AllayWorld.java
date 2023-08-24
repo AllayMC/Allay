@@ -6,18 +6,20 @@ import cn.allay.api.math.Position3i;
 import cn.allay.api.math.Position3ic;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
-import cn.allay.api.world.*;
+import cn.allay.api.world.Difficulty;
+import cn.allay.api.world.DimensionInfo;
+import cn.allay.api.world.World;
+import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.entity.EntityPhysicsService;
 import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
 import cn.allay.api.world.storage.WorldStorage;
+import cn.allay.server.GameLoop;
 import cn.allay.server.scheduler.AllayScheduler;
-import cn.allay.server.utils.GameLoop;
 import cn.allay.server.world.chunk.AllayChunkService;
 import cn.allay.server.world.entity.AllayEntityPhysicsService;
 import cn.allay.server.world.entity.AllayEntityService;
-import cn.allay.server.world.generator.AllayWorldGenerationService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -28,8 +30,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
 
 /**
  * Allay Project 2023/7/1
@@ -45,10 +45,6 @@ public class AllayWorld implements World {
     protected final WorldGenerator worldGenerator;
     @Getter
     protected final Server server;
-    @Getter
-    protected final WorldType worldType;
-    @Getter
-    protected final ForkJoinPool threadPool = new ForkJoinPool();
     @Getter
     protected final ChunkService chunkService;
     @Getter
@@ -69,15 +65,11 @@ public class AllayWorld implements World {
         this.worldStorage = worldStorage;
         this.worldData = worldData;
         this.worldGenerator = worldGenerator;
-        this.worldType = worldGenerator.getGeneratorWorldType();
         this.server = server;
-        this.chunkService = new AllayChunkService(
-                this,
-                chunkService -> new AllayWorldGenerationService(threadPool, worldGenerator),
-                worldStorage);
+        this.chunkService = new AllayChunkService(this, worldStorage);
         this.entityService = new AllayEntityService(this);
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
-        this.worldScheduler = new AllayScheduler(Executors.newVirtualThreadPerTaskExecutor());
+        this.worldScheduler = new AllayScheduler();
         this.worldMainThread = Thread.ofPlatform()
                 .name("World Thread - " + worldData.getLevelName())
                 .unstarted(() -> GameLoop.builder()

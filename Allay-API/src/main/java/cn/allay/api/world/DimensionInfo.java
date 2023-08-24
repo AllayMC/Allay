@@ -32,6 +32,14 @@ public record DimensionInfo(int dimensionId,
         };
     }
 
+    public int minSectionY() {
+        return this.minHeight >> 4;
+    }
+
+    public int maxSectionY() {
+        return this.maxHeight >> 4;
+    }
+
     public static DimensionInfo fromName(Identifier name) {
         return switch (name.toString()) {
             case "minecraft:overworld" -> OVERWORLD;

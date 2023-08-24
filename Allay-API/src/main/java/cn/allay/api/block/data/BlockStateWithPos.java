@@ -11,6 +11,6 @@ import cn.allay.api.math.Position3ic;
 public record BlockStateWithPos(
         BlockState blockState,
         Position3ic pos,
-        boolean layer
+        int layer
 ) {
 }
