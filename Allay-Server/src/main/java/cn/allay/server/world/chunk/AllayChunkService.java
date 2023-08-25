@@ -1,7 +1,6 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.annotation.SlowOperation;
-import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.DimensionInfo;

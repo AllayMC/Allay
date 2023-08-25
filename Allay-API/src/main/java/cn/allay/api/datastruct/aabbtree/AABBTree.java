@@ -22,7 +22,7 @@ import static java.lang.Math.max;
 @Getter
 public final class AABBTree<T extends HasAABB & HasLongId> {
 
-    public static final float DEFAULT_FAT_AABB_MARGIN = 0.2f;
+    public static final float DEFAULT_FAT_AABB_MARGIN = 0f;
 
     private final List<AABBTreeNode<T>> nodes;
     private final AABBTreeHeuristicFunction<T> insertionHeuristicFunction;

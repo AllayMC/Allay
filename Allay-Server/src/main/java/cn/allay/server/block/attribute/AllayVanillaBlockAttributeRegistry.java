@@ -6,6 +6,7 @@ import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.registry.RegistryLoader;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.StringUtils;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtMap;
@@ -14,7 +15,7 @@ import org.cloudburstmc.nbt.NbtUtils;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -54,7 +55,7 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
             log.info("Start loading vanilla block attribute data registry...");
             try (var reader = NbtUtils.createGZIPReader(streamSupplier.get())) {
                 var blocks = ((NbtMap) reader.readTag()).getList("block", NbtType.COMPOUND);
-                var loaded = new HashMap<VanillaBlockId, Map<Integer, BlockAttributes>>();
+                var loaded = new EnumMap<VanillaBlockId, Map<Integer, BlockAttributes>>(VanillaBlockId.class);
                 for (var dataEntry : blocks) {
                     VanillaBlockId type;
                     try {
@@ -65,7 +66,7 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
                     }
                     var blockAttributes = BlockAttributes.fromNBT(dataEntry);
                     if (!loaded.containsKey(type))
-                        loaded.put(type, new HashMap<>());
+                        loaded.put(type, new Int2ObjectOpenHashMap<>());
                     loaded.get(type).put(dataEntry.getInt("blockStateHash"), blockAttributes);
                 }
                 log.info("Loaded vanilla block attribute data registry successfully");

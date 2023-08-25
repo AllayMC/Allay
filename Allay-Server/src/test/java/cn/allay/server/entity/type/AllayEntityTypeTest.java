@@ -3,7 +3,7 @@ package cn.allay.server.entity.type;
 import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.impl.EntitySheep;
 import cn.allay.api.entity.type.EntityInitInfo;
-import cn.allay.api.math.location.Location3d;
+import cn.allay.api.math.location.Location3f;
 import cn.allay.api.world.World;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,11 +25,11 @@ class AllayEntityTypeTest {
 
     @BeforeAll
     static void init() {
-        sheep = VanillaEntityTypes.SHEEP_TYPE.createEntity(new EntityInitInfo.Simple(new Location3d(0f, 1f, 2f, 0, 0, 0, mockWorld)));
+        sheep = VanillaEntityTypes.SHEEP_TYPE.createEntity(new EntityInitInfo.Simple(new Location3f(0f, 1f, 2f, 0, 0, 0, mockWorld)));
     }
 
     @Test
     void testCommon() {
-        assertEquals(new Location3d(0f, 1f, 2f, 0, 0, 0, mockWorld), sheep.getLocation());
+        assertEquals(new Location3f(0f, 1f, 2f, 0, 0, 0, mockWorld), sheep.getLocation());
     }
 }

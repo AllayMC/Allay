@@ -83,7 +83,7 @@ tasks.named("run") {
 }
 
 tasks.runShadow {
-    this.jarFile = file("build/libs/Allay-Server-all.jar")
+    this.jarFile = file("build/libs/Allay-Server-0.0.1-all.jar")
     jvmArgs?.add("--enable-preview")
 }
 

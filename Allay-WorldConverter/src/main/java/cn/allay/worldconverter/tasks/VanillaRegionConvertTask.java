@@ -3,7 +3,6 @@ package cn.allay.worldconverter.tasks;
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.mapping.Mapping;
-import cn.allay.api.utils.VanillaBiomeIdUtils;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.palette.Palette;
 import cn.allay.api.world.storage.AnvilRegionFile;
@@ -70,7 +69,7 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                                         }
                                         Integer beBlockStateHash = Mapping.getBeBlockStateHash(MappingUtils.convertBlockState(blockState));
                                         Integer beBiomeId = Mapping.getBeBiomeId(section.getBiome(x, y, z));
-                                        Identifier biome = beBiomeId == null ? VanillaBiomeId.values()[1].getIdentifier() : VanillaBiomeIdUtils.fromId(beBiomeId).getIdentifier();
+                                        Identifier biome = beBiomeId == null ? VanillaBiomeId.values()[1].getIdentifier() : VanillaBiomeId.fromId(beBiomeId).getIdentifier();
                                         int blockStateHash = beBlockStateHash == null ? AIR_BLOCK_STATE_HASH : beBlockStateHash;
                                         int index = Chunk.index(x, y, z);
                                         biomePalette.set(index, biome);
