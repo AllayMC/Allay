@@ -5,7 +5,7 @@ import cn.allay.dependence.StringUtils;
 import cn.allay.dependence.VanillaItemId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
@@ -28,6 +28,7 @@ public class VanillaItemIdEnumGen {
             @author daoge_cmd | Cool_Loong
             """;
     private static final String PACKAGE_NAME = "cn.allay.api.data";
+
     public static void main(String[] args) {
         generate();
     }
@@ -61,9 +62,13 @@ public class VanillaItemIdEnumGen {
         codeBuilder.addMethod(MethodSpec.methodBuilder("fromIdentifier")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addParameter(Identifier.class, "identifier")
-                .addStatement("return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH))")
-                .addAnnotation(NotNull.class)
-                .addException(IllegalArgumentException.class)
+                .addCode("""
+                        try{
+                            return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH));
+                        }catch(IllegalArgumentException ignore){
+                            return null;
+                        }""")
+                .addAnnotation(Nullable.class)
                 .returns(VanillaItemId.class)
                 .build()
         );

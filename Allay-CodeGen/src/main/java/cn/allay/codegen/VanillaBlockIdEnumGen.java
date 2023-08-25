@@ -7,7 +7,6 @@ import lombok.SneakyThrows;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
@@ -56,12 +55,12 @@ public class VanillaBlockIdEnumGen {
 
     @SneakyThrows
     public static void generate() {
-        generateDependence();
-        generateAPI();
+        generateToDependenceModule();
+        generateToAPIModule();
     }
 
     @SneakyThrows
-    public static void generateDependence() {
+    public static void generateToDependenceModule() {
         var identifierClass = ClassName.get("cn.allay.dependence", "Identifier");
         TypeSpec.Builder codeBuilder = commonBuilder(identifierClass);
         addEnums(codeBuilder);
@@ -70,7 +69,7 @@ public class VanillaBlockIdEnumGen {
     }
 
     @SneakyThrows
-    public static void generateAPI() {
+    public static void generateToAPIModule() {
         var identifierClass = ClassName.get("cn.allay.api.identifier", "Identifier");
         var blockTypeRegistryClass = ClassName.get("cn.allay.api.block.type", "BlockTypeRegistry");
         var blockTypeClass = ClassName.get("cn.allay.api.block.type", "BlockType");
@@ -84,9 +83,13 @@ public class VanillaBlockIdEnumGen {
                 .addMethod(MethodSpec.methodBuilder("fromIdentifier")
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addParameter(Identifier.class, "identifier")
-                        .addStatement("return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH))")
-                        .addAnnotation(NotNull.class)
-                        .addException(IllegalArgumentException.class)
+                        .addCode("""
+                                try{
+                                    return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH));
+                                }catch(IllegalArgumentException ignore){
+                                    return null;
+                                }""")
+                        .addAnnotation(Nullable.class)
                         .returns(VanillaBlockId.class)
                         .build()
                 );
