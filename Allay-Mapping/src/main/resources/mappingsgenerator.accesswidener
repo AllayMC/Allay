@@ -1,0 +1,12 @@
+accessWidener v1 named
+
+# Allows us to iterate through material colors
+accessible field net/minecraft/world/level/material/MapColor MATERIAL_COLORS [Lnet/minecraft/world/level/material/MapColor;
+# Allow us to access the formatter used for each statistic
+accessible field net/minecraft/stats/Stat formatter Lnet/minecraft/stats/StatFormatter;
+
+# Allows us to set various field required to generate interaction data
+mutable field net/minecraft/world/level/Level isClientSide Z
+mutable field net/minecraft/world/level/Level random Lnet/minecraft/util/RandomSource;
+accessible field net/minecraft/world/entity/Entity level Lnet/minecraft/world/level/Level;
+accessible field net/minecraft/world/entity/Entity position Lnet/minecraft/world/phys/Vec3;

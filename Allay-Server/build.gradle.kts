@@ -1,6 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
 
 plugins {
+    id("java-library")
     id("application")
     id("me.champeau.jmh") version ("0.7.1")
     id("com.gorylenko.gradle-git-properties") version ("2.4.1")
@@ -15,7 +16,7 @@ application {
 }
 
 dependencies {
-    implementation(project(":Allay-API"))
+    api(project(":Allay-API"))
     implementation(libs.bundles.terminal)
     implementation(libs.progressbar)
     implementation(libs.bundles.logging)
