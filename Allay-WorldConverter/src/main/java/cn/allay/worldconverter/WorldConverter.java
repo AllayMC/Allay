@@ -1,4 +1,4 @@
-package cn.allay.worldconvert;
+package cn.allay.worldconverter;
 
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.gamerule.GameRule;

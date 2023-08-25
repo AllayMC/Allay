@@ -1,4 +1,4 @@
-package cn.allay.worldconvert.tasks;
+package cn.allay.worldconverter.tasks;
 
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.identifier.Identifier;
@@ -7,7 +7,7 @@ import cn.allay.api.utils.VanillaBiomeIdUtils;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.palette.Palette;
 import cn.allay.api.world.storage.AnvilRegionFile;
-import cn.allay.worldconvert.utils.MappingUtils;
+import cn.allay.worldconverter.utils.MappingUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
