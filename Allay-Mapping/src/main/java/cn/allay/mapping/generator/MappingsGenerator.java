@@ -51,8 +51,6 @@ public class MappingsGenerator {
             Block value = entry.getValue();
             String identifier = BuiltInRegistries.BLOCK.getKey(value).toString();
             ImmutableList<BlockState> allStates = value.getStateDefinition().getPossibleStates();
-            for (var s : allStates) {
-            }
         }
     }
 }
