@@ -1,11 +1,14 @@
 package cn.allay.codegen;
 
 import cn.allay.dependence.Identifier;
+import cn.allay.dependence.VanillaBlockId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.DataInputStream;
@@ -77,10 +80,23 @@ public class VanillaBlockIdEnumGen {
                         .addStatement("return $T.getRegistry().get(this.getIdentifier())", blockTypeRegistryClass)
                         .returns(blockTypeClass)
                         .build()
+                )
+                .addMethod(MethodSpec.methodBuilder("fromIdentifier")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addParameter(Identifier.class, "identifier")
+                        .addStatement("return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH))")
+                        .addAnnotation(NotNull.class)
+                        .addException(IllegalArgumentException.class)
+                        .returns(VanillaBlockId.class)
+                        .build()
                 );
         addEnums(codeBuilder);
         var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build()).build();
-        Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockId.java"), javaFile.toString().replace("public BlockType", "public BlockType<?>"));
+        String result = javaFile.toString()
+                .replace("public BlockType", "public BlockType<?>")
+                .replace("cn.allay.dependence.Identifier", "cn.allay.api.identifier.Identifier")
+                .replace("cn.allay.dependence.VanillaBlockId", "cn.allay.api.data.VanillaBlockId");
+        Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockId.java"), result);
     }
 
     private static void addEnums(TypeSpec.Builder codeBuilder) {
