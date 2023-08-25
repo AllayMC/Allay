@@ -36,6 +36,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     public static final float MOTION_THRESHOLD = 0.003f;
     public static final float STEPPING_OFFSET = 0.01f;
+    public static final float FAT_AABB_MARGIN = 0.0001f;
 
     protected World world;
     protected Map<Long, Entity> entities = new ConcurrentHashMap<>();
@@ -252,6 +253,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             } else {
                 //计算X轴坐标变化量
                 deltaX = mx * result.x;
+                if (deltaX <= FAT_AABB_MARGIN) deltaX = 0;
             }
             //x轴方向速度归零
             mx = 0;
@@ -309,6 +311,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             } else {
                 //计算Z轴坐标变化量
                 deltaZ = mz * result.x;
+                if (deltaZ <= FAT_AABB_MARGIN) deltaZ = 0;
             }
             //z轴方向速度归零
             mz = 0;
@@ -369,6 +372,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             } else {
                 //计算Y轴坐标变化量
                 deltaY = my * result.x;
+                if (deltaY <= FAT_AABB_MARGIN) deltaY = 0;
             }
             //y轴方向速度归零
             my = 0;
