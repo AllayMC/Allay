@@ -2,7 +2,9 @@ plugins {
     id("java-library")
 }
 
-description = "Allay-API"
+description = "api"
+group = "cn.allay"
+version = "0.0.1"
 
 dependencies {
     api(libs.network) {

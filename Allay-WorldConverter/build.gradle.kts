@@ -4,7 +4,9 @@ plugins {
     id("application")
 }
 
-description = "Allay-WorldConvert"
+description = "worldconverter"
+group = "cn.allay"
+version = "0.0.1"
 
 application {
     mainClass.set("cn.allay.worldconvert.WorldConverter")

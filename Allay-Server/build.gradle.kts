@@ -6,7 +6,9 @@ plugins {
     id("com.gorylenko.gradle-git-properties") version ("2.4.1")
 }
 
-description = "Allay-Server"
+description = "server"
+group = "cn.allay"
+version = "0.0.1"
 
 application {
     mainClass.set("cn.allay.server.Allay")
