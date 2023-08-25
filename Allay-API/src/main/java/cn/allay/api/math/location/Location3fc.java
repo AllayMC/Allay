@@ -1,4 +1,6 @@
-package cn.allay.api.math;
+package cn.allay.api.math.location;
+
+import cn.allay.api.math.position.Position3fc;
 
 /**
  * Allay Project 7/30/2023

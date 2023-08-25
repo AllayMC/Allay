@@ -1,4 +1,4 @@
-package cn.allay.api.math;
+package cn.allay.api.math.position;
 
 import cn.allay.api.world.World;
 import org.joml.Vector3ic;

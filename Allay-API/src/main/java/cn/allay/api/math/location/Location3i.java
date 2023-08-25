@@ -1,5 +1,7 @@
-package cn.allay.api.math;
+package cn.allay.api.math.location;
 
+import cn.allay.api.math.position.Position3i;
+import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.World;
 import com.google.common.base.Objects;

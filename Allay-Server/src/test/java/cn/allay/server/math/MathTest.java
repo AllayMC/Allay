@@ -1,7 +1,7 @@
 package cn.allay.server.math;
 
-import cn.allay.api.math.Location3i;
-import cn.allay.api.math.Position3i;
+import cn.allay.api.math.location.Location3i;
+import cn.allay.api.math.position.Position3i;
 import cn.allay.api.world.World;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

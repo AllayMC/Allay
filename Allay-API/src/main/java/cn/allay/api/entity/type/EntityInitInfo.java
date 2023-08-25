@@ -2,7 +2,7 @@ package cn.allay.api.entity.type;
 
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.entity.Entity;
-import cn.allay.api.math.Location3d;
+import cn.allay.api.math.location.Location3d;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;

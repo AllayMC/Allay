@@ -6,7 +6,7 @@ import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.math.Location3d;
+import cn.allay.api.math.location.Location3d;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 
