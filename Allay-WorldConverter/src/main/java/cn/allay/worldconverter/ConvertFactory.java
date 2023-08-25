@@ -1,7 +1,7 @@
-package cn.allay.worldconvert;
+package cn.allay.worldconverter;
 
 import cn.allay.api.world.storage.AnvilRegionFile;
-import cn.allay.worldconvert.tasks.VanillaRegionConvertTask;
+import cn.allay.worldconverter.tasks.VanillaRegionConvertTask;
 import lombok.extern.slf4j.Slf4j;
 import org.jglrxavpok.hephaistos.mca.AnvilException;
 import org.jglrxavpok.hephaistos.mca.RegionFile;

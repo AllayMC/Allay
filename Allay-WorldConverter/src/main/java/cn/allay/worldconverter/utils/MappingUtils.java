@@ -1,4 +1,4 @@
-package cn.allay.worldconvert.utils;
+package cn.allay.worldconverter.utils;
 
 import cn.allay.api.mapping.JeBlockState;
 import org.cloudburstmc.nbt.NbtList;
