@@ -21,8 +21,8 @@ import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBdc;
+import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 import org.slf4j.Logger;
 
 import java.util.Collection;
@@ -187,17 +187,17 @@ public interface World {
     }
 
     @Nullable
-    default BlockState[][][] getCollidingBlocks(AABBdc aabb) {
+    default BlockState[][][] getCollidingBlocks(AABBfc aabb) {
         return getCollidingBlocks(aabb, false);
     }
 
     @Nullable
-    default BlockState[][][] getCollidingBlocks(AABBdc aabb, boolean layer) {
+    default BlockState[][][] getCollidingBlocks(AABBfc aabb, boolean layer) {
         return getCollidingBlocks(aabb, layer, false);
     }
 
     @Nullable
-    default BlockState[][][] getCollidingBlocks(AABBdc aabb, boolean layer, boolean ignoreCollision) {
+    default BlockState[][][] getCollidingBlocks(AABBfc aabb, boolean layer, boolean ignoreCollision) {
         int maxX = (int) Math.ceil(aabb.maxX());
         int maxY = (int) Math.ceil(aabb.maxY());
         int maxZ = (int) Math.ceil(aabb.maxZ());
@@ -214,7 +214,7 @@ public interface World {
                         var blockState = blockStates[x][y][z];
                         if (blockState == null) continue;
                         var attributes = blockState.blockType().getBlockBehavior().getBlockAttributes(blockState);
-                        if (!attributes.hasCollision() || !aabb.intersectsAABB(attributes.aabbCollision().translate(minX + x, minY + y, minZ + z, new AABBd()))) {
+                        if (!attributes.hasCollision() || !aabb.intersectsAABB(attributes.aabbCollision().translate(minX + x, minY + y, minZ + z, new AABBf()))) {
                             blockStates[x][y][z] = null;
                         } else {
                             notEmpty = true;

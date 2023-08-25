@@ -17,7 +17,7 @@ import cn.allay.server.block.type.BlockTypeBuildException;
 import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.utils.ComponentClassCacheUtils;
 import lombok.SneakyThrows;
-import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBf;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -130,7 +130,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
                 addComponent(ComponentProvider.of(
                         info -> new EntityBaseComponentImpl<>(
                                 (EntityInitInfo<T>) info,
-                                e -> new AABBd(0, 0, 0, 0, 0, 0)),
+                                e -> new AABBf(0, 0, 0, 0, 0, 0)),
                         EntityBaseComponentImpl.class
                 ));
             Arrays.stream(interfaceClass.getDeclaredFields())

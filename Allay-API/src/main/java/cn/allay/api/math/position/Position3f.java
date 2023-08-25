@@ -21,6 +21,11 @@ import java.text.NumberFormat;
 public class Position3f extends Vector3f implements Position3fc {
     public World world;
 
+    public Position3f(Position3fc p) {
+        super(p);
+        this.world = p.world();
+    }
+
     public Position3f(World world) {
         super();
         this.world = world;
