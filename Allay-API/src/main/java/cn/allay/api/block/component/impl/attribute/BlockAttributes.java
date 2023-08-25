@@ -9,10 +9,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.cloudburstmc.nbt.NbtMap;
-import org.joml.Vector3dc;
-import org.joml.Vector3ic;
-import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBdc;
+import org.joml.Vector3fc;
+import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 
 import java.awt.*;
 
@@ -29,7 +28,7 @@ public class BlockAttributes {
     public static final float DEFAULT_FRICTION = 0.6f;
     public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
     protected static Gson SERIALIZER = new GsonBuilder()
-            .registerTypeAdapter(AABBdc.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> parseAABBStr(json.getAsString()))
+            .registerTypeAdapter(AABBfc.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> parseAABBStr(json.getAsString()))
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var r = json.getAsJsonObject().get("r").getAsInt();
                 var g = json.getAsJsonObject().get("g").getAsInt();
@@ -39,18 +38,18 @@ public class BlockAttributes {
             })
             .create();
 
-    protected static AABBd parseAABBStr(String str) {
-        var numbers = StringUtils.fastSplit(str, ",").stream().map(Double::valueOf).toList();
-        return new AABBd(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
+    protected static AABBf parseAABBStr(String str) {
+        var numbers = StringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
+        return new AABBf(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
     }
     @Builder.Default
-    protected AABBdc aabbCollision = new AABBd(0, 0, 0, 1, 1, 1);
+    protected AABBfc aabbCollision = new AABBf(0, 0, 0, 1, 1, 1);
 
-    public AABBd computeOffsetAABB(double x, double y, double z) {
-        return aabbCollision.translate(x, y, z, new AABBd());
+    public AABBf computeOffsetAABB(float x, float y, float z) {
+        return aabbCollision.translate(x, y, z, new AABBf());
     }
 
-    public AABBd computeOffsetAABB(Vector3dc vector) {
+    public AABBf computeOffsetAABB(Vector3fc vector) {
         return computeOffsetAABB(vector.x(), vector.y(), vector.z());
     }
 

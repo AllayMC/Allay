@@ -5,8 +5,8 @@ import lombok.Getter;
 import org.joml.FrustumIntersection;
 import org.joml.Matrix4fc;
 import org.joml.RayAabIntersection;
-import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBdc;
+import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 import org.joml.primitives.Rayf;
 
 import java.util.*;
@@ -15,12 +15,14 @@ import java.util.function.Predicate;
 import static java.lang.Math.max;
 
 /**
- * Created by pateman.
+ * Allay Project 2023/7/30
+ *
+ * @author daoge_cmd
  */
 @Getter
 public final class AABBTree<T extends HasAABB & HasLongId> {
 
-    public static final double DEFAULT_FAT_AABB_MARGIN = 0.2;
+    public static final float DEFAULT_FAT_AABB_MARGIN = 0.2f;
 
     private final List<AABBTreeNode<T>> nodes;
     private final AABBTreeHeuristicFunction<T> insertionHeuristicFunction;
@@ -33,13 +35,13 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
 
     @Getter
     private int root;
-    private final double fatAABBMargin;
+    private final float fatAABBMargin;
 
     public AABBTree() {
         this(new AreaAABBHeuristicFunction<>(), DEFAULT_FAT_AABB_MARGIN);
     }
 
-    public AABBTree(AABBTreeHeuristicFunction<T> insertionHeuristicFunction, double fatAABBMargin) {
+    public AABBTree(AABBTreeHeuristicFunction<T> insertionHeuristicFunction, float fatAABBMargin) {
         nodes = new ObjectArrayList<>();
         root = AABBTreeNode.INVALID_NODE_INDEX;
         this.insertionHeuristicFunction = insertionHeuristicFunction;
@@ -229,13 +231,13 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
         AABBTreeNode<T> nodeToAdd = getNodeAt(node);
         AABBTreeNode<T> parentNode = getNodeAt(root);
 
-        AABBd nodeToAddAABB = nodeToAdd.getAABB();
+        AABBf nodeToAddAABB = nodeToAdd.getAABB();
 
         while (!parentNode.isLeaf()) {
             AABBTreeNode<T> leftChild = getNodeAt(parentNode.getLeftChild());
             AABBTreeNode<T> rightChild = getNodeAt(parentNode.getRightChild());
-            AABBd aabbA = leftChild.getAABB();
-            AABBd aabbB = rightChild.getAABB();
+            AABBf aabbA = leftChild.getAABB();
+            AABBf aabbB = rightChild.getAABB();
 
             AABBTreeHeuristicFunction.HeuristicResult heuristicResult = insertionHeuristicFunction
                     .getInsertionHeuristic(aabbA, aabbB, nodeToAdd.getData(), nodeToAddAABB);
@@ -259,7 +261,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
                                               List<CollisionPair<T>> result) {
         Deque<Integer> stack = new ArrayDeque<>();
         stack.offer(root);
-        AABBd overlapWith = nodeToTest.getAABB();
+        AABBf overlapWith = nodeToTest.getAABB();
 
         while (!stack.isEmpty()) {
             int nodeIndex = stack.pop();
@@ -268,7 +270,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             }
 
             AABBTreeNode<T> node = getNodeAt(nodeIndex);
-            AABBd nodeAABB = node.getAABB();
+            AABBf nodeAABB = node.getAABB();
             if (nodeAABB.intersectsAABB(overlapWith)) {
                 if (node.isLeaf() && node.getIndex() != nodeToTest.getIndex()) {
                     T nodeData = node.getData();
@@ -359,13 +361,12 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
         syncUpHierarchy(nodeGrandparent);
     }
 
-    public void detectOverlaps(AABBdc overlapWith, List<T> result) {
+    public void detectOverlaps(AABBfc overlapWith, List<T> result) {
         detectOverlaps(overlapWith, defaultAABBOverlapFilter, result);
     }
 
-    public void detectOverlaps(AABBdc overlapWith, AABBOverlapFilter<T> filter, List<T> result) {
-        var copy = new AABBd(overlapWith);
-        traverseTree(aabb -> aabb.intersectsAABB(copy), filter, result);
+    public void detectOverlaps(AABBfc overlapWith, AABBOverlapFilter<T> filter, List<T> result) {
+        traverseTree(aabb -> aabb.intersectsAABB(overlapWith), filter, result);
     }
 
     public void detectCollisionPairs(List<CollisionPair<T>> result) {
@@ -407,7 +408,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
         traverseTree(aabb -> rayIntersection.test((float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(), (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()), filter, result);
     }
 
-    private void traverseTree(Predicate<AABBdc> nodeTest, AABBOverlapFilter<T> filter, List<T> result) {
+    private void traverseTree(Predicate<AABBfc> nodeTest, AABBOverlapFilter<T> filter, List<T> result) {
         result.clear();
         if (root == AABBTreeNode.INVALID_NODE_INDEX) {
             return;
@@ -423,7 +424,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             }
 
             AABBTreeNode<T> node = getNodeAt(nodeIndex);
-            AABBd nodeAABB = node.getAABB();
+            AABBf nodeAABB = node.getAABB();
             if (nodeTest.test(nodeAABB)) {
                 if (node.isLeaf()) {
                     T nodeData = node.getData();

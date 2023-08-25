@@ -1,13 +1,12 @@
 package cn.allay.api.data;
 
-import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.entity.component.impl.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.impl.*;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
-import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBf;
 
 /**
  * Allay Project <p>
@@ -640,7 +639,7 @@ public interface VanillaEntityTypes {
                           info -> new EntityBaseComponentImpl<>(
                                   (EntityInitInfo<EntityVillager>) info,
                                   //TODO: 小村民
-                                  e -> new AABBd(-0.3, 0, -0.3, 0.3, 1.8, 0.3)
+                                  e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)
                           ), EntityBaseComponentImpl.class
                   ))
           .addBasicComponents()
@@ -654,7 +653,7 @@ public interface VanillaEntityTypes {
                           info -> new EntityBaseComponentImpl<>(
                                   (EntityInitInfo<EntityVillagerV2>) info,
                                   //TODO: 小村民
-                                  e -> new AABBd(-0.3, 0, -0.3, 0.3, 1.8, 0.3)
+                                  e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)
                           ), EntityBaseComponentImpl.class
                   ))
           .addBasicComponents()

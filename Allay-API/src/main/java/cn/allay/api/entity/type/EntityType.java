@@ -4,7 +4,6 @@ import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponentImpl;
 import cn.allay.api.identifier.Identified;
-import org.joml.primitives.AABBdc;
 
 import java.util.List;
 

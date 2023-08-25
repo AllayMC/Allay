@@ -19,7 +19,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
-import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBf;
 
 /**
  * Allay Project 2023/5/19
@@ -46,7 +46,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (blockState == null)
             return false;
         if (player != null) {
-            var block_aabb = new AABBd(
+            var block_aabb = new AABBf(
                     placePos.x(), placePos.y(), placePos.z(),
                     placePos.x() + 1, placePos.y() + 1, placePos.z() + 1
             );

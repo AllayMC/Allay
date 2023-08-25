@@ -23,6 +23,13 @@ public class Location3i extends Position3i implements Location3ic {
     public double yaw;
     public double headYaw;
 
+    public Location3i(Location3ic l) {
+        super(l);
+        this.pitch = l.pitch();
+        this.yaw = l.yaw();
+        this.headYaw = l.headYaw();
+    }
+
     public Location3i(int x, int y, int z, World world) {
         super(x, y, z, world);
     }

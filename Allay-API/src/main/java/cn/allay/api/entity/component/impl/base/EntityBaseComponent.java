@@ -5,16 +5,16 @@ import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
-import cn.allay.api.math.location.Location3dc;
+import cn.allay.api.math.location.Location3fc;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
-import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBdc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
+import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 
 import java.util.Map;
 import java.util.Set;
@@ -29,10 +29,10 @@ public interface EntityBaseComponent {
     EntityType<? extends Entity> getEntityType();
 
     @Inject
-    Location3dc getLocation();
+    Location3fc getLocation();
 
     @Inject
-    void setLocation(Location3dc location);
+    void setLocation(Location3fc location);
 
     @Inject
     long getUniqueId();
@@ -41,10 +41,10 @@ public interface EntityBaseComponent {
     Metadata getMetadata();
 
     @Inject
-    AABBdc getAABB();
+    AABBfc getAABB();
 
     @Inject
-    void setAABB(AABBd aabb);
+    void setAABB(AABBf aabb);
 
     default boolean hasCollision() {
         return getMetadata().getFlag(EntityFlag.HAS_COLLISION);
@@ -58,13 +58,13 @@ public interface EntityBaseComponent {
     Map<Long, Client> getViewers();
 
     @Inject
-    Vector3dc getMotion();
+    Vector3fc getMotion();
 
     @Inject
-    void setMotion(Vector3dc motion);
+    void setMotion(Vector3fc motion);
 
-    default void addMotion(Vector3dc add) {
-        setMotion(getMotion().add(add, new Vector3d()));
+    default void addMotion(Vector3fc add) {
+        setMotion(getMotion().add(add, new Vector3f()));
     }
 
     @Inject
@@ -92,7 +92,7 @@ public interface EntityBaseComponent {
     void sendPacketToViewersImmediately(BedrockPacket packet);
 
     @Inject
-    void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3dc newLoc);
+    void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3fc newLoc);
 
     @Inject
     NbtMap save();
@@ -107,24 +107,24 @@ public interface EntityBaseComponent {
         return false;
     }
 
-    default double getBaseOffset() {
-        return 0;
+    default float getBaseOffset() {
+        return 0f;
     }
 
-    default AABBdc getOffsetAABB() {
-        return new AABBd(getAABB()).translate(getLocation());
+    default AABBf getOffsetAABB() {
+        return getAABB().translate(getLocation(), new AABBf());
     }
 
     default boolean computeMovementServerSide() {
         return true;
     }
 
-    default double getStepHeight() {
-        return 0.6;
+    default float getStepHeight() {
+        return 0.6f;
     }
 
-    default double getGravity() {
-        return 0.08;
+    default float getGravity() {
+        return 0.08f;
     }
 
     default boolean hasGravity() {
@@ -133,22 +133,22 @@ public interface EntityBaseComponent {
 
     void setHasGravity(boolean hasGravity);
 
-    double SPRINTING_MOVEMENT_FACTOR = 1.3;
-    double WALKING_MOVEMENT_FACTOR = 1;
-    double SNEAKING_MOVEMENT_FACTOR = 0.3;
-    double STOP_MOVEMENT_FACTOR = 0;
+    float SPRINTING_MOVEMENT_FACTOR = 1.3f;
+    float WALKING_MOVEMENT_FACTOR = 1f;
+    float SNEAKING_MOVEMENT_FACTOR = 0.3f;
+    float STOP_MOVEMENT_FACTOR = 0f;
 
     /**
      * 给定yaw，若移动乘数不为0实体将往yaw指定的方向前进 <p>
      * 参见：<a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas/zh">...</a>
      */
-    default double getMovementFactor() {
+    default float getMovementFactor() {
         return STOP_MOVEMENT_FACTOR;
     }
 
-    double DEFAULT_PUSH_SPEED_REDUCTION = 1;
+    float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
 
-    default double getPushSpeedReduction() {
+    default float getPushSpeedReduction() {
         return DEFAULT_PUSH_SPEED_REDUCTION;
     }
 }

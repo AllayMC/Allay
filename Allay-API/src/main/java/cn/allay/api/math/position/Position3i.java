@@ -19,6 +19,10 @@ import java.nio.IntBuffer;
 public class Position3i extends Vector3i implements Position3ic {
     public World world;
 
+    public Position3i(Position3ic p) {
+        super(p);
+        this.world = p.world();
+    }
     public Position3i(World world) {
         super();
         this.world = world;

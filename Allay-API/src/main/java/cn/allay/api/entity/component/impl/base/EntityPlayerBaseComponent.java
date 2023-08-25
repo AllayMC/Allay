@@ -45,8 +45,8 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     void setHandSlot(@Range(from = 0, to = 8) int handSlot);
 
     @Override
-    default double getBaseOffset() {
-        return 1.62;
+    default float getBaseOffset() {
+        return 1.62f;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package cn.allay.api.block.type;
 
 import cn.allay.api.block.BlockBehavior;
-import cn.allay.api.block.component.impl.attribute.BlockAttributeComponent;
 import cn.allay.api.block.component.impl.attribute.BlockAttributes;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import org.cloudburstmc.nbt.NbtMap;

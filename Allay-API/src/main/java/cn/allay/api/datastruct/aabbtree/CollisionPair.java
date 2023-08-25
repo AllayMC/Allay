@@ -2,6 +2,11 @@ package cn.allay.api.datastruct.aabbtree;
 
 import java.util.Objects;
 
+/**
+ * Allay Project 2023/7/30
+ *
+ * @author daoge_cmd
+ */
 public record CollisionPair<T extends HasAABB & HasLongId>(T objectA, T objectB) {
 
    @Override
