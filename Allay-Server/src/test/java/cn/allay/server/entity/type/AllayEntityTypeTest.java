@@ -3,7 +3,7 @@ package cn.allay.server.entity.type;
 import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.impl.EntitySheep;
 import cn.allay.api.entity.type.EntityInitInfo;
-import cn.allay.api.math.Location3d;
+import cn.allay.api.math.location.Location3d;
 import cn.allay.api.world.World;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;

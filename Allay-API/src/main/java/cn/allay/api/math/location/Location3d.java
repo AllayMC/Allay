@@ -1,5 +1,6 @@
-package cn.allay.api.math;
+package cn.allay.api.math.location;
 
+import cn.allay.api.math.position.Position3d;
 import cn.allay.api.world.World;
 import com.google.common.base.Objects;
 import org.joml.Runtime;

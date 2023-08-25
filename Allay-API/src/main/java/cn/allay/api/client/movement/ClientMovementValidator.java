@@ -1,6 +1,6 @@
 package cn.allay.api.client.movement;
 
-import cn.allay.api.math.Location3dc;
+import cn.allay.api.math.location.Location3dc;
 
 /**
  * Allay Project 2023/8/5

@@ -1,12 +1,11 @@
 package cn.allay.api.world.chunk;
 
-import cn.allay.api.math.Location3dc;
+import cn.allay.api.math.location.Location3dc;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**

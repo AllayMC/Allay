@@ -5,7 +5,7 @@ import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
-import cn.allay.api.math.Location3dc;
+import cn.allay.api.math.location.Location3dc;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;

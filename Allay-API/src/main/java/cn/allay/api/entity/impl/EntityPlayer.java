@@ -19,7 +19,7 @@ import cn.allay.api.entity.component.impl.container.EntityContainerViewerCompone
 import cn.allay.api.entity.component.impl.container.EntityContainerViewerComponentImpl;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.math.Location3d;
+import cn.allay.api.math.location.Location3d;
 import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;

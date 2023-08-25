@@ -4,8 +4,8 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.datastruct.aabbtree.AABBTree;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
-import cn.allay.api.math.Location3d;
-import cn.allay.api.math.Location3dc;
+import cn.allay.api.math.location.Location3d;
+import cn.allay.api.math.location.Location3dc;
 import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.World;
 import cn.allay.api.world.entity.EntityPhysicsService;
@@ -18,6 +18,7 @@ import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static cn.allay.api.block.component.impl.attribute.BlockAttributes.DEFAULT_FRICTION;
@@ -38,9 +39,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final double STEPPING_OFFSET = 0.01;
 
     protected World world;
-    protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
-    protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectNonBlockingMap<>();
-    protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectNonBlockingMap<>();
+    protected Map<Long, Entity> entities = new ConcurrentHashMap<>();
+    protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new ConcurrentHashMap<>();
+    protected Map<Long, List<Entity>> entityCollisionCache = new ConcurrentHashMap<>();
     protected AABBTree<Entity> entityAABBTree = new AABBTree<>();
     protected Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
 
@@ -53,7 +54,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         handleEntityUpdateQueue();
         handleScheduledMoveQueue();
         cacheEntityCollisionResult();
-        var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
+        var updatedEntities = new ConcurrentHashMap<Long, Entity>();
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide()) return;
             //TODO: 水流作用 方块推出作用 etc...
