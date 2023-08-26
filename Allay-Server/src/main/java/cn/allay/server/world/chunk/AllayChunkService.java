@@ -40,8 +40,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class AllayChunkService implements ChunkService {
     public static final int REMOVE_UNNEEDED_CHUNK_CYCLE = 600;
-    private final Long2ObjectNonBlockingMap<Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
-    private final Long2ObjectNonBlockingMap<CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
+    private final Map<Long, Chunk> loadedChunks = new ConcurrentHashMap<>();
+    private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new ConcurrentHashMap<>();
     private final World world;
     @Getter

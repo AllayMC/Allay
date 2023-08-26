@@ -7,7 +7,7 @@ import cn.allay.api.client.movement.ClientMovementValidator;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.impl.EntityPlayer;
-import cn.allay.api.math.Location3dc;
+import cn.allay.api.math.location.Location3fc;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.World;
 import cn.allay.api.world.chunk.ChunkLoader;
@@ -105,7 +105,7 @@ public interface Client extends ChunkLoader {
     }
 
     @Override
-    default Location3dc getLocation() {
+    default Location3fc getLocation() {
         return getPlayerEntity().getLocation();
     }
 

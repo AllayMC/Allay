@@ -2,7 +2,7 @@ package cn.allay.server;
 
 import cn.allay.api.datastruct.aabbtree.AABBTree;
 import cn.allay.api.datastruct.aabbtree.TestEntity;
-import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBf;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ public class AABBTreeJMHTest {
     private final int RANGE = 500;
     private AABBTree<TestEntity> aabbTree;
     private TestEntity[] testEntities;
-    private AABBd[] testEntityAABBs;
-    private AABBd[] testAABBs;
+    private AABBf[] testEntityAABBs;
+    private AABBf[] testAABBs;
 
     @Setup
     public void init() {
@@ -38,11 +38,11 @@ public class AABBTreeJMHTest {
             testEntities[i] = createRandomTestEntity(i);
             aabbTree.add(testEntities[i]);
         }
-        testEntityAABBs = new AABBd[TEST_ENTITY_COUNT];
+        testEntityAABBs = new AABBf[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {
             testEntityAABBs[i] = testEntities[i].copyOffsetAABBTo(null);
         }
-        testAABBs = new AABBd[TEST_ENTITY_COUNT];
+        testAABBs = new AABBf[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {
             testAABBs[i] = createRandomAABB();
         }
@@ -60,14 +60,14 @@ public class AABBTreeJMHTest {
         );
     }
 
-    public AABBd createRandomAABB() {
+    public AABBf createRandomAABB() {
         var x = ThreadLocalRandom.current().nextFloat() * RANGE;
         var y = ThreadLocalRandom.current().nextFloat() * RANGE;
         var z = ThreadLocalRandom.current().nextFloat() * RANGE;
         var width = ThreadLocalRandom.current().nextFloat() * ENTITY_SIZE;
         var height = ThreadLocalRandom.current().nextFloat() * ENTITY_SIZE;
         var length = ThreadLocalRandom.current().nextFloat() * ENTITY_SIZE;
-        return new AABBd(
+        return new AABBf(
                 x, y, z,
                 x + width, y + height, z + length
         );
@@ -102,7 +102,7 @@ public class AABBTreeJMHTest {
         }
     }
 
-    public void forEachDetect(AABBd aabb, List<AABBd> result) {
+    public void forEachDetect(AABBf aabb, List<AABBf> result) {
         for (var entityAABB : testEntityAABBs) {
             if (entityAABB.intersectsAABB(aabb))
                 result.add(entityAABB);

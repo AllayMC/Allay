@@ -1,8 +1,8 @@
 package cn.allay.api.world.entity;
 
 import cn.allay.api.entity.Entity;
-import cn.allay.api.math.Location3dc;
-import org.joml.primitives.AABBdc;
+import cn.allay.api.math.location.Location3fc;
+import org.joml.primitives.AABBfc;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +24,7 @@ public interface EntityPhysicsService {
 
     boolean containEntity(Entity entity);
 
-    void offerScheduledMove(Entity entity, Location3dc newLoc);
+    void offerScheduledMove(Entity entity, Location3fc newLoc);
 
     default List<Entity> computeCollidingEntities(Entity entity) {
         if (entity.hasCollision()) {
@@ -34,7 +34,7 @@ public interface EntityPhysicsService {
         } else return Collections.emptyList();
     }
 
-    List<Entity> computeCollidingEntities(AABBdc aabb);
+    List<Entity> computeCollidingEntities(AABBfc aabb);
 
     List<Entity> getCachedEntityCollidingResult(Entity entity);
 }

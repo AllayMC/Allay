@@ -2,8 +2,8 @@ package cn.allay.server.world;
 
 import cn.allay.api.client.Client;
 import cn.allay.api.entity.Entity;
-import cn.allay.api.math.Position3i;
-import cn.allay.api.math.Position3ic;
+import cn.allay.api.math.position.Position3i;
+import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.Difficulty;

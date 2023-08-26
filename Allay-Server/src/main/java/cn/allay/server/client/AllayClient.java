@@ -19,8 +19,10 @@ import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
-import cn.allay.api.math.Location3d;
-import cn.allay.api.math.Position3ic;
+import cn.allay.api.math.location.Location3f;
+import cn.allay.api.math.position.Position3ic;
+import cn.allay.api.client.data.AdventureSettings;
+import cn.allay.api.client.data.LoginData;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
@@ -220,7 +222,7 @@ public class AllayClient extends BaseClient {
         playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(
                 new EntityPlayer.EntityPlayerInitInfo.Simple(
                         this,
-                        new Location3d(
+                        new Location3f(
                                 spawnPos.x(), spawnPos.y(), spawnPos.z(),
                                 0, 0, 0,
                                 spawnPos.world()
@@ -597,7 +599,7 @@ public class AllayClient extends BaseClient {
         }
 
         protected void handleMovement(Vector3f newPos, Vector3f newRot) {
-            var valid = movementValidator.validate(new Location3d(
+            var valid = movementValidator.validate(new Location3f(
                     newPos.getX(), newPos.getY(), newPos.getZ(),
                     newRot.getX(), newRot.getY(), newRot.getZ(),
                     getWorld())
@@ -609,7 +611,7 @@ public class AllayClient extends BaseClient {
             getWorld().getEntityPhysicsService()
                     .offerScheduledMove(
                             playerEntity,
-                            new Location3d(
+                            new Location3f(
                                     newPos.getX(), newPos.getY(), newPos.getZ(),
                                     newRot.getX(), newRot.getY(), newRot.getZ(),
                                     getWorld())
@@ -648,7 +650,7 @@ public class AllayClient extends BaseClient {
                         playerEntity.setSneaking(true);
                         //TODO: debug only
                         var loc = getLocation();
-                        var entity = VanillaEntityTypes.VILLAGER_V2_TYPE.createEntity(new EntityInitInfo.Simple<>(new Location3d(loc)));
+                        var entity = VanillaEntityTypes.VILLAGER_V2_TYPE.createEntity(new EntityInitInfo.Simple<>(new Location3f(loc)));
                         loc.world().addEntity(entity);
                     }
                     case STOP_SNEAKING -> playerEntity.setSneaking(false);

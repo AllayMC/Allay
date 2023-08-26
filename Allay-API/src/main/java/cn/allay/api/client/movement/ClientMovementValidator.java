@@ -1,6 +1,6 @@
 package cn.allay.api.client.movement;
 
-import cn.allay.api.math.Location3dc;
+import cn.allay.api.math.location.Location3fc;
 
 /**
  * Allay Project 2023/8/5
@@ -11,7 +11,7 @@ public interface ClientMovementValidator {
 
     ClientMovementValidator EMPTY_VALIDATOR = new ClientMovementValidator() {
         @Override
-        public boolean validate(Location3dc newLoc) {
+        public boolean validate(Location3fc newLoc) {
             return true;
         }
 
@@ -21,7 +21,7 @@ public interface ClientMovementValidator {
         }
     };
 
-    boolean validate(Location3dc newLoc);
+    boolean validate(Location3fc newLoc);
 
     boolean validateOnGround();
 }

@@ -2,6 +2,11 @@ package cn.allay.api.datastruct.aabbtree;
 
 import java.util.Objects;
 
+/**
+ * Allay Project 2023/7/30
+ *
+ * @author daoge_cmd
+ */
 final class AABBTreeObject<E extends HasLongId> {
    private final E data;
 

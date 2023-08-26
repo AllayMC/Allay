@@ -1,28 +1,28 @@
 package cn.allay.api.datastruct.aabbtree;
 
-import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBf;
 
 public class TestEntity implements HasAABB, HasLongId {
 
-   private final double x;
+   private final float x;
 
-   private final double y;
+   private final float y;
 
-   private final double z;
+   private final float z;
 
-   private final double width;
+   private final float width;
 
-   private final double height;
+   private final float height;
 
-    private final double length;
+    private final float length;
 
    private final int id;
 
-   public TestEntity(int id, double x, double y, double width, double height) {
+   public TestEntity(int id, float x, float y, float width, float height) {
         this(id, x, y, 0, width, height, 0);
    }
 
-   public TestEntity(int id, double x, double y, double z, double width, double height, double length) {
+   public TestEntity(int id, float x, float y, float z, float width, float height, float length) {
       this.id = id;
       this.x = x;
       this.y = y;
@@ -33,9 +33,9 @@ public class TestEntity implements HasAABB, HasLongId {
    }
 
    @Override
-   public AABBd copyOffsetAABBTo(AABBd dest) {
+   public AABBf copyOffsetAABBTo(AABBf dest) {
       if (dest == null) {
-         dest = new AABBd();
+         dest = new AABBf();
       }
       dest.setMin(x, y, z);
       dest.setMax(x + width, y + height, z + length);

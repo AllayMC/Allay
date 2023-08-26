@@ -1,12 +1,13 @@
 package cn.allay.api.datastruct.aabbtree;
 
-
-import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBf;
 
 /**
- * Created by pateman.
+ * Allay Project 2023/7/30
+ *
+ * @author daoge_cmd
  */
 public interface HasAABB {
 
-    AABBd copyOffsetAABBTo(AABBd dest);
+    AABBf copyOffsetAABBTo(AABBf dest);
 }

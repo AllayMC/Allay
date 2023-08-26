@@ -19,7 +19,7 @@ import cn.allay.api.entity.component.impl.container.EntityContainerViewerCompone
 import cn.allay.api.entity.component.impl.container.EntityContainerViewerComponentImpl;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.math.Location3d;
+import cn.allay.api.math.location.Location3f;
 import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
@@ -29,8 +29,8 @@ import org.cloudburstmc.protocol.bedrock.packet.AddPlayerPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
 import org.jetbrains.annotations.Range;
-import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBdc;
+import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 
 import java.util.function.Function;
 
@@ -49,7 +49,7 @@ public interface EntityPlayer extends
     @AutoRegister
     ComponentProvider<EntityBaseComponentImpl<EntityPlayer>> BASE_COMPONENT =
             ComponentProvider.of(
-                    info -> new EntityPlayerBaseComponentImpl((EntityInitInfo<EntityPlayer>) info, e -> new AABBd(-0.3, 0, -0.3, 0.3, 1.8, 0.3)),
+                    info -> new EntityPlayerBaseComponentImpl((EntityInitInfo<EntityPlayer>) info, e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)),
                     EntityPlayerBaseComponentImpl.class
             );
 
@@ -87,7 +87,7 @@ public interface EntityPlayer extends
         @Getter
         class Simple extends EntityInitInfo.Simple<EntityPlayer> implements EntityPlayerInitInfo {
             private final Client client;
-            public Simple(Client client, Location3d location) {
+            public Simple(Client client, Location3f location) {
                 super(location);
                 this.client = client;
             }
@@ -108,7 +108,7 @@ public interface EntityPlayer extends
         protected boolean gliding;
         protected boolean crawling;
 
-        public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info, Function<EntityPlayer, AABBdc> aabbGetter) {
+        public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info, Function<EntityPlayer, AABBfc> aabbGetter) {
             super(info, aabbGetter);
             if (info instanceof EntityPlayerInitInfo playerInitInfo) {
                 client = playerInitInfo.getClient();

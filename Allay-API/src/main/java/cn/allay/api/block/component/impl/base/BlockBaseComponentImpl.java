@@ -2,10 +2,10 @@ package cn.allay.api.block.component.impl.base;
 
 import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.CanPlaceOn;
-import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.blockupdate.*;
 import cn.allay.api.block.component.BlockComponentImpl;
 import cn.allay.api.block.data.BlockFace;
+import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
@@ -13,7 +13,6 @@ import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3i;
 
 /**
  * Allay Project 2023/4/8

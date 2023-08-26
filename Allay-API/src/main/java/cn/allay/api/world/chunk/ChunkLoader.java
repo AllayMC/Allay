@@ -1,12 +1,11 @@
 package cn.allay.api.world.chunk;
 
-import cn.allay.api.math.Location3dc;
+import cn.allay.api.math.location.Location3fc;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -16,7 +15,7 @@ import java.util.function.Function;
  */
 public interface ChunkLoader {
 
-    Location3dc getLocation();
+    Location3fc getLocation();
 
     boolean isLoaderActive();
 

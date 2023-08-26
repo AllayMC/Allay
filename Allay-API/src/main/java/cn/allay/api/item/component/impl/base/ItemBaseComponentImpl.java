@@ -19,7 +19,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
-import org.joml.primitives.AABBd;
 
 /**
  * Allay Project 2023/5/19
@@ -46,10 +45,12 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (blockState == null)
             return false;
         if (player != null) {
-            var block_aabb = new AABBd(
-                    placePos.x(), placePos.y(), placePos.z(),
-                    placePos.x() + 1, placePos.y() + 1, placePos.z() + 1
-            );
+            var block_aabb = blockState.getBehavior().getBlockAttributes(blockState)
+                    .computeOffsetAABB(
+                            placePos.x(),
+                            placePos.y(),
+                            placePos.z()
+                    );
             if (!world.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty())
                 return false;
         }

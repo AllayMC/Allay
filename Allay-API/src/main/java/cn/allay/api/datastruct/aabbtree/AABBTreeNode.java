@@ -1,15 +1,20 @@
 package cn.allay.api.datastruct.aabbtree;
 
 import lombok.Getter;
-import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBf;
 
+/**
+ * Allay Project 2023/7/30
+ *
+ * @author daoge_cmd
+ */
 public final class AABBTreeNode<E extends HasAABB> {
     public static final int INVALID_NODE_INDEX = -1;
     public static final int LEFT_CHILD = 0;
     public static final int RIGHT_CHILD = 1;
     private static final int MAX_NUM_OF_CHILDREN_PER_NODE = 2;
     private final int[] children;
-    private final AABBd aabb;
+    private final AABBf aabb;
 
     @Getter
     private int parent;
@@ -24,7 +29,7 @@ public final class AABBTreeNode<E extends HasAABB> {
         children = new int[MAX_NUM_OF_CHILDREN_PER_NODE];
         assignChildren(INVALID_NODE_INDEX, INVALID_NODE_INDEX);
 
-        aabb = new AABBd();
+        aabb = new AABBf();
         parent = INVALID_NODE_INDEX;
         index = INVALID_NODE_INDEX;
     }
@@ -50,25 +55,25 @@ public final class AABBTreeNode<E extends HasAABB> {
         assignChild(RIGHT_CHILD, childB);
     }
 
-    void computeAABBWithMargin(double margin) {
+    void computeAABBWithMargin(float margin) {
         if (data == null) {
             return;
         }
-        AABBd dataAABB = data.copyOffsetAABBTo(aabb);
+        AABBf dataAABB = data.copyOffsetAABBTo(aabb);
         aabb.setMin(dataAABB.minX - margin, dataAABB.minY - margin, dataAABB.minZ - margin);
         aabb.setMax(dataAABB.maxX + margin, dataAABB.maxY + margin, dataAABB.maxZ + margin);
     }
 
     public void resetForReuse() {
         assignChildren(INVALID_NODE_INDEX, INVALID_NODE_INDEX);
-        aabb.setMin(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-        aabb.setMax(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        aabb.setMin(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
+        aabb.setMax(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
         setParent(INVALID_NODE_INDEX);
         setHeight(0);
         setData(null);
 
-        aabb.setMin(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-        aabb.setMax(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        aabb.setMin(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
+        aabb.setMax(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
     }
 
     public int getLeftChild() {
@@ -79,7 +84,7 @@ public final class AABBTreeNode<E extends HasAABB> {
         return children[RIGHT_CHILD];
     }
 
-    public AABBd getAABB() {
+    public AABBf getAABB() {
         return aabb;
     }
 

@@ -65,10 +65,10 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     @SneakyThrows
     @Override
-    public Class<T> inject(boolean cache) {
+    public Class<T> inject(boolean createCache) {
         if (injectedClass == null) {
             checkComponentDuplicate();
-            injectedClass = buildClass(cache);
+            injectedClass = buildClass(createCache);
         }
         injectInitializer();
         return injectedClass;
@@ -135,18 +135,13 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     }
 
     protected void injectInitializer() {
-        Field initializer = null;
         try {
-            initializer = injectedClass.getDeclaredField(AllayComponentInjector.INITIALIZER_FIELD_NAME);
+            Field initializer = injectedClass.getDeclaredField(AllayComponentInjector.INITIALIZER_FIELD_NAME);
             initializer.setAccessible(true);
             //inject initializer instance
             initializer.set(injectedClass, new AllayComponentInjector.Initializer<T>(componentProviders));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (initializer != null) {
-                initializer.setAccessible(false);
-            }
         }
     }
 

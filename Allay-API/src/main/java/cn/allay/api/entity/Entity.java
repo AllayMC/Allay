@@ -6,9 +6,9 @@ import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.math.Location3d;
+import cn.allay.api.math.location.Location3f;
 import org.cloudburstmc.nbt.NbtMap;
-import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBf;
 
 /**
  * Allay Project 2023/5/20
@@ -20,14 +20,14 @@ public interface Entity extends
         HasAABB, HasLongId {
 
     @Override
-    default AABBd copyOffsetAABBTo(AABBd dest) {
+    default AABBf copyOffsetAABBTo(AABBf dest) {
         var aabb = getOffsetAABB();
         dest.setMin(aabb.minX(), aabb.minY(), aabb.minZ());
         dest.setMax(aabb.maxX(), aabb.maxY(), aabb.maxZ());
         return dest;
     }
 
-    static Entity fromNBT(Location3d location, NbtMap nbt) {
+    static Entity fromNBT(Location3f location, NbtMap nbt) {
         var identifier = new Identifier(nbt.getString("identifier"));
         var entityType = EntityTypeRegistry.getRegistry().get(identifier);
         if (entityType == null) {

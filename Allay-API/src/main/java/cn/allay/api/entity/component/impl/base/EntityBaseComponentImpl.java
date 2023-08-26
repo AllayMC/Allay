@@ -14,11 +14,10 @@ import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.math.Location3d;
-import cn.allay.api.math.Location3dc;
+import cn.allay.api.math.location.Location3f;
+import cn.allay.api.math.location.Location3fc;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.math.vector.Vector2f;
-import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
@@ -27,10 +26,10 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
-import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBdc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
+import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 
 import java.util.Collections;
 import java.util.Map;
@@ -56,17 +55,17 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Nullable
     protected EntityAttributeComponent attributeComponent;
 
-    protected final Location3d location;
+    protected final Location3f location;
     protected final long uniqueId = UNIQUE_ID_COUNTER.getAndIncrement();
     protected final Metadata metadata;
     protected EntityType<T> entityType;
-    protected AABBdc aabb;
-    protected Function<T, AABBdc> aabbGetter;
+    protected AABBfc aabb;
+    protected Function<T, AABBfc> aabbGetter;
     protected Map<Long, Client> viewers = new Long2ObjectOpenHashMap<>();
-    protected Vector3d motion = new Vector3d();
+    protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
 
-    public EntityBaseComponentImpl(EntityInitInfo<T> info, Function<T, AABBdc> aabbGetter) {
+    public EntityBaseComponentImpl(EntityInitInfo<T> info, Function<T, AABBfc> aabbGetter) {
         if (info.location().world() == null)
             throw new IllegalArgumentException("World cannot be null!");
         this.entityType = info.getEntityType();
@@ -127,13 +126,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     @Impl
-    public Location3dc getLocation() {
+    public Location3fc getLocation() {
         return location;
     }
 
     @Override
     @Impl
-    public void setLocation(Location3dc location) {
+    public void setLocation(Location3fc location) {
         this.location.set(location);
         this.location.setYaw(location.yaw());
         this.location.setHeadYaw(location.headYaw());
@@ -175,13 +174,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     @Impl
-    public AABBdc getAABB() {
+    public AABBfc getAABB() {
         return aabb;
     }
 
     @Override
     @Impl
-    public void setAABB(AABBd aabb) {
+    public void setAABB(AABBf aabb) {
         this.aabb = aabb;
         updateHitBoxAndCollisionBoxMetadata();
         sendEntityData(EntityDataTypes.HITBOX, EntityDataTypes.COLLISION_BOX);
@@ -202,14 +201,14 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     @Impl
-    public Vector3dc getMotion() {
+    public Vector3fc getMotion() {
         return motion;
     }
 
     @Override
     @Impl
-    public void setMotion(Vector3dc motion) {
-        this.motion = new Vector3d(motion);
+    public void setMotion(Vector3fc motion) {
+        this.motion = new Vector3f(motion);
     }
 
     @Override
@@ -261,8 +260,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         addEntityPacket.setRuntimeEntityId(uniqueId);
         addEntityPacket.setUniqueEntityId(uniqueId);
         addEntityPacket.setIdentifier(entityType.getIdentifier().toString());
-        addEntityPacket.setPosition(Vector3f.from(location.x(), location.y()  + getBaseOffset(), location.z()));
-        addEntityPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
+        addEntityPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
+        addEntityPacket.setMotion(org.cloudburstmc.math.vector.Vector3f.from(motion.x(), motion.y(), motion.z()));
         addEntityPacket.setRotation(Vector2f.from(location.pitch(), location.yaw()));
         addEntityPacket.getMetadata().putAll(metadata.getEntityDataMap());
         return addEntityPacket;
@@ -282,7 +281,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     @Impl
-    public void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3dc newLoc) {
+    public void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3fc newLoc) {
         var pk = new MoveEntityDeltaPacket();
         pk.setRuntimeEntityId(getUniqueId());
         pk.getFlags().addAll(moveFlags);

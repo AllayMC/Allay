@@ -1,19 +1,22 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
 
 plugins {
+    id("java-library")
     id("application")
     id("me.champeau.jmh") version ("0.7.1")
     id("com.gorylenko.gradle-git-properties") version ("2.4.1")
 }
 
-description = "Allay-Server"
+description = "server"
+group = "cn.allay"
+version = "0.0.1"
 
 application {
     mainClass.set("cn.allay.server.Allay")
 }
 
 dependencies {
-    implementation(project(":Allay-API"))
+    api(project(":Allay-API"))
     implementation(libs.bundles.terminal)
     implementation(libs.progressbar)
     implementation(libs.bundles.logging)
@@ -81,7 +84,7 @@ tasks.named("run") {
 }
 
 tasks.runShadow {
-    this.jarFile = file("build/libs/Allay-Server-all.jar")
+    this.jarFile = file("build/libs/Allay-Server-0.0.1-all.jar")
     jvmArgs?.add("--enable-preview")
 }
 
