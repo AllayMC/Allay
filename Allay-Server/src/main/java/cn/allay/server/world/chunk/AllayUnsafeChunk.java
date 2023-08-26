@@ -2,7 +2,6 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockTypes;
-import cn.allay.api.entity.Entity;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.world.DimensionInfo;
@@ -25,10 +24,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import javax.annotation.concurrent.ThreadSafe;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -236,7 +233,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         DimensionInfo dimensionInfo;
         ChunkSection[] sections;
         HeightMap heightMap;
-        Set<Entity> entities;
+        Map<Long, Entity> entities;
 
         public Builder chunkX(int chunkX) {
             this.chunkX = chunkX;
@@ -268,7 +265,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             return this;
         }
 
-        public Builder entities(Set<Entity> entities) {
+        public Builder entities(Map<Long, Entity> entities) {
             this.entities = entities;
             return this;
         }

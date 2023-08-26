@@ -325,13 +325,14 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void removeEntity(@NotNull Entity entity) {
-        unsafeChunk.removeEntity(entity);
+    public @UnmodifiableView Map<Long, Entity> getEntities() {
+        return unsafeChunk.getEntities();
     }
 
+    @Nullable
     @Override
-    public @UnmodifiableView Set<Entity> getEntities() {
-        return unsafeChunk.getEntities();
+    public Entity removeEntity(Long uniqueId) {
+        return unsafeChunk.removeEntity(uniqueId);
     }
 
     @Override
@@ -396,21 +397,5 @@ public class AllayChunk implements Chunk {
     @Override
     public void sendChunkPackets() {
         unsafeChunk.sendChunkPackets();
-    }
-
-    @Override
-    public void addEntity(Entity entity) {
-        unsafeChunk.addEntity(entity);
-    }
-
-    @Nullable
-    @Override
-    public Entity removeEntity(Long uniqueId) {
-        return unsafeChunk.removeEntity(uniqueId);
-    }
-
-    @Override
-    public Map<Long, Entity> getEntities() {
-        return unsafeChunk.getEntities();
     }
 }
