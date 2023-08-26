@@ -1,6 +1,7 @@
 package cn.allay.server.world;
 
 import cn.allay.api.client.Client;
+import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.position.Position3i;
 import cn.allay.api.math.position.Position3ic;
@@ -9,14 +10,12 @@ import cn.allay.api.server.Server;
 import cn.allay.api.world.*;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.entity.EntityPhysicsService;
-import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.server.scheduler.AllayScheduler;
 import cn.allay.server.utils.GameLoop;
 import cn.allay.server.world.chunk.AllayChunkService;
 import cn.allay.server.world.entity.AllayEntityPhysicsService;
-import cn.allay.server.world.entity.AllayEntityService;
 import cn.allay.server.world.generator.AllayWorldGenerationService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +23,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 import org.slf4j.Logger;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -52,8 +49,6 @@ public class AllayWorld implements World {
     @Getter
     protected final ChunkService chunkService;
     @Getter
-    protected final EntityService entityService;
-    @Getter
     protected final EntityPhysicsService entityPhysicsService;
     @Getter
     protected final Scheduler worldScheduler;
@@ -75,7 +70,6 @@ public class AllayWorld implements World {
                 this,
                 chunkService -> new AllayWorldGenerationService(threadPool, worldGenerator),
                 worldStorage);
-        this.entityService = new AllayEntityService(this);
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.worldScheduler = new AllayScheduler(Executors.newVirtualThreadPerTaskExecutor());
         this.worldMainThread = Thread.ofPlatform()
@@ -105,7 +99,6 @@ public class AllayWorld implements World {
 
     private void tick() {
         chunkService.tick();
-        entityService.tick();
         entityPhysicsService.tick();
         worldScheduler.tick();
     }
@@ -153,15 +146,20 @@ public class AllayWorld implements World {
 
     @Override
     public void addEntity(Entity entity) {
-        entityService.addEntity(entity);
+        var chunk = entity.getCurrentChunk();
+        if (chunk == null)
+            throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
+        chunk.addEntity(entity);
         entityPhysicsService.addEntity(entity);
         clients.forEach(entity::spawnTo);
     }
 
     @Override
     public void removeEntity(Entity entity) {
-        entityService.removeEntity(entity);
+        var chunk = entity.getCurrentChunk();
+        if (chunk == null) return;
         entityPhysicsService.removeEntity(entity);
+        chunk.removeEntity(entity);
         entity.despawnFromAll();
     }
 

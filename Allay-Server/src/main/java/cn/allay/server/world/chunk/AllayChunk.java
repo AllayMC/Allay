@@ -1,6 +1,7 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.entity.Entity;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
@@ -287,6 +289,11 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
+    public void tick() {
+
+    }
+
+    @Override
     public DimensionInfo getDimensionInfo() {
         return unsafeChunk.getDimensionInfo();
     }
@@ -373,5 +380,21 @@ public class AllayChunk implements Chunk {
     @Override
     public void sendChunkPackets() {
         unsafeChunk.sendChunkPackets();
+    }
+
+    @Override
+    public void addEntity(Entity entity) {
+        unsafeChunk.addEntity(entity);
+    }
+
+    @Nullable
+    @Override
+    public Entity removeEntity(Long uniqueId) {
+        return unsafeChunk.removeEntity(uniqueId);
+    }
+
+    @Override
+    public Map<Long, Entity> getEntities() {
+        return unsafeChunk.getEntities();
     }
 }

@@ -6,6 +6,7 @@ import cn.allay.api.world.generator.WorldGenerator;
 import lombok.Getter;
 
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveAction;
 
 /**
@@ -24,9 +25,9 @@ public class AllayWorldGenerationService implements WorldGenerationService {
         this.worldGenerator = worldGenerator;
     }
 
-    public <T extends LimitedWorldRegion> void submitGenerationTask(T limitedWorldRegion, FinishCallback<T> finishCallback) {
+    public <T extends LimitedWorldRegion> ForkJoinTask<Void> submitGenerationTask(T limitedWorldRegion, FinishCallback<T> finishCallback) {
         WorldGenerationTask<T> worldGenerationTask = new WorldGenerationTask<>(limitedWorldRegion, finishCallback);
-        executorService.submit(worldGenerationTask);
+        return executorService.submit(worldGenerationTask);
     }
 
     public class WorldGenerationTask<T extends LimitedWorldRegion> extends RecursiveAction {

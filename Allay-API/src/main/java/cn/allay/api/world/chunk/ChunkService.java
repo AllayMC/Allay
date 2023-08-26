@@ -7,6 +7,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/7/1
@@ -37,6 +38,13 @@ public interface ChunkService extends ChunkAccessible {
 
     boolean isChunkUnloaded(long hashXZ);
 
+    void addKeepLoadingChunk(int x, int z);
+
+    void removeKeepLoadingChunk(int x, int z);
+
+    @UnmodifiableView
+    Set<Long> getKeepLoadingChunks();
+
     WorldGenerationService getWorldGenerationService();
 
     WorldStorage getWorldStorage();
@@ -47,4 +55,6 @@ public interface ChunkService extends ChunkAccessible {
     void addChunkLoader(ChunkLoader chunkLoader);
 
     void removeChunkLoader(ChunkLoader chunkLoader);
+
+    void forEachLoadedChunks(Consumer<Chunk> consumer);
 }

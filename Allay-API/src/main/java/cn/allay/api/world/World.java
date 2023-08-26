@@ -12,20 +12,23 @@ import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.chunk.ChunkService;
 import cn.allay.api.world.entity.EntityPhysicsService;
-import cn.allay.api.world.entity.EntityService;
 import cn.allay.api.world.generator.WorldGenerator;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 import org.slf4j.Logger;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Describe a world
@@ -68,17 +71,17 @@ public interface World {
 
     ChunkService getChunkService();
 
-    EntityService getEntityService();
-
     EntityPhysicsService getEntityPhysicsService();
 
     void addEntity(Entity entity);
 
     void removeEntity(Entity entity);
 
-    @Nullable
-    default Entity removeEntity(long entityUniqueId) {
-        return getEntityService().removeEntity(entityUniqueId);
+    @Unmodifiable
+    default Map<Long, Entity> getEntities() {
+        var entities = new Long2ObjectOpenHashMap<Entity>();
+        getChunkService().forEachLoadedChunks(chunk -> entities.putAll(chunk.getEntities()));
+        return Collections.unmodifiableMap(entities);
     }
 
     void addClient(Client client);
@@ -276,5 +279,13 @@ public interface World {
                 ),
                 face.opposite()
         );
+    }
+
+    default boolean isYInRange(float y) {
+        return y >= getDimensionInfo().minHeight() && y <= getDimensionInfo().maxHeight();
+    }
+
+    default boolean isInWorld(float x, float y, float z) {
+        return isYInRange(y) && getChunkService().isChunkLoaded((int) x >> 4, (int) z >> 4);
     }
 }

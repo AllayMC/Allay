@@ -6,10 +6,12 @@ import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.math.location.Location3fc;
+import cn.allay.api.world.chunk.Chunk;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -150,5 +152,29 @@ public interface EntityBaseComponent {
 
     default float getPushSpeedReduction() {
         return DEFAULT_PUSH_SPEED_REDUCTION;
+    }
+
+    default boolean isCurrentChunkLoaded() {
+        var loc = getLocation();
+        var cx = (int) loc.x() >> 4;
+        var cz = (int) loc.z() >> 4;
+        return loc.world().getChunkService().isChunkLoaded(cx, cz);
+    }
+
+    default boolean isYInRange() {
+        var loc = getLocation();
+        return loc.world().isYInRange(loc.y());
+    }
+
+    default boolean isInWorld() {
+        return isYInRange() && isCurrentChunkLoaded();
+    }
+
+    @Nullable
+    default Chunk getCurrentChunk() {
+        var loc = getLocation();
+        var cx = (int) loc.x() >> 4;
+        var cz = (int) loc.z() >> 4;
+        return loc.world().getChunkService().getChunk(cx, cz);
     }
 }

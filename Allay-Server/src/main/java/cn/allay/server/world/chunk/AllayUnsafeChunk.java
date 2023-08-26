@@ -2,6 +2,8 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockTypes;
+import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
+import cn.allay.api.entity.Entity;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.ChunkLoader;
@@ -20,9 +22,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Vector;
+import javax.annotation.concurrent.ThreadSafe;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
@@ -38,8 +40,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final DimensionInfo dimensionInfo;
     protected final ChunkSection[] sections;
     protected final HeightMap[] heightMap;
-    protected final Vector<ChunkLoader> chunkLoaders;
+    protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<BedrockPacket> chunkPacketQueue;
+    protected final Map<Long, Entity> entities;
 
     public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
@@ -51,8 +54,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
         this.heightMap = new HeightMap[]{new HeightMap()};
         this.dimensionInfo = dimensionInfo;
-        this.chunkLoaders = new Vector<>();
+        this.chunkLoaders = Collections.newSetFromMap(new ConcurrentHashMap<>());
         this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
+        this.entities = new Long2ObjectNonBlockingMap<>();
     }
 
     @ApiStatus.Internal
@@ -172,5 +176,30 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         while ((packet = chunkPacketQueue.poll()) != null) {
             sendChunkPacket(packet);
         }
+    }
+
+    @Override
+    public void tick() {
+        tickEntities();
+    }
+
+    private void tickEntities() {
+        entities.forEach((uniqueId, entity) -> entity.tick());
+    }
+
+    @Override
+    public void addEntity(Entity entity) {
+        entities.put(entity.getUniqueId(), entity);
+    }
+
+    @Override
+    @Nullable
+    public Entity removeEntity(Long uniqueId) {
+        return entities.remove(uniqueId);
+    }
+
+    @Override
+    public Map<Long, Entity> getEntities() {
+        return Collections.unmodifiableMap(entities);
     }
 }
