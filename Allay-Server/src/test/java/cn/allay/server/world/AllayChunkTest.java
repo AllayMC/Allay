@@ -4,8 +4,8 @@ import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
-import cn.allay.api.world.heightmap.HeightMapType;
 import cn.allay.server.world.chunk.AllayChunk;
+import cn.allay.server.world.chunk.AllayUnsafeChunk;
 import cn.allay.testutils.AllayTestExtension;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -15,12 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Slf4j
 @ExtendWith(AllayTestExtension.class)
 public class AllayChunkTest {
-    final Chunk chunk = new AllayChunk(0, 0, DimensionInfo.of(0));
+    final Chunk chunk = new AllayChunk(AllayUnsafeChunk.builder().emptyChunk(0, 0, DimensionInfo.OVERWORLD));
 
     @Test
     void testUpdateBlockState() {
-        chunk.setBlockState(0, 0, 0, VanillaBlockTypes.WOOD_TYPE.getDefaultState(), false);
-        Assertions.assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, false));
+        chunk.setBlockState(0, 0, 0, VanillaBlockTypes.WOOD_TYPE.getDefaultState(), 0);
+        Assertions.assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 0));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class AllayChunkTest {
 
     @Test
     void testUpdateHeight() {
-        chunk.setHeight(HeightMapType.WORLD_SURFACE, 0, 0, 100);
-        Assertions.assertEquals(100, chunk.getHeight(HeightMapType.WORLD_SURFACE, 0, 0));
+        chunk.setHeight(0, 0, 100);
+        Assertions.assertEquals(100, chunk.getHeight(0, 0));
     }
 }

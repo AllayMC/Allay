@@ -1,16 +1,21 @@
 package cn.allay.api.mapping;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
 
 @Getter
 @Setter
 public class JeBlockState {
-
+    private final static Cache<String, JeBlockState> CACHE = Caffeine.newBuilder()
+            .maximumSize(1000)
+            .build();
     private final String identifier;
     private final Map<String, String> attributes = new Object2ObjectArrayMap<>(1);
     private boolean equalsIgnoreAttributes = false;
@@ -24,7 +29,7 @@ public class JeBlockState {
      *
      * @param str the state str
      */
-    public JeBlockState(String str) {
+    private JeBlockState(String str) {
         var strings = str.replace("[", ",").replace("]", ",").replace(" ", "").split(",");
         identifier = strings[0];
         if (strings.length > 1) {
@@ -34,6 +39,11 @@ public class JeBlockState {
                 attributes.put(tmp.substring(0, index), tmp.substring(index + 1));
             }
         }
+    }
+
+    @Contract("_ -> new")
+    public static JeBlockState of(String str) {
+        return CACHE.get(str, JeBlockState::new);
     }
 
     /**
