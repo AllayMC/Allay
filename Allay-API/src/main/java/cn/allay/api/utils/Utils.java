@@ -1,5 +1,6 @@
 package cn.allay.api.utils;
 
+import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Range;
 
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Range;
  */
 @UtilityClass
 public class Utils {
-    public static byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
+    public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
         int length = bytes1.length;
         for (byte[] bytes : bytes2) {
             length += bytes.length;
@@ -33,7 +34,7 @@ public class Utils {
      * @param value the value
      * @return the bits
      */
-    public static int computeRequiredBits(@Range(from = 0, to = Integer.MAX_VALUE) int value) {
+    public int computeRequiredBits(@Range(from = 0, to = Integer.MAX_VALUE) int value) {
         if (value <= 1)
             return 1;
         int bits = 1;
@@ -41,5 +42,11 @@ public class Utils {
             bits++;
         }
         return bits;
+    }
+
+    public byte[] convertByteBuf2Array(ByteBuf buf) {
+        byte[] payload = new byte[buf.readableBytes()];
+        buf.readBytes(payload);
+        return payload;
     }
 }

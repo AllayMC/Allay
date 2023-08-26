@@ -1,6 +1,6 @@
 package cn.allay.api.world.generator;
 
-import cn.allay.api.world.WorldType;
+import cn.allay.api.world.GeneratorType;
 
 /**
  * Allay Project 2023/7/1
@@ -8,8 +8,11 @@ import cn.allay.api.world.WorldType;
  * @author daoge_cmd
  */
 public interface WorldGenerator {
+    //empty chunk -> 各种 noise-> biome -> calc height map -> generate -> carvers
+    //feature -> structure place-> calc light -> spawn entity -> full
+    void generate(ChunkGenerateContext context);
 
-    void generate(LimitedWorldRegion region);
+    String getGeneratorName();
 
-    WorldType getGeneratorWorldType();
+    GeneratorType getType();
 }

@@ -3,7 +3,7 @@ package cn.allay.server.scheduler;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.scheduler.task.Task;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
-import cn.allay.server.utils.GameLoop;
+import cn.allay.server.GameLoop;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author daoge_cmd
  */
 class SchedulerTest {
-    protected static final Scheduler scheduler = new AllayScheduler(null);
+    protected static final Scheduler scheduler = new AllayScheduler();
 
     protected static final TaskCreator MOCK_TASK_CREATOR = new MockTaskCreator();
 

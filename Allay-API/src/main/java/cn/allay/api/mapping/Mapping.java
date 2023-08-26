@@ -75,7 +75,7 @@ public class Mapping {
                 NbtMap beNBT = NbtMap.builder().putString("name", name)
                         .putCompound("states", NbtMap.fromMap(states))
                         .build();
-                JeBlockState jeBlockState = new JeBlockState(k);
+                JeBlockState jeBlockState = JeBlockState.of(k);
                 int hash = HashUtils.fnv1a_32_nbt(beNBT);
                 BE_2_JE_BLOCKS_MAPPING.put(hash, jeBlockState);
                 JE_2_BE_BLOCKS_MAPPING.put(jeBlockState, hash);
