@@ -14,7 +14,7 @@ import javax.annotation.concurrent.ThreadSafe;
  * @author Cool_Loong
  */
 @ThreadSafe
-public interface Chunk extends BaseChunk {
+public interface Chunk extends UnsafeChunk {
     void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, int layer);
 
     void compareAndSetBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType expectedValue, BiomeType newValue);

@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
-import static cn.allay.api.world.chunk.BaseChunk.index;
+import static cn.allay.api.world.chunk.UnsafeChunk.index;
 
 /**
  * Allay Project 2023/5/30
