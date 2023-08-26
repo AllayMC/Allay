@@ -200,7 +200,13 @@ public class AllayClient extends BaseClient {
         initPlayerEntity();
         sendBasicGameData();
         online = true;
-        server.getDefaultWorld().addClient(this);
+        if (playerEntity.getCurrentChunk() == null) {
+            getWorld().getChunkService().loadChunk(
+                    (int) playerEntity.getLocation().x() >> 4,
+                    (int) playerEntity.getLocation().z() >> 4
+            ).join();
+        }
+        getWorld().addClient(this);
     }
 
     @Override
@@ -280,7 +286,6 @@ public class AllayClient extends BaseClient {
         startGamePacket.setCustomBiomeName("");
         startGamePacket.setEducationProductionId("");
         startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
-        //Hashed runtime ids
         startGamePacket.setBlockNetworkIdsHashed(true);
         sendPacket(startGamePacket);
 

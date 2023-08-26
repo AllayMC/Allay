@@ -16,7 +16,10 @@ import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.location.Location3fc;
+import cn.allay.api.utils.MathUtils;
+import cn.allay.api.world.chunk.Chunk;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -42,6 +45,7 @@ import java.util.function.Function;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComponent, EntityComponentImpl {
 
     @ComponentIdentifier
@@ -99,9 +103,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                 .putFloat("MinX", 0)
                 .putFloat("MinY", 0)
                 .putFloat("MinZ", 0)
-                .putFloat("MaxX", (float) (aabb.maxX() - aabb.minX()))
-                .putFloat("MaxY", (float) (aabb.maxY() - aabb.minY()))
-                .putFloat("MaxZ", (float) (aabb.maxZ() - aabb.minZ()))
+                .putFloat("MaxX", aabb.maxX() - aabb.minX())
+                .putFloat("MaxY", aabb.maxY() - aabb.minY())
+                .putFloat("MaxZ", aabb.maxZ() - aabb.minZ())
                 .putFloat("PivotX", 0)
                 .putFloat("PivotY", 0)
                 .putFloat("PivotZ", 0)
@@ -133,6 +137,22 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     @Impl
     public void setLocation(Location3fc location) {
+        var oldChunkX = (int) this.location.x >> 4;
+        var oldChunkZ = (int) this.location.z >> 4;
+        var newChunkX = (int) location.x() >> 4;
+        var newChunkZ = (int) location.z() >> 4;
+        if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
+            var oldChunk = location.world().getChunkService().getChunk(oldChunkX, oldChunkZ);
+            var newChunk = location.world().getChunkService().getChunk(newChunkX, newChunkZ);
+            if (newChunk != null) newChunk.addEntity(manager.getComponentedObject());
+            else {
+                log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
+                //不允许移动到未加载的区块中。因为entity引用由区块持有，移动到未加载的区块会导致entity丢失
+                return;
+            }
+            if (oldChunk != null) oldChunk.removeEntity(uniqueId);
+            else log.warn("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
+        }
         this.location.set(location);
         this.location.setYaw(location.yaw());
         this.location.setHeadYaw(location.headYaw());
@@ -285,9 +305,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var pk = new MoveEntityDeltaPacket();
         pk.setRuntimeEntityId(getUniqueId());
         pk.getFlags().addAll(moveFlags);
-        pk.setX((float) newLoc.x());
-        pk.setY((float) newLoc.y());
-        pk.setZ((float) newLoc.z());
+        pk.setX(newLoc.x());
+        pk.setY(newLoc.y());
+        pk.setZ(newLoc.z());
         pk.setPitch((float) newLoc.pitch());
         pk.setYaw((float) newLoc.yaw());
         pk.setHeadYaw((float) newLoc.headYaw());
@@ -302,9 +322,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                 .putString("identifier", entityType.getIdentifier().toString())
                 .putCompound("Pos",
                         NbtMap.builder()
-                                .putFloat("x", (float) location.x())
-                                .putFloat("y", (float) location.y())
-                                .putFloat("z", (float) location.z())
+                                .putFloat("x", location.x())
+                                .putFloat("y", location.y())
+                                .putFloat("z", location.z())
                                 .build())
                 .putCompound("Rotation",
                         NbtMap.builder()
@@ -313,9 +333,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                                 .build())
                 .putCompound("Motion",
                         NbtMap.builder()
-                                .putFloat("dx", (float) motion.x())
-                                .putFloat("dy", (float) motion.y())
-                                .putFloat("dz", (float) motion.z())
+                                .putFloat("dx", motion.x())
+                                .putFloat("dy", motion.y())
+                                .putFloat("dz", motion.z())
                                 .build())
                 .putBoolean("OnGround", onGround);
         if (attributeComponent != null) {

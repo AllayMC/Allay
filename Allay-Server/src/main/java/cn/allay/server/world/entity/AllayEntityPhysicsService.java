@@ -2,6 +2,7 @@ package cn.allay.server.world.entity;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.datastruct.aabbtree.AABBTree;
+import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.location.Location3fc;
@@ -17,7 +18,6 @@ import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static cn.allay.api.block.component.impl.attribute.BlockAttributes.DEFAULT_FRICTION;
@@ -39,9 +39,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final float FAT_AABB_MARGIN = 0.0001f;
 
     protected World world;
-    protected Map<Long, Entity> entities = new ConcurrentHashMap<>();
-    protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new ConcurrentHashMap<>();
-    protected Map<Long, List<Entity>> entityCollisionCache = new ConcurrentHashMap<>();
+    protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
+    protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectNonBlockingMap<>();
+    protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectNonBlockingMap<>();
     protected AABBTree<Entity> entityAABBTree = new AABBTree<>();
     protected Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
 
@@ -54,9 +54,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         handleEntityUpdateQueue();
         handleScheduledMoveQueue();
         cacheEntityCollisionResult();
-        var updatedEntities = new ConcurrentHashMap<Long, Entity>();
+        var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide()) return;
+            if (!entity.isInWorld()) return;
             //TODO: 水流作用 方块推出作用 etc...
             if (entity.hasCollision()) computeCollisionMotion(entity);
             entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
@@ -159,8 +160,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         entity.setMotion(new Vector3f(mx, my, mz));
         var updated = !pos.equals(entity.getLocation());
-        updateEntityLocation(entity, pos);
-        return updated;
+        return updated && updateEntityLocation(entity, pos);
     }
 
     protected float applyMotionZ(float stepHeight, Location3f pos, float mz, AABBf aabb, boolean enableStepping) {
@@ -425,8 +425,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var queue = entry.getValue();
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
-                updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc);
-                entityAABBTree.update(scheduledMove.entity);
+                if (updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc))
+                    entityAABBTree.update(scheduledMove.entity);
             }
         }
     }
@@ -450,9 +450,11 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
     }
 
-    protected void updateEntityLocation(Entity entity, Location3fc newLoc) {
+    protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
+        if (!world.isInWorld(newLoc.x(), newLoc.y(), newLoc.z())) return false;
         entity.broadcastMoveToViewers(computeMoveFlags(entity, entity.getLocation(), newLoc), newLoc);
         entity.setLocation(newLoc);
+        return true;
     }
 
     protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Entity entity, Location3fc oldLoc, Location3fc newLoc) {

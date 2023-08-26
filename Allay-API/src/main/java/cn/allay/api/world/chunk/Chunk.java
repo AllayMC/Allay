@@ -2,7 +2,9 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.world.biome.BiomeType;
+import cn.allay.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nullable;
@@ -37,4 +39,8 @@ public interface Chunk extends UnsafeChunk {
                       @Nullable Consumer<LightOperate> lightOperate);
 
     LevelChunkPacket createLevelChunkPacket();
+
+    default void save(WorldStorage storage) {
+        storage.writeChunk(getChunkX(), getChunkZ(), this);
+    }
 }

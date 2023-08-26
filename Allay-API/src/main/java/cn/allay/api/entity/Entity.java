@@ -7,8 +7,11 @@ import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.location.Location3f;
+import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBf;
+
+import javax.annotation.Nullable;
 
 /**
  * Allay Project 2023/5/20
@@ -27,13 +30,13 @@ public interface Entity extends
         return dest;
     }
 
-    static Entity fromNBT(Location3f location, NbtMap nbt) {
+    static Entity fromNBT(World world, NbtMap nbt) {
         var identifier = new Identifier(nbt.getString("identifier"));
         var entityType = EntityTypeRegistry.getRegistry().get(identifier);
         if (entityType == null) {
             throw new IllegalArgumentException("Unknown entity type " + identifier);
         }
         //此处nbt中存储的Pos，Rotation将会覆盖location的值
-        return entityType.createEntity(new EntityInitInfo.Simple<>(location, nbt));
+        return entityType.createEntity(new EntityInitInfo.Simple<>(new Location3f(0, 0, 0, world), nbt));
     }
 }

@@ -1,6 +1,7 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.annotation.SlowOperation;
+import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.DimensionInfo;
@@ -31,6 +32,8 @@ import org.joml.Vector3i;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -41,8 +44,8 @@ import java.util.function.Function;
 @Slf4j
 public class AllayChunkService implements ChunkService {
     public static final int REMOVE_UNNEEDED_CHUNK_CYCLE = 600;
-    private final Map<Long, Chunk> loadedChunks = new ConcurrentHashMap<>();
-    private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
+    private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
+    private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new ConcurrentHashMap<>();
     private final World world;
     @Getter
@@ -50,6 +53,7 @@ public class AllayChunkService implements ChunkService {
     @Getter
     private final WorldStorage worldStorage;
     private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
+    private final Set<Long> keepLoadingChunks = Sets.newConcurrentHashSet();
 
     public AllayChunkService(World world, Function<ChunkService, WorldGenerationService> worldGenerationServiceSupplier, WorldStorage worldStorage) {
         this.world = world;
@@ -62,6 +66,11 @@ public class AllayChunkService implements ChunkService {
         sendChunkPackets();
         tickChunkLoaders();
         removeUnusedChunks();
+        tickChunks();
+    }
+
+    private void tickChunks() {
+        loadedChunks.values().forEach(Chunk::tick);
     }
 
     private void sendChunkPackets() {
@@ -75,7 +84,7 @@ public class AllayChunkService implements ChunkService {
     private void removeUnusedChunks() {
         unusedChunkClearCountDown.entrySet().removeIf(entry -> {
             var chunk = getChunk(entry.getKey());
-            return chunk == null || chunk.getChunkLoaderCount() > 0;
+            return chunk == null || chunk.getChunkLoaderCount() > 0 || keepLoadingChunks.contains(entry.getKey());
         });
         //Update countdown
         unusedChunkClearCountDown.replaceAll((chunkHash, countDown) -> countDown - 1);
@@ -92,7 +101,7 @@ public class AllayChunkService implements ChunkService {
         for (var entry : loadedChunks.entrySet()) {
             Long chunkHash = entry.getKey();
             var loadedChunk = entry.getValue();
-            if (loadedChunk.getChunkLoaderCount() == 0 && !unusedChunkClearCountDown.containsKey(chunkHash)) {
+            if (loadedChunk.getChunkLoaderCount() == 0 && !keepLoadingChunks.contains(chunkHash) && !unusedChunkClearCountDown.containsKey(chunkHash)) {
                 unusedChunkClearCountDown.put(chunkHash, REMOVE_UNNEEDED_CHUNK_CYCLE);
             }
         }
@@ -108,6 +117,10 @@ public class AllayChunkService implements ChunkService {
         if (chunk.getChunkX() != x) chunk.setChunkX(x);
         if (chunk.getChunkZ() != z) chunk.setChunkZ(z);
         loadedChunks.put(chunkHash, chunk);
+        chunk.getEntities().forEach((uniqueId, entity) -> {
+            world.getClients().forEach(entity::spawnTo);
+            world.getEntityPhysicsService().addEntity(entity);
+        });
     }
 
     @Override
@@ -153,6 +166,22 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
+    public void addKeepLoadingChunk(int x, int z) {
+        keepLoadingChunks.add(HashUtils.hashXZ(x, z));
+    }
+
+    @Override
+    public void removeKeepLoadingChunk(int x, int z) {
+        keepLoadingChunks.remove(HashUtils.hashXZ(x, z));
+    }
+
+    @Override
+    @UnmodifiableView
+    public Set<Long> getKeepLoadingChunks() {
+        return Collections.unmodifiableSet(keepLoadingChunks);
+    }
+
+    @Override
     @UnmodifiableView
     public Set<ChunkLoader> getChunkLoaders() {
         return Collections.unmodifiableSet(chunkLoaderManagers.keySet());
@@ -169,6 +198,11 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
+    public void forEachLoadedChunks(Consumer<Chunk> consumer) {
+        loadedChunks.values().forEach(consumer);
+    }
+
+    @Override
     public CompletableFuture<Chunk> getOrLoadChunk(int x, int z) {
         var chunk = getChunk(x, z);
         if (chunk != null) {
@@ -176,6 +210,37 @@ public class AllayChunkService implements ChunkService {
         }
         return loadChunk(x, z);
     }
+
+//    @SlowOperation
+//    @Override
+//    public CompletableFuture<Chunk> loadChunk(int x, int z) {
+//        var hashXZ = HashUtils.hashXZ(x, z);
+//        if (isChunkLoaded(hashXZ)) {
+//            throw new IllegalStateException("Chunk is already loaded");
+//        }
+//        var loadingChunk = loadingChunks.get(hashXZ);
+//        if (loadingChunk != null) {
+//            return loadingChunk;
+//        }
+//        var future = worldStorage.readChunk(x, z, world).thenApplyAsync(loadedChunk -> {
+//            if (loadedChunk != null) {
+//                setChunk(x, z, loadedChunk);
+//                loadingChunks.remove(hashXZ);
+//                return loadedChunk;
+//            } else return null;
+//        }).thenApplyAsync(loadedChunk -> {
+//            if (loadedChunk == null) {
+//                worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(world, null), single -> {
+//                    var chunk = single.getChunk(0, 0);
+//                    setChunk(x, z, chunk);
+//                    loadingChunks.remove(hashXZ);
+//                }).join();
+//            }
+//            return getChunk(x, z);
+//        }, Executors.newVirtualThreadPerTaskExecutor());
+//        loadingChunks.put(hashXZ, future);
+//        return future;
+//    }
 
     @SlowOperation
     @Override
@@ -188,19 +253,30 @@ public class AllayChunkService implements ChunkService {
         if (loadingChunk != null) {
             return loadingChunk;
         }
-        var future = worldStorage.readChunk(x, z, world.getDimensionInfo()).thenApplyAsync(loadedChunk -> {
-            if (loadedChunk != null) {
-                setChunk(x, z, loadedChunk);
-                loadingChunks.remove(hashXZ);
-                return loadedChunk;
-            }
-            worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(world, null), single -> {
-                setChunk(x, z, single.getChunk(0, 0));
-                loadingChunks.remove(hashXZ);
-            });
-            return getChunk(x, z);
-        });
-        loadingChunks.put(hashXZ, future);
+        var future = worldStorage.readChunk(x, z, world)
+                .thenApply(loadedChunk -> {
+                    if (loadedChunk != null) {
+                        setChunk(x, z, loadedChunk);
+                        loadingChunks.remove(hashXZ);
+                        return CompletableFuture.completedFuture(loadedChunk);
+                    } else {
+                        return CompletableFuture.completedFuture(null);
+                    }
+                })
+                .thenCompose(loadedChunkFuture -> loadedChunkFuture.thenCompose(loadedChunk -> {
+                    if (loadedChunk == null) {
+                        CompletableFuture<Chunk> taskFuture = new CompletableFuture<>();
+                        worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(world, null), single -> {
+                            var chunk = single.getChunk(0, 0);
+                            setChunk(x, z, chunk);
+                            loadingChunks.remove(hashXZ);
+                            taskFuture.complete(chunk);
+                        });
+                        return taskFuture;
+                    }
+                    return CompletableFuture.completedFuture((Chunk) loadedChunk);
+                }));
+        if (!future.isDone()) loadingChunks.put(hashXZ, future);
         return future;
     }
 
@@ -214,7 +290,11 @@ public class AllayChunkService implements ChunkService {
             return;
         }
         loadedChunks.remove(chunkHash);
-        worldStorage.writeChunk(chunk.getChunkX(), chunk.getChunkZ(), chunk);
+        chunk.save(worldStorage);
+        chunk.getEntities().forEach((uniqueId, entity) -> {
+            entity.despawnFromAll();
+            world.getEntityPhysicsService().removeEntity(entity);
+        });
     }
 
     @Override
