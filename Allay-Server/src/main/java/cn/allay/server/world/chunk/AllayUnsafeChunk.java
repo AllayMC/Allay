@@ -2,16 +2,19 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockTypes;
+import cn.allay.api.entity.Entity;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.ChunkLoader;
 import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.chunk.UnsafeChunk;
 import cn.allay.api.world.heightmap.HeightMap;
-import cn.allay.api.world.heightmap.HeightMapType;
+import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSets;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -20,50 +23,65 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import java.util.Collections;
 import java.util.Queue;
 import java.util.Set;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
-@Getter
 @NotThreadSafe
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AllayUnsafeChunk implements UnsafeChunk {
-    @Setter
-    protected volatile int chunkX;
-    @Getter
-    @Setter
-    protected volatile int chunkZ;
-    @Getter
-    protected final DimensionInfo dimensionInfo;
+    private static final AtomicIntegerFieldUpdater<AllayUnsafeChunk> STATE_FIELD = AtomicIntegerFieldUpdater.newUpdater(AllayUnsafeChunk.class, "state");
+    protected @Getter
+    volatile int state;
+    protected @Getter
+    final int x;
+    protected @Getter
+    final int z;
+    protected @Getter
+    final DimensionInfo dimensionInfo;
     protected final ChunkSection[] sections;
-    protected final HeightMap[] heightMap;
-    protected final Vector<ChunkLoader> chunkLoaders;
+    protected final HeightMap heightMap;
     protected final Queue<BedrockPacket> chunkPacketQueue;
+    protected final Set<ChunkLoader> chunkLoaders;
+    protected final Set<Entity> entities;
 
-    public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        this(chunkX, chunkZ, dimensionInfo, NbtMap.EMPTY);
+    private AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+        this.x = chunkX;
+        this.z = chunkZ;
+        this.dimensionInfo = dimensionInfo;
+        this.state = UnsafeChunk.STATE_NEW;
+        this.heightMap = new HeightMap();
+        this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
+        this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
+        this.chunkLoaders = ObjectSets.synchronize(new ObjectOpenHashSet<>());
+        this.entities = ObjectSets.synchronize(new ObjectOpenHashSet<>());
     }
 
-    public AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo, NbtMap data) {
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
-        this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
-        this.heightMap = new HeightMap[]{new HeightMap()};
-        this.dimensionInfo = dimensionInfo;
-        this.chunkLoaders = new Vector<>();
-        this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    @Override
+    public void setState(int next) {
+        int curr;
+        do {
+            curr = STATE_FIELD.get(this);
+            Preconditions.checkArgument(next >= 0 && next <= STATE_FINISHED, "invalid state: %s", next);
+            Preconditions.checkState(curr < next, "invalid state transition: %s => %s", curr, next);
+        } while (!STATE_FIELD.compareAndSet(this, curr, next));
     }
 
     @ApiStatus.Internal
     @Nullable
-    public ChunkSection getSection(int y) {
+    public ChunkSection getSection(@Range(from = 0, to = 63) int y) {
         return sections[y];
     }
 
     @ApiStatus.Internal
     @NotNull
-    public ChunkSection createAndGetSection(int y) {
+    public ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y) {
         for (int i = 0; i <= y; i++) {
             if (sections[i] == null) {
                 sections[i] = new ChunkSection(i);
@@ -72,15 +90,15 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return sections[y];
     }
 
-    public int getHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
-        return this.heightMap[type.ordinal()].get(x, z);
+    public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
+        return this.heightMap.get(x, z);
     }
 
-    public void setHeight(HeightMapType type, @Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height) {
-        this.heightMap[type.ordinal()].set(x, z, height);
+    public void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, @Range(from = -512, to = 511) int height) {
+        this.heightMap.set(x, z, (short) height);
     }
 
-    public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, boolean layer) {
+    public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int layer) {
         ChunkSection section = this.getSection(normalY(y) >>> 4);
         BlockState blockState;
         if (section == null) {
@@ -91,11 +109,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return blockState;
     }
 
-    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, boolean layer) {
+    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer) {
         int sectionY = normalY(y) >>> 4;
         ChunkSection section = this.getSection(sectionY);
         if (section == null) {
-            section = this.createAndGetSection(sectionY);
+            section = this.getOrCreateSection(sectionY);
         }
         section.setBlockState(x, y & 0xf, z, layer, blockState);
     }
@@ -105,37 +123,54 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return section == null ? 0 : section.getBlockLight(x, y & 0xf, z);
     }
 
+    @Override
+    public short[] getHeights() {
+        return this.heightMap.getHeights();
+    }
+
     public @Range(from = 0, to = 15) int getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
         ChunkSection section = this.getSection(normalY(y) >>> 4);
         return section == null ? 0 : section.getSkyLight(x, y & 0xf, z);
     }
 
     public void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
-        this.createAndGetSection(normalY(y) >>> 4).setBlockLight(x, y & 0xf, z, (byte) light);
+        this.getOrCreateSection(normalY(y) >>> 4).setBlockLight(x, y & 0xf, z, (byte) light);
     }
 
     public void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
-        this.createAndGetSection(normalY(y) >>> 4).setSkyLight(x, y & 0xf, z, (byte) light);
-    }
-
-    protected int normalY(int y) {
-        return y - getDimensionInfo().minHeight();
+        this.getOrCreateSection(normalY(y) >>> 4).setSkyLight(x, y & 0xf, z, (byte) light);
     }
 
     @Override
     public void setBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
-        this.createAndGetSection(normalY(y) >>> 4).setBiomeType(x, y & 0xf, z, biomeType);
+        this.getOrCreateSection(normalY(y) >>> 4).setBiomeType(x, y & 0xf, z, biomeType);
     }
 
     @Override
     public BiomeType getBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        return this.createAndGetSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
+        return this.getOrCreateSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
+    }
+
+    @Override
+    public void addEntity(@NotNull Entity entity) {
+        this.entities.add(entity);
+    }
+
+    @Override
+    public void removeEntity(@NotNull Entity entity) {
+        this.entities.remove(entity);
+    }
+
+    @Override
+    @UnmodifiableView
+    public Set<Entity> getEntities() {
+        return Collections.unmodifiableSet(this.entities);
     }
 
     @Override
     @UnmodifiableView
     public Set<ChunkLoader> getChunkLoaders() {
-        return chunkLoaders.stream().collect(Collectors.toUnmodifiableSet());
+        return Collections.unmodifiableSet(chunkLoaders);
     }
 
     @Override
@@ -171,6 +206,68 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         BedrockPacket packet;
         while ((packet = chunkPacketQueue.poll()) != null) {
             sendChunkPacket(packet);
+        }
+    }
+
+    protected int normalY(int y) {
+        return y - getDimensionInfo().minHeight();
+    }
+
+    @Getter
+    public static class Builder {
+        int state;
+        int chunkZ;
+        int chunkX;
+        DimensionInfo dimensionInfo;
+        ChunkSection[] sections;
+        HeightMap heightMap;
+        Set<Entity> entities;
+
+        public Builder chunkX(int chunkX) {
+            this.chunkX = chunkX;
+            return this;
+        }
+
+        public Builder chunkZ(int chunkZ) {
+            this.chunkZ = chunkZ;
+            return this;
+        }
+
+        public Builder state(int state) {
+            this.state = state;
+            return this;
+        }
+
+        public Builder dimensionInfo(DimensionInfo dimensionInfo) {
+            this.dimensionInfo = dimensionInfo;
+            return this;
+        }
+
+        public Builder sections(ChunkSection[] sections) {
+            this.sections = sections;
+            return this;
+        }
+
+        public Builder heightMap(HeightMap heightMap) {
+            this.heightMap = heightMap;
+            return this;
+        }
+
+        public Builder entities(Set<Entity> entities) {
+            this.entities = entities;
+            return this;
+        }
+
+        public AllayUnsafeChunk build() {
+            return new AllayUnsafeChunk(state, chunkX, chunkZ, dimensionInfo, sections, heightMap,
+                    new ConcurrentLinkedQueue<>(),
+                    ObjectSets.synchronize(new ObjectOpenHashSet<>()),
+                    entities
+            );
+        }
+
+        public AllayUnsafeChunk emptyChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+            return new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo);
         }
     }
 }

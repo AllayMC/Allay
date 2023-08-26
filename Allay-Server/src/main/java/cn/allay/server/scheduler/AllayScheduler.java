@@ -2,11 +2,10 @@ package cn.allay.server.scheduler;
 
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.scheduler.task.Task;
+import cn.allay.api.server.Server;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,8 +27,12 @@ public class AllayScheduler implements Scheduler {
     protected long tickCounter;
     protected AtomicInteger taskCount = new AtomicInteger(0);
 
-    public AllayScheduler(@Nullable ExecutorService asyncTaskExecutor) {
-        this.asyncTaskExecutor = asyncTaskExecutor != null ? asyncTaskExecutor : Executors.newVirtualThreadPerTaskExecutor();
+    public AllayScheduler() {
+        this.asyncTaskExecutor = Server.getInstance().getVirtualThreadPool();
+    }
+
+    public AllayScheduler(ExecutorService asyncTaskExecutor) {
+        this.asyncTaskExecutor = asyncTaskExecutor;
     }
 
     @Override

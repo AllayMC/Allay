@@ -1,5 +1,6 @@
 package cn.allay.api.world.bitarray;
 
+import com.google.common.base.Objects;
 import org.cloudburstmc.math.GenericMath;
 
 import java.util.Arrays;
@@ -39,5 +40,17 @@ public record Pow2BitArray(BitArrayVersion version, int size, int[] words) imple
     @Override
     public BitArray copy() {
         return new Pow2BitArray(this.version, this.size, Arrays.copyOf(this.words, this.words.length));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pow2BitArray that)) return false;
+        return size == that.size && version == that.version && Arrays.equals(words, that.words);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(version, size, Arrays.hashCode(words));
     }
 }

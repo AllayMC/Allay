@@ -22,6 +22,7 @@ dependencies {
     implementation(libs.bundles.logging)
     implementation(libs.bytebuddy)
     implementation(libs.libdeflate)
+    implementation(libs.rocksdb)
     testImplementation(libs.bytebuddy)
 }
 

@@ -1,5 +1,6 @@
 package cn.allay.server.utils;
 
+import cn.allay.server.GameLoop;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;

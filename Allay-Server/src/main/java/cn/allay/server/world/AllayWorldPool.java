@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author daoge_cmd
  */
 public class AllayWorldPool implements WorldPool {
-
     private final Map<String, World> worlds = new ConcurrentHashMap<>();
     private World defaultWorld;
 
@@ -46,4 +45,5 @@ public class AllayWorldPool implements WorldPool {
     public World getDefaultWorld() {
         return defaultWorld;
     }
+
 }
