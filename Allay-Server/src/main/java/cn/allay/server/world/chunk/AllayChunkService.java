@@ -31,6 +31,7 @@ import org.joml.Vector3i;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/7/1
@@ -199,37 +200,6 @@ public class AllayChunkService implements ChunkService {
         }
         return loadChunk(x, z);
     }
-
-//    @SlowOperation
-//    @Override
-//    public CompletableFuture<Chunk> loadChunk(int x, int z) {
-//        var hashXZ = HashUtils.hashXZ(x, z);
-//        if (isChunkLoaded(hashXZ)) {
-//            throw new IllegalStateException("Chunk is already loaded");
-//        }
-//        var loadingChunk = loadingChunks.get(hashXZ);
-//        if (loadingChunk != null) {
-//            return loadingChunk;
-//        }
-//        var future = worldStorage.readChunk(x, z, world).thenApplyAsync(loadedChunk -> {
-//            if (loadedChunk != null) {
-//                setChunk(x, z, loadedChunk);
-//                loadingChunks.remove(hashXZ);
-//                return loadedChunk;
-//            } else return null;
-//        }).thenApplyAsync(loadedChunk -> {
-//            if (loadedChunk == null) {
-//                worldGenerationService.submitGenerationTask(new SingleChunkLimitedWorldRegion(world, null), single -> {
-//                    var chunk = single.getChunk(0, 0);
-//                    setChunk(x, z, chunk);
-//                    loadingChunks.remove(hashXZ);
-//                }).join();
-//            }
-//            return getChunk(x, z);
-//        }, Executors.newVirtualThreadPerTaskExecutor());
-//        loadingChunks.put(hashXZ, future);
-//        return future;
-//    }
 
     @SlowOperation
     @Override

@@ -44,8 +44,6 @@ public interface ChunkService extends ChunkAccessible {
     @UnmodifiableView
     Set<Long> getKeepLoadingChunks();
 
-    WorldGenerationService getWorldGenerationService();
-
     WorldStorage getWorldStorage();
 
     @UnmodifiableView

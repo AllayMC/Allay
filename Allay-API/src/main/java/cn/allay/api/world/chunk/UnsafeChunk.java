@@ -13,6 +13,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,10 +41,10 @@ public interface UnsafeChunk {
 
     void addEntity(@NotNull Entity entity);
 
-    void removeEntity(@NotNull Entity entity);
+    Entity removeEntity(Long uniqueId);
 
     @UnmodifiableView
-    Set<Entity> getEntities();
+    Map<Long, Entity> getEntities();
 
     @ApiStatus.Internal
     @Nullable

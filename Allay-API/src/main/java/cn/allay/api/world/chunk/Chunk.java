@@ -32,6 +32,6 @@ public interface Chunk extends UnsafeChunk {
     LevelChunkPacket createLevelChunkPacket();
 
     default void save(WorldStorage storage) {
-        storage.writeChunk(getChunkX(), getChunkZ(), this);
+        storage.writeChunk(this);
     }
 }

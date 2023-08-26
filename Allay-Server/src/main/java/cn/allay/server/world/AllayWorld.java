@@ -1,7 +1,6 @@
 package cn.allay.server.world;
 
 import cn.allay.api.client.Client;
-import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.position.Position3i;
 import cn.allay.api.math.position.Position3ic;
@@ -19,15 +18,15 @@ import cn.allay.server.GameLoop;
 import cn.allay.server.scheduler.AllayScheduler;
 import cn.allay.server.world.chunk.AllayChunkService;
 import cn.allay.server.world.entity.AllayEntityPhysicsService;
-import cn.allay.server.world.generator.AllayWorldGenerationService;
-import cn.allay.server.world.entity.AllayEntityService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -64,7 +63,6 @@ public class AllayWorld implements World {
         this.worldGenerator = worldGenerator;
         this.server = server;
         this.chunkService = new AllayChunkService(this, worldStorage);
-        this.entityService = new AllayEntityService(this);
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.worldScheduler = new AllayScheduler();
         this.worldMainThread = Thread.ofPlatform()
@@ -154,7 +152,7 @@ public class AllayWorld implements World {
         var chunk = entity.getCurrentChunk();
         if (chunk == null) return;
         entityPhysicsService.removeEntity(entity);
-        chunk.removeEntity(entity);
+        chunk.removeEntity(entity.getUniqueId());
         entity.despawnFromAll();
     }
 
