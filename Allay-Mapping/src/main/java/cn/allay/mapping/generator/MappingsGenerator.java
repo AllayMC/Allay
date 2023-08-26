@@ -1,5 +1,9 @@
 package cn.allay.mapping.generator;
 
+import cn.allay.api.block.component.impl.attribute.BlockAttributes;
+import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.api.data.VanillaBlockId;
+import cn.allay.api.identifier.Identifier;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -51,6 +55,10 @@ public class MappingsGenerator {
             Block value = entry.getValue();
             String identifier = BuiltInRegistries.BLOCK.getKey(value).toString();
             ImmutableList<BlockState> allStates = value.getStateDefinition().getPossibleStates();
+            Map<Integer, BlockAttributes> integerBlockAttributesMap = VanillaBlockAttributeRegistry.getRegistry().get(VanillaBlockId.fromIdentifier(new Identifier(identifier)));
+            if (integerBlockAttributesMap == null) {
+                System.out.println(identifier);
+            }
         }
     }
 }

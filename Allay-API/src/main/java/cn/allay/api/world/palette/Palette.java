@@ -3,24 +3,25 @@ package cn.allay.api.world.palette;
 import cn.allay.api.world.bitarray.BitArray;
 import cn.allay.api.world.bitarray.BitArrayVersion;
 import cn.allay.api.world.chunk.Chunk;
+import com.google.common.base.Objects;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import lombok.EqualsAndHashCode;
-import org.cloudburstmc.nbt.*;
+import org.cloudburstmc.nbt.NBTInputStream;
+import org.cloudburstmc.nbt.NBTOutputStream;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.common.util.VarInts;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * Allay Project 2023/4/14
  *
  * @author JukeboxMC | daoge_cmd
  */
-@EqualsAndHashCode
 public final class Palette<V> {
     public static final int COPY_LAST_FLAG_HEADER = (0x7F << 1) | 1;// 11111111b (1byte)
     private final List<V> palette;
@@ -51,12 +52,10 @@ public final class Palette<V> {
      * @param byteBuf    the byte buf
      * @param serializer the serializer
      */
-    //Anvil Level 公用
     public void writeToNetwork(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer) {
         writeWords(byteBuf, serializer);
     }
 
-    //Anvil Level 公用
     public void writeToNetwork(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
         if (writeLast(byteBuf, last)) return;
         if (writeEmpty(byteBuf, serializer)) return;
@@ -64,7 +63,6 @@ public final class Palette<V> {
         writeWords(byteBuf, serializer);
     }
 
-    //Anvil Level 公用
     public void readFromNetwork(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer) {
         readWords(byteBuf, readBitArrayVersion(byteBuf));
 
@@ -72,14 +70,11 @@ public final class Palette<V> {
         for (int i = 0; i < size; i++) this.palette.add(deserializer.deserialize(VarInts.readInt(byteBuf)));
     }
 
-    //Anvil Level 公用
+    //LevelDB格式存储使用这个
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
         byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), false));
-
         for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
-
         byteBuf.writeIntLE(this.palette.size());
-
         try (final ByteBufOutputStream bufOutputStream = new ByteBufOutputStream(byteBuf);
              final NBTOutputStream outputStream = NbtUtils.createWriterLE(bufOutputStream)) {
             for (V value : this.palette) outputStream.writeTag(serializer.serialize(value));
@@ -88,7 +83,7 @@ public final class Palette<V> {
         }
     }
 
-    //仅LevelDB使用
+    //Allay格式存储使用这个
     public void writeToStorageRuntime(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
         if (writeLast(byteBuf, last)) return;
         if (writeEmpty(byteBuf, serializer)) return;
@@ -99,7 +94,6 @@ public final class Palette<V> {
         for (V value : this.palette) byteBuf.writeIntLE(serializer.serialize(value));
     }
 
-    //仅LevelDB使用
     public void readFromStoragePersistent(ByteBuf byteBuf, PersistentDataDeserializer<V> deserializer) {
         readWords(byteBuf, readBitArrayVersion(byteBuf));
 
@@ -113,7 +107,6 @@ public final class Palette<V> {
         }
     }
 
-    //仅LevelDB使用
     public void readFromStorageRuntime(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer, Palette<V> last) {
         final short header = byteBuf.readUnsignedByte();
 
@@ -137,20 +130,6 @@ public final class Palette<V> {
         final int paletteSize = byteBuf.readIntLE();
         for (int i = 0; i < paletteSize; i++) this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
     }
-
-    //仅Anvil使用
-    @SuppressWarnings("unchecked")
-    public <R> NbtMap toNBT(Function<V, R> converter) {
-        List<R> list = this.palette.stream().map(converter).toList();
-        if (this.isEmpty()) {
-            return NbtMap.builder().putList("palette", (NbtType<R>) NbtType.byClass(list.get(0).getClass()), list).build();
-        } else {
-            NbtMapBuilder builder = NbtMap.builder().putIntArray("data", this.bitArray.words());
-            builder.putList("palette", (NbtType<R>) NbtType.byClass(list.get(0).getClass()), list);
-            return builder.build();
-        }
-    }
-
 
     public int paletteIndexFor(V value) {
         int index = this.palette.indexOf(value);
@@ -247,5 +226,17 @@ public final class Palette<V> {
 
     private static boolean isPersistent(short header) {
         return (header & 1) == 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Palette<?> palette1)) return false;
+        return Objects.equal(palette, palette1.palette) && Objects.equal(bitArray, palette1.bitArray);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(palette, bitArray);
     }
 }

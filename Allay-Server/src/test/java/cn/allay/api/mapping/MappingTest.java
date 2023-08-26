@@ -1,8 +1,6 @@
 package cn.allay.api.mapping;
 
 import cn.allay.api.data.VanillaBlockTypes;
-import cn.allay.api.mapping.JeBlockState;
-import cn.allay.api.mapping.Mapping;
 import cn.allay.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +25,7 @@ public class MappingTest {
 
     @Test
     void testGetBeBlockStateHash1() {
-        JeBlockState jeBlockState = new JeBlockState("minecraft:acacia_wood[axis=x]");
+        JeBlockState jeBlockState = JeBlockState.of("minecraft:acacia_wood[axis=x]");
         Integer value = Mapping.getBeBlockStateHash(jeBlockState);
         assert value != null;
         Assertions.assertEquals(-1715809305, value);

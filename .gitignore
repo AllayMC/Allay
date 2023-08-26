@@ -12,4 +12,3 @@ buildSrc/**
 /Data/bedrock-samples/version.json
 /Data/git.properties
 /Allay-Server/cache/
-/Allay-Server/cache/*

@@ -1,18 +1,16 @@
 package cn.allay.server;
 
-import cn.allay.api.network.NetworkServer;
 import cn.allay.api.client.Client;
 import cn.allay.api.client.info.DeviceInfo;
 import cn.allay.api.client.skin.Skin;
+import cn.allay.api.network.NetworkServer;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.api.world.WorldData;
 import cn.allay.api.world.WorldPool;
-import cn.allay.api.world.WorldType;
-import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.client.AllayClient;
+import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.terminal.AllayTerminalConsole;
-import cn.allay.server.utils.GameLoop;
 import cn.allay.server.world.AllayWorld;
 import cn.allay.server.world.AllayWorldPool;
 import cn.allay.server.world.generator.flat.FlatWorldGenerator;
@@ -36,20 +34,31 @@ import org.joml.Vector3i;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 @Slf4j
 public final class AllayServer implements Server {
-
     private final boolean DEBUG = false;
-
     private final Map<String, Client> clients = new ConcurrentHashMap<>();
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
+    //执行CPU密集型任务的线程池
+    @Getter
+    private final ForkJoinPool computeThreadPool = new ForkJoinPool(
+            Runtime.getRuntime().availableProcessors() + 1,
+            pool -> {
+                ForkJoinWorkerThread worker = ForkJoinPool.defaultForkJoinWorkerThreadFactory.newThread(pool);
+                worker.setName("computation-thread-" + worker.getPoolIndex());
+                return worker;
+            },
+            null, true);
+    //执行IO密集型任务的线程池
+    @Getter
+    private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
     @Getter
     private ServerSettings serverSettings;
     @Getter

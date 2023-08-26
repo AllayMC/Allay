@@ -8,16 +8,12 @@ import cn.allay.api.world.World;
 import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.storage.WorldStorage;
-import cn.allay.api.world.storage.WorldStorageException;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import org.cloudburstmc.nbt.NbtMap;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 /**
  * Allay Project 2023/7/1
@@ -28,18 +24,17 @@ import java.util.stream.Collectors;
 public class AllayNonPersistentWorldStorage implements WorldStorage {
 
     private final Map<Long, Chunk> chunks = new Long2ObjectOpenHashMap<>();
-    private final Map<Long, Set<NbtMap>> entities = new Long2ObjectOpenHashMap<>();
     private WorldData worldData = WorldData.DEFAULT;
 
     @Override
-    public CompletableFuture<Chunk> readChunk(int x, int z, World world) {
+    public CompletableFuture<Chunk> readChunk(int x, int z) {
         var chunk = chunks.get(HashUtils.hashXZ(x, z));
         if (chunk != null) readEntities(x, z).stream().map(nbt -> Entity.fromNBT(world, nbt)).forEach(chunk::addEntity);
         return CompletableFuture.completedFuture(chunk);
     }
 
     @Override
-    public CompletableFuture<Void> writeChunk(int x, int z, Chunk chunk) {
+    public CompletableFuture<Void> writeChunk(Chunk chunk) {
         chunks.put(HashUtils.hashXZ(x, z), chunk);
         writeEntities(x, z, chunk.getEntities().values());
         return CompletableFuture.completedFuture(null);
@@ -66,6 +61,11 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
     @Override
     public WorldData readWorldData() {
         return this.worldData;
+    }
+
+    @Override
+    public WorldData getWorldDataCache() {
+        return worldData;
     }
 
     @Override

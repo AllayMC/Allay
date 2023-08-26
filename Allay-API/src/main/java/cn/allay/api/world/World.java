@@ -55,8 +55,6 @@ public interface World {
 
     DimensionInfo getDimensionInfo();
 
-    WorldType getWorldType();
-
     int getTickingRadius();
 
     int getViewDistance();
@@ -92,18 +90,18 @@ public interface World {
     Collection<Client> getClients();
 
     default void setBlockState(int x, int y, int z, BlockState blockState) {
-        setBlockState(x, y, z, blockState, false);
+        setBlockState(x, y, z, blockState, 0);
     }
 
-    default void setBlockState(int x, int y, int z, BlockState blockState, boolean layer) {
+    default void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
         setBlockState(x, y, z, blockState, layer, true);
     }
 
-    default void setBlockState(int x, int y, int z, BlockState blockState, boolean layer, boolean send) {
+    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send) {
         setBlockState(x, y, z, blockState, layer, send, true);
     }
 
-    default void setBlockState(int x, int y, int z, BlockState blockState, boolean layer, boolean send, boolean update) {
+    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update) {
         var chunk = getChunkService().getChunk(x >> 4, z >> 4);
         if (chunk == null) return;
 
@@ -125,14 +123,14 @@ public interface World {
 
     @Nullable
     default BlockState getBlockState(int x, int y, int z) {
-        return getBlockState(x, y, z, false);
+        return getBlockState(x, y, z, 0);
     }
 
     default BlockState getBlockStateNonNull(int x, int y, int z) {
-        return getBlockStateNonNull(x, y, z, false);
+        return getBlockStateNonNull(x, y, z, 0);
     }
 
-    default BlockState getBlockStateNonNull(int x, int y, int z, boolean layer) {
+    default BlockState getBlockStateNonNull(int x, int y, int z, int layer) {
         var blockState = getBlockState(x, y, z, layer);
         if (blockState == null)
             blockState = VanillaBlockTypes.AIR_TYPE.getDefaultState();
@@ -140,14 +138,14 @@ public interface World {
     }
 
     @Nullable
-    default BlockState getBlockState(int x, int y, int z, boolean layer) {
+    default BlockState getBlockState(int x, int y, int z, int layer) {
         var chunk = getChunkService().getChunk(x >> 4, z >> 4);
         if (chunk == null)
             return null;
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
-    default BlockState[][][] getBlockStates(int x, int y, int z, @Range(from = 1, to = Integer.MAX_VALUE) int sizeX, @Range(from = 1, to = Integer.MAX_VALUE) int sizeY, @Range(from = 1, to = Integer.MAX_VALUE) int sizeZ, boolean layer) {
+    default BlockState[][][] getBlockStates(int x, int y, int z, @Range(from = 1, to = Integer.MAX_VALUE) int sizeX, @Range(from = 1, to = Integer.MAX_VALUE) int sizeY, @Range(from = 1, to = Integer.MAX_VALUE) int sizeZ, int layer) {
         BlockState[][][] blockStates = new BlockState[sizeX][sizeY][sizeZ];
 
         int startX = x >> 4;
@@ -166,41 +164,38 @@ public interface World {
 
                 var chunk = getChunkService().getChunk(chunkX, chunkZ);
                 if (chunk != null) {
-                    chunk.batchProcess(
-                            sectionOperate -> {
-                                for (int localX = localStartX; localX < localEndX; localX++) {
-                                    for (int globalY = y; globalY < y + sizeY; globalY++) {
-                                        for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
-                                            int globalX = cX + localX;
-                                            int globalZ = cZ + localZ;
-                                            blockStates[globalX - x][globalY - y][globalZ - z] =
-                                                    sectionOperate.getBlockState(localX, globalY, localZ, layer);
-                                        }
+                    chunk.batchProcess((l1, l2, l3, c) -> {
+                        long stamp = l1.writeLock();
+                        try {
+                            for (int localX = localStartX; localX < localEndX; localX++) {
+                                for (int globalY = y; globalY < y + sizeY; globalY++) {
+                                    for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
+                                        int globalX = cX + localX;
+                                        int globalZ = cZ + localZ;
+                                        blockStates[globalX - x][globalY - y][globalZ - z] = c.getBlockState(localX, globalY, localZ, layer);
                                     }
                                 }
-                            },
-                            null,
-                            null
-                    );
+                            }
+                        } finally {
+                            l1.unlockWrite(stamp);
+                        }
+                    });
                 }
             }
         }
-
         return blockStates;
     }
 
     @Nullable
     default BlockState[][][] getCollidingBlocks(AABBfc aabb) {
-        return getCollidingBlocks(aabb, false);
+        return getCollidingBlocks(aabb, 0);
     }
 
-    @Nullable
-    default BlockState[][][] getCollidingBlocks(AABBfc aabb, boolean layer) {
+    default BlockState[][][] getCollidingBlocks(AABBfc aabb, int layer) {
         return getCollidingBlocks(aabb, layer, false);
     }
 
-    @Nullable
-    default BlockState[][][] getCollidingBlocks(AABBfc aabb, boolean layer, boolean ignoreCollision) {
+    default BlockState[][][] getCollidingBlocks(AABBfc aabb, int layer, boolean ignoreCollision) {
         int maxX = (int) Math.ceil(aabb.maxX());
         int maxY = (int) Math.ceil(aabb.maxY());
         int maxZ = (int) Math.ceil(aabb.maxZ());
@@ -265,17 +260,17 @@ public interface World {
 
     default void updateAtFace(int x, int y, int z, BlockFace face) {
         var offsetPos = face.offsetPos(x, y, z);
-        var blockState = getBlockState(x, y, z, false);
+        var blockState = getBlockState(x, y, z, 0);
         blockState.getBehavior().onNeighborChanged(
                 new BlockStateWithPos(
                         blockState,
                         new Position3i(offsetPos.x(), offsetPos.y(), offsetPos.z(), this),
-                        false
+                        0
                 ),
                 new BlockStateWithPos(
                         blockState,
                         new Position3i(x, y, z, this),
-                        false
+                        0
                 ),
                 face.opposite()
         );

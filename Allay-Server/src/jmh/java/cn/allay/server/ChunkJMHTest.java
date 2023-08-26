@@ -5,6 +5,7 @@ import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.server.world.chunk.AllayChunk;
+import cn.allay.server.world.chunk.AllayUnsafeChunk;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
@@ -22,7 +23,7 @@ public class ChunkJMHTest {
     @Setup
     public void init() throws MissingImplementationException {
         Allay.initAllayAPI();
-        chunk = new AllayChunk(0, 0, DimensionInfo.OVERWORLD);
+        chunk = new AllayChunk(AllayUnsafeChunk.builder().emptyChunk(0, 0, DimensionInfo.OVERWORLD));
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {
@@ -32,7 +33,7 @@ public class ChunkJMHTest {
         }
     }
 
-    /*@Benchmark
+    @Benchmark
     public void test1() {
         chunk.setBlockState(0, 0, 0, VanillaBlockTypes.STONE_TYPE.getDefaultState());
     }
@@ -40,7 +41,7 @@ public class ChunkJMHTest {
     @Benchmark
     public void test2(Blackhole blackhole) {
         blackhole.consume(chunk.getBlockState(0, 0, 0));
-    }*/
+    }
 
     @Threads(Threads.MAX)
     @Benchmark

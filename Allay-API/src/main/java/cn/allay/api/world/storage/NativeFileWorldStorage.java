@@ -8,5 +8,6 @@ import java.nio.file.Path;
  * @author daoge_cmd
  */
 public interface NativeFileWorldStorage extends WorldStorage {
+
     Path getWorldFolderPath();
 }

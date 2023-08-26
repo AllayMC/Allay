@@ -7,12 +7,12 @@ import io.netty.buffer.ByteBuf;
  *
  * @author JukeboxMC | daoge_cmd
  */
-public final class SingletonBitArray implements BitArray {
-
+public record SingletonBitArray() implements BitArray {
     private static final int[] EMPTY_ARRAY = new int[0];
 
     @Override
     public void set(int index, int value) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -22,6 +22,7 @@ public final class SingletonBitArray implements BitArray {
 
     @Override
     public void writeSizeToNetwork(ByteBuf buffer, int size) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

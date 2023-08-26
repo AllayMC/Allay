@@ -1,12 +1,9 @@
 package cn.allay.server.world.generator.flat;
 
 import cn.allay.api.data.VanillaBlockTypes;
-import cn.allay.api.world.DimensionInfo;
-import cn.allay.api.world.WorldType;
-import cn.allay.api.world.chunk.Chunk;
-import cn.allay.api.world.generator.LimitedWorldRegion;
+import cn.allay.api.world.GeneratorType;
+import cn.allay.api.world.generator.ChunkGenerateContext;
 import cn.allay.api.world.generator.WorldGenerator;
-import cn.allay.server.world.chunk.AllayChunk;
 
 /**
  * Allay Project 2023/7/8
@@ -15,18 +12,10 @@ import cn.allay.server.world.chunk.AllayChunk;
  */
 public class FlatWorldGenerator implements WorldGenerator {
     @Override
-    public void generate(LimitedWorldRegion region) {
-        for (int cx = region.minChunkX(); cx <= region.maxChunkX(); cx++) {
-            for (int cz = region.minChunkZ(); cz <= region.maxChunkZ(); cz++) {
-                region.setChunk(cx, cz, createFlatChunk(cx, cz));
-            }
-        }
-    }
-
-    private Chunk createFlatChunk(int cx, int cz) {
+    public void generate(ChunkGenerateContext context) {
         var bedrock = VanillaBlockTypes.BEDROCK_TYPE.getDefaultState();
         var grass = VanillaBlockTypes.GRASS_TYPE.getDefaultState();
-        var flatChunk = new AllayChunk(cx, cz, DimensionInfo.OVERWORLD);
+        var flatChunk = context.getChunk();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 0; y < 5; y++) {
@@ -36,11 +25,15 @@ public class FlatWorldGenerator implements WorldGenerator {
                 }
             }
         }
-        return flatChunk;
     }
 
     @Override
-    public WorldType getGeneratorWorldType() {
-        return WorldType.FLAT;
+    public String getGeneratorName() {
+        return "FLAT";
+    }
+
+    @Override
+    public GeneratorType getType() {
+        return GeneratorType.FLAT;
     }
 }

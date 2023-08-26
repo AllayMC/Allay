@@ -4,19 +4,44 @@ log4j = "2.20.0"
 jline = "3.23.0"
 
 [libraries]
+# NBT
 nbt = { group = "com.github.AllayMC", name = "NBT", version = "3.0.7" }
+
+# MC network protocol
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta1-SNAPSHOT" }
+
+# Collections
+fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.12" }
 guava = { group = "com.google.guava", name = "guava", version = "31.1-jre" }
+
+# Serialization
 gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.0" }
+
+# Support Annotation
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.26" }
-bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "24.0.1" }
+
+# zlib
 libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0.0.2-PNX" }
+
+# concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "3.4.4" }
+
+# IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.13.0" }
+
+# bytecode
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.0" }
+
+# MC Region Loader
 hephaistos = { group = "io.github.jglrxavpok.hephaistos", name = "common", version = "2.6.0" }
-picocli = { group = "info.picocli", name = "picocli", version = "4.7.4" }
+
+# Cache
+caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
+
+# K-V DataBase
+rocksdb = { group = "org.rocksdb", name = "rocksdbjni", version = "8.3.2" }
 
 # Logging dependencies
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.7" }
@@ -24,6 +49,8 @@ log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-i
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
 
 # CLI dependencies
+progressbar = { group = "me.tongfei", name = "progressbar", version = "0.10.0" }
+picocli = { group = "info.picocli", name = "picocli", version = "4.7.4" }
 jline-terminal = { group = "org.jline", name = "jline-terminal", version.ref = "jline" }
 jline-terminal-jna = { group = "org.jline", name = "jline-terminal-jna", version.ref = "jline" }
 jline-reader = { group = "org.jline", name = "jline-reader", version.ref = "jline" }
@@ -38,16 +65,10 @@ mockito-junit = { group = "org.mockito", name = "mockito-junit-jupiter", version
 # Code generating
 javapoet = { group = "com.squareup", name = "javapoet", version = "1.13.0" }
 
-# FastUtil
-fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.12" }
-
 # Reflections
 reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
 
-# Progress Bar
-progressbar = { group = "me.tongfei", name = "progressbar", version = "0.9.4" }
-
-#3D math computing
+#Math computing
 joml = { group = "org.joml", name = "joml", version = "1.10.5" }
 joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.10.0" }
 
