@@ -58,6 +58,7 @@ public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
             File logFolder = path.resolve("db/log").toFile();
             if (!logFolder.exists()) logFolder.mkdirs();
             db = RocksDB.open(options, dbFolder.getAbsolutePath());
+            options.close();
         } catch (RocksDBException e) {
             throw new WorldStorageException(e);
         }
@@ -110,7 +111,9 @@ public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
                             }
                         }
                 );
-                this.db.write(new WriteOptions(), writeBatch);
+                try (WriteOptions writeOptions = new WriteOptions()) {
+                    this.db.write(writeOptions, writeBatch);
+                }
                 return null;
             } catch (RocksDBException e) {
                 throw new RuntimeException(e);
