@@ -13,3 +13,5 @@ buildSrc/**
 /Data/git.properties
 /Allay-Server/cache/
 /output/
+/Allay-Server/src/test/resources/allayworld/db/
+/output/

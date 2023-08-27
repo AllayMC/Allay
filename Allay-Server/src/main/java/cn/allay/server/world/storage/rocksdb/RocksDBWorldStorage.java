@@ -42,7 +42,12 @@ public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
     private final RocksDB db;
 
     public RocksDBWorldStorage(Path path) throws WorldStorageException {
-        this(path, new Options().setCreateIfMissing(true));
+        this(path, new Options()
+                .setKeepLogFileNum(10)
+                .setRecycleLogFileNum(10)
+                .setDbLogDir(path.resolve("db/log").toString())
+                .setCreateIfMissing(true)
+        );
     }
 
     public RocksDBWorldStorage(Path path, Options options) throws WorldStorageException {
@@ -50,6 +55,8 @@ public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
             this.path = path;
             File dbFolder = path.resolve("db").toFile();
             if (!dbFolder.exists()) dbFolder.mkdirs();
+            File logFolder = path.resolve("db/log").toFile();
+            if (!logFolder.exists()) logFolder.mkdirs();
             db = RocksDB.open(options, dbFolder.getAbsolutePath());
         } catch (RocksDBException e) {
             throw new WorldStorageException(e);
