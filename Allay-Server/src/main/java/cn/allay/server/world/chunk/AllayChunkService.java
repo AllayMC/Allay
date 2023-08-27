@@ -212,18 +212,22 @@ public class AllayChunkService implements ChunkService {
         if (loadingChunk != null) {
             return loadingChunk;
         }
-        var future = worldStorage.readChunk(x, z).thenApplyAsync(loadedChunk -> {
+        var future = worldStorage.readChunk(x, z);
+        loadingChunks.put(hashXZ, future);
+        future.thenApplyAsync(loadedChunk -> {
             if (loadedChunk != null) {
                 setChunk(x, z, loadedChunk);
                 loadingChunks.remove(hashXZ);
                 return loadedChunk;
             }
-            AllayUnsafeChunk chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, getWorldStorage().getWorldDataCache().getDimensionInfo());
-            ChunkGenerateContext chunkGenerateContext = new ChunkGenerateContext(chunk, world);
-            this.world.getWorldGenerator().generate(chunkGenerateContext);
-            return new AllayChunk(chunk);
+            var unsafeChunk = AllayUnsafeChunk.builder().emptyChunk(x, z, getWorldStorage().getWorldDataCache().getDimensionInfo());
+            var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
+            world.getWorldGenerator().generate(chunkGenerateContext);
+            var safeChunk = new AllayChunk(unsafeChunk);
+            setChunk(x, z, safeChunk);
+            loadingChunks.remove(hashXZ);
+            return safeChunk;
         }, Server.getInstance().getComputeThreadPool());
-        loadingChunks.put(hashXZ, future);
         return future;
     }
 

@@ -9,8 +9,5 @@ import lombok.Data;
  *
  * @author Cool_Loong
  */
-@Data
-public class ChunkGenerateContext {
-    private final UnsafeChunk chunk;
-    private final World world;
+public record ChunkGenerateContext(UnsafeChunk chunk, World world) {
 }
