@@ -70,6 +70,12 @@ public class VanillaBiomeIdEnumGen {
                         CodeBlock.builder()
                                 .add("MAP1 = $L;", "new Int2ObjectOpenHashMap<>()")
                                 .add("MAP2 = $L;", "new HashMap<>()")
+                                .add("""
+                                                
+                                        for (var b : values()) {
+                                            MAP1.put(b.id, b);
+                                            MAP2.put(b.identifier, b);
+                                        }""")
                                 .build()
                 )
                 .addField(FieldSpec

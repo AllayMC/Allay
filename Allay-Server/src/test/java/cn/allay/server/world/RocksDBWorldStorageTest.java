@@ -34,12 +34,19 @@ import java.util.concurrent.Executors;
  * @author Cool_Loong
  */
 @ExtendWith({AllayTestExtension.class, MockitoExtension.class})
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RocksDBWorldStorageTest {
     static Server server = Mockito.mock(Server.class);
-    final Path be = Path.of("src/test/resources/world/belevel.dat");
+    static RocksDBWorldStorage rocksDBWorldStorage;
 
     @BeforeAll
     static void mockServerSettings() {
+        try {
+            Files.copy(Path.of("src/test/resources/allayworld/level.dat"), Path.of("src/test/resources/allayworld/copy/level.dat"), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        rocksDBWorldStorage = new RocksDBWorldStorage(Path.of("src/test/resources/allayworld"));
         @SuppressWarnings("resource") MockedStatic<Server> serve = Mockito.mockStatic(Server.class);
         serve.when(Server::getInstance).thenReturn(server);
         Mockito.when(server.getVirtualThreadPool()).thenReturn(Executors.newVirtualThreadPerTaskExecutor());
@@ -61,27 +68,23 @@ public class RocksDBWorldStorageTest {
     @Test
     @Order(1)
     void testLoadAllayWorldData() {
-        try (final RocksDBWorldStorage allay = new RocksDBWorldStorage(Path.of("src/test/resources/allayworld"))) {
-            WorldData worldData = allay.readWorldData();
-            Assertions.assertEquals(new Vector3i(32, 86, -32), worldData.getSpawnPoint());
-            Assertions.assertEquals(6974, worldData.getTime());
-            Assertions.assertEquals(Difficulty.PEACEFUL, worldData.getDifficulty());
-            Assertions.assertEquals(2348465307070870700L, worldData.getRandomSeed());
-        }
+        WorldData worldData = rocksDBWorldStorage.readWorldData();
+        Assertions.assertEquals(new Vector3i(32, 86, -32), worldData.getSpawnPoint());
+        Assertions.assertEquals(6974, worldData.getTime());
+        Assertions.assertEquals(Difficulty.PEACEFUL, worldData.getDifficulty());
+        Assertions.assertEquals(2348465307070870700L, worldData.getRandomSeed());
     }
 
     @SneakyThrows
     @Test
     @Order(2)
     void testWriteAllayWorldData() {
-        try (final RocksDBWorldStorage allay = new RocksDBWorldStorage(Path.of("src/test/resources/allayworld/write"))) {
-            WorldData worldData = allay.readWorldData();
-            worldData.setSpawnPoint(new Vector3i(1, 1, 1));
-            worldData.setTime(1234);
-            allay.writeWorldData(worldData);
-            Assertions.assertEquals(new Vector3i(1, 1, 1), worldData.getSpawnPoint());
-            Assertions.assertEquals(1234, worldData.getTime());
-        }
+        WorldData worldData = rocksDBWorldStorage.readWorldData();
+        worldData.setSpawnPoint(new Vector3i(1, 1, 1));
+        worldData.setTime(1234);
+        rocksDBWorldStorage.writeWorldData(worldData);
+        Assertions.assertEquals(new Vector3i(1, 1, 1), worldData.getSpawnPoint());
+        Assertions.assertEquals(1234, worldData.getTime());
     }
 
     @SneakyThrows
@@ -99,29 +102,26 @@ public class RocksDBWorldStorageTest {
             }
         }
         AllayChunk allayChunk = new AllayChunk(allayUnsafeChunk);
-        try (final RocksDBWorldStorage allay = new RocksDBWorldStorage(Path.of("src/test/resources/allayworld"))) {
-            allay.writeChunk(allayChunk).get();
-        }
+        rocksDBWorldStorage.writeChunk(allayChunk).join();
     }
 
     @SneakyThrows
     @Test
     @Order(4)
     void testReadChunk() {
-        try (final RocksDBWorldStorage allay = new RocksDBWorldStorage(Path.of("src/test/resources/allayworld"))) {
-            Chunk chunk = allay.readChunk(0, 0).get();
-            Assertions.assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 55, 0));
-            Assertions.assertEquals(VanillaBiomeId.FOREST, chunk.getBiome(0, 55, 0));
-            Assertions.assertEquals(319, chunk.getHeight(0, 0));
-        }
+        Chunk chunk = rocksDBWorldStorage.readChunk(0, 0).get();
+        Assertions.assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 55, 0));
+        Assertions.assertEquals(VanillaBiomeId.FOREST, chunk.getBiome(0, 55, 0));
+        Assertions.assertEquals(319, chunk.getHeight(0, 0));
     }
 
     @AfterAll
     static void end() {
         try {
-            Files.copy(Path.of("src/test/resources/allayworld/level.dat"), Path.of("src/test/resources/allayworld/write/level.dat"), StandardCopyOption.REPLACE_EXISTING);
+            rocksDBWorldStorage.close();
+            Files.copy(Path.of("src/test/resources/allayworld/copy/level.dat"), Path.of("src/test/resources/allayworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
             FileUtils.deleteDirectory(Path.of("src/test/resources/allayworld/db").toFile());
-            FileUtils.deleteDirectory(Path.of("src/test/resources/allayworld/write/db").toFile());
+            Server.getInstance().shutdown();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

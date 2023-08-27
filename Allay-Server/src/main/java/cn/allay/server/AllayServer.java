@@ -122,6 +122,9 @@ public final class AllayServer implements Server {
     @Override
     public void shutdown() {
         isRunning.compareAndSet(true, false);
+        virtualThreadPool.shutdownNow();
+        computeThreadPool.shutdownNow();
+        System.exit(0);
     }
 
     private void onTick() {
