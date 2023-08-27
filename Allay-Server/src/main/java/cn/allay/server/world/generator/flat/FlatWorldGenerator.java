@@ -15,7 +15,7 @@ public class FlatWorldGenerator implements WorldGenerator {
     public void generate(ChunkGenerateContext context) {
         var bedrock = VanillaBlockTypes.BEDROCK_TYPE.getDefaultState();
         var grass = VanillaBlockTypes.GRASS_TYPE.getDefaultState();
-        var flatChunk = context.getChunk();
+        var flatChunk = context.chunk();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 0; y < 5; y++) {
