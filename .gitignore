@@ -15,3 +15,4 @@ buildSrc/**
 /output/
 /Allay-Server/src/test/resources/allayworld/db/
 /output/
+/cache/
