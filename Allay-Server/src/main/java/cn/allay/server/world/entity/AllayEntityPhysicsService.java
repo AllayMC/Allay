@@ -35,7 +35,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final float DIFF_ROTATION_THRESHOLD = 0.1f;
 
     public static final float MOTION_THRESHOLD = 0.003f;
-    public static final float STEPPING_OFFSET = 0.01f;
+    public static final float STEPPING_OFFSET = 0.1f;
     public static final float FAT_AABB_MARGIN = 0.0001f;
 
     protected World world;
