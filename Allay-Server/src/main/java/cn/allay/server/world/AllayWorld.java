@@ -159,15 +159,15 @@ public class AllayWorld implements World {
     @Override
     public void addClient(Client client) {
         clients.add(client);
-        addEntity(client.getPlayerEntity());
         chunkService.addChunkLoader(client);
+        addEntity(client.getPlayerEntity());
     }
 
     @Override
     public void removeClient(Client client) {
-        clients.remove(client);
         removeEntity(client.getPlayerEntity());
         chunkService.removeChunkLoader(client);
+        clients.remove(client);
     }
 
     @Override
