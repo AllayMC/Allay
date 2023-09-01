@@ -11,16 +11,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
  */
 public class PlayerCursorContainer extends BaseContainer {
     public PlayerCursorContainer() {
-        super(1);
-    }
-
-    @Override
-    public ContainerSlotType getSlotType(int slot) {
-        return ContainerSlotType.CURSOR;
-    }
-
-    @Override
-    public FullContainerType<PlayerCursorContainer> getContainerType() {
-        return FullContainerType.CURSOR;
+        super(FullContainerType.CURSOR);
     }
 }
