@@ -10,18 +10,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
  * @author daoge_cmd
  */
 public class PlayerArmorContainer extends BaseContainer {
-
     public PlayerArmorContainer() {
-        super(4);
-    }
-
-    @Override
-    public ContainerSlotType getSlotType(int slot) {
-        return ContainerSlotType.ARMOR;
-    }
-
-    @Override
-    public FullContainerType<PlayerArmorContainer> getContainerType() {
-        return FullContainerType.ARMOR;
+        super(FullContainerType.ARMOR);
     }
 }

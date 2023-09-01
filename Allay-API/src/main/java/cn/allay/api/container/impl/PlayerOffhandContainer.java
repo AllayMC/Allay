@@ -11,16 +11,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
  */
 public class PlayerOffhandContainer extends BaseContainer {
     public PlayerOffhandContainer() {
-        super(1);
-    }
-
-    @Override
-    public ContainerSlotType getSlotType(int slot) {
-        return ContainerSlotType.OFFHAND;
-    }
-
-    @Override
-    public FullContainerType<PlayerOffhandContainer> getContainerType() {
-        return FullContainerType.OFFHAND;
+        super(FullContainerType.OFFHAND);
     }
 }

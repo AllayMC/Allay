@@ -4,21 +4,59 @@ import cn.allay.api.container.impl.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType;
 
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Allay Project 2023/7/27
  *
  * @author daoge_cmd
- *
  */
-public record FullContainerType<T extends Container>(int id, boolean canBeOpenedAlone, ContainerSlotType... slotTypes) {
-    public FullContainerType(int id, boolean canBeOpenedAlone, ContainerSlotType... slotTypes) {
+public record FullContainerType<T extends Container>(int id, boolean canBeOpenedAlone,
+                                                     ContainerSlotType[] slotTypeTable,
+                                                     Set<ContainerSlotType> heldSlotTypes) {
+
+    public static final Map<ContainerSlotType, FullContainerType<? extends Container>> SLOT_TYPE_TO_TYPE_MAP = new EnumMap<>(ContainerSlotType.class);
+
+    public static final int UNKNOWN_NETWORK_ID = -1;
+
+    public static final FullContainerType<PlayerCursorContainer> CURSOR = builder()
+            .id(119)
+            .size(1)
+            .mapAllSlotToType(ContainerSlotType.CURSOR)
+            .build();
+
+    public static final FullContainerType<PlayerArmorContainer> ARMOR = builder()
+            .id(ContainerType.ARMOR)
+            .size(4)
+            .mapAllSlotToType(ContainerSlotType.ARMOR)
+            .build();
+
+    public static final FullContainerType<PlayerOffhandContainer> OFFHAND = builder()
+            .id(120)
+            .size(1)
+            .mapAllSlotToType(ContainerSlotType.OFFHAND)
+            .build();
+
+    public static final FullContainerType<PlayerInventoryContainer> PLAYER_INVENTORY = builder()
+            .id(ContainerType.INVENTORY)
+            .size(36)
+            .mapRangedSlotToType(0, 8, ContainerSlotType.HOTBAR)
+            .mapRangedSlotToType(9, 35, ContainerSlotType.INVENTORY)
+            .holdSlotType(ContainerSlotType.HOTBAR_AND_INVENTORY)
+            .build();
+
+    public static final FullContainerType<PlayerCreatedOutputContainer> CREATED_OUTPUT = builder()
+            .id(UNKNOWN_NETWORK_ID)
+            .size(1)
+            .mapAllSlotToType(ContainerSlotType.CREATED_OUTPUT)
+            .build();
+
+    public FullContainerType(int id, boolean canBeOpenedAlone, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes) {
         this.id = id;
         this.canBeOpenedAlone = canBeOpenedAlone;
-        this.slotTypes = slotTypes;
-        for (ContainerSlotType slotType : slotTypes) {
+        this.slotTypeTable = slotTypeTable;
+        this.heldSlotTypes = heldSlotTypes;
+        for (ContainerSlotType slotType : heldSlotTypes) {
             var mapped = SLOT_TYPE_TO_TYPE_MAP.get(slotType);
             if (mapped == null) {
                 SLOT_TYPE_TO_TYPE_MAP.put(slotType, this);
@@ -33,44 +71,77 @@ public record FullContainerType<T extends Container>(int id, boolean canBeOpened
         return (FullContainerType<T>) SLOT_TYPE_TO_TYPE_MAP.get(type);
     }
 
-    FullContainerType(ContainerType type) {
-        this(type.getId(), true);
-    }
-
-    FullContainerType(ContainerType type, ContainerSlotType... slotTypes) {
-        this(type.getId(), true, slotTypes);
-    }
-
-    FullContainerType(int id) {
-        this(id, false);
-    }
-
-    FullContainerType(int id, ContainerSlotType... slotTypes) {
-        this(id, false, slotTypes);
+    public static FullContainerTypeBuilder builder() {
+        return new FullContainerTypeBuilder();
     }
 
     public ContainerType toNetworkType() {
         return ContainerType.from(id);
     }
 
-    public static final Map<ContainerSlotType, FullContainerType<? extends Container>> SLOT_TYPE_TO_TYPE_MAP = new EnumMap<>(ContainerSlotType.class);
+    public ContainerSlotType getSlotType(int slot) {
+        return slotTypeTable[slot];
+    }
 
-    public static final int UNKNOWN_NETWORK_ID = -1;
+    public int size() {
+        return slotTypeTable().length;
+    }
 
-    public static final FullContainerType<PlayerCursorContainer> CURSOR = new FullContainerType<>(
-            119,
-            ContainerSlotType.CURSOR);
-    public static final FullContainerType<PlayerArmorContainer> ARMOR = new FullContainerType<>(
-            ContainerType.ARMOR,
-            ContainerSlotType.ARMOR);
-    public static final FullContainerType<PlayerOffhandContainer> OFFHAND = new FullContainerType<>(
-            120,
-            ContainerSlotType.OFFHAND);
-    public static final FullContainerType<PlayerInventoryContainer> PLAYER_INVENTORY = new FullContainerType<>(
-            ContainerType.INVENTORY,
-            ContainerSlotType.INVENTORY, ContainerSlotType.HOTBAR, ContainerSlotType.HOTBAR_AND_INVENTORY);
-    public static final FullContainerType<PlayerCreatedOutputContainer> CREATED_OUTPUT = new FullContainerType<>(
-            UNKNOWN_NETWORK_ID,
-            ContainerSlotType.CREATED_OUTPUT
-    );
+    public static class FullContainerTypeBuilder {
+        private final Set<ContainerSlotType> heldSlotTypes = EnumSet.noneOf(ContainerSlotType.class);
+        private int id;
+        private boolean canBeOpenedAlone = true;
+        private ContainerSlotType[] slotTypeTable;
+
+        public FullContainerTypeBuilder id(int id) {
+            this.id = id;
+            this.canBeOpenedAlone = false;
+            return this;
+        }
+
+        public FullContainerTypeBuilder id(ContainerType containerType) {
+            this.id = containerType.getId();
+            this.canBeOpenedAlone = true;
+            return this;
+
+        }
+
+        public FullContainerTypeBuilder canBeOpenedAlone(boolean canBeOpenedAlone) {
+            this.canBeOpenedAlone = canBeOpenedAlone;
+            return this;
+        }
+
+        public FullContainerTypeBuilder size(int size) {
+            this.slotTypeTable = new ContainerSlotType[size];
+            return this;
+        }
+
+        public FullContainerTypeBuilder mapRangedSlotToType(int l, int r, ContainerSlotType type) {
+            if (slotTypeTable == null) throw new IllegalStateException("The size must be set firstly!");
+            if (l > r) throw new IllegalArgumentException("Left must smaller than right!");
+            if (l > slotTypeTable.length || r > slotTypeTable.length)
+                throw new IllegalArgumentException("Left or right bigger than size!");
+            heldSlotTypes.add(type);
+            for (int i = l; i <= r; i++) {
+                slotTypeTable[i] = type;
+            }
+            return this;
+        }
+
+        public FullContainerTypeBuilder mapAllSlotToType(ContainerSlotType type) {
+            if (slotTypeTable == null) throw new IllegalStateException("The size must be set firstly!");
+            heldSlotTypes.add(type);
+            Arrays.fill(slotTypeTable, type);
+            return this;
+        }
+
+        public FullContainerTypeBuilder holdSlotType(ContainerSlotType type) {
+            heldSlotTypes.add(type);
+            return this;
+        }
+
+        public <T extends Container> FullContainerType<T> build() {
+            return new FullContainerType<T>(id, canBeOpenedAlone, slotTypeTable, heldSlotTypes);
+        }
+    }
 }

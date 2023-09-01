@@ -21,23 +21,7 @@ public class PlayerInventoryContainer extends BaseContainer {
     protected int handSlot = 0;
 
     public PlayerInventoryContainer() {
-        super(36);
-    }
-
-    @Override
-    public ContainerSlotType getSlotType(int slot) {
-        if (slot >= 0 && slot <= 8) {
-            return ContainerSlotType.HOTBAR;
-        } else if (slot >= 9 && slot <= 35) {
-            return ContainerSlotType.INVENTORY;
-        } else {
-            throw new IndexOutOfBoundsException("Slot must be between 0 and 35");
-        }
-    }
-
-    @Override
-    public FullContainerType<PlayerInventoryContainer> getContainerType() {
-        return FullContainerType.PLAYER_INVENTORY;
+        super(FullContainerType.PLAYER_INVENTORY);
     }
 
     public ItemStack getItemInHand() {

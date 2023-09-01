@@ -24,7 +24,9 @@ public interface Container {
 
     FullContainerType<?> getContainerType();
 
-    ContainerSlotType getSlotType(int slot);
+    default ContainerSlotType getSlotType(int slot) {
+        return getContainerType().getSlotType(slot);
+    }
 
     Map<Byte, ContainerViewer> getViewers();
 

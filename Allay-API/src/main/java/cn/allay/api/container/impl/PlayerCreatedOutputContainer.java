@@ -15,7 +15,7 @@ import static cn.allay.api.container.FullContainerType.CREATED_OUTPUT;
 public class PlayerCreatedOutputContainer extends BaseContainer {
 
     public PlayerCreatedOutputContainer() {
-        super(1);
+        super(CREATED_OUTPUT);
     }
 
     @Override
@@ -27,15 +27,5 @@ public class PlayerCreatedOutputContainer extends BaseContainer {
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
         super.setItemStack(0, itemStack);
-    }
-
-    @Override
-    public FullContainerType<PlayerCreatedOutputContainer> getContainerType() {
-        return CREATED_OUTPUT;
-    }
-
-    @Override
-    public ContainerSlotType getSlotType(int slot) {
-        return ContainerSlotType.CREATED_OUTPUT;
     }
 }

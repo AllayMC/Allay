@@ -26,14 +26,19 @@ import java.util.Map;
  */
 @Slf4j
 public abstract class BaseContainer implements Container {
+    protected final FullContainerType<? extends Container> containerType;
     protected final BiMap<Byte, ContainerViewer> viewers = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
-    protected int size;
-    protected ItemStack[] content;
+    protected final ItemStack[] content;
 
-    public BaseContainer(int size) {
-        this.size = size;
-        this.content = new ItemStack[size];
+    public BaseContainer(FullContainerType<? extends Container> containerType) {
+        this.containerType = containerType;
+        this.content = new ItemStack[containerType.size()];
         Arrays.fill(this.content, AIR_STACK);
+    }
+
+    @Override
+    public FullContainerType<?> getContainerType() {
+        return containerType;
     }
 
     @Override
