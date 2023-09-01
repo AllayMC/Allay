@@ -19,11 +19,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.*;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkRequestResult;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
@@ -201,7 +203,6 @@ public class AllayChunkService implements ChunkService {
         return loadChunk(x, z);
     }
 
-    @SlowOperation
     @Override
     public CompletableFuture<Chunk> loadChunk(int x, int z) {
         var hashXZ = HashUtils.hashXZ(x, z);
@@ -214,21 +215,35 @@ public class AllayChunkService implements ChunkService {
         }
         var future = worldStorage.readChunk(x, z);
         loadingChunks.put(hashXZ, future);
-        future.thenApplyAsync(loadedChunk -> {
-            if (loadedChunk != null) {
-                setChunk(x, z, loadedChunk);
-                loadingChunks.remove(hashXZ);
-                return loadedChunk;
-            }
-            var unsafeChunk = AllayUnsafeChunk.builder().emptyChunk(x, z, getWorldStorage().getWorldDataCache().getDimensionInfo());
-            var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
-            world.getWorldGenerator().generate(chunkGenerateContext);
-            var safeChunk = new AllayChunk(unsafeChunk);
-            setChunk(x, z, safeChunk);
-            loadingChunks.remove(hashXZ);
-            return safeChunk;
-        }, Server.getInstance().getComputeThreadPool());
+        future.thenApplyAsync(loadedChunk -> generateChunkIfNull(x, z, loadedChunk), Server.getInstance().getComputeThreadPool());
         return future;
+    }
+
+    @SneakyThrows
+    @SlowOperation
+    @Override
+    public Chunk loadChunkImmediately(int x, int z) {
+        return generateChunkIfNull(
+                x, z,
+                worldStorage.readChunk(x, z).get()
+        );
+    }
+
+    private Chunk generateChunkIfNull(int x, int z, Chunk loadedChunk) {
+        long hashXZ = HashUtils.hashXZ(x, z);
+        if (loadedChunk == null) {
+            loadedChunk = generateChunkImmediately(x, z);
+        }
+        setChunk(x, z, loadedChunk);
+        loadingChunks.remove(hashXZ);
+        return loadedChunk;
+    }
+
+    private AllayChunk generateChunkImmediately(int x, int z) {
+        var unsafeChunk = AllayUnsafeChunk.builder().emptyChunk(x, z, getWorldStorage().getWorldDataCache().getDimensionInfo());
+        var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
+        world.getWorldGenerator().generate(chunkGenerateContext);
+        return new AllayChunk(unsafeChunk);
     }
 
     public void unloadChunk(int x, int z) {
