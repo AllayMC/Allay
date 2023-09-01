@@ -25,7 +25,6 @@ import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkRequestResult;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
@@ -34,6 +33,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 2023/7/1
@@ -186,7 +186,8 @@ public class AllayChunkService implements ChunkService {
 
     @Override
     public void removeChunkLoader(ChunkLoader chunkLoader) {
-        this.chunkLoaderManagers.remove(chunkLoader).onRemoved();
+        var removed = this.chunkLoaderManagers.remove(chunkLoader);
+        if (removed != null) removed.onRemoved();
     }
 
     @Override
@@ -204,6 +205,29 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
+    public CompletableFuture<Set<Chunk>> getOrLoadRangedChunk(int x, int z, int range) {
+        // 用于存储CompletableFuture的集合
+        Set<CompletableFuture<Chunk>> futureSet = new HashSet<>();
+
+        // 遍历(x, z)为中心，半径为range的区块
+        for (int dx = -range; dx <= range; dx++) {
+            for (int dz = -range; dz <= range; dz++) {
+                if (dx * dx + dz * dz <= range * range) {
+                    // 获取或加载每一个块，并将返回的CompletableFuture添加到集合中
+                    futureSet.add(getOrLoadChunk(x + dx, z + dz));
+                }
+            }
+        }
+
+        // 当所有的CompletableFuture都完成时，返回一个新的CompletableFuture
+        return CompletableFuture.allOf(futureSet.toArray(new CompletableFuture[0]))
+                .thenApplyAsync(v -> futureSet.stream()
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toSet()), Server.getInstance().getVirtualThreadPool());
+    }
+
+
+    @Override
     public CompletableFuture<Chunk> loadChunk(int x, int z) {
         var hashXZ = HashUtils.hashXZ(x, z);
         if (isChunkLoaded(hashXZ)) {
@@ -213,9 +237,14 @@ public class AllayChunkService implements ChunkService {
         if (loadingChunk != null) {
             return loadingChunk;
         }
-        var future = worldStorage.readChunk(x, z);
+        var future = worldStorage.readChunk(x, z).exceptionally(t -> {
+            log.error("Error while reading chunk (" + x + "," + z + ") !", t);
+            return null;
+        }).thenApplyAsync(loadedChunk -> generateChunkIfNullAndSetChunk(x, z, loadedChunk), Server.getInstance().getComputeThreadPool()).exceptionally(t -> {
+            log.error("Error while generating chunk (" + x + "," + z + ") !", t);
+            return null;
+        });
         loadingChunks.put(hashXZ, future);
-        future.thenApplyAsync(loadedChunk -> generateChunkIfNull(x, z, loadedChunk), Server.getInstance().getComputeThreadPool());
         return future;
     }
 
@@ -223,16 +252,16 @@ public class AllayChunkService implements ChunkService {
     @SlowOperation
     @Override
     public Chunk loadChunkImmediately(int x, int z) {
-        if (isChunkLoaded(x, z)) {
-            throw new IllegalStateException("Chunk is already loaded");
+        if (isChunkLoaded(x, z) || isChunkLoading(x, z)) {
+            throw new IllegalStateException("Chunk is already loaded or under loading");
         }
-        return generateChunkIfNull(
+        return generateChunkIfNullAndSetChunk(
                 x, z,
                 worldStorage.readChunk(x, z).get()
         );
     }
 
-    private Chunk generateChunkIfNull(int x, int z, Chunk loadedChunk) {
+    private Chunk generateChunkIfNullAndSetChunk(int x, int z, Chunk loadedChunk) {
         long hashXZ = HashUtils.hashXZ(x, z);
         if (loadedChunk == null) {
             loadedChunk = generateChunkImmediately(x, z);

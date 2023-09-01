@@ -18,6 +18,8 @@ public interface ChunkService extends ChunkAccessible {
 
     CompletableFuture<Chunk> getOrLoadChunk(int x, int z);
 
+    CompletableFuture<Set<Chunk>> getOrLoadRangedChunk(int x, int z, int range);
+
     CompletableFuture<Chunk> loadChunk(int x, int z);
 
     @SlowOperation

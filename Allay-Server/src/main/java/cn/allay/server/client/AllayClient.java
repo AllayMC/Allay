@@ -21,8 +21,6 @@ import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.position.Position3ic;
-import cn.allay.api.client.data.AdventureSettings;
-import cn.allay.api.client.data.LoginData;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
@@ -202,13 +200,15 @@ public class AllayClient extends BaseClient {
         initPlayerEntity();
         sendBasicGameData();
         online = true;
-        if (playerEntity.getCurrentChunk() == null) {
-            getWorld().getChunkService().loadChunk(
-                    (int) playerEntity.getLocation().x() >> 4,
-                    (int) playerEntity.getLocation().z() >> 4
-            ).join();
-        }
-        getWorld().addClient(this);
+        getWorld().getChunkService().getOrLoadChunk(
+                (int) playerEntity.getLocation().x() >> 4,
+                (int) playerEntity.getLocation().z() >> 4
+        ).thenAcceptAsync((c) -> getWorld().addClient(this), Server.getInstance().getVirtualThreadPool()).exceptionally(
+                t -> {
+                    log.error("Error while initialize player " + getName() + "!", t);
+                    return null;
+                }
+        );
     }
 
     @Override
