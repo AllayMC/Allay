@@ -223,6 +223,9 @@ public class AllayChunkService implements ChunkService {
     @SlowOperation
     @Override
     public Chunk loadChunkImmediately(int x, int z) {
+        if (isChunkLoaded(x, z)) {
+            throw new IllegalStateException("Chunk is already loaded");
+        }
         return generateChunkIfNull(
                 x, z,
                 worldStorage.readChunk(x, z).get()
