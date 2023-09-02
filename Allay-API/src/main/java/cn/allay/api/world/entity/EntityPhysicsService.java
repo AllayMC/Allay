@@ -2,6 +2,7 @@ package cn.allay.api.world.entity;
 
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.location.Location3fc;
+import cn.allay.api.math.voxelshape.VoxelShape;
 import org.joml.primitives.AABBfc;
 
 import java.util.Collections;
@@ -35,6 +36,8 @@ public interface EntityPhysicsService {
     }
 
     List<Entity> computeCollidingEntities(AABBfc aabb);
+
+    List<Entity> computeCollidingEntities(VoxelShape voxelShape);
 
     List<Entity> getCachedEntityCollidingResult(Entity entity);
 }

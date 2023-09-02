@@ -6,6 +6,7 @@ import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.location.Location3fc;
+import cn.allay.api.math.voxelshape.VoxelShape;
 import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.World;
 import cn.allay.api.world.entity.EntityPhysicsService;
@@ -408,11 +409,11 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 for (int offsetZ = 0; offsetZ < sub2.length; offsetZ++) {
                     var block = sub2[offsetZ];
                     if (block == null) continue;
-                    var blockAABB = block.blockType().getBlockBehavior().getBlockAttributes(block).computeOffsetAABB(startX + offsetX, startY + offsetY, startZ + offsetZ);
+                    var blockAABB = block.blockType().getBlockBehavior().getBlockAttributes(block).computeOffsetVoxelShape(startX + offsetX, startY + offsetY, startZ + offsetZ);
                     if (unionAABB == null) {
-                        unionAABB = blockAABB;
+                        unionAABB = blockAABB.unionAABB();
                     } else {
-                        unionAABB.union(blockAABB);
+                        unionAABB.union(blockAABB.unionAABB());
                     }
                 }
             }
@@ -508,6 +509,23 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var result = new ArrayList<Entity>();
         entityAABBTree.detectOverlaps(aabb, result);
         return result;
+    }
+
+    @Override
+    public List<Entity> computeCollidingEntities(VoxelShape voxelShape) {
+        //用一个set暂存entity避免重复
+        var result = new HashSet<Entity>();
+        for (var solid : voxelShape.getSolids()) {
+            var list = new ArrayList<Entity>();
+            entityAABBTree.detectOverlaps(solid, list);
+            result.addAll(list);
+        }
+        for (var vacancy : voxelShape.getVacancies()) {
+            var list = new ArrayList<Entity>();
+            entityAABBTree.detectOverlaps(vacancy, list);
+            list.forEach(result::remove);
+        }
+        return new ArrayList<>(result);
     }
 
     @Override

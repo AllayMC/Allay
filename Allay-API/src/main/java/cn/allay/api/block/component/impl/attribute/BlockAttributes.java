@@ -1,9 +1,11 @@
 package cn.allay.api.block.component.impl.attribute;
 
+import cn.allay.api.math.voxelshape.VoxelShape;
 import cn.allay.api.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,7 +13,6 @@ import lombok.experimental.Accessors;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
 
 import java.awt.*;
 
@@ -28,7 +29,8 @@ public class BlockAttributes {
     public static final float DEFAULT_FRICTION = 0.6f;
     public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
     protected static Gson SERIALIZER = new GsonBuilder()
-            .registerTypeAdapter(AABBfc.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> parseAABBStr(json.getAsString()))
+            .registerTypeAdapter(VoxelShape.class, (JsonDeserializer<Object>) (json, typeOfT, context) ->
+                    VoxelShape.builder().solid(parseAABBStr(json.getAsString())).build())
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var r = json.getAsJsonObject().get("r").getAsInt();
                 var g = json.getAsJsonObject().get("g").getAsInt();
@@ -42,15 +44,17 @@ public class BlockAttributes {
         var numbers = StringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
         return new AABBf(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
     }
-    @Builder.Default
-    protected AABBfc aabbCollision = new AABBf(0, 0, 0, 1, 1, 1);
 
-    public AABBf computeOffsetAABB(float x, float y, float z) {
-        return aabbCollision.translate(x, y, z, new AABBf());
+    @Builder.Default
+    @SerializedName("aabbCollision")
+    protected VoxelShape voxelShape = VoxelShape.builder().solid(0, 0, 0, 1, 1 , 1).build();
+
+    public VoxelShape computeOffsetVoxelShape(float x, float y, float z) {
+        return voxelShape.translate(x, y, z);
     }
 
-    public AABBf computeOffsetAABB(Vector3fc vector) {
-        return computeOffsetAABB(vector.x(), vector.y(), vector.z());
+    public VoxelShape computeOffsetVoxelShape(Vector3fc vector) {
+        return computeOffsetVoxelShape(vector.x(), vector.y(), vector.z());
     }
 
     @Builder.Default
@@ -131,7 +135,7 @@ public class BlockAttributes {
         );
         return BlockAttributes
                 .builder()
-                .aabbCollision(parseAABBStr(nbt.getString("aabbCollision")))
+                .voxelShape(VoxelShape.builder().solid(parseAABBStr(nbt.getString("aabbCollision"))).build())
                 .hasCollision(nbt.getBoolean("hasCollision"))
                 .blocksPrecipitation(nbt.getBoolean("blocksPrecipitation"))
                 .canBeMovingBlock(nbt.getBoolean("canBeMovingBlock"))

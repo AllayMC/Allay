@@ -212,7 +212,7 @@ public interface World {
                         var blockState = blockStates[x][y][z];
                         if (blockState == null) continue;
                         var attributes = blockState.blockType().getBlockBehavior().getBlockAttributes(blockState);
-                        if (!attributes.hasCollision() || !aabb.intersectsAABB(attributes.aabbCollision().translate(minX + x, minY + y, minZ + z, new AABBf()))) {
+                        if (!attributes.hasCollision() || !attributes.voxelShape().translate(minX + x, minY + y, minZ + z).intersectsAABB(aabb)) {
                             blockStates[x][y][z] = null;
                         } else {
                             notEmpty = true;
