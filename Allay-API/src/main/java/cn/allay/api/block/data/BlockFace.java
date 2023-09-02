@@ -150,4 +150,22 @@ public enum BlockFace {
         return this == NORTH || this == EAST || this == SOUTH || this == WEST;
     }
 
+    public static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE =
+            new BlockFace[] {
+                    BlockFace.EAST, BlockFace.WEST,
+                    BlockFace.SOUTH, BlockFace.NORTH};
+
+    public static BlockFace getBlockFaceByStairDirectionValue(int value) {
+        return STAIR_DIRECTION_VALUE_TO_BLOCK_FACE[value];
+    }
+
+    public int toStairDirectionValue() {
+        return switch (this) {
+            case EAST -> 0;
+            case WEST -> 1;
+            case SOUTH -> 2;
+            case NORTH -> 3;
+            default -> throw new IllegalStateException("Unexpected value: " + this);
+        };
+    }
 }

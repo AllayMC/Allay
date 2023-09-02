@@ -17,7 +17,7 @@ import static cn.allay.api.math.voxelshape.CommonShapes.buildStairShape;
  * @author daoge_cmd
  */
 public interface CommonBlockComponents {
-    Supplier<BlockAttributeComponentImpl> VANILLA_STAIR_ATTRIBUTE_COMPONENT_SUPPLIER =
+    Supplier<BlockAttributeComponentImpl> STAIR_ATTRIBUTE_COMPONENT_SUPPLIER =
             () -> BlockAttributeComponentImpl.ofMappedBlockStateHashLazyLoad(blockType -> {
                 var vanillaId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
                 Objects.requireNonNull(vanillaId);

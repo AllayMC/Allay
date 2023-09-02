@@ -4,7 +4,7 @@ import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.component.annotation.AutoRegister;
 
-import static cn.allay.api.block.component.CommonBlockComponents.VANILLA_STAIR_ATTRIBUTE_COMPONENT_SUPPLIER;
+import static cn.allay.api.block.component.CommonBlockComponents.STAIR_ATTRIBUTE_COMPONENT_SUPPLIER;
 
 /**
  * @author daoge_cmd | Cool_Loong <br>
@@ -12,5 +12,5 @@ import static cn.allay.api.block.component.CommonBlockComponents.VANILLA_STAIR_A
  */
 public interface BlockAcaciaStairsBehavior extends BlockBehavior {
     @AutoRegister
-    BlockAttributeComponentImpl BLOCK_ATTRIBUTE_COMPONENT = VANILLA_STAIR_ATTRIBUTE_COMPONENT_SUPPLIER.get();
+    BlockAttributeComponentImpl BLOCK_ATTRIBUTE_COMPONENT = STAIR_ATTRIBUTE_COMPONENT_SUPPLIER.get();
 }
