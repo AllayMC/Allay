@@ -1,6 +1,7 @@
 package cn.allay.api.math.voxelshape;
 
 import cn.allay.api.block.data.BlockFace;
+import lombok.Getter;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
@@ -13,6 +14,7 @@ import java.util.Set;
  *
  * @author daoge_cmd
  */
+@Getter
 public final class VoxelShape {
     private final Set<AABBfc> vacancies;
     private final Set<AABBfc> solids;
@@ -26,11 +28,44 @@ public final class VoxelShape {
         return new VoxelShapeBuilder();
     }
 
+    public AABBf unionAABB() {
+        float minX = Float.MAX_VALUE, minY = Float.MAX_VALUE, minZ = Float.MAX_VALUE;
+        float maxX = Float.MIN_VALUE, maxY = Float.MIN_VALUE, maxZ = Float.MIN_VALUE;
+        for (var solid : solids) {
+            if (solid.minX() < minX) minX = solid.minX();
+            if (solid.minY() < minY) minY = solid.minY();
+            if (solid.minZ() < minZ) minZ = solid.minZ();
+            if (solid.maxX() > maxX) maxX = solid.maxX();
+            if (solid.maxY() > maxY) maxY = solid.maxY();
+            if (solid.maxZ() > maxZ) maxZ = solid.maxZ();
+        }
+        return new AABBf(
+                minX, minY, minZ,
+                maxX, maxY, maxZ
+        );
+    }
+
     public VoxelShape rotate(BlockFace face) {
         var newVacancies = new HashSet<AABBfc>();
         var newSolids = new HashSet<AABBfc>();
         vacancies.forEach(vacancy -> newVacancies.add(face.rotateAABB(vacancy)));
         solids.forEach(solid -> newSolids.add(face.rotateAABB(solid)));
+        return new VoxelShape(newSolids, newVacancies);
+    }
+
+    public VoxelShape translate(float x, float y, float z) {
+        var newVacancies = new HashSet<AABBfc>();
+        var newSolids = new HashSet<AABBfc>();
+        vacancies.forEach(vacancy -> newVacancies.add(vacancy.translate(x, y, z, new AABBf())));
+        solids.forEach(solid -> newSolids.add(solid.translate(x, y, z, new AABBf())));
+        return new VoxelShape(newSolids, newVacancies);
+    }
+
+    public VoxelShape translate(Vector3fc vec) {
+        var newVacancies = new HashSet<AABBfc>();
+        var newSolids = new HashSet<AABBfc>();
+        vacancies.forEach(vacancy -> newVacancies.add(vacancy.translate(vec, new AABBf())));
+        solids.forEach(solid -> newSolids.add(solid.translate(vec, new AABBf())));
         return new VoxelShape(newSolids, newVacancies);
     }
 

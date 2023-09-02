@@ -46,7 +46,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             return false;
         if (player != null) {
             var block_aabb = blockState.getBehavior().getBlockAttributes(blockState)
-                    .computeOffsetAABB(
+                    .computeOffsetVoxelShape(
                             placePos.x(),
                             placePos.y(),
                             placePos.z()
