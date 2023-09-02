@@ -131,7 +131,19 @@ public enum BlockFace {
     }
 
     public static BlockFace[] getHorizontal() {
-        return new BlockFace[]{ NORTH, EAST, SOUTH, WEST };
+        return new BlockFace[] {
+                NORTH,
+                EAST,
+                SOUTH,
+                WEST
+        };
+    }
+
+    public static BlockFace[] getVertical() {
+        return new BlockFace[] {
+                UP,
+                DOWN
+        };
     }
 
     public boolean isHorizontal() {
