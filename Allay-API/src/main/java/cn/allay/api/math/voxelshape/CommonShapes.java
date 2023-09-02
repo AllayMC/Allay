@@ -1,12 +1,13 @@
 package cn.allay.api.math.voxelshape;
 
-import cn.allay.api.block.component.impl.attribute.BlockAttributes;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 
 import java.util.EnumMap;
 import java.util.Map;
+
+import static cn.allay.api.block.data.BlockFace.getBlockFaceByStairDirectionValue;
 
 /**
  * Allay Project 2023/9/2
@@ -30,11 +31,6 @@ public abstract class CommonShapes {
 
     public static final Map<BlockFace, VoxelShape> DOWNWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
 
-    public static final BlockFace[] WEIRDO_DIRECTION_TO_BLOCK_FACE =
-            new BlockFace[] {
-                    BlockFace.EAST, BlockFace.WEST,
-                    BlockFace.SOUTH, BlockFace.NORTH};
-
     static {
         for (var face : BlockFace.getHorizontal()) {
             UPWARDS_STAIR_SHAPES.put(face, UPWARDS_STAIR_SHAPE.rotate(face));
@@ -44,7 +40,7 @@ public abstract class CommonShapes {
 
     public static VoxelShape buildStairShape(BlockState stairBlockState) {
         var isDownwards = stairBlockState.getPropertyValue(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT);
-        var face = WEIRDO_DIRECTION_TO_BLOCK_FACE[stairBlockState.getPropertyValue(VanillaBlockPropertyTypes.WEIRDO_DIRECTION)];
+        var face = getBlockFaceByStairDirectionValue(stairBlockState.getPropertyValue(VanillaBlockPropertyTypes.WEIRDO_DIRECTION));
         return isDownwards ? DOWNWARDS_STAIR_SHAPES.get(face) : UPWARDS_STAIR_SHAPES.get(face);
     }
 }

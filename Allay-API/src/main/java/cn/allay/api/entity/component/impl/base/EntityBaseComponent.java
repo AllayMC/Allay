@@ -1,5 +1,6 @@
 package cn.allay.api.entity.component.impl.base;
 
+import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.Entity;
@@ -27,6 +28,12 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface EntityBaseComponent {
+    float SPRINTING_MOVEMENT_FACTOR = 1.3f;
+    float WALKING_MOVEMENT_FACTOR = 1f;
+    float SNEAKING_MOVEMENT_FACTOR = 0.3f;
+    float STOP_MOVEMENT_FACTOR = 0f;
+    float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
+
     @Inject
     EntityType<? extends Entity> getEntityType();
 
@@ -103,7 +110,8 @@ public interface EntityBaseComponent {
     void load(NbtMap nbt);
 
     @Inject
-    default void tick() {}
+    default void tick() {
+    }
 
     default boolean enableHeadYaw() {
         return false;
@@ -135,11 +143,6 @@ public interface EntityBaseComponent {
 
     void setHasGravity(boolean hasGravity);
 
-    float SPRINTING_MOVEMENT_FACTOR = 1.3f;
-    float WALKING_MOVEMENT_FACTOR = 1f;
-    float SNEAKING_MOVEMENT_FACTOR = 0.3f;
-    float STOP_MOVEMENT_FACTOR = 0f;
-
     /**
      * 给定yaw，若移动乘数不为0实体将往yaw指定的方向前进 <p>
      * 参见：<a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas/zh">...</a>
@@ -147,8 +150,6 @@ public interface EntityBaseComponent {
     default float getMovementFactor() {
         return STOP_MOVEMENT_FACTOR;
     }
-
-    float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
 
     default float getPushSpeedReduction() {
         return DEFAULT_PUSH_SPEED_REDUCTION;
@@ -176,5 +177,22 @@ public interface EntityBaseComponent {
         var cx = (int) loc.x() >> 4;
         var cz = (int) loc.z() >> 4;
         return loc.world().getChunkService().getChunk(cx, cz);
+    }
+
+    default BlockFace getHorizontalFace() {
+        double rotation = getLocation().yaw() % 360;
+        if (rotation < 0) {
+            rotation += 360.0;
+        }
+
+        if (45 <= rotation && rotation < 135) {
+            return BlockFace.WEST;
+        } else if (135 <= rotation && rotation < 225) {
+            return BlockFace.NORTH;
+        } else if (225 <= rotation && rotation < 315) {
+            return BlockFace.EAST;
+        } else {
+            return BlockFace.SOUTH;
+        }
     }
 }

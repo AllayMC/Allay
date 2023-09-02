@@ -14,11 +14,13 @@ import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
+
+import static cn.allay.api.item.CommonUseItemFunctions.checkEntityCollision;
+import static cn.allay.api.item.CommonUseItemFunctions.tryConsumeItem;
 
 /**
  * Allay Project 2023/5/19
@@ -44,19 +46,10 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected UseItemOn useItemOn = (player, itemStack, world, blockPos, placePos, clickPos, blockFace) -> {
         if (blockState == null)
             return false;
-        if (player != null) {
-            var block_aabb = blockState.getBehavior().getBlockAttributes(blockState)
-                    .computeOffsetVoxelShape(
-                            placePos.x(),
-                            placePos.y(),
-                            placePos.z()
-                    );
-            if (!world.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty())
-                return false;
-        }
+        if (player != null && checkEntityCollision(world, placePos, blockState))
+            return false;
         world.setBlockState(placePos.x(), placePos.y(), placePos.z(), blockState);
-        if (player == null || player.getClient().getGameType() != GameType.CREATIVE)
-            itemStack.setCount(itemStack.getCount() - 1);
+        tryConsumeItem(player, itemStack);
         return true;
     };
 
