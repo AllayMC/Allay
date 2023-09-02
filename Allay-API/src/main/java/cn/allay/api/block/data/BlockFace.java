@@ -1,7 +1,14 @@
 package cn.allay.api.block.data;
 
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
+import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * Allay Project 2023/8/11
@@ -35,6 +42,65 @@ public enum BlockFace {
 
     public Vector3ic offsetPos(Vector3ic pos) {
         return offset.add(pos, new Vector3i());
+    }
+
+    public AABBf rotateAABB(AABBfc aabb) {
+        var c1 = new Vector3f(aabb.minX(), aabb.minY(), aabb.minZ());
+        var c2 = new Vector3f(aabb.maxX(), aabb.maxY(), aabb.maxZ());
+        var nc1 = rotateVector(c1);
+        var nc2 = rotateVector(c2);
+        return new AABBf(
+                min(nc1.x, nc2.x),
+                min(nc1.y, nc2.y),
+                min(nc1.z, nc2.z),
+                max(nc1.x, nc2.x),
+                max(nc1.y, nc2.y),
+                max(nc1.z, nc2.z)
+        );
+    }
+
+    @SuppressWarnings("SuspiciousNameCombination")
+    public Vector3f rotateVector(Vector3fc vec) {
+        Vector3f result = new Vector3f(vec);
+
+        // 平移到旋转点 (0.5, 0.5, 0.5)
+        result.sub(0.5f, 0.5f, 0.5f);
+
+        float temp;
+        switch (this) {
+            case EAST -> {
+                // 不需要旋转，因为 EAST 是默认朝向
+            }
+            case NORTH -> {
+                temp = result.x;
+                result.x = result.z;
+                result.z = -temp;
+            }
+            case SOUTH -> {
+                temp = result.x;
+                result.x = -result.z;
+                result.z = temp;
+            }
+            case WEST -> {
+                result.x = -result.x;
+                result.z = -result.z;
+            }
+            case UP -> {
+                temp = result.x;
+                result.x = -result.y;
+                result.y = temp;
+            }
+            case DOWN -> {
+                temp = result.x;
+                result.x = result.y;
+                result.y = -temp;
+            }
+        }
+
+        // 平移回原点
+        result.add(0.5f, 0.5f, 0.5f);
+
+        return result;
     }
 
     public int getHorizontalIndex() {
