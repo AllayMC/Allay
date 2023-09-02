@@ -50,6 +50,10 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     @Nullable
     ItemType<?> getItemType();
 
+    default BlockState ofState(int blockStateHash) {
+        return getBlockStateHashMap().get(blockStateHash);
+    }
+
     default BlockState ofState(BlockPropertyType.BlockPropertyValue<?, ?, ?>... propertyValues) {
         return ofState(List.of(propertyValues));
     }

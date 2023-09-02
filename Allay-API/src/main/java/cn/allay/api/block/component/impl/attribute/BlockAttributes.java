@@ -23,7 +23,7 @@ import java.awt.*;
  */
 @Getter
 @Accessors(fluent = true)
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode
 public class BlockAttributes {
     public static final float DEFAULT_FRICTION = 0.6f;
