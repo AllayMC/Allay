@@ -63,7 +63,7 @@ class AllayBlockTypeTest {
                         TEST_ENUM_PROPERTY_TYPE)
                 .setComponents(List.of(
                         new TestComponentImpl(),
-                        BlockAttributeComponentImpl.ofDynamic(blockState -> BlockAttributes.builder().burnChance(3).build())))
+                        BlockAttributeComponentImpl.ofDirectDynamic(blockState -> BlockAttributes.builder().burnChance(3).build())))
                 .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                 .addBasicComponents()
                 .build();

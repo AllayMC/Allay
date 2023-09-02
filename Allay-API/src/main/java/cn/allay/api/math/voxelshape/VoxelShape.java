@@ -70,10 +70,14 @@ public final class VoxelShape {
     }
 
     public boolean intersectsAABB(AABBfc other) {
-        if (vacancies.stream().anyMatch(vacancy -> vacancy.containsAABB(other))) {
+        AABBf aabb = unionAABB();
+        if (!aabb.intersectsAABB(other))
+            return false;
+        other.intersection(aabb, aabb);
+        if (vacancies.stream().anyMatch(vacancy -> vacancy.containsAABB(aabb))) {
             return false;
         }
-        return solids.stream().anyMatch(solid -> solid.intersectsAABB(other));
+        return solids.stream().anyMatch(solid -> solid.intersectsAABB(aabb));
     }
 
     public boolean intersectsPoint(Vector3fc vec) {
