@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
@@ -25,7 +23,6 @@ jobs:
         with:
           name: Allay-API
           path: Allay-API/build/libs/Allay-API.jar
-
       - name: Upload Allay-Server
         uses: actions/upload-artifact@v3
         if: success()
