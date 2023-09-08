@@ -27,6 +27,12 @@ idea {
     }
 }
 
+//Enable gradle wrapper update task
+tasks.wrapper {
+    enabled = true
+    gradleVersion = "8.3"
+}
+
 subprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")

@@ -29,9 +29,10 @@ dependencies {
 tasks.processResources {
     dependsOn("generateGitProperties")
     // input directory
-    from("${rootProject.projectDir}/Data")
+    from("${rootProject.projectDir}/Allay-Data/resources")
     // exclude unpacked folder and block palette.nbt
     exclude("**/unpacked/**")
+    exclude("**/updater/**")
     exclude("**/mappings/**")
 }
 
