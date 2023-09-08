@@ -2,14 +2,14 @@ package cn.allay.server;
 
 import cn.allay.api.AllayAPI;
 import cn.allay.api.MissingImplementationException;
-import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
-import cn.allay.api.item.component.impl.attribute.VanillaItemAttributeRegistry;
+import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;

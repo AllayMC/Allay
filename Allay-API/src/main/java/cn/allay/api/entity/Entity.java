@@ -2,7 +2,7 @@ package cn.allay.api.entity;
 
 import cn.allay.api.datastruct.aabbtree.HasAABB;
 import cn.allay.api.datastruct.aabbtree.HasLongId;
-import cn.allay.api.entity.component.impl.base.EntityBaseComponent;
+import cn.allay.api.entity.component.base.EntityBaseComponent;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
@@ -10,8 +10,6 @@ import cn.allay.api.math.location.Location3f;
 import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBf;
-
-import javax.annotation.Nullable;
 
 /**
  * Allay Project 2023/5/20

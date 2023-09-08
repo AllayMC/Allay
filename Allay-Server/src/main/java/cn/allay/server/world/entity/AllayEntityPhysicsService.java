@@ -21,7 +21,7 @@ import org.joml.primitives.AABBfc;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static cn.allay.api.block.component.impl.attribute.BlockAttributes.DEFAULT_FRICTION;
+import static cn.allay.api.block.component.attribute.BlockAttributes.DEFAULT_FRICTION;
 import static java.lang.Math.*;
 
 /**

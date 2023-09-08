@@ -2,7 +2,7 @@ package cn.allay.server.component.impl;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
-import cn.allay.api.component.interfaces.ComponentImpl;
+import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.interfaces.TestInitArgComponent;
 
@@ -11,7 +11,7 @@ import cn.allay.server.component.interfaces.TestInitArgComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleTestInitArgComponent implements TestInitArgComponent, ComponentImpl {
+public class SimpleTestInitArgComponent implements TestInitArgComponent, Component {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:test_init_arg_component");

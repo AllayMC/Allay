@@ -1,7 +1,7 @@
 package cn.allay.server.entity.type;
 
 import cn.allay.api.data.VanillaEntityTypes;
-import cn.allay.api.entity.impl.EntitySheep;
+import cn.allay.api.entity.interfaces.EntitySheep;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.world.World;

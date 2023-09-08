@@ -1,8 +1,8 @@
 package cn.allay.api.block.component;
 
-import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
-import cn.allay.api.block.component.impl.attribute.BlockAttributes;
-import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.api.block.component.attribute.BlockAttributeComponentImpl;
+import cn.allay.api.block.component.attribute.BlockAttributes;
+import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.data.VanillaBlockId;
 
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package cn.allay.api.block.type;
 
 import cn.allay.api.block.BlockBehavior;
-import cn.allay.api.block.component.BlockComponentImpl;
+import cn.allay.api.block.component.BlockComponent;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.identifier.Identified;
@@ -23,7 +23,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
 
     T getBlockBehavior();
 
-    List<? extends BlockComponentImpl> getComponents();
+    List<? extends BlockComponent> getComponents();
 
     @UnmodifiableView
     Map<String, BlockPropertyType<?>> getProperties();

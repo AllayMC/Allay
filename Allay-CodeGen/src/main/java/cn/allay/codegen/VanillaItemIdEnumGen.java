@@ -11,7 +11,7 @@ import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static cn.allay.codegen.VanillaItemClassGen.MAPPED_ITEM_DATA;
+import static cn.allay.codegen.VanillaItemInterfaceGen.MAPPED_ITEM_DATA;
 
 
 /**

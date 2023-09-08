@@ -14,5 +14,5 @@ public interface ComponentedObject {
     /**
      * @return Components injected into this object
      */
-    List<ComponentImpl> getComponents();
+    List<Component> getComponents();
 }

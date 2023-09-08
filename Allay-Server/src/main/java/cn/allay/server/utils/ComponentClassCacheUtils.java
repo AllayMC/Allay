@@ -24,9 +24,9 @@ import java.util.Properties;
 @SuppressWarnings("unchecked")
 public final class ComponentClassCacheUtils {
     public static final Path CACHE_ROOT = Path.of("cache");
-    public static final String CACHE_PACKAGE_BLOCK = "cn/allay/api/block/behavior";
-    public static final String CACHE_PACKAGE_ITEM = "cn/allay/api/item/impl";
-    public static final String CACHE_PACKAGE_ENTITY = "cn/allay/api/entity/impl";
+    public static final String CACHE_PACKAGE_BLOCK = "cn/allay/api/block/interfaces";
+    public static final String CACHE_PACKAGE_ITEM = "cn/allay/api/item/interfaces";
+    public static final String CACHE_PACKAGE_ENTITY = "cn/allay/api/entity/interfaces";
     private static final URLClassLoader LOADER;
 
     static {

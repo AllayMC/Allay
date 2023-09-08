@@ -1,7 +1,7 @@
 package cn.allay.api.item;
 
-import cn.allay.api.item.component.impl.attribute.ItemAttributeComponent;
-import cn.allay.api.item.component.impl.base.ItemBaseComponent;
+import cn.allay.api.item.component.attribute.ItemAttributeComponent;
+import cn.allay.api.item.component.base.ItemBaseComponent;
 
 /**
  * Allay Project 2023/5/19
@@ -11,5 +11,4 @@ import cn.allay.api.item.component.impl.base.ItemBaseComponent;
 public interface ItemStack extends
         ItemBaseComponent,
         ItemAttributeComponent {
-
 }

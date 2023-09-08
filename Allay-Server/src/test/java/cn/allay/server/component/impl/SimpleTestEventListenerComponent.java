@@ -2,7 +2,7 @@ package cn.allay.server.component.impl;
 
 import cn.allay.api.component.annotation.ComponentEventListener;
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.interfaces.ComponentImpl;
+import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.event.TestEvent;
 import cn.allay.server.component.interfaces.TestEventListenerComponent;
@@ -12,7 +12,7 @@ import cn.allay.server.component.interfaces.TestEventListenerComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleTestEventListenerComponent implements TestEventListenerComponent, ComponentImpl {
+public class SimpleTestEventListenerComponent implements TestEventListenerComponent, Component {
 
 
     @ComponentIdentifier

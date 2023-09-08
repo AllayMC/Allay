@@ -1,8 +1,8 @@
 package cn.allay.server.block.type;
 
 import cn.allay.api.block.BlockBehavior;
-import cn.allay.api.block.component.BlockComponentImpl;
-import cn.allay.api.block.component.impl.custom.CustomBlockComponent;
+import cn.allay.api.block.component.BlockComponent;
+import cn.allay.api.block.component.custom.CustomBlockComponent;
 import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.server.block.component.TestAutoRegisterComponent;
 import cn.allay.server.block.component.TestAutoRegisterComponentImpl;
@@ -16,5 +16,5 @@ import cn.allay.server.block.component.TestComponent;
 public interface TestBlock extends BlockBehavior, TestComponent, CustomBlockComponent, TestAutoRegisterComponent {
 
     @AutoRegister
-    BlockComponentImpl TEST_AUTO_REGISTER_COMPONENT = new TestAutoRegisterComponentImpl(true);
+    BlockComponent TEST_AUTO_REGISTER_COMPONENT = new TestAutoRegisterComponentImpl(true);
 }

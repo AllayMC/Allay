@@ -2,8 +2,8 @@ package cn.allay.api.block.type;
 
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.block.BlockBehavior;
-import cn.allay.api.block.component.BlockComponentImpl;
-import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
+import cn.allay.api.block.component.BlockComponent;
+import cn.allay.api.block.component.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
@@ -41,20 +41,20 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
 
     BlockTypeBuilder<T> setProperties(List<BlockPropertyType<?>> properties);
 
-    default BlockTypeBuilder<T> setComponents(List<BlockComponentImpl> components) {
+    default BlockTypeBuilder<T> setComponents(List<BlockComponent> components) {
         return setComponents(listComponentToMap(components));
     }
 
-    BlockTypeBuilder<T> setComponents(Map<Identifier, BlockComponentImpl> components);
+    BlockTypeBuilder<T> setComponents(Map<Identifier, BlockComponent> components);
 
-    default BlockTypeBuilder<T> addComponents(List<BlockComponentImpl> components) {
+    default BlockTypeBuilder<T> addComponents(List<BlockComponent> components) {
         return addComponents(listComponentToMap(components));
     }
 
-    BlockTypeBuilder<T> addComponents(Map<Identifier, BlockComponentImpl> components);
+    BlockTypeBuilder<T> addComponents(Map<Identifier, BlockComponent> components);
 
-    private Map<Identifier, BlockComponentImpl> listComponentToMap(List<BlockComponentImpl> components) {
-        var map = new HashMap<Identifier, BlockComponentImpl>();
+    private Map<Identifier, BlockComponent> listComponentToMap(List<BlockComponent> components) {
+        var map = new HashMap<Identifier, BlockComponent>();
         components.forEach(component -> {
             var id = ComponentProvider.findComponentIdentifier(component.getClass());
             if (map.containsKey(id))
@@ -64,13 +64,13 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
         return map;
     }
 
-    BlockTypeBuilder<T> addComponent(BlockComponentImpl component);
+    BlockTypeBuilder<T> addComponent(BlockComponent component);
 
     BlockTypeBuilder<T> addBasicComponents();
 
     BlockTypeBuilder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent);
 
-    BlockTypeBuilder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockComponentImpl> blockBaseComponentSupplier);
+    BlockTypeBuilder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockComponent> blockBaseComponentSupplier);
 
     BlockType<T> build();
 

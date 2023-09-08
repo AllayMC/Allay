@@ -18,7 +18,7 @@ public class VanillaEntityDataExtractor {
 
     public static final Gson GSON = new Gson();
     public static final Path ENTITY_FILE_PATH = BedrockSampleDataExtractor.BEHAVIOR_PACK_ROOT_PATH.resolve("entities");
-    public static final Path FILE_OUT_PUT_PATH = Path.of("Data/unpacked/entity_attributes.json");
+    public static final Path FILE_OUT_PUT_PATH = Path.of("Allay-Data/resources/unpacked/entity_attributes.json");
 
     //TODO: Temporarily not working. Make it work
     @SneakyThrows

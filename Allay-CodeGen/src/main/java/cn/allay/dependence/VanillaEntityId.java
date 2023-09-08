@@ -1,5 +1,6 @@
 package cn.allay.dependence;
 
+import java.lang.String;
 import lombok.Getter;
 
 /**
@@ -7,7 +8,6 @@ import lombok.Getter;
  * Allay Project <p>
  * @author daoge_cmd
  */
-@Getter
 public enum VanillaEntityId {
   AGENT("minecraft:agent", 56),
 
@@ -253,6 +253,7 @@ public enum VanillaEntityId {
 
   ZOMBIE_VILLAGER_V2("minecraft:zombie_villager_v2", 116);
 
+  @Getter
   private final Identifier identifier;
 
   @Getter
