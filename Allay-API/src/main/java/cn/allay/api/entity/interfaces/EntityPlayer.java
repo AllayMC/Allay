@@ -87,6 +87,7 @@ public interface EntityPlayer extends
         @Getter
         class Simple extends EntityInitInfo.Simple<EntityPlayer> implements EntityPlayerInitInfo {
             private final Client client;
+
             public Simple(Client client, Location3f location) {
                 super(location);
                 this.client = client;
