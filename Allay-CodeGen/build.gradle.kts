@@ -11,7 +11,8 @@ dependencies {
 
 tasks.processResources {
     // input
-    from("${rootProject.projectDir}/Data")
-    //  exclude unpacked folder
+    from("${rootProject.projectDir}/Allay-Data/resources")
+    // exclude folder
     exclude("**/unpacked/**")
+    exclude("**/updater/**")
 }
