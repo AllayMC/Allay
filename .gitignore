@@ -3,16 +3,8 @@
 buildSrc/**
 **/build
 **/logs
-/Data/bedrock-samples/behavior_pack/
-/Data/bedrock-samples/documentation/
-/Data/bedrock-samples/resource_pack/
-/Data/bedrock-samples/.gitignore
-/Data/bedrock-samples/LICENSE.md
-/Data/bedrock-samples/README.md
-/Data/bedrock-samples/version.json
-/Data/git.properties
+/Allay-Data/resources/git.properties
 /Allay-Server/cache/
-/output/
 /Allay-Server/src/test/resources/allayworld/db/
 /output/
 /cache/

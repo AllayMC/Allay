@@ -26,6 +26,11 @@ dependencies {
     testImplementation(libs.bytebuddy)
 }
 
+gitProperties {
+    gitPropertiesName = "git.properties"
+    gitPropertiesResourceDir.set(file("${rootProject.projectDir}/Allay-Data/resources"))
+}
+
 tasks.processResources {
     dependsOn("generateGitProperties")
     // input directory
@@ -63,11 +68,6 @@ tasks.named<Delete>("clean") {
 
 tasks.sourcesJar {
     dependsOn("generateGitProperties")
-}
-
-gitProperties {
-    gitPropertiesName = "git.properties"
-    gitPropertiesResourceDir.set(file("${rootProject.projectDir}/Data"))
 }
 
 tasks.jmh {
