@@ -128,7 +128,7 @@ class BlockAttributesTest {
 //                continue;
 //            }
             assertNotNull(expected, "Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
-            assertEquals(attributeMap.get(state.blockStateHash()), block.getBlockAttributes(state));
+            assertEquals(expected, block.getBlockAttributes(state));
         }
     }
 }
