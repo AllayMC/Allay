@@ -1,4 +1,4 @@
-package cn.allay.api.item.impl;
+package cn.allay.api.item.interfaces;
 
 import cn.allay.api.item.ItemStack;
 
