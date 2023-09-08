@@ -5,7 +5,7 @@ import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.component.ItemComponentImpl;
+import cn.allay.api.item.component.ItemComponent;
 
 import java.util.List;
 import java.util.Map;
@@ -40,19 +40,19 @@ public interface ItemTypeBuilder<T extends ItemStack> {
 
     ItemTypeBuilder<T> runtimeId(int runtimeId);
 
-    ItemTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends ItemComponentImpl>> componentProviders);
+    ItemTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders);
 
-    default ItemTypeBuilder<T> setComponents(List<ComponentProvider<? extends ItemComponentImpl>> componentProviders) {
+    default ItemTypeBuilder<T> setComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
         return setComponents(toMap(componentProviders));
     }
 
-    ItemTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends ItemComponentImpl>> componentProviders);
+    ItemTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders);
 
-    default ItemTypeBuilder<T> addComponents(List<ComponentProvider<? extends ItemComponentImpl>> componentProviders) {
+    default ItemTypeBuilder<T> addComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
         return addComponents(toMap(componentProviders));
     }
 
-    ItemTypeBuilder<T> addComponent(ComponentProvider<? extends ItemComponentImpl> componentProvider);
+    ItemTypeBuilder<T> addComponent(ComponentProvider<? extends ItemComponent> componentProvider);
 
     ItemTypeBuilder<T> addBasicComponents();
 

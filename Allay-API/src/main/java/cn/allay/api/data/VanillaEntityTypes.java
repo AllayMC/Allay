@@ -1,7 +1,7 @@
 package cn.allay.api.data;
 
 import cn.allay.api.component.interfaces.ComponentProvider;
-import cn.allay.api.entity.component.impl.base.EntityBaseComponentImpl;
+import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.impl.*;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;

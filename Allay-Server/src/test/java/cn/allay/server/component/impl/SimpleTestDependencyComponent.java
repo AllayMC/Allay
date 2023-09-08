@@ -3,7 +3,7 @@ package cn.allay.server.component.impl;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
-import cn.allay.api.component.interfaces.ComponentImpl;
+import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.interfaces.TestDependencyComponent;
 
@@ -12,7 +12,7 @@ import cn.allay.server.component.interfaces.TestDependencyComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleTestDependencyComponent implements ComponentImpl, TestDependencyComponent {
+public class SimpleTestDependencyComponent implements Component, TestDependencyComponent {
 
 
     @ComponentIdentifier
@@ -20,29 +20,29 @@ public class SimpleTestDependencyComponent implements ComponentImpl, TestDepende
 
 
     @Dependency(identifier = "minecraft:name_component")
-    protected ComponentImpl nameComponent;
+    protected Component nameComponent;
 
     @Dependency(identifier = "minecraft:health_component")
-    protected ComponentImpl healthComponent;
+    protected Component healthComponent;
 
     @Dependency(identifier = "minecraft:attack_component")
-    protected ComponentImpl attackComponent;
+    protected Component attackComponent;
 
     @Impl
     @Override
-    public ComponentImpl getNameComponent() {
+    public Component getNameComponent() {
         return nameComponent;
     }
 
     @Impl
     @Override
-    public ComponentImpl getHealthComponent() {
+    public Component getHealthComponent() {
         return healthComponent;
     }
 
     @Impl
     @Override
-    public ComponentImpl getAttackComponent() {
+    public Component getAttackComponent() {
         return attackComponent;
     }
 }

@@ -20,20 +20,20 @@ import static java.lang.reflect.Modifier.isStatic;
  *
  * @author daoge_cmd
  */
-public interface ComponentProvider<T extends ComponentImpl> {
-    static <T extends ComponentImpl> ComponentProvider<T> of(Supplier<T> provider, Class<?> componentClass) {
+public interface ComponentProvider<T extends Component> {
+    static <T extends Component> ComponentProvider<T> of(Supplier<T> provider, Class<?> componentClass) {
         return new SimpleComponentProvider<>((info) -> provider.get(), componentClass);
     }
 
-    static <T extends ComponentImpl> ComponentProvider<T> of(Function<ComponentInitInfo, T> provider, Class<?> componentClass) {
+    static <T extends Component> ComponentProvider<T> of(Function<ComponentInitInfo, T> provider, Class<?> componentClass) {
         return new SimpleComponentProvider<>(provider, componentClass);
     }
 
-    static <T extends ComponentImpl> ComponentProvider<T> ofSingleton(T singleton) {
+    static <T extends Component> ComponentProvider<T> ofSingleton(T singleton) {
         return of((info) -> singleton, singleton.getClass());
     }
 
-    static <P extends ComponentImpl> Map<Identifier, ComponentProvider<? extends P>> toMap(List<ComponentProvider<? extends P>> componentProviders) {
+    static <P extends Component> Map<Identifier, ComponentProvider<? extends P>> toMap(List<ComponentProvider<? extends P>> componentProviders) {
         var map = new HashMap<Identifier, ComponentProvider<? extends P>>();
         componentProviders.forEach(componentProvider -> {
             var id = componentProvider.findComponentIdentifier();
@@ -73,7 +73,7 @@ public interface ComponentProvider<T extends ComponentImpl> {
     }
 
     @AllArgsConstructor
-    class SimpleComponentProvider<T extends ComponentImpl> implements ComponentProvider<T> {
+    class SimpleComponentProvider<T extends Component> implements ComponentProvider<T> {
         private Function<ComponentInitInfo, T> provider;
         @Getter
         private Class<?> componentClass;

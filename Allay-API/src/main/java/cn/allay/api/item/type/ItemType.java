@@ -5,7 +5,7 @@ import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.identifier.Identified;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.component.ItemComponentImpl;
+import cn.allay.api.item.component.ItemComponent;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,7 @@ import java.util.List;
  * @author daoge_cmd
  */
 public interface ItemType<T extends ItemStack> extends Identified {
-    List<ComponentProvider<? extends ItemComponentImpl>> getComponentProviders();
+    List<ComponentProvider<? extends ItemComponent>> getComponentProviders();
 
     T createItemStack(ItemStackInitInfo<T> info);
 

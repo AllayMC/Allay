@@ -9,14 +9,14 @@ import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.*;
 import cn.allay.api.entity.Entity;
-import cn.allay.api.entity.component.impl.attribute.EntityAttributeComponent;
-import cn.allay.api.entity.component.impl.attribute.EntityAttributeComponentImpl;
-import cn.allay.api.entity.component.impl.base.EntityBaseComponentImpl;
-import cn.allay.api.entity.component.impl.base.EntityPlayerBaseComponent;
-import cn.allay.api.entity.component.impl.container.EntityContainerHolderComponent;
-import cn.allay.api.entity.component.impl.container.EntityContainerHolderComponentImpl;
-import cn.allay.api.entity.component.impl.container.EntityContainerViewerComponent;
-import cn.allay.api.entity.component.impl.container.EntityContainerViewerComponentImpl;
+import cn.allay.api.entity.component.attribute.EntityAttributeComponent;
+import cn.allay.api.entity.component.attribute.EntityAttributeComponentImpl;
+import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
+import cn.allay.api.entity.component.base.EntityPlayerBaseComponent;
+import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
+import cn.allay.api.entity.component.container.EntityContainerHolderComponentImpl;
+import cn.allay.api.entity.component.container.EntityContainerViewerComponent;
+import cn.allay.api.entity.component.container.EntityContainerViewerComponentImpl;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.location.Location3f;
@@ -34,7 +34,7 @@ import org.joml.primitives.AABBfc;
 
 import java.util.function.Function;
 
-import static cn.allay.api.entity.component.impl.attribute.EntityAttributeComponentImpl.basicAttributes;
+import static cn.allay.api.entity.component.attribute.EntityAttributeComponentImpl.basicAttributes;
 
 /**
  * @author daoge_cmd <br>

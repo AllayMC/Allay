@@ -1,7 +1,7 @@
 package cn.allay.server.component.interfaces;
 
 import cn.allay.api.component.annotation.Inject;
-import cn.allay.api.component.interfaces.ComponentImpl;
+import cn.allay.api.component.interfaces.Component;
 
 /**
  * Allay Project 2023/3/4
@@ -10,11 +10,11 @@ import cn.allay.api.component.interfaces.ComponentImpl;
  */
 public interface TestDependencyComponent {
     @Inject
-    ComponentImpl getNameComponent();
+    Component getNameComponent();
 
     @Inject
-    ComponentImpl getHealthComponent();
+    Component getHealthComponent();
 
     @Inject
-    ComponentImpl getAttackComponent();
+    Component getAttackComponent();
 }

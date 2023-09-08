@@ -1,13 +1,13 @@
 package cn.allay.server.entity.type;
 
 import cn.allay.api.component.annotation.AutoRegister;
-import cn.allay.api.component.interfaces.ComponentImpl;
+import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
-import cn.allay.api.entity.component.EntityComponentImpl;
-import cn.allay.api.entity.component.impl.base.EntityBaseComponentImpl;
+import cn.allay.api.entity.component.EntityComponent;
+import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
@@ -33,18 +33,18 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
     protected Constructor<T> constructor;
-    protected List<ComponentProvider<? extends EntityComponentImpl>> componentProviders;
+    protected List<ComponentProvider<? extends EntityComponent>> componentProviders;
     protected Identifier identifier;
 
     @SneakyThrows
     protected AllayEntityType(Class<T> interfaceClass,
-                              List<ComponentProvider<? extends EntityComponentImpl>> componentProviders,
+                              List<ComponentProvider<? extends EntityComponent>> componentProviders,
                               Identifier identifier) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
         this.identifier = identifier;
         try {
-            ArrayList<ComponentProvider<? extends ComponentImpl>> components = new ArrayList<>(componentProviders);
+            ArrayList<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
             injectedClass = new AllayComponentInjector<T>()
                     .interfaceClass(interfaceClass)
                     .component(components)
@@ -57,7 +57,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         constructor = injectedClass.getConstructor(ComponentInitInfo.class);
     }
     @Override
-    public List<ComponentProvider<? extends EntityComponentImpl>> getComponentProviders() {
+    public List<ComponentProvider<? extends EntityComponent>> getComponentProviders() {
         return componentProviders;
     }
 
@@ -79,7 +79,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
     public static class Builder<T extends Entity> implements EntityTypeBuilder<T> {
         protected Class<T> interfaceClass;
-        protected Map<Identifier, ComponentProvider<? extends EntityComponentImpl>> componentProviders = new HashMap<>();
+        protected Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders = new HashMap<>();
         protected Identifier identifier;
 
         public Builder(Class<T> interfaceClass) {
@@ -105,7 +105,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         @Override
-        public EntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponentImpl>> componentProviders) {
+        public EntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
             if (componentProviders == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
             this.componentProviders = new HashMap<>(componentProviders);
@@ -113,13 +113,13 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         @Override
-        public EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponentImpl>> componentProviders) {
+        public EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
             this.componentProviders.putAll(componentProviders);
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponentImpl> componentProvider) {
+        public EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponent> componentProvider) {
             this.componentProviders.put(componentProvider.findComponentIdentifier(), componentProvider);
             return this;
         }
@@ -140,7 +140,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
                     .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegister.class).order()))
                     .forEach(field -> {
                         try {
-                            addComponent((ComponentProvider<? extends EntityComponentImpl>) field.get(null));
+                            addComponent((ComponentProvider<? extends EntityComponent>) field.get(null));
                         } catch (IllegalAccessException e) {
                             throw new EntityTypeBuildException(e);
                         } catch (ClassCastException e) {

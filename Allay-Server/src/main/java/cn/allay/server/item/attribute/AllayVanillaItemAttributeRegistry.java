@@ -1,8 +1,8 @@
 package cn.allay.server.item.attribute;
 
 import cn.allay.api.data.VanillaItemId;
-import cn.allay.api.item.component.impl.attribute.ItemAttributes;
-import cn.allay.api.item.component.impl.attribute.VanillaItemAttributeRegistry;
+import cn.allay.api.item.component.attribute.ItemAttributes;
+import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
 import cn.allay.api.registry.RegistryLoader;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.StringUtils;

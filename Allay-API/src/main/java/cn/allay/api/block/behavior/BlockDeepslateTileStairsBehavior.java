@@ -1,7 +1,7 @@
 package cn.allay.api.block.behavior;
 
 import cn.allay.api.block.BlockBehavior;
-import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
+import cn.allay.api.block.component.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.component.annotation.AutoRegister;
 
 import static cn.allay.api.block.component.CommonBlockComponents.STAIR_ATTRIBUTE_COMPONENT_SUPPLIER;

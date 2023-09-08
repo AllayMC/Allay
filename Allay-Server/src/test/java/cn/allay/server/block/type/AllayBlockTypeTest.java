@@ -1,7 +1,7 @@
 package cn.allay.server.block.type;
 
-import cn.allay.api.block.component.impl.attribute.BlockAttributeComponentImpl;
-import cn.allay.api.block.component.impl.attribute.BlockAttributes;
+import cn.allay.api.block.component.attribute.BlockAttributeComponentImpl;
+import cn.allay.api.block.component.attribute.BlockAttributes;
 import cn.allay.api.block.property.enums.*;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.property.type.BooleanPropertyType;
