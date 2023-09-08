@@ -1,6 +1,7 @@
 package cn.allay.server.world.generator.flat;
 
-import cn.allay.api.data.VanillaBlockTypes;
+import cn.allay.api.block.interfaces.BlockBedrockBehavior;
+import cn.allay.api.block.interfaces.BlockGrassBehavior;
 import cn.allay.api.world.GeneratorType;
 import cn.allay.api.world.generator.ChunkGenerateContext;
 import cn.allay.api.world.generator.WorldGenerator;
@@ -13,8 +14,8 @@ import cn.allay.api.world.generator.WorldGenerator;
 public class FlatWorldGenerator implements WorldGenerator {
     @Override
     public void generate(ChunkGenerateContext context) {
-        var bedrock = VanillaBlockTypes.BEDROCK_TYPE.getDefaultState();
-        var grass = VanillaBlockTypes.GRASS_TYPE.getDefaultState();
+        var bedrock = BlockBedrockBehavior.BEDROCK_TYPE.getDefaultState();
+        var grass = BlockGrassBehavior.GRASS_TYPE.getDefaultState();
         var flatChunk = context.chunk();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {

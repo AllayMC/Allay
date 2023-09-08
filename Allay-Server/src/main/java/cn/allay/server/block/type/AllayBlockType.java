@@ -355,25 +355,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public Builder<T> addBasicComponents() {
-            Arrays.stream(interfaceClass.getDeclaredFields())
-                    .filter(field -> isStatic(field.getModifiers()))
-                    .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
-                    .filter(field -> BlockComponent.class.isAssignableFrom(field.getType()))
-                    .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegister.class).order()))
-                    .forEach(field -> {
-                        try {
-                            addComponent((BlockComponent) field.get(null));
-                        } catch (IllegalAccessException e) {
-                            throw new BlockTypeBuildException(e);
-                        } catch (ClassCastException e) {
-                            throw new BlockTypeBuildException("Field " + field.getName() + "in class" + interfaceClass + " is not a ComponentProvider<? extends BlockComponentImpl>!", e);
-                        }
-                    });
-            return this;
-        }
-
-        @Override
         public Builder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent) {
             components.put(findComponentIdentifier(customBlockComponent.getClass()) ,customBlockComponent);
             isCustomBlock = true;

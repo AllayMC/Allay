@@ -2,6 +2,7 @@ package cn.allay.server.client;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.data.BlockFace;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.client.BaseClient;
 import cn.allay.api.client.data.AdventureSettings;
@@ -11,7 +12,6 @@ import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
-import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.interfaces.EntityPlayer;
@@ -638,7 +638,7 @@ public class AllayClient extends BaseClient {
                             log.warn("Player " + name + " tried to break block at " + pos + " but it is air");
                             continue;
                         }
-                        getWorld().setBlockState(pos.getX(), pos.getY(), pos.getZ(), VanillaBlockTypes.AIR_TYPE.getDefaultState());
+                        getWorld().setBlockState(pos.getX(), pos.getY(), pos.getZ(), BlockAirBehavior.AIR_TYPE.getDefaultState());
                         getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_STOP_BREAK, 0);
                         getWorld().sendLevelEventPacket(pos, LevelEvent.PARTICLE_DESTROY_BLOCK, oldState.blockStateHash());
                     }

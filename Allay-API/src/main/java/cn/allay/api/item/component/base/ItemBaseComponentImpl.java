@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
-import static cn.allay.api.item.CommonUseItemFunctions.checkEntityCollision;
+import static cn.allay.api.item.CommonUseItemFunctions.hasEntityCollision;
 import static cn.allay.api.item.CommonUseItemFunctions.tryConsumeItem;
 
 /**
@@ -45,7 +45,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected UseItemOn useItemOn = (player, itemStack, world, blockPos, placePos, clickPos, blockFace) -> {
         if (blockState == null)
             return false;
-        if (player != null && checkEntityCollision(world, placePos, blockState))
+        if (player != null && hasEntityCollision(world, placePos, blockState))
             return false;
         world.setBlockState(placePos.x(), placePos.y(), placePos.z(), blockState);
         tryConsumeItem(player, itemStack);

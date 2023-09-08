@@ -41,22 +41,14 @@ public class VanillaBlockInterfaceGen {
     public static void generate() {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
-            var blockClassName = ClassName.get("cn.allay.api.block.interfaces", "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior");
-            var path = FILE_OUTPUT_PATH_BASE.resolve(blockClassName + ".java");
-//            if (!Files.exists(path)) {
-//                System.out.println("Generating " + blockClassName + ".java ...");
-//                generateBlockClass(block, blockClassName, path);
-//            } else {
-//                System.out.println("Class " + blockClassName + ".java already exists during block class generating!");
-//            }
-            //TODO: TMP!!!
-            if (Files.exists(path)) {
-                var lines = Files.readAllLines(path);
-                if (lines.size() > 11) {
-                    System.out.println("修改过的文件！ " + blockClassName);
-                } else {
-                    generateBlockClass(block, blockClassName, path);
-                }
+            var blockClassSimpleName = "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior";
+            var blockClassName = ClassName.get("cn.allay.api.block.interfaces", blockClassSimpleName);
+            var path = FILE_OUTPUT_PATH_BASE.resolve(blockClassSimpleName + ".java");
+            if (!Files.exists(path)) {
+                System.out.println("Generating " + blockClassName + "...");
+                generateBlockClass(block, blockClassName, path);
+            } else {
+                System.out.println("Class " + blockClassName + " already exists during block class generating!");
             }
         }
     }
@@ -91,7 +83,6 @@ public class VanillaBlockInterfaceGen {
             });
             initializer.add(")\n");
         }
-        initializer.add("        .addBasicComponents()\n");
         initializer.add("        .build()");
         return FieldSpec
                 .builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, blockClassName), vanillaBlockId.name() + "_TYPE")

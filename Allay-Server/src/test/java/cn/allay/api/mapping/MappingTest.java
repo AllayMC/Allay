@@ -1,6 +1,6 @@
 package cn.allay.api.mapping;
 
-import cn.allay.api.data.VanillaBlockTypes;
+import cn.allay.api.block.interfaces.BlockWoodBehavior;
 import cn.allay.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public class MappingTest {
     @Test
     void testGetJeBlockState() {
-        JeBlockState jeBlockState = Mapping.getJeBlockState(VanillaBlockTypes.WOOD_TYPE.getDefaultState().blockStateHash());
+        JeBlockState jeBlockState = Mapping.getJeBlockState(BlockWoodBehavior.WOOD_TYPE.getDefaultState().blockStateHash());
         assert jeBlockState != null;
         Assertions.assertEquals("minecraft:acacia_wood[axis=x]", jeBlockState.toString());
     }
