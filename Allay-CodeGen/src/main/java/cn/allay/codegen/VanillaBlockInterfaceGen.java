@@ -5,7 +5,9 @@ import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,11 +30,6 @@ public class VanillaBlockInterfaceGen {
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockTypeBuilder");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/interfaces");
-    private static final Path BLOCK_TYPE_OUTPUT_PATH = Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockTypes.java");
-    private static final String BLOCK_TYPE_PACKAGE_NAME = "cn.allay.api.data";
-    private static final TypeSpec.Builder TYPES_CLASS = TypeSpec.interfaceBuilder("VanillaBlockTypes")
-            .addModifiers(Modifier.PUBLIC)
-            .addJavadoc("Allay Project <p>\n@author daoge_cmd");
 
     public static void main(String[] args) {
         VanillaBlockIdEnumGen.generate();
@@ -44,37 +41,43 @@ public class VanillaBlockInterfaceGen {
     public static void generate() {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
-            var className = "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior";
-            var path = FILE_OUTPUT_PATH_BASE.resolve(className + ".java");
-            if (!Files.exists(path)) {
-                System.out.println("Generating " + className + ".java ...");
-                generateBlockClass(className, path);
+            var blockClassName = ClassName.get("cn.allay.api.block.interfaces", "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior");
+            var path = FILE_OUTPUT_PATH_BASE.resolve(blockClassName + ".java");
+//            if (!Files.exists(path)) {
+//                System.out.println("Generating " + blockClassName + ".java ...");
+//                generateBlockClass(block, blockClassName, path);
+//            } else {
+//                System.out.println("Class " + blockClassName + ".java already exists during block class generating!");
+//            }
+            //TODO: TMP!!!
+            if (Files.exists(path)) {
+                var lines = Files.readAllLines(path);
+                if (lines.size() > 11) {
+                    System.out.println("修改过的文件！ " + blockClassName);
+                } else {
+                    generateBlockClass(block, blockClassName, path);
+                }
             }
-            generateBlockType(block, className);
         }
-        var typesJavaFile = JavaFile
-                .builder(BLOCK_TYPE_PACKAGE_NAME, TYPES_CLASS.build())
-                .build();
-        Files.writeString(BLOCK_TYPE_OUTPUT_PATH, typesJavaFile.toString());
     }
 
-    private static void generateBlockClass(String className, Path path) throws IOException {
-        TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(className)
+    private static void generateBlockClass(VanillaBlockId vanillaBlockId, ClassName blockClassName, Path path) throws IOException {
+        TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(blockClassName)
                 .addSuperinterface(BLOCK_BEHAVIOR_CLASS_NAME)
                 .addJavadoc(
                         "@author daoge_cmd | Cool_Loong <br>\n" +
                         "Allay Project <br>\n")
+                .addField(generateBlockTypeField(vanillaBlockId, blockClassName))
                 .addModifiers(Modifier.PUBLIC);
         var javaFile = JavaFile.builder("cn.allay.api.block.interfaces", codeBuilder.build()).build();
-        System.out.println("Generating " + className + ".java ...");
+        System.out.println("Generating " + blockClassName + ".java ...");
         Files.writeString(path, javaFile.toString());
     }
 
-    private static void generateBlockType(VanillaBlockId vanillaBlockId, String classNameStr) {
-        var className = ClassName.get("cn.allay.api.block.interfaces", classNameStr);
+    private static FieldSpec generateBlockTypeField(VanillaBlockId vanillaBlockId, ClassName blockClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T\n        .builder($T.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, className)
+                .add("$T\n        .builder($T.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, blockClassName)
                 .add("        .vanillaBlock($T.$N)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
         var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
         var states = blockPaletteData.getCompound("states");
@@ -90,11 +93,10 @@ public class VanillaBlockInterfaceGen {
         }
         initializer.add("        .addBasicComponents()\n");
         initializer.add("        .build()");
-        TYPES_CLASS.addField(
-                FieldSpec
-                        .builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, className), vanillaBlockId.name() + "_TYPE")
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                        .initializer(initializer.build())
-                        .build());
+        return FieldSpec
+                .builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, blockClassName), vanillaBlockId.name() + "_TYPE")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .initializer(initializer.build())
+                .build();
     }
 }
