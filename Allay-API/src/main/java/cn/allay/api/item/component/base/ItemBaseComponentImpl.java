@@ -5,7 +5,7 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.data.VanillaItemTypes;
-import cn.allay.api.entity.impl.EntityPlayer;
+import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.UseItemOn;

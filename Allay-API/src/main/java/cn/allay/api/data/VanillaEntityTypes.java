@@ -1,12 +1,129 @@
 package cn.allay.api.data;
 
-import cn.allay.api.component.interfaces.ComponentProvider;
-import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
-import cn.allay.api.entity.impl.*;
-import cn.allay.api.entity.type.EntityInitInfo;
+import cn.allay.api.entity.interfaces.EntityAgent;
+import cn.allay.api.entity.interfaces.EntityAllay;
+import cn.allay.api.entity.interfaces.EntityAreaEffectCloud;
+import cn.allay.api.entity.interfaces.EntityArmorStand;
+import cn.allay.api.entity.interfaces.EntityArrow;
+import cn.allay.api.entity.interfaces.EntityAxolotl;
+import cn.allay.api.entity.interfaces.EntityBalloon;
+import cn.allay.api.entity.interfaces.EntityBat;
+import cn.allay.api.entity.interfaces.EntityBee;
+import cn.allay.api.entity.interfaces.EntityBlaze;
+import cn.allay.api.entity.interfaces.EntityBoat;
+import cn.allay.api.entity.interfaces.EntityCamel;
+import cn.allay.api.entity.interfaces.EntityCat;
+import cn.allay.api.entity.interfaces.EntityCaveSpider;
+import cn.allay.api.entity.interfaces.EntityChestBoat;
+import cn.allay.api.entity.interfaces.EntityChestMinecart;
+import cn.allay.api.entity.interfaces.EntityChicken;
+import cn.allay.api.entity.interfaces.EntityCod;
+import cn.allay.api.entity.interfaces.EntityCommandBlockMinecart;
+import cn.allay.api.entity.interfaces.EntityCow;
+import cn.allay.api.entity.interfaces.EntityCreeper;
+import cn.allay.api.entity.interfaces.EntityDolphin;
+import cn.allay.api.entity.interfaces.EntityDonkey;
+import cn.allay.api.entity.interfaces.EntityDragonFireball;
+import cn.allay.api.entity.interfaces.EntityDrowned;
+import cn.allay.api.entity.interfaces.EntityEgg;
+import cn.allay.api.entity.interfaces.EntityElderGuardian;
+import cn.allay.api.entity.interfaces.EntityElderGuardianGhost;
+import cn.allay.api.entity.interfaces.EntityEnderCrystal;
+import cn.allay.api.entity.interfaces.EntityEnderDragon;
+import cn.allay.api.entity.interfaces.EntityEnderPearl;
+import cn.allay.api.entity.interfaces.EntityEnderman;
+import cn.allay.api.entity.interfaces.EntityEndermite;
+import cn.allay.api.entity.interfaces.EntityEvocationFang;
+import cn.allay.api.entity.interfaces.EntityEvocationIllager;
+import cn.allay.api.entity.interfaces.EntityEyeOfEnderSignal;
+import cn.allay.api.entity.interfaces.EntityFallingBlock;
+import cn.allay.api.entity.interfaces.EntityFireball;
+import cn.allay.api.entity.interfaces.EntityFireworksRocket;
+import cn.allay.api.entity.interfaces.EntityFishingHook;
+import cn.allay.api.entity.interfaces.EntityFox;
+import cn.allay.api.entity.interfaces.EntityFrog;
+import cn.allay.api.entity.interfaces.EntityGhast;
+import cn.allay.api.entity.interfaces.EntityGlowSquid;
+import cn.allay.api.entity.interfaces.EntityGoat;
+import cn.allay.api.entity.interfaces.EntityGuardian;
+import cn.allay.api.entity.interfaces.EntityHoglin;
+import cn.allay.api.entity.interfaces.EntityHopperMinecart;
+import cn.allay.api.entity.interfaces.EntityHorse;
+import cn.allay.api.entity.interfaces.EntityHusk;
+import cn.allay.api.entity.interfaces.EntityIceBomb;
+import cn.allay.api.entity.interfaces.EntityIronGolem;
+import cn.allay.api.entity.interfaces.EntityItem;
+import cn.allay.api.entity.interfaces.EntityLeashKnot;
+import cn.allay.api.entity.interfaces.EntityLightningBolt;
+import cn.allay.api.entity.interfaces.EntityLingeringPotion;
+import cn.allay.api.entity.interfaces.EntityLlama;
+import cn.allay.api.entity.interfaces.EntityLlamaSpit;
+import cn.allay.api.entity.interfaces.EntityMagmaCube;
+import cn.allay.api.entity.interfaces.EntityMinecart;
+import cn.allay.api.entity.interfaces.EntityMooshroom;
+import cn.allay.api.entity.interfaces.EntityMule;
+import cn.allay.api.entity.interfaces.EntityNpc;
+import cn.allay.api.entity.interfaces.EntityOcelot;
+import cn.allay.api.entity.interfaces.EntityPainting;
+import cn.allay.api.entity.interfaces.EntityPanda;
+import cn.allay.api.entity.interfaces.EntityParrot;
+import cn.allay.api.entity.interfaces.EntityPhantom;
+import cn.allay.api.entity.interfaces.EntityPig;
+import cn.allay.api.entity.interfaces.EntityPiglin;
+import cn.allay.api.entity.interfaces.EntityPiglinBrute;
+import cn.allay.api.entity.interfaces.EntityPillager;
+import cn.allay.api.entity.interfaces.EntityPlayer;
+import cn.allay.api.entity.interfaces.EntityPolarBear;
+import cn.allay.api.entity.interfaces.EntityPufferfish;
+import cn.allay.api.entity.interfaces.EntityRabbit;
+import cn.allay.api.entity.interfaces.EntityRavager;
+import cn.allay.api.entity.interfaces.EntitySalmon;
+import cn.allay.api.entity.interfaces.EntitySheep;
+import cn.allay.api.entity.interfaces.EntityShulker;
+import cn.allay.api.entity.interfaces.EntityShulkerBullet;
+import cn.allay.api.entity.interfaces.EntitySilverfish;
+import cn.allay.api.entity.interfaces.EntitySkeleton;
+import cn.allay.api.entity.interfaces.EntitySkeletonHorse;
+import cn.allay.api.entity.interfaces.EntitySlime;
+import cn.allay.api.entity.interfaces.EntitySmallFireball;
+import cn.allay.api.entity.interfaces.EntitySniffer;
+import cn.allay.api.entity.interfaces.EntitySnowGolem;
+import cn.allay.api.entity.interfaces.EntitySnowball;
+import cn.allay.api.entity.interfaces.EntitySpider;
+import cn.allay.api.entity.interfaces.EntitySplashPotion;
+import cn.allay.api.entity.interfaces.EntitySquid;
+import cn.allay.api.entity.interfaces.EntityStray;
+import cn.allay.api.entity.interfaces.EntityStrider;
+import cn.allay.api.entity.interfaces.EntityTadpole;
+import cn.allay.api.entity.interfaces.EntityThrownTrident;
+import cn.allay.api.entity.interfaces.EntityTnt;
+import cn.allay.api.entity.interfaces.EntityTntMinecart;
+import cn.allay.api.entity.interfaces.EntityTraderLlama;
+import cn.allay.api.entity.interfaces.EntityTripodCamera;
+import cn.allay.api.entity.interfaces.EntityTropicalfish;
+import cn.allay.api.entity.interfaces.EntityTurtle;
+import cn.allay.api.entity.interfaces.EntityVex;
+import cn.allay.api.entity.interfaces.EntityVillager;
+import cn.allay.api.entity.interfaces.EntityVillagerV2;
+import cn.allay.api.entity.interfaces.EntityVindicator;
+import cn.allay.api.entity.interfaces.EntityWanderingTrader;
+import cn.allay.api.entity.interfaces.EntityWarden;
+import cn.allay.api.entity.interfaces.EntityWitch;
+import cn.allay.api.entity.interfaces.EntityWither;
+import cn.allay.api.entity.interfaces.EntityWitherSkeleton;
+import cn.allay.api.entity.interfaces.EntityWitherSkull;
+import cn.allay.api.entity.interfaces.EntityWitherSkullDangerous;
+import cn.allay.api.entity.interfaces.EntityWolf;
+import cn.allay.api.entity.interfaces.EntityXpBottle;
+import cn.allay.api.entity.interfaces.EntityXpOrb;
+import cn.allay.api.entity.interfaces.EntityZoglin;
+import cn.allay.api.entity.interfaces.EntityZombie;
+import cn.allay.api.entity.interfaces.EntityZombieHorse;
+import cn.allay.api.entity.interfaces.EntityZombiePigman;
+import cn.allay.api.entity.interfaces.EntityZombieVillager;
+import cn.allay.api.entity.interfaces.EntityZombieVillagerV2;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
-import org.joml.primitives.AABBf;
 
 /**
  * Allay Project <p>
@@ -634,28 +751,12 @@ public interface VanillaEntityTypes {
   EntityType<EntityVillager> VILLAGER_TYPE = EntityTypeBuilder
           .builder(EntityVillager.class)
           .vanillaEntity(VanillaEntityId.VILLAGER)
-          .addComponent(
-                  ComponentProvider.of(
-                          info -> new EntityBaseComponentImpl<>(
-                                  (EntityInitInfo<EntityVillager>) info,
-                                  //TODO: 小村民
-                                  e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)
-                          ), EntityBaseComponentImpl.class
-                  ))
           .addBasicComponents()
           .build();
 
   EntityType<EntityVillagerV2> VILLAGER_V2_TYPE = EntityTypeBuilder
           .builder(EntityVillagerV2.class)
           .vanillaEntity(VanillaEntityId.VILLAGER_V2)
-          .addComponent(
-                  ComponentProvider.of(
-                          info -> new EntityBaseComponentImpl<>(
-                                  (EntityInitInfo<EntityVillagerV2>) info,
-                                  //TODO: 小村民
-                                  e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)
-                          ), EntityBaseComponentImpl.class
-                  ))
           .addBasicComponents()
           .build();
 

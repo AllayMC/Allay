@@ -3,6 +3,7 @@ package cn.allay.api.data;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.identifier.Identifier;
+import java.lang.String;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
@@ -1767,11 +1768,11 @@ public enum VanillaBlockId {
 
   @Nullable
   public static cn.allay.api.data.VanillaBlockId fromIdentifier(
-          cn.allay.api.identifier.Identifier identifier) {
-    try {
-      return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH));
-    } catch (IllegalArgumentException ignore) {
-      return null;
+      cn.allay.api.identifier.Identifier identifier) {
+    try{
+        return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH));
+    }catch(IllegalArgumentException ignore){
+        return null;
     }
   }
 }

@@ -19,10 +19,12 @@ import java.util.zip.GZIPInputStream;
  * @author daoge_cmd
  */
 public class CodeGen {
+    //所用到的资源根目录
+    public static final String DATA_PATH = "Allay-Data/resources/";
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     //被多个codegen同时使用到的资源文件
-    public static final Path BLOCK_ID_TO_ITEM_ID_MAP_PATH = Path.of("Data/unpacked/block_id_to_item_id_map.nbt");
+    public static final Path BLOCK_ID_TO_ITEM_ID_MAP_PATH = Path.of(DATA_PATH + "unpacked/block_id_to_item_id_map.nbt");
     public static final Map<String, String> BLOCK_ID_TO_ITEM_ID_MAP = new HashMap<>();
     public static final Map<String, String> ITEM_ID_TO_BLOCK_ID_MAP = new HashMap<>();
 
@@ -41,8 +43,8 @@ public class CodeGen {
 
     public static void main(String[] args) {
         VanillaBiomeIdEnumGen.main(args);
-        VanillaBlockBehaviorInterfaceGen.main(args);
-        VanillaEntityClassGen.main(args);
-        VanillaItemClassGen.main(args);
+        VanillaBlockInterfaceGen.main(args);
+        VanillaEntityInterfaceGen.main(args);
+        VanillaItemInterfaceGen.main(args);
     }
 }

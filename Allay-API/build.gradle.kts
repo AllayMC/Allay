@@ -32,5 +32,5 @@ dependencies {
 tasks.processResources {
     // input directory
     from("${rootProject.projectDir}/Allay-Data/resources")
-    include("mappings/")
+    include("mappings")
 }

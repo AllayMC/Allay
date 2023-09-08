@@ -3,7 +3,7 @@ package cn.allay.api.item.component.base;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.component.annotation.Inject;
-import cn.allay.api.entity.impl.EntityPlayer;
+import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.UseItemOn;
 import cn.allay.api.item.component.ItemComponent;

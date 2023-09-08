@@ -1,7 +1,7 @@
 package cn.allay.api.item;
 
 import cn.allay.api.block.data.BlockFace;
-import cn.allay.api.entity.impl.EntityPlayer;
+import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;

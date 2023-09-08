@@ -23,7 +23,7 @@ public class VanillaBlockPropertyTypeGen {
     }
 
     public static final BlockPropertyTypeFile BLOCK_PROPERTY_TYPE_INFO_FILE;
-    public static final Path BLOCK_PROPERTY_TYPES_FILE = Path.of("Data/unpacked/block_property_types.json");
+    public static final Path BLOCK_PROPERTY_TYPES_FILE = Path.of(CodeGen.DATA_PATH + "unpacked/block_property_types.json");
 
     public static class BlockPropertyTypeFile {
         Map<String, BlockPropertyTypeInfo> propertyTypes;
