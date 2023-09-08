@@ -37,7 +37,6 @@ tasks.processResources {
     from("${rootProject.projectDir}/Allay-Data/resources")
     // exclude unpacked folder and block palette.nbt
     exclude("**/unpacked/**")
-    exclude("**/mappings/**")
 }
 
 //disable ,please use `java -jar` to start directly
