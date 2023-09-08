@@ -7,7 +7,7 @@ import cn.allay.api.client.info.UIProfile;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
-import cn.allay.api.entity.impl.EntityPlayer;
+import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.chunk.Chunk;
 import lombok.Getter;

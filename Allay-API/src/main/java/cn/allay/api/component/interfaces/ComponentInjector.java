@@ -39,7 +39,7 @@ public interface ComponentInjector<T> {
      * @param providers component providers
      * @return the injector
      */
-    ComponentInjector<T> component(List<ComponentProvider<? extends ComponentImpl>> providers);
+    ComponentInjector<T> component(List<ComponentProvider<? extends Component>> providers);
 
     ComponentInjector<T> useCachedClass(Class<T> cachedClass);
 

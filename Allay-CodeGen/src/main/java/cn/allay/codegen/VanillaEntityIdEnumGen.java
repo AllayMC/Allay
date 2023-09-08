@@ -18,7 +18,7 @@ import java.util.TreeMap;
  * @author daoge_cmd
  */
 public class VanillaEntityIdEnumGen {
-    static final Path ENTITY_ID_MAP_FILE_PATH = Path.of("Data/unpacked/entity_id_map.json");
+    static final Path ENTITY_ID_MAP_FILE_PATH = Path.of(CodeGen.DATA_PATH + "unpacked/entity_id_map.json");
     static final Map<String, Integer> ENTITY_ID_MAP = new TreeMap<>();
 
     static {

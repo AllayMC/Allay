@@ -8,11 +8,3 @@ dependencies {
     implementation(libs.fastutil)
     implementation(libs.annotations)
 }
-
-tasks.processResources {
-    // input
-    from("${rootProject.projectDir}/Allay-Data/resources")
-    // exclude folder
-    exclude("**/unpacked/**")
-    exclude("**/updater/**")
-}

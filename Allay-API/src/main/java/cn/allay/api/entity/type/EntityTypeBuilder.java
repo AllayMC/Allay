@@ -4,7 +4,7 @@ import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
-import cn.allay.api.entity.component.EntityComponentImpl;
+import cn.allay.api.entity.component.EntityComponent;
 import cn.allay.api.identifier.Identifier;
 
 import java.util.List;
@@ -30,20 +30,20 @@ public interface EntityTypeBuilder<T extends Entity> {
 
     EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId);
 
-    default EntityTypeBuilder<T> setComponents(List<ComponentProvider<? extends EntityComponentImpl>> componentProviders) {
+    default EntityTypeBuilder<T> setComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
         return setComponents(toMap(componentProviders));
     }
 
-    EntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponentImpl>> componentProviders);
+    EntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders);
 
 
-    default EntityTypeBuilder<T> addComponents(List<ComponentProvider<? extends EntityComponentImpl>> componentProviders) {
+    default EntityTypeBuilder<T> addComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
         return addComponents(toMap(componentProviders));
     }
 
-    EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponentImpl>> componentProviders);
+    EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders);
 
-    EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponentImpl> componentProvider);
+    EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponent> componentProvider);
 
     EntityTypeBuilder<T> addBasicComponents();
 

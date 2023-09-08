@@ -1,10 +1,10 @@
 package cn.allay.server.block.registry;
 
-import cn.allay.api.block.component.impl.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaItemId;
-import cn.allay.api.item.component.impl.attribute.VanillaItemAttributeRegistry;
+import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;

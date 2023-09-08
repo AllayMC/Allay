@@ -35,7 +35,7 @@ public class VanillaBiomeIdEnumGen {
 
     static {
         try {
-            Map<String, BiomeData> unsorted = CodeGen.GSON.fromJson(Files.newBufferedReader(Path.of("Data/unpacked/biome_id_and_type.json")), new HashMap<String, BiomeData>() {
+            Map<String, BiomeData> unsorted = CodeGen.GSON.fromJson(Files.newBufferedReader(Path.of(CodeGen.DATA_PATH + "unpacked/biome_id_and_type.json")), new HashMap<String, BiomeData>() {
             }.getClass().getGenericSuperclass());
             unsorted.entrySet()
                     .stream()

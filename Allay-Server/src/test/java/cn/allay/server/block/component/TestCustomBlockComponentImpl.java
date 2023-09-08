@@ -1,6 +1,6 @@
 package cn.allay.server.block.component;
 
-import cn.allay.api.block.component.impl.custom.CustomBlockComponentImpl;
+import cn.allay.api.block.component.custom.CustomBlockComponentImpl;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.identifier.Identifier;
 

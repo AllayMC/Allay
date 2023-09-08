@@ -38,7 +38,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     protected static final String INIT_METHOD_NAME = "initComponents";
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
-    protected List<ComponentProvider<? extends ComponentImpl>> componentProviders = new ArrayList<>();
+    protected List<ComponentProvider<? extends Component>> componentProviders = new ArrayList<>();
 
     public AllayComponentInjector() {
     }
@@ -51,7 +51,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     }
 
     @Override
-    public ComponentInjector<T> component(List<ComponentProvider<? extends ComponentImpl>> providers) {
+    public ComponentInjector<T> component(List<ComponentProvider<? extends Component>> providers) {
         Objects.requireNonNull(providers, "The component providers cannot be null");
         this.componentProviders.addAll(providers);
         return this;
@@ -173,7 +173,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     }
 
 
-    protected DynamicType.Builder<T> afterInject(List<ComponentProvider<? extends ComponentImpl>> providers, DynamicType.Builder<T> bb) {
+    protected DynamicType.Builder<T> afterInject(List<ComponentProvider<? extends Component>> providers, DynamicType.Builder<T> bb) {
         bb = bb.implement(ComponentedObject.class)
                 .method(named("getComponents"))
                 .intercept(FieldAccessor.ofField(COMPONENT_LIST_FIELD_NAME));
@@ -233,10 +233,10 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     public static class Initializer<T> {
 
-        private final List<ComponentProvider<? extends ComponentImpl>> componentProviders;
-        private final Map<ComponentProvider<? extends ComponentImpl>, String> componentFieldNameMapping;
+        private final List<ComponentProvider<? extends Component>> componentProviders;
+        private final Map<ComponentProvider<? extends Component>, String> componentFieldNameMapping;
 
-        public Initializer(List<ComponentProvider<? extends ComponentImpl>> componentProviders) {
+        public Initializer(List<ComponentProvider<? extends Component>> componentProviders) {
             var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
             int num = 0;
             for (var provider : componentProviders) {
@@ -248,14 +248,14 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
 
         public void init(T instance, ComponentInitInfo initInfo) {
-            List<? extends ComponentImpl> components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
+            List<? extends Component> components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
             injectComponentInstances(instance, components);
             var componentManager = new AllayComponentManager<>(instance);
             injectComponentManager(componentManager, components);
-            components.forEach(ComponentImpl::onInitFinish);
+            components.forEach(Component::onInitFinish);
         }
 
-        protected void injectComponentManager(AllayComponentManager<T> manager, List<? extends ComponentImpl> components) {
+        protected void injectComponentManager(AllayComponentManager<T> manager, List<? extends Component> components) {
             for (var component : components) {
                 for (var field : ReflectionUtils.getAllFields(component.getClass())) {
                     if (field.isAnnotationPresent(Manager.class)) {
@@ -282,7 +282,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             }
         }
 
-        protected void injectComponentInstances(Object instance, List<? extends ComponentImpl> components) {
+        protected void injectComponentInstances(Object instance, List<? extends Component> components) {
             try {
                 var componentListField = instance.getClass().getDeclaredField(COMPONENT_LIST_FIELD_NAME);
                 try {
@@ -308,12 +308,12 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             }
         }
 
-        protected void injectDependency(List<? extends ComponentImpl> components, ComponentImpl component) {
+        protected void injectDependency(List<? extends Component> components, Component component) {
             for (var field : ReflectionUtils.getAllFields(component.getClass())) {
                 var annotation = field.getAnnotation(Dependency.class);
                 if (annotation != null) {
                     var type = field.getType();
-                    List<ComponentImpl> dependencies = new ArrayList<>(components);
+                    List<Component> dependencies = new ArrayList<>(components);
                     var count = Integer.MAX_VALUE;
                     var requireCompId = annotation.identifier();
                     var soft = annotation.soft();
