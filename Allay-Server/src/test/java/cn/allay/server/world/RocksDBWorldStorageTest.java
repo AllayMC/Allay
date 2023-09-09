@@ -1,7 +1,7 @@
 package cn.allay.server.world;
 
+import cn.allay.api.block.interfaces.BlockWoodBehavior;
 import cn.allay.api.data.VanillaBiomeId;
-import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.api.world.Difficulty;
@@ -95,7 +95,7 @@ public class RocksDBWorldStorageTest {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {
-                    allayUnsafeChunk.setBlockState(i, k, j, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
+                    allayUnsafeChunk.setBlockState(i, k, j, BlockWoodBehavior.WOOD_TYPE.getDefaultState());
                     allayUnsafeChunk.setBiome(i, k, j, VanillaBiomeId.FOREST);
                 }
                 allayUnsafeChunk.setHeight(i, j, 319);
@@ -110,7 +110,7 @@ public class RocksDBWorldStorageTest {
     @Order(4)
     void testReadChunk() {
         Chunk chunk = rocksDBWorldStorage.readChunk(0, 0).get();
-        Assertions.assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 55, 0));
+        Assertions.assertEquals(BlockWoodBehavior.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 55, 0));
         Assertions.assertEquals(VanillaBiomeId.FOREST, chunk.getBiome(0, 55, 0));
         Assertions.assertEquals(319, chunk.getHeight(0, 0));
     }

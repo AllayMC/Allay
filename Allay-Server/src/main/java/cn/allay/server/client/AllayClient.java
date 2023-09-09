@@ -2,6 +2,7 @@ package cn.allay.server.client;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.data.BlockFace;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.client.BaseClient;
 import cn.allay.api.client.data.AdventureSettings;
@@ -11,10 +12,9 @@ import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
-import cn.allay.api.data.VanillaBlockTypes;
-import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.interfaces.EntityPlayer;
+import cn.allay.api.entity.interfaces.EntityVillagerV2;
 import cn.allay.api.entity.type.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.type.CreativeItemRegistry;
@@ -225,7 +225,7 @@ public class AllayClient extends BaseClient {
     private void initPlayerEntity() {
         //TODO: Load player data
         Position3ic spawnPos = server.getDefaultWorld().getSpawnPosition();
-        playerEntity = VanillaEntityTypes.PLAYER_TYPE.createEntity(
+        playerEntity = EntityPlayer.PLAYER_TYPE.createEntity(
                 new EntityPlayer.EntityPlayerInitInfo.Simple(
                         this,
                         new Location3f(
@@ -638,7 +638,7 @@ public class AllayClient extends BaseClient {
                             log.warn("Player " + name + " tried to break block at " + pos + " but it is air");
                             continue;
                         }
-                        getWorld().setBlockState(pos.getX(), pos.getY(), pos.getZ(), VanillaBlockTypes.AIR_TYPE.getDefaultState());
+                        getWorld().setBlockState(pos.getX(), pos.getY(), pos.getZ(), BlockAirBehavior.AIR_TYPE.getDefaultState());
                         getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_STOP_BREAK, 0);
                         getWorld().sendLevelEventPacket(pos, LevelEvent.PARTICLE_DESTROY_BLOCK, oldState.blockStateHash());
                     }
@@ -655,7 +655,7 @@ public class AllayClient extends BaseClient {
                         playerEntity.setSneaking(true);
                         //TODO: debug only
                         var loc = getLocation();
-                        var entity = VanillaEntityTypes.VILLAGER_V2_TYPE.createEntity(new EntityInitInfo.Simple<>(new Location3f(loc)));
+                        var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(new EntityInitInfo.Simple<>(new Location3f(loc)));
                         loc.world().addEntity(entity);
                     }
                     case STOP_SNEAKING -> playerEntity.setSneaking(false);

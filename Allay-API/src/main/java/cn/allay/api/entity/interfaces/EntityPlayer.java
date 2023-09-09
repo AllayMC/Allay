@@ -1,13 +1,13 @@
 package cn.allay.api.entity.interfaces;
 
 import cn.allay.api.client.Client;
-import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.*;
+import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.attribute.EntityAttributeComponent;
 import cn.allay.api.entity.component.attribute.EntityAttributeComponentImpl;
@@ -18,6 +18,8 @@ import cn.allay.api.entity.component.container.EntityContainerHolderComponentImp
 import cn.allay.api.entity.component.container.EntityContainerViewerComponent;
 import cn.allay.api.entity.component.container.EntityContainerViewerComponentImpl;
 import cn.allay.api.entity.type.EntityInitInfo;
+import cn.allay.api.entity.type.EntityType;
+import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.location.Location3f;
 import lombok.Getter;
@@ -46,23 +48,16 @@ public interface EntityPlayer extends
         EntityAttributeComponent,
         EntityContainerHolderComponent,
         EntityContainerViewerComponent {
-    @AutoRegister
-    ComponentProvider<EntityBaseComponentImpl<EntityPlayer>> BASE_COMPONENT =
-            ComponentProvider.of(
+    EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder
+            .builder(EntityPlayer.class)
+            .vanillaEntity(VanillaEntityId.PLAYER)
+            .addComponent(ComponentProvider.of(
                     info -> new EntityPlayerBaseComponentImpl((EntityInitInfo<EntityPlayer>) info, e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)),
-                    EntityPlayerBaseComponentImpl.class
-            );
-
-    @AutoRegister
-    ComponentProvider<EntityAttributeComponentImpl> ATTRIBUTE_COMPONENT =
-            ComponentProvider.of(
+                    EntityPlayerBaseComponentImpl.class))
+            .addComponent(ComponentProvider.of(
                     () -> new EntityAttributeComponentImpl(basicAttributes()),
-                    EntityAttributeComponentImpl.class
-            );
-
-    @AutoRegister
-    ComponentProvider<EntityContainerHolderComponentImpl> CONTAINER_HOLDER_COMPONENT =
-            ComponentProvider.of(
+                    EntityAttributeComponentImpl.class))
+            .addComponent(ComponentProvider.of(
                     () -> new EntityContainerHolderComponentImpl(
                             new PlayerInventoryContainer(),
                             new PlayerCursorContainer(),
@@ -70,15 +65,11 @@ public interface EntityPlayer extends
                             new PlayerArmorContainer(),
                             new PlayerOffhandContainer()
                     ),
-                    EntityContainerHolderComponentImpl.class
-            );
-
-    @AutoRegister
-    ComponentProvider<EntityContainerViewerComponentImpl> CONTAINER_VIEWER_COMPONENT =
-            ComponentProvider.of(
+                    EntityContainerHolderComponentImpl.class))
+            .addComponent(ComponentProvider.of(
                     EntityContainerViewerComponentImpl::new,
-                    EntityContainerViewerComponentImpl.class
-            );
+                    EntityContainerViewerComponentImpl.class))
+            .build();
 
     interface EntityPlayerInitInfo extends EntityInitInfo<EntityPlayer> {
 

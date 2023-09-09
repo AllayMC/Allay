@@ -2,13 +2,13 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
-import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
+import cn.allay.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ProgressBar;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +27,21 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
 
     @SneakyThrows
     public void init() {
-        var fields = VanillaBlockTypes.class.getDeclaredFields();
         log.info("Loading Block Types...");
-        fields[0].get(null);
+        var classes = ReflectionUtils.getAllClasses("cn.allay.api.block.interfaces");
+        try (var pgbar = ProgressBar
+                .builder()
+                .setInitialMax(classes.size())
+                .setTaskName("Loading Block Types")
+                .setUpdateIntervalMillis(100)
+                .build()) {
+            for (var blockClassName : classes) {
+                Class.forName(blockClassName);
+                pgbar.step();
+            }
+        }
         rebuildDefinitionList();
-        log.info("Loaded " + fields.length + " Block Types");
+        log.info("Loaded " + classes.size() + " Block Types");
     }
 
     private final List<BlockDefinition> blockDefinitions = new ArrayList<>();

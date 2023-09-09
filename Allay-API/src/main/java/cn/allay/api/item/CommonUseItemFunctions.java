@@ -18,7 +18,7 @@ public interface CommonUseItemFunctions {
         var blockState = itemStack.toBlockState();
         if (blockState == null)
             return false;
-        if (player != null && !checkEntityCollision(world, placePos, blockState)) return false;
+        if (player != null && hasEntityCollision(world, placePos, blockState)) return false;
         if (player != null) {
             var stairFace = player.getHorizontalFace();
             blockState = blockState.setProperty(VanillaBlockPropertyTypes.WEIRDO_DIRECTION, stairFace.toStairDirectionValue());
@@ -36,15 +36,13 @@ public interface CommonUseItemFunctions {
             itemStack.setCount(itemStack.getCount() - 1);
     }
 
-    static boolean checkEntityCollision(World world, Vector3ic placePos, BlockState blockState) {
+    static boolean hasEntityCollision(World world, Vector3ic placePos, BlockState blockState) {
         var block_aabb = blockState.getBehavior().getBlockAttributes(blockState)
                 .computeOffsetVoxelShape(
                         placePos.x(),
                         placePos.y(),
                         placePos.z()
                 );
-        if (!world.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty())
-            return false;
-        return true;
+        return !world.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty();
     }
 }

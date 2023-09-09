@@ -13,7 +13,6 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
-import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
@@ -351,25 +350,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public Builder<T> addComponent(BlockComponent component) {
             this.components.put(findComponentIdentifier(component.getClass()), component);
-            return this;
-        }
-
-        @Override
-        public Builder<T> addBasicComponents() {
-            Arrays.stream(interfaceClass.getDeclaredFields())
-                    .filter(field -> isStatic(field.getModifiers()))
-                    .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
-                    .filter(field -> BlockComponent.class.isAssignableFrom(field.getType()))
-                    .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegister.class).order()))
-                    .forEach(field -> {
-                        try {
-                            addComponent((BlockComponent) field.get(null));
-                        } catch (IllegalAccessException e) {
-                            throw new BlockTypeBuildException(e);
-                        } catch (ClassCastException e) {
-                            throw new BlockTypeBuildException("Field " + field.getName() + "in class" + interfaceClass + " is not a ComponentProvider<? extends BlockComponentImpl>!", e);
-                        }
-                    });
             return this;
         }
 

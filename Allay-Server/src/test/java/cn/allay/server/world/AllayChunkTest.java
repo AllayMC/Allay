@@ -1,7 +1,7 @@
 package cn.allay.server.world;
 
+import cn.allay.api.block.interfaces.BlockWoodBehavior;
 import cn.allay.api.data.VanillaBiomeId;
-import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.server.world.chunk.AllayChunk;
@@ -19,8 +19,8 @@ public class AllayChunkTest {
 
     @Test
     void testUpdateBlockState() {
-        chunk.setBlockState(0, 0, 0, VanillaBlockTypes.WOOD_TYPE.getDefaultState(), 0);
-        Assertions.assertEquals(VanillaBlockTypes.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 0));
+        chunk.setBlockState(0, 0, 0, BlockWoodBehavior.WOOD_TYPE.getDefaultState(), 0);
+        Assertions.assertEquals(BlockWoodBehavior.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 0));
     }
 
     @Test

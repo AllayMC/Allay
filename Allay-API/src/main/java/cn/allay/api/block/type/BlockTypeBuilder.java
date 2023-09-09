@@ -66,8 +66,6 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
 
     BlockTypeBuilder<T> addComponent(BlockComponent component);
 
-    BlockTypeBuilder<T> addBasicComponents();
-
     BlockTypeBuilder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent);
 
     BlockTypeBuilder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockComponent> blockBaseComponentSupplier);
