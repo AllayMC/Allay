@@ -32,7 +32,7 @@ import java.util.concurrent.CompletableFuture;
  *
  * @author Cool_Loong
  */
-public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
+public class RocksDBWorldStorage implements WorldStorage {
     static {
         RocksDB.loadLibrary();
     }
@@ -69,7 +69,7 @@ public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z) throws WorldStorageException {
         return CompletableFuture.supplyAsync(() -> {
-            AllayUnsafeChunk.Builder builder = AllayUnsafeChunk.builder().chunkX(x).chunkZ(z).dimensionInfo(getWorldDataCache().getDimensionInfo());
+            AllayUnsafeChunk.Builder builder = AllayUnsafeChunk.builder().chunkX(x).chunkZ(z).dimensionInfo(getWorldDataCache().getDimensionInfo()).state(Chunk.STATE_FINISHED);
             try {
                 byte[] versionValue = this.db.get(LevelDBKey.VERSION.getKey(x, z));
                 if (versionValue == null || versionValue.length != 1) {
@@ -93,30 +93,16 @@ public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
 
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException {
-        return CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.runAsync(() -> {
             RocksdbChunkSerializer serializer = RocksdbChunkSerializer.Provider.of(0);
             try (WriteBatch writeBatch = new WriteBatch()) {
                 writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ()), new byte[]{0});
-                chunk.batchProcess(
-                        (l1, l2, l3, c) -> {
-                            long stamp1 = l1.writeLock();
-                            long stamp2 = l2.writeLock();
-                            long stamp3 = l3.writeLock();
-                            try {
-                                serializer.serialize(writeBatch, c);
-                            } finally {
-                                l1.unlockWrite(stamp1);
-                                l2.unlockWrite(stamp2);
-                                l3.unlockWrite(stamp3);
-                            }
-                        }
-                );
-                try (WriteOptions writeOptions = new WriteOptions()) {
-                    this.db.write(writeOptions, writeBatch);
+                chunk.batchProcess(c -> serializer.serialize(writeBatch, c));
+                try (var options = new WriteOptions().setSync(true)) {
+                    this.db.write(options, writeBatch);
                 }
-                return null;
             } catch (RocksDBException e) {
-                throw new RuntimeException(e);
+                throw new WorldStorageException(e);
             }
         }, Server.getInstance().getVirtualThreadPool());
     }
@@ -153,7 +139,7 @@ public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
         return worldDataCache;
     }
 
-    @Override
+
     public void close() {
         db.close();
         worldDataCache = null;

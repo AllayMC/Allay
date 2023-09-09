@@ -9,11 +9,11 @@ group = "cn.allay"
 version = "0.0.1"
 
 application {
-    mainClass.set("cn.allay.worldconvert.WorldConverter")
+    mainClass.set("cn.allay.worldconverter.WorldConverter")
 }
 
 dependencies {
-    implementation(project(":Allay-API"))
+    implementation(project(":Allay-Server"))
     implementation(libs.hephaistos)
     implementation(libs.picocli)
     implementation(libs.progressbar)

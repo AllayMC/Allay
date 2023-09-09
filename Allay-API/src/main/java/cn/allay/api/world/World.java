@@ -88,6 +88,8 @@ public interface World {
     @UnmodifiableView
     Collection<Client> getClients();
 
+    void close();
+
     default void setBlockState(int x, int y, int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0);
     }
@@ -146,7 +148,6 @@ public interface World {
 
     default BlockState[][][] getBlockStates(int x, int y, int z, @Range(from = 1, to = Integer.MAX_VALUE) int sizeX, @Range(from = 1, to = Integer.MAX_VALUE) int sizeY, @Range(from = 1, to = Integer.MAX_VALUE) int sizeZ, int layer) {
         BlockState[][][] blockStates = new BlockState[sizeX][sizeY][sizeZ];
-
         int startX = x >> 4;
         int endX = (x + sizeX - 1) >> 4;
         int startZ = z >> 4;
@@ -163,20 +164,15 @@ public interface World {
 
                 var chunk = getChunkService().getChunk(chunkX, chunkZ);
                 if (chunk != null) {
-                    chunk.batchProcess((l1, l2, l3, c) -> {
-                        long stamp = l1.writeLock();
-                        try {
-                            for (int localX = localStartX; localX < localEndX; localX++) {
-                                for (int globalY = y; globalY < y + sizeY; globalY++) {
-                                    for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
-                                        int globalX = cX + localX;
-                                        int globalZ = cZ + localZ;
-                                        blockStates[globalX - x][globalY - y][globalZ - z] = c.getBlockState(localX, globalY, localZ, layer);
-                                    }
+                    chunk.batchProcess(c -> {
+                        for (int localX = localStartX; localX < localEndX; localX++) {
+                            for (int globalY = y; globalY < y + sizeY; globalY++) {
+                                for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
+                                    int globalX = cX + localX;
+                                    int globalZ = cZ + localZ;
+                                    blockStates[globalX - x][globalY - y][globalZ - z] = c.getBlockState(localX, globalY, localZ, layer);
                                 }
                             }
-                        } finally {
-                            l1.unlockWrite(stamp);
                         }
                     });
                 }

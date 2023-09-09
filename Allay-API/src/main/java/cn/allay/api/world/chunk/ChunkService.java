@@ -29,6 +29,8 @@ public interface ChunkService extends ChunkAccessible {
 
     void unloadChunk(long chunkHash);
 
+    void unloadChunkAll();
+
     boolean isChunkLoaded(int x, int z);
 
     boolean isChunkLoaded(long hashXZ);

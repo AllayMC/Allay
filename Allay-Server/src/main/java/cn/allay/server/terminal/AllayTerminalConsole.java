@@ -27,8 +27,12 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
 
     @Override
     protected void runCommand(String s) {
-        //TODO
-        log.info("§1TODO :)");
+        if (s.equalsIgnoreCase("stop")) {
+            shutdown();
+        } else {
+            //TODO
+            log.info("§1TODO :)");
+        }
     }
 
     @Override

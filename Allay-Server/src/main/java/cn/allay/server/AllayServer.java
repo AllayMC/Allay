@@ -6,7 +6,7 @@ import cn.allay.api.client.skin.Skin;
 import cn.allay.api.network.NetworkServer;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
-import cn.allay.api.world.WorldData;
+import cn.allay.api.world.World;
 import cn.allay.api.world.WorldPool;
 import cn.allay.server.client.AllayClient;
 import cn.allay.server.network.AllayNetworkServer;
@@ -29,7 +29,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3i;
 
 import java.util.Collections;
 import java.util.Map;
@@ -108,12 +107,8 @@ public final class AllayServer implements Server {
     }
 
     private void loadWorlds() {
-        WorldData worldData = WorldData.DEFAULT;
-        worldData.setLevelName("Test Flat World");
-        worldData.setSpawnPoint(new Vector3i(0, 7, 0));
         worldPool.setDefaultWorld(AllayWorld
                 .builder()
-                .worldData(worldData)
                 .setWorldGenerator(new FlatWorldGenerator())
                 .setWorldStorage(new AllayNonPersistentWorldStorage())
                 .build());
@@ -124,6 +119,7 @@ public final class AllayServer implements Server {
         isRunning.compareAndSet(true, false);
         virtualThreadPool.shutdownNow();
         computeThreadPool.shutdownNow();
+        getWorldPool().getWorlds().values().forEach(World::close);
         System.exit(0);
     }
 

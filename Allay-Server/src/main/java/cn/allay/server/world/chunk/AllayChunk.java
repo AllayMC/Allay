@@ -275,7 +275,16 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void batchProcess(UnsafeChunkOperate operate) {
-        operate.run(this.blockLock, heightAndBiomeLock, lightLock, this.unsafeChunk);
+        long stamp1 = blockLock.writeLock();
+        long stamp2 = heightAndBiomeLock.writeLock();
+        long stamp3 = lightLock.writeLock();
+        try {
+            operate.run(this.unsafeChunk);
+        } finally {
+            blockLock.unlockWrite(stamp1);
+            heightAndBiomeLock.unlockWrite(stamp2);
+            lightLock.unlockWrite(stamp3);
+        }
     }
 
     @Override

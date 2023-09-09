@@ -21,14 +21,6 @@ public class JeBlockState {
     private boolean equalsIgnoreAttributes = false;
     private boolean equalsIgnoreWaterlogged = false;
 
-    /**
-     * <pre>
-     *     State Str
-     *     minecraft:redstone_wire[east=up,north=up,power=0,south=up,west=side]
-     * </pre>
-     *
-     * @param str the state str
-     */
     private JeBlockState(String str) {
         var strings = str.replace("[", ",").replace("]", ",").replace(" ", "").split(",");
         identifier = strings[0];
@@ -41,9 +33,27 @@ public class JeBlockState {
         }
     }
 
+    private JeBlockState(String identifier, Map<String, String> attributes) {
+        this.identifier = identifier;
+        this.attributes.putAll(attributes);
+    }
+
+    /**
+     * <pre>
+     *     State Str
+     *     minecraft:redstone_wire[east=up,north=up,power=0,south=up,west=side]
+     * </pre>
+     *
+     * @param str the state str
+     */
     @Contract("_ -> new")
     public static JeBlockState of(String str) {
         return CACHE.get(str, JeBlockState::new);
+    }
+
+    @Contract("_,_ -> new")
+    public static JeBlockState of(String identifier, Map<String, String> attributes) {
+        return new JeBlockState(identifier, attributes);
     }
 
     /**
