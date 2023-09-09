@@ -38,6 +38,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final float MOTION_THRESHOLD = 0.003f;
     public static final float STEPPING_OFFSET = 0.05f;
     public static final float FAT_AABB_MARGIN = 0.0005f;
+    public static final FloatBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new FloatBooleanImmutablePair(0, false);
 
     protected World world;
     protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
@@ -209,7 +210,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected Pair<Float, Boolean> moveAlongXAxisAndStopWhenCollision(AABBf aabb, float mx, Vector3f recorder) {
-        if (mx == 0) return new FloatBooleanImmutablePair(0, false);
+        if (mx == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
         var extendX = new AABBf(aabb);
         //计算射线X轴起点坐标
         float x;
@@ -226,6 +227,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var deltaX = mx;
         var collision = false;
+        if (!world.isAABBInWorld(extendX)) return EMPTY_FLOAT_BOOLEAN_PAIR;
         var blocks = world.getCollidingBlocks(extendX);
         if (blocks != null) {
             collision = true;
@@ -267,7 +269,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected Pair<Float, Boolean> moveAlongZAxisAndStopWhenCollision(AABBf aabb, float mz, Vector3f recorder) {
-        if (mz == 0) return new FloatBooleanImmutablePair(0, false);
+        if (mz == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
         var extendZ = new AABBf(aabb);
         //计算射线Z轴起点坐标
         float z;
@@ -284,6 +286,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var deltaZ = mz;
         var collision = false;
+        if (!world.isAABBInWorld(extendZ)) return EMPTY_FLOAT_BOOLEAN_PAIR;
         var blocks = world.getCollidingBlocks(extendZ);
         if (blocks != null) {
             collision = true;
@@ -325,7 +328,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected Pair<Float, Boolean> moveAlongYAxisAndStopWhenCollision(AABBf aabb, float my, Vector3f recorder) {
-        if (my == 0) return new FloatBooleanImmutablePair(0, false);
+        if (my == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
         AABBf extendY = new AABBf(aabb);
         //计算射线Y轴起点坐标
         float y;
@@ -345,6 +348,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var deltaY = my;
         var onGround = false;
+        if (!world.isAABBInWorld(extendY)) return EMPTY_FLOAT_BOOLEAN_PAIR;
         var blocks = world.getCollidingBlocks(extendY);
         if (blocks != null) {
             //存在碰撞
