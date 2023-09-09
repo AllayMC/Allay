@@ -282,4 +282,8 @@ public interface World {
     default boolean isInWorld(float x, float y, float z) {
         return isYInRange(y) && getChunkService().isChunkLoaded((int) x >> 4, (int) z >> 4);
     }
+
+    default boolean isAABBInWorld(AABBfc aabb) {
+        return isInWorld(aabb.maxX(), aabb.maxY(), aabb.maxZ()) && isInWorld(aabb.minX(), aabb.minY(), aabb.minZ());
+    }
 }
