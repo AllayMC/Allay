@@ -1,12 +1,13 @@
 package cn.allay.server.item.type;
 
-import cn.allay.api.data.VanillaItemTypes;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.registry.SimpleMappedRegistry;
+import cn.allay.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ProgressBar;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
 import java.util.ArrayList;
@@ -27,11 +28,21 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
 
     @SneakyThrows
     public void init() {
-        var fields = VanillaItemTypes.class.getDeclaredFields();
         log.info("Loading Item Types...");
-        fields[0].get(null);
-        log.info("Loaded " + fields.length + " Item Types");
+        var classes = ReflectionUtils.getAllClasses("cn.allay.api.item.interfaces");
+        try (var pgbar = ProgressBar
+                .builder()
+                .setInitialMax(classes.size())
+                .setTaskName("Loading Item Types")
+                .setUpdateIntervalMillis(100)
+                .build()) {
+            for (var itemClassName : classes) {
+                Class.forName(itemClassName);
+                pgbar.step();
+            }
+        }
         rebuildDefinitionList();
+        log.info("Loaded " + classes.size() + " Item Types");
     }
 
     private final List<ItemDefinition> itemDefinitions = new ArrayList<>();

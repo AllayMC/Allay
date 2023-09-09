@@ -1,6 +1,5 @@
 package cn.allay.dependence;
 
-import java.lang.String;
 import lombok.Getter;
 
 /**

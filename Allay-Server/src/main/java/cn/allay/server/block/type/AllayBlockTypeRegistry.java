@@ -28,7 +28,6 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
     @SneakyThrows
     public void init() {
         log.info("Loading Block Types...");
-        var count = 0;
         var classes = ReflectionUtils.getAllClasses("cn.allay.api.block.interfaces");
         try (var pgbar = ProgressBar
                 .builder()
@@ -39,12 +38,11 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
             for (var blockClassName : classes) {
                 Class.forName(blockClassName);
                 pgbar.step();
-                count++;
             }
 
         }
         rebuildDefinitionList();
-        log.info("Loaded " + count + " Block Types");
+        log.info("Loaded " + classes.size() + " Block Types");
     }
 
     private final List<BlockDefinition> blockDefinitions = new ArrayList<>();

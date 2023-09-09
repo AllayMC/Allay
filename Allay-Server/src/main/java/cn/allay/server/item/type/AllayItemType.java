@@ -2,7 +2,6 @@ package cn.allay.server.item.type;
 
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeRegistry;
-import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
@@ -25,9 +24,10 @@ import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
-
-import static java.lang.reflect.Modifier.isStatic;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Allay Project 2023/5/19
@@ -166,28 +166,9 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
-        public ItemTypeBuilder<T> addBasicComponents() {
+        public ItemType<T> build() {
             if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER))
                 addComponent(ComponentProvider.of(info -> new ItemBaseComponentImpl<>((ItemStackInitInfo<T>) info), ItemBaseComponentImpl.class));
-            Arrays.stream(interfaceClass.getDeclaredFields())
-                    .filter(field -> isStatic(field.getModifiers()))
-                    .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
-                    .filter(field -> ComponentProvider.class.isAssignableFrom(field.getType()))
-                    .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegister.class).order()))
-                    .forEach(field -> {
-                        try {
-                            addComponent((ComponentProvider<? extends ItemComponent>) field.get(null));
-                        } catch (IllegalAccessException e) {
-                            throw new ItemTypeBuildException(e);
-                        } catch (ClassCastException e) {
-                            throw new ItemTypeBuildException("Field " + field.getName() + "in class" + interfaceClass + " is not a ComponentProvider<? extends ItemTypeBuildException>!", e);
-                        }
-                    });
-            return this;
-        }
-
-        @Override
-        public ItemType<T> build() {
             if (identifier == null)
                 throw new ItemTypeBuildException("identifier cannot be null!");
             if (runtimeId == Integer.MAX_VALUE)

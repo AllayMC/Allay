@@ -4,11 +4,11 @@ import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
-import cn.allay.api.data.VanillaItemTypes;
 import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.UseItemOn;
+import cn.allay.api.item.interfaces.ItemAirStack;
 import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.world.World;
@@ -140,7 +140,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     @Impl
     public ItemData toNetworkItemData() {
-        if (itemType == VanillaItemTypes.AIR_TYPE) {
+        if (itemType == ItemAirStack.AIR_TYPE) {
             return ItemData.AIR;
         } else {
             return ItemData
