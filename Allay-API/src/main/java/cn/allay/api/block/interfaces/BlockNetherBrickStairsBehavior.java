@@ -1,10 +1,8 @@
 package cn.allay.api.block.interfaces;
 
 import cn.allay.api.block.BlockBehavior;
-import cn.allay.api.block.component.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
 

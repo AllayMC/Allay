@@ -39,7 +39,6 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
                 Class.forName(blockClassName);
                 pgbar.step();
             }
-
         }
         rebuildDefinitionList();
         log.info("Loaded " + classes.size() + " Block Types");

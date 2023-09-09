@@ -13,7 +13,6 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
-import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
