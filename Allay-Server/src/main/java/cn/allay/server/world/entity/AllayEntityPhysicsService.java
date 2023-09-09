@@ -518,18 +518,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     @Override
     public List<Entity> computeCollidingEntities(VoxelShape voxelShape) {
         //用一个set暂存entity避免重复
-        var result = new HashSet<Entity>();
-        for (var solid : voxelShape.getSolids()) {
-            var list = new ArrayList<Entity>();
-            entityAABBTree.detectOverlaps(solid, list);
-            result.addAll(list);
-        }
-        for (var vacancy : voxelShape.getVacancies()) {
-            var list = new ArrayList<Entity>();
-            entityAABBTree.detectOverlaps(vacancy, list);
-            list.forEach(result::remove);
-        }
-        return new ArrayList<>(result);
+        var list = new ArrayList<Entity>();
+        entityAABBTree.detectOverlaps(voxelShape.unionAABB(), list);
+        list.removeIf(entity -> !voxelShape.intersectsAABB(entity.getOffsetAABB()));
+        return list;
     }
 
     @Override

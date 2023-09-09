@@ -396,7 +396,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
 
     public void detectInFrustum(Matrix4fc worldViewProjection, AABBOverlapFilter<T> filter, List<T> result) {
         frustumIntersection.set(worldViewProjection, false);
-        traverseTree(aabb -> frustumIntersection.testAab((float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(), (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()), filter, result);
+        traverseTree(aabb -> frustumIntersection.testAab(aabb.minX(), aabb.minY(), aabb.minZ(), aabb.maxX(), aabb.maxY(), aabb.maxZ()), filter, result);
     }
 
     public void detectRayIntersection(Rayf ray, List<T> result) {
@@ -405,7 +405,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
 
     public void detectRayIntersection(Rayf ray, AABBOverlapFilter<T> filter, List<T> result) {
         rayIntersection.set(ray.oX, ray.oY, ray.oZ, ray.dX, ray.dY, ray.dZ);
-        traverseTree(aabb -> rayIntersection.test((float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(), (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()), filter, result);
+        traverseTree(aabb -> rayIntersection.test(aabb.minX(), aabb.minY(), aabb.minZ(), aabb.maxX(), aabb.maxY(), aabb.maxZ()), filter, result);
     }
 
     private void traverseTree(Predicate<AABBfc> nodeTest, AABBOverlapFilter<T> filter, List<T> result) {
