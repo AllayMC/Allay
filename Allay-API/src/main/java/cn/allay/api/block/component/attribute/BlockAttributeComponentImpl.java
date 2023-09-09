@@ -4,10 +4,14 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
+import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.math.voxelshape.VoxelShape;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -53,6 +57,26 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent {
 
     public static BlockAttributeComponentImpl ofMappedBlockStateHashLazyLoad(Function<BlockType<?>, Map<Integer, BlockAttributes>> lazyLoader) {
         return ofDirectDynamic(new LazyLoaderAttributeAccessor(lazyLoader));
+    }
+
+    public static BlockAttributeComponentImpl ofRedefinedAABB(Function<BlockState, VoxelShape> aabbRedefiner) {
+        return ofMappedBlockStateHashLazyLoad(blockType -> {
+            var vanillaId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
+            Objects.requireNonNull(vanillaId);
+            var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaId);
+            Objects.requireNonNull(attributeMap);
+            var newAttributeMap = new HashMap<Integer, BlockAttributes>();
+            attributeMap.forEach((blockStateHash, attribute) ->
+                    newAttributeMap.put(
+                            blockStateHash,
+                            attribute
+                                    .toBuilder()
+                                    .voxelShape(aabbRedefiner.apply(Objects.requireNonNull(blockType.ofState(blockStateHash))))
+                                    .build()
+                    )
+            );
+            return newAttributeMap;
+        });
     }
 
     @Override

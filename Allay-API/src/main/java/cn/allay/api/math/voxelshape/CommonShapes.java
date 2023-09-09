@@ -8,6 +8,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import static cn.allay.api.block.data.BlockFace.getBlockFaceByStairDirectionValue;
+import static cn.allay.api.data.VanillaBlockPropertyTypes.TOP_SLOT_BIT;
 
 /**
  * Allay Project 2023/9/2
@@ -15,6 +16,9 @@ import static cn.allay.api.block.data.BlockFace.getBlockFaceByStairDirectionValu
  * @author daoge_cmd
  */
 public abstract class CommonShapes {
+
+    //Stair
+
     private static final VoxelShape UPWARDS_STAIR_SHAPE = VoxelShape
             .builder()
             .solid(0, 0, 0, 1, 1, 1)
