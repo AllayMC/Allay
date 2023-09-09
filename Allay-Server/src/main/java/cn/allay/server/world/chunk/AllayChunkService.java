@@ -345,13 +345,13 @@ public class AllayChunkService implements ChunkService {
         //保存着这tick将要发送的全部区块hash值
         private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
         private final LongArrayPriorityQueue chunkSendQueue = new LongArrayPriorityQueue(100, chunkDistanceComparator);
-        private final int chunkSentPerTick;
+        private final int chunkTrySentPerTick;
         private long lastLoaderChunkPosHashed = -1;
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
             //TODO: Config
-            this.chunkSentPerTick = 8;
+            this.chunkTrySentPerTick = 8;
             chunkLoader.setSubChunkRequestHandler(subChunkRequestPacket -> {
                 List<SubChunkData> responseData = new ArrayList<>();
                 var centerPosition = subChunkRequestPacket.getSubChunkPosition();
@@ -501,9 +501,6 @@ public class AllayChunkService implements ChunkService {
                     var chunkZ = loaderChunkZ + rz;
                     var hashXZ = HashUtils.hashXZ(chunkX, chunkZ);
                     inRadiusChunks.add(hashXZ);
-                    if (isChunkUnloaded(hashXZ)) {
-                        loadChunk(chunkX, chunkZ);
-                    }
                 }
             }
         }
@@ -533,25 +530,21 @@ public class AllayChunkService implements ChunkService {
         private void sendQueuedChunks() {
             if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
-            int sentChunkCount = 0;
+            int trySentChunkCount = 0;
             do {
+                trySentChunkCount++;
                 long chunkHash = chunkSendQueue.firstLong();
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
-                    //TODO: 这边有问题，按理说获取的chunk不应该一直为null（发送了加载请求）。怀疑是区块加载出了问题。等待进一步调查
-                    if (!isChunkLoading(chunkHash)) {
-                        log.warn("Error while trying to send chunk(" + HashUtils.getXFromHashXZ(chunkHash) + ", " + HashUtils.getZFromHashXZ(chunkHash) + "), the chunk cannot been loaded");
-                        chunkSendQueue.dequeueLong();
-                    } else {
-                        log.info("Wait chunk(" + HashUtils.getXFromHashXZ(chunkHash) + ", " + HashUtils.getZFromHashXZ(chunkHash) + ")'s loading");
+                    if (isChunkUnloaded(chunkHash)) {
+                        loadChunk(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash));
                     }
                     continue;
                 }
-                sentChunkCount++;
                 chunkSendQueue.dequeueLong();
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
-            } while (!chunkSendQueue.isEmpty() && sentChunkCount < chunkSentPerTick);
+            } while (!chunkSendQueue.isEmpty() && trySentChunkCount < chunkTrySentPerTick);
             chunkLoader.preSendChunks(chunkReadyToSend.keySet());
             chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash.longValue()));
             chunkReadyToSend.values().forEach(chunkLoader::notifyChunkLoaded);
