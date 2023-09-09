@@ -17,6 +17,9 @@ public interface ItemCherryStairsStack extends ItemStack {
     ItemType<ItemCherryStairsStack> CHERRY_STAIRS_TYPE = ItemTypeBuilder
             .builder(ItemCherryStairsStack.class)
             .vanillaItem(VanillaItemId.CHERRY_STAIRS)
-            .addComponent(ComponentProvider.of(initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo, CommonUseItemFunctions.ITEM_STAIR_USE_ON), ItemBaseComponentImpl.class))
+            .addComponent(
+                    ComponentProvider.of(
+                            initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo, CommonUseItemFunctions.ITEM_STAIR_USE_ON),
+                            ItemBaseComponentImpl.class))
             .build();
 }

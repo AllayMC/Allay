@@ -45,4 +45,16 @@ public interface CommonUseItemFunctions {
                 );
         return !world.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty();
     }
+
+    static UseItemOn createPlaceBlockUseOn(BlockState placedBlockState) {
+        return (player, itemStack, world, blockPos, placePos, clickPos, blockFace) -> {
+            if (placedBlockState == null)
+                return false;
+            if (player != null && hasEntityCollision(world, placePos, placedBlockState))
+                return false;
+            world.setBlockState(placePos.x(), placePos.y(), placePos.z(), placedBlockState);
+            tryConsumeItem(player, itemStack);
+            return true;
+        };
+    }
 }

@@ -18,8 +18,9 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
-import static cn.allay.api.item.CommonUseItemFunctions.hasEntityCollision;
-import static cn.allay.api.item.CommonUseItemFunctions.tryConsumeItem;
+import java.util.Objects;
+
+import static cn.allay.api.item.CommonUseItemFunctions.*;
 
 /**
  * Allay Project 2023/5/19
@@ -42,15 +43,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected BlockState blockState;
     @Nullable
     protected Integer stackNetworkId;
-    protected UseItemOn useItemOn = (player, itemStack, world, blockPos, placePos, clickPos, blockFace) -> {
-        if (blockState == null)
-            return false;
-        if (player != null && hasEntityCollision(world, placePos, blockState))
-            return false;
-        world.setBlockState(placePos.x(), placePos.y(), placePos.z(), blockState);
-        tryConsumeItem(player, itemStack);
-        return true;
-    };
+    protected UseItemOn useItemOn;
 
     public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
         this(initInfo, null);
@@ -76,8 +69,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         } else {
             this.stackNetworkId = null;
         }
-        if (useItemOn != null)
-            this.useItemOn = useItemOn;
+        this.useItemOn = Objects.requireNonNullElseGet(useItemOn, () -> createPlaceBlockUseOn(blockState));
     }
 
     @Override
