@@ -77,11 +77,16 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                                 .entities(new Long2ObjectNonBlockingMap<>());
                         try {
                             cn.allay.api.world.chunk.ChunkSection[] sections = new cn.allay.api.world.chunk.ChunkSection[dimensionInfo.chunkSectionSize()];
-                            for (int sectionY = dimensionInfo.minSectionY(); sectionY < dimensionInfo.maxSectionY(); sectionY++) {
-                                int positiveY = sectionY - dimensionInfo.minSectionY();
+                            int minY = srcRegion.getMinY() >> 4;
+                            int maxY = srcRegion.getMaxY() >> 4;
+                            for (int sectionY = minY; sectionY < maxY; sectionY++) {
                                 ChunkSection section = chunk.getSection((byte) sectionY);
-                                if (section.getEmpty()) break;
+                                int positiveY = sectionY - minY;
                                 cn.allay.api.world.chunk.ChunkSection allaySection = new cn.allay.api.world.chunk.ChunkSection(positiveY);
+                                if (section.getEmpty()) {
+                                    sections[positiveY] = allaySection;
+                                    continue;
+                                }
                                 for (int x = 0; x < 16; ++x) {
                                     for (int y = 0; y < 16; ++y) {
                                         for (int z = 0; z < 16; ++z) {
@@ -121,6 +126,7 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                         } catch (WorldStorageException e) {
                             throw new RuntimeException(e);
                         }
+                        srcRegion.forget(chunk);
                     } else {
                         pb.step();
                     }
