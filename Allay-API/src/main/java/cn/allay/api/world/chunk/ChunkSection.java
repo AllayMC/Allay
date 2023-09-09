@@ -1,8 +1,8 @@
 package cn.allay.api.world.chunk;
 
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBiomeId;
-import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.datastruct.NibbleArray;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.palette.Palette;
@@ -28,7 +28,7 @@ public record ChunkSection(int sectionY,
 
     public ChunkSection(int sectionY) {
         this(sectionY,
-                new Palette[]{new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState()), new Palette<>(VanillaBlockTypes.AIR_TYPE.getDefaultState())},
+                new Palette[]{new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState()), new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState())},
                 new Palette<>(VanillaBiomeId.PLAINS),
                 new NibbleArray(Chunk.SECTION_SIZE),
                 new NibbleArray(Chunk.SECTION_SIZE));
@@ -67,7 +67,7 @@ public record ChunkSection(int sectionY,
     }
 
     public boolean isEmpty() {
-        return blockLayer[0].isEmpty() && blockLayer[0].get(0) == VanillaBlockTypes.AIR_TYPE.getDefaultState();
+        return blockLayer[0].isEmpty() && blockLayer[0].get(0) == BlockAirBehavior.AIR_TYPE.getDefaultState();
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {

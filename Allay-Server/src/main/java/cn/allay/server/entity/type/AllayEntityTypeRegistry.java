@@ -1,18 +1,20 @@
 package cn.allay.server.entity.type;
 
-import cn.allay.api.data.VanillaEntityTypes;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
+import cn.allay.api.utils.ReflectionUtils;
 import cn.allay.server.world.biome.AllayBiomeTypeRegistry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ProgressBar;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Allay Project 2023/5/26
@@ -31,16 +33,26 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
 
     @SneakyThrows
     public void init() {
-        var fields = VanillaEntityTypes.class.getDeclaredFields();
         log.info("Loading Entity Types...");
-        fields[0].get(null);
-        log.info("Loaded " + fields.length + " Entity Types");
+        var classes = ReflectionUtils.getAllClasses("cn.allay.api.entity.interfaces");
+        try (var pgbar = ProgressBar
+                .builder()
+                .setInitialMax(classes.size())
+                .setTaskName("Loading Entity Types")
+                .setUpdateIntervalMillis(100)
+                .build()) {
+            for (var entityClassName : classes) {
+                Class.forName(entityClassName);
+                pgbar.step();
+            }
+        }
+        log.info("Loaded " + classes.size() + " Entity Types");
     }
 
     @SneakyThrows
     private void loadVanillaEntityIdentifierTag() {
         //TODO: Support custom entity
-        availableEntityIdentifierTag = (NbtMap) NbtUtils.createNetworkReader(AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("entity_identifiers.nbt")).readTag();
+        availableEntityIdentifierTag = (NbtMap) NbtUtils.createNetworkReader(Objects.requireNonNull(AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("entity_identifiers.nbt"))).readTag();
     }
 
     @Override

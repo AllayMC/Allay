@@ -1,6 +1,5 @@
 package cn.allay.server.entity.type;
 
-import cn.allay.api.component.annotation.AutoRegister;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
@@ -20,9 +19,10 @@ import lombok.SneakyThrows;
 import org.joml.primitives.AABBf;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
-
-import static java.lang.reflect.Modifier.isStatic;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Allay Project 2023/5/20
@@ -125,7 +125,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         @Override
-        public EntityTypeBuilder<T> addBasicComponents() {
+        public EntityType<T> build() {
             if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER))
                 addComponent(ComponentProvider.of(
                         info -> new EntityBaseComponentImpl<>(
@@ -133,25 +133,6 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
                                 e -> new AABBf(0, 0, 0, 0, 0, 0)),
                         EntityBaseComponentImpl.class
                 ));
-            Arrays.stream(interfaceClass.getDeclaredFields())
-                    .filter(field -> isStatic(field.getModifiers()))
-                    .filter(field -> field.getDeclaredAnnotation(AutoRegister.class) != null)
-                    .filter(field -> ComponentProvider.class.isAssignableFrom(field.getType()))
-                    .sorted(Comparator.comparingInt(field -> field.getDeclaredAnnotation(AutoRegister.class).order()))
-                    .forEach(field -> {
-                        try {
-                            addComponent((ComponentProvider<? extends EntityComponent>) field.get(null));
-                        } catch (IllegalAccessException e) {
-                            throw new EntityTypeBuildException(e);
-                        } catch (ClassCastException e) {
-                            throw new EntityTypeBuildException("Field " + field.getName() + "in class" + interfaceClass + " is not a ComponentProvider<? extends EntityComponentImpl>!", e);
-                        }
-                    });
-            return this;
-        }
-
-        @Override
-        public EntityType<T> build() {
             if (identifier == null)
                 throw new EntityTypeBuildException("identifier cannot be null!");
             var type = new AllayEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier);

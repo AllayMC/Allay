@@ -1,7 +1,8 @@
 package cn.allay.server;
 
 import cn.allay.api.MissingImplementationException;
-import cn.allay.api.data.VanillaBlockTypes;
+import cn.allay.api.block.interfaces.BlockStoneBehavior;
+import cn.allay.api.block.interfaces.BlockWoodBehavior;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.server.world.chunk.AllayChunk;
@@ -27,7 +28,7 @@ public class ChunkJMHTest {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {
-                    chunk.setBlockState(i, k, j, VanillaBlockTypes.WOOD_TYPE.getDefaultState());
+                    chunk.setBlockState(i, k, j, BlockWoodBehavior.WOOD_TYPE.getDefaultState());
                 }
             }
         }
@@ -35,7 +36,7 @@ public class ChunkJMHTest {
 
     @Benchmark
     public void test1() {
-        chunk.setBlockState(0, 0, 0, VanillaBlockTypes.STONE_TYPE.getDefaultState());
+        chunk.setBlockState(0, 0, 0, BlockStoneBehavior.STONE_TYPE.getDefaultState());
     }
 
     @Benchmark
@@ -46,7 +47,7 @@ public class ChunkJMHTest {
     @Threads(Threads.MAX)
     @Benchmark
     public void test3() {
-        chunk.setBlockState(0, 0, 0, VanillaBlockTypes.STONE_TYPE.getDefaultState());
+        chunk.setBlockState(0, 0, 0, BlockStoneBehavior.STONE_TYPE.getDefaultState());
     }
 
     @Threads(Threads.MAX)

@@ -54,8 +54,6 @@ public interface ItemTypeBuilder<T extends ItemStack> {
 
     ItemTypeBuilder<T> addComponent(ComponentProvider<? extends ItemComponent> componentProvider);
 
-    ItemTypeBuilder<T> addBasicComponents();
-
     ItemType<T> build();
 
     interface ItemTypeBuilderFactory {

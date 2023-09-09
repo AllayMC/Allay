@@ -1,9 +1,7 @@
 package cn.allay.api.container.impl;
 
 import cn.allay.api.container.BaseContainer;
-import cn.allay.api.container.FullContainerType;
 import cn.allay.api.item.ItemStack;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
 import static cn.allay.api.container.FullContainerType.CREATED_OUTPUT;
 

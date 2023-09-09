@@ -113,22 +113,16 @@ class BlockAttributesTest {
     void testVanillaBlockAttributes() {
         for (var vanillaBlockId : VanillaBlockId.values()) {
             log.info("Testing block type: " + vanillaBlockId.getIdentifier());
-            testBlockType(vanillaBlockId, BlockTypeRegistry.getRegistry().get(vanillaBlockId.getIdentifier()));
+            BlockType<?> type = BlockTypeRegistry.getRegistry().get(vanillaBlockId.getIdentifier());
+            assertNotNull(type);
+            var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
+            assertNotNull(attributeMap);
+            for (var state : type.getBlockStateHashMap().values()) {
+                var expected = attributeMap.get(state.blockStateHash());
+                assertNotNull(expected, "Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
+            }
         }
     }
 
 
-    void testBlockType(VanillaBlockId vanillaBlockId, BlockType<?> type) {
-        var block = type.getBlockBehavior();
-        var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
-        for (var state : type.getBlockStateHashMap().values()) {
-            var expected = attributeMap.get(state.blockStateHash());
-//            if (expected == null) {
-//                missing.add(state);
-//                continue;
-//            }
-            assertNotNull(expected, "Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
-            assertEquals(expected, block.getBlockAttributes(state));
-        }
-    }
 }

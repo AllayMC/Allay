@@ -5,7 +5,6 @@ import cn.allay.api.container.FullContainerType;
 import cn.allay.api.item.ItemStack;
 import lombok.Getter;
 import lombok.Setter;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.jetbrains.annotations.Range;
 
 /**

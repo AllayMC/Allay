@@ -45,7 +45,6 @@ public interface EntityTypeBuilder<T extends Entity> {
 
     EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponent> componentProvider);
 
-    EntityTypeBuilder<T> addBasicComponents();
 
     EntityType<T> build();
 

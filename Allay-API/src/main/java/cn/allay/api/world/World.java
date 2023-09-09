@@ -2,9 +2,9 @@ package cn.allay.api.world;
 
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.data.BlockStateWithPos;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.client.Client;
-import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.position.Position3i;
 import cn.allay.api.math.position.Position3ic;
@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 import org.slf4j.Logger;
 
@@ -133,7 +132,7 @@ public interface World {
     default BlockState getBlockStateNonNull(int x, int y, int z, int layer) {
         var blockState = getBlockState(x, y, z, layer);
         if (blockState == null)
-            blockState = VanillaBlockTypes.AIR_TYPE.getDefaultState();
+            blockState = BlockAirBehavior.AIR_TYPE.getDefaultState();
         return blockState;
     }
 

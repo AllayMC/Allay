@@ -1,7 +1,7 @@
 package cn.allay.server.world.chunk;
 
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.data.VanillaBlockTypes;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.world.DimensionInfo;
@@ -104,7 +104,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         ChunkSection section = this.getSection(normalY(y) >>> 4);
         BlockState blockState;
         if (section == null) {
-            blockState = VanillaBlockTypes.AIR_TYPE.getDefaultState();
+            blockState = BlockAirBehavior.AIR_TYPE.getDefaultState();
         } else {
             blockState = section.getBlockState(x, y & 0xf, z, layer);
         }
