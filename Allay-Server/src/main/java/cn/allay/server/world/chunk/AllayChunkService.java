@@ -477,14 +477,10 @@ public class AllayChunkService implements ChunkService {
 
         public void tick() {
             if (!chunkLoader.isLoaderActive()) return;
-            var loaderChunkPosChanged = false;
             long currentLoaderChunkPosHashed;
             Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
             if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
                 lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
-                loaderChunkPosChanged = true;
-            }
-            if (loaderChunkPosChanged) {
                 updateAndLoadInRadiusChunks();
                 removeOutOfRadiusChunks();
                 updateChunkSendingQueue();
@@ -542,6 +538,13 @@ public class AllayChunkService implements ChunkService {
                 long chunkHash = chunkSendQueue.firstLong();
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
+                    //TODO: 这边有问题，按理说获取的chunk不应该一直为null（发送了加载请求）。怀疑是区块加载出了问题。等待进一步调查
+                    if (!isChunkLoading(chunkHash)) {
+                        log.warn("Error while trying to send chunk(" + HashUtils.getXFromHashXZ(chunkHash) + ", " + HashUtils.getZFromHashXZ(chunkHash) + "), the chunk cannot been loaded");
+                        chunkSendQueue.dequeueLong();
+                    } else {
+                        log.info("Wait chunk(" + HashUtils.getXFromHashXZ(chunkHash) + ", " + HashUtils.getZFromHashXZ(chunkHash) + ")'s loading");
+                    }
                     continue;
                 }
                 sentChunkCount++;
