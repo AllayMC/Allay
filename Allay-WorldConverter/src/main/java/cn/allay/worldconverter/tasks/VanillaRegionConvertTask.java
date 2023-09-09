@@ -98,9 +98,20 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                                             }
                                             Integer beBlockStateHash = Mapping.getBeBlockStateHash(MappingUtils.convertBlockState(jeBlockState));
                                             if (beBlockStateHash == null) System.out.println(jeBlockState);
-                                            Integer beBiomeId = Mapping.getBeBiomeId(section.getBiome(x, y, z));
+                                            String jeBiomeId = section.getBiome(x, y, z);
+                                            Integer beBiomeId = Mapping.getBeBiomeId(jeBiomeId);
                                             cn.allay.api.block.type.BlockState blockState = beBlockStateHash == null ? BlockAirBehavior.AIR_TYPE.getDefaultState() : BlockStateHashPalette.getRegistry().get(beBlockStateHash);
+                                            //todo 临时解决映射错误
+                                            cn.allay.api.block.type.BlockState blockState1 = BlockStateHashPalette.getRegistry().get(beBlockStateHash);
+                                            if (blockState1 == null) {
+                                                blockState = BlockAirBehavior.AIR_TYPE.getDefaultState();
+                                                System.out.println(jeBlockState);
+                                            }
                                             BiomeType biomeType = beBiomeId == null ? VanillaBiomeId.values()[1] : VanillaBiomeId.fromId(beBiomeId);
+                                            if (VanillaBiomeId.fromId(beBiomeId) == null) {
+                                                biomeType = VanillaBiomeId.values()[1];
+                                                System.out.println(jeBiomeId);
+                                            }
                                             allaySection.setBlockState(x, y, z, 0, blockState);
                                             allaySection.setBiomeType(x, y, z, biomeType);
                                         }

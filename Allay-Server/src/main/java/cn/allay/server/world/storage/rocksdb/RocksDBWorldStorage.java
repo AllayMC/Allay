@@ -98,7 +98,7 @@ public class RocksDBWorldStorage implements WorldStorage {
             try (WriteBatch writeBatch = new WriteBatch()) {
                 writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ()), new byte[]{0});
                 chunk.batchProcess(c -> serializer.serialize(writeBatch, c));
-                try (var options = new WriteOptions().setSync(true)) {
+                try (var options = new WriteOptions()) {
                     this.db.write(options, writeBatch);
                 }
             } catch (RocksDBException e) {
