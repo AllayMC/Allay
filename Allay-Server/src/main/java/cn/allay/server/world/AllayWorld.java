@@ -68,7 +68,13 @@ public class AllayWorld implements World {
         this.worldMainThread = Thread.ofPlatform()
                 .name("World Thread - " + worldData.getLevelName())
                 .unstarted(() -> GameLoop.builder()
-                        .onTick(gameLoop -> tick())
+                        .onTick(gameLoop -> {
+                            try {
+                                tick();
+                            } catch (Throwable throwable) {
+                                log.error("Error while ticking level " + getName(), throwable);
+                            }
+                        })
                         .build()
                         .startLoop());
     }
