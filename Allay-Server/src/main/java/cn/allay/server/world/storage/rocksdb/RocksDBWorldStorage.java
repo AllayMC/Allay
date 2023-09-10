@@ -9,7 +9,7 @@ import cn.allay.api.world.gamerule.GameRule;
 import cn.allay.api.world.gamerule.GameRules;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.api.world.storage.WorldStorageException;
-import cn.allay.server.utils.LevelDBKey;
+import cn.allay.server.utils.LevelDBKeyUtils;
 import cn.allay.server.world.chunk.AllayChunk;
 import cn.allay.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NbtMap;
@@ -71,7 +71,7 @@ public class RocksDBWorldStorage implements WorldStorage {
         return CompletableFuture.supplyAsync(() -> {
             AllayUnsafeChunk.Builder builder = AllayUnsafeChunk.builder().chunkX(x).chunkZ(z).dimensionInfo(getWorldDataCache().getDimensionInfo()).state(Chunk.STATE_FINISHED);
             try {
-                byte[] versionValue = this.db.get(LevelDBKey.VERSION.getKey(x, z));
+                byte[] versionValue = this.db.get(LevelDBKeyUtils.VERSION.getKey(x, z));
                 if (versionValue == null || versionValue.length != 1) {
                     return null;
                 }
@@ -96,7 +96,7 @@ public class RocksDBWorldStorage implements WorldStorage {
         return CompletableFuture.runAsync(() -> {
             RocksdbChunkSerializer serializer = RocksdbChunkSerializer.Provider.of(0);
             try (WriteBatch writeBatch = new WriteBatch()) {
-                writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ()), new byte[]{0});
+                writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ()), new byte[]{0});
                 chunk.batchProcess(c -> serializer.serialize(writeBatch, c));
                 try (var options = new WriteOptions()) {
                     this.db.write(options, writeBatch);

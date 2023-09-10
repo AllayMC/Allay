@@ -10,7 +10,7 @@ import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.chunk.UnsafeChunk;
 import cn.allay.api.world.heightmap.HeightMap;
 import cn.allay.api.world.palette.Palette;
-import cn.allay.server.utils.LevelDBKey;
+import cn.allay.server.utils.LevelDBKeyUtils;
 import cn.allay.server.world.chunk.AllayUnsafeChunk;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -64,7 +64,7 @@ public class RocksdbChunkSerializerV1 implements RocksdbChunkSerializer {
                     section.blockLayer()[i].writeToStorageRuntime(buffer, BlockState::blockStateHash, lastLayers[i]);
                     lastLayers[i] = section.blockLayer()[i];
                 }
-                writeBatch.put(LevelDBKey.CHUNK_SECTION_PREFIX.getKey(chunk.getX(), chunk.getZ(), ySection), Utils.convertByteBuf2Array(buffer));
+                writeBatch.put(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(chunk.getX(), chunk.getZ(), ySection), Utils.convertByteBuf2Array(buffer));
             } catch (RocksDBException e) {
                 throw new RuntimeException(e);
             } finally {
@@ -80,7 +80,7 @@ public class RocksdbChunkSerializerV1 implements RocksdbChunkSerializer {
         for (int ySection = 0; ySection < builder.getDimensionInfo().chunkSectionSize(); ySection++) {
             ByteBuf buf = null;
             try {
-                byte[] bytes = db.get(LevelDBKey.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection));
+                byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection));
                 if (bytes != null) {
                     ChunkSection section = new ChunkSection(ySection);
                     buf = Unpooled.wrappedBuffer(bytes);
@@ -120,7 +120,7 @@ public class RocksdbChunkSerializerV1 implements RocksdbChunkSerializer {
                 biomePalette.writeToStorageRuntime(heightAndBiomesBuffer, BiomeType::getId, last);
                 last = biomePalette;
             }
-            writeBatch.put(LevelDBKey.DATA_3D.getKey(chunk.getX(), chunk.getZ()), Utils.convertByteBuf2Array(heightAndBiomesBuffer));
+            writeBatch.put(LevelDBKeyUtils.DATA_3D.getKey(chunk.getX(), chunk.getZ()), Utils.convertByteBuf2Array(heightAndBiomesBuffer));
         } catch (RocksDBException e) {
             throw new RuntimeException(e);
         } finally {
@@ -132,7 +132,7 @@ public class RocksdbChunkSerializerV1 implements RocksdbChunkSerializer {
         //Write biomeAndHeight
         ByteBuf heightAndBiomesBuffer = null;
         try {
-            byte[] bytes = db.get(LevelDBKey.DATA_3D.getKey(builder.getChunkX(), builder.getChunkZ()));
+            byte[] bytes = db.get(LevelDBKeyUtils.DATA_3D.getKey(builder.getChunkX(), builder.getChunkZ()));
             if (bytes != null) {
                 heightAndBiomesBuffer = Unpooled.wrappedBuffer(bytes);
                 short[] heights = new short[256];
