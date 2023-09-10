@@ -8,10 +8,7 @@ import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeType;
-import cn.allay.api.world.chunk.Chunk;
-import cn.allay.api.world.chunk.ChunkLoader;
-import cn.allay.api.world.chunk.ChunkSection;
-import cn.allay.api.world.chunk.ChunkService;
+import cn.allay.api.world.chunk.*;
 import cn.allay.api.world.generator.ChunkGenerateContext;
 import cn.allay.api.world.storage.WorldStorage;
 import com.google.common.collect.Sets;
@@ -34,6 +31,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static cn.allay.api.world.chunk.ChunkState.*;
 
 /**
  * Allay Project 2023/7/1
@@ -239,10 +238,10 @@ public class AllayChunkService implements ChunkService {
         }
         var future = worldStorage.readChunk(x, z).exceptionally(t -> {
             log.error("Error while reading chunk (" + x + "," + z + ") !", t);
-            return null;
-        }).thenApplyAsync(loadedChunk -> generateChunkIfNullAndSetChunk(x, z, loadedChunk), Server.getInstance().getComputeThreadPool()).exceptionally(t -> {
+            return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
+        }).thenApplyAsync(loadedChunk -> prepareAndSetChunk(x, z, loadedChunk), Server.getInstance().getComputeThreadPool()).exceptionally(t -> {
             log.error("Error while generating chunk (" + x + "," + z + ") !", t);
-            return null;
+            return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
         });
         loadingChunks.put(hashXZ, future);
         return future;
@@ -255,27 +254,37 @@ public class AllayChunkService implements ChunkService {
         if (isChunkLoaded(x, z) || isChunkLoading(x, z)) {
             throw new IllegalStateException("Chunk is already loaded or under loading");
         }
-        return generateChunkIfNullAndSetChunk(
+        return prepareAndSetChunk(
                 x, z,
                 worldStorage.readChunk(x, z).get()
         );
     }
 
-    private Chunk generateChunkIfNullAndSetChunk(int x, int z, Chunk loadedChunk) {
+    private Chunk prepareAndSetChunk(int x, int z, Chunk chunk) {
         long hashXZ = HashUtils.hashXZ(x, z);
-        if (loadedChunk == null) {
-            loadedChunk = generateChunkImmediately(x, z);
+        var unsafeChunk = chunk.toUnsafeChunk();
+        if (unsafeChunk.getState() != FINISHED) {
+            var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
+            if (unsafeChunk.getState() == NEW) {
+                world.getWorldGenerator().generate(chunkGenerateContext);
+                unsafeChunk.setState(ChunkState.GENERATED);
+            }
+            if (unsafeChunk.getState() == GENERATED) {
+                world.getWorldGenerator().populate(chunkGenerateContext);
+                unsafeChunk.setState(POPULATED);
+            }
+            if (unsafeChunk.getState() == POPULATED) {
+                afterPopulate(unsafeChunk);
+                unsafeChunk.setState(FINISHED);
+            }
         }
-        setChunk(x, z, loadedChunk);
+        setChunk(x, z, chunk);
         loadingChunks.remove(hashXZ);
-        return loadedChunk;
+        return chunk;
     }
 
-    private AllayChunk generateChunkImmediately(int x, int z) {
-        var unsafeChunk = AllayUnsafeChunk.builder().emptyChunk(x, z, getWorldStorage().getWorldDataCache().getDimensionInfo());
-        var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
-        world.getWorldGenerator().generate(chunkGenerateContext);
-        return new AllayChunk(unsafeChunk);
+    private void afterPopulate(UnsafeChunk chunk) {
+        //TODO works...
     }
 
     public void unloadChunk(int x, int z) {
@@ -350,13 +359,13 @@ public class AllayChunkService implements ChunkService {
         //保存着这tick将要发送的全部区块hash值
         private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
         private final LongArrayPriorityQueue chunkSendQueue = new LongArrayPriorityQueue(100, chunkDistanceComparator);
-        private final int chunkTrySentPerTick;
+        private final int chunkTrySendCountPerTick;
         private long lastLoaderChunkPosHashed = -1;
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
             //TODO: Config
-            this.chunkTrySentPerTick = 8;
+            this.chunkTrySendCountPerTick = chunkLoader.getChunkTrySendCountPerTick();
             chunkLoader.setSubChunkRequestHandler(subChunkRequestPacket -> {
                 List<SubChunkData> responseData = new ArrayList<>();
                 var centerPosition = subChunkRequestPacket.getSubChunkPosition();
@@ -535,13 +544,14 @@ public class AllayChunkService implements ChunkService {
         private void sendQueuedChunks() {
             if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
-            int trySentChunkCount = 0;
+            int triedSendChunkCount = 0;
             do {
-                trySentChunkCount++;
+                triedSendChunkCount++;
                 long chunkHash = chunkSendQueue.firstLong();
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
                     if (isChunkUnloaded(chunkHash)) {
+                        //TODO: 这边有概率报IllegalStateException("Chunk is already loaded")，怀疑是并发加载了同一个区块(AllayClient那边也有一个加载区块的操作)。需要进一步调查
                         loadChunk(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash));
                     }
                     continue;
@@ -549,7 +559,7 @@ public class AllayChunkService implements ChunkService {
                 chunkSendQueue.dequeueLong();
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
-            } while (!chunkSendQueue.isEmpty() && trySentChunkCount < chunkTrySentPerTick);
+            } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
             chunkLoader.preSendChunks(chunkReadyToSend.keySet());
             chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash.longValue()));
             chunkReadyToSend.values().forEach(chunkLoader::notifyChunkLoaded);

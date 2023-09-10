@@ -6,8 +6,11 @@ import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.chunk.ChunkState;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.api.world.storage.WorldStorageException;
+import cn.allay.server.world.chunk.AllayChunk;
+import cn.allay.server.world.chunk.AllayUnsafeChunk;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -35,7 +38,10 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
         World world = Server.getInstance().getWorldPool().getWorld(worldData.getLevelName());
         long l = HashUtils.hashXZ(x, z);
         var chunk = chunks.get(l);
-        if (chunk != null) readEntities(l).stream().map(nbt -> Entity.fromNBT(world, nbt)).forEach(chunk::addEntity);
+        if (chunk == null) {
+            chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, worldData.getDimensionInfo()).toSafeChunk();
+        }
+        readEntities(l).stream().map(nbt -> Entity.fromNBT(world, nbt)).forEach(chunk::addEntity);
         return CompletableFuture.completedFuture(chunk);
     }
 

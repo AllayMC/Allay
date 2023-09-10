@@ -3,6 +3,7 @@ package cn.allay.api.world.storage;
 import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.Chunk;
 
+import javax.annotation.Nonnull;
 import java.util.concurrent.CompletableFuture;
 
 /**
