@@ -179,7 +179,7 @@ public class AllayWorld implements World {
 
     @Override
     public void close() {
-        getChunkService().unloadChunkAll();
+        getChunkService().unloadAllChunks();
         getWorldStorage().close();
     }
 

@@ -296,7 +296,7 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
-    public void unloadChunkAll() {
+    public void unloadAllChunks() {
         this.loadedChunks.values().forEach((c) -> unloadChunk(c.getX(), c.getZ()));
     }
 
