@@ -29,6 +29,11 @@ public class FlatWorldGenerator implements WorldGenerator {
     }
 
     @Override
+    public void populate(ChunkGenerateContext context) {
+        //do nothing
+    }
+
+    @Override
     public String getGeneratorName() {
         return "FLAT";
     }

@@ -5,6 +5,7 @@ import cn.allay.api.world.Difficulty;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.chunk.ChunkState;
 import cn.allay.api.world.gamerule.GameRule;
 import cn.allay.api.world.gamerule.GameRules;
 import cn.allay.api.world.storage.WorldStorage;
@@ -73,7 +74,7 @@ public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
             try {
                 byte[] versionValue = this.db.get(LevelDBKey.VERSION.getKey(x, z));
                 if (versionValue == null || versionValue.length != 1) {
-                    return null;
+                    return builder.build().toSafeChunk();
                 }
 //                byte[] finalizationState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.getKey(x, z));
 //                if (finalizationState == null) {
@@ -84,7 +85,8 @@ public class RocksDBWorldStorage implements WorldStorage, AutoCloseable {
                 byte chunkVersion = versionValue[0];
                 RocksdbChunkSerializer serializer = RocksdbChunkSerializer.Provider.of(chunkVersion);
                 serializer.deserialize(this.db, builder);
-                return new AllayChunk(builder.build());
+                builder.state(ChunkState.POPULATED);
+                return builder.build().toSafeChunk();
             } catch (RocksDBException e) {
                 throw new RuntimeException(e);
             }

@@ -28,6 +28,8 @@ public interface Chunk extends UnsafeChunk {
 
     void batchProcess(UnsafeChunkOperate operate);
 
+    UnsafeChunk toUnsafeChunk();
+
     @ApiStatus.Internal
     LevelChunkPacket createLevelChunkPacket();
 

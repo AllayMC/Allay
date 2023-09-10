@@ -6,9 +6,7 @@ import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
-import cn.allay.api.world.chunk.ChunkLoader;
-import cn.allay.api.world.chunk.ChunkSection;
-import cn.allay.api.world.chunk.UnsafeChunk;
+import cn.allay.api.world.chunk.*;
 import cn.allay.api.world.heightmap.HeightMap;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -29,14 +27,14 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
+import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 @NotThreadSafe
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AllayUnsafeChunk implements UnsafeChunk {
-    private static final AtomicIntegerFieldUpdater<AllayUnsafeChunk> STATE_FIELD = AtomicIntegerFieldUpdater.newUpdater(AllayUnsafeChunk.class, "state");
+    private static final AtomicReferenceFieldUpdater<AllayUnsafeChunk, ChunkState> STATE_FIELD = AtomicReferenceFieldUpdater.newUpdater(AllayUnsafeChunk.class, ChunkState.class, "state");
     protected @Getter
-    volatile int state;
+    volatile ChunkState state;
     protected @Getter
     final int x;
     protected @Getter
@@ -53,7 +51,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.x = chunkX;
         this.z = chunkZ;
         this.dimensionInfo = dimensionInfo;
-        this.state = UnsafeChunk.STATE_NEW;
+        this.state = ChunkState.NEW;
         this.heightMap = new HeightMap();
         this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
         this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
@@ -66,12 +64,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public void setState(int next) {
-        int curr;
+    public void setState(ChunkState next) {
+        ChunkState curr;
         do {
             curr = STATE_FIELD.get(this);
-            Preconditions.checkArgument(next >= 0 && next <= STATE_FINISHED, "invalid state: %s", next);
-            Preconditions.checkState(curr < next, "invalid state transition: %s => %s", curr, next);
+            Preconditions.checkState(curr.ordinal() <= next.ordinal(), "invalid state transition: %s => %s", curr, next);
         } while (!STATE_FIELD.compareAndSet(this, curr, next));
     }
 
@@ -220,6 +217,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return Collections.unmodifiableMap(entities);
     }
 
+    @Override
+    public Chunk toSafeChunk() {
+        return new AllayChunk(this);
+    }
 
     protected int normalY(int y) {
         return y - getDimensionInfo().minHeight();
@@ -227,7 +228,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Getter
     public static class Builder {
-        int state;
+        ChunkState state;
         int chunkZ;
         int chunkX;
         DimensionInfo dimensionInfo;
@@ -245,7 +246,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             return this;
         }
 
-        public Builder state(int state) {
+        public Builder state(ChunkState state) {
             this.state = state;
             return this;
         }
@@ -279,7 +280,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
 
         public AllayUnsafeChunk emptyChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-            return new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo);
+            var chunk = new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo);
+            chunk.setState(ChunkState.NEW);
+            return chunk;
         }
     }
 }
