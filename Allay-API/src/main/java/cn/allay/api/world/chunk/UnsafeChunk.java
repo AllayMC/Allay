@@ -24,14 +24,11 @@ import java.util.Set;
 @NotThreadSafe
 public interface UnsafeChunk {
     int SECTION_SIZE = 16 * 16 * 16;
-    int STATE_NEW = 0;
-    int STATE_GENERATED = 1;
-    int STATE_POPULATED = 2;
-    int STATE_FINISHED = 3;
 
-    int getState();
+    ChunkState getState();
 
-    void setState(int next);
+    @ApiStatus.Internal
+    void setState(ChunkState next);
 
     DimensionInfo getDimensionInfo();
 
@@ -45,6 +42,8 @@ public interface UnsafeChunk {
 
     @UnmodifiableView
     Map<Long, Entity> getEntities();
+
+    Chunk toSafeChunk();
 
     @ApiStatus.Internal
     @Nullable

@@ -21,6 +21,8 @@ public interface ChunkLoader {
 
     int getChunkLoadingRadius();
 
+    int getChunkTrySendCountPerTick();
+
     void setChunkLoadingRadius(int radius);
 
     void preSendChunks(Set<Long> chunkHashes);

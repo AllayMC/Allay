@@ -42,4 +42,7 @@ public abstract class BaseClient implements Client {
     @Getter
     @Setter
     protected ClientMovementValidator movementValidator = ClientMovementValidator.EMPTY_VALIDATOR;
+    @Getter
+    @Setter
+    protected int chunkTrySendCountPerTick = 16;
 }

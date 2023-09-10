@@ -279,6 +279,11 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
+    public UnsafeChunk toUnsafeChunk() {
+        return unsafeChunk;
+    }
+
+    @Override
     public LevelChunkPacket createLevelChunkPacket() {
         final LevelChunkPacket levelChunkPacket = new LevelChunkPacket();
         levelChunkPacket.setChunkX(this.getX());
@@ -291,12 +296,13 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public int getState() {
+    public ChunkState getState() {
         return unsafeChunk.getState();
     }
 
     @Override
-    public void setState(int next) {
+    public void setState(ChunkState next) {
+        unsafeChunk.setState(next);
     }
 
     @Override
@@ -327,6 +333,12 @@ public class AllayChunk implements Chunk {
     @Override
     public @UnmodifiableView Map<Long, Entity> getEntities() {
         return unsafeChunk.getEntities();
+    }
+
+    @Override
+    public Chunk toSafeChunk() {
+        //already safe
+        return this;
     }
 
     @Nullable

@@ -12,6 +12,8 @@ public interface WorldGenerator {
     //feature -> structure place-> calc light -> spawn entity -> full
     void generate(ChunkGenerateContext context);
 
+    void populate(ChunkGenerateContext context);
+
     String getGeneratorName();
 
     GeneratorType getType();
