@@ -5,7 +5,7 @@ package cn.allay.server.utils;
  *
  * @author Cool_Loong | Cloudburst Server
  */
-public enum LevelDBKey {
+public enum LevelDBKeyUtils {
     /**
      * Biome IDs are written as 8-bit integers. No longer written since v1.18.0.
      */
@@ -63,7 +63,7 @@ public enum LevelDBKey {
 
     private final byte encoded;
 
-    LevelDBKey(char encoded) {
+    LevelDBKeyUtils(char encoded) {
         this.encoded = (byte) encoded;
     }
 

@@ -7,15 +7,11 @@ import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class MappingUtils {
     public static JeBlockState convertBlockState(org.jglrxavpok.hephaistos.mca.BlockState blockState) {
         String name = blockState.getName();
-        Map<String, String> properties = blockState.getProperties();
-        StringBuilder ret = new StringBuilder(name).append('[');
-        String join = String.join(",", properties.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).toList());
-        return JeBlockState.of(ret.append(join).append(']').toString());
+        return JeBlockState.of(name, blockState.getProperties());
     }
 
     public static NBTCompound convertNBT(NbtMap blockState) {
