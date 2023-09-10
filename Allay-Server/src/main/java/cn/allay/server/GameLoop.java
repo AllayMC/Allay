@@ -14,7 +14,6 @@ import java.util.function.Consumer;
  */
 @Slf4j
 public final class GameLoop {
-
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
     @Getter
     private final int loopCountPerSec;

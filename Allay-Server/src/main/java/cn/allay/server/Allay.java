@@ -54,7 +54,7 @@ public final class Allay {
         ComponentClassCacheUtils.checkCacheValid();
         //Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
-        api.bind(Server.class, AllayServer::new);
+        api.bind(Server.class, AllayServer::getInstance);
         api.bind(Scheduler.SchedulerFactory.class, () -> AllayScheduler::new);
 
         //Item

@@ -14,7 +14,7 @@ import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.world.AllayWorld;
 import cn.allay.server.world.AllayWorldPool;
 import cn.allay.server.world.generator.flat.FlatWorldGenerator;
-import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
+import cn.allay.server.world.storage.rocksdb.RocksDBWorldStorage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
@@ -30,34 +30,28 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Getter
 @Slf4j
 public final class AllayServer implements Server {
-    private final boolean DEBUG = false;
-    private final Map<String, Client> clients = new ConcurrentHashMap<>();
+    private final boolean DEBUG;
+    private final Map<String, Client> clients;
     @Getter
-    private final WorldPool worldPool = new AllayWorldPool();
-    private final AtomicBoolean isRunning = new AtomicBoolean(true);
-    private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
+    private final WorldPool worldPool;
+    private final AtomicBoolean isRunning;
+    private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap;
     //执行CPU密集型任务的线程池
     @Getter
-    private final ForkJoinPool computeThreadPool = new ForkJoinPool(
-            Runtime.getRuntime().availableProcessors() + 1,
-            pool -> {
-                ForkJoinWorkerThread worker = ForkJoinPool.defaultForkJoinWorkerThreadFactory.newThread(pool);
-                worker.setName("computation-thread-" + worker.getPoolIndex());
-                return worker;
-            },
-            null, true);
+    private final ForkJoinPool computeThreadPool;
     //执行IO密集型任务的线程池
     @Getter
-    private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
+    private final ExecutorService virtualThreadPool;
+    private final GameLoop MAIN_THREAD_GAME_LOOP;
     @Getter
     private ServerSettings serverSettings;
     @Getter
@@ -65,7 +59,46 @@ public final class AllayServer implements Server {
     private Thread terminalConsoleThread;
     private AllayTerminalConsole terminalConsole;
     @Getter
-    private long ticks = 0;
+    private long ticks;
+    private static volatile AllayServer instance;
+
+    private AllayServer() {
+        DEBUG = false;
+        clients = new ConcurrentHashMap<>();
+        worldPool = new AllayWorldPool();
+        isRunning = new AtomicBoolean(true);
+        playerListEntryMap = new Object2ObjectOpenHashMap<>();
+        computeThreadPool = new ForkJoinPool(
+                Runtime.getRuntime().availableProcessors() + 1,
+                pool -> {
+                    ForkJoinWorkerThread worker = ForkJoinPool.defaultForkJoinWorkerThreadFactory.newThread(pool);
+                    worker.setName("computation-thread-" + worker.getPoolIndex());
+                    return worker;
+                },
+                null, true);
+        virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
+        ticks = 0;
+        MAIN_THREAD_GAME_LOOP = GameLoop.builder()
+                .loopCountPerSec(20)
+                .onTick(loop -> {
+                    if (isRunning.get())
+                        onTick();
+                    else loop.stop();
+                })
+                .onStop(() -> isRunning.set(false))
+                .build();
+    }
+
+    public static AllayServer getInstance() {
+        if (instance == null) {
+            synchronized (AllayServer.class) {
+                if (instance == null) {
+                    instance = new AllayServer();
+                }
+            }
+        }
+        return instance;
+    }
 
     @Override
     public void start() {
@@ -76,7 +109,18 @@ public final class AllayServer implements Server {
             loggerConfig.setLevel(Level.TRACE);
             ctx.updateLoggers();
         }
-
+        Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
+            @Override
+            public void run() {
+                isRunning.compareAndSet(true, false);
+                virtualThreadPool.shutdownNow();
+                computeThreadPool.shutdownNow();
+                getWorldPool().getWorlds().values().forEach(World::close);
+                while (MAIN_THREAD_GAME_LOOP.isRunning()) {
+                    MAIN_THREAD_GAME_LOOP.stop();
+                }
+            }
+        });
         initTerminalConsole();
         this.serverSettings = readServerSettings();
         this.networkServer = initNetwork();
@@ -84,20 +128,7 @@ public final class AllayServer implements Server {
         this.networkServer.start();
         log.info("Network server started.");
         loadWorlds();
-        loop();
-    }
-
-    private void loop() {
-        GameLoop.builder()
-                .loopCountPerSec(20)
-                .onTick(loop -> {
-                    if (isRunning.get())
-                        onTick();
-                    else loop.stop();
-                })
-                .onStop(() -> isRunning.set(false))
-                .build()
-                .startLoop();
+        MAIN_THREAD_GAME_LOOP.startLoop();
     }
 
     private void initTerminalConsole() {
@@ -110,16 +141,12 @@ public final class AllayServer implements Server {
         worldPool.setDefaultWorld(AllayWorld
                 .builder()
                 .setWorldGenerator(new FlatWorldGenerator())
-                .setWorldStorage(new AllayNonPersistentWorldStorage())
+                .setWorldStorage(new RocksDBWorldStorage(Path.of("output/新的世界")))
                 .build());
     }
 
     @Override
     public void shutdown() {
-        isRunning.compareAndSet(true, false);
-        virtualThreadPool.shutdownNow();
-        computeThreadPool.shutdownNow();
-        getWorldPool().getWorlds().values().forEach(World::close);
         System.exit(0);
     }
 
