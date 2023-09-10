@@ -13,6 +13,7 @@ import cn.allay.api.world.generator.ChunkGenerateContext;
 import cn.allay.api.world.storage.WorldStorage;
 import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.*;
 import lombok.Getter;
@@ -395,8 +396,7 @@ public class AllayChunkService implements ChunkService {
                     if (sent != null) {
                         if (sent.contains(requestData)) {
                             log.trace("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
-                            //TODO: 按理说客户端不应该重复请求，不过在实际测试中我们确实注意到原版客户端在某些情况下也会有重复请求的情况，这可能是一个原版漏洞
-                            //continue;
+                            continue;
                         } else {
                             sent.add(requestData);
                         }
@@ -414,9 +414,9 @@ public class AllayChunkService implements ChunkService {
                             int i = (z << 4) | x;
                             int otherInd = (y - dimensionInfo.minHeight()) >> 4;
                             if (otherInd > sectionY) {
-                                higher = true;
-                            } else if (otherInd < sectionY) {
                                 lower = true;
+                            } else if (otherInd < sectionY) {
+                                higher = true;
                             } else {
                                 hMap[i] = (byte) (y - (otherInd << 4) + dimensionInfo.minHeight());
                             }
@@ -466,13 +466,13 @@ public class AllayChunkService implements ChunkService {
                 if (type == HeightMapDataType.HAS_DATA) {
                     subChunkData.setHeightMapData(heightMapData);
                 }
-                ByteBuf byteBuf = Unpooled.buffer();
-                subchunk.writeToNetwork(byteBuf);
-                subchunk.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+                ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
+                subchunk.writeToNetwork(buffer);
+                subchunk.biomes().writeToNetwork(buffer, BiomeType::getId);
                 // edu - border blocks
-                byteBuf.writeByte(0);
+                buffer.writeByte(0);
                 //TODO: BlockEntity
-                subChunkData.setData(byteBuf);
+                subChunkData.setData(buffer);
                 response.add(subChunkData);
             } else {
                 subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);

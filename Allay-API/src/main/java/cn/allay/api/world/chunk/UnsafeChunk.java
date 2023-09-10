@@ -43,8 +43,6 @@ public interface UnsafeChunk {
     @UnmodifiableView
     Map<Long, Entity> getEntities();
 
-    Chunk toSafeChunk();
-
     @ApiStatus.Internal
     @Nullable
     ChunkSection getSection(@Range(from = 0, to = 63) int y);

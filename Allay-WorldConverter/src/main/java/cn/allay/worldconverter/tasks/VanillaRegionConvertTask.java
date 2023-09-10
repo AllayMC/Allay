@@ -7,7 +7,7 @@ import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.mapping.Mapping;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
-import cn.allay.api.world.chunk.UnsafeChunk;
+import cn.allay.api.world.chunk.ChunkState;
 import cn.allay.api.world.heightmap.HeightMap;
 import cn.allay.api.world.storage.WorldStorageException;
 import cn.allay.server.world.chunk.AllayChunk;
@@ -73,7 +73,7 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                             }
                         }
                         builder.heightMap(allayHeightMap)
-                                .state(UnsafeChunk.STATE_FINISHED)
+                                .state(ChunkState.FINISHED)
                                 .entities(new Long2ObjectNonBlockingMap<>());
                         try {
                             cn.allay.api.world.chunk.ChunkSection[] sections = new cn.allay.api.world.chunk.ChunkSection[dimensionInfo.chunkSectionSize()];
