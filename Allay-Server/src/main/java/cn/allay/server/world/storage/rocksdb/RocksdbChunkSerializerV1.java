@@ -3,7 +3,6 @@ package cn.allay.server.world.storage.rocksdb;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBiomeId;
-import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.utils.Utils;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.ChunkSection;
@@ -42,7 +41,6 @@ public class RocksdbChunkSerializerV1 implements RocksdbChunkSerializer {
         deserializeBlock(db, builder);
         deserializeHeightAndBiome(db, builder);
         //todo Entity and Block Entity
-        builder.entities(new Long2ObjectNonBlockingMap<>());
     }
 
     private void serializeBlock(WriteBatch writeBatch, UnsafeChunk chunk) {

@@ -344,12 +344,6 @@ public class AllayChunk implements Chunk {
         return unsafeChunk.getEntities();
     }
 
-    @Override
-    public Chunk toSafeChunk() {
-        //already safe
-        return this;
-    }
-
     @Nullable
     @Override
     public Entity removeEntity(Long uniqueId) {

@@ -11,7 +11,6 @@ import cn.allay.api.world.gamerule.GameRules;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.api.world.storage.WorldStorageException;
 import cn.allay.server.utils.LevelDBKeyUtils;
-import cn.allay.server.world.chunk.AllayChunk;
 import cn.allay.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -70,11 +69,16 @@ public class RocksDBWorldStorage implements WorldStorage {
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z) throws WorldStorageException {
         return CompletableFuture.supplyAsync(() -> {
-            AllayUnsafeChunk.Builder builder = AllayUnsafeChunk.builder().chunkX(x).chunkZ(z).dimensionInfo(getWorldDataCache().getDimensionInfo()).state(Chunk.STATE_FINISHED);
             try {
+                AllayUnsafeChunk.Builder builder = AllayUnsafeChunk.builder()
+                        .chunkX(x)
+                        .chunkZ(z)
+                        .dimensionInfo(getWorldDataCache().getDimensionInfo());
                 byte[] versionValue = this.db.get(LevelDBKeyUtils.VERSION.getKey(x, z));
                 if (versionValue == null || versionValue.length != 1) {
-                    return builder.build().toSafeChunk();
+                    return builder
+                            .build()
+                            .toSafeChunk();
                 }
 //                byte[] finalizationState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.getKey(x, z));
 //                if (finalizationState == null) {
@@ -85,7 +89,7 @@ public class RocksDBWorldStorage implements WorldStorage {
                 byte chunkVersion = versionValue[0];
                 RocksdbChunkSerializer serializer = RocksdbChunkSerializer.Provider.of(chunkVersion);
                 serializer.deserialize(this.db, builder);
-                builder.state(ChunkState.POPULATED);
+                builder.state(ChunkState.FINISHED);
                 return builder.build().toSafeChunk();
             } catch (RocksDBException e) {
                 throw new RuntimeException(e);

@@ -217,7 +217,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return Collections.unmodifiableMap(entities);
     }
 
-    @Override
     public Chunk toSafeChunk() {
         return new AllayChunk(this);
     }
@@ -272,7 +271,18 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
 
         public AllayUnsafeChunk build() {
-            return new AllayUnsafeChunk(state, chunkX, chunkZ, dimensionInfo, sections, heightMap,
+            Preconditions.checkNotNull(dimensionInfo);
+            if (state == null) state = ChunkState.NEW;
+            if (sections == null) sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
+            if (heightMap == null) heightMap = new HeightMap();
+            if (entities == null) entities = new Long2ObjectNonBlockingMap<>();
+            return new AllayUnsafeChunk(
+                    state,
+                    chunkX,
+                    chunkZ,
+                    dimensionInfo,
+                    sections,
+                    heightMap,
                     new ConcurrentLinkedQueue<>(),
                     ObjectSets.synchronize(new ObjectOpenHashSet<>()),
                     entities
