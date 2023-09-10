@@ -41,7 +41,7 @@ hephaistos = { group = "io.github.jglrxavpok.hephaistos", name = "common", versi
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 
 # K-V DataBase
-rocksdb = { group = "org.rocksdb", name = "rocksdbjni", version = "8.3.2" }
+rocksdb = { group = "org.rocksdb", name = "rocksdbjni", version = "8.3.3" }
 
 # Logging dependencies
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.7" }

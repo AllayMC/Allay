@@ -1,7 +1,10 @@
 package cn.allay.worldconverter;
 
+import cn.allay.api.MissingImplementationException;
+import cn.allay.api.mapping.Mapping;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.gamerule.GameRule;
+import cn.allay.server.Allay;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.jglrxavpok.hephaistos.nbt.*;
@@ -46,11 +49,6 @@ public class WorldConverter implements Callable<Integer> {
         File file = output.toFile();
         if (!file.exists()) {
             file.mkdirs();
-        }
-        Path region = output.resolve("region");
-        File regionFile = region.toFile();
-        if (!regionFile.exists()) {
-            regionFile.mkdirs();
         }
         return output;
     }
@@ -118,7 +116,12 @@ public class WorldConverter implements Callable<Integer> {
         if (!path.toFile().exists()) {
             return 1;
         }
-        convertLevelDat();
+        try {
+            Allay.initAllayAPI();
+            Mapping.getJeBiomeName(1);
+        } catch (MissingImplementationException e) {
+            throw new RuntimeException(e);
+        }
         ConvertFactory.of(path, convertLevelDat(), dimension);
         return 0;
     }

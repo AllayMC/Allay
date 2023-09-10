@@ -24,6 +24,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -35,21 +36,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author daoge_cmd
  */
 @Slf4j
+@Getter
 public class AllayWorld implements World {
     protected final WorldStorage worldStorage;
-    @Getter
-    protected final WorldData worldData;
-    @Getter
-    protected final WorldGenerator worldGenerator;
-    @Getter
-    protected final Server server;
-    @Getter
     protected final ChunkService chunkService;
-    @Getter
+    protected final WorldData worldData;
+    protected final WorldGenerator worldGenerator;
+    protected final Server server;
     protected final EntityPhysicsService entityPhysicsService;
-    @Getter
     protected final Scheduler worldScheduler;
-    @Getter
     protected final Thread worldMainThread;
 
     protected final Set<Client> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -59,14 +54,14 @@ public class AllayWorld implements World {
                        WorldData worldData,
                        WorldGenerator worldGenerator) {
         this.worldStorage = worldStorage;
-        this.worldData = worldData;
+        this.worldData = worldData == null ? worldStorage.getWorldDataCache() : worldData;
         this.worldGenerator = worldGenerator;
         this.server = server;
         this.chunkService = new AllayChunkService(this, worldStorage);
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.worldScheduler = new AllayScheduler();
         this.worldMainThread = Thread.ofPlatform()
-                .name("World Thread - " + worldData.getLevelName())
+                .name("World Thread - " + this.worldData.getLevelName())
                 .unstarted(() -> GameLoop.builder()
                         .onTick(gameLoop -> {
                             try {
@@ -181,11 +176,20 @@ public class AllayWorld implements World {
         return Collections.unmodifiableCollection(clients);
     }
 
+
+    @Override
+    public void close() {
+        getChunkService().unloadAllChunks();
+        getWorldStorage().close();
+    }
+
+
     public static WorldBuilder builder() {
         return new WorldBuilder();
     }
 
     public static class WorldBuilder {
+        @Nullable
         private WorldData worldData;
         private WorldStorage worldStorage;
         private WorldGenerator worldGenerator;

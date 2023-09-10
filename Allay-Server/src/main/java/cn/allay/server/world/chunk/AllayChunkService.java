@@ -305,6 +305,11 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
+    public void unloadAllChunks() {
+        this.loadedChunks.values().forEach((c) -> unloadChunk(c.getX(), c.getZ()));
+    }
+
+    @Override
     public int maxChunkX() {
         return Integer.MAX_VALUE;
     }

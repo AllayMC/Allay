@@ -52,6 +52,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -79,8 +80,7 @@ public class AllayClient extends BaseClient {
             packet -> {
                 throw new UnsupportedOperationException();
             };
-    @Getter
-    private boolean localInitialized;
+    private AtomicBoolean localInitialized = new AtomicBoolean(false);
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -94,6 +94,11 @@ public class AllayClient extends BaseClient {
 
     public static AllayClient hold(BedrockServerSession session, Server Server) {
         return new AllayClient(session, Server);
+    }
+
+    @Override
+    public boolean isLocalInitialized() {
+        return localInitialized.get();
     }
 
     @Override
@@ -478,7 +483,7 @@ public class AllayClient extends BaseClient {
 
         @Override
         public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
-            localInitialized = true;
+            localInitialized.set(true);
             return PacketSignal.HANDLED;
         }
 
@@ -580,7 +585,7 @@ public class AllayClient extends BaseClient {
 
         @Override
         public PacketSignal handle(PlayerAuthInputPacket packet) {
-            if (!isLocalInitialized()) return PacketSignal.HANDLED;
+            if (!isLocalInitialized()) return PacketSignal.UNHANDLED;
             //客户端发送给服务端的坐标比实际坐标高了一个BaseOffset，我们需要减掉它
             handleMovement(packet.getPosition().sub(0, playerEntity.getBaseOffset(), 0), packet.getRotation());
             handleBlockAction(packet.getPlayerActions());
@@ -590,7 +595,7 @@ public class AllayClient extends BaseClient {
 
         @Override
         public PacketSignal handle(MovePlayerPacket packet) {
-            if (!isLocalInitialized()) return PacketSignal.HANDLED;
+            if (!isLocalInitialized()) return PacketSignal.UNHANDLED;
             if (!packet.isOnGround()) {
                 log.warn("Player " + name + " send a invalid MovePlayerPacket (onGround=false) while using server-auth movement!");
                 return PacketSignal.HANDLED;
