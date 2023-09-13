@@ -1,6 +1,6 @@
 package cn.allay.worldconverter.tasks;
 
-import cn.allay.api.block.interfaces.BlockAirBehavior;
+import cn.allay.api.block.interfaces.BlockWaterBehavior;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
@@ -15,13 +15,14 @@ import cn.allay.server.world.chunk.AllayUnsafeChunk;
 import cn.allay.server.world.storage.rocksdb.RocksDBWorldStorage;
 import cn.allay.worldconverter.utils.ConsoleMultiProgressBarConsumer;
 import cn.allay.worldconverter.utils.MappingUtils;
+import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarBuilder;
 import me.tongfei.progressbar.ProgressBarStyle;
 import org.jglrxavpok.hephaistos.mca.*;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.RecursiveAction;
@@ -32,8 +33,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Cool_Loong
  */
+@Slf4j
 public class VanillaRegionConvertTask extends RecursiveAction {
     static final AtomicBoolean FIRST = new AtomicBoolean(true);
+    static final int AIR_BLOCK_HASH = -604749536;
     final RegionFile srcRegion;
     final RocksDBWorldStorage storage;
     final DimensionInfo dimensionInfo;
@@ -47,7 +50,8 @@ public class VanillaRegionConvertTask extends RecursiveAction {
 
     @Override
     protected void compute() {
-        try (ProgressBar pb = new ProgressBarBuilder()
+        try (ProgressBar pb = ProgressBar
+                .builder()
                 .setStyle(ProgressBarStyle.ASCII)
                 .setInitialMax(1024)
                 .setTaskName("Region " + srcRegion.getRegionX() + "," + srcRegion.getRegionZ() + ":")
@@ -56,7 +60,7 @@ public class VanillaRegionConvertTask extends RecursiveAction {
         ) {
             for (int i = 0; i < 32; i++) {
                 for (int j = 0; j < 32; j++) {
-                    int cx = i + (srcRegion.getRegionX() << 5), cz = j + (srcRegion.getRegionZ() << 5);
+                    int cx = i + (srcRegion.getRegionX() * 32), cz = j + (srcRegion.getRegionZ() * 32);
                     ChunkColumn chunk;
                     try {
                         chunk = srcRegion.getChunk(cx, cz);
@@ -77,13 +81,12 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                                 .entities(new Long2ObjectNonBlockingMap<>());
                         try {
                             cn.allay.api.world.chunk.ChunkSection[] sections = new cn.allay.api.world.chunk.ChunkSection[dimensionInfo.chunkSectionSize()];
-                            int minY = srcRegion.getMinY() >> 4;
-                            int maxY = srcRegion.getMaxY() >> 4;
-                            for (int sectionY = minY; sectionY < maxY; sectionY++) {
+                            for (int sectionY = dimensionInfo.minSectionY(); sectionY <= dimensionInfo.maxSectionY(); sectionY++) {
                                 ChunkSection section = chunk.getSection((byte) sectionY);
-                                int positiveY = sectionY - minY;
+                                int positiveY = sectionY - dimensionInfo.minSectionY();
                                 cn.allay.api.world.chunk.ChunkSection allaySection = new cn.allay.api.world.chunk.ChunkSection(positiveY);
                                 if (section.getEmpty()) {
+                                    log.warn("section" + positiveY + " is empty");
                                     sections[positiveY] = allaySection;
                                     continue;
                                 }
@@ -96,23 +99,32 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                                             } catch (AnvilException e) {
                                                 throw new RuntimeException(e);
                                             }
+
                                             Integer beBlockStateHash = Mapping.getBeBlockStateHash(MappingUtils.convertBlockState(jeBlockState));
-                                            if (beBlockStateHash == null) System.out.println(jeBlockState);
+                                            if (beBlockStateHash == null) {
+                                                log.warn("unmapping blockstate:" + jeBlockState);
+                                                beBlockStateHash = AIR_BLOCK_HASH;
+                                            }
+                                            cn.allay.api.block.type.BlockState blockState = BlockStateHashPalette.getRegistry().get(beBlockStateHash);
+                                            allaySection.setBlockState(x, y, z, 0, blockState);
+                                            Map<String, String> properties = jeBlockState.getProperties();
+                                            switch (jeBlockState.getName()) {
+                                                //Specially water block
+                                                case "minecraft:kelp", "minecraft:seagrass", "minecraft:bubble_column" ->
+                                                        allaySection.setBlockState(x, y, z, 1, BlockWaterBehavior.WATER_TYPE.getDefaultState());
+                                            }
+                                            //common water block
+                                            if (properties.containsKey("waterlogged") && properties.get("waterlogged").equals("true")) {
+                                                allaySection.setBlockState(x, y, z, 1, BlockWaterBehavior.WATER_TYPE.getDefaultState());
+                                            }
+
                                             String jeBiomeId = section.getBiome(x, y, z);
                                             Integer beBiomeId = Mapping.getBeBiomeId(jeBiomeId);
-                                            cn.allay.api.block.type.BlockState blockState = beBlockStateHash == null ? BlockAirBehavior.AIR_TYPE.getDefaultState() : BlockStateHashPalette.getRegistry().get(beBlockStateHash);
-                                            //todo 临时解决映射错误
-                                            cn.allay.api.block.type.BlockState blockState1 = BlockStateHashPalette.getRegistry().get(beBlockStateHash);
-                                            if (blockState1 == null) {
-                                                blockState = BlockAirBehavior.AIR_TYPE.getDefaultState();
-                                                System.out.println(jeBlockState);
+                                            if (beBiomeId == null) {
+                                                log.warn("unmapping biome:" + jeBiomeId);
+                                                beBiomeId = 1;
                                             }
-                                            BiomeType biomeType = beBiomeId == null ? VanillaBiomeId.values()[1] : VanillaBiomeId.fromId(beBiomeId);
-                                            if (VanillaBiomeId.fromId(beBiomeId) == null) {
-                                                biomeType = VanillaBiomeId.values()[1];
-                                                System.out.println(jeBiomeId);
-                                            }
-                                            allaySection.setBlockState(x, y, z, 0, blockState);
+                                            BiomeType biomeType = VanillaBiomeId.fromId(beBiomeId);
                                             allaySection.setBiomeType(x, y, z, biomeType);
                                         }
                                     }
@@ -129,7 +141,7 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                             }
                             builder.sections(sections);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            log.error("convert error:", e);
                         }
                         try {
                             AllayChunk allayChunk = new AllayChunk(builder.build());
