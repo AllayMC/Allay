@@ -22,7 +22,6 @@ public class MappingValidator {
     public static void main(String[] args) {
         Allay.initAllayAPI();
         Mapping.getJeBiomeName(1);
-        Mapping.getJeBiomeName(1);
         Field je2BeBlocksMapping = Mapping.class.getDeclaredField("JE_2_BE_BLOCKS_MAPPING");
         je2BeBlocksMapping.setAccessible(true);
         Object2IntOpenHashMap<JeBlockState> o = (Object2IntOpenHashMap<JeBlockState>) je2BeBlocksMapping.get(Mapping.class);
