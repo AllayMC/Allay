@@ -1,3 +1,6 @@
+dependencies {
+    implementation(project(":Allay-Server"))
+}
 plugins {
     id("java")
 }

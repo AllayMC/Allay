@@ -22,13 +22,17 @@ public class Mapping {
         String value = jsonReader.nextString();
         return Double.valueOf(value).intValue();
     }).create();
-    private static final Map<JeBlockState, Integer> JE_2_BE_BLOCKS_MAPPING = new Object2IntOpenHashMap<>();
-    private static final Map<Integer, JeBlockState> BE_2_JE_BLOCKS_MAPPING = new Int2ObjectOpenHashMap<>();
-    private static final Map<String, Integer> JE_2_BE_BIOME_MAP = new Object2IntOpenHashMap<>();
-    private static final Map<Integer, String> BE_2_JE_BIOME_MAP = new Int2ObjectOpenHashMap<>();
+    private static final Object2IntOpenHashMap<JeBlockState> JE_2_BE_BLOCKS_MAPPING = new Object2IntOpenHashMap<>();
+    private static final Int2ObjectOpenHashMap<JeBlockState> BE_2_JE_BLOCKS_MAPPING = new Int2ObjectOpenHashMap<>();
+    private static final Object2IntOpenHashMap<String> JE_2_BE_BIOME_MAP = new Object2IntOpenHashMap<>();
+    private static final Int2ObjectOpenHashMap<String> BE_2_JE_BIOME_MAP = new Int2ObjectOpenHashMap<>();
 
     static {
         init();
+        JE_2_BE_BLOCKS_MAPPING.trim();
+        BE_2_JE_BLOCKS_MAPPING.trim();
+        JE_2_BE_BIOME_MAP.trim();
+        BE_2_JE_BIOME_MAP.trim();
     }
 
     @Nullable
