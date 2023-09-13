@@ -80,10 +80,12 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                                 .state(ChunkState.FINISHED)
                                 .entities(new Long2ObjectNonBlockingMap<>());
                         try {
+                            int minY = srcRegion.getMinY() >> 4;
+                            int maxY = srcRegion.getMaxY() >> 4;
                             cn.allay.api.world.chunk.ChunkSection[] sections = new cn.allay.api.world.chunk.ChunkSection[dimensionInfo.chunkSectionSize()];
-                            for (int sectionY = dimensionInfo.minSectionY(); sectionY <= dimensionInfo.maxSectionY(); sectionY++) {
+                            for (int sectionY = minY; sectionY <= maxY; sectionY++) {
                                 ChunkSection section = chunk.getSection((byte) sectionY);
-                                int positiveY = sectionY - dimensionInfo.minSectionY();
+                                int positiveY = sectionY - minY;
                                 cn.allay.api.world.chunk.ChunkSection allaySection = new cn.allay.api.world.chunk.ChunkSection(positiveY);
                                 if (section.getEmpty()) {
                                     log.warn("section" + positiveY + " is empty");
