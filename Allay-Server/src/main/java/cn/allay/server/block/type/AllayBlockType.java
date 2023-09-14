@@ -5,6 +5,7 @@ import cn.allay.api.block.component.BlockComponent;
 import cn.allay.api.block.component.annotation.RequireBlockProperty;
 import cn.allay.api.block.component.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.api.block.component.base.BlockBaseComponent;
 import cn.allay.api.block.component.base.BlockBaseComponentImpl;
 import cn.allay.api.block.component.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.palette.BlockStateHashPalette;
@@ -35,14 +36,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static cn.allay.api.component.interfaces.ComponentProvider.findComponentIdentifier;
-import static java.lang.reflect.Modifier.isStatic;
 
 /**
  * Allay Project 2023/4/15
  *
  * @author daoge_cmd | Cool_Loong
  */
-@Getter
 public final class AllayBlockType<T extends BlockBehavior> implements BlockType<T> {
     public static int computeSpecialValue(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
         int nbits = 0;
@@ -59,19 +58,29 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         return specialValue;
     }
 
-    private final Class<T> interfaceClass;
     private Class<T> injectedClass;
+    @Getter
+    private final Class<T> interfaceClass;
+    @Getter
     private final List<BlockComponent> components;
+    @Getter
     private final Map<String, BlockPropertyType<?>> properties;
+    @Getter
     private final Identifier identifier;
+    @Getter
     @Nullable
     private final Identifier itemIdentifier;
     @Nullable
     private ItemType<?> itemTypeCache;
+    @Getter
     private final Map<Integer, BlockState> blockStateHashMap;
+    @Getter
     private final int specialValueBits;
+    @Getter
     private BlockState defaultState;
+    @Getter
     private T blockBehavior;
+    @Getter
     @Nullable
     private Map<Integer, BlockState> specialValueMap;
 
@@ -103,8 +112,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         if (itemTypeCache != null) return itemTypeCache;
         if (itemIdentifier == null) return null;
         itemTypeCache = ItemTypeRegistry.getRegistry().get(itemIdentifier);
-        if (itemTypeCache == null)
-            throw new IllegalStateException("Item type " + itemIdentifier + " not registered");
+        if (itemTypeCache == null) throw new IllegalStateException("Item type " + itemIdentifier + " not registered");
         return itemTypeCache;
     }
 
@@ -290,7 +298,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Nullable
         protected Identifier itemIdentifier;
         protected boolean isCustomBlock = false;
-        protected Function<BlockType<T>, BlockComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
+        protected Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -361,7 +369,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public Builder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockComponent> blockBaseComponentSupplier) {
+        public Builder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
             this.blockBaseComponentSupplier = blockBaseComponentSupplier;
             return this;
         }
@@ -381,7 +389,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                         .component(componentProviders)
                         .useCachedClass(ComponentClassCacheUtils.loadBlockType(interfaceClass))
                         .inject(true);
-                //Cache constructor
                 type.blockBehavior = type.injectedClass.getConstructor().newInstance();
             } catch (Exception e) {
                 throw new BlockTypeBuildException("Failed to create block type!", e);

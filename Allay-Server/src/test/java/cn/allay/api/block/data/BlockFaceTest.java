@@ -3,7 +3,7 @@ package cn.allay.api.block.data;
 import org.joml.Vector3f;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Allay Project 2023/9/2

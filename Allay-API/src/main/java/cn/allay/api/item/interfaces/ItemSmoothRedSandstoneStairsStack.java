@@ -17,6 +17,6 @@ public interface ItemSmoothRedSandstoneStairsStack extends ItemStack {
     ItemType<ItemSmoothRedSandstoneStairsStack> SMOOTH_RED_SANDSTONE_STAIRS_TYPE = ItemTypeBuilder
             .builder(ItemSmoothRedSandstoneStairsStack.class)
             .vanillaItem(VanillaItemId.SMOOTH_RED_SANDSTONE_STAIRS)
-            .addComponent(ComponentProvider.of(initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo, CommonUseItemFunctions.ITEM_STAIR_USE_ON), ItemBaseComponentImpl.class))
+            .addComponent(ComponentProvider.of(initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo), ItemBaseComponentImpl.class))
             .build();
 }

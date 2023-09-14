@@ -3,6 +3,7 @@ package cn.allay.api.block.type;
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponent;
+import cn.allay.api.block.component.base.BlockBaseComponent;
 import cn.allay.api.block.component.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.component.interfaces.ComponentProvider;
@@ -68,7 +69,7 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
 
     BlockTypeBuilder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent);
 
-    BlockTypeBuilder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockComponent> blockBaseComponentSupplier);
+    BlockTypeBuilder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier);
 
     BlockType<T> build();
 

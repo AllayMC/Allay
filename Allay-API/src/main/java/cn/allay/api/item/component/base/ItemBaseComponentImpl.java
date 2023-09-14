@@ -20,7 +20,7 @@ import org.joml.Vector3ic;
 
 import java.util.Objects;
 
-import static cn.allay.api.item.CommonUseItemFunctions.*;
+import static cn.allay.api.item.CommonUseItemFunctions.createPlaceBlockUseOn;
 
 /**
  * Allay Project 2023/5/19
@@ -69,7 +69,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         } else {
             this.stackNetworkId = null;
         }
-        this.useItemOn = Objects.requireNonNullElseGet(useItemOn, () -> createPlaceBlockUseOn(blockState));
+        this.useItemOn = Objects.requireNonNullElseGet(useItemOn, () -> createPlaceBlockUseOn());
     }
 
     @Override
@@ -171,9 +171,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Impl
     public boolean useItemOn(
             @Nullable EntityPlayer player, ItemStack itemStack,
-            World world, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos,
+            World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace) {
-        return useItemOn.useItemOn(player, itemStack, world, blockPos, placePos, clickPos, blockFace);
+        return useItemOn.useItemOn(player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace);
     }
 
     @Override

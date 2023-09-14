@@ -62,7 +62,6 @@ public enum BlockFace {
     @SuppressWarnings("SuspiciousNameCombination")
     public Vector3f rotateVector(Vector3fc vec) {
         Vector3f result = new Vector3f(vec);
-
         // 平移到旋转点 (0.5, 0.5, 0.5)
         result.sub(0.5f, 0.5f, 0.5f);
 
