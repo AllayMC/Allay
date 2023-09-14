@@ -23,7 +23,9 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,9 +37,9 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
+    private final MethodHandle constructorMethodHandle;
     private final Class<T> interfaceClass;
     private final Class<T> injectedClass;
-    private final Constructor<T> constructor;
     private final List<ComponentProvider<? extends ItemComponent>> componentProviders;
     @Getter
     private final Identifier identifier;
@@ -71,24 +73,27 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         } catch (Exception e) {
             throw new ItemTypeBuildException("Failed to create item type!", e);
         }
-        //Cache constructor
-        constructor = injectedClass.getConstructor(ComponentInitInfo.class);
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        MethodType methodType = MethodType.methodType(void.class, ComponentInitInfo.class);
+        //Cache constructor Method Handle
+        constructorMethodHandle = lookup.findConstructor(injectedClass, methodType);
     }
 
     public static <T extends ItemStack> ItemTypeBuilder<T> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
 
+    @SneakyThrows
+    @Override
+    @SuppressWarnings("unchecked")
+    public T createItemStack(ItemStackInitInfo<T> info) {
+        info.setItemType(this);
+        return (T) constructorMethodHandle.invokeExact((ComponentInitInfo) info);
+    }
+
     @Override
     public List<ComponentProvider<? extends ItemComponent>> getComponentProviders() {
         return componentProviders;
-    }
-
-    @SneakyThrows
-    @Override
-    public T createItemStack(ItemStackInitInfo<T> info) {
-        info.setItemType(this);
-        return constructor.newInstance(info);
     }
 
     @Override
