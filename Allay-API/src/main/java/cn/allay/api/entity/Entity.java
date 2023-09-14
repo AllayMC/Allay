@@ -3,7 +3,7 @@ package cn.allay.api.entity;
 import cn.allay.api.datastruct.aabbtree.HasAABB;
 import cn.allay.api.datastruct.aabbtree.HasLongId;
 import cn.allay.api.entity.component.base.EntityBaseComponent;
-import cn.allay.api.entity.type.EntityInitInfo;
+import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.location.Location3f;
@@ -35,6 +35,6 @@ public interface Entity extends
             throw new IllegalArgumentException("Unknown entity type " + identifier);
         }
         //此处nbt中存储的Pos，Rotation将会覆盖location的值
-        return entityType.createEntity(new EntityInitInfo.Simple<>(new Location3f(0, 0, 0, world), nbt));
+        return entityType.createEntity(EntityInitInfo.of(new Location3f(0, 0, 0, world), nbt));
     }
 }

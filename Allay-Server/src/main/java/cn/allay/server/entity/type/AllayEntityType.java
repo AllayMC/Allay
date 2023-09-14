@@ -7,7 +7,7 @@ import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponent;
 import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
-import cn.allay.api.entity.type.EntityInitInfo;
+import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
@@ -58,7 +58,8 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         MethodHandles.Lookup lookup = MethodHandles.lookup();
         MethodType methodType = MethodType.methodType(void.class, ComponentInitInfo.class);
         //Cache constructor Method Handle
-        constructorMethodHandle = lookup.findConstructor(injectedClass, methodType);
+        var temp = lookup.findConstructor(injectedClass, methodType);
+        constructorMethodHandle = temp.asType(temp.type().changeParameterType(0, EntityInitInfo.class).changeReturnType(Object.class));
     }
 
     @Override
@@ -68,10 +69,9 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
     @SneakyThrows
     @Override
-    @SuppressWarnings("unchecked")
     public T createEntity(EntityInitInfo<T> info) {
         info.setEntityType(this);
-        return (T) constructorMethodHandle.invokeExact((ComponentInitInfo) info);
+        return injectedClass.cast(constructorMethodHandle.invokeExact(info));
     }
 
     @Override

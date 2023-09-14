@@ -6,7 +6,7 @@ import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.item.CommonUseItemFunctions;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.base.ItemBaseComponentImpl;
-import cn.allay.api.item.type.ItemStackInitInfo;
+import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeBuilder;
 

@@ -1,8 +1,8 @@
 package cn.allay.api.container;
 
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.interfaces.ItemAirStack;
-import cn.allay.api.item.type.ItemStackInitInfo;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public interface Container {
 
-    ItemStack AIR_STACK = ItemAirStack.AIR_TYPE.createItemStack(new ItemStackInitInfo.Simple<>(0, 0, null, null, 0, false));
+    ItemStack AIR_STACK = ItemAirStack.AIR_TYPE.createItemStack(ItemStackInitInfo.of(0, 0, null, null, 0, false));
 
     FullContainerType<?> getContainerType();
 

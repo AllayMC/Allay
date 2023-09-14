@@ -8,8 +8,8 @@ import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.UseItemOn;
+import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.interfaces.ItemAirStack;
-import cn.allay.api.item.type.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
@@ -164,7 +164,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     @Impl
     public ItemStack copy(boolean newStackNetworkId) {
-        return itemType.createItemStack(new ItemStackInitInfo.Simple<>(count, damage, nbt, blockState, stackNetworkId, newStackNetworkId));
+        return itemType.createItemStack(ItemStackInitInfo.of(count, damage, nbt, blockState, stackNetworkId, newStackNetworkId));
     }
 
     @Override

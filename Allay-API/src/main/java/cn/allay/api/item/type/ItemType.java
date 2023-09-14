@@ -6,6 +6,7 @@ import cn.allay.api.identifier.Identified;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponent;
+import cn.allay.api.item.init.ItemStackInitInfo;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.jetbrains.annotations.Nullable;

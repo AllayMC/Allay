@@ -17,12 +17,11 @@ import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponentImpl;
 import cn.allay.api.entity.component.container.EntityContainerViewerComponent;
 import cn.allay.api.entity.component.container.EntityContainerViewerComponentImpl;
-import cn.allay.api.entity.type.EntityInitInfo;
+import cn.allay.api.entity.init.EntityInitInfo;
+import cn.allay.api.entity.init.EntityPlayerInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.math.location.Location3f;
-import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -70,21 +69,6 @@ public interface EntityPlayer extends
                     EntityContainerViewerComponentImpl::new,
                     EntityContainerViewerComponentImpl.class))
             .build();
-
-    interface EntityPlayerInitInfo extends EntityInitInfo<EntityPlayer> {
-
-        Client getClient();
-
-        @Getter
-        class Simple extends EntityInitInfo.Simple<EntityPlayer> implements EntityPlayerInitInfo {
-            private final Client client;
-
-            public Simple(Client client, Location3f location) {
-                super(location);
-                this.client = client;
-            }
-        }
-    }
 
     class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
 
