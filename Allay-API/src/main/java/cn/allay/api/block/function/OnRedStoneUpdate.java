@@ -1,4 +1,4 @@
-package cn.allay.api.block.blockupdate;
+package cn.allay.api.block.function;
 
 import cn.allay.api.block.data.BlockStateWithPos;
 
@@ -8,6 +8,6 @@ import cn.allay.api.block.data.BlockStateWithPos;
  * @author daoge_cmd
  */
 @FunctionalInterface
-public interface OnRandomUpdate {
-    void onRandomUpdate(BlockStateWithPos blockState);
+public interface OnRedStoneUpdate {
+    void onRedStoneUpdate(BlockStateWithPos blockState);
 }

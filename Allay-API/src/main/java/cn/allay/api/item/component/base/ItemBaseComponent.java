@@ -71,6 +71,6 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
     @Inject
     boolean useItemOn(
             @Nullable EntityPlayer player, ItemStack itemStack,
-            World world, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos,
+            World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace);
 }

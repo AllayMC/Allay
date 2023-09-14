@@ -1,4 +1,4 @@
-package cn.allay.api.block;
+package cn.allay.api.block.function;
 
 import cn.allay.api.block.data.BlockStateWithPos;
 
@@ -8,6 +8,6 @@ import cn.allay.api.block.data.BlockStateWithPos;
  * @author daoge_cmd
  */
 @FunctionalInterface
-public interface CanPlaceOn {
-    boolean canPlaceOn(BlockStateWithPos pos);
+public interface OnRandomUpdate {
+    void onRandomUpdate(BlockStateWithPos blockState);
 }

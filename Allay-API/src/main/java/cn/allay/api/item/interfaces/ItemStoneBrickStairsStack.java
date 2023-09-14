@@ -17,6 +17,6 @@ public interface ItemStoneBrickStairsStack extends ItemStack {
     ItemType<ItemStoneBrickStairsStack> STONE_BRICK_STAIRS_TYPE = ItemTypeBuilder
             .builder(ItemStoneBrickStairsStack.class)
             .vanillaItem(VanillaItemId.STONE_BRICK_STAIRS)
-            .addComponent(ComponentProvider.of(initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo, CommonUseItemFunctions.ITEM_STAIR_USE_ON), ItemBaseComponentImpl.class))
+            .addComponent(ComponentProvider.of(initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo), ItemBaseComponentImpl.class))
             .build();
 }

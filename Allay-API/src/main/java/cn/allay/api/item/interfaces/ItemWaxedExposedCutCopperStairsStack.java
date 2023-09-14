@@ -17,6 +17,6 @@ public interface ItemWaxedExposedCutCopperStairsStack extends ItemStack {
     ItemType<ItemWaxedExposedCutCopperStairsStack> WAXED_EXPOSED_CUT_COPPER_STAIRS_TYPE = ItemTypeBuilder
             .builder(ItemWaxedExposedCutCopperStairsStack.class)
             .vanillaItem(VanillaItemId.WAXED_EXPOSED_CUT_COPPER_STAIRS)
-            .addComponent(ComponentProvider.of(initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo, CommonUseItemFunctions.ITEM_STAIR_USE_ON), ItemBaseComponentImpl.class))
+            .addComponent(ComponentProvider.of(initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo), ItemBaseComponentImpl.class))
             .build();
 }

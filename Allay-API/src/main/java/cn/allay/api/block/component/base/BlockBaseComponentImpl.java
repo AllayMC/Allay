@@ -1,17 +1,21 @@
 package cn.allay.api.block.component.base;
 
 import cn.allay.api.block.BlockBehavior;
-import cn.allay.api.block.CanPlaceOn;
-import cn.allay.api.block.blockupdate.*;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.data.BlockStateWithPos;
+import cn.allay.api.block.function.*;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
+import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.world.World;
 import lombok.Builder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3fc;
+import org.joml.Vector3ic;
 
 /**
  * Allay Project 2023/4/8
@@ -24,11 +28,20 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
 
     protected BlockType<? extends BlockBehavior> blockType;
-    protected OnNeighborChanged onNeighborChanged = (blockState, neighborBlockState, blockFace) -> {};
-    protected OnPlace onPlace = (currentBlockState, newBlockState) -> {};
-    protected OnRandomUpdate onRandomUpdate = blockState -> {};
-    protected OnReplace onReplace = (currentBlockState, newBlockState) -> {};
-    protected OnScheduledUpdate onScheduledUpdate = blockState -> {};
+    protected OnNeighborChanged onNeighborChanged = (blockState, neighborBlockState, blockFace) -> {
+    };
+    protected Place place = (player, world, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace) -> {
+        world.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
+        return true;
+    };
+    protected OnPlace onPlace = (currentBlockState, newBlockState) -> {
+    };
+    protected OnRandomUpdate onRandomUpdate = blockState -> {
+    };
+    protected OnReplace onReplace = (currentBlockState, newBlockState) -> {
+    };
+    protected OnScheduledUpdate onScheduledUpdate = blockState -> {
+    };
     protected CanPlaceOn canPlaceOn = pos -> true;
 
     public BlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
@@ -39,17 +52,19 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public BlockBaseComponentImpl(
             BlockType<? extends BlockBehavior> blockType,
             @Nullable OnNeighborChanged onNeighborChanged,
-            @Nullable OnPlace onPlace,
             @Nullable OnRandomUpdate onRandomUpdate,
-            @Nullable OnReplace onReplace,
             @Nullable OnScheduledUpdate onScheduledUpdate,
+            @Nullable Place place,
+            @Nullable OnPlace onPlace,
+            @Nullable OnReplace onReplace,
             @Nullable CanPlaceOn canPlaceOn) {
         this.blockType = blockType;
         if (onNeighborChanged != null) this.onNeighborChanged = onNeighborChanged;
-        if (onPlace != null) this.onPlace = onPlace;
         if (onRandomUpdate != null) this.onRandomUpdate = onRandomUpdate;
-        if (onReplace != null) this.onReplace = onReplace;
         if (onScheduledUpdate != null) this.onScheduledUpdate = onScheduledUpdate;
+        if (place != null) this.place = place;
+        if (onPlace != null) this.onPlace = onPlace;
+        if (onReplace != null) this.onReplace = onReplace;
         if (canPlaceOn != null) this.canPlaceOn = canPlaceOn;
     }
 
@@ -85,13 +100,19 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     @Impl
-    public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
-        onReplace.onReplace(currentBlockState, newBlockState);
+    public boolean place(@Nullable EntityPlayer player, @NotNull World world, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {
+        return place.place(player, world, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
     }
 
     @Override
     @Impl
     public void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
         onPlace.onPlace(currentBlockState, newBlockState);
+    }
+
+    @Override
+    @Impl
+    public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
+        onReplace.onReplace(currentBlockState, newBlockState);
     }
 }

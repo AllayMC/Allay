@@ -17,6 +17,6 @@ public interface ItemSpruceStairsStack extends ItemStack {
     ItemType<ItemSpruceStairsStack> SPRUCE_STAIRS_TYPE = ItemTypeBuilder
             .builder(ItemSpruceStairsStack.class)
             .vanillaItem(VanillaItemId.SPRUCE_STAIRS)
-            .addComponent(ComponentProvider.of(initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo, CommonUseItemFunctions.ITEM_STAIR_USE_ON), ItemBaseComponentImpl.class))
+            .addComponent(ComponentProvider.of(initInfo -> new ItemBaseComponentImpl<>((ItemStackInitInfo<?>) initInfo), ItemBaseComponentImpl.class))
             .build();
 }

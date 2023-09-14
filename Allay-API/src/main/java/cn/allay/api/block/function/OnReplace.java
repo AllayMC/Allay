@@ -1,4 +1,4 @@
-package cn.allay.api.block.blockupdate;
+package cn.allay.api.block.function;
 
 import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.type.BlockState;
