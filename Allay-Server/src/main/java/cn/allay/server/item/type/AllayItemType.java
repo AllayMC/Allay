@@ -12,7 +12,7 @@ import cn.allay.api.item.component.ItemComponent;
 import cn.allay.api.item.component.attribute.ItemAttributeComponentImpl;
 import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
 import cn.allay.api.item.component.base.ItemBaseComponentImpl;
-import cn.allay.api.item.type.ItemStackInitInfo;
+import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
@@ -76,7 +76,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         MethodHandles.Lookup lookup = MethodHandles.lookup();
         MethodType methodType = MethodType.methodType(void.class, ComponentInitInfo.class);
         //Cache constructor Method Handle
-        constructorMethodHandle = lookup.findConstructor(injectedClass, methodType);
+        var temp = lookup.findConstructor(injectedClass, methodType);
+        constructorMethodHandle = temp.asType(temp.type().changeParameterType(0, ItemStackInitInfo.class).changeReturnType(Object.class));
     }
 
     public static <T extends ItemStack> ItemTypeBuilder<T> builder(Class<T> interfaceClass) {
@@ -85,10 +86,9 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
     @SneakyThrows
     @Override
-    @SuppressWarnings("unchecked")
     public T createItemStack(ItemStackInitInfo<T> info) {
         info.setItemType(this);
-        return (T) constructorMethodHandle.invokeExact((ComponentInitInfo) info);
+        return injectedClass.cast(constructorMethodHandle.invokeExact(info));
     }
 
     @Override
