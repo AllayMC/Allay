@@ -18,7 +18,9 @@ import cn.allay.server.utils.ComponentClassCacheUtils;
 import lombok.SneakyThrows;
 import org.joml.primitives.AABBf;
 
-import java.lang.reflect.Constructor;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +32,9 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public class AllayEntityType<T extends Entity> implements EntityType<T> {
+    protected final MethodHandle constructorMethodHandle;
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
-    protected Constructor<T> constructor;
     protected List<ComponentProvider<? extends EntityComponent>> componentProviders;
     protected Identifier identifier;
 
@@ -53,9 +55,12 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         } catch (Exception e) {
             throw new EntityTypeBuildException("Failed to create entity type!", e);
         }
-        //Cache constructor
-        constructor = injectedClass.getConstructor(ComponentInitInfo.class);
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        MethodType methodType = MethodType.methodType(void.class, ComponentInitInfo.class);
+        //Cache constructor Method Handle
+        constructorMethodHandle = lookup.findConstructor(injectedClass, methodType);
     }
+
     @Override
     public List<ComponentProvider<? extends EntityComponent>> getComponentProviders() {
         return componentProviders;
@@ -63,9 +68,10 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
     @SneakyThrows
     @Override
+    @SuppressWarnings("unchecked")
     public T createEntity(EntityInitInfo<T> info) {
         info.setEntityType(this);
-        return constructor.newInstance(info);
+        return (T) constructorMethodHandle.invokeExact((ComponentInitInfo) info);
     }
 
     @Override
