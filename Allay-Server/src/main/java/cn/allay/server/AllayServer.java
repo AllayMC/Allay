@@ -14,7 +14,7 @@ import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.world.AllayWorld;
 import cn.allay.server.world.AllayWorldPool;
 import cn.allay.server.world.generator.flat.FlatWorldGenerator;
-import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
+import cn.allay.server.world.storage.rocksdb.RocksDBWorldStorage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
@@ -30,6 +30,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -112,9 +113,9 @@ public final class AllayServer implements Server {
             @Override
             public void run() {
                 isRunning.compareAndSet(true, false);
+                getWorldPool().getWorlds().values().forEach(World::close);
                 virtualThreadPool.shutdownNow();
                 computeThreadPool.shutdownNow();
-                getWorldPool().getWorlds().values().forEach(World::close);
                 while (MAIN_THREAD_GAME_LOOP.isRunning()) {
                     MAIN_THREAD_GAME_LOOP.stop();
                 }
@@ -140,7 +141,7 @@ public final class AllayServer implements Server {
         worldPool.setDefaultWorld(AllayWorld
                 .builder()
                 .setWorldGenerator(new FlatWorldGenerator())
-                .setWorldStorage(new AllayNonPersistentWorldStorage())
+                .setWorldStorage(new RocksDBWorldStorage(Path.of("output/新的世界")))
                 .build());
     }
 

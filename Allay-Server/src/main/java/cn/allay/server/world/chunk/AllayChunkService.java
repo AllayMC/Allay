@@ -392,7 +392,6 @@ public class AllayChunkService implements ChunkService {
 
                     int cx = centerPosition.getX() + offset.getX(), cz = centerPosition.getZ() + offset.getZ();
                     Chunk chunk = getChunk(cx, cz);
-
                     if (chunk == null) {
                         log.trace("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
                         createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null);
@@ -416,42 +415,44 @@ public class AllayChunkService implements ChunkService {
                     }
 
                     byte[] hMap = new byte[256];
-                    boolean higher = false, lower = false;
+                    boolean higher = true, lower = true;
                     for (int x = 0; x < 16; x++) {
                         for (int z = 0; z < 16; z++) {
                             int y = chunk.getHeight(x, z);
                             int i = (z << 4) | x;
-                            int otherInd = (y - dimensionInfo.minHeight()) >> 4;
-                            if (otherInd > sectionY) {
-                                lower = true;
-                            } else if (otherInd < sectionY) {
-                                higher = true;
+                            int hSectionY = (y - dimensionInfo.minHeight()) >> 4;
+                            if (hSectionY > sectionY) {
+                                hMap[i] = 16;
+                                lower = false;
+                            } else if (hSectionY < sectionY) {
+                                hMap[i] = -1;
+                                higher = false;
                             } else {
-                                hMap[i] = (byte) (y - (otherInd << 4) + dimensionInfo.minHeight());
+                                hMap[i] = (byte) (y - ((hSectionY << 4) + dimensionInfo.minHeight()));
+                                higher = false;
+                                lower = false;
                             }
                         }
                     }
+                    ByteBuf heightMapData;
                     if (higher) {
                         hMapType = HeightMapDataType.TOO_HIGH;
-                        hMap = null;
+                        heightMapData = Unpooled.EMPTY_BUFFER;
                     } else if (lower) {
                         hMapType = HeightMapDataType.TOO_LOW;
-                        hMap = null;
+                        heightMapData = Unpooled.EMPTY_BUFFER;
+                    } else {
+                        hMapType = HeightMapDataType.HAS_DATA;
+                        heightMapData = Unpooled.wrappedBuffer(hMap);
                     }
                     var subChunk = chunk.getOrCreateSection(sectionY);
+                    SubChunkRequestResult subChunkRequestResult;
                     if (subChunk.isEmpty()) {
-                        if (hMap == null) {
-                            createSubChunkData(responseData, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, hMapType, null, subChunk);
-                        } else {
-                            createSubChunkData(responseData, SubChunkRequestResult.SUCCESS_ALL_AIR, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
-                        }
-                        continue;
-                    }
-                    if (hMap == null) {
-                        createSubChunkData(responseData, SubChunkRequestResult.SUCCESS, offset, hMapType, null, subChunk);
+                        subChunkRequestResult = SubChunkRequestResult.SUCCESS_ALL_AIR;
                     } else {
-                        createSubChunkData(responseData, SubChunkRequestResult.SUCCESS, offset, HeightMapDataType.HAS_DATA, Unpooled.wrappedBuffer(hMap), subChunk);
+                        subChunkRequestResult = SubChunkRequestResult.SUCCESS;
                     }
+                    createSubChunkData(responseData, subChunkRequestResult, offset, hMapType, heightMapData, subChunk);
                 }
                 SubChunkPacket subChunkPacket = new SubChunkPacket();
                 subChunkPacket.setSubChunks(responseData);
@@ -482,11 +483,11 @@ public class AllayChunkService implements ChunkService {
                 buffer.writeByte(0);
                 //TODO: BlockEntity
                 subChunkData.setData(buffer);
-                response.add(subChunkData);
             } else {
                 subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
                 subChunkData.setData(Unpooled.EMPTY_BUFFER);
             }
+            response.add(subChunkData);
         }
 
         public void onRemoved() {

@@ -19,6 +19,7 @@ public class FlatWorldGenerator implements WorldGenerator {
         var flatChunk = context.chunk();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
+                flatChunk.setHeight(x, z, 5);
                 for (int y = 0; y < 5; y++) {
                     if (y == 0) {
                         flatChunk.setBlockState(x, y, z, bedrock);
