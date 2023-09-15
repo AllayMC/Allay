@@ -42,7 +42,7 @@ import java.util.function.Supplier;
 @Getter
 public final class AllayAPI {
 
-    //TODO: move to file?Prevent problems caused by compiler inlining
+    //TODO: move to file? Prevent problems caused by compiler inlining
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();

@@ -6,6 +6,8 @@ import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
+import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
@@ -20,6 +22,8 @@ import cn.allay.server.block.attribute.AllayVanillaBlockAttributeRegistry;
 import cn.allay.server.block.type.AllayBlockStateHashPalette;
 import cn.allay.server.block.type.AllayBlockType;
 import cn.allay.server.block.type.AllayBlockTypeRegistry;
+import cn.allay.server.blockentity.type.AllayBlockEntityType;
+import cn.allay.server.blockentity.type.AllayBlockEntityTypeRegistry;
 import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.entity.type.AllayEntityType;
 import cn.allay.server.entity.type.AllayEntityTypeRegistry;
@@ -62,6 +66,10 @@ public final class Allay {
         api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));
         api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());
         api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
+
+        //BlockEntity
+        api.bind(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, () -> AllayBlockEntityType::builder);
+        api.bind(BlockEntityTypeRegistry.class, AllayBlockEntityTypeRegistry::new, instance -> ((AllayBlockEntityTypeRegistry) instance).init());
 
         //Block
         api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
