@@ -4,6 +4,7 @@ import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.init.ItemStackInitInfo;
+import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.registry.RegistryLoader;
@@ -73,9 +74,18 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                 int damage = obj.getInt("damage");
                 int blockStateHash = obj.getInt("blockStateHash");
                 var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
-                var tag = obj.getCompound("tag", null);
+                var tag = obj.getCompound("tag", NbtMap.builder().build());
                 assert itemType != null;
-                var itemStack = itemType.createItemStack(ItemStackInitInfo.of(count, damage, tag, blockState, index + 1, false));
+                var itemStack = itemType.createItemStack(
+                        SimpleItemStackInitInfo
+                                .builder()
+                                .count(count)
+                                .damage(damage)
+                                .nbt(tag)
+                                .blockState(blockState)
+                                .stackNetworkId(index + 1)
+                                .build()
+                );
                 map.put(index, itemStack);
             });
             log.info("Loaded creative item registry successfully");

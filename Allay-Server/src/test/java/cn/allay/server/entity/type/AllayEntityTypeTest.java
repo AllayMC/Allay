@@ -1,6 +1,7 @@
 package cn.allay.server.entity.type;
 
 import cn.allay.api.entity.init.EntityInitInfo;
+import cn.allay.api.entity.init.SimpleEntityInitInfo;
 import cn.allay.api.entity.interfaces.EntitySheep;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.world.World;
@@ -24,7 +25,7 @@ class AllayEntityTypeTest {
 
     @BeforeAll
     static void init() {
-        sheep = EntitySheep.SHEEP_TYPE.createEntity(EntityInitInfo.of(new Location3f(0f, 1f, 2f, 0, 0, 0, mockWorld)));
+        sheep = EntitySheep.SHEEP_TYPE.createEntity(SimpleEntityInitInfo.builder().pos(0, 1, 2).world(mockWorld).build());
     }
 
     @Test

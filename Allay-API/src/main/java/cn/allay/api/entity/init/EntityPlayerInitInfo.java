@@ -11,8 +11,4 @@ import cn.allay.api.math.location.Location3f;
  */
 public interface EntityPlayerInitInfo extends EntityInitInfo<EntityPlayer> {
     Client getClient();
-
-    static EntityPlayerInitInfo of(Client client, Location3f location) {
-        return new SimpleEntityPlayerInitInfo(client, location);
-    }
 }

@@ -216,8 +216,8 @@ public interface EntityPlayer extends
 
         @Override
         @Impl
-        public NbtMap save() {
-            return super.save().toBuilder()
+        public NbtMap saveNBT() {
+            return super.saveNBT().toBuilder()
                     .putList(
                             "Offhand",
                             NbtType.COMPOUND,
@@ -235,8 +235,8 @@ public interface EntityPlayer extends
 
         @Override
         @Impl
-        public void load(NbtMap nbt) {
-            super.load(nbt);
+        public void loadNBT(NbtMap nbt) {
+            super.loadNBT(nbt);
             if (nbt.containsKey("Offhand")) {
                 containerHolderComponent.getContainer(FullContainerType.OFFHAND).load(nbt.getList("Offhand", NbtType.COMPOUND));
             }

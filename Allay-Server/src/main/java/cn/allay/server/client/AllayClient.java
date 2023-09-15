@@ -15,6 +15,8 @@ import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.entity.init.EntityPlayerInitInfo;
+import cn.allay.api.entity.init.SimpleEntityInitInfo;
+import cn.allay.api.entity.init.SimpleEntityPlayerInitInfo;
 import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.entity.interfaces.EntityVillagerV2;
 import cn.allay.api.entity.type.EntityTypeRegistry;
@@ -235,14 +237,12 @@ public class AllayClient extends BaseClient {
         //TODO: Load player data
         Position3ic spawnPos = server.getDefaultWorld().getSpawnPosition();
         playerEntity = EntityPlayer.PLAYER_TYPE.createEntity(
-                EntityPlayerInitInfo.of(
-                        this,
-                        new Location3f(
-                                spawnPos.x(), spawnPos.y(), spawnPos.z(),
-                                0, 0, 0,
-                                spawnPos.world()
-                        )
-                )
+                SimpleEntityPlayerInitInfo
+                        .builder()
+                        .client(this)
+                        .pos(spawnPos.x(), spawnPos.y(), spawnPos.z())
+                        .world(spawnPos.world())
+                        .build()
         );
     }
 
@@ -668,7 +668,7 @@ public class AllayClient extends BaseClient {
                         playerEntity.setSneaking(true);
                         //TODO: debug only
                         var loc = getLocation();
-                        var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(EntityInitInfo.of(new Location3f(loc)));
+                        var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(SimpleEntityInitInfo.builder().loc(loc).build());
                         loc.world().addEntity(entity);
                     }
                     case STOP_SNEAKING -> playerEntity.setSneaking(false);

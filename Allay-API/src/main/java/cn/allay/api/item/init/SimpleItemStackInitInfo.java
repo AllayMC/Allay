@@ -3,9 +3,11 @@ package cn.allay.api.item.init;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.type.ItemType;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -13,44 +15,24 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Cool_Loong
  */
-final class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackInitInfo<T> {
-    private final int count;
-    private final int damage;
-    private final @Nullable NbtMap nbt;
-    private final @Nullable BlockState blockState;
-    private final @Nullable Integer stackNetworkId;
-    private final boolean autoAssignStackNetworkId;
+public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackInitInfo<T> {
+    protected final int count;
+    protected final int damage;
+    protected final NbtMap nbt;
+    protected final @Nullable BlockState blockState;
+    protected final @Nullable Integer stackNetworkId;
+    protected final boolean autoAssignStackNetworkId;
     @Getter
     @Setter
-    private ItemType<T> itemType;
+    protected ItemType<T> itemType;
 
-    public SimpleItemStackInitInfo(int count, int damage, @Nullable NbtMap nbt, @Nullable BlockState blockState, @Nullable Integer stackNetworkId, boolean autoAssignStackNetworkId) {
+    protected SimpleItemStackInitInfo(int count, int damage, NbtMap nbt, @Nullable BlockState blockState, @Nullable Integer stackNetworkId, boolean autoAssignStackNetworkId) {
         this.count = count;
         this.damage = damage;
         this.nbt = nbt;
         this.blockState = blockState;
         this.stackNetworkId = stackNetworkId;
         this.autoAssignStackNetworkId = autoAssignStackNetworkId;
-    }
-
-    public SimpleItemStackInitInfo(int count, int damage, NbtMap nbt, BlockState blockState, Integer stackNetworkId) {
-        this(count, damage, nbt, blockState, stackNetworkId, true);
-    }
-
-    public SimpleItemStackInitInfo(int count, int damage, NbtMap nbt, BlockState blockState) {
-        this(count, damage, nbt, blockState, null);
-    }
-
-    public SimpleItemStackInitInfo(int count, int damage, @Nullable NbtMap nbt) {
-        this(count, damage, nbt, null);
-    }
-
-    public SimpleItemStackInitInfo(int count, int damage) {
-        this(count, damage, null, null);
-    }
-
-    public SimpleItemStackInitInfo(int count) {
-        this(count, 0, null, null);
     }
 
     @Override
@@ -64,7 +46,7 @@ final class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIni
     }
 
     @Override
-    public @Nullable NbtMap nbt() {
+    public NbtMap nbt() {
         return nbt;
     }
 
@@ -81,5 +63,52 @@ final class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIni
     @Override
     public boolean autoAssignStackNetworkId() {
         return autoAssignStackNetworkId;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        protected int count;
+        protected int damage;
+        protected NbtMapBuilder nbtBuilder = NbtMap.builder();
+        protected @Nullable BlockState blockState;
+        protected @Nullable Integer stackNetworkId;
+        protected boolean autoAssignStackNetworkId;
+
+        public Builder count(int count) {
+            this.count = count;
+            return this;
+        }
+
+        public Builder damage(int damage) {
+            this.damage = damage;
+            return this;
+        }
+
+        public Builder nbt(NbtMap nbt) {
+            this.nbtBuilder.putAll(nbt);
+            return this;
+        }
+
+        public Builder blockState(@Nullable BlockState blockState) {
+            this.blockState = blockState;
+            return this;
+        }
+
+        public Builder stackNetworkId(@Nullable Integer stackNetworkId) {
+            this.stackNetworkId = stackNetworkId;
+            return this;
+        }
+
+        public Builder autoAssignStackNetworkId(boolean autoAssignStackNetworkId) {
+            this.autoAssignStackNetworkId = autoAssignStackNetworkId;
+            return this;
+        }
+
+        public <R extends ItemStack> SimpleItemStackInitInfo<R> build() {
+            return new SimpleItemStackInitInfo<>(count, damage, nbtBuilder.build(), blockState, stackNetworkId, autoAssignStackNetworkId);
+        }
     }
 }

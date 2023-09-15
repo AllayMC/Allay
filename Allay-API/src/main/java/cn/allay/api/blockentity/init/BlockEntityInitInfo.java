@@ -4,6 +4,7 @@ import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.math.position.Position3ic;
+import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3ic;
@@ -14,14 +15,9 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 public interface BlockEntityInitInfo<T extends BlockEntity> extends ComponentInitInfo {
+    World world();
 
-    Position3ic position();
-
-    @Nullable
     NbtMap nbt();
-
-    @Nullable
-    String customName();
 
     BlockEntityType<T> getBlockEntityType();
 

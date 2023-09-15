@@ -3,6 +3,7 @@ package cn.allay.api.container;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.init.ItemStackInitInfo;
+import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -128,7 +129,7 @@ public abstract class BaseContainer implements Container {
                 log.warn("Unknown item type " + name + "while loading container items!");
                 continue;
             }
-            var itemStack = itemType.createItemStack(ItemStackInitInfo.of(count, damage));
+            var itemStack = itemType.createItemStack(SimpleItemStackInitInfo.builder().count(count).damage(damage).build());
             content[slot] = itemStack;
         }
     }

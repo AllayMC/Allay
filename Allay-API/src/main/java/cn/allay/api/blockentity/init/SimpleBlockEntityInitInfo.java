@@ -3,9 +3,11 @@ package cn.allay.api.blockentity.init;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.math.position.Position3ic;
+import cn.allay.api.world.World;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -14,44 +16,59 @@ import org.jetbrains.annotations.Nullable;
  * @author daoge_cmd
  */
 public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEntityInitInfo<T> {
-
-    private final Position3ic position;
-    @Nullable
+    private final World world;
     private final NbtMap nbt;
-    @Nullable
-    private final String customName;
     @Getter
     @Setter
     private BlockEntityType<T> blockEntityType;
 
-    public SimpleBlockEntityInitInfo(Position3ic position) {
-        this(position, null);
-    }
-
-    public SimpleBlockEntityInitInfo(Position3ic position, @Nullable NbtMap nbt) {
-        this(position, nbt, null);
-    }
-
-    public SimpleBlockEntityInitInfo(Position3ic position, @Nullable NbtMap nbt, @Nullable String customName) {
-        this.position = position;
+    protected SimpleBlockEntityInitInfo(World world, NbtMap nbt) {
+        this.world = world;
         this.nbt = nbt;
-        this.customName = customName;
     }
 
     @Override
-    public Position3ic position() {
-        return position;
+    public World world() {
+        return world;
     }
 
     @Override
-    @Nullable
     public NbtMap nbt() {
         return nbt;
     }
 
-    @Override
-    @Nullable
-    public String customName() {
-        return customName;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private World world;
+        private final NbtMapBuilder nbtBuilder = NbtMap.builder();
+
+        public Builder world(World world) {
+            this.world = world;
+            return this;
+        }
+
+        public Builder pos(int x, int y, int z) {
+            nbtBuilder.putInt("x", x);
+            nbtBuilder.putInt("y", y);
+            nbtBuilder.putInt("z", z);
+            return this;
+        }
+
+        public Builder customName(String customName) {
+            nbtBuilder.putString("CustomName", customName);
+            return this;
+        }
+
+        public Builder nbt(NbtMap nbt) {
+            nbtBuilder.putAll(nbt);
+            return this;
+        }
+
+        public <R extends BlockEntity> SimpleBlockEntityInitInfo<R> build() {
+            return new SimpleBlockEntityInitInfo<>(world, nbtBuilder.build());
+        }
     }
 }

@@ -17,11 +17,10 @@ import java.util.Objects;
 public interface BlockEntity extends
         BlockEntityBaseComponent {
 
-    static BlockEntity fromNBT(World world, NbtMap nbt) {
+     static BlockEntity fromNBT(World world, NbtMap nbt) {
         var id = nbt.getString("id");
         var blockEntityType = BlockEntityTypeRegistry.getRegistry().get(id);
         Objects.requireNonNull(blockEntityType, "Unknown block entity type: " + id);
-        //此处nbt中存储的xyz会覆盖Position的值
-        return blockEntityType.createBlockEntity(new SimpleBlockEntityInitInfo<>(new Position3i(0, 0, 0, world), nbt));
+        return blockEntityType.createBlockEntity(SimpleBlockEntityInitInfo.builder().world(world).nbt(nbt).build());
     }
 }
