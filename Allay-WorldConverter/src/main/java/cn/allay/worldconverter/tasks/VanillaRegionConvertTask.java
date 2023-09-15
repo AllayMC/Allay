@@ -58,6 +58,7 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                 .setConsumer(new ConsoleMultiProgressBarConsumer(System.out, FIRST.getAndSet(false)))
                 .build()
         ) {
+            int absMinY = Math.abs(srcRegion.getMinY());
             for (int i = 0; i < 32; i++) {
                 for (int j = 0; j < 32; j++) {
                     int cx = i + (srcRegion.getRegionX() * 32), cz = j + (srcRegion.getRegionZ() * 32);
@@ -73,7 +74,7 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                         HeightMap allayHeightMap = new HeightMap();
                         for (int h1 = 0; h1 < 16; h1++) {
                             for (int h2 = 0; h2 < 16; h2++) {
-                                allayHeightMap.set(h1, h2, (short) heightMap.get(h1, h2));
+                                allayHeightMap.set(h1, h2, (short) (heightMap.get(h1, h2) - absMinY));
                             }
                         }
                         builder.heightMap(allayHeightMap)

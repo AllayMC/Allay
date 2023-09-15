@@ -17,11 +17,11 @@ public final class HeightMap {
     }
 
     public short get(int x, int z) {
-        return heights[(z << 4) + x];
+        return heights[(x << 4) | z];
     }
 
     public void set(int x, int z, short height) {
-        heights[(z << 4) + x] = height;
+        heights[(x << 4) | z] = height;
     }
 
     public void fill(short[] heights) {
