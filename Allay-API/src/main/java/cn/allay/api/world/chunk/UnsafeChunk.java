@@ -1,6 +1,7 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.DimensionInfo;
@@ -38,10 +39,20 @@ public interface UnsafeChunk {
 
     void addEntity(@NotNull Entity entity);
 
-    Entity removeEntity(Long uniqueId);
+    Entity removeEntity(long uniqueId);
+
+    Entity getEntity(long uniqueId);
 
     @UnmodifiableView
     Map<Long, Entity> getEntities();
+
+    void addBlockEntity(@NotNull BlockEntity blockEntity);
+
+    BlockEntity removeBlockEntity(int x, int y, int z);
+    BlockEntity getBlockEntity(int x, int y, int z);
+
+    @UnmodifiableView
+    Map<Integer, BlockEntity> getBlockEntities();
 
     @ApiStatus.Internal
     @Nullable

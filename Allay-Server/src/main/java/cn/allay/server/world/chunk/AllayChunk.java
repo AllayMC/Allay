@@ -1,6 +1,7 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
@@ -345,10 +346,35 @@ public class AllayChunk implements Chunk {
         return unsafeChunk.getEntities();
     }
 
+    @Override
+    public void addBlockEntity(@NotNull BlockEntity blockEntity) {
+        unsafeChunk.addBlockEntity(blockEntity);
+    }
+
+    @Override
+    public BlockEntity removeBlockEntity(int x, int y, int z) {
+        return unsafeChunk.removeBlockEntity(x, y, z);
+    }
+
+    @Override
+    public BlockEntity getBlockEntity(int x, int y, int z) {
+        return unsafeChunk.getBlockEntity(x, y, z);
+    }
+
+    @Override
+    public @UnmodifiableView Map<Integer, BlockEntity> getBlockEntities() {
+        return unsafeChunk.getBlockEntities();
+    }
+
     @Nullable
     @Override
-    public Entity removeEntity(Long uniqueId) {
+    public Entity removeEntity(long uniqueId) {
         return unsafeChunk.removeEntity(uniqueId);
+    }
+
+    @Override
+    public Entity getEntity(long uniqueId) {
+        return unsafeChunk.getEntity(uniqueId);
     }
 
     @Override

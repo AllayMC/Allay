@@ -2,8 +2,11 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.blockentity.BlockEntity;
+import cn.allay.api.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.entity.Entity;
+import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
@@ -46,6 +49,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final Queue<BedrockPacket> chunkPacketQueue;
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Map<Long, Entity> entities;
+    protected final Map<Integer, BlockEntity> blockEntities;
 
     private AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this.x = chunkX;
@@ -57,6 +61,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
         this.chunkLoaders = ObjectSets.synchronize(new ObjectOpenHashSet<>());
         this.entities = new Long2ObjectNonBlockingMap<>();
+        this.blockEntities = new Int2ObjectNonBlockingMap<>();
     }
 
     public static Builder builder() {
@@ -202,19 +207,47 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public void addEntity(Entity entity) {
+    public void addEntity(@NotNull Entity entity) {
         entities.put(entity.getUniqueId(), entity);
     }
 
     @Override
     @Nullable
-    public Entity removeEntity(Long uniqueId) {
+    public Entity removeEntity(long uniqueId) {
         return entities.remove(uniqueId);
+    }
+
+    @Override
+    public Entity getEntity(long uniqueId) {
+        return entities.get(uniqueId);
     }
 
     @Override
     public Map<Long, Entity> getEntities() {
         return Collections.unmodifiableMap(entities);
+    }
+
+    @Override
+    public void addBlockEntity(@NotNull BlockEntity blockEntity) {
+        var pos = blockEntity.getPosition();
+        var key = HashUtils.hashChunkXYZ(pos.x(), pos.y(), pos.z());
+        blockEntities.put(key, blockEntity);
+    }
+
+    @Override
+    public BlockEntity removeBlockEntity(int x, int y, int z) {
+        var key = HashUtils.hashChunkXYZ(x, y, z);
+        return blockEntities.remove(key);
+    }
+
+    @Override
+    public BlockEntity getBlockEntity(int x, int y, int z) {
+        return blockEntities.get(HashUtils.hashChunkXYZ(x, y, z));
+    }
+
+    @Override
+    public @UnmodifiableView Map<Integer, BlockEntity> getBlockEntities() {
+        return Collections.unmodifiableMap(blockEntities);
     }
 
     public Chunk toSafeChunk() {
@@ -234,6 +267,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         ChunkSection[] sections;
         HeightMap heightMap;
         Map<Long, Entity> entities;
+        Map<Integer, BlockEntity> blockEntities;
 
         public Builder chunkX(int chunkX) {
             this.chunkX = chunkX;
@@ -270,6 +304,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             return this;
         }
 
+        public Builder blockEntities(Map<Integer, BlockEntity> blockEntities) {
+            this.blockEntities = blockEntities;
+            return this;
+        }
+
         public AllayUnsafeChunk build() {
             Preconditions.checkNotNull(dimensionInfo);
             if (state == null) state = ChunkState.NEW;
@@ -285,7 +324,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     heightMap,
                     new ConcurrentLinkedQueue<>(),
                     ObjectSets.synchronize(new ObjectOpenHashSet<>()),
-                    entities
+                    entities,
+                    blockEntities
             );
         }
 
