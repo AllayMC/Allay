@@ -6,6 +6,7 @@ import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.math.position.Position3i;
 import cn.allay.api.math.position.Position3ic;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -61,5 +62,10 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
         if (nbt.containsKey("CustomName")) {
             this.customName = nbt.getString("CustomName");
         }
+        var pos = new Position3i(position);
+        pos.x = nbt.getInt("x", position.x());
+        pos.y = nbt.getInt("y", position.y());
+        pos.z = nbt.getInt("z", position.z());
+        position = pos;
     }
 }
