@@ -24,9 +24,9 @@ public interface EntityTypeBuilder<T extends Entity> {
         return FACTORY.get().create(clazz);
     }
 
-    EntityTypeBuilder<T> namespace(Identifier identifier);
+    EntityTypeBuilder<T> identifier(Identifier identifier);
 
-    EntityTypeBuilder<T> namespace(String identifier);
+    EntityTypeBuilder<T> identifier(String identifier);
 
     EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId);
 
@@ -44,7 +44,6 @@ public interface EntityTypeBuilder<T extends Entity> {
     EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders);
 
     EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponent> componentProvider);
-
 
     EntityType<T> build();
 
