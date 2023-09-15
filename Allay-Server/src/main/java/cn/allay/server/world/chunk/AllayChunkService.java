@@ -74,7 +74,8 @@ public class AllayChunkService implements ChunkService {
     }
 
     private void tickChunkLoaders() {
-        chunkLoaderManagers.values().parallelStream().forEach(ChunkLoaderManager::tick);
+        //NOTICE: There is no need to use parallel stream here
+        chunkLoaderManagers.values().forEach(ChunkLoaderManager::tick);
     }
 
     private void removeUnusedChunks() {
@@ -154,7 +155,7 @@ public class AllayChunkService implements ChunkService {
 
     @Override
     public boolean isChunkUnloaded(long hashXZ) {
-        return !isChunkLoaded(hashXZ) && !isChunkLoading(hashXZ);
+        return !isChunkLoading(hashXZ) && !isChunkLoaded(hashXZ);
     }
 
     @Override
@@ -559,7 +560,6 @@ public class AllayChunkService implements ChunkService {
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
                     if (isChunkUnloaded(chunkHash)) {
-                        //TODO: 这边有概率报IllegalStateException("Chunk is already loaded")，怀疑是并发加载了同一个区块(AllayClient那边也有一个加载区块的操作)。需要进一步调查
                         loadChunk(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash));
                     }
                     continue;
