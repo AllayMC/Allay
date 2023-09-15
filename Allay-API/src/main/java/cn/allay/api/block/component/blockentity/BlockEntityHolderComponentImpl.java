@@ -26,13 +26,13 @@ public class BlockEntityHolderComponentImpl implements BlockEntityHolderComponen
 
     @ComponentEventListener
     private void onBlockPlace(BlockOnPlaceEvent event) {
-        log.info("Create block entity at " + event.currentBlockState().pos());
+        log.debug("Create block entity at " + event.currentBlockState().pos());
         createBlockEntityAt(event.currentBlockState().pos());
     }
 
     @ComponentEventListener
     private void onBlockRemove(BlockOnReplaceEvent event) {
-        log.info("Remove block entity at " + event.currentBlockState().pos());
+        log.debug("Remove block entity at " + event.currentBlockState().pos());
         removeBlockEntityAt(event.currentBlockState().pos());
     }
 
