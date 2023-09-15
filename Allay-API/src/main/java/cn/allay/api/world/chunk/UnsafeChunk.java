@@ -2,6 +2,7 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
+import cn.allay.api.client.Client;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.DimensionInfo;
@@ -14,8 +15,10 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 2023/7/4
@@ -65,6 +68,11 @@ public interface UnsafeChunk {
 
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();
+
+    @UnmodifiableView
+    default Set<Client> getClientChunkLoaders() {
+        return getChunkLoaders().stream().filter(loader -> loader instanceof Client).map(loader -> (Client) loader).collect(Collectors.toSet());
+    }
 
     void addChunkLoader(ChunkLoader chunkLoader);
 

@@ -31,6 +31,9 @@ public interface BlockEntityHolderComponent extends BlockComponent {
         }
         var blockEntity = getBlockEntityType().createBlockEntity(new SimpleBlockEntityInitInfo<>(new Position3i(x, y, z, world)));
         chunk.addBlockEntity(blockEntity);
+        if (blockEntity.isSpawnable()) {
+            blockEntity.sendBlockEntityDataPacketToAll();
+        }
     }
 
     default void createBlockEntityAt(Position3ic pos) {
