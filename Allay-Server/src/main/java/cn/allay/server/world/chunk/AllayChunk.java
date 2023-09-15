@@ -318,7 +318,7 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void tick() {
-
+        getBlockEntities().values().forEach(BlockEntity::tick);
     }
 
     @Override
