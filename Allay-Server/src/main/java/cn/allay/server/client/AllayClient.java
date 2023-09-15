@@ -24,6 +24,7 @@ import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.MathUtils;
+import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.api.world.gamerule.GameRule;
@@ -69,10 +70,10 @@ public class AllayClient extends BaseClient {
     private static final int DO_FIRST_SPAWN_CHUNK_THRESHOLD = 36;
     private final BedrockServerSession session;
     @Getter
-    private boolean online = false;
+    private AtomicBoolean online = new AtomicBoolean(false);
     @Getter
     @Setter
-    private boolean firstSpawned = false;
+    private AtomicBoolean firstSpawned = new AtomicBoolean(false);
     private final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(DO_FIRST_SPAWN_CHUNK_THRESHOLD);
     @Getter
     private final ContainerActionProcessorHolder containerActionProcessorHolder;
@@ -120,7 +121,7 @@ public class AllayClient extends BaseClient {
     }
 
     private void doFirstSpawn() {
-        if (firstSpawned) {
+        if (firstSpawned.get()) {
             return;
         }
 
@@ -155,11 +156,12 @@ public class AllayClient extends BaseClient {
 
         sendInventories();
 
-        sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
+        firstSpawned.set(true);
+        var playStatusPacket = new PlayStatusPacket();
+        playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
+        sendPacket(playStatusPacket);
 
         //TODO: SetTime
-
-        firstSpawned = true;
     }
 
     private void sendInventories() {
@@ -172,6 +174,11 @@ public class AllayClient extends BaseClient {
 
         var armor = playerEntity.getContainer(FullContainerType.ARMOR);
         armor.sendContents(playerEntity);
+    }
+
+    @Override
+    public boolean isFirstSpawned() {
+        return firstSpawned.get();
     }
 
     @Override
@@ -205,11 +212,13 @@ public class AllayClient extends BaseClient {
         server.onLoginFinish(this);
         initPlayerEntity();
         sendBasicGameData();
-        online = true;
         getWorld().getChunkService().getOrLoadChunk(
                 (int) playerEntity.getLocation().x() >> 4,
                 (int) playerEntity.getLocation().z() >> 4
-        ).thenAcceptAsync((c) -> getWorld().addClient(this), Server.getInstance().getVirtualThreadPool()).exceptionally(
+        ).thenAcceptAsync((c) -> {
+            getWorld().addClient(this);
+            online.set(true);
+        }, Server.getInstance().getVirtualThreadPool()).exceptionally(
                 t -> {
                     log.error("Error while initialize player " + getName() + "!", t);
                     return null;
@@ -220,12 +229,6 @@ public class AllayClient extends BaseClient {
     @Override
     public boolean computeMovementServerSide() {
         return false;
-    }
-
-    public void sendPlayStatus(PlayStatusPacket.Status status) {
-        var playStatusPacket = new PlayStatusPacket();
-        playStatusPacket.setStatus(status);
-        sendPacket(playStatusPacket);
     }
 
     private void initPlayerEntity() {
@@ -271,9 +274,7 @@ public class AllayClient extends BaseClient {
         startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
         startGamePacket.setPremiumWorldTemplateId("");
         startGamePacket.setInventoriesServerAuthoritative(true);
-        //TODO
         startGamePacket.setItemDefinitions(ItemTypeRegistry.getRegistry().getItemDefinitions());
-        //TODO: server-auth-movement
         startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
         startGamePacket.setServerAuthoritativeBlockBreaking(true);
         startGamePacket.setCommandsEnabled(true);
@@ -331,6 +332,11 @@ public class AllayClient extends BaseClient {
     @Override
     public boolean isLoaderActive() {
         return isOnline();
+    }
+
+    @Override
+    public boolean isOnline() {
+        return online.get();
     }
 
     @SlowOperation
@@ -586,7 +592,7 @@ public class AllayClient extends BaseClient {
 
         @Override
         public PacketSignal handle(PlayerAuthInputPacket packet) {
-            if (!isLocalInitialized()) return PacketSignal.UNHANDLED;
+            if (!isOnline()) return PacketSignal.UNHANDLED;
             //客户端发送给服务端的坐标比实际坐标高了一个BaseOffset，我们需要减掉它
             handleMovement(packet.getPosition().sub(0, playerEntity.getBaseOffset(), 0), packet.getRotation());
             handleBlockAction(packet.getPlayerActions());
@@ -596,7 +602,8 @@ public class AllayClient extends BaseClient {
 
         @Override
         public PacketSignal handle(MovePlayerPacket packet) {
-            if (!isLocalInitialized()) return PacketSignal.UNHANDLED;
+            //In server-auth movement, the MovePlayerPacket is only used to send "onGround" state to server by client
+            if (!isOnline()) return PacketSignal.UNHANDLED;
             if (!packet.isOnGround()) {
                 log.warn("Player " + name + " send a invalid MovePlayerPacket (onGround=false) while using server-auth movement!");
                 return PacketSignal.HANDLED;

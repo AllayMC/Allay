@@ -33,9 +33,9 @@ public interface Client extends ChunkLoader {
 
     boolean isFirstSpawned();
 
-    void sendPacket(BedrockPacket packet);
+    boolean isOnline();
 
-    void sendPlayStatus(PlayStatusPacket.Status status);
+    void sendPacket(BedrockPacket packet);
 
     void sendPacketImmediately(BedrockPacket packet);
 
