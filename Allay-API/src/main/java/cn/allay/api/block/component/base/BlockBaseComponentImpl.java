@@ -65,6 +65,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             @Nullable OnRandomUpdate onRandomUpdate,
             @Nullable OnScheduledUpdate onScheduledUpdate,
             @Nullable Place place,
+            @Nullable OnInteract onInteract,
             @Nullable OnPlace onPlace,
             @Nullable OnReplace onReplace,
             @Nullable CanPlaceOn canPlaceOn) {
@@ -73,6 +74,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         if (onRandomUpdate != null) this.onRandomUpdate = onRandomUpdate;
         if (onScheduledUpdate != null) this.onScheduledUpdate = onScheduledUpdate;
         if (place != null) this.place = place;
+        if (onInteract != null) this.onInteract = onInteract;
         if (onPlace != null) this.onPlace = onPlace;
         if (onReplace != null) this.onReplace = onReplace;
         if (canPlaceOn != null) this.canPlaceOn = canPlaceOn;
