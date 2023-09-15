@@ -4,8 +4,10 @@ import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponent;
 import cn.allay.api.block.component.base.BlockBaseComponent;
+import cn.allay.api.block.component.blockentity.BlockEntityHolderComponentImpl;
 import cn.allay.api.block.component.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.identifier.Identifier;
@@ -37,6 +39,10 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
     BlockTypeBuilder<T> itemIdentifier(Identifier itemIdentifier);
 
     BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId);
+
+    default BlockTypeBuilder<T> bindBlockEntity(BlockEntityType<?> blockEntityType) {
+        return addComponent(new BlockEntityHolderComponentImpl(blockEntityType));
+    }
 
     BlockTypeBuilder<T> setProperties(BlockPropertyType<?>... properties);
 
