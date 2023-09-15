@@ -17,7 +17,7 @@ public class VanillaBlockInterfaceUpdate {
     public static String formatCode = "\n            ";
 
     public static void main(String[] args) {
-        addCode(".setBlockBaseComponentSupplier((b) -> new BlockBaseComponentImpl(b, null, null, null, CommonBlockPlaceFunctions.STAIR_PLACE, null, null, null))",
+        addCode(".setBlockBaseComponentSupplier((b) -> BlockBaseComponentImpl.builder().place(CommonBlockPlaceFunctions.STAIR_PLACE).build())",
                 """
                         import cn.allay.api.block.CommonBlockPlaceFunctions;
                         import cn.allay.api.block.component.base.BlockBaseComponentImpl;""",
