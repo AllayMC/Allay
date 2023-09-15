@@ -65,12 +65,12 @@ public class FakeClient extends BaseClient {
 
     @Override public boolean isLocalInitialized() {return true;}
     @Override public boolean isFirstSpawned() {return true;}
+    @Override public boolean isOnline() {return true;}
     @Override public void preSendChunks(Set<Long> chunkHashes) {}
     @Override public void notifyChunkLoaded(Chunk chunk) {}
     @Override public void unloadChunks(Set<Long> chunkHashes) {}
     @Override public void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler) {}
     @Override public void sendPacket(BedrockPacket packet) {}
-    @Override public void sendPlayStatus(PlayStatusPacket.Status status) {}
     @Override public void sendPacketImmediately(BedrockPacket packet) {}
     @Override public void disconnect(String reason) {}
     @Override public void disconnect(String reason, boolean hideReason) {}
