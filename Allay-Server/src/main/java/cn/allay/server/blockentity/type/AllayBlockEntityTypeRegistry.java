@@ -18,7 +18,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<Identifier, BlockEntityType<?>, Map<Identifier, BlockEntityType<?>>>  implements BlockEntityTypeRegistry {
+public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<String, BlockEntityType<?>, Map<String, BlockEntityType<?>>>  implements BlockEntityTypeRegistry {
     public AllayBlockEntityTypeRegistry() {
         super(null, input -> new HashMap<>());
     }

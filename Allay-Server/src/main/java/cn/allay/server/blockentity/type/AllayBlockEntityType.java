@@ -17,6 +17,7 @@ import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.entity.type.EntityTypeBuildException;
 import cn.allay.server.utils.ComponentClassCacheUtils;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -36,15 +37,15 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
     protected List<ComponentProvider<? extends BlockEntityComponent>> componentProviders;
-    protected Identifier identifier;
+    protected String blockEntityId;
 
     @SneakyThrows
     protected AllayBlockEntityType(Class<T> interfaceClass,
                                    List<ComponentProvider<? extends BlockEntityComponent>> componentProviders,
-                                   Identifier identifier) {
+                                   String blockEntityId) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
-        this.identifier = identifier;
+        this.blockEntityId = blockEntityId;
         try {
             ArrayList<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
             injectedClass = new AllayComponentInjector<T>()
@@ -67,16 +68,17 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         return componentProviders;
     }
 
+    @ApiStatus.Internal
     @SneakyThrows
     @Override
-    public T createEntity(BlockEntityInitInfo<T> info) {
+    public T createBlockEntity(BlockEntityInitInfo<T> info) {
         info.setBlockEntityType(this);
         return injectedClass.cast(constructorMethodHandle.invokeExact(info));
     }
 
     @Override
-    public Identifier getIdentifier() {
-        return identifier;
+    public String getBlockEntityId() {
+        return blockEntityId;
     }
 
     public static <T extends BlockEntity> BlockEntityTypeBuilder<T> builder(Class<T> interfaceClass) {
@@ -86,21 +88,15 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
     public static class Builder<T extends BlockEntity> implements BlockEntityTypeBuilder<T> {
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders = new HashMap<>();
-        protected Identifier identifier;
+        protected String blockEntityId;
 
         public Builder(Class<T> interfaceClass) {
             this.interfaceClass = interfaceClass;
         }
 
         @Override
-        public BlockEntityTypeBuilder<T> identifier(Identifier identifier) {
-            this.identifier = identifier;
-            return this;
-        }
-
-        @Override
-        public BlockEntityTypeBuilder<T> identifier(String identifier) {
-            this.identifier = new Identifier(identifier);
+        public BlockEntityTypeBuilder<T> blockEntityId(String id) {
+            this.blockEntityId = id;
             return this;
         }
 
@@ -131,10 +127,10 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
                         info -> new BlockEntityBaseComponentImpl<>((BlockEntityInitInfo<T>) info),
                         BlockEntityBaseComponentImpl.class
                 ));
-            if (identifier == null)
+            if (blockEntityId == null)
                 throw new EntityTypeBuildException("identifier cannot be null!");
-            var type = new AllayBlockEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier);
-            BlockEntityTypeRegistry.getRegistry().register(identifier, type);
+            var type = new AllayBlockEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), blockEntityId);
+            BlockEntityTypeRegistry.getRegistry().register(blockEntityId, type);
             return type;
         }
     }

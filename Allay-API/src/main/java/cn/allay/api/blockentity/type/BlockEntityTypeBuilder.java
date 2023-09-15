@@ -23,11 +23,13 @@ import static cn.allay.api.component.interfaces.ComponentProvider.toMap;
 public interface BlockEntityTypeBuilder<T extends BlockEntity> {
     ApiInstanceHolder<BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
 
+    static <T extends BlockEntity> BlockEntityTypeBuilder<T> builder(Class<T> clazz) {
+        return FACTORY.get().create(clazz);
+    }
+
     BlockEntityType<T> build();
 
-    BlockEntityTypeBuilder<T> identifier(Identifier identifier);
-
-    BlockEntityTypeBuilder<T> identifier(String identifier);
+    BlockEntityTypeBuilder<T> blockEntityId(String id);
 
     default BlockEntityTypeBuilder<T> setComponents(List<ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
         return setComponents(toMap(componentProviders));
