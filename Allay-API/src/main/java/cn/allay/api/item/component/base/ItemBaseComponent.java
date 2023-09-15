@@ -44,12 +44,11 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
     @Inject
     void setBlockStateStyle(@Nullable BlockState blockState);
 
-    @Nullable
     @Inject
     NbtMap getNbt();
 
     @Inject
-    void setNbt(@Nullable NbtMap nbt);
+    void setNbt(NbtMap nbt);
 
     @Inject
     ItemData toNetworkItemData();

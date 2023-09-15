@@ -107,10 +107,10 @@ public interface EntityBaseComponent extends EntityComponent {
     void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3fc newLoc);
 
     @Inject
-    NbtMap save();
+    NbtMap saveNBT();
 
     @Inject
-    void load(NbtMap nbt);
+    void loadNBT(NbtMap nbt);
 
     @Inject
     default void tick() {

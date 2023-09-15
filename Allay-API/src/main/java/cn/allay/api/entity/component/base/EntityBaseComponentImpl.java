@@ -34,6 +34,7 @@ import org.joml.primitives.AABBfc;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
@@ -68,15 +69,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected boolean onGround = true;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, Function<T, AABBfc> aabbGetter) {
-        if (info.location().world() == null)
-            throw new IllegalArgumentException("World cannot be null!");
+        Objects.requireNonNull(info.world(), "World cannot be null!");
+        this.location = new Location3f(0, 0, 0, info.world());
         this.entityType = info.getEntityType();
         this.aabbGetter = aabbGetter;
-        this.location = info.location();
         this.metadata = new Metadata();
-        var nbt = info.nbt();
-        if (nbt != null)
-            load(nbt);
+        loadNBT(info.nbt());
     }
 
     @Override
@@ -316,7 +314,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     @Impl
-    public NbtMap save() {
+    public NbtMap saveNBT() {
         var builder = NbtMap.builder()
                 .putString("identifier", entityType.getIdentifier().toString())
                 .putCompound("Pos",
@@ -349,7 +347,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     @Impl
-    public void load(NbtMap nbt) {
+    public void loadNBT(NbtMap nbt) {
         if (attributeComponent != null && nbt.containsKey("Attributes")) {
             var attributes = nbt.getList("Attributes", NbtType.COMPOUND);
             for (NbtMap attribute : attributes) {

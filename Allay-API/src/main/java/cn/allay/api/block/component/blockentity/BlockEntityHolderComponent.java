@@ -29,7 +29,7 @@ public interface BlockEntityHolderComponent extends BlockComponent {
         if (presentBlockEntity != null) {
             throw new IllegalStateException("Trying to create a block entity in world " + world.getName() + " at pos " + x + ", " + y + ", " + z + "!");
         }
-        var blockEntity = getBlockEntityType().createBlockEntity(new SimpleBlockEntityInitInfo<>(new Position3i(x, y, z, world)));
+        var blockEntity = getBlockEntityType().createBlockEntity(SimpleBlockEntityInitInfo.builder().pos(x, y, z).world(world).build());
         chunk.addBlockEntity(blockEntity);
         if (blockEntity.isSpawnable()) {
             blockEntity.sendBlockEntityDataPacketToAll();

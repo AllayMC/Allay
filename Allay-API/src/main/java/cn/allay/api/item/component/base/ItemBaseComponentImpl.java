@@ -6,9 +6,11 @@ import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.CommonUseItemFunctions;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.UseItemOn;
 import cn.allay.api.item.init.ItemStackInitInfo;
+import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.interfaces.ItemAirStack;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.world.World;
@@ -37,7 +39,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected ItemType<T> itemType;
     protected int count;
     protected int damage;
-    @Nullable
     protected NbtMap nbt;
     @Nullable
     protected BlockState blockState;
@@ -60,16 +61,17 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         this.blockState = initInfo.blockState();
         if (this.blockState == null && itemType.getBlockType() != null)
             this.blockState = itemType.getBlockType().getDefaultState();
+        var specifiedNetworkId = initInfo.stackNetworkId();
         if (initInfo.autoAssignStackNetworkId()) {
             this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
-        } else if (initInfo.stackNetworkId() != null) {
-            if (initInfo.stackNetworkId() < 0)
+        } else if (specifiedNetworkId != null) {
+            if (specifiedNetworkId < 0)
                 throw new IllegalArgumentException("stack network id cannot be negative");
             this.stackNetworkId = initInfo.stackNetworkId();
         } else {
             this.stackNetworkId = null;
         }
-        this.useItemOn = Objects.requireNonNullElseGet(useItemOn, () -> createPlaceBlockUseOn());
+        this.useItemOn = Objects.requireNonNullElseGet(useItemOn, CommonUseItemFunctions::createPlaceBlockUseOn);
     }
 
     @Override
@@ -115,7 +117,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         this.blockState = blockState;
     }
 
-    @Nullable
     @Override
     @Impl
     public NbtMap getNbt() {
@@ -124,7 +125,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     @Impl
-    public void setNbt(@Nullable NbtMap nbt) {
+    public void setNbt(NbtMap nbt) {
         this.nbt = nbt;
     }
 
@@ -164,7 +165,17 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     @Impl
     public ItemStack copy(boolean newStackNetworkId) {
-        return itemType.createItemStack(ItemStackInitInfo.of(count, damage, nbt, blockState, stackNetworkId, newStackNetworkId));
+        return itemType.createItemStack(
+                SimpleItemStackInitInfo
+                        .builder()
+                        .count(count)
+                        .damage(damage)
+                        .nbt(nbt)
+                        .blockState(blockState)
+                        .stackNetworkId(stackNetworkId)
+                        .autoAssignStackNetworkId(newStackNetworkId)
+                        .build()
+        );
     }
 
     @Override

@@ -64,11 +64,11 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
     }
 
     protected void writeEntities(long chunkHash, Collection<Entity> entities) throws WorldStorageException {
-        this.entities.put(chunkHash, entities.stream().map(Entity::save).collect(Collectors.toSet()));
+        this.entities.put(chunkHash, entities.stream().map(Entity::saveNBT).collect(Collectors.toSet()));
     }
 
     protected void writeBlockEntities(long chunkHash, Collection<BlockEntity> blockEntities) throws WorldStorageException {
-        this.blockEntities.put(chunkHash, blockEntities.stream().map(BlockEntity::save).collect(Collectors.toSet()));
+        this.blockEntities.put(chunkHash, blockEntities.stream().map(BlockEntity::saveNBT).collect(Collectors.toSet()));
     }
 
     @Override

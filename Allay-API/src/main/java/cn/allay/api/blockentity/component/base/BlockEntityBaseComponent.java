@@ -27,17 +27,17 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
     Position3ic getPosition();
 
     @Inject
-    NbtMap save();
+    NbtMap saveNBT();
 
     @Inject
-    void load(NbtMap nbt);
+    void loadNBT(NbtMap nbt);
 
     @Inject
     default BlockEntityDataPacket createBlockEntityDataPacket() {
         var packet = new BlockEntityDataPacket();
         var pos = getPosition();
         packet.setBlockPosition(Vector3i.from(pos.x(), pos.y(), pos.z()));
-        packet.setData(save());
+        packet.setData(saveNBT());
         return packet;
     }
 

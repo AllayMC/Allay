@@ -8,9 +8,7 @@ import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.position.Position3i;
 import cn.allay.api.math.position.Position3ic;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
 
 /**
  * Allay Project 2023/9/15
@@ -27,10 +25,8 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
 
     public BlockEntityBaseComponentImpl(BlockEntityInitInfo<T> initInfo) {
         this.blockEntityType = initInfo.getBlockEntityType();
-        this.position = initInfo.position();
-        if (initInfo.customName() != null) customName = initInfo.customName();
-        var nbt = initInfo.nbt();
-        if (nbt != null) load(nbt);
+        this.position = new Position3i(0, 0, 0, initInfo.world());
+        loadNBT(initInfo.nbt());
     }
 
     @Override
@@ -47,7 +43,7 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
 
     @Override
     @Impl
-    public NbtMap save() {
+    public NbtMap saveNBT() {
         return NbtMap.builder()
                 .putString("id", blockEntityType.getBlockEntityId())
                 .putInt("x", position.x())
@@ -60,7 +56,7 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
 
     @Override
     @Impl
-    public void load(NbtMap nbt) {
+    public void loadNBT(NbtMap nbt) {
         if (nbt.containsKey("CustomName")) {
             this.customName = nbt.getString("CustomName");
         }
