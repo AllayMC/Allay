@@ -19,6 +19,6 @@ public interface BlockBirchStairsBehavior extends BlockBehavior {
             .builder(BlockBirchStairsBehavior.class)
             .vanillaBlock(VanillaBlockId.BIRCH_STAIRS)
             .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION).addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
-            .setBlockBaseComponentSupplier((b) -> new BlockBaseComponentImpl(b, null, null, null, CommonBlockPlaceFunctions.STAIR_PLACE, null, null, null))
+            .setBlockBaseComponentSupplier((b) -> BlockBaseComponentImpl.builder().place(CommonBlockPlaceFunctions.STAIR_PLACE).build())
             .build();
 }

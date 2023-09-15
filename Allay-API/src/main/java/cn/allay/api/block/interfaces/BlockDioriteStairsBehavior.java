@@ -19,6 +19,6 @@ public interface BlockDioriteStairsBehavior extends BlockBehavior {
             .builder(BlockDioriteStairsBehavior.class)
             .vanillaBlock(VanillaBlockId.DIORITE_STAIRS)
             .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION).addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
-            .setBlockBaseComponentSupplier((b) -> new BlockBaseComponentImpl(b, null, null, null, CommonBlockPlaceFunctions.STAIR_PLACE, null, null, null))
+            .setBlockBaseComponentSupplier((b) -> BlockBaseComponentImpl.builder().place(CommonBlockPlaceFunctions.STAIR_PLACE).build())
             .build();
 }
