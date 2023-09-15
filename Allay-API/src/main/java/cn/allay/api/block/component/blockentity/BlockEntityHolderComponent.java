@@ -1,11 +1,8 @@
 package cn.allay.api.block.component.blockentity;
 
 import cn.allay.api.block.component.BlockComponent;
-import cn.allay.api.block.data.BlockPos;
-import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.init.SimpleBlockEntityInitInfo;
 import cn.allay.api.blockentity.type.BlockEntityType;
-import cn.allay.api.math.position.Position3i;
 import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.world.World;
 
@@ -31,7 +28,7 @@ public interface BlockEntityHolderComponent extends BlockComponent {
         }
         var blockEntity = getBlockEntityType().createBlockEntity(SimpleBlockEntityInitInfo.builder().pos(x, y, z).world(world).build());
         chunk.addBlockEntity(blockEntity);
-        if (blockEntity.isSpawnable()) {
+        if (blockEntity.sendToClient()) {
             blockEntity.sendBlockEntityDataPacketToAll();
         }
     }

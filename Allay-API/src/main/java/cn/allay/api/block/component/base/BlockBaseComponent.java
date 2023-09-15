@@ -23,7 +23,7 @@ import org.joml.Vector3ic;
  *
  * @author daoge_cmd
  */
-public interface BlockBaseComponent extends OnNeighborChanged, OnRandomUpdate, CanPlaceOn, Place, OnPlace, OnReplace, OnScheduledUpdate, BlockComponent {
+public interface BlockBaseComponent extends OnNeighborChanged, OnRandomUpdate, CanPlaceOn, Place, OnPlace, OnInteract, OnReplace, OnScheduledUpdate, BlockComponent {
     @Inject
     BlockType<? extends BlockBehavior> getBlockType();
 

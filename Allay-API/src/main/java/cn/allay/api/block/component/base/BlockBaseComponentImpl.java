@@ -14,6 +14,7 @@ import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.ItemStack;
 import cn.allay.api.world.World;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     protected Place place = (player, world, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace) -> {
         world.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         return true;
+    };
+    protected OnInteract onInteract = (player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace) -> {
     };
     protected OnPlace onPlace = (currentBlockState, newBlockState) -> {
     };
@@ -123,5 +126,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
         manager.callEvent(new BlockOnReplaceEvent(currentBlockState, newBlockState));
         onReplace.onReplace(currentBlockState, newBlockState);
+    }
+
+    @Override
+    @Impl
+    public void onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        onInteract.onInteract(player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace);
     }
 }
