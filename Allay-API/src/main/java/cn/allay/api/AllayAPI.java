@@ -4,6 +4,8 @@ import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
+import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
@@ -133,6 +135,10 @@ public final class AllayAPI {
         requireImpl(VanillaBlockAttributeRegistry.class, VanillaBlockAttributeRegistry.REGISTRY::set);
         requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
+
+        //BlockEntity
+        requireImpl(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, BlockEntityTypeBuilder.FACTORY::set);
+        requireImpl(BlockEntityTypeRegistry.class, BlockEntityTypeRegistry.REGISTRY::set);
 
         //Item
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);

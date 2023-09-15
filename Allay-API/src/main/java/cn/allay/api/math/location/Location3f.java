@@ -3,7 +3,6 @@ package cn.allay.api.math.location;
 import cn.allay.api.math.position.Position3f;
 import cn.allay.api.world.World;
 import com.google.common.base.Objects;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Runtime;
 import org.joml.*;
 
@@ -140,7 +139,7 @@ public class Location3f extends Position3f implements Location3fc {
     }
 
     @Override
-    public @NotNull World world() {
+    public World world() {
         return super.world();
     }
 

@@ -25,6 +25,7 @@ import java.util.Properties;
 public final class ComponentClassCacheUtils {
     public static final Path CACHE_ROOT = Path.of("cache");
     public static final String CACHE_PACKAGE_BLOCK = "cn/allay/api/block/interfaces";
+    public static final String CACHE_PACKAGE_BLOCK_ENTITY = "cn/allay/api/blockentity/interfaces";
     public static final String CACHE_PACKAGE_ITEM = "cn/allay/api/item/interfaces";
     public static final String CACHE_PACKAGE_ENTITY = "cn/allay/api/entity/interfaces";
     private static final URLClassLoader LOADER;
@@ -77,6 +78,27 @@ public final class ComponentClassCacheUtils {
                     .findFirst();
             if (first.isPresent()) {
                 String cachePath = CACHE_PACKAGE_BLOCK.replace("/", ".") + "." + first.get();
+                try {
+                    return (Class<T>) LOADER.loadClass(cachePath);
+                } catch (ClassNotFoundException e) {
+                    log.error(e.getMessage());
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static <T> Class<T> loadBlockEntityType(Class<T> interfaceClassName) {
+        Path path = CACHE_ROOT.resolve(CACHE_PACKAGE_BLOCK_ENTITY);
+        File file = path.toFile();
+        if (file.exists()) {
+            Optional<String> first = Arrays.stream(file.listFiles())
+                    .filter(f -> StringUtils.fastSplit(f.getName(), "$").get(0).equals(interfaceClassName.getSimpleName()))
+                    .map(f -> f.getName().replace(".class", ""))
+                    .findFirst();
+            if (first.isPresent()) {
+                String cachePath = CACHE_PACKAGE_BLOCK_ENTITY.replace("/", ".") + "." + first.get();
                 try {
                     return (Class<T>) LOADER.loadClass(cachePath);
                 } catch (ClassNotFoundException e) {
