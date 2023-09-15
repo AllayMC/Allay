@@ -50,6 +50,12 @@ public record FullContainerType<T extends Container>(int id, boolean canBeOpened
             .mapAllSlotToType(ContainerSlotType.CREATED_OUTPUT)
             .build();
 
+    public static final FullContainerType<BarrelContainer> BARREL = builder()
+            .id(ContainerType.CONTAINER)
+            .size(27)
+            .mapAllSlotToType(ContainerSlotType.BARREL)
+            .build();
+
     public FullContainerType(int id, boolean canBeOpenedAlone, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes) {
         this.id = id;
         this.canBeOpenedAlone = canBeOpenedAlone;
