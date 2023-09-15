@@ -4,7 +4,6 @@ import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.component.BlockEntityComponent;
 import cn.allay.api.blockentity.init.BlockEntityInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
-import cn.allay.api.identifier.Identified;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
