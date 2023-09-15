@@ -226,7 +226,6 @@ public class AllayChunkService implements ChunkService {
                         .collect(Collectors.toSet()), Server.getInstance().getVirtualThreadPool());
     }
 
-
     @Override
     public CompletableFuture<Chunk> loadChunk(int x, int z) {
         var hashXZ = HashUtils.hashXZ(x, z);
@@ -237,15 +236,24 @@ public class AllayChunkService implements ChunkService {
         if (loadingChunk != null) {
             return loadingChunk;
         }
-        var future = worldStorage.readChunk(x, z).exceptionally(t -> {
+        //we use a "trigger" to allow us starting the operation after we put the "future" object into "loadingChunks"
+        var trigger = new CompletableFuture<Void>();
+        var future = trigger.thenCompose(v -> worldStorage.readChunk(x, z)).exceptionally(t -> {
             log.error("Error while reading chunk (" + x + "," + z + ") !", t);
             return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
         }).thenApplyAsync(loadedChunk -> prepareAndSetChunk(x, z, loadedChunk), Server.getInstance().getComputeThreadPool()).exceptionally(t -> {
             log.error("Error while generating chunk (" + x + "," + z + ") !", t);
             return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
         });
-        loadingChunks.put(hashXZ, future);
-        return future;
+        //Prevent multiple threads from putting the same chunk into loadingChunks at the same time and wasting computing resources
+        var presentValue = loadingChunks.putIfAbsent(hashXZ, future);
+        if (presentValue == null) {
+            //start the future
+            trigger.complete(null);
+            return future;
+        } else {
+            return presentValue;
+        }
     }
 
     @SneakyThrows
