@@ -1,15 +1,14 @@
 package cn.allay.server.world.storage.nonpersistent;
 
+import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.Chunk;
-import cn.allay.api.world.chunk.ChunkState;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.api.world.storage.WorldStorageException;
-import cn.allay.server.world.chunk.AllayChunk;
 import cn.allay.server.world.chunk.AllayUnsafeChunk;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.nbt.NbtMap;
@@ -31,6 +30,7 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
 
     private final Map<Long, Chunk> chunks = new Long2ObjectOpenHashMap<>();
     private final Map<Long, Set<NbtMap>> entities = new Long2ObjectOpenHashMap<>();
+    private final Map<Long, Set<NbtMap>> blockEntities = new Long2ObjectOpenHashMap<>();
     private WorldData worldData = WorldData.DEFAULT;
 
     @Override
@@ -42,6 +42,7 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
             chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, worldData.getDimensionInfo()).toSafeChunk();
         }
         readEntities(l).stream().map(nbt -> Entity.fromNBT(world, nbt)).forEach(chunk::addEntity);
+        readBlockEntities(l).stream().map(nbt -> BlockEntity.fromNBT(world, nbt)).forEach(chunk::addBlockEntity);
         return CompletableFuture.completedFuture(chunk);
     }
 
@@ -50,6 +51,7 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
         long l = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
         chunks.put(l, chunk);
         writeEntities(l, chunk.getEntities().values());
+        writeBlockEntities(l, chunk.getBlockEntities().values());
         return CompletableFuture.completedFuture(null);
     }
 
@@ -57,8 +59,16 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
         return entities.getOrDefault(chunkHash, Set.of());
     }
 
+    protected Set<NbtMap> readBlockEntities(long chunkHash) throws WorldStorageException {
+        return blockEntities.getOrDefault(chunkHash, Set.of());
+    }
+
     protected void writeEntities(long chunkHash, Collection<Entity> entities) throws WorldStorageException {
         this.entities.put(chunkHash, entities.stream().map(Entity::save).collect(Collectors.toSet()));
+    }
+
+    protected void writeBlockEntities(long chunkHash, Collection<BlockEntity> blockEntities) throws WorldStorageException {
+        this.blockEntities.put(chunkHash, blockEntities.stream().map(BlockEntity::save).collect(Collectors.toSet()));
     }
 
     @Override

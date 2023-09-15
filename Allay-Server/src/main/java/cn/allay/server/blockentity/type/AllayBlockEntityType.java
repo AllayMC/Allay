@@ -1,6 +1,5 @@
 package cn.allay.server.blockentity.type;
 
-import cn.allay.api.block.type.BlockType;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.component.BlockEntityComponent;
 import cn.allay.api.blockentity.component.base.BlockEntityBaseComponentImpl;
