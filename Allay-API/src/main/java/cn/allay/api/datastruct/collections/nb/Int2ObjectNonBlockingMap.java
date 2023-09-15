@@ -419,14 +419,14 @@ public class Int2ObjectNonBlockingMap<TypeV>
      * Auto-boxing version of {@link #get(int)}.
      */
     public TypeV get(Object key) {
-        return (key instanceof Integer) ? get((Integer) key) : null;
+        return (key instanceof Integer intKey) ? get(intKey.intValue()) : null;
     }
 
     /**
      * Auto-boxing version of {@link #remove(int)}.
      */
     public TypeV remove(Object key) {
-        return (key instanceof Integer) ? remove(key) : null;
+        return (key instanceof Integer intKey) ? remove(intKey.intValue()) : null;
     }
 
     /**

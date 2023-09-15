@@ -26,7 +26,8 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
         this.blockEntityType = initInfo.getBlockEntityType();
         this.position = initInfo.position();
         if (initInfo.customName() != null) customName = initInfo.customName();
-        load(initInfo.nbt());
+        var nbt = initInfo.nbt();
+        if (nbt != null) load(nbt);
     }
 
     @Override
