@@ -54,12 +54,11 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         chunk.getClientChunkLoaders().forEach(this::sendBlockEntityDataPacketTo);
     }
 
-
     @Inject
     default void tick() {}
 
     @Inject
-    default boolean isSpawnable() {
+    default boolean sendToClient() {
         return true;
     }
 

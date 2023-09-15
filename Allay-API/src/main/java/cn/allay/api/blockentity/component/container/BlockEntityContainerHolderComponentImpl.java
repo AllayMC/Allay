@@ -1,4 +1,4 @@
-package cn.allay.api.entity.component.container;
+package cn.allay.api.blockentity.component.container;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
@@ -9,23 +9,20 @@ import cn.allay.api.identifier.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Allay Project 2023/7/15
+ * Allay Project 2023/9/16
  *
  * @author daoge_cmd
  */
-public class EntityContainerHolderComponentImpl extends BaseContainerHolder implements EntityContainerHolderComponent {
-
+public class BlockEntityContainerHolderComponentImpl extends BaseContainerHolder implements BlockEntityContainerHolderComponent {
     @ComponentIdentifier
-    protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_holder_component");
+    protected static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_inventory_holder_component");
 
-    public EntityContainerHolderComponentImpl() {}
+    public BlockEntityContainerHolderComponentImpl() {}
 
-    public EntityContainerHolderComponentImpl(Container... containers) {
+    public BlockEntityContainerHolderComponentImpl(Container... containers) {
         super(containers);
     }
 
