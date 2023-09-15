@@ -12,6 +12,11 @@ public interface ChunkAccessible {
     Chunk getChunk(int x, int z);
 
     @Nullable
+    default Chunk getChunkByLevelPos(int x, int z) {
+        return getChunk(x >> 4, z >> 4);
+    }
+
+    @Nullable
     Chunk getChunk(long chunkHash);
 
     int maxChunkX();

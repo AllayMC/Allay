@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEntityInitInfo<T> {
 
     private final Position3ic position;
+    @Nullable
     private final NbtMap nbt;
     @Nullable
     private final String customName;
@@ -23,11 +24,15 @@ public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEn
     @Setter
     private BlockEntityType<T> blockEntityType;
 
-    public SimpleBlockEntityInitInfo(Position3ic position, NbtMap nbt) {
+    public SimpleBlockEntityInitInfo(Position3ic position) {
+        this(position, null);
+    }
+
+    public SimpleBlockEntityInitInfo(Position3ic position, @Nullable NbtMap nbt) {
         this(position, nbt, null);
     }
 
-    public SimpleBlockEntityInitInfo(Position3ic position, NbtMap nbt, @Nullable String customName) {
+    public SimpleBlockEntityInitInfo(Position3ic position, @Nullable NbtMap nbt, @Nullable String customName) {
         this.position = position;
         this.nbt = nbt;
         this.customName = customName;
@@ -39,6 +44,7 @@ public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEn
     }
 
     @Override
+    @Nullable
     public NbtMap nbt() {
         return nbt;
     }

@@ -49,6 +49,7 @@ public interface UnsafeChunk {
     void addBlockEntity(@NotNull BlockEntity blockEntity);
 
     BlockEntity removeBlockEntity(int x, int y, int z);
+
     BlockEntity getBlockEntity(int x, int y, int z);
 
     @UnmodifiableView

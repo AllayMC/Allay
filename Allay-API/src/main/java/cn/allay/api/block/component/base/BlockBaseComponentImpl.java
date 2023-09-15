@@ -1,6 +1,8 @@
 package cn.allay.api.block.component.base;
 
 import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.component.event.BlockOnPlaceEvent;
+import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.function.*;
@@ -8,6 +10,8 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Impl;
+import cn.allay.api.component.annotation.Manager;
+import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.world.World;
@@ -26,6 +30,9 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
+
+    @Manager
+    protected ComponentManager<?> manager;
 
     protected BlockType<? extends BlockBehavior> blockType;
     protected OnNeighborChanged onNeighborChanged = (blockState, neighborBlockState, blockFace) -> {
@@ -107,12 +114,14 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     @Impl
     public void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
+        manager.callEvent(new BlockOnPlaceEvent(currentBlockState, newBlockState));
         onPlace.onPlace(currentBlockState, newBlockState);
     }
 
     @Override
     @Impl
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
+        manager.callEvent(new BlockOnReplaceEvent(currentBlockState, newBlockState));
         onReplace.onReplace(currentBlockState, newBlockState);
     }
 }

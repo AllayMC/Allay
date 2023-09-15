@@ -4,6 +4,7 @@ import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.client.Client;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.position.Position3i;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3ic;
 import org.joml.primitives.AABBfc;
 import org.slf4j.Logger;
 
@@ -103,7 +105,7 @@ public interface World {
     }
 
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update) {
-        var chunk = getChunkService().getChunk(x >> 4, z >> 4);
+        var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) return;
 
         int xIndex = x & 15;
@@ -140,7 +142,7 @@ public interface World {
 
     @Nullable
     default BlockState getBlockState(int x, int y, int z, int layer) {
-        var chunk = getChunkService().getChunk(x >> 4, z >> 4);
+        var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null)
             return null;
         return chunk.getBlockState(x & 15, y, z & 15, layer);
@@ -281,5 +283,15 @@ public interface World {
 
     default boolean isAABBInWorld(AABBfc aabb) {
         return isInWorld(aabb.maxX(), aabb.maxY(), aabb.maxZ()) && isInWorld(aabb.minX(), aabb.minY(), aabb.minZ());
+    }
+
+    default BlockEntity getBlockEntity(int x, int y, int z) {
+        var chunk = getChunkService().getChunkByLevelPos(x, z);
+        if (chunk == null) return null;
+        return chunk.getBlockEntity(x & 15, y, z & 15);
+    }
+
+    default BlockEntity getBlockEntity(Vector3ic pos) {
+        return getBlockEntity(pos.x(), pos.y(), pos.z());
     }
 }

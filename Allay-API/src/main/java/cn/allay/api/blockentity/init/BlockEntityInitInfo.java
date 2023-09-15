@@ -17,6 +17,7 @@ public interface BlockEntityInitInfo<T extends BlockEntity> extends ComponentIni
 
     Position3ic position();
 
+    @Nullable
     NbtMap nbt();
 
     @Nullable
