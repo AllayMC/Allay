@@ -42,7 +42,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         world.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         return true;
     };
-    protected OnInteract onInteract = (player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace) -> {
+    protected OnInteract onInteract = (player, itemStack, world, placeBlockPos, clickPos, blockFace) -> {
     };
     protected OnPlace onPlace = (currentBlockState, newBlockState) -> {
     };
@@ -132,7 +132,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     @Impl
-    public void onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        onInteract.onInteract(player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace);
+    public void onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        onInteract.onInteract(player, itemStack, world, placeBlockPos, clickPos, blockFace);
     }
 }
