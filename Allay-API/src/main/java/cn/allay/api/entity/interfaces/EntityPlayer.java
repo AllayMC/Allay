@@ -221,15 +221,15 @@ public interface EntityPlayer extends
                     .putList(
                             "Offhand",
                             NbtType.COMPOUND,
-                            containerHolderComponent.getContainer(FullContainerType.OFFHAND).save())
+                            containerHolderComponent.getContainer(FullContainerType.OFFHAND).saveNBT())
                     .putList(
                             "Inventory",
                             NbtType.COMPOUND,
-                            containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).save())
+                            containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).saveNBT())
                     .putList(
                             "Armor",
                             NbtType.COMPOUND,
-                            containerHolderComponent.getContainer(FullContainerType.ARMOR).save())
+                            containerHolderComponent.getContainer(FullContainerType.ARMOR).saveNBT())
                     .build();
         }
 
@@ -238,13 +238,13 @@ public interface EntityPlayer extends
         public void loadNBT(NbtMap nbt) {
             super.loadNBT(nbt);
             if (nbt.containsKey("Offhand")) {
-                containerHolderComponent.getContainer(FullContainerType.OFFHAND).load(nbt.getList("Offhand", NbtType.COMPOUND));
+                containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(nbt.getList("Offhand", NbtType.COMPOUND));
             }
             if (nbt.containsKey("Inventory")) {
-                containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).load(nbt.getList("Inventory", NbtType.COMPOUND));
+                containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).loadNBT(nbt.getList("Inventory", NbtType.COMPOUND));
             }
             if (nbt.containsKey("Armor")) {
-                containerHolderComponent.getContainer(FullContainerType.ARMOR).load(nbt.getList("Armor", NbtType.COMPOUND));
+                containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(nbt.getList("Armor", NbtType.COMPOUND));
             }
         }
     }

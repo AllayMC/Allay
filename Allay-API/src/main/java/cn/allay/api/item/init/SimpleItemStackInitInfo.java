@@ -75,7 +75,7 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
         protected NbtMapBuilder nbtBuilder = NbtMap.builder();
         protected @Nullable BlockState blockState;
         protected @Nullable Integer stackNetworkId;
-        protected boolean autoAssignStackNetworkId;
+        protected boolean autoAssignStackNetworkId = true;
 
         public Builder count(int count) {
             this.count = count;

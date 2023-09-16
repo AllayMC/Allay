@@ -8,6 +8,7 @@ import cn.allay.api.network.NetworkServer;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldPool;
+import cn.allay.api.world.storage.ClientStorage;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
@@ -43,6 +44,8 @@ public interface Server extends TaskCreator {
      * @return the server settings
      */
     ServerSettings getServerSettings();
+
+    ClientStorage getClientStorage();
 
     int getOnlineClientCount();
 

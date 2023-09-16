@@ -69,7 +69,7 @@ public interface BlockEntityBarrel extends
         @Impl
         public void loadNBT(NbtMap nbt) {
             super.loadNBT(nbt);
-            if (nbt.containsKey("Items")) Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.BARREL)).load(nbt.getList("Items", NbtType.COMPOUND));
+            if (nbt.containsKey("Items")) Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.BARREL)).loadNBT(nbt.getList("Items", NbtType.COMPOUND));
         }
 
         @Override
@@ -78,7 +78,7 @@ public interface BlockEntityBarrel extends
             return super.saveNBT().toBuilder().putList(
                     "Items",
                     NbtType.COMPOUND,
-                    Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.BARREL)).save()
+                    Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.BARREL)).saveNBT()
             ).build();
         }
     }

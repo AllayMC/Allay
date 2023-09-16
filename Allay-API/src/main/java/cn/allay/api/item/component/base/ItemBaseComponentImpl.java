@@ -62,14 +62,12 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (this.blockState == null && itemType.getBlockType() != null)
             this.blockState = itemType.getBlockType().getDefaultState();
         var specifiedNetworkId = initInfo.stackNetworkId();
-        if (initInfo.autoAssignStackNetworkId()) {
-            this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
-        } else if (specifiedNetworkId != null) {
+        if (specifiedNetworkId != null) {
             if (specifiedNetworkId < 0)
                 throw new IllegalArgumentException("stack network id cannot be negative");
             this.stackNetworkId = initInfo.stackNetworkId();
-        } else {
-            this.stackNetworkId = null;
+        } else if (initInfo.autoAssignStackNetworkId()) {
+            this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
         }
         this.useItemOn = Objects.requireNonNullElseGet(useItemOn, CommonUseItemFunctions::createPlaceBlockUseOn);
     }
@@ -172,7 +170,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
                         .damage(damage)
                         .nbt(nbt)
                         .blockState(blockState)
-                        .stackNetworkId(stackNetworkId)
+                        .stackNetworkId(newStackNetworkId ? null : stackNetworkId)
                         .autoAssignStackNetworkId(newStackNetworkId)
                         .build()
         );

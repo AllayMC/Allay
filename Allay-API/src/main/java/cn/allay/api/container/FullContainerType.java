@@ -11,7 +11,7 @@ import java.util.*;
  *
  * @author daoge_cmd
  */
-public record FullContainerType<T extends Container>(int id, boolean canBeOpenedAlone,
+public record FullContainerType<T extends Container>(int id,
                                                      ContainerSlotType[] slotTypeTable,
                                                      Set<ContainerSlotType> heldSlotTypes) {
 
@@ -19,7 +19,7 @@ public record FullContainerType<T extends Container>(int id, boolean canBeOpened
     public static final int UNKNOWN_NETWORK_ID = Integer.MIN_VALUE;
 
     public static final FullContainerType<PlayerCursorContainer> CURSOR = builder()
-            .id(119)
+            .id(124)
             .size(1)
             .mapAllSlotToType(ContainerSlotType.CURSOR)
             .build();
@@ -31,7 +31,7 @@ public record FullContainerType<T extends Container>(int id, boolean canBeOpened
             .build();
 
     public static final FullContainerType<PlayerOffhandContainer> OFFHAND = builder()
-            .id(120)
+            .id(119)
             .size(1)
             .mapAllSlotToType(ContainerSlotType.OFFHAND)
             .build();
@@ -56,9 +56,8 @@ public record FullContainerType<T extends Container>(int id, boolean canBeOpened
             .mapAllSlotToType(ContainerSlotType.BARREL)
             .build();
 
-    public FullContainerType(int id, boolean canBeOpenedAlone, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes) {
+    public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes) {
         this.id = id;
-        this.canBeOpenedAlone = canBeOpenedAlone;
         this.slotTypeTable = slotTypeTable;
         this.heldSlotTypes = heldSlotTypes;
         for (ContainerSlotType slotType : heldSlotTypes) {
@@ -95,24 +94,15 @@ public record FullContainerType<T extends Container>(int id, boolean canBeOpened
     public static class FullContainerTypeBuilder {
         private final Set<ContainerSlotType> heldSlotTypes = EnumSet.noneOf(ContainerSlotType.class);
         private int id;
-        private boolean canBeOpenedAlone = true;
         private ContainerSlotType[] slotTypeTable;
 
         public FullContainerTypeBuilder id(int id) {
             this.id = id;
-            this.canBeOpenedAlone = false;
             return this;
         }
 
         public FullContainerTypeBuilder id(ContainerType containerType) {
             this.id = containerType.getId();
-            this.canBeOpenedAlone = true;
-            return this;
-
-        }
-
-        public FullContainerTypeBuilder canBeOpenedAlone(boolean canBeOpenedAlone) {
-            this.canBeOpenedAlone = canBeOpenedAlone;
             return this;
         }
 
@@ -146,7 +136,7 @@ public record FullContainerType<T extends Container>(int id, boolean canBeOpened
         }
 
         public <T extends Container> FullContainerType<T> build() {
-            return new FullContainerType<>(id, canBeOpenedAlone, slotTypeTable, heldSlotTypes);
+            return new FullContainerType<>(id, slotTypeTable, heldSlotTypes);
         }
     }
 }

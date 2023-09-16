@@ -91,8 +91,8 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
     @Override
     @Impl
     public void onOpen(byte assignedId, Container container) {
-        if (!container.getContainerType().canBeOpenedAlone())
-            throw new IllegalArgumentException("Trying to open a container which cannot be opened alone! Type: " + container.getContainerType());
+//        if (!container.getContainerType().canBeOpenedAlone())
+//            throw new IllegalArgumentException("Trying to open a container which cannot be opened alone! Type: " + container.getContainerType());
         var client = playerBaseComponent.getClient();
         var containerOpenPacket = new ContainerOpenPacket();
         containerOpenPacket.setId(assignedId);
