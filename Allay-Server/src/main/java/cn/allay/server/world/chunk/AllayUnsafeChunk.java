@@ -9,15 +9,15 @@ import cn.allay.api.entity.Entity;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
-import cn.allay.api.world.chunk.*;
+import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.chunk.ChunkSection;
+import cn.allay.api.world.chunk.ChunkState;
+import cn.allay.api.world.chunk.UnsafeChunk;
 import cn.allay.api.world.heightmap.HeightMap;
 import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSets;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -25,26 +25,26 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 @NotThreadSafe
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AllayUnsafeChunk implements UnsafeChunk {
     private static final AtomicReferenceFieldUpdater<AllayUnsafeChunk, ChunkState> STATE_FIELD = AtomicReferenceFieldUpdater.newUpdater(AllayUnsafeChunk.class, ChunkState.class, "state");
-    protected @Getter
-    volatile ChunkState state;
-    protected @Getter
-    final int x;
-    protected @Getter
-    final int z;
-    protected @Getter
-    final DimensionInfo dimensionInfo;
+    @Getter
+    protected volatile ChunkState state;
+    @Getter
+    protected final int x;
+    @Getter
+    protected final int z;
+    @Getter
+    protected final DimensionInfo dimensionInfo;
     protected final ChunkSection[] sections;
     protected final HeightMap heightMap;
-    protected final Queue<BedrockPacket> chunkPacketQueue;
-    protected final Set<ChunkLoader> chunkLoaders;
     protected final Map<Long, Entity> entities;
     protected final Map<Integer, BlockEntity> blockEntities;
 
@@ -55,8 +55,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.state = ChunkState.NEW;
         this.heightMap = new HeightMap();
         this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
-        this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
-        this.chunkLoaders = ObjectSets.synchronize(new ObjectOpenHashSet<>());
         this.entities = new Long2ObjectNonBlockingMap<>();
         this.blockEntities = new Int2ObjectNonBlockingMap<>();
     }
@@ -163,57 +161,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public BiomeType getBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
         return this.getOrCreateSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
-    }
-
-    @Override
-    @UnmodifiableView
-    public Set<ChunkLoader> getChunkLoaders() {
-        return Collections.unmodifiableSet(chunkLoaders);
-    }
-
-    @Override
-    public void addChunkLoader(ChunkLoader chunkLoader) {
-        chunkLoaders.add(chunkLoader);
-    }
-
-    @Override
-    public void removeChunkLoader(ChunkLoader chunkLoader) {
-        chunkLoaders.remove(chunkLoader);
-    }
-
-    @Override
-    public int getChunkLoaderCount() {
-        return chunkLoaders.size();
-    }
-
-    @Override
-    public void addChunkPacket(BedrockPacket packet) {
-        chunkPacketQueue.add(packet);
-    }
-
-    @Override
-    public void sendChunkPacket(BedrockPacket packet) {
-        for (ChunkLoader chunkLoader : chunkLoaders) {
-            chunkLoader.sendPacket(packet);
-        }
-    }
-
-    @Override
-    public void sendChunkPackets() {
-        if (chunkPacketQueue.isEmpty()) return;
-        BedrockPacket packet;
-        while ((packet = chunkPacketQueue.poll()) != null) {
-            sendChunkPacket(packet);
-        }
-    }
-
-    @Override
-    public void tick() {
-        tickEntities();
-    }
-
-    private void tickEntities() {
-        entities.forEach((uniqueId, entity) -> entity.tick());
     }
 
     @Override
@@ -333,8 +280,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     dimensionInfo,
                     sections,
                     heightMap,
-                    new ConcurrentLinkedQueue<>(),
-                    ObjectSets.synchronize(new ObjectOpenHashSet<>()),
                     entities,
                     blockEntities
             );
