@@ -1,6 +1,7 @@
 package cn.allay.server.world.chunk;
 
 import cn.allay.api.annotation.SlowOperation;
+import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.HashUtils;
@@ -14,11 +15,13 @@ import cn.allay.api.world.storage.WorldStorage;
 import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.*;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkRequestResult;
@@ -27,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -344,6 +348,14 @@ public class AllayChunkService implements ChunkService {
     }
 
     private final class ChunkLoaderManager {
+        private final ChunkLoader chunkLoader;
+        //保存着上tick已经发送的全部区块hash值
+        private final LongOpenHashSet sentChunks = new LongOpenHashSet();
+        //保存着上tick已经发送的SubChunkRequestData
+        private final Map<Long, Set<SubChunkRequestData>> sentSubChunks = new Long2ObjectOpenHashMap<>();
+        //保存着这tick将要发送的全部区块hash值
+        private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
+        private final int chunkTrySendCountPerTick;
         LongComparator chunkDistanceComparator = new LongComparator() {
             @Override
             public int compare(long chunkHash1, long chunkHash2) {
@@ -361,15 +373,7 @@ public class AllayChunkService implements ChunkService {
                 );
             }
         };
-        private final ChunkLoader chunkLoader;
-        //保存着上tick已经发送的全部区块hash值
-        private final LongOpenHashSet sentChunks = new LongOpenHashSet();
-        //保存着上tick已经发送的SubChunkRequestData
-        private final Map<Long, Set<SubChunkRequestData>> sentSubChunks = new Long2ObjectOpenHashMap<>();
-        //保存着这tick将要发送的全部区块hash值
-        private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
         private final LongArrayPriorityQueue chunkSendQueue = new LongArrayPriorityQueue(200, chunkDistanceComparator);
-        private final int chunkTrySendCountPerTick;
         private long lastLoaderChunkPosHashed = -1;
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
@@ -386,7 +390,7 @@ public class AllayChunkService implements ChunkService {
 
                     HeightMapDataType hMapType = HeightMapDataType.NO_DATA;
                     if (sectionY < 0 || sectionY >= dimensionInfo.chunkSectionSize()) {
-                        createSubChunkData(responseData, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null);
+                        createSubChunkData(responseData, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null, null);
                         continue;
                     }
 
@@ -394,7 +398,7 @@ public class AllayChunkService implements ChunkService {
                     Chunk chunk = getChunk(cx, cz);
                     if (chunk == null) {
                         log.trace("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
-                        createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null);
+                        createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null, null);
                         continue;
                     }
 
@@ -452,7 +456,7 @@ public class AllayChunkService implements ChunkService {
                     } else {
                         subChunkRequestResult = SubChunkRequestResult.SUCCESS;
                     }
-                    createSubChunkData(responseData, subChunkRequestResult, offset, hMapType, heightMapData, subChunk);
+                    createSubChunkData(responseData, subChunkRequestResult, offset, hMapType, heightMapData, subChunk, null);
                 }
                 SubChunkPacket subChunkPacket = new SubChunkPacket();
                 subChunkPacket.setSubChunks(responseData);
@@ -466,8 +470,9 @@ public class AllayChunkService implements ChunkService {
                                                SubChunkRequestResult result,
                                                org.cloudburstmc.math.vector.Vector3i offset,
                                                HeightMapDataType type,
-                                               ByteBuf heightMapData,
-                                               ChunkSection subchunk) {
+                                               @Nullable ByteBuf heightMapData,
+                                               @Nullable ChunkSection subchunk,
+                                               @Nullable Collection<BlockEntity> subChunkBlockEntities) {
             SubChunkData subChunkData = new SubChunkData();
             subChunkData.setResult(result);
             subChunkData.setPosition(offset);
@@ -481,7 +486,15 @@ public class AllayChunkService implements ChunkService {
                 subchunk.biomes().writeToNetwork(buffer, BiomeType::getId);
                 // edu - border blocks
                 buffer.writeByte(0);
-                //TODO: BlockEntity
+                if (subChunkBlockEntities != null) {
+                    try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(buffer))) {
+                        for (BlockEntity blockEntity : subChunkBlockEntities) {
+                            writer.writeTag(blockEntity.saveNBT());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 subChunkData.setData(buffer);
             } else {
                 subChunkData.setHeightMapData(Unpooled.EMPTY_BUFFER);
