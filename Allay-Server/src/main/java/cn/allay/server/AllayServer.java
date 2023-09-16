@@ -15,7 +15,6 @@ import cn.allay.server.world.AllayWorld;
 import cn.allay.server.world.AllayWorldPool;
 import cn.allay.server.world.generator.flat.FlatWorldGenerator;
 import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
-import cn.allay.server.world.storage.rocksdb.RocksDBWorldStorage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
@@ -31,7 +30,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -120,6 +118,7 @@ public final class AllayServer implements Server {
                 while (MAIN_THREAD_GAME_LOOP.isRunning()) {
                     MAIN_THREAD_GAME_LOOP.stop();
                 }
+                System.out.println("Server ShutDown Over.");
             }
         });
         initTerminalConsole();
@@ -178,7 +177,7 @@ public final class AllayServer implements Server {
                 .gameType(GameType.CREATIVE)
                 .xboxAuth(false)
                 .defaultTickingRadius(8)
-                .defaultViewDistance(8)
+                .defaultViewDistance(48)
                 .enableNetworkEncryption(true)
                 .build();
     }
