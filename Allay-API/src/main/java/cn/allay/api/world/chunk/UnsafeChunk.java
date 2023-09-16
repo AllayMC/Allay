@@ -2,12 +2,10 @@ package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
-import cn.allay.api.client.Client;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -16,10 +14,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Allay Project 2023/7/4
@@ -69,29 +64,6 @@ public interface UnsafeChunk {
 
     @UnmodifiableView
     Collection<BlockEntity> getSectionBlockEntities(int sectionY);
-
-    @UnmodifiableView
-    Set<ChunkLoader> getChunkLoaders();
-
-    @UnmodifiableView
-    default Set<Client> getClientChunkLoaders() {
-        return getChunkLoaders().stream().filter(loader -> loader instanceof Client).map(loader -> (Client) loader).collect(Collectors.toSet());
-    }
-
-    void addChunkLoader(ChunkLoader chunkLoader);
-
-    void removeChunkLoader(ChunkLoader chunkLoader);
-
-    int getChunkLoaderCount();
-
-    void addChunkPacket(BedrockPacket packet);
-
-    void sendChunkPacket(BedrockPacket packet);
-
-    void sendChunkPackets();
-
-    @ApiStatus.Internal
-    void tick();
 
     void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer);
 

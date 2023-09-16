@@ -7,6 +7,8 @@ import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSets;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -16,9 +18,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.StampedLock;
 
 /**
@@ -32,12 +33,16 @@ public class AllayChunk implements Chunk {
     protected final StampedLock blockLock;
     protected final StampedLock heightAndBiomeLock;
     protected final StampedLock lightLock;
+    protected final Set<ChunkLoader> chunkLoaders;
+    protected final Queue<BedrockPacket> chunkPacketQueue;
 
     public AllayChunk(UnsafeChunk unsafeChunk) {
         this.unsafeChunk = unsafeChunk;
         this.blockLock = new StampedLock();
         this.heightAndBiomeLock = new StampedLock();
         this.lightLock = new StampedLock();
+        this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
+        this.chunkLoaders = ObjectSets.synchronize(new ObjectOpenHashSet<>());
     }
 
     @Override
@@ -413,37 +418,44 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public @UnmodifiableView Set<ChunkLoader> getChunkLoaders() {
-        return unsafeChunk.getChunkLoaders();
-    }
-
-    @Override
-    public void addChunkLoader(ChunkLoader chunkLoader) {
-        unsafeChunk.addChunkLoader(chunkLoader);
-    }
-
-    @Override
-    public void removeChunkLoader(ChunkLoader chunkLoader) {
-        unsafeChunk.removeChunkLoader(chunkLoader);
-    }
-
-    @Override
-    public int getChunkLoaderCount() {
-        return unsafeChunk.getChunkLoaderCount();
+    public void sendChunkPackets() {
+        if (chunkPacketQueue.isEmpty()) return;
+        BedrockPacket packet;
+        while ((packet = chunkPacketQueue.poll()) != null) {
+            sendChunkPacket(packet);
+        }
     }
 
     @Override
     public void addChunkPacket(BedrockPacket packet) {
-        unsafeChunk.addChunkPacket(packet);
+        chunkPacketQueue.add(packet);
+    }
+
+    @Override
+    @UnmodifiableView
+    public Set<ChunkLoader> getChunkLoaders() {
+        return Collections.unmodifiableSet(chunkLoaders);
+    }
+
+    @Override
+    public void addChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.add(chunkLoader);
+    }
+
+    @Override
+    public void removeChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.remove(chunkLoader);
+    }
+
+    @Override
+    public int getChunkLoaderCount() {
+        return chunkLoaders.size();
     }
 
     @Override
     public void sendChunkPacket(BedrockPacket packet) {
-        unsafeChunk.sendChunkPacket(packet);
-    }
-
-    @Override
-    public void sendChunkPackets() {
-        unsafeChunk.sendChunkPackets();
+        for (ChunkLoader chunkLoader : chunkLoaders) {
+            chunkLoader.sendPacket(packet);
+        }
     }
 }
