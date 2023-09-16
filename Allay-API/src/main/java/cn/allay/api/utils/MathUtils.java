@@ -53,6 +53,11 @@ public class MathUtils {
         return new Vector3i((int) Math.ceil(vector3f.x()), (int) Math.ceil(vector3f.y()), (int) Math.ceil(vector3f.z()));
     }
 
+    public static double round(double d, int precision) {
+        double pow = Math.pow(10, precision);
+        return ((double) Math.round(d * pow)) / pow;
+    }
+
     public float fastFloatInverseSqrt(float x) {
         float xHalf = 0.5f * x;
         int reEncode = Float.floatToIntBits(x);
