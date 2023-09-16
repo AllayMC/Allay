@@ -38,7 +38,7 @@ public record ChunkSection(int sectionY,
         return blockLayer[layer].get(index(x, y, z));
     }
 
-    public void setBlockState(int x, int y, int z, int layer, BlockState blockState) {
+    public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
         blockLayer[layer].set(index(x, y, z), blockState);
     }
 

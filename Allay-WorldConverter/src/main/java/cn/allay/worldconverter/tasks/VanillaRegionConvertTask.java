@@ -22,7 +22,6 @@ import org.jglrxavpok.hephaistos.mca.*;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.RecursiveAction;
@@ -94,8 +93,8 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                                     continue;
                                 }
                                 for (int x = 0; x < 16; ++x) {
-                                    for (int y = 0; y < 16; ++y) {
-                                        for (int z = 0; z < 16; ++z) {
+                                    for (int z = 0; z < 16; ++z) {
+                                        for (int y = 0; y < 16; ++y) {
                                             BlockState jeBlockState;
                                             try {
                                                 jeBlockState = section.get(x, y, z);
@@ -109,18 +108,13 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                                                 beBlockStateHash = AIR_BLOCK_HASH;
                                             }
                                             cn.allay.api.block.type.BlockState blockState = BlockStateHashPalette.getRegistry().get(beBlockStateHash);
-                                            allaySection.setBlockState(x, y, z, 0, blockState);
-                                            Map<String, String> properties = jeBlockState.getProperties();
-                                            switch (jeBlockState.getName()) {
-                                                //Specially water block
-                                                case "minecraft:kelp", "minecraft:seagrass", "minecraft:bubble_column" ->
-                                                        allaySection.setBlockState(x, y, z, 1, BlockWaterBehavior.WATER_TYPE.getDefaultState());
+                                            assert blockState != null;
+                                            allaySection.setBlockState(x, y, z, blockState, 0);
+                                            switch (blockState.blockType().getIdentifier().path()) {
+                                                case "kelp", "seagrass", "bubble_column" -> {
+                                                    allaySection.setBlockState(x, y, z, BlockWaterBehavior.WATER_TYPE.getDefaultState(), 1);
+                                                }
                                             }
-                                            //common water block
-                                            if (properties.containsKey("waterlogged") && properties.get("waterlogged").equals("true")) {
-                                                allaySection.setBlockState(x, y, z, 1, BlockWaterBehavior.WATER_TYPE.getDefaultState());
-                                            }
-
                                             String jeBiomeId = section.getBiome(x, y, z);
                                             Integer beBiomeId = Mapping.getBeBiomeId(jeBiomeId);
                                             if (beBiomeId == null) {
