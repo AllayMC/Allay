@@ -505,14 +505,14 @@ public class AllayChunkService implements ChunkService {
             Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
             if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
                 lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
-                updateAndLoadInRadiusChunks();
+                updateInRadiusChunks();
                 removeOutOfRadiusChunks();
                 updateChunkSendingQueue();
             }
-            sendQueuedChunks();
+            loadAndSendQueuedChunks();
         }
 
-        private void updateAndLoadInRadiusChunks() {
+        private void updateInRadiusChunks() {
             Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
             var loaderChunkX = floor.x >> 4;
             var loaderChunkZ = floor.z >> 4;
@@ -551,7 +551,7 @@ public class AllayChunkService implements ChunkService {
             }
         }
 
-        private void sendQueuedChunks() {
+        private void loadAndSendQueuedChunks() {
             if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int triedSendChunkCount = 0;
