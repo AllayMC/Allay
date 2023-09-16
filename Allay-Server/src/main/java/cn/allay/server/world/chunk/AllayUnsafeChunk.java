@@ -25,10 +25,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
@@ -92,6 +89,19 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             }
         }
         return sections[y];
+    }
+
+    @UnmodifiableView
+    @Override
+    public Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
+        var sectionBlockEntities = new HashSet<BlockEntity>();
+        for (var entry : getBlockEntities().entrySet()) {
+            var blockEntity = entry.getValue();
+            if (normalY(blockEntity.getPosition().y()) >>> 4 == sectionY) {
+                sectionBlockEntities.add(blockEntity);
+            }
+        }
+        return Collections.unmodifiableCollection(sectionBlockEntities);
     }
 
     public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {

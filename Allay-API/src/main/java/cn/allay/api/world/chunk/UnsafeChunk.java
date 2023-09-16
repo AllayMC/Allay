@@ -15,6 +15,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -65,6 +66,9 @@ public interface UnsafeChunk {
     @ApiStatus.Internal
     @NotNull
     ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y);
+
+    @UnmodifiableView
+    Collection<BlockEntity> getSectionBlockEntities(int sectionY);
 
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();
