@@ -16,6 +16,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.StampedLock;
@@ -404,6 +405,11 @@ public class AllayChunk implements Chunk {
         } finally {
             blockLock.unlockWrite(stamp);
         }
+    }
+
+    @Override
+    public @UnmodifiableView Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
+        return unsafeChunk.getSectionBlockEntities(sectionY);
     }
 
     @Override
