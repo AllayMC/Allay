@@ -99,7 +99,7 @@ public abstract class BaseContainer implements Container {
     }
 
     @Override
-    public NbtList<NbtMap> save() {
+    public NbtList<NbtMap> saveNBT() {
         var list = new ArrayList<NbtMap>(content.length);
         for (int slot = 0; slot < content.length; slot++) {
             var itemStack = content[slot];
@@ -116,7 +116,7 @@ public abstract class BaseContainer implements Container {
     }
 
     @Override
-    public void load(List<NbtMap> nbtList) {
+    public void loadNBT(List<NbtMap> nbtList) {
         for (var nbt : nbtList) {
             int slot = nbt.getByte("Slot");
             int count = nbt.getByte("Count");

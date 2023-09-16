@@ -8,12 +8,14 @@ import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldPool;
+import cn.allay.api.world.storage.ClientStorage;
 import cn.allay.server.client.AllayClient;
 import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.world.AllayWorld;
 import cn.allay.server.world.AllayWorldPool;
 import cn.allay.server.world.generator.flat.FlatWorldGenerator;
+import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentClientStorage;
 import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -44,6 +46,8 @@ public final class AllayServer implements Server {
     private final WorldPool worldPool;
     private final AtomicBoolean isRunning;
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap;
+    @Getter
+    private final ClientStorage clientStorage;
     //执行CPU密集型任务的线程池
     @Getter
     private final ForkJoinPool computeThreadPool;
@@ -67,6 +71,8 @@ public final class AllayServer implements Server {
         worldPool = new AllayWorldPool();
         isRunning = new AtomicBoolean(true);
         playerListEntryMap = new Object2ObjectOpenHashMap<>();
+        //TODO: client storage
+        clientStorage = new AllayNonPersistentClientStorage();
         computeThreadPool = new ForkJoinPool(
                 Runtime.getRuntime().availableProcessors() + 1,
                 pool -> {

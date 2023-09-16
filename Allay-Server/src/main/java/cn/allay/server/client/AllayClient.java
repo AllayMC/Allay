@@ -125,6 +125,7 @@ public class AllayClient extends BaseClient {
         if (firstSpawned.get()) {
             return;
         }
+        server.getClientStorage().readClientData(this);
 
         var setEntityDataPacket = new SetEntityDataPacket();
         setEntityDataPacket.setRuntimeEntityId(playerEntity.getUniqueId());
@@ -166,15 +167,13 @@ public class AllayClient extends BaseClient {
     }
 
     private void sendInventories() {
-        var inv = playerEntity.getContainer(FullContainerType.PLAYER_INVENTORY);
         //TODO: setHolder
-        inv.sendContents(playerEntity);
-
-        var cursor = playerEntity.getContainer(FullContainerType.CURSOR);
-        cursor.sendContents(playerEntity);
-
-        var armor = playerEntity.getContainer(FullContainerType.ARMOR);
-        armor.sendContents(playerEntity);
+        //NOTICE: When client is first entered, it determines that containerId=0 is the ID of the player's inventory :c
+        //There may be a problem here, because the use of containerId in the original InventoryContentsPacket is too confusing
+        playerEntity.sendContentsWithSpecificContainerId(playerEntity.getContainer(FullContainerType.PLAYER_INVENTORY), 0);
+        playerEntity.sendContents(playerEntity.getContainer(FullContainerType.OFFHAND));
+        playerEntity.sendContents(playerEntity.getContainer(FullContainerType.ARMOR));
+        //No need to send cursor's content to client because there is nothing in cursor
     }
 
     @Override
@@ -199,10 +198,7 @@ public class AllayClient extends BaseClient {
 
     @Override
     public void disconnect(String reason, boolean hideReason) {
-        server.onClientDisconnect(this);
         session.disconnect(reason, hideReason);
-        if (playerEntity != null)
-            playerEntity.getLocation().world().removeClient(this);
     }
 
     /**
@@ -361,6 +357,7 @@ public class AllayClient extends BaseClient {
 
         @Override
         public void onDisconnect(String reason) {
+            if (firstSpawned.get()) server.getClientStorage().writeClientData(AllayClient.this);
             server.onClientDisconnect(AllayClient.this);
             if (playerEntity != null)
                 playerEntity.getLocation().world().removeClient(AllayClient.this);

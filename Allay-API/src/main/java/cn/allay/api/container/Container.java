@@ -65,9 +65,9 @@ public interface Container {
 
     void onSlotChange(int slot, ItemStack current);
 
-    NbtList<NbtMap> save();
+    NbtList<NbtMap> saveNBT();
 
-    void load(List<NbtMap> nbtList);
+    void loadNBT(List<NbtMap> nbtList);
 
     default void sendContents(ContainerViewer viewer) {
         viewer.sendContents(this);

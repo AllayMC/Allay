@@ -1,7 +1,9 @@
 package cn.allay.api.world.storage;
 
+import cn.allay.api.client.Client;
 import cn.allay.api.world.WorldData;
 import cn.allay.api.world.chunk.Chunk;
+import org.cloudburstmc.nbt.NbtMap;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.CompletableFuture;
