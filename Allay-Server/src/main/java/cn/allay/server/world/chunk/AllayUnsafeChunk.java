@@ -119,7 +119,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         if (section == null) {
             section = this.getOrCreateSection(sectionY);
         }
-        section.setBlockState(x, y & 0xf, z, layer, blockState);
+        section.setBlockState(x, y & 0xf, z, blockState, layer);
     }
 
     public @Range(from = 0, to = 15) int getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
@@ -315,6 +315,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             if (sections == null) sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
             if (heightMap == null) heightMap = new HeightMap();
             if (entities == null) entities = new Long2ObjectNonBlockingMap<>();
+            if (blockEntities == null) blockEntities = new Int2ObjectNonBlockingMap<>();
             return new AllayUnsafeChunk(
                     state,
                     chunkX,

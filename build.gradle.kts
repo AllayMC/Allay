@@ -12,7 +12,7 @@ description = "The next generation minecraft server software"
 plugins {
     `kotlin-dsl`
     idea
-    id("com.github.johnrengelman.shadow") version ("8.0.0")
+    id("com.github.johnrengelman.shadow") version ("8.1.1")
 }
 
 //Do not build this root project, this is only used as a control submodule
@@ -31,6 +31,11 @@ idea {
 tasks.wrapper {
     enabled = true
     gradleVersion = "8.3"
+}
+
+tasks.clean {
+    enabled = true
+    delete("logs", "cache", "output")
 }
 
 subprojects {

@@ -1,5 +1,6 @@
 package cn.allay.server.terminal;
 
+import cn.allay.api.block.type.BlockState;
 import cn.allay.api.server.Server;
 import lombok.extern.slf4j.Slf4j;
 import net.minecrell.terminalconsole.SimpleTerminalConsole;
@@ -28,7 +29,12 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
     @Override
     protected void runCommand(String s) {
         if (s.equalsIgnoreCase("stop")) {
+            log.info("Server ShutDown...");
             shutdown();
+        } else if (s.startsWith("/t ")) {
+            String[] s1 = s.replace("/t ", "").split(" ");
+            BlockState blockState = Server.getInstance().getDefaultWorld().getBlockState(Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2]), 1);
+            log.info(blockState.blockType().getIdentifier().toString());
         } else {
             //TODO
             log.info("§1TODO :)");

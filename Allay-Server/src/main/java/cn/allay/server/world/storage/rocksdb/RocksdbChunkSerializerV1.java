@@ -29,11 +29,11 @@ public class RocksdbChunkSerializerV1 implements RocksdbChunkSerializer {
     private RocksdbChunkSerializerV1() {
     }
 
-    //todo Entity and Block Entity
     @Override
     public void serialize(WriteBatch writeBatch, UnsafeChunk chunk) {
         serializeBlock(writeBatch, chunk);
         serializeHeightAndBiome(writeBatch, chunk);
+        //todo Entity and Block Entity
     }
 
     @Override
