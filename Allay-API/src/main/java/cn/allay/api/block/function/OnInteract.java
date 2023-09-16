@@ -15,5 +15,5 @@ import org.joml.Vector3ic;
  */
 @FunctionalInterface
 public interface OnInteract {
-    void onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
+    boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
 }

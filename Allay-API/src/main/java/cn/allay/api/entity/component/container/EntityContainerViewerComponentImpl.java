@@ -3,11 +3,14 @@ package cn.allay.api.entity.component.container;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
+import cn.allay.api.component.annotation.Manager;
+import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.entity.component.base.EntityPlayerBaseComponent;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.utils.MathUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
@@ -34,6 +37,8 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
     protected byte idCounter = 0;
     @Dependency
     protected EntityPlayerBaseComponent playerBaseComponent;
+    @Dependency
+    protected EntityContainerHolderComponent containerHolderComponent;
 
     protected HashBiMap<Byte, Container> id2ContainerBiMap = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
     protected HashBiMap<FullContainerType<?>, Container> type2ContainerBiMap = HashBiMap.create(new Object2ObjectOpenHashMap<>());
@@ -50,9 +55,20 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
     @Override
     @Impl
     public void sendContents(Container container) {
+        var id = id2ContainerBiMap.inverse().get(container);
+        if (id == null) {
+            //If the container is not opened, the id will be the container's type id
+            id = (byte) container.getContainerType().id();
+        }
+        sendContentsWithSpecificContainerId(container, id);
+    }
+
+    @Override
+    @Impl
+    public void sendContentsWithSpecificContainerId(Container container, int containerId) {
         var client = playerBaseComponent.getClient();
         var inventoryContentPacket = new InventoryContentPacket();
-        inventoryContentPacket.setContainerId(container.getContainerType().id());
+        inventoryContentPacket.setContainerId(containerId);
         inventoryContentPacket.setContents(container.toNetworkItemData());
         client.sendPacket(inventoryContentPacket);
     }
@@ -62,7 +78,12 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
     public void sendContent(Container container, int slot) {
         var client = playerBaseComponent.getClient();
         var inventoryContentPacket = new InventoryContentPacket();
-        inventoryContentPacket.setContainerId(container.getContainerType().id());
+        var id = id2ContainerBiMap.inverse().get(container);
+        if (id == null) {
+            //If the container is not opened, the id will be the container's type id
+            id = (byte) container.getContainerType().id();
+        }
+        inventoryContentPacket.setContainerId(id);
         inventoryContentPacket.setContents(List.of(container.getItemStack(slot).toNetworkItemData()));
         client.sendPacket(inventoryContentPacket);
     }
@@ -75,13 +96,23 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
         var client = playerBaseComponent.getClient();
         var containerOpenPacket = new ContainerOpenPacket();
         containerOpenPacket.setId(assignedId);
-        containerOpenPacket.setType(container.getContainerType().toNetworkType());
-        var location = playerBaseComponent.getLocation();
-        containerOpenPacket.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
+        var containerType = container.getContainerType();
+        containerOpenPacket.setType(containerType.toNetworkType());
+        if (container.hasBlockPos()) {
+            containerOpenPacket.setBlockPosition(MathUtils.JOMLVecTocbVec(container.getBlockPos()));
+        } else {
+            var location = playerBaseComponent.getLocation();
+            containerOpenPacket.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
+        }
         client.sendPacket(containerOpenPacket);
 
         id2ContainerBiMap.put(assignedId, container);
         type2ContainerBiMap.put(container.getContainerType(), container);
+
+        //We should send the container's contents to client if the container is not held by the entity
+        if (containerHolderComponent.getContainer(containerType) == null) {
+            sendContents(container);
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@ import cn.allay.api.block.type.BlockType;
 import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.interfaces.EntityPlayer;
+import cn.allay.api.item.ItemStack;
 import cn.allay.api.world.World;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
@@ -69,4 +70,8 @@ public interface BlockBaseComponent extends OnNeighborChanged, OnRandomUpdate, C
     @Override
     @Inject
     void onScheduledUpdate(BlockStateWithPos blockState);
+
+    @Override
+    @Inject
+    boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
 }

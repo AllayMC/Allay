@@ -26,6 +26,10 @@ public interface EntityContainerViewerComponent extends ContainerViewer, EntityC
 
     @Override
     @Inject
+    void sendContentsWithSpecificContainerId(Container container, int containerId);
+
+    @Override
+    @Inject
     void sendContent(Container container, int slot);
 
     @Override

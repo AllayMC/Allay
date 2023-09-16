@@ -3,7 +3,6 @@ package cn.allay.server.client;
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.interfaces.BlockAirBehavior;
-import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.client.BaseClient;
 import cn.allay.api.client.data.AdventureSettings;
@@ -590,8 +589,9 @@ public class AllayClient extends BaseClient {
         private boolean useItemOn(ItemStack itemStack, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos, BlockFace blockFace) {
             var world = getWorld();
             var blockStateClicked = world.getBlockStateNonNull(blockPos.x(), blockPos.y(), blockPos.z());
-            blockStateClicked.getBehavior().onInteract(playerEntity, itemStack, world, placePos, clickPos, blockFace);
-            return itemStack.useItemOn(playerEntity, itemStack, getWorld(), blockPos, placePos, clickPos, blockFace);
+            if (!blockStateClicked.getBehavior().onInteract(playerEntity, itemStack, world, blockPos, placePos, clickPos, blockFace))
+                return itemStack.useItemOn(playerEntity, itemStack, getWorld(), blockPos, placePos, clickPos, blockFace);
+            else return true;
         }
 
         protected boolean canInteract() {

@@ -2,7 +2,6 @@ package cn.allay.api.container;
 
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import com.google.common.collect.BiMap;
@@ -15,10 +14,7 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Allay Project 2023/7/15
@@ -79,11 +75,13 @@ public abstract class BaseContainer implements Container {
         }
         viewers.put(assignedId, viewer);
         viewer.onOpen(assignedId, this);
+        onOpen(viewer);
     }
 
     @Override
     public void removeViewer(ContainerViewer viewer) {
         viewer.onClose(viewers.inverse().remove(viewer), this);
+        onClose(viewer);
     }
 
     @Override
@@ -102,7 +100,7 @@ public abstract class BaseContainer implements Container {
 
     @Override
     public NbtList<NbtMap> save() {
-        var list = new NbtList<>(NbtType.COMPOUND, new NbtMap[content.length]);
+        var list = new ArrayList<NbtMap>(content.length);
         for (int slot = 0; slot < content.length; slot++) {
             var itemStack = content[slot];
             //TODO: WasPickedUp?
@@ -114,7 +112,7 @@ public abstract class BaseContainer implements Container {
                     .build();
             list.add(slot, nbt);
         }
-        return list;
+        return new NbtList<>(NbtType.COMPOUND, list);
     }
 
     @Override

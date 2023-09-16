@@ -1,7 +1,6 @@
 package cn.allay.api.container;
 
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtList;
@@ -9,6 +8,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3ic;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -24,6 +24,22 @@ public interface Container {
     ItemStack AIR_STACK = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().stackNetworkId(0).build());
 
     FullContainerType<?> getContainerType();
+
+    default void onOpen(ContainerViewer viewer) {
+
+    }
+
+    default void onClose(ContainerViewer viewer) {
+
+    }
+
+    default boolean hasBlockPos() {
+        return false;
+    }
+
+    default Vector3ic getBlockPos() {
+        throw new UnsupportedOperationException();
+    }
 
     default ContainerSlotType getSlotType(int slot) {
         return getContainerType().getSlotType(slot);

@@ -16,7 +16,7 @@ public record FullContainerType<T extends Container>(int id, boolean canBeOpened
                                                      Set<ContainerSlotType> heldSlotTypes) {
 
     public static final Map<ContainerSlotType, FullContainerType<? extends Container>> SLOT_TYPE_TO_TYPE_MAP = new EnumMap<>(ContainerSlotType.class);
-    public static final int UNKNOWN_NETWORK_ID = -1;
+    public static final int UNKNOWN_NETWORK_ID = Integer.MIN_VALUE;
 
     public static final FullContainerType<PlayerCursorContainer> CURSOR = builder()
             .id(119)
@@ -146,7 +146,7 @@ public record FullContainerType<T extends Container>(int id, boolean canBeOpened
         }
 
         public <T extends Container> FullContainerType<T> build() {
-            return new FullContainerType<T>(id, canBeOpenedAlone, slotTypeTable, heldSlotTypes);
+            return new FullContainerType<>(id, canBeOpenedAlone, slotTypeTable, heldSlotTypes);
         }
     }
 }

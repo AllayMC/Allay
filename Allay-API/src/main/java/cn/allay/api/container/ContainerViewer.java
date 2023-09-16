@@ -2,6 +2,7 @@ package cn.allay.api.container;
 
 import cn.allay.api.item.ItemStack;
 import com.google.common.collect.BiMap;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -16,6 +17,8 @@ public interface ContainerViewer {
 
     void sendContents(Container container);
 
+    void sendContentsWithSpecificContainerId(Container container, int containerId);
+
     void sendContent(Container container, int slot);
 
     void onOpen(byte assignedId, Container container);
@@ -26,6 +29,11 @@ public interface ContainerViewer {
 
     @Nullable
     <T extends Container> T getOpenedContainer(FullContainerType<T> type);
+
+    @Nullable
+    default <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType) {
+        return getOpenedContainer(FullContainerType.fromSlotType(slotType));
+    }
 
     @Nullable
     Container getOpenedContainer(byte id);
