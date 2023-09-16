@@ -1,5 +1,7 @@
 package cn.allay.server;
 
+import cn.allay.api.utils.MathUtils;
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,8 +25,16 @@ public final class GameLoop {
     private final Runnable onStop;
     @Getter
     private long currentTick;
-    @Getter
-    private int currentTps;
+    private final float[] tickAverage = {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
+
+    public float getCurrentTps() {
+        float sum = 0;
+        int count = this.tickAverage.length;
+        for (float aTickAverage : this.tickAverage) {
+            sum += aTickAverage;
+        }
+        return (float) MathUtils.round(sum / count, 2);
+    }
 
     private GameLoop(Runnable onStart, Consumer<GameLoop> onTick, Runnable onStop, int loopCountPerSec) {
         if (loopCountPerSec <= 0)
@@ -41,40 +51,37 @@ public final class GameLoop {
 
     public void startLoop() {
         onStart.run();
-        long nextTpsRecording = 0;
         long nanoSleepTime = 0;
+        long idealNanoSleepPerTick = 1000000000 / loopCountPerSec;
         while (this.isRunning.get()) {
-            long idealNanoSleepPerTick = TimeUnit.SECONDS.toNanos(1) / loopCountPerSec;
-
             // Figure out how long it took to tick
             long startTickTime = System.nanoTime();
             onTick.accept(this);
             currentTick++;
-            currentTps++;
             long timeTakenToTick = System.nanoTime() - startTickTime;
+            float tick = (float) Math.max(0, Math.min(20, 1000000000 / timeTakenToTick));
+            System.arraycopy(this.tickAverage, 1, this.tickAverage, 0, this.tickAverage.length - 1);
+            this.tickAverage[this.tickAverage.length - 1] = tick;
 
+            long sumOperateTime = System.nanoTime() - startTickTime;
             // Sleep for the ideal time but take into account the time spent running the tick
-            nanoSleepTime += idealNanoSleepPerTick - timeTakenToTick;
+            nanoSleepTime += idealNanoSleepPerTick - sumOperateTime;
             long sleepStart = System.nanoTime();
             try {
-                Thread.sleep(Math.max(TimeUnit.NANOSECONDS.toMillis(nanoSleepTime), 0));
+                if (nanoSleepTime > 0) {
+                    //noinspection BusyWait
+                    Thread.sleep(TimeUnit.NANOSECONDS.toMillis(nanoSleepTime));
+                }
             } catch (InterruptedException exception) {
                 log.error("GameLoop interrupted", exception);
                 onStop.run();
                 return;
             }
-
             // How long did it actually take to sleep?
             // If we didn't sleep for the correct amount,
             // take that into account for the next sleep by
             // leaving extra/less for the next sleep.
             nanoSleepTime -= System.nanoTime() - sleepStart;
-
-            // Record TPS every second
-            if (System.nanoTime() > nextTpsRecording) {
-                currentTps = 0;
-                nextTpsRecording = System.nanoTime() + TimeUnit.SECONDS.toNanos(1);
-            }
         }
         onStop.run();
     }
@@ -114,6 +121,7 @@ public final class GameLoop {
         }
 
         public GameLoopBuilder loopCountPerSec(int loopCountPerSec) {
+            Preconditions.checkArgument(loopCountPerSec > 0 && loopCountPerSec <= 1024);
             this.loopCountPerSec = loopCountPerSec;
             return this;
         }
