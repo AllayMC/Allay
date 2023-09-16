@@ -456,7 +456,7 @@ public class AllayChunkService implements ChunkService {
                     } else {
                         subChunkRequestResult = SubChunkRequestResult.SUCCESS;
                     }
-                    createSubChunkData(responseData, subChunkRequestResult, offset, hMapType, heightMapData, subChunk, null);
+                    createSubChunkData(responseData, subChunkRequestResult, offset, hMapType, heightMapData, subChunk, chunk.getSectionBlockEntities(sectionY));
                 }
                 SubChunkPacket subChunkPacket = new SubChunkPacket();
                 subChunkPacket.setSubChunks(responseData);
@@ -492,7 +492,7 @@ public class AllayChunkService implements ChunkService {
                             writer.writeTag(blockEntity.saveNBT());
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.error("Error while encoding block entity in sub chunk!", e);
                     }
                 }
                 subChunkData.setData(buffer);
