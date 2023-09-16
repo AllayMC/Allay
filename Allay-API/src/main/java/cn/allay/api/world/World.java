@@ -106,8 +106,9 @@ public interface World {
 
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null) return;
-
+        if (chunk == null) {
+            chunk = getChunkService().getChunkImmediately(x >> 4, z >> 4);
+        }
         int xIndex = x & 15;
         int zIndex = z & 15;
         Position3i blockPos = new Position3i(x, y & 0xf, z, this);
@@ -124,7 +125,6 @@ public interface World {
         }
     }
 
-    @Nullable
     default BlockState getBlockState(int x, int y, int z) {
         return getBlockState(x, y, z, 0);
     }
@@ -140,11 +140,11 @@ public interface World {
         return blockState;
     }
 
-    @Nullable
     default BlockState getBlockState(int x, int y, int z, int layer) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null)
-            return null;
+        if (chunk == null) {
+            chunk = getChunkService().getChunkImmediately(x >> 4, z >> 4);
+        }
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 

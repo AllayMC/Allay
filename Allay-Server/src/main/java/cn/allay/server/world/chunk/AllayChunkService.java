@@ -19,7 +19,6 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.*;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
@@ -34,6 +33,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -108,6 +108,29 @@ public class AllayChunkService implements ChunkService {
         }
     }
 
+    private Chunk prepareAndSetChunk(int x, int z, Chunk chunk) {
+        long hashXZ = HashUtils.hashXZ(x, z);
+        var unsafeChunk = chunk.toUnsafeChunk();
+        if (unsafeChunk.getState() != FINISHED) {
+            var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
+            if (unsafeChunk.getState() == NEW) {
+                world.getWorldGenerator().generate(chunkGenerateContext);
+                unsafeChunk.setState(ChunkState.GENERATED);
+            }
+            if (unsafeChunk.getState() == GENERATED) {
+                world.getWorldGenerator().populate(chunkGenerateContext);
+                unsafeChunk.setState(POPULATED);
+            }
+            if (unsafeChunk.getState() == POPULATED) {
+                afterPopulate(unsafeChunk);
+                unsafeChunk.setState(FINISHED);
+            }
+        }
+        setChunk(x, z, chunk);
+        loadingChunks.remove(hashXZ);
+        return chunk;
+    }
+
     private void setChunk(int x, int z, Chunk chunk) {
         var chunkHash = HashUtils.hashXZ(x, z);
         if (isChunkLoaded(chunkHash)) {
@@ -130,6 +153,79 @@ public class AllayChunkService implements ChunkService {
     @Nullable
     public Chunk getChunk(long chunkHash) {
         return loadedChunks.get(chunkHash);
+    }
+
+    @SlowOperation
+    @Override
+    public Chunk getChunkImmediately(int x, int z) {
+        Chunk chunk = getChunk(x, z);
+        if (chunk == null) {
+            CompletableFuture<Chunk> chunkCompletableFuture = loadingChunks.get(HashUtils.hashXZ(x, z));
+            try {
+                if (chunkCompletableFuture != null) {
+                    return chunkCompletableFuture.get();
+                }
+                return prepareAndSetChunk(x, z, worldStorage.readChunk(x, z).get());
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        } else return chunk;
+    }
+
+    @Override
+    public CompletableFuture<Chunk> getOrLoadChunk(int x, int z) {
+        var chunk = getChunk(x, z);
+        if (chunk != null) {
+            return CompletableFuture.completedFuture(chunk);
+        }
+        return loadChunk(x, z);
+    }
+
+    @Override
+    public CompletableFuture<Set<Chunk>> getOrLoadRangedChunk(int x, int z, int range) {
+        // 用于存储CompletableFuture的集合
+        Set<CompletableFuture<Chunk>> futureSet = new HashSet<>();
+
+        // 遍历(x, z)为中心，半径为range的区块
+        for (int dx = -range; dx <= range; dx++) {
+            for (int dz = -range; dz <= range; dz++) {
+                if (dx * dx + dz * dz <= range * range) {
+                    // 获取或加载每一个块，并将返回的CompletableFuture添加到集合中
+                    futureSet.add(getOrLoadChunk(x + dx, z + dz));
+                }
+            }
+        }
+
+        // 当所有的CompletableFuture都完成时，返回一个新的CompletableFuture
+        return CompletableFuture.allOf(futureSet.toArray(new CompletableFuture[0]))
+                .thenApplyAsync(v -> futureSet.stream()
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toSet()), Server.getInstance().getVirtualThreadPool());
+    }
+
+    @Override
+    public CompletableFuture<Chunk> loadChunk(int x, int z) {
+        var hashXZ = HashUtils.hashXZ(x, z);
+        if (isChunkLoaded(hashXZ)) {
+            throw new IllegalStateException("Chunk is already loaded");
+        }
+        //Prevent multiple threads from putting the same chunk into loadingChunks at the same time and wasting computing resources
+        var presentValue = loadingChunks.putIfAbsent(hashXZ, worldStorage.readChunk(x, z)
+                .exceptionally(t -> {
+                    log.error("Error while reading chunk (" + x + "," + z + ") !", t);
+                    return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
+                })
+                .thenApplyAsync(loadedChunk -> prepareAndSetChunk(x, z, loadedChunk), Server.getInstance().getComputeThreadPool())
+                .exceptionally(t -> {
+                    log.error("Error while generating chunk (" + x + "," + z + ") !", t);
+                    return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
+                })
+        );
+        if (presentValue == null) {
+            return loadingChunks.get(hashXZ);
+        } else {
+            return presentValue;
+        }
     }
 
     @Override
@@ -200,102 +296,6 @@ public class AllayChunkService implements ChunkService {
         loadedChunks.values().forEach(consumer);
     }
 
-    @Override
-    public CompletableFuture<Chunk> getOrLoadChunk(int x, int z) {
-        var chunk = getChunk(x, z);
-        if (chunk != null) {
-            return CompletableFuture.completedFuture(chunk);
-        }
-        return loadChunk(x, z);
-    }
-
-    @Override
-    public CompletableFuture<Set<Chunk>> getOrLoadRangedChunk(int x, int z, int range) {
-        // 用于存储CompletableFuture的集合
-        Set<CompletableFuture<Chunk>> futureSet = new HashSet<>();
-
-        // 遍历(x, z)为中心，半径为range的区块
-        for (int dx = -range; dx <= range; dx++) {
-            for (int dz = -range; dz <= range; dz++) {
-                if (dx * dx + dz * dz <= range * range) {
-                    // 获取或加载每一个块，并将返回的CompletableFuture添加到集合中
-                    futureSet.add(getOrLoadChunk(x + dx, z + dz));
-                }
-            }
-        }
-
-        // 当所有的CompletableFuture都完成时，返回一个新的CompletableFuture
-        return CompletableFuture.allOf(futureSet.toArray(new CompletableFuture[0]))
-                .thenApplyAsync(v -> futureSet.stream()
-                        .map(CompletableFuture::join)
-                        .collect(Collectors.toSet()), Server.getInstance().getVirtualThreadPool());
-    }
-
-    @Override
-    public CompletableFuture<Chunk> loadChunk(int x, int z) {
-        var hashXZ = HashUtils.hashXZ(x, z);
-        if (isChunkLoaded(hashXZ)) {
-            throw new IllegalStateException("Chunk is already loaded");
-        }
-        var loadingChunk = loadingChunks.get(hashXZ);
-        if (loadingChunk != null) {
-            return loadingChunk;
-        }
-        //we use a "trigger" to allow us starting the operation after we put the "future" object into "loadingChunks"
-        var trigger = new CompletableFuture<Void>();
-        var future = trigger.thenCompose(v -> worldStorage.readChunk(x, z)).exceptionally(t -> {
-            log.error("Error while reading chunk (" + x + "," + z + ") !", t);
-            return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
-        }).thenApplyAsync(loadedChunk -> prepareAndSetChunk(x, z, loadedChunk), Server.getInstance().getComputeThreadPool()).exceptionally(t -> {
-            log.error("Error while generating chunk (" + x + "," + z + ") !", t);
-            return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
-        });
-        //Prevent multiple threads from putting the same chunk into loadingChunks at the same time and wasting computing resources
-        var presentValue = loadingChunks.putIfAbsent(hashXZ, future);
-        if (presentValue == null) {
-            //start the future
-            trigger.complete(null);
-            return future;
-        } else {
-            return presentValue;
-        }
-    }
-
-    @SneakyThrows
-    @SlowOperation
-    @Override
-    public Chunk loadChunkImmediately(int x, int z) {
-        if (isChunkLoaded(x, z) || isChunkLoading(x, z)) {
-            throw new IllegalStateException("Chunk is already loaded or under loading");
-        }
-        return prepareAndSetChunk(
-                x, z,
-                worldStorage.readChunk(x, z).get()
-        );
-    }
-
-    private Chunk prepareAndSetChunk(int x, int z, Chunk chunk) {
-        long hashXZ = HashUtils.hashXZ(x, z);
-        var unsafeChunk = chunk.toUnsafeChunk();
-        if (unsafeChunk.getState() != FINISHED) {
-            var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
-            if (unsafeChunk.getState() == NEW) {
-                world.getWorldGenerator().generate(chunkGenerateContext);
-                unsafeChunk.setState(ChunkState.GENERATED);
-            }
-            if (unsafeChunk.getState() == GENERATED) {
-                world.getWorldGenerator().populate(chunkGenerateContext);
-                unsafeChunk.setState(POPULATED);
-            }
-            if (unsafeChunk.getState() == POPULATED) {
-                afterPopulate(unsafeChunk);
-                unsafeChunk.setState(FINISHED);
-            }
-        }
-        setChunk(x, z, chunk);
-        loadingChunks.remove(hashXZ);
-        return chunk;
-    }
 
     private void afterPopulate(UnsafeChunk chunk) {
         //TODO works...
