@@ -2,9 +2,11 @@ package cn.allay.api.block.component.blockentity;
 
 import cn.allay.api.block.component.event.BlockOnPlaceEvent;
 import cn.allay.api.block.component.event.BlockOnReplaceEvent;
+import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.component.annotation.ComponentEventListener;
 import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,13 +16,13 @@ import lombok.extern.slf4j.Slf4j;
  * @author daoge_cmd
  */
 @Slf4j
-public class BlockEntityHolderComponentImpl implements BlockEntityHolderComponent {
+public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements BlockEntityHolderComponent<T> {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_holder_component");
 
-    protected final BlockEntityType<?> blockEntityType;
+    protected final BlockEntityType<T> blockEntityType;
 
-    public BlockEntityHolderComponentImpl(BlockEntityType<?> blockEntityType) {
+    public BlockEntityHolderComponentImpl(BlockEntityType<T> blockEntityType) {
         this.blockEntityType = blockEntityType;
     }
 
@@ -37,6 +39,7 @@ public class BlockEntityHolderComponentImpl implements BlockEntityHolderComponen
     }
 
     @Override
+    @Impl
     public BlockEntityType<?> getBlockEntityType() {
         return blockEntityType;
     }

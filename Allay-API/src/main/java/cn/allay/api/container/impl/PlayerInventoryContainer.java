@@ -30,4 +30,5 @@ public class PlayerInventoryContainer extends BaseContainer {
     public void setItemInHand(ItemStack itemStack) {
         setItemStack(handSlot, itemStack);
     }
+
 }

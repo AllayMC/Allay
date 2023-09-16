@@ -1,8 +1,10 @@
 package cn.allay.api.block.component.blockentity;
 
 import cn.allay.api.block.component.BlockComponent;
+import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.init.SimpleBlockEntityInitInfo;
 import cn.allay.api.blockentity.type.BlockEntityType;
+import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.world.World;
 
@@ -13,8 +15,27 @@ import java.util.Objects;
  *
  * @author daoge_cmd
  */
-public interface BlockEntityHolderComponent extends BlockComponent {
+public interface BlockEntityHolderComponent<T extends BlockEntity> extends BlockComponent {
+    @Inject
     BlockEntityType<?> getBlockEntityType();
+
+    default T getBlockEntity(int x, int y, int z, World world) {
+        var blockEntity = world.getBlockEntity(x, y, z);
+        if (blockEntity.getBlockEntityType() != this.getBlockEntityType()) {
+            throw new IllegalStateException(
+                    "Mismatched block entity type at pos %d, %d, %d, %s! Expected: %s, actual: %s"
+                            .formatted(
+                                    x, y, z, world.getName(),
+                                    this.getBlockEntityType().getBlockEntityId(), blockEntity.getBlockEntityType().getBlockEntityId()
+                            )
+            );
+        }
+        return (T) blockEntity;
+    }
+
+    default T getBlockEntity(Position3ic pos) {
+        return getBlockEntity(pos.x(), pos.y(), pos.z(), pos.world());
+    }
 
     default void createBlockEntityAt(int x, int y, int z, World world) {
         Objects.requireNonNull(world);

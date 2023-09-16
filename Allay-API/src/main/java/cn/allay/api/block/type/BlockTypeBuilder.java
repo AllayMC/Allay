@@ -41,7 +41,7 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
     BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId);
 
     default BlockTypeBuilder<T> bindBlockEntity(BlockEntityType<?> blockEntityType) {
-        return addComponent(new BlockEntityHolderComponentImpl(blockEntityType));
+        return addComponent(new BlockEntityHolderComponentImpl<>(blockEntityType));
     }
 
     BlockTypeBuilder<T> setProperties(BlockPropertyType<?>... properties);

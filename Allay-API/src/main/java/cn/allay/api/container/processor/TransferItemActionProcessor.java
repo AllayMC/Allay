@@ -29,8 +29,10 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         int stackNetworkId1 = action.getSource().getStackNetworkId();
         int slot2 = action.getDestination().getSlot();
         int stackNetworkId2 = action.getDestination().getStackNetworkId();
-        var source = client.getPlayerEntity().getContainerBySlotType(action.getSource().getContainer());
-        var destination = client.getPlayerEntity().getContainerBySlotType(action.getDestination().getContainer());
+        var source = client.getPlayerEntity().getOpenedContainerBySlotType(action.getSource().getContainer());
+        if (source == null) source = client.getPlayerEntity().getContainerBySlotType(action.getSource().getContainer());
+        var destination = client.getPlayerEntity().getOpenedContainerBySlotType(action.getDestination().getContainer());
+        if (destination == null) destination = client.getPlayerEntity().getContainerBySlotType(action.getDestination().getContainer());
         int count = action.getCount();
         var sourItem = source.getItemStack(slot1);
         if (sourItem.getItemType() == AIR_TYPE) {

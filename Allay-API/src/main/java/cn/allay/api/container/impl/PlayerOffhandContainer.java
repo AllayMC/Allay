@@ -12,4 +12,5 @@ public class PlayerOffhandContainer extends BaseContainer {
     public PlayerOffhandContainer() {
         super(FullContainerType.OFFHAND);
     }
+
 }
