@@ -12,6 +12,7 @@ import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.api.world.storage.WorldStorageException;
 import cn.allay.server.utils.LevelDBKeyUtils;
 import cn.allay.server.world.chunk.AllayUnsafeChunk;
+import org.apache.commons.io.FileUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -51,16 +52,29 @@ public class RocksDBWorldStorage implements WorldStorage {
     }
 
     public RocksDBWorldStorage(Path path, Options options) throws WorldStorageException {
+        RocksDB storage = null;
+        this.path = path;
+        File dbFolder = path.resolve("db").toFile();
         try {
-            this.path = path;
-            File dbFolder = path.resolve("db").toFile();
             if (!dbFolder.exists()) dbFolder.mkdirs();
             File logFolder = path.resolve("db/log").toFile();
             if (!logFolder.exists()) logFolder.mkdirs();
-            db = RocksDB.open(options, dbFolder.getAbsolutePath());
+            storage = RocksDB.open(options, dbFolder.getAbsolutePath());
             options.close();
         } catch (RocksDBException e) {
-            throw new WorldStorageException(e);
+            if (e.getMessage().contains("Failed to create lock file")) {
+                try {
+                    FileUtils.forceDelete(path.resolve("db/LOCK").toFile());
+                    storage = RocksDB.open(options, dbFolder.getAbsolutePath());
+                    options.close();
+                } catch (IOException | RocksDBException ex) {
+                    throw new WorldStorageException(ex);
+                }
+            }
+        }
+        if (storage != null) db = storage;
+        else {
+            throw new WorldStorageException("The storage is null");
         }
         worldDataCache = readWorldData();
     }
