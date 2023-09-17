@@ -4,7 +4,10 @@ import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.component.BlockEntityComponent;
 import cn.allay.api.blockentity.init.BlockEntityInitInfo;
+import cn.allay.api.component.interfaces.ComponentProvider;
+import cn.allay.api.identifier.Identifier;
 
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -22,6 +25,10 @@ public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEn
     BlockEntityType<T> build();
 
     BlockEntityTypeBuilder<T, C> blockEntityId(String id);
+
+    BlockEntityTypeBuilder<T, C> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
+
+    BlockEntityTypeBuilder<T, C> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
 
     BlockEntityTypeBuilder<T, C> addComponent(Function<BlockEntityInitInfo<? extends BlockEntity>, C> provider, Class<?> componentClass);
 

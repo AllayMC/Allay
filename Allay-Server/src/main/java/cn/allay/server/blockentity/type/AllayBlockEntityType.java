@@ -11,6 +11,7 @@ import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.server.block.type.BlockTypeBuildException;
 import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.entity.type.EntityTypeBuildException;
 import cn.allay.server.utils.ComponentClassCacheUtils;
@@ -96,6 +97,20 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         @Override
         public BlockEntityTypeBuilder<T, C> blockEntityId(String id) {
             this.blockEntityId = id;
+            return this;
+        }
+
+        @Override
+        public BlockEntityTypeBuilder<T, C> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
+            if (componentProviders == null)
+                throw new BlockTypeBuildException("Component providers cannot be null");
+            this.componentProviders = new HashMap<>(componentProviders);
+            return this;
+        }
+
+        @Override
+        public BlockEntityTypeBuilder<T, C> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
+            this.componentProviders.putAll(componentProviders);
             return this;
         }
 
