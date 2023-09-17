@@ -1,7 +1,13 @@
 package cn.allay.api.component.interfaces;
 
+import cn.allay.api.blockentity.component.BlockEntityComponent;
+import cn.allay.api.blockentity.init.BlockEntityInitInfo;
 import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.entity.component.EntityComponent;
+import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.component.ItemComponent;
+import cn.allay.api.item.init.ItemStackInitInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -59,8 +65,8 @@ public interface ComponentProvider<T extends Component> {
     static Identifier findComponentIdentifier(Class<?> clazz) {
         for (var field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(ComponentIdentifier.class) &&
-                Identifier.class == field.getType() &&
-                isStatic(field.getModifiers())) {
+                    Identifier.class == field.getType() &&
+                    isStatic(field.getModifiers())) {
                 try {
                     field.setAccessible(true);
                     return (Identifier) field.get(null);
@@ -81,6 +87,42 @@ public interface ComponentProvider<T extends Component> {
         @Override
         public T provide(ComponentInitInfo info) {
             return provider.apply(info);
+        }
+    }
+
+    @AllArgsConstructor
+    class BlockEntityComponentProvider<T extends BlockEntityComponent> implements ComponentProvider<T> {
+        private Function<BlockEntityInitInfo<?>, T> provider;
+        @Getter
+        private Class<?> componentClass;
+
+        @Override
+        public T provide(ComponentInitInfo info) {
+            return provider.apply((BlockEntityInitInfo<?>) info);
+        }
+    }
+
+    @AllArgsConstructor
+    class EntityComponentProvider<T extends EntityComponent> implements ComponentProvider<T> {
+        private Function<EntityInitInfo<?>, T> provider;
+        @Getter
+        private Class<?> componentClass;
+
+        @Override
+        public T provide(ComponentInitInfo info) {
+            return provider.apply((EntityInitInfo<?>) info);
+        }
+    }
+
+    @AllArgsConstructor
+    class ItemComponentProvider<T extends ItemComponent> implements ComponentProvider<T> {
+        private Function<ItemStackInitInfo<?>, T> provider;
+        @Getter
+        private Class<?> componentClass;
+
+        @Override
+        public T provide(ComponentInitInfo info) {
+            return provider.apply((ItemStackInitInfo<?>) info);
         }
     }
 }

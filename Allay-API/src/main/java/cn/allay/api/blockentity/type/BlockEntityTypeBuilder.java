@@ -1,51 +1,31 @@
 package cn.allay.api.blockentity.type;
 
 import cn.allay.api.ApiInstanceHolder;
-import cn.allay.api.block.BlockBehavior;
-import cn.allay.api.block.type.BlockType;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.component.BlockEntityComponent;
-import cn.allay.api.component.interfaces.ComponentProvider;
-import cn.allay.api.entity.Entity;
-import cn.allay.api.entity.type.EntityTypeBuilder;
-import cn.allay.api.identifier.Identifier;
+import cn.allay.api.blockentity.init.BlockEntityInitInfo;
 
-import java.util.List;
-import java.util.Map;
-
-import static cn.allay.api.component.interfaces.ComponentProvider.toMap;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/9/15
  *
  * @author daoge_cmd
  */
-public interface BlockEntityTypeBuilder<T extends BlockEntity> {
+public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEntityComponent> {
     ApiInstanceHolder<BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
 
-    static <T extends BlockEntity> BlockEntityTypeBuilder<T> builder(Class<T> clazz) {
+    static <T extends BlockEntity, C extends BlockEntityComponent> BlockEntityTypeBuilder<T, C> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);
     }
 
     BlockEntityType<T> build();
 
-    BlockEntityTypeBuilder<T> blockEntityId(String id);
+    BlockEntityTypeBuilder<T, C> blockEntityId(String id);
 
-    default BlockEntityTypeBuilder<T> setComponents(List<ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
-        return setComponents(toMap(componentProviders));
-    }
-
-    BlockEntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
-
-    default BlockEntityTypeBuilder<T> addComponents(List<ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
-        return addComponents(toMap(componentProviders));
-    }
-
-    BlockEntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
-
-    BlockEntityTypeBuilder<T> addComponent(ComponentProvider<? extends BlockEntityComponent> componentProvider);
+    BlockEntityTypeBuilder<T, C> addComponent(Function<BlockEntityInitInfo<? extends BlockEntity>, C> provider, Class<?> componentClass);
 
     interface BlockEntityTypeBuilderFactory {
-        <T extends BlockEntity> BlockEntityTypeBuilder<T> create(Class<T> clazz);
+        <T extends BlockEntity, C extends BlockEntityComponent> BlockEntityTypeBuilder<T, C> create(Class<T> clazz);
     }
 }
