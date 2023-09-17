@@ -18,7 +18,7 @@ import java.util.function.Function;
 public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEntityComponent> {
     ApiInstanceHolder<BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
 
-    static <T extends BlockEntity, C extends BlockEntityComponent> BlockEntityTypeBuilder<T, C> builder(Class<T> clazz) {
+    static <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);
     }
 
@@ -33,6 +33,6 @@ public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEn
     BlockEntityTypeBuilder<T, C> addComponent(Function<BlockEntityInitInfo<? extends BlockEntity>, C> provider, Class<?> componentClass);
 
     interface BlockEntityTypeBuilderFactory {
-        <T extends BlockEntity, C extends BlockEntityComponent> BlockEntityTypeBuilder<T, C> create(Class<T> clazz);
+        <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> create(Class<T> clazz);
     }
 }

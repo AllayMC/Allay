@@ -4,7 +4,6 @@ import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
-import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.*;
 import cn.allay.api.data.VanillaEntityId;
@@ -50,24 +49,18 @@ public interface EntityPlayer extends
     EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder
             .builder(EntityPlayer.class)
             .vanillaEntity(VanillaEntityId.PLAYER)
-            .addComponent(ComponentProvider.of(
-                    info -> new EntityPlayerBaseComponentImpl((EntityInitInfo<EntityPlayer>) info, e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)),
-                    EntityPlayerBaseComponentImpl.class))
-            .addComponent(ComponentProvider.of(
-                    () -> new EntityAttributeComponentImpl(basicAttributes()),
-                    EntityAttributeComponentImpl.class))
-            .addComponent(ComponentProvider.of(
-                    () -> new EntityContainerHolderComponentImpl(
+            .addComponent(info -> new EntityPlayerBaseComponentImpl((EntityInitInfo<EntityPlayer>) info, e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)),
+                    EntityPlayerBaseComponentImpl.class)
+            .addComponent(info -> new EntityAttributeComponentImpl(basicAttributes()), EntityAttributeComponentImpl.class)
+            .addComponent(info -> new EntityContainerHolderComponentImpl(
                             new PlayerInventoryContainer(),
                             new PlayerCursorContainer(),
                             new PlayerCreatedOutputContainer(),
                             new PlayerArmorContainer(),
                             new PlayerOffhandContainer()
                     ),
-                    EntityContainerHolderComponentImpl.class))
-            .addComponent(ComponentProvider.of(
-                    EntityContainerViewerComponentImpl::new,
-                    EntityContainerViewerComponentImpl.class))
+                    EntityContainerHolderComponentImpl.class)
+            .addComponent(info -> new EntityContainerViewerComponentImpl(), EntityContainerViewerComponentImpl.class)
             .build();
 
     class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {

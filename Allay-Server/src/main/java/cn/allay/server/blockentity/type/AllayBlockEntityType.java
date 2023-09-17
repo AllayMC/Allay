@@ -81,11 +81,11 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         return blockEntityId;
     }
 
-    public static <T extends BlockEntity, C extends BlockEntityComponent> BlockEntityTypeBuilder<T, C> builder(Class<T> interfaceClass) {
+    public static <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
 
-    public static class Builder<T extends BlockEntity, C extends BlockEntityComponent> implements BlockEntityTypeBuilder<T, C> {
+    public static class Builder<T extends BlockEntity> implements BlockEntityTypeBuilder<T, BlockEntityComponent> {
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders = new HashMap<>();
         protected String blockEntityId;
@@ -95,13 +95,13 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         }
 
         @Override
-        public BlockEntityTypeBuilder<T, C> blockEntityId(String id) {
+        public BlockEntityTypeBuilder<T, BlockEntityComponent> blockEntityId(String id) {
             this.blockEntityId = id;
             return this;
         }
 
         @Override
-        public BlockEntityTypeBuilder<T, C> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
+        public BlockEntityTypeBuilder<T, BlockEntityComponent> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
             if (componentProviders == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
             this.componentProviders = new HashMap<>(componentProviders);
@@ -109,13 +109,13 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         }
 
         @Override
-        public BlockEntityTypeBuilder<T, C> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
+        public BlockEntityTypeBuilder<T, BlockEntityComponent> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
             this.componentProviders.putAll(componentProviders);
             return this;
         }
 
         @Override
-        public BlockEntityTypeBuilder<T, C> addComponent(Function<BlockEntityInitInfo<? extends BlockEntity>, C> provider, Class<?> componentClass) {
+        public BlockEntityTypeBuilder<T, BlockEntityComponent> addComponent(Function<BlockEntityInitInfo<? extends BlockEntity>, BlockEntityComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.BlockEntityComponentProvider<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
@@ -124,7 +124,7 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         @Override
         public BlockEntityType<T> build() {
             if (!componentProviders.containsKey(BlockEntityBaseComponentImpl.IDENTIFIER)) {
-                addComponent(info -> (C) new BlockEntityBaseComponentImpl(info), BlockEntityBaseComponentImpl.class);
+                addComponent(BlockEntityBaseComponentImpl::new, BlockEntityBaseComponentImpl.class);
             }
             if (blockEntityId == null)
                 throw new EntityTypeBuildException("identifier cannot be null!");

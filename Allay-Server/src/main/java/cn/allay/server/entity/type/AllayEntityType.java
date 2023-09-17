@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/5/20
@@ -79,11 +80,11 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         return identifier;
     }
 
-    public static <T extends Entity> EntityTypeBuilder<T> builder(Class<T> interfaceClass) {
+    public static <T extends Entity> EntityTypeBuilder<T, EntityComponent> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
 
-    public static class Builder<T extends Entity> implements EntityTypeBuilder<T> {
+    public static class Builder<T extends Entity> implements EntityTypeBuilder<T, EntityComponent> {
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders = new HashMap<>();
         protected Identifier identifier;
@@ -93,25 +94,25 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         @Override
-        public EntityTypeBuilder<T> identifier(Identifier identifier) {
+        public EntityTypeBuilder<T, EntityComponent> identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T> identifier(String identifier) {
+        public EntityTypeBuilder<T, EntityComponent> identifier(String identifier) {
             this.identifier = new Identifier(identifier);
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId) {
+        public EntityTypeBuilder<T, EntityComponent> vanillaEntity(VanillaEntityId vanillaEntityId) {
             this.identifier = vanillaEntityId.getIdentifier();
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
+        public EntityTypeBuilder<T, EntityComponent> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
             if (componentProviders == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
             this.componentProviders = new HashMap<>(componentProviders);
@@ -119,28 +120,27 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         @Override
-        public EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
+        public EntityTypeBuilder<T, EntityComponent> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
             this.componentProviders.putAll(componentProviders);
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponent> componentProvider) {
-            this.componentProviders.put(componentProvider.findComponentIdentifier(), componentProvider);
+        public EntityTypeBuilder<T, EntityComponent> addComponent(Function<EntityInitInfo<? extends Entity>, EntityComponent> provider, Class<?> componentClass) {
+            var p = new ComponentProvider.EntityComponentProvider<>(provider, componentClass);
+            this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
         @Override
         public EntityType<T> build() {
-            if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER))
-                addComponent(ComponentProvider.of(
-                        info -> new EntityBaseComponentImpl<>(
-                                (EntityInitInfo<T>) info,
-                                e -> new AABBf(0, 0, 0, 0, 0, 0)),
-                        EntityBaseComponentImpl.class
-                ));
-            if (identifier == null)
+            if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
+                addComponent(info -> new EntityBaseComponentImpl<>(info, e -> new AABBf(0, 0, 0, 0, 0, 0)),
+                        EntityBaseComponentImpl.class);
+            }
+            if (identifier == null) {
                 throw new EntityTypeBuildException("identifier cannot be null!");
+            }
             var type = new AllayEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier);
             EntityTypeRegistry.getRegistry().register(identifier, type);
             return type;
