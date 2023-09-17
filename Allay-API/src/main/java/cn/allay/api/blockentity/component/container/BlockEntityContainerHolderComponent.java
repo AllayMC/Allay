@@ -5,7 +5,6 @@ import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerHolder;
 import cn.allay.api.container.FullContainerType;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -17,15 +16,25 @@ import java.util.Map;
  */
 public interface BlockEntityContainerHolderComponent extends ContainerHolder, BlockEntityComponent {
     @Override
-    @Inject
     @UnmodifiableView
-    Map<FullContainerType<?>, Container> getContainers();
+    default Map<FullContainerType<?>, Container> getContainers() {
+        Container container = getContainer();
+        return Map.of(container.getContainerType(), getContainer());
+    }
 
     @Override
-    @Inject
-    <T extends Container> @Nullable T getContainer(FullContainerType<T> type);
+    default <T extends Container> T getContainer(FullContainerType<T> type) {
+        return getContainer();
+    }
 
     @Override
+    default void addContainer(Container container) {
+        setContainer(container);
+    }
+
     @Inject
-    void addContainer(Container container);
+    <T extends Container> T getContainer();
+
+    @Inject
+    void setContainer(Container container);
 }
