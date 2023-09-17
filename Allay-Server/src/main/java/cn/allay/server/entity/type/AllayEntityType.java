@@ -127,7 +127,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
         @Override
         public EntityTypeBuilder<T, EntityComponent> addComponent(Function<EntityInitInfo<? extends Entity>, EntityComponent> provider, Class<?> componentClass) {
-            var p = new ComponentProvider.EntityComponentProvider<>(provider, componentClass);
+            var p = new ComponentProvider.EntityComponentProvider(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
