@@ -54,7 +54,7 @@ public interface ItemTypeBuilder<T extends ItemStack, C extends ItemComponent> {
         return addComponents(toMap(componentProviders));
     }
 
-    ItemTypeBuilder<T, C> addComponent(Function<ItemStackInitInfo<? extends ItemStack>, C> provider, Class<?> componentClass);
+    ItemTypeBuilder<T, C> addComponent(Function<ItemStackInitInfo<T>, C> provider, Class<?> componentClass);
 
     ItemType<T> build();
 

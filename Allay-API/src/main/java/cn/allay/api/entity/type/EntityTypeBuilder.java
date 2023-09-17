@@ -45,7 +45,7 @@ public interface EntityTypeBuilder<T extends Entity, C extends EntityComponent> 
 
     EntityTypeBuilder<T, C> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders);
 
-    EntityTypeBuilder<T, C> addComponent(Function<EntityInitInfo<? extends Entity>, EntityComponent> provider, Class<?> componentClass);
+    EntityTypeBuilder<T, C> addComponent(Function<EntityInitInfo<T>, EntityComponent> provider, Class<?> componentClass);
 
     EntityType<T> build();
 

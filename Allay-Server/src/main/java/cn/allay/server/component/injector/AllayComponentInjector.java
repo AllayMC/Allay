@@ -105,8 +105,10 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                 try {
                     Method methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
                     if (!methodImpl.isAnnotationPresent(Impl.class)) continue;
-                    if (methodDelegation == null) methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
-                    else throw new ComponentInjectException("Duplicate implementation for method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
+                    if (methodDelegation == null)
+                        methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
+                    else
+                        throw new ComponentInjectException("Duplicate implementation for method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
                 } catch (NoSuchMethodException ignored) {
                 }
             }
@@ -264,8 +266,6 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                             field.set(component, manager);
                         } catch (IllegalAccessException e) {
                             throw new ComponentInjectException("Cannot inject component manager to component: " + component.getClass().getName(), e);
-                        } finally {
-                            field.setAccessible(false);
                         }
                     }
                 }
@@ -296,12 +296,8 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                     var component = components.get(index);
                     injectDependency(components, component);
                     var field = instance.getClass().getDeclaredField(componentFieldNameMapping.get(provider));
-                    try {
-                        field.setAccessible(true);
-                        field.set(instance, component);
-                    } finally {
-                        field.setAccessible(false);
-                    }
+                    field.setAccessible(true);
+                    field.set(instance, component);
                 }
             } catch (IllegalAccessException | NoSuchFieldException e) {
                 throw new RuntimeException(e);
@@ -325,18 +321,19 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                         dependencies = dependencies.stream().filter(type::isInstance).toList();
                     count = dependencies.size();
                     //Matches to multiple dependencies
-                    if (count > 1)
+                    if (count > 1) {
                         throw new ComponentInjectException("Found multiple dependencies " + type.getName() + " for " + component.getClass().getName());
+                    }
                     //No dependencies available
                     if (count == 0) {
-                        if (!soft)
+                        if (!soft) {
                             throw new ComponentInjectException("Cannot find dependency " + type.getName() + " for " + component.getClass().getName());
-                        else continue;
+                        } else continue;
                     }
                     //Inject dependencies
                     var dependency = dependencies.get(0);
-                    field.setAccessible(true);
                     try {
+                        field.setAccessible(true);
                         field.set(component, dependency);
                     } catch (IllegalAccessException e) {
                         throw new ComponentInjectException("Cannot inject dependency " + type.getName() + " for " + component.getClass().getName(), e);

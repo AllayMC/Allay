@@ -115,8 +115,8 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         }
 
         @Override
-        public BlockEntityTypeBuilder<T, BlockEntityComponent> addComponent(Function<BlockEntityInitInfo<? extends BlockEntity>, BlockEntityComponent> provider, Class<?> componentClass) {
-            var p = new ComponentProvider.BlockEntityComponentProvider(provider, componentClass);
+        public BlockEntityTypeBuilder<T, BlockEntityComponent> addComponent(Function<BlockEntityInitInfo<T>, BlockEntityComponent> provider, Class<?> componentClass) {
+            var p = new ComponentProvider.BlockEntityComponentProvider<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }

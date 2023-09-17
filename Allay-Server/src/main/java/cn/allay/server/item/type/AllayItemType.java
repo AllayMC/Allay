@@ -166,8 +166,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> addComponent(Function<ItemStackInitInfo<? extends ItemStack>, ItemComponent> provider, Class<?> componentClass) {
-            var p = new ComponentProvider.ItemComponentProvider(provider, componentClass);
+        public ItemTypeBuilder<T, ItemComponent> addComponent(Function<ItemStackInitInfo<T>, ItemComponent> provider, Class<?> componentClass) {
+            var p = new ComponentProvider.ItemComponentProvider<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }

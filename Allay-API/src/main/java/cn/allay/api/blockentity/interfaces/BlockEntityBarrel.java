@@ -43,7 +43,7 @@ public interface BlockEntityBarrel extends BlockEntity, BlockEntityContainerHold
             )
             .build();
 
-    class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponentImpl {
+    class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponentImpl<BlockEntityBarrel> {
 
         @ComponentIdentifier
         public static final Identifier IDENTIFIER = BlockEntityBaseComponentImpl.IDENTIFIER;
@@ -51,7 +51,7 @@ public interface BlockEntityBarrel extends BlockEntity, BlockEntityContainerHold
         @Dependency
         protected BlockEntityContainerHolderComponent containerHolderComponent;
 
-        public BlockEntityBarrelBaseComponentImpl(BlockEntityInitInfo<?> initInfo) {
+        public BlockEntityBarrelBaseComponentImpl(BlockEntityInitInfo<BlockEntityBarrel> initInfo) {
             super(initInfo);
         }
 

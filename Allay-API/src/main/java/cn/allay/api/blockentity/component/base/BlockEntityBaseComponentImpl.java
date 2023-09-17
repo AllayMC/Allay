@@ -15,15 +15,15 @@ import org.cloudburstmc.nbt.NbtMap;
  *
  * @author daoge_cmd
  */
-public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
+public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements BlockEntityBaseComponent {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
 
-    protected BlockEntityType<? extends BlockEntity> blockEntityType;
+    protected BlockEntityType<T> blockEntityType;
     protected Position3ic position;
     protected String customName = "";
 
-    public BlockEntityBaseComponentImpl(BlockEntityInitInfo<? extends BlockEntity> initInfo) {
+    public BlockEntityBaseComponentImpl(BlockEntityInitInfo<T> initInfo) {
         this.blockEntityType = initInfo.getBlockEntityType();
         this.position = new Position3i(0, 0, 0, initInfo.world());
         loadNBT(initInfo.nbt());

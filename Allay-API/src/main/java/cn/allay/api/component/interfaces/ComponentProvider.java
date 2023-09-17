@@ -94,38 +94,38 @@ public interface ComponentProvider<T extends Component> {
     }
 
     @AllArgsConstructor
-    class BlockEntityComponentProvider implements ComponentProvider<BlockEntityComponent> {
-        private Function<BlockEntityInitInfo<? extends BlockEntity>, BlockEntityComponent> provider;
+    class BlockEntityComponentProvider<T extends BlockEntity> implements ComponentProvider<BlockEntityComponent> {
+        private Function<BlockEntityInitInfo<T>, BlockEntityComponent> provider;
         @Getter
         private Class<?> componentClass;
 
         @Override
         public BlockEntityComponent provide(ComponentInitInfo info) {
-            return provider.apply((BlockEntityInitInfo<?>) info);
+            return provider.apply((BlockEntityInitInfo<T>) info);
         }
     }
 
     @AllArgsConstructor
-    class EntityComponentProvider implements ComponentProvider<EntityComponent> {
-        private Function<EntityInitInfo<? extends Entity>, EntityComponent> provider;
+    class EntityComponentProvider<T extends Entity> implements ComponentProvider<EntityComponent> {
+        private Function<EntityInitInfo<T>, EntityComponent> provider;
         @Getter
         private Class<?> componentClass;
 
         @Override
         public EntityComponent provide(ComponentInitInfo info) {
-            return provider.apply((EntityInitInfo<?>) info);
+            return provider.apply((EntityInitInfo<T>) info);
         }
     }
 
     @AllArgsConstructor
-    class ItemComponentProvider implements ComponentProvider<ItemComponent> {
-        private Function<ItemStackInitInfo<? extends ItemStack>, ItemComponent> provider;
+    class ItemComponentProvider<T extends ItemStack> implements ComponentProvider<ItemComponent> {
+        private Function<ItemStackInitInfo<T>, ItemComponent> provider;
         @Getter
         private Class<?> componentClass;
 
         @Override
         public ItemComponent provide(ComponentInitInfo info) {
-            return provider.apply((ItemStackInitInfo<?>) info);
+            return provider.apply((ItemStackInitInfo<T>) info);
         }
     }
 }
