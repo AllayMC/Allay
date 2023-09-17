@@ -12,8 +12,9 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class VanillaBlockInterfaceUpdate {
-    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/interfaces");
+public class TypeInterfaceUpdate {
+    public static Path BLOCK = Path.of("Allay-API/src/main/java/cn/allay/api/block/interfaces");
+    public static Path ITEM = Path.of("Allay-API/src/main/java/cn/allay/api/item/interfaces");
     public static String formatCode = "\n            ";
 
     public static void main(String[] args) {
@@ -27,7 +28,7 @@ public class VanillaBlockInterfaceUpdate {
     public static void addCode(String code, String importCode, String classNameRegex) {
         List<String> r = new ArrayList<>();
         Pattern compile = Pattern.compile(classNameRegex);
-        File file = FILE_OUTPUT_PATH_BASE.toFile();
+        File file = ITEM.toFile();
         for (var f : Objects.requireNonNull(file.listFiles())) {
             Matcher matcher = compile.matcher(f.getName());
             if (matcher.find()) {

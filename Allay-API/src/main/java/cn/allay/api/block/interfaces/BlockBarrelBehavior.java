@@ -34,19 +34,17 @@ public interface BlockBarrelBehavior extends
             .setBlockBaseComponentSupplier(type ->
                 BlockBaseComponentImpl
                         .builder()
-                        .onInteract(new BarrelOnInteract())
+                        .onInteract(new OnInteract() {
+                            @Override
+                            public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+                                if (player == null || player.isSneaking()) return false;
+                                var blockEntity = BARREL_TYPE.getBlockBehavior().getBlockEntity(blockPos.x(), blockPos.y(), blockPos.z(), world);
+                                var container = blockEntity.getContainer(FullContainerType.BARREL);
+                                Objects.requireNonNull(container).addViewer(player);
+                                return true;
+                            }
+                        })
                         .build()
             )
             .build();
-
-    class BarrelOnInteract implements OnInteract {
-        @Override
-        public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-            if (player == null || player.isSneaking()) return false;
-            var blockEntity = BARREL_TYPE.getBlockBehavior().getBlockEntity(blockPos.x(), blockPos.y(), blockPos.z(), world);
-            var container = blockEntity.getContainer(FullContainerType.BARREL);
-            Objects.requireNonNull(container).addViewer(player);
-            return true;
-        }
-    }
 }

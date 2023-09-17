@@ -10,7 +10,6 @@ import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
-import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.BarrelContainer;
 import cn.allay.api.identifier.Identifier;
@@ -25,32 +24,23 @@ import java.util.Objects;
  *
  * @author daoge_cmd
  */
-public interface BlockEntityBarrel extends
-        BlockEntity, BlockEntityContainerHolderComponent {
+public interface BlockEntityBarrel extends BlockEntity, BlockEntityContainerHolderComponent {
     String BLOCK_ENTITY_ID = "Barrel";
     BlockEntityType<BlockEntityBarrel> BARREL_TYPE = BlockEntityTypeBuilder
             .builder(BlockEntityBarrel.class)
             .blockEntityId(BLOCK_ENTITY_ID)
+            .addComponent(BlockEntityBarrelBaseComponentImpl::new, BlockEntityBarrelBaseComponentImpl.class)
             .addComponent(
-                    ComponentProvider.of(
-                            initInfo -> new BlockEntityBarrelBaseComponentImpl((BlockEntityInitInfo<BlockEntityBarrel>) initInfo),
-                            BlockEntityBarrelBaseComponentImpl.class
-                    ))
-            .addComponent(
-                    ComponentProvider.of(
-                            initInfo -> new BlockEntityContainerHolderComponentImpl(
-                                    new BarrelContainer(() -> {
-                                        BlockEntityInitInfo<?> cast = (BlockEntityInitInfo<?>) initInfo;
-                                        var nbt = cast.nbt();
-                                        var vec = new Vector3i(0, 0, 0);
-                                        vec.x = nbt.getInt("x");
-                                        vec.y = nbt.getInt("y");
-                                        vec.z = nbt.getInt("z");
-                                        return vec;
-                                    })
-                            ),
-                            BlockEntityContainerHolderComponentImpl.class
-                    ))
+                    initInfo -> new BlockEntityContainerHolderComponentImpl(new BarrelContainer(() -> {
+                        var nbt = initInfo.nbt();
+                        var vec = new Vector3i(0, 0, 0);
+                        vec.x = nbt.getInt("x");
+                        vec.y = nbt.getInt("y");
+                        vec.z = nbt.getInt("z");
+                        return vec;
+                    })),
+                    BlockEntityContainerHolderComponentImpl.class
+            )
             .build();
 
     class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponentImpl<BlockEntityBarrel> {
@@ -69,7 +59,8 @@ public interface BlockEntityBarrel extends
         @Impl
         public void loadNBT(NbtMap nbt) {
             super.loadNBT(nbt);
-            if (nbt.containsKey("Items")) Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.BARREL)).loadNBT(nbt.getList("Items", NbtType.COMPOUND));
+            if (nbt.containsKey("Items"))
+                Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.BARREL)).loadNBT(nbt.getList("Items", NbtType.COMPOUND));
         }
 
         @Override
