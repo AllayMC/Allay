@@ -47,7 +47,7 @@ public class BlockAttributes {
 
     @Builder.Default
     @SerializedName("aabbCollision")
-    protected VoxelShape voxelShape = VoxelShape.builder().solid(0, 0, 0, 1, 1 , 1).build();
+    protected VoxelShape voxelShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
 
     public VoxelShape computeOffsetVoxelShape(float x, float y, float z) {
         return voxelShape.translate(x, y, z);
@@ -58,29 +58,29 @@ public class BlockAttributes {
     }
 
     @Builder.Default
-    protected boolean hasCollision = true;
-    @Builder.Default
-    protected boolean blocksPrecipitation = true;
-    @Builder.Default
-    protected boolean canBeMovingBlock = true;
-    @Builder.Default
-    protected boolean breaksFallingBlocks = false;
+    protected Color color = Color.BLACK;
     @Builder.Default
     protected int burnAbility = 0;
     @Builder.Default
     protected int burnChance = 0;
     @Builder.Default
-    protected boolean canBeBrokenFromFalling = false;
+    protected int lightDampening = 0;
     @Builder.Default
-    protected boolean canContainLiquid = false;
-    @Builder.Default
-    protected Color color = Color.BLACK;
+    protected int lightEmission = 0;
     @Builder.Default
     protected float explosionResistance = 15;
     @Builder.Default
     protected float friction = DEFAULT_FRICTION;
     @Builder.Default
     protected float hardness = 1;
+    @Builder.Default
+    protected float thickness = 0;
+    @Builder.Default
+    protected float translucency = 0;
+    @Builder.Default
+    protected boolean canContainLiquid = false;
+    @Builder.Default
+    protected boolean hasCollision = true;
     @Builder.Default
     protected boolean hasBlockEntity = false;
     @Builder.Default
@@ -98,28 +98,37 @@ public class BlockAttributes {
     @Builder.Default
     protected boolean isSolid = false;
     @Builder.Default
-    protected boolean isSolidBlocking = false;
-    @Builder.Default
     protected boolean isUnbreakable = false;
     @Builder.Default
     protected boolean isWaterBlocking = true;
     @Builder.Default
-    protected boolean flammable = true;
-    @Builder.Default
-    protected int light = 0;
-    @Builder.Default
-    protected int lightEmission = 0;
+    protected boolean isLavaFlammable = true;
     @Builder.Default
     protected boolean pushesUpFallingBlocks = false;
     @Builder.Default
     protected boolean superHot = false;
     @Builder.Default
-    protected float thickness = 0;
+    protected boolean isAir = false;
     @Builder.Default
-    protected float translucency = 0;
+    protected boolean isBounceBlock = false;
     @Builder.Default
-    protected boolean waterSpreadCausesSpawn = false;
-
+    protected boolean isButtonBlock = false;
+    @Builder.Default
+    protected boolean isCropBlock = false;
+    @Builder.Default
+    protected boolean isDoorBlock = false;
+    @Builder.Default
+    protected boolean isFenceBlock = false;
+    @Builder.Default
+    protected boolean isFenceGateBlock = false;
+    @Builder.Default
+    protected boolean isThinFenceBlock = false;
+    @Builder.Default
+    protected boolean isFallingBlock = false;
+    @Builder.Default
+    protected boolean isStemBlock = false;
+    @Builder.Default
+    protected boolean isSlabBlock = false;
     public static BlockAttributes fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockAttributes.class);
     }
@@ -137,12 +146,8 @@ public class BlockAttributes {
                 .builder()
                 .voxelShape(VoxelShape.builder().solid(parseAABBStr(nbt.getString("aabbCollision"))).build())
                 .hasCollision(nbt.getBoolean("hasCollision"))
-                .blocksPrecipitation(nbt.getBoolean("blocksPrecipitation"))
-                .canBeMovingBlock(nbt.getBoolean("canBeMovingBlock"))
-                .breaksFallingBlocks(nbt.getBoolean("breaksFallingBlocks"))
                 .burnAbility(nbt.getInt("burnAbility"))
                 .burnChance(nbt.getInt("burnChance"))
-                .canBeBrokenFromFalling(nbt.getBoolean("canBeBrokenFromFalling"))
                 .canContainLiquid(nbt.getBoolean("canContainLiquid"))
                 .color(color)
                 .explosionResistance(nbt.getFloat("explosionResistance"))
@@ -156,17 +161,26 @@ public class BlockAttributes {
                 .isMotionBlockingBlock(nbt.getBoolean("isMotionBlockingBlock"))
                 .isPowerSource(nbt.getBoolean("isPowerSource"))
                 .isSolid(nbt.getBoolean("isSolid"))
-                .isSolidBlocking(nbt.getBoolean("isSolidBlocking"))
                 .isUnbreakable(nbt.getBoolean("isUnbreakable"))
                 .isWaterBlocking(nbt.getBoolean("isWaterBlocking"))
-                .flammable(nbt.getBoolean("flammable"))
-                .light(nbt.getInt("light"))
                 .lightEmission(nbt.getInt("lightEmission"))
+                .lightDampening(nbt.getInt("lightDampening"))
+                .isAir(nbt.getBoolean("isAir"))
+                .isBounceBlock(nbt.getBoolean("isBounceBlock"))
+                .isButtonBlock(nbt.getBoolean("isButtonBlock"))
+                .isCropBlock(nbt.getBoolean("isCropBlock"))
+                .isDoorBlock(nbt.getBoolean("isDoorBlock"))
+                .isFallingBlock(nbt.getBoolean("isFallingBlock"))
+                .isFenceBlock(nbt.getBoolean("isFenceBlock"))
+                .isFenceGateBlock(nbt.getBoolean("isFenceGateBlock"))
+                .isLavaFlammable(nbt.getBoolean("isLavaFlammable"))
+                .isSlabBlock(nbt.getBoolean("isSlabBlock"))
+                .isStemBlock(nbt.getBoolean("isStemBlock"))
+                .isThinFenceBlock(nbt.getBoolean("isThinFenceBlock"))
                 .pushesUpFallingBlocks(nbt.getBoolean("pushesUpFallingBlocks"))
                 .superHot(nbt.getBoolean("superHot"))
                 .thickness(nbt.getFloat("thickness"))
                 .translucency(nbt.getFloat("translucency"))
-                .waterSpreadCausesSpawn(nbt.getBoolean("waterSpreadCausesSpawn"))
                 .build();
     }
 }
