@@ -45,10 +45,6 @@ public class BlockAttributes {
         return new AABBf(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
     }
 
-    @Builder.Default
-    @SerializedName("aabbCollision")
-    protected VoxelShape voxelShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
-
     public VoxelShape computeOffsetVoxelShape(float x, float y, float z) {
         return voxelShape.translate(x, y, z);
     }
@@ -56,6 +52,13 @@ public class BlockAttributes {
     public VoxelShape computeOffsetVoxelShape(Vector3fc vector) {
         return computeOffsetVoxelShape(vector.x(), vector.y(), vector.z());
     }
+
+    /**
+     * block collision box
+     */
+    @Builder.Default
+    @SerializedName("aabbCollision")
+    protected VoxelShape voxelShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
 
     @Builder.Default
     protected Color color = Color.BLACK;
@@ -91,6 +94,9 @@ public class BlockAttributes {
     protected boolean isContainerBlock = false;
     @Builder.Default
     protected boolean isLiquid = false;
+    /**
+     * Whether the block blocking movement
+     */
     @Builder.Default
     protected boolean isMotionBlockingBlock = false;
     @Builder.Default
@@ -103,8 +109,14 @@ public class BlockAttributes {
     protected boolean isWaterBlocking = true;
     @Builder.Default
     protected boolean isLavaFlammable = true;
+    /**
+     * representing a piston block type
+     */
     @Builder.Default
     protected boolean pushesUpFallingBlocks = false;
+    /**
+     * Blocks that can cause fire
+     */
     @Builder.Default
     protected boolean superHot = false;
     @Builder.Default
