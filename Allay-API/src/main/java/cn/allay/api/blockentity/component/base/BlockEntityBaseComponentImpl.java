@@ -50,7 +50,7 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
                 .putInt("y", position.y())
                 .putInt("z", position.z())
                 .putString("CustomName", customName)
-                .putBoolean("isMovable",getBlockState().getBlockAttributes().canBeMovingBlock())
+                .putBoolean("isMovable", true)
                 .build();
     }
 

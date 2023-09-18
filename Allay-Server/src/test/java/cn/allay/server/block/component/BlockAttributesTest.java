@@ -25,12 +25,8 @@ class BlockAttributesTest {
     private static final String json = """
             {
                 "aabbCollision": "0.0005,0.0005,0.0005,0.9995,0.1825,0.9995",
-                "canBeMovingBlock": true,
-                "blocksPrecipitation": true,
-                "breaksFallingBlocks": true,
                 "burnAbility": 0,
                 "burnChance": 0,
-                "canBeBrokenFromFalling": true,
                 "canContainLiquid": true,
                 "color": {
                             "a": 255,
@@ -53,20 +49,29 @@ class BlockAttributesTest {
                 "isMotionBlockingBlock": false,
                 "isPowerSource": false,
                 "isSolid": false,
-                "isSolidBlocking": true,
                 "isUnbreakable": false,
                 "isWaterBlocking": true,
-                "flammable": true,
-                "light": 0,
+                "isLavaFlammable": true,
+                "lightDampening": 0,
                 "lightEmission": 0,
                 "pushesUpFallingBlocks": false,
                 "superHot": false,
                 "thickness": 0,
                 "translucency": 0,
-                "waterSpreadCausesSpawn": false
+                "isAir": true,
+                "isBounceBlock": true,
+                "isButtonBlock": true,
+                "isCropBlock": true,
+                "isDoorBlock": true,
+                "isFallingBlock": true,
+                "isFenceBlock": true,
+                "isFenceGateBlock": true,
+                "isLavaFlammable": true,
+                "isSlabBlock": true,
+                "isStemBlock": true,
+                "isThinFenceBlock": true
             }
             """;
-
     @Test
     void testDeserialization() {
         var blockAttributes = BlockAttributes.fromJson(json);
@@ -77,12 +82,8 @@ class BlockAttributesTest {
         assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockAttributes.voxelShape().unionAABB().maxX()));
         assertEquals(Float.toHexString(0.1825f), Float.toHexString(blockAttributes.voxelShape().unionAABB().maxY()));
         assertEquals(Float.toHexString(0.9995f), Float.toHexString(blockAttributes.voxelShape().unionAABB().maxZ()));
-        assertTrue(blockAttributes.canBeMovingBlock());
-        assertTrue(blockAttributes.blocksPrecipitation());
-        assertTrue(blockAttributes.breaksFallingBlocks());
         assertEquals(0, blockAttributes.burnAbility());
         assertEquals(0, blockAttributes.burnChance());
-        assertTrue(blockAttributes.canBeBrokenFromFalling());
         assertTrue(blockAttributes.canContainLiquid());
         assertEquals(new Color(51, 76, 178, 255), blockAttributes.color());
         assertEquals(15, blockAttributes.explosionResistance());
@@ -96,17 +97,26 @@ class BlockAttributesTest {
         assertFalse(blockAttributes.isMotionBlockingBlock());
         assertFalse(blockAttributes.isPowerSource());
         assertFalse(blockAttributes.isSolid());
-        assertTrue(blockAttributes.isSolidBlocking());
         assertFalse(blockAttributes.isUnbreakable());
         assertTrue(blockAttributes.isWaterBlocking());
-        assertTrue(blockAttributes.flammable());
-        assertEquals(0, blockAttributes.light());
+        assertTrue(blockAttributes.isLavaFlammable());
+        assertEquals(0, blockAttributes.lightDampening());
         assertEquals(0, blockAttributes.lightEmission());
         assertFalse(blockAttributes.pushesUpFallingBlocks());
         assertFalse(blockAttributes.superHot());
         assertEquals(0, blockAttributes.thickness());
         assertEquals(0, blockAttributes.translucency());
-        assertFalse(blockAttributes.waterSpreadCausesSpawn());
+        assertTrue(blockAttributes.isAir());
+        assertTrue(blockAttributes.isBounceBlock());
+        assertTrue(blockAttributes.isButtonBlock());
+        assertTrue(blockAttributes.isCropBlock());
+        assertTrue(blockAttributes.isDoorBlock());
+        assertTrue(blockAttributes.isFallingBlock());
+        assertTrue(blockAttributes.isFenceBlock());
+        assertTrue(blockAttributes.isFenceGateBlock());
+        assertTrue(blockAttributes.isSlabBlock());
+        assertTrue(blockAttributes.isStemBlock());
+        assertTrue(blockAttributes.isThinFenceBlock());
     }
 
     @Test
@@ -123,6 +133,4 @@ class BlockAttributesTest {
             }
         }
     }
-
-
 }
