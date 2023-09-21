@@ -289,7 +289,7 @@ public class AllayClient extends BaseClient {
         startGamePacket.setSpawnBiomeType(SpawnBiomeType.DEFAULT);
         startGamePacket.setCustomBiomeName("");
         startGamePacket.setEducationProductionId("");
-        startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
+        startGamePacket.setForceExperimentalGameplay(OptionalBoolean.of(true));
         startGamePacket.setBlockNetworkIdsHashed(true);
         sendPacket(startGamePacket);
 

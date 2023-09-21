@@ -26,10 +26,6 @@ tasks.named("run") {
     group = ""
 }
 
-tasks.runShadow {
-    jvmArgs?.add("--enable-preview")
-}
-
 //disable ,please use `java -jar` to start directly
 tasks.startScripts {
     group = ""
