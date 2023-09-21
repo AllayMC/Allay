@@ -19,7 +19,7 @@ gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.0" }
 
 # Support Annotation
-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.26" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.30" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "24.0.1" }
 
 # zlib

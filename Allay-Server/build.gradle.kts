@@ -74,7 +74,6 @@ tasks.jmh {
 //    includes.add("BlockStateUpdateJMHTest")
     //includes.add("ChunkJMHTest")
 //    includes.add("ThroughList2Array")
-    jvmArgs.add("--enable-preview")
 }
 
 //Hiding this task should use runShadow
@@ -84,7 +83,6 @@ tasks.named("run") {
 
 tasks.runShadow {
     this.jarFile = file("build/libs/Allay-Server-0.0.1-all.jar")
-    jvmArgs?.add("--enable-preview")
 }
 
 tasks.installShadowDist {
