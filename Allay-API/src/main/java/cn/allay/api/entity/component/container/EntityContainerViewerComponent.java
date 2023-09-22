@@ -5,7 +5,6 @@ import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerViewer;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.entity.component.EntityComponent;
-import cn.allay.api.item.ItemStack;
 import com.google.common.collect.BiMap;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -30,6 +29,10 @@ public interface EntityContainerViewerComponent extends ContainerViewer, EntityC
 
     @Override
     @Inject
+    void sendContentsWithSpecificContainerId(Container container, int containerId, int slot);
+
+    @Override
+    @Inject
     void sendContent(Container container, int slot);
 
     @Override
@@ -42,7 +45,7 @@ public interface EntityContainerViewerComponent extends ContainerViewer, EntityC
 
     @Override
     @Inject
-    void onSlotChange(Container container, int slot, ItemStack current);
+    void onSlotChange(Container container, int slot);
 
     @Override
     @Inject

@@ -67,7 +67,8 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         var pos = getPosition();
         var chunk = pos.world().getChunkService().getChunkByLevelPos(pos.x(), pos.z());
         Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
-        chunk.getClientChunkLoaders().forEach(this::sendBlockEntityDataPacketTo);
+        var pk = createBlockEntityDataPacket();
+        chunk.sendChunkPacket(pk);
     }
 
     @Inject

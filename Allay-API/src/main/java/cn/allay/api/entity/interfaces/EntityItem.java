@@ -47,7 +47,7 @@ public interface EntityItem extends Entity, EntityItemBaseComponent {
         public static final Identifier IDENTIFIER = EntityBaseComponentImpl.IDENTIFIER;
         public static final int MAX_AGE = 6000;
         protected ItemStack itemStack;
-        protected int pickupDelay;
+        protected int pickupDelay = 10;
         protected int age = -1;
 
         public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, Function<EntityItem, AABBfc> aabbGetter, @Nullable ItemStack itemStack) {
@@ -61,8 +61,8 @@ public interface EntityItem extends Entity, EntityItemBaseComponent {
             super.tick();
             if (age != -1) {
                 age++;
-                if (age >= 6000) {
-                    //TODO: disappear
+                if (age >= MAX_AGE) {
+                    location.world.removeEntity(manager.getComponentedObject());
                 }
             }
             if (pickupDelay > 0) pickupDelay--;

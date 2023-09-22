@@ -54,6 +54,12 @@ public abstract class BaseContainer implements Container {
         return Collections.unmodifiableList(Arrays.asList(content));
     }
 
+    @UnmodifiableView
+    @Override
+    public ItemStack[] getItemStackArray() {
+        return content;
+    }
+
     @Override
     public List<ItemData> toNetworkItemData() {
         return Arrays.stream(content).map(ItemStack::toNetworkItemData).toList();
@@ -62,7 +68,7 @@ public abstract class BaseContainer implements Container {
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
         content[slot] = itemStack;
-        onSlotChange(slot, itemStack);
+        onSlotChange(slot);
     }
 
     @Override
@@ -92,9 +98,9 @@ public abstract class BaseContainer implements Container {
     }
 
     @Override
-    public void onSlotChange(int slot, ItemStack current) {
+    public void onSlotChange(int slot) {
         for (var viewer : viewers.values()) {
-            viewer.onSlotChange(this, slot, current);
+            viewer.onSlotChange(this, slot);
         }
     }
 

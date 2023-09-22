@@ -1,6 +1,5 @@
 package cn.allay.api.container;
 
-import cn.allay.api.item.ItemStack;
 import com.google.common.collect.BiMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.jetbrains.annotations.Nullable;
@@ -19,13 +18,15 @@ public interface ContainerViewer {
 
     void sendContentsWithSpecificContainerId(Container container, int containerId);
 
+    void sendContentsWithSpecificContainerId(Container container, int containerId, int slot);
+
     void sendContent(Container container, int slot);
 
     void onOpen(byte assignedId, Container container);
 
     void onClose(byte assignedId, Container container);
 
-    void onSlotChange(Container container, int slot, ItemStack current);
+    void onSlotChange(Container container, int slot);
 
     @Nullable
     <T extends Container> T getOpenedContainer(FullContainerType<T> type);

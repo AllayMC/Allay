@@ -26,4 +26,8 @@ public interface EntityItemBaseComponent extends EntityBaseComponent {
 
     @Inject
     void setAge(int age);
+
+    default boolean canBePicked() {
+        return getPickupDelay() == 0;
+    }
 }
