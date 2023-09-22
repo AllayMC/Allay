@@ -47,7 +47,7 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
         }
         if (item.getCount() > count) {
             item.setCount(item.getCount() - count);
-            container.onSlotChange(slot, item);
+            container.onSlotChange(slot);
         } else {
             item = AIR_STACK;
             container.setItemStack(slot, item);

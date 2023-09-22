@@ -29,8 +29,8 @@ public class PlayerOffhandContainer extends BaseContainer {
     }
 
     @Override
-    public void onSlotChange(int slot, ItemStack current) {
-        super.onSlotChange(slot - 1, current);
+    public void onSlotChange(int slot) {
+        super.onSlotChange(slot - 1);
     }
 
     @Override

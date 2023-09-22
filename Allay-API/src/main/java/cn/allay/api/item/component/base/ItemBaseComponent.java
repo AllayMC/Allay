@@ -88,4 +88,11 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
         //TODO: CanPlaceOn
         return builder.build();
     }
+
+    default boolean canMerge(ItemStack itemStack) {
+        return itemStack.getItemType() == getItemType() &&
+               itemStack.getDamage() == getDamage() &&
+               itemStack.getNbt().equals(getNbt()) &&
+               itemStack.toBlockState() == toBlockState();
+    }
 }

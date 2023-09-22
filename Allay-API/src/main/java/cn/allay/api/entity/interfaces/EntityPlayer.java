@@ -23,7 +23,6 @@ import cn.allay.api.entity.init.EntityPlayerInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.item.ItemStack;
 import cn.allay.api.utils.MathUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -41,7 +40,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import static cn.allay.api.entity.component.attribute.EntityAttributeComponentImpl.basicAttributes;
@@ -65,7 +64,7 @@ public interface EntityPlayer extends
             )
             .addComponent(info -> new EntityAttributeComponentImpl(basicAttributes()), EntityAttributeComponentImpl.class)
             .addComponent(info -> new EntityContainerHolderComponentImpl(
-                            new PlayerInventoryContainer(),
+                            new PlayerInventoryContainer(((EntityPlayerInitInfo) info).getClient()),
                             new PlayerCursorContainer(),
                             new PlayerCreatedOutputContainer(),
                             new PlayerArmorContainer(),
@@ -96,6 +95,38 @@ public interface EntityPlayer extends
                 client = playerInitInfo.getClient();
             } else {
                 throw new IllegalArgumentException("EntityPlayerInitInfo is required for EntityPlayer");
+            }
+        }
+
+        @Override
+        @Impl
+        public void tick() {
+            super.tick();
+            var world = location.world;
+            //pick up items
+            var pickUpArea = new AABBf(
+                    location.x - 0.7125f,
+                    location.y - 0.7125f,
+                    location.z - 0.7125f,
+                    location.x + 0.7125f,
+                    location.y + 0.7125f,
+                    location.z + 0.7125f
+            );
+            var entityItems = world.getEntityPhysicsService().computeCollidingEntities(pickUpArea)
+                    .stream()
+                    .filter(entity -> entity instanceof EntityItem entityItem && entityItem.canBePicked())
+                    .toList();
+            for (var entityItem : entityItems) {
+                var item = ((EntityItem) entityItem).getItemStack();
+                var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY));
+                var remain = inventory.tryAddItem(item, true);
+                if (remain == null) {
+                    TakeItemEntityPacket takeItemEntityPacket = new TakeItemEntityPacket();
+                    takeItemEntityPacket.setRuntimeEntityId(uniqueId);
+                    takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getUniqueId());
+                    Objects.requireNonNull(world.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
+                    world.removeEntity(entityItem);
+                }
             }
         }
 
@@ -306,14 +337,21 @@ public interface EntityPlayer extends
 
         @Override
         @Impl
+        public void sendContentsWithSpecificContainerId(Container container, int containerId, int slot) {
+            var inventorySlotPacket = new InventorySlotPacket();
+            inventorySlotPacket.setContainerId(containerId);
+            inventorySlotPacket.setSlot(slot);
+            inventorySlotPacket.setItem(container.getItemStack(slot).toNetworkItemData());
+            client.sendPacket(inventorySlotPacket);
+        }
+
+        @Override
+        @Impl
         public void sendContent(Container container, int slot) {
-            var inventoryContentPacket = new InventoryContentPacket();
             var id = id2ContainerBiMap.inverse().get(container);
             if (id == null)
                 throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
-            inventoryContentPacket.setContainerId(id);
-            inventoryContentPacket.setContents(List.of(container.getItemStack(slot).toNetworkItemData()));
-            client.sendPacket(inventoryContentPacket);
+            sendContentsWithSpecificContainerId(container, id, slot);
         }
 
         @Override
@@ -354,8 +392,10 @@ public interface EntityPlayer extends
 
         @Override
         @Impl
-        public void onSlotChange(Container container, int slot, ItemStack current) {
-            //TODO
+        public void onSlotChange(Container container, int slot) {
+            var id = id2ContainerBiMap.inverse().get(container);
+            //"0" is player's inventory
+            sendContentsWithSpecificContainerId(container, id != null ? id : 0, slot);
         }
 
         @Override

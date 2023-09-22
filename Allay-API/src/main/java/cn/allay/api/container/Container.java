@@ -52,6 +52,9 @@ public interface Container {
     @UnmodifiableView
     List<ItemStack> getItemStacks();
 
+    @UnmodifiableView
+    ItemStack[] getItemStackArray();
+
     List<ItemData> toNetworkItemData();
 
     void setItemStack(int slot, ItemStack itemStack);
@@ -63,7 +66,7 @@ public interface Container {
     @Nullable
     ContainerViewer removeViewer(byte viewerId);
 
-    void onSlotChange(int slot, ItemStack current);
+    void onSlotChange(int slot);
 
     NbtList<NbtMap> saveNBT();
 
@@ -75,5 +78,38 @@ public interface Container {
 
     default void sendContent(ContainerViewer viewer, int slot) {
         viewer.sendContent(this, slot);
+    }
+
+    @Nullable
+    default ItemStack tryAddItem(ItemStack itemStack) {
+        return tryAddItem(itemStack, false);
+    }
+
+    @Nullable
+    default ItemStack tryAddItem(ItemStack itemStack, boolean mustAddAll) {
+        ItemStack[] itemStacks = getItemStackArray();
+        for (int index = 0; index < itemStacks.length; index++) {
+            var content = itemStacks[index];
+            if (content == Container.AIR_STACK) {
+                setItemStack(index, itemStack);
+                return null;
+            } else if (content.canMerge(itemStack)) {
+                if (content.getCount() + itemStack.getCount() <= content.getItemAttributes().maxStackSize()) {
+                    content.setCount(content.getCount() + itemStack.getCount());
+                    onSlotChange(index);
+                    return null;
+                } else if (mustAddAll) {
+                    return itemStack;
+                } else {
+                    int count = itemStack.getCount();
+                    count -= content.getItemAttributes().maxStackSize() - content.getCount();
+                    itemStack.setCount(count);
+                    content.setCount(content.getItemAttributes().maxStackSize());
+                    onSlotChange(index);
+                    return itemStack;
+                }
+            }
+        }
+        return itemStack;
     }
 }

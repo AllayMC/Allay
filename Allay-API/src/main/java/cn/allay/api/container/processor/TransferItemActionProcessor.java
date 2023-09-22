@@ -77,7 +77,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 resultDestItem = destItem;
                 //目标物品不为空，直接添加数量，目标物品网络堆栈id不变
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.onSlotChange(slot2, resultDestItem);
+                destination.onSlotChange(slot2);
             } else {
                 //目标物品为空，直接移动原有堆栈到新位置，网络堆栈id使用源物品的网络堆栈id（相当于换个位置）
                 resultDestItem = sourItem;
@@ -87,12 +87,12 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             //第二种：拿走一部分
             resultSourItem = sourItem;
             resultSourItem.setCount(resultSourItem.getCount() - count);
-            source.onSlotChange(slot1, resultSourItem);
+            source.onSlotChange(slot1);
             if (destItem.getItemType() != AIR_TYPE) {
                 //目标物品不为空
                 resultDestItem = destItem;
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.onSlotChange(slot2, resultDestItem);
+                destination.onSlotChange(slot2);
             } else {
                 //目标物品为空，为分出来的子物品堆栈新建网络堆栈id
                 resultDestItem = sourItem.copy(true);
