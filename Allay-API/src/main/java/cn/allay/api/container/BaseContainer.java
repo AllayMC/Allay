@@ -1,5 +1,6 @@
 package cn.allay.api.container;
 
+import cn.allay.api.container.exception.ContainerException;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
@@ -68,7 +69,7 @@ public abstract class BaseContainer implements Container {
     @Override
     public void addViewer(ContainerViewer viewer) {
         if (viewers.containsValue(viewer))
-            throw new IllegalArgumentException("viewer already exists");
+            throw new ContainerException("viewer already exists");
         var assignedId = viewer.assignInventoryId();
         if (viewers.containsKey(assignedId)) {
             removeViewer(viewers.get(assignedId));
