@@ -9,6 +9,8 @@ import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.attribute.AttributeType;
 import cn.allay.api.entity.component.attribute.EntityAttributeComponent;
+import cn.allay.api.entity.event.EntityLoadNBTEvent;
+import cn.allay.api.entity.event.EntitySaveNBTEvent;
 import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
@@ -68,17 +70,20 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
 
+    protected NbtMap infoNbt;
+
     public EntityBaseComponentImpl(EntityInitInfo<T> info, Function<T, AABBfc> aabbGetter) {
         Objects.requireNonNull(info.world(), "World cannot be null!");
         this.location = new Location3f(0, 0, 0, info.world());
         this.entityType = info.getEntityType();
         this.aabbGetter = aabbGetter;
         this.metadata = new Metadata();
-        loadNBT(info.nbt());
+        this.infoNbt = info.nbt();
     }
 
     @Override
     public void onInitFinish() {
+        loadNBT(infoNbt);
         this.aabb = aabbGetter.apply(manager.getComponentedObject());
         initMetadata();
     }
@@ -315,8 +320,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     @Impl
     public NbtMap saveNBT() {
-        var builder = NbtMap.builder()
-                .putString("identifier", entityType.getIdentifier().toString())
+        var builder = NbtMap.builder();
+        var event = new EntitySaveNBTEvent(builder);
+        manager.callEvent(event);
+        builder.putString("identifier", entityType.getIdentifier().toString())
                 .putCompound("Pos",
                         NbtMap.builder()
                                 .putFloat("x", location.x())
@@ -348,6 +355,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     @Impl
     public void loadNBT(NbtMap nbt) {
+        var event = new EntityLoadNBTEvent(nbt);
+        manager.callEvent(event);
         if (attributeComponent != null && nbt.containsKey("Attributes")) {
             var attributes = nbt.getList("Attributes", NbtType.COMPOUND);
             for (NbtMap attribute : attributes) {

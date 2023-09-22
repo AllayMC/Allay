@@ -1,10 +1,7 @@
 package cn.allay.api.container;
 
 import cn.allay.api.container.exception.ContainerException;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.init.SimpleItemStackInitInfo;
-import cn.allay.api.item.type.ItemTypeRegistry;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
@@ -16,6 +13,8 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
+
+import static cn.allay.api.item.ItemHelper.fromNBT;
 
 /**
  * Allay Project 2023/7/15
@@ -105,11 +104,9 @@ public abstract class BaseContainer implements Container {
         for (int slot = 0; slot < content.length; slot++) {
             var itemStack = content[slot];
             //TODO: WasPickedUp?
-            var nbt = NbtMap.builder()
-                    .putByte("Count", (byte) itemStack.getCount())
+            var nbt = itemStack.saveNBT()
+                    .toBuilder()
                     .putByte("Slot", (byte) slot)
-                    .putShort("Damage", (short) itemStack.getDamage())
-                    .putString("Name", itemStack.getItemType().getIdentifier().toString())
                     .build();
             list.add(slot, nbt);
         }
@@ -120,16 +117,12 @@ public abstract class BaseContainer implements Container {
     public void loadNBT(List<NbtMap> nbtList) {
         for (var nbt : nbtList) {
             int slot = nbt.getByte("Slot");
-            int count = nbt.getByte("Count");
-            int damage = nbt.getShort("Damage");
-            var name = nbt.getString("Name");
-            var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(name));
-            if (itemType == null) {
-                log.warn("Unknown item type " + name + "while loading container items!");
-                continue;
+            try {
+                ItemStack itemStack = fromNBT(nbt);
+                content[slot] = itemStack;
+            } catch (NullPointerException e) {
+                log.error("An error happen while loading container items", e);
             }
-            var itemStack = itemType.createItemStack(SimpleItemStackInitInfo.builder().count(count).damage(damage).build());
-            content[slot] = itemStack;
         }
     }
 }

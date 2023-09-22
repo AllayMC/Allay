@@ -28,6 +28,7 @@ import cn.allay.server.utils.ComponentClassCacheUtils;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import lombok.Getter;
+import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -193,13 +194,31 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
      */
     record AllayBlockState(BlockType<?> blockType,
                            BlockPropertyType.BlockPropertyValue<?, ?, ?>[] blockPropertyValues,
+                           NbtMap blockStateTag,
                            int blockStateHash,
                            int specialValue) implements BlockState {
         public AllayBlockState(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues, int blockStateHash) {
             this(blockType,
                     propertyValues,
+                    buildBlockStateTag(blockType, propertyValues),
                     blockStateHash,
                     AllayBlockType.computeSpecialValue(propertyValues));
+        }
+
+        private static NbtMap buildBlockStateTag(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
+            //build block state tag
+            var states = new TreeMap<String, Object>();
+            for (var value : propertyValues) {
+                states.put(value.getPropertyType().getName(), value.getSerializedValue());
+            }
+
+            var tag = NbtMap.builder()
+                    .putString("name", blockType.getIdentifier().toString())
+                    .putCompound("states", NbtMap.fromMap(states))
+                    .putInt("version", VERSION)
+                    .build();
+
+            return tag;
         }
 
         public AllayBlockState(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
@@ -209,6 +228,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public long unsignedBlockStateHash() {
             return Integer.toUnsignedLong(blockStateHash);
+        }
+
+        @Override
+        public NbtMap getBlockStateTag() {
+            return blockStateTag;
         }
 
         @Override

@@ -17,6 +17,9 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface BlockState {
+
+    int VERSION = 18090528;
+
     BlockType<?> blockType();
 
     int blockStateHash();
@@ -35,6 +38,8 @@ public interface BlockState {
     BlockState setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     long unsignedBlockStateHash();
+
+    NbtMap getBlockStateTag();
 
     //TODO: 确认是否只需要实现BlockDefinition::getRuntimeId(), 现有实现较为复杂且低效
     default SimpleBlockDefinition toNetworkBlockDefinition() {
@@ -63,6 +68,4 @@ public interface BlockState {
     default BlockAttributes getBlockAttributes() {
         return getBehavior().getBlockAttributes(this);
     }
-
-
 }

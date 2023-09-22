@@ -1,5 +1,7 @@
 package cn.allay.api.block.component.blockentity;
 
+import cn.allay.api.block.component.event.BlockOnInteractEvent;
+import cn.allay.api.block.component.event.BlockOnNeighborChangedEvent;
 import cn.allay.api.block.component.event.BlockOnPlaceEvent;
 import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.blockentity.BlockEntity;
@@ -28,14 +30,32 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
     @ComponentEventListener
     private void onBlockPlace(BlockOnPlaceEvent event) {
-        log.debug("Create block entity at " + event.currentBlockState().pos());
-        createBlockEntityAt(event.currentBlockState().pos());
+        var pos = event.currentBlockState().pos();
+        createBlockEntityAt(pos);
+        var blockEntity = getBlockEntity(pos);
+        blockEntity.onPlace(event);
     }
 
     @ComponentEventListener
     private void onBlockRemove(BlockOnReplaceEvent event) {
-        log.debug("Remove block entity at " + event.currentBlockState().pos());
-        removeBlockEntityAt(event.currentBlockState().pos());
+        var pos = event.currentBlockState().pos();
+        var blockEntity = getBlockEntity(pos);
+        blockEntity.onReplace(event);
+        removeBlockEntityAt(pos);
+    }
+
+    @ComponentEventListener
+    private void onNeighborChanged(BlockOnNeighborChangedEvent event) {
+        var pos = event.blockState().pos();
+        var blockEntity = getBlockEntity(pos);
+        blockEntity.onNeighborChanged(event);
+    }
+
+    @ComponentEventListener
+    private void onInteract(BlockOnInteractEvent event) {
+        var pos = event.blockPos();
+        var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.world());
+        blockEntity.onInteract(event);
     }
 
     @Override

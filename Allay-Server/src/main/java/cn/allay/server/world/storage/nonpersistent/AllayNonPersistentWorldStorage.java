@@ -1,9 +1,9 @@
 package cn.allay.server.world.storage.nonpersistent;
 
 import cn.allay.api.blockentity.BlockEntity;
-import cn.allay.api.client.Client;
-import cn.allay.api.container.FullContainerType;
+import cn.allay.api.blockentity.BlockEntityHelper;
 import cn.allay.api.entity.Entity;
+import cn.allay.api.entity.EntityHelper;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.world.World;
@@ -16,9 +16,10 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.nbt.NbtMap;
 
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -42,8 +43,8 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
         if (chunk == null) {
             chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, worldData.getDimensionInfo()).toSafeChunk();
         }
-        readEntities(l).stream().map(nbt -> Entity.fromNBT(world, nbt)).forEach(chunk::addEntity);
-        readBlockEntities(l).stream().map(nbt -> BlockEntity.fromNBT(world, nbt)).forEach(chunk::addBlockEntity);
+        readEntities(l).stream().map(nbt -> EntityHelper.fromNBT(world, nbt)).forEach(chunk::addEntity);
+        readBlockEntities(l).stream().map(nbt -> BlockEntityHelper.fromNBT(world, nbt)).forEach(chunk::addBlockEntity);
         return CompletableFuture.completedFuture(chunk);
     }
 

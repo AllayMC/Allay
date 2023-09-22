@@ -72,4 +72,20 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
             @Nullable EntityPlayer player, ItemStack itemStack,
             World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace);
+
+    @Inject
+    default NbtMap saveNBT() {
+        var builder = NbtMap.builder()
+                .putByte("Count", (byte) getCount())
+                .putShort("Damage", (short) getDamage())
+                .putCompound("tag", getNbt())
+                .putString("Name", getItemType().getIdentifier().toString());
+        var blockState = toBlockState();
+        if (blockState != null) {
+            builder.put("Block", blockState.getBlockStateTag());
+        }
+        //TODO: CanDestroy
+        //TODO: CanPlaceOn
+        return builder.build();
+    }
 }

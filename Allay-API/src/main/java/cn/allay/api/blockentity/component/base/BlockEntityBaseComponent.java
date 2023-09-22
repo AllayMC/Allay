@@ -1,5 +1,9 @@
 package cn.allay.api.blockentity.component.base;
 
+import cn.allay.api.block.component.event.BlockOnInteractEvent;
+import cn.allay.api.block.component.event.BlockOnNeighborChangedEvent;
+import cn.allay.api.block.component.event.BlockOnPlaceEvent;
+import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.component.BlockEntityComponent;
@@ -31,6 +35,18 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
 
     @Inject
     void loadNBT(NbtMap nbt);
+
+    @Inject
+    void onNeighborChanged(BlockOnNeighborChangedEvent event);
+
+    @Inject
+    void onPlace(BlockOnPlaceEvent event);
+
+    @Inject
+    void onReplace(BlockOnReplaceEvent event);
+
+    @Inject
+    void onInteract(BlockOnInteractEvent event);
 
     @Inject
     default BlockEntityDataPacket createBlockEntityDataPacket() {
