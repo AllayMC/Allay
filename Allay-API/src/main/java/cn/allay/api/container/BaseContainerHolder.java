@@ -1,5 +1,6 @@
 package cn.allay.api.container;
 
+import cn.allay.api.container.exception.ContainerException;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
@@ -38,7 +39,7 @@ public class BaseContainerHolder implements ContainerHolder {
     @Override
     public void addContainer(Container container) {
         if (containers.containsKey(container.getContainerType()))
-            throw new IllegalArgumentException("Inventory " + container.getClass().getSimpleName() + "already exists");
+            throw new ContainerException("Inventory " + container.getClass().getSimpleName() + "already exists");
         containers.put(container.getContainerType(), container);
     }
 }
