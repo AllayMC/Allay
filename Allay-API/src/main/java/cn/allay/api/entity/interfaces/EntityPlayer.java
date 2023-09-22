@@ -4,6 +4,9 @@ import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Impl;
+import cn.allay.api.component.annotation.Manager;
+import cn.allay.api.component.interfaces.ComponentManager;
+import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.*;
 import cn.allay.api.data.VanillaEntityId;
@@ -15,23 +18,30 @@ import cn.allay.api.entity.component.base.EntityPlayerBaseComponent;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponentImpl;
 import cn.allay.api.entity.component.container.EntityContainerViewerComponent;
-import cn.allay.api.entity.component.container.EntityContainerViewerComponentImpl;
 import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.entity.init.EntityPlayerInitInfo;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.ItemStack;
+import cn.allay.api.utils.MathUtils;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.cloudburstmc.protocol.bedrock.packet.AddPlayerPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
+import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static cn.allay.api.entity.component.attribute.EntityAttributeComponentImpl.basicAttributes;
@@ -49,8 +59,10 @@ public interface EntityPlayer extends
     EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder
             .builder(EntityPlayer.class)
             .vanillaEntity(VanillaEntityId.PLAYER)
-            .addComponent(info -> new EntityPlayerBaseComponentImpl(info, e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)),
-                    EntityPlayerBaseComponentImpl.class)
+            .addComponent(
+                    info -> new EntityPlayerBaseComponentImpl(info, e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)),
+                    EntityPlayerBaseComponentImpl.class
+            )
             .addComponent(info -> new EntityAttributeComponentImpl(basicAttributes()), EntityAttributeComponentImpl.class)
             .addComponent(info -> new EntityContainerHolderComponentImpl(
                             new PlayerInventoryContainer(),
@@ -60,9 +72,10 @@ public interface EntityPlayer extends
                             new PlayerOffhandContainer()
                     ),
                     EntityContainerHolderComponentImpl.class)
-            .addComponent(info -> new EntityContainerViewerComponentImpl(), EntityContainerViewerComponentImpl.class)
+            .addComponent(info -> new EntityPlayerContainerViewerComponentImpl(), EntityPlayerContainerViewerComponentImpl.class)
             .build();
 
+    //<editor-fold desc="EntityPlayerBaseComponentImpl">
     class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
 
         @ComponentIdentifier
@@ -241,5 +254,136 @@ public interface EntityPlayer extends
             }
         }
     }
+    //</editor-fold>
+
+    //<editor-fold desc="EntityPlayerContainerViewerComponentImpl">
+    class EntityPlayerContainerViewerComponentImpl implements EntityContainerViewerComponent {
+
+        @ComponentIdentifier
+        protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_viewer_component");
+
+        protected byte idCounter = 0;
+        @Manager
+        protected ComponentManager<EntityPlayer> manager;
+        @Dependency
+        protected EntityContainerHolderComponent containerHolderComponent;
+        protected Client client;
+
+        protected HashBiMap<Byte, Container> id2ContainerBiMap = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
+        protected HashBiMap<FullContainerType<?>, Container> type2ContainerBiMap = HashBiMap.create(new Object2ObjectOpenHashMap<>());
+
+        @Override
+        public void onInitFinish() {
+            client = manager.getComponentedObject().getClient();
+        }
+
+        @Override
+        @Impl
+        public byte assignInventoryId() {
+            if (idCounter + 1 >= 100) {
+                idCounter = 0;
+            }
+            return idCounter++;
+        }
+
+        @Override
+        @Impl
+        public void sendContents(Container container) {
+            var id = id2ContainerBiMap.inverse().get(container);
+            if (id == null)
+                throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
+            sendContentsWithSpecificContainerId(container, id);
+        }
+
+        @Override
+        @Impl
+        public void sendContentsWithSpecificContainerId(Container container, int containerId) {
+            var inventoryContentPacket = new InventoryContentPacket();
+            inventoryContentPacket.setContainerId(containerId);
+            inventoryContentPacket.setContents(container.toNetworkItemData());
+            client.sendPacket(inventoryContentPacket);
+        }
+
+        @Override
+        @Impl
+        public void sendContent(Container container, int slot) {
+            var inventoryContentPacket = new InventoryContentPacket();
+            var id = id2ContainerBiMap.inverse().get(container);
+            if (id == null)
+                throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
+            inventoryContentPacket.setContainerId(id);
+            inventoryContentPacket.setContents(List.of(container.getItemStack(slot).toNetworkItemData()));
+            client.sendPacket(inventoryContentPacket);
+        }
+
+        @Override
+        @Impl
+        public void onOpen(byte assignedId, Container container) {
+            var containerOpenPacket = new ContainerOpenPacket();
+            containerOpenPacket.setId(assignedId);
+            var containerType = container.getContainerType();
+            containerOpenPacket.setType(containerType.toNetworkType());
+            if (container.hasBlockPos()) {
+                containerOpenPacket.setBlockPosition(MathUtils.JOMLVecTocbVec(container.getBlockPos()));
+            } else {
+                var location = manager.getComponentedObject().getLocation();
+                containerOpenPacket.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
+            }
+            client.sendPacket(containerOpenPacket);
+
+            id2ContainerBiMap.put(assignedId, container);
+            type2ContainerBiMap.put(container.getContainerType(), container);
+
+            //We should send the container's contents to client if the container is not held by the entity
+            if (containerHolderComponent.getContainer(containerType) == null) {
+                sendContents(container);
+            }
+        }
+
+        @Override
+        @Impl
+        public void onClose(byte assignedId, Container container) {
+            if (!id2ContainerBiMap.containsKey(assignedId))
+                throw new IllegalArgumentException("Trying to close a container which is not opened! Type: " + container.getContainerType());
+            var containerClosePacket = new ContainerClosePacket();
+            containerClosePacket.setId(assignedId);
+            client.sendPacket(containerClosePacket);
+
+            type2ContainerBiMap.remove(id2ContainerBiMap.remove(assignedId).getContainerType());
+        }
+
+        @Override
+        @Impl
+        public void onSlotChange(Container container, int slot, ItemStack current) {
+            //TODO
+        }
+
+        @Override
+        @Nullable
+        @Impl
+        public <T extends Container> T getOpenedContainer(FullContainerType<T> type) {
+            return (T) type2ContainerBiMap.get(type);
+        }
+
+        @Override
+        @Nullable
+        @Impl
+        public Container getOpenedContainer(byte id) {
+            return id2ContainerBiMap.get(id);
+        }
+
+        @Override
+        @Impl
+        public @UnmodifiableView BiMap<Byte, Container> getId2ContainerBiMap() {
+            return id2ContainerBiMap;
+        }
+
+        @Override
+        @Impl
+        public @UnmodifiableView BiMap<FullContainerType<?>, Container> getType2ContainerBiMap() {
+            return type2ContainerBiMap;
+        }
+    }
+    //</editor-fold>
 }
 

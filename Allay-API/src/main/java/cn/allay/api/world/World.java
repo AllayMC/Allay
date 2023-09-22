@@ -257,15 +257,15 @@ public interface World {
 
     default void updateAtFace(int x, int y, int z, BlockFace face) {
         var offsetPos = face.offsetPos(x, y, z);
-        var blockState = getBlockState(x, y, z, 0);
-        blockState.getBehavior().onNeighborChanged(
+        var blockStateNeedUpdate = getBlockState(offsetPos.x(), offsetPos.y(), offsetPos.z());
+        blockStateNeedUpdate.getBehavior().onNeighborChanged(
                 new BlockStateWithPos(
-                        blockState,
+                        blockStateNeedUpdate,
                         new Position3i(offsetPos.x(), offsetPos.y(), offsetPos.z(), this),
                         0
                 ),
                 new BlockStateWithPos(
-                        blockState,
+                        getBlockState(x, y, z),
                         new Position3i(x, y, z, this),
                         0
                 ),

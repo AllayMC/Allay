@@ -6,6 +6,7 @@ import cn.allay.api.component.interfaces.*;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.utils.ReflectionUtils;
 import cn.allay.server.utils.ComponentClassCacheUtils;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
@@ -21,7 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
@@ -184,7 +184,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     protected static class AllayComponentManager<T> implements ComponentManager<T> {
 
-        Map<Class<? extends ComponentEvent>, List<Listener>> listenerMap = new ConcurrentHashMap<>();
+        Map<Class<? extends ComponentEvent>, List<Listener>> listenerMap = new Object2ObjectOpenHashMap<>();
         T componentedObject;
 
         public AllayComponentManager(T componentedObject) {

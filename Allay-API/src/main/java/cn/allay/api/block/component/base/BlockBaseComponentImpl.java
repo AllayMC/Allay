@@ -1,6 +1,8 @@
 package cn.allay.api.block.component.base;
 
 import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.component.event.BlockOnInteractEvent;
+import cn.allay.api.block.component.event.BlockOnNeighborChangedEvent;
 import cn.allay.api.block.component.event.BlockOnPlaceEvent;
 import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.block.data.BlockFace;
@@ -51,7 +53,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     };
     protected OnScheduledUpdate onScheduledUpdate = blockState -> {
     };
-    protected CanPlaceOn canPlaceOn = pos -> true;
 
     public BlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         this.blockType = blockType;
@@ -66,8 +67,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             @Nullable Place place,
             @Nullable OnInteract onInteract,
             @Nullable OnPlace onPlace,
-            @Nullable OnReplace onReplace,
-            @Nullable CanPlaceOn canPlaceOn) {
+            @Nullable OnReplace onReplace) {
         this.blockType = blockType;
         if (onNeighborChanged != null) this.onNeighborChanged = onNeighborChanged;
         if (onRandomUpdate != null) this.onRandomUpdate = onRandomUpdate;
@@ -76,7 +76,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         if (onInteract != null) this.onInteract = onInteract;
         if (onPlace != null) this.onPlace = onPlace;
         if (onReplace != null) this.onReplace = onReplace;
-        if (canPlaceOn != null) this.canPlaceOn = canPlaceOn;
     }
 
     @Override
@@ -88,6 +87,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     @Impl
     public void onNeighborChanged(BlockStateWithPos blockState, BlockStateWithPos neighborBlockState, BlockFace blockFace) {
+        manager.callEvent(new BlockOnNeighborChangedEvent(blockState, neighborBlockState, blockFace));
         onNeighborChanged.onNeighborChanged(blockState, neighborBlockState, blockFace);
     }
 
@@ -101,12 +101,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Impl
     public void onScheduledUpdate(BlockStateWithPos blockState) {
         onScheduledUpdate.onScheduledUpdate(blockState);
-    }
-
-    @Override
-    @Impl
-    public boolean canPlaceOn(BlockStateWithPos pos) {
-        return canPlaceOn.canPlaceOn(pos);
     }
 
     @Override
@@ -132,6 +126,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     @Impl
     public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        manager.callEvent(new BlockOnInteractEvent(player, itemStack, world, blockPos, placeBlockPos, clickPos, blockFace));
         return onInteract.onInteract(player, itemStack, world, blockPos, placeBlockPos, clickPos, blockFace);
     }
 }
