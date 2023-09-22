@@ -56,10 +56,8 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
     @Impl
     public void sendContents(Container container) {
         var id = id2ContainerBiMap.inverse().get(container);
-        if (id == null) {
-            //If the container is not opened, the id will be the container's type id
-            id = (byte) container.getContainerType().id();
-        }
+        if (id == null)
+            throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
         sendContentsWithSpecificContainerId(container, id);
     }
 
@@ -79,10 +77,8 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
         var client = playerBaseComponent.getClient();
         var inventoryContentPacket = new InventoryContentPacket();
         var id = id2ContainerBiMap.inverse().get(container);
-        if (id == null) {
-            //If the container is not opened, the id will be the container's type id
-            id = (byte) container.getContainerType().id();
-        }
+        if (id == null)
+            throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
         inventoryContentPacket.setContainerId(id);
         inventoryContentPacket.setContents(List.of(container.getItemStack(slot).toNetworkItemData()));
         client.sendPacket(inventoryContentPacket);
@@ -91,8 +87,6 @@ public class EntityContainerViewerComponentImpl implements EntityContainerViewer
     @Override
     @Impl
     public void onOpen(byte assignedId, Container container) {
-//        if (!container.getContainerType().canBeOpenedAlone())
-//            throw new IllegalArgumentException("Trying to open a container which cannot be opened alone! Type: " + container.getContainerType());
         var client = playerBaseComponent.getClient();
         var containerOpenPacket = new ContainerOpenPacket();
         containerOpenPacket.setId(assignedId);
