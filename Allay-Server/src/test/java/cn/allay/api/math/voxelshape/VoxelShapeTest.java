@@ -4,7 +4,8 @@ import cn.allay.api.block.data.BlockFace;
 import org.joml.primitives.AABBf;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Allay Project 2023/9/2

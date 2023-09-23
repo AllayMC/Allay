@@ -2,9 +2,9 @@ package cn.allay.server.block.type;
 
 import cn.allay.api.block.component.attribute.BlockAttributeComponentImpl;
 import cn.allay.api.block.component.attribute.BlockAttributes;
-import cn.allay.api.block.interfaces.BlockBlueCandleBehavior;
-import cn.allay.api.block.interfaces.BlockCobbledDeepslateWallBehavior;
-import cn.allay.api.block.interfaces.BlockCoralFanBehavior;
+import cn.allay.api.block.interfaces.bluecandle.BlockBlueCandleBehavior;
+import cn.allay.api.block.interfaces.cobbleddeepslatewall.BlockCobbledDeepslateWallBehavior;
+import cn.allay.api.block.interfaces.coralfan.BlockCoralFanBehavior;
 import cn.allay.api.block.property.enums.*;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.property.type.BooleanPropertyType;
@@ -95,7 +95,7 @@ class AllayBlockTypeTest {
     void testCommon() {
         var block = testBlockType1.getBlockBehavior();
         assertEquals(testBlockType1, block.getBlockType());
-        //Test block properties
+        // Test block properties
         var state = block.getBlockType().getDefaultState();
         assertFalse(state.getPropertyValue(TEST_BOOLEAN_PROPERTY_TYPE));
         state = state.setProperty(TEST_BOOLEAN_PROPERTY_TYPE, true);
@@ -117,7 +117,7 @@ class AllayBlockTypeTest {
                         .identifier("minecraft:test_block")
                         .setProperties(
                                 TEST_BOOLEAN_PROPERTY_TYPE,
-//                                TEST_INT_PROPERTY_TYPE,
+                                // TEST_INT_PROPERTY_TYPE,
                                 TEST_ENUM_PROPERTY_TYPE)
                         .setComponents(List.of(
                                 new TestComponentImpl(),
@@ -157,17 +157,19 @@ class AllayBlockTypeTest {
     @Test
     void testSpecialValue() {
         var values = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[3];
-        values[0] = (TEST_BOOLEAN_PROPERTY_TYPE.createValue(true));//1 bit
-        values[1] = (TEST_INT_PROPERTY_TYPE.createValue(5));//4 bit
-        values[2] = (TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.B));//2 bit
+        values[0] = (TEST_BOOLEAN_PROPERTY_TYPE.createValue(true));// 1 bit
+        values[1] = (TEST_INT_PROPERTY_TYPE.createValue(5));// 4 bit
+        values[2] = (TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.B));// 2 bit
         int offset = 0;
-        for (var value : values) offset += value.getPropertyType().getBitSize();
-        //                      1 0101 01
+        for (var value : values) {
+            offset += value.getPropertyType().getBitSize();
+        }
+        // 1 0101 01
         assertEquals(0b1010101, computeSpecialValue(offset, values));
-        //                      1 0101 00
+        // 1 0101 00
         values[2] = TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.A);
         assertEquals(0b1010100, computeSpecialValue(offset, values));
-        //                      1 0000 00
+        // 1 0000 00
         values[1] = TEST_INT_PROPERTY_TYPE.createValue(0);
         assertEquals(0b1000000, computeSpecialValue(offset, values));
     }

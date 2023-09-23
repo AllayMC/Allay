@@ -1,7 +1,7 @@
 package cn.allay.server;
 
 import cn.allay.api.MissingImplementationException;
-import cn.allay.api.block.interfaces.BlockWoodBehavior;
+import cn.allay.api.block.interfaces.wood.BlockWoodBehavior;
 import cn.allay.api.block.property.enums.PillarAxis;
 import cn.allay.api.block.property.enums.WoodType;
 import cn.allay.api.block.type.BlockState;
