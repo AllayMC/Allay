@@ -100,10 +100,12 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             bb = bb.defineField(fieldName, provider.getComponentClass(), Visibility.PRIVATE);
         }
         bb = bb.defineField(COMPONENT_LIST_FIELD_NAME, List.class, Modifier.STATIC | Modifier.PRIVATE);
-        bb = buildInitializer(bb, componentFieldNameMapping);
+        bb = buildInitializer(bb);
         bb = buildConstructor(bb);
         for (var methodShouldBeInject : Arrays.stream(interfaceClass.getMethods()).filter(method -> {
+            //Do not inject methods that are annotated with @DoNotInject
             if (method.isAnnotationPresent(DoNotInject.class)) {
+                //This method must be a default method, as there won't be implementation for it
                 if (!method.isDefault())
                     throw new ComponentInjectException("Annotation @DoNotInject must be used in a default method: " + interfaceClass.getName() + "::" + method.getName());
                 return false;
@@ -115,19 +117,19 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                 try {
                     Method methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
                     if (methodImpl.equals(methodShouldBeInject)) {
-                        //we shouldn't delegate a method to itself, as it must be a default method
+                        //This method must be a default method, and the component implementation doesn't override it
+                        //So that we don't need to handle it, as it has a default implementation
                         continue;
                     }
                     if (methodDelegation == null)
                         methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
                     else
                         throw new ComponentInjectException("Duplicate implementation for method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
-                } catch (NoSuchMethodException ignored) {
-                }
+                } catch (NoSuchMethodException ignored) {}
             }
             if (methodDelegation == null) {
                 if (methodShouldBeInject.isDefault()) {
-                    //默认方法不需要强制要求实现
+                    //We do not enforce require a implementation for a method which is default
                     continue;
                 } else {
                     throw new ComponentInjectException("Missing implementation for method: " + interfaceClass.getSimpleName() + "::" + methodShouldBeInject.getName());
@@ -160,7 +162,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
-    protected DynamicType.Builder<T> buildInitializer(DynamicType.Builder<T> bb, HashMap<ComponentProvider<?>, String> componentFieldNameMapping) {
+    protected DynamicType.Builder<T> buildInitializer(DynamicType.Builder<T> bb) {
         bb = bb.defineField(INITIALIZER_FIELD_NAME, Initializer.class, Modifier.STATIC | Modifier.PRIVATE);
         bb = bb.defineMethod(INIT_METHOD_NAME, void.class, Modifier.PUBLIC)
                 .withParameters(Object.class, ComponentInitInfo.class)
@@ -267,7 +269,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             injectComponentInstances(instance, components);
             var componentManager = new AllayComponentManager<>(instance);
             injectComponentManager(componentManager, components);
-            components.forEach(Component::onInitFinish);
+            components.forEach(component -> component.onInitFinish(initInfo));
         }
 
         protected void injectComponentManager(AllayComponentManager<T> manager, List<? extends Component> components) {
