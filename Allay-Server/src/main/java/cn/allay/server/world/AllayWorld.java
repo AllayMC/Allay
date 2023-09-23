@@ -46,6 +46,7 @@ public class AllayWorld implements World {
     protected final EntityPhysicsService entityPhysicsService;
     protected final Scheduler worldScheduler;
     protected final Thread worldMainThread;
+    protected final GameLoop gameLoop;
 
     protected final Set<Client> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
@@ -60,23 +61,28 @@ public class AllayWorld implements World {
         this.chunkService = new AllayChunkService(this, worldStorage);
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.worldScheduler = new AllayScheduler();
+        this.gameLoop = GameLoop.builder()
+                .onTick(gameLoop -> {
+                    try {
+                        tick();
+                    } catch (Throwable throwable) {
+                        log.error("Error while ticking level " + getName(), throwable);
+                    }
+                })
+                .build();
         this.worldMainThread = Thread.ofPlatform()
                 .name("World Thread - " + this.worldData.getLevelName())
-                .unstarted(() -> GameLoop.builder()
-                        .onTick(gameLoop -> {
-                            try {
-                                tick();
-                            } catch (Throwable throwable) {
-                                log.error("Error while ticking level " + getName(), throwable);
-                            }
-                        })
-                        .build()
-                        .startLoop());
+                .unstarted(gameLoop::startLoop);
     }
 
     @Override
     public Logger getLogger() {
         return log;
+    }
+
+    @Override
+    public float getCurrentTps() {
+        return gameLoop.getCurrentTps();
     }
 
     @Override
