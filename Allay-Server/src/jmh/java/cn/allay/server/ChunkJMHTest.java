@@ -1,8 +1,8 @@
 package cn.allay.server;
 
 import cn.allay.api.MissingImplementationException;
-import cn.allay.api.block.interfaces.BlockStoneBehavior;
-import cn.allay.api.block.interfaces.BlockWoodBehavior;
+import cn.allay.api.block.interfaces.stone.BlockStoneBehavior;
+import cn.allay.api.block.interfaces.wood.BlockWoodBehavior;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
 import cn.allay.server.world.chunk.AllayChunk;

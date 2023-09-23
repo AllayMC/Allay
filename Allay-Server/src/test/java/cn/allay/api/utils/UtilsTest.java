@@ -1,6 +1,5 @@
 package cn.allay.api.utils;
 
-import cn.allay.api.utils.Utils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author daoge_cmd
  */
-public class UtilsTest {
+class UtilsTest {
 
     @Test
     void testComputeRequiredBits() {

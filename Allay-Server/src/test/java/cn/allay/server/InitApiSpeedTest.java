@@ -1,7 +1,6 @@
 package cn.allay.server;
 
 import cn.allay.api.MissingImplementationException;
-import cn.allay.server.Allay;
 
 public class InitApiSpeedTest {
     public static void main(String[] args) throws MissingImplementationException {

@@ -1,7 +1,7 @@
 package cn.allay.server.world;
 
-import cn.allay.api.block.interfaces.BlockWaterBehavior;
-import cn.allay.api.block.interfaces.BlockWoodBehavior;
+import cn.allay.api.block.interfaces.water.BlockWaterBehavior;
+import cn.allay.api.block.interfaces.wood.BlockWoodBehavior;
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.chunk.Chunk;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @Slf4j
 @ExtendWith(AllayTestExtension.class)
-public class AllayChunkTest {
+class AllayChunkTest {
     final Chunk chunk = new AllayChunk(AllayUnsafeChunk.builder().emptyChunk(0, 0, DimensionInfo.OVERWORLD));
 
     @Test

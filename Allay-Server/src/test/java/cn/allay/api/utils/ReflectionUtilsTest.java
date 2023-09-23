@@ -3,7 +3,7 @@ package cn.allay.api.utils;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Allay Project 2023/8/4

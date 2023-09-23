@@ -1,6 +1,6 @@
 package cn.allay.api.mapping;
 
-import cn.allay.api.block.interfaces.BlockWoodBehavior;
+import cn.allay.api.block.interfaces.wood.BlockWoodBehavior;
 import cn.allay.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Assertions;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(AllayTestExtension.class)
-public class MappingTest {
+class MappingTest {
     @Test
     void testGetJeBlockState() {
         JeBlockState jeBlockState = Mapping.getJeBlockState(BlockWoodBehavior.WOOD_TYPE.getDefaultState().blockStateHash());
