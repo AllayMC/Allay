@@ -113,8 +113,11 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             for (var provider : componentProviders) {
                 var componentFieldName = componentFieldNameMapping.get(provider);
                 try {
-                    //We should use getDeclaredMethod() instead of getMethod(), because we only need the methods declared in the component implementation class
-                    Method methodImpl = provider.getComponentClass().getDeclaredMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
+                    Method methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
+                    if (methodImpl.equals(methodShouldBeInject)) {
+                        //we shouldn't delegate a method to itself, as it must be a default method
+                        continue;
+                    }
                     if (methodDelegation == null)
                         methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
                     else
