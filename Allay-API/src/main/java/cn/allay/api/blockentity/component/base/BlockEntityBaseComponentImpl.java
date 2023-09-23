@@ -8,7 +8,6 @@ import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.init.BlockEntityInitInfo;
 import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.identifier.Identifier;
@@ -67,19 +66,16 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     }
 
     @Override
-    @Impl
     public BlockEntityType<? extends BlockEntity> getBlockEntityType() {
         return blockEntityType;
     }
 
     @Override
-    @Impl
     public Position3ic getPosition() {
         return position;
     }
 
     @Override
-    @Impl
     public NbtMap saveNBT() {
         return NbtMap.builder()
                 .putString("id", blockEntityType.getBlockEntityId())
@@ -92,7 +88,6 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     }
 
     @Override
-    @Impl
     public void loadNBT(NbtMap nbt) {
         if (nbt.containsKey("CustomName")) {
             this.customName = nbt.getString("CustomName");
@@ -105,28 +100,24 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     }
 
     @Override
-    @Impl
     public void onNeighborChanged(BlockOnNeighborChangedEvent event) {
         manager.callEvent(event);
         onNeighborChanged.accept(event);
     }
 
     @Override
-    @Impl
     public void onPlace(BlockOnPlaceEvent event) {
         manager.callEvent(event);
         onPlace.accept(event);
     }
 
     @Override
-    @Impl
     public void onReplace(BlockOnReplaceEvent event) {
         manager.callEvent(event);
         onReplace.accept(event);
     }
 
     @Override
-    @Impl
     public void onInteract(BlockOnInteractEvent event) {
         manager.callEvent(event);
         onInteract.accept(event);

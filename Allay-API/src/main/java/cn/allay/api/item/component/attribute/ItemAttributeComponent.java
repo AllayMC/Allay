@@ -1,6 +1,5 @@
 package cn.allay.api.item.component.attribute;
 
-import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.item.component.ItemComponent;
 
 /**
@@ -9,6 +8,5 @@ import cn.allay.api.item.component.ItemComponent;
  * @author daoge_cmd
  */
 public interface ItemAttributeComponent extends ItemComponent {
-    @Inject
     ItemAttributes getItemAttributes();
 }

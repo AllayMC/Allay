@@ -1,7 +1,6 @@
 package cn.allay.api.entity.component.attribute;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.attribute.AttributeType;
 import cn.allay.api.identifier.Identifier;
@@ -37,25 +36,21 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @Override
-    @Impl
     public void addAttribute(AttributeType attributeType) {
         this.attributes.put(attributeType, attributeType.newAttributeInstance());
     }
 
     @Override
-    @Impl
     public Collection<Attribute> getAttributes() {
         return Collections.unmodifiableCollection(attributes.values());
     }
 
     @Override
-    @Impl
     public Attribute getAttribute(AttributeType attributeType) {
         return attributes.get(attributeType);
     }
 
     @Override
-    @Impl
     public void setAttribute(AttributeType attributeType, float value) {
         Attribute attribute = this.attributes.get(attributeType);
         if (attribute != null)
@@ -63,13 +58,11 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @Override
-    @Impl
     public void setAttribute(Attribute attribute) {
         this.attributes.put(AttributeType.valueOf(attribute.getKey()), attribute);
     }
 
     @Override
-    @Impl
     public float getAttributeValue(AttributeType attributeType) {
         return this.getAttribute(attributeType).getCurrentValue();
     }

@@ -1,5 +1,7 @@
 package cn.allay.api.component.interfaces;
 
+import cn.allay.api.component.annotation.DoNotInject;
+
 /**
  * Describe the implementation of a component <br>
  * Any component implementation needs to implement this interface, otherwise obviously you can't pass it into the injector <br>
@@ -12,5 +14,6 @@ package cn.allay.api.component.interfaces;
  * @author daoge_cmd
  */
 public interface Component {
+    @DoNotInject
     default void onInitFinish() {}
 }

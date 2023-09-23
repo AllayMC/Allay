@@ -11,7 +11,6 @@ import cn.allay.api.block.function.*;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.entity.interfaces.EntityPlayer;
@@ -79,52 +78,44 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    @Impl
     public BlockType<? extends BlockBehavior> getBlockType() {
         return blockType;
     }
 
     @Override
-    @Impl
     public void onNeighborChanged(BlockStateWithPos blockState, BlockStateWithPos neighborBlockState, BlockFace blockFace) {
         manager.callEvent(new BlockOnNeighborChangedEvent(blockState, neighborBlockState, blockFace));
         onNeighborChanged.onNeighborChanged(blockState, neighborBlockState, blockFace);
     }
 
     @Override
-    @Impl
     public void onRandomUpdate(BlockStateWithPos blockState) {
         onRandomUpdate.onRandomUpdate(blockState);
     }
 
     @Override
-    @Impl
     public void onScheduledUpdate(BlockStateWithPos blockState) {
         onScheduledUpdate.onScheduledUpdate(blockState);
     }
 
     @Override
-    @Impl
     public boolean place(@Nullable EntityPlayer player, @NotNull World world, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {
         return place.place(player, world, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
     }
 
     @Override
-    @Impl
     public void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
         manager.callEvent(new BlockOnPlaceEvent(currentBlockState, newBlockState));
         onPlace.onPlace(currentBlockState, newBlockState);
     }
 
     @Override
-    @Impl
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
         manager.callEvent(new BlockOnReplaceEvent(currentBlockState, newBlockState));
         onReplace.onReplace(currentBlockState, newBlockState);
     }
 
     @Override
-    @Impl
     public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
         manager.callEvent(new BlockOnInteractEvent(player, itemStack, world, blockPos, placeBlockPos, clickPos, blockFace));
         return onInteract.onInteract(player, itemStack, world, blockPos, placeBlockPos, clickPos, blockFace);

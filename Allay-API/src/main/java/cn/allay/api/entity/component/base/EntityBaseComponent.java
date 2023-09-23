@@ -2,7 +2,6 @@ package cn.allay.api.entity.component.base;
 
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.client.Client;
-import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponent;
 import cn.allay.api.entity.metadata.Metadata;
@@ -36,83 +35,60 @@ public interface EntityBaseComponent extends EntityComponent {
     float STOP_MOVEMENT_FACTOR = 0f;
     float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
 
-    @Inject
     EntityType<? extends Entity> getEntityType();
 
-    @Inject
     Location3fc getLocation();
 
-    @Inject
     @ApiStatus.Internal
     void setLocation(Location3fc location);
 
-    @Inject
     long getUniqueId();
 
-    @Inject
     Metadata getMetadata();
 
-    @Inject
     AABBfc getAABB();
 
-    @Inject
     void setAABB(AABBf aabb);
 
     default boolean hasCollision() {
         return getMetadata().getFlag(EntityFlag.HAS_COLLISION);
     }
 
-    @Inject
     void setHasCollision(boolean hasCollision);
 
-    @Inject
     @UnmodifiableView
     Map<Long, Client> getViewers();
 
-    @Inject
     Vector3fc getMotion();
 
-    @Inject
     void setMotion(Vector3fc motion);
 
     default void addMotion(Vector3fc add) {
         setMotion(getMotion().add(add, new Vector3f()));
     }
 
-    @Inject
     boolean isOnGround();
 
-    @Inject
     void setOnGround(boolean onGround);
 
-    @Inject
     void spawnTo(Client client);
 
-    @Inject
     void despawnFrom(Client client);
 
-    @Inject
     void despawnFromAll();
 
-    @Inject
     BedrockPacket createSpawnPacket();
 
-    @Inject
     void sendPacketToViewers(BedrockPacket packet);
 
-    @Inject
     void sendPacketToViewersImmediately(BedrockPacket packet);
 
-    @Inject
     void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3fc newLoc);
 
-    @Inject
     NbtMap saveNBT();
 
-    @Inject
     void loadNBT(NbtMap nbt);
 
-    @Inject
     default void tick() {
     }
 

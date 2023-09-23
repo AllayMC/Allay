@@ -3,7 +3,6 @@ package cn.allay.api.item.component.base;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.CommonUseItemFunctions;
@@ -21,8 +20,6 @@ import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.util.Objects;
-
-import static cn.allay.api.item.CommonUseItemFunctions.createPlaceBlockUseOn;
 
 /**
  * Allay Project 2023/5/19
@@ -73,63 +70,53 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    @Impl
     public ItemType<? extends ItemStack> getItemType() {
         return itemType;
     }
 
     @Override
-    @Impl
     public int getCount() {
         return count;
     }
 
     @Override
-    @Impl
     public void setCount(int count) {
         if (count < 0) throw new IllegalArgumentException("count cannot be negative");
         this.count = count;
     }
 
     @Override
-    @Impl
     public int getDamage() {
         return damage;
     }
 
     @Override
-    @Impl
     public void setDamage(int damage) {
         this.damage = damage;
     }
 
     @Override
-    @Impl
     public @Nullable BlockState toBlockState() {
         return blockState;
     }
 
     @Override
-    @Impl
     public void setBlockStateStyle(@Nullable BlockState blockState) {
         this.blockState = blockState;
     }
 
     @Override
-    @Impl
     public NbtMap getNbt() {
         return nbt;
     }
 
     @Override
-    @Impl
     public void setNbt(NbtMap nbt) {
         this.nbt = nbt;
     }
 
     //TODO: 缓存ItemData
     @Override
-    @Impl
     public ItemData toNetworkItemData() {
         if (itemType == ItemAirStack.AIR_TYPE) {
             return ItemData.AIR;
@@ -149,19 +136,16 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Nullable
     @Override
-    @Impl
     public Integer getStackNetworkId() {
         return stackNetworkId;
     }
 
     @Override
-    @Impl
     public void setStackNetworkId(int newStackNetworkId) {
         this.stackNetworkId = newStackNetworkId;
     }
 
     @Override
-    @Impl
     public ItemStack copy(boolean newStackNetworkId) {
         return itemType.createItemStack(
                 SimpleItemStackInitInfo
@@ -177,7 +161,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    @Impl
     public boolean useItemOn(
             @Nullable EntityPlayer player, ItemStack itemStack,
             World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
@@ -186,7 +169,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    @Impl
     public ItemStack copy() {
         return copy(true);
     }

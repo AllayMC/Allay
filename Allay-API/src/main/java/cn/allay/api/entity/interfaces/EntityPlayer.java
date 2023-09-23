@@ -3,7 +3,6 @@ package cn.allay.api.entity.interfaces;
 import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.container.Container;
@@ -99,7 +98,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void tick() {
             super.tick();
             var world = location.world;
@@ -131,21 +129,18 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void spawnTo(Client client) {
             if (this.client != client)
                 super.spawnTo(client);
         }
 
         @Override
-        @Impl
         public void despawnFrom(Client client) {
             if (this.client != client)
                 super.despawnFrom(client);
         }
 
         @Override
-        @Impl
         public BedrockPacket createSpawnPacket() {
             var addPlayerPacket = new AddPlayerPacket();
             addPlayerPacket.setRuntimeEntityId(uniqueId);
@@ -164,79 +159,66 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public Client getClient() {
             return client;
         }
 
         @Override
-        @Impl
         public void setSprinting(boolean sprinting) {
             this.sprinting = sprinting;
         }
 
         @Override
-        @Impl
         public boolean isSprinting() {
             return sprinting;
         }
 
         @Override
-        @Impl
         public void setSneaking(boolean sneaking) {
             this.sneaking = sneaking;
         }
 
         @Override
-        @Impl
         public boolean isSneaking() {
             return sneaking;
         }
 
         @Override
-        @Impl
         public void setSwimming(boolean swimming) {
             this.swimming = swimming;
         }
 
         @Override
-        @Impl
         public boolean isSwimming() {
             return swimming;
         }
 
         @Override
-        @Impl
         public void setGliding(boolean gliding) {
             this.gliding = gliding;
         }
 
         @Override
-        @Impl
         public boolean isGliding() {
             return gliding;
         }
 
         @Override
-        @Impl
         public void setCrawling(boolean crawling) {
             this.crawling = crawling;
         }
 
         @Override
-        @Impl
         public boolean isCrawling() {
             return crawling;
         }
 
         @Override
-        @Impl
         public int getHandSlot() {
             return containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getHandSlot();
         }
 
         @Override
-        @Impl
         public void setHandSlot(@Range(from = 0, to = 8) int handSlot) {
             var inv = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
             inv.setHandSlot(handSlot);
@@ -252,7 +234,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public NbtMap saveNBT() {
             return super.saveNBT().toBuilder()
                     .putList(
@@ -271,7 +252,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void loadNBT(NbtMap nbt) {
             super.loadNBT(nbt);
             if (nbt.containsKey("Offhand")) {
@@ -309,7 +289,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public byte assignInventoryId() {
             if (idCounter + 1 >= 100) {
                 idCounter = 0;
@@ -318,7 +297,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void sendContents(Container container) {
             var id = id2ContainerBiMap.inverse().get(container);
             if (id == null)
@@ -327,7 +305,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void sendContentsWithSpecificContainerId(Container container, int containerId) {
             var inventoryContentPacket = new InventoryContentPacket();
             inventoryContentPacket.setContainerId(containerId);
@@ -336,7 +313,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void sendContentsWithSpecificContainerId(Container container, int containerId, int slot) {
             var inventorySlotPacket = new InventorySlotPacket();
             inventorySlotPacket.setContainerId(containerId);
@@ -346,7 +322,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void sendContent(Container container, int slot) {
             var id = id2ContainerBiMap.inverse().get(container);
             if (id == null)
@@ -355,7 +330,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void onOpen(byte assignedId, Container container) {
             var containerOpenPacket = new ContainerOpenPacket();
             containerOpenPacket.setId(assignedId);
@@ -379,7 +353,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void onClose(byte assignedId, Container container) {
             if (!id2ContainerBiMap.containsKey(assignedId))
                 throw new IllegalArgumentException("Trying to close a container which is not opened! Type: " + container.getContainerType());
@@ -391,7 +364,6 @@ public interface EntityPlayer extends
         }
 
         @Override
-        @Impl
         public void onSlotChange(Container container, int slot) {
             var id = id2ContainerBiMap.inverse().get(container);
             //"0" is player's inventory
@@ -400,26 +372,22 @@ public interface EntityPlayer extends
 
         @Override
         @Nullable
-        @Impl
         public <T extends Container> T getOpenedContainer(FullContainerType<T> type) {
             return (T) type2ContainerBiMap.get(type);
         }
 
         @Override
         @Nullable
-        @Impl
         public Container getOpenedContainer(byte id) {
             return id2ContainerBiMap.get(id);
         }
 
         @Override
-        @Impl
         public @UnmodifiableView BiMap<Byte, Container> getId2ContainerBiMap() {
             return id2ContainerBiMap;
         }
 
         @Override
-        @Impl
         public @UnmodifiableView BiMap<FullContainerType<?>, Container> getType2ContainerBiMap() {
             return type2ContainerBiMap;
         }

@@ -1,6 +1,5 @@
 package cn.allay.api.entity.component.container;
 
-import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerHolder;
 import cn.allay.api.container.FullContainerType;
@@ -17,15 +16,12 @@ import java.util.Map;
  */
 public interface EntityContainerHolderComponent extends ContainerHolder, EntityComponent {
     @Override
-    @Inject
     @UnmodifiableView
     Map<FullContainerType<?>, Container> getContainers();
 
     @Override
-    @Inject
     <T extends Container> @Nullable T getContainer(FullContainerType<T> type);
 
     @Override
-    @Inject
     void addContainer(Container container);
 }
