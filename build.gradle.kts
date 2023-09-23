@@ -30,7 +30,7 @@ idea {
 //Enable gradle wrapper update task
 tasks.wrapper {
     enabled = true
-    gradleVersion = "8.3"
+    gradleVersion = "8.4-rc-1"
 }
 
 tasks.clean {
@@ -87,12 +87,10 @@ subprojects {
 
     tasks.test {
         useJUnitPlatform()
-        jvmArgs = listOf("--enable-preview")
     }
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
-        options.compilerArgs.add("--enable-preview")
     }
 
     tasks.withType<Copy> {
@@ -102,8 +100,7 @@ subprojects {
     tasks.withType<Javadoc> {
         options.encoding = "UTF-8"
         val javadocOptions = options as CoreJavadocOptions
-        javadocOptions.addStringOption("source", "20")
-        javadocOptions.addBooleanOption("-enable-preview", true)
+        javadocOptions.addStringOption("source", "21")
         //Suppress some meaningless warnings
         javadocOptions.addStringOption("Xdoclint:none", "-quiet")
     }
