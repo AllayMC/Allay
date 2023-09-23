@@ -105,12 +105,12 @@ public interface EntityPlayer extends
             var world = location.world;
             //pick up items
             var pickUpArea = new AABBf(
-                    location.x - 0.7125f,
-                    location.y - 0.7125f,
-                    location.z - 0.7125f,
-                    location.x + 0.7125f,
-                    location.y + 0.7125f,
-                    location.z + 0.7125f
+                    location.x - 1.425f,
+                    location.y - 1.425f,
+                    location.z - 1.425f,
+                    location.x + 1.425f,
+                    location.y + 1.425f,
+                    location.z + 1.425f
             );
             var entityItems = world.getEntityPhysicsService().computeCollidingEntities(pickUpArea)
                     .stream()
