@@ -2,6 +2,7 @@ package cn.allay.server.component.injector;
 
 import cn.allay.api.component.annotation.ComponentEventListener;
 import cn.allay.api.component.annotation.Dependency;
+import cn.allay.api.component.annotation.DoNotInject;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.exception.ComponentInjectException;
 import cn.allay.api.component.interfaces.*;
@@ -48,6 +49,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     @Override
     public ComponentInjector<T> interfaceClass(Class<T> interfaceClass) {
         Objects.requireNonNull(interfaceClass, "The interface class cannot be null");
+        if (!interfaceClass.isInterface()) throw new ComponentInjectException("Interface class must be an interface!");
         this.interfaceClass = interfaceClass;
         return this;
     }
@@ -100,7 +102,13 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         bb = bb.defineField(COMPONENT_LIST_FIELD_NAME, List.class, Modifier.STATIC | Modifier.PRIVATE);
         bb = buildInitializer(bb, componentFieldNameMapping);
         bb = buildConstructor(bb);
-        for (var methodShouldBeInject : Arrays.stream(interfaceClass.getMethods()).toList()) {
+        for (var methodShouldBeInject : Arrays.stream(interfaceClass.getMethods()).filter(method -> {
+            if (method.isAnnotationPresent(DoNotInject.class)) {
+                if (!method.isDefault())
+                    throw new ComponentInjectException("Annotation @DoNotInject must be used in a default method: " + interfaceClass.getName() + "::" + method.getName());
+                return false;
+            } else return true;
+        }).toList()) {
             Implementation.Composable methodDelegation = null;
             for (var provider : componentProviders) {
                 var componentFieldName = componentFieldNameMapping.get(provider);
