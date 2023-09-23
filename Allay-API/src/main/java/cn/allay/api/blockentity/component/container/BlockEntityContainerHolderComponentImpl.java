@@ -40,10 +40,9 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @ComponentEventListener
     private void onInteract(BlockOnInteractEvent event) {
         var player = event.player();
-        var blockPos = event.blockPos();
-        var world = event.world();
         if (player == null || player.isSneaking()) return;
         Objects.requireNonNull(container).addViewer(player);
+        event.success(true);
     }
 
     @ComponentEventListener

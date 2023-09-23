@@ -117,7 +117,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        manager.callEvent(new BlockOnInteractEvent(player, itemStack, world, blockPos, placeBlockPos, clickPos, blockFace));
-        return onInteract.onInteract(player, itemStack, world, blockPos, placeBlockPos, clickPos, blockFace);
+        var event = new BlockOnInteractEvent(player, itemStack, world, blockPos, placeBlockPos, clickPos, blockFace, false);
+        manager.callEvent(event);
+        return event.success() || onInteract.onInteract(player, itemStack, world, blockPos, placeBlockPos, clickPos, blockFace);
     }
 }
