@@ -1,0 +1,19 @@
+package cn.allay.api.block.interfaces.rail;
+
+import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeBuilder;
+import cn.allay.api.data.VanillaBlockId;
+import cn.allay.api.data.VanillaBlockPropertyTypes;
+
+/**
+ * @author daoge_cmd | Cool_Loong <br>
+ * Allay Project <br>
+ */
+public interface BlockRailBehavior extends BlockBehavior {
+    BlockType<BlockRailBehavior> RAIL_TYPE = BlockTypeBuilder
+            .builder(BlockRailBehavior.class)
+            .vanillaBlock(VanillaBlockId.RAIL)
+            .setProperties(VanillaBlockPropertyTypes.RAIL_DIRECTION_10)
+            .build();
+}

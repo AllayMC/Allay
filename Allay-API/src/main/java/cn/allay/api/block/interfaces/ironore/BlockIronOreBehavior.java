@@ -1,0 +1,17 @@
+package cn.allay.api.block.interfaces.ironore;
+
+import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeBuilder;
+import cn.allay.api.data.VanillaBlockId;
+
+/**
+ * @author daoge_cmd | Cool_Loong <br>
+ * Allay Project <br>
+ */
+public interface BlockIronOreBehavior extends BlockBehavior {
+    BlockType<BlockIronOreBehavior> IRON_ORE_TYPE = BlockTypeBuilder
+            .builder(BlockIronOreBehavior.class)
+            .vanillaBlock(VanillaBlockId.IRON_ORE)
+            .build();
+}

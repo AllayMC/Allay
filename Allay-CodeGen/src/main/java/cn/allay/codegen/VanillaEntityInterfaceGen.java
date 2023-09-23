@@ -34,8 +34,9 @@ public class VanillaEntityInterfaceGen {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var entity : VanillaEntityId.values()) {
             var entityClassSimpleName = "Entity" + Utils.convertToPascalCase(entity.getIdentifier().path());
-            var entityClassName = ClassName.get("cn.allay.api.entity.interfaces", entityClassSimpleName);
-            var path = FILE_OUTPUT_PATH_BASE.resolve(entityClassSimpleName + ".java");
+            var folderName = Utils.convertToPascalCase(entity.getIdentifier().path()).toLowerCase();
+            var entityClassName = ClassName.get("cn.allay.api.entity.interfaces." + folderName, entityClassSimpleName);
+            var path = FILE_OUTPUT_PATH_BASE.resolve(folderName).resolve(entityClassSimpleName + ".java");
             if (!Files.exists(path)) {
                 System.out.println("Generating " + entityClassName + "...");
                 generateEntityClass(entity, entityClassName, path);
@@ -53,7 +54,7 @@ public class VanillaEntityInterfaceGen {
                                 "Allay Project <br>\n")
                 .addField(generateEntityTypeField(vanillaEntityId, entityClassName))
                 .addModifiers(Modifier.PUBLIC);
-        var javaFile = JavaFile.builder("cn.allay.api.entity.interfaces", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder(entityClassName.packageName(), codeBuilder.build()).build();
         System.out.println("Generating " + entityClassName + ".java ...");
         Files.writeString(path, javaFile.toString());
     }

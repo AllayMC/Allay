@@ -1,0 +1,17 @@
+package cn.allay.api.item.interfaces.farmland;
+
+import cn.allay.api.data.VanillaItemId;
+import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.type.ItemType;
+import cn.allay.api.item.type.ItemTypeBuilder;
+
+/**
+ * @author daoge_cmd <br>
+ * Allay Project <br>
+ */
+public interface ItemFarmlandStack extends ItemStack {
+    ItemType<ItemFarmlandStack> FARMLAND_TYPE = ItemTypeBuilder
+            .builder(ItemFarmlandStack.class)
+            .vanillaItem(VanillaItemId.FARMLAND)
+            .build();
+}

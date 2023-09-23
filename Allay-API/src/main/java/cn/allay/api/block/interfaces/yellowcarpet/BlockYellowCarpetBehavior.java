@@ -1,0 +1,17 @@
+package cn.allay.api.block.interfaces.yellowcarpet;
+
+import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeBuilder;
+import cn.allay.api.data.VanillaBlockId;
+
+/**
+ * @author daoge_cmd | Cool_Loong <br>
+ * Allay Project <br>
+ */
+public interface BlockYellowCarpetBehavior extends BlockBehavior {
+    BlockType<BlockYellowCarpetBehavior> YELLOW_CARPET_TYPE = BlockTypeBuilder
+            .builder(BlockYellowCarpetBehavior.class)
+            .vanillaBlock(VanillaBlockId.YELLOW_CARPET)
+            .build();
+}

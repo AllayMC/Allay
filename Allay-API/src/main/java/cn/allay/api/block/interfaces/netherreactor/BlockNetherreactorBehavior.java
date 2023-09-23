@@ -1,0 +1,17 @@
+package cn.allay.api.block.interfaces.netherreactor;
+
+import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeBuilder;
+import cn.allay.api.data.VanillaBlockId;
+
+/**
+ * @author daoge_cmd | Cool_Loong <br>
+ * Allay Project <br>
+ */
+public interface BlockNetherreactorBehavior extends BlockBehavior {
+    BlockType<BlockNetherreactorBehavior> NETHERREACTOR_TYPE = BlockTypeBuilder
+            .builder(BlockNetherreactorBehavior.class)
+            .vanillaBlock(VanillaBlockId.NETHERREACTOR)
+            .build();
+}

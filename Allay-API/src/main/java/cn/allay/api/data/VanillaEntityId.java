@@ -1,6 +1,7 @@
 package cn.allay.api.data;
 
 import cn.allay.api.identifier.Identifier;
+import java.lang.String;
 import lombok.Getter;
 
 /**
