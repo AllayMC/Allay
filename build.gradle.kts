@@ -10,8 +10,9 @@ group = "cn.allay"
 description = "The next generation minecraft server software"
 
 plugins {
-    `kotlin-dsl`
+    id("org.gradle.kotlin.kotlin-dsl") version "4.1.2"
     idea
+    id("org.jetbrains.kotlin.jvm") version "1.9.20-Beta2"
     id("com.github.johnrengelman.shadow") version ("8.1.1")
 }
 
