@@ -1,6 +1,6 @@
 package cn.allay.worldconverter.tasks;
 
-import cn.allay.api.block.interfaces.BlockWaterBehavior;
+import cn.allay.api.block.interfaces.water.BlockWaterBehavior;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
