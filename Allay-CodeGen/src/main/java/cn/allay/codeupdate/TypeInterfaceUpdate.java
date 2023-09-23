@@ -26,7 +26,6 @@ public class TypeInterfaceUpdate {
     }
 
     public static void addCode(String code, String importCode, String classNameRegex) {
-        List<String> r = new ArrayList<>();
         Pattern compile = Pattern.compile(classNameRegex);
         File file = ITEM.toFile();
         for (var f : Objects.requireNonNull(file.listFiles())) {
