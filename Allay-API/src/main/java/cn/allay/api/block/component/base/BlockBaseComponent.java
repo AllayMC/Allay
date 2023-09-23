@@ -38,25 +38,4 @@ public interface BlockBaseComponent extends OnNeighborChanged, OnRandomUpdate, P
         updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
         return updateBlockPacket;
     }
-
-    @Override
-    void onNeighborChanged(BlockStateWithPos blockState, BlockStateWithPos neighborBlockState, BlockFace blockFace);
-
-    @Override
-    boolean place(@Nullable EntityPlayer player, @NotNull World world, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, @NotNull Vector3fc clickPos, @NotNull BlockFace blockFace);
-
-    @Override
-    void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState);
-
-    @Override
-    void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState);
-
-    @Override
-    void onRandomUpdate(BlockStateWithPos blockState);
-
-    @Override
-    void onScheduledUpdate(BlockStateWithPos blockState);
-
-    @Override
-    boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
 }
