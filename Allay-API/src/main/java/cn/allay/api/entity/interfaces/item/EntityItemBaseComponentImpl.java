@@ -29,7 +29,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     public static final int MAX_AGE = 6000;
     protected ItemStack itemStack;
     protected int pickupDelay = 10;
-    protected int age = -1;
+    protected int age;
 
     public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, Function<EntityItem, AABBfc> aabbGetter, @Nullable ItemStack itemStack) {
         super(info, aabbGetter);
