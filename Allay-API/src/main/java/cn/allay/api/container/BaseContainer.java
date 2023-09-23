@@ -4,6 +4,7 @@ import cn.allay.api.container.exception.ContainerException;
 import cn.allay.api.item.ItemStack;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtList;
@@ -13,6 +14,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static cn.allay.api.item.ItemHelper.fromNBT;
 
@@ -26,6 +28,8 @@ public abstract class BaseContainer implements Container {
     protected final FullContainerType<? extends Container> containerType;
     protected final BiMap<Byte, ContainerViewer> viewers = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
     protected final ItemStack[] content;
+    protected final Set<Consumer<ContainerViewer>> onOpenListeners = new HashSet<>();
+    protected final Set<Consumer<ContainerViewer>> onCloseListeners = new HashSet<>();
 
     public BaseContainer(FullContainerType<? extends Container> containerType) {
         this.containerType = containerType;
@@ -102,6 +106,36 @@ public abstract class BaseContainer implements Container {
         for (var viewer : viewers.values()) {
             viewer.onSlotChange(this, slot);
         }
+    }
+
+    @Override
+    public void onOpen(ContainerViewer viewer) {
+        onOpenListeners.forEach(listener -> listener.accept(viewer));
+    }
+
+    @Override
+    public void onClose(ContainerViewer viewer) {
+        onCloseListeners.forEach(listener -> listener.accept(viewer));
+    }
+
+    @Override
+    public void addOnOpenListener(Consumer<ContainerViewer> listener) {
+        onOpenListeners.add(listener);
+    }
+
+    @Override
+    public void removeOnOpenListener(Consumer<ContainerViewer> listener) {
+        onOpenListeners.remove(listener);
+    }
+
+    @Override
+    public void addOnCloseListener(Consumer<ContainerViewer> listener) {
+        onCloseListeners.add(listener);
+    }
+
+    @Override
+    public void removeOnCloseListener(Consumer<ContainerViewer> listener) {
+        onCloseListeners.remove(listener);
     }
 
     @Override

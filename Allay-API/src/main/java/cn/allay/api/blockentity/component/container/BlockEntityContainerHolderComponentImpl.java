@@ -6,12 +6,14 @@ import cn.allay.api.component.annotation.ComponentEventListener;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerHolder;
+import cn.allay.api.container.ContainerViewer;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
 import cn.allay.api.entity.interfaces.item.EntityItem;
 import cn.allay.api.identifier.Identifier;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/9/16
@@ -25,6 +27,16 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
 
     public BlockEntityContainerHolderComponentImpl(Container container) {
         this.container = container;
+    }
+
+    public BlockEntityContainerHolderComponentImpl(
+            Container container,
+            Consumer<ContainerViewer> onOpenListener,
+            Consumer<ContainerViewer> onCloseListener
+            ) {
+        this.container = container;
+        this.container.addOnOpenListener(onOpenListener);
+        this.container.addOnCloseListener(onCloseListener);
     }
 
     @Override

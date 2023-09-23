@@ -13,6 +13,7 @@ import org.joml.Vector3ic;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/7/15
@@ -25,13 +26,17 @@ public interface Container {
 
     FullContainerType<?> getContainerType();
 
-    default void onOpen(ContainerViewer viewer) {
+    void onOpen(ContainerViewer viewer);
 
-    }
+    void onClose(ContainerViewer viewer);
 
-    default void onClose(ContainerViewer viewer) {
+    void addOnOpenListener(Consumer<ContainerViewer> listener);
 
-    }
+    void removeOnOpenListener(Consumer<ContainerViewer> listener);
+
+    void addOnCloseListener(Consumer<ContainerViewer> listener);
+
+    void removeOnCloseListener(Consumer<ContainerViewer> listener);
 
     default boolean hasBlockPos() {
         return false;
