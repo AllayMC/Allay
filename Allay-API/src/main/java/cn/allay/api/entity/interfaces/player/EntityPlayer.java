@@ -68,6 +68,10 @@ public interface EntityPlayer extends
         return (T) container;
     }
 
+    default boolean tryDropItemInHand(int count) {
+        return tryDropItem(FullContainerType.PLAYER_INVENTORY, getContainer(FullContainerType.PLAYER_INVENTORY).getHandSlot(), count);
+    }
+
     default boolean tryDropItem(FullContainerType<?> containerType, int slot, int count) {
         var container = getReachableContainer(containerType);
         if (container == null) return false;

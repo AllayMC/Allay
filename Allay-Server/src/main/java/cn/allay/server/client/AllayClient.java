@@ -586,8 +586,7 @@ public class AllayClient extends BaseClient {
                         if (action.getSource().getFlag().equals(InventorySource.Flag.DROP_ITEM)) {
                             //Do not ask me why mojang still use the old item transaction packet even the server-auth inv was enabled
                             var count = action.getToItem().getCount();
-                            var slot = action.getSlot();
-                            playerEntity.tryDropItem(FullContainerType.PLAYER_INVENTORY, slot, count);
+                            playerEntity.tryDropItemInHand(count);
                         }
                     }
                 }
