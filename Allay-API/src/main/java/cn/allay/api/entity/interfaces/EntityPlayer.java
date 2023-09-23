@@ -4,6 +4,7 @@ import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Manager;
+import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
@@ -284,7 +285,7 @@ public interface EntityPlayer extends
         protected HashBiMap<FullContainerType<?>, Container> type2ContainerBiMap = HashBiMap.create(new Object2ObjectOpenHashMap<>());
 
         @Override
-        public void onInitFinish() {
+        public void onInitFinish(ComponentInitInfo initInfo) {
             client = manager.getComponentedObject().getClient();
         }
 

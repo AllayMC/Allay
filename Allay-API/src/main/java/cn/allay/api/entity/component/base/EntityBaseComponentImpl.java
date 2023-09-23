@@ -4,6 +4,7 @@ import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Manager;
+import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.attribute.AttributeType;
@@ -81,8 +82,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public void onInitFinish() {
-        loadNBT(infoNbt);
+    public void onInitFinish(ComponentInitInfo initInfo) {
+        loadNBT(((EntityInitInfo<T>) initInfo).nbt());
         this.aabb = aabbGetter.apply(manager.getComponentedObject());
         initMetadata();
     }

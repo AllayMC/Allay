@@ -15,5 +15,5 @@ import cn.allay.api.component.annotation.DoNotInject;
  */
 public interface Component {
     @DoNotInject
-    default void onInitFinish() {}
+    default void onInitFinish(ComponentInitInfo initInfo) {}
 }
