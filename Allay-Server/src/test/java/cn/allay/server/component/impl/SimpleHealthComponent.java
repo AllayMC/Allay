@@ -1,7 +1,6 @@
 package cn.allay.server.component.impl;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.interfaces.HealthComponent;
@@ -28,25 +27,21 @@ public class SimpleHealthComponent implements HealthComponent, Component {
         this.health = health;
     }
 
-    @Impl
     @Override
     public int getHealth() {
         return health;
     }
 
-    @Impl
     @Override
     public void setHealth(int health) {
         this.health = health;
     }
 
-    @Impl
     @Override
     public int getMaxHealth() {
         return maxHealth;
     }
 
-    @Impl
     @Override
     public boolean isDead() {
         return health <= 0;

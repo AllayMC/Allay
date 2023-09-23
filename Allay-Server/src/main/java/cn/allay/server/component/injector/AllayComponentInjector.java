@@ -1,6 +1,8 @@
 package cn.allay.server.component.injector;
 
-import cn.allay.api.component.annotation.*;
+import cn.allay.api.component.annotation.ComponentEventListener;
+import cn.allay.api.component.annotation.Dependency;
+import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.exception.ComponentInjectException;
 import cn.allay.api.component.interfaces.*;
 import cn.allay.api.identifier.Identifier;
@@ -98,13 +100,12 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         bb = bb.defineField(COMPONENT_LIST_FIELD_NAME, List.class, Modifier.STATIC | Modifier.PRIVATE);
         bb = buildInitializer(bb, componentFieldNameMapping);
         bb = buildConstructor(bb);
-        for (var methodShouldBeInject : Arrays.stream(interfaceClass.getMethods()).filter(m -> m.isAnnotationPresent(Inject.class)).toList()) {
+        for (var methodShouldBeInject : Arrays.stream(interfaceClass.getMethods()).toList()) {
             Implementation.Composable methodDelegation = null;
             for (var provider : componentProviders) {
                 var componentFieldName = componentFieldNameMapping.get(provider);
                 try {
                     Method methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
-                    if (!methodImpl.isAnnotationPresent(Impl.class)) continue;
                     if (methodDelegation == null)
                         methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
                     else

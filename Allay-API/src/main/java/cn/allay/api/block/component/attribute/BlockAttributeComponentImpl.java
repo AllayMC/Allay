@@ -3,7 +3,6 @@ package cn.allay.api.block.component.attribute;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import cn.allay.api.identifier.Identifier;
@@ -80,7 +79,6 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent {
     }
 
     @Override
-    @Impl
     public BlockAttributes getBlockAttributes(BlockState blockState) {
         return attributeAccessor.apply(blockState);
     }

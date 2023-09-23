@@ -1,7 +1,6 @@
 package cn.allay.server.component.impl;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.interfaces.NameComponent;
@@ -23,7 +22,6 @@ public class SimpleNameComponent implements NameComponent, Component {
     }
 
     @Override
-    @Impl
     public String getName() {
         return name;
     }

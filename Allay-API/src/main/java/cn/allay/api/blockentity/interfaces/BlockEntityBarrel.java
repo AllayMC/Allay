@@ -9,7 +9,6 @@ import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.BarrelContainer;
 import cn.allay.api.identifier.Identifier;
@@ -56,7 +55,6 @@ public interface BlockEntityBarrel extends BlockEntity, BlockEntityContainerHold
         }
 
         @Override
-        @Impl
         public void loadNBT(NbtMap nbt) {
             super.loadNBT(nbt);
             if (nbt.containsKey("Items"))
@@ -64,7 +62,6 @@ public interface BlockEntityBarrel extends BlockEntity, BlockEntityContainerHold
         }
 
         @Override
-        @Impl
         public NbtMap saveNBT() {
             return super.saveNBT().toBuilder().putList(
                     "Items",

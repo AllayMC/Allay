@@ -8,7 +8,6 @@ import cn.allay.api.block.function.*;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.client.Client;
-import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.world.World;
@@ -25,15 +24,12 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 public interface BlockBaseComponent extends OnNeighborChanged, OnRandomUpdate, Place, OnPlace, OnInteract, OnReplace, OnScheduledUpdate, BlockComponent {
-    @Inject
     BlockType<? extends BlockBehavior> getBlockType();
 
-    @Inject
     default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, Client client) {
         client.sendPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
     }
 
-    @Inject
     default UpdateBlockPacket createBlockUpdatePacket(BlockState blockState, int x, int y, int z, int layer) {
         var updateBlockPacket = new UpdateBlockPacket();
         updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
@@ -44,30 +40,23 @@ public interface BlockBaseComponent extends OnNeighborChanged, OnRandomUpdate, P
     }
 
     @Override
-    @Inject
     void onNeighborChanged(BlockStateWithPos blockState, BlockStateWithPos neighborBlockState, BlockFace blockFace);
 
     @Override
-    @Inject
     boolean place(@Nullable EntityPlayer player, @NotNull World world, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, @NotNull Vector3fc clickPos, @NotNull BlockFace blockFace);
 
     @Override
-    @Inject
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState);
 
     @Override
-    @Inject
     void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState);
 
     @Override
-    @Inject
     void onRandomUpdate(BlockStateWithPos blockState);
 
     @Override
-    @Inject
     void onScheduledUpdate(BlockStateWithPos blockState);
 
     @Override
-    @Inject
     boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
 }

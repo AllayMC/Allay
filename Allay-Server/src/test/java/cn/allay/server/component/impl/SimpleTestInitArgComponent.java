@@ -1,7 +1,6 @@
 package cn.allay.server.component.impl;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.interfaces.TestInitArgComponent;
@@ -22,7 +21,6 @@ public class SimpleTestInitArgComponent implements TestInitArgComponent, Compone
         this.data = data;
     }
 
-    @Impl
     @Override
     public int getData() {
         return data;

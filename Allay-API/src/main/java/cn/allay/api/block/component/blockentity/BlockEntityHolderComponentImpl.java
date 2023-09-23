@@ -8,7 +8,6 @@ import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.component.annotation.ComponentEventListener;
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,7 +58,6 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     }
 
     @Override
-    @Impl
     public BlockEntityType<?> getBlockEntityType() {
         return blockEntityType;
     }
