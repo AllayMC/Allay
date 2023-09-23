@@ -42,6 +42,8 @@ public interface World {
 
     Logger getLogger();
 
+    float getCurrentTps();
+
     void startTick();
 
     Server getServer();

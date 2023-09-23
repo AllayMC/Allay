@@ -399,6 +399,7 @@ public class AllayClient extends BaseClient {
             }
 
             name = loginData.getDisplayName();
+            displayName = loginData.getDisplayName();
             if (!NAME_PATTERN.matcher(name).matches()) {
                 disconnect("disconnectionScreen.invalidName");
                 return PacketSignal.HANDLED;
@@ -686,6 +687,12 @@ public class AllayClient extends BaseClient {
                         var loc = getLocation();
                         var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(SimpleEntityInitInfo.builder().loc(loc).build());
                         loc.world().addEntity(entity);
+                        var pk = new TextPacket();
+                        pk.setType(TextPacket.Type.CHAT);
+                        pk.setMessage("TPS: " + loc.world().getCurrentTps() + ", Entity Count: " + loc.world().getEntities().size());
+                        pk.setSourceName(getDisplayName());
+                        pk.setXuid(loginData.getXuid());
+                        sendPacket(pk);
                     }
                     case STOP_SNEAKING -> playerEntity.setSneaking(false);
                     case START_SWIMMING -> playerEntity.setSwimming(true);
