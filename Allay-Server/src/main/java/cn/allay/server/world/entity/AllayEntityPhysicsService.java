@@ -20,6 +20,7 @@ import org.joml.primitives.AABBfc;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Function;
 
 import static cn.allay.api.block.component.attribute.BlockAttributes.DEFAULT_FRICTION;
 import static java.lang.Math.*;
@@ -232,31 +233,15 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         if (blocks != null) {
             collision = true;
             //存在碰撞
-            //union为一个能将所有方块aabb包含的最小aabb
-            var union = unionBlockAABBs(
-                    (float) floor(extendX.minX),
-                    (float) floor(extendX.minY),
-                    (float) floor(extendX.minZ),
-                    blocks
-            );
-            //result包含射线与union求交的两个交点的参数
-            var result = new Vector2f(0, 0);
-            //计算射线YZ轴起点坐标
-            //让射线通过union的YZ面中心
-            var y = (union.maxY + union.minY) / 2f;
-            var z = (union.maxZ + union.minZ) / 2f;
-            union.intersectsRay(
-                    x, y, z,
-                    mx, 0, 0,
-                    result
-            );
-            if (result.x < 0) {
+            var minX = (float) floor(extendX.minX);
+            var maxX = computeMax(minX, 0, blocks);
+            if (minX <= x && x <= maxX) {
                 //卡方块里面了
                 deltaX = 0;
             } else {
-                //计算X轴坐标变化量
-                deltaX = mx * result.x;
-                if (deltaX <= FAT_AABB_MARGIN) deltaX = 0;
+                deltaX = min(abs(x - minX), abs(x - maxX));
+                if (mx < 0) deltaX = -deltaX;
+                if (abs(deltaX) <= FAT_AABB_MARGIN) deltaX = 0;
             }
             //x轴方向速度归零
             mx = 0;
@@ -291,31 +276,15 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         if (blocks != null) {
             collision = true;
             //存在碰撞
-            //union为一个能将所有方块aabb包含的最小aabb
-            var union = unionBlockAABBs(
-                    (float) floor(extendZ.minX),
-                    (float) floor(extendZ.minY),
-                    (float) floor(extendZ.minZ),
-                    blocks
-            );
-            //result包含射线与union求交的两个交点的参数
-            var result = new Vector2f(0, 0);
-            //计算射线XY轴起点坐标
-            //让射线通过union的XY面中心
-            var x = (union.maxX + union.minX) / 2f;
-            var y = (union.maxY + union.minY) / 2f;
-            union.intersectsRay(
-                    x, y, z,
-                    0, 0, mz,
-                    result
-            );
-            if (result.x < 0) {
+            var minZ = (float) floor(extendZ.minZ);
+            var maxZ = computeMax(minZ, 2, blocks);
+            if (minZ <= z && z <= maxZ) {
                 //卡方块里面了
                 deltaZ = 0;
             } else {
-                //计算Z轴坐标变化量
-                deltaZ = mz * result.x;
-                if (deltaZ <= FAT_AABB_MARGIN) deltaZ = 0;
+                deltaZ = min(abs(z - minZ), abs(z - maxZ));
+                if (mz < 0) deltaZ = -deltaZ;
+                if (abs(deltaZ) <= FAT_AABB_MARGIN) deltaZ = 0;
             }
             //z轴方向速度归零
             mz = 0;
@@ -353,31 +322,15 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         if (blocks != null) {
             //存在碰撞
             if (down) onGround = true;
-            //union为一个能将所有方块aabb包含的最小aabb
-            var union = unionBlockAABBs(
-                    (float) floor(extendY.minX),
-                    (float) floor(extendY.minY),
-                    (float) floor(extendY.minZ),
-                    blocks
-            );
-            //result包含射线与union求交的两个交点的参数
-            var result = new Vector2f(0, 0);
-            //计算射线XZ轴起点坐标
-            //让射线通过union的XZ面中心
-            var x = (union.maxX + union.minX) / 2f;
-            var z = (union.maxZ + union.minZ) / 2f;
-            union.intersectsRay(
-                    x, y, z,
-                    0, my, 0,
-                    result
-            );
-            if (result.x < 0) {
+            var minY = (float) floor(extendY.minY);
+            var maxY = computeMax(minY, 1, blocks);
+            if (minY <= y && y <= maxY) {
                 //卡方块里面了
                 deltaY = 0;
             } else {
-                //计算Y轴坐标变化量
-                deltaY = my * result.x;
-                if (deltaY <= FAT_AABB_MARGIN) deltaY = 0;
+                deltaY = min(abs(y - minY), abs(y - maxY));
+                if (my < 0) deltaY = -deltaY;
+                if (abs(deltaY) <= FAT_AABB_MARGIN) deltaY = 0;
             }
             //y轴方向速度归零
             my = 0;
@@ -404,25 +357,35 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
     }
 
-    protected AABBf unionBlockAABBs(float startX, float startY, float startZ, BlockState[][][] blocks) {
-        AABBf unionAABB = null;
-        for (int offsetX = 0; offsetX < blocks.length; offsetX++) {
-            var sub1 = blocks[offsetX];
-            for (int offsetY = 0; offsetY < sub1.length; offsetY++) {
-                var sub2 = sub1[offsetY];
-                for (int offsetZ = 0; offsetZ < sub2.length; offsetZ++) {
-                    var block = sub2[offsetZ];
-                    if (block == null) continue;
-                    var blockAABB = block.blockType().getBlockBehavior().getBlockAttributes(block).computeOffsetVoxelShape(startX + offsetX, startY + offsetY, startZ + offsetZ);
-                    if (unionAABB == null) {
-                        unionAABB = blockAABB.unionAABB();
-                    } else {
-                        unionAABB.union(blockAABB.unionAABB());
+    protected float computeMax(float start, int xyzMode, BlockState[][][] blocks) {
+        float max = start;
+        for (int ox = 0, blocksLength = blocks.length; ox < blocksLength; ox++) {
+            BlockState[][] sub1 = blocks[ox];
+            for (int oy = 0, sub1Length = sub1.length; oy < sub1Length; oy++) {
+                BlockState[] sub2 = sub1[oy];
+                for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
+                    BlockState blockState = sub2[oz];
+                    if (blockState == null) continue;
+                    var current = 0f;
+                    switch (xyzMode) {
+                        case 0 -> {
+                            //x
+                            current = blockState.getBlockAttributes().voxelShape().unionAABB().lengthX() + start + ox;
+                        }
+                        case 1 -> {
+                            //y
+                            current = blockState.getBlockAttributes().voxelShape().unionAABB().lengthY() + start + oy;
+                        }
+                        case 2 -> {
+                            //y
+                            current = blockState.getBlockAttributes().voxelShape().unionAABB().lengthZ() + start + oz;
+                        }
                     }
+                    if (current > max) max = current;
                 }
             }
         }
-        return unionAABB;
+        return max;
     }
 
     protected void handleScheduledMoveQueue() {
