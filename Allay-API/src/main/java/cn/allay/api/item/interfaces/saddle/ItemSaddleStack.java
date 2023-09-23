@@ -1,0 +1,17 @@
+package cn.allay.api.item.interfaces.saddle;
+
+import cn.allay.api.data.VanillaItemId;
+import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.type.ItemType;
+import cn.allay.api.item.type.ItemTypeBuilder;
+
+/**
+ * @author daoge_cmd <br>
+ * Allay Project <br>
+ */
+public interface ItemSaddleStack extends ItemStack {
+    ItemType<ItemSaddleStack> SADDLE_TYPE = ItemTypeBuilder
+            .builder(ItemSaddleStack.class)
+            .vanillaItem(VanillaItemId.SADDLE)
+            .build();
+}

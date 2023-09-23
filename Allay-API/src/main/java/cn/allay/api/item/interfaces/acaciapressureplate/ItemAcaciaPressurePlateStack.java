@@ -1,0 +1,17 @@
+package cn.allay.api.item.interfaces.acaciapressureplate;
+
+import cn.allay.api.data.VanillaItemId;
+import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.type.ItemType;
+import cn.allay.api.item.type.ItemTypeBuilder;
+
+/**
+ * @author daoge_cmd <br>
+ * Allay Project <br>
+ */
+public interface ItemAcaciaPressurePlateStack extends ItemStack {
+    ItemType<ItemAcaciaPressurePlateStack> ACACIA_PRESSURE_PLATE_TYPE = ItemTypeBuilder
+            .builder(ItemAcaciaPressurePlateStack.class)
+            .vanillaItem(VanillaItemId.ACACIA_PRESSURE_PLATE)
+            .build();
+}

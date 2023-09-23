@@ -14,7 +14,7 @@ import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
-import cn.allay.api.entity.init.SimpleEntityPlayerInitInfo;
+import cn.allay.api.entity.interfaces.player.SimpleEntityPlayerInitInfo;
 import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.entity.interfaces.EntityVillagerV2;
 import cn.allay.api.entity.type.EntityTypeRegistry;
