@@ -1,7 +1,6 @@
 package cn.allay.api.entity.component.container;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.container.BaseContainerHolder;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
@@ -9,8 +8,6 @@ import cn.allay.api.identifier.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,20 +27,17 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
     }
 
     @Override
-    @Impl
     public @UnmodifiableView Map<FullContainerType<?>, Container> getContainers() {
         return super.getContainers();
     }
 
     @Override
     @Nullable
-    @Impl
     public <T extends Container> T getContainer(FullContainerType<T> type) {
         return super.getContainer(type);
     }
 
     @Override
-    @Impl
     public void addContainer(Container container) {
         super.addContainer(container);
     }

@@ -4,7 +4,6 @@ import cn.allay.api.block.component.BlockComponent;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.init.SimpleBlockEntityInitInfo;
 import cn.allay.api.blockentity.type.BlockEntityType;
-import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.world.World;
 
@@ -16,7 +15,6 @@ import java.util.Objects;
  * @author daoge_cmd
  */
 public interface BlockEntityHolderComponent<T extends BlockEntity> extends BlockComponent {
-    @Inject
     BlockEntityType<?> getBlockEntityType();
 
     default T getBlockEntity(int x, int y, int z, World world) {

@@ -1,7 +1,6 @@
 package cn.allay.api.entity.interfaces;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
@@ -56,7 +55,6 @@ public interface EntityItem extends Entity, EntityItemBaseComponent {
         }
 
         @Override
-        @Impl
         public void tick() {
             super.tick();
             if (age != -1) {
@@ -69,7 +67,6 @@ public interface EntityItem extends Entity, EntityItemBaseComponent {
         }
 
         @Override
-        @Impl
         public NbtMap saveNBT() {
             var nbt = super.saveNBT();
             if (itemStack != null)
@@ -78,7 +75,6 @@ public interface EntityItem extends Entity, EntityItemBaseComponent {
         }
 
         @Override
-        @Impl
         public void loadNBT(NbtMap nbt) {
             super.loadNBT(nbt);
             if (nbt.containsKey("Item"))
@@ -86,43 +82,36 @@ public interface EntityItem extends Entity, EntityItemBaseComponent {
         }
 
         @Override
-        @Impl
         public ItemStack getItemStack() {
             return itemStack;
         }
 
         @Override
-        @Impl
         public void setItemStack(ItemStack itemStack) {
             this.itemStack = itemStack;
         }
 
         @Override
-        @Impl
         public int getPickupDelay() {
             return pickupDelay;
         }
 
         @Override
-        @Impl
         public void setPickupDelay(int delay) {
             this.pickupDelay = delay;
         }
 
         @Override
-        @Impl
         public int getAge() {
             return age;
         }
 
         @Override
-        @Impl
         public void setAge(int age) {
             this.age = age;
         }
 
         @Override
-        @Impl
         public BedrockPacket createSpawnPacket() {
             AddItemEntityPacket addItemEntityPacket = new AddItemEntityPacket();
             addItemEntityPacket.setRuntimeEntityId(uniqueId);

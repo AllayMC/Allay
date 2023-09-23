@@ -3,7 +3,6 @@ package cn.allay.api.entity.component.base;
 import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.entity.Entity;
@@ -124,19 +123,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @Impl
     public EntityType<? extends Entity> getEntityType() {
         return entityType;
     }
 
     @Override
-    @Impl
     public Location3fc getLocation() {
         return location;
     }
 
     @Override
-    @Impl
     @ApiStatus.Internal
     public void setLocation(Location3fc location) {
         var oldChunkX = (int) this.location.x >> 4;
@@ -163,13 +159,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @Impl
     public long getUniqueId() {
         return uniqueId;
     }
 
     @Override
-    @Impl
     public Metadata getMetadata() {
         return metadata;
     }
@@ -195,13 +189,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @Impl
     public AABBfc getAABB() {
         return aabb;
     }
 
     @Override
-    @Impl
     public void setAABB(AABBf aabb) {
         this.aabb = aabb;
         updateHitBoxAndCollisionBoxMetadata();
@@ -209,51 +201,43 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @Impl
     public void setHasCollision(boolean hasCollision) {
         metadata.setFlag(EntityFlag.HAS_COLLISION, hasCollision);
         sendEntityFlags(EntityFlag.HAS_COLLISION);
     }
 
     @Override
-    @Impl
     public @UnmodifiableView Map<Long, Client> getViewers() {
         return Collections.unmodifiableMap(viewers);
     }
 
     @Override
-    @Impl
     public Vector3fc getMotion() {
         return motion;
     }
 
     @Override
-    @Impl
     public void setMotion(Vector3fc motion) {
         this.motion = new Vector3f(motion);
     }
 
     @Override
-    @Impl
     public boolean isOnGround() {
         return onGround;
     }
 
     @Override
-    @Impl
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
     }
 
     @Override
-    @Impl
     public void setHasGravity(boolean hasGravity) {
         metadata.setFlag(EntityFlag.HAS_GRAVITY, hasGravity);
         sendEntityFlags(EntityFlag.HAS_GRAVITY);
     }
 
     @Override
-    @Impl
     public void spawnTo(Client client) {
         var pk = createSpawnPacket();
         client.sendPacket(pk);
@@ -261,7 +245,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @Impl
     public void despawnFrom(Client client) {
         var pk = new RemoveEntityPacket();
         pk.setUniqueEntityId(uniqueId);
@@ -270,13 +253,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @Impl
     public void despawnFromAll() {
         viewers.values().forEach(this::despawnFrom);
     }
 
     @Override
-    @Impl
     public BedrockPacket createSpawnPacket() {
         var addEntityPacket = new AddEntityPacket();
         addEntityPacket.setRuntimeEntityId(uniqueId);
@@ -290,19 +271,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @Impl
     public void sendPacketToViewers(BedrockPacket packet) {
         viewers.values().forEach(client -> client.sendPacket(packet));
     }
 
     @Override
-    @Impl
     public void sendPacketToViewersImmediately(BedrockPacket packet) {
         viewers.values().forEach(client -> client.sendPacketImmediately(packet));
     }
 
     @Override
-    @Impl
     public void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3fc newLoc) {
         var pk = new MoveEntityDeltaPacket();
         pk.setRuntimeEntityId(getUniqueId());
@@ -318,7 +296,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @Impl
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
         var event = new EntitySaveNBTEvent(builder);
@@ -353,7 +330,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @Impl
     public void loadNBT(NbtMap nbt) {
         var event = new EntityLoadNBTEvent(nbt);
         manager.callEvent(event);

@@ -1,6 +1,5 @@
 package cn.allay.api.entity.component.container;
 
-import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerViewer;
 import cn.allay.api.container.FullContainerType;
@@ -16,50 +15,38 @@ import org.jetbrains.annotations.UnmodifiableView;
  */
 public interface EntityContainerViewerComponent extends ContainerViewer, EntityComponent {
     @Override
-    @Inject
     byte assignInventoryId();
 
     @Override
-    @Inject
     void sendContents(Container container);
 
     @Override
-    @Inject
     void sendContentsWithSpecificContainerId(Container container, int containerId);
 
     @Override
-    @Inject
     void sendContentsWithSpecificContainerId(Container container, int containerId, int slot);
 
     @Override
-    @Inject
     void sendContent(Container container, int slot);
 
     @Override
-    @Inject
     void onOpen(byte assignedId, Container container);
 
     @Override
-    @Inject
     void onClose(byte assignedId, Container container);
 
     @Override
-    @Inject
     void onSlotChange(Container container, int slot);
 
     @Override
-    @Inject
     @Nullable <T extends Container> T getOpenedContainer(FullContainerType<T> type);
 
     @Override
-    @Inject
     Container getOpenedContainer(byte id);
 
     @Override
-    @Inject
     @UnmodifiableView BiMap<Byte, Container> getId2ContainerBiMap();
 
     @Override
-    @Inject
     @UnmodifiableView BiMap<FullContainerType<?>, Container> getType2ContainerBiMap();
 }

@@ -1,7 +1,6 @@
 package cn.allay.api.blockentity.component.container;
 
 import cn.allay.api.blockentity.component.BlockEntityComponent;
-import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerHolder;
 import cn.allay.api.container.FullContainerType;
@@ -32,9 +31,7 @@ public interface BlockEntityContainerHolderComponent extends ContainerHolder, Bl
         setContainer(container);
     }
 
-    @Inject
     <T extends Container> T getContainer();
 
-    @Inject
     void setContainer(Container container);
 }

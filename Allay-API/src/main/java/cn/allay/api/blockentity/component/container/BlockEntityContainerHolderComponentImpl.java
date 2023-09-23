@@ -4,7 +4,6 @@ import cn.allay.api.block.component.event.BlockOnInteractEvent;
 import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.component.annotation.ComponentEventListener;
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerHolder;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
@@ -29,13 +28,11 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @Override
-    @Impl
     public <T extends Container> T getContainer() {
         return (T) container;
     }
 
     @Override
-    @Impl
     public void setContainer(Container container) {
         this.container = container;
     }

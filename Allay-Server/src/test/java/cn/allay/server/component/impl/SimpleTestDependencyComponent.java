@@ -2,7 +2,6 @@ package cn.allay.server.component.impl;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.interfaces.TestDependencyComponent;
@@ -28,19 +27,16 @@ public class SimpleTestDependencyComponent implements Component, TestDependencyC
     @Dependency(identifier = "minecraft:attack_component")
     protected Component attackComponent;
 
-    @Impl
     @Override
     public Component getNameComponent() {
         return nameComponent;
     }
 
-    @Impl
     @Override
     public Component getHealthComponent() {
         return healthComponent;
     }
 
-    @Impl
     @Override
     public Component getAttackComponent() {
         return attackComponent;

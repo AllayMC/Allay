@@ -1,7 +1,6 @@
 package cn.allay.api.item.component.attribute;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.identifier.Identifier;
 
 /**
@@ -21,7 +20,6 @@ public class ItemAttributeComponentImpl implements ItemAttributeComponent {
     }
 
     @Override
-    @Impl
     public ItemAttributes getItemAttributes() {
         return itemAttributes;
     }

@@ -1,6 +1,5 @@
 package cn.allay.server.component.interfaces;
 
-import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.component.interfaces.Component;
 
 /**
@@ -9,12 +8,9 @@ import cn.allay.api.component.interfaces.Component;
  * @author daoge_cmd
  */
 public interface TestDependencyComponent {
-    @Inject
     Component getNameComponent();
 
-    @Inject
     Component getHealthComponent();
 
-    @Inject
     Component getAttackComponent();
 }

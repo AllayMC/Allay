@@ -2,7 +2,6 @@ package cn.allay.server.component.impl;
 
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
-import cn.allay.api.component.annotation.Impl;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.interfaces.AttackComponent;
@@ -21,7 +20,6 @@ public class SimpleAttackComponent implements AttackComponent, Component {
     @Dependency
     protected HealthComponent healthComponent;
 
-    @Impl
     @Override
     public void attack(int amount) {
         healthComponent.setHealth(healthComponent.getHealth() - amount);

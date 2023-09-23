@@ -9,7 +9,6 @@ import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.component.BlockEntityComponent;
 import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.client.Client;
-import cn.allay.api.component.annotation.Inject;
 import cn.allay.api.math.position.Position3ic;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -24,31 +23,22 @@ import java.util.Objects;
  */
 public interface BlockEntityBaseComponent extends BlockEntityComponent {
 
-    @Inject
     BlockEntityType<? extends BlockEntity> getBlockEntityType();
 
-    @Inject
     Position3ic getPosition();
 
-    @Inject
     NbtMap saveNBT();
 
-    @Inject
     void loadNBT(NbtMap nbt);
 
-    @Inject
     void onNeighborChanged(BlockOnNeighborChangedEvent event);
 
-    @Inject
     void onPlace(BlockOnPlaceEvent event);
 
-    @Inject
     void onReplace(BlockOnReplaceEvent event);
 
-    @Inject
     void onInteract(BlockOnInteractEvent event);
 
-    @Inject
     default BlockEntityDataPacket createBlockEntityDataPacket() {
         var packet = new BlockEntityDataPacket();
         var pos = getPosition();
@@ -57,12 +47,10 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         return packet;
     }
 
-    @Inject
     default void sendBlockEntityDataPacketTo(Client client) {
         client.sendPacket(createBlockEntityDataPacket());
     }
 
-    @Inject
     default void sendBlockEntityDataPacketToAll() {
         var pos = getPosition();
         var chunk = pos.world().getChunkService().getChunkByLevelPos(pos.x(), pos.z());
@@ -71,10 +59,8 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         chunk.sendChunkPacket(pk);
     }
 
-    @Inject
     default void tick() {}
 
-    @Inject
     default boolean sendToClient() {
         return true;
     }
