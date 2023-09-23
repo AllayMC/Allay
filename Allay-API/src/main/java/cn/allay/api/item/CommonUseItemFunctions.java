@@ -2,7 +2,7 @@ package cn.allay.api.item;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
-import cn.allay.api.entity.interfaces.EntityPlayer;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.world.World;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;

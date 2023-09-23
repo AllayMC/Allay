@@ -2,7 +2,7 @@ package cn.allay.api.item.component.base;
 
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.entity.interfaces.EntityPlayer;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.UseItemOn;
 import cn.allay.api.item.component.ItemComponent;
@@ -45,7 +45,13 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
     @Nullable
     Integer getStackNetworkId();
 
-    void setStackNetworkId(int newStackNetworkId);
+    void setStackNetworkId(@Nullable Integer newStackNetworkId);
+
+    Integer assignNewStackNetworkId();
+
+    default void clearStackNetworkId() {
+        setStackNetworkId(null);
+    }
 
     ItemStack copy();
 

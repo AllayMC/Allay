@@ -14,6 +14,11 @@ public interface BlockAcaciaDoorBehavior extends BlockBehavior {
     BlockType<BlockAcaciaDoorBehavior> ACACIA_DOOR_TYPE = BlockTypeBuilder
             .builder(BlockAcaciaDoorBehavior.class)
             .vanillaBlock(VanillaBlockId.ACACIA_DOOR)
-            .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+            .setProperties(
+                    VanillaBlockPropertyTypes.DIRECTION,
+                    VanillaBlockPropertyTypes.DOOR_HINGE_BIT,
+                    VanillaBlockPropertyTypes.OPEN_BIT,
+                    VanillaBlockPropertyTypes.UPPER_BLOCK_BIT
+            )
             .build();
 }

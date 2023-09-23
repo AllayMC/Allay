@@ -28,7 +28,7 @@ public interface EntityPhysicsService {
     void offerScheduledMove(Entity entity, Location3fc newLoc);
 
     default List<Entity> computeCollidingEntities(Entity entity) {
-        if (entity.hasCollision()) {
+        if (entity.hasEntityCollision()) {
             var entities = computeCollidingEntities(entity.getOffsetAABB());
             entities.removeIf(e -> e.getUniqueId() == entity.getUniqueId());
             return entities;

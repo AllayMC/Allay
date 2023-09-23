@@ -7,6 +7,7 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.utils.MathUtils;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.primitives.AABBfc;
@@ -21,8 +22,7 @@ import static cn.allay.api.item.ItemHelper.fromNBT;
  *
  * @author daoge_cmd
  */
-public
-class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityItem> implements EntityItemBaseComponent {
+public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityItem> implements EntityItemBaseComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = EntityBaseComponentImpl.IDENTIFIER;
@@ -34,6 +34,12 @@ class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityItem> im
     public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, Function<EntityItem, AABBfc> aabbGetter, @Nullable ItemStack itemStack) {
         super(info, aabbGetter);
         this.itemStack = itemStack;
+    }
+
+    @Override
+    protected void initMetadata() {
+        super.initMetadata();
+        metadata.setFlag(EntityFlag.HAS_COLLISION, false);
     }
 
     @Override

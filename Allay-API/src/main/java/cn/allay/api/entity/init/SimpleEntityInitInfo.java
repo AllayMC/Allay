@@ -2,7 +2,6 @@ package cn.allay.api.entity.init;
 
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.type.EntityType;
-import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.location.Location3fc;
 import cn.allay.api.world.World;
 import lombok.Getter;
@@ -10,6 +9,7 @@ import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3fc;
 
 /**
  * Allay Project 2023/9/14
@@ -89,6 +89,10 @@ public class SimpleEntityInitInfo<T extends Entity> implements EntityInitInfo<T>
                             .build()
             );
             return this;
+        }
+
+        public Builder motion(Vector3fc m) {
+            return motion(m.x(), m.y(), m.z());
         }
 
         public Builder nbt(NbtMap nbt) {

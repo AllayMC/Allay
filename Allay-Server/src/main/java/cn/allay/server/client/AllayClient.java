@@ -2,7 +2,7 @@ package cn.allay.server.client;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.data.BlockFace;
-import cn.allay.api.block.interfaces.BlockAirBehavior;
+import cn.allay.api.block.interfaces.air.BlockAirBehavior;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.client.BaseClient;
 import cn.allay.api.client.data.AdventureSettings;
@@ -14,9 +14,9 @@ import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.entity.interfaces.player.SimpleEntityPlayerInitInfo;
-import cn.allay.api.entity.interfaces.EntityPlayer;
-import cn.allay.api.entity.interfaces.EntityVillagerV2;
+import cn.allay.api.entity.interfaces.villagerv2.EntityVillagerV2;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.type.CreativeItemRegistry;
@@ -41,6 +41,7 @@ import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
+import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventoryTransactionType;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
@@ -576,6 +577,17 @@ public class AllayClient extends BaseClient {
                             } else {
                                 inv.setItemInHand(Container.AIR_STACK);
                             }
+                        }
+                    }
+                }
+            } else if (packet.getTransactionType() == InventoryTransactionType.NORMAL) {
+                for (var action : packet.getActions()) {
+                    if (action.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) {
+                        if (action.getSource().getFlag().equals(InventorySource.Flag.DROP_ITEM)) {
+                            //Do not ask me why mojang still use the old item transaction packet even the server-auth inv was enabled
+                            var count = action.getToItem().getCount();
+                            var slot = action.getSlot();
+                            playerEntity.tryDropItem(FullContainerType.PLAYER_INVENTORY, slot, count);
                         }
                     }
                 }

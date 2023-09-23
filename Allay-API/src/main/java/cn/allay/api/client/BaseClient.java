@@ -4,7 +4,7 @@ import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
 import cn.allay.api.client.movement.ClientMovementValidator;
 import cn.allay.api.client.skin.Skin;
-import cn.allay.api.entity.interfaces.EntityPlayer;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.server.Server;
 import lombok.Getter;
 import lombok.Setter;

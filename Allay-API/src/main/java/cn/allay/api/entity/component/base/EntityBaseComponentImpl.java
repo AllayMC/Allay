@@ -88,7 +88,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         initMetadata();
     }
 
-    private void initMetadata() {
+    protected void initMetadata() {
         metadata.setInt(EntityDataTypes.PLAYER_INDEX, 0);
         metadata.setShort(EntityDataTypes.AIR_SUPPLY, (short) 400);
         metadata.setShort(EntityDataTypes.AIR_SUPPLY_MAX, (short) 400);
@@ -202,8 +202,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public void setHasCollision(boolean hasCollision) {
-        metadata.setFlag(EntityFlag.HAS_COLLISION, hasCollision);
+    public void setHasEntityCollision(boolean hasEntityCollision) {
+        metadata.setFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
         sendEntityFlags(EntityFlag.HAS_COLLISION);
     }
 

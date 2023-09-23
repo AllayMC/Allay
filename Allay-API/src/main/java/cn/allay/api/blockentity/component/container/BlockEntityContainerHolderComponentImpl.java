@@ -7,7 +7,7 @@ import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerHolder;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
-import cn.allay.api.entity.interfaces.EntityItem;
+import cn.allay.api.entity.interfaces.item.EntityItem;
 import cn.allay.api.identifier.Identifier;
 
 import java.util.Objects;

@@ -7,6 +7,7 @@ import cn.allay.api.container.FullContainerType;
 import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
 import cn.allay.api.entity.init.EntityInitInfo;
+import cn.allay.api.entity.interfaces.item.EntityItem;
 import cn.allay.api.identifier.Identifier;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
@@ -27,7 +28,7 @@ import java.util.function.Function;
  * Allay Project 2023/9/23
  *
  * @author daoge_cmd
- */ //<editor-fold desc="EntityPlayerBaseComponentImpl">
+ */
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
 
     @ComponentIdentifier
@@ -54,6 +55,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void tick() {
         super.tick();
+        tryPickUpItems();
+    }
+
+    protected void tryPickUpItems() {
         var world = location.world;
         //pick up items
         var pickUpArea = new AABBf(
