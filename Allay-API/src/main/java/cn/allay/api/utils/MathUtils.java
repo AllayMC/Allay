@@ -5,6 +5,8 @@ import org.joml.*;
 
 import java.lang.Math;
 
+import static java.lang.StrictMath.*;
+
 /**
  * Allay Project 7/31/2023
  *
@@ -74,5 +76,60 @@ public class MathUtils {
         x = Double.longBitsToDouble(reEncode);
         x *= (1.5d - xHalf * x * x);
         return x;
+    }
+
+    /**
+     * 通过yaw与pitch计算出等价的Vector3方向向量
+     *
+     * @param yaw   yaw
+     * @param pitch pitch
+     * @return Vector3方向向量
+     */
+    public Vector3f getDirectionVector(double yaw, double pitch) {
+        var pitch0 = toRadians(pitch + 90);
+        var yaw0 = toRadians(yaw + 90);
+        var x = sin(pitch0) * cos(yaw0);
+        var z = sin(pitch0) * sin(yaw0);
+        var y = cos(pitch0);
+        return new Vector3f((float) x, (float) y, (float) z).normalize();
+    }
+
+    /**
+     * 通过方向向量计算出yaw
+     * <p>
+     * Calculate yaw from the direction vector
+     *
+     * @param vector 方向向量
+     * @return yaw
+     */
+    public double getYawFromVector(Vector3fc vector) {
+        double length = vector.x() * vector.x() + vector.z() * vector.z();
+        // 避免NAN
+        if (length == 0) {
+            return 0;
+        }
+        double yaw = toDegrees(asin(-vector.x() / sqrt(length)));
+        return -vector.z() > 0.0D ? 180.0D - yaw : StrictMath.abs(yaw) < 1E-10 ? 0 : yaw;
+    }
+
+    /**
+     * 通过方向向量计算出pitch
+     * <p>
+     * Calculate the pitch by the direction vector
+     *
+     * @param vector 方向向量
+     * @return pitch
+     */
+    public double getPitchFromVector(Vector3fc vector) {
+        double length =
+                vector.x() * vector.x() +
+                vector.z() * vector.z() +
+                vector.y() * vector.y();
+        // 避免NAN
+        if (length == 0) {
+            return 0;
+        }
+        var pitch = toDegrees(asin(-vector.y() / sqrt(length)));
+        return StrictMath.abs(pitch) < 1E-10 ? 0 : pitch;
     }
 }

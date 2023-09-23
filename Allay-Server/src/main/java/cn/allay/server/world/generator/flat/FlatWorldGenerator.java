@@ -1,7 +1,7 @@
 package cn.allay.server.world.generator.flat;
 
-import cn.allay.api.block.interfaces.BlockBedrockBehavior;
-import cn.allay.api.block.interfaces.BlockGrassBehavior;
+import cn.allay.api.block.interfaces.bedrock.BlockBedrockBehavior;
+import cn.allay.api.block.interfaces.grass.BlockGrassBehavior;
 import cn.allay.api.world.GeneratorType;
 import cn.allay.api.world.generator.ChunkGenerateContext;
 import cn.allay.api.world.generator.WorldGenerator;

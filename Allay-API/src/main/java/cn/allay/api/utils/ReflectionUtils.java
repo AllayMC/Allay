@@ -19,7 +19,7 @@ public class ReflectionUtils {
         List<String> classes = null;
         try {
             ClassPath classPath = ClassPath.from(ClassLoader.getSystemClassLoader());
-            classes = classPath.getTopLevelClasses(packageName).stream().map(ClassPath.ClassInfo::getName).toList();
+            classes = classPath.getTopLevelClassesRecursive(packageName).stream().map(ClassPath.ClassInfo::getName).toList();
         } catch (IOException e) {
             e.printStackTrace();
         }

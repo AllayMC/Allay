@@ -59,6 +59,7 @@ public final class GameLoop {
             onTick.accept(this);
             currentTick++;
             long timeTakenToTick = System.nanoTime() - startTickTime;
+            if (timeTakenToTick == 0) timeTakenToTick = 1;
             float tick = (float) Math.max(0, Math.min(20, 1000000000 / timeTakenToTick));
             System.arraycopy(this.tickAverage, 1, this.tickAverage, 0, this.tickAverage.length - 1);
             this.tickAverage[this.tickAverage.length - 1] = tick;

@@ -61,7 +61,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             if (!entity.computeMovementServerSide()) return;
             if (!entity.isInWorld()) return;
             //TODO: 水流作用 方块推出作用 etc...
-            if (entity.hasCollision()) computeCollisionMotion(entity);
+            if (entity.hasEntityCollision()) computeCollisionMotion(entity);
             entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
             if (applyMotion(entity)) {
                 updatedEntities.put(entity.getUniqueId(), entity);

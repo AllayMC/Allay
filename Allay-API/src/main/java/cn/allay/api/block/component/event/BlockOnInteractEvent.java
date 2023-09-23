@@ -2,7 +2,7 @@ package cn.allay.api.block.component.event;
 
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.component.interfaces.ComponentEvent;
-import cn.allay.api.entity.interfaces.EntityPlayer;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.world.World;
 import org.jetbrains.annotations.Nullable;

@@ -50,11 +50,11 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void setAABB(AABBf aabb);
 
-    default boolean hasCollision() {
+    default boolean hasEntityCollision() {
         return getMetadata().getFlag(EntityFlag.HAS_COLLISION);
     }
 
-    void setHasCollision(boolean hasCollision);
+    void setHasEntityCollision(boolean hasEntityCollision);
 
     @UnmodifiableView
     Map<Long, Client> getViewers();
@@ -114,6 +114,10 @@ public interface EntityBaseComponent extends EntityComponent {
 
     default float getGravity() {
         return 0.08f;
+    }
+
+    default float getEyeHeight() {
+        return (getAABB().maxY() - getAABB().minY()) * 0.9f;
     }
 
     default boolean hasGravity() {

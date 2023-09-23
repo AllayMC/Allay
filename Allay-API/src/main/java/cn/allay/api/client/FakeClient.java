@@ -7,14 +7,13 @@ import cn.allay.api.client.info.UIProfile;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
-import cn.allay.api.entity.interfaces.EntityPlayer;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.chunk.Chunk;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PlayStatusPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 
