@@ -125,6 +125,31 @@ public interface World {
         }
     }
 
+    default void updateBlockState(int x, int y, int z, BlockState newBlockState) {
+        updateBlockState(x, y, z, newBlockState, 0);
+    }
+
+    default void updateBlockState(int x, int y, int z, BlockState newBlockState, int layer) {
+        updateBlockState(x, y, z, newBlockState, layer, true);
+    }
+
+    default void updateBlockState(int x, int y, int z, BlockState newBlockState, int layer, boolean send) {
+        var chunk = getChunkService().getChunkByLevelPos(x, z);
+        if (chunk == null) {
+            chunk = getChunkService().getChunkImmediately(x >> 4, z >> 4);
+        }
+        int xIndex = x & 15;
+        int zIndex = z & 15;
+        BlockState oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
+        if (newBlockState.blockType() != oldBlockState.blockType()) {
+            throw new IllegalArgumentException("Cannot update block to a new block type! Current: " + oldBlockState.blockType() + ", new: " + newBlockState.blockType());
+        }
+        chunk.setBlockState(xIndex, y, zIndex, newBlockState, layer);
+        if (send) {
+            chunk.sendChunkPacket(newBlockState.getBehavior().createBlockUpdatePacket(newBlockState, x, y, z, layer));
+        }
+    }
+
     default BlockState getBlockState(int x, int y, int z) {
         return getBlockState(x, y, z, 0);
     }
