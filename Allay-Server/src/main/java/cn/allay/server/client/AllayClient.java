@@ -685,7 +685,7 @@ public class AllayClient extends BaseClient {
                         playerEntity.setSneaking(true);
                         //TODO: debug only
                         var loc = getLocation();
-                        for (var i = 0; i <= 10; i++) {
+                        for (var i = 0; i <= 0; i++) {
                             var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(
                                     SimpleEntityInitInfo
                                             .builder()

@@ -7,21 +7,18 @@ import cn.allay.api.entity.Entity;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.location.Location3fc;
 import cn.allay.api.math.voxelshape.VoxelShape;
-import cn.allay.api.server.Server;
 import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.World;
 import cn.allay.api.world.entity.EntityPhysicsService;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Function;
 
 import static cn.allay.api.block.component.attribute.BlockAttributes.DEFAULT_FRICTION;
 import static java.lang.Math.*;
