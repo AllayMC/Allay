@@ -14,6 +14,7 @@ import cn.allay.api.data.VanillaBlockId;
 
 import static cn.allay.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
 import static cn.allay.api.data.VanillaBlockPropertyTypes.OPEN_BIT;
+import static java.lang.Math.abs;
 
 /**
  * @author daoge_cmd | Cool_Loong <br>

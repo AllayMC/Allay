@@ -1,7 +1,7 @@
 package cn.allay.server.entity.type;
 
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
-import cn.allay.api.entity.interfaces.sheep.EntitySheep;
+import cn.allay.api.entity.interfaces.EntitySheep;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.world.World;
 import cn.allay.testutils.AllayTestExtension;

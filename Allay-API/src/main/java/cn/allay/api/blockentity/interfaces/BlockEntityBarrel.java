@@ -1,6 +1,7 @@
 package cn.allay.api.blockentity.interfaces;
 
 import cn.allay.api.blockentity.BlockEntity;
+import cn.allay.api.blockentity.component.barrel.BlockEntityBarrelBaseComponentImpl;
 import cn.allay.api.blockentity.component.container.BlockEntityContainerHolderComponent;
 import cn.allay.api.blockentity.component.container.BlockEntityContainerHolderComponentImpl;
 import cn.allay.api.blockentity.type.BlockEntityType;

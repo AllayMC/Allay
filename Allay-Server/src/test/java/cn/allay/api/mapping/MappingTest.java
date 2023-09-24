@@ -1,6 +1,6 @@
 package cn.allay.api.mapping;
 
-import cn.allay.api.block.interfaces.wood.BlockWoodBehavior;
+import cn.allay.api.block.interfaces.BlockWoodBehavior;
 import cn.allay.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Assertions;

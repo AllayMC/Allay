@@ -1,6 +1,6 @@
 package cn.allay.server.world;
 
-import cn.allay.api.block.interfaces.wood.BlockWoodBehavior;
+import cn.allay.api.block.interfaces.BlockWoodBehavior;
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;

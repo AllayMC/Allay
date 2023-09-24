@@ -1,7 +1,7 @@
 package cn.allay.api.entity.init;
 
 import cn.allay.api.client.Client;
-import cn.allay.api.entity.interfaces.player.EntityPlayer;
+import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.world.World;
 import lombok.Getter;
 import org.cloudburstmc.nbt.NbtMap;
