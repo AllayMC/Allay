@@ -77,7 +77,7 @@ public class LoginData {
 
         JsonObject skinMap = decodeToken(skinData);
         if (skinMap.has("DeviceModel") && skinMap.has("DeviceId") &&
-            skinMap.has("ClientRandomId") && skinMap.has("DeviceOS") && skinMap.has("GuiScale")) {
+                skinMap.has("ClientRandomId") && skinMap.has("DeviceOS") && skinMap.has("GuiScale")) {
             String deviceModel = skinMap.get("DeviceModel").getAsString();
             String deviceId = skinMap.get("DeviceId").getAsString();
             long clientId = skinMap.get("ClientRandomId").getAsLong();

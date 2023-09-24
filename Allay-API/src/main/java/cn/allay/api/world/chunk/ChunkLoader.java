@@ -37,7 +37,9 @@ public interface ChunkLoader {
 
     void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler);
 
-    default void sendPacket(BedrockPacket packet) {}
+    default void sendPacket(BedrockPacket packet) {
+    }
 
-    default void sendPacketImmediately(BedrockPacket packet) {}
+    default void sendPacketImmediately(BedrockPacket packet) {
+    }
 }

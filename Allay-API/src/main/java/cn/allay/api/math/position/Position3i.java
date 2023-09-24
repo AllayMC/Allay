@@ -23,6 +23,7 @@ public class Position3i extends Vector3i implements Position3ic {
         super(p);
         this.world = p.world();
     }
+
     public Position3i(World world) {
         super();
         this.world = world;

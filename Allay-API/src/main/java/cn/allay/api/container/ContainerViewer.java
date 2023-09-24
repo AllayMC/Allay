@@ -28,8 +28,7 @@ public interface ContainerViewer {
 
     void onSlotChange(Container container, int slot);
 
-    @Nullable
-    <T extends Container> T getOpenedContainer(FullContainerType<T> type);
+    @Nullable <T extends Container> T getOpenedContainer(FullContainerType<T> type);
 
     @Nullable
     default <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType) {

@@ -20,7 +20,8 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
     @ComponentIdentifier
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_holder_component");
 
-    public EntityContainerHolderComponentImpl() {}
+    public EntityContainerHolderComponentImpl() {
+    }
 
     public EntityContainerHolderComponentImpl(Container... containers) {
         super(containers);

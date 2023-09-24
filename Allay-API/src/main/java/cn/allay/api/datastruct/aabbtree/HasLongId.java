@@ -6,5 +6,5 @@ package cn.allay.api.datastruct.aabbtree;
  * @author daoge_cmd
  */
 public interface HasLongId {
-   long getUniqueId();
+    long getUniqueId();
 }

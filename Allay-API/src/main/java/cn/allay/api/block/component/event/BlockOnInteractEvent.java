@@ -54,12 +54,12 @@ public final class BlockOnInteractEvent implements ComponentEvent {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (BlockOnInteractEvent) obj;
         return Objects.equals(this.player, that.player) &&
-               Objects.equals(this.itemStack, that.itemStack) &&
-               Objects.equals(this.world, that.world) &&
-               Objects.equals(this.blockPos, that.blockPos) &&
-               Objects.equals(this.placeBlockPos, that.placeBlockPos) &&
-               Objects.equals(this.clickPos, that.clickPos) &&
-               Objects.equals(this.blockFace, that.blockFace);
+                Objects.equals(this.itemStack, that.itemStack) &&
+                Objects.equals(this.world, that.world) &&
+                Objects.equals(this.blockPos, that.blockPos) &&
+                Objects.equals(this.placeBlockPos, that.placeBlockPos) &&
+                Objects.equals(this.clickPos, that.clickPos) &&
+                Objects.equals(this.blockFace, that.blockFace);
     }
 
     @Override
@@ -70,13 +70,13 @@ public final class BlockOnInteractEvent implements ComponentEvent {
     @Override
     public String toString() {
         return "BlockOnInteractEvent[" +
-               "player=" + player + ", " +
-               "itemStack=" + itemStack + ", " +
-               "world=" + world + ", " +
-               "blockPos=" + blockPos + ", " +
-               "placeBlockPos=" + placeBlockPos + ", " +
-               "clickPos=" + clickPos + ", " +
-               "blockFace=" + blockFace + ']';
+                "player=" + player + ", " +
+                "itemStack=" + itemStack + ", " +
+                "world=" + world + ", " +
+                "blockPos=" + blockPos + ", " +
+                "placeBlockPos=" + placeBlockPos + ", " +
+                "clickPos=" + clickPos + ", " +
+                "blockFace=" + blockFace + ']';
     }
 
 }

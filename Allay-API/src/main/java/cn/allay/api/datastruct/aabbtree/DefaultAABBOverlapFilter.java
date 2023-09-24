@@ -6,8 +6,8 @@ package cn.allay.api.datastruct.aabbtree;
  * @author daoge_cmd
  */
 public class DefaultAABBOverlapFilter<T extends HasAABB & HasLongId> implements AABBOverlapFilter<T> {
-   @Override
-   public boolean test(T t) {
-      return true;
-   }
+    @Override
+    public boolean test(T t) {
+        return true;
+    }
 }

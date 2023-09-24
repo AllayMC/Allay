@@ -9,10 +9,10 @@ import org.joml.primitives.AABBf;
  */
 @FunctionalInterface
 public interface AABBTreeHeuristicFunction<T extends HasAABB> {
-   HeuristicResult getInsertionHeuristic(AABBf left, AABBf right, T object, AABBf objectAABB);
+    HeuristicResult getInsertionHeuristic(AABBf left, AABBf right, T object, AABBf objectAABB);
 
-   enum HeuristicResult {
-      LEFT,
-      RIGHT
-   }
+    enum HeuristicResult {
+        LEFT,
+        RIGHT
+    }
 }

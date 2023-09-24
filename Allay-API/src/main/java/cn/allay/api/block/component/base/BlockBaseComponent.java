@@ -19,7 +19,7 @@ import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
 public interface BlockBaseComponent extends OnNeighborChanged, OnRandomUpdate, Place, OnPlace, OnInteract, OnReplace, OnScheduledUpdate, BlockComponent {
     BlockType<? extends BlockBehavior> getBlockType();
 
-     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE propertyValue, int x, int y, int z, World world) {
+    default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE propertyValue, int x, int y, int z, World world) {
         updateBlockProperty(propertyType.createValue(propertyValue), x, y, z, world);
     }
 

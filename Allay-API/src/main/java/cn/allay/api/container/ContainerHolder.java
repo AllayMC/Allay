@@ -15,8 +15,7 @@ public interface ContainerHolder {
     @UnmodifiableView
     Map<FullContainerType<?>, Container> getContainers();
 
-    @Nullable
-    <T extends Container> T getContainer(FullContainerType<T> type);
+    @Nullable <T extends Container> T getContainer(FullContainerType<T> type);
 
     @Nullable
     default <T extends Container> T getContainerBySlotType(ContainerSlotType slotType) {

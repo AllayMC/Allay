@@ -33,7 +33,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
             Container container,
             Consumer<ContainerViewer> onOpenListener,
             Consumer<ContainerViewer> onCloseListener
-            ) {
+    ) {
         this.container = container;
         this.container.addOnOpenListener(onOpenListener);
         this.container.addOnCloseListener(onCloseListener);

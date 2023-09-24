@@ -14,7 +14,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Allay Project 2023/5/1
@@ -141,6 +141,7 @@ public class BlockAttributes {
     protected boolean isStemBlock = false;
     @Builder.Default
     protected boolean isSlabBlock = false;
+
     public static BlockAttributes fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockAttributes.class);
     }

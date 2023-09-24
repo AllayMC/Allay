@@ -15,8 +15,7 @@ import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request
  * @author daoge_cmd
  */
 public interface ContainerActionProcessorHolder {
-    @Nullable
-    <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type);
+    @Nullable <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type);
 
     void registerProcessor(ContainerActionProcessor<?> processor);
 

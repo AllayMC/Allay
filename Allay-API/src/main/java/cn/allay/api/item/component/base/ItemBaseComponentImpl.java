@@ -122,15 +122,15 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             return ItemData.AIR;
         } else {
             return ItemData
-                .builder()
-                .definition(itemType.toNetworkDefinition())
-                .blockDefinition(blockState != null ? blockState.toNetworkBlockDefinition() : () -> 0)
-                .count(count)
-                .damage(damage)
-                .tag(nbt)
-                .usingNetId(stackNetworkId != null)
-                .netId(stackNetworkId != null ? stackNetworkId : 0)
-                .build();
+                    .builder()
+                    .definition(itemType.toNetworkDefinition())
+                    .blockDefinition(blockState != null ? blockState.toNetworkBlockDefinition() : () -> 0)
+                    .count(count)
+                    .damage(damage)
+                    .tag(nbt)
+                    .usingNetId(stackNetworkId != null)
+                    .netId(stackNetworkId != null ? stackNetworkId : 0)
+                    .build();
         }
     }
 

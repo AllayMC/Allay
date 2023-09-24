@@ -62,21 +62,72 @@ public class FakeClient extends BaseClient {
         return computeMovement;
     }
 
-    @Override public boolean isLocalInitialized() {return true;}
-    @Override public boolean isFirstSpawned() {return true;}
-    @Override public boolean isOnline() {return true;}
-    @Override public void preSendChunks(Set<Long> chunkHashes) {}
-    @Override public void notifyChunkLoaded(Chunk chunk) {}
-    @Override public void unloadChunks(Set<Long> chunkHashes) {}
-    @Override public void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler) {}
-    @Override public void sendPacket(BedrockPacket packet) {}
-    @Override public void sendPacketImmediately(BedrockPacket packet) {}
-    @Override public void disconnect(String reason) {}
-    @Override public void disconnect(String reason, boolean hideReason) {}
-    @Override public void initializePlayer() {}
-    @Override public boolean isXboxAuthenticated() {return true;}
-    @Override public ContainerActionProcessorHolder getContainerActionProcessorHolder() {return EMPTY_CONTAINER_ACTION_PROCESSOR_HOLDER;}
-    @Override @Nullable public SecretKey getEncryptionSecretKey() {return null;}
+    @Override
+    public boolean isLocalInitialized() {
+        return true;
+    }
+
+    @Override
+    public boolean isFirstSpawned() {
+        return true;
+    }
+
+    @Override
+    public boolean isOnline() {
+        return true;
+    }
+
+    @Override
+    public void preSendChunks(Set<Long> chunkHashes) {
+    }
+
+    @Override
+    public void notifyChunkLoaded(Chunk chunk) {
+    }
+
+    @Override
+    public void unloadChunks(Set<Long> chunkHashes) {
+    }
+
+    @Override
+    public void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler) {
+    }
+
+    @Override
+    public void sendPacket(BedrockPacket packet) {
+    }
+
+    @Override
+    public void sendPacketImmediately(BedrockPacket packet) {
+    }
+
+    @Override
+    public void disconnect(String reason) {
+    }
+
+    @Override
+    public void disconnect(String reason, boolean hideReason) {
+    }
+
+    @Override
+    public void initializePlayer() {
+    }
+
+    @Override
+    public boolean isXboxAuthenticated() {
+        return true;
+    }
+
+    @Override
+    public ContainerActionProcessorHolder getContainerActionProcessorHolder() {
+        return EMPTY_CONTAINER_ACTION_PROCESSOR_HOLDER;
+    }
+
+    @Override
+    @Nullable
+    public SecretKey getEncryptionSecretKey() {
+        return null;
+    }
 
     public static class FakeClientBuilder {
         private String name;
@@ -98,7 +149,8 @@ public class FakeClient extends BaseClient {
         private String identityPublicKey = "";
         private boolean computeMovement = true;
 
-        FakeClientBuilder() {}
+        FakeClientBuilder() {
+        }
 
         public FakeClientBuilder loaderActive(boolean loaderActive) {
             this.loaderActive = loaderActive;

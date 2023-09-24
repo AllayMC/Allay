@@ -7,6 +7,6 @@ import java.nio.file.Path;
  *
  * @author daoge_cmd
  */
-public interface NativeFileClientStorage extends ClientStorage{
+public interface NativeFileClientStorage extends ClientStorage {
     Path getClientDBPath();
 }

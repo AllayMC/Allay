@@ -80,8 +80,8 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
 
     default boolean canMerge(ItemStack itemStack) {
         return itemStack.getItemType() == getItemType() &&
-               itemStack.getDamage() == getDamage() &&
-               itemStack.getNbt().equals(getNbt()) &&
-               itemStack.toBlockState() == toBlockState();
+                itemStack.getDamage() == getDamage() &&
+                itemStack.getNbt().equals(getNbt()) &&
+                itemStack.toBlockState() == toBlockState();
     }
 }

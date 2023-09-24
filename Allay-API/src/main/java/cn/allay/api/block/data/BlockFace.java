@@ -17,17 +17,17 @@ import static java.lang.Math.min;
  */
 public enum BlockFace {
 
-    DOWN( -1, new Vector3i( 0, -1, 0 ) ),
-    UP( -1, new Vector3i( 0, 1, 0 ) ),
-    NORTH( 2, new Vector3i( 0, 0, -1 ) ),
-    SOUTH( 0, new Vector3i( 0, 0, 1 ) ),
-    WEST( 1, new Vector3i( -1, 0, 0 ) ),
-    EAST( 3, new Vector3i( 1, 0, 0 ) );
+    DOWN(-1, new Vector3i(0, -1, 0)),
+    UP(-1, new Vector3i(0, 1, 0)),
+    NORTH(2, new Vector3i(0, 0, -1)),
+    SOUTH(0, new Vector3i(0, 0, 1)),
+    WEST(1, new Vector3i(-1, 0, 0)),
+    EAST(3, new Vector3i(1, 0, 0));
 
     private final int horizontalIndex;
     private final Vector3ic offset;
 
-    BlockFace( int horizontalIndex, Vector3ic offset ) {
+    BlockFace(int horizontalIndex, Vector3ic offset) {
         this.horizontalIndex = horizontalIndex;
         this.offset = offset;
     }
@@ -107,7 +107,7 @@ public enum BlockFace {
     }
 
     public BlockFace opposite() {
-        return switch ( this ) {
+        return switch (this) {
             case DOWN -> UP;
             case UP -> DOWN;
             case NORTH -> SOUTH;
@@ -117,8 +117,8 @@ public enum BlockFace {
         };
     }
 
-    public static BlockFace fromId( int value ) {
-        return switch ( value ) {
+    public static BlockFace fromId(int value) {
+        return switch (value) {
             case 0 -> BlockFace.DOWN;
             case 1 -> BlockFace.UP;
             case 2 -> BlockFace.NORTH;
@@ -130,7 +130,7 @@ public enum BlockFace {
     }
 
     public static BlockFace[] getHorizontal() {
-        return new BlockFace[] {
+        return new BlockFace[]{
                 NORTH,
                 EAST,
                 SOUTH,
@@ -139,7 +139,7 @@ public enum BlockFace {
     }
 
     public static BlockFace[] getVertical() {
-        return new BlockFace[] {
+        return new BlockFace[]{
                 UP,
                 DOWN
         };
@@ -150,7 +150,7 @@ public enum BlockFace {
     }
 
     public static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE =
-            new BlockFace[] {
+            new BlockFace[]{
                     BlockFace.EAST, BlockFace.WEST,
                     BlockFace.SOUTH, BlockFace.NORTH};
 

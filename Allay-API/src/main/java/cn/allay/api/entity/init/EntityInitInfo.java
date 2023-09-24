@@ -13,6 +13,7 @@ import org.cloudburstmc.nbt.NbtMap;
  */
 public interface EntityInitInfo<T extends Entity> extends ComponentInitInfo {
     World world();
+
     NbtMap nbt();
 
     EntityType<T> getEntityType();

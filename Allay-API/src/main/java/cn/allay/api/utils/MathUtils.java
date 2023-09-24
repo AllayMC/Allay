@@ -123,8 +123,8 @@ public class MathUtils {
     public double getPitchFromVector(Vector3fc vector) {
         double length =
                 vector.x() * vector.x() +
-                vector.z() * vector.z() +
-                vector.y() * vector.y();
+                        vector.z() * vector.z() +
+                        vector.y() * vector.y();
         // 避免NAN
         if (length == 0) {
             return 0;

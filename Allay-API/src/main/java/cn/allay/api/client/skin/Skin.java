@@ -9,7 +9,7 @@ import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.json.internal.json_simple.JSONValue;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -232,8 +232,8 @@ public class Skin {
 
     private boolean isValidSkin() {
         return skinId != null && !skinId.trim().isEmpty() &&
-               skinData != null && skinData.width() >= 64 && skinData.height() >= 32 &&
-               skinData.data().length >= SINGLE_SKIN_SIZE;
+                skinData != null && skinData.width() >= 64 && skinData.height() >= 32 &&
+                skinData.data().length >= SINGLE_SKIN_SIZE;
     }
 
     private boolean isValidResourcePatch() {
