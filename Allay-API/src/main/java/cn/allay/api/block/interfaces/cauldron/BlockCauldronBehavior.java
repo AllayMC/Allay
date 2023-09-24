@@ -6,7 +6,6 @@ import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.data.VanillaBlockPropertyTypes;
-import cn.allay.api.math.voxelshape.CommonShapes;
 import cn.allay.api.math.voxelshape.VoxelShape;
 
 /**

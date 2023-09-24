@@ -2,7 +2,6 @@ package cn.allay.server.blockentity.type;
 
 import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;

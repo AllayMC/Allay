@@ -3,7 +3,6 @@ package cn.allay.server.item.type;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;

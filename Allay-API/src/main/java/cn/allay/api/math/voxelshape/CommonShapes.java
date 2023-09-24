@@ -8,7 +8,6 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import static cn.allay.api.block.data.BlockFace.getBlockFaceByStairDirectionValue;
-import static cn.allay.api.data.VanillaBlockPropertyTypes.TOP_SLOT_BIT;
 
 /**
  * Allay Project 2023/9/2

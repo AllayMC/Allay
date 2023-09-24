@@ -9,7 +9,7 @@ import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.json.internal.json_simple.JSONValue;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -147,10 +147,10 @@ public class Skin {
 
     private static boolean validateSkinResourcePatch(String skinResourcePatch) {
         try {
-            JSONObject object = (JSONObject) JSONValue.parse(skinResourcePatch);
+            JSONObject object = (JSONObject) JSONValue.parseWithException(skinResourcePatch);
             JSONObject geometry = (JSONObject) object.get("geometry");
             return geometry.containsKey("default") && geometry.get("default") instanceof String;
-        } catch (ClassCastException | NullPointerException e) {
+        } catch (Exception e) {
             return false;
         }
     }

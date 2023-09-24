@@ -5,9 +5,7 @@ import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
