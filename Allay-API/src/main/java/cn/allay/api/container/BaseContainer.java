@@ -4,7 +4,6 @@ import cn.allay.api.container.exception.ContainerException;
 import cn.allay.api.item.ItemStack;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtList;

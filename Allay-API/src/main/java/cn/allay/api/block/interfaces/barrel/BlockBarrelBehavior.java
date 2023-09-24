@@ -11,9 +11,9 @@ import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.blockentity.interfaces.barrel.BlockEntityBarrel;
 import cn.allay.api.data.VanillaBlockId;
-import cn.allay.api.data.VanillaBlockPropertyTypes;
 
-import static cn.allay.api.data.VanillaBlockPropertyTypes.*;
+import static cn.allay.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
+import static cn.allay.api.data.VanillaBlockPropertyTypes.OPEN_BIT;
 import static java.lang.Math.abs;
 
 /**

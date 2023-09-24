@@ -13,7 +13,6 @@ import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Allay Project 2023/9/23
