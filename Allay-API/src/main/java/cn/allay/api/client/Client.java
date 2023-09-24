@@ -6,7 +6,7 @@ import cn.allay.api.client.info.DeviceInfo;
 import cn.allay.api.client.movement.ClientMovementValidator;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
-import cn.allay.api.entity.interfaces.player.EntityPlayer;
+import cn.allay.api.entity.interfaces.EntityPlayer;
 import cn.allay.api.math.location.Location3fc;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.World;

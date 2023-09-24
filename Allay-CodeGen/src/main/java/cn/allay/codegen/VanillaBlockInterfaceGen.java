@@ -40,9 +40,8 @@ public class VanillaBlockInterfaceGen {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
             var blockClassSimpleName = "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior";
-            var folderName = Utils.convertToPascalCase(block.getIdentifier().path()).toLowerCase();
-            var blockClassName = ClassName.get("cn.allay.api.block.interfaces." + folderName, blockClassSimpleName);
-            var path = FILE_OUTPUT_PATH_BASE.resolve(folderName).resolve(blockClassSimpleName + ".java");
+            var blockClassName = ClassName.get("cn.allay.api.block.interfaces", blockClassSimpleName);
+            var path = FILE_OUTPUT_PATH_BASE.resolve(blockClassSimpleName + ".java");
             if (!Files.exists(path)) {
                 System.out.println("Generating " + blockClassName + "...");
                 generateBlockClass(block, blockClassName, path);
@@ -60,7 +59,7 @@ public class VanillaBlockInterfaceGen {
                         "Allay Project <br>\n")
                 .addField(generateBlockTypeField(vanillaBlockId, blockClassName))
                 .addModifiers(Modifier.PUBLIC);
-        var javaFile = JavaFile.builder(blockClassName.packageName(), codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.block.interfaces", codeBuilder.build()).build();
         System.out.println("Generating " + blockClassName + ".java ...");
         Files.writeString(path, javaFile.toString());
     }

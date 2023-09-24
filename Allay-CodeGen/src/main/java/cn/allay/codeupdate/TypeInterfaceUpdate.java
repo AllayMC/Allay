@@ -26,19 +26,17 @@ public class TypeInterfaceUpdate {
     public static void addCode(String code, String importCode, String classNameRegex) {
         Pattern compile = Pattern.compile(classNameRegex);
         File file = ITEM.toFile();
-        for (var f1 : Objects.requireNonNull(file.listFiles())) {
-            for (var f : f1.listFiles()) {
-                Matcher matcher = compile.matcher(f.getName());
-                if (matcher.find()) {
-                    String s;
-                    try {
-                        s = Files.readString(f.toPath());
-                        var result = s.replace(".build();", formatCode + code + formatCode + ".build();");
-                        result = result.replace("import cn.allay.api.block.BlockBehavior;", "import cn.allay.api.block.BlockBehavior;\n" + importCode);
-                        Files.writeString(f.toPath(), result, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+        for (var f : Objects.requireNonNull(file.listFiles())) {
+            Matcher matcher = compile.matcher(f.getName());
+            if (matcher.find()) {
+                String s;
+                try {
+                    s = Files.readString(f.toPath());
+                    var result = s.replace(".build();", formatCode + code + formatCode + ".build();");
+                    result = result.replace("import cn.allay.api.block.BlockBehavior;", "import cn.allay.api.block.BlockBehavior;\n" + importCode);
+                    Files.writeString(f.toPath(), result, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }

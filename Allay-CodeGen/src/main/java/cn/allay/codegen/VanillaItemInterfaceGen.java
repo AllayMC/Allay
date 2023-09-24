@@ -49,9 +49,8 @@ public class VanillaItemInterfaceGen {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var item : VanillaItemId.values()) {
             var itemClassSimpleName = item == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0Stack" : "Item" + Utils.convertToPascalCase(item.getIdentifier().path().replace(".", "_")) + "Stack";
-            var folderName = item == VanillaItemId.NETHERBRICK ? "netherbrick0" : Utils.convertToPascalCase(item.getIdentifier().path().replace(".", "_")).toLowerCase();
-            var itemClassName = ClassName.get("cn.allay.api.item.interfaces." + folderName, itemClassSimpleName);
-            var path = FILE_OUTPUT_PATH_BASE.resolve(folderName).resolve(itemClassSimpleName + ".java");
+            var itemClassName = ClassName.get("cn.allay.api.item.interfaces", itemClassSimpleName);
+            var path = FILE_OUTPUT_PATH_BASE.resolve(itemClassSimpleName + ".java");
             if (!Files.exists(path)) {
                 System.out.println("Generating " + itemClassName + "...");
                 generateItemClass(item, itemClassName, path);
@@ -69,7 +68,7 @@ public class VanillaItemInterfaceGen {
                         "Allay Project <br>\n")
                 .addField(generateItemTypeField(vanillaItemId, itemClassName))
                 .addModifiers(Modifier.PUBLIC);
-        var javaFile = JavaFile.builder(itemClassName.packageName(), codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("cn.allay.api.item.interfaces", codeBuilder.build()).build();
         System.out.println("Generating " + itemClassName + ".java ...");
         Files.writeString(path, javaFile.toString());
     }
