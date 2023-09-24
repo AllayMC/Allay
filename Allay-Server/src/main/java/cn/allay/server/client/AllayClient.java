@@ -685,8 +685,16 @@ public class AllayClient extends BaseClient {
                         playerEntity.setSneaking(true);
                         //TODO: debug only
                         var loc = getLocation();
-                        var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(SimpleEntityInitInfo.builder().loc(loc).build());
-                        loc.world().addEntity(entity);
+                        for (var i = 0; i <= 10; i++) {
+                            var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(
+                                    SimpleEntityInitInfo
+                                            .builder()
+                                            .pos(loc.x() + i, loc.y(), loc.z() + i)
+                                            .world(loc.world())
+                                            .build()
+                            );
+                            loc.world().addEntity(entity);
+                        }
                         var pk = new TextPacket();
                         pk.setType(TextPacket.Type.CHAT);
                         pk.setMessage("TPS: " + loc.world().getCurrentTps() + ", Entity Count: " + loc.world().getEntities().size());
