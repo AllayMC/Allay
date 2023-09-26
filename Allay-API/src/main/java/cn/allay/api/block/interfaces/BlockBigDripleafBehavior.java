@@ -14,6 +14,6 @@ public interface BlockBigDripleafBehavior extends BlockBehavior {
     BlockType<BlockBigDripleafBehavior> BIG_DRIPLEAF_TYPE = BlockTypeBuilder
             .builder(BlockBigDripleafBehavior.class)
             .vanillaBlock(VanillaBlockId.BIG_DRIPLEAF)
-            .setProperties(VanillaBlockPropertyTypes.BIG_DRIPLEAF_HEAD, VanillaBlockPropertyTypes.BIG_DRIPLEAF_TILT, VanillaBlockPropertyTypes.DIRECTION)
+            .setProperties(VanillaBlockPropertyTypes.BIG_DRIPLEAF_HEAD, VanillaBlockPropertyTypes.BIG_DRIPLEAF_TILT, VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
             .build();
 }

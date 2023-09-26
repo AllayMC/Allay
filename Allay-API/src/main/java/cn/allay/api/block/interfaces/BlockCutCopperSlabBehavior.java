@@ -14,6 +14,6 @@ public interface BlockCutCopperSlabBehavior extends BlockBehavior {
     BlockType<BlockCutCopperSlabBehavior> CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockCutCopperSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.CUT_COPPER_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

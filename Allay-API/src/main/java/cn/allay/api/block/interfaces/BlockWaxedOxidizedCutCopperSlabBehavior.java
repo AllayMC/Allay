@@ -14,6 +14,6 @@ public interface BlockWaxedOxidizedCutCopperSlabBehavior extends BlockBehavior {
     BlockType<BlockWaxedOxidizedCutCopperSlabBehavior> WAXED_OXIDIZED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockWaxedOxidizedCutCopperSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

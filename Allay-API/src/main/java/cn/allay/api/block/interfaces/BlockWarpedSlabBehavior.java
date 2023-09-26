@@ -14,6 +14,6 @@ public interface BlockWarpedSlabBehavior extends BlockBehavior {
     BlockType<BlockWarpedSlabBehavior> WARPED_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockWarpedSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.WARPED_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

@@ -14,6 +14,6 @@ public interface BlockMangroveSlabBehavior extends BlockBehavior {
     BlockType<BlockMangroveSlabBehavior> MANGROVE_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockMangroveSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.MANGROVE_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

@@ -14,6 +14,6 @@ public interface BlockMudBrickSlabBehavior extends BlockBehavior {
     BlockType<BlockMudBrickSlabBehavior> MUD_BRICK_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockMudBrickSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.MUD_BRICK_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

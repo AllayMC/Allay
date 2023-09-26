@@ -14,6 +14,6 @@ public interface BlockWeatheredCutCopperSlabBehavior extends BlockBehavior {
     BlockType<BlockWeatheredCutCopperSlabBehavior> WEATHERED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockWeatheredCutCopperSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.WEATHERED_CUT_COPPER_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

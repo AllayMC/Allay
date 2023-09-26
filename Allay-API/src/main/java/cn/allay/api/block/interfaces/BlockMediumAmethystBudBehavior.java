@@ -14,6 +14,6 @@ public interface BlockMediumAmethystBudBehavior extends BlockBehavior {
     BlockType<BlockMediumAmethystBudBehavior> MEDIUM_AMETHYST_BUD_TYPE = BlockTypeBuilder
             .builder(BlockMediumAmethystBudBehavior.class)
             .vanillaBlock(VanillaBlockId.MEDIUM_AMETHYST_BUD)
-            .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_BLOCK_FACE)
             .build();
 }

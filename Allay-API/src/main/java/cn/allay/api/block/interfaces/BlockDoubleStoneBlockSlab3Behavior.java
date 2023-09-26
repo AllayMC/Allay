@@ -14,6 +14,6 @@ public interface BlockDoubleStoneBlockSlab3Behavior extends BlockBehavior {
     BlockType<BlockDoubleStoneBlockSlab3Behavior> DOUBLE_STONE_BLOCK_SLAB3_TYPE = BlockTypeBuilder
             .builder(BlockDoubleStoneBlockSlab3Behavior.class)
             .vanillaBlock(VanillaBlockId.DOUBLE_STONE_BLOCK_SLAB3)
-            .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_3, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_3, VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

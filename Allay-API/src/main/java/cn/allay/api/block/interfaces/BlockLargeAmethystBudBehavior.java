@@ -14,6 +14,6 @@ public interface BlockLargeAmethystBudBehavior extends BlockBehavior {
     BlockType<BlockLargeAmethystBudBehavior> LARGE_AMETHYST_BUD_TYPE = BlockTypeBuilder
             .builder(BlockLargeAmethystBudBehavior.class)
             .vanillaBlock(VanillaBlockId.LARGE_AMETHYST_BUD)
-            .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_BLOCK_FACE)
             .build();
 }

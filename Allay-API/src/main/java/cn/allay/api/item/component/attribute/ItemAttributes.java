@@ -73,6 +73,8 @@ public class ItemAttributes {
     @Builder.Default
     protected String name = "";
     @Builder.Default
+    protected String descriptionId = "";
+    @Builder.Default
     protected int toughnessValue = 0;
     @Builder.Default
     protected float viewDamping = 1.0f;
@@ -113,6 +115,7 @@ public class ItemAttributes {
                 .name(nbt.getString("name"))
                 .toughnessValue(nbt.getInt("toughnessValue"))
                 .viewDamping(nbt.getFloat("viewDamping"))
+                .descriptionId(nbt.getString("descriptionId"))
                 .build();
     }
 }

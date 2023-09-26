@@ -14,6 +14,6 @@ public interface BlockMangroveDoubleSlabBehavior extends BlockBehavior {
     BlockType<BlockMangroveDoubleSlabBehavior> MANGROVE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockMangroveDoubleSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.MANGROVE_DOUBLE_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

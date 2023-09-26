@@ -15,6 +15,7 @@ import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
@@ -41,7 +42,8 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
 
     @Override
     public void rebuildNetworkItemDataArray() {
-        cachedNetworkItemDataArray = mappings.values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new);
+        ItemData[] array = mappings.values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new);
+        cachedNetworkItemDataArray = Arrays.copyOfRange(array, 0, 100, ItemData[].class);
     }
 
     public static class Loader implements RegistryLoader<Void, Map<Integer, ItemStack>> {

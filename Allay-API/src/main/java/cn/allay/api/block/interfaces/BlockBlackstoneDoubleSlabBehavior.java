@@ -14,6 +14,6 @@ public interface BlockBlackstoneDoubleSlabBehavior extends BlockBehavior {
     BlockType<BlockBlackstoneDoubleSlabBehavior> BLACKSTONE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockBlackstoneDoubleSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.BLACKSTONE_DOUBLE_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

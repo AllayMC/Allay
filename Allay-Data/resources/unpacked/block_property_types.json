@@ -852,6 +852,18 @@
                 true
             ]
         },
+      "minecraft_block_face": {
+        "serializationName": "minecraft:block_face",
+        "valueType": "ENUM",
+        "values": [
+          "down",
+          "east",
+          "north",
+          "south",
+          "up",
+          "west"
+        ]
+      },
         "minecraft_cardinal_direction": {
             "serializationName": "minecraft:cardinal_direction",
             "valueType": "ENUM",
@@ -874,6 +886,14 @@
                 "west"
             ]
         },
+      "minecraft_vertical_half": {
+        "serializationName": "minecraft:vertical_half",
+        "valueType": "ENUM",
+        "values": [
+          "bottom",
+          "top"
+        ]
+      },
         "moisturized_amount": {
             "serializationName": "moisturized_amount",
             "valueType": "INTEGER",
@@ -1366,14 +1386,6 @@
         },
         "toggle_bit": {
             "serializationName": "toggle_bit",
-            "valueType": "BOOLEAN",
-            "values": [
-                false,
-                true
-            ]
-        },
-        "top_slot_bit": {
-            "serializationName": "top_slot_bit",
             "valueType": "BOOLEAN",
             "values": [
                 false,

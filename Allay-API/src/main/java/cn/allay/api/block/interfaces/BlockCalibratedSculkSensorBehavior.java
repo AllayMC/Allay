@@ -14,6 +14,6 @@ public interface BlockCalibratedSculkSensorBehavior extends BlockBehavior {
     BlockType<BlockCalibratedSculkSensorBehavior> CALIBRATED_SCULK_SENSOR_TYPE = BlockTypeBuilder
             .builder(BlockCalibratedSculkSensorBehavior.class)
             .vanillaBlock(VanillaBlockId.CALIBRATED_SCULK_SENSOR)
-            .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.SCULK_SENSOR_PHASE)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.SCULK_SENSOR_PHASE)
             .build();
 }

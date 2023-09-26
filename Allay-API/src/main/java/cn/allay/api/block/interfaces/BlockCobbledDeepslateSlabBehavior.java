@@ -14,6 +14,6 @@ public interface BlockCobbledDeepslateSlabBehavior extends BlockBehavior {
     BlockType<BlockCobbledDeepslateSlabBehavior> COBBLED_DEEPSLATE_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockCobbledDeepslateSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

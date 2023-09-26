@@ -14,6 +14,6 @@ public interface BlockAnvilBehavior extends BlockBehavior {
     BlockType<BlockAnvilBehavior> ANVIL_TYPE = BlockTypeBuilder
             .builder(BlockAnvilBehavior.class)
             .vanillaBlock(VanillaBlockId.ANVIL)
-            .setProperties(VanillaBlockPropertyTypes.DAMAGE, VanillaBlockPropertyTypes.DIRECTION)
+            .setProperties(VanillaBlockPropertyTypes.DAMAGE, VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
             .build();
 }

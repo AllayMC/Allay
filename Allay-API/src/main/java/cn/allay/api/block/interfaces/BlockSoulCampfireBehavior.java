@@ -14,6 +14,6 @@ public interface BlockSoulCampfireBehavior extends BlockBehavior {
     BlockType<BlockSoulCampfireBehavior> SOUL_CAMPFIRE_TYPE = BlockTypeBuilder
             .builder(BlockSoulCampfireBehavior.class)
             .vanillaBlock(VanillaBlockId.SOUL_CAMPFIRE)
-            .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.EXTINGUISHED)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.EXTINGUISHED)
             .build();
 }

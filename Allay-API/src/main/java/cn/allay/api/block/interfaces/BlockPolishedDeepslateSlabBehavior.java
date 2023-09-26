@@ -14,6 +14,6 @@ public interface BlockPolishedDeepslateSlabBehavior extends BlockBehavior {
     BlockType<BlockPolishedDeepslateSlabBehavior> POLISHED_DEEPSLATE_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockPolishedDeepslateSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }

@@ -1,5 +1,6 @@
 package cn.allay.dependence;
 
+import java.lang.String;
 import lombok.Getter;
 
 /**
@@ -144,9 +145,17 @@ public enum VanillaBlockId {
 
   BLACK_CONCRETE("minecraft:black_concrete", "minecraft:black_concrete"),
 
+    BLACK_CONCRETE_POWDER("minecraft:black_concrete_powder", "minecraft:black_concrete_powder"),
+
   BLACK_GLAZED_TERRACOTTA("minecraft:black_glazed_terracotta", "minecraft:black_glazed_terracotta"),
 
   BLACK_SHULKER_BOX("minecraft:black_shulker_box", "minecraft:black_shulker_box"),
+
+    BLACK_STAINED_GLASS("minecraft:black_stained_glass", "minecraft:black_stained_glass"),
+
+    BLACK_STAINED_GLASS_PANE("minecraft:black_stained_glass_pane", "minecraft:black_stained_glass_pane"),
+
+    BLACK_TERRACOTTA("minecraft:black_terracotta", "minecraft:black_terracotta"),
 
   BLACK_WOOL("minecraft:black_wool", "minecraft:black_wool"),
 
@@ -170,11 +179,19 @@ public enum VanillaBlockId {
 
   BLUE_CONCRETE("minecraft:blue_concrete", "minecraft:blue_concrete"),
 
+    BLUE_CONCRETE_POWDER("minecraft:blue_concrete_powder", "minecraft:blue_concrete_powder"),
+
   BLUE_GLAZED_TERRACOTTA("minecraft:blue_glazed_terracotta", "minecraft:blue_glazed_terracotta"),
 
   BLUE_ICE("minecraft:blue_ice", "minecraft:blue_ice"),
 
   BLUE_SHULKER_BOX("minecraft:blue_shulker_box", "minecraft:blue_shulker_box"),
+
+    BLUE_STAINED_GLASS("minecraft:blue_stained_glass", "minecraft:blue_stained_glass"),
+
+    BLUE_STAINED_GLASS_PANE("minecraft:blue_stained_glass_pane", "minecraft:blue_stained_glass_pane"),
+
+    BLUE_TERRACOTTA("minecraft:blue_terracotta", "minecraft:blue_terracotta"),
 
   BLUE_WOOL("minecraft:blue_wool", "minecraft:blue_wool"),
 
@@ -200,6 +217,8 @@ public enum VanillaBlockId {
 
   BROWN_CONCRETE("minecraft:brown_concrete", "minecraft:brown_concrete"),
 
+    BROWN_CONCRETE_POWDER("minecraft:brown_concrete_powder", "minecraft:brown_concrete_powder"),
+
   BROWN_GLAZED_TERRACOTTA("minecraft:brown_glazed_terracotta", "minecraft:brown_glazed_terracotta"),
 
   BROWN_MUSHROOM("minecraft:brown_mushroom", "minecraft:brown_mushroom"),
@@ -207,6 +226,12 @@ public enum VanillaBlockId {
   BROWN_MUSHROOM_BLOCK("minecraft:brown_mushroom_block", "minecraft:brown_mushroom_block"),
 
   BROWN_SHULKER_BOX("minecraft:brown_shulker_box", "minecraft:brown_shulker_box"),
+
+    BROWN_STAINED_GLASS("minecraft:brown_stained_glass", "minecraft:brown_stained_glass"),
+
+    BROWN_STAINED_GLASS_PANE("minecraft:brown_stained_glass_pane", "minecraft:brown_stained_glass_pane"),
+
+    BROWN_TERRACOTTA("minecraft:brown_terracotta", "minecraft:brown_terracotta"),
 
   BROWN_WOOL("minecraft:brown_wool", "minecraft:brown_wool"),
 
@@ -334,8 +359,6 @@ public enum VanillaBlockId {
 
   COMPOSTER("minecraft:composter", "minecraft:composter"),
 
-  CONCRETE_POWDER("minecraft:concrete_powder", "minecraft:concrete_powder"),
-
   CONDUIT("minecraft:conduit", "minecraft:conduit"),
 
   COPPER_BLOCK("minecraft:copper_block", "minecraft:copper_block"),
@@ -416,9 +439,17 @@ public enum VanillaBlockId {
 
   CYAN_CONCRETE("minecraft:cyan_concrete", "minecraft:cyan_concrete"),
 
+    CYAN_CONCRETE_POWDER("minecraft:cyan_concrete_powder", "minecraft:cyan_concrete_powder"),
+
   CYAN_GLAZED_TERRACOTTA("minecraft:cyan_glazed_terracotta", "minecraft:cyan_glazed_terracotta"),
 
   CYAN_SHULKER_BOX("minecraft:cyan_shulker_box", "minecraft:cyan_shulker_box"),
+
+    CYAN_STAINED_GLASS("minecraft:cyan_stained_glass", "minecraft:cyan_stained_glass"),
+
+    CYAN_STAINED_GLASS_PANE("minecraft:cyan_stained_glass_pane", "minecraft:cyan_stained_glass_pane"),
+
+    CYAN_TERRACOTTA("minecraft:cyan_terracotta", "minecraft:cyan_terracotta"),
 
   CYAN_WOOL("minecraft:cyan_wool", "minecraft:cyan_wool"),
 
@@ -872,9 +903,17 @@ public enum VanillaBlockId {
 
   GRAY_CONCRETE("minecraft:gray_concrete", "minecraft:gray_concrete"),
 
+    GRAY_CONCRETE_POWDER("minecraft:gray_concrete_powder", "minecraft:gray_concrete_powder"),
+
   GRAY_GLAZED_TERRACOTTA("minecraft:gray_glazed_terracotta", "minecraft:gray_glazed_terracotta"),
 
   GRAY_SHULKER_BOX("minecraft:gray_shulker_box", "minecraft:gray_shulker_box"),
+
+    GRAY_STAINED_GLASS("minecraft:gray_stained_glass", "minecraft:gray_stained_glass"),
+
+    GRAY_STAINED_GLASS_PANE("minecraft:gray_stained_glass_pane", "minecraft:gray_stained_glass_pane"),
+
+    GRAY_TERRACOTTA("minecraft:gray_terracotta", "minecraft:gray_terracotta"),
 
   GRAY_WOOL("minecraft:gray_wool", "minecraft:gray_wool"),
 
@@ -886,9 +925,17 @@ public enum VanillaBlockId {
 
   GREEN_CONCRETE("minecraft:green_concrete", "minecraft:green_concrete"),
 
+    GREEN_CONCRETE_POWDER("minecraft:green_concrete_powder", "minecraft:green_concrete_powder"),
+
   GREEN_GLAZED_TERRACOTTA("minecraft:green_glazed_terracotta", "minecraft:green_glazed_terracotta"),
 
   GREEN_SHULKER_BOX("minecraft:green_shulker_box", "minecraft:green_shulker_box"),
+
+    GREEN_STAINED_GLASS("minecraft:green_stained_glass", "minecraft:green_stained_glass"),
+
+    GREEN_STAINED_GLASS_PANE("minecraft:green_stained_glass_pane", "minecraft:green_stained_glass_pane"),
+
+    GREEN_TERRACOTTA("minecraft:green_terracotta", "minecraft:green_terracotta"),
 
   GREEN_WOOL("minecraft:green_wool", "minecraft:green_wool"),
 
@@ -996,9 +1043,17 @@ public enum VanillaBlockId {
 
   LIGHT_BLUE_CONCRETE("minecraft:light_blue_concrete", "minecraft:light_blue_concrete"),
 
+    LIGHT_BLUE_CONCRETE_POWDER("minecraft:light_blue_concrete_powder", "minecraft:light_blue_concrete_powder"),
+
   LIGHT_BLUE_GLAZED_TERRACOTTA("minecraft:light_blue_glazed_terracotta", "minecraft:light_blue_glazed_terracotta"),
 
   LIGHT_BLUE_SHULKER_BOX("minecraft:light_blue_shulker_box", "minecraft:light_blue_shulker_box"),
+
+    LIGHT_BLUE_STAINED_GLASS("minecraft:light_blue_stained_glass", "minecraft:light_blue_stained_glass"),
+
+    LIGHT_BLUE_STAINED_GLASS_PANE("minecraft:light_blue_stained_glass_pane", "minecraft:light_blue_stained_glass_pane"),
+
+    LIGHT_BLUE_TERRACOTTA("minecraft:light_blue_terracotta", "minecraft:light_blue_terracotta"),
 
   LIGHT_BLUE_WOOL("minecraft:light_blue_wool", "minecraft:light_blue_wool"),
 
@@ -1010,7 +1065,15 @@ public enum VanillaBlockId {
 
   LIGHT_GRAY_CONCRETE("minecraft:light_gray_concrete", "minecraft:light_gray_concrete"),
 
+    LIGHT_GRAY_CONCRETE_POWDER("minecraft:light_gray_concrete_powder", "minecraft:light_gray_concrete_powder"),
+
   LIGHT_GRAY_SHULKER_BOX("minecraft:light_gray_shulker_box", "minecraft:light_gray_shulker_box"),
+
+    LIGHT_GRAY_STAINED_GLASS("minecraft:light_gray_stained_glass", "minecraft:light_gray_stained_glass"),
+
+    LIGHT_GRAY_STAINED_GLASS_PANE("minecraft:light_gray_stained_glass_pane", "minecraft:light_gray_stained_glass_pane"),
+
+    LIGHT_GRAY_TERRACOTTA("minecraft:light_gray_terracotta", "minecraft:light_gray_terracotta"),
 
   LIGHT_GRAY_WOOL("minecraft:light_gray_wool", "minecraft:light_gray_wool"),
 
@@ -1026,9 +1089,17 @@ public enum VanillaBlockId {
 
   LIME_CONCRETE("minecraft:lime_concrete", "minecraft:lime_concrete"),
 
+    LIME_CONCRETE_POWDER("minecraft:lime_concrete_powder", "minecraft:lime_concrete_powder"),
+
   LIME_GLAZED_TERRACOTTA("minecraft:lime_glazed_terracotta", "minecraft:lime_glazed_terracotta"),
 
   LIME_SHULKER_BOX("minecraft:lime_shulker_box", "minecraft:lime_shulker_box"),
+
+    LIME_STAINED_GLASS("minecraft:lime_stained_glass", "minecraft:lime_stained_glass"),
+
+    LIME_STAINED_GLASS_PANE("minecraft:lime_stained_glass_pane", "minecraft:lime_stained_glass_pane"),
+
+    LIME_TERRACOTTA("minecraft:lime_terracotta", "minecraft:lime_terracotta"),
 
   LIME_WOOL("minecraft:lime_wool", "minecraft:lime_wool"),
 
@@ -1058,9 +1129,17 @@ public enum VanillaBlockId {
 
   MAGENTA_CONCRETE("minecraft:magenta_concrete", "minecraft:magenta_concrete"),
 
+    MAGENTA_CONCRETE_POWDER("minecraft:magenta_concrete_powder", "minecraft:magenta_concrete_powder"),
+
   MAGENTA_GLAZED_TERRACOTTA("minecraft:magenta_glazed_terracotta", "minecraft:magenta_glazed_terracotta"),
 
   MAGENTA_SHULKER_BOX("minecraft:magenta_shulker_box", "minecraft:magenta_shulker_box"),
+
+    MAGENTA_STAINED_GLASS("minecraft:magenta_stained_glass", "minecraft:magenta_stained_glass"),
+
+    MAGENTA_STAINED_GLASS_PANE("minecraft:magenta_stained_glass_pane", "minecraft:magenta_stained_glass_pane"),
+
+    MAGENTA_TERRACOTTA("minecraft:magenta_terracotta", "minecraft:magenta_terracotta"),
 
   MAGENTA_WOOL("minecraft:magenta_wool", "minecraft:magenta_wool"),
 
@@ -1186,9 +1265,17 @@ public enum VanillaBlockId {
 
   ORANGE_CONCRETE("minecraft:orange_concrete", "minecraft:orange_concrete"),
 
+    ORANGE_CONCRETE_POWDER("minecraft:orange_concrete_powder", "minecraft:orange_concrete_powder"),
+
   ORANGE_GLAZED_TERRACOTTA("minecraft:orange_glazed_terracotta", "minecraft:orange_glazed_terracotta"),
 
   ORANGE_SHULKER_BOX("minecraft:orange_shulker_box", "minecraft:orange_shulker_box"),
+
+    ORANGE_STAINED_GLASS("minecraft:orange_stained_glass", "minecraft:orange_stained_glass"),
+
+    ORANGE_STAINED_GLASS_PANE("minecraft:orange_stained_glass_pane", "minecraft:orange_stained_glass_pane"),
+
+    ORANGE_TERRACOTTA("minecraft:orange_terracotta", "minecraft:orange_terracotta"),
 
   ORANGE_WOOL("minecraft:orange_wool", "minecraft:orange_wool"),
 
@@ -1216,11 +1303,19 @@ public enum VanillaBlockId {
 
   PINK_CONCRETE("minecraft:pink_concrete", "minecraft:pink_concrete"),
 
+    PINK_CONCRETE_POWDER("minecraft:pink_concrete_powder", "minecraft:pink_concrete_powder"),
+
   PINK_GLAZED_TERRACOTTA("minecraft:pink_glazed_terracotta", "minecraft:pink_glazed_terracotta"),
 
   PINK_PETALS("minecraft:pink_petals", "minecraft:pink_petals"),
 
   PINK_SHULKER_BOX("minecraft:pink_shulker_box", "minecraft:pink_shulker_box"),
+
+    PINK_STAINED_GLASS("minecraft:pink_stained_glass", "minecraft:pink_stained_glass"),
+
+    PINK_STAINED_GLASS_PANE("minecraft:pink_stained_glass_pane", "minecraft:pink_stained_glass_pane"),
+
+    PINK_TERRACOTTA("minecraft:pink_terracotta", "minecraft:pink_terracotta"),
 
   PINK_WOOL("minecraft:pink_wool", "minecraft:pink_wool"),
 
@@ -1308,9 +1403,17 @@ public enum VanillaBlockId {
 
   PURPLE_CONCRETE("minecraft:purple_concrete", "minecraft:purple_concrete"),
 
+    PURPLE_CONCRETE_POWDER("minecraft:purple_concrete_powder", "minecraft:purple_concrete_powder"),
+
   PURPLE_GLAZED_TERRACOTTA("minecraft:purple_glazed_terracotta", "minecraft:purple_glazed_terracotta"),
 
   PURPLE_SHULKER_BOX("minecraft:purple_shulker_box", "minecraft:purple_shulker_box"),
+
+    PURPLE_STAINED_GLASS("minecraft:purple_stained_glass", "minecraft:purple_stained_glass"),
+
+    PURPLE_STAINED_GLASS_PANE("minecraft:purple_stained_glass_pane", "minecraft:purple_stained_glass_pane"),
+
+    PURPLE_TERRACOTTA("minecraft:purple_terracotta", "minecraft:purple_terracotta"),
 
   PURPLE_WOOL("minecraft:purple_wool", "minecraft:purple_wool"),
 
@@ -1342,6 +1445,8 @@ public enum VanillaBlockId {
 
   RED_CONCRETE("minecraft:red_concrete", "minecraft:red_concrete"),
 
+    RED_CONCRETE_POWDER("minecraft:red_concrete_powder", "minecraft:red_concrete_powder"),
+
   RED_FLOWER("minecraft:red_flower", "minecraft:red_flower"),
 
   RED_GLAZED_TERRACOTTA("minecraft:red_glazed_terracotta", "minecraft:red_glazed_terracotta"),
@@ -1359,6 +1464,12 @@ public enum VanillaBlockId {
   RED_SANDSTONE_STAIRS("minecraft:red_sandstone_stairs", "minecraft:red_sandstone_stairs"),
 
   RED_SHULKER_BOX("minecraft:red_shulker_box", "minecraft:red_shulker_box"),
+
+    RED_STAINED_GLASS("minecraft:red_stained_glass", "minecraft:red_stained_glass"),
+
+    RED_STAINED_GLASS_PANE("minecraft:red_stained_glass_pane", "minecraft:red_stained_glass_pane"),
+
+    RED_TERRACOTTA("minecraft:red_terracotta", "minecraft:red_terracotta"),
 
   RED_WOOL("minecraft:red_wool", "minecraft:red_wool"),
 
@@ -1477,12 +1588,6 @@ public enum VanillaBlockId {
   SPRUCE_TRAPDOOR("minecraft:spruce_trapdoor", "minecraft:spruce_trapdoor"),
 
   SPRUCE_WALL_SIGN("minecraft:spruce_wall_sign", "minecraft:spruce_wall_sign"),
-
-  STAINED_GLASS("minecraft:stained_glass", "minecraft:stained_glass"),
-
-  STAINED_GLASS_PANE("minecraft:stained_glass_pane", "minecraft:stained_glass_pane"),
-
-  STAINED_HARDENED_CLAY("minecraft:stained_hardened_clay", "minecraft:stained_hardened_clay"),
 
   STANDING_BANNER("minecraft:standing_banner", "minecraft:standing_banner"),
 
@@ -1712,9 +1817,17 @@ public enum VanillaBlockId {
 
   WHITE_CONCRETE("minecraft:white_concrete", "minecraft:white_concrete"),
 
+    WHITE_CONCRETE_POWDER("minecraft:white_concrete_powder", "minecraft:white_concrete_powder"),
+
   WHITE_GLAZED_TERRACOTTA("minecraft:white_glazed_terracotta", "minecraft:white_glazed_terracotta"),
 
   WHITE_SHULKER_BOX("minecraft:white_shulker_box", "minecraft:white_shulker_box"),
+
+    WHITE_STAINED_GLASS("minecraft:white_stained_glass", "minecraft:white_stained_glass"),
+
+    WHITE_STAINED_GLASS_PANE("minecraft:white_stained_glass_pane", "minecraft:white_stained_glass_pane"),
+
+    WHITE_TERRACOTTA("minecraft:white_terracotta", "minecraft:white_terracotta"),
 
   WHITE_WOOL("minecraft:white_wool", "minecraft:white_wool"),
 
@@ -1738,11 +1851,19 @@ public enum VanillaBlockId {
 
   YELLOW_CONCRETE("minecraft:yellow_concrete", "minecraft:yellow_concrete"),
 
+    YELLOW_CONCRETE_POWDER("minecraft:yellow_concrete_powder", "minecraft:yellow_concrete_powder"),
+
   YELLOW_FLOWER("minecraft:yellow_flower", "minecraft:yellow_flower"),
 
   YELLOW_GLAZED_TERRACOTTA("minecraft:yellow_glazed_terracotta", "minecraft:yellow_glazed_terracotta"),
 
   YELLOW_SHULKER_BOX("minecraft:yellow_shulker_box", "minecraft:yellow_shulker_box"),
+
+    YELLOW_STAINED_GLASS("minecraft:yellow_stained_glass", "minecraft:yellow_stained_glass"),
+
+    YELLOW_STAINED_GLASS_PANE("minecraft:yellow_stained_glass_pane", "minecraft:yellow_stained_glass_pane"),
+
+    YELLOW_TERRACOTTA("minecraft:yellow_terracotta", "minecraft:yellow_terracotta"),
 
   YELLOW_WOOL("minecraft:yellow_wool", "minecraft:yellow_wool");
 

@@ -14,6 +14,6 @@ public interface BlockCherryDoubleSlabBehavior extends BlockBehavior {
     BlockType<BlockCherryDoubleSlabBehavior> CHERRY_DOUBLE_SLAB_TYPE = BlockTypeBuilder
             .builder(BlockCherryDoubleSlabBehavior.class)
             .vanillaBlock(VanillaBlockId.CHERRY_DOUBLE_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
 }
