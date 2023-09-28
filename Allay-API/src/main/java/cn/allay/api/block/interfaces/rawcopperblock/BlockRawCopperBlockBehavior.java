@@ -10,8 +10,8 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockRawCopperBlockBehavior extends BlockBehavior {
-    BlockType<BlockRawCopperBlockBehavior> RAW_COPPER_BLOCK_TYPE = BlockTypeBuilder
-            .builder(BlockRawCopperBlockBehavior.class)
-            .vanillaBlock(VanillaBlockId.RAW_COPPER_BLOCK)
-            .build();
+  BlockType<BlockRawCopperBlockBehavior> RAW_COPPER_BLOCK_TYPE = BlockTypeBuilder
+          .builder(BlockRawCopperBlockBehavior.class)
+          .vanillaBlock(VanillaBlockId.RAW_COPPER_BLOCK)
+          .build();
 }

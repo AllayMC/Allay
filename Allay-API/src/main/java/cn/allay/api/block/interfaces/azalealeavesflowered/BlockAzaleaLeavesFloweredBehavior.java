@@ -11,9 +11,9 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockAzaleaLeavesFloweredBehavior extends BlockBehavior {
-    BlockType<BlockAzaleaLeavesFloweredBehavior> AZALEA_LEAVES_FLOWERED_TYPE = BlockTypeBuilder
-            .builder(BlockAzaleaLeavesFloweredBehavior.class)
-            .vanillaBlock(VanillaBlockId.AZALEA_LEAVES_FLOWERED)
-            .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
-            .build();
+  BlockType<BlockAzaleaLeavesFloweredBehavior> AZALEA_LEAVES_FLOWERED_TYPE = BlockTypeBuilder
+          .builder(BlockAzaleaLeavesFloweredBehavior.class)
+          .vanillaBlock(VanillaBlockId.AZALEA_LEAVES_FLOWERED)
+          .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+          .build();
 }

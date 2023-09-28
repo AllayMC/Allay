@@ -11,9 +11,9 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockStoneBlockSlab4Behavior extends BlockBehavior {
-    BlockType<BlockStoneBlockSlab4Behavior> STONE_BLOCK_SLAB4_TYPE = BlockTypeBuilder
-            .builder(BlockStoneBlockSlab4Behavior.class)
-            .vanillaBlock(VanillaBlockId.STONE_BLOCK_SLAB4)
-            .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
-            .build();
+  BlockType<BlockStoneBlockSlab4Behavior> STONE_BLOCK_SLAB4_TYPE = BlockTypeBuilder
+          .builder(BlockStoneBlockSlab4Behavior.class)
+          .vanillaBlock(VanillaBlockId.STONE_BLOCK_SLAB4)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .build();
 }

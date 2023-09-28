@@ -10,8 +10,8 @@ import cn.allay.api.data.VanillaBlockId;
  * Allay Project <br>
  */
 public interface BlockDeepslateCopperOreBehavior extends BlockBehavior {
-    BlockType<BlockDeepslateCopperOreBehavior> DEEPSLATE_COPPER_ORE_TYPE = BlockTypeBuilder
-            .builder(BlockDeepslateCopperOreBehavior.class)
-            .vanillaBlock(VanillaBlockId.DEEPSLATE_COPPER_ORE)
-            .build();
+  BlockType<BlockDeepslateCopperOreBehavior> DEEPSLATE_COPPER_ORE_TYPE = BlockTypeBuilder
+          .builder(BlockDeepslateCopperOreBehavior.class)
+          .vanillaBlock(VanillaBlockId.DEEPSLATE_COPPER_ORE)
+          .build();
 }

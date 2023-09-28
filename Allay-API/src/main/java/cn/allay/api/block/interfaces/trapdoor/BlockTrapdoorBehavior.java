@@ -11,9 +11,9 @@ import cn.allay.api.data.VanillaBlockPropertyTypes;
  * Allay Project <br>
  */
 public interface BlockTrapdoorBehavior extends BlockBehavior {
-    BlockType<BlockTrapdoorBehavior> TRAPDOOR_TYPE = BlockTypeBuilder
-            .builder(BlockTrapdoorBehavior.class)
-            .vanillaBlock(VanillaBlockId.TRAPDOOR)
-            .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
-            .build();
+  BlockType<BlockTrapdoorBehavior> TRAPDOOR_TYPE = BlockTypeBuilder
+          .builder(BlockTrapdoorBehavior.class)
+          .vanillaBlock(VanillaBlockId.TRAPDOOR)
+          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+          .build();
 }
