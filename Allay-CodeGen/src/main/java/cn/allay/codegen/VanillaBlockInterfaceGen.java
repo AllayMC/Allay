@@ -3,12 +3,16 @@ package cn.allay.codegen;
 import cn.allay.dependence.VanillaBlockId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import static cn.allay.codegen.VanillaBlockIdEnumGen.MAPPED_BLOCK_PALETTE_NBT;
 import static cn.allay.codegen.VanillaBlockPropertyTypeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
@@ -28,6 +32,8 @@ public class VanillaBlockInterfaceGen {
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockTypeBuilder");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/interfaces");
+    public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new HashMap<>();
+
 
     public static void main(String[] args) {
         VanillaBlockIdEnumGen.generate();
@@ -37,19 +43,64 @@ public class VanillaBlockInterfaceGen {
 
     @SneakyThrows
     public static void generate() {
+        registerSubPackage(Pattern.compile(".*Slab\\d?Behavior"), "slab");
+        registerSubPackage(Pattern.compile(".*StairsBehavior"), "stairs");
+        registerSubPackage(Pattern.compile(".*DoorBehavior"), "door");
+        registerSubPackage(Pattern.compile(".*SignBehavior"), "sign");
+        registerSubPackage(Pattern.compile(".*WallBehavior"), "wall");
+        registerSubPackage(Pattern.compile("BlockElement.*"), "element");
+        registerSubPackage(Pattern.compile("BlockCoralFan.*"), "coralfan");
+        registerSubPackage(Pattern.compile(".*BricksBehavior"), "bricks");
+        registerSubPackage(Pattern.compile(".*WoolBehavior"), "wool");
+        registerSubPackage(Pattern.compile(".*ButtonBehavior"), "button");
+        registerSubPackage(Pattern.compile(".*PlanksBehavior"), "planks");
+        registerSubPackage(Pattern.compile(".*TrapdoorBehavior"), "trapdoor");
+        registerSubPackage(Pattern.compile(".*CandleBehavior"), "candle");
+        registerSubPackage(Pattern.compile(".*CandleCakeBehavior"), "candlecake");
+        registerSubPackage(Pattern.compile(".*ConcreteBehavior"), "concrete");
+        registerSubPackage(Pattern.compile(".*TerracottaBehavior"), "terracotta");
+        registerSubPackage(Pattern.compile(".*ShulkerBoxBehavior"), "shulkerbox");
+        registerSubPackage(Pattern.compile(".*CarpetBehavior"), "carpet");
+        registerSubPackage(Pattern.compile(".*WoodBehavior"), "wood");
+        registerSubPackage(Pattern.compile(".*Leaves\\d?Behavior"), "leaves");
+        registerSubPackage(Pattern.compile(".*FenceBehavior"), "fence");
+        registerSubPackage(Pattern.compile(".*FenceGateBehavior"), "fencegate");
+        registerSubPackage(Pattern.compile(".*CoralBehavior"), "coral");
+        registerSubPackage(Pattern.compile(".*LogBehavior"), "log");
+        registerSubPackage(Pattern.compile(".*CopperBehavior"), "copper");
+        registerSubPackage(Pattern.compile(".*SaplingBehavior"), "sapling");
+        registerSubPackage(Pattern.compile(".*(?:Water|Lava)Behavior"), "liquid");
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
             var blockClassSimpleName = "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior";
-            var folderName = Utils.convertToPascalCase(block.getIdentifier().path()).toLowerCase();
+            var folderName = tryFindSpecifiedFolderName(blockClassSimpleName);
+            if (folderName == null) folderName = Utils.convertToPascalCase(block.getIdentifier().path()).toLowerCase();
             var blockClassName = ClassName.get("cn.allay.api.block.interfaces." + folderName, blockClassSimpleName);
-            var path = FILE_OUTPUT_PATH_BASE.resolve(folderName).resolve(blockClassSimpleName + ".java");
+            var folderPath = FILE_OUTPUT_PATH_BASE.resolve(folderName);
+            var path = folderPath.resolve(blockClassSimpleName + ".java");
             if (!Files.exists(path)) {
                 System.out.println("Generating " + blockClassName + "...");
+                if (!Files.exists(folderPath)) Files.createDirectories(folderPath);
                 generateBlockClass(block, blockClassName, path);
             } else {
                 System.out.println("Class " + blockClassName + " already exists during block class generating!");
             }
         }
+    }
+
+    @Nullable
+    private static String tryFindSpecifiedFolderName(String blockClassSimpleName) {
+        for (var entry : SUB_PACKAGE_GROUPERS.entrySet()) {
+            var pattern = entry.getKey();
+            if (pattern.matcher(blockClassSimpleName).find()) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    private static void registerSubPackage(Pattern regex, String packageName) {
+        SUB_PACKAGE_GROUPERS.put(regex, packageName);
     }
 
     private static void generateBlockClass(VanillaBlockId vanillaBlockId, ClassName blockClassName, Path path) throws IOException {
