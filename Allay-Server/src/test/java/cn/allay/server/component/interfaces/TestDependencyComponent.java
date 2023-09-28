@@ -7,7 +7,7 @@ import cn.allay.api.component.interfaces.Component;
  *
  * @author daoge_cmd
  */
-public interface TestDependencyComponent {
+public interface TestDependencyComponent extends Component{
     Component getNameComponent();
 
     Component getHealthComponent();

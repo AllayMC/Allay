@@ -10,7 +10,7 @@ import cn.allay.server.component.interfaces.TestInitArgComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleTestInitArgComponent implements TestInitArgComponent, Component {
+public class SimpleTestInitArgComponent implements TestInitArgComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:test_init_arg_component");

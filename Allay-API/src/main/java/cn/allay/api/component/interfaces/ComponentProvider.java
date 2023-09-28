@@ -66,6 +66,18 @@ public interface ComponentProvider<T extends Component> {
     @SneakyThrows
     @Nullable
     static Identifier findComponentIdentifier(Class<?> clazz) {
+        Identifier identifier = null;
+        while (identifier == null) {
+            identifier = findComponentIdentifierInCertainClass(clazz);
+            if (identifier == null) clazz = clazz.getSuperclass();
+            if (clazz == null) break;
+        }
+        return identifier;
+    }
+
+    @SneakyThrows
+    @Nullable
+    static Identifier findComponentIdentifierInCertainClass(Class<?> clazz) {
         for (var field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(ComponentIdentifier.class) &&
                     Identifier.class == field.getType() &&

@@ -10,7 +10,7 @@ import cn.allay.server.component.interfaces.HealthComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleHealthComponent implements HealthComponent, Component {
+public class SimpleHealthComponent implements HealthComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:health_component");

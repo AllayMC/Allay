@@ -12,7 +12,7 @@ import cn.allay.server.component.interfaces.TestEventListenerComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleTestEventListenerComponent implements TestEventListenerComponent, Component {
+public class SimpleTestEventListenerComponent implements TestEventListenerComponent {
 
 
     @ComponentIdentifier

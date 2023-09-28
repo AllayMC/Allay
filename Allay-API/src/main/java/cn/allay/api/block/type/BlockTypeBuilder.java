@@ -63,7 +63,7 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
     private Map<Identifier, BlockComponent> listComponentToMap(List<BlockComponent> components) {
         var map = new HashMap<Identifier, BlockComponent>();
         components.forEach(component -> {
-            var id = ComponentProvider.findComponentIdentifier(component.getClass());
+            var id = ComponentProvider.findComponentIdentifierInCertainClass(component.getClass());
             if (map.containsKey(id))
                 throw new IllegalArgumentException("Duplicate component: " + id);
             map.put(id, component);

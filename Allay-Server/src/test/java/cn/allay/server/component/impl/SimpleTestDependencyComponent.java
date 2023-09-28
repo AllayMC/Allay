@@ -11,7 +11,7 @@ import cn.allay.server.component.interfaces.TestDependencyComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleTestDependencyComponent implements Component, TestDependencyComponent {
+public class SimpleTestDependencyComponent implements TestDependencyComponent {
 
 
     @ComponentIdentifier
