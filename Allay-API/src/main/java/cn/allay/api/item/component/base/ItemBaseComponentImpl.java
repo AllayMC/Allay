@@ -2,24 +2,22 @@ package cn.allay.api.item.component.base;
 
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
+import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.item.CommonUseItemFunctions;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.UseItemOn;
 import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.interfaces.air.ItemAirStack;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
-
-import java.util.Objects;
 
 /**
  * Allay Project 2023/5/19
@@ -41,15 +39,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected BlockState blockState;
     @Nullable
     protected Integer stackNetworkId;
-    protected UseItemOn useItemOn;
-
-    public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
-        this(initInfo, null);
-    }
 
     public ItemBaseComponentImpl(
-            ItemStackInitInfo<T> initInfo,
-            @Nullable UseItemOn useItemOn
+            ItemStackInitInfo<T> initInfo
     ) {
         this.itemType = initInfo.getItemType();
         this.count = initInfo.count();
@@ -66,7 +58,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         } else if (initInfo.autoAssignStackNetworkId()) {
             this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
         }
-        this.useItemOn = Objects.requireNonNullElseGet(useItemOn, CommonUseItemFunctions::createPlaceBlockUseOn);
     }
 
     @Override
@@ -171,7 +162,31 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             @Nullable EntityPlayer player, ItemStack itemStack,
             World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace) {
-        return useItemOn.useItemOn(player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace);
+        var blockState = itemStack.toBlockState();
+        if (blockState == null)
+            return false;
+        if (player != null && hasEntityCollision(world, placeBlockPos, blockState))
+            return false;
+        BlockType<?> blockType = itemStack.getItemType().getBlockType();
+        assert blockType != null;
+        boolean result = blockType.getBlockBehavior().place(player, world, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
+        tryConsumeItem(player, itemStack);
+        return result;
+    }
+
+    protected void tryConsumeItem(EntityPlayer player, ItemStack itemStack) {
+        if (player == null || player.getClient().getGameType() != GameType.CREATIVE)
+            itemStack.setCount(itemStack.getCount() - 1);
+    }
+
+    protected boolean hasEntityCollision(World world, Vector3ic placePos, BlockState blockState) {
+        var block_aabb = blockState.getBehavior().getBlockAttributes(blockState)
+                .computeOffsetVoxelShape(
+                        placePos.x(),
+                        placePos.y(),
+                        placePos.z()
+                );
+        return !world.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty();
     }
 
     @Override
