@@ -46,9 +46,13 @@ public class VanillaBlockInterfaceGen {
         registerSubPackage(Pattern.compile(".*Slab\\d?Behavior"), "slab");
         registerSubPackage(Pattern.compile(".*StairsBehavior"), "stairs");
         registerSubPackage(Pattern.compile(".*DoorBehavior"), "door");
+        registerSubPackage(Pattern.compile(".*StandingSignBehavior"), "standingsign");
+        registerSubPackage(Pattern.compile(".*HangingSignBehavior"), "hangingsign");
+        registerSubPackage(Pattern.compile(".*WallSignBehavior"), "wallsign");
         registerSubPackage(Pattern.compile(".*SignBehavior"), "sign");
         registerSubPackage(Pattern.compile(".*WallBehavior"), "wall");
         registerSubPackage(Pattern.compile("BlockElement.*"), "element");
+        registerSubPackage(Pattern.compile(".*CoralBehavior"), "coral");
         registerSubPackage(Pattern.compile("BlockCoralFan.*"), "coralfan");
         registerSubPackage(Pattern.compile(".*BricksBehavior"), "bricks");
         registerSubPackage(Pattern.compile(".*WoolBehavior"), "wool");
@@ -62,14 +66,15 @@ public class VanillaBlockInterfaceGen {
         registerSubPackage(Pattern.compile(".*ShulkerBoxBehavior"), "shulkerbox");
         registerSubPackage(Pattern.compile(".*CarpetBehavior"), "carpet");
         registerSubPackage(Pattern.compile(".*WoodBehavior"), "wood");
-        registerSubPackage(Pattern.compile(".*Leaves\\d?Behavior"), "leaves");
+        registerSubPackage(Pattern.compile(".*(Leaves\\d?|LeavesFlowered)Behavior"), "leaves");
         registerSubPackage(Pattern.compile(".*FenceBehavior"), "fence");
         registerSubPackage(Pattern.compile(".*FenceGateBehavior"), "fencegate");
-        registerSubPackage(Pattern.compile(".*CoralBehavior"), "coral");
         registerSubPackage(Pattern.compile(".*LogBehavior"), "log");
         registerSubPackage(Pattern.compile(".*CopperBehavior"), "copper");
         registerSubPackage(Pattern.compile(".*SaplingBehavior"), "sapling");
         registerSubPackage(Pattern.compile(".*(?:Water|Lava)Behavior"), "liquid");
+        registerSubPackage(Pattern.compile("BlockPiston.*"), "piston");
+        registerSubPackage(Pattern.compile("BlockStickyPiston.*"), "piston");
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
             var blockClassSimpleName = "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior";

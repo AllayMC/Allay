@@ -10,8 +10,8 @@ import cn.allay.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemRawCopperBlockStack extends ItemStack {
-    ItemType<ItemRawCopperBlockStack> RAW_COPPER_BLOCK_TYPE = ItemTypeBuilder
-            .builder(ItemRawCopperBlockStack.class)
-            .vanillaItem(VanillaItemId.RAW_COPPER_BLOCK)
-            .build();
+  ItemType<ItemRawCopperBlockStack> RAW_COPPER_BLOCK_TYPE = ItemTypeBuilder
+          .builder(ItemRawCopperBlockStack.class)
+          .vanillaItem(VanillaItemId.RAW_COPPER_BLOCK)
+          .build();
 }
