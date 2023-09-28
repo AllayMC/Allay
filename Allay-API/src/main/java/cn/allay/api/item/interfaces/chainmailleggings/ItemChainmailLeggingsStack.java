@@ -10,8 +10,8 @@ import cn.allay.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemChainmailLeggingsStack extends ItemStack {
-    ItemType<ItemChainmailLeggingsStack> CHAINMAIL_LEGGINGS_TYPE = ItemTypeBuilder
-            .builder(ItemChainmailLeggingsStack.class)
-            .vanillaItem(VanillaItemId.CHAINMAIL_LEGGINGS)
-            .build();
+  ItemType<ItemChainmailLeggingsStack> CHAINMAIL_LEGGINGS_TYPE = ItemTypeBuilder
+          .builder(ItemChainmailLeggingsStack.class)
+          .vanillaItem(VanillaItemId.CHAINMAIL_LEGGINGS)
+          .build();
 }

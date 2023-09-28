@@ -10,8 +10,8 @@ import cn.allay.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemLeatherLeggingsStack extends ItemStack {
-    ItemType<ItemLeatherLeggingsStack> LEATHER_LEGGINGS_TYPE = ItemTypeBuilder
-            .builder(ItemLeatherLeggingsStack.class)
-            .vanillaItem(VanillaItemId.LEATHER_LEGGINGS)
-            .build();
+  ItemType<ItemLeatherLeggingsStack> LEATHER_LEGGINGS_TYPE = ItemTypeBuilder
+          .builder(ItemLeatherLeggingsStack.class)
+          .vanillaItem(VanillaItemId.LEATHER_LEGGINGS)
+          .build();
 }

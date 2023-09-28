@@ -10,8 +10,8 @@ import cn.allay.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemNetheriteLeggingsStack extends ItemStack {
-    ItemType<ItemNetheriteLeggingsStack> NETHERITE_LEGGINGS_TYPE = ItemTypeBuilder
-            .builder(ItemNetheriteLeggingsStack.class)
-            .vanillaItem(VanillaItemId.NETHERITE_LEGGINGS)
-            .build();
+  ItemType<ItemNetheriteLeggingsStack> NETHERITE_LEGGINGS_TYPE = ItemTypeBuilder
+          .builder(ItemNetheriteLeggingsStack.class)
+          .vanillaItem(VanillaItemId.NETHERITE_LEGGINGS)
+          .build();
 }

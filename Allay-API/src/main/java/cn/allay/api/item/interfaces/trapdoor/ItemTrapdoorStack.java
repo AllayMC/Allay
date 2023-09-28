@@ -10,8 +10,8 @@ import cn.allay.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemTrapdoorStack extends ItemStack {
-    ItemType<ItemTrapdoorStack> TRAPDOOR_TYPE = ItemTypeBuilder
-            .builder(ItemTrapdoorStack.class)
-            .vanillaItem(VanillaItemId.TRAPDOOR)
-            .build();
+  ItemType<ItemTrapdoorStack> TRAPDOOR_TYPE = ItemTypeBuilder
+          .builder(ItemTrapdoorStack.class)
+          .vanillaItem(VanillaItemId.TRAPDOOR)
+          .build();
 }

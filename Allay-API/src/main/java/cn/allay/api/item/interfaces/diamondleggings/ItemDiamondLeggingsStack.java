@@ -10,8 +10,8 @@ import cn.allay.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemDiamondLeggingsStack extends ItemStack {
-    ItemType<ItemDiamondLeggingsStack> DIAMOND_LEGGINGS_TYPE = ItemTypeBuilder
-            .builder(ItemDiamondLeggingsStack.class)
-            .vanillaItem(VanillaItemId.DIAMOND_LEGGINGS)
-            .build();
+  ItemType<ItemDiamondLeggingsStack> DIAMOND_LEGGINGS_TYPE = ItemTypeBuilder
+          .builder(ItemDiamondLeggingsStack.class)
+          .vanillaItem(VanillaItemId.DIAMOND_LEGGINGS)
+          .build();
 }

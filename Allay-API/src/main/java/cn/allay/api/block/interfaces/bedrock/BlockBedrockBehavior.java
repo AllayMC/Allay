@@ -1,6 +1,9 @@
 package cn.allay.api.block.interfaces.bedrock;
 
 import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.component.base.BlockBaseComponentImpl;
+import cn.allay.api.block.data.BlockStateWithPos;
+import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.data.VanillaBlockId;

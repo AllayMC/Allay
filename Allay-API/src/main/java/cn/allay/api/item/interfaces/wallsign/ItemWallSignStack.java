@@ -10,8 +10,8 @@ import cn.allay.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemWallSignStack extends ItemStack {
-    ItemType<ItemWallSignStack> WALL_SIGN_TYPE = ItemTypeBuilder
-            .builder(ItemWallSignStack.class)
-            .vanillaItem(VanillaItemId.WALL_SIGN)
-            .build();
+  ItemType<ItemWallSignStack> WALL_SIGN_TYPE = ItemTypeBuilder
+          .builder(ItemWallSignStack.class)
+          .vanillaItem(VanillaItemId.WALL_SIGN)
+          .build();
 }
