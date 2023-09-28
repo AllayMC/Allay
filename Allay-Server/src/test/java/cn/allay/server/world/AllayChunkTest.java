@@ -1,6 +1,6 @@
 package cn.allay.server.world;
 
-import cn.allay.api.block.interfaces.water.BlockWaterBehavior;
+import cn.allay.api.block.interfaces.liquid.BlockWaterBehavior;
 import cn.allay.api.block.interfaces.wood.BlockWoodBehavior;
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.world.DimensionInfo;

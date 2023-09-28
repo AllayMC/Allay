@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -32,7 +33,7 @@ public class VanillaBlockInterfaceGen {
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("cn.allay.api.block.type", "BlockTypeBuilder");
     public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/block/interfaces");
-    public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new HashMap<>();
+    public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
 
     public static void main(String[] args) {
@@ -49,7 +50,6 @@ public class VanillaBlockInterfaceGen {
         registerSubPackage(Pattern.compile(".*StandingSignBehavior"), "standingsign");
         registerSubPackage(Pattern.compile(".*HangingSignBehavior"), "hangingsign");
         registerSubPackage(Pattern.compile(".*WallSignBehavior"), "wallsign");
-        registerSubPackage(Pattern.compile(".*SignBehavior"), "sign");
         registerSubPackage(Pattern.compile(".*WallBehavior"), "wall");
         registerSubPackage(Pattern.compile("BlockElement.*"), "element");
         registerSubPackage(Pattern.compile(".*CoralBehavior"), "coral");
