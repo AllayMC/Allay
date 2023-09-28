@@ -1,9 +1,7 @@
 package cn.allay.api.entity.interfaces.item;
 
-import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.init.EntityInitInfo;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.utils.MathUtils;
 import org.cloudburstmc.nbt.NbtMap;
@@ -24,8 +22,6 @@ import static cn.allay.api.item.ItemHelper.fromNBT;
  */
 public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityItem> implements EntityItemBaseComponent {
 
-    @ComponentIdentifier
-    public static final Identifier IDENTIFIER = EntityBaseComponentImpl.IDENTIFIER;
     public static final int MAX_AGE = 6000;
     protected ItemStack itemStack;
     protected int pickupDelay = 10;

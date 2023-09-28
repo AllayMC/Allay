@@ -26,6 +26,7 @@ public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<String, B
     public void init() {
         log.info("Loading Block Entity Types...");
         var classes = ReflectionUtils.getAllClasses("cn.allay.api.blockentity.interfaces");
+        classes.removeIf(clazz -> clazz.contains("Component"));
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())

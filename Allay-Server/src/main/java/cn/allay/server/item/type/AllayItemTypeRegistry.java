@@ -30,6 +30,7 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
     public void init() {
         log.info("Loading Item Types...");
         var classes = ReflectionUtils.getAllClasses("cn.allay.api.item.interfaces");
+        classes.removeIf(clazz -> clazz.contains("Component"));
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
