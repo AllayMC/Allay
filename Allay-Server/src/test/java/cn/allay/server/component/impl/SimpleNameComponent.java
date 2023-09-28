@@ -10,7 +10,7 @@ import cn.allay.server.component.interfaces.NameComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleNameComponent implements NameComponent, Component {
+public class SimpleNameComponent implements NameComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:name_component");

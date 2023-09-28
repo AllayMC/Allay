@@ -12,7 +12,7 @@ import cn.allay.server.component.interfaces.HealthComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleAttackComponent implements AttackComponent, Component {
+public class SimpleAttackComponent implements AttackComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:attack_component");

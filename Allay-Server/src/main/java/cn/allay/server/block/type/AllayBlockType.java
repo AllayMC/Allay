@@ -36,7 +36,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static cn.allay.api.component.interfaces.ComponentProvider.findComponentIdentifier;
+import static cn.allay.api.component.interfaces.ComponentProvider.findComponentIdentifierInCertainClass;
 
 /**
  * Allay Project 2023/4/15
@@ -381,13 +381,13 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public Builder<T> addComponent(BlockComponent component) {
-            this.components.put(findComponentIdentifier(component.getClass()), component);
+            this.components.put(findComponentIdentifierInCertainClass(component.getClass()), component);
             return this;
         }
 
         @Override
         public Builder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent) {
-            components.put(findComponentIdentifier(customBlockComponent.getClass()) ,customBlockComponent);
+            components.put(findComponentIdentifierInCertainClass(customBlockComponent.getClass()) ,customBlockComponent);
             isCustomBlock = true;
             return this;
         }

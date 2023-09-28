@@ -8,10 +8,7 @@ import cn.allay.api.component.interfaces.ComponentedObject;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.server.component.impl.*;
 import cn.allay.server.component.injector.AllayComponentInjector;
-import cn.allay.server.component.interfaces.AttackComponent;
-import cn.allay.server.component.interfaces.HealthComponent;
-import cn.allay.server.component.interfaces.NameComponent;
-import cn.allay.server.component.interfaces.Sheep;
+import cn.allay.server.component.interfaces.*;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,8 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/3/4
@@ -84,12 +80,31 @@ class ComponentTest {
                         .interfaceClass(interfaceClass)
                         .component(componentProvidersV2)
                         .inject(false));
-
     }
 
     @Test
     void testListener() {
         Assertions.assertEquals("testListener() accepted to the event!", sheep.triggerEvent("origin message").getMessage());
+    }
+
+    @Test
+    void testAnonymousComponentClass() {
+        var componentProvidersV3 = new ArrayList<>(componentProviders);
+        componentProvidersV3.add(ComponentProvider.of(() -> new SimpleTestAnonymousClassComponent() {
+            @Override
+            public void testMethod() {
+                System.out.println("TestAnonymousClassComponent");
+            }
+        }, SimpleTestAnonymousClassComponent.class));
+        assertDoesNotThrow(() -> {
+            new AllayComponentInjector<Sheep>()
+                    .interfaceClass(interfaceClass)
+                    .component(componentProvidersV3)
+                    .inject(false)
+                    .getDeclaredConstructor(ComponentInitInfo.class)
+                    .newInstance(new TestComponentInitInfo(114514))
+                    .testMethod();
+        });
     }
 
     public static class SimpleNameComponentV2 extends SimpleNameComponent {

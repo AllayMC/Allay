@@ -13,7 +13,7 @@ import cn.allay.server.component.interfaces.TestEventTriggerComponent;
  *
  * @author daoge_cmd
  */
-public class SimpleTestEventTriggerComponent implements TestEventTriggerComponent, Component {
+public class SimpleTestEventTriggerComponent implements TestEventTriggerComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:test_event_trigger_component");

@@ -1,5 +1,6 @@
 package cn.allay.server.component.interfaces;
 
+import cn.allay.api.component.interfaces.Component;
 import cn.allay.server.component.event.TestEvent;
 
 /**
@@ -7,6 +8,6 @@ import cn.allay.server.component.event.TestEvent;
  *
  * @author daoge_cmd
  */
-public interface TestEventTriggerComponent {
+public interface TestEventTriggerComponent extends Component {
     TestEvent triggerEvent(String message);
 }
