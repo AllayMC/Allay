@@ -29,7 +29,7 @@ public interface Chunk extends UnsafeChunk {
 
     @UnmodifiableView
     default Set<Client> getClientChunkLoaders() {
-        return getChunkLoaders().stream().filter(loader -> loader instanceof Client).map(loader -> (Client) loader).collect(Collectors.toSet());
+        return getChunkLoaders().stream().filter(Client.class::isInstance).map(Client.class::cast).collect(Collectors.toSet());
     }
 
     void addChunkLoader(ChunkLoader chunkLoader);
