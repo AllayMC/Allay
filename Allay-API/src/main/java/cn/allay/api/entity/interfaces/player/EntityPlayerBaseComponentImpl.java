@@ -1,14 +1,12 @@
 package cn.allay.api.entity.interfaces.player;
 
 import cn.allay.api.client.Client;
-import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
 import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.entity.interfaces.item.EntityItem;
-import cn.allay.api.identifier.Identifier;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -30,9 +28,6 @@ import java.util.function.Function;
  * @author daoge_cmd
  */
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
-
-    @ComponentIdentifier
-    public static final Identifier IDENTIFIER = EntityBaseComponentImpl.IDENTIFIER;
 
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;

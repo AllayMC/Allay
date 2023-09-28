@@ -70,15 +70,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
 
-    protected NbtMap infoNbt;
-
     public EntityBaseComponentImpl(EntityInitInfo<T> info, Function<T, AABBfc> aabbGetter) {
         Objects.requireNonNull(info.world(), "World cannot be null!");
         this.location = new Location3f(0, 0, 0, info.world());
         this.entityType = info.getEntityType();
         this.aabbGetter = aabbGetter;
         this.metadata = new Metadata();
-        this.infoNbt = info.nbt();
     }
 
     @Override

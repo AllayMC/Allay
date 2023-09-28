@@ -35,6 +35,7 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
     public void init() {
         log.info("Loading Entity Types...");
         var classes = ReflectionUtils.getAllClasses("cn.allay.api.entity.interfaces");
+        classes.removeIf(clazz -> clazz.contains("Component"));
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())

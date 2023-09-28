@@ -30,6 +30,7 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
     public void init() {
         log.info("Loading Block Types...");
         var classes = ReflectionUtils.getAllClasses("cn.allay.api.block.interfaces");
+        classes.removeIf(clazz -> clazz.contains("Component"));
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
