@@ -405,7 +405,13 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemIdentifier);
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
                 listComponents.add(blockBaseComponentSupplier.apply(type));
-            List<ComponentProvider<? extends Component>> componentProviders = listComponents.stream().map(ComponentProvider::ofSingleton).collect(Collectors.toList());
+            List<ComponentProvider<? extends Component>> componentProviders = listComponents.stream().map(singleton -> {
+                var currentClass = singleton.getClass();
+                //For anonymous class, we give it's super class to component provider
+                //So that injector can work with anonymous class
+                //Because anonymous class classes cannot be used directly as field types during the dynamic class generation phase
+                return ComponentProvider.of(initInfo -> singleton, currentClass.isAnonymousClass() ? currentClass.getSuperclass() : currentClass);
+            }).collect(Collectors.toList());
             try {
                 checkPropertyValid();
                 type.injectedClass = new AllayComponentInjector<T>()

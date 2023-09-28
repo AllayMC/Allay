@@ -16,14 +16,13 @@ import java.util.*;
 @UtilityClass
 public class ReflectionUtils {
     public List<String> getAllClasses(String packageName) {
-        List<String> classes = null;
         try {
             ClassPath classPath = ClassPath.from(ClassLoader.getSystemClassLoader());
-            classes = classPath.getTopLevelClassesRecursive(packageName).stream().map(ClassPath.ClassInfo::getName).toList();
+            return new ArrayList<>(classPath.getTopLevelClassesRecursive(packageName).stream().map(ClassPath.ClassInfo::getName).toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return classes;
+        return null;
     }
 
     public List<Field> getAllFields(Class<?> clazz) {
