@@ -2,7 +2,7 @@ package cn.allay.server.client;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.block.data.BlockFace;
-import cn.allay.api.block.interfaces.air.BlockAirBehavior;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.client.BaseClient;
 import cn.allay.api.client.data.AdventureSettings;

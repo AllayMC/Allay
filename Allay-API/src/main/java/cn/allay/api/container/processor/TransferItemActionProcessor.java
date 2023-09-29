@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 
 import java.util.List;
 
-import static cn.allay.api.item.interfaces.air.ItemAirStack.AIR_TYPE;
+import static cn.allay.api.item.interfaces.ItemAirStack.AIR_TYPE;
 import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus.OK;
 
 /**

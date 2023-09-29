@@ -2,7 +2,7 @@ package cn.allay.api.world;
 
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.data.BlockStateWithPos;
-import cn.allay.api.block.interfaces.air.BlockAirBehavior;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.client.Client;

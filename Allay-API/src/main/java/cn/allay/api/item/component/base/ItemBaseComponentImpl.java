@@ -9,7 +9,7 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
-import cn.allay.api.item.interfaces.air.ItemAirStack;
+import cn.allay.api.item.interfaces.ItemAirStack;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
