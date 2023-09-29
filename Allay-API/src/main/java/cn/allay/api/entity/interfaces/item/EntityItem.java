@@ -17,7 +17,6 @@ public interface EntityItem extends Entity, EntityItemBaseComponent {
           .addComponent(
                   info -> new EntityItemBaseComponentImpl(
                           info,
-                          e -> new AABBf(-0.125f, 0.0f, -0.125f, 0.125f, 0.25f, 0.125f),
                           null
                   ),
                   EntityItemBaseComponentImpl.class

@@ -8,6 +8,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
 import javax.annotation.Nullable;
@@ -27,8 +28,8 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     protected int pickupDelay = 10;
     protected int age;
 
-    public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, Function<EntityItem, AABBfc> aabbGetter, @Nullable ItemStack itemStack) {
-        super(info, aabbGetter);
+    public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, @Nullable ItemStack itemStack) {
+        super(info, new AABBf(-0.125f, 0.0f, -0.125f, 0.125f, 0.25f, 0.125f));
         this.itemStack = itemStack;
     }
 
