@@ -1,6 +1,6 @@
 package cn.allay.server.world.chunk;
 
-import cn.allay.api.block.interfaces.air.BlockAirBehavior;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.datastruct.collections.nb.Int2ObjectNonBlockingMap;

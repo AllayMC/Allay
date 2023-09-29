@@ -2,7 +2,7 @@ package cn.allay.api.container;
 
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
-import cn.allay.api.item.interfaces.air.ItemAirStack;
+import cn.allay.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;

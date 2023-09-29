@@ -1,6 +1,6 @@
 package cn.allay.api.world.chunk;
 
-import cn.allay.api.block.interfaces.air.BlockAirBehavior;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.datastruct.NibbleArray;

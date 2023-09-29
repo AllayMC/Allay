@@ -23,7 +23,7 @@ import org.joml.primitives.AABBf;
 
 import static cn.allay.api.container.Container.AIR_STACK;
 import static cn.allay.api.entity.component.attribute.EntityAttributeComponentImpl.basicAttributes;
-import static cn.allay.api.item.interfaces.air.ItemAirStack.AIR_TYPE;
+import static cn.allay.api.item.interfaces.ItemAirStack.AIR_TYPE;
 
 /**
  * @author daoge_cmd <br>

@@ -1,6 +1,6 @@
 package cn.allay.dataupdater;
 
-import cn.allay.api.block.interfaces.air.BlockAirBehavior;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.mapping.JeBlockState;
