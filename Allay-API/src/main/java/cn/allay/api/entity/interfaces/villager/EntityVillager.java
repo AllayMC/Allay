@@ -17,7 +17,7 @@ public interface EntityVillager extends Entity {
             .vanillaEntity(VanillaEntityId.VILLAGER)
             .addComponent(
                     info -> new EntityBaseComponentImpl<>(info,//TODO: 小村民
-                            e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)
+                            new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)
                     ), EntityBaseComponentImpl.class
             )
             .build();

@@ -65,23 +65,21 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected final Metadata metadata;
     protected EntityType<T> entityType;
     protected AABBfc aabb;
-    protected Function<T, AABBfc> aabbGetter;
     protected Map<Long, Client> viewers = new Long2ObjectOpenHashMap<>();
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
 
-    public EntityBaseComponentImpl(EntityInitInfo<T> info, Function<T, AABBfc> aabbGetter) {
+    public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
         Objects.requireNonNull(info.world(), "World cannot be null!");
         this.location = new Location3f(0, 0, 0, info.world());
         this.entityType = info.getEntityType();
-        this.aabbGetter = aabbGetter;
+        this.aabb = aabb;
         this.metadata = new Metadata();
     }
 
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
         loadNBT(((EntityInitInfo<T>) initInfo).nbt());
-        this.aabb = aabbGetter.apply(manager.getComponentedObject());
         initMetadata();
     }
 

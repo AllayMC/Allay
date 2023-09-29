@@ -30,7 +30,7 @@ public interface EntityPhysicsService {
     default List<Entity> computeCollidingEntities(Entity entity) {
         if (entity.hasEntityCollision()) {
             var entities = computeCollidingEntities(entity.getOffsetAABB());
-            entities.removeIf(e -> e.getUniqueId() == entity.getUniqueId() || !e.hasEntityCollision());
+            entities.removeIf(e -> e.getUniqueId() == entity.getUniqueId());
             return entities;
         } else return Collections.emptyList();
     }

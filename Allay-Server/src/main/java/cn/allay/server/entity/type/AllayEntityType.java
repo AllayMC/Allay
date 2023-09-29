@@ -135,7 +135,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         @Override
         public EntityType<T> build() {
             if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
-                addComponent(info -> new EntityBaseComponentImpl<>(info, e -> new AABBf(0, 0, 0, 0, 0, 0)),
+                addComponent(info -> new EntityBaseComponentImpl<>(info, new AABBf(0, 0, 0, 1, 1, 1)),
                         EntityBaseComponentImpl.class);
             }
             if (identifier == null) {
