@@ -39,7 +39,7 @@ public interface EntityPlayer extends
             .builder(EntityPlayer.class)
             .vanillaEntity(VanillaEntityId.PLAYER)
             .addComponent(
-                    info -> new EntityPlayerBaseComponentImpl(info, e -> new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)),
+                    info -> new EntityPlayerBaseComponentImpl(info),
                     EntityPlayerBaseComponentImpl.class
             )
             .addComponent(info -> new EntityAttributeComponentImpl(basicAttributes()), EntityAttributeComponentImpl.class)

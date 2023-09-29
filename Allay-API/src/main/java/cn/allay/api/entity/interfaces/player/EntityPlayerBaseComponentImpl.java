@@ -17,10 +17,8 @@ import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
 import org.cloudburstmc.protocol.bedrock.packet.TakeItemEntityPacket;
 import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
 
 import java.util.Objects;
-import java.util.function.Function;
 
 /**
  * Allay Project 2023/9/23
@@ -38,8 +36,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected boolean gliding;
     protected boolean crawling;
 
-    public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info, Function<EntityPlayer, AABBfc> aabbGetter) {
-        super(info, aabbGetter);
+    public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
+        super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
         if (info instanceof EntityPlayerInitInfo playerInitInfo) {
             client = playerInitInfo.getClient();
         } else {
@@ -64,7 +62,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 location.y + 1.425f,
                 location.z + 1.425f
         );
-        var entityItems = world.getEntityPhysicsService().computeCollidingEntities(pickUpArea)
+        var entityItems = world.getEntityPhysicsService().computeCollidingEntities(pickUpArea, true)
                 .stream()
                 .filter(entity -> entity instanceof EntityItem entityItem && entityItem.canBePicked())
                 .toList();

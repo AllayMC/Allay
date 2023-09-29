@@ -165,9 +165,13 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         var blockState = itemStack.toBlockState();
         if (blockState == null)
             return false;
+        return tryPlaceBlockState(player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
+    }
+
+    protected boolean tryPlaceBlockState(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
         if (player != null && hasEntityCollision(world, placeBlockPos, blockState))
             return false;
-        BlockType<?> blockType = itemStack.getItemType().getBlockType();
+        BlockType<?> blockType = blockState.blockType();
         assert blockType != null;
         boolean result = blockType.getBlockBehavior().place(player, world, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         tryConsumeItem(player, itemStack);

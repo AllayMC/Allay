@@ -43,6 +43,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
     protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectNonBlockingMap<>();
     protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectNonBlockingMap<>();
+    /**
+     * Regardless of the value of the entity's hasEntityCollision(), this aabb tree saves its collision result
+     */
     protected AABBTree<Entity> entityAABBTree = new AABBTree<>();
     protected Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
 
@@ -67,18 +70,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             }
             updateMotion(entity);
         });
-        updatedEntities.values().forEach(this::updateAABBTreeIfHasCollision);
-    }
-
-    protected void updateAABBTreeIfHasCollision(Entity entity) {
-        if (entity.hasEntityCollision())
-            entityAABBTree.update(entity);
+        updatedEntities.values().forEach(entityAABBTree::update);
     }
 
     protected void cacheEntityCollisionResult() {
         entityCollisionCache.clear();
         entities.values().forEach(entity -> {
-            var collidedEntities = computeCollidingEntities(entity);
+            var collidedEntities = computeCollidingEntities(entity, true);
             if (collidedEntities.isEmpty()) return;
             entityCollisionCache.put(entity.getUniqueId(), collidedEntities);
         });
@@ -86,6 +84,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected void computeCollisionMotion(Entity entity) {
         var collidedEntities = getCachedEntityCollidingResult(entity);
+        collidedEntities.removeIf(e -> !e.computeEntityCollisionMotion());
         var collisionMotion = new Vector3f(0, 0, 0);
         var loc = entity.getLocation();
         float r = entity.getPushSpeedReduction();
@@ -397,7 +396,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
                 if (updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc))
-                    updateAABBTreeIfHasCollision(scheduledMove.entity);
+                    entityAABBTree.update(scheduledMove.entity);
             }
         }
     }
@@ -409,14 +408,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             switch (operation.type) {
                 case ADD -> {
                     entities.put(entity.getUniqueId(), entity);
-                    if (entity.hasEntityCollision()) entityAABBTree.add(entity);
+                    entityAABBTree.add(entity);
                 }
                 case REMOVE -> {
                     entities.remove(entity.getUniqueId());
-                    if (entity.hasEntityCollision()) entityAABBTree.remove(entity);
+                    entityAABBTree.remove(entity);
                     entityCollisionCache.remove(entity.getUniqueId());
                 }
-                case UPDATE -> updateAABBTreeIfHasCollision(entity);
+                case UPDATE -> entityAABBTree.update(entity);
             }
         }
     }
@@ -475,24 +474,32 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     @Override
-    public List<Entity> computeCollidingEntities(AABBfc aabb) {
+    public List<Entity> computeCollidingEntities(AABBfc aabb, boolean ignoreEntityHasCollision) {
         var result = new ArrayList<Entity>();
         entityAABBTree.detectOverlaps(aabb, result);
+        if (!ignoreEntityHasCollision) {
+            result.removeIf(e -> !e.hasEntityCollision());
+        }
         return result;
     }
 
     @Override
-    public List<Entity> computeCollidingEntities(VoxelShape voxelShape) {
+    public List<Entity> computeCollidingEntities(VoxelShape voxelShape, boolean ignoreEntityHasCollision) {
         //用一个set暂存entity避免重复
-        var list = new ArrayList<Entity>();
-        entityAABBTree.detectOverlaps(voxelShape.unionAABB(), list);
-        list.removeIf(entity -> !voxelShape.intersectsAABB(entity.getOffsetAABB()));
-        return list;
+        var result = new ArrayList<Entity>();
+        entityAABBTree.detectOverlaps(voxelShape.unionAABB(), result);
+        result.removeIf(entity -> !voxelShape.intersectsAABB(entity.getOffsetAABB()) && (ignoreEntityHasCollision || !entity.hasEntityCollision()));
+        return result;
     }
 
     @Override
-    public List<Entity> getCachedEntityCollidingResult(Entity entity) {
-        return entityCollisionCache.getOrDefault(entity.getUniqueId(), Collections.emptyList());
+    public List<Entity> getCachedEntityCollidingResult(Entity entity, boolean ignoreEntityHasCollision) {
+        if (!entity.hasEntityCollision()) return Collections.emptyList();
+        var result = entityCollisionCache.getOrDefault(entity.getUniqueId(), Collections.emptyList());
+        if (!ignoreEntityHasCollision) {
+            result.removeIf(e -> !e.hasEntityCollision());
+        }
+        return result;
     }
 
     protected record ScheduledMove(Entity entity, Location3fc newLoc) {};

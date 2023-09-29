@@ -27,17 +27,31 @@ public interface EntityPhysicsService {
 
     void offerScheduledMove(Entity entity, Location3fc newLoc);
 
-    default List<Entity> computeCollidingEntities(Entity entity) {
-        if (entity.hasEntityCollision()) {
-            var entities = computeCollidingEntities(entity.getOffsetAABB());
-            entities.removeIf(e -> e.getUniqueId() == entity.getUniqueId());
-            return entities;
-        } else return Collections.emptyList();
+    default List<Entity> computeCollidingEntities(Entity entity, boolean ignoreEntityHasCollision) {
+        var entities = computeCollidingEntities(entity.getOffsetAABB(), ignoreEntityHasCollision);
+        entities.removeIf(e -> e.getUniqueId() == entity.getUniqueId());
+        return entities;
     }
 
-    List<Entity> computeCollidingEntities(AABBfc aabb);
+    default List<Entity> computeCollidingEntities(Entity entity) {
+        return computeCollidingEntities(entity, false);
+    }
 
-    List<Entity> computeCollidingEntities(VoxelShape voxelShape);
+    default List<Entity> computeCollidingEntities(AABBfc aabb) {
+        return computeCollidingEntities(aabb, false);
+    }
 
-    List<Entity> getCachedEntityCollidingResult(Entity entity);
+    List<Entity> computeCollidingEntities(AABBfc aabb, boolean ignoreEntityHasCollision);
+
+    default List<Entity> computeCollidingEntities(VoxelShape voxelShape) {
+        return computeCollidingEntities(voxelShape, false);
+    }
+
+    List<Entity> computeCollidingEntities(VoxelShape voxelShape, boolean ignoreEntityHasCollision);
+
+    default List<Entity> getCachedEntityCollidingResult(Entity entity) {
+        return getCachedEntityCollidingResult(entity, false);
+    }
+
+    List<Entity> getCachedEntityCollidingResult(Entity entity, boolean ignoreEntityHasCollision);
 }
