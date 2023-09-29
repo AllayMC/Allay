@@ -90,9 +90,8 @@ public class VanillaItemInterfaceGen {
         for (var item : VanillaItemId.values()) {
             var itemClassSimpleName = item == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0Stack" : "Item" + Utils.convertToPascalCase(item.getIdentifier().path().replace(".", "_")) + "Stack";
             var folderName = tryFindSpecifiedFolderName(itemClassSimpleName);
-            if (folderName == null) folderName = item == VanillaItemId.NETHERBRICK ? "netherbrick0" : Utils.convertToPascalCase(item.getIdentifier().path().replace(".", "_")).toLowerCase();
-            var itemClassName = ClassName.get("cn.allay.api.item.interfaces." + folderName, itemClassSimpleName);
-            var folderPath = FILE_OUTPUT_PATH_BASE.resolve(folderName);
+            var itemClassName = ClassName.get("cn.allay.api.item.interfaces" + (folderName != null ? "." + folderName : ""), itemClassSimpleName);
+            var folderPath = folderName != null ? FILE_OUTPUT_PATH_BASE.resolve(folderName) : FILE_OUTPUT_PATH_BASE;
             var path = folderPath.resolve(itemClassSimpleName + ".java");
             if (!Files.exists(path)) {
                 System.out.println("Generating " + itemClassName + "...");

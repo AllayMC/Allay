@@ -79,9 +79,8 @@ public class VanillaBlockInterfaceGen {
         for (var block : VanillaBlockId.values()) {
             var blockClassSimpleName = "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior";
             var folderName = tryFindSpecifiedFolderName(blockClassSimpleName);
-            if (folderName == null) folderName = Utils.convertToPascalCase(block.getIdentifier().path()).toLowerCase();
-            var blockClassName = ClassName.get("cn.allay.api.block.interfaces." + folderName, blockClassSimpleName);
-            var folderPath = FILE_OUTPUT_PATH_BASE.resolve(folderName);
+            var blockClassName = ClassName.get("cn.allay.api.block.interfaces" + (folderName != null ? "." + folderName : ""), blockClassSimpleName);
+            var folderPath = folderName != null ? FILE_OUTPUT_PATH_BASE.resolve(folderName) : FILE_OUTPUT_PATH_BASE;
             var path = folderPath.resolve(blockClassSimpleName + ".java");
             if (!Files.exists(path)) {
                 System.out.println("Generating " + blockClassName + "...");
