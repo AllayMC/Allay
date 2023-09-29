@@ -56,6 +56,10 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void setHasEntityCollision(boolean hasEntityCollision);
 
+    default boolean computeEntityCollisionMotion() {
+        return hasEntityCollision();
+    }
+
     @UnmodifiableView
     Map<Long, Client> getViewers();
 

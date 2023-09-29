@@ -60,19 +60,24 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             if (!entity.computeMovementServerSide()) return;
             if (!entity.isInWorld()) return;
             //TODO: 水流作用 方块推出作用 etc...
-            if (entity.hasEntityCollision()) computeCollisionMotion(entity);
+            if (entity.computeEntityCollisionMotion()) computeCollisionMotion(entity);
             entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
             if (applyMotion(entity)) {
                 updatedEntities.put(entity.getUniqueId(), entity);
             }
             updateMotion(entity);
         });
-        updatedEntities.values().forEach(entity -> entityAABBTree.update(entity));
+        updatedEntities.values().forEach(this::updateAABBTreeIfHasCollision);
+    }
+
+    protected void updateAABBTreeIfHasCollision(Entity entity) {
+        if (entity.hasEntityCollision())
+            entityAABBTree.update(entity);
     }
 
     protected void cacheEntityCollisionResult() {
         entityCollisionCache.clear();
-        entities.values().stream().filter(Entity::hasEntityCollision).forEach(entity -> {
+        entities.values().forEach(entity -> {
             var collidedEntities = computeCollidingEntities(entity);
             if (collidedEntities.isEmpty()) return;
             entityCollisionCache.put(entity.getUniqueId(), collidedEntities);
@@ -392,7 +397,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
                 if (updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc))
-                    entityAABBTree.update(scheduledMove.entity);
+                    updateAABBTreeIfHasCollision(scheduledMove.entity);
             }
         }
     }
@@ -404,14 +409,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             switch (operation.type) {
                 case ADD -> {
                     entities.put(entity.getUniqueId(), entity);
-                    entityAABBTree.add(entity);
+                    if (entity.hasEntityCollision()) entityAABBTree.add(entity);
                 }
                 case REMOVE -> {
                     entities.remove(entity.getUniqueId());
-                    entityAABBTree.remove(entity);
+                    if (entity.hasEntityCollision()) entityAABBTree.remove(entity);
                     entityCollisionCache.remove(entity.getUniqueId());
                 }
-                case UPDATE -> entityAABBTree.update(entity);
+                case UPDATE -> updateAABBTreeIfHasCollision(entity);
             }
         }
     }
