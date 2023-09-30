@@ -69,7 +69,6 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                 var index = Integer.parseInt(key);
                 var obj = (NbtMap) value;
                 var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(obj.getString("name")));
-                int count = obj.getInt("count");
                 int damage = obj.getInt("damage");
                 int blockStateHash = obj.getInt("blockStateHash");
                 var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
@@ -78,7 +77,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                 var itemStack = itemType.createItemStack(
                         SimpleItemStackInitInfo
                                 .builder()
-                                .count(count)
+                                .count(1)
                                 .damage(damage)
                                 .nbt(tag)
                                 .blockState(blockState)
