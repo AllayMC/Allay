@@ -68,6 +68,7 @@ public class VanillaItemInterfaceGen {
         registerSubPackage(Pattern.compile(".*CandleStack"), "candle");
         registerSubPackage(Pattern.compile(".*CandleCakeStack"), "candlecake");
         registerSubPackage(Pattern.compile(".*ConcreteStack"), "concrete");
+        registerSubPackage(Pattern.compile(".*ConcretePowderStack"), "concretepowder");
         registerSubPackage(Pattern.compile(".*TerracottaStack"), "terracotta");
         registerSubPackage(Pattern.compile(".*ShulkerBoxStack"), "shulkerbox");
         registerSubPackage(Pattern.compile(".*CarpetStack"), "carpet");
@@ -86,6 +87,10 @@ public class VanillaItemInterfaceGen {
         registerSubPackage(Pattern.compile("ItemMusicDisc.*"), "musicdisc");
         registerSubPackage(Pattern.compile("ItemPiston.*"), "piston");
         registerSubPackage(Pattern.compile("ItemStickyPiston.*"), "piston");
+        registerSubPackage(Pattern.compile(".*StainedGlassStack"), "stainedglass");
+        registerSubPackage(Pattern.compile(".*StainedGlassPaneStack"), "stainedglasspane");
+        registerSubPackage(Pattern.compile(".*GlassStack"), "glass");
+        registerSubPackage(Pattern.compile(".*GlassPaneStack"), "glasspane");
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var item : VanillaItemId.values()) {
             var itemClassSimpleName = item == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0Stack" : "Item" + Utils.convertToPascalCase(item.getIdentifier().path().replace(".", "_")) + "Stack";
