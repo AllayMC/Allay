@@ -25,7 +25,7 @@ public record FullContainerType<T extends Container>(int id,
             .build();
 
     public static final FullContainerType<PlayerArmorContainer> ARMOR = builder()
-            .id(ContainerType.ARMOR)
+            .id(120)
             .size(4)
             .mapAllSlotToType(ContainerSlotType.ARMOR)
             .build();
