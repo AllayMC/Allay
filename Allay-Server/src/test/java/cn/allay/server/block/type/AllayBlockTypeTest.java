@@ -5,6 +5,7 @@ import cn.allay.api.block.component.attribute.BlockAttributes;
 import cn.allay.api.block.interfaces.candle.BlockBlueCandleBehavior;
 import cn.allay.api.block.interfaces.coralfan.BlockCoralFanBehavior;
 import cn.allay.api.block.interfaces.wall.BlockCobbledDeepslateWallBehavior;
+import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.enums.*;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.property.type.BooleanPropertyType;
