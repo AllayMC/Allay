@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
-public class BlockStateHashValidator {
+class BlockStateHashTest {
 
     static Map<Integer, NbtMap> BLOCK_ATTRIBUTES = new HashMap<>();
 
