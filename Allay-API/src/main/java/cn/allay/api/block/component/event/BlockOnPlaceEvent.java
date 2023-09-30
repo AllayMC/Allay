@@ -9,5 +9,8 @@ import cn.allay.api.component.interfaces.ComponentEvent;
  *
  * @author daoge_cmd
  */
-public record BlockOnPlaceEvent(BlockStateWithPos currentBlockState, BlockState newBlockState) implements ComponentEvent {
+public record BlockOnPlaceEvent(
+        BlockStateWithPos currentBlockState,
+        BlockState newBlockState
+) implements ComponentEvent {
 }
