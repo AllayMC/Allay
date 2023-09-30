@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.awt.Color;
+import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,6 +72,7 @@ class BlockAttributesTest {
                 "isThinFenceBlock": true
             }
             """;
+
     @Test
     void testDeserialization() {
         var blockAttributes = BlockAttributes.fromJson(json);
@@ -121,16 +122,21 @@ class BlockAttributesTest {
 
     @Test
     void testVanillaBlockAttributes() {
+        int error = 0;
         for (var vanillaBlockId : VanillaBlockId.values()) {
-            log.info("Testing block type: " + vanillaBlockId.getIdentifier());
             BlockType<?> type = BlockTypeRegistry.getRegistry().get(vanillaBlockId.getIdentifier());
             assertNotNull(type);
             var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
             assertNotNull(attributeMap);
             for (var state : type.getBlockStateHashMap().values()) {
                 var expected = attributeMap.get(state.blockStateHash());
-                assertNotNull(expected, "Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
+                if (expected == null) {
+                    log.error("Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
+                    log.info("expected blockhash: " + state.blockStateHash());
+                    error++;
+                }
             }
         }
+        assertEquals(0, error, "error number not zero!");
     }
 }

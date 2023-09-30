@@ -14,6 +14,6 @@ public interface BlockPinkPetalsBehavior extends BlockBehavior {
   BlockType<BlockPinkPetalsBehavior> PINK_PETALS_TYPE = BlockTypeBuilder
           .builder(BlockPinkPetalsBehavior.class)
           .vanillaBlock(VanillaBlockId.PINK_PETALS)
-          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.GROWTH)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.GROWTH)
           .build();
 }

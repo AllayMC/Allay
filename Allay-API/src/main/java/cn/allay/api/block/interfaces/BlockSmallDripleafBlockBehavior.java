@@ -14,6 +14,6 @@ public interface BlockSmallDripleafBlockBehavior extends BlockBehavior {
   BlockType<BlockSmallDripleafBlockBehavior> SMALL_DRIPLEAF_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockSmallDripleafBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.SMALL_DRIPLEAF_BLOCK)
-          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
           .build();
 }

@@ -14,6 +14,6 @@ public interface BlockDeepslateBrickSlabBehavior extends BlockBehavior {
   BlockType<BlockDeepslateBrickSlabBehavior> DEEPSLATE_BRICK_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateBrickSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_BRICK_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

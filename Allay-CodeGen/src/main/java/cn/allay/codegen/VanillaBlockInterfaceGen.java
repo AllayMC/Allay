@@ -62,6 +62,7 @@ public class VanillaBlockInterfaceGen {
         registerSubPackage(Pattern.compile(".*CandleBehavior"), "candle");
         registerSubPackage(Pattern.compile(".*CandleCakeBehavior"), "candlecake");
         registerSubPackage(Pattern.compile(".*ConcreteBehavior"), "concrete");
+        registerSubPackage(Pattern.compile(".*ConcretePowderBehavior"), "concretepowder");
         registerSubPackage(Pattern.compile(".*TerracottaBehavior"), "terracotta");
         registerSubPackage(Pattern.compile(".*ShulkerBoxBehavior"), "shulkerbox");
         registerSubPackage(Pattern.compile(".*CarpetBehavior"), "carpet");
@@ -75,6 +76,11 @@ public class VanillaBlockInterfaceGen {
         registerSubPackage(Pattern.compile(".*(?:Water|Lava)Behavior"), "liquid");
         registerSubPackage(Pattern.compile("BlockPiston.*"), "piston");
         registerSubPackage(Pattern.compile("BlockStickyPiston.*"), "piston");
+        registerSubPackage(Pattern.compile(".*StainedGlassBehavior"), "stainedglass");
+        registerSubPackage(Pattern.compile(".*StainedGlassPaneBehavior"), "stainedglasspane");
+        registerSubPackage(Pattern.compile(".*GlassBehavior"), "glass");
+        registerSubPackage(Pattern.compile(".*GlassPaneBehavior"), "glasspane");
+        registerSubPackage(Pattern.compile(".*AmethystBudBehavior"), "amethystbud");
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
             var blockClassSimpleName = "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior";

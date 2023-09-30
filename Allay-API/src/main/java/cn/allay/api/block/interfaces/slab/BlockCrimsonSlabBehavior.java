@@ -14,6 +14,6 @@ public interface BlockCrimsonSlabBehavior extends BlockBehavior {
   BlockType<BlockCrimsonSlabBehavior> CRIMSON_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockCrimsonSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.CRIMSON_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

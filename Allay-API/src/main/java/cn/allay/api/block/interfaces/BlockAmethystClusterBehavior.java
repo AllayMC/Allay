@@ -14,6 +14,6 @@ public interface BlockAmethystClusterBehavior extends BlockBehavior {
   BlockType<BlockAmethystClusterBehavior> AMETHYST_CLUSTER_TYPE = BlockTypeBuilder
           .builder(BlockAmethystClusterBehavior.class)
           .vanillaBlock(VanillaBlockId.AMETHYST_CLUSTER)
-          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_BLOCK_FACE)
           .build();
 }

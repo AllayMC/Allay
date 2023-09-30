@@ -14,6 +14,6 @@ public interface BlockUnpoweredRepeaterBehavior extends BlockBehavior {
   BlockType<BlockUnpoweredRepeaterBehavior> UNPOWERED_REPEATER_TYPE = BlockTypeBuilder
           .builder(BlockUnpoweredRepeaterBehavior.class)
           .vanillaBlock(VanillaBlockId.UNPOWERED_REPEATER)
-          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.REPEATER_DELAY)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.REPEATER_DELAY)
           .build();
 }

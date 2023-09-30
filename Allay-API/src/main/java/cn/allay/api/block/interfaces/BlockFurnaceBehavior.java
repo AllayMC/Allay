@@ -14,6 +14,6 @@ public interface BlockFurnaceBehavior extends BlockBehavior {
   BlockType<BlockFurnaceBehavior> FURNACE_TYPE = BlockTypeBuilder
           .builder(BlockFurnaceBehavior.class)
           .vanillaBlock(VanillaBlockId.FURNACE)
-          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
           .build();
 }

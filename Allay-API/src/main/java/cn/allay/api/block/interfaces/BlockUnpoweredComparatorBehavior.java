@@ -14,6 +14,6 @@ public interface BlockUnpoweredComparatorBehavior extends BlockBehavior {
   BlockType<BlockUnpoweredComparatorBehavior> UNPOWERED_COMPARATOR_TYPE = BlockTypeBuilder
           .builder(BlockUnpoweredComparatorBehavior.class)
           .vanillaBlock(VanillaBlockId.UNPOWERED_COMPARATOR)
-          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OUTPUT_LIT_BIT, VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.OUTPUT_LIT_BIT, VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
           .build();
 }

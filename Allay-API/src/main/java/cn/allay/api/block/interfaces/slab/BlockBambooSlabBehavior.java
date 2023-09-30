@@ -14,6 +14,6 @@ public interface BlockBambooSlabBehavior extends BlockBehavior {
   BlockType<BlockBambooSlabBehavior> BAMBOO_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockBambooSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

@@ -14,6 +14,6 @@ public interface BlockMudBrickDoubleSlabBehavior extends BlockBehavior {
   BlockType<BlockMudBrickDoubleSlabBehavior> MUD_BRICK_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockMudBrickDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.MUD_BRICK_DOUBLE_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }
