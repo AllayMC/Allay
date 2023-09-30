@@ -14,6 +14,6 @@ public interface BlockPolishedBlackstoneBrickDoubleSlabBehavior extends BlockBeh
   BlockType<BlockPolishedBlackstoneBrickDoubleSlabBehavior> POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneBrickDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

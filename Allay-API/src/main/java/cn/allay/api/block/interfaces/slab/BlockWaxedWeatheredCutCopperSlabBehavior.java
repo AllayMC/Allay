@@ -14,6 +14,6 @@ public interface BlockWaxedWeatheredCutCopperSlabBehavior extends BlockBehavior 
   BlockType<BlockWaxedWeatheredCutCopperSlabBehavior> WAXED_WEATHERED_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedWeatheredCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_CUT_COPPER_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

@@ -14,6 +14,6 @@ public interface BlockDoubleStoneBlockSlab4Behavior extends BlockBehavior {
   BlockType<BlockDoubleStoneBlockSlab4Behavior> DOUBLE_STONE_BLOCK_SLAB4_TYPE = BlockTypeBuilder
           .builder(BlockDoubleStoneBlockSlab4Behavior.class)
           .vanillaBlock(VanillaBlockId.DOUBLE_STONE_BLOCK_SLAB4)
-          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4, VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4, VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

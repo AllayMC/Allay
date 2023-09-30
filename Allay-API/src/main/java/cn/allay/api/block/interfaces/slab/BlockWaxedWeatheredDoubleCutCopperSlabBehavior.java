@@ -14,6 +14,6 @@ public interface BlockWaxedWeatheredDoubleCutCopperSlabBehavior extends BlockBeh
   BlockType<BlockWaxedWeatheredDoubleCutCopperSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWaxedWeatheredDoubleCutCopperSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

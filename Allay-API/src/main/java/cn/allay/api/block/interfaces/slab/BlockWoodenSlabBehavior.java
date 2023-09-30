@@ -14,6 +14,6 @@ public interface BlockWoodenSlabBehavior extends BlockBehavior {
   BlockType<BlockWoodenSlabBehavior> WOODEN_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockWoodenSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.WOODEN_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT, VanillaBlockPropertyTypes.WOOD_TYPE)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF, VanillaBlockPropertyTypes.WOOD_TYPE)
           .build();
 }

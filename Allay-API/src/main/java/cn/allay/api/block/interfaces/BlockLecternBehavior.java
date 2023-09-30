@@ -14,6 +14,6 @@ public interface BlockLecternBehavior extends BlockBehavior {
   BlockType<BlockLecternBehavior> LECTERN_TYPE = BlockTypeBuilder
           .builder(BlockLecternBehavior.class)
           .vanillaBlock(VanillaBlockId.LECTERN)
-          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.POWERED_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.POWERED_BIT)
           .build();
 }

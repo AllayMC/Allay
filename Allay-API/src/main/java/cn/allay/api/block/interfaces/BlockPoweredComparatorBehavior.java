@@ -14,6 +14,6 @@ public interface BlockPoweredComparatorBehavior extends BlockBehavior {
   BlockType<BlockPoweredComparatorBehavior> POWERED_COMPARATOR_TYPE = BlockTypeBuilder
           .builder(BlockPoweredComparatorBehavior.class)
           .vanillaBlock(VanillaBlockId.POWERED_COMPARATOR)
-          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OUTPUT_LIT_BIT, VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.OUTPUT_LIT_BIT, VanillaBlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
           .build();
 }

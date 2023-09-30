@@ -1,0 +1,17 @@
+package cn.allay.api.block.interfaces.stainedglasspane;
+
+import cn.allay.api.block.BlockBehavior;
+import cn.allay.api.block.type.BlockType;
+import cn.allay.api.block.type.BlockTypeBuilder;
+import cn.allay.api.data.VanillaBlockId;
+
+/**
+ * @author daoge_cmd | Cool_Loong <br>
+ * Allay Project <br>
+ */
+public interface BlockCyanStainedGlassPaneBehavior extends BlockBehavior {
+  BlockType<BlockCyanStainedGlassPaneBehavior> CYAN_STAINED_GLASS_PANE_TYPE = BlockTypeBuilder
+          .builder(BlockCyanStainedGlassPaneBehavior.class)
+          .vanillaBlock(VanillaBlockId.CYAN_STAINED_GLASS_PANE)
+          .build();
+}

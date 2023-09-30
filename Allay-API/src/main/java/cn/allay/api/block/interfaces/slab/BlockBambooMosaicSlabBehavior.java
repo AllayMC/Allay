@@ -14,6 +14,6 @@ public interface BlockBambooMosaicSlabBehavior extends BlockBehavior {
   BlockType<BlockBambooMosaicSlabBehavior> BAMBOO_MOSAIC_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockBambooMosaicSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

@@ -14,6 +14,6 @@ public interface BlockPolishedBlackstoneSlabBehavior extends BlockBehavior {
   BlockType<BlockPolishedBlackstoneSlabBehavior> POLISHED_BLACKSTONE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockPolishedBlackstoneSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

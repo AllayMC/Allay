@@ -14,6 +14,6 @@ public interface BlockDeepslateTileDoubleSlabBehavior extends BlockBehavior {
   BlockType<BlockDeepslateTileDoubleSlabBehavior> DEEPSLATE_TILE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
           .builder(BlockDeepslateTileDoubleSlabBehavior.class)
           .vanillaBlock(VanillaBlockId.DEEPSLATE_TILE_DOUBLE_SLAB)
-          .setProperties(VanillaBlockPropertyTypes.TOP_SLOT_BIT)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
           .build();
 }

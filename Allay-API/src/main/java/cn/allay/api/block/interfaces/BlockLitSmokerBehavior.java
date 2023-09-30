@@ -14,6 +14,6 @@ public interface BlockLitSmokerBehavior extends BlockBehavior {
   BlockType<BlockLitSmokerBehavior> LIT_SMOKER_TYPE = BlockTypeBuilder
           .builder(BlockLitSmokerBehavior.class)
           .vanillaBlock(VanillaBlockId.LIT_SMOKER)
-          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
           .build();
 }

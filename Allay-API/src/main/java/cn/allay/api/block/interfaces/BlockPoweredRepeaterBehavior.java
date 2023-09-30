@@ -14,6 +14,6 @@ public interface BlockPoweredRepeaterBehavior extends BlockBehavior {
   BlockType<BlockPoweredRepeaterBehavior> POWERED_REPEATER_TYPE = BlockTypeBuilder
           .builder(BlockPoweredRepeaterBehavior.class)
           .vanillaBlock(VanillaBlockId.POWERED_REPEATER)
-          .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.REPEATER_DELAY)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.REPEATER_DELAY)
           .build();
 }
