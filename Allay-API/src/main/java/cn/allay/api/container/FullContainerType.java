@@ -11,9 +11,11 @@ import java.util.*;
  *
  * @author daoge_cmd
  */
-public record FullContainerType<T extends Container>(int id,
-                                                     ContainerSlotType[] slotTypeTable,
-                                                     Set<ContainerSlotType> heldSlotTypes) {
+public record FullContainerType<T extends Container>(
+        int id,
+        ContainerSlotType[] slotTypeTable,
+        Set<ContainerSlotType> heldSlotTypes
+) {
 
     public static final Map<ContainerSlotType, FullContainerType<? extends Container>> SLOT_TYPE_TO_TYPE_MAP = new EnumMap<>(ContainerSlotType.class);
     public static final int UNKNOWN_NETWORK_ID = Integer.MIN_VALUE;
