@@ -1,4 +1,4 @@
-package cn.allay.api.item.interfaces;
+package cn.allay.api.item.interfaces.stainedglass;
 
 import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.item.ItemStack;
