@@ -63,6 +63,8 @@ public class BlockAttributes {
     @Builder.Default
     protected Color color = Color.BLACK;
     @Builder.Default
+    protected String descriptionId = "";
+    @Builder.Default
     protected int burnAbility = 0;
     @Builder.Default
     protected int burnChance = 0;
@@ -162,6 +164,7 @@ public class BlockAttributes {
                 .burnChance(nbt.getInt("burnChance"))
                 .canContainLiquid(nbt.getBoolean("canContainLiquid"))
                 .color(color)
+                .descriptionId(nbt.getString("descriptionId"))
                 .explosionResistance(nbt.getFloat("explosionResistance"))
                 .friction(nbt.getFloat("friction"))
                 .hardness(nbt.getFloat("hardness"))
