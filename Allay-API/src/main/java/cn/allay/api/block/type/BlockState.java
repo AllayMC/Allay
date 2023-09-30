@@ -18,7 +18,10 @@ import java.util.Map;
  */
 public interface BlockState {
 
-    int VERSION = 18090528;
+    int VERSION = (1 << 24) | //major
+                  (20 << 16) | //minor
+                  (30 << 8) | //patch
+                  (50); //revision
 
     BlockType<?> blockType();
 
