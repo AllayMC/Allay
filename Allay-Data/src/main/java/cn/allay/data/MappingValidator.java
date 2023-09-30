@@ -1,4 +1,4 @@
-package cn.allay.dataupdater;
+package cn.allay.data;
 
 import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.palette.BlockStateHashPalette;
