@@ -9,6 +9,9 @@ import cn.allay.api.component.interfaces.ComponentEvent;
  *
  * @author daoge_cmd
  */
-public record BlockOnNeighborChangedEvent(BlockStateWithPos blockState, BlockStateWithPos neighborBlockState,
-                                          BlockFace blockFace) implements ComponentEvent {
+public record BlockOnNeighborChangedEvent(
+        BlockStateWithPos blockState,
+        BlockStateWithPos neighborBlockState,
+        BlockFace blockFace
+) implements ComponentEvent {
 }
