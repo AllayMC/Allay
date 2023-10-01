@@ -1,7 +1,7 @@
 package cn.allay.api.blockentity.component.base;
 
 import cn.allay.api.block.component.event.BlockOnInteractEvent;
-import cn.allay.api.block.component.event.BlockOnNeighborChangedEvent;
+import cn.allay.api.block.component.event.BlockOnNeighborUpdateEvent;
 import cn.allay.api.block.component.event.BlockOnPlaceEvent;
 import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.blockentity.BlockEntity;
@@ -72,7 +72,7 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     }
 
     @Override
-    public void onNeighborChanged(BlockOnNeighborChangedEvent event) {
+    public void onNeighborUpdate(BlockOnNeighborUpdateEvent event) {
         manager.callEvent(event);
     }
 

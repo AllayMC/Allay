@@ -1,4 +1,4 @@
-package cn.allay.server.world.chunk;
+package cn.allay.server.world.service;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.blockentity.BlockEntity;
@@ -11,7 +11,9 @@ import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
 import cn.allay.api.world.generator.ChunkGenerateContext;
+import cn.allay.api.world.service.ChunkService;
 import cn.allay.api.world.storage.WorldStorage;
+import cn.allay.server.world.chunk.AllayUnsafeChunk;
 import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;

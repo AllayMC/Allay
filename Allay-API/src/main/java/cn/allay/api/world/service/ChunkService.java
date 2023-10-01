@@ -1,6 +1,9 @@
-package cn.allay.api.world.chunk;
+package cn.allay.api.world.service;
 
 import cn.allay.api.annotation.SlowOperation;
+import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.chunk.ChunkAccessible;
+import cn.allay.api.world.chunk.ChunkLoader;
 import cn.allay.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.UnmodifiableView;
 

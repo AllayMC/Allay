@@ -6,6 +6,7 @@ import cn.allay.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -27,7 +28,8 @@ class BlockStateHashTest {
 
     static Map<Integer, NbtMap> BLOCK_ATTRIBUTES = new HashMap<>();
 
-    static {
+    @BeforeAll
+    static void load() {
         try {
             var list = ((NbtMap) NbtUtils.createGZIPReader(
                     new BufferedInputStream(
