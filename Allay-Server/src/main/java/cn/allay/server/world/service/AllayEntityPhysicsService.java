@@ -1,4 +1,4 @@
-package cn.allay.server.world.entity;
+package cn.allay.server.world.service;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.datastruct.aabbtree.AABBTree;
@@ -9,7 +9,7 @@ import cn.allay.api.math.location.Location3fc;
 import cn.allay.api.math.voxelshape.VoxelShape;
 import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.World;
-import cn.allay.api.world.entity.EntityPhysicsService;
+import cn.allay.api.world.service.EntityPhysicsService;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;

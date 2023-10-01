@@ -10,14 +10,16 @@ import cn.allay.api.world.Difficulty;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldData;
-import cn.allay.api.world.chunk.ChunkService;
-import cn.allay.api.world.entity.EntityPhysicsService;
 import cn.allay.api.world.generator.WorldGenerator;
+import cn.allay.api.world.service.BlockUpdateService;
+import cn.allay.api.world.service.ChunkService;
+import cn.allay.api.world.service.EntityPhysicsService;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.server.GameLoop;
 import cn.allay.server.scheduler.AllayScheduler;
-import cn.allay.server.world.chunk.AllayChunkService;
-import cn.allay.server.world.entity.AllayEntityPhysicsService;
+import cn.allay.server.world.service.AllayBlockUpdateService;
+import cn.allay.server.world.service.AllayChunkService;
+import cn.allay.server.world.service.AllayEntityPhysicsService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -36,32 +38,33 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author daoge_cmd
  */
 @Slf4j
-@Getter
 public class AllayWorld implements World {
+    @Getter
     protected final WorldStorage worldStorage;
-    protected final ChunkService chunkService;
+    @Getter
     protected final WorldData worldData;
+    @Getter
     protected final WorldGenerator worldGenerator;
+    @Getter
     protected final Server server;
+    @Getter
+    protected final ChunkService chunkService;
+    @Getter
     protected final EntityPhysicsService entityPhysicsService;
+    @Getter
+    protected final BlockUpdateService blockUpdateService;
+    @Getter
     protected final Scheduler worldScheduler;
+    @Getter
     protected final Thread worldMainThread;
+    protected final Set<Client> clients;
     protected final GameLoop gameLoop;
-
-    protected final Set<Client> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private AllayWorld(Server server,
                        WorldStorage worldStorage,
                        WorldData worldData,
                        WorldGenerator worldGenerator) {
-        this.worldStorage = worldStorage;
-        this.worldData = worldData == null ? worldStorage.getWorldDataCache() : worldData;
-        this.worldGenerator = worldGenerator;
-        this.server = server;
-        this.chunkService = new AllayChunkService(this, worldStorage);
-        this.entityPhysicsService = new AllayEntityPhysicsService(this);
-        this.worldScheduler = new AllayScheduler();
-        this.gameLoop = GameLoop.builder()
+        gameLoop = GameLoop.builder()
                 .onTick(gameLoop -> {
                     try {
                         tick();
@@ -70,6 +73,15 @@ public class AllayWorld implements World {
                     }
                 })
                 .build();
+        this.worldStorage = worldStorage;
+        this.worldData = worldData == null ? worldStorage.getWorldDataCache() : worldData;
+        this.worldGenerator = worldGenerator;
+        this.server = server;
+        this.chunkService = new AllayChunkService(this, worldStorage);
+        this.entityPhysicsService = new AllayEntityPhysicsService(this);
+        this.blockUpdateService = new AllayBlockUpdateService(this);
+        this.worldScheduler = new AllayScheduler();
+        this.clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
         this.worldMainThread = Thread.ofPlatform()
                 .name("World Thread - " + this.worldData.getLevelName())
                 .unstarted(gameLoop::startLoop);
@@ -81,8 +93,13 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public float getCurrentTps() {
-        return gameLoop.getCurrentTps();
+    public long getTick() {
+        return gameLoop.getTick();
+    }
+
+    @Override
+    public float getTps() {
+        return gameLoop.getTps();
     }
 
     @Override
@@ -98,9 +115,11 @@ public class AllayWorld implements World {
     }
 
     private void tick() {
+        long currentTick = getTick();
         chunkService.tick();
         entityPhysicsService.tick();
         worldScheduler.tick();
+        blockUpdateService.tick(currentTick);
     }
 
     @Override

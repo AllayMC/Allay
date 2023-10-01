@@ -1,7 +1,7 @@
 package cn.allay.api.blockentity.component.base;
 
 import cn.allay.api.block.component.event.BlockOnInteractEvent;
-import cn.allay.api.block.component.event.BlockOnNeighborChangedEvent;
+import cn.allay.api.block.component.event.BlockOnNeighborUpdateEvent;
 import cn.allay.api.block.component.event.BlockOnPlaceEvent;
 import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.block.type.BlockState;
@@ -31,7 +31,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
 
     void loadNBT(NbtMap nbt);
 
-    void onNeighborChanged(BlockOnNeighborChangedEvent event);
+    void onNeighborUpdate(BlockOnNeighborUpdateEvent event);
 
     void onPlace(BlockOnPlaceEvent event);
 

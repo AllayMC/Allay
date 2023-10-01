@@ -5,7 +5,6 @@ import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.component.annotation.ComponentEventListener;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.container.Container;
-import cn.allay.api.container.ContainerHolder;
 import cn.allay.api.container.ContainerViewer;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
 import cn.allay.api.entity.interfaces.item.EntityItem;
@@ -20,7 +19,7 @@ import java.util.function.Consumer;
  *
  * @author daoge_cmd
  */
-public class BlockEntityContainerHolderComponentImpl implements BlockEntityContainerHolderComponent, ContainerHolder {
+public class BlockEntityContainerHolderComponentImpl implements BlockEntityContainerHolderComponent {
     @ComponentIdentifier
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_inventory_holder_component");
     protected Container container;
