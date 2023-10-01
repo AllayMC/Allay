@@ -41,7 +41,7 @@ class GameLoopTest {
                         list.add((int) Math.ceil(Math.random() * 10));
                         Collections.sort(list);
                     }
-                    if (loop.getCurrentTick() == 100) {
+                    if (loop.getTick() == 100) {
                         loop.stop();
                     }
                 }))
@@ -53,6 +53,6 @@ class GameLoopTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Preconditions.checkArgument(gameLoop.getCurrentTps() != 20);
+        Preconditions.checkArgument(gameLoop.getTps() != 20);
     }
 }

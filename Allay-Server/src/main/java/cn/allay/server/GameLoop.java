@@ -17,17 +17,16 @@ import java.util.function.Consumer;
 @Slf4j
 public final class GameLoop {
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
-    @Getter
-    private final int loopCountPerSec;
-
     private final Runnable onStart;
     private final Consumer<GameLoop> onTick;
     private final Runnable onStop;
     @Getter
-    private long currentTick;
+    private final int loopCountPerSec;
+    @Getter
+    private long tick;
     private final float[] tickAverage = {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
 
-    public float getCurrentTps() {
+    public float getTps() {
         float sum = 0;
         int count = this.tickAverage.length;
         for (float aTickAverage : this.tickAverage) {
@@ -57,7 +56,7 @@ public final class GameLoop {
             // Figure out how long it took to tick
             long startTickTime = System.nanoTime();
             onTick.accept(this);
-            currentTick++;
+            tick++;
             long timeTakenToTick = System.nanoTime() - startTickTime;
             if (timeTakenToTick == 0) timeTakenToTick = 1;
             float tick = (float) Math.max(0, Math.min(20, 1000000000 / timeTakenToTick));

@@ -1,7 +1,7 @@
 package cn.allay.api.block.component.blockentity;
 
 import cn.allay.api.block.component.event.BlockOnInteractEvent;
-import cn.allay.api.block.component.event.BlockOnNeighborChangedEvent;
+import cn.allay.api.block.component.event.BlockOnNeighborUpdateEvent;
 import cn.allay.api.block.component.event.BlockOnPlaceEvent;
 import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.blockentity.BlockEntity;
@@ -9,6 +9,7 @@ import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.component.annotation.ComponentEventListener;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.math.position.Position3i;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -44,10 +45,10 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     }
 
     @ComponentEventListener
-    private void onNeighborChanged(BlockOnNeighborChangedEvent event) {
-        var pos = event.blockState().pos();
+    private void onNeighborChanged(BlockOnNeighborUpdateEvent event) {
+        var pos = new Position3i(event.updated(), event.world());
         var blockEntity = getBlockEntity(pos);
-        blockEntity.onNeighborChanged(event);
+        blockEntity.onNeighborUpdate(event);
     }
 
     @ComponentEventListener

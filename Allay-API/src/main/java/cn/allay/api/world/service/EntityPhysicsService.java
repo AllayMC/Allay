@@ -1,11 +1,10 @@
-package cn.allay.api.world.entity;
+package cn.allay.api.world.service;
 
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.location.Location3fc;
 import cn.allay.api.math.voxelshape.VoxelShape;
 import org.joml.primitives.AABBfc;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
