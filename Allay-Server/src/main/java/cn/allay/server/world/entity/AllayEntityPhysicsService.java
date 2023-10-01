@@ -37,6 +37,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final float MOTION_THRESHOLD = 0.003f;
     public static final float STEPPING_OFFSET = 0.05f;
     public static final float FAT_AABB_MARGIN = 0.0005f;
+    public static final float BLOCK_COLLISION_MOTION = 0.1f;
     public static final FloatBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new FloatBooleanImmutablePair(0, false);
 
     protected World world;
@@ -61,14 +62,26 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide()) return;
+            //TODO: Currently, entities whose y > maxY (or < minY) will stop calculating physics
             if (!entity.isInWorld()) return;
-            //TODO: 水流作用 方块推出作用 etc...
-            if (entity.computeEntityCollisionMotion()) computeCollisionMotion(entity);
-            entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
-            if (applyMotion(entity)) {
+            //TODO: liquid motion etc...
+            if (world.getCollidingBlocks(entity.getOffsetAABB()) == null) {
+                //1. The entity is not stuck in the block
+                if (entity.computeEntityCollisionMotion()) computeEntityCollisionMotion(entity);
+                entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
+                if (applyMotion(entity)) {
+                    updatedEntities.put(entity.getUniqueId(), entity);
+                }
+                //Apply friction, gravity etc...
+                updateMotion(entity);
+            } else {
+                //2. The entity is stuck in the block
+                //Do not calculate other motion exclude block collision motion
+                if (entity.computeBlockCollisionMotion()) computeBlockCollisionMotion(entity);
+                entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
+                applyMotionNoClip(entity);
                 updatedEntities.put(entity.getUniqueId(), entity);
             }
-            updateMotion(entity);
         });
         updatedEntities.values().forEach(entityAABBTree::update);
     }
@@ -82,7 +95,12 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         });
     }
 
-    protected void computeCollisionMotion(Entity entity) {
+    protected void computeBlockCollisionMotion(Entity entity) {
+        //TODO: complete it
+        entity.addMotion(0, BLOCK_COLLISION_MOTION, 0);
+    }
+
+    protected void computeEntityCollisionMotion(Entity entity) {
         var collidedEntities = getCachedEntityCollidingResult(entity);
         collidedEntities.removeIf(e -> !e.computeEntityCollisionMotion());
         var collisionMotion = new Vector3f(0, 0, 0);
@@ -139,6 +157,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         if (abs(motion.y) < MOTION_THRESHOLD) motion.y = 0;
         if (abs(motion.z) < MOTION_THRESHOLD) motion.z = 0;
         return motion;
+    }
+
+    protected void applyMotionNoClip(Entity entity) {
+        updateEntityLocation(entity, new Location3f(entity.getLocation()).add(entity.getMotion()));
     }
 
     protected boolean applyMotion(Entity entity) {
@@ -488,7 +510,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         //用一个set暂存entity避免重复
         var result = new ArrayList<Entity>();
         entityAABBTree.detectOverlaps(voxelShape.unionAABB(), result);
-        result.removeIf(entity -> !voxelShape.intersectsAABB(entity.getOffsetAABB()) && (ignoreEntityHasCollision || !entity.hasEntityCollision()));
+        if (!ignoreEntityHasCollision) result.removeIf(entity ->  !entity.hasEntityCollision());
+        result.removeIf(entity -> !voxelShape.intersectsAABB(entity.getOffsetAABB()));
         return result;
     }
 

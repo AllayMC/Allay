@@ -30,7 +30,7 @@ public final class VoxelShape {
 
     public AABBf unionAABB() {
         float minX = Float.MAX_VALUE, minY = Float.MAX_VALUE, minZ = Float.MAX_VALUE;
-        float maxX = Float.MIN_VALUE, maxY = Float.MIN_VALUE, maxZ = Float.MIN_VALUE;
+        float maxX = -Float.MAX_VALUE, maxY = -Float.MAX_VALUE, maxZ = -Float.MAX_VALUE;
         for (var solid : solids) {
             if (solid.minX() < minX) minX = solid.minX();
             if (solid.minY() < minY) minY = solid.minY();

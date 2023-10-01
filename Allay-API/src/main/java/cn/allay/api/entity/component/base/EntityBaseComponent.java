@@ -60,6 +60,10 @@ public interface EntityBaseComponent extends EntityComponent {
         return hasEntityCollision();
     }
 
+    default boolean computeBlockCollisionMotion() {
+        return false;
+    }
+
     @UnmodifiableView
     Map<Long, Client> getViewers();
 
@@ -69,6 +73,10 @@ public interface EntityBaseComponent extends EntityComponent {
 
     default void addMotion(Vector3fc add) {
         setMotion(getMotion().add(add, new Vector3f()));
+    }
+
+    default void addMotion(float mx, float my, float mz) {
+        setMotion(getMotion().add(mx, my, mz, new Vector3f()));
     }
 
     boolean isOnGround();
