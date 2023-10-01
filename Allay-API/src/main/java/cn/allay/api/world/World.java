@@ -240,7 +240,6 @@ public interface World {
                 for (int y = 0; y < blockStates[x].length; y++) {
                     for (int z = 0; z < blockStates[x][y].length; z++) {
                         var blockState = blockStates[x][y][z];
-                        if (blockState == null) continue;
                         var attributes = blockState.blockType().getBlockBehavior().getBlockAttributes(blockState);
                         if (!attributes.hasCollision() || !attributes.voxelShape().translate(minX + x, minY + y, minZ + z).intersectsAABB(aabb)) {
                             blockStates[x][y][z] = null;

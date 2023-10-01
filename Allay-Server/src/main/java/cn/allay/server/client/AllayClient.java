@@ -665,10 +665,6 @@ public class AllayClient extends BaseClient {
                     }
                     case BLOCK_PREDICT_DESTROY -> {
                         var oldState = getWorld().getBlockState(pos.getX(), pos.getY(), pos.getZ());
-                        if (oldState == null) {
-                            log.warn("Player " + name + " tried to break block at " + pos + " but it is air");
-                            continue;
-                        }
                         getWorld().setBlockState(pos.getX(), pos.getY(), pos.getZ(), BlockAirBehavior.AIR_TYPE.getDefaultState());
                         getWorld().sendLevelEventPacket(pos, LevelEvent.BLOCK_STOP_BREAK, 0);
                         getWorld().sendLevelEventPacket(pos, LevelEvent.PARTICLE_DESTROY_BLOCK, oldState.blockStateHash());
