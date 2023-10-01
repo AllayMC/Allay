@@ -2,7 +2,7 @@ package cn.allay.api.block.component.base;
 
 import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.event.BlockOnInteractEvent;
-import cn.allay.api.block.component.event.BlockOnNeighborChangedEvent;
+import cn.allay.api.block.component.event.BlockOnNeighborUpdateEvent;
 import cn.allay.api.block.component.event.BlockOnPlaceEvent;
 import cn.allay.api.block.component.event.BlockOnReplaceEvent;
 import cn.allay.api.block.data.BlockFace;
@@ -46,15 +46,17 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onNeighborChanged(BlockStateWithPos blockState, BlockStateWithPos neighborBlockState, BlockFace blockFace) {
-        manager.callEvent(new BlockOnNeighborChangedEvent(blockState, neighborBlockState, blockFace));
+    public void onNeighborUpdate(Vector3ic updated, Vector3ic neighbor, BlockFace face, World world) {
+        manager.callEvent(new BlockOnNeighborUpdateEvent(updated, neighbor, face, world));
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos blockState) {}
+    public void onRandomUpdate(BlockStateWithPos blockState) {
+    }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos blockState) {}
+    public void onScheduledUpdate(BlockStateWithPos blockState) {
+    }
 
     @Override
     public boolean place(@Nullable EntityPlayer player, @NotNull World world, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {

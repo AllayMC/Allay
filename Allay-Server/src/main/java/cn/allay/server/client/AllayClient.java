@@ -19,8 +19,6 @@ import cn.allay.api.entity.interfaces.player.SimpleEntityPlayerInitInfo;
 import cn.allay.api.entity.interfaces.villagerv2.EntityVillagerV2;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.init.SimpleItemStackInitInfo;
-import cn.allay.api.item.interfaces.ItemDiamondStack;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.location.Location3f;
@@ -41,7 +39,6 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
@@ -561,19 +558,20 @@ public class AllayClient extends BaseClient {
                         var placePos = blockFace.offsetPos(blockPos);
                         if (!canInteract()) {
                             //TODO: 确认是否需要发送UpdateBlockPacket
-                            var blockState = getWorld().getBlockStateNonNull(placePos.x(), placePos.y(), placePos.z());
-                            blockState.getBehavior().sendBlockUpdateTo(blockState, placePos.x(), placePos.y(), placePos.z(), 0, AllayClient.this);
+                            var blockState = getWorld().getBlockState(placePos.x(), placePos.y(), placePos.z());
+                            getWorld().sendBlockUpdateTo(blockState, placePos.x(), placePos.y(), placePos.z(), 0, AllayClient.this);
                             return PacketSignal.HANDLED;
                         }
                         this.spamCheckTime = System.currentTimeMillis();
 
                         if (!useItemOn(itemStack, blockPos, placePos, clickPos, blockFace)) {
                             //Failed to use the item, send back origin block state to client
-                            var blockStateClicked = getWorld().getBlockStateNonNull(blockPos.x(), blockPos.y(), blockPos.z());
-                            blockStateClicked.getBehavior().sendBlockUpdateTo(blockStateClicked, blockPos.x(), blockPos.y(), blockPos.z(), 0, AllayClient.this);
+                            var w = getWorld();
+                            var blockStateClicked = w.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
+                            w.sendBlockUpdateTo(blockStateClicked, blockPos.x(), blockPos.y(), blockPos.z(), 0, AllayClient.this);
 
-                            var blockStateReplaced = getWorld().getBlockStateNonNull(placePos.x(), placePos.y(), placePos.z());
-                            blockStateReplaced.getBehavior().sendBlockUpdateTo(blockStateReplaced, placePos.x(), placePos.y(), placePos.z(), 0, AllayClient.this);
+                            var blockStateReplaced = w.getBlockState(placePos.x(), placePos.y(), placePos.z());
+                            w.sendBlockUpdateTo(blockStateReplaced, placePos.x(), placePos.y(), placePos.z(), 0, AllayClient.this);
                         } else {
                             //Used! Update item slot to client
                             if (itemStack.getCount() != 0) {
@@ -600,7 +598,7 @@ public class AllayClient extends BaseClient {
 
         private boolean useItemOn(ItemStack itemStack, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos, BlockFace blockFace) {
             var world = getWorld();
-            var blockStateClicked = world.getBlockStateNonNull(blockPos.x(), blockPos.y(), blockPos.z());
+            var blockStateClicked = world.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
             if (!blockStateClicked.getBehavior().onInteract(playerEntity, itemStack, world, blockPos, placePos, clickPos, blockFace))
                 return itemStack.useItemOn(playerEntity, itemStack, getWorld(), blockPos, placePos, clickPos, blockFace);
             else return true;
@@ -700,7 +698,7 @@ public class AllayClient extends BaseClient {
                         }
                         var pk = new TextPacket();
                         pk.setType(TextPacket.Type.CHAT);
-                        pk.setMessage("TPS: " + loc.world().getCurrentTps() + ", Entity Count: " + loc.world().getEntities().size());
+                        pk.setMessage("TPS: " + loc.world().getTps() + ", Entity Count: " + loc.world().getEntities().size());
                         pk.setSourceName(getDisplayName());
                         pk.setXuid(loginData.getXuid());
                         sendPacket(pk);
