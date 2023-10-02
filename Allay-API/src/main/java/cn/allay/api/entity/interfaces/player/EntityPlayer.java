@@ -17,9 +17,7 @@ import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import org.joml.primitives.AABBf;
 
 import static cn.allay.api.container.Container.AIR_STACK;
 import static cn.allay.api.entity.component.attribute.EntityAttributeComponentImpl.basicAttributes;
@@ -82,12 +80,11 @@ public interface EntityPlayer extends
         if (item.getCount() < count) {
             return false;
         }
-        dropItemWithOutCheck(container, slot, count);
+        forceDropItem(container, slot, count);
         return true;
     }
 
-    @ApiStatus.Internal
-    default void dropItemWithOutCheck(Container container, int slot, int count) {
+    default void forceDropItem(Container container, int slot, int count) {
         var item = container.getItemStack(slot);
         ItemStack droppedItemStack;
         if (item.getCount() > count) {
