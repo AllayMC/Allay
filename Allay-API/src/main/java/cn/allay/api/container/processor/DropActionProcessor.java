@@ -46,7 +46,8 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
             log.warn("cannot throw more items than the current amount!");
             return error(requestId);
         }
-        client.getPlayerEntity().dropItemWithOutCheck(container, slot, count);
+        client.getPlayerEntity().forceDropItem(container, slot, count);
+        item = container.getItemStack(slot);
         return Collections.singletonList(
                 new ItemStackResponse(
                         OK,

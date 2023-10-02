@@ -7,6 +7,7 @@ import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
 import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.entity.interfaces.item.EntityItem;
+import cn.allay.api.entity.interfaces.item.EntityItemBaseComponent;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -64,18 +65,22 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         );
         var entityItems = world.getEntityPhysicsService().computeCollidingEntities(pickUpArea, true)
                 .stream()
-                .filter(entity -> entity instanceof EntityItem entityItem && entityItem.canBePicked())
+                .filter(e -> e instanceof EntityItem)
+                .map(e -> (EntityItem) e)
+                .filter(EntityItemBaseComponent::canBePicked)
                 .toList();
         for (var entityItem : entityItems) {
-            var item = ((EntityItem) entityItem).getItemStack();
+            var item = entityItem.getItemStack();
             var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY));
-            var remain = inventory.tryAddItem(item, true);
+            var remain = inventory.tryAddItem(item);
             if (remain == null) {
                 TakeItemEntityPacket takeItemEntityPacket = new TakeItemEntityPacket();
                 takeItemEntityPacket.setRuntimeEntityId(uniqueId);
                 takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getUniqueId());
                 Objects.requireNonNull(world.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
                 world.removeEntity(entityItem);
+            } else {
+                entityItem.setItemStack(remain);
             }
         }
     }

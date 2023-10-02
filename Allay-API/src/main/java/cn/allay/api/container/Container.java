@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  */
 public interface Container {
 
-    ItemStack AIR_STACK = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().stackNetworkId(0).build());
+    ItemStack AIR_STACK = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(0).stackNetworkId(0).build());
 
     FullContainerType<?> getContainerType();
 
@@ -87,11 +87,6 @@ public interface Container {
 
     @Nullable
     default ItemStack tryAddItem(ItemStack itemStack) {
-        return tryAddItem(itemStack, false);
-    }
-
-    @Nullable
-    default ItemStack tryAddItem(ItemStack itemStack, boolean mustAddAll) {
         ItemStack[] itemStacks = getItemStackArray();
         for (int index = 0; index < itemStacks.length; index++) {
             var content = itemStacks[index];
@@ -103,15 +98,12 @@ public interface Container {
                     content.setCount(content.getCount() + itemStack.getCount());
                     onSlotChange(index);
                     return null;
-                } else if (mustAddAll) {
-                    return itemStack;
                 } else {
                     int count = itemStack.getCount();
-                    count -= content.getItemAttributes().maxStackSize() - content.getCount();
-                    itemStack.setCount(count);
+                    int completion = content.getItemAttributes().maxStackSize() - content.getCount();
+                    itemStack.setCount(count - completion);
                     content.setCount(content.getItemAttributes().maxStackSize());
                     onSlotChange(index);
-                    return itemStack;
                 }
             }
         }
