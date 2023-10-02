@@ -5,6 +5,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus.ERROR;
@@ -17,9 +18,9 @@ import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.respons
 public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
     ItemStackRequestActionType getType();
 
-    List<ItemStackResponse> handle(T action, Client client, int requestId);
+    ItemStackResponse handle(T action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo);
 
-    default List<ItemStackResponse> error(int requestId) {
-        return List.of(new ItemStackResponse(ERROR, requestId, List.of()));
+    default ItemStackResponse error(int requestId) {
+        return new ItemStackResponse(ERROR, requestId, List.of());
     }
 }
