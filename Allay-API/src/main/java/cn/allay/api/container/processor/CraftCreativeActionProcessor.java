@@ -8,7 +8,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 
-import java.util.List;
+import java.util.LinkedHashMap;
 
 /**
  * Allay Project 2023/7/26
@@ -23,7 +23,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
     }
 
     @Override
-    public List<ItemStackResponse> handle(CraftCreativeAction action, Client client, int requestId) {
+    public ItemStackResponse handle(CraftCreativeAction action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
         var item = CreativeItemRegistry.getRegistry().get(action.getCreativeItemNetworkId() - 1);
         if (item == null) {
             log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId() - 1);
@@ -33,6 +33,6 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
         item.setCount(item.getItemAttributes().maxStackSize());
         client.getPlayerEntity().getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, item);
         //从创造物品栏拿东西不需要响应
-        return List.of();
+        return null;
     }
 }

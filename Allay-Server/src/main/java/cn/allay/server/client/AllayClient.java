@@ -40,6 +40,7 @@ import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventoryTransactionType;
@@ -51,10 +52,7 @@ import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -515,13 +513,21 @@ public class AllayClient extends BaseClient {
         public PacketSignal handle(ItemStackRequestPacket packet) {
             List<ItemStackResponse> responses = new LinkedList<>();
             for (var request : packet.getRequests()) {
+                var chainInfo = new LinkedHashMap<ItemStackRequestActionType, ItemStackResponse>();
+                //chain process
                 for (var action : request.getActions()) {
                     ContainerActionProcessor<ItemStackRequestAction> processor = containerActionProcessorHolder.getProcessor(action.getType());
                     if (processor == null) {
                         log.warn("Unhandled inventory action type " + action.getType());
                         continue;
                     }
-                    responses.addAll(processor.handle(action, AllayClient.this, request.getRequestId()));
+                    chainInfo.put(action.getType(), processor.handle(action, AllayClient.this, request.getRequestId(), chainInfo));
+                }
+                //add process result
+                for (var res : chainInfo.values()) {
+                    if (res != null) {
+                        responses.add(res);
+                    }
                 }
             }
             var itemStackResponsePacket = new ItemStackResponsePacket();

@@ -10,7 +10,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 import static cn.allay.api.container.Container.AIR_STACK;
@@ -29,7 +29,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
     }
 
     @Override
-    public List<ItemStackResponse> handle(DropAction action, Client client, int requestId) {
+    public ItemStackResponse handle(DropAction action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
         Container container = Objects.requireNonNull(client.getPlayerEntity().getReachableContainerBySlotType(action.getSource().getContainer()));
         var count = action.getCount();
         var slot = action.getSource().getSlot();
@@ -48,8 +48,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
         }
         client.getPlayerEntity().forceDropItem(container, slot, count);
         item = container.getItemStack(slot);
-        return Collections.singletonList(
-                new ItemStackResponse(
+        return new ItemStackResponse(
                         OK,
                         requestId,
                         Collections.singletonList(
@@ -67,7 +66,6 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                         )
                                 )
                         )
-                )
         );
     }
 }

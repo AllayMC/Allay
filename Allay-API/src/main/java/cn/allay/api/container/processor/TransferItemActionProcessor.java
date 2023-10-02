@@ -5,11 +5,13 @@ import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.item.ItemStack;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static cn.allay.api.item.interfaces.ItemAirStack.AIR_TYPE;
@@ -24,7 +26,7 @@ import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.respons
 public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
     @Override
-    public List<ItemStackResponse> handle(T action, Client client, int requestId) {
+    public ItemStackResponse handle(T action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
         int slot1 = action.getSource().getSlot();
         int stackNetworkId1 = action.getSource().getStackNetworkId();
         int slot2 = action.getDestination().getSlot();
@@ -114,30 +116,29 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 );
         //CREATED_OUTPUT不需要发响应（mjの奇妙hack）
         if (source.getContainerType() != FullContainerType.CREATED_OUTPUT) {
-            return List.of(
-                    new ItemStackResponse(
-                            OK,
-                            requestId,
+            return new ItemStackResponse(
+                    OK,
+                    requestId,
+                    List.of(new ItemStackResponseContainer(
+                            source.getSlotType(slot1),
                             List.of(
-                                    new ItemStackResponseContainer(
-                                            source.getSlotType(slot1),
-                                            List.of(
-                                                    new ItemStackResponseSlot(
-                                                            slot1,
-                                                            slot1,
-                                                            resultSourItem.getCount(),
-                                                            resultSourItem.getStackNetworkId(),
-                                                            "",
-                                                            0
-                                                    )
-                                            )
-                                    ), destItemStackResponseSlot)));
+                                    new ItemStackResponseSlot(
+                                            slot1,
+                                            slot1,
+                                            resultSourItem.getCount(),
+                                            resultSourItem.getStackNetworkId(),
+                                            "",
+                                            0
+                                    )
+                            )
+                    ), destItemStackResponseSlot)
+            );
         } else {
-            return List.of(
-                    new ItemStackResponse(
-                            OK,
-                            requestId,
-                            List.of(destItemStackResponseSlot)));
+            return new ItemStackResponse(
+                    OK,
+                    requestId,
+                    List.of(destItemStackResponseSlot)
+            );
         }
     }
 }
