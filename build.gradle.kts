@@ -10,7 +10,7 @@ group = "cn.allay"
 description = "The next generation minecraft server software"
 
 plugins {
-    id("org.gradle.kotlin.kotlin-dsl") version "4.1.2"
+    `kotlin-dsl`
     idea
     id("org.jetbrains.kotlin.jvm") version "1.9.20-Beta2"
     id("com.github.johnrengelman.shadow") version ("8.1.1")
@@ -31,7 +31,7 @@ idea {
 //Enable gradle wrapper update task
 tasks.wrapper {
     enabled = true
-    gradleVersion = "8.4-rc-1"
+    gradleVersion = "8.4"
 }
 
 tasks.clean {
