@@ -17,7 +17,6 @@ import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
-import cn.allay.api.datastruct.UnmodifiableLinkedHashMap;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeRegistry;
@@ -27,6 +26,8 @@ import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.utils.ComponentClassCacheUtils;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Nullable;
@@ -44,22 +45,21 @@ import static cn.allay.api.component.interfaces.ComponentProvider.findComponentI
  * @author daoge_cmd | Cool_Loong
  */
 public final class AllayBlockType<T extends BlockBehavior> implements BlockType<T> {
-    public static int computeSpecialValue(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-        int nbits = 0;
-        for (var value : propertyValues) nbits += value.getPropertyType().getBitSize();
-        return computeSpecialValue(nbits, propertyValues);
+    public static long computeSpecialValue(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
+        byte specialValueBits = 0;
+        for (var value : propertyValues) specialValueBits += value.getPropertyType().getBitSize();
+        return computeSpecialValue(specialValueBits, propertyValues);
     }
 
-    public static int computeSpecialValue(int nbits, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-        int specialValue = 0;
+    public static long computeSpecialValue(byte specialValueBits, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
+        long specialValue = 0;
         for (var value : propertyValues) {
-            specialValue |= value.getIndex() << (nbits - value.getPropertyType().getBitSize());
-            nbits -= value.getPropertyType().getBitSize();
+            specialValue |= ((long) value.getIndex()) << (specialValueBits - value.getPropertyType().getBitSize());
+            specialValueBits -= value.getPropertyType().getBitSize();
         }
         return specialValue;
     }
 
-    private Class<T> injectedClass;
     @Getter
     private final Class<T> interfaceClass;
     @Getter
@@ -71,19 +71,21 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     @Getter
     @Nullable
     private final Identifier itemIdentifier;
-    @Nullable
-    private ItemType<?> itemTypeCache;
     @Getter
     private final Map<Integer, BlockState> blockStateHashMap;
     @Getter
-    private final int specialValueBits;
+    @Nullable
+    private final Map<Long, BlockState> specialValueMap;
+    @Getter
+    private final byte specialValueBits;
+
+    private Class<T> injectedClass;
     @Getter
     private BlockState defaultState;
+    @Nullable
+    private ItemType<?> itemTypeCache;
     @Getter
     private T blockBehavior;
-    @Getter
-    @Nullable
-    private Map<Integer, BlockState> specialValueMap;
 
     private AllayBlockType(Class<T> interfaceClass,
                            List<BlockComponent> components,
@@ -96,11 +98,18 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         this.identifier = identifier;
         this.itemIdentifier = itemIdentifier;
         this.blockStateHashMap = initStates();
-        int nbits = 0;
-        for (var value : properties.values()) nbits += value.getBitSize();
-        this.specialValueBits = nbits;
-        if (nbits <= 32) {
-            this.specialValueMap = Collections.unmodifiableMap(blockStateHashMap.values().stream().collect(Collectors.toMap(BlockState::specialValue, Function.identity(), (v1, v2) -> v1, Int2ObjectArrayMap::new)));
+        byte specialValueBits = 0;
+        for (var value : properties.values()) specialValueBits += value.getBitSize();
+        this.specialValueBits = specialValueBits;
+        if (specialValueBits <= 64) {
+            this.specialValueMap = Collections.unmodifiableMap(
+                    blockStateHashMap
+                            .values()
+                            .stream()
+                            .collect(Collectors.toMap(BlockState::specialValue, Function.identity(), (v1, v2) -> v1, Long2ObjectOpenHashMap::new))
+            );
+        } else {
+            this.specialValueMap = null;
         }
     }
 
@@ -125,7 +134,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     @Override
     @UnmodifiableView
     public Collection<BlockState> getAllStates() {
-        return Collections.unmodifiableCollection(blockStateHashMap.values());
+        //blockStateHashMap is unmodifiableMap,so values is unmodifiableCollection
+        return blockStateHashMap.values();
     }
 
     private Map<Integer, BlockState> initStates() {
@@ -133,12 +143,9 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         int size = propertyTypeList.size();
         if (size == 0) {
             this.defaultState = new AllayBlockState(this, new BlockPropertyType.BlockPropertyValue[]{});
-            var singleBlockStateMap = new Int2ObjectArrayMap<BlockState>();
-            singleBlockStateMap.put(defaultState.blockStateHash(), defaultState);
-            return singleBlockStateMap;
+            return new Int2ObjectArrayMap<>(new int[]{defaultState.blockStateHash()}, new BlockState[]{defaultState});
         }
-
-        var blockStates = new Int2ObjectArrayMap<BlockState>();
+        var blockStates = new Int2ObjectOpenHashMap<BlockState>();
 
         // to keep track of next element in each of
         // the n arrays
@@ -184,6 +191,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         for (var s : blockStates.values()) {
             if (s.blockStateHash() == defaultStateHash) {
                 this.defaultState = s;
+                break;
             }
         }
         return Collections.unmodifiableMap(blockStates);
@@ -196,7 +204,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                            BlockPropertyType.BlockPropertyValue<?, ?, ?>[] blockPropertyValues,
                            NbtMap blockStateTag,
                            int blockStateHash,
-                           int specialValue) implements BlockState {
+                           long specialValue) implements BlockState {
         public AllayBlockState(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues, int blockStateHash) {
             this(blockType,
                     propertyValues,
@@ -237,13 +245,14 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public @UnmodifiableView Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues() {
-            return UnmodifiableLinkedHashMap.warp(Arrays.stream(blockPropertyValues).collect(
+            return Collections.unmodifiableMap(Arrays.stream(blockPropertyValues).collect(
                     LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
                     (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue),
                     LinkedHashMap::putAll));
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getPropertyValue(PROPERTY p) {
             for (var property : blockPropertyValues) {
                 if (property.getPropertyType() == p) {
@@ -303,9 +312,9 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         private BlockState getNewBlockState(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] values) {
-            int bits = blockType.getSpecialValueBits();
-            if (bits < 32) {
-                Map<Integer, BlockState> specialValueMap = blockType.getSpecialValueMap();
+            byte bits = blockType.getSpecialValueBits();
+            if (bits <= 64) {
+                Map<Long, BlockState> specialValueMap = blockType.getSpecialValueMap();
                 assert specialValueMap != null;
                 return specialValueMap.get(computeSpecialValue(bits, values));
             } else {
@@ -387,7 +396,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public Builder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent) {
-            components.put(findComponentIdentifierInCertainClass(customBlockComponent.getClass()) ,customBlockComponent);
+            components.put(findComponentIdentifierInCertainClass(customBlockComponent.getClass()), customBlockComponent);
             isCustomBlock = true;
             return this;
         }

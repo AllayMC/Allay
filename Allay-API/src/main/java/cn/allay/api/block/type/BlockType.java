@@ -36,19 +36,19 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
 
     @UnmodifiableView
     @Nullable
-    Map<Integer, BlockState> getSpecialValueMap();
+    Map<Long, BlockState> getSpecialValueMap();
 
-    int getSpecialValueBits();
+    byte getSpecialValueBits();
 
     BlockState getDefaultState();
-
-    BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     @Nullable
     Identifier getItemIdentifier();
 
     @Nullable
     ItemType<?> getItemType();
+
+    BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     default BlockState ofState(int blockStateHash) {
         return getBlockStateHashMap().get(blockStateHash);

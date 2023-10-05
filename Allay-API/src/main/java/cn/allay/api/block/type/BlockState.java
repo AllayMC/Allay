@@ -27,7 +27,7 @@ public interface BlockState {
 
     int blockStateHash();
 
-    int specialValue();
+    long specialValue();
 
     @UnmodifiableView
     Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues();
