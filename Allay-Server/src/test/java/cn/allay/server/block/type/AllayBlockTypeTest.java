@@ -5,7 +5,6 @@ import cn.allay.api.block.component.attribute.BlockAttributes;
 import cn.allay.api.block.interfaces.candle.BlockBlueCandleBehavior;
 import cn.allay.api.block.interfaces.coralfan.BlockCoralFanBehavior;
 import cn.allay.api.block.interfaces.wall.BlockCobbledDeepslateWallBehavior;
-import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.enums.*;
 import cn.allay.api.block.property.type.BlockPropertyType;
 import cn.allay.api.block.property.type.BooleanPropertyType;
@@ -161,7 +160,7 @@ class AllayBlockTypeTest {
         values[0] = (TEST_BOOLEAN_PROPERTY_TYPE.createValue(true));// 1 bit
         values[1] = (TEST_INT_PROPERTY_TYPE.createValue(5));// 4 bit
         values[2] = (TEST_ENUM_PROPERTY_TYPE.createValue(TestEnum.B));// 2 bit
-        int offset = 0;
+        byte offset = 0;
         for (var value : values) {
             offset += value.getPropertyType().getBitSize();
         }

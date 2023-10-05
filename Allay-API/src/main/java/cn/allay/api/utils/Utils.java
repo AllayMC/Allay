@@ -34,10 +34,9 @@ public class Utils {
      * @param value the value
      * @return the bits
      */
-    public int computeRequiredBits(@Range(from = 0, to = Integer.MAX_VALUE) int value) {
-        if (value <= 1)
-            return 1;
-        int bits = 1;
+    public byte computeRequiredBits(@Range(from = 0, to = Integer.MAX_VALUE) int value) {
+        if (value <= 1) return 1;
+        byte bits = 1;
         while (value >= (1 << bits)) {
             bits++;
         }

@@ -13,9 +13,9 @@ public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPro
     protected final String name;
     protected final List<DATATYPE> validValues;
     protected final DATATYPE defaultValue;
-    protected final int bitSize;
+    protected final byte bitSize;
 
-    protected BaseBlockPropertyType(String name, List<DATATYPE> validValues, DATATYPE defaultValue, int bitSize) {
+    protected BaseBlockPropertyType(String name, List<DATATYPE> validValues, DATATYPE defaultValue, byte bitSize) {
         Objects.requireNonNull(defaultValue);
         this.name = name;
         this.validValues = validValues;
@@ -39,7 +39,7 @@ public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPro
     }
 
     @Override
-    public int getBitSize() {
+    public byte getBitSize() {
         return bitSize;
     }
 }
