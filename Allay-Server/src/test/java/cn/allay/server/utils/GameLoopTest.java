@@ -41,12 +41,12 @@ class GameLoopTest {
                         list.add((int) Math.ceil(Math.random() * 10));
                         Collections.sort(list);
                     }
-                    if (loop.getTick() == 100) {
+                    if (loop.getTick() == 20) {
                         loop.stop();
                     }
                 }))
                 .build();
-        Thread thread = new Thread(() -> gameLoop.startLoop());
+        Thread thread = new Thread(gameLoop::startLoop);
         thread.start();
         try {
             thread.join();

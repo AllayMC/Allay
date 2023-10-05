@@ -427,7 +427,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                         .interfaceClass(interfaceClass)
                         .component(componentProviders)
                         .useCachedClass(ComponentClassCacheUtils.loadBlockType(interfaceClass))
-                        .inject(true);
+                        .inject(!isCustomBlock);
                 type.blockBehavior = type.injectedClass.getConstructor().newInstance();
             } catch (Exception e) {
                 throw new BlockTypeBuildException("Failed to create block type!", e);
