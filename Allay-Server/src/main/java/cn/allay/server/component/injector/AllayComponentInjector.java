@@ -125,7 +125,8 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                         methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
                     else
                         throw new ComponentInjectException("Duplicate implementation for method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
-                } catch (NoSuchMethodException ignored) {}
+                } catch (NoSuchMethodException ignored) {
+                }
             }
             if (methodDelegation == null) {
                 if (methodShouldBeInject.isDefault()) {
@@ -140,12 +141,14 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
         bb = afterInject(componentProviders, bb);
         try (var unloaded = bb.make()) {
-            if (cache) {
-                unloaded.saveIn(ComponentClassCacheUtils.CACHE_ROOT.toFile());
-            }
-            return (Class<T>) unloaded
+            var clazz = (Class<T>) unloaded
                     .load(getClass().getClassLoader())
                     .getLoaded();
+            if (cache) {
+                ComponentClassCacheUtils.addCacheMapping(interfaceClass.getSimpleName(), clazz.getName());
+                unloaded.saveIn(ComponentClassCacheUtils.CACHE_ROOT_PATH.toFile());
+            }
+            return clazz;
         } catch (IOException e) {
             throw new ComponentInjectException(e);
         }

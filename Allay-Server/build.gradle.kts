@@ -61,7 +61,7 @@ tasks.distZip {
 }
 
 tasks.named<Delete>("clean") {
-    delete("logs", "cache")
+    delete("logs", "caches")
 }
 
 tasks.sourcesJar {

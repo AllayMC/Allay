@@ -79,15 +79,9 @@ public interface ComponentProvider<T extends Component> {
     @Nullable
     static Identifier findComponentIdentifierInCertainClass(Class<?> clazz) {
         for (var field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(ComponentIdentifier.class) &&
-                    Identifier.class == field.getType() &&
-                    isStatic(field.getModifiers())) {
-                try {
-                    field.setAccessible(true);
-                    return (Identifier) field.get(null);
-                } finally {
-                    field.setAccessible(false);
-                }
+            if (field.isAnnotationPresent(ComponentIdentifier.class) && Identifier.class == field.getType() && isStatic(field.getModifiers())) {
+                field.setAccessible(true);
+                return (Identifier) field.get(null);
             }
         }
         return null;
