@@ -1,11 +1,13 @@
 package cn.allay.server.utils;
 
-import cn.allay.api.utils.StringUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.file.PathUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -15,28 +17,31 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Properties;
 
 @Slf4j
 @SuppressWarnings("unchecked")
 public final class ComponentClassCacheUtils {
-    public static final Path CACHE_ROOT = Path.of("cache");
-    public static final String CACHE_PACKAGE_BLOCK = "cn/allay/api/block/interfaces";
-    public static final String CACHE_PACKAGE_BLOCK_ENTITY = "cn/allay/api/blockentity/interfaces";
-    public static final String CACHE_PACKAGE_ITEM = "cn/allay/api/item/interfaces";
-    public static final String CACHE_PACKAGE_ENTITY = "cn/allay/api/entity/interfaces";
+    public static final Path CACHE_ROOT_PATH = Path.of("caches");
+    public static final String CACHE_PACKAGE_BLOCK_PATH = "cn/allay/api/block/interfaces";
+    public static final String CACHE_PACKAGE_BLOCK_ENTITY_PATH = "cn/allay/api/blockentity/interfaces";
+    public static final String CACHE_PACKAGE_ITEM_PATH = "cn/allay/api/item/interfaces";
+    public static final String CACHE_PACKAGE_ENTITY_PATH = "cn/allay/api/entity/interfaces";
     private static final URLClassLoader LOADER;
+    private static Map<String, String> LAST_CACHE_MAP;
+    private static Map<String, String> CACHE_MAP = new LinkedHashMap<>();
+    private static final Gson GSON = new GsonBuilder().create();
 
     static {
-        File file1 = CACHE_ROOT.toFile();
+        File file1 = CACHE_ROOT_PATH.toFile();
         if (!file1.exists()) {
             file1.mkdir();
         }
         try {
-            LOADER = new URLClassLoader(new URL[]{CACHE_ROOT.toUri().toURL()});
+            LOADER = new URLClassLoader(new URL[]{CACHE_ROOT_PATH.toUri().toURL()});
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -46,22 +51,26 @@ public final class ComponentClassCacheUtils {
      * Check cache valid.
      */
     public static void checkCacheValid() {
-        Path cacheValid = CACHE_ROOT.resolve("cache.valid");
+        Path cacheValid = CACHE_ROOT_PATH.resolve("cache.valid");
         Properties properties = new Properties();
         try {
             properties.load(new InputStreamReader(Objects.requireNonNull(LOADER.getResourceAsStream("git.properties"))));
-            if (Files.exists(cacheValid) && Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev"))) {
+            if (Files.exists(cacheValid) &&
+                    Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev")) &&
+                    CACHE_ROOT_PATH.resolve("mapping.json").toFile().exists()) {
                 return;
             }
-            var cn = CACHE_ROOT.resolve("cn");
+            var cn = CACHE_ROOT_PATH.resolve("cn");
             if (Files.exists(cn)) {
                 PathUtils.deleteDirectory(cn);
             }
+            Files.deleteIfExists(CACHE_ROOT_PATH.resolve("mapping.json"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
             try {
-                Files.writeString(CACHE_ROOT.resolve("cache.valid"), properties.getProperty("git.commit.id.abbrev"), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+                Files.deleteIfExists(CACHE_ROOT_PATH.resolve("cache.valid"));
+                Files.writeString(CACHE_ROOT_PATH.resolve("cache.valid"), properties.getProperty("git.commit.id.abbrev"), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
             } catch (IOException ignore) {
             }
         }
@@ -69,88 +78,59 @@ public final class ComponentClassCacheUtils {
 
     @Nullable
     public static <T> Class<T> loadBlockType(Class<T> interfaceClassName) {
-        Path path = CACHE_ROOT.resolve(CACHE_PACKAGE_BLOCK);
-        File file = path.toFile();
-        if (file.exists()) {
-            Optional<String> first = Arrays.stream(file.listFiles())
-                    .filter(f -> StringUtils.fastSplit(f.getName(), "$").get(0).equals(interfaceClassName.getSimpleName()))
-                    .map(f -> f.getName().replace(".class", ""))
-                    .findFirst();
-            if (first.isPresent()) {
-                String cachePath = CACHE_PACKAGE_BLOCK.replace("/", ".") + "." + first.get();
-                try {
-                    return (Class<T>) LOADER.loadClass(cachePath);
-                } catch (ClassNotFoundException e) {
-                    log.error(e.getMessage());
-                    return null;
-                }
-            }
-        }
-        return null;
+        return getCacheClass(interfaceClassName.getSimpleName());
     }
 
     public static <T> Class<T> loadBlockEntityType(Class<T> interfaceClassName) {
-        Path path = CACHE_ROOT.resolve(CACHE_PACKAGE_BLOCK_ENTITY);
-        File file = path.toFile();
-        if (file.exists()) {
-            Optional<String> first = Arrays.stream(file.listFiles())
-                    .filter(f -> StringUtils.fastSplit(f.getName(), "$").get(0).equals(interfaceClassName.getSimpleName()))
-                    .map(f -> f.getName().replace(".class", ""))
-                    .findFirst();
-            if (first.isPresent()) {
-                String cachePath = CACHE_PACKAGE_BLOCK_ENTITY.replace("/", ".") + "." + first.get();
-                try {
-                    return (Class<T>) LOADER.loadClass(cachePath);
-                } catch (ClassNotFoundException e) {
-                    log.error(e.getMessage());
-                    return null;
-                }
-            }
-        }
-        return null;
+        return getCacheClass(interfaceClassName.getSimpleName());
     }
 
     @Nullable
     public static <T> Class<T> loadItemType(Class<T> interfaceClassName) {
-        Path path = CACHE_ROOT.resolve(CACHE_PACKAGE_ITEM);
-        File file = path.toFile();
-        if (file.exists()) {
-            Optional<String> first = Arrays.stream(file.listFiles())
-                    .filter(f -> StringUtils.fastSplit(f.getName(), "$").get(0).equals(interfaceClassName.getSimpleName()))
-                    .map(f -> f.getName().replace(".class", ""))
-                    .findFirst();
-            if (first.isPresent()) {
-                String cachePath = CACHE_PACKAGE_ITEM.replace("/", ".") + "." + first.get();
-                try {
-                    return (Class<T>) LOADER.loadClass(cachePath);
-                } catch (ClassNotFoundException e) {
-                    log.error(e.getMessage());
-                    return null;
-                }
-            }
-        }
-        return null;
+        return getCacheClass(interfaceClassName.getSimpleName());
     }
 
     @Nullable
     public static <T> Class<T> loadEntityType(Class<T> interfaceClassName) {
-        Path path = CACHE_ROOT.resolve(CACHE_PACKAGE_ENTITY);
-        File file = path.toFile();
-        if (file.exists()) {
-            Optional<String> first = Arrays.stream(file.listFiles())
-                    .filter(f -> StringUtils.fastSplit(f.getName(), "$").get(0).equals(interfaceClassName.getSimpleName()))
-                    .map(f -> f.getName().replace(".class", ""))
-                    .findFirst();
-            if (first.isPresent()) {
-                String cachePath = CACHE_PACKAGE_ENTITY.replace("/", ".") + "." + first.get();
-                try {
-                    return (Class<T>) LOADER.loadClass(cachePath);
-                } catch (ClassNotFoundException e) {
-                    log.error(e.getMessage());
-                    return null;
-                }
+        return getCacheClass(interfaceClassName.getSimpleName());
+    }
+
+    public static void addCacheMapping(String className, String bytebuddyClassName) {
+        CACHE_MAP.put(className, bytebuddyClassName);
+    }
+
+    public static void saveCacheMapping() {
+        if (LAST_CACHE_MAP != null) {
+            LAST_CACHE_MAP = null;
+        }
+        if (!CACHE_MAP.isEmpty()) {
+            try {
+                Files.writeString(CACHE_ROOT_PATH.resolve("mapping.json"), GSON.toJson(CACHE_MAP), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
-        return null;
+        CACHE_MAP = null;
+    }
+
+    public static void readCacheMapping() {
+        File file = CACHE_ROOT_PATH.resolve("mapping.json").toFile();
+        if (file.exists()) {
+            try {
+                LAST_CACHE_MAP = GSON.fromJson(new FileReader(file), Map.class);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private static @Nullable <T> Class<T> getCacheClass(String simpleName) {
+        if (LAST_CACHE_MAP == null) return null;
+        try {
+            return (Class<T>) LOADER.loadClass(LAST_CACHE_MAP.get(simpleName));
+        } catch (ClassNotFoundException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
     }
 }

@@ -36,7 +36,7 @@ tasks.wrapper {
 
 tasks.clean {
     enabled = true
-    delete("logs", "cache", "output")
+    delete("logs", "caches", "output")
 }
 
 subprojects {

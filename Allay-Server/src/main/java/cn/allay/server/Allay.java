@@ -56,6 +56,7 @@ public final class Allay {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
         ComponentClassCacheUtils.checkCacheValid();
+        ComponentClassCacheUtils.readCacheMapping();
         //Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::getInstance);
@@ -83,7 +84,7 @@ public final class Allay {
 
         //Biome
         api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
-
         api.implement("Allay");
+        ComponentClassCacheUtils.saveCacheMapping();
     }
 }

@@ -4,8 +4,8 @@ buildSrc/**
 **/build
 **/logs
 /Allay-Data/resources/git.properties
-/Allay-Server/cache/
+/Allay-Server/caches/
 /Allay-Server/output/
 /Allay-Server/src/test/resources/allayworld/db/
 /output/
-/cache/
+/caches/
