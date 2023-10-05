@@ -1,4 +1,4 @@
-package cn.allay.server.block.type;
+package cn.allay.server.block;
 
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.server.block.attribute.AllayVanillaBlockAttributeRegistry;
@@ -19,6 +19,8 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
+ * This test must be executed before the AllayBlockTypeTest test,
+ * otherwise the generated TestBlock will cause error.
  * Allay Project 2023/9/30
  *
  * @author daoge_cmd

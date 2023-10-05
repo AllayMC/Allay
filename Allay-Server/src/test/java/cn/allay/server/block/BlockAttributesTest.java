@@ -1,4 +1,4 @@
-package cn.allay.server.block.component;
+package cn.allay.server.block;
 
 import cn.allay.api.block.component.attribute.BlockAttributes;
 import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
