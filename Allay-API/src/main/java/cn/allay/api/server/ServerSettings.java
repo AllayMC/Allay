@@ -18,56 +18,56 @@ import java.util.Objects;
 public class ServerSettings extends OkaeriConfig {
 
     @CustomKey("generic-settings")
-    private GenericSettings genericSettings = new GenericSettings();
+    private final GenericSettings genericSettings = new GenericSettings();
 
     @Getter
     @Accessors(fluent = true)
     public class GenericSettings extends OkaeriConfig {
 
-        private String motd = "An allay-powered server";
+        private final String motd = "An allay-powered server";
 
         @CustomKey("sub-motd")
-        private String subMotd = "https://github.com/AllayMC/Allay";
+        private final String subMotd = "https://github.com/AllayMC/Allay";
 
         @CustomKey("max-client-count")
-        private int maxClientCount = 20;
+        private final int maxClientCount = 20;
 
         @CustomKey("game-type")
-        private GameType defaultGameType = GameType.CREATIVE;
+        private final GameType defaultGameType = GameType.CREATIVE;
     }
 
     @CustomKey("network-settings")
-    private NetworkSettings networkSettings = new NetworkSettings();
+    private final NetworkSettings networkSettings = new NetworkSettings();
 
     @Getter
     @Accessors(fluent = true)
     public class NetworkSettings extends OkaeriConfig {
 
-        private String ip = "0.0.0.0";
+        private final String ip = "0.0.0.0";
 
-        private int port = 19132;
+        private final int port = 19132;
 
         @CustomKey("xbox-auth")
-        private boolean xboxAuth = true;
+        private final boolean xboxAuth = true;
 
         @CustomKey("enable-network-encryption")
-        private boolean enableNetworkEncryption = true;
+        private final boolean enableNetworkEncryption = true;
     }
 
     @CustomKey("chunk-settings")
-    private ChunkSettings chunkSettings = new ChunkSettings();
+    private final ChunkSettings chunkSettings = new ChunkSettings();
 
     @Getter
     @Accessors(fluent = true)
     public class ChunkSettings extends OkaeriConfig {
 
         @CustomKey("ticking-radius")
-        private int tickingRadius = 8;
+        private final int tickingRadius = 8;
 
         @CustomKey("view-distance")
-        private int viewDistance = 16;
+        private final int viewDistance = 16;
 
         @CustomKey("chunk-try-send-count-per-tick")
-        private int chunkTrySendCountPerTick = 32;
+        private final int chunkTrySendCountPerTick = 32;
     }
 }
