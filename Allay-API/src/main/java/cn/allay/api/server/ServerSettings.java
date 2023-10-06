@@ -24,7 +24,7 @@ public class ServerSettings extends OkaeriConfig {
     @Accessors(fluent = true)
     public class GenericSettings extends OkaeriConfig {
 
-        private String motd = "An allay powered server";
+        private String motd = "An allay-powered server";
 
         @CustomKey("sub-motd")
         private String subMotd = "https://github.com/AllayMC/Allay";
