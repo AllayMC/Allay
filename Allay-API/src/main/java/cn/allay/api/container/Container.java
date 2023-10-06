@@ -85,20 +85,23 @@ public interface Container {
         viewer.sendContent(this, slot);
     }
 
-    @Nullable
-    default ItemStack tryAddItem(ItemStack itemStack) {
+    default int tryAddItem(ItemStack itemStack) {
+        var slot = -1;
         ItemStack[] itemStacks = getItemStackArray();
         for (int index = 0; index < itemStacks.length; index++) {
             var content = itemStacks[index];
             if (content == Container.AIR_STACK) {
                 setItemStack(index, itemStack);
-                return null;
+                itemStack.setCount(0);
+                return index;
             } else if (content.canMerge(itemStack)) {
                 if (content.getCount() + itemStack.getCount() <= content.getItemAttributes().maxStackSize()) {
                     content.setCount(content.getCount() + itemStack.getCount());
+                    itemStack.setCount(0);
                     onSlotChange(index);
-                    return null;
+                    return index;
                 } else {
+                    slot = index;
                     int count = itemStack.getCount();
                     int completion = content.getItemAttributes().maxStackSize() - content.getCount();
                     itemStack.setCount(count - completion);
@@ -107,6 +110,6 @@ public interface Container {
                 }
             }
         }
-        return itemStack;
+        return slot;
     }
 }
