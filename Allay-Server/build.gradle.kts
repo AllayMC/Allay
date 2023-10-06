@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.bytebuddy)
     implementation(libs.libdeflate)
     implementation(libs.rocksdb)
+    implementation(libs.netty.epoll)
     testImplementation(libs.bytebuddy)
 }
 

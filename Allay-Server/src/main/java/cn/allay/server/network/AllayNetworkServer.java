@@ -5,7 +5,10 @@ import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollDatagramChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.Getter;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
@@ -42,8 +45,14 @@ public class AllayNetworkServer implements NetworkServer {
         var settings = server.getServerSettings();
         this.pong = initPong(settings);
         this.bindAddress = new InetSocketAddress(settings.ip(), settings.port());
+        Class<? extends DatagramChannel> oclass;
+        if (Epoll.isAvailable()) {
+            oclass = EpollDatagramChannel.class;
+        } else {
+            oclass = NioDatagramChannel.class;
+        }
         this.channel = new ServerBootstrap()
-                .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
+                .channelFactory(RakChannelFactory.server(oclass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
                 .group(new NioEventLoopGroup())
                 .childHandler(new BedrockServerInitializer() {
