@@ -87,8 +87,8 @@ public class AllayClient extends BaseClient {
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
         this.server = server;
-        this.chunkLoadingRadius = server.getServerSettings().defaultViewDistance();
-        this.chunkTrySendCountPerTick = server.getServerSettings().defaultViewDistance() * 2;
+        this.chunkLoadingRadius = server.getServerSettings().chunkSettings().viewDistance();
+        this.chunkTrySendCountPerTick = server.getServerSettings().chunkSettings().chunkTrySendCountPerTick();
         this.adventureSettings = new AdventureSettings(this);
         session.setPacketHandler(new AllayClientPacketHandler());
         containerActionProcessorHolder = new SimpleContainerActionProcessorHolder();
@@ -106,7 +106,7 @@ public class AllayClient extends BaseClient {
 
     @Override
     public void setChunkLoadingRadius(int radius) {
-        chunkLoadingRadius = Math.min(radius, server.getServerSettings().defaultViewDistance());
+        chunkLoadingRadius = Math.min(radius, server.getServerSettings().chunkSettings().viewDistance());
         var chunkRadiusUpdatedPacket = new ChunkRadiusUpdatedPacket();
         chunkRadiusUpdatedPacket.setRadius(chunkLoadingRadius);
         sendPacket(chunkRadiusUpdatedPacket);
@@ -258,7 +258,7 @@ public class AllayClient extends BaseClient {
         startGamePacket.setDifficulty(spawnWorld.getDifficulty().ordinal());
         startGamePacket.setTrustingPlayers(true);
         startGamePacket.setDayCycleStopTime(0);
-        startGamePacket.setLevelName(server.getServerSettings().motd());
+        startGamePacket.setLevelName(server.getServerSettings().genericSettings().motd());
         //TODO
         startGamePacket.setLevelId("");
         //TODO
@@ -390,7 +390,7 @@ public class AllayClient extends BaseClient {
             loginData = LoginData.decode(packet);
 
             //TODO: event
-            if (!loginData.isXboxAuthenticated() && server.getServerSettings().xboxAuth()) {
+            if (!loginData.isXboxAuthenticated() && server.getServerSettings().networkSettings().xboxAuth()) {
                 disconnect("disconnectionScreen.notAuthenticated");
                 return PacketSignal.HANDLED;
             }
@@ -412,7 +412,7 @@ public class AllayClient extends BaseClient {
                 return PacketSignal.HANDLED;
             }
 
-            if (server.getServerSettings().enableNetworkEncryption()) {
+            if (server.getServerSettings().networkSettings().enableNetworkEncryption()) {
                 try {
                     var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
                     var encryptionKeyPair = EncryptionUtils.createKeyPair();
@@ -449,7 +449,7 @@ public class AllayClient extends BaseClient {
 
         protected void completeLogin() {
             var playStatusPacket = new PlayStatusPacket();
-            if (server.getOnlineClientCount() >= server.getServerSettings().maxClientCount()) {
+            if (server.getOnlineClientCount() >= server.getServerSettings().genericSettings().maxClientCount()) {
                 playStatusPacket.setStatus(PlayStatusPacket.Status.FAILED_SERVER_FULL_SUB_CLIENT);
             } else {
                 playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);

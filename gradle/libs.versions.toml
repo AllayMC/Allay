@@ -75,6 +75,9 @@ joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.1
 #netty epoll
 netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.99.Final" }
 
+#configulation lib
+okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.0-beta.5"}
+
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 terminal = ["jline-terminal", "jline-terminal-jna", "jline-reader", "terminalconsoleappender"]

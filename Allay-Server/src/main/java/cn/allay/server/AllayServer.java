@@ -17,6 +17,8 @@ import cn.allay.server.world.AllayWorldPool;
 import cn.allay.server.world.generator.flat.FlatWorldGenerator;
 import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentClientStorage;
 import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
+import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
@@ -172,20 +174,13 @@ public final class AllayServer implements Server {
     }
 
     private ServerSettings readServerSettings() {
-        //TODO
-        return ServerSettings
-                .builder()
-                .ip("0.0.0.0")
-                .port(19132)
-                .motd("Allay Server")
-                .subMotd("Powered by Allay")
-                .maxClientCount(20)
-                .gameType(GameType.CREATIVE)
-                .xboxAuth(false)
-                .defaultTickingRadius(8)
-                .defaultViewDistance(48)
-                .enableNetworkEncryption(true)
-                .build();
+        return ConfigManager.create(ServerSettings.class, it -> {
+            it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
+            it.withBindFile("server-settings.yml"); // specify Path, File or pathname
+            it.withRemoveOrphans(true); // automatic removal of undeclared keys
+            it.saveDefaults(); // save file if does not exists
+            it.load(true); // load and save to update comments/new fields
+        });
     }
 
     private NetworkServer initNetwork() {

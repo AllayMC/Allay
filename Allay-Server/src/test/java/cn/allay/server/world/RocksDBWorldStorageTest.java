@@ -50,18 +50,7 @@ class RocksDBWorldStorageTest {
         @SuppressWarnings("resource") MockedStatic<Server> serve = Mockito.mockStatic(Server.class);
         serve.when(Server::getInstance).thenReturn(server);
         Mockito.when(server.getVirtualThreadPool()).thenReturn(Executors.newVirtualThreadPerTaskExecutor());
-        Mockito.when(server.getServerSettings()).thenReturn(ServerSettings
-                .builder()
-                .ip("0.0.0.0")
-                .port(19132)
-                .motd("Allay Server")
-                .subMotd("Powered by Allay")
-                .maxClientCount(20)
-                .gameType(GameType.CREATIVE)
-                .xboxAuth(false)
-                .defaultTickingRadius(8)
-                .defaultViewDistance(8)
-                .build());
+        Mockito.when(server.getServerSettings()).thenReturn(new ServerSettings());
     }
 
     @SneakyThrows
