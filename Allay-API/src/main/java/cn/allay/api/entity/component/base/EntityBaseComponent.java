@@ -71,6 +71,10 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void setMotion(Vector3fc motion);
 
+    default void setMotion(float mx, float my, float mz) {
+        setMotion(new Vector3f(mx, my, mz));
+    }
+
     default void addMotion(Vector3fc add) {
         setMotion(getMotion().add(add, new Vector3f()));
     }
