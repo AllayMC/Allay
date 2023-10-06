@@ -3,10 +3,14 @@ package cn.allay.server.network;
 import cn.allay.api.network.NetworkServer;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
+import com.google.common.base.Suppliers;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollDatagramChannel;
+import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
@@ -19,6 +23,7 @@ import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
+import java.util.function.Supplier;
 
 /**
  * Allay Project 2023/6/23
@@ -27,6 +32,8 @@ import java.net.InetSocketAddress;
  */
 @Getter
 public class AllayNetworkServer implements NetworkServer {
+    public static final Supplier<NioEventLoopGroup> SERVER_EVENT_GROUP = Suppliers.memoize(() -> new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build()));
+    public static final Supplier<EpollEventLoopGroup> SERVER_EPOLL_EVENT_GROUP = Suppliers.memoize(() -> new EpollEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Server IO #%d").setDaemon(true).build()));
 
     protected static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
 
@@ -45,16 +52,21 @@ public class AllayNetworkServer implements NetworkServer {
         var settings = server.getServerSettings();
         this.pong = initPong(settings);
         this.bindAddress = new InetSocketAddress(settings.ip(), settings.port());
+
         Class<? extends DatagramChannel> oclass;
+        EventLoopGroup eventloopgroup;
         if (Epoll.isAvailable()) {
             oclass = EpollDatagramChannel.class;
+            eventloopgroup = SERVER_EPOLL_EVENT_GROUP.get();
         } else {
             oclass = NioDatagramChannel.class;
+            eventloopgroup = SERVER_EVENT_GROUP.get();
         }
+
         this.channel = new ServerBootstrap()
                 .channelFactory(RakChannelFactory.server(oclass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
-                .group(new NioEventLoopGroup())
+                .group(eventloopgroup)
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
