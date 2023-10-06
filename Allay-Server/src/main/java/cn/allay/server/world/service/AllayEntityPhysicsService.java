@@ -34,13 +34,13 @@ import static java.lang.Math.*;
  */
 public class AllayEntityPhysicsService implements EntityPhysicsService {
 
-    public static final float DIFF_POSITION_THRESHOLD = 0.0001f;
-    public static final float DIFF_ROTATION_THRESHOLD = 0.1f;
+    public static float DIFF_POSITION_THRESHOLD;
+    public static float DIFF_ROTATION_THRESHOLD;
 
-    public static final float MOTION_THRESHOLD = 0.003f;
-    public static final float STEPPING_OFFSET = 0.05f;
-    public static final float FAT_AABB_MARGIN = 0.0005f;
-    public static final float BLOCK_COLLISION_MOTION = 0.2f;
+    public static float MOTION_THRESHOLD;
+    public static float STEPPING_OFFSET;
+    public static float FAT_AABB_MARGIN;
+    public static float BLOCK_COLLISION_MOTION;
     public static final FloatBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new FloatBooleanImmutablePair(0, false);
 
     protected World world;
@@ -55,6 +55,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     public AllayEntityPhysicsService(World world) {
         this.world = world;
+        var settings = world.getServer().getServerSettings().entitySettings().physicsEngineSettings();
+        DIFF_POSITION_THRESHOLD = settings.diffPositionThreshold();
+        DIFF_ROTATION_THRESHOLD = settings.diffRotationThreshold();
+        MOTION_THRESHOLD = settings.motionThreshold();
+        STEPPING_OFFSET = settings.steppingOffset();
+        FAT_AABB_MARGIN = settings.fatAABBMargin();
+        BLOCK_COLLISION_MOTION = settings.blockCollisionMotion();
     }
 
     @Override
@@ -138,14 +145,17 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         //2. Centered on the block pos we found (1), find out the best moving direction
         BlockFace movingDirection = null;
         var values = BlockFace.values();
+        float distanceSqrt = Integer.MAX_VALUE;
         for (int i = values.length - 1; i >= 0; i--) {
             var blockFace = values[i];
             var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
             var blockState = world.getBlockState(offsetVec);
-            if (blockState.blockType() != BlockAirBehavior.AIR_TYPE) continue;
-            else {
-                movingDirection = blockFace;
-                break;
+            if (blockState.blockType() == BlockAirBehavior.AIR_TYPE) {
+                var currentDistanceSqrt = entity.getLocation().distanceSquared(offsetVec.x() + 0.5f, offsetVec.y() + 0.5f, offsetVec.z() + 0.5f);
+                if (currentDistanceSqrt < distanceSqrt) {
+                    movingDirection = blockFace;
+                    distanceSqrt = currentDistanceSqrt;
+                }
             }
         }
         if (movingDirection == null) movingDirection = BlockFace.UP;
