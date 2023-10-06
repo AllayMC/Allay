@@ -26,5 +26,4 @@ public class PlayerCreatedOutputContainer extends BaseContainer {
     public void setItemStack(int slot, ItemStack itemStack) {
         super.setItemStack(0, itemStack);
     }
-
 }
