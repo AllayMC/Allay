@@ -1,14 +1,12 @@
 package cn.allay.api.server;
 
 import eu.okaeri.configs.OkaeriConfig;
+import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
-import lombok.Builder;
+import eu.okaeri.configs.annotation.Header;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-
-import java.util.Objects;
 
 /**
  * Server settings
@@ -18,56 +16,104 @@ import java.util.Objects;
 public class ServerSettings extends OkaeriConfig {
 
     @CustomKey("generic-settings")
-    private final GenericSettings genericSettings = new GenericSettings();
+    private GenericSettings genericSettings = new GenericSettings();
 
     @Getter
     @Accessors(fluent = true)
     public static class GenericSettings extends OkaeriConfig {
 
-        private final String motd = "An allay-powered server";
+        private String motd = "An allay-powered server";
 
+        @Comment("Usually only visible on the LAN interface")
         @CustomKey("sub-motd")
-        private final String subMotd = "https://github.com/AllayMC/Allay";
+        private String subMotd = "https://github.com/AllayMC/Allay";
 
         @CustomKey("max-client-count")
-        private final int maxClientCount = 20;
+        private int maxClientCount = 20;
 
         @CustomKey("game-type")
-        private final GameType defaultGameType = GameType.CREATIVE;
+        @Comment("Possible value: SURVIVAL, CREATIVE, SPECTATOR")
+        private GameType defaultGameType = GameType.CREATIVE;
     }
 
     @CustomKey("network-settings")
-    private final NetworkSettings networkSettings = new NetworkSettings();
+    private NetworkSettings networkSettings = new NetworkSettings();
 
     @Getter
     @Accessors(fluent = true)
     public static class NetworkSettings extends OkaeriConfig {
 
-        private final String ip = "0.0.0.0";
+        private String ip = "0.0.0.0";
 
-        private final int port = 19132;
+        private int port = 19132;
 
         @CustomKey("xbox-auth")
-        private final boolean xboxAuth = true;
+        private boolean xboxAuth = true;
 
+        @Comment("Turning this on is highly recommended for security reasons")
         @CustomKey("enable-network-encryption")
-        private final boolean enableNetworkEncryption = true;
+        private boolean enableNetworkEncryption = true;
     }
 
-    @CustomKey("chunk-settings")
-    private final ChunkSettings chunkSettings = new ChunkSettings();
+    @CustomKey("world-settings")
+    private WorldSettings worldSettings = new WorldSettings();
 
     @Getter
     @Accessors(fluent = true)
-    public static class ChunkSettings extends OkaeriConfig {
+    public static class WorldSettings extends OkaeriConfig {
 
         @CustomKey("ticking-radius")
-        private final int tickingRadius = 8;
+        private int tickingRadius = 8;
 
         @CustomKey("view-distance")
-        private final int viewDistance = 16;
+        private int viewDistance = 16;
 
         @CustomKey("chunk-try-send-count-per-tick")
-        private final int chunkTrySendCountPerTick = 32;
+        private int chunkTrySendCountPerTick = 32;
+
+        @CustomKey("do-first-spawn-chunk-threshold")
+        private int doFirstSpawnChunkThreshold = 36;
+    }
+
+    @CustomKey("entity-settings")
+    private EntitySettings entitySettings = new EntitySettings();
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class EntitySettings extends OkaeriConfig {
+
+        @Comment("Entity physics engine settings")
+        @Comment("Do not change them if you don't know what you are doing!")
+        @CustomKey("physics-engine-settings")
+        private PhysicsEngineSettings physicsEngineSettings = new PhysicsEngineSettings();
+
+        @Getter
+        @Accessors(fluent = true)
+        public static class PhysicsEngineSettings extends OkaeriConfig {
+            @Comment("Send packets to the client when the amount of position change accumulates")
+            @Comment("This threshold acts on each axis individually")
+            @Comment("Increasing this threshold will reduce bandwidth pressure, but may result in untimely motion updates")
+            @CustomKey("diff-position-threshold")
+            private float diffPositionThreshold = 0.0001f;
+
+            @Comment("Similar to \"diffPositionThreshold\"")
+            @CustomKey("diff-rotation-threshold")
+            private float diffRotationThreshold = 0.1f;
+
+            @Comment("When the motion falls below this value, its motion is zeroed")
+            @CustomKey("motion-threshold")
+            private float motionThreshold = 0.003f;
+
+            @Comment("Walk assist offset")
+            @CustomKey("stepping-offset")
+            private float steppingOffset = 0.05f;
+
+            @Comment("This usually determines how quickly an entity item is moved when getting stuck in a block")
+            @CustomKey("block-collision-motion")
+            private float blockCollisionMotion = 0.2f;
+
+            @CustomKey("fat-aabb-margin")
+            private float fatAABBMargin = 0.0005f;
+        }
     }
 }

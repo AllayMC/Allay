@@ -66,15 +66,13 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class AllayClient extends BaseClient {
-
-    private static final int DO_FIRST_SPAWN_CHUNK_THRESHOLD = 36;
     private final BedrockServerSession session;
     @Getter
     private AtomicBoolean online = new AtomicBoolean(false);
     @Getter
     @Setter
     private AtomicBoolean firstSpawned = new AtomicBoolean(false);
-    private final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(DO_FIRST_SPAWN_CHUNK_THRESHOLD);
+    private final AtomicInteger doFirstSpawnChunkThreshold;
     @Getter
     private final ContainerActionProcessorHolder containerActionProcessorHolder;
     @Setter
@@ -87,12 +85,13 @@ public class AllayClient extends BaseClient {
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
         this.server = server;
-        this.chunkLoadingRadius = server.getServerSettings().chunkSettings().viewDistance();
-        this.chunkTrySendCountPerTick = server.getServerSettings().chunkSettings().chunkTrySendCountPerTick();
+        this.chunkLoadingRadius = server.getServerSettings().worldSettings().viewDistance();
+        this.chunkTrySendCountPerTick = server.getServerSettings().worldSettings().chunkTrySendCountPerTick();
         this.adventureSettings = new AdventureSettings(this);
         session.setPacketHandler(new AllayClientPacketHandler());
         containerActionProcessorHolder = new SimpleContainerActionProcessorHolder();
         ContainerActionProcessorHolder.registerDefaultContainerActionProcessors(containerActionProcessorHolder);
+        doFirstSpawnChunkThreshold = new AtomicInteger(server.getServerSettings().worldSettings().doFirstSpawnChunkThreshold());
     }
 
     public static AllayClient hold(BedrockServerSession session, Server Server) {
@@ -106,7 +105,7 @@ public class AllayClient extends BaseClient {
 
     @Override
     public void setChunkLoadingRadius(int radius) {
-        chunkLoadingRadius = Math.min(radius, server.getServerSettings().chunkSettings().viewDistance());
+        chunkLoadingRadius = Math.min(radius, server.getServerSettings().worldSettings().viewDistance());
         var chunkRadiusUpdatedPacket = new ChunkRadiusUpdatedPacket();
         chunkRadiusUpdatedPacket.setRadius(chunkLoadingRadius);
         sendPacket(chunkRadiusUpdatedPacket);
