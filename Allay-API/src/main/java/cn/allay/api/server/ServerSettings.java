@@ -22,7 +22,7 @@ public class ServerSettings extends OkaeriConfig {
 
     @Getter
     @Accessors(fluent = true)
-    public class GenericSettings extends OkaeriConfig {
+    public static class GenericSettings extends OkaeriConfig {
 
         private final String motd = "An allay-powered server";
 
@@ -41,7 +41,7 @@ public class ServerSettings extends OkaeriConfig {
 
     @Getter
     @Accessors(fluent = true)
-    public class NetworkSettings extends OkaeriConfig {
+    public static class NetworkSettings extends OkaeriConfig {
 
         private final String ip = "0.0.0.0";
 
@@ -59,7 +59,7 @@ public class ServerSettings extends OkaeriConfig {
 
     @Getter
     @Accessors(fluent = true)
-    public class ChunkSettings extends OkaeriConfig {
+    public static class ChunkSettings extends OkaeriConfig {
 
         @CustomKey("ticking-radius")
         private final int tickingRadius = 8;
