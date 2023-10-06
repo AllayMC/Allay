@@ -1,5 +1,7 @@
 package cn.allay.server.world.service;
 
+import cn.allay.api.block.data.BlockFace;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.datastruct.aabbtree.AABBTree;
 import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
@@ -14,6 +16,7 @@ import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.joml.Vector3f;
+import org.joml.Vector3ic;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
@@ -37,7 +40,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final float MOTION_THRESHOLD = 0.003f;
     public static final float STEPPING_OFFSET = 0.05f;
     public static final float FAT_AABB_MARGIN = 0.0005f;
-    public static final float BLOCK_COLLISION_MOTION = 0.1f;
+    public static final float BLOCK_COLLISION_MOTION = 0.2f;
     public static final FloatBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new FloatBooleanImmutablePair(0, false);
 
     protected World world;
@@ -65,7 +68,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             //TODO: Currently, entities whose y > maxY (or < minY) will stop calculating physics
             if (!entity.isInWorld()) return;
             //TODO: liquid motion etc...
-            if (world.getCollidingBlocks(entity.getOffsetAABB()) == null) {
+            var collidedBlocks = world.getCollidingBlocks(entity.getOffsetAABB());
+            if (collidedBlocks == null) {
                 //1. The entity is not stuck in the block
                 if (entity.computeEntityCollisionMotion()) computeEntityCollisionMotion(entity);
                 entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
@@ -77,10 +81,12 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             } else {
                 //2. The entity is stuck in the block
                 //Do not calculate other motion exclude block collision motion
-                if (entity.computeBlockCollisionMotion()) computeBlockCollisionMotion(entity);
-                entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
-                applyMotionNoClip(entity);
-                updatedEntities.put(entity.getUniqueId(), entity);
+                if (entity.computeBlockCollisionMotion()) {
+                    computeBlockCollisionMotion(entity, collidedBlocks);
+                    entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
+                    forceApplyMotion(entity);
+                    updatedEntities.put(entity.getUniqueId(), entity);
+                }
             }
         });
         updatedEntities.values().forEach(entityAABBTree::update);
@@ -95,9 +101,61 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         });
     }
 
-    protected void computeBlockCollisionMotion(Entity entity) {
-        //TODO: complete it
-        entity.addMotion(0, BLOCK_COLLISION_MOTION, 0);
+    protected void computeBlockCollisionMotion(Entity entity, BlockState[][][] collidedBlocks) {
+        //1. Find out the block state which entity collided most
+        var aabb = entity.getOffsetAABB();
+        int minX = (int) Math.floor(aabb.minX());
+        int minY = (int) Math.floor(aabb.minY());
+        int minZ = (int) Math.floor(aabb.minZ());
+        int targetX = 0, targetY = 0, targetZ = 0;
+        float V = 0;
+        for (int ox = 0, blocksLength = collidedBlocks.length; ox < blocksLength; ox++) {
+            BlockState[][] sub1 = collidedBlocks[ox];
+            for (int oy = 0, sub1Length = sub1.length; oy < sub1Length; oy++) {
+                BlockState[] sub2 = sub1[oy];
+                for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
+                    BlockState blockState = sub2[oz];
+                    if (blockState == null) continue;
+                    var currentX = minX + ox;
+                    var currentY = minY + oy;
+                    var currentZ = minZ + oz;
+                    var intersection = blockState
+                            .getBlockAttributes()
+                            .computeOffsetVoxelShape(currentX, currentY, currentZ)
+                            .unionAABB()
+                            .intersection(aabb);
+                    var currentV = intersection.lengthX() * intersection.lengthY() * intersection.lengthZ();
+                    if (currentV > V) {
+                        V = currentV;
+                        targetX = currentX;
+                        targetY = currentY;
+                        targetZ = currentZ;
+                    }
+                }
+            }
+        }
+
+        //2. Centered on the block pos we found (1), find out the best moving direction
+        BlockFace movingDirection = null;
+        var values = BlockFace.values();
+        for (int i = values.length - 1; i >= 0; i--) {
+            var blockFace = values[i];
+            var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
+            var blockState = world.getBlockState(offsetVec);
+            if (blockState.blockType() != BlockAirBehavior.AIR_TYPE) continue;
+            else {
+                movingDirection = blockFace;
+                break;
+            }
+        }
+        if (movingDirection == null) movingDirection = BlockFace.UP;
+
+        //3. Add motion to the entity
+        var directionOffset = movingDirection.getOffset();
+        var mx = directionOffset.x();
+        var my = directionOffset.y();
+        var mz = directionOffset.z();
+        entity.setMotion(mx * BLOCK_COLLISION_MOTION, my * BLOCK_COLLISION_MOTION, mz * BLOCK_COLLISION_MOTION);
     }
 
     protected void computeEntityCollisionMotion(Entity entity) {
@@ -159,7 +217,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return motion;
     }
 
-    protected void applyMotionNoClip(Entity entity) {
+    protected void forceApplyMotion(Entity entity) {
         updateEntityLocation(entity, new Location3f(entity.getLocation()).add(entity.getMotion()));
     }
 
