@@ -37,7 +37,7 @@ public interface EntityPlayer extends
             .builder(EntityPlayer.class)
             .vanillaEntity(VanillaEntityId.PLAYER)
             .addComponent(
-                    info -> new EntityPlayerBaseComponentImpl(info),
+                    EntityPlayerBaseComponentImpl::new,
                     EntityPlayerBaseComponentImpl.class
             )
             .addComponent(info -> new EntityAttributeComponentImpl(basicAttributes()), EntityAttributeComponentImpl.class)

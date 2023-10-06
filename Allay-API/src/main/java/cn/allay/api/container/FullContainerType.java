@@ -21,19 +21,16 @@ public record FullContainerType<T extends Container>(
     public static final int UNKNOWN_NETWORK_ID = Integer.MIN_VALUE;
 
     public static final FullContainerType<PlayerCursorContainer> CURSOR = builder()
-            .id(124)
             .size(1)
             .mapAllSlotToType(ContainerSlotType.CURSOR)
             .build();
 
     public static final FullContainerType<PlayerArmorContainer> ARMOR = builder()
-            .id(120)
             .size(4)
             .mapAllSlotToType(ContainerSlotType.ARMOR)
             .build();
 
     public static final FullContainerType<PlayerOffhandContainer> OFFHAND = builder()
-            .id(119)
             .size(1)
             .mapAllSlotToType(ContainerSlotType.OFFHAND)
             .build();
@@ -47,7 +44,6 @@ public record FullContainerType<T extends Container>(
             .build();
 
     public static final FullContainerType<PlayerCreatedOutputContainer> CREATED_OUTPUT = builder()
-            .id(UNKNOWN_NETWORK_ID)
             .size(1)
             .mapAllSlotToType(ContainerSlotType.CREATED_OUTPUT)
             .build();
@@ -95,7 +91,7 @@ public record FullContainerType<T extends Container>(
 
     public static class FullContainerTypeBuilder {
         private final Set<ContainerSlotType> heldSlotTypes = EnumSet.noneOf(ContainerSlotType.class);
-        private int id;
+        private int id = UNKNOWN_NETWORK_ID;
         private ContainerSlotType[] slotTypeTable;
 
         public FullContainerTypeBuilder id(int id) {

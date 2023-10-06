@@ -2,6 +2,7 @@ package cn.allay.api.entity.interfaces.player;
 
 import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.Dependency;
+import cn.allay.api.container.FixedContainerId;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
@@ -72,15 +73,18 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         for (var entityItem : entityItems) {
             var item = entityItem.getItemStack();
             var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY));
-            var remain = inventory.tryAddItem(item);
-            if (remain == null) {
-                TakeItemEntityPacket takeItemEntityPacket = new TakeItemEntityPacket();
-                takeItemEntityPacket.setRuntimeEntityId(uniqueId);
-                takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getUniqueId());
-                Objects.requireNonNull(world.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
-                world.removeEntity(entityItem);
-            } else {
-                entityItem.setItemStack(remain);
+            var slot = inventory.tryAddItem(item);
+            if (slot != -1) {
+                if (item.getCount() == 0) {
+                    TakeItemEntityPacket takeItemEntityPacket = new TakeItemEntityPacket();
+                    takeItemEntityPacket.setRuntimeEntityId(uniqueId);
+                    takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getUniqueId());
+                    Objects.requireNonNull(world.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
+                    world.removeEntity(entityItem);
+                }
+                // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
+                // it's much easier to just resend the inventory.
+                client.getPlayerEntity().sendContentsWithSpecificContainerId(inventory, FixedContainerId.PLAYER_INVENTORY, slot);
             }
         }
     }

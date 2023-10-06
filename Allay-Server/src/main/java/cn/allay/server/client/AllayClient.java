@@ -8,6 +8,7 @@ import cn.allay.api.client.BaseClient;
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
 import cn.allay.api.container.Container;
+import cn.allay.api.container.FixedContainerId;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import cn.allay.api.container.processor.ContainerActionProcessor;
@@ -167,11 +168,9 @@ public class AllayClient extends BaseClient {
 
     private void sendInventories() {
         //TODO: setHolder
-        //NOTICE: When client is first entered, it determines that containerId=0 is the ID of the player's inventory :c
-        //There may be a problem here, because the use of containerId in the original InventoryContentsPacket is too confusing
-        playerEntity.sendContentsWithSpecificContainerId(playerEntity.getContainer(FullContainerType.PLAYER_INVENTORY), 0);
-        playerEntity.sendContentsWithSpecificContainerId(playerEntity.getContainer(FullContainerType.OFFHAND), FullContainerType.OFFHAND.id());
-        playerEntity.sendContentsWithSpecificContainerId(playerEntity.getContainer(FullContainerType.ARMOR), FullContainerType.ARMOR.id());
+        playerEntity.sendContentsWithSpecificContainerId(playerEntity.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
+        playerEntity.sendContentsWithSpecificContainerId(playerEntity.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
+        playerEntity.sendContentsWithSpecificContainerId(playerEntity.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
         //No need to send cursor's content to client because there is nothing in cursor
     }
 
