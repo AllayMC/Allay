@@ -51,7 +51,7 @@ public class AllayNetworkServer implements NetworkServer {
     public void start() {
         var settings = server.getServerSettings();
         this.pong = initPong(settings);
-        this.bindAddress = new InetSocketAddress(settings.ip(), settings.port());
+        this.bindAddress = new InetSocketAddress(settings.networkSettings().ip(), settings.networkSettings().port());
 
         Class<? extends DatagramChannel> oclass;
         EventLoopGroup eventloopgroup;
@@ -117,11 +117,13 @@ public class AllayNetworkServer implements NetworkServer {
     protected BedrockPong initPong(ServerSettings settings) {
         return new BedrockPong()
                 .edition("MCPE")
-                .motd(settings.motd())
-                .subMotd(settings.subMotd())
+                .motd(settings.genericSettings().motd())
+                .subMotd(settings.genericSettings().subMotd())
                 .playerCount(0)
-                .maximumPlayerCount(settings.maxClientCount())
-                .gameType(settings.gameType().name())
-                .protocolVersion(CODEC.getProtocolVersion());
+                .maximumPlayerCount(settings.genericSettings().maxClientCount())
+                .gameType(settings.genericSettings().defaultGameType().name())
+                .protocolVersion(CODEC.getProtocolVersion())
+                .ipv4Port(settings.networkSettings().port())
+                .ipv6Port(settings.networkSettings().port());//TODO: ipv6
     }
 }
