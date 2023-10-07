@@ -51,6 +51,8 @@ public interface World {
 
     Logger getLogger();
 
+    WorldData getWorldData();
+
     long getTick();
 
     float getTps();

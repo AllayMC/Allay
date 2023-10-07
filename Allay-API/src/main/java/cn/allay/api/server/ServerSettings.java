@@ -7,6 +7,8 @@ import eu.okaeri.configs.annotation.Header;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
+import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
 
 /**
  * Server settings
@@ -32,8 +34,12 @@ public class ServerSettings extends OkaeriConfig {
         private int maxClientCount = 20;
 
         @CustomKey("game-type")
-        @Comment("Possible value: SURVIVAL, CREATIVE, SPECTATOR")
+        @Comment("Possible values: SURVIVAL, CREATIVE, SPECTATOR")
         private GameType defaultGameType = GameType.CREATIVE;
+
+        @CustomKey("default-permission")
+        @Comment("Possible values: VISITOR, MEMBER, OPERATOR")
+        private PlayerPermission defaultPermission = PlayerPermission.OPERATOR;
     }
 
     @CustomKey("network-settings")
@@ -53,6 +59,13 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Turning this on is highly recommended for security reasons")
         @CustomKey("enable-network-encryption")
         private boolean enableNetworkEncryption = true;
+
+        @Comment("Possible values: ZLIB, SNAPPY")
+        @CustomKey("compression-algorithm")
+        private PacketCompressionAlgorithm compressionAlgorithm = PacketCompressionAlgorithm.ZLIB;
+
+        @CustomKey("compression-threshold")
+        private int compressionThreshold = 0;
     }
 
     @CustomKey("world-settings")
