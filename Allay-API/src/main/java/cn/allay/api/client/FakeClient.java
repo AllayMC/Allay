@@ -64,6 +64,10 @@ public class FakeClient extends BaseClient {
     }
 
     @Override public boolean isLocalInitialized() {return true;}
+
+    @Override
+    public boolean isLoggedIn() {return true;}
+
     @Override public boolean isFirstSpawned() {return true;}
     @Override public boolean isOnline() {return true;}
     @Override public void preSendChunks(Set<Long> chunkHashes) {}

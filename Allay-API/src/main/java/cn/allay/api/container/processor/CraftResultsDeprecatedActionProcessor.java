@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
  *
  * @author daoge_cmd
  */
-public class CraftResultsDeprecated implements ContainerActionProcessor<CraftResultsDeprecatedAction> {
+public class CraftResultsDeprecatedActionProcessor implements ContainerActionProcessor<CraftResultsDeprecatedAction> {
 
     @Override
     public ItemStackRequestActionType getType() {

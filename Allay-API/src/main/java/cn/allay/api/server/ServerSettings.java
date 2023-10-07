@@ -43,7 +43,7 @@ public class ServerSettings extends OkaeriConfig {
     @Accessors(fluent = true)
     public static class NetworkSettings extends OkaeriConfig {
 
-        private String ip = "0.0.0.0";
+        private String ip = "127.0.0.1";
 
         private int port = 19132;
 

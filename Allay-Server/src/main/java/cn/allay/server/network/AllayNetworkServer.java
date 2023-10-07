@@ -71,7 +71,7 @@ public class AllayNetworkServer implements NetworkServer {
                     protected void initSession(BedrockServerSession session) {
                         session.setLogging(true);
                         session.setCodec(CODEC);
-                        server.onClientConnect(session);
+                        server.onConnect(session);
                     }
                 })
                 .bind(bindAddress)

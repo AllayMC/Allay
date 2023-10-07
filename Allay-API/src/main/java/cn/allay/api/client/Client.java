@@ -31,6 +31,8 @@ public interface Client extends ChunkLoader {
 
     LoginData getLoginData();
 
+    boolean isLoggedIn();
+
     boolean isFirstSpawned();
 
     boolean isOnline();

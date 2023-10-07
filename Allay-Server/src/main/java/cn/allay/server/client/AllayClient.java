@@ -68,11 +68,10 @@ import java.util.regex.Pattern;
 @Slf4j
 public class AllayClient extends BaseClient {
     private final BedrockServerSession session;
-    @Getter
-    private AtomicBoolean online = new AtomicBoolean(false);
-    @Getter
-    @Setter
-    private AtomicBoolean firstSpawned = new AtomicBoolean(false);
+    private final AtomicBoolean loggedIn = new AtomicBoolean(false);
+    private final AtomicBoolean online = new AtomicBoolean(false);
+    private final AtomicBoolean firstSpawned = new AtomicBoolean(false);
+    private final AtomicBoolean localInitialized = new AtomicBoolean(false);
     private final AtomicInteger doFirstSpawnChunkThreshold;
     @Getter
     private final ContainerActionProcessorHolder containerActionProcessorHolder;
@@ -81,7 +80,6 @@ public class AllayClient extends BaseClient {
             packet -> {
                 throw new UnsupportedOperationException();
             };
-    private AtomicBoolean localInitialized = new AtomicBoolean(false);
 
     private AllayClient(BedrockServerSession session, Server server) {
         this.session = session;
@@ -178,6 +176,11 @@ public class AllayClient extends BaseClient {
     }
 
     @Override
+    public boolean isLoggedIn() {
+        return loggedIn.get();
+    }
+
+    @Override
     public boolean isFirstSpawned() {
         return firstSpawned.get();
     }
@@ -207,7 +210,6 @@ public class AllayClient extends BaseClient {
      */
     @Override
     public void initializePlayer() {
-        server.onLoginFinish(this);
         initPlayerEntity();
         sendBasicGameData();
         getWorld().getChunkService().getOrLoadChunk(
@@ -372,7 +374,7 @@ public class AllayClient extends BaseClient {
         @Override
         public void onDisconnect(String reason) {
             if (firstSpawned.get()) server.getClientStorage().writeClientData(AllayClient.this);
-            server.onClientDisconnect(AllayClient.this);
+            server.onDisconnect(AllayClient.this);
             if (playerEntity != null)
                 playerEntity.getLocation().world().removeClient(AllayClient.this);
         }
@@ -471,6 +473,8 @@ public class AllayClient extends BaseClient {
                 playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
             }
             sendPacket(playStatusPacket);
+            server.onLoggedIn(AllayClient.this);
+            loggedIn.set(true);
             //TODO: Resource Packs
             sendPacket(new ResourcePacksInfoPacket());
         }
