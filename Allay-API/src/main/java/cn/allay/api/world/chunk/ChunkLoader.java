@@ -1,5 +1,6 @@
 package cn.allay.api.world.chunk;
 
+import cn.allay.api.entity.Entity;
 import cn.allay.api.math.location.Location3fc;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
@@ -27,12 +28,16 @@ public interface ChunkLoader {
 
     void preSendChunks(Set<Long> chunkHashes);
 
-    void notifyChunkLoaded(Chunk chunk);
+    void onChunkInRangeLoaded(Chunk chunk);
 
-    void unloadChunks(Set<Long> chunkHashes);
+    void spawnEntity(Entity entity);
+
+    void despawnEntity(Entity entity);
+
+    void onChunkOutOfRange(Set<Long> chunkHashes);
 
     default void unloadChunk(Long chunkHash) {
-        unloadChunks(Set.of(chunkHash));
+        onChunkOutOfRange(Set.of(chunkHash));
     }
 
     void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler);

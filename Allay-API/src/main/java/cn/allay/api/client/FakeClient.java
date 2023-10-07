@@ -7,6 +7,7 @@ import cn.allay.api.client.info.UIProfile;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
+import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.chunk.Chunk;
@@ -66,8 +67,22 @@ public class FakeClient extends BaseClient {
     @Override public boolean isFirstSpawned() {return true;}
     @Override public boolean isOnline() {return true;}
     @Override public void preSendChunks(Set<Long> chunkHashes) {}
-    @Override public void notifyChunkLoaded(Chunk chunk) {}
-    @Override public void unloadChunks(Set<Long> chunkHashes) {}
+
+    @Override
+    public void onChunkInRangeLoaded(Chunk chunk) {
+    }
+
+    @Override
+    public void spawnEntity(Entity entity) {
+    }
+
+    @Override
+    public void despawnEntity(Entity entity) {
+    }
+
+    @Override
+    public void onChunkOutOfRange(Set<Long> chunkHashes) {
+    }
     @Override public void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler) {}
     @Override public void sendPacket(BedrockPacket packet) {}
     @Override public void sendPacketImmediately(BedrockPacket packet) {}

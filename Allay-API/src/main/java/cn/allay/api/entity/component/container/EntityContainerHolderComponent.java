@@ -4,7 +4,6 @@ import cn.allay.api.container.Container;
 import cn.allay.api.container.ContainerHolder;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.entity.component.EntityComponent;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -20,7 +19,7 @@ public interface EntityContainerHolderComponent extends ContainerHolder, EntityC
     Map<FullContainerType<?>, Container> getContainers();
 
     @Override
-    <T extends Container> @Nullable T getContainer(FullContainerType<T> type);
+    <T extends Container> T getContainer(FullContainerType<T> type);
 
     @Override
     void addContainer(Container container);

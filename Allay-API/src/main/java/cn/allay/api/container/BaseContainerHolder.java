@@ -3,7 +3,6 @@ package cn.allay.api.container;
 import cn.allay.api.container.exception.ContainerException;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +30,6 @@ public class BaseContainerHolder implements ContainerHolder {
     }
 
     @Override
-    @Nullable
     public <T extends Container> T getContainer(FullContainerType<T> type) {
         return (T) containers.get(type);
     }

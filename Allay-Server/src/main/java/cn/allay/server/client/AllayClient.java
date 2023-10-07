@@ -13,6 +13,7 @@ import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
+import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
@@ -154,6 +155,9 @@ public class AllayClient extends BaseClient {
         sendPacket(updateAttributesPacket);
 
         server.addToPlayerList(this);
+        if (server.getOnlineClientCount() > 1) {
+            server.sendFullPlayerListInfoTo(this);
+        }
 
         sendInventories();
 
@@ -226,7 +230,6 @@ public class AllayClient extends BaseClient {
     }
 
     private void initPlayerEntity() {
-        //TODO: Load player data
         Position3ic spawnPos = server.getDefaultWorld().getSpawnPosition();
         playerEntity = EntityPlayer.PLAYER_TYPE.createEntity(
                 SimpleEntityPlayerInitInfo
@@ -333,9 +336,10 @@ public class AllayClient extends BaseClient {
 
     @SlowOperation
     @Override
-    public void notifyChunkLoaded(Chunk chunk) {
+    public void onChunkInRangeLoaded(Chunk chunk) {
         var levelChunkPacket = chunk.createLevelChunkPacket();
         sendPacket(levelChunkPacket);
+        chunk.spawnEntitiesTo(this);
         if (doFirstSpawnChunkThreshold.get() > 0) {
             if (doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
                 doFirstSpawn();
@@ -344,8 +348,21 @@ public class AllayClient extends BaseClient {
     }
 
     @Override
-    public void unloadChunks(Set<Long> chunkHashes) {
+    public void onChunkOutOfRange(Set<Long> chunkHashes) {
+        chunkHashes
+                .stream()
+                .map(getWorld().getChunkService()::getChunk)
+                .forEach(chunk -> chunk.despawnEntitiesFrom(this));
+    }
 
+    @Override
+    public void spawnEntity(Entity entity) {
+        entity.spawnTo(this);
+    }
+
+    @Override
+    public void despawnEntity(Entity entity) {
+        entity.despawnFrom(this);
     }
 
     private class AllayClientPacketHandler implements BedrockPacketHandler {
@@ -638,6 +655,37 @@ public class AllayClient extends BaseClient {
             return PacketSignal.HANDLED;
         }
 
+        @Override
+        public PacketSignal handle(AnimatePacket packet) {
+            if (packet.getAction() == AnimatePacket.Action.SWING_ARM) {
+                getPlayerEntity().getCurrentChunk().addChunkPacket(packet);
+            }
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(TextPacket packet) {
+            if (packet.getType() == TextPacket.Type.CHAT) {
+                server.broadcastChat(AllayClient.this, packet.getMessage());
+                //TODO: debug only
+                if (packet.getMessage().equals("spawn v")) {
+                    var loc = getLocation();
+                    for (var i = 0; i <= 0; i++) {
+                        var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(
+                                SimpleEntityInitInfo
+                                        .builder()
+                                        .pos(loc.x() + i, loc.y(), loc.z() + i)
+                                        .world(loc.world())
+                                        .build()
+                        );
+                        loc.world().addEntity(entity);
+                    }
+                    sendRawMessage("TPS: " + loc.world().getTps() + ", Entity Count: " + loc.world().getEntities().size());
+                }
+            }
+            return PacketSignal.HANDLED;
+        }
+
         protected void handleMovement(Vector3f newPos, Vector3f newRot) {
             var valid = movementValidator.validate(new Location3f(
                     newPos.getX(), newPos.getY(), newPos.getZ(),
@@ -682,27 +730,7 @@ public class AllayClient extends BaseClient {
                 switch (input) {
                     case START_SPRINTING -> playerEntity.setSprinting(true);
                     case STOP_SPRINTING -> playerEntity.setSprinting(false);
-                    case START_SNEAKING -> {
-                        playerEntity.setSneaking(true);
-                        //TODO: debug only
-                        var loc = getLocation();
-                        for (var i = 0; i <= 0; i++) {
-                            var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(
-                                    SimpleEntityInitInfo
-                                            .builder()
-                                            .pos(loc.x() + i, loc.y(), loc.z() + i)
-                                            .world(loc.world())
-                                            .build()
-                            );
-                            loc.world().addEntity(entity);
-                        }
-                        var pk = new TextPacket();
-                        pk.setType(TextPacket.Type.CHAT);
-                        pk.setMessage("TPS: " + loc.world().getTps() + ", Entity Count: " + loc.world().getEntities().size());
-                        pk.setSourceName(getDisplayName());
-                        pk.setXuid(loginData.getXuid());
-                        sendPacket(pk);
-                    }
+                    case START_SNEAKING -> playerEntity.setSneaking(true);
                     case STOP_SNEAKING -> playerEntity.setSneaking(false);
                     case START_SWIMMING -> playerEntity.setSwimming(true);
                     case STOP_SWIMMING -> playerEntity.setSwimming(false);

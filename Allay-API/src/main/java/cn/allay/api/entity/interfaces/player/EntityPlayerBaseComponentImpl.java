@@ -9,18 +9,18 @@ import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
 import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.entity.interfaces.item.EntityItem;
 import cn.allay.api.entity.interfaces.item.EntityItemBaseComponent;
+import cn.allay.api.math.location.Location3f;
+import cn.allay.api.math.location.Location3fc;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.cloudburstmc.protocol.bedrock.packet.AddPlayerPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
-import org.cloudburstmc.protocol.bedrock.packet.TakeItemEntityPacket;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBf;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Allay Project 2023/9/23
@@ -32,11 +32,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
     protected Client client;
-    protected boolean sprinting;
-    protected boolean sneaking;
-    protected boolean swimming;
-    protected boolean gliding;
-    protected boolean crawling;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
@@ -102,6 +97,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
+    public void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3fc newLoc) {
+        var offsetLoc = new Location3f(newLoc).add(0, getBaseOffset(), 0);
+        super.broadcastMoveToViewers(moveFlags, offsetLoc);
+    }
+
+    @Override
     public BedrockPacket createSpawnPacket() {
         var addPlayerPacket = new AddPlayerPacket();
         addPlayerPacket.setRuntimeEntityId(uniqueId);
@@ -109,13 +110,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         addPlayerPacket.setUuid(client.getLoginData().getUuid());
         addPlayerPacket.setUsername(client.getName());
         addPlayerPacket.setPlatformChatId(client.getLoginData().getDeviceInfo().getDeviceId());
-        addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
+        addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
         addPlayerPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         addPlayerPacket.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         addPlayerPacket.setGameType(client.getGameType());
         addPlayerPacket.getMetadata().putAll(this.metadata.getEntityDataMap());
         addPlayerPacket.setDeviceId(client.getLoginData().getDeviceInfo().getDeviceId());
-        addPlayerPacket.setHand(ItemData.AIR);//TODO: itemInHand
+        addPlayerPacket.setHand(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().toNetworkItemData());//TODO: itemInHand
         return addPlayerPacket;
     }
 
@@ -125,53 +126,58 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void setSprinting(boolean sprinting) {
-        this.sprinting = sprinting;
-    }
-
-    @Override
     public boolean isSprinting() {
-        return sprinting;
+        return metadata.getFlag(EntityFlag.SPRINTING);
     }
 
     @Override
-    public void setSneaking(boolean sneaking) {
-        this.sneaking = sneaking;
+    public void setSprinting(boolean sprinting) {
+        metadata.setFlag(EntityFlag.SPRINTING, sprinting);
+        sendEntityFlags(EntityFlag.SPRINTING);
     }
 
     @Override
     public boolean isSneaking() {
-        return sneaking;
+        return metadata.getFlag(EntityFlag.SNEAKING);
     }
 
     @Override
-    public void setSwimming(boolean swimming) {
-        this.swimming = swimming;
+    public void setSneaking(boolean sneaking) {
+        metadata.setFlag(EntityFlag.SNEAKING, sneaking);
+        sendEntityFlags(EntityFlag.SNEAKING);
     }
 
     @Override
     public boolean isSwimming() {
-        return swimming;
+        return metadata.getFlag(EntityFlag.SWIMMING);
     }
 
     @Override
-    public void setGliding(boolean gliding) {
-        this.gliding = gliding;
+    public void setSwimming(boolean swimming) {
+        metadata.setFlag(EntityFlag.SWIMMING, swimming);
+        sendEntityFlags(EntityFlag.SWIMMING);
     }
 
     @Override
     public boolean isGliding() {
-        return gliding;
+        return metadata.getFlag(EntityFlag.GLIDING);
     }
 
     @Override
-    public void setCrawling(boolean crawling) {
-        this.crawling = crawling;
+    public void setGliding(boolean gliding) {
+        metadata.setFlag(EntityFlag.GLIDING, gliding);
+        sendEntityFlags(EntityFlag.GLIDING);
     }
 
     @Override
     public boolean isCrawling() {
-        return crawling;
+        return metadata.getFlag(EntityFlag.CRAWLING);
+    }
+
+    @Override
+    public void setCrawling(boolean crawling) {
+        metadata.setFlag(EntityFlag.CRAWLING, crawling);
+        sendEntityFlags(EntityFlag.CRAWLING);
     }
 
     @Override

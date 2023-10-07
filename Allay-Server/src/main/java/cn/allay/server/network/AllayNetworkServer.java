@@ -38,7 +38,6 @@ public class AllayNetworkServer implements NetworkServer {
     protected static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
 
     protected InetSocketAddress bindAddress;
-    //TODO: Update PONG
     protected BedrockPong pong;
     protected Server server;
     protected Channel channel;

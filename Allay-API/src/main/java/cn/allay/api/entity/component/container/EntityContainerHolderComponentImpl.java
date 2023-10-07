@@ -5,7 +5,6 @@ import cn.allay.api.container.BaseContainerHolder;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.identifier.Identifier;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -32,7 +31,6 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
     }
 
     @Override
-    @Nullable
     public <T extends Container> T getContainer(FullContainerType<T> type) {
         return super.getContainer(type);
     }
