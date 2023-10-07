@@ -255,7 +255,7 @@ public class AllayClient extends BaseClient {
         startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
         startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
         startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
-        startGamePacket.setSeed(0L);
+        startGamePacket.setSeed(spawnWorld.getWorldData().getRandomSeed());
         startGamePacket.setDimensionId(spawnWorld.getDimensionInfo().dimensionId());
         startGamePacket.setGeneratorId(spawnWorld.getWorldGenerator().getType().getId());
         startGamePacket.setLevelGameType(spawnWorld.getWorldGameType());
@@ -266,7 +266,7 @@ public class AllayClient extends BaseClient {
         //TODO
         startGamePacket.setLevelId("");
         //TODO
-        startGamePacket.setDefaultPlayerPermission(PlayerPermission.OPERATOR);
+        startGamePacket.setDefaultPlayerPermission(server.getServerSettings().genericSettings().defaultPermission());
         startGamePacket.setServerChunkTickRange(spawnWorld.getTickingRadius());
         startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
         startGamePacket.setPremiumWorldTemplateId("");
@@ -382,7 +382,7 @@ public class AllayClient extends BaseClient {
         @Override
         public PacketSignal handle(RequestNetworkSettingsPacket packet) {
             var protocolVersion = packet.getProtocolVersion();
-            var supportedProtocolVersion = Server.getInstance().getNetworkServer().getCodec().getProtocolVersion();
+            var supportedProtocolVersion = server.getNetworkServer().getCodec().getProtocolVersion();
             if (protocolVersion != supportedProtocolVersion) {
                 var loginFailedPacket = new PlayStatusPacket();
                 if (protocolVersion > supportedProtocolVersion) {
@@ -394,9 +394,8 @@ public class AllayClient extends BaseClient {
                 return PacketSignal.HANDLED;
             }
             var settingsPacket = new NetworkSettingsPacket();
-            //TODO: Support other compression algorithms
-            settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.ZLIB);
-            settingsPacket.setCompressionThreshold(1);
+            settingsPacket.setCompressionAlgorithm(server.getServerSettings().networkSettings().compressionAlgorithm());
+            settingsPacket.setCompressionThreshold(server.getServerSettings().networkSettings().compressionThreshold());
             sendPacketImmediately(settingsPacket);
             session.setCompression(settingsPacket.getCompressionAlgorithm());
             session.setCompressionLevel(settingsPacket.getCompressionThreshold());
@@ -742,9 +741,7 @@ public class AllayClient extends BaseClient {
                     case STOP_GLIDING -> playerEntity.setGliding(false);
                     case START_CRAWLING -> playerEntity.setCrawling(true);
                     case STOP_CRAWLING -> playerEntity.setCrawling(false);
-                    case START_JUMPING -> {
-                        playerEntity.setOnGround(false);
-                    }
+                    case START_JUMPING -> playerEntity.setOnGround(false);
                 }
             }
         }
