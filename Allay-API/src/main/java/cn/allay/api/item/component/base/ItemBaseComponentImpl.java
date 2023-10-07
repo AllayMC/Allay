@@ -35,9 +35,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected int count;
     protected int damage;
     protected NbtMap nbt;
-    @Nullable
     protected BlockState blockState;
-    @Nullable
     protected Integer stackNetworkId;
 
     public ItemBaseComponentImpl(
@@ -87,7 +85,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public @Nullable BlockState toBlockState() {
+    public BlockState toBlockState() {
         return blockState;
     }
 
@@ -125,7 +123,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         }
     }
 
-    @Nullable
     @Override
     public Integer getStackNetworkId() {
         return stackNetworkId;

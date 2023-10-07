@@ -52,14 +52,12 @@ public interface EntityPlayer extends
             .addComponent(info -> new EntityPlayerContainerViewerComponentImpl(), EntityPlayerContainerViewerComponentImpl.class)
             .build();
 
-    @Nullable
     default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
         var container = getOpenedContainer(slotType);
         if (container == null) container = getContainer(slotType);
         return (T) container;
     }
 
-    @Nullable
     default <T extends Container> T getReachableContainerBySlotType(ContainerSlotType slotType) {
         var container = getOpenedContainerBySlotType(slotType);
         if (container == null) container = getContainerBySlotType(slotType);

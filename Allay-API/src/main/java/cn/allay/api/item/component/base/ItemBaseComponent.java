@@ -31,7 +31,6 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
 
     void setDamage(int damage);
 
-    @Nullable
     BlockState toBlockState();
 
     void setBlockStateStyle(@Nullable BlockState blockState);
@@ -42,7 +41,6 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
 
     ItemData toNetworkItemData();
 
-    @Nullable
     Integer getStackNetworkId();
 
     void setStackNetworkId(@Nullable Integer newStackNetworkId);

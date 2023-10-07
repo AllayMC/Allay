@@ -30,7 +30,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
 
     @Override
     public ItemStackResponse handle(DropAction action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
-        Container container = Objects.requireNonNull(client.getPlayerEntity().getReachableContainerBySlotType(action.getSource().getContainer()));
+        Container container = client.getPlayerEntity().getReachableContainerBySlotType(action.getSource().getContainer());
         var count = action.getCount();
         var slot = action.getSource().getSlot();
         var item = container.getItemStack(slot);
