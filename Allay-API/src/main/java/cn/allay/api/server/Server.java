@@ -55,11 +55,11 @@ public interface Server extends TaskCreator {
     @UnmodifiableView
     Map<String, Client> getOnlineClients();
 
-    void onClientConnect(BedrockServerSession session);
+    void onConnect(BedrockServerSession session);
 
-    void onLoginFinish(Client client);
+    void onLoggedIn(Client client);
 
-    void onClientDisconnect(Client client);
+    void onDisconnect(Client client);
 
     WorldPool getWorldPool();
 

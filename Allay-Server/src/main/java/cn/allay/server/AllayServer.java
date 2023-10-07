@@ -193,20 +193,26 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void onClientConnect(BedrockServerSession session) {
+    public void onConnect(BedrockServerSession session) {
         AllayClient.hold(session, this);
     }
 
     @Override
-    public void onLoginFinish(Client client) {
+    public void onLoggedIn(Client client) {
         clients.put(client.getName(), client);
         networkServer.setPlayerCount(clients.size());
     }
 
     @Override
-    public void onClientDisconnect(Client client) {
+    public void onDisconnect(Client client) {
+        if (!client.isLoggedIn()) return;
         clients.remove(client.getName());
         networkServer.setPlayerCount(clients.size());
+        var playerListEntry = playerListEntryMap.remove(client.getUuid());
+        var pk = new PlayerListPacket();
+        pk.setAction(PlayerListPacket.Action.REMOVE);
+        pk.getEntries().add(playerListEntry);
+        broadcastPacket(pk);
     }
 
     @Override
