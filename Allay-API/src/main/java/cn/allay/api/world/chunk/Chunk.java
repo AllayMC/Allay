@@ -64,4 +64,12 @@ public interface Chunk extends UnsafeChunk {
     default void save(WorldStorage storage) {
         storage.writeChunk(this).join();
     }
+
+    default void spawnEntitiesTo(Client client) {
+        getEntities().values().forEach(client::spawnEntity);
+    }
+
+    default void despawnEntitiesFrom(Client client) {
+        getEntities().values().forEach(client::despawnEntity);
+    }
 }

@@ -29,7 +29,6 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -47,6 +46,7 @@ public final class AllayServer implements Server {
     @Getter
     private final WorldPool worldPool;
     private final AtomicBoolean isRunning;
+    //TODO: skin update
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap;
     @Getter
     private final ClientStorage clientStorage;

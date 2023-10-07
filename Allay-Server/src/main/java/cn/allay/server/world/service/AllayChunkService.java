@@ -135,14 +135,9 @@ public class AllayChunkService implements ChunkService {
 
     private void setChunk(int x, int z, Chunk chunk) {
         var chunkHash = HashUtils.hashXZ(x, z);
-        if (isChunkLoaded(chunkHash)) {
-            unloadChunk(chunkHash);
-        }
+        if (isChunkLoaded(chunkHash))
+            throw new IllegalStateException("Trying to set a chunk (" + x + "," + z + ") which is already loaded");
         loadedChunks.put(chunkHash, chunk);
-        chunk.getEntities().forEach((uniqueId, entity) -> {
-            world.getClients().forEach(entity::spawnTo);
-            world.getEntityPhysicsService().addEntity(entity);
-        });
     }
 
     @Override
@@ -380,7 +375,6 @@ public class AllayChunkService implements ChunkService {
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
-            //TODO: Config
             this.chunkTrySendCountPerTick = chunkLoader.getChunkTrySendCountPerTick();
             chunkLoader.setSubChunkRequestHandler(subChunkRequestPacket -> {
                 List<SubChunkData> responseData = new ArrayList<>();
@@ -511,7 +505,7 @@ public class AllayChunkService implements ChunkService {
                 if (chunk != null)
                     chunk.removeChunkLoader(chunkLoader);
             });
-            chunkLoader.unloadChunks(sentChunks);
+            chunkLoader.onChunkOutOfRange(sentChunks);
         }
 
         public void tick() {
@@ -551,7 +545,7 @@ public class AllayChunkService implements ChunkService {
                 if (chunk != null)
                     chunk.removeChunkLoader(chunkLoader);
             });
-            chunkLoader.unloadChunks(difference);
+            chunkLoader.onChunkOutOfRange(difference);
             //剩下sentChunks和inRadiusChunks的交集
             sentChunks.removeAll(difference);
             difference.forEach(sentSubChunks::remove);
@@ -586,7 +580,7 @@ public class AllayChunkService implements ChunkService {
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
             chunkLoader.preSendChunks(chunkReadyToSend.keySet());
             chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash.longValue()));
-            chunkReadyToSend.values().forEach(chunkLoader::notifyChunkLoaded);
+            chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeLoaded);
         }
 
         private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {

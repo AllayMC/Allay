@@ -13,7 +13,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -88,6 +87,10 @@ public interface EntityBaseComponent extends EntityComponent {
     void setOnGround(boolean onGround);
 
     void spawnTo(Client client);
+
+    default void spawnTo(Set<Client> clients) {
+        clients.forEach(this::spawnTo);
+    }
 
     void despawnFrom(Client client);
 
@@ -170,7 +173,6 @@ public interface EntityBaseComponent extends EntityComponent {
         return isYInRange() && isCurrentChunkLoaded();
     }
 
-    @Nullable
     default Chunk getCurrentChunk() {
         var loc = getLocation();
         var cx = (int) loc.x() >> 4;

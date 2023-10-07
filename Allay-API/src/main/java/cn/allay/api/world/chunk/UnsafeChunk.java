@@ -36,7 +36,7 @@ public interface UnsafeChunk {
 
     int getZ();
 
-    void addEntity(@NotNull Entity entity);
+    void addEntity(Entity entity);
 
     Entity removeEntity(long uniqueId);
 

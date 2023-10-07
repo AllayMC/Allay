@@ -13,6 +13,7 @@ import cn.allay.api.world.World;
 import cn.allay.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 
 import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
@@ -110,5 +111,35 @@ public interface Client extends ChunkLoader {
 
     default World getWorld() {
         return getLocation().world();
+    }
+
+    default void sendChat(Client sender, String message) {
+        var pk = new TextPacket();
+        pk.setType(TextPacket.Type.CHAT);
+        pk.setMessage(message);
+        pk.setSourceName(sender.getDisplayName());
+        pk.setXuid(sender.getLoginData().getXuid());
+        pk.setPlatformChatId(sender.getLoginData().getDeviceInfo().getDeviceId());
+        sendPacket(pk);
+    }
+
+    default void sendRawMessage(String message) {
+        sendSimpleMessage(message, TextPacket.Type.RAW);
+    }
+
+    default void sendTip(String message) {
+        sendSimpleMessage(message, TextPacket.Type.TIP);
+    }
+
+    default void sendPopup(String message) {
+        sendSimpleMessage(message, TextPacket.Type.POPUP);
+    }
+
+    private void sendSimpleMessage(String message, TextPacket.Type type) {
+        var pk = new TextPacket();
+        pk.setType(TextPacket.Type.RAW);
+        pk.setXuid(getLoginData().getXuid());
+        pk.setMessage(message);
+        sendPacket(pk);
     }
 }

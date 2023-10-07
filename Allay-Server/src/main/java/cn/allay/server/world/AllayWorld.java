@@ -169,14 +169,15 @@ public class AllayWorld implements World {
         if (chunk == null)
             throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
         chunk.addEntity(entity);
+        entity.spawnTo(chunk.getClientChunkLoaders());
         entityPhysicsService.addEntity(entity);
-        clients.forEach(entity::spawnTo);
     }
 
     @Override
     public void removeEntity(Entity entity) {
         var chunk = entity.getCurrentChunk();
-        if (chunk == null) return;
+        if (chunk == null)
+            throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
         entityPhysicsService.removeEntity(entity);
         chunk.removeEntity(entity.getUniqueId());
         entity.despawnFromAll();
@@ -200,7 +201,6 @@ public class AllayWorld implements World {
     public Collection<Client> getClients() {
         return Collections.unmodifiableCollection(clients);
     }
-
 
     @Override
     public void close() {
