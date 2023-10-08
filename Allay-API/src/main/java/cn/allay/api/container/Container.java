@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  */
 public interface Container {
 
-    ItemStack AIR_STACK = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(0).stackNetworkId(0).build());
+    ItemStack AIR_STACK = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(0).stackNetworkId(0).autoAssignStackNetworkId(false).build());
 
     FullContainerType<?> getContainerType();
 

@@ -60,8 +60,8 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                                         slot,
                                                         item.getCount(),
                                                         item.getStackNetworkId(),
-                                                        "",
-                                                        0
+                                                        item.getCustomName(),
+                                                        item.getDurability()
                                                 )
                                         )
                                 )

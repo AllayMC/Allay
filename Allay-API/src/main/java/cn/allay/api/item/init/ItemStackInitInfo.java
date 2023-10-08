@@ -7,6 +7,8 @@ import cn.allay.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * Allay Project 2023/5/19
  *
@@ -16,15 +18,17 @@ public interface ItemStackInitInfo<T extends ItemStack> extends ComponentInitInf
 
     int count();
 
-    int damage();
+    int meta();
 
-    NbtMap nbt();
+    NbtMap extraTag();
+
+    //TODO: enchantments
+    //TODO: item lock type
 
     @Nullable
     BlockState blockState();
 
-    @Nullable
-    Integer stackNetworkId();
+    int stackNetworkId();
 
     boolean autoAssignStackNetworkId();
 

@@ -4,6 +4,7 @@ import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
@@ -13,11 +14,16 @@ import cn.allay.api.item.interfaces.ItemAirStack;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtMapBuilder;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Allay Project 2023/5/19
@@ -33,28 +39,44 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     protected ItemType<T> itemType;
     protected int count;
-    protected int damage;
-    protected NbtMap nbt;
+    protected int meta;
+    protected int durability;
+    protected String customName = "";
+    protected List<String> lore = new ArrayList<>();
+    //TODO: enchantments
+    //TODO: item lock type
     protected BlockState blockState;
-    protected Integer stackNetworkId;
+    protected int stackNetworkId;
 
-    public ItemBaseComponentImpl(
-            ItemStackInitInfo<T> initInfo
-    ) {
+    public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
         this.itemType = initInfo.getItemType();
         this.count = initInfo.count();
-        this.damage = initInfo.damage();
-        this.nbt = initInfo.nbt();
+        this.meta = initInfo.meta();
         this.blockState = initInfo.blockState();
         if (this.blockState == null && itemType.getBlockType() != null)
             this.blockState = itemType.getBlockType().getDefaultState();
         var specifiedNetworkId = initInfo.stackNetworkId();
-        if (specifiedNetworkId != null) {
+        if (specifiedNetworkId != EMPTY_STACK_NETWORK_ID) {
             if (specifiedNetworkId < 0)
                 throw new IllegalArgumentException("stack network id cannot be negative");
-            this.stackNetworkId = initInfo.stackNetworkId();
+            this.stackNetworkId = specifiedNetworkId;
         } else if (initInfo.autoAssignStackNetworkId()) {
             this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
+        }
+    }
+
+    @Override
+    public void onInitFinish(ComponentInitInfo initInfo) {
+        loadExtraTag(((ItemStackInitInfo<?>) initInfo).extraTag());
+    }
+
+    @Override
+    public void loadExtraTag(NbtMap extraTag) {
+        this.durability = extraTag.getInt("Damage", 0);
+        if (extraTag.containsKey("display")) {
+            var displayTag = extraTag.getCompound("display");
+            this.customName = displayTag.getString("Name");
+            this.lore = extraTag.getList("Lore", NbtType.STRING);
         }
     }
 
@@ -75,13 +97,43 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public int getDamage() {
-        return damage;
+    public int getMeta() {
+        return meta;
     }
 
     @Override
-    public void setDamage(int damage) {
-        this.damage = damage;
+    public void setMeta(int meta) {
+        this.meta = meta;
+    }
+
+    @Override
+    public int getDurability() {
+        return durability;
+    }
+
+    @Override
+    public void setDurability(int durability) {
+        this.durability = durability;
+    }
+
+    @Override
+    public String getCustomName() {
+        return customName;
+    }
+
+    @Override
+    public void setCustomName(String customName) {
+        this.customName = customName;
+    }
+
+    @Override
+    public List<String> getLore() {
+        return lore;
+    }
+
+    @Override
+    public void setLore(List<String> lore) {
+        this.lore = lore;
     }
 
     @Override
@@ -95,17 +147,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public NbtMap getNbt() {
-        return nbt;
-    }
-
-    @Override
-    public void setNbt(NbtMap nbt) {
-        this.nbt = nbt;
-    }
-
-    //TODO: 缓存ItemData
-    @Override
     public ItemData toNetworkItemData() {
         if (itemType == ItemAirStack.AIR_TYPE) {
             return ItemData.AIR;
@@ -115,43 +156,68 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
                 .definition(itemType.toNetworkDefinition())
                 .blockDefinition(blockState != null ? blockState.toNetworkBlockDefinition() : () -> 0)
                 .count(count)
-                .damage(damage)
-                .tag(nbt)
-                .usingNetId(stackNetworkId != null)
-                .netId(stackNetworkId != null ? stackNetworkId : 0)
+                .damage(meta)
+                .tag(saveExtraTag())
+                .usingNetId(hasStackNetworkId())
+                .netId(stackNetworkId)
                 .build();
         }
     }
 
     @Override
-    public Integer getStackNetworkId() {
+    public int getStackNetworkId() {
         return stackNetworkId;
     }
 
     @Override
-    public void setStackNetworkId(@Nullable Integer newStackNetworkId) {
+    public void setStackNetworkId(int newStackNetworkId) {
         this.stackNetworkId = newStackNetworkId;
     }
 
     @Override
-    public Integer assignNewStackNetworkId() {
+    public int assignNewStackNetworkId() {
         stackNetworkId = STACK_NETWORK_ID_COUNTER++;
         return stackNetworkId;
     }
 
     @Override
     public ItemStack copy(boolean newStackNetworkId) {
+        var extraTag = saveExtraTag();
         return itemType.createItemStack(
                 SimpleItemStackInitInfo
                         .builder()
                         .count(count)
-                        .damage(damage)
-                        .nbt(nbt)
+                        .meta(meta)
+                        .extraTag(extraTag != null ? extraTag : NbtMap.EMPTY)
                         .blockState(blockState)
-                        .stackNetworkId(newStackNetworkId ? null : stackNetworkId)
+                        .stackNetworkId(newStackNetworkId ? EMPTY_STACK_NETWORK_ID : stackNetworkId)
                         .autoAssignStackNetworkId(newStackNetworkId)
                         .build()
         );
+    }
+
+    @Override
+    @Nullable
+    public NbtMap saveExtraTag() {
+        NbtMapBuilder nbtBuilder = NbtMap.builder();
+        if (durability != 0) {
+            nbtBuilder.putInt("Damage", durability);
+        }
+
+        NbtMapBuilder displayBuilder = NbtMap.builder();
+        if (!this.customName.isEmpty()) {
+            displayBuilder.put( "Name", this.customName );
+        }
+        if ( !this.lore.isEmpty() ) {
+            displayBuilder.putList( "Lore", NbtType.STRING, this.lore );
+        }
+        if ( !displayBuilder.isEmpty() ) {
+            nbtBuilder.putCompound( "display", displayBuilder.build() );
+        }
+
+        //TODO: enchantment, item lock type
+
+        return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }
 
     @Override

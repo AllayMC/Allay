@@ -72,8 +72,8 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
                                                 slot,
                                                 item.getCount(),
                                                 item.getStackNetworkId(),
-                                                "",
-                                                0
+                                                item.getCustomName(),
+                                                item.getDurability()
                                         )
                                 )
                         )
