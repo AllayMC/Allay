@@ -1,5 +1,7 @@
 package cn.allay.api.utils;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
+@UtilityClass
 public class StringUtils {
     public static List<String> fastSplit(String str, String delimiter) {
         return fastSplit(str, delimiter, Integer.MAX_VALUE);
