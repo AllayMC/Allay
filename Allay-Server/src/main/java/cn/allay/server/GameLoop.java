@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -22,18 +23,9 @@ public final class GameLoop {
     private final Runnable onStop;
     @Getter
     private final int loopCountPerSec;
+    private final float[] tickAverage = new float[20];
     @Getter
     private long tick;
-    private final float[] tickAverage = {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
-
-    public float getTps() {
-        float sum = 0;
-        int count = this.tickAverage.length;
-        for (float aTickAverage : this.tickAverage) {
-            sum += aTickAverage;
-        }
-        return (float) MathUtils.round(sum / count, 2);
-    }
 
     private GameLoop(Runnable onStart, Consumer<GameLoop> onTick, Runnable onStop, int loopCountPerSec) {
         if (loopCountPerSec <= 0)
@@ -42,10 +34,20 @@ public final class GameLoop {
         this.onTick = onTick;
         this.onStop = onStop;
         this.loopCountPerSec = loopCountPerSec;
+        Arrays.fill(tickAverage, 20f);
     }
 
     public static GameLoopBuilder builder() {
         return new GameLoopBuilder();
+    }
+
+    public float getTps() {
+        float sum = 0;
+        int count = this.tickAverage.length;
+        for (float aTickAverage : this.tickAverage) {
+            sum += aTickAverage;
+        }
+        return (float) MathUtils.round(sum / count, 2);
     }
 
     public void startLoop() {
@@ -59,7 +61,7 @@ public final class GameLoop {
             tick++;
             long timeTakenToTick = System.nanoTime() - startTickTime;
             if (timeTakenToTick == 0) timeTakenToTick = 1;
-            float tick = (float) Math.max(0, Math.min(20, 1000000000 / timeTakenToTick));
+            float tick = Math.max(0, Math.min(20, 1000000000 / timeTakenToTick));
             System.arraycopy(this.tickAverage, 1, this.tickAverage, 0, this.tickAverage.length - 1);
             this.tickAverage[this.tickAverage.length - 1] = tick;
 
@@ -69,7 +71,7 @@ public final class GameLoop {
             long sleepStart = System.nanoTime();
             try {
                 if (nanoSleepTime > 0) {
-                    //noinspection BusyWait
+                    // noinspection BusyWait
                     Thread.sleep(TimeUnit.NANOSECONDS.toMillis(nanoSleepTime));
                 }
             } catch (InterruptedException exception) {
@@ -90,19 +92,14 @@ public final class GameLoop {
         this.isRunning.set(false);
     }
 
-    // Builder pattern
-
     public boolean isRunning() {
         return isRunning.get();
     }
 
     public static class GameLoopBuilder {
-        private Runnable onStart = () -> {
-        };
-        private Consumer<GameLoop> onTick = (gameLoop) -> {
-        };
-        private Runnable onStop = () -> {
-        };
+        private Runnable onStart = () -> {};
+        private Consumer<GameLoop> onTick = gameLoop -> {};
+        private Runnable onStop = () -> {};
         private int loopCountPerSec = 20;
 
         public GameLoopBuilder onStart(Runnable onStart) {
