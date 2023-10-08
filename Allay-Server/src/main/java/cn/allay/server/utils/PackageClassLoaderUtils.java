@@ -1,6 +1,7 @@
 package cn.allay.server.utils;
 
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 import org.reflections.Reflections;
 
 import static org.reflections.scanners.Scanners.SubTypes;
@@ -10,9 +11,8 @@ import static org.reflections.scanners.Scanners.SubTypes;
  *
  * @author daoge_cmd
  */
+@UtilityClass
 public final class PackageClassLoaderUtils {
-    private PackageClassLoaderUtils() {
-    }
 
     @SneakyThrows
     public static void loadClasses(String packageName) {

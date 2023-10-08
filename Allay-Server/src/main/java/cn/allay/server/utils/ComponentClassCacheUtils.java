@@ -2,6 +2,7 @@ package cn.allay.server.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.file.PathUtils;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +24,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 @Slf4j
+@UtilityClass
 @SuppressWarnings("unchecked")
 public final class ComponentClassCacheUtils {
     public static final Path CACHE_ROOT_PATH = Path.of("caches");
@@ -31,9 +33,9 @@ public final class ComponentClassCacheUtils {
     public static final String CACHE_PACKAGE_ITEM_PATH = "cn/allay/api/item/interfaces";
     public static final String CACHE_PACKAGE_ENTITY_PATH = "cn/allay/api/entity/interfaces";
     private static final URLClassLoader LOADER;
+    private static final Gson GSON = new GsonBuilder().create();
     private static Map<String, String> LAST_CACHE_MAP;
     private static Map<String, String> CACHE_MAP = new LinkedHashMap<>();
-    private static final Gson GSON = new GsonBuilder().create();
 
     static {
         File file1 = CACHE_ROOT_PATH.toFile();
@@ -53,11 +55,12 @@ public final class ComponentClassCacheUtils {
     public static void checkCacheValid() {
         Path cacheValid = CACHE_ROOT_PATH.resolve("cache.valid");
         Properties properties = new Properties();
-        try {
-            properties.load(new InputStreamReader(Objects.requireNonNull(LOADER.getResourceAsStream("git.properties"))));
+        try (var input = new InputStreamReader(Objects.requireNonNull(LOADER.getResourceAsStream("git.properties")))) {
+            properties.load(input);
             if (Files.exists(cacheValid) &&
-                    Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev")) &&
-                    CACHE_ROOT_PATH.resolve("mapping.json").toFile().exists()) {
+                Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev")) &&
+                CACHE_ROOT_PATH.resolve("mapping.json").toFile().exists()
+            ) {
                 return;
             }
             var cn = CACHE_ROOT_PATH.resolve("cn");
