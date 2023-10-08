@@ -7,7 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
+import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+import static cn.allay.api.item.component.base.ItemBaseComponent.EMPTY_STACK_NETWORK_ID;
 
 /**
  * Allay Project 2023/9/14
@@ -16,19 +21,19 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackInitInfo<T> {
     protected final int count;
-    protected final int damage;
-    protected final NbtMap nbt;
+    protected final int meta;
+    protected NbtMap extraTag;
     protected final @Nullable BlockState blockState;
-    protected final @Nullable Integer stackNetworkId;
+    protected final int stackNetworkId;
     protected final boolean autoAssignStackNetworkId;
     @Getter
     @Setter
     protected ItemType<T> itemType;
 
-    protected SimpleItemStackInitInfo(int count, int damage, NbtMap nbt, @Nullable BlockState blockState, @Nullable Integer stackNetworkId, boolean autoAssignStackNetworkId) {
+    protected SimpleItemStackInitInfo(int count, int meta, NbtMap extraTag, @Nullable BlockState blockState, int stackNetworkId, boolean autoAssignStackNetworkId) {
         this.count = count;
-        this.damage = damage;
-        this.nbt = nbt;
+        this.meta = meta;
+        this.extraTag = extraTag;
         this.blockState = blockState;
         this.stackNetworkId = stackNetworkId;
         this.autoAssignStackNetworkId = autoAssignStackNetworkId;
@@ -40,13 +45,13 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
     }
 
     @Override
-    public int damage() {
-        return damage;
+    public int meta() {
+        return meta;
     }
 
     @Override
-    public NbtMap nbt() {
-        return nbt;
+    public NbtMap extraTag() {
+        return extraTag;
     }
 
     @Override
@@ -55,7 +60,7 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
     }
 
     @Override
-    public @Nullable Integer stackNetworkId() {
+    public int stackNetworkId() {
         return stackNetworkId;
     }
 
@@ -70,10 +75,10 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
 
     public static class Builder {
         protected int count;
-        protected int damage;
-        protected NbtMapBuilder nbtBuilder = NbtMap.builder();
+        protected int meta;
+        protected NbtMapBuilder extraTagBuilder = NbtMap.builder();
         protected @Nullable BlockState blockState;
-        protected @Nullable Integer stackNetworkId;
+        protected int stackNetworkId = EMPTY_STACK_NETWORK_ID;
         protected boolean autoAssignStackNetworkId = true;
 
         public Builder count(int count) {
@@ -81,13 +86,8 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
             return this;
         }
 
-        public Builder damage(int damage) {
-            this.damage = damage;
-            return this;
-        }
-
-        public Builder nbt(NbtMap nbt) {
-            this.nbtBuilder.putAll(nbt);
+        public Builder meta(int meta) {
+            this.meta = meta;
             return this;
         }
 
@@ -96,7 +96,7 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
             return this;
         }
 
-        public Builder stackNetworkId(@Nullable Integer stackNetworkId) {
+        public Builder stackNetworkId(int stackNetworkId) {
             this.stackNetworkId = stackNetworkId;
             return this;
         }
@@ -106,8 +106,30 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
             return this;
         }
 
+        public Builder extraTag(NbtMap extraTag) {
+            extraTagBuilder.putAll(extraTag);
+            return this;
+        }
+
+        public Builder durability(int durability) {
+            extraTagBuilder.putInt("Damage", durability);
+            return this;
+        }
+
+        public Builder customName(String customName) {
+            extraTagBuilder.putString("Name", customName);
+            return this;
+        }
+
+        public Builder lore(List<String> lore) {
+            extraTagBuilder.putList("Lore", NbtType.STRING, lore);
+            return this;
+        }
+
         public <R extends ItemStack> SimpleItemStackInitInfo<R> build() {
-            return new SimpleItemStackInitInfo<>(count, damage, nbtBuilder.build(), blockState, stackNetworkId, autoAssignStackNetworkId);
+            return new SimpleItemStackInitInfo<>(
+                    count, meta, extraTagBuilder.build(), blockState,
+                    stackNetworkId, autoAssignStackNetworkId);
         }
     }
 }

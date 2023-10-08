@@ -56,8 +56,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 sourceSlot,
                                                 destinationItem.getCount(),
                                                 destinationItem.getStackNetworkId(),
-                                                "",
-                                                0
+                                                destinationItem.getCustomName(),
+                                                destinationItem.getDurability()
                                         )
                                 )
                         ),
@@ -69,8 +69,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 destinationSlot,
                                                 sourceItem.getCount(),
                                                 sourceItem.getStackNetworkId(),
-                                                "",
-                                                0
+                                                sourceItem.getCustomName(),
+                                                sourceItem.getDurability()
                                         )
                                 )
                         )

@@ -109,8 +109,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                         slot2,
                                         resultDestItem.getCount(),
                                         resultDestItem.getStackNetworkId(),
-                                        "",
-                                        0
+                                        resultDestItem.getCustomName(),
+                                        resultDestItem.getDurability()
                                 )
                         )
                 );
@@ -127,8 +127,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                             slot1,
                                             resultSourItem.getCount(),
                                             resultSourItem.getStackNetworkId(),
-                                            "",
-                                            0
+                                            resultSourItem.getCustomName(),
+                                            resultSourItem.getDurability()
                                     )
                             )
                     ), destItemStackResponseSlot)

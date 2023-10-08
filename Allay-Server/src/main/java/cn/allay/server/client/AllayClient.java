@@ -406,7 +406,6 @@ public class AllayClient extends BaseClient {
         public PacketSignal handle(LoginPacket packet) {
             loginData = LoginData.decode(packet);
 
-            //TODO: event
             if (!loginData.isXboxAuthenticated() && server.getServerSettings().networkSettings().xboxAuth()) {
                 disconnect("disconnectionScreen.notAuthenticated");
                 return PacketSignal.HANDLED;

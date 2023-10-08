@@ -21,21 +21,17 @@ public class AllayItemTypeTest {
     void testCreation() {
         var itemStack = ItemDiamondStack.DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
         assertEquals(1, itemStack.getCount());
-        assertEquals(0, itemStack.getDamage());
-        assertNotNull(itemStack.getNbt());
+        assertEquals(0, itemStack.getMeta());
+        assertEquals(0, itemStack.getDurability());
         assertEquals(ItemDiamondStack.DIAMOND_TYPE, itemStack.getItemType());
 
         itemStack.setCount(2);
-        itemStack.setDamage(1);
-        itemStack.setNbt(
-                NbtMap.builder()
-                        .putString("test", "114514")
-                        .build()
-        );
+        itemStack.setMeta(1);
+        itemStack.setDurability(1);
 
         assertEquals(2, itemStack.getCount());
-        assertEquals(1, itemStack.getDamage());
-        assertEquals("114514", itemStack.getNbt().getString("test"));
+        assertEquals(1, itemStack.getMeta());
+        assertEquals(1, itemStack.getDurability());
 
         assertThrows(IllegalArgumentException.class, () -> itemStack.setCount(-1));
     }
