@@ -71,7 +71,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         ItemStack resultDestItem;
         if (sourItem.getCount() == count) {
             //第一种：全部拿走
-            resultSourItem = Container.AIR_STACK;
+            resultSourItem = Container.EMPTY_SLOT_PLACE_HOLDER;
             source.setItemStack(slot1, resultSourItem);
             if (destItem.getItemType() != AIR_TYPE) {
                 resultDestItem = destItem;

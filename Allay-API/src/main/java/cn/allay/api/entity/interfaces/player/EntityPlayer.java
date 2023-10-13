@@ -17,9 +17,8 @@ import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
-import org.jetbrains.annotations.Nullable;
 
-import static cn.allay.api.container.Container.AIR_STACK;
+import static cn.allay.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
 import static cn.allay.api.entity.component.attribute.EntityAttributeComponentImpl.basicAttributes;
 import static cn.allay.api.item.interfaces.ItemAirStack.AIR_TYPE;
 
@@ -92,7 +91,7 @@ public interface EntityPlayer extends
             droppedItemStack.setCount(count);
         } else {
             droppedItemStack = item;
-            item = AIR_STACK;
+            item = EMPTY_SLOT_PLACE_HOLDER;
             container.setItemStack(slot, item);
         }
         var client = getClient();

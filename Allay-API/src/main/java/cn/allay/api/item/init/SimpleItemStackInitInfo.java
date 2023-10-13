@@ -9,6 +9,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.util.List;
 
@@ -96,12 +97,14 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
             return this;
         }
 
-        public Builder stackNetworkId(int stackNetworkId) {
+        public Builder stackNetworkId(@Range(from = 0, to = Integer.MAX_VALUE) int stackNetworkId) {
             this.stackNetworkId = stackNetworkId;
+            this.autoAssignStackNetworkId = false;
             return this;
         }
 
         public Builder autoAssignStackNetworkId(boolean autoAssignStackNetworkId) {
+            this.stackNetworkId = 0;
             this.autoAssignStackNetworkId = autoAssignStackNetworkId;
             return this;
         }

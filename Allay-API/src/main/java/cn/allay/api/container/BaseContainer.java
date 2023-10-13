@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static cn.allay.api.item.ItemHelper.fromNBT;
+import static cn.allay.api.item.interfaces.ItemAirStack.AIR_TYPE;
 
 /**
  * Allay Project 2023/7/15
@@ -33,7 +34,7 @@ public abstract class BaseContainer implements Container {
     public BaseContainer(FullContainerType<? extends Container> containerType) {
         this.containerType = containerType;
         this.content = new ItemStack[containerType.size()];
-        Arrays.fill(this.content, AIR_STACK);
+        Arrays.fill(this.content, EMPTY_SLOT_PLACE_HOLDER);
     }
 
     @Override
@@ -70,6 +71,10 @@ public abstract class BaseContainer implements Container {
 
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
+        if (itemStack.getItemType() == AIR_TYPE && itemStack != EMPTY_SLOT_PLACE_HOLDER) {
+            // NOTICE: Please use clearSlot() instead of using this method if you want to clear a slot!
+            itemStack = EMPTY_SLOT_PLACE_HOLDER;
+        }
         content[slot] = itemStack;
         onSlotChange(slot);
     }

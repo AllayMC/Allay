@@ -62,7 +62,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         var world = pos.world();
         var rand = ThreadLocalRandom.current();
         for (var itemStack : container.getItemStacks()) {
-            if (itemStack != Container.AIR_STACK) {
+            if (itemStack != Container.EMPTY_SLOT_PLACE_HOLDER) {
                 var entity = EntityItem.ITEM_TYPE.createEntity(
                         SimpleEntityInitInfo
                                 .builder()

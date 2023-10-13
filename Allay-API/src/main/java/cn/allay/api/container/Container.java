@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  */
 public interface Container {
 
-    ItemStack AIR_STACK = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(0).stackNetworkId(0).autoAssignStackNetworkId(false).build());
+    ItemStack EMPTY_SLOT_PLACE_HOLDER = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(0).stackNetworkId(0).autoAssignStackNetworkId(false).build());
 
     FullContainerType<?> getContainerType();
 
@@ -64,6 +64,10 @@ public interface Container {
 
     void setItemStack(int slot, ItemStack itemStack);
 
+    default void clearSlot(int slot) {
+        setItemStack(slot, EMPTY_SLOT_PLACE_HOLDER);
+    }
+
     void addViewer(ContainerViewer viewer);
 
     void removeViewer(ContainerViewer viewer);
@@ -90,7 +94,7 @@ public interface Container {
         ItemStack[] itemStacks = getItemStackArray();
         for (int index = 0; index < itemStacks.length; index++) {
             var content = itemStacks[index];
-            if (content == Container.AIR_STACK) {
+            if (content == Container.EMPTY_SLOT_PLACE_HOLDER) {
                 setItemStack(index, itemStack);
                 itemStack.setCount(0);
                 return index;

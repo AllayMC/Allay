@@ -37,6 +37,10 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     private static int STACK_NETWORK_ID_COUNTER = 1;
 
+    public static int getCurrentStackNetworkIdCounter() {
+        return STACK_NETWORK_ID_COUNTER;
+    }
+
     protected ItemType<T> itemType;
     protected int count;
     protected int meta;
