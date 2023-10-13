@@ -57,6 +57,10 @@ public record FullContainerType<T extends Container>(
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;
+        //There shouldn't be null entry in slotTypeTable
+        for (var slotType : slotTypeTable) {
+            if (slotType == null) throw new IllegalArgumentException("Slot type table shouldn't contain null entry!");
+        }
         this.heldSlotTypes = heldSlotTypes;
         for (ContainerSlotType slotType : heldSlotTypes) {
             var mapped = SLOT_TYPE_TO_TYPE_MAP.get(slotType);

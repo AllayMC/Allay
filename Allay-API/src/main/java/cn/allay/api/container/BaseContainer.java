@@ -24,7 +24,7 @@ import static cn.allay.api.item.interfaces.ItemAirStack.AIR_TYPE;
  * @author daoge_cmd
  */
 @Slf4j
-public abstract class BaseContainer implements Container {
+public class BaseContainer implements Container {
     protected final FullContainerType<? extends Container> containerType;
     protected final BiMap<Byte, ContainerViewer> viewers = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
     protected final ItemStack[] content;
