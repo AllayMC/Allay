@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  */
 public interface Container {
 
-    ItemStack EMPTY_SLOT_PLACE_HOLDER = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(0).stackNetworkId(0).autoAssignStackNetworkId(false).build());
+    ItemStack EMPTY_SLOT_PLACE_HOLDER = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(0).stackNetworkId(0).build());
 
     FullContainerType<?> getContainerType();
 
