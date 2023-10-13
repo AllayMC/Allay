@@ -6,6 +6,7 @@ import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface ItemStackInitInfo<T extends ItemStack> extends ComponentInitInf
     @Nullable
     BlockState blockState();
 
-    int stackNetworkId();
+    @Range(from = 0, to = Integer.MAX_VALUE) int stackNetworkId();
 
     boolean autoAssignStackNetworkId();
 

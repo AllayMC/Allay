@@ -600,7 +600,7 @@ public class AllayClient extends BaseClient {
                             if (itemStack.getCount() != 0) {
                                 inv.onSlotChange(inv.getHandSlot());
                             } else {
-                                inv.setItemInHand(Container.AIR_STACK);
+                                inv.setItemInHand(Container.EMPTY_SLOT_PLACE_HOLDER);
                             }
                         }
                     }

@@ -11,9 +11,8 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.Objects;
 
-import static cn.allay.api.container.Container.AIR_STACK;
+import static cn.allay.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
 import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus.OK;
 
 /**
@@ -38,7 +37,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
             log.warn("mismatch stack network id!");
             return error(requestId);
         }
-        if (item == AIR_STACK) {
+        if (item == EMPTY_SLOT_PLACE_HOLDER) {
             log.warn("cannot throw an air!");
             return error(requestId);
         }
