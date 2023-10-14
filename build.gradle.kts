@@ -1,22 +1,19 @@
-repositories {
-    mavenCentral()
-    maven {
-        url = uri("https://plugins.gradle.org/m2/")
-    }
-    mavenLocal()
+plugins {
+    java
+    idea
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "cn.allay"
 description = "The next generation minecraft server software"
 
-plugins {
-    `kotlin-dsl`
-    idea
-    id("org.jetbrains.kotlin.jvm") version "1.9.20-Beta2"
-    id("com.github.johnrengelman.shadow") version ("8.1.1")
+repositories {
+    mavenCentral()
+    maven("https://plugins.gradle.org/m2/")
+    mavenLocal()
 }
 
-//Do not build this root project, this is only used as a control submodule
+// Do not build this root project, this is only used as a control submodule
 tasks.forEach {
     it.enabled = false
 }
@@ -28,13 +25,13 @@ idea {
     }
 }
 
-//Enable gradle wrapper update task
+// Enable gradle wrapper update task
 tasks.wrapper {
     enabled = true
-    gradleVersion = "8.4"
+    gradleVersion = GradleVersion.current().version
 }
 
-tasks.clean {
+tasks.withType<Delete> {
     enabled = true
     delete("logs", "caches", "output")
 }
@@ -49,18 +46,10 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven {
-            url = uri("https://repo.opencollab.dev/maven-releases/")
-        }
-        maven {
-            url = uri("https://repo.opencollab.dev/maven-snapshots/")
-        }
-        maven {
-            url = uri("https://www.jitpack.io/")
-        }
-        maven {
-            url = uri("https://storehouse.okaeri.eu/repository/maven-public/")
-        }
+        maven("https://repo.opencollab.dev/maven-releases/")
+        maven("https://repo.opencollab.dev/maven-snapshots/")
+        maven("https://www.jitpack.io/")
+        maven("https://storehouse.okaeri.eu/repository/maven-public/")
         mavenLocal()
     }
 
@@ -83,7 +72,7 @@ subprojects {
         dependsOn("shadowJar")
     }
 
-    //disable
+    // disable
     tasks.assemble {
         group = ""
         enabled = false
@@ -94,7 +83,7 @@ subprojects {
     }
 
     tasks.withType<JavaCompile> {
-        options.encoding = "UTF-8"
+        options.encoding = Charsets.UTF_8.name()
     }
 
     tasks.withType<Copy> {
@@ -102,10 +91,13 @@ subprojects {
     }
 
     tasks.withType<Javadoc> {
-        options.encoding = "UTF-8"
+        options.encoding = Charsets.UTF_8.name()
         val javadocOptions = options as CoreJavadocOptions
-        javadocOptions.addStringOption("source", "21")
-        //Suppress some meaningless warnings
+        javadocOptions.addStringOption(
+            "source",
+            java.sourceCompatibility.toString()
+        )
+        // Suppress some meaningless warnings
         javadocOptions.addStringOption("Xdoclint:none", "-quiet")
     }
 }
