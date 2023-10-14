@@ -37,9 +37,13 @@ import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static java.lang.Math.abs;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
  * Allay Project 2023/5/26
@@ -53,18 +57,17 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
     protected static AtomicLong UNIQUE_ID_COUNTER = new AtomicLong(0);
 
+    protected final Location3f location;
+    protected final Location3f locLastSent = new Location3f(0, 0, 0, null);
+    protected final long uniqueId = UNIQUE_ID_COUNTER.getAndIncrement();
+    protected final Metadata metadata;
     @Manager
     protected ComponentManager<T> manager;
     @ComponentedObject
     protected T thisEntity;
-
     @Dependency(soft = true)
     @Nullable
     protected EntityAttributeComponent attributeComponent;
-
-    protected final Location3f location;
-    protected final long uniqueId = UNIQUE_ID_COUNTER.getAndIncrement();
-    protected final Metadata metadata;
     protected EntityType<T> entityType;
     protected AABBfc aabb;
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
@@ -280,18 +283,51 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3fc newLoc) {
+    public void broadcastMoveToViewers(Location3fc newLoc) {
         var pk = new MoveEntityDeltaPacket();
         pk.setRuntimeEntityId(getUniqueId());
+        var moveFlags = computeMoveFlags(newLoc);
         pk.getFlags().addAll(moveFlags);
-        pk.setX(newLoc.x());
-        pk.setY(newLoc.y());
-        pk.setZ(newLoc.z());
-        pk.setPitch((float) newLoc.pitch());
-        pk.setYaw((float) newLoc.yaw());
-        pk.setHeadYaw((float) newLoc.headYaw());
-        if (onGround) pk.getFlags().add(MoveEntityDeltaPacket.Flag.ON_GROUND);
+        if (moveFlags.contains(HAS_X)) {
+            pk.setX(newLoc.x());
+            locLastSent.x = newLoc.x();
+        }
+        if (moveFlags.contains(HAS_Y)) {
+            pk.setY(newLoc.y());
+            locLastSent.y = newLoc.y();
+        }
+        if (moveFlags.contains(HAS_Z)) {
+            pk.setZ(newLoc.z());
+            locLastSent.z = newLoc.z();
+        }
+        if (moveFlags.contains(HAS_PITCH)) {
+            pk.setPitch((float) newLoc.pitch());
+            locLastSent.pitch = newLoc.pitch();
+        }
+        if (moveFlags.contains(HAS_YAW)) {
+            pk.setYaw((float) newLoc.yaw());
+            locLastSent.yaw = newLoc.yaw();
+        }
+        if (moveFlags.contains(HAS_HEAD_YAW)) {
+            pk.setHeadYaw((float) newLoc.headYaw());
+            locLastSent.headYaw = newLoc.headYaw();
+        }
+        if (onGround) pk.getFlags().add(ON_GROUND);
         sendPacketToViewers(pk);
+    }
+
+    protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Location3fc newLoc) {
+        var flags = EnumSet.noneOf(MoveEntityDeltaPacket.Flag.class);
+        var settings = Server.getInstance().getServerSettings().entitySettings().physicsEngineSettings();
+        var diffPositionThreshold = settings.diffPositionThreshold();
+        var diffRotationThreshold = settings.diffRotationThreshold();
+        if (abs(locLastSent.x() - newLoc.x()) > diffPositionThreshold) flags.add(HAS_X);
+        if (abs(locLastSent.y() - newLoc.y()) > diffPositionThreshold) flags.add(HAS_Y);
+        if (abs(locLastSent.z() - newLoc.z()) > diffPositionThreshold) flags.add(HAS_Z);
+        if (abs(locLastSent.yaw() - newLoc.yaw()) > diffRotationThreshold) flags.add(HAS_YAW);
+        if (abs(locLastSent.pitch() - newLoc.pitch()) > diffRotationThreshold) flags.add(HAS_PITCH);
+        if (enableHeadYaw() && abs(locLastSent.headYaw() - newLoc.headYaw()) > diffRotationThreshold) flags.add(HAS_HEAD_YAW);
+        return flags;
     }
 
     @Override

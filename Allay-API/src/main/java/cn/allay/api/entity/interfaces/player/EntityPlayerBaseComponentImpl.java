@@ -149,9 +149,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3fc newLoc) {
-        var offsetLoc = new Location3f(newLoc).add(0, getBaseOffset(), 0);
-        super.broadcastMoveToViewers(moveFlags, offsetLoc);
+    public void broadcastMoveToViewers(Location3fc newLoc) {
+        super.broadcastMoveToViewers(new Location3f(newLoc).add(0, getBaseOffset(), 0));
     }
 
     @Override
