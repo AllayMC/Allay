@@ -41,6 +41,8 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
@@ -637,6 +639,15 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                         loc.world().addEntity(entity);
                     }
                     player.sendRawMessage("TPS: " + loc.world().getTps() + ", Entity Count: " + loc.world().getEntities().size());
+                }
+                if (packet.getMessage().equals("test2")) {
+                    player.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
+                    player.sendEntityFlags(EntityFlag.USING_ITEM);
+                    var pk = new SetEntityDataPacket();
+                    pk.setRuntimeEntityId(player.getUniqueId());
+                    pk.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
+                    pk.setTick(Server.getInstance().getTicks());
+                    Server.getInstance().broadcastPacket(pk);
                 }
             }
             return PacketSignal.HANDLED;

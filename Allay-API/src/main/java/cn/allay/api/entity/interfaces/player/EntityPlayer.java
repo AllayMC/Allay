@@ -7,7 +7,6 @@ import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.*;
 import cn.allay.api.data.VanillaEntityId;
 import cn.allay.api.entity.Entity;
-import cn.allay.api.entity.component.attribute.EntityAttributeComponent;
 import cn.allay.api.entity.component.attribute.EntityAttributeComponentImpl;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponentImpl;
@@ -32,7 +31,7 @@ public interface EntityPlayer extends
         Entity,
         EntityPlayerBaseComponent,
         EntityPlayerNetworkComponent,
-        EntityAttributeComponent,
+        EntityPlayerAttributeComponent,
         EntityContainerHolderComponent,
         EntityContainerViewerComponent {
     EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder

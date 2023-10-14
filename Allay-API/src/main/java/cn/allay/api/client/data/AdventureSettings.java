@@ -89,8 +89,8 @@ public class AdventureSettings {
         updateAdventureSettingsPacket.setNoPvM(this.get(Type.NO_PVM));
         updateAdventureSettingsPacket.setShowNameTags(this.get(Type.SHOW_NAME_TAGS));
 
-        player.handleChunkPacket(updateAbilitiesPacket);
-        player.handleChunkPacket(updateAdventureSettingsPacket);
+        player.sendPacket(updateAbilitiesPacket);
+        player.sendPacket(updateAdventureSettingsPacket);
     }
 
     @Getter

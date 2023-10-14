@@ -274,7 +274,7 @@ public final class AllayServer implements Server {
     @Override
     public void broadcastPacket(BedrockPacket packet) {
         for (var player : players.values()) {
-            player.handleChunkPacket(packet);
+            player.sendPacket(packet);
         }
     }
 

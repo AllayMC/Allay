@@ -87,7 +87,7 @@ public interface Server extends TaskCreator {
                 playerListPacket.getEntries().add(entry);
             }
         });
-        player.handleChunkPacket(playerListPacket);
+        player.sendPacket(playerListPacket);
     }
 
     void broadcastPacket(BedrockPacket packet);

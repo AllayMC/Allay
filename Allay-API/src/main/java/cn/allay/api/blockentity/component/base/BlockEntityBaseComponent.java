@@ -48,7 +48,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
     }
 
     default void sendBlockEntityDataPacketTo(EntityPlayer player) {
-        player.handleChunkPacket(createBlockEntityDataPacket());
+        player.sendPacket(createBlockEntityDataPacket());
     }
 
     default void sendBlockEntityDataPacketToAll() {

@@ -168,7 +168,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return metadata;
     }
 
-    protected void sendEntityData(EntityDataType<?>... dataTypes) {
+    @Override
+    public void sendEntityData(EntityDataType<?>... dataTypes) {
         if (viewers.isEmpty()) return;
         var pk = new SetEntityDataPacket();
         pk.setRuntimeEntityId(uniqueId);
@@ -179,7 +180,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         sendPacketToViewers(pk);
     }
 
-    protected void sendEntityFlags(EntityFlag... flags) {
+    @Override
+    public void sendEntityFlags(EntityFlag... flags) {
         if (viewers.isEmpty()) return;
         var pk = new SetEntityDataPacket();
         pk.setRuntimeEntityId(uniqueId);
@@ -242,7 +244,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void spawnTo(EntityPlayer player) {
         var pk = createSpawnPacket();
-        player.handleChunkPacket(pk);
+        player.sendPacket(pk);
         viewers.put(player.getUniqueId(), player);
     }
 
@@ -250,7 +252,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public void despawnFrom(EntityPlayer player) {
         var pk = new RemoveEntityPacket();
         pk.setUniqueEntityId(uniqueId);
-        player.handleChunkPacket(pk);
+        player.sendPacket(pk);
         viewers.remove(player.getUniqueId());
     }
 
@@ -274,7 +276,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void sendPacketToViewers(BedrockPacket packet) {
-        viewers.values().forEach(client -> client.handleChunkPacket(packet));
+        viewers.values().forEach(client -> client.sendPacket(packet));
     }
 
     @Override
