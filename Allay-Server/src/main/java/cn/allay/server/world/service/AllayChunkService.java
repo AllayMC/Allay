@@ -155,18 +155,7 @@ public class AllayChunkService implements ChunkService {
     @SlowOperation
     @Override
     public Chunk getChunkImmediately(int x, int z) {
-        Chunk chunk = getChunk(x, z);
-        if (chunk == null) {
-            CompletableFuture<Chunk> chunkCompletableFuture = loadingChunks.get(HashUtils.hashXZ(x, z));
-            try {
-                if (chunkCompletableFuture != null) {
-                    return chunkCompletableFuture.get();
-                }
-                return prepareAndSetChunk(x, z, worldStorage.readChunk(x, z).get());
-            } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException(e);
-            }
-        } else return chunk;
+        return getOrLoadChunk(x, z).join();
     }
 
     @Override
