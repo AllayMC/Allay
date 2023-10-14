@@ -15,4 +15,6 @@ public interface CommandHandler {
     <T> void registerValueResolver(@NotNull Class<T> type, @NotNull ValueResolver<T> resolver);
 
     void register(@NotNull Object... commands);
+
+    void dispatch(@NotNull CommandSender sender, @NotNull String command);
 }

@@ -16,6 +16,10 @@ public interface CommandSender {
         return CommandHandler.getInstance();
     }
 
+    default void dispatch(String command) {
+        this.getCommandHandler().dispatch(this, command);
+    }
+
     default <T extends CommandSender> T as(@NotNull Class<T> type) {
         return type.cast(this);
     }

@@ -15,6 +15,8 @@ import org.jline.reader.LineReaderBuilder;
 @Slf4j
 public class AllayTerminalConsole extends SimpleTerminalConsole {
 
+    private static final ConsoleSender SENDER = new ConsoleSender();
+
     protected Server server;
 
     public AllayTerminalConsole(Server server) {
@@ -28,6 +30,9 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
 
     @Override
     protected void runCommand(String s) {
+        SENDER.dispatch(s);
+
+        // TODO: remove this
         if (s.equalsIgnoreCase("stop")) {
             log.info("Server ShutDown...");
             shutdown();
