@@ -1,5 +1,7 @@
 package cn.allay.api.entity.interfaces.player;
 
+import cn.allay.api.component.annotation.ComponentedObject;
+import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.impl.*;
@@ -29,6 +31,7 @@ import static cn.allay.api.item.interfaces.ItemAirStack.AIR_TYPE;
 public interface EntityPlayer extends
         Entity,
         EntityPlayerBaseComponent,
+        EntityPlayerNetworkComponent,
         EntityAttributeComponent,
         EntityContainerHolderComponent,
         EntityContainerViewerComponent {
@@ -39,14 +42,25 @@ public interface EntityPlayer extends
                     EntityPlayerBaseComponentImpl::new,
                     EntityPlayerBaseComponentImpl.class
             )
+            .addComponent(
+                    initInfo -> new EntityPlayerNetworkComponentImpl(),
+                    EntityPlayerNetworkComponentImpl.class
+            )
             .addComponent(info -> new EntityAttributeComponentImpl(basicAttributes()), EntityAttributeComponentImpl.class)
             .addComponent(info -> new EntityContainerHolderComponentImpl(
-                            new PlayerInventoryContainer(((EntityPlayerInitInfo) info).getClient()),
                             new PlayerCursorContainer(),
                             new PlayerCreatedOutputContainer(),
                             new PlayerArmorContainer(),
                             new PlayerOffhandContainer()
-                    ),
+                    ) {
+                        @ComponentedObject
+                        private EntityPlayer player;
+
+                        @Override
+                        public void onInitFinish(ComponentInitInfo initInfo) {
+                            addContainer(new PlayerInventoryContainer(player));
+                        }
+                    },
                     EntityContainerHolderComponentImpl.class)
             .addComponent(info -> new EntityPlayerContainerViewerComponentImpl(), EntityPlayerContainerViewerComponentImpl.class)
             .build();
@@ -94,14 +108,13 @@ public interface EntityPlayer extends
             item = EMPTY_SLOT_PLACE_HOLDER;
             container.setItemStack(slot, item);
         }
-        var client = getClient();
-        var world = client.getWorld();
-        var playerLoc = client.getLocation();
+        var playerLoc = getLocation();
+        var world = playerLoc.world();
         var entityItem = EntityItem.ITEM_TYPE.createEntity(
                 SimpleEntityInitInfo
                         .builder()
                         .world(world)
-                        .pos(playerLoc.x(), playerLoc.y() + client.getPlayerEntity().getEyeHeight() - 0.25f, playerLoc.z())
+                        .pos(playerLoc.x(), playerLoc.y() + this.getEyeHeight() - 0.25f, playerLoc.z())
                         .motion(MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f))
                         .build()
         );

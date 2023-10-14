@@ -246,7 +246,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     protected void tryConsumeItem(EntityPlayer player, ItemStack itemStack) {
-        if (player == null || player.getClient().getGameType() != GameType.CREATIVE)
+        if (player == null || player.getGameType() != GameType.CREATIVE)
             itemStack.setCount(itemStack.getCount() - 1);
     }
 

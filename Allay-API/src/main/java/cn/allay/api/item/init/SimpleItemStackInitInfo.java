@@ -104,7 +104,7 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
         }
 
         public Builder autoAssignStackNetworkId(boolean autoAssignStackNetworkId) {
-            this.stackNetworkId = 0;
+            if (autoAssignStackNetworkId) this.stackNetworkId = 0;
             this.autoAssignStackNetworkId = autoAssignStackNetworkId;
             return this;
         }

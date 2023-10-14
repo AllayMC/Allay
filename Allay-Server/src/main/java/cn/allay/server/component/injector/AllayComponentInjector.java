@@ -1,9 +1,7 @@
 package cn.allay.server.component.injector;
 
-import cn.allay.api.component.annotation.ComponentEventListener;
-import cn.allay.api.component.annotation.Dependency;
-import cn.allay.api.component.annotation.DoNotInject;
-import cn.allay.api.component.annotation.Manager;
+import cn.allay.api.component.annotation.ComponentedObject;
+import cn.allay.api.component.annotation.*;
 import cn.allay.api.component.exception.ComponentInjectException;
 import cn.allay.api.component.interfaces.*;
 import cn.allay.api.identifier.Identifier;
@@ -194,7 +192,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
 
     protected DynamicType.Builder<T> afterInject(List<ComponentProvider<? extends Component>> providers, DynamicType.Builder<T> bb) {
-        bb = bb.implement(ComponentedObject.class)
+        bb = bb.implement(cn.allay.api.component.interfaces.ComponentedObject.class)
                 .method(named("getComponents"))
                 .intercept(FieldAccessor.ofField(COMPONENT_LIST_FIELD_NAME));
         return bb;
@@ -271,11 +269,27 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             List<? extends Component> components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
             injectComponentInstances(instance, components);
             var componentManager = new AllayComponentManager<>(instance);
-            injectComponentManager(componentManager, components);
+            injectComponentManagerAndSetUpListeners(componentManager, components);
+            injectComponentedObject(instance, components);
             components.forEach(component -> component.onInitFinish(initInfo));
         }
 
-        protected void injectComponentManager(AllayComponentManager<T> manager, List<? extends Component> components) {
+        protected void injectComponentedObject(T instance, List<? extends Component> components) {
+            for (var component : components) {
+                for (var field : ReflectionUtils.getAllFields(component.getClass())) {
+                    if (field.isAnnotationPresent(ComponentedObject.class)) {
+                        try {
+                            field.setAccessible(true);
+                            field.set(component, instance);
+                        } catch (IllegalAccessException e) {
+                            throw new ComponentInjectException("Cannot inject componented object to component: " + component.getClass().getName(), e);
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void injectComponentManagerAndSetUpListeners(AllayComponentManager<T> manager, List<? extends Component> components) {
             for (var component : components) {
                 for (var field : ReflectionUtils.getAllFields(component.getClass())) {
                     if (field.isAnnotationPresent(Manager.class)) {

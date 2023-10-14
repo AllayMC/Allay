@@ -4,8 +4,8 @@ import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.data.BlockStateWithPos;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
-import cn.allay.api.client.Client;
 import cn.allay.api.entity.Entity;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.math.position.Position3i;
 import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.scheduler.Scheduler;
@@ -100,12 +100,12 @@ public interface World {
         return Collections.unmodifiableMap(entities);
     }
 
-    void addClient(Client client);
+    void addPlayer(EntityPlayer player);
 
-    void removeClient(Client client);
+    void removePlayer(EntityPlayer player);
 
     @UnmodifiableView
-    Collection<Client> getClients();
+    Collection<EntityPlayer> getPlayers();
 
     void close();
 
@@ -159,8 +159,8 @@ public interface World {
         }
     }
 
-    default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, Client client) {
-        client.sendPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
+    default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, EntityPlayer player) {
+        player.handleChunkPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
     }
 
     default BlockState getBlockState(Vector3ic pos) {

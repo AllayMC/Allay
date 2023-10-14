@@ -1,8 +1,8 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.client.Client;
 import cn.allay.api.container.Container;
 import cn.allay.api.container.FullContainerType;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.item.ItemStack;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -26,13 +26,13 @@ import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.respons
 public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
     @Override
-    public ItemStackResponse handle(T action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
+    public ItemStackResponse handle(T action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
         int slot1 = action.getSource().getSlot();
         int stackNetworkId1 = action.getSource().getStackNetworkId();
         int slot2 = action.getDestination().getSlot();
         int stackNetworkId2 = action.getDestination().getStackNetworkId();
-        var source = client.getPlayerEntity().getReachableContainerBySlotType(action.getSource().getContainer());
-        var destination = client.getPlayerEntity().getReachableContainerBySlotType(action.getDestination().getContainer());
+        var source = player.getReachableContainerBySlotType(action.getSource().getContainer());
+        var destination = player.getReachableContainerBySlotType(action.getDestination().getContainer());
         int count = action.getCount();
         var sourItem = source.getItemStack(slot1);
         if (sourItem.getItemType() == AIR_TYPE) {

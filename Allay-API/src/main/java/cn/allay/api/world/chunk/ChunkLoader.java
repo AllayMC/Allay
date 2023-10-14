@@ -5,6 +5,7 @@ import cn.allay.api.math.location.Location3fc;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -42,7 +43,9 @@ public interface ChunkLoader {
 
     void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler);
 
-    default void sendPacket(BedrockPacket packet) {}
+    @ApiStatus.Internal
+    void handleChunkPacket(BedrockPacket packet);
 
-    default void sendPacketImmediately(BedrockPacket packet) {}
+    @ApiStatus.Internal
+    void handleChunkPacketImmediately(BedrockPacket packet);
 }

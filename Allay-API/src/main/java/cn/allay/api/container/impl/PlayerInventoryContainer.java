@@ -1,8 +1,8 @@
 package cn.allay.api.container.impl;
 
-import cn.allay.api.client.Client;
 import cn.allay.api.container.BaseContainer;
 import cn.allay.api.container.FullContainerType;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.item.ItemStack;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,11 +19,11 @@ public class PlayerInventoryContainer extends BaseContainer {
     @Setter
     @Range(from = 0, to = 8)
     protected int handSlot = 0;
-    protected Client client;
+    protected EntityPlayer player;
 
-    public PlayerInventoryContainer(Client client) {
+    public PlayerInventoryContainer(EntityPlayer player) {
         super(FullContainerType.PLAYER_INVENTORY);
-        this.client = client;
+        this.player = player;
     }
 
     public ItemStack getItemInHand() {
@@ -38,8 +38,8 @@ public class PlayerInventoryContainer extends BaseContainer {
     public void onSlotChange(int slot) {
         super.onSlotChange(slot);
         //因为尽管客户端没有打开player inventory，但是他始终能看到自己的物品栏。所以说我们需要给客户端也发送库存包
-        if (!viewers.containsValue(client.getPlayerEntity())) {
-            client.getPlayerEntity().onSlotChange(this, slot);
+        if (!viewers.containsValue(player)) {
+            player.onSlotChange(this, slot);
         }
     }
 }

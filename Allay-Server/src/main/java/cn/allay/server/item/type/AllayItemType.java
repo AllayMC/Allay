@@ -88,7 +88,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @SneakyThrows
     @Override
     public T createItemStack(ItemStackInitInfo<T> info) {
-        info.setItemType(this);
+        //"info" for ItemAirType is useless and can be null
+        if (info != null) info.setItemType(this);
         return injectedClass.cast(constructorMethodHandle.invokeExact(info));
     }
 

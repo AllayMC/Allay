@@ -22,14 +22,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(AllayTestExtension.class)
 public class ContainerTest {
 
-    FullContainerType<Container> testContainerType = FullContainerType
+    static FullContainerType<Container> testContainerType = FullContainerType
             .builder()
             .size(36)
             // Here may throw an exception if we implemented lab table in the future
             .mapAllSlotToType(ContainerSlotType.LAB_TABLE_INPUT)
             .build();
 
-    BaseContainer container = new BaseContainer(testContainerType);
+    static BaseContainer container = new BaseContainer(testContainerType);
 
     @Test
     void testEmptySlotPlaceHolder() {

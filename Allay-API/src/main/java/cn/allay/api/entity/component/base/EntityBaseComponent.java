@@ -1,9 +1,9 @@
 package cn.allay.api.entity.component.base;
 
 import cn.allay.api.block.data.BlockFace;
-import cn.allay.api.client.Client;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponent;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.math.location.Location3fc;
@@ -64,7 +64,7 @@ public interface EntityBaseComponent extends EntityComponent {
     }
 
     @UnmodifiableView
-    Map<Long, Client> getViewers();
+    Map<Long, EntityPlayer> getViewers();
 
     Vector3fc getMotion();
 
@@ -86,13 +86,13 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void setOnGround(boolean onGround);
 
-    void spawnTo(Client client);
+    void spawnTo(EntityPlayer player);
 
-    default void spawnTo(Set<Client> clients) {
-        clients.forEach(this::spawnTo);
+    default void spawnTo(Set<EntityPlayer> players) {
+        players.forEach(this::spawnTo);
     }
 
-    void despawnFrom(Client client);
+    void despawnFrom(EntityPlayer player);
 
     void despawnFromAll();
 

@@ -1,7 +1,6 @@
 package cn.allay.api.container;
 
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
@@ -22,7 +21,7 @@ import java.util.function.Consumer;
  */
 public interface Container {
 
-    ItemStack EMPTY_SLOT_PLACE_HOLDER = ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(0).stackNetworkId(0).build());
+    ItemStack EMPTY_SLOT_PLACE_HOLDER = ItemAirStack.AIR_TYPE.createItemStack(null);
 
     FullContainerType<?> getContainerType();
 
