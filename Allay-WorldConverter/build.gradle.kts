@@ -1,11 +1,11 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
 
 plugins {
-    id("application")
+    application
 }
 
-description = "worldconverter"
 group = "cn.allay"
+description = "worldconverter"
 version = "0.0.1"
 
 application {
@@ -21,22 +21,21 @@ dependencies {
     implementation(files("lib/KotlinLib.jar"))
 }
 
-//Hiding this task should use runShadow
+// Hiding this task should use runShadow
 tasks.named("run") {
     group = ""
 }
 
-//disable ,please use `java -jar` to start directly
+// disable, please use `java -jar` to start directly
 tasks.startScripts {
     group = ""
     enabled = false
 }
-//disable
+// disable
 tasks.startShadowScripts {
     group = ""
     enabled = false
 }
-
 tasks.distTar { enabled = false }
 tasks.distZip { enabled = false }
 tasks.shadowDistTar { enabled = false }

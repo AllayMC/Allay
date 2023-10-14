@@ -1,17 +1,15 @@
 plugins {
-    id("java-library")
+    `java-library`
 }
 
-description = "api"
 group = "cn.allay"
+description = "api"
 version = "0.0.1"
 
 dependencies {
     api(libs.network) {
-        //use allay nbt
-        exclude(group = "org.cloudburstmc", module = "nbt")
-        //use it.unimi.dsi.fastutil
-        exclude(group = "com.nukkitx.fastutil")
+        exclude(group = "org.cloudburstmc", module = "nbt") // use allay nbt
+        exclude(group = "com.nukkitx.fastutil") // use it.unimi.dsi.fastutil
     }
     api(libs.slf4j.api)
     api(libs.disruptor)

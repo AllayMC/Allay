@@ -1,6 +1,7 @@
-description = "codegen"
 group = "cn.allay"
+description = "codegen"
 version = "0.0.1"
+
 dependencies {
     implementation(libs.javapoet)
     implementation(libs.nbt)

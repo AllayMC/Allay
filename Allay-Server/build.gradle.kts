@@ -1,14 +1,14 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
 
 plugins {
-    id("java-library")
-    id("application")
-    id("me.champeau.jmh") version ("0.7.1")
-    id("com.gorylenko.gradle-git-properties") version ("2.4.1")
+    `java-library`
+    application
+    id("me.champeau.jmh") version "0.7.1"
+    id("com.gorylenko.gradle-git-properties") version "2.4.1"
 }
 
-description = "server"
 group = "cn.allay"
+description = "server"
 version = "0.0.1"
 
 application {
@@ -40,22 +40,22 @@ tasks.processResources {
     exclude("**/unpacked/**")
 }
 
-//disable ,please use `java -jar` to start directly
+// disable, please use `java -jar` to start directly
 tasks.startScripts {
     group = ""
     enabled = false
 }
-//disable
+// disable
 tasks.startShadowScripts {
     group = ""
     enabled = false
 }
-//disable
+// disable
 tasks.distTar {
     group = ""
     enabled = false
 }
-//disable
+// disable
 tasks.distZip {
     group = ""
     enabled = false
@@ -70,14 +70,14 @@ tasks.sourcesJar {
 }
 
 tasks.jmh {
-    //Add the executed test case
+    // Add the executed test case
     includes.add("AABBTreeJMHTest")
-    //includes.add("BlockStateUpdateJMHTest")
-    //includes.add("ChunkJMHTest")
-    //includes.add("ThroughList2Array")
+    // includes.add("BlockStateUpdateJMHTest")
+    // includes.add("ChunkJMHTest")
+    // includes.add("ThroughList2Array")
 }
 
-//Hiding this task should use runShadow
+// Hiding this task should use runShadow
 tasks.named("run") {
     group = ""
 }
