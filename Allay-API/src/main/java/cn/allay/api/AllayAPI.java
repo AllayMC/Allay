@@ -6,6 +6,7 @@ import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
 import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
+import cn.allay.api.command.CommandHandler;
 import cn.allay.api.component.interfaces.ComponentInjector;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
@@ -152,8 +153,10 @@ public final class AllayAPI {
 
         //Biome
         requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);
+
+        // Commands
+        requireImpl(CommandHandler.class, CommandHandler.INSTANCE::set);
     }
 
-    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {
-    }
+    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {}
 }

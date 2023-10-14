@@ -8,6 +8,7 @@ import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
 import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
+import cn.allay.api.command.CommandHandler;
 import cn.allay.api.component.interfaces.ComponentInjector;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
@@ -24,6 +25,7 @@ import cn.allay.server.block.type.AllayBlockType;
 import cn.allay.server.block.type.AllayBlockTypeRegistry;
 import cn.allay.server.blockentity.type.AllayBlockEntityType;
 import cn.allay.server.blockentity.type.AllayBlockEntityTypeRegistry;
+import cn.allay.server.command.AllayCommandHandler;
 import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.entity.type.AllayEntityType;
 import cn.allay.server.entity.type.AllayEntityTypeRegistry;
@@ -84,6 +86,9 @@ public final class Allay {
 
         //Biome
         api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
+
+        // Commands
+        api.bind(CommandHandler.class, AllayCommandHandler::new);
         api.implement("Allay");
         ComponentClassCacheUtils.saveCacheMapping();
     }
