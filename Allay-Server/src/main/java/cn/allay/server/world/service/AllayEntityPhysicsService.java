@@ -506,7 +506,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
         if (!world.isInWorld(newLoc.x(), newLoc.y(), newLoc.z())) return false;
-        //TODO: bug!!
         entity.broadcastMoveToViewers(newLoc);
         entity.setLocation(newLoc);
         return true;
