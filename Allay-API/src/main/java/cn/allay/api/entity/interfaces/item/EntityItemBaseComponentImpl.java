@@ -9,10 +9,8 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
 
 import javax.annotation.Nullable;
-import java.util.function.Function;
 
 import static cn.allay.api.item.ItemHelper.fromNBT;
 
@@ -45,7 +43,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
         if (age != -1) {
             age++;
             if (age >= MAX_AGE) {
-                location.world.removeEntity(manager.getComponentedObject());
+                location.world.removeEntity(thisEntity);
             }
         }
         if (pickupDelay > 0) pickupDelay--;

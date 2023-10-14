@@ -1,6 +1,6 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.client.Client;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftResultsDeprecatedAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
@@ -20,7 +20,7 @@ public class CraftResultsDeprecatedActionProcessor implements ContainerActionPro
     }
 
     @Override
-    public ItemStackResponse handle(CraftResultsDeprecatedAction action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
+    public ItemStackResponse handle(CraftResultsDeprecatedAction action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
         //Indicate that subsequent destroy action do not return a response
         chainInfo.put(ItemStackRequestActionType.DESTROY, null);
         return null;

@@ -16,7 +16,6 @@ import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.joml.Vector3f;
-import org.joml.Vector3ic;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
@@ -512,6 +511,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
         if (!world.isInWorld(newLoc.x(), newLoc.y(), newLoc.z())) return false;
+        //TODO: bug!!
         entity.broadcastMoveToViewers(computeMoveFlags(entity, entity.getLocation(), newLoc), newLoc);
         entity.setLocation(newLoc);
         return true;

@@ -1,6 +1,6 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.client.Client;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DestroyAction;
@@ -29,12 +29,12 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
     }
 
     @Override
-    public ItemStackResponse handle(DestroyAction action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
-        if (client.getGameType() != GameType.CREATIVE) {
+    public ItemStackResponse handle(DestroyAction action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
+        if (player.getGameType() != GameType.CREATIVE) {
             log.warn("only Creative Mode can destroy item");
             return error(requestId);
         }
-        var container = client.getPlayerEntity().getContainerBySlotType(action.getSource().getContainer());
+        var container = player.getContainerBySlotType(action.getSource().getContainer());
         var count = action.getCount();
         var slot = action.getSource().getSlot();
         var item = container.getItemStack(slot);
