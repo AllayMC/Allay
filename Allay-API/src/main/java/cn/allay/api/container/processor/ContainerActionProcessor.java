@@ -1,6 +1,6 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.client.Client;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
@@ -18,7 +18,7 @@ import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.respons
 public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
     ItemStackRequestActionType getType();
 
-    ItemStackResponse handle(T action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo);
+    ItemStackResponse handle(T action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo);
 
     default ItemStackResponse error(int requestId) {
         return new ItemStackResponse(ERROR, requestId, List.of());

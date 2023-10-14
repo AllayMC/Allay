@@ -1,7 +1,7 @@
 package cn.allay.server.world;
 
-import cn.allay.api.client.Client;
 import cn.allay.api.entity.Entity;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.math.position.Position3i;
 import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.scheduler.Scheduler;
@@ -57,7 +57,7 @@ public class AllayWorld implements World {
     protected final Scheduler worldScheduler;
     @Getter
     protected final Thread worldMainThread;
-    protected final Set<Client> clients;
+    protected final Set<EntityPlayer> players;
     protected final GameLoop gameLoop;
 
     private AllayWorld(Server server,
@@ -81,7 +81,7 @@ public class AllayWorld implements World {
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.worldScheduler = new AllayScheduler();
-        this.clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        this.players = Collections.newSetFromMap(new ConcurrentHashMap<>());
         this.worldMainThread = Thread.ofPlatform()
                 .name("World Thread - " + this.worldData.getLevelName())
                 .unstarted(gameLoop::startLoop);
@@ -169,7 +169,7 @@ public class AllayWorld implements World {
         if (chunk == null)
             throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
         chunk.addEntity(entity);
-        entity.spawnTo(chunk.getClientChunkLoaders());
+        entity.spawnTo(chunk.getPlayerChunkLoaders());
         entityPhysicsService.addEntity(entity);
     }
 
@@ -184,22 +184,22 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public void addClient(Client client) {
-        clients.add(client);
-        chunkService.addChunkLoader(client);
-        addEntity(client.getPlayerEntity());
+    public void addPlayer(EntityPlayer player) {
+        players.add(player);
+        chunkService.addChunkLoader(player);
+        addEntity(player);
     }
 
     @Override
-    public void removeClient(Client client) {
-        removeEntity(client.getPlayerEntity());
-        chunkService.removeChunkLoader(client);
-        clients.remove(client);
+    public void removePlayer(EntityPlayer player) {
+        removeEntity(player);
+        chunkService.removeChunkLoader(player);
+        players.remove(player);
     }
 
     @Override
-    public Collection<Client> getClients() {
-        return Collections.unmodifiableCollection(clients);
+    public Collection<EntityPlayer> getPlayers() {
+        return Collections.unmodifiableCollection(players);
     }
 
     @Override

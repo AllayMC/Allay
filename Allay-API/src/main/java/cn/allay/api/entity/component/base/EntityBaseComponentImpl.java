@@ -1,7 +1,7 @@
 package cn.allay.api.entity.component.base;
 
-import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.component.annotation.ComponentedObject;
 import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.annotation.Manager;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
@@ -12,11 +12,13 @@ import cn.allay.api.entity.component.attribute.EntityAttributeComponent;
 import cn.allay.api.entity.event.EntityLoadNBTEvent;
 import cn.allay.api.entity.event.EntitySaveNBTEvent;
 import cn.allay.api.entity.init.EntityInitInfo;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.location.Location3fc;
+import cn.allay.api.server.Server;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -36,10 +38,8 @@ import org.joml.primitives.AABBfc;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
 
 /**
  * Allay Project 2023/5/26
@@ -55,6 +55,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Manager
     protected ComponentManager<T> manager;
+    @ComponentedObject
+    protected T thisEntity;
 
     @Dependency(soft = true)
     @Nullable
@@ -65,12 +67,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected final Metadata metadata;
     protected EntityType<T> entityType;
     protected AABBfc aabb;
-    protected Map<Long, Client> viewers = new Long2ObjectOpenHashMap<>();
+    protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
-        Objects.requireNonNull(info.world(), "World cannot be null!");
         this.location = new Location3f(0, 0, 0, info.world());
         this.entityType = info.getEntityType();
         this.aabb = aabb;
@@ -138,7 +139,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
             var oldChunk = location.world().getChunkService().getChunk(oldChunkX, oldChunkZ);
             var newChunk = location.world().getChunkService().getChunk(newChunkX, newChunkZ);
-            if (newChunk != null) newChunk.addEntity(manager.getComponentedObject());
+            if (newChunk != null) newChunk.addEntity(thisEntity);
             else {
                 log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
                 //不允许移动到未加载的区块中。因为entity引用由区块持有，移动到未加载的区块会导致entity丢失
@@ -165,22 +166,24 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     protected void sendEntityData(EntityDataType<?>... dataTypes) {
+        if (viewers.isEmpty()) return;
         var pk = new SetEntityDataPacket();
         pk.setRuntimeEntityId(uniqueId);
         for (EntityDataType<?> type : dataTypes) {
             pk.getMetadata().put(type, metadata.getEntityDataMap().get(type));
         }
-        pk.setTick(location.world().getServer().getTicks());
+        pk.setTick(Server.getInstance().getTicks());
         sendPacketToViewers(pk);
     }
 
     protected void sendEntityFlags(EntityFlag... flags) {
+        if (viewers.isEmpty()) return;
         var pk = new SetEntityDataPacket();
         pk.setRuntimeEntityId(uniqueId);
         for (EntityFlag flag : flags) {
             pk.getMetadata().setFlag(flag, metadata.getFlag(flag));
         }
-        pk.setTick(location.world().getServer().getTicks());
+        pk.setTick(Server.getInstance().getTicks());
         sendPacketToViewers(pk);
     }
 
@@ -203,7 +206,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public @UnmodifiableView Map<Long, Client> getViewers() {
+    public @UnmodifiableView Map<Long, EntityPlayer> getViewers() {
         return Collections.unmodifiableMap(viewers);
     }
 
@@ -234,18 +237,18 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public void spawnTo(Client client) {
+    public void spawnTo(EntityPlayer player) {
         var pk = createSpawnPacket();
-        client.sendPacket(pk);
-        viewers.put(client.getPlayerEntity().getUniqueId(), client);
+        player.handleChunkPacket(pk);
+        viewers.put(player.getUniqueId(), player);
     }
 
     @Override
-    public void despawnFrom(Client client) {
+    public void despawnFrom(EntityPlayer player) {
         var pk = new RemoveEntityPacket();
         pk.setUniqueEntityId(uniqueId);
-        client.sendPacket(pk);
-        viewers.remove(client.getPlayerEntity().getUniqueId());
+        player.handleChunkPacket(pk);
+        viewers.remove(player.getUniqueId());
     }
 
     @Override
@@ -268,12 +271,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void sendPacketToViewers(BedrockPacket packet) {
-        viewers.values().forEach(client -> client.sendPacket(packet));
+        viewers.values().forEach(client -> client.handleChunkPacket(packet));
     }
 
     @Override
     public void sendPacketToViewersImmediately(BedrockPacket packet) {
-        viewers.values().forEach(client -> client.sendPacketImmediately(packet));
+        viewers.values().forEach(client -> client.handleChunkPacketImmediately(packet));
     }
 
     @Override
@@ -316,6 +319,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                                 .build())
                 .putBoolean("OnGround", onGround);
         if (attributeComponent != null) {
+            //TODO: use component event
             builder.putList(
                     "Attributes",
                     NbtType.COMPOUND,

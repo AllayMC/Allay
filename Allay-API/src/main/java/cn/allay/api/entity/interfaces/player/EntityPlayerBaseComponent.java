@@ -1,11 +1,17 @@
 package cn.allay.api.entity.interfaces.player;
 
-import cn.allay.api.client.Client;
+import cn.allay.api.client.data.AdventureSettings;
+import cn.allay.api.client.skin.Skin;
 import cn.allay.api.entity.component.base.EntityBaseComponent;
+import cn.allay.api.world.chunk.ChunkLoader;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
+import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 import org.jetbrains.annotations.Range;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent {
-    Client getClient();
+import java.util.function.Function;
+
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
 
     void setSprinting(boolean sprinting);
 
@@ -41,8 +47,35 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
         return true;
     }
 
-    @Override
-    default boolean computeMovementServerSide() {
-        return getClient().computeMovementServerSide();
-    }
+    boolean computeMovementServerSide();
+
+    String getDisplayName();
+
+    void setDisplayName(String displayName);
+
+    Skin getSkin();
+
+    void setSkin(Skin skin);
+
+    boolean isOp();
+
+    void setOp(boolean op);
+
+    GameType getGameType();
+
+    void setGameType(GameType gameType);
+
+    AdventureSettings getAdventureSettings();
+
+    Function<SubChunkRequestPacket, SubChunkPacket> getSubChunkRequestHandler();
+
+    void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> subChunkRequestHandler);
+
+    void sendChat(EntityPlayer sender, String message);
+
+    void sendRawMessage(String message);
+
+    void sendTip(String message);
+
+    void sendPopup(String message);
 }

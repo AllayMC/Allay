@@ -8,7 +8,7 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.blockentity.component.BlockEntityComponent;
 import cn.allay.api.blockentity.type.BlockEntityType;
-import cn.allay.api.client.Client;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.math.position.Position3ic;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -47,8 +47,8 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         return packet;
     }
 
-    default void sendBlockEntityDataPacketTo(Client client) {
-        client.sendPacket(createBlockEntityDataPacket());
+    default void sendBlockEntityDataPacketTo(EntityPlayer player) {
+        player.handleChunkPacket(createBlockEntityDataPacket());
     }
 
     default void sendBlockEntityDataPacketToAll() {

@@ -1,7 +1,7 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.client.Client;
 import cn.allay.api.container.Container;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DropAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -28,8 +28,8 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
     }
 
     @Override
-    public ItemStackResponse handle(DropAction action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
-        Container container = client.getPlayerEntity().getReachableContainerBySlotType(action.getSource().getContainer());
+    public ItemStackResponse handle(DropAction action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
+        Container container = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var count = action.getCount();
         var slot = action.getSource().getSlot();
         var item = container.getItemStack(slot);
@@ -45,7 +45,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
             log.warn("cannot throw more items than the current amount!");
             return error(requestId);
         }
-        client.getPlayerEntity().forceDropItem(container, slot, count);
+        player.forceDropItem(container, slot, count);
         item = container.getItemStack(slot);
         return new ItemStackResponse(
                         OK,

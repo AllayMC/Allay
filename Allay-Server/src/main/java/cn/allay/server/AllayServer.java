@@ -1,21 +1,21 @@
 package cn.allay.server;
 
-import cn.allay.api.client.Client;
 import cn.allay.api.client.info.DeviceInfo;
 import cn.allay.api.client.skin.Skin;
+import cn.allay.api.entity.init.SimpleEntityInitInfo;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.network.NetworkServer;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldPool;
-import cn.allay.api.world.storage.ClientStorage;
-import cn.allay.server.client.AllayClient;
+import cn.allay.api.world.storage.PlayerStorage;
 import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.world.AllayWorld;
 import cn.allay.server.world.AllayWorldPool;
 import cn.allay.server.world.generator.flat.FlatWorldGenerator;
-import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentClientStorage;
+import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
 import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
@@ -42,14 +42,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 public final class AllayServer implements Server {
     private final boolean DEBUG;
-    private final Map<String, Client> clients;
+    private final Map<UUID, EntityPlayer> players;
     @Getter
     private final WorldPool worldPool;
     private final AtomicBoolean isRunning;
     //TODO: skin update
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap;
     @Getter
-    private final ClientStorage clientStorage;
+    private final PlayerStorage playerStorage;
     //执行CPU密集型任务的线程池
     @Getter
     private final ForkJoinPool computeThreadPool;
@@ -69,12 +69,12 @@ public final class AllayServer implements Server {
 
     private AllayServer() {
         DEBUG = false;
-        clients = new ConcurrentHashMap<>();
+        players = new ConcurrentHashMap<>();
         worldPool = new AllayWorldPool();
         isRunning = new AtomicBoolean(true);
         playerListEntryMap = new Object2ObjectOpenHashMap<>();
         //TODO: client storage
-        clientStorage = new AllayNonPersistentClientStorage();
+        playerStorage = new AllayNonPersistentPlayerStorage();
         computeThreadPool = new ForkJoinPool(
                 Runtime.getRuntime().availableProcessors() + 1,
                 pool -> {
@@ -163,14 +163,14 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public int getOnlineClientCount() {
-        return clients.size();
+    public int getOnlinePlayerCount() {
+        return players.size();
     }
 
     @Override
     @UnmodifiableView
-    public Map<String, Client> getOnlineClients() {
-        return Collections.unmodifiableMap(clients);
+    public Map<UUID, EntityPlayer> getOnlinePlayers() {
+        return Collections.unmodifiableMap(players);
     }
 
     private ServerSettings readServerSettings() {
@@ -194,21 +194,26 @@ public final class AllayServer implements Server {
 
     @Override
     public void onConnect(BedrockServerSession session) {
-        AllayClient.hold(session, this);
+        var player = EntityPlayer.PLAYER_TYPE.createEntity(
+                SimpleEntityInitInfo
+                        .builder()
+                        .build()
+        );
+        player.setClientSession(session);
     }
 
     @Override
-    public void onLoggedIn(Client client) {
-        clients.put(client.getName(), client);
-        networkServer.setPlayerCount(clients.size());
+    public void onLoggedIn(EntityPlayer player) {
+        players.put(player.getUuid(), player);
+        networkServer.setPlayerCount(players.size());
     }
 
     @Override
-    public void onDisconnect(Client client) {
-        if (!client.isLoggedIn()) return;
-        clients.remove(client.getName());
-        networkServer.setPlayerCount(clients.size());
-        var playerListEntry = playerListEntryMap.remove(client.getUuid());
+    public void onDisconnect(EntityPlayer player) {
+        if (!player.isLoggedIn()) return;
+        players.remove(player.getUuid());
+        networkServer.setPlayerCount(players.size());
+        var playerListEntry = playerListEntryMap.remove(player.getUuid());
         var pk = new PlayerListPacket();
         pk.setAction(PlayerListPacket.Action.REMOVE);
         pk.getEntries().add(playerListEntry);
@@ -216,14 +221,14 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void addToPlayerList(Client client) {
+    public void addToPlayerList(EntityPlayer player) {
         addToPlayerList(
-                client.getLoginData().getUuid(),
-                client.getPlayerEntity().getUniqueId(),
-                client.getName(),
-                client.getLoginData().getDeviceInfo(),
-                client.getLoginData().getXuid(),
-                client.getLoginData().getSkin()
+                player.getLoginData().getUuid(),
+                player.getUniqueId(),
+                player.getOriginName(),
+                player.getLoginData().getDeviceInfo(),
+                player.getLoginData().getXuid(),
+                player.getLoginData().getSkin()
         );
     }
 
@@ -246,12 +251,12 @@ public final class AllayServer implements Server {
         broadcastPacket(playerListPacket);
     }
 
-    public void removeFromPlayerList(Client client) {
+    public void removeFromPlayerList(EntityPlayer player) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.REMOVE);
-        playerListPacket.getEntries().add(new PlayerListPacket.Entry(client.getLoginData().getUuid()));
+        playerListPacket.getEntries().add(new PlayerListPacket.Entry(player.getLoginData().getUuid()));
         broadcastPacket(playerListPacket);
-        playerListEntryMap.remove(client.getLoginData().getUuid());
+        playerListEntryMap.remove(player.getLoginData().getUuid());
     }
 
     public void removeFromPlayerList(UUID uuid) {
@@ -268,8 +273,8 @@ public final class AllayServer implements Server {
 
     @Override
     public void broadcastPacket(BedrockPacket packet) {
-        for (var client : clients.values()) {
-            client.sendPacket(packet);
+        for (var player : players.values()) {
+            player.handleChunkPacket(packet);
         }
     }
 

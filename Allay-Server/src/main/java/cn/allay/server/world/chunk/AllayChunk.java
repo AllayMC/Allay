@@ -456,7 +456,7 @@ public class AllayChunk implements Chunk {
     @Override
     public void sendChunkPacket(BedrockPacket packet) {
         for (ChunkLoader chunkLoader : chunkLoaders) {
-            chunkLoader.sendPacket(packet);
+            chunkLoader.handleChunkPacket(packet);
         }
     }
 }

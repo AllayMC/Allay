@@ -1,12 +1,9 @@
 package cn.allay.api.entity.interfaces.player;
 
-import cn.allay.api.client.Client;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.Dependency;
-import cn.allay.api.component.annotation.Manager;
-import cn.allay.api.component.interfaces.ComponentInitInfo;
-import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.container.Container;
+import cn.allay.api.container.FixedContainerId;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.entity.component.container.EntityContainerHolderComponent;
 import cn.allay.api.entity.component.container.EntityContainerViewerComponent;
@@ -35,19 +32,15 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_viewer_component");
 
     protected byte idCounter = 0;
-    @Manager
-    protected ComponentManager<EntityPlayer> manager;
+    @Dependency
+    protected EntityPlayerBaseComponent baseComponent;
+    @Dependency
+    protected EntityPlayerNetworkComponent networkComponent;
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
-    protected Client client;
 
     protected HashBiMap<Byte, Container> id2ContainerBiMap = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
     protected HashBiMap<FullContainerType<?>, Container> type2ContainerBiMap = HashBiMap.create(new Object2ObjectOpenHashMap<>());
-
-    @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
-        client = manager.getComponentedObject().getClient();
-    }
 
     @Override
     public byte assignInventoryId() {
@@ -70,7 +63,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         var inventoryContentPacket = new InventoryContentPacket();
         inventoryContentPacket.setContainerId(containerId);
         inventoryContentPacket.setContents(container.toNetworkItemData());
-        client.sendPacket(inventoryContentPacket);
+        networkComponent.sendPacket(inventoryContentPacket);
     }
 
     @Override
@@ -79,7 +72,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         inventorySlotPacket.setContainerId(containerId);
         inventorySlotPacket.setSlot(slot);
         inventorySlotPacket.setItem(container.getItemStack(slot).toNetworkItemData());
-        client.sendPacket(inventorySlotPacket);
+        networkComponent.sendPacket(inventorySlotPacket);
     }
 
     @Override
@@ -99,10 +92,10 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         if (container.hasBlockPos()) {
             containerOpenPacket.setBlockPosition(MathUtils.JOMLVecTocbVec(container.getBlockPos()));
         } else {
-            var location = manager.getComponentedObject().getLocation();
+            var location = baseComponent.getLocation();
             containerOpenPacket.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
         }
-        client.sendPacket(containerOpenPacket);
+        networkComponent.sendPacket(containerOpenPacket);
 
         id2ContainerBiMap.put(assignedId, container);
         type2ContainerBiMap.put(container.getContainerType(), container);
@@ -119,7 +112,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
             throw new IllegalArgumentException("Trying to close a container which is not opened! Type: " + container.getContainerType());
         var containerClosePacket = new ContainerClosePacket();
         containerClosePacket.setId(assignedId);
-        client.sendPacket(containerClosePacket);
+        networkComponent.sendPacket(containerClosePacket);
 
         type2ContainerBiMap.remove(id2ContainerBiMap.remove(assignedId).getContainerType());
     }
@@ -127,8 +120,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @Override
     public void onSlotChange(Container container, int slot) {
         var id = id2ContainerBiMap.inverse().get(container);
-        //"0" is player's inventory
-        sendContentsWithSpecificContainerId(container, id != null ? id : 0, slot);
+        sendContentsWithSpecificContainerId(container, id != null ? id : FixedContainerId.PLAYER_INVENTORY, slot);
     }
 
     @Override

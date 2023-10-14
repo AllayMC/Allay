@@ -1,7 +1,7 @@
 package cn.allay.api.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
-import cn.allay.api.client.Client;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -28,8 +28,8 @@ public interface Chunk extends UnsafeChunk {
     Set<ChunkLoader> getChunkLoaders();
 
     @UnmodifiableView
-    default Set<Client> getClientChunkLoaders() {
-        return getChunkLoaders().stream().filter(Client.class::isInstance).map(Client.class::cast).collect(Collectors.toSet());
+    default Set<EntityPlayer> getPlayerChunkLoaders() {
+        return getChunkLoaders().stream().filter(EntityPlayer.class::isInstance).map(EntityPlayer.class::cast).collect(Collectors.toSet());
     }
 
     void addChunkLoader(ChunkLoader chunkLoader);
@@ -65,11 +65,11 @@ public interface Chunk extends UnsafeChunk {
         storage.writeChunk(this).join();
     }
 
-    default void spawnEntitiesTo(Client client) {
-        getEntities().values().forEach(client::spawnEntity);
+    default void spawnEntitiesTo(EntityPlayer player) {
+        getEntities().values().forEach(player::spawnEntity);
     }
 
-    default void despawnEntitiesFrom(Client client) {
-        getEntities().values().forEach(client::despawnEntity);
+    default void despawnEntitiesFrom(EntityPlayer player) {
+        getEntities().values().forEach(player::despawnEntity);
     }
 }

@@ -1,7 +1,7 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.client.Client;
 import cn.allay.api.container.Container;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.SwapAction;
@@ -27,9 +27,9 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
     }
 
     @Override
-    public ItemStackResponse handle(SwapAction action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
-        Container sourceContainer = client.getPlayerEntity().getReachableContainerBySlotType(action.getSource().getContainer());
-        Container destinationContainer = client.getPlayerEntity().getReachableContainerBySlotType(action.getDestination().getContainer());
+    public ItemStackResponse handle(SwapAction action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
+        Container sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
+        Container destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
         var sourceSlot = action.getSource().getSlot();
         var destinationSlot = action.getDestination().getSlot();
         var sourceItem = sourceContainer.getItemStack(sourceSlot);

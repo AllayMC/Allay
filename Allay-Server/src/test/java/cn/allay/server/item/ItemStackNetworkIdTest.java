@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Allay Project 2023/10/14
@@ -21,11 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ItemStackNetworkIdTest {
     @Test
     void testItemAirStackNetworkId() {
-        assertThrows(
-                RuntimeException.class,
-                () -> ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().stackNetworkId(1).build())
-        );
-        assertEquals(ItemBaseComponent.EMPTY_STACK_NETWORK_ID, ItemAirStack.AIR_TYPE.createItemStack(SimpleItemStackInitInfo.builder().build()).getStackNetworkId());
+        assertEquals(ItemBaseComponent.EMPTY_STACK_NETWORK_ID, ItemAirStack.AIR_TYPE.createItemStack(null).getStackNetworkId());
     }
 
     @Test

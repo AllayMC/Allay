@@ -1,6 +1,6 @@
 package cn.allay.api.client.data;
 
-import cn.allay.api.client.Client;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.AbilityLayer;
@@ -21,15 +21,15 @@ import java.util.Map;
  */
 public class AdventureSettings {
 
-    private final Client client;
+    private final EntityPlayer player;
     private final Map<Type, Boolean> values = new EnumMap<>(Type.class);
     @Getter
     private float walkSpeed = 0.1f;
     @Getter
     private float flySpeed = 0.05f;
 
-    public AdventureSettings(Client client) {
-        this.client = client;
+    public AdventureSettings(EntityPlayer player) {
+        this.player = player;
     }
 
     public AdventureSettings set(Type type, boolean value) {
@@ -52,9 +52,9 @@ public class AdventureSettings {
 
     public void update() {
         UpdateAbilitiesPacket updateAbilitiesPacket = new UpdateAbilitiesPacket();
-        updateAbilitiesPacket.setUniqueEntityId(this.client.getPlayerEntity().getUniqueId());
-        updateAbilitiesPacket.setCommandPermission(this.client.isOp() ? CommandPermission.ADMIN : CommandPermission.ANY);
-        updateAbilitiesPacket.setPlayerPermission(this.client.isOp() && this.client.getGameType() != GameType.SPECTATOR ? PlayerPermission.OPERATOR : PlayerPermission.MEMBER);
+        updateAbilitiesPacket.setUniqueEntityId(player.getUniqueId());
+        updateAbilitiesPacket.setCommandPermission(player.isOp() ? CommandPermission.ADMIN : CommandPermission.ANY);
+        updateAbilitiesPacket.setPlayerPermission(player.isOp() && player.getGameType() != GameType.SPECTATOR ? PlayerPermission.OPERATOR : PlayerPermission.MEMBER);
 
         AbilityLayer abilityLayer = new AbilityLayer();
         abilityLayer.setLayerType(AbilityLayer.Type.BASE);
@@ -69,11 +69,11 @@ public class AdventureSettings {
         abilityLayer.getAbilityValues().add(Ability.WALK_SPEED);
         abilityLayer.getAbilityValues().add(Ability.FLY_SPEED);
 
-        if (this.client.getGameType() == GameType.CREATIVE) {
+        if (player.getGameType() == GameType.CREATIVE) {
             abilityLayer.getAbilityValues().add(Ability.INSTABUILD);
         }
 
-        if (this.client.isOp()) {
+        if (player.isOp()) {
             abilityLayer.getAbilityValues().add(Ability.OPERATOR_COMMANDS);
         }
 
@@ -89,8 +89,8 @@ public class AdventureSettings {
         updateAdventureSettingsPacket.setNoPvM(this.get(Type.NO_PVM));
         updateAdventureSettingsPacket.setShowNameTags(this.get(Type.SHOW_NAME_TAGS));
 
-        this.client.sendPacket(updateAbilitiesPacket);
-        this.client.sendPacket(updateAdventureSettingsPacket);
+        player.handleChunkPacket(updateAbilitiesPacket);
+        player.handleChunkPacket(updateAdventureSettingsPacket);
     }
 
     @Getter

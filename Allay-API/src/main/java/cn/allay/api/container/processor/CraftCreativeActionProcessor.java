@@ -1,7 +1,7 @@
 package cn.allay.api.container.processor;
 
-import cn.allay.api.client.Client;
 import cn.allay.api.container.FullContainerType;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;
@@ -23,7 +23,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
     }
 
     @Override
-    public ItemStackResponse handle(CraftCreativeAction action, Client client, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
+    public ItemStackResponse handle(CraftCreativeAction action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
         var item = CreativeItemRegistry.getRegistry().get(action.getCreativeItemNetworkId() - 1);
         if (item == null) {
             log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId() - 1);
@@ -31,7 +31,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
         }
         item = item.copy(true);
         item.setCount(item.getItemAttributes().maxStackSize());
-        client.getPlayerEntity().getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, item);
+        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, item);
         //从创造物品栏拿东西不需要响应
         return null;
     }
