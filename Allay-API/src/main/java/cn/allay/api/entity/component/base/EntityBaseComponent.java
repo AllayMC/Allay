@@ -102,7 +102,7 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void sendPacketToViewersImmediately(BedrockPacket packet);
 
-    void broadcastMoveToViewers(Set<MoveEntityDeltaPacket.Flag> moveFlags, Location3fc newLoc);
+    void broadcastMoveToViewers(Location3fc newLoc);
 
     NbtMap saveNBT();
 

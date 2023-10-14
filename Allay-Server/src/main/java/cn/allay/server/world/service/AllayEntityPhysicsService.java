@@ -33,9 +33,6 @@ import static java.lang.Math.*;
  */
 public class AllayEntityPhysicsService implements EntityPhysicsService {
 
-    public static float DIFF_POSITION_THRESHOLD;
-    public static float DIFF_ROTATION_THRESHOLD;
-
     public static float MOTION_THRESHOLD;
     public static float STEPPING_OFFSET;
     public static float FAT_AABB_MARGIN;
@@ -55,8 +52,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public AllayEntityPhysicsService(World world) {
         this.world = world;
         var settings = world.getServer().getServerSettings().entitySettings().physicsEngineSettings();
-        DIFF_POSITION_THRESHOLD = settings.diffPositionThreshold();
-        DIFF_ROTATION_THRESHOLD = settings.diffRotationThreshold();
         MOTION_THRESHOLD = settings.motionThreshold();
         STEPPING_OFFSET = settings.steppingOffset();
         FAT_AABB_MARGIN = settings.fatAABBMargin();
@@ -512,20 +507,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
         if (!world.isInWorld(newLoc.x(), newLoc.y(), newLoc.z())) return false;
         //TODO: bug!!
-        entity.broadcastMoveToViewers(computeMoveFlags(entity, entity.getLocation(), newLoc), newLoc);
+        entity.broadcastMoveToViewers(newLoc);
         entity.setLocation(newLoc);
         return true;
-    }
-
-    protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Entity entity, Location3fc oldLoc, Location3fc newLoc) {
-        var flags = EnumSet.noneOf(MoveEntityDeltaPacket.Flag.class);
-        if (abs(oldLoc.x() - newLoc.x()) > DIFF_POSITION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_X);
-        if (abs(oldLoc.y() - newLoc.y()) > DIFF_POSITION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_Y);
-        if (abs(oldLoc.z() - newLoc.z()) > DIFF_POSITION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_Z);
-        if (abs(oldLoc.yaw() - newLoc.yaw()) > DIFF_ROTATION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_YAW);
-        if (abs(oldLoc.pitch() - newLoc.pitch()) > DIFF_ROTATION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_PITCH);
-        if (entity.enableHeadYaw() && abs(oldLoc.headYaw() - newLoc.headYaw()) > DIFF_ROTATION_THRESHOLD) flags.add(MoveEntityDeltaPacket.Flag.HAS_HEAD_YAW);
-        return flags;
     }
 
     @Override
