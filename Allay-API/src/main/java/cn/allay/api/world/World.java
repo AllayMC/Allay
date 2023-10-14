@@ -160,7 +160,7 @@ public interface World {
     }
 
     default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, EntityPlayer player) {
-        player.handleChunkPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
+        player.sendPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
     }
 
     default BlockState getBlockState(Vector3ic pos) {

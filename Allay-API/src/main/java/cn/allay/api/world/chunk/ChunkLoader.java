@@ -46,6 +46,5 @@ public interface ChunkLoader {
     @ApiStatus.Internal
     void handleChunkPacket(BedrockPacket packet);
 
-    @ApiStatus.Internal
     void handleChunkPacketImmediately(BedrockPacket packet);
 }

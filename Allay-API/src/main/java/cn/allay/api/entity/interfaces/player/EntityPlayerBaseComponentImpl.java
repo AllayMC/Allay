@@ -324,7 +324,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         chunkLoadingRadius = Math.min(radius, Server.getInstance().getServerSettings().worldSettings().viewDistance());
         var chunkRadiusUpdatedPacket = new ChunkRadiusUpdatedPacket();
         chunkRadiusUpdatedPacket.setRadius(chunkLoadingRadius);
-        handleChunkPacket(chunkRadiusUpdatedPacket);
+        networkComponent.sendPacket(chunkRadiusUpdatedPacket);
     }
 
     @Override
@@ -333,13 +333,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var loc = getLocation();
         chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
         chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
-        handleChunkPacket(chunkPublisherUpdatePacket);
+        networkComponent.sendPacket(chunkPublisherUpdatePacket);
     }
 
     @Override
     public void onChunkInRangeLoaded(Chunk chunk) {
         var levelChunkPacket = chunk.createLevelChunkPacket();
-        handleChunkPacket(levelChunkPacket);
+        networkComponent.sendPacket(levelChunkPacket);
         chunk.spawnEntitiesTo(thisEntity);
         networkComponent.onChunkInRangeLoaded();
     }

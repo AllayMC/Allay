@@ -9,6 +9,7 @@ import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.math.location.Location3fc;
 import cn.allay.api.world.chunk.Chunk;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
@@ -44,6 +45,10 @@ public interface EntityBaseComponent extends EntityComponent {
     long getUniqueId();
 
     Metadata getMetadata();
+
+    void sendEntityData(EntityDataType<?>... dataTypes);
+
+    void sendEntityFlags(EntityFlag... flags);
 
     AABBfc getAABB();
 
