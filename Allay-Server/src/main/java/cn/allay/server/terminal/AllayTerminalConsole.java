@@ -1,7 +1,8 @@
 package cn.allay.server.terminal;
 
-import cn.allay.api.block.type.BlockState;
+import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.server.Server;
+import cn.allay.api.world.chunk.Chunk;
 import lombok.extern.slf4j.Slf4j;
 import net.minecrell.terminalconsole.SimpleTerminalConsole;
 import org.jline.reader.LineReader;
@@ -31,10 +32,14 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
         if (s.equalsIgnoreCase("stop")) {
             log.info("Server ShutDown...");
             shutdown();
-        } else if (s.startsWith("/t ")) {
-            String[] s1 = s.replace("/t ", "").split(" ");
-            BlockState blockState = Server.getInstance().getDefaultWorld().getBlockState(Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2]), 1);
-            log.info(blockState.blockType().getIdentifier().toString());
+        } else if (s.startsWith("/t")) {
+            EntityPlayer entityPlayer = Server.getInstance().getDefaultWorld().getPlayers().stream().findFirst().get();
+            System.out.println(entityPlayer.getLocation());
+            Chunk chunk = Server.getInstance().getDefaultWorld().getChunkService().getChunk(
+                    (int) Math.floor(entityPlayer.getLocation().x()),
+                    (int) Math.floor(entityPlayer.getLocation().z())
+            );
+            System.out.println(chunk == null);
         } else {
             //TODO
             log.info("§1TODO :)");
