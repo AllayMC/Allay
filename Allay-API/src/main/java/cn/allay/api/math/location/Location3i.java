@@ -5,6 +5,7 @@ import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.World;
 import com.google.common.base.Objects;
+import org.joml.Runtime;
 import org.joml.*;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.text.NumberFormat;
 
 /**
  * Allay Project 7/30/2023
@@ -449,5 +451,15 @@ public class Location3i extends Position3i implements Location3ic {
     @Override
     public int hashCode() {
         return Objects.hashCode(super.hashCode(), pitch, yaw, headYaw, world);
+    }
+
+    @Override
+    public String toString() {
+        return Runtime.formatNumbers(toString(Options.NUMBER_FORMAT));
+    }
+
+    @Override
+    public String toString(NumberFormat formatter) {
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " world=" + this.world.getName() + ")";
     }
 }
