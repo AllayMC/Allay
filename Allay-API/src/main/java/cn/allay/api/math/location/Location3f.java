@@ -909,7 +909,7 @@ public class Location3f extends Position3f implements Location3fc {
 
     @Override
     public String toString() {
-        return Runtime.formatNumbers(toString(Options.NUMBER_FORMAT)) + ",pitch=" + this.pitch + ",yaw=" + this.yaw + ",headYaw=" + this.headYaw + ",world=" + this.world.getName();
+        return Runtime.formatNumbers(toString(Options.NUMBER_FORMAT));
     }
 
     @Override
