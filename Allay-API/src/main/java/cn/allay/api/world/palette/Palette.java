@@ -70,7 +70,7 @@ public final class Palette<V> {
         for (int i = 0; i < size; i++) this.palette.add(deserializer.deserialize(VarInts.readInt(byteBuf)));
     }
 
-    //LevelDB格式存储使用这个
+    //LevelDB
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
         byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), false));
         for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
@@ -83,17 +83,7 @@ public final class Palette<V> {
         }
     }
 
-    //Allay格式存储使用这个
-    public void writeToStorageRuntime(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
-        if (writeLast(byteBuf, last)) return;
-        if (writeEmpty(byteBuf, serializer)) return;
-
-        byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), true));
-        for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
-        byteBuf.writeIntLE(this.palette.size());
-        for (V value : this.palette) byteBuf.writeIntLE(serializer.serialize(value));
-    }
-
+    //LevelDB
     public void readFromStoragePersistent(ByteBuf byteBuf, PersistentDataDeserializer<V> deserializer) {
         readWords(byteBuf, readBitArrayVersion(byteBuf));
 
@@ -107,6 +97,18 @@ public final class Palette<V> {
         }
     }
 
+    //RocksDB
+    public void writeToStorageRuntime(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
+        if (writeLast(byteBuf, last)) return;
+        if (writeEmpty(byteBuf, serializer)) return;
+
+        byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), true));
+        for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
+        byteBuf.writeIntLE(this.palette.size());
+        for (V value : this.palette) byteBuf.writeIntLE(serializer.serialize(value));
+    }
+
+    //RocksDB
     public void readFromStorageRuntime(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer, Palette<V> last) {
         final short header = byteBuf.readUnsignedByte();
 

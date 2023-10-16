@@ -1,5 +1,6 @@
 package cn.allay.server.utils;
 
+import cn.allay.server.Allay;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.experimental.UtilityClass;
@@ -12,8 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,7 +31,6 @@ public final class ComponentClassCacheUtils {
     public static final String CACHE_PACKAGE_BLOCK_ENTITY_PATH = "cn/allay/api/blockentity/interfaces";
     public static final String CACHE_PACKAGE_ITEM_PATH = "cn/allay/api/item/interfaces";
     public static final String CACHE_PACKAGE_ENTITY_PATH = "cn/allay/api/entity/interfaces";
-    private static final URLClassLoader LOADER;
     private static final Gson GSON = new GsonBuilder().create();
     private static Map<String, String> LAST_CACHE_MAP;
     private static Map<String, String> CACHE_MAP = new LinkedHashMap<>();
@@ -43,7 +41,7 @@ public final class ComponentClassCacheUtils {
             file1.mkdir();
         }
         try {
-            LOADER = new URLClassLoader(new URL[]{CACHE_ROOT_PATH.toUri().toURL()});
+            Allay.EXTRA_RESOURCE_CLASS_LOADER.addURL(CACHE_ROOT_PATH.toUri().toURL());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -55,11 +53,11 @@ public final class ComponentClassCacheUtils {
     public static void checkCacheValid() {
         Path cacheValid = CACHE_ROOT_PATH.resolve("cache.valid");
         Properties properties = new Properties();
-        try (var input = new InputStreamReader(Objects.requireNonNull(LOADER.getResourceAsStream("git.properties")))) {
+        try (var input = new InputStreamReader(Objects.requireNonNull(Allay.EXTRA_RESOURCE_CLASS_LOADER.getResourceAsStream("git.properties")))) {
             properties.load(input);
             if (Files.exists(cacheValid) &&
-                Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev")) &&
-                CACHE_ROOT_PATH.resolve("mapping.json").toFile().exists()
+                    Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev")) &&
+                    CACHE_ROOT_PATH.resolve("mapping.json").toFile().exists()
             ) {
                 return;
             }
@@ -130,7 +128,7 @@ public final class ComponentClassCacheUtils {
     private static @Nullable <T> Class<T> getCacheClass(String simpleName) {
         if (LAST_CACHE_MAP == null) return null;
         try {
-            return (Class<T>) LOADER.loadClass(LAST_CACHE_MAP.get(simpleName));
+            return (Class<T>) Allay.EXTRA_RESOURCE_CLASS_LOADER.loadClass(LAST_CACHE_MAP.get(simpleName));
         } catch (ClassNotFoundException e) {
             log.error(e.getLocalizedMessage());
             return null;

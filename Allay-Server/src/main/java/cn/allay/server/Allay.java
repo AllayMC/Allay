@@ -9,6 +9,7 @@ import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
 import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;
+import cn.allay.api.datastruct.DynamicURLClassLoader;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
@@ -34,16 +35,20 @@ import cn.allay.server.item.type.AllayItemTypeRegistry;
 import cn.allay.server.scheduler.AllayScheduler;
 import cn.allay.server.utils.ComponentClassCacheUtils;
 import cn.allay.server.world.biome.AllayBiomeTypeRegistry;
+import cn.allay.server.world.generator.jegenerator.JeGeneratorLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.VisibleForTesting;
 
 @Slf4j
 public final class Allay {
+    public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
 
     public static void main(String[] args) {
         log.info("Starting Allay...");
         try {
             initAllayAPI();
+            JeGeneratorLoader.setup();
+            JeGeneratorLoader.waitStart();
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
             System.exit(1);

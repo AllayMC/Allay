@@ -4,6 +4,9 @@ import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Range;
 
+import java.time.Duration;
+import java.util.function.Supplier;
+
 /**
  * Allay Project 2023/6/23
  *
@@ -47,5 +50,21 @@ public class Utils {
         byte[] payload = new byte[buf.readableBytes()];
         buf.readBytes(payload);
         return payload;
+    }
+
+    /**
+     * Spin until end = true
+     *
+     * @param end      the end
+     * @param interval the interval
+     */
+    public void spinUntil(Supplier<Boolean> end, Duration interval) {
+        while (end.get()) {
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

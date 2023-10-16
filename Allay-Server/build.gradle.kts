@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.libdeflate)
     implementation(libs.rocksdb)
     implementation(libs.netty.epoll)
+    implementation(files("libs/jegenerator-paperclip-1.20.2-R0.1-SNAPSHOT-reobf.jar"))
     testImplementation(libs.bytebuddy)
 }
 
