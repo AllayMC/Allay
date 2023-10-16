@@ -2,6 +2,7 @@ package cn.allay.api.datastruct.collections.nb;
 
 import it.unimi.dsi.fastutil.ints.AbstractIntSet;
 import it.unimi.dsi.fastutil.ints.IntIterator;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -78,6 +79,7 @@ import java.util.function.Function;
  * @author PowerNukkitX
  * @since 1.5
  */
+@ApiStatus.Experimental
 public class Int2ObjectNonBlockingMap<TypeV>
         extends AbstractMap<Integer, TypeV>
         implements ConcurrentMap<Integer, TypeV>, Cloneable, Serializable {
