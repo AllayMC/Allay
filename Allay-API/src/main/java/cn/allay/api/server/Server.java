@@ -18,7 +18,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * The server interface
@@ -92,7 +92,7 @@ public interface Server extends TaskCreator {
 
     void broadcastPacket(BedrockPacket packet);
 
-    ForkJoinPool getComputeThreadPool();
+    ThreadPoolExecutor getComputeThreadPool();
 
     ExecutorService getVirtualThreadPool();
 

@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -110,8 +109,7 @@ public class AllayChunkService implements ChunkService {
         }
     }
 
-    private Chunk prepareAndSetChunk(int x, int z, Chunk chunk) {
-        long hashXZ = HashUtils.hashXZ(x, z);
+    private Chunk generateChunk(Chunk chunk) {
         var unsafeChunk = chunk.toUnsafeChunk();
         if (unsafeChunk.getState() != FINISHED) {
             var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
@@ -128,8 +126,6 @@ public class AllayChunkService implements ChunkService {
                 unsafeChunk.setState(FINISHED);
             }
         }
-        setChunk(x, z, chunk);
-        loadingChunks.remove(hashXZ);
         return chunk;
     }
 
@@ -201,10 +197,15 @@ public class AllayChunkService implements ChunkService {
                     log.error("Error while reading chunk (" + x + "," + z + ") !", t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
                 })
-                .thenApplyAsync(loadedChunk -> prepareAndSetChunk(x, z, loadedChunk), Server.getInstance().getComputeThreadPool())
+                .thenApplyAsync(this::generateChunk, Server.getInstance().getComputeThreadPool())
                 .exceptionally(t -> {
                     log.error("Error while generating chunk (" + x + "," + z + ") !", t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
+                })
+                .thenApply(prepareChunk -> {
+                    setChunk(x, z, prepareChunk);
+                    loadingChunks.remove(hashXZ);
+                    return prepareChunk;
                 })
         );
         if (presentValue == null) {
@@ -329,16 +330,10 @@ public class AllayChunkService implements ChunkService {
         return Integer.MIN_VALUE;
     }
 
-    private record SubChunkRequestData(org.cloudburstmc.math.vector.Vector3i center,
-                                       org.cloudburstmc.math.vector.Vector3i offset) {
-    }
-
     private final class ChunkLoaderManager {
         private final ChunkLoader chunkLoader;
         //保存着上tick已经发送的全部区块hash值
         private final LongOpenHashSet sentChunks = new LongOpenHashSet();
-        //保存着上tick已经发送的SubChunkRequestData
-        private final Map<Long, Set<SubChunkRequestData>> sentSubChunks = new Long2ObjectOpenHashMap<>();
         //保存着这tick将要发送的全部区块hash值
         private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
         private final int chunkTrySendCountPerTick;
@@ -382,27 +377,10 @@ public class AllayChunkService implements ChunkService {
                     int cx = centerPosition.getX() + offset.getX(), cz = centerPosition.getZ() + offset.getZ();
                     Chunk chunk = getChunk(cx, cz);
                     if (chunk == null) {
-                        log.trace("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
+                        log.info("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
                         createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null, null);
                         continue;
                     }
-
-                    var chunkHash = chunk.computeChunkHash();
-                    var sent = this.sentSubChunks.get(chunkHash);
-                    SubChunkRequestData requestData = new SubChunkRequestData(centerPosition, offset);
-                    if (sent != null) {
-                        if (sent.contains(requestData)) {
-                            log.trace("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
-                            continue;
-                        } else {
-                            sent.add(requestData);
-                        }
-                    } else {
-                        sent = new HashSet<>();
-                        sent.add(requestData);
-                        this.sentSubChunks.put(chunkHash, sent);
-                    }
-
                     byte[] hMap = new byte[256];
                     boolean higher = true, lower = true;
                     for (int x = 0; x < 16; x++) {
@@ -451,13 +429,14 @@ public class AllayChunkService implements ChunkService {
             });
         }
 
+        //There is no need to explicitly mark Nullable because we ensure that result = success is not null
         private static void createSubChunkData(List<SubChunkData> response,
                                                SubChunkRequestResult result,
                                                org.cloudburstmc.math.vector.Vector3i offset,
                                                HeightMapDataType type,
-                                               @Nullable ByteBuf heightMapData,
-                                               @Nullable ChunkSection subchunk,
-                                               @Nullable Collection<BlockEntity> subChunkBlockEntities) {
+                                               ByteBuf heightMapData,
+                                               ChunkSection subchunk,
+                                               Collection<BlockEntity> subChunkBlockEntities) {
             SubChunkData subChunkData = new SubChunkData();
             subChunkData.setResult(result);
             subChunkData.setPosition(offset);
@@ -471,14 +450,12 @@ public class AllayChunkService implements ChunkService {
                 subchunk.biomes().writeToNetwork(buffer, BiomeType::getId);
                 // edu - border blocks
                 buffer.writeByte(0);
-                if (subChunkBlockEntities != null) {
-                    try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(buffer))) {
-                        for (BlockEntity blockEntity : subChunkBlockEntities) {
-                            writer.writeTag(blockEntity.saveNBT());
-                        }
-                    } catch (IOException e) {
-                        log.error("Error while encoding block entity in sub chunk!", e);
+                try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(buffer))) {
+                    for (BlockEntity blockEntity : subChunkBlockEntities) {
+                        writer.writeTag(blockEntity.saveNBT());
                     }
+                } catch (IOException e) {
+                    log.error("Error while encoding block entity in sub chunk!", e);
                 }
                 subChunkData.setData(buffer);
             } else {
@@ -511,11 +488,11 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void updateInRadiusChunks() {
+            inRadiusChunks.clear();
             Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
             var loaderChunkX = floor.x >> 4;
             var loaderChunkZ = floor.z >> 4;
             var chunkLoadingRadius = chunkLoader.getChunkLoadingRadius();
-            inRadiusChunks.clear();
             for (int rx = -chunkLoadingRadius; rx <= chunkLoadingRadius; rx++) {
                 for (int rz = -chunkLoadingRadius; rz <= chunkLoadingRadius; rz++) {
                     if (!isChunkInRadius(rx, rz, chunkLoadingRadius)) continue;
@@ -537,7 +514,6 @@ public class AllayChunkService implements ChunkService {
             chunkLoader.onChunkOutOfRange(difference);
             //剩下sentChunks和inRadiusChunks的交集
             sentChunks.removeAll(difference);
-            difference.forEach(sentSubChunks::remove);
         }
 
         private void updateChunkSendingQueue() {
@@ -567,9 +543,11 @@ public class AllayChunkService implements ChunkService {
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
-            chunkLoader.preSendChunks(chunkReadyToSend.keySet());
-            chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash.longValue()));
-            chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeLoaded);
+            chunkLoader.preSendChunks();
+            chunkReadyToSend.forEach((chunkHash, chunk) -> {
+                chunkLoader.onChunkInRangeLoaded(chunk);
+                sentChunks.add(chunkHash.longValue());
+            });
         }
 
         private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {

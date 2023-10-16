@@ -27,7 +27,7 @@ public interface ChunkLoader {
 
     void setChunkLoadingRadius(int radius);
 
-    void preSendChunks(Set<Long> chunkHashes);
+    void preSendChunks();
 
     void onChunkInRangeLoaded(Chunk chunk);
 

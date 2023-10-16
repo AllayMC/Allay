@@ -9,5 +9,5 @@ buildSrc/**
 /Allay-Server/src/test/resources/allayworld/db/
 /output/
 /caches/
-
-server-settings.yml
+**/server-settings.yml
+/jegenerator/
