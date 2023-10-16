@@ -479,6 +479,7 @@ public class AllayChunkService implements ChunkService {
             long currentLoaderChunkPosHashed;
             Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
             if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
+                chunkLoader.publishClientChunkUpdate();
                 lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
                 updateInRadiusChunks();
                 removeOutOfRadiusChunks();
@@ -543,7 +544,6 @@ public class AllayChunkService implements ChunkService {
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
-            chunkLoader.preSendChunks();
             chunkReadyToSend.forEach((chunkHash, chunk) -> {
                 chunkLoader.onChunkInRangeLoaded(chunk);
                 sentChunks.add(chunkHash.longValue());
