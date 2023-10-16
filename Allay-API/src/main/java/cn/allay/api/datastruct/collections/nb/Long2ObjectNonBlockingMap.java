@@ -3,6 +3,7 @@ package cn.allay.api.datastruct.collections.nb;
 import it.unimi.dsi.fastutil.longs.AbstractLongSet;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -80,6 +81,7 @@ import java.util.function.Function;
  * @author PowerNukkitX
  * @since 1.5
  */
+@ApiStatus.Experimental
 public class Long2ObjectNonBlockingMap<TypeV>
         extends AbstractMap<Long, TypeV>
         implements ConcurrentMap<Long, TypeV>, Cloneable, Serializable {

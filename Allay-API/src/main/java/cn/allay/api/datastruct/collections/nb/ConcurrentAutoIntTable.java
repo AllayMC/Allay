@@ -1,5 +1,7 @@
 package cn.allay.api.datastruct.collections.nb;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -19,6 +21,7 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
  * @author PowerNukkitX
  * @since 1.5
  */
+@ApiStatus.Experimental
 public class ConcurrentAutoIntTable implements Serializable {
 
     // --- public interface ---
