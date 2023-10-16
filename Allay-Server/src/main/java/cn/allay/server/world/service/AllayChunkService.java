@@ -2,7 +2,6 @@ package cn.allay.server.world.service;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.blockentity.BlockEntity;
-import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.utils.MathUtils;
@@ -20,6 +19,7 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.*;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -48,9 +48,9 @@ import static cn.allay.api.world.chunk.ChunkState.*;
 @Slf4j
 public class AllayChunkService implements ChunkService {
     public static final int REMOVE_UNNEEDED_CHUNK_CYCLE = 600;
-    private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
-    private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
-    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new ConcurrentHashMap<>();
+    private final Map<Long, Chunk> loadedChunks = new ConcurrentHashMap<>();
+    private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
+    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.getInstance().getServerSettings().genericSettings().maxClientCount());
     private final World world;
     @Getter
     private final WorldStorage worldStorage;
