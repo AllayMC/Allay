@@ -102,7 +102,7 @@ public final class AllayServer implements Server {
                 })
                 .onStop(() -> isRunning.set(false))
                 .build();
-        serverScheduler = new AllayScheduler();
+        serverScheduler = new AllayScheduler(virtualThreadPool);
     }
 
     public static AllayServer getInstance() {
