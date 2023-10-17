@@ -1,7 +1,6 @@
 package cn.allay.server.scheduler;
 
 import cn.allay.api.scheduler.task.Task;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,8 +13,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author daoge_cmd
  */
-@Getter
+
 public final class RunningTaskInfo {
+    @Getter
     private final Task task;
     @Getter
     private final int delay;
@@ -23,7 +23,6 @@ public final class RunningTaskInfo {
     private final int period;
     @Getter
     private final boolean async;
-
     @Getter
     @Setter
     private long nextRunTick;
@@ -46,7 +45,6 @@ public final class RunningTaskInfo {
         this.running.set(running);
     }
 
-    @Builder
     public RunningTaskInfo(Task task, int delay, int period, boolean async) {
         this.task = task;
         this.delay = delay;
