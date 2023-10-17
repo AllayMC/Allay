@@ -81,8 +81,8 @@ public final class AllayServer implements Server {
         //TODO: client storage
         playerStorage = new AllayNonPersistentPlayerStorage();
         computeThreadPool = new ThreadPoolExecutor(
-                Runtime.getRuntime().availableProcessors() + 1,
-                Runtime.getRuntime().availableProcessors() + 1,
+                Runtime.getRuntime().availableProcessors(),
+                Runtime.getRuntime().availableProcessors(),
                 0,
                 TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>(),

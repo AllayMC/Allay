@@ -8,7 +8,9 @@ import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeType;
-import cn.allay.api.world.chunk.*;
+import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.chunk.ChunkLoader;
+import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.generator.ChunkGenerateContext;
 import cn.allay.api.world.service.ChunkService;
 import cn.allay.api.world.storage.WorldStorage;
@@ -38,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static cn.allay.api.world.chunk.ChunkState.*;
+import static cn.allay.api.world.chunk.ChunkState.EMPTY;
 
 /**
  * Allay Project 2023/7/1
@@ -111,20 +113,9 @@ public class AllayChunkService implements ChunkService {
 
     private Chunk generateChunk(Chunk chunk) {
         var unsafeChunk = chunk.toUnsafeChunk();
-        if (unsafeChunk.getState() != FINISHED) {
+        if (unsafeChunk.getState() == EMPTY) {
             var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
-            if (unsafeChunk.getState() == NEW) {
-                world.getWorldGenerator().generate(chunkGenerateContext);
-                unsafeChunk.setState(ChunkState.GENERATED);
-            }
-            if (unsafeChunk.getState() == GENERATED) {
-                world.getWorldGenerator().populate(chunkGenerateContext);
-                unsafeChunk.setState(POPULATED);
-            }
-            if (unsafeChunk.getState() == POPULATED) {
-                afterPopulate(unsafeChunk);
-                unsafeChunk.setState(FINISHED);
-            }
+            world.getWorldGenerator().generate(chunkGenerateContext);
         }
         return chunk;
     }
@@ -281,11 +272,6 @@ public class AllayChunkService implements ChunkService {
     @Override
     public void forEachLoadedChunks(Consumer<Chunk> consumer) {
         loadedChunks.values().forEach(consumer);
-    }
-
-
-    private void afterPopulate(UnsafeChunk chunk) {
-        //TODO works...
     }
 
     public void unloadChunk(int x, int z) {

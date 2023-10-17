@@ -6,8 +6,16 @@ package cn.allay.api.world.chunk;
  * @author daoge_cmd
  */
 public enum ChunkState {
-    NEW,
-    GENERATED,
-    POPULATED,
+    EMPTY,
+    STRUCTURE_STARTS,
+    STRUCTURE_REFERENCES,
+    BIOMES,
+    NOISE,
+    SURFACE,
+    CARVERS,
+    FEATURES,
+    INITIALIZE_LIGHT,
+    LIGHT,
+    SPAWN,
     FINISHED
 }
