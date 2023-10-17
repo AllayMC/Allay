@@ -65,7 +65,10 @@ public final class Allay {
         //Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::getInstance);
-        api.bind(Scheduler.SchedulerFactory.class, () -> AllayScheduler::new);
+        api.bind(Scheduler.SchedulerFactory.class, () -> asyncTaskExecutor -> {
+            if (asyncTaskExecutor == null) return new AllayScheduler();
+            else return new AllayScheduler(asyncTaskExecutor);
+        });
 
         //Item
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);

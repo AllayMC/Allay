@@ -5,6 +5,7 @@ import cn.allay.api.client.skin.Skin;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.network.NetworkServer;
+import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
 import cn.allay.api.world.DimensionInfo;
@@ -12,6 +13,7 @@ import cn.allay.api.world.World;
 import cn.allay.api.world.WorldPool;
 import cn.allay.api.world.storage.PlayerStorage;
 import cn.allay.server.network.AllayNetworkServer;
+import cn.allay.server.scheduler.AllayScheduler;
 import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.world.AllayWorld;
 import cn.allay.server.world.AllayWorldPool;
@@ -62,10 +64,12 @@ public final class AllayServer implements Server {
     private ServerSettings serverSettings;
     @Getter
     private NetworkServer networkServer;
-    private Thread terminalConsoleThread;
-    private AllayTerminalConsole terminalConsole;
     @Getter
     private long ticks;
+    @Getter
+    private final Scheduler serverScheduler;
+    private Thread terminalConsoleThread;
+    private AllayTerminalConsole terminalConsole;
     private static volatile AllayServer instance;
 
     private AllayServer() {
@@ -98,6 +102,7 @@ public final class AllayServer implements Server {
                 })
                 .onStop(() -> isRunning.set(false))
                 .build();
+        serverScheduler = new AllayScheduler();
     }
 
     public static AllayServer getInstance() {

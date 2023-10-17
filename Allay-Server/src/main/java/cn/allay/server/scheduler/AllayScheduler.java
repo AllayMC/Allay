@@ -15,11 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author daoge_cmd
  */
 public class AllayScheduler implements Scheduler {
-
-    protected static final Comparator<RunningTaskInfo> COMPARATOR =
-            Comparator
-                    .comparing(RunningTaskInfo::getNextRunTick)
-                    .reversed();
+    protected static final Comparator<RunningTaskInfo> COMPARATOR = Comparator.comparing(RunningTaskInfo::getNextRunTick).reversed();
     protected static final int INITIAL_CAPACITY = 11;
 
     protected final ExecutorService asyncTaskExecutor;
@@ -43,7 +39,7 @@ public class AllayScheduler implements Scheduler {
             var task = taskInfo.getTask();
             //1. Confirm validity
             if (taskInfo.isCancelled() || !task.getTaskCreator().isValid()) {
-                cancelTask(taskInfo, task);
+                cancelTask(taskInfo);
                 continue;
             }
 
@@ -79,10 +75,7 @@ public class AllayScheduler implements Scheduler {
 
     @Override
     public void stop() {
-        queue.forEach(entry -> {
-            var task = entry.getTask();
-            cancelTask(entry, task);
-        });
+        queue.forEach(this::cancelTask);
         queue.clear();
     }
 
@@ -90,25 +83,25 @@ public class AllayScheduler implements Scheduler {
         var task = info.getTask();
         try {
             info.setRunning(true);
-            if (!task.onRun()) cancelTask(info, task);
+            if (!task.onRun()) cancelTask(info);
         } catch (Throwable error) {
             task.onError(error);
-            cancelTask(info, task);
+            cancelTask(info);
         } finally {
             info.setRunning(false);
             //Run only once
             if (!info.isRepeating()) {
-                cancelTask(info, task);
+                cancelTask(info);
             } else {
                 addTask(info, false);
             }
         }
     }
 
-    protected void cancelTask(RunningTaskInfo info, Task task) {
+    protected void cancelTask(RunningTaskInfo info) {
         if (info.isCancelled()) return;
         info.setCancelled(true);
-        task.onCancel();
+        info.getTask().onCancel();
         taskCount.decrementAndGet();
     }
 

@@ -5,6 +5,7 @@ import cn.allay.api.client.info.DeviceInfo;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.network.NetworkServer;
+import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldPool;
@@ -51,6 +52,8 @@ public interface Server extends TaskCreator {
     int getOnlinePlayerCount();
 
     NetworkServer getNetworkServer();
+
+    Scheduler getServerScheduler();
 
     @UnmodifiableView
     Map<UUID, EntityPlayer> getOnlinePlayers();
