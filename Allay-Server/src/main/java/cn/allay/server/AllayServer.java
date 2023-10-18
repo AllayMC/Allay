@@ -157,7 +157,7 @@ public final class AllayServer implements Server {
     private void loadWorlds() {
         worldPool.setDefaultWorld(AllayWorld
                 .builder()
-                .setWorldGenerator(JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD))
+                .setWorldGenerator(/*new FlatWorldGenerator()*/JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD))
                 .setWorldStorage(new AllayNonPersistentWorldStorage()/*new RocksDBWorldStorage(Path.of("output/新的世界"))*/)
                 .build());
     }

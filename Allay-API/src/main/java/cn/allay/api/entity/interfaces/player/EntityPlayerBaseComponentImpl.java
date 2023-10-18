@@ -359,7 +359,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         chunkHashes
                 .stream()
                 .map(location.world.getChunkService()::getChunk).filter(Objects::nonNull)
-                .forEach(chunk -> chunk.despawnEntitiesFrom(thisEntity));
+                .forEach(chunk -> {
+                    chunk.removeChunkLoader(this);
+                    chunk.despawnEntitiesFrom(thisEntity);
+                });
     }
 
     @Override

@@ -41,7 +41,6 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -195,7 +194,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
         updateAttributesPacket.setTick(server.getTicks());
         sendPacket(updateAttributesPacket);
-
         server.addToPlayerList(player);
         if (server.getOnlinePlayerCount() > 1) {
             server.sendFullPlayerListInfoTo(player);

@@ -15,6 +15,7 @@ import cn.allay.api.world.generator.ChunkGenerateContext;
 import cn.allay.api.world.service.ChunkService;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.server.world.chunk.AllayUnsafeChunk;
+import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -317,13 +318,7 @@ public class AllayChunkService implements ChunkService {
     }
 
     private final class ChunkLoaderManager {
-        private final ChunkLoader chunkLoader;
-        //保存着上tick已经发送的全部区块hash值
-        private final LongOpenHashSet sentChunks = new LongOpenHashSet();
-        //保存着这tick将要发送的全部区块hash值
-        private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
-        private final int chunkTrySendCountPerTick;
-        LongComparator chunkDistanceComparator = new LongComparator() {
+        private final LongComparator chunkDistanceComparator = new LongComparator() {
             @Override
             public int compare(long chunkHash1, long chunkHash2) {
                 Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
@@ -340,8 +335,37 @@ public class AllayChunkService implements ChunkService {
                 );
             }
         };
+        private final ChunkLoader chunkLoader;
+        //保存着上tick已经发送的全部区块hash值
+        private final LongOpenHashSet sentChunks = new LongOpenHashSet();
+        //保存着这tick将要发送的全部区块hash值
+        private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
+        private final int chunkTrySendCountPerTick;
         private final LongArrayPriorityQueue chunkSendQueue = new LongArrayPriorityQueue(200, chunkDistanceComparator);
         private long lastLoaderChunkPosHashed = -1;
+
+        //保存着上tick已经发送的SubChunkRequestData
+        private final Map<Long, Set<SubChunkRequestIndex>> sentSubChunks = new Long2ObjectOpenHashMap<>();
+
+        record SubChunkRequestIndex(org.cloudburstmc.math.vector.Vector3i centerPosition,
+                                    org.cloudburstmc.math.vector.Vector3i offset) {
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (!(o instanceof SubChunkRequestIndex that)) return false;
+                return centerPosition.getX() == that.centerPosition.getX() &&
+                        centerPosition.getY() == that.centerPosition.getY() &&
+                        centerPosition.getZ() == that.centerPosition.getZ() &&
+                        offset.getX() == that.offset.getX() &&
+                        offset.getY() == that.offset.getY() &&
+                        offset.getZ() == that.offset.getZ();
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hashCode(centerPosition.getX(), centerPosition.getY(), centerPosition.getZ(), offset.getX(), offset.getY(), offset.getZ());
+            }
+        }
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
@@ -356,6 +380,7 @@ public class AllayChunkService implements ChunkService {
 
                     HeightMapDataType hMapType = HeightMapDataType.NO_DATA;
                     if (sectionY < 0 || sectionY >= dimensionInfo.chunkSectionSize()) {
+                        log.info("Chunk loader " + chunkLoader + " requested sub chunk which is out of bounds");
                         createSubChunkData(responseData, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null, null);
                         continue;
                     }
@@ -367,6 +392,17 @@ public class AllayChunkService implements ChunkService {
                         createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null, null);
                         continue;
                     }
+
+                    var chunkHash = chunk.computeChunkHash();
+                    this.sentSubChunks.putIfAbsent(chunkHash, new HashSet<>());
+                    var sent = this.sentSubChunks.get(chunkHash);
+                    SubChunkRequestIndex requestIndex = new SubChunkRequestIndex(centerPosition, offset);
+                    if (sent.contains(requestIndex)) {
+                        log.trace("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
+                    } else {
+                        sent.add(requestIndex);
+                    }
+
                     byte[] hMap = new byte[256];
                     boolean higher = true, lower = true;
                     for (int x = 0; x < 16; x++) {
@@ -452,11 +488,6 @@ public class AllayChunkService implements ChunkService {
         }
 
         public void onRemoved() {
-            sentChunks.forEach(chunkHash -> {
-                var chunk = getChunk(chunkHash);
-                if (chunk != null)
-                    chunk.removeChunkLoader(chunkLoader);
-            });
             chunkLoader.onChunkOutOfRange(sentChunks);
         }
 
@@ -465,20 +496,18 @@ public class AllayChunkService implements ChunkService {
             long currentLoaderChunkPosHashed;
             Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
             if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
-                chunkLoader.publishClientChunkUpdate();
                 lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
-                updateInRadiusChunks();
+                updateInRadiusChunks(floor);
                 removeOutOfRadiusChunks();
                 updateChunkSendingQueue();
             }
             loadAndSendQueuedChunks();
         }
 
-        private void updateInRadiusChunks() {
+        private void updateInRadiusChunks(Vector3i currentPos) {
             inRadiusChunks.clear();
-            Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
-            var loaderChunkX = floor.x >> 4;
-            var loaderChunkZ = floor.z >> 4;
+            var loaderChunkX = currentPos.x >> 4;
+            var loaderChunkZ = currentPos.z >> 4;
             var chunkLoadingRadius = chunkLoader.getChunkLoadingRadius();
             for (int rx = -chunkLoadingRadius; rx <= chunkLoadingRadius; rx++) {
                 for (int rz = -chunkLoadingRadius; rz <= chunkLoadingRadius; rz++) {
@@ -493,11 +522,7 @@ public class AllayChunkService implements ChunkService {
 
         private void removeOutOfRadiusChunks() {
             Sets.SetView<Long> difference = Sets.difference(sentChunks, inRadiusChunks);
-            difference.forEach(chunkHash -> {
-                var chunk = getChunk(chunkHash);
-                if (chunk != null)
-                    chunk.removeChunkLoader(chunkLoader);
-            });
+            //卸载超出范围的区块
             chunkLoader.onChunkOutOfRange(difference);
             //剩下sentChunks和inRadiusChunks的交集
             sentChunks.removeAll(difference);
@@ -530,6 +555,7 @@ public class AllayChunkService implements ChunkService {
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
+            chunkLoader.publishClientChunkUpdate();
             chunkReadyToSend.forEach((chunkHash, chunk) -> {
                 chunkLoader.onChunkInRangeLoaded(chunk);
                 sentChunks.add(chunkHash.longValue());
