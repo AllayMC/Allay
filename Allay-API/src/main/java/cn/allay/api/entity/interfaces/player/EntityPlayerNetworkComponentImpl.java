@@ -6,6 +6,7 @@ import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
 import cn.allay.api.client.movement.ClientMovementValidator;
+import cn.allay.api.command.CommandHandler;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.ComponentedObject;
 import cn.allay.api.component.annotation.Manager;
@@ -186,7 +187,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         adventureSettings.set(AdventureSettings.Type.NO_PVM, gameType == GameType.SPECTATOR);
         adventureSettings.update();
 
-        //TODO: CommandData
+        sendPacket(CommandHandler.getInstance().createPacketFor(player));
 
         var updateAttributesPacket = new UpdateAttributesPacket();
         updateAttributesPacket.setRuntimeEntityId(player.getUniqueId());

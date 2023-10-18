@@ -16,7 +16,7 @@ public interface CommandSender {
         return CommandHandler.getInstance();
     }
 
-    default void dispatch(String command) {
+    default void dispatch(@NotNull String command) {
         this.getCommandHandler().dispatch(this, command);
     }
 
