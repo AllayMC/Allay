@@ -91,6 +91,12 @@ tasks.installShadowDist {
     enabled = false
 }
 
+tasks.jar {
+    manifest {
+        attributes["Multi-Release"] = "true"
+    }
+}
+
 tasks.shadowJar {
     transform(Log4j2PluginsCacheFileTransformer())
 }
