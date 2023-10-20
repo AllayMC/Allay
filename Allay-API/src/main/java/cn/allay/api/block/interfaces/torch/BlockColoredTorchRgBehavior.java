@@ -1,4 +1,4 @@
-package cn.allay.api.block.interfaces;
+package cn.allay.api.block.interfaces.torch;
 
 import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.type.BlockType;
