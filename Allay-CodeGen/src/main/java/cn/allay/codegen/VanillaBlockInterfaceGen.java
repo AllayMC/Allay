@@ -81,6 +81,7 @@ public class VanillaBlockInterfaceGen {
         registerSubPackage(Pattern.compile(".*GlassBehavior"), "glass");
         registerSubPackage(Pattern.compile(".*GlassPaneBehavior"), "glasspane");
         registerSubPackage(Pattern.compile(".*AmethystBudBehavior"), "amethystbud");
+        registerSubPackage(Pattern.compile(".*Torch.*Behavior"),"torch");
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var block : VanillaBlockId.values()) {
             var blockClassSimpleName = "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior";
