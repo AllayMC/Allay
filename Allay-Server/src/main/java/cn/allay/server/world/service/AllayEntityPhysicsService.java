@@ -14,7 +14,6 @@ import cn.allay.api.world.World;
 import cn.allay.api.world.service.EntityPhysicsService;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
-import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
@@ -98,6 +97,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var collidedEntities = computeCollidingEntities(entity, true);
             if (collidedEntities.isEmpty()) return;
             entityCollisionCache.put(entity.getUniqueId(), collidedEntities);
+            collidedEntities.forEach(entity::onCollideWith);
         });
     }
 
@@ -512,7 +512,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
-//        if (!world.isInWorld(newLoc.x(), newLoc.y(), newLoc.z())) return false;
         entity.broadcastMoveToViewers(newLoc);
         entity.setLocation(newLoc);
         return true;

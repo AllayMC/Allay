@@ -68,6 +68,8 @@ public interface EntityBaseComponent extends EntityComponent {
         return false;
     }
 
+    default void onCollideWith(Entity other) {}
+
     @UnmodifiableView
     Map<Long, EntityPlayer> getViewers();
 
@@ -100,6 +102,8 @@ public interface EntityBaseComponent extends EntityComponent {
     void despawnFrom(EntityPlayer player);
 
     void despawnFromAll();
+
+    void removeEntity();
 
     BedrockPacket createSpawnPacket();
 
