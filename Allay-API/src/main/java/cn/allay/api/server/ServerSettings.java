@@ -86,6 +86,10 @@ public class ServerSettings extends OkaeriConfig {
 
         @CustomKey("do-first-spawn-chunk-threshold")
         private int doFirstSpawnChunkThreshold = 36;
+
+        @Comment("Determines how long a chunk without chunk loaders will remain loaded (gt)")
+        @CustomKey("remove-unneeded-chunk-cycle")
+        private int removeUnneededChunkCycle = 600;
     }
 
     @CustomKey("entity-settings")
