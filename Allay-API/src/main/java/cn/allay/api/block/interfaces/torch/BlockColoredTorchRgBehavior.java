@@ -15,5 +15,6 @@ public interface BlockColoredTorchRgBehavior extends BlockBehavior {
           .builder(BlockColoredTorchRgBehavior.class)
           .vanillaBlock(VanillaBlockId.COLORED_TORCH_RG)
           .setProperties(VanillaBlockPropertyTypes.COLOR_BIT, VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
           .build();
 }

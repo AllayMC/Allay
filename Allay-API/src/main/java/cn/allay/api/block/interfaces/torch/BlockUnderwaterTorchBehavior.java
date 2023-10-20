@@ -15,5 +15,6 @@ public interface BlockUnderwaterTorchBehavior extends BlockBehavior {
           .builder(BlockUnderwaterTorchBehavior.class)
           .vanillaBlock(VanillaBlockId.UNDERWATER_TORCH)
           .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
           .build();
 }

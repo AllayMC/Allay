@@ -15,5 +15,6 @@ public interface BlockUnlitRedstoneTorchBehavior extends BlockBehavior {
           .builder(BlockUnlitRedstoneTorchBehavior.class)
           .vanillaBlock(VanillaBlockId.UNLIT_REDSTONE_TORCH)
           .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
           .build();
 }
