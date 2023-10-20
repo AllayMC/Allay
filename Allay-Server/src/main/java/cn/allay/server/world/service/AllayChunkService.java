@@ -50,7 +50,6 @@ import static cn.allay.api.world.chunk.ChunkState.EMPTY;
  */
 @Slf4j
 public class AllayChunkService implements ChunkService {
-    public static final int REMOVE_UNNEEDED_CHUNK_CYCLE = 600;
     private final Map<Long, Chunk> loadedChunks = new ConcurrentHashMap<>();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.getInstance().getServerSettings().genericSettings().maxClientCount());
@@ -107,7 +106,7 @@ public class AllayChunkService implements ChunkService {
             Long chunkHash = entry.getKey();
             var loadedChunk = entry.getValue();
             if (loadedChunk.getChunkLoaderCount() == 0 && !keepLoadingChunks.contains(chunkHash) && !unusedChunkClearCountDown.containsKey(chunkHash)) {
-                unusedChunkClearCountDown.put(chunkHash, REMOVE_UNNEEDED_CHUNK_CYCLE);
+                unusedChunkClearCountDown.put(chunkHash, Server.getInstance().getServerSettings().worldSettings().removeUnneededChunkCycle());
             }
         }
     }
