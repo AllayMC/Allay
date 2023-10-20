@@ -262,6 +262,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public void removeEntity() {
+        location.world.removeEntity(thisEntity);
+    }
+
+    @Override
     public BedrockPacket createSpawnPacket() {
         var addEntityPacket = new AddEntityPacket();
         addEntityPacket.setRuntimeEntityId(uniqueId);

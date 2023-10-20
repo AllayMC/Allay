@@ -1,5 +1,6 @@
 package cn.allay.api.entity.interfaces.item;
 
+import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.base.EntityBaseComponentImpl;
 import cn.allay.api.entity.init.EntityInitInfo;
 import cn.allay.api.item.ItemStack;
@@ -40,13 +41,31 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     public void tick() {
         super.tick();
+        if (itemStack.getCount() == 0) {
+            removeEntity();
+        }
+        // update age
         if (age != -1) {
             age++;
             if (age >= MAX_AGE) {
-                location.world.removeEntity(thisEntity);
+                removeEntity();
             }
         }
+        // update pick up delay
         if (pickupDelay > 0) pickupDelay--;
+    }
+
+    @Override
+    public void onCollideWith(Entity other) {
+        // check can merge
+        if (other.getEntityType() == EntityItem.ITEM_TYPE) {
+            var otherEntityItem = (EntityItem) other;
+            var otherItemStack = otherEntityItem.getItemStack();
+            if (otherItemStack.canMerge(itemStack) && itemStack.getCount() + otherItemStack.getCount() <= itemStack.getItemAttributes().maxStackSize()) {
+                itemStack.setCount(itemStack.getCount() + otherItemStack.getCount());
+                otherItemStack.setCount(0);
+            }
+        }
     }
 
     @Override
