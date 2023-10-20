@@ -111,6 +111,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int layer) {
+        if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
+            return BlockAirBehavior.AIR_TYPE.getDefaultState();
         ChunkSection section = this.getSection(normalY(y) >>> 4);
         BlockState blockState;
         if (section == null) {
