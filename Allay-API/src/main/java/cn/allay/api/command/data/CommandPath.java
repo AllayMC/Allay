@@ -2,34 +2,37 @@ package cn.allay.api.command.data;
 
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumConstraint;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumData;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @ToString
+@Slf4j
 public class CommandPath {
 
     private final String name;
-    private final String[] aliases;
+    private final List<String> aliases;
 
     public CommandPath(@NotNull String... nameAndAliases) {
+        if (nameAndAliases.length == 0) throw new IllegalArgumentException("CommandPath input cannot be empty!");
+
         this.name = nameAndAliases[0];
 
-        var extractedAliases = new String[nameAndAliases.length - 1];
-        System.arraycopy(nameAndAliases, 1, extractedAliases, 0, nameAndAliases.length - 1);
-        this.aliases = extractedAliases;
+        List<String> aliases = new ArrayList<>(List.of(nameAndAliases));
+        aliases.remove(0);
+        this.aliases = aliases;
     }
 
     public CommandEnumData getNetworkAliases() {
         Map<String, Set<CommandEnumConstraint>> values = new LinkedHashMap<>();
-        for (var alias : aliases) values.put(alias, Collections.emptySet());
-        return new CommandEnumData(name + "Aliases", values, false);
+        List<String> copy = new ArrayList<>(this.aliases);
+        copy.addFirst(this.name);
+        for (var alias : copy) values.put(alias, Collections.emptySet());
+        return new CommandEnumData(this.name + "Aliases", values, false);
     }
 
     @Override

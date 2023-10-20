@@ -15,7 +15,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandPermission;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +61,7 @@ public abstract class CommandHandleImpl implements CommandHandler {
                 if (method.isAnnotationPresent(DefaultExecuteFor.class)) {
                     var value = method.getAnnotation(DefaultExecuteFor.class).value();
                     if (value.length == 0) {
-                        var nameAndAliases = Arrays.asList(path.getAliases());
+                        var nameAndAliases = path.getAliases();
                         nameAndAliases.addFirst(path.getName());
                         value = nameAndAliases.toArray(new String[0]);
                     }
@@ -90,7 +89,7 @@ public abstract class CommandHandleImpl implements CommandHandler {
         this.commands.forEach((path, data) ->
                 packet.getCommands().add(new org.cloudburstmc.protocol.bedrock.data.command.CommandData(
                         data.getPath().getName(),
-                        (data.getDescription() != null ? data.getDescription() : "description null"),
+                        data.getDescription(),
                         Collections.emptySet(),
                         CommandPermission.ANY,
                         path.getNetworkAliases(),

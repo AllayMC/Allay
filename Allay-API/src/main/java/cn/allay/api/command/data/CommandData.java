@@ -7,6 +7,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOverloadData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.lang.reflect.Method;
@@ -24,9 +25,9 @@ public class CommandData {
     private final Map<String[], Method> methods = new HashMap<>();
     private final Map<String[], Method> overloads = new HashMap<>();
 
-    private String description;
-    private String usage;
-    private String permission;
+    private @NotNull String description = "";
+    private @Nullable String usage;
+    private @Nullable String permission;
 
     public CommandData(@NotNull CommandPath path) {
         this.path = path;
@@ -51,9 +52,9 @@ public class CommandData {
     public CommandOverloadData[] getNetworkOverloads() {
         // todo
         var data = new CommandParamData();
-        data.setName("todo");
-        data.setOptional(false);
-        data.setType(CommandParam.ARGS);
+        data.setName("args");
+        data.setOptional(true);
+        data.setType(CommandParam.TEXT);
         return new CommandOverloadData[]{
                 new CommandOverloadData(false, new CommandParamData[]{data})
         };
