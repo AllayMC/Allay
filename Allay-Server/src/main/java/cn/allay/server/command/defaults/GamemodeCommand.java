@@ -3,10 +3,12 @@ package cn.allay.server.command.defaults;
 import cn.allay.api.command.CommandSender;
 import cn.allay.api.command.annotation.Command;
 import cn.allay.api.command.annotation.DefaultExecuteFor;
+import cn.allay.api.command.annotation.Description;
 import cn.allay.api.command.annotation.Overload;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
+@Description("change gamemode")
 @Command({"gamemode", "gm", "gmc", "gms"})
 public class GamemodeCommand {
 
