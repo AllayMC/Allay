@@ -2,6 +2,7 @@ package cn.allay.server.world.service;
 
 import cn.allay.api.annotation.SlowOperation;
 import cn.allay.api.blockentity.BlockEntity;
+import cn.allay.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.HashUtils;
 import cn.allay.api.utils.MathUtils;
@@ -37,7 +38,6 @@ import org.joml.Vector3i;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -50,8 +50,8 @@ import static cn.allay.api.world.chunk.ChunkState.EMPTY;
  */
 @Slf4j
 public class AllayChunkService implements ChunkService {
-    private final Map<Long, Chunk> loadedChunks = new ConcurrentHashMap<>();
-    private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
+    private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
+    private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.getInstance().getServerSettings().genericSettings().maxClientCount());
     private final World world;
     @Getter
