@@ -2,9 +2,11 @@ package cn.allay.api.item.init;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.enchantment.EnchantmentInstance;
 import cn.allay.api.item.type.ItemType;
 import lombok.Getter;
 import lombok.Setter;
+import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -126,6 +128,14 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
 
         public Builder lore(List<String> lore) {
             extraTagBuilder.putList("Lore", NbtType.STRING, lore);
+            return this;
+        }
+
+        public Builder enchantments(List<EnchantmentInstance> enchantments) {
+            extraTagBuilder.putList(
+                    "ench", NbtType.COMPOUND,
+                    enchantments.stream().map(EnchantmentInstance::saveNBT).toList()
+            );
             return this;
         }
 

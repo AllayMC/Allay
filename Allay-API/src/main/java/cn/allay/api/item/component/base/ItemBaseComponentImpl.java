@@ -8,11 +8,15 @@ import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.enchantment.EnchantmentInstance;
+import cn.allay.api.item.enchantment.EnchantmentRegistry;
+import cn.allay.api.item.enchantment.EnchantmentType;
 import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.interfaces.ItemAirStack;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.world.World;
+import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -23,13 +27,16 @@ import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Allay Project 2023/5/19
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseComponent {
 
     @ComponentIdentifier
@@ -47,7 +54,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected int durability;
     protected String customName = "";
     protected List<String> lore = new ArrayList<>();
-    //TODO: enchantments
+    protected Map<EnchantmentType, EnchantmentInstance> enchantments = new HashMap<>();
     //TODO: item lock type
     protected BlockState blockState;
     protected int stackNetworkId;
@@ -81,6 +88,17 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             var displayTag = extraTag.getCompound("display");
             this.customName = displayTag.getString("Name");
             this.lore = extraTag.getList("Lore", NbtType.STRING);
+        }
+        if (extraTag.containsKey("ench")) {
+            extraTag.getList("ench", NbtType.COMPOUND).forEach(tag -> {
+                var id = tag.getShort("id");
+                var enchantmentType = EnchantmentRegistry.getRegistry().get(id);
+                if (enchantmentType == null) {
+                    log.warn("Unknown enchantment id {} while loading item stack extra tag", id);
+                    return;
+                }
+                this.enchantments.put(enchantmentType, enchantmentType.createInstance(tag.getShort("lvl")));
+            });
         }
     }
 
@@ -218,8 +236,18 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if ( !displayBuilder.isEmpty() ) {
             nbtBuilder.putCompound( "display", displayBuilder.build() );
         }
-
-        //TODO: enchantment, item lock type
+        if (!enchantments.isEmpty()) {
+            List<NbtMap> enchantmentNBT = new ArrayList<>();
+            for (var enchantment : this.enchantments.values()) {
+                enchantmentNBT.add(NbtMap.builder()
+                        .putShort("id", enchantment.getType().getId())
+                        .putShort("lvl", enchantment.getLevel())
+                        .build()
+                );
+            }
+            nbtBuilder.putList("ench", NbtType.COMPOUND, enchantmentNBT);
+        }
+        //TODO: item lock type
 
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }

@@ -7,6 +7,7 @@ import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 
@@ -35,6 +36,7 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
                 .builder()
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Block Types")
+                .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .setUpdateIntervalMillis(100)
                 .build()) {
             for (var blockClassName : classes) {
