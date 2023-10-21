@@ -6,6 +6,7 @@ import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<String, B
                 .builder()
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Block Entity Types")
+                .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .setUpdateIntervalMillis(100)
                 .build()) {
             for (var entityClassName : classes) {

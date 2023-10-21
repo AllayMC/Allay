@@ -8,6 +8,7 @@ import cn.allay.api.utils.ReflectionUtils;
 import cn.allay.server.world.biome.AllayBiomeTypeRegistry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -40,6 +41,7 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
                 .builder()
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Entity Types")
+                .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .setUpdateIntervalMillis(100)
                 .build()) {
             for (var entityClassName : classes) {

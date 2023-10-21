@@ -13,6 +13,7 @@ import cn.allay.api.datastruct.DynamicURLClassLoader;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
+import cn.allay.api.item.enchantment.EnchantmentRegistry;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
@@ -29,6 +30,7 @@ import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.entity.type.AllayEntityType;
 import cn.allay.server.entity.type.AllayEntityTypeRegistry;
 import cn.allay.server.item.attribute.AllayVanillaItemAttributeRegistry;
+import cn.allay.server.item.enchantment.AllayEnchantmentRegistry;
 import cn.allay.server.item.type.AllayCreativeItemRegistry;
 import cn.allay.server.item.type.AllayItemType;
 import cn.allay.server.item.type.AllayItemTypeRegistry;
@@ -71,6 +73,7 @@ public final class Allay {
         });
 
         //Item
+        api.bind(EnchantmentRegistry.class, AllayEnchantmentRegistry::new, instance -> ((AllayEnchantmentRegistry) instance).init());
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
         api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));
         api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());
