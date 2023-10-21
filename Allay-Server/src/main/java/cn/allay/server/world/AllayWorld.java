@@ -29,8 +29,10 @@ import org.slf4j.Logger;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Allay Project 2023/7/1
@@ -59,6 +61,7 @@ public class AllayWorld implements World {
     protected final Thread worldMainThread;
     protected final Set<EntityPlayer> players;
     protected final GameLoop gameLoop;
+    protected Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
 
     private AllayWorld(Server server,
                        WorldStorage worldStorage,
@@ -85,6 +88,35 @@ public class AllayWorld implements World {
         this.worldMainThread = Thread.ofPlatform()
                 .name("World Thread - " + this.worldData.getLevelName())
                 .unstarted(gameLoop::startLoop);
+    }
+
+    public static WorldBuilder builder() {
+        return new WorldBuilder();
+    }
+
+    protected void handleEntityUpdateQueue() {
+        while (!entityUpdateOperationQueue.isEmpty()) {
+            var operation = entityUpdateOperationQueue.poll();
+            var entity = operation.entity;
+            switch (operation.type) {
+                case ADD -> {
+                    var chunk = entity.getCurrentChunk();
+                    if (chunk == null)
+                        throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
+                    chunk.addEntity(entity);
+                    entity.spawnTo(chunk.getPlayerChunkLoaders());
+                    entityPhysicsService.addEntity(entity);
+                }
+                case REMOVE -> {
+                    var chunk = entity.getCurrentChunk();
+                    if (chunk == null)
+                        throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
+                    entityPhysicsService.removeEntity(entity);
+                    chunk.removeEntity(entity.getUniqueId());
+                    entity.despawnFromAll();
+                }
+            }
+        }
     }
 
     @Override
@@ -114,17 +146,18 @@ public class AllayWorld implements World {
         return this.worldData.getGameType();
     }
 
+    @Override
+    public void setWorldGameType(GameType gameType) {
+        this.worldData.setGameType(gameType);
+    }
+
     private void tick() {
         long currentTick = getTick();
+        handleEntityUpdateQueue();
         chunkService.tick();
         entityPhysicsService.tick();
         worldScheduler.tick();
         blockUpdateService.tick(currentTick);
-    }
-
-    @Override
-    public void setWorldGameType(GameType gameType) {
-        this.worldData.setGameType(gameType);
     }
 
     @Override
@@ -165,22 +198,18 @@ public class AllayWorld implements World {
 
     @Override
     public void addEntity(Entity entity) {
-        var chunk = entity.getCurrentChunk();
-        if (chunk == null)
-            throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
-        chunk.addEntity(entity);
-        entity.spawnTo(chunk.getPlayerChunkLoaders());
-        entityPhysicsService.addEntity(entity);
+        entityUpdateOperationQueue.add(new EntityUpdateOperation(
+                entity,
+                EntityUpdateType.ADD
+        ));
     }
 
     @Override
     public void removeEntity(Entity entity) {
-        var chunk = entity.getCurrentChunk();
-        if (chunk == null)
-            throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
-        entityPhysicsService.removeEntity(entity);
-        chunk.removeEntity(entity.getUniqueId());
-        entity.despawnFromAll();
+        entityUpdateOperationQueue.add(new EntityUpdateOperation(
+                entity,
+                EntityUpdateType.REMOVE
+        ));
     }
 
     @Override
@@ -208,10 +237,12 @@ public class AllayWorld implements World {
         getWorldStorage().close();
     }
 
-
-    public static WorldBuilder builder() {
-        return new WorldBuilder();
+    protected enum EntityUpdateType {
+        ADD,
+        REMOVE
     }
+
+    protected record EntityUpdateOperation(Entity entity, EntityUpdateType type) {}
 
     public static class WorldBuilder {
         @Nullable

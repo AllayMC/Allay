@@ -14,6 +14,7 @@ import cn.allay.api.world.World;
 import cn.allay.api.world.service.EntityPhysicsService;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
@@ -46,7 +47,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * Regardless of the value of the entity's hasEntityCollision(), this aabb tree saves its collision result
      */
     protected AABBTree<Entity> entityAABBTree = new AABBTree<>();
-    protected Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
 
     public AllayEntityPhysicsService(World world) {
         this.world = world;
@@ -59,7 +59,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     @Override
     public void tick() {
-        handleEntityUpdateQueue();
         handleScheduledMoveQueue();
         cacheEntityCollisionResult();
         var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
@@ -492,25 +491,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
     }
 
-    protected void handleEntityUpdateQueue() {
-        while (!entityUpdateOperationQueue.isEmpty()) {
-            var operation = entityUpdateOperationQueue.poll();
-            var entity = operation.entity;
-            switch (operation.type) {
-                case ADD -> {
-                    entities.put(entity.getUniqueId(), entity);
-                    entityAABBTree.add(entity);
-                }
-                case REMOVE -> {
-                    entities.remove(entity.getUniqueId());
-                    entityAABBTree.remove(entity);
-                    entityCollisionCache.remove(entity.getUniqueId());
-                }
-                case UPDATE -> entityAABBTree.update(entity);
-            }
-        }
-    }
-
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
         entity.broadcastMoveToViewers(newLoc);
         entity.setLocation(newLoc);
@@ -518,24 +498,22 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     @Override
-    public void updateEntity(Entity entity) {
-        if (!entities.containsKey(entity.getUniqueId()))
-            throw new IllegalArgumentException("Entity " + entity.getUniqueId() + " is not added!");
-        entityUpdateOperationQueue.offer(new EntityUpdateOperation(entity, EntityUpdateType.UPDATE));
-    }
-
-    @Override
+    @ApiStatus.Internal
     public void addEntity(Entity entity) {
         if (entities.containsKey(entity.getUniqueId()))
             throw new IllegalArgumentException("Entity " + entity.getUniqueId() + " is already added!");
-        entityUpdateOperationQueue.offer(new EntityUpdateOperation(entity, EntityUpdateType.ADD));
+        entities.put(entity.getUniqueId(), entity);
+        entityAABBTree.add(entity);
     }
 
     @Override
+    @ApiStatus.Internal
     public void removeEntity(Entity entity) {
         if (!entities.containsKey(entity.getUniqueId()))
             return;
-        entityUpdateOperationQueue.offer(new EntityUpdateOperation(entity, EntityUpdateType.REMOVE));
+        entities.remove(entity.getUniqueId());
+        entityAABBTree.remove(entity);
+        entityCollisionCache.remove(entity.getUniqueId());
     }
 
     @Override
@@ -583,12 +561,4 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected record ScheduledMove(Entity entity, Location3fc newLoc) {};
-
-    protected record EntityUpdateOperation(Entity entity, EntityUpdateType type) {}
-
-    protected enum EntityUpdateType {
-        ADD,
-        REMOVE,
-        UPDATE
-    }
 }
