@@ -73,6 +73,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
+    protected boolean willBeRemovedNextTick = false;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
         this.location = new Location3f(0, 0, 0, info.world());
@@ -130,6 +131,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public Location3fc getLocation() {
         return location;
+    }
+
+    @Override
+    public boolean willBeRemovedNextTick() {
+        return willBeRemovedNextTick;
+    }
+
+    @Override
+    public void setWillBeRemovedNextTick(boolean willBeRemovedNextTick) {
+        this.willBeRemovedNextTick = willBeRemovedNextTick;
     }
 
     @Override

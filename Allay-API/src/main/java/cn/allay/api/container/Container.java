@@ -94,7 +94,7 @@ public interface Container {
         for (int index = 0; index < itemStacks.length; index++) {
             var content = itemStacks[index];
             if (content == Container.EMPTY_SLOT_PLACE_HOLDER) {
-                setItemStack(index, itemStack);
+                setItemStack(index, itemStack.copy());
                 itemStack.setCount(0);
                 return index;
             } else if (content.canMerge(itemStack)) {

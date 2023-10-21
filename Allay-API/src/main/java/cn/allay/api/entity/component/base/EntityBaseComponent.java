@@ -39,6 +39,10 @@ public interface EntityBaseComponent extends EntityComponent {
 
     Location3fc getLocation();
 
+    boolean willBeRemovedNextTick();
+
+    void setWillBeRemovedNextTick(boolean willBeRemovedNextTick);
+
     @ApiStatus.Internal
     void setLocation(Location3fc location);
 

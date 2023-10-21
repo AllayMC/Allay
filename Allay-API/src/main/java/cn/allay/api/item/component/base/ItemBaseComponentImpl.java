@@ -8,6 +8,7 @@ import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.enchantment.EnchantmentHelper;
 import cn.allay.api.item.enchantment.EnchantmentInstance;
 import cn.allay.api.item.enchantment.EnchantmentRegistry;
 import cn.allay.api.item.enchantment.EnchantmentType;
@@ -91,13 +92,8 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         }
         if (extraTag.containsKey("ench")) {
             extraTag.getList("ench", NbtType.COMPOUND).forEach(tag -> {
-                var id = tag.getShort("id");
-                var enchantmentType = EnchantmentRegistry.getRegistry().get(id);
-                if (enchantmentType == null) {
-                    log.warn("Unknown enchantment id {} while loading item stack extra tag", id);
-                    return;
-                }
-                this.enchantments.put(enchantmentType, enchantmentType.createInstance(tag.getShort("lvl")));
+                var enchantment = EnchantmentHelper.fromNBT(tag);
+                this.enchantments.put(enchantment.getType(), enchantment);
             });
         }
     }
@@ -239,11 +235,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (!enchantments.isEmpty()) {
             List<NbtMap> enchantmentNBT = new ArrayList<>();
             for (var enchantment : this.enchantments.values()) {
-                enchantmentNBT.add(NbtMap.builder()
-                        .putShort("id", enchantment.getType().getId())
-                        .putShort("lvl", enchantment.getLevel())
-                        .build()
-                );
+                enchantmentNBT.add(enchantment.saveNBT());
             }
             nbtBuilder.putList("ench", NbtType.COMPOUND, enchantmentNBT);
         }
