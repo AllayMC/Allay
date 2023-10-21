@@ -117,6 +117,10 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void loadNBT(NbtMap nbt);
 
+    float getFallDistance();
+
+    void onFall();
+
     default void tick() {
     }
 

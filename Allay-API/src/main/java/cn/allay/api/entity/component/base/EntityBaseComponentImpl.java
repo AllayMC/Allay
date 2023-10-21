@@ -151,6 +151,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             if (oldChunk != null) oldChunk.removeEntity(uniqueId);
             else log.warn("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
         }
+        // Calculate fall distance
+        if (!onGround) {
+            fallDistance -= location.y() - this.location.y();
+        }
         this.location.set(location);
         this.location.setYaw(location.yaw());
         this.location.setHeadYaw(location.headYaw());
@@ -233,6 +237,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
+        if (fallDistance > 0) {
+            onFall();
+        }
     }
 
     @Override
@@ -406,5 +413,17 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (nbt.containsKey("OnGround")) {
             onGround = nbt.getBoolean("OnGround");
         }
+    }
+
+    protected float fallDistance = 0f;
+
+    @Override
+    public float getFallDistance() {
+        return fallDistance;
+    }
+
+    @Override
+    public void onFall() {
+        //TODO: fall damage
     }
 }
