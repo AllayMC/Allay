@@ -68,6 +68,10 @@ public interface World {
 
     void setWorldGameType(GameType gameType);
 
+    void setWorldTime(long worldTime);
+
+    void sendWorldTimeTo(Collection<EntityPlayer> players);
+
     String getName();
 
     DimensionInfo getDimensionInfo();
@@ -109,6 +113,8 @@ public interface World {
     Collection<EntityPlayer> getPlayers();
 
     void close();
+
+    void saveWorldData();
 
     default void setBlockState(int x, int y, int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0, true, true);
