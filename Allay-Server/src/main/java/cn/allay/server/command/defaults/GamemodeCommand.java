@@ -1,10 +1,7 @@
 package cn.allay.server.command.defaults;
 
 import cn.allay.api.command.CommandSender;
-import cn.allay.api.command.annotation.Command;
-import cn.allay.api.command.annotation.DefaultExecuteFor;
-import cn.allay.api.command.annotation.Description;
-import cn.allay.api.command.annotation.Overload;
+import cn.allay.api.command.annotation.*;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
@@ -13,7 +10,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 public class GamemodeCommand {
 
     @DefaultExecuteFor({"gamemode", "gm"})
-    public void gamemodeInt(CommandSender sender, int mode, EntityPlayer target) {
+    public void gamemodeInt(CommandSender sender, @Optional int mode, EntityPlayer target) {
         sender.reply("int");
     }
 

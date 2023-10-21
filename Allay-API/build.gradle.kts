@@ -31,6 +31,7 @@ dependencies {
     api(libs.joml.primitives)
     api(libs.okaeri.configs.yaml.snakeyaml)
     implementation(libs.libdeflate)
+    implementation(libs.bundles.asm)
 }
 
 tasks.processResources {

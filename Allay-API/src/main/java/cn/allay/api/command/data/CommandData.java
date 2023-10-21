@@ -1,5 +1,7 @@
 package cn.allay.api.command.data;
 
+import cn.allay.api.command.annotation.Optional;
+import cn.allay.api.utils.ReflectionUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,9 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -50,13 +50,28 @@ public class CommandData {
     }
 
     public CommandOverloadData[] getNetworkOverloads() {
-        // todo
-        var data = new CommandParamData();
-        data.setName("args");
-        data.setOptional(true);
-        data.setType(CommandParam.TEXT);
-        return new CommandOverloadData[]{
-                new CommandOverloadData(false, new CommandParamData[]{data})
-        };
+        Set<CommandOverloadData> overloads = new HashSet<>();
+
+        overloads.add(getOverloadParams(this.methods));
+        overloads.add(getOverloadParams(this.overloads));
+
+        return overloads.toArray(new CommandOverloadData[0]);
+    }
+
+    private CommandOverloadData getOverloadParams(Map<String[], Method> methods) {
+        Set<CommandParamData> params = new HashSet<>();
+        methods.forEach((names, method) -> {
+            var paramNames = ReflectionUtils.getParametersName(method);
+            for (int i = 0; i < method.getParameterTypes().length; i++) {
+                var param = method.getParameterTypes()[i];
+                var paramData = new CommandParamData();
+                paramData.setName(paramNames.get(i));
+                paramData.setOptional(param.isAnnotationPresent(Optional.class));
+                paramData.setType(CommandParam.TEXT); // TODO: check type
+                params.add(paramData);
+            }
+        });
+
+        return new CommandOverloadData(false, params.toArray(new CommandParamData[0]));
     }
 }
