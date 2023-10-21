@@ -14,6 +14,7 @@ import cn.allay.api.container.Container;
 import cn.allay.api.container.FixedContainerId;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
+import cn.allay.api.container.impl.PlayerInventoryContainer;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.attribute.Attribute;
@@ -22,12 +23,14 @@ import cn.allay.api.entity.interfaces.villagerv2.EntityVillagerV2;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.server.Server;
 import cn.allay.api.utils.MathUtils;
+import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
 import cn.allay.api.world.gamerule.GameRule;
 import lombok.Getter;
@@ -52,6 +55,7 @@ import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -624,28 +628,39 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             if (packet.getType() == TextPacket.Type.CHAT) {
                 server.broadcastChat(player, packet.getMessage());
                 //TODO: debug only
-                if (packet.getMessage().equals("spawn v")) {
-                    var loc = player.getLocation();
-                    for (var i = 0; i <= 0; i++) {
-                        var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(
-                                SimpleEntityInitInfo
-                                        .builder()
-                                        .pos(loc.x() + i, loc.y(), loc.z() + i)
-                                        .world(loc.world())
-                                        .build()
-                        );
-                        loc.world().addEntity(entity);
+                switch (packet.getMessage()) {
+                    case "spawn v" -> {
+                        var loc = player.getLocation();
+                        for (var i = 0; i <= 0; i++) {
+                            var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(
+                                    SimpleEntityInitInfo
+                                            .builder()
+                                            .pos(loc.x() + i, loc.y(), loc.z() + i)
+                                            .world(loc.world())
+                                            .build()
+                            );
+                            loc.world().addEntity(entity);
+                        }
+                        player.sendRawMessage("TPS: " + loc.world().getTps() + ", Entity Count: " + loc.world().getEntities().size());
                     }
-                    player.sendRawMessage("TPS: " + loc.world().getTps() + ", Entity Count: " + loc.world().getEntities().size());
-                }
-                if (packet.getMessage().equals("test2")) {
-                    player.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
-                    player.sendEntityFlags(EntityFlag.USING_ITEM);
-                    var pk = new SetEntityDataPacket();
-                    pk.setRuntimeEntityId(player.getUniqueId());
-                    pk.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
-                    pk.setTick(Server.getInstance().getTicks());
-                    Server.getInstance().broadcastPacket(pk);
+                    case "test2" -> {
+                        player.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
+                        player.sendEntityFlags(EntityFlag.USING_ITEM);
+                        var pk = new SetEntityDataPacket();
+                        pk.setRuntimeEntityId(player.getUniqueId());
+                        pk.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
+                        pk.setTick(Server.getInstance().getTicks());
+                        Server.getInstance().broadcastPacket(pk);
+                    }
+                    case "test3" -> {
+                        PlayerInventoryContainer container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+                        System.out.println(container.getItemInHand());
+                        for (ItemStack stack : container.getItemStackArray()) {
+                            System.out.println(stack + "   " + stack.getCount());
+                        }
+                        System.out.println(player.getHandSlot());
+                        sendInventories();
+                    }
                 }
             }
             return PacketSignal.HANDLED;
@@ -708,6 +723,62 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     case START_JUMPING -> player.setOnGround(false);
                 }
             }
+        }
+
+        @Override
+        public PacketSignal handle(BlockPickRequestPacket packet) {
+            // TODO: isAddUserData() saving extra information
+
+            World world = player.getLocation().world();
+            Vector3i position = packet.getBlockPosition();
+            var block = world.getBlockState(position.getX(), position.getY(), position.getZ());
+            var container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+            @UnmodifiableView ItemStack[] array = container.getItemStackArray();
+
+            if (container.getItemInHand().getItemType().equals(block.blockType().getItemType()))
+                return BedrockPacketHandler.super.handle(packet);
+
+            for (int i = 0; i < 9; i++) {
+                if (array[i].getItemType().equals(block.blockType().getItemType())) {
+                    player.setHandSlot(i);
+                    container.setHandSlot(i);
+                    player.sendRawMessage(String.valueOf(player.getHandSlot()));
+                    return BedrockPacketHandler.super.handle(packet);
+                }
+            }
+
+            for (int j = 9; j < array.length; j++) {
+                ItemStack item = array[j];
+                if (item.getItemType().equals(block.blockType().getItemType())) {
+                    ItemStack target = item.copy();
+                    target.setCount(item.getCount());
+
+                    for (int i = 0; i < 9; i++) {
+                        if (array[i].equals(Container.EMPTY_SLOT_PLACE_HOLDER)) {
+                            container.setItemStack(i, target);
+                            break;
+                        }
+                    }
+
+                    container.setItemStack(j, Container.EMPTY_SLOT_PLACE_HOLDER);
+                    sendInventories(); // flush inventory
+                    return BedrockPacketHandler.super.handle(packet);
+                }
+            }
+
+            // create item
+            if (player.getGameType() == GameType.CREATIVE) {
+                container.setItemInHand(Objects.requireNonNull(block.blockType().getItemType()).createItemStack(
+                        SimpleItemStackInitInfo
+                                .builder()
+                                .count(1)
+                                .blockState(block)
+                                .build()
+                ));
+            }
+
+            sendInventories(); // flush inventory
+            return BedrockPacketHandler.super.handle(packet);
         }
     }
 }
