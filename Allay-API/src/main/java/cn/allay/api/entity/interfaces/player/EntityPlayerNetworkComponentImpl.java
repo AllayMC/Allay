@@ -206,7 +206,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
 
-        //TODO: SetTime
+        player.getLocation().world().sendWorldTimeTo(List.of(player));
     }
 
     private void sendInventories() {
