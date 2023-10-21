@@ -41,9 +41,6 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     public void tick() {
         super.tick();
-        if (itemStack.getCount() == 0) {
-            removeEntity();
-        }
         // update age
         if (age != -1) {
             age++;
@@ -58,12 +55,13 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     public void onCollideWith(Entity other) {
         // check can merge
-        if (other.getEntityType() == EntityItem.ITEM_TYPE) {
+        if (itemStack != null && other.getEntityType() == EntityItem.ITEM_TYPE) {
             var otherEntityItem = (EntityItem) other;
             var otherItemStack = otherEntityItem.getItemStack();
-            if (otherItemStack.canMerge(itemStack) && itemStack.getCount() + otherItemStack.getCount() <= itemStack.getItemAttributes().maxStackSize()) {
+            if (otherItemStack != null && otherItemStack.canMerge(itemStack) && itemStack.getCount() + otherItemStack.getCount() <= itemStack.getItemAttributes().maxStackSize()) {
                 itemStack.setCount(itemStack.getCount() + otherItemStack.getCount());
-                otherItemStack.setCount(0);
+                otherEntityItem.setItemStack(null);
+                otherEntityItem.removeEntity();
             }
         }
     }

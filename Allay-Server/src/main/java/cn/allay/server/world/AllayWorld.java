@@ -114,6 +114,7 @@ public class AllayWorld implements World {
                     entityPhysicsService.removeEntity(entity);
                     chunk.removeEntity(entity.getUniqueId());
                     entity.despawnFromAll();
+                    entity.setWillBeRemovedNextTick(false);
                 }
             }
         }
@@ -206,6 +207,7 @@ public class AllayWorld implements World {
 
     @Override
     public void removeEntity(Entity entity) {
+        entity.setWillBeRemovedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
                 EntityUpdateType.REMOVE

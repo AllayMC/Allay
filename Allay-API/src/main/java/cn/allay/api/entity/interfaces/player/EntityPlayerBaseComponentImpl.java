@@ -102,7 +102,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     protected void tryPickUpItems() {
         var world = location.world;
-        //pick up items
+        // pick up items
         var pickUpArea = new AABBf(
                 location.x - 1.425f,
                 location.y - 1.425f,
