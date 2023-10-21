@@ -39,6 +39,10 @@ public interface EntityBaseComponent extends EntityComponent {
 
     Location3fc getLocation();
 
+    boolean willBeRemovedNextTick();
+
+    void setWillBeRemovedNextTick(boolean willBeRemovedNextTick);
+
     @ApiStatus.Internal
     void setLocation(Location3fc location);
 
@@ -67,6 +71,8 @@ public interface EntityBaseComponent extends EntityComponent {
     default boolean computeBlockCollisionMotion() {
         return false;
     }
+
+    default void onCollideWith(Entity other) {}
 
     @UnmodifiableView
     Map<Long, EntityPlayer> getViewers();
@@ -101,6 +107,8 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void despawnFromAll();
 
+    void removeEntity();
+
     BedrockPacket createSpawnPacket();
 
     void sendPacketToViewers(BedrockPacket packet);
@@ -112,6 +120,10 @@ public interface EntityBaseComponent extends EntityComponent {
     NbtMap saveNBT();
 
     void loadNBT(NbtMap nbt);
+
+    float getFallDistance();
+
+    void onFall();
 
     default void tick() {
     }

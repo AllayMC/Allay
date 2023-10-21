@@ -14,7 +14,7 @@ import cn.allay.api.world.World;
 import cn.allay.api.world.service.EntityPhysicsService;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
-import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
@@ -47,7 +47,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * Regardless of the value of the entity's hasEntityCollision(), this aabb tree saves its collision result
      */
     protected AABBTree<Entity> entityAABBTree = new AABBTree<>();
-    protected Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
 
     public AllayEntityPhysicsService(World world) {
         this.world = world;
@@ -60,14 +59,12 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     @Override
     public void tick() {
-        handleEntityUpdateQueue();
         handleScheduledMoveQueue();
         cacheEntityCollisionResult();
         var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide()) return;
-            //TODO: Currently, entities whose y > maxY (or < minY) will stop calculating physics
-            if (!entity.isInWorld()) return;
+            if (!entity.isCurrentChunkLoaded()) return;
             //TODO: liquid motion etc...
             var collidedBlocks = world.getCollidingBlocks(entity.getOffsetAABB());
             if (collidedBlocks == null) {
@@ -99,6 +96,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var collidedEntities = computeCollidingEntities(entity, true);
             if (collidedEntities.isEmpty()) return;
             entityCollisionCache.put(entity.getUniqueId(), collidedEntities);
+            collidedEntities.forEach(entity::onCollideWith);
         });
     }
 
@@ -314,7 +312,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var deltaX = mx;
         var collision = false;
-        if (!world.isAABBInWorld(extendX)) return EMPTY_FLOAT_BOOLEAN_PAIR;
+        if (!isValidEntityArea(extendX)) return EMPTY_FLOAT_BOOLEAN_PAIR;
         var blocks = world.getCollidingBlocks(extendX);
         if (blocks != null) {
             collision = true;
@@ -357,7 +355,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var deltaZ = mz;
         var collision = false;
-        if (!world.isAABBInWorld(extendZ)) return EMPTY_FLOAT_BOOLEAN_PAIR;
+        if (!isValidEntityArea(extendZ)) return EMPTY_FLOAT_BOOLEAN_PAIR;
         var blocks = world.getCollidingBlocks(extendZ);
         if (blocks != null) {
             collision = true;
@@ -403,7 +401,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var deltaY = my;
         var onGround = false;
-        if (!world.isAABBInWorld(extendY)) return EMPTY_FLOAT_BOOLEAN_PAIR;
+        if (!isValidEntityArea(extendY))
+            return EMPTY_FLOAT_BOOLEAN_PAIR;
         var blocks = world.getCollidingBlocks(extendY);
         if (blocks != null) {
             //存在碰撞
@@ -426,6 +425,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         //更新坐标
         recorder.y += deltaY;
         return new FloatBooleanImmutablePair(my, onGround);
+    }
+
+    //Do not use world.isAABBInWorld(extendX|Y|Z) because entity should be able to move even if y > maxHeight
+    protected boolean isValidEntityArea(AABBf extendAABB) {
+        return extendAABB.minY >= world.getDimensionInfo().minHeight() ||
+               world.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) ||
+               world.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
     }
 
     protected boolean tryStepping(Vector3f pos, AABBf aabb, float stepHeight, boolean positive, boolean xAxis) {
@@ -485,51 +491,29 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
     }
 
-    protected void handleEntityUpdateQueue() {
-        while (!entityUpdateOperationQueue.isEmpty()) {
-            var operation = entityUpdateOperationQueue.poll();
-            var entity = operation.entity;
-            switch (operation.type) {
-                case ADD -> {
-                    entities.put(entity.getUniqueId(), entity);
-                    entityAABBTree.add(entity);
-                }
-                case REMOVE -> {
-                    entities.remove(entity.getUniqueId());
-                    entityAABBTree.remove(entity);
-                    entityCollisionCache.remove(entity.getUniqueId());
-                }
-                case UPDATE -> entityAABBTree.update(entity);
-            }
-        }
-    }
-
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
-        if (!world.isInWorld(newLoc.x(), newLoc.y(), newLoc.z())) return false;
         entity.broadcastMoveToViewers(newLoc);
         entity.setLocation(newLoc);
         return true;
     }
 
     @Override
-    public void updateEntity(Entity entity) {
-        if (!entities.containsKey(entity.getUniqueId()))
-            throw new IllegalArgumentException("Entity " + entity.getUniqueId() + " is not added!");
-        entityUpdateOperationQueue.offer(new EntityUpdateOperation(entity, EntityUpdateType.UPDATE));
-    }
-
-    @Override
+    @ApiStatus.Internal
     public void addEntity(Entity entity) {
         if (entities.containsKey(entity.getUniqueId()))
             throw new IllegalArgumentException("Entity " + entity.getUniqueId() + " is already added!");
-        entityUpdateOperationQueue.offer(new EntityUpdateOperation(entity, EntityUpdateType.ADD));
+        entities.put(entity.getUniqueId(), entity);
+        entityAABBTree.add(entity);
     }
 
     @Override
+    @ApiStatus.Internal
     public void removeEntity(Entity entity) {
         if (!entities.containsKey(entity.getUniqueId()))
             return;
-        entityUpdateOperationQueue.offer(new EntityUpdateOperation(entity, EntityUpdateType.REMOVE));
+        entities.remove(entity.getUniqueId());
+        entityAABBTree.remove(entity);
+        entityCollisionCache.remove(entity.getUniqueId());
     }
 
     @Override
@@ -577,12 +561,4 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected record ScheduledMove(Entity entity, Location3fc newLoc) {};
-
-    protected record EntityUpdateOperation(Entity entity, EntityUpdateType type) {}
-
-    protected enum EntityUpdateType {
-        ADD,
-        REMOVE,
-        UPDATE
-    }
 }

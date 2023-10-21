@@ -5,16 +5,19 @@ import cn.allay.api.client.skin.Skin;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.network.NetworkServer;
+import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.server.ServerSettings;
+import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldPool;
 import cn.allay.api.world.storage.PlayerStorage;
 import cn.allay.server.network.AllayNetworkServer;
+import cn.allay.server.scheduler.AllayScheduler;
 import cn.allay.server.terminal.AllayTerminalConsole;
 import cn.allay.server.world.AllayWorld;
 import cn.allay.server.world.AllayWorldPool;
-import cn.allay.server.world.generator.flat.FlatWorldGenerator;
+import cn.allay.server.world.generator.jegenerator.JeGeneratorLoader;
 import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
 import cn.allay.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
 import eu.okaeri.configs.ConfigManager;
@@ -52,7 +55,7 @@ public final class AllayServer implements Server {
     private final PlayerStorage playerStorage;
     //执行CPU密集型任务的线程池
     @Getter
-    private final ForkJoinPool computeThreadPool;
+    private final ThreadPoolExecutor computeThreadPool;
     //执行IO密集型任务的线程池
     @Getter
     private final ExecutorService virtualThreadPool;
@@ -61,10 +64,12 @@ public final class AllayServer implements Server {
     private ServerSettings serverSettings;
     @Getter
     private NetworkServer networkServer;
-    private Thread terminalConsoleThread;
-    private AllayTerminalConsole terminalConsole;
     @Getter
     private long ticks;
+    @Getter
+    private final Scheduler serverScheduler;
+    private Thread terminalConsoleThread;
+    private AllayTerminalConsole terminalConsole;
     private static volatile AllayServer instance;
 
     private AllayServer() {
@@ -75,14 +80,17 @@ public final class AllayServer implements Server {
         playerListEntryMap = new Object2ObjectOpenHashMap<>();
         //TODO: client storage
         playerStorage = new AllayNonPersistentPlayerStorage();
-        computeThreadPool = new ForkJoinPool(
-                Runtime.getRuntime().availableProcessors() + 1,
-                pool -> {
-                    ForkJoinWorkerThread worker = ForkJoinPool.defaultForkJoinWorkerThreadFactory.newThread(pool);
-                    worker.setName("computation-thread-" + worker.getPoolIndex());
-                    return worker;
-                },
-                null, true);
+        computeThreadPool = new ThreadPoolExecutor(
+                Runtime.getRuntime().availableProcessors(),
+                Runtime.getRuntime().availableProcessors(),
+                0,
+                TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>(),
+                r -> {
+                    Thread thread = new Thread(r);
+                    thread.setName("computation-thread-" + thread.threadId());
+                    return thread;
+                });
         virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
         ticks = 0;
         MAIN_THREAD_GAME_LOOP = GameLoop.builder()
@@ -94,6 +102,7 @@ public final class AllayServer implements Server {
                 })
                 .onStop(() -> isRunning.set(false))
                 .build();
+        serverScheduler = new AllayScheduler(virtualThreadPool);
     }
 
     public static AllayServer getInstance() {
@@ -148,7 +157,7 @@ public final class AllayServer implements Server {
     private void loadWorlds() {
         worldPool.setDefaultWorld(AllayWorld
                 .builder()
-                .setWorldGenerator(new FlatWorldGenerator())
+                .setWorldGenerator(/*new FlatWorldGenerator()*/JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD))
                 .setWorldStorage(new AllayNonPersistentWorldStorage()/*new RocksDBWorldStorage(Path.of("output/新的世界"))*/)
                 .build());
     }

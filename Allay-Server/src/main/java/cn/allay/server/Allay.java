@@ -10,9 +10,11 @@ import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
 import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
 import cn.allay.api.command.CommandHandler;
 import cn.allay.api.component.interfaces.ComponentInjector;
+import cn.allay.api.datastruct.DynamicURLClassLoader;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
+import cn.allay.api.item.enchantment.EnchantmentRegistry;
 import cn.allay.api.item.type.CreativeItemRegistry;
 import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.item.type.ItemTypeRegistry;
@@ -30,22 +32,27 @@ import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.entity.type.AllayEntityType;
 import cn.allay.server.entity.type.AllayEntityTypeRegistry;
 import cn.allay.server.item.attribute.AllayVanillaItemAttributeRegistry;
+import cn.allay.server.item.enchantment.AllayEnchantmentRegistry;
 import cn.allay.server.item.type.AllayCreativeItemRegistry;
 import cn.allay.server.item.type.AllayItemType;
 import cn.allay.server.item.type.AllayItemTypeRegistry;
 import cn.allay.server.scheduler.AllayScheduler;
 import cn.allay.server.utils.ComponentClassCacheUtils;
 import cn.allay.server.world.biome.AllayBiomeTypeRegistry;
+import cn.allay.server.world.generator.jegenerator.JeGeneratorLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.VisibleForTesting;
 
 @Slf4j
 public final class Allay {
+    public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
 
     public static void main(String[] args) {
         log.info("Starting Allay...");
         try {
             initAllayAPI();
+            JeGeneratorLoader.setup();
+            JeGeneratorLoader.waitStart();
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
             System.exit(1);
@@ -62,9 +69,13 @@ public final class Allay {
         //Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::getInstance);
-        api.bind(Scheduler.SchedulerFactory.class, () -> AllayScheduler::new);
+        api.bind(Scheduler.SchedulerFactory.class, () -> asyncTaskExecutor -> {
+            if (asyncTaskExecutor == null) return new AllayScheduler();
+            else return new AllayScheduler(asyncTaskExecutor);
+        });
 
         //Item
+        api.bind(EnchantmentRegistry.class, AllayEnchantmentRegistry::new, instance -> ((AllayEnchantmentRegistry) instance).init());
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
         api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));
         api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());

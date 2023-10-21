@@ -5,6 +5,7 @@ import cn.allay.api.client.info.DeviceInfo;
 import cn.allay.api.client.skin.Skin;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.network.NetworkServer;
+import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.scheduler.taskcreator.TaskCreator;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldPool;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * The server interface
@@ -51,6 +52,8 @@ public interface Server extends TaskCreator {
     int getOnlinePlayerCount();
 
     NetworkServer getNetworkServer();
+
+    Scheduler getServerScheduler();
 
     @UnmodifiableView
     Map<UUID, EntityPlayer> getOnlinePlayers();
@@ -92,7 +95,7 @@ public interface Server extends TaskCreator {
 
     void broadcastPacket(BedrockPacket packet);
 
-    ForkJoinPool getComputeThreadPool();
+    ThreadPoolExecutor getComputeThreadPool();
 
     ExecutorService getVirtualThreadPool();
 

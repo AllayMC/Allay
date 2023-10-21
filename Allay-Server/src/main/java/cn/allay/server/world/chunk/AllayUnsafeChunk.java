@@ -52,7 +52,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.x = chunkX;
         this.z = chunkZ;
         this.dimensionInfo = dimensionInfo;
-        this.state = ChunkState.NEW;
+        this.state = ChunkState.EMPTY;
         this.heightMap = new HeightMap();
         this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
         this.entities = new Long2ObjectNonBlockingMap<>();
@@ -111,6 +111,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int layer) {
+        if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
+            return BlockAirBehavior.AIR_TYPE.getDefaultState();
         ChunkSection section = this.getSection(normalY(y) >>> 4);
         BlockState blockState;
         if (section == null) {
@@ -268,7 +270,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
         public AllayUnsafeChunk build() {
             Preconditions.checkNotNull(dimensionInfo);
-            if (state == null) state = ChunkState.NEW;
+            if (state == null) state = ChunkState.EMPTY;
             if (sections == null) sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
             if (heightMap == null) heightMap = new HeightMap();
             if (entities == null) entities = new Long2ObjectNonBlockingMap<>();
@@ -287,7 +289,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
         public AllayUnsafeChunk emptyChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
             var chunk = new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo);
-            chunk.setState(ChunkState.NEW);
+            chunk.setState(ChunkState.EMPTY);
             return chunk;
         }
     }

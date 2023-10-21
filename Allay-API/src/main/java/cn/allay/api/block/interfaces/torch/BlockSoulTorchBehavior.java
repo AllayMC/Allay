@@ -1,4 +1,4 @@
-package cn.allay.api.block.interfaces;
+package cn.allay.api.block.interfaces.torch;
 
 import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.type.BlockType;
@@ -15,5 +15,6 @@ public interface BlockSoulTorchBehavior extends BlockBehavior {
           .builder(BlockSoulTorchBehavior.class)
           .vanillaBlock(VanillaBlockId.SOUL_TORCH)
           .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
+          .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
           .build();
 }

@@ -2,6 +2,7 @@ package cn.allay.api.world;
 
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.data.BlockStateWithPos;
+import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
 import cn.allay.api.entity.Entity;
@@ -176,6 +177,8 @@ public interface World {
     }
 
     default BlockState getBlockState(int x, int y, int z, int layer) {
+        if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
+            return BlockAirBehavior.AIR_TYPE.getDefaultState();
         var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
             chunk = getChunkService().getChunkImmediately(x >> 4, z >> 4);

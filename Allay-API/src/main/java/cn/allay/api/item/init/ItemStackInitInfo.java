@@ -23,9 +23,6 @@ public interface ItemStackInitInfo<T extends ItemStack> extends ComponentInitInf
 
     NbtMap extraTag();
 
-    //TODO: enchantments
-    //TODO: item lock type
-
     @Nullable
     BlockState blockState();
 

@@ -9,17 +9,21 @@ import cn.allay.api.utils.MathUtils;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.World;
 import cn.allay.api.world.biome.BiomeType;
-import cn.allay.api.world.chunk.*;
+import cn.allay.api.world.chunk.Chunk;
+import cn.allay.api.world.chunk.ChunkLoader;
+import cn.allay.api.world.chunk.ChunkSection;
 import cn.allay.api.world.generator.ChunkGenerateContext;
 import cn.allay.api.world.service.ChunkService;
 import cn.allay.api.world.storage.WorldStorage;
 import cn.allay.server.world.chunk.AllayUnsafeChunk;
+import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.*;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -34,12 +38,10 @@ import org.joml.Vector3i;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static cn.allay.api.world.chunk.ChunkState.*;
+import static cn.allay.api.world.chunk.ChunkState.EMPTY;
 
 /**
  * Allay Project 2023/7/1
@@ -48,10 +50,9 @@ import static cn.allay.api.world.chunk.ChunkState.*;
  */
 @Slf4j
 public class AllayChunkService implements ChunkService {
-    public static final int REMOVE_UNNEEDED_CHUNK_CYCLE = 600;
     private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
-    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new ConcurrentHashMap<>();
+    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.getInstance().getServerSettings().genericSettings().maxClientCount());
     private final World world;
     @Getter
     private final WorldStorage worldStorage;
@@ -105,31 +106,17 @@ public class AllayChunkService implements ChunkService {
             Long chunkHash = entry.getKey();
             var loadedChunk = entry.getValue();
             if (loadedChunk.getChunkLoaderCount() == 0 && !keepLoadingChunks.contains(chunkHash) && !unusedChunkClearCountDown.containsKey(chunkHash)) {
-                unusedChunkClearCountDown.put(chunkHash, REMOVE_UNNEEDED_CHUNK_CYCLE);
+                unusedChunkClearCountDown.put(chunkHash, Server.getInstance().getServerSettings().worldSettings().removeUnneededChunkCycle());
             }
         }
     }
 
-    private Chunk prepareAndSetChunk(int x, int z, Chunk chunk) {
-        long hashXZ = HashUtils.hashXZ(x, z);
+    private Chunk generateChunk(Chunk chunk) {
         var unsafeChunk = chunk.toUnsafeChunk();
-        if (unsafeChunk.getState() != FINISHED) {
+        if (unsafeChunk.getState() == EMPTY) {
             var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
-            if (unsafeChunk.getState() == NEW) {
-                world.getWorldGenerator().generate(chunkGenerateContext);
-                unsafeChunk.setState(ChunkState.GENERATED);
-            }
-            if (unsafeChunk.getState() == GENERATED) {
-                world.getWorldGenerator().populate(chunkGenerateContext);
-                unsafeChunk.setState(POPULATED);
-            }
-            if (unsafeChunk.getState() == POPULATED) {
-                afterPopulate(unsafeChunk);
-                unsafeChunk.setState(FINISHED);
-            }
+            world.getWorldGenerator().generate(chunkGenerateContext);
         }
-        setChunk(x, z, chunk);
-        loadingChunks.remove(hashXZ);
         return chunk;
     }
 
@@ -155,18 +142,7 @@ public class AllayChunkService implements ChunkService {
     @SlowOperation
     @Override
     public Chunk getChunkImmediately(int x, int z) {
-        Chunk chunk = getChunk(x, z);
-        if (chunk == null) {
-            CompletableFuture<Chunk> chunkCompletableFuture = loadingChunks.get(HashUtils.hashXZ(x, z));
-            try {
-                if (chunkCompletableFuture != null) {
-                    return chunkCompletableFuture.get();
-                }
-                return prepareAndSetChunk(x, z, worldStorage.readChunk(x, z).get());
-            } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException(e);
-            }
-        } else return chunk;
+        return getOrLoadChunk(x, z).join();
     }
 
     @Override
@@ -212,10 +188,15 @@ public class AllayChunkService implements ChunkService {
                     log.error("Error while reading chunk (" + x + "," + z + ") !", t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
                 })
-                .thenApplyAsync(loadedChunk -> prepareAndSetChunk(x, z, loadedChunk), Server.getInstance().getComputeThreadPool())
+                .thenApplyAsync(this::generateChunk, Server.getInstance().getComputeThreadPool())
                 .exceptionally(t -> {
                     log.error("Error while generating chunk (" + x + "," + z + ") !", t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
+                })
+                .thenApply(prepareChunk -> {
+                    setChunk(x, z, prepareChunk);
+                    loadingChunks.remove(hashXZ);
+                    return prepareChunk;
                 })
         );
         if (presentValue == null) {
@@ -293,11 +274,6 @@ public class AllayChunkService implements ChunkService {
         loadedChunks.values().forEach(consumer);
     }
 
-
-    private void afterPopulate(UnsafeChunk chunk) {
-        //TODO works...
-    }
-
     public void unloadChunk(int x, int z) {
         unloadChunk(HashUtils.hashXZ(x, z));
     }
@@ -340,20 +316,8 @@ public class AllayChunkService implements ChunkService {
         return Integer.MIN_VALUE;
     }
 
-    private record SubChunkRequestData(org.cloudburstmc.math.vector.Vector3i center,
-                                       org.cloudburstmc.math.vector.Vector3i offset) {
-    }
-
     private final class ChunkLoaderManager {
-        private final ChunkLoader chunkLoader;
-        //保存着上tick已经发送的全部区块hash值
-        private final LongOpenHashSet sentChunks = new LongOpenHashSet();
-        //保存着上tick已经发送的SubChunkRequestData
-        private final Map<Long, Set<SubChunkRequestData>> sentSubChunks = new Long2ObjectOpenHashMap<>();
-        //保存着这tick将要发送的全部区块hash值
-        private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
-        private final int chunkTrySendCountPerTick;
-        LongComparator chunkDistanceComparator = new LongComparator() {
+        private final LongComparator chunkDistanceComparator = new LongComparator() {
             @Override
             public int compare(long chunkHash1, long chunkHash2) {
                 Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
@@ -370,8 +334,37 @@ public class AllayChunkService implements ChunkService {
                 );
             }
         };
+        private final ChunkLoader chunkLoader;
+        //保存着上tick已经发送的全部区块hash值
+        private final LongOpenHashSet sentChunks = new LongOpenHashSet();
+        //保存着这tick将要发送的全部区块hash值
+        private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
+        private final int chunkTrySendCountPerTick;
         private final LongArrayPriorityQueue chunkSendQueue = new LongArrayPriorityQueue(200, chunkDistanceComparator);
         private long lastLoaderChunkPosHashed = -1;
+
+        //保存着上tick已经发送的SubChunkRequestData
+        private final Map<Long, Set<SubChunkRequestIndex>> sentSubChunks = new Long2ObjectOpenHashMap<>();
+
+        record SubChunkRequestIndex(org.cloudburstmc.math.vector.Vector3i centerPosition,
+                                    org.cloudburstmc.math.vector.Vector3i offset) {
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (!(o instanceof SubChunkRequestIndex that)) return false;
+                return centerPosition.getX() == that.centerPosition.getX() &&
+                        centerPosition.getY() == that.centerPosition.getY() &&
+                        centerPosition.getZ() == that.centerPosition.getZ() &&
+                        offset.getX() == that.offset.getX() &&
+                        offset.getY() == that.offset.getY() &&
+                        offset.getZ() == that.offset.getZ();
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hashCode(centerPosition.getX(), centerPosition.getY(), centerPosition.getZ(), offset.getX(), offset.getY(), offset.getZ());
+            }
+        }
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
@@ -386,6 +379,7 @@ public class AllayChunkService implements ChunkService {
 
                     HeightMapDataType hMapType = HeightMapDataType.NO_DATA;
                     if (sectionY < 0 || sectionY >= dimensionInfo.chunkSectionSize()) {
+                        log.info("Chunk loader " + chunkLoader + " requested sub chunk which is out of bounds");
                         createSubChunkData(responseData, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null, null);
                         continue;
                     }
@@ -393,25 +387,19 @@ public class AllayChunkService implements ChunkService {
                     int cx = centerPosition.getX() + offset.getX(), cz = centerPosition.getZ() + offset.getZ();
                     Chunk chunk = getChunk(cx, cz);
                     if (chunk == null) {
-                        log.trace("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
+                        log.info("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
                         createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null, null);
                         continue;
                     }
 
                     var chunkHash = chunk.computeChunkHash();
+                    this.sentSubChunks.putIfAbsent(chunkHash, new HashSet<>());
                     var sent = this.sentSubChunks.get(chunkHash);
-                    SubChunkRequestData requestData = new SubChunkRequestData(centerPosition, offset);
-                    if (sent != null) {
-                        if (sent.contains(requestData)) {
-                            log.trace("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
-                            continue;
-                        } else {
-                            sent.add(requestData);
-                        }
+                    SubChunkRequestIndex requestIndex = new SubChunkRequestIndex(centerPosition, offset);
+                    if (sent.contains(requestIndex)) {
+                        log.trace("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
                     } else {
-                        sent = new HashSet<>();
-                        sent.add(requestData);
-                        this.sentSubChunks.put(chunkHash, sent);
+                        sent.add(requestIndex);
                     }
 
                     byte[] hMap = new byte[256];
@@ -462,13 +450,14 @@ public class AllayChunkService implements ChunkService {
             });
         }
 
+        //There is no need to explicitly mark Nullable because we ensure that result = success is not null
         private static void createSubChunkData(List<SubChunkData> response,
                                                SubChunkRequestResult result,
                                                org.cloudburstmc.math.vector.Vector3i offset,
                                                HeightMapDataType type,
-                                               @Nullable ByteBuf heightMapData,
-                                               @Nullable ChunkSection subchunk,
-                                               @Nullable Collection<BlockEntity> subChunkBlockEntities) {
+                                               ByteBuf heightMapData,
+                                               ChunkSection subchunk,
+                                               Collection<BlockEntity> subChunkBlockEntities) {
             SubChunkData subChunkData = new SubChunkData();
             subChunkData.setResult(result);
             subChunkData.setPosition(offset);
@@ -482,14 +471,12 @@ public class AllayChunkService implements ChunkService {
                 subchunk.biomes().writeToNetwork(buffer, BiomeType::getId);
                 // edu - border blocks
                 buffer.writeByte(0);
-                if (subChunkBlockEntities != null) {
-                    try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(buffer))) {
-                        for (BlockEntity blockEntity : subChunkBlockEntities) {
-                            writer.writeTag(blockEntity.saveNBT());
-                        }
-                    } catch (IOException e) {
-                        log.error("Error while encoding block entity in sub chunk!", e);
+                try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(buffer))) {
+                    for (BlockEntity blockEntity : subChunkBlockEntities) {
+                        writer.writeTag(blockEntity.saveNBT());
                     }
+                } catch (IOException e) {
+                    log.error("Error while encoding block entity in sub chunk!", e);
                 }
                 subChunkData.setData(buffer);
             } else {
@@ -500,11 +487,6 @@ public class AllayChunkService implements ChunkService {
         }
 
         public void onRemoved() {
-            sentChunks.forEach(chunkHash -> {
-                var chunk = getChunk(chunkHash);
-                if (chunk != null)
-                    chunk.removeChunkLoader(chunkLoader);
-            });
             chunkLoader.onChunkOutOfRange(sentChunks);
         }
 
@@ -514,19 +496,18 @@ public class AllayChunkService implements ChunkService {
             Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
             if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
                 lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
-                updateInRadiusChunks();
+                updateInRadiusChunks(floor);
                 removeOutOfRadiusChunks();
                 updateChunkSendingQueue();
             }
             loadAndSendQueuedChunks();
         }
 
-        private void updateInRadiusChunks() {
-            Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
-            var loaderChunkX = floor.x >> 4;
-            var loaderChunkZ = floor.z >> 4;
-            var chunkLoadingRadius = chunkLoader.getChunkLoadingRadius();
+        private void updateInRadiusChunks(Vector3i currentPos) {
             inRadiusChunks.clear();
+            var loaderChunkX = currentPos.x >> 4;
+            var loaderChunkZ = currentPos.z >> 4;
+            var chunkLoadingRadius = chunkLoader.getChunkLoadingRadius();
             for (int rx = -chunkLoadingRadius; rx <= chunkLoadingRadius; rx++) {
                 for (int rz = -chunkLoadingRadius; rz <= chunkLoadingRadius; rz++) {
                     if (!isChunkInRadius(rx, rz, chunkLoadingRadius)) continue;
@@ -540,15 +521,10 @@ public class AllayChunkService implements ChunkService {
 
         private void removeOutOfRadiusChunks() {
             Sets.SetView<Long> difference = Sets.difference(sentChunks, inRadiusChunks);
-            difference.forEach(chunkHash -> {
-                var chunk = getChunk(chunkHash);
-                if (chunk != null)
-                    chunk.removeChunkLoader(chunkLoader);
-            });
+            //卸载超出范围的区块
             chunkLoader.onChunkOutOfRange(difference);
             //剩下sentChunks和inRadiusChunks的交集
             sentChunks.removeAll(difference);
-            difference.forEach(sentSubChunks::remove);
         }
 
         private void updateChunkSendingQueue() {
@@ -578,9 +554,11 @@ public class AllayChunkService implements ChunkService {
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
-            chunkLoader.preSendChunks(chunkReadyToSend.keySet());
-            chunkReadyToSend.forEach((chunkHash, chunk) -> sentChunks.add(chunkHash.longValue()));
-            chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeLoaded);
+            chunkLoader.publishClientChunkUpdate();
+            chunkReadyToSend.forEach((chunkHash, chunk) -> {
+                chunkLoader.onChunkInRangeLoaded(chunk);
+                sentChunks.add(chunkHash.longValue());
+            });
         }
 
         private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {

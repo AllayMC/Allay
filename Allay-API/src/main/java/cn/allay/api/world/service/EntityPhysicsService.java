@@ -3,6 +3,7 @@ package cn.allay.api.world.service;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.math.location.Location3fc;
 import cn.allay.api.math.voxelshape.VoxelShape;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.primitives.AABBfc;
 
 import java.util.List;
@@ -16,10 +17,16 @@ public interface EntityPhysicsService {
 
     void tick();
 
-    void updateEntity(Entity entity);
-
+    /**
+     * Please call it before run tick()!
+     */
+    @ApiStatus.Internal
     void addEntity(Entity entity);
 
+    /**
+     * Please call it before run tick()!
+     */
+    @ApiStatus.Internal
     void removeEntity(Entity entity);
 
     boolean containEntity(Entity entity);

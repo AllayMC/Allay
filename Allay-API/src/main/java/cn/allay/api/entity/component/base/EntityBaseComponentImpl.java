@@ -73,6 +73,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
+    protected boolean willBeRemovedNextTick = false;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
         this.location = new Location3f(0, 0, 0, info.world());
@@ -133,6 +134,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public boolean willBeRemovedNextTick() {
+        return willBeRemovedNextTick;
+    }
+
+    @Override
+    public void setWillBeRemovedNextTick(boolean willBeRemovedNextTick) {
+        this.willBeRemovedNextTick = willBeRemovedNextTick;
+    }
+
+    @Override
     @ApiStatus.Internal
     public void setLocation(Location3fc location) {
         var oldChunkX = (int) this.location.x >> 4;
@@ -150,6 +161,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             }
             if (oldChunk != null) oldChunk.removeEntity(uniqueId);
             else log.warn("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
+        }
+        // Calculate fall distance
+        if (!onGround) {
+            fallDistance -= location.y() - this.location.y();
         }
         this.location.set(location);
         this.location.setYaw(location.yaw());
@@ -233,6 +248,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
+        if (fallDistance > 0) {
+            onFall();
+        }
     }
 
     @Override
@@ -259,6 +277,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void despawnFromAll() {
         viewers.values().forEach(this::despawnFrom);
+    }
+
+    @Override
+    public void removeEntity() {
+        location.world.removeEntity(thisEntity);
     }
 
     @Override
@@ -401,5 +424,17 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (nbt.containsKey("OnGround")) {
             onGround = nbt.getBoolean("OnGround");
         }
+    }
+
+    protected float fallDistance = 0f;
+
+    @Override
+    public float getFallDistance() {
+        return fallDistance;
+    }
+
+    @Override
+    public void onFall() {
+        //TODO: fall damage
     }
 }

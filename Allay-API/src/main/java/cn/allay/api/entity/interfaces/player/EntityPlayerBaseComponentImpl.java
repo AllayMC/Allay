@@ -102,7 +102,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     protected void tryPickUpItems() {
         var world = location.world;
-        //pick up items
+        // pick up items
         var pickUpArea = new AABBf(
                 location.x - 1.425f,
                 location.y - 1.425f,
@@ -328,7 +328,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void preSendChunks(Set<Long> chunkHashes) {
+    public void publishClientChunkUpdate() {
         var chunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
         var loc = getLocation();
         chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
@@ -359,7 +359,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         chunkHashes
                 .stream()
                 .map(location.world.getChunkService()::getChunk).filter(Objects::nonNull)
-                .forEach(chunk -> chunk.despawnEntitiesFrom(thisEntity));
+                .forEach(chunk -> {
+                    chunk.removeChunkLoader(this);
+                    chunk.despawnEntitiesFrom(thisEntity);
+                });
     }
 
     @Override
