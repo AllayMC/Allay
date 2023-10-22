@@ -2,13 +2,20 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
+import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.entity.Entity;
+import cn.allay.api.server.Server;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
+import cn.allay.api.world.palette.Palette;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
+import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -18,6 +25,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.StampedLock;
@@ -27,6 +35,7 @@ import java.util.concurrent.locks.StampedLock;
  *
  * @author Cool_Loong
  */
+@Slf4j
 @ThreadSafe
 public class AllayChunk implements Chunk {
     protected final UnsafeChunk unsafeChunk;
@@ -301,7 +310,61 @@ public class AllayChunk implements Chunk {
 
     @Override
     public LevelChunkPacket createLevelChunkPacket() {
-        final LevelChunkPacket levelChunkPacket = new LevelChunkPacket();
+        if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) return createLevelChunkPacketSubChunk();
+        else return createLevelChunkPacketFullChunk();
+    }
+
+    private LevelChunkPacket createLevelChunkPacketFullChunk() {
+        var levelChunkPacket = new LevelChunkPacket();
+        levelChunkPacket.setChunkX(this.getX());
+        levelChunkPacket.setChunkZ(this.getZ());
+        levelChunkPacket.setCachingEnabled(false);
+        levelChunkPacket.setRequestSubChunks(false);
+        levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionSize());
+        //Chunk encoding
+        var byteBuf = Unpooled.buffer();
+        try {
+            writeToNetwork(byteBuf.retain());
+            levelChunkPacket.setData(byteBuf);
+            return levelChunkPacket;
+        } finally {
+            // Make sure the byteBuf is released even if an exception is thrown
+            byteBuf.release();
+        }
+    }
+
+    private void writeToNetwork(ByteBuf byteBuf) {
+        Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
+        // Write blocks
+        for (var section : getSections()) {
+            if (section == null) break;
+            section.writeToNetwork(byteBuf);
+        }
+        // Write biomes
+        for (var section : getSections()) {
+            if (section == null) {
+                lastBiomes.writeToNetwork(byteBuf, BiomeType::getId, lastBiomes);
+                continue;
+            }
+            section.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+            lastBiomes = section.biomes();
+        }
+        byteBuf.writeByte(0); // edu- border blocks
+        // Write block entities
+        var blockEntities = getBlockEntities().values();
+        if (!blockEntities.isEmpty()) {
+            try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(byteBuf))) {
+                for (var blockEntity : blockEntities) {
+                    writer.writeTag(blockEntity.saveNBT());
+                }
+            } catch (IOException e) {
+                log.error("Error while encoding block entities in chunk(x=" + getX() + ", z=" + getZ() + ")!", e);
+            }
+        }
+    }
+
+    private LevelChunkPacket createLevelChunkPacketSubChunk() {
+        var levelChunkPacket = new LevelChunkPacket();
         levelChunkPacket.setChunkX(this.getX());
         levelChunkPacket.setChunkZ(this.getZ());
         levelChunkPacket.setCachingEnabled(false);
@@ -399,6 +462,12 @@ public class AllayChunk implements Chunk {
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) blockLock.unlockRead(stamp);
         }
+    }
+
+    @Override
+    @ApiStatus.Internal
+    public ChunkSection[] getSections() {
+        return unsafeChunk.getSections();
     }
 
     @Override

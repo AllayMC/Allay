@@ -59,6 +59,9 @@ public interface UnsafeChunk {
     ChunkSection getSection(@Range(from = 0, to = 63) int y);
 
     @ApiStatus.Internal
+    ChunkSection[] getSections();
+
+    @ApiStatus.Internal
     @NotNull
     ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y);
 

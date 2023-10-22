@@ -78,6 +78,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return sections[y];
     }
 
+    @Override
+    @ApiStatus.Internal
+    public ChunkSection[] getSections() {
+        return sections;
+    }
+
     @ApiStatus.Internal
     @NotNull
     public ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y) {
