@@ -32,6 +32,7 @@ import org.joml.primitives.AABBf;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 /**
@@ -338,10 +339,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void onChunkInRangeLoaded(Chunk chunk) {
-        var levelChunkPacket = chunk.createLevelChunkPacket();
-        networkComponent.sendPacket(levelChunkPacket);
-        chunk.spawnEntitiesTo(thisEntity);
-        networkComponent.onChunkInRangeLoaded();
+        if (!Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) {
+            CompletableFuture.runAsync(() -> {
+                var levelChunkPacket = chunk.createLevelChunkPacket();
+                networkComponent.sendPacket(levelChunkPacket);
+                chunk.spawnEntitiesTo(thisEntity);
+                networkComponent.onChunkInRangeLoaded();
+            }, Server.getInstance().getVirtualThreadPool());
+        } else {
+            var levelChunkPacket = chunk.createLevelChunkPacket();
+            networkComponent.sendPacket(levelChunkPacket);
+            chunk.spawnEntitiesTo(thisEntity);
+            networkComponent.onChunkInRangeLoaded();
+        }
     }
 
     @Override
