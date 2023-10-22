@@ -10,6 +10,7 @@ import cn.allay.api.world.biome.BiomeType;
 import cn.allay.api.world.chunk.*;
 import cn.allay.api.world.palette.Palette;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -35,17 +36,17 @@ import java.util.concurrent.locks.StampedLock;
  *
  * @author Cool_Loong
  */
-@Slf4j
 @ThreadSafe
+@Slf4j
 public class AllayChunk implements Chunk {
-    protected final UnsafeChunk unsafeChunk;
+    protected final AllayUnsafeChunk unsafeChunk;
     protected final StampedLock blockLock;
     protected final StampedLock heightAndBiomeLock;
     protected final StampedLock lightLock;
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<BedrockPacket> chunkPacketQueue;
 
-    public AllayChunk(UnsafeChunk unsafeChunk) {
+    public AllayChunk(AllayUnsafeChunk unsafeChunk) {
         this.unsafeChunk = unsafeChunk;
         this.blockLock = new StampedLock();
         this.heightAndBiomeLock = new StampedLock();
@@ -310,7 +311,8 @@ public class AllayChunk implements Chunk {
 
     @Override
     public LevelChunkPacket createLevelChunkPacket() {
-        if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) return createLevelChunkPacketSubChunk();
+        if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem())
+            return createLevelChunkPacketSubChunk();
         else return createLevelChunkPacketFullChunk();
     }
 
@@ -322,18 +324,12 @@ public class AllayChunk implements Chunk {
         levelChunkPacket.setRequestSubChunks(false);
         levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionSize());
         //Chunk encoding
-        var byteBuf = Unpooled.buffer();
-        try {
-            writeToNetwork(byteBuf.retain());
-            levelChunkPacket.setData(byteBuf);
-            return levelChunkPacket;
-        } finally {
-            // Make sure the byteBuf is released even if an exception is thrown
-            byteBuf.release();
-        }
+        levelChunkPacket.setData(writeToNetwork());
+        return levelChunkPacket;
     }
 
-    private void writeToNetwork(ByteBuf byteBuf) {
+    private ByteBuf writeToNetwork() {
+        var byteBuf = ByteBufAllocator.DEFAULT.buffer();
         Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
         // Write blocks
         for (var section : getSections()) {
@@ -361,6 +357,7 @@ public class AllayChunk implements Chunk {
                 log.error("Error while encoding block entities in chunk(x=" + getX() + ", z=" + getZ() + ")!", e);
             }
         }
+        return byteBuf;
     }
 
     private LevelChunkPacket createLevelChunkPacketSubChunk() {
