@@ -450,6 +450,7 @@ public class AllayChunkService implements ChunkService {
             });
         }
 
+        //TODO: Move these logic to chunk object?
         //There is no need to explicitly mark Nullable because we ensure that result = success is not null
         private static void createSubChunkData(List<SubChunkData> response,
                                                SubChunkRequestResult result,

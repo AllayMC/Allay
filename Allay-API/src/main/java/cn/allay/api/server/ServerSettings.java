@@ -84,6 +84,9 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("chunk-try-send-count-per-tick")
         private int chunkTrySendCountPerTick = 32;
 
+        @CustomKey("use-sub-chunk-sending-system")
+        private boolean useSubChunkSendingSystem = false;
+
         @CustomKey("do-first-spawn-chunk-threshold")
         private int doFirstSpawnChunkThreshold = 36;
 
