@@ -27,7 +27,7 @@ public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, 
     @SneakyThrows
     public void init() {
         log.info("Loading Effect Types...");
-        var classes = ReflectionUtils.getAllClasses("cn.allay.server.entity.effect.type");
+        var classes = ReflectionUtils.getAllClasses("cn.allay.api.entity.effect.type");
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
