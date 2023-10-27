@@ -57,6 +57,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected List<String> lore = new ArrayList<>();
     protected Map<EnchantmentType, EnchantmentInstance> enchantments = new HashMap<>();
     //TODO: item lock type
+    protected NbtMap customNBTContent = NbtMap.EMPTY;
     protected BlockState blockState;
     protected int stackNetworkId;
 
@@ -121,6 +122,8 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public void setMeta(int meta) {
+        if (meta < 0)
+            throw new IllegalArgumentException("Meta must bigger than zero!");
         this.meta = meta;
     }
 
@@ -131,6 +134,8 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public void setDurability(int durability) {
+        if (durability < 0)
+            throw new IllegalArgumentException("Durability must bigger than zero!");
         this.durability = durability;
     }
 
@@ -242,6 +247,16 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         //TODO: item lock type
 
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
+    }
+
+    @Override
+    public NbtMap getCustomNBTContent() {
+        return customNBTContent;
+    }
+
+    @Override
+    public void setCustomNBTContent(NbtMap customNBTContent) {
+        this.customNBTContent = customNBTContent;
     }
 
     @Override

@@ -20,7 +20,7 @@ import static cn.allay.api.item.component.base.ItemBaseComponent.EMPTY_STACK_NET
 /**
  * Allay Project 2023/9/14
  *
- * @author Cool_Loong
+ * @author Cool_Loong | daoge_cmd
  */
 public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackInitInfo<T> {
     protected final int count;
@@ -113,29 +113,6 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
 
         public Builder extraTag(NbtMap extraTag) {
             extraTagBuilder.putAll(extraTag);
-            return this;
-        }
-
-        public Builder durability(int durability) {
-            extraTagBuilder.putInt("Damage", durability);
-            return this;
-        }
-
-        public Builder customName(String customName) {
-            extraTagBuilder.putString("Name", customName);
-            return this;
-        }
-
-        public Builder lore(List<String> lore) {
-            extraTagBuilder.putList("Lore", NbtType.STRING, lore);
-            return this;
-        }
-
-        public Builder enchantments(List<EnchantmentInstance> enchantments) {
-            extraTagBuilder.putList(
-                    "ench", NbtType.COMPOUND,
-                    enchantments.stream().map(EnchantmentInstance::saveNBT).toList()
-            );
             return this;
         }
 
