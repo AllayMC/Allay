@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,18 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectSpeedType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 1;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.SPEED;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(124, 175, 198);
+    private EffectSpeedType() {
+        super(1, VanillaEffectIds.SPEED, new Color(124, 175, 198));
     }
 }

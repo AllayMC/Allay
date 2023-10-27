@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,18 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectNightVisionType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 16;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.NIGHT_VISION;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(0, 0, 139);
+    private EffectNightVisionType() {
+        super(16, VanillaEffectIds.NIGHT_VISION, new Color(0, 0, 139));
     }
 }

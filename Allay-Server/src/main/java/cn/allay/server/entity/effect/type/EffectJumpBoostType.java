@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,18 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectJumpBoostType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 8;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.JUMP_BOOST;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(34, 255, 76);
+    private EffectJumpBoostType() {
+        super(8, VanillaEffectIds.JUMP_BOOST, new Color(34, 255, 76));
     }
 }
