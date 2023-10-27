@@ -20,8 +20,8 @@ public interface BlockState {
 
     int VERSION = (1 << 24) | //major
                   (20 << 16) | //minor
-                  (30 << 8) | //patch
-                  (50); //revision
+                  (40 << 8) | //patch
+                  (3); //revision
 
     BlockType<?> blockType();
 
