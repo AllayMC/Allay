@@ -7,6 +7,7 @@ import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
 import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;
+import cn.allay.api.entity.effect.EffectRegistry;
 import cn.allay.api.entity.type.EntityTypeBuilder;
 import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
@@ -149,6 +150,7 @@ public final class AllayAPI {
         requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
 
         //Entity
+        requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
         requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
 
