@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectSpeedType extends AbstractEffectType {
+    public static final EffectSpeedType SPEED_TYPE = new EffectSpeedType();
     private EffectSpeedType() {
         super(1, VanillaEffectIds.SPEED, new Color(124, 175, 198));
     }

@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectSlowFallingType extends AbstractEffectType {
+    public static final EffectSlowFallingType SLOW_FALLING_TYPE = new EffectSlowFallingType();
     private EffectSlowFallingType() {
         super(27, VanillaEffectIds.SLOW_FALLING, new Color(206, 255, 255));
     }

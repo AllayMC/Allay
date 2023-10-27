@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentRespirationType extends AbstractEnchantmentType {
+    public static final EnchantmentRespirationType RESPIRATION_TYPE = new EnchantmentRespirationType();
   private EnchantmentRespirationType() {
     super(VanillaEnchantmentIds.RESPIRATION, 6, 3, Rarity.RARE);
   }

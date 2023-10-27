@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectRegenerationType extends AbstractEffectType {
+    public static final EffectRegenerationType REGENERATION_TYPE = new EffectRegenerationType();
     private EffectRegenerationType() {
         super(10, VanillaEffectIds.REGENERATION, new Color(205, 92, 171));
     }

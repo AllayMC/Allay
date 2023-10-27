@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectPoisonType extends AbstractEffectType {
+    public static final EffectPoisonType POISON_TYPE = new EffectPoisonType();
     private EffectPoisonType() {
         super(19, VanillaEffectIds.POISON, new Color(78, 147, 49), true);
     }

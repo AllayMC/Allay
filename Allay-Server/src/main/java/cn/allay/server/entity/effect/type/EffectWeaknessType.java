@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectWeaknessType extends AbstractEffectType {
+    public static final EffectWeaknessType WEAKNESS_TYPE = new EffectWeaknessType();
     private EffectWeaknessType() {
         super(18, VanillaEffectIds.WEAKNESS, new Color(72, 77, 72), true);
     }

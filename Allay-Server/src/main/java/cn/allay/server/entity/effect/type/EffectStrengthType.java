@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectStrengthType extends AbstractEffectType {
+    public static final EffectStrengthType STRENGTH_TYPE = new EffectStrengthType();
     private EffectStrengthType() {
         super(5, VanillaEffectIds.STRENGTH, new Color(147, 36, 35));
     }

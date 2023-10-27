@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentSharpnessType extends AbstractEnchantmentType {
+    public static final EnchantmentSharpnessType SHARPNESS_TYPE = new EnchantmentSharpnessType();
   private EnchantmentSharpnessType() {
     super(VanillaEnchantmentIds.SHARPNESS, 9, 5, Rarity.COMMON);
   }

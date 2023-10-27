@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectInstantHealthType extends AbstractEffectType {
+    public static final EffectInstantHealthType INSTANT_HEALTH_TYPE = new EffectInstantHealthType();
     private EffectInstantHealthType() {
         super(6, VanillaEffectIds.INSTANT_HEALTH, new Color(248, 36, 35));
     }

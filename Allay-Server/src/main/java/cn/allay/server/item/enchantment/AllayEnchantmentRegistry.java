@@ -38,10 +38,7 @@ public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Shor
                 .setUpdateIntervalMillis(100)
                 .build()) {
             for (var enchantmentClassName : classes) {
-                Constructor<?> constructor = Class.forName(enchantmentClassName).getDeclaredConstructor();
-                constructor.setAccessible(true);
-                EnchantmentType enchantment = (EnchantmentType) constructor.newInstance();
-                register(enchantment.getId(), enchantment.getIdentifier(), enchantment);
+                Class.forName(enchantmentClassName);
                 pgbar.step();
             }
         }

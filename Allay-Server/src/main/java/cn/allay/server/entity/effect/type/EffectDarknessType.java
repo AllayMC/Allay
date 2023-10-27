@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectDarknessType extends AbstractEffectType {
+    public static final EffectDarknessType DARKNESS_TYPE = new EffectDarknessType();
     private EffectDarknessType() {
         super(30, VanillaEffectIds.DARKNESS, new Color(41, 39, 33), true);
     }

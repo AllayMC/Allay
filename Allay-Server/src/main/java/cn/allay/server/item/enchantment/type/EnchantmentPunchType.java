@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentPunchType extends AbstractEnchantmentType {
+    public static final EnchantmentPunchType PUNCH_TYPE = new EnchantmentPunchType();
   private EnchantmentPunchType() {
     super(VanillaEnchantmentIds.PUNCH, 20, 2, Rarity.RARE);
   }

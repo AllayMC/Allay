@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectWaterBreathingType extends AbstractEffectType {
+    public static final EffectWaterBreathingType WATER_BREATHING_TYPE = new EffectWaterBreathingType();
     private EffectWaterBreathingType() {
         super(13, VanillaEffectIds.WATER_BREATHING, new Color(46, 82, 153));
     }

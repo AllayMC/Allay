@@ -19,7 +19,7 @@ import java.util.HashMap;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, Identifier, Class<? extends EffectType>> implements EffectRegistry {
+public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, Identifier, EffectType> implements EffectRegistry {
     public AllayEffectRegistry() {
         super(null, input -> new MapPair<>(new HashMap<>(), new HashMap<>()));
     }
@@ -36,11 +36,7 @@ public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, 
                 .setUpdateIntervalMillis(100)
                 .build()) {
             for (var effectClassName : classes) {
-                Class<EffectType> clazz = (Class<EffectType>) Class.forName(effectClassName);
-                Constructor<?> constructor = clazz.getDeclaredConstructor();
-                constructor.setAccessible(true);
-                EffectType effectType = (EffectType) constructor.newInstance();
-                register(effectType.getId(), effectType.getIdentifier(), clazz);
+                Class.forName(effectClassName);
                 pgbar.step();
             }
         }

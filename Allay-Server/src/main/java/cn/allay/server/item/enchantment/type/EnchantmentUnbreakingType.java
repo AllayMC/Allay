@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentUnbreakingType extends AbstractEnchantmentType {
+    public static final EnchantmentUnbreakingType UNBREAKING_TYPE = new EnchantmentUnbreakingType();
   private EnchantmentUnbreakingType() {
     super(VanillaEnchantmentIds.UNBREAKING, 17, 3, Rarity.UNCOMMON);
   }

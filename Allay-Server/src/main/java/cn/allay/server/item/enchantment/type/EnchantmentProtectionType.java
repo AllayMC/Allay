@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentProtectionType extends AbstractEnchantmentType {
+    public static final EnchantmentProtectionType PROTECTION_TYPE = new EnchantmentProtectionType();
   private EnchantmentProtectionType() {
     super(VanillaEnchantmentIds.PROTECTION, 0, 4, Rarity.COMMON);
   }

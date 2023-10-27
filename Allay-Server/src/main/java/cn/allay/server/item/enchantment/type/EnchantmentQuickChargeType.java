@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentQuickChargeType extends AbstractEnchantmentType {
+    public static final EnchantmentQuickChargeType QUICK_CHARGE_TYPE = new EnchantmentQuickChargeType();
   private EnchantmentQuickChargeType() {
     super(VanillaEnchantmentIds.QUICK_CHARGE, 35, 3, Rarity.UNCOMMON);
   }

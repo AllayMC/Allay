@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectHasteType extends AbstractEffectType {
+    public static final EffectHasteType HASTE_TYPE = new EffectHasteType();
     private EffectHasteType() {
         super(3, VanillaEffectIds.HASTE, new Color(217, 192, 67));
     }

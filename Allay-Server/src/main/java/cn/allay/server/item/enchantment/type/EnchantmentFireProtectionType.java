@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentFireProtectionType extends AbstractEnchantmentType {
+    public static final EnchantmentFireProtectionType FIRE_PROTECTION_TYPE = new EnchantmentFireProtectionType();
   private EnchantmentFireProtectionType() {
     super(VanillaEnchantmentIds.FIRE_PROTECTION, 1, 4, Rarity.UNCOMMON);
   }

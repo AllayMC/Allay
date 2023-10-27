@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentAquaAffinityType extends AbstractEnchantmentType {
+  public static final EnchantmentAquaAffinityType AQUA_AFFINITY_TYPE = new EnchantmentAquaAffinityType();
   private EnchantmentAquaAffinityType() {
     super(VanillaEnchantmentIds.AQUA_AFFINITY, 8, 1, Rarity.RARE);
   }

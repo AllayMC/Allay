@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentSilkTouchType extends AbstractEnchantmentType {
+    public static final EnchantmentSilkTouchType SILK_TOUCH_TYPE = new EnchantmentSilkTouchType();
   private EnchantmentSilkTouchType() {
     super(VanillaEnchantmentIds.SILK_TOUCH, 16, 1, Rarity.VERY_RARE);
   }

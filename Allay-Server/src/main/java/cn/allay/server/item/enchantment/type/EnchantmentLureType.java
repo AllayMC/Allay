@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentLureType extends AbstractEnchantmentType {
+    public static final EnchantmentLureType LURE_TYPE = new EnchantmentLureType();
   private EnchantmentLureType() {
     super(VanillaEnchantmentIds.LURE, 24, 3, Rarity.RARE);
   }

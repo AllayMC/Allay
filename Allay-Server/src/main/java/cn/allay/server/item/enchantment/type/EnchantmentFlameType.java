@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentFlameType extends AbstractEnchantmentType {
+    public static final EnchantmentFlameType FLAME_TYPE = new EnchantmentFlameType();
   private EnchantmentFlameType() {
     super(VanillaEnchantmentIds.FLAME, 21, 1, Rarity.RARE);
   }

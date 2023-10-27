@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectFireResistanceType extends AbstractEffectType {
+    public static final EffectFireResistanceType FIRE_RESISTANCE_TYPE = new EffectFireResistanceType();
     private EffectFireResistanceType() {
         super(12, VanillaEffectIds.FIRE_RESISTANCE, new Color(228, 154, 58));
     }

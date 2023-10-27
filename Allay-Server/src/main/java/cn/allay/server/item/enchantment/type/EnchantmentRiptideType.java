@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentRiptideType extends AbstractEnchantmentType {
+    public static final EnchantmentRiptideType RIPTIDE_TYPE = new EnchantmentRiptideType();
   private EnchantmentRiptideType() {
     super(VanillaEnchantmentIds.RIPTIDE, 30, 3, Rarity.RARE);
   }

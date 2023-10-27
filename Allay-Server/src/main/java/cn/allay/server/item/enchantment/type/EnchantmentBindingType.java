@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentBindingType extends AbstractEnchantmentType {
+    public static final EnchantmentBindingType BINDING_TYPE = new EnchantmentBindingType();
   private EnchantmentBindingType() {
     super(VanillaEnchantmentIds.BINDING, 27, 1, Rarity.VERY_RARE);
   }

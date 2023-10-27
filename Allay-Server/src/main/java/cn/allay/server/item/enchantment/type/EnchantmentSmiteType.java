@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentSmiteType extends AbstractEnchantmentType {
+    public static final EnchantmentSmiteType SMITE_TYPE = new EnchantmentSmiteType();
   private EnchantmentSmiteType() {
     super(VanillaEnchantmentIds.SMITE, 10, 5, Rarity.UNCOMMON);
   }

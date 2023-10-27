@@ -10,6 +10,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * @author daoge_cmd
  */
 public class EnchantmentFrostWalkerType extends AbstractEnchantmentType {
+    public static final EnchantmentFrostWalkerType FROST_WALKER_TYPE = new EnchantmentFrostWalkerType();
     private EnchantmentFrostWalkerType() {
         super(VanillaEnchantmentIds.FROST_WALKER, 25, 3, Rarity.RARE);
     }

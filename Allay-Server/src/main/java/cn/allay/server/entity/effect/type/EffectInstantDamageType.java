@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectInstantDamageType extends AbstractEffectType {
+    public static final EffectInstantDamageType INSTANT_DAMAGE_TYPE = new EffectInstantDamageType();
     private EffectInstantDamageType() {
         super(7, VanillaEffectIds.INSTANT_DAMAGE, new Color(67, 10, 9), true);
     }

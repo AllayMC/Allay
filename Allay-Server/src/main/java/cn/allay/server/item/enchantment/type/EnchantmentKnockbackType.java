@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentKnockbackType extends AbstractEnchantmentType {
+    public static final EnchantmentKnockbackType KNOCKBACK_TYPE = new EnchantmentKnockbackType();
   private EnchantmentKnockbackType() {
     super(VanillaEnchantmentIds.KNOCKBACK, 12, 2, Rarity.UNCOMMON);
   }

@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentLuckOfTheSeaType extends AbstractEnchantmentType {
+    public static final EnchantmentLuckOfTheSeaType LUCK_OF_THE_SEA_TYPE = new EnchantmentLuckOfTheSeaType();
   private EnchantmentLuckOfTheSeaType() {
     super(VanillaEnchantmentIds.LUCK_OF_THE_SEA, 23, 3, Rarity.RARE);
   }

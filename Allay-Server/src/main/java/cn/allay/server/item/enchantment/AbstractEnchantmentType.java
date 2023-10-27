@@ -2,6 +2,7 @@ package cn.allay.server.item.enchantment;
 
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.enchantment.EnchantmentInstance;
+import cn.allay.api.item.enchantment.EnchantmentRegistry;
 import cn.allay.api.item.enchantment.EnchantmentType;
 import cn.allay.api.item.enchantment.Rarity;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
@@ -32,6 +33,7 @@ public class AbstractEnchantmentType implements EnchantmentType {
         this.id = (short) id;
         this.maxLevel = (short) maxLevel;
         this.rarity = rarity;
+        EnchantmentRegistry.getRegistry().register(this.id, identifier, this);
     }
 
     @Override

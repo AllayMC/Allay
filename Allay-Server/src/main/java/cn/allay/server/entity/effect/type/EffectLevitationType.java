@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectLevitationType extends AbstractEffectType {
+    public static final EffectLevitationType LEVITATION_TYPE = new EffectLevitationType();
     private EffectLevitationType() {
         super(24, VanillaEffectIds.LEVITATION, new Color(206, 255, 255), true);
     }

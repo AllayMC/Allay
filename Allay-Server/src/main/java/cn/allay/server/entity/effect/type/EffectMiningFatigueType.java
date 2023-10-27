@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectMiningFatigueType extends AbstractEffectType {
+    public static final EffectMiningFatigueType MINING_FATIGUE_TYPE = new EffectMiningFatigueType();
     private EffectMiningFatigueType() {
         super(4, VanillaEffectIds.MINING_FATIGUE, new Color(74, 66, 23), true);
     }
