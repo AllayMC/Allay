@@ -31,7 +31,7 @@ public interface EffectType {
         return false;
     }
 
-    default void onApply(Entity entity, EffectInstance effectInstance) {}
+    default void onAdd(Entity entity, EffectInstance effectInstance) {}
 
     default void onRemove(Entity entity, EffectInstance effectInstance) {}
 
