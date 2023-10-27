@@ -9,6 +9,8 @@ import cn.allay.api.component.interfaces.ComponentManager;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.attribute.AttributeType;
 import cn.allay.api.entity.component.attribute.EntityAttributeComponent;
+import cn.allay.api.entity.effect.EffectInstance;
+import cn.allay.api.entity.effect.EffectType;
 import cn.allay.api.entity.event.EntityLoadNBTEvent;
 import cn.allay.api.entity.event.EntitySaveNBTEvent;
 import cn.allay.api.entity.init.EntityInitInfo;
@@ -36,10 +38,7 @@ import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.Math.abs;
@@ -71,6 +70,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected EntityType<T> entityType;
     protected AABBfc aabb;
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
+    protected Map<EffectType, EffectInstance> effects = new HashMap<>();
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
     protected boolean willBeRemovedNextTick = false;
@@ -436,5 +436,62 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void onFall() {
         //TODO: fall damage
+    }
+
+    @Override
+    public void addEffect(EffectInstance effectInstance) {
+        var old = effects.put(effectInstance.getType(), effectInstance);
+        effectInstance.getType().onAdd(thisEntity, effectInstance);
+        if (old == null) calculateEffectColor();
+        var mobEffectPk = new MobEffectPacket();
+        mobEffectPk.setRuntimeEntityId(uniqueId);
+        mobEffectPk.setEffectId(effectInstance.getType().getId());
+        mobEffectPk.setAmplifier(effectInstance.getAmplifier());
+        mobEffectPk.setParticles(effectInstance.isVisible());
+        mobEffectPk.setDuration(effectInstance.getDuration());
+        mobEffectPk.setEvent(old == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
+        sendPacketToViewers(mobEffectPk);
+    }
+
+    @Override
+    public void removeEffect(EffectType effectType) {
+        var removed = effects.remove(effectType);
+        if (removed != null) {
+            effectType.onRemove(thisEntity, removed);
+            calculateEffectColor();
+            var mobEffectPk = new MobEffectPacket();
+            mobEffectPk.setRuntimeEntityId(uniqueId);
+            mobEffectPk.setEffectId(effectType.getId());
+            mobEffectPk.setEvent(MobEffectPacket.Event.REMOVE);
+            sendPacketToViewers(mobEffectPk);
+        }
+    }
+
+    protected void calculateEffectColor() {
+        int[] color = new int[3];
+        int count = 0;
+        for (var effectInstance : this.effects.values()) {
+            if (effectInstance.isVisible()) {
+                var c = effectInstance.getType().getColor();
+                color[0] += c.getRed() * (effectInstance.getAmplifier() + 1);
+                color[1] += c.getGreen() * (effectInstance.getAmplifier() + 1);
+                color[2] += c.getBlue() * (effectInstance.getAmplifier() + 1);
+                count += effectInstance.getAmplifier() + 1;
+            }
+        }
+
+        if (count > 0) {
+            int r = (color[0] / count) & 0xff;
+            int g = (color[1] / count) & 0xff;
+            int b = (color[2] / count) & 0xff;
+
+            this.metadata.setInt(EntityDataTypes.EFFECT_COLOR, (r << 16) + (g << 8) + b);
+            this.metadata.setByte(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
+        } else {
+            this.metadata.setInt(EntityDataTypes.EFFECT_COLOR, 0);
+            this.metadata.setByte(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
+        }
+
+        sendEntityData(EntityDataTypes.EFFECT_COLOR, EntityDataTypes.EFFECT_AMBIENCE);
     }
 }

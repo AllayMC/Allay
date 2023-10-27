@@ -3,6 +3,8 @@ package cn.allay.api.entity.component.base;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponent;
+import cn.allay.api.entity.effect.EffectInstance;
+import cn.allay.api.entity.effect.EffectType;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
@@ -124,7 +126,9 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void onFall();
 
-    // TODO: Effect
+    void addEffect(EffectInstance effectInstance);
+
+    void removeEffect(EffectType effectType);
 
     default void tick() {
     }
