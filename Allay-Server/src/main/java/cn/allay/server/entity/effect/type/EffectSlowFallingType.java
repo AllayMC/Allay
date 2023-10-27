@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,18 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectSlowFallingType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 27;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.SLOW_FALLING;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(206, 255, 255);
+    private EffectSlowFallingType() {
+        super(27, VanillaEffectIds.SLOW_FALLING, new Color(206, 255, 255));
     }
 }

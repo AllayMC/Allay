@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,23 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectInstantDamageType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 7;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.INSTANT_DAMAGE;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(67, 10, 9);
-    }
-
-    @Override
-    public boolean isBad() {
-        return true;
+    private EffectInstantDamageType() {
+        super(7, VanillaEffectIds.INSTANT_DAMAGE, new Color(67, 10, 9), true);
     }
 }

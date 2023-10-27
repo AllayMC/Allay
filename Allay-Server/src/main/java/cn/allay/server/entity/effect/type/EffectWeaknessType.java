@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,23 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectWeaknessType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 18;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.WEAKNESS;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(72, 77, 72);
-    }
-
-    @Override
-    public boolean isBad() {
-        return true;
+    private EffectWeaknessType() {
+        super(18, VanillaEffectIds.WEAKNESS, new Color(72, 77, 72), true);
     }
 }

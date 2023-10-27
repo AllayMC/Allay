@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,23 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectPoisonType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 19;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.POISON;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(78, 147, 49);
-    }
-
-    @Override
-    public boolean isBad() {
-        return true;
+    private EffectPoisonType() {
+        super(19, VanillaEffectIds.POISON, new Color(78, 147, 49), true);
     }
 }

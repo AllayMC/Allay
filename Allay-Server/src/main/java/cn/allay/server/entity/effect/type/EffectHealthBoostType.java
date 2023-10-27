@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,18 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectHealthBoostType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 21;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.HEALTH_BOOST;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(248, 125, 35);
+    private EffectHealthBoostType() {
+        super(21, VanillaEffectIds.HEALTH_BOOST, new Color(248, 125, 35));
     }
 }

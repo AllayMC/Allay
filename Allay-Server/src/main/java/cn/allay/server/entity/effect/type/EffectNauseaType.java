@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,23 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectNauseaType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 9;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.NAUSEA;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(85, 29, 74);
-    }
-
-    @Override
-    public boolean isBad() {
-        return true;
+    private EffectNauseaType() {
+        super(9, VanillaEffectIds.NAUSEA, new Color(85, 29, 74), true);
     }
 }

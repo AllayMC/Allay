@@ -1,7 +1,6 @@
 package cn.allay.server.entity.effect.type;
 
 import cn.allay.api.data.VanillaEffectIds;
-import cn.allay.api.identifier.Identifier;
 import cn.allay.server.entity.effect.AbstractEffectType;
 
 import java.awt.*;
@@ -12,18 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectResistanceType extends AbstractEffectType {
-    @Override
-    public int getId() {
-        return 11;
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return VanillaEffectIds.RESISTANCE;
-    }
-
-    @Override
-    public Color getColor() {
-        return new Color(153, 69, 58);
+    private EffectResistanceType() {
+        super(11, VanillaEffectIds.RESISTANCE, new Color(153, 69, 58));
     }
 }
