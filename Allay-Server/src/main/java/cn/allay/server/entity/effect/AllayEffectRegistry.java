@@ -1,10 +1,9 @@
 package cn.allay.server.entity.effect;
 
-import cn.allay.api.entity.effect.Effect;
+import cn.allay.api.entity.effect.EffectType;
 import cn.allay.api.entity.effect.EffectRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleDoubleKeyMappedRegistry;
-import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import me.tongfei.progressbar.ProgressBar;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Allay Project 2023/10/27
@@ -21,7 +19,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, Identifier, Class<? extends Effect>> implements EffectRegistry {
+public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, Identifier, Class<? extends EffectType>> implements EffectRegistry {
     public AllayEffectRegistry() {
         super(null, input -> new MapPair<>(new HashMap<>(), new HashMap<>()));
     }
@@ -38,11 +36,11 @@ public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, 
                 .setUpdateIntervalMillis(100)
                 .build()) {
             for (var effectClassName : classes) {
-                Class<Effect> clazz = (Class<Effect>) Class.forName(effectClassName);
+                Class<EffectType> clazz = (Class<EffectType>) Class.forName(effectClassName);
                 Constructor<?> constructor = clazz.getDeclaredConstructor();
                 constructor.setAccessible(true);
-                Effect effect = (Effect) constructor.newInstance();
-                register(effect.getId(), effect.getIdentifier(), clazz);
+                EffectType effectType = (EffectType) constructor.newInstance();
+                register(effectType.getId(), effectType.getIdentifier(), clazz);
                 pgbar.step();
             }
         }
