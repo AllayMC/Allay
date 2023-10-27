@@ -1,0 +1,16 @@
+package cn.allay.api.item.enchantment.type;
+
+import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.enchantment.Rarity;
+import cn.allay.api.item.enchantment.AbstractEnchantmentType;
+
+/**
+ * @author daoge_cmd <br>
+ * Allay Project <br>
+ */
+public class EnchantmentKnockbackType extends AbstractEnchantmentType {
+    public static final EnchantmentKnockbackType KNOCKBACK_TYPE = new EnchantmentKnockbackType();
+  private EnchantmentKnockbackType() {
+    super(new Identifier("minecraft:knockback"), 12, 2, Rarity.UNCOMMON);
+  }
+}

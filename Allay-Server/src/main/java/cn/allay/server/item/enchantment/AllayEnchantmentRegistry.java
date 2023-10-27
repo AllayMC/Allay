@@ -29,7 +29,7 @@ public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Shor
     @SneakyThrows
     public void init() {
         log.info("Loading Enchantment Types...");
-        var classes = ReflectionUtils.getAllClasses("cn.allay.server.item.enchantment.type");
+        var classes = ReflectionUtils.getAllClasses("cn.allay.api.item.enchantment.type");
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
