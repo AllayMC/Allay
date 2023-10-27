@@ -14,6 +14,6 @@ public interface BlockChestBehavior extends BlockBehavior {
   BlockType<BlockChestBehavior> CHEST_TYPE = BlockTypeBuilder
           .builder(BlockChestBehavior.class)
           .vanillaBlock(VanillaBlockId.CHEST)
-          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
           .build();
 }

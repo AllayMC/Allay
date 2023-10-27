@@ -14,6 +14,6 @@ public interface BlockTrappedChestBehavior extends BlockBehavior {
   BlockType<BlockTrappedChestBehavior> TRAPPED_CHEST_TYPE = BlockTypeBuilder
           .builder(BlockTrappedChestBehavior.class)
           .vanillaBlock(VanillaBlockId.TRAPPED_CHEST)
-          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
           .build();
 }
