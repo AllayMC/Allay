@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentSoulSpeedType extends AbstractEnchantmentType {
+    public static final EnchantmentSoulSpeedType SOUL_SPEED_TYPE = new EnchantmentSoulSpeedType();
   private EnchantmentSoulSpeedType() {
     super(VanillaEnchantmentIds.SOUL_SPEED, 36, 3, Rarity.VERY_RARE);
   }

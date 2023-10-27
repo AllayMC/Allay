@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectInvisibilityType extends AbstractEffectType {
+    public static final EffectInvisibilityType INVISIBILITY_TYPE = new EffectInvisibilityType();
     private EffectInvisibilityType() {
         super(14, VanillaEffectIds.INVISIBILITY, new Color(127, 131, 146));
     }

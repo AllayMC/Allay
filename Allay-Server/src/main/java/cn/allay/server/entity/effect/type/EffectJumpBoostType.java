@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectJumpBoostType extends AbstractEffectType {
+    public static final EffectJumpBoostType JUMP_BOOST_TYPE = new EffectJumpBoostType();
     private EffectJumpBoostType() {
         super(8, VanillaEffectIds.JUMP_BOOST, new Color(34, 255, 76));
     }

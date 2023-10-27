@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectBlindnessType extends AbstractEffectType {
+    public static final EffectBlindnessType BLINDNESS_TYPE = new EffectBlindnessType();
     private EffectBlindnessType() {
         super(15, VanillaEffectIds.BLINDNESS, new Color(191, 192, 192), true);
     }

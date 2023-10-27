@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentFeatherFallingType extends AbstractEnchantmentType {
+    public static final EnchantmentFeatherFallingType FEATHER_FALLING_TYPE = new EnchantmentFeatherFallingType();
   private EnchantmentFeatherFallingType() {
     super(VanillaEnchantmentIds.FEATHER_FALLING, 2, 4, Rarity.UNCOMMON);
   }

@@ -9,7 +9,7 @@ import cn.allay.api.registry.DoubleKeyMappedRegistry;
  *
  * @author daoge_cmd
  */
-public interface EffectRegistry extends DoubleKeyMappedRegistry<Integer, Identifier, Class<? extends EffectType>> {
+public interface EffectRegistry extends DoubleKeyMappedRegistry<Integer, Identifier, EffectType> {
     ApiInstanceHolder<EffectRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static EffectRegistry getRegistry() {

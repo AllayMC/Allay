@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentThornsType extends AbstractEnchantmentType {
+    public static final EnchantmentThornsType THORNS_TYPE = new EnchantmentThornsType();
   private EnchantmentThornsType() {
     super(VanillaEnchantmentIds.THORNS, 5, 3, Rarity.VERY_RARE);
   }

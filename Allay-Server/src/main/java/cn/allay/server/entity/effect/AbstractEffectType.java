@@ -1,6 +1,7 @@
 package cn.allay.server.entity.effect;
 
 import cn.allay.api.entity.effect.EffectInstance;
+import cn.allay.api.entity.effect.EffectRegistry;
 import cn.allay.api.entity.effect.EffectType;
 import cn.allay.api.identifier.Identifier;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public abstract class AbstractEffectType implements EffectType {
         this.identifier = identifier;
         this.color = color;
         this.isBad = isBad;
+        EffectRegistry.getRegistry().register(id, identifier, this);
     }
 
     @Override

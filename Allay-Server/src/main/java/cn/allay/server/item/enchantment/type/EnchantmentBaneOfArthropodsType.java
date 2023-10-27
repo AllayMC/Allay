@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentBaneOfArthropodsType extends AbstractEnchantmentType {
+    public static final EnchantmentBaneOfArthropodsType BANE_OF_ARTHROPODS_TYPE = new EnchantmentBaneOfArthropodsType();
   private EnchantmentBaneOfArthropodsType() {
     super(VanillaEnchantmentIds.BANE_OF_ARTHROPODS, 11, 5, Rarity.UNCOMMON);
   }

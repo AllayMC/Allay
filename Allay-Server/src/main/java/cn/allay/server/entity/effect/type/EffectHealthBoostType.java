@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectHealthBoostType extends AbstractEffectType {
+    public static final EffectHealthBoostType HEALTH_BOOST_TYPE = new EffectHealthBoostType();
     private EffectHealthBoostType() {
         super(21, VanillaEffectIds.HEALTH_BOOST, new Color(248, 125, 35));
     }

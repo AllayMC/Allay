@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectSaturationType extends AbstractEffectType {
+    public static final EffectSaturationType SATURATION_TYPE = new EffectSaturationType();
     private EffectSaturationType() {
         super(23, VanillaEffectIds.SATURATION, new Color(255, 0, 255));
     }

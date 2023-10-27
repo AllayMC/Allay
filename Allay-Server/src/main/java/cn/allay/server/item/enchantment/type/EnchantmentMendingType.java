@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentMendingType extends AbstractEnchantmentType {
+    public static final EnchantmentMendingType MENDING_TYPE = new EnchantmentMendingType();
   private EnchantmentMendingType() {
     super(VanillaEnchantmentIds.MENDING, 26, 3, Rarity.RARE);
   }

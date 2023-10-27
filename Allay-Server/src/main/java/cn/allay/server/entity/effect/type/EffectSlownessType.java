@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectSlownessType extends AbstractEffectType {
+    public static final EffectSlownessType SLOWNESS_TYPE = new EffectSlownessType();
     private EffectSlownessType() {
         super(2, VanillaEffectIds.SLOWNESS, new Color(90, 108, 129), true);
     }

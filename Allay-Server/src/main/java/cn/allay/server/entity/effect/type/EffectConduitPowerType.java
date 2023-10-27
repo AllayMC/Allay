@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectConduitPowerType extends AbstractEffectType {
+    public static final EffectConduitPowerType CONDUIT_POWER_TYPE = new EffectConduitPowerType();
     private EffectConduitPowerType() {
         super(26, VanillaEffectIds.CONDUIT_POWER, new Color(29, 194, 209));
     }

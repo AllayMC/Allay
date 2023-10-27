@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentMultishotType extends AbstractEnchantmentType {
+    public static final EnchantmentMultishotType MULTISHOT_TYPE = new EnchantmentMultishotType();
   private EnchantmentMultishotType() {
     super(VanillaEnchantmentIds.MULTISHOT, 33, 1, Rarity.RARE);
   }

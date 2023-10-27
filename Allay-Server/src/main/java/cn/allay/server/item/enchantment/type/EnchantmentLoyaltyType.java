@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentLoyaltyType extends AbstractEnchantmentType {
+    public static final EnchantmentLoyaltyType LOYALTY_TYPE = new EnchantmentLoyaltyType();
   private EnchantmentLoyaltyType() {
     super(VanillaEnchantmentIds.LOYALTY, 31, 3, Rarity.UNCOMMON);
   }

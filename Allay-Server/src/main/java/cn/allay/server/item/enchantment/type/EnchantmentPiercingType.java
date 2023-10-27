@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentPiercingType extends AbstractEnchantmentType {
+    public static final EnchantmentPiercingType PIERCING_TYPE = new EnchantmentPiercingType();
   private EnchantmentPiercingType() {
     super(VanillaEnchantmentIds.PIERCING, 34, 4, Rarity.COMMON);
   }

@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentChannelingType extends AbstractEnchantmentType {
+    public static final EnchantmentChannelingType CHANNELING_TYPE = new EnchantmentChannelingType();
   private EnchantmentChannelingType() {
     super(VanillaEnchantmentIds.CHANNELING, 32, 1, Rarity.VERY_RARE);
   }

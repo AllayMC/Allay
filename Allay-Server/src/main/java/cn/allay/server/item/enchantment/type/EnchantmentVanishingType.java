@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentVanishingType extends AbstractEnchantmentType {
+    public static final EnchantmentVanishingType VANISHING_TYPE = new EnchantmentVanishingType();
   private EnchantmentVanishingType() {
     super(VanillaEnchantmentIds.VANISHING, 28, 1, Rarity.VERY_RARE);
   }

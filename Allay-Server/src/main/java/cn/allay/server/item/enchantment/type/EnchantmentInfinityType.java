@@ -9,6 +9,7 @@ import cn.allay.server.item.enchantment.AbstractEnchantmentType;
  * Allay Project <br>
  */
 public class EnchantmentInfinityType extends AbstractEnchantmentType {
+    public static final EnchantmentInfinityType INFINITY_TYPE = new EnchantmentInfinityType();
   private EnchantmentInfinityType() {
     super(VanillaEnchantmentIds.INFINITY, 22, 1, Rarity.VERY_RARE);
   }

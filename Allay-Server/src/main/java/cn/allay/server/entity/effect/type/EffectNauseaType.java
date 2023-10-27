@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectNauseaType extends AbstractEffectType {
+    public static final EffectNauseaType NAUSEA_TYPE = new EffectNauseaType();
     private EffectNauseaType() {
         super(9, VanillaEffectIds.NAUSEA, new Color(85, 29, 74), true);
     }

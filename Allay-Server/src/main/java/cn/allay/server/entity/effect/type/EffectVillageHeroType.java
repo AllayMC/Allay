@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectVillageHeroType extends AbstractEffectType {
+    public static final EffectVillageHeroType VILLAGE_HERO_TYPE = new EffectVillageHeroType();
     private EffectVillageHeroType() {
         super(29, VanillaEffectIds.VILLAGE_HERO, new Color(68, 255, 68));
     }

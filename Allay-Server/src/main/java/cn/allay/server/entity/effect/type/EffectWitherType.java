@@ -11,6 +11,7 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectWitherType extends AbstractEffectType {
+    public static final EffectWitherType WITHER_TYPE = new EffectWitherType();
     private EffectWitherType() {
         super(20, VanillaEffectIds.WITHER, new Color(53, 42, 39), true);
     }
