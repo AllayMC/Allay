@@ -14,6 +14,6 @@ public interface BlockStonecutterBlockBehavior extends BlockBehavior {
   BlockType<BlockStonecutterBlockBehavior> STONECUTTER_BLOCK_TYPE = BlockTypeBuilder
           .builder(BlockStonecutterBlockBehavior.class)
           .vanillaBlock(VanillaBlockId.STONECUTTER_BLOCK)
-          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
           .build();
 }

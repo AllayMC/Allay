@@ -14,6 +14,6 @@ public interface BlockEnderChestBehavior extends BlockBehavior {
   BlockType<BlockEnderChestBehavior> ENDER_CHEST_TYPE = BlockTypeBuilder
           .builder(BlockEnderChestBehavior.class)
           .vanillaBlock(VanillaBlockId.ENDER_CHEST)
-          .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+          .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
           .build();
 }
