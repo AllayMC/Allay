@@ -10,4 +10,5 @@ buildSrc/**
 /output/
 /caches/
 **/server-settings.yml
-/jegenerator/
+**/bin/
+**/jegenerator/
