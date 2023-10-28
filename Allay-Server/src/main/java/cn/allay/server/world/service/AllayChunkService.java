@@ -521,7 +521,7 @@ public class AllayChunkService implements ChunkService {
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
-            chunkLoader.publishClientChunkUpdate();
+            if (!chunkReadyToSend.isEmpty()) chunkLoader.publishClientChunkUpdate();
             chunkReadyToSend.forEach((chunkHash, chunk) -> {
                 chunkLoader.onChunkInRangeLoaded(chunk);
                 sentChunks.add(chunkHash.longValue());
