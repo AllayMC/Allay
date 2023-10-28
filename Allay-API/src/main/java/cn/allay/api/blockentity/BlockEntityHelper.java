@@ -1,7 +1,7 @@
 package cn.allay.api.blockentity;
 
 import cn.allay.api.blockentity.init.SimpleBlockEntityInitInfo;
-import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
+import cn.allay.api.blockentity.registry.BlockEntityTypeRegistry;
 import cn.allay.api.world.World;
 import org.cloudburstmc.nbt.NbtMap;
 

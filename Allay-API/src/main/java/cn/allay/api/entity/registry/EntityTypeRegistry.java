@@ -1,6 +1,7 @@
-package cn.allay.api.entity.type;
+package cn.allay.api.entity.registry;
 
 import cn.allay.api.ApiInstanceHolder;
+import cn.allay.api.entity.type.EntityType;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.MappedRegistry;
 import org.cloudburstmc.nbt.NbtMap;

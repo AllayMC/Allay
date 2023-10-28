@@ -112,7 +112,7 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent {
 
         @Override
         public BlockAttributes apply(BlockState blockState) {
-            if (lazyLoadAttributeMap == null) lazyLoadAttributeMap = lazyLoader.apply(blockState.blockType());
+            if (lazyLoadAttributeMap == null) lazyLoadAttributeMap = lazyLoader.apply(blockState.getBlockType());
             return lazyLoadAttributeMap.get(blockState.blockStateHash());
         }
     }

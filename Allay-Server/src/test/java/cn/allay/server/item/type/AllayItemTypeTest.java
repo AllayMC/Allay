@@ -1,10 +1,10 @@
 package cn.allay.server.item.type;
 
-import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.interfaces.ItemDiamondStack;
-import cn.allay.api.item.type.CreativeItemRegistry;
-import cn.allay.api.item.type.ItemTypeRegistry;
+import cn.allay.api.item.registry.CreativeItemRegistry;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
@@ -87,7 +87,7 @@ public class AllayItemTypeTest {
         // Use CreativeItemRegistry as standard reference
         for (var creativeItem : CreativeItemRegistry.getRegistry().getContent().values()) {
             if (creativeItem.toBlockState() == null) continue;
-            var correct = creativeItem.toBlockState().blockType();
+            var correct = creativeItem.toBlockState().getBlockType();
             var actual = creativeItem.getItemType().getBlockType();
             if (correct != actual) {
                 System.out.println(correct.getIdentifier() + " " + actual.getIdentifier());

@@ -5,12 +5,12 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
+import cn.allay.api.data.VanillaItemMetaBlockStateBiMap;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.enchantment.EnchantmentHelper;
 import cn.allay.api.item.enchantment.EnchantmentInstance;
-import cn.allay.api.item.enchantment.EnchantmentRegistry;
 import cn.allay.api.item.enchantment.EnchantmentType;
 import cn.allay.api.item.init.ItemStackInitInfo;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
@@ -58,16 +58,12 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected Map<EnchantmentType, EnchantmentInstance> enchantments = new HashMap<>();
     //TODO: item lock type
     protected NbtMap customNBTContent = NbtMap.EMPTY;
-    protected BlockState blockState;
     protected int stackNetworkId;
 
     public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
         this.itemType = initInfo.getItemType();
         this.count = initInfo.count();
         this.meta = initInfo.meta();
-        this.blockState = initInfo.blockState();
-        if (this.blockState == null && itemType.getBlockType() != null)
-            this.blockState = itemType.getBlockType().getDefaultState();
         var specifiedNetworkId = initInfo.stackNetworkId();
         if (specifiedNetworkId != EMPTY_STACK_NETWORK_ID) {
             if (specifiedNetworkId < 0)
@@ -161,12 +157,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public BlockState toBlockState() {
-        return blockState;
-    }
-
-    @Override
-    public void setBlockStateStyle(@Nullable BlockState blockState) {
-        this.blockState = blockState;
+        return itemType.getBlockType() == null ?
+                null :
+                VanillaItemMetaBlockStateBiMap.getRegistry().getMetaToBlockStateMap(itemType).get(meta);
     }
 
     @Override
@@ -174,6 +167,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (itemType == ItemAirStack.AIR_TYPE) {
             return ItemData.AIR;
         } else {
+            var blockState = toBlockState();
             return ItemData
                 .builder()
                 .definition(itemType.toNetworkDefinition())
@@ -212,7 +206,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
                         .count(count)
                         .meta(meta)
                         .extraTag(extraTag != null ? extraTag : NbtMap.EMPTY)
-                        .blockState(blockState)
                         .stackNetworkId(newStackNetworkId ? EMPTY_STACK_NETWORK_ID : stackNetworkId)
                         .autoAssignStackNetworkId(newStackNetworkId)
                         .build()
@@ -264,16 +257,16 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             @Nullable EntityPlayer player, ItemStack itemStack,
             World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace) {
-        var blockState = itemStack.toBlockState();
-        if (blockState == null)
+        if (itemStack.getItemType().getBlockType() == null)
             return false;
+        var blockState = itemStack.toBlockState();
         return tryPlaceBlockState(player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
     }
 
     protected boolean tryPlaceBlockState(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
         if (player != null && hasEntityCollision(world, placeBlockPos, blockState))
             return false;
-        BlockType<?> blockType = blockState.blockType();
+        BlockType<?> blockType = blockState.getBlockType();
         assert blockType != null;
         boolean result = blockType.getBlockBehavior().place(player, world, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         tryConsumeItem(player, itemStack);

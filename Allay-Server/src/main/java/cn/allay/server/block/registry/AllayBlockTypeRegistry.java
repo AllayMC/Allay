@@ -1,7 +1,7 @@
-package cn.allay.server.block.type;
+package cn.allay.server.block.registry;
 
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.block.type.BlockType;
-import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.ReflectionUtils;

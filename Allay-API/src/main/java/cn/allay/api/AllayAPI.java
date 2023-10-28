@@ -2,19 +2,20 @@ package cn.allay.api;
 
 import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.palette.BlockStateHashPalette;
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.blockentity.registry.BlockEntityTypeRegistry;
 import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
-import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
 import cn.allay.api.component.interfaces.ComponentInjector;
+import cn.allay.api.data.VanillaItemMetaBlockStateBiMap;
 import cn.allay.api.entity.effect.EffectRegistry;
+import cn.allay.api.entity.registry.EntityTypeRegistry;
 import cn.allay.api.entity.type.EntityTypeBuilder;
-import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
 import cn.allay.api.item.enchantment.EnchantmentRegistry;
-import cn.allay.api.item.type.CreativeItemRegistry;
+import cn.allay.api.item.registry.CreativeItemRegistry;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.api.item.type.ItemTypeBuilder;
-import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
@@ -143,9 +144,6 @@ public final class AllayAPI {
         requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
 
-        //Creative Item Registry
-        requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
-
         //Entity
         requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
@@ -153,6 +151,12 @@ public final class AllayAPI {
 
         //Biome
         requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);
+
+        //Misc
+        requireImpl(VanillaItemMetaBlockStateBiMap.class, VanillaItemMetaBlockStateBiMap.REGISTRY::set);
+
+        //Creative Item Registry
+        requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {

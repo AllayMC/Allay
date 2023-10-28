@@ -1,7 +1,7 @@
 package cn.allay.server.item.type;
 
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.block.type.BlockType;
-import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.component.interfaces.ComponentProvider;
@@ -10,13 +10,12 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponent;
 import cn.allay.api.item.component.attribute.ItemAttributeComponentImpl;
-import cn.allay.api.item.component.attribute.ItemAttributes;
 import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
 import cn.allay.api.item.component.base.ItemBaseComponentImpl;
 import cn.allay.api.item.init.ItemStackInitInfo;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeBuilder;
-import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.utils.ComponentClassCacheUtils;
 import lombok.Getter;

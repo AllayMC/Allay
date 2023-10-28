@@ -1,4 +1,4 @@
-package cn.allay.api.item.type;
+package cn.allay.api.item.registry;
 
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.item.ItemStack;

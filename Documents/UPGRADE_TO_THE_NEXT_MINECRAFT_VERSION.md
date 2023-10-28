@@ -1,3 +1,4 @@
+# TODO: This doc need to be updated!
 # Upgrade to the next minecraft version
 
 ## 1. Update resource files
