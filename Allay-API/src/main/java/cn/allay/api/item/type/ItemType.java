@@ -25,10 +25,11 @@ public interface ItemType<T extends ItemStack> extends Identified {
 
     int getRuntimeId();
 
-    @Nullable
-    Identifier getBlockIdentifier();
+    default Identifier getBlockIdentifier() {
+        var blockType = getBlockType();
+        return blockType == null ? null : blockType.getIdentifier();
+    }
 
-    @Nullable
     BlockType<?> getBlockType();
 
     default ItemDefinition toNetworkDefinition() {

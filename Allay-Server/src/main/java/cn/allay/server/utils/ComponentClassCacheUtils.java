@@ -27,10 +27,6 @@ import java.util.Properties;
 @SuppressWarnings("unchecked")
 public final class ComponentClassCacheUtils {
     public static final Path CACHE_ROOT_PATH = Path.of("caches");
-    public static final String CACHE_PACKAGE_BLOCK_PATH = "cn/allay/api/block/interfaces";
-    public static final String CACHE_PACKAGE_BLOCK_ENTITY_PATH = "cn/allay/api/blockentity/interfaces";
-    public static final String CACHE_PACKAGE_ITEM_PATH = "cn/allay/api/item/interfaces";
-    public static final String CACHE_PACKAGE_ENTITY_PATH = "cn/allay/api/entity/interfaces";
     private static final Gson GSON = new GsonBuilder().create();
     private static Map<String, String> LAST_CACHE_MAP;
     private static Map<String, String> CACHE_MAP = new LinkedHashMap<>();

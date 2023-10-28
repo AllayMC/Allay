@@ -2,7 +2,7 @@ package cn.allay.api.item;
 
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
-import cn.allay.api.item.type.ItemTypeRegistry;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Objects;

@@ -1,7 +1,9 @@
 package cn.allay.server.item.enchantment;
 
+import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.enchantment.EnchantmentRegistry;
 import cn.allay.api.item.enchantment.EnchantmentType;
+import cn.allay.api.registry.SimpleDoubleKeyMappedRegistry;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
@@ -19,15 +21,15 @@ import java.util.Map;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayEnchantmentRegistry extends SimpleMappedRegistry<Short, EnchantmentType, Map<Short, EnchantmentType>> implements EnchantmentRegistry {
+public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Short, Identifier, EnchantmentType> implements EnchantmentRegistry {
     public AllayEnchantmentRegistry() {
-        super(null, input -> new HashMap<>());
+        super(null, input -> new MapPair<>(new HashMap<>(), new HashMap<>()));
     }
 
     @SneakyThrows
     public void init() {
         log.info("Loading Enchantment Types...");
-        var classes = ReflectionUtils.getAllClasses("cn.allay.server.item.enchantment.type");
+        var classes = ReflectionUtils.getAllClasses("cn.allay.api.item.enchantment.type");
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
@@ -36,10 +38,7 @@ public class AllayEnchantmentRegistry extends SimpleMappedRegistry<Short, Enchan
                 .setUpdateIntervalMillis(100)
                 .build()) {
             for (var enchantmentClassName : classes) {
-                Constructor<?> constructor = Class.forName(enchantmentClassName).getDeclaredConstructor();
-                constructor.setAccessible(true);
-                EnchantmentType enchantment = (EnchantmentType) constructor.newInstance();
-                register(enchantment.getId(), enchantment);
+                Class.forName(enchantmentClassName);
                 pgbar.step();
             }
         }

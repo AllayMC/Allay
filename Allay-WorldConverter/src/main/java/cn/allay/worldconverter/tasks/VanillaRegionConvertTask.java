@@ -110,7 +110,7 @@ public class VanillaRegionConvertTask extends RecursiveAction {
                                             cn.allay.api.block.type.BlockState blockState = BlockStateHashPalette.getRegistry().get(beBlockStateHash);
                                             assert blockState != null;
                                             allaySection.setBlockState(x, y, z, blockState, 0);
-                                            switch (blockState.blockType().getIdentifier().path()) {
+                                            switch (blockState.getBlockType().getIdentifier().path()) {
                                                 case "kelp", "seagrass", "bubble_column" -> {
                                                     allaySection.setBlockState(x, y, z, BlockWaterBehavior.WATER_TYPE.getDefaultState(), 1);
                                                 }

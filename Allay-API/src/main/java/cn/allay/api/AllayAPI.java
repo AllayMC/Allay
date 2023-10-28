@@ -2,19 +2,22 @@ package cn.allay.api;
 
 import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import cn.allay.api.block.palette.BlockStateHashPalette;
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.blockentity.registry.BlockEntityTypeRegistry;
 import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
 import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
 import cn.allay.api.command.CommandHandler;
 import cn.allay.api.component.interfaces.ComponentInjector;
+import cn.allay.api.data.VanillaItemMetaBlockStateBiMap;
+import cn.allay.api.entity.effect.EffectRegistry;
+import cn.allay.api.entity.registry.EntityTypeRegistry;
 import cn.allay.api.entity.type.EntityTypeBuilder;
-import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
 import cn.allay.api.item.enchantment.EnchantmentRegistry;
-import cn.allay.api.item.type.CreativeItemRegistry;
+import cn.allay.api.item.registry.CreativeItemRegistry;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.api.item.type.ItemTypeBuilder;
-import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.scheduler.Scheduler;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.biome.BiomeTypeRegistry;
@@ -22,10 +25,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -48,7 +48,7 @@ public final class AllayAPI {
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
-    private final Map<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
+    private final SequencedMap<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean implemented = false;
 
@@ -80,7 +80,6 @@ public final class AllayAPI {
                 ((Consumer<Object>) entry.getValue().afterBound).accept(apiInstance);
             }
         }
-        //TODO: multilingual support
         log.info("This server is running " + coreName + ", implement Allay-API version §b" + API_VERSION);
         implemented = true;
     }
@@ -110,7 +109,6 @@ public final class AllayAPI {
         Objects.requireNonNull(api);
         Objects.requireNonNull(bindingAction);
         bindings.put(api, new ApiBindingAction<>(bindingAction, afterBound));
-
     }
 
     /**
@@ -132,6 +130,12 @@ public final class AllayAPI {
         requireImpl(ComponentInjector.ComponentInjectorFactory.class, ComponentInjector.ComponentInjectorFactory.FACTORY::set);
         requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
 
+        //Item
+        requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);
+        requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
+        requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);
+        requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
+
         //BlockEntity
         requireImpl(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, BlockEntityTypeBuilder.FACTORY::set);
         requireImpl(BlockEntityTypeRegistry.class, BlockEntityTypeRegistry.REGISTRY::set);
@@ -142,19 +146,20 @@ public final class AllayAPI {
         requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
 
-        //Item
-        requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);
-        requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
-        requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);
-        requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
-        requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
-
         //Entity
+        requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
         requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
 
         //Biome
         requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);
+
+        //Misc
+        requireImpl(VanillaItemMetaBlockStateBiMap.class, VanillaItemMetaBlockStateBiMap.REGISTRY::set);
+
+        //Creative Item Registry
+        requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
+    }
 
         // Commands
         requireImpl(CommandHandler.class, CommandHandler.INSTANCE::set);

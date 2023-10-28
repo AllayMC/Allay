@@ -4,7 +4,6 @@ import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.UseItemOn;
 import cn.allay.api.item.component.ItemComponent;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.world.World;
@@ -21,7 +20,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-public interface ItemBaseComponent extends UseItemOn, ItemComponent {
+public interface ItemBaseComponent extends ItemComponent {
 
     ItemType<? extends ItemStack> getItemType();
 
@@ -46,8 +45,6 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
     void setLore(List<String>  lore);
 
     BlockState toBlockState();
-
-    void setBlockStateStyle(@Nullable BlockState blockState);
 
     ItemData toNetworkItemData();
 
@@ -74,13 +71,18 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
     @Nullable
     NbtMap saveExtraTag();
 
+    NbtMap getCustomNBTContent();
+
+    void setCustomNBTContent(NbtMap customNBTContent);
+
     void loadExtraTag(NbtMap extraTag);
 
-    @Override
     boolean useItemOn(
             @Nullable EntityPlayer player, ItemStack itemStack,
             World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace);
+
+    // TODO: boolean useInAir();
 
     default NbtMap saveNBT() {
         var builder = NbtMap.builder()
@@ -95,6 +97,8 @@ public interface ItemBaseComponent extends UseItemOn, ItemComponent {
         if (blockState != null) {
             builder.put("Block", blockState.getBlockStateTag());
         }
+        // User's custom nbt content
+        builder.putAll(getCustomNBTContent());
         //TODO: CanDestroy
         //TODO: CanPlaceOn
         return builder.build();

@@ -10,17 +10,23 @@ import cn.allay.api.block.component.base.BlockBaseComponentImpl;
 import cn.allay.api.block.component.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
+import cn.allay.api.data.VanillaItemMetaBlockStateBiMap;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.init.SimpleItemStackInitInfo;
+import cn.allay.api.item.interfaces.ItemSugarCaneStack;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.api.item.type.ItemType;
-import cn.allay.api.item.type.ItemTypeRegistry;
+import cn.allay.api.item.type.ItemTypeBuilder;
 import cn.allay.api.utils.HashUtils;
+import cn.allay.server.block.registry.AllayBlockStateHashPalette;
 import cn.allay.server.component.exception.BlockComponentInjectException;
 import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.utils.ComponentClassCacheUtils;
@@ -29,6 +35,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -69,9 +76,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     @Getter
     private final Identifier identifier;
     @Getter
-    @Nullable
-    private final Identifier itemIdentifier;
-    @Getter
     private final Map<Integer, BlockState> blockStateHashMap;
     @Getter
     @Nullable
@@ -82,8 +86,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private Class<T> injectedClass;
     @Getter
     private BlockState defaultState;
-    @Nullable
-    private ItemType<?> itemTypeCache;
+    private ItemType<?> blockItemType;
+    private Map<Integer, Integer> hashToMeta;
     @Getter
     private T blockBehavior;
 
@@ -91,12 +95,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                            List<BlockComponent> components,
                            Map<String, BlockPropertyType<?>> properties,
                            Identifier identifier,
-                           @Nullable Identifier itemIdentifier) {
+                           ItemType<?> blockItemType) {
         this.interfaceClass = interfaceClass;
         this.components = components;
         this.properties = Collections.unmodifiableMap(properties);
         this.identifier = identifier;
-        this.itemIdentifier = itemIdentifier;
+        this.blockItemType = blockItemType;
         this.blockStateHashMap = initStates();
         byte specialValueBits = 0;
         for (var value : properties.values()) specialValueBits += value.getBitSize();
@@ -118,12 +122,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     }
 
     @Override
-    public @Nullable ItemType<?> getItemType() {
-        if (itemTypeCache != null) return itemTypeCache;
-        if (itemIdentifier == null) return null;
-        itemTypeCache = ItemTypeRegistry.getRegistry().get(itemIdentifier);
-        if (itemTypeCache == null) throw new IllegalStateException("Item type " + itemIdentifier + " not registered");
-        return itemTypeCache;
+    public ItemType<?> getItemType() {
+        return blockItemType;
     }
 
     @Override
@@ -244,6 +244,22 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
+        public ItemStack toItemStack() {
+            var meta = VanillaItemMetaBlockStateBiMap.getRegistry().getBlockStateHashToMetaMap(blockType).get(blockStateHash);
+            return blockType.getItemType().createItemStack(
+                    SimpleItemStackInitInfo
+                            .builder()
+                            .meta(meta)
+                            .build()
+            );
+        }
+
+        @Override
+        public BlockType<?> getBlockType() {
+            return blockType;
+        }
+
+        @Override
         public @UnmodifiableView Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues() {
             return Collections.unmodifiableMap(Arrays.stream(blockPropertyValues).collect(
                     LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
@@ -323,13 +339,13 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
     }
 
+    @Slf4j
     public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
         protected Class<T> interfaceClass;
         protected Map<Identifier, BlockComponent> components = new HashMap<>();
         protected Map<String, BlockPropertyType<?>> properties = new HashMap<>();
         protected Identifier identifier;
-        @Nullable
-        protected Identifier itemIdentifier;
+        protected ItemType<?> itemType;
         protected boolean isCustomBlock = false;
         protected Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
 
@@ -346,15 +362,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public BlockTypeBuilder<T> itemIdentifier(Identifier itemIdentifier) {
-            this.itemIdentifier = itemIdentifier;
-            return this;
-        }
-
-        @Override
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
             this.identifier = vanillaBlockId.getIdentifier();
-            this.itemIdentifier = vanillaBlockId.getItemIdentifier();
             var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
             if (attributeMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
@@ -409,11 +418,14 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public AllayBlockType<T> build() {
-            if (identifier == null) throw new BlockTypeBuildException("identifier cannot be null!");
+            Objects.requireNonNull(identifier, "Identifier cannot be null!");
+            prepareItemType();
             var listComponents = new ArrayList<>(components.values());
-            var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemIdentifier);
+            var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemType);
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
                 listComponents.add(blockBaseComponentSupplier.apply(type));
+            if (!components.containsKey(BlockAttributeComponentImpl.IDENTIFIER))
+                listComponents.add(BlockAttributeComponentImpl.ofDefault());
             List<ComponentProvider<? extends Component>> componentProviders = listComponents.stream().map(singleton -> {
                 var currentClass = singleton.getClass();
                 //For anonymous class, we give it's super class to component provider
@@ -435,6 +447,23 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             type.register(BlockTypeRegistry.getRegistry());
             type.register(BlockStateHashPalette.getRegistry());
             return type;
+        }
+
+        private void prepareItemType() {
+            // NOTICE: some special cases!
+            // Ask mojang for why
+            if (identifier.equals(VanillaBlockId.REEDS.getIdentifier())) {
+                itemType = ItemSugarCaneStack.SUGAR_CANE_TYPE;
+            } else {
+                itemType = ItemTypeRegistry.getRegistry().get(identifier);
+            }
+            if (itemType == null) {
+                log.debug("Cannot find item type for " + identifier + " from item type registry! Will automatically create an item type!");
+                itemType = ItemTypeBuilder
+                        .builder(ItemStack.class)
+                        .identifier(identifier)
+                        .build();
+            }
         }
 
         private void checkPropertyValid() {

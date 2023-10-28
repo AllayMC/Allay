@@ -3,6 +3,7 @@ package cn.allay.api.block.type;
 import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.attribute.BlockAttributes;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.item.ItemStack;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleBlockDefinition;
@@ -20,10 +21,10 @@ public interface BlockState {
 
     int VERSION = (1 << 24) | //major
                   (20 << 16) | //minor
-                  (30 << 8) | //patch
-                  (50); //revision
+                  (40 << 8) | //patch
+                  (3); //revision
 
-    BlockType<?> blockType();
+    BlockType<?> getBlockType();
 
     int blockStateHash();
 
@@ -44,6 +45,8 @@ public interface BlockState {
 
     NbtMap getBlockStateTag();
 
+    ItemStack toItemStack();
+
     //TODO: 确认是否只需要实现BlockDefinition::getRuntimeId(), 现有实现较为复杂且低效
     default SimpleBlockDefinition toNetworkBlockDefinition() {
         var statesBuilder = NbtMap.builder();
@@ -54,7 +57,7 @@ public interface BlockState {
             );
         }
         return new SimpleBlockDefinition(
-                blockType().getIdentifier().toString(),
+                getBlockType().getIdentifier().toString(),
                 blockStateHash(),
                 statesBuilder.build()
         );
@@ -65,7 +68,7 @@ public interface BlockState {
     }
 
     default BlockBehavior getBehavior() {
-        return blockType().getBlockBehavior();
+        return getBlockType().getBlockBehavior();
     }
 
     default BlockAttributes getBlockAttributes() {

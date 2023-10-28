@@ -2,6 +2,7 @@ package cn.allay.api.item.enchantment;
 
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.registry.DoubleKeyMappedRegistry;
 import cn.allay.api.registry.MappedRegistry;
 
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public interface EnchantmentRegistry extends MappedRegistry<Short, EnchantmentType, Map<Short, EnchantmentType>> {
+public interface EnchantmentRegistry extends DoubleKeyMappedRegistry<Short, Identifier, EnchantmentType> {
     ApiInstanceHolder<EnchantmentRegistry> REGISTRY = ApiInstanceHolder.of();
 
     static EnchantmentRegistry getRegistry() {

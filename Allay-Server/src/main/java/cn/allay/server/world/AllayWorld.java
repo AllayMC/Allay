@@ -10,6 +10,7 @@ import cn.allay.api.world.Difficulty;
 import cn.allay.api.world.DimensionInfo;
 import cn.allay.api.world.World;
 import cn.allay.api.world.WorldData;
+import cn.allay.api.world.gamerule.GameRule;
 import cn.allay.api.world.generator.WorldGenerator;
 import cn.allay.api.world.service.BlockUpdateService;
 import cn.allay.api.world.service.ChunkService;
@@ -23,6 +24,7 @@ import cn.allay.server.world.service.AllayEntityPhysicsService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.joml.Vector3ic;
 import org.slf4j.Logger;
 
@@ -60,6 +62,7 @@ public class AllayWorld implements World {
     @Getter
     protected final Thread worldMainThread;
     protected final Set<EntityPlayer> players;
+    protected long nextTimeSendTick = 0;
     protected final GameLoop gameLoop;
     protected Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
 
@@ -152,13 +155,39 @@ public class AllayWorld implements World {
         this.worldData.setGameType(gameType);
     }
 
-    private void tick() {
+    protected void tick() {
         long currentTick = getTick();
+        updateTime(currentTick);
         handleEntityUpdateQueue();
         chunkService.tick();
         entityPhysicsService.tick();
         worldScheduler.tick();
         blockUpdateService.tick(currentTick);
+    }
+
+    protected void updateTime(long currentTick) {
+        if (worldData.getGameRules().get(GameRule.DO_DAYLIGHT_CYCLE)) {
+            worldData.setTime(worldData.getTime() + 1);
+            if (currentTick >= nextTimeSendTick) {
+                sendWorldTimeTo(players);
+                nextTimeSendTick = currentTick + 12 * 20; //Client send the time every 12 seconds
+            }
+        }
+    }
+
+    @Override
+    public void setWorldTime(long worldTime) {
+        this.worldData.setTime(worldTime);
+        sendWorldTimeTo(players);
+    }
+
+    @Override
+    public void sendWorldTimeTo(Collection<EntityPlayer> players) {
+        var setTimePk = new SetTimePacket();
+        setTimePk.setTime((int) worldData.getTime());
+        for (var player : players) {
+            player.sendPacket(setTimePk);
+        }
     }
 
     @Override
@@ -236,7 +265,13 @@ public class AllayWorld implements World {
     @Override
     public void close() {
         getChunkService().unloadAllChunks();
+        saveWorldData();
         getWorldStorage().close();
+    }
+
+    @Override
+    public void saveWorldData() {
+        getWorldStorage().writeWorldData(worldData);
     }
 
     protected enum EntityUpdateType {

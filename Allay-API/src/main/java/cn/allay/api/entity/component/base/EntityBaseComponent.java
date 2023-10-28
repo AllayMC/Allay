@@ -3,6 +3,8 @@ package cn.allay.api.entity.component.base;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.entity.component.EntityComponent;
+import cn.allay.api.entity.effect.EffectInstance;
+import cn.allay.api.entity.effect.EffectType;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.entity.metadata.Metadata;
 import cn.allay.api.entity.type.EntityType;
@@ -12,7 +14,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
@@ -124,6 +125,10 @@ public interface EntityBaseComponent extends EntityComponent {
     float getFallDistance();
 
     void onFall();
+
+    void addEffect(EffectInstance effectInstance);
+
+    void removeEffect(EffectType effectType);
 
     default void tick() {
     }

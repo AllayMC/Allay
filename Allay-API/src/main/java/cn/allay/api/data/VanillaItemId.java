@@ -1,9 +1,8 @@
 package cn.allay.api.data;
 
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.api.item.type.ItemType;
-import cn.allay.api.item.type.ItemTypeRegistry;
-import java.lang.String;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 

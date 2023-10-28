@@ -67,23 +67,31 @@ class AllayBlockTypeTest {
                         BlockAttributeComponentImpl.ofDirectDynamic(blockState -> BlockAttributes.builder().burnChance(3).build())))
                 .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                 .build();
+    }
+
+    @Test
+    public void testBlockTypeBuildException() {
         assertThrows(BlockTypeBuildException.class,
-                () -> {
-                    AllayBlockType
-                            .builder(TestBlock.class)
-                            .identifier("minecraft:test_block_v2")
-                            .setProperties(
-                                    TEST_BOOLEAN_PROPERTY_TYPE,
-                                    TEST_INT_PROPERTY_TYPE,
-                                    TEST_ENUM_PROPERTY_TYPE)
-                            .setComponents(List.of(
-                                    new TestComponentImplV2(),
-                                    BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT)
-                            ))
-                            .addCustomBlockComponent(new TestCustomBlockComponentImpl())
-                            .build();
-                }
+                () -> AllayBlockType
+                        .builder(TestBlock.class)
+                        .identifier("minecraft:test_block_v2")
+                        .setProperties(
+                                TEST_BOOLEAN_PROPERTY_TYPE,
+                                TEST_INT_PROPERTY_TYPE,
+                                TEST_ENUM_PROPERTY_TYPE)
+                        .setComponents(List.of(
+                                new TestComponentImplV2(),
+                                BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT)
+                        ))
+                        .addCustomBlockComponent(new TestCustomBlockComponentImpl())
+                        .build()
         );
+    }
+
+    @Test
+    void testDefaultItemType() {
+        assertNotNull(testBlockType1.getItemType());
+        assertNotNull(testBlockType2.getItemType());
     }
 
     @Test

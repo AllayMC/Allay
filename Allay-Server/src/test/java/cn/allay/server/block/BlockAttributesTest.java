@@ -2,8 +2,8 @@ package cn.allay.server.block;
 
 import cn.allay.api.block.component.attribute.BlockAttributes;
 import cn.allay.api.block.component.attribute.VanillaBlockAttributeRegistry;
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.block.type.BlockType;
-import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.testutils.AllayTestExtension;
 import lombok.extern.slf4j.Slf4j;

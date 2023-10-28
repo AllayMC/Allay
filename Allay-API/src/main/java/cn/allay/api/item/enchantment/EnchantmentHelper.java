@@ -14,7 +14,7 @@ import org.cloudburstmc.nbt.NbtMap;
 public class EnchantmentHelper {
     public EnchantmentInstance fromNBT(NbtMap nbtMap) {
         var id = nbtMap.getShort("id");
-        var enchantmentType = EnchantmentRegistry.getRegistry().get(id);
+        var enchantmentType = EnchantmentRegistry.getRegistry().getByK1(id);
         if (enchantmentType == null) {
             log.warn("Unknown enchantment id {}", id);
             return null;

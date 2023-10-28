@@ -23,8 +23,12 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_attribute_component");
-
+    protected static final BlockAttributeComponentImpl DEFAULT = BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT);
     protected Function<BlockState, BlockAttributes> attributeAccessor;
+
+    public static BlockAttributeComponentImpl ofDefault() {
+        return DEFAULT;
+    }
 
     protected BlockAttributeComponentImpl(Function<BlockState, BlockAttributes> attributeAccessor) {
         this.attributeAccessor = attributeAccessor;
@@ -108,7 +112,7 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent {
 
         @Override
         public BlockAttributes apply(BlockState blockState) {
-            if (lazyLoadAttributeMap == null) lazyLoadAttributeMap = lazyLoader.apply(blockState.blockType());
+            if (lazyLoadAttributeMap == null) lazyLoadAttributeMap = lazyLoader.apply(blockState.getBlockType());
             return lazyLoadAttributeMap.get(blockState.blockStateHash());
         }
     }

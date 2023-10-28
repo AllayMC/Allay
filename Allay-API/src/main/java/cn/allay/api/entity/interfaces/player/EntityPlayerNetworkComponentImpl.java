@@ -2,7 +2,7 @@ package cn.allay.api.entity.interfaces.player;
 
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.interfaces.BlockAirBehavior;
-import cn.allay.api.block.type.BlockTypeRegistry;
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
 import cn.allay.api.client.movement.ClientMovementValidator;
@@ -20,11 +20,11 @@ import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.attribute.Attribute;
 import cn.allay.api.entity.init.SimpleEntityInitInfo;
 import cn.allay.api.entity.interfaces.villagerv2.EntityVillagerV2;
-import cn.allay.api.entity.type.EntityTypeRegistry;
+import cn.allay.api.entity.registry.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.type.CreativeItemRegistry;
-import cn.allay.api.item.type.ItemTypeRegistry;
+import cn.allay.api.item.registry.CreativeItemRegistry;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.api.math.location.Location3f;
 import cn.allay.api.math.position.Position3ic;
 import cn.allay.api.server.Server;
@@ -207,7 +207,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
 
-        //TODO: SetTime
+        player.getLocation().world().sendWorldTimeTo(List.of(player));
     }
 
     private void sendInventories() {
