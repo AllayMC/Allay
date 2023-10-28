@@ -42,10 +42,10 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
 
     BlockState getDefaultState();
 
-    @Nullable
-    Identifier getItemIdentifier();
+    default Identifier getItemIdentifier() {
+        return getItemType().getIdentifier();
+    }
 
-    @Nullable
     ItemType<?> getItemType();
 
     BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);

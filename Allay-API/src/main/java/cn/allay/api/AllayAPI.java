@@ -22,10 +22,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -48,7 +45,7 @@ public final class AllayAPI {
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
-    private final Map<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
+    private final SequencedMap<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean implemented = false;
 
@@ -80,7 +77,6 @@ public final class AllayAPI {
                 ((Consumer<Object>) entry.getValue().afterBound).accept(apiInstance);
             }
         }
-        //TODO: multilingual support
         log.info("This server is running " + coreName + ", implement Allay-API version §b" + API_VERSION);
         implemented = true;
     }
@@ -110,7 +106,6 @@ public final class AllayAPI {
         Objects.requireNonNull(api);
         Objects.requireNonNull(bindingAction);
         bindings.put(api, new ApiBindingAction<>(bindingAction, afterBound));
-
     }
 
     /**
@@ -132,6 +127,12 @@ public final class AllayAPI {
         requireImpl(ComponentInjector.ComponentInjectorFactory.class, ComponentInjector.ComponentInjectorFactory.FACTORY::set);
         requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
 
+        //Item
+        requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);
+        requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
+        requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);
+        requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
+
         //BlockEntity
         requireImpl(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, BlockEntityTypeBuilder.FACTORY::set);
         requireImpl(BlockEntityTypeRegistry.class, BlockEntityTypeRegistry.REGISTRY::set);
@@ -142,11 +143,7 @@ public final class AllayAPI {
         requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
 
-        //Item
-        requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);
-        requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
-        requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);
-        requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
+        //Creative Item Registry
         requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
 
         //Entity

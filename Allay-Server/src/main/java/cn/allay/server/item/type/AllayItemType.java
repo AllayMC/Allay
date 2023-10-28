@@ -10,6 +10,7 @@ import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.component.ItemComponent;
 import cn.allay.api.item.component.attribute.ItemAttributeComponentImpl;
+import cn.allay.api.item.component.attribute.ItemAttributes;
 import cn.allay.api.item.component.attribute.VanillaItemAttributeRegistry;
 import cn.allay.api.item.component.base.ItemBaseComponentImpl;
 import cn.allay.api.item.init.ItemStackInitInfo;
@@ -48,22 +49,18 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final int runtimeId;
     @Getter
     @Nullable
-    private final Identifier blockIdentifier;
-    @Getter
-    @Nullable
     private BlockType<?> blockTypeCache;
+    private boolean haveTriedInitBlockTypeCache;
 
     @SneakyThrows
     private AllayItemType(Class<T> interfaceClass,
                           List<ComponentProvider<? extends ItemComponent>> componentProviders,
                           Identifier identifier,
-                          int runtimeId,
-                          @Nullable Identifier blockIdentifier) {
+                          int runtimeId) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
         this.identifier = identifier;
         this.runtimeId = runtimeId;
-        this.blockIdentifier = blockIdentifier;
         try {
             ArrayList<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
             injectedClass = new AllayComponentInjector<T>()
@@ -98,18 +95,32 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         return componentProviders;
     }
 
+    // Naming conflict prefix
+    public static final String NAMING_CONFLICT_PATH_PREFIX = "item.";
+
     @Override
     public @Nullable BlockType<?> getBlockType() {
-        if (blockTypeCache != null) return blockTypeCache;
-        if (blockIdentifier == null) return null;
-        blockTypeCache = BlockTypeRegistry.getRegistry().get(blockIdentifier);
-        if (blockTypeCache == null)
-            throw new IllegalStateException("Block type " + blockIdentifier + " not registered");
+        if (!haveTriedInitBlockTypeCache) {
+            // Try to find out if this item type has a corresponding block type
+            var blockIdentifier = identifier.clone();
+            if (blockIdentifier.path().contains(NAMING_CONFLICT_PATH_PREFIX)) {
+                // In vanilla, If an item type identifier shaped like "minecraft:item.{block_identifier_path}"
+                // Then there must be an item type whose identifier is "minecraft:{block_identifier_path}"
+                // The item type whose identifier is "minecraft:item.{block_identifier_path}" is the strictly corresponding block-item
+                // And the item type whose identifier is "minecraft:{block_identifier_path}" is the type actually used in the game
+                // Example: kelp
+                blockIdentifier = new Identifier(blockIdentifier.namespace(), blockIdentifier.path().replace(NAMING_CONFLICT_PATH_PREFIX, ""));
+            }
+            // Note that the block type still may be null
+            blockTypeCache = BlockTypeRegistry.getRegistry().get(blockIdentifier);
+            haveTriedInitBlockTypeCache = true;
+        }
         return blockTypeCache;
     }
 
     @ToString
     public static class Builder<T extends ItemStack> implements ItemTypeBuilder<T, ItemComponent> {
+        protected static int CUSTOM_ITEM_RUNTIME_ID_COUNTER = 10000;
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders = new HashMap<>();
         protected Identifier identifier;
@@ -178,13 +189,16 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER)) {
                 addComponent(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class);
             }
+            if (!componentProviders.containsKey(ItemAttributeComponentImpl.IDENTIFIER)) {
+                addComponent(unused -> ItemAttributeComponentImpl.ofDefault(), ItemAttributeComponentImpl.class);
+            }
             if (identifier == null) {
                 throw new ItemTypeBuildException("identifier cannot be null!");
             }
             if (runtimeId == Integer.MAX_VALUE) {
-                throw new ItemTypeBuildException("runtimeId unassigned!");
+                runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
             }
-            var type = new AllayItemType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier, runtimeId, blockIdentifier);
+            var type = new AllayItemType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier, runtimeId);
             ItemTypeRegistry.getRegistry().register(identifier, type);
             return type;
         }

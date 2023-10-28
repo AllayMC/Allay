@@ -79,7 +79,6 @@ public final class Allay {
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
         api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));
         api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());
-        api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
 
         //BlockEntity
         api.bind(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, () -> AllayBlockEntityType::builder);
@@ -91,6 +90,9 @@ public final class Allay {
         api.bind(BlockStateHashPalette.class, AllayBlockStateHashPalette::new);
         api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
 
+        //Creative Item Registry
+        api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
+
         //Entity
         api.bind(EffectRegistry.class, AllayEffectRegistry::new, instance -> ((AllayEffectRegistry) instance).init());
         api.bind(EntityTypeBuilder.EntityTypeBuilderFactory.class, () -> AllayEntityType::builder);
@@ -99,6 +101,5 @@ public final class Allay {
         //Biome
         api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
         api.implement("Allay");
-        ComponentClassCacheUtils.saveCacheMapping();
     }
 }

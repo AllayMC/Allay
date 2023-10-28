@@ -11,7 +11,7 @@ import static cn.allay.api.utils.StringUtils.fastTwoPartSplit;
  *
  * @author daoge_cmd
  */
-public record Identifier(String namespace, String path) {
+public record Identifier(String namespace, String path) implements Cloneable {
     public static final String NAMESPACE_SEPARATOR = ":";
     public static final String DEFAULT_NAMESPACE = "minecraft";
 
@@ -48,5 +48,10 @@ public record Identifier(String namespace, String path) {
 
     public int hashCode() {
         return 31 * this.namespace.hashCode() + this.path.hashCode();
+    }
+
+    @Override
+    public Identifier clone() {
+        return new Identifier(namespace, path);
     }
 }

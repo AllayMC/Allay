@@ -15,6 +15,7 @@ import cn.allay.api.world.storage.PlayerStorage;
 import cn.allay.server.network.AllayNetworkServer;
 import cn.allay.server.scheduler.AllayScheduler;
 import cn.allay.server.terminal.AllayTerminalConsole;
+import cn.allay.server.utils.ComponentClassCacheUtils;
 import cn.allay.server.world.AllayWorld;
 import cn.allay.server.world.AllayWorldPool;
 import cn.allay.server.world.generator.jegenerator.JeGeneratorLoader;
@@ -164,6 +165,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
+        ComponentClassCacheUtils.saveCacheMapping();
         System.exit(0);
     }
 
