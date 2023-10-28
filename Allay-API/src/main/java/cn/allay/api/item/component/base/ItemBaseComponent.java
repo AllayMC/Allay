@@ -84,6 +84,8 @@ public interface ItemBaseComponent extends ItemComponent {
             World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace);
 
+    // TODO: boolean useInAir();
+
     default NbtMap saveNBT() {
         var builder = NbtMap.builder()
                 .putByte("Count", (byte) getCount())

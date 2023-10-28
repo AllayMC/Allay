@@ -2,6 +2,7 @@ package cn.allay.api.item.interfaces;
 
 import cn.allay.api.data.VanillaItemId;
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.component.base.ItemBaseComponentImpl;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeBuilder;
 
@@ -13,5 +14,8 @@ public interface ItemSnowballStack extends ItemStack {
   ItemType<ItemSnowballStack> SNOWBALL_TYPE = ItemTypeBuilder
           .builder(ItemSnowballStack.class)
           .vanillaItem(VanillaItemId.SNOWBALL)
+          .addComponent(initInfo -> new ItemBaseComponentImpl<>(initInfo) {
+
+          }, ItemBaseComponentImpl.class)
           .build();
 }

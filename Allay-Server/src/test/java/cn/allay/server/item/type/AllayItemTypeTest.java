@@ -1,7 +1,10 @@
 package cn.allay.server.item.type;
 
+import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.interfaces.ItemDiamondStack;
+import cn.allay.api.item.type.CreativeItemRegistry;
+import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
@@ -67,5 +70,28 @@ public class AllayItemTypeTest {
         var savedItemStackNBT = itemStack.saveNBT();
         assertTrue(savedItemStackNBT.containsKey("testKey"));
         assertEquals("testValue", savedItemStackNBT.getString("testKey"));
+    }
+
+    @Test
+    void test() {
+        for (var i : ItemTypeRegistry.getRegistry().getContent().values()) {
+            var b = BlockTypeRegistry.getRegistry().get(i.getIdentifier());
+            if (b == null && i.getBlockIdentifier() != null) {
+                System.out.println(i.getIdentifier());
+            }
+        }
+    }
+
+    @Test
+    void validateBlockType() {
+        // Use CreativeItemRegistry as standard reference
+        for (var creativeItem : CreativeItemRegistry.getRegistry().getContent().values()) {
+            if (creativeItem.toBlockState() == null) continue;
+            var correct = creativeItem.toBlockState().blockType();
+            var actual = creativeItem.getItemType().getBlockType();
+            if (correct != actual) {
+                System.out.println(correct.getIdentifier() + " " + actual.getIdentifier());
+            }
+        }
     }
 }

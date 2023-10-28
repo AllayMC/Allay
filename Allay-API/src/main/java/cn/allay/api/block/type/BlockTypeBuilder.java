@@ -11,6 +11,7 @@ import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.type.ItemType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +36,6 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
     default BlockTypeBuilder<T> identifier(String identifier) {
         return identifier(new Identifier(identifier));
     }
-
-    BlockTypeBuilder<T> itemIdentifier(Identifier itemIdentifier);
 
     BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId);
 

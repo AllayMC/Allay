@@ -80,6 +80,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                                 .count(1)
                                 .meta(meta)
                                 .extraTag(tag)
+                                // TODO: Do not set the block state directly, as we will write logic to get the block state by item meta
                                 .blockState(blockState)
                                 .stackNetworkId(index + 1)
                                 .build()
