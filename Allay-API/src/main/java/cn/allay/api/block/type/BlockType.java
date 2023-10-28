@@ -4,6 +4,7 @@ import cn.allay.api.block.BlockBehavior;
 import cn.allay.api.block.component.BlockComponent;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.identifier.Identified;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.type.ItemType;

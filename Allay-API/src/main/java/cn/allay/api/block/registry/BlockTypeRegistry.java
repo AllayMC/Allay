@@ -1,6 +1,7 @@
-package cn.allay.api.block.type;
+package cn.allay.api.block.registry;
 
 import cn.allay.api.ApiInstanceHolder;
+import cn.allay.api.block.type.BlockType;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.MappedRegistry;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;

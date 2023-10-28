@@ -1,6 +1,6 @@
 package cn.allay.server.item.type;
 
-import cn.allay.api.item.type.CreativeItemRegistry;
+import cn.allay.api.item.registry.CreativeItemRegistry;
 import cn.allay.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

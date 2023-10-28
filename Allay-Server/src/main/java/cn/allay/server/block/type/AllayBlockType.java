@@ -10,21 +10,23 @@ import cn.allay.api.block.component.base.BlockBaseComponentImpl;
 import cn.allay.api.block.component.custom.CustomBlockComponentImpl;
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.property.type.BlockPropertyType;
+import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.block.type.BlockTypeBuilder;
-import cn.allay.api.block.type.BlockTypeRegistry;
 import cn.allay.api.component.interfaces.Component;
 import cn.allay.api.component.interfaces.ComponentProvider;
 import cn.allay.api.data.VanillaBlockId;
+import cn.allay.api.data.VanillaItemMetaBlockStateBiMap;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
-import cn.allay.api.item.component.attribute.ItemAttributeComponentImpl;
+import cn.allay.api.item.init.SimpleItemStackInitInfo;
 import cn.allay.api.item.interfaces.ItemSugarCaneStack;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.api.item.type.ItemType;
 import cn.allay.api.item.type.ItemTypeBuilder;
-import cn.allay.api.item.type.ItemTypeRegistry;
 import cn.allay.api.utils.HashUtils;
+import cn.allay.server.block.registry.AllayBlockStateHashPalette;
 import cn.allay.server.component.exception.BlockComponentInjectException;
 import cn.allay.server.component.injector.AllayComponentInjector;
 import cn.allay.server.utils.ComponentClassCacheUtils;
@@ -85,6 +87,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     @Getter
     private BlockState defaultState;
     private ItemType<?> blockItemType;
+    private Map<Integer, Integer> hashToMeta;
     @Getter
     private T blockBehavior;
 
@@ -238,6 +241,22 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public NbtMap getBlockStateTag() {
             return blockStateTag;
+        }
+
+        @Override
+        public ItemStack toItemStack() {
+            var meta = VanillaItemMetaBlockStateBiMap.getRegistry().getBlockStateHashToMetaMap(blockType).get(blockStateHash);
+            return blockType.getItemType().createItemStack(
+                    SimpleItemStackInitInfo
+                            .builder()
+                            .meta(meta)
+                            .build()
+            );
+        }
+
+        @Override
+        public BlockType<?> getBlockType() {
+            return blockType;
         }
 
         @Override

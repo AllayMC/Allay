@@ -1,7 +1,7 @@
-package cn.allay.server.entity.type;
+package cn.allay.server.entity.registry;
 
+import cn.allay.api.entity.registry.EntityTypeRegistry;
 import cn.allay.api.entity.type.EntityType;
-import cn.allay.api.entity.type.EntityTypeRegistry;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import cn.allay.api.utils.ReflectionUtils;

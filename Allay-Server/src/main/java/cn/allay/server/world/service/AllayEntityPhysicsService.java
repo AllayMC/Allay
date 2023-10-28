@@ -142,7 +142,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var blockFace = values[i];
             var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
             var blockState = world.getBlockState(offsetVec);
-            if (blockState.blockType() == BlockAirBehavior.AIR_TYPE) {
+            if (blockState.getBlockType() == BlockAirBehavior.AIR_TYPE) {
                 var currentDistanceSqrt = entity.getLocation().distanceSquared(offsetVec.x() + 0.5f, offsetVec.y() + 0.5f, offsetVec.z() + 0.5f);
                 if (currentDistanceSqrt < distanceSqrt) {
                     movingDirection = blockFace;
@@ -191,7 +191,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         float movementFactor = entity.getMovementFactor();
         var blockUnder = world.getBlockState((int) entity.getLocation().x(), (int) (entity.getLocation().y() - 0.5), (int) entity.getLocation().z());
         float slipperyFactor = blockUnder != null ?
-                blockUnder.blockType().getBlockBehavior().getBlockAttributes(blockUnder).friction() :
+                blockUnder.getBlockType().getBlockBehavior().getBlockAttributes(blockUnder).friction() :
                 DEFAULT_FRICTION;
         float mx = entity.getMotion().x();
         float my = entity.getMotion().y();

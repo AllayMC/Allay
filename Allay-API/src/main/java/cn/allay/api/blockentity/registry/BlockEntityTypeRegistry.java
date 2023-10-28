@@ -1,6 +1,7 @@
-package cn.allay.api.blockentity.type;
+package cn.allay.api.blockentity.registry;
 
 import cn.allay.api.ApiInstanceHolder;
+import cn.allay.api.blockentity.type.BlockEntityType;
 import cn.allay.api.registry.MappedRegistry;
 
 import java.util.Map;

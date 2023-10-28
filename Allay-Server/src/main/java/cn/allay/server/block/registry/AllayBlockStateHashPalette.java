@@ -1,4 +1,4 @@
-package cn.allay.server.block.type;
+package cn.allay.server.block.registry;
 
 import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.type.BlockState;

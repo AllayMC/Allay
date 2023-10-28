@@ -46,8 +46,6 @@ public interface ItemBaseComponent extends ItemComponent {
 
     BlockState toBlockState();
 
-    void setBlockStateStyle(@Nullable BlockState blockState);
-
     ItemData toNetworkItemData();
 
     int EMPTY_STACK_NETWORK_ID = 0;

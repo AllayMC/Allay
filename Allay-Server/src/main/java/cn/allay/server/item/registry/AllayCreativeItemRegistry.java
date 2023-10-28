@@ -1,11 +1,10 @@
-package cn.allay.server.item.type;
+package cn.allay.server.item.registry;
 
-import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
 import cn.allay.api.item.init.SimpleItemStackInitInfo;
-import cn.allay.api.item.type.CreativeItemRegistry;
-import cn.allay.api.item.type.ItemTypeRegistry;
+import cn.allay.api.item.registry.CreativeItemRegistry;
+import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.api.registry.RegistryLoader;
 import cn.allay.api.registry.SimpleMappedRegistry;
 import lombok.SneakyThrows;
@@ -70,8 +69,6 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                 var obj = (NbtMap) value;
                 var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(obj.getString("name")));
                 int meta = obj.getInt("damage");
-                int blockStateHash = obj.getInt("blockStateHash");
-                var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
                 var tag = obj.getCompound("tag", NbtMap.builder().build());
                 assert itemType != null;
                 var itemStack = itemType.createItemStack(
@@ -80,8 +77,6 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                                 .count(1)
                                 .meta(meta)
                                 .extraTag(tag)
-                                // TODO: Do not set the block state directly, as we will write logic to get the block state by item meta
-                                .blockState(blockState)
                                 .stackNetworkId(index + 1)
                                 .build()
                 );

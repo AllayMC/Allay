@@ -1,7 +1,8 @@
-package cn.allay.api.item.type;
+package cn.allay.api.item.registry;
 
 import cn.allay.api.ApiInstanceHolder;
 import cn.allay.api.identifier.Identifier;
+import cn.allay.api.item.type.ItemType;
 import cn.allay.api.registry.MappedRegistry;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
