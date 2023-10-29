@@ -53,6 +53,10 @@ public interface Container {
 
     ItemStack getItemStack(int slot);
 
+    default boolean isEmpty(int slot) {
+        return getItemStack(slot) == EMPTY_SLOT_PLACE_HOLDER;
+    }
+
     @UnmodifiableView
     List<ItemStack> getItemStacks();
 
@@ -88,10 +92,19 @@ public interface Container {
         viewer.sendContent(this, slot);
     }
 
-    default int tryAddItem(ItemStack itemStack) {
-        var slot = -1;
+    default int tryAddItem(ItemStack itemStack, int minSlotIndex, int maxSlotIndex) {
+        if (minSlotIndex > maxSlotIndex) {
+            throw new IllegalArgumentException("minSlotIndex > maxSlotIndex");
+        }
+        if (minSlotIndex < 0) {
+            throw new IllegalArgumentException("minSlotIndex is less than 0");
+        }
         ItemStack[] itemStacks = getItemStackArray();
-        for (int index = 0; index < itemStacks.length; index++) {
+        if (minSlotIndex > itemStacks.length - 1 || maxSlotIndex > itemStacks.length - 1) {
+            throw new IllegalArgumentException("minSlotIndex or maxSlotIndex is out of range");
+        }
+        var slot = -1;
+        for (int index = minSlotIndex; index <= maxSlotIndex; index++) {
             var content = itemStacks[index];
             if (content == Container.EMPTY_SLOT_PLACE_HOLDER) {
                 setItemStack(index, itemStack.copy());
@@ -114,5 +127,10 @@ public interface Container {
             }
         }
         return slot;
+    }
+
+    default int tryAddItem(ItemStack itemStack) {
+        var array = getItemStackArray();
+        return tryAddItem(itemStack, 0, array.length - 1);
     }
 }

@@ -5,9 +5,9 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.data.VanillaItemMetaBlockStateBiMap;
 import cn.allay.api.identifier.Identifier;
-import cn.allay.api.item.component.base.ItemBaseComponentImpl;
 import cn.allay.api.item.registry.ItemTypeRegistry;
 import cn.allay.api.item.type.ItemType;
+import it.unimi.dsi.fastutil.Function;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtMap;
@@ -52,12 +52,22 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
     }
 
     @Override
-    public Map<Integer, BlockState> getMetaToBlockStateMap(ItemType<?> itemType) {
-        return ITEM_TYPE_TO_META_MAP.getOrDefault(itemType, Map.of(0, itemType.getBlockType().getDefaultState()));
+    public Function<Integer, BlockState> getMetaToBlockStateMapper(ItemType<?> itemType) {
+        var map = ITEM_TYPE_TO_META_MAP.get(itemType);
+        if (map != null) {
+            return map::get;
+        } else {
+            return unused -> itemType.getBlockType().getDefaultState();
+        }
     }
 
     @Override
-    public Map<Integer, Integer> getBlockStateHashToMetaMap(BlockType<?> blockType) {
-        return BLOCK_STATE_HASH_TO_META_MAP.getOrDefault(blockType, Map.of(blockType.getDefaultState().blockStateHash(), 0));
+    public Function<Integer, Integer> getBlockStateHashToMetaMapper(BlockType<?> blockType) {
+        var map = BLOCK_STATE_HASH_TO_META_MAP.get(blockType);
+        if (map != null) {
+            return map::get;
+        } else {
+            return unused -> 0;
+        }
     }
 }
