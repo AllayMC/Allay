@@ -43,14 +43,14 @@ EntityXXX ..|> AttackComponent
 EntityXXX ..|> TameComponent
 EntityXXX ..|> AIComponent
 class EntityType {
-+ EntityXXX createEntity(参数...)
++ EntityXXX createEntity(parameters...)
 }
 
 EntityDefinition o-- HealthComponentImpl
 EntityDefinition o-- AttackComponentImpl
 EntityDefinition o-- TameComponentImpl
 EntityDefinition o-- AIComponentImpl
-EntityTypeBuilder o-- EntityDefinition : 传入到EntityBuilder中
-EntityType <- EntityTypeBuilder : 构建出EntityType，其持有Entity接口的实现类对象(Class<Entity>)
-EntityXXX <- EntityType : 通过EntityType创建Entity接口的实例
+EntityTypeBuilder o-- EntityDefinition : 传入到EntityBuilder中 \n Passed to EntityBuilder
+EntityType <- EntityTypeBuilder : 构建出EntityType，其持有Entity接口的实现类对象(Class<Entity>) \n Constructs EntityType holding the implementation class objects (Class<Entity>)
+EntityXXX <- EntityType : 通过EntityType创建Entity接口的实例 \n Creates instances of the Entity interface through EntityType
 @enduml
