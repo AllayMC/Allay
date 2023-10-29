@@ -159,7 +159,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     public BlockState toBlockState() {
         return itemType.getBlockType() == null ?
                 null :
-                VanillaItemMetaBlockStateBiMap.getRegistry().getMetaToBlockStateMap(itemType).get(meta);
+                VanillaItemMetaBlockStateBiMap.getRegistry().getMetaToBlockStateMapper(itemType).apply(meta);
     }
 
     @Override

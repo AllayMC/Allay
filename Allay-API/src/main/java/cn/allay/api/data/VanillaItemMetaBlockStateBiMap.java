@@ -5,7 +5,7 @@ import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.item.type.ItemType;
 
-import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Allay Project 2023/10/28
@@ -20,7 +20,7 @@ public interface VanillaItemMetaBlockStateBiMap {
         return REGISTRY.get();
     }
 
-    Map<Integer, BlockState> getMetaToBlockStateMap(ItemType<?> itemType);
+    Function<Integer, BlockState> getMetaToBlockStateMapper(ItemType<?> itemType);
 
-    Map<Integer, Integer> getBlockStateHashToMetaMap(BlockType<?> blockType);
+    Function<Integer, Integer> getBlockStateHashToMetaMapper(BlockType<?> blockType);
 }

@@ -614,6 +614,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         @Override
         public PacketSignal handle(AnimatePacket packet) {
             if (packet.getAction() == AnimatePacket.Action.SWING_ARM) {
+                // TODO: Shouldn't send to self
                 player.getCurrentChunk().addChunkPacket(packet);
             }
             return PacketSignal.HANDLED;
@@ -708,6 +709,49 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     case START_JUMPING -> player.setOnGround(false);
                 }
             }
+        }
+
+        @Override
+        public PacketSignal handle(BlockPickRequestPacket packet) {
+            if (player.getGameType() != GameType.CREATIVE) {
+                log.warn("Player " + getOriginName() + " tried to pick block in non-creative mode!");
+                return PacketSignal.HANDLED;
+            }
+            var pos = packet.getBlockPosition();
+            // TODO: includeBlockEntityData
+            var includeBlockEntityData = packet.isAddUserData();
+            var block = player.getLocation().world().getBlockState(pos.getX(), pos.getY(), pos.getZ());
+            if (block.getBlockType() == BlockAirBehavior.AIR_TYPE) {
+                log.warn("Player " + getOriginName() + " tried to pick air!");
+                return PacketSignal.HANDLED;
+            }
+            var item = block.toItemStack();
+            item.setCount(item.getItemAttributes().maxStackSize());
+            var inventory = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+            // Foreach hot bar
+            int minEmptySlot = -1;
+            boolean success = false;
+            for (int slot = 0; slot <= 9; slot++) {
+                if (inventory.isEmpty(slot) && minEmptySlot == -1) {
+                    minEmptySlot = slot;
+                    continue;
+                }
+                var hotBarItem = inventory.getItemStack(slot);
+                if (hotBarItem.canMerge(item)) {
+                    hotBarItem.setCount(hotBarItem.getItemAttributes().maxStackSize());
+                    inventory.onSlotChange(slot);
+                    success = true;
+                }
+            }
+            if (!success) {
+                if (minEmptySlot != -1) {
+                    inventory.setItemStack(minEmptySlot, item);
+                } else {
+                    // Hot bar is full
+                    inventory.setItemInHand(item);
+                }
+            }
+            return PacketSignal.HANDLED;
         }
     }
 }
