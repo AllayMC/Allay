@@ -2,6 +2,7 @@ package cn.allay.api.entity.interfaces.player;
 
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.interfaces.BlockAirBehavior;
+import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
@@ -639,14 +640,14 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     }
                     player.sendRawMessage("TPS: " + loc.world().getTps() + ", Entity Count: " + loc.world().getEntities().size());
                 }
-                if (packet.getMessage().equals("test2")) {
-                    player.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
-                    player.sendEntityFlags(EntityFlag.USING_ITEM);
-                    var pk = new SetEntityDataPacket();
-                    pk.setRuntimeEntityId(player.getUniqueId());
-                    pk.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
-                    pk.setTick(Server.getInstance().getTicks());
-                    Server.getInstance().broadcastPacket(pk);
+                if (packet.getMessage().startsWith("gb_")) {
+                    var blockStateHash = Integer.parseInt(packet.getMessage().substring(3));
+                    var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
+                    if (blockState == null) {
+                        player.sendRawMessage("unknown hash!");
+                        return PacketSignal.HANDLED;
+                    }
+                    player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
                 }
             }
             return PacketSignal.HANDLED;
