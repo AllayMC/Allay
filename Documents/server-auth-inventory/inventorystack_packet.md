@@ -12,9 +12,9 @@ Take the plank item from the Creative Inventory to the first hotbar
 
 2.从创造创造物品栏拿取木板到已经存在木板物品的hotbar第一格  
 这在手机端和win10端会出现不同的发包行为，手机端物品看起来被替换，win10端物品看起来没变化  
-Take the plank item from the Creative Inventory to the first hotbar that already has the item  
-This in the mobile and win10 device will have different packet, the mobile end items look replaced, win10 end items look
-unchanged  
+Take the plank item from the Creative Inventory to the first hotbar that already has the item
+This will have different packet behaviors on mobile and Win10 devices. On mobile, items appear to be replaced, while on
+Win10, items appear unchanged.
 win10:
 
 ```txt
@@ -30,7 +30,7 @@ mobile:
 ```
 
 3.从创造物品栏拿取云杉木板到已经存在木板物品的hotbar第一格  
-From the Creative Inventory, take the spruce planks item to the first hotbar of an already existing plank item
+From the Creative Inventory, take the spruce planks item to the first hotbar, where a plank item already exists
 
 ```txt
 [SERVER BOUND] - ItemStackRequestPacket(requests=[ItemStackRequest(requestId=-53, actions=[CraftCreativeAction(creativeItemNetworkId=2), CraftResultsDeprecatedAction(resultItems=[BaseItemData(definition=SimpleItemDefinition(identifier=minecraft:planks, runtimeId=5, componentBased=false), damage=0, count=1, tag=null, canPlace=[], canBreak=[], blockingTicks=0, blockDefinition=UnknownDefinition[runtimeId=10431], usingNetId=false, netId=0)], timesCrafted=1), TakeAction(count=64, source=ItemStackRequestSlotData(container=CREATED_OUTPUT, slot=50, stackNetworkId=-53), destination=ItemStackRequestSlotData(container=CURSOR, slot=0, stackNetworkId=0))], filterStrings=[], textProcessingEventOrigin=null)])
@@ -50,7 +50,7 @@ Move the plank item from slot 9 to slot 10
 ```
 
 5.移动物品到创造栏销毁物品  
-Move item to the Creative Inventory to destroy item
+Move an item to the Creative Inventory to destroy it
 
 ```
 [SERVER BOUND] - ItemStackRequestPacket(requests=[ItemStackRequest(requestId=-137, actions=[DestroyAction(count=64, source=ItemStackRequestSlotData(container=CURSOR, slot=0, stackNetworkId=19))], filterStrings=[], textProcessingEventOrigin=null)])
@@ -58,7 +58,7 @@ Move item to the Creative Inventory to destroy item
 ```
 
 6.从创造物品栏拿取木板到已经存在木板的hotbar第一格，然后丢弃该木板  
-Take the plank from the Creative inventory to the first hotbar where the plank already exists, then drop the plank
+Take the plank from the Creative Inventory to the first hotbar where the plank already exists, then drop the plank
 
 ```
 [SERVER BOUND] - ItemStackRequestPacket(requests=[ItemStackRequest(requestId=-557, actions=[CraftCreativeAction(creativeItemNetworkId=1), CraftResultsDeprecatedAction(resultItems=[BaseItemData(definition=SimpleItemDefinition(identifier=minecraft:planks, runtimeId=5, componentBased=false), damage=0, count=1, tag=null, canPlace=[], canBreak=[], blockingTicks=0, blockDefinition=UnknownDefinition[runtimeId=10430], usingNetId=false, netId=0)], timesCrafted=1), TakeAction(count=64, source=ItemStackRequestSlotData(container=CREATED_OUTPUT, slot=50, stackNetworkId=-557), destination=ItemStackRequestSlotData(container=CURSOR, slot=0, stackNetworkId=0))], filterStrings=[], textProcessingEventOrigin=null)])
