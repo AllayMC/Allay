@@ -344,6 +344,29 @@ public class AllayChunkService implements ChunkService {
         private final LongArrayFIFOQueue chunkSendQueue;
         private long lastLoaderChunkPosHashed = -1;
 
+        //保存着上tick已经发送的SubChunkRequestData
+        private final Map<Long, Set<SubChunkRequestIndex>> sentSubChunks = new Long2ObjectOpenHashMap<>();
+
+        record SubChunkRequestIndex(org.cloudburstmc.math.vector.Vector3i centerPosition,
+                                    org.cloudburstmc.math.vector.Vector3i offset) {
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (!(o instanceof SubChunkRequestIndex that)) return false;
+                return centerPosition.getX() == that.centerPosition.getX() &&
+                        centerPosition.getY() == that.centerPosition.getY() &&
+                        centerPosition.getZ() == that.centerPosition.getZ() &&
+                        offset.getX() == that.offset.getX() &&
+                        offset.getY() == that.offset.getY() &&
+                        offset.getZ() == that.offset.getZ();
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(centerPosition.getX(), centerPosition.getY(), centerPosition.getZ(), offset.getX(), offset.getY(), offset.getZ());
+            }
+        }
+
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
             this.chunkSendQueue = new LongArrayFIFOQueue(chunkLoader.getChunkLoadingRadius() * chunkLoader.getChunkLoadingRadius());
@@ -369,6 +392,17 @@ public class AllayChunkService implements ChunkService {
                         log.info("Chunk loader " + chunkLoader + " requested sub chunk which is not loaded");
                         createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null, null);
                         continue;
+                    }
+
+                    var chunkHash = chunk.computeChunkHash();
+                    this.sentSubChunks.putIfAbsent(chunkHash, new HashSet<>());
+                    var sent = this.sentSubChunks.get(chunkHash);
+                    SubChunkRequestIndex requestIndex = new SubChunkRequestIndex(centerPosition, offset);
+                    if (sent.contains(requestIndex)) {
+                        log.trace("Chunk loader " + chunkLoader + " requested sub chunk which was already sent");
+                        continue;
+                    } else {
+                        sent.add(requestIndex);
                     }
 
                     byte[] hMap = new byte[256];

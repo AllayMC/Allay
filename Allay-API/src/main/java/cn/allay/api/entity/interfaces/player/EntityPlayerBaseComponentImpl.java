@@ -339,18 +339,18 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void onChunkInRangeLoaded(Chunk chunk) {
-        if (!Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) {
+        if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) {
+            var levelChunkPacket = chunk.createLevelChunkPacket();
+            networkComponent.sendPacket(levelChunkPacket);
+            chunk.spawnEntitiesTo(thisEntity);
+            networkComponent.onChunkInRangeLoaded();
+        } else {
             CompletableFuture.runAsync(() -> {
                 var levelChunkPacket = chunk.createLevelChunkPacket();
                 networkComponent.sendPacket(levelChunkPacket);
                 chunk.spawnEntitiesTo(thisEntity);
                 networkComponent.onChunkInRangeLoaded();
             }, Server.getInstance().getVirtualThreadPool());
-        } else {
-            var levelChunkPacket = chunk.createLevelChunkPacket();
-            networkComponent.sendPacket(levelChunkPacket);
-            chunk.spawnEntitiesTo(thisEntity);
-            networkComponent.onChunkInRangeLoaded();
         }
     }
 
