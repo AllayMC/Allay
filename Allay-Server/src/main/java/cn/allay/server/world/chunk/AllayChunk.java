@@ -2,7 +2,6 @@ package cn.allay.server.world.chunk;
 
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.blockentity.BlockEntity;
-import cn.allay.api.data.VanillaBiomeId;
 import cn.allay.api.entity.Entity;
 import cn.allay.api.server.Server;
 import cn.allay.api.world.DimensionInfo;
@@ -330,19 +329,15 @@ public class AllayChunk implements Chunk {
 
     private ByteBuf writeToNetwork() {
         var byteBuf = ByteBufAllocator.DEFAULT.buffer();
-        Palette<BiomeType> lastBiomes = new Palette<>(VanillaBiomeId.PLAINS);
         // Write blocks
-        for (var section : getSections()) {
-            if (section == null) break;
+        for (int i = 0; i < getDimensionInfo().chunkSectionSize(); i++) {
+            ChunkSection section = getOrCreateSection(i);
             section.writeToNetwork(byteBuf);
         }
         // Write biomes
+        Palette<BiomeType> lastBiomes = null;
         for (var section : getSections()) {
-            if (section == null) {
-                lastBiomes.writeToNetwork(byteBuf, BiomeType::getId, lastBiomes);
-                continue;
-            }
-            section.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+            section.biomes().writeToNetwork(byteBuf, BiomeType::getId, lastBiomes);
             lastBiomes = section.biomes();
         }
         byteBuf.writeByte(0); // edu- border blocks
