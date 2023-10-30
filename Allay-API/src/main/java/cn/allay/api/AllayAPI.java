@@ -6,7 +6,6 @@ import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.block.type.BlockTypeBuilder;
 import cn.allay.api.blockentity.registry.BlockEntityTypeRegistry;
 import cn.allay.api.blockentity.type.BlockEntityTypeBuilder;
-import cn.allay.api.blockentity.type.BlockEntityTypeRegistry;
 import cn.allay.api.command.CommandHandler;
 import cn.allay.api.component.interfaces.ComponentInjector;
 import cn.allay.api.data.VanillaItemMetaBlockStateBiMap;
@@ -159,7 +158,6 @@ public final class AllayAPI {
 
         //Creative Item Registry
         requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
-    }
 
         // Commands
         requireImpl(CommandHandler.class, CommandHandler.INSTANCE::set);

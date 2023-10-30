@@ -1,5 +1,6 @@
 package cn.allay.api.entity.interfaces.player;
 
+import cn.allay.api.AllayAPI;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.interfaces.BlockAirBehavior;
 import cn.allay.api.block.registry.BlockTypeRegistry;
@@ -7,6 +8,7 @@ import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
 import cn.allay.api.client.movement.ClientMovementValidator;
 import cn.allay.api.command.CommandHandler;
+import cn.allay.api.command.CommandSender;
 import cn.allay.api.component.annotation.ComponentIdentifier;
 import cn.allay.api.component.annotation.ComponentedObject;
 import cn.allay.api.component.annotation.Manager;
@@ -53,6 +55,7 @@ import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -649,6 +652,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     Server.getInstance().broadcastPacket(pk);
                 }
             }
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(CommandRequestPacket packet) {
+            // The packet returns `/command args`, this gets rid of the `/` at the start
+            player.dispatch(packet.getCommand().substring(1));
             return PacketSignal.HANDLED;
         }
 

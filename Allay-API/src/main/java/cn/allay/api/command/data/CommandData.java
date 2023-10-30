@@ -21,6 +21,7 @@ import java.util.*;
 public class CommandData {
 
     private final CommandPath path;
+    private final Object commandInstance; // Needed for reflection, see CommandHandlerImpl#dispatch
 
     private final Map<String[], Method> methods = new HashMap<>();
     private final Map<String[], Method> overloads = new HashMap<>();
@@ -29,8 +30,9 @@ public class CommandData {
     private @Nullable String usage;
     private @Nullable String permission;
 
-    public CommandData(@NotNull CommandPath path) {
+    public CommandData(@NotNull CommandPath path, Object commandInstance) {
         this.path = path;
+        this.commandInstance = commandInstance;
     }
 
     public void addDefaultExecutor(@NotNull String[] commandNameOrAliases, @NotNull Method method) {

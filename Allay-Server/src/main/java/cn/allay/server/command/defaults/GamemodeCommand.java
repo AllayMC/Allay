@@ -10,12 +10,13 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 public class GamemodeCommand {
 
     @DefaultExecuteFor({"gamemode", "gm"})
-    public void gamemodeInt(CommandSender sender, @Optional int mode, EntityPlayer target) {
+    public void gamemodeInt(CommandSender sender, int mode, @Optional EntityPlayer target) {
         sender.reply("int");
     }
 
     @Overload("gamemode") // only gamemode for tests
-    public void gamemodeEnum(CommandSender sender, GameType mode, EntityPlayer target) {
+    @DefaultExecuteFor({"gamemode", "gm"})
+    public void gamemodeEnum(CommandSender sender, GameType mode, @Optional EntityPlayer target) {
         sender.reply("enum");
     }
 
@@ -25,7 +26,7 @@ public class GamemodeCommand {
     }
 
     @DefaultExecuteFor("gms")
-    public void gms(CommandSender sender, EntityPlayer target) {
+    public void gms(EntityPlayer sender, EntityPlayer target) {
         gamemodeEnum(sender, GameType.SURVIVAL, target);
     }
 }

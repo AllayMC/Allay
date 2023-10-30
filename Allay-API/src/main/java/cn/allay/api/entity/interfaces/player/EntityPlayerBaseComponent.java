@@ -2,6 +2,7 @@ package cn.allay.api.entity.interfaces.player;
 
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.skin.Skin;
+import cn.allay.api.command.CommandSender;
 import cn.allay.api.entity.component.base.EntityBaseComponent;
 import cn.allay.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.Range;
 
 import java.util.function.Function;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
 
     void setSprinting(boolean sprinting);
 

@@ -27,6 +27,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBf;
 
@@ -383,5 +384,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void handleChunkPacketImmediately(BedrockPacket packet) {
         networkComponent.sendPacketImmediately(packet);
+    }
+
+    @Override
+    @NotNull
+    public String getName() {
+        return this.getDisplayName();
+    }
+
+    @Override
+    public void reply(@NotNull String message) {
+        this.sendRawMessage(message);
     }
 }
