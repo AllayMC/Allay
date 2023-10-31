@@ -58,7 +58,12 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
         if (itemStack != null && other.getEntityType() == EntityItem.ITEM_TYPE) {
             var otherEntityItem = (EntityItem) other;
             var otherItemStack = otherEntityItem.getItemStack();
-            if (otherItemStack != null && otherItemStack.canMerge(itemStack) && itemStack.getCount() + otherItemStack.getCount() <= itemStack.getItemAttributes().maxStackSize()) {
+
+            // 物品捡起的时候会执行 EntityPlayerBaseComponentImpl 中的 tryPickUpItems方法，物品数量会被清空，此时两个物品都是count = 0 的状态导致合并后误删掉落物实体。
+            // 问题最终导致： 物品在同一tick下捡起会导致吞方块
+            if (otherItemStack != null && otherItemStack.canMerge(itemStack) &&
+                    itemStack.getCount() > 0 && otherItemStack.getCount() > 0 &&
+                    itemStack.getCount() + otherItemStack.getCount() <= itemStack.getItemAttributes().maxStackSize()) {
                 itemStack.setCount(itemStack.getCount() + otherItemStack.getCount());
                 otherEntityItem.setItemStack(null);
                 otherEntityItem.removeEntity();
