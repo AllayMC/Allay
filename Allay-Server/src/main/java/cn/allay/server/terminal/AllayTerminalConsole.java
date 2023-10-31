@@ -36,7 +36,7 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
         SENDER.dispatch(s);
 
         // TODO: remove this
-        if (s.equalsIgnoreCase("stop")) {
+        /*if (s.equalsIgnoreCase("stop")) {
             log.info("Server ShutDown...");
             shutdown();
         } else if (s.startsWith("/t")) {
@@ -52,7 +52,7 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
         } else {
             //TODO
             log.info("§1TODO :)");
-        }
+        }*/
     }
 
     @Override

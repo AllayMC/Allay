@@ -15,7 +15,6 @@ public class GamemodeCommand {
     }
 
     @Overload("gamemode") // only gamemode for tests
-    @DefaultExecuteFor({"gamemode", "gm"})
     public void gamemodeEnum(CommandSender sender, GameType mode, @Optional EntityPlayer target) {
         sender.reply("enum");
     }

@@ -90,7 +90,6 @@ public abstract class CommandHandlerImpl implements CommandHandler {
 
     @Override
     public void dispatch(@NotNull CommandSender sender, @NotNull String command) {
-        log.info("Command dispatched: " + command);
         var args = QuotedStringTokenizer.parse(command);
         var commandName = args.remove(0);
 
@@ -114,88 +113,102 @@ public abstract class CommandHandlerImpl implements CommandHandler {
         }
 
         // Now we need to figure out what method to run
-        Method possibleMethod = null;
+        List<Method> possibleMethods = new ArrayList<>();
         for (var nameAliasArray : commandData.getMethods().keySet()) {
             for (var value : nameAliasArray) {
                 if (value.equals(commandName)) {
-                    possibleMethod = commandData.getMethods().get(nameAliasArray);
+                    possibleMethods.add(commandData.getMethods().get(nameAliasArray));
                     break;
                 }
             }
         }
 
-        if (possibleMethod == null) {
+        for (var nameAliasArray : commandData.getOverloads().keySet()) {
+            for (var value : nameAliasArray) {
+                if (value.equals(commandName)) {
+                    possibleMethods.add(commandData.getOverloads().get(nameAliasArray));
+                    break;
+                }
+            }
+        }
+
+        if (possibleMethods.isEmpty()) {
             // Empty command class
             sender.error("Found command, could not find an executor for it!");
             return;
         }
 
-        // The -1 is for the first parameter CommandSender
-        if (args.size() > possibleMethod.getParameterCount() - 1) {
-            sender.error("You provided too many arguments!");
-            return;
-        }
+        var iterator = possibleMethods.iterator();
+        while (iterator.hasNext()) {
+            var method = iterator.next();
 
-        // If a parameter is optional, we should set the extra values passed in to null
-        // Reflection only allows the exact number of arguments to invoke a method
-        int optionalParams = 0;
-        for (int i = 0; i < possibleMethod.getParameterCount(); i++) {
-            optionalParams += (possibleMethod.getParameters()[i].isAnnotationPresent(Optional.class) ? 1 : 0);
-        }
-
-        List<Object> parametersRun = new ArrayList<>();
-        parametersRun.add(sender);
-        int argIndex = 0;
-        boolean works = true;
-        // Start at 1 to skip the first parameter CommandSender
-        for (int i = 1; i < possibleMethod.getParameterCount(); i++) {
-            var parameter = possibleMethod.getParameters()[i];
-            // If the parameter is optional and there are not enough arguments provided by the player, stop the loop
-            // Values will be populated later on
-            if (parameter.isAnnotationPresent(Optional.class) && argIndex >= args.size()) {
-                break;
-            } else if (args.size() <= argIndex) {
-                // TODO: Usage message?
-                sender.error("Not enough parameters for that command!");
+            // The -1 is for the first parameter CommandSender
+            if (args.size() > method.getParameterCount() - 1) {
+                sender.error("You provided too many arguments!");
                 return;
             }
 
-            var resolver = this.resolvers.get(parameter.getType());
-            if (resolver == null) {
-                sender.error("No existing revolver for the " + parameter.getType().getName() + " class!");
-                return;
+            // If a parameter is optional, we should set the extra values passed in to null
+            // Reflection only allows the exact number of arguments to invoke a method
+            int optionalParams = 0;
+            for (int i = 0; i < method.getParameterCount(); i++) {
+                optionalParams += (method.getParameters()[i].isAnnotationPresent(Optional.class) ? 1 : 0);
+            }
+
+            List<Object> parametersRun = new ArrayList<>();
+            parametersRun.add(sender);
+            int argIndex = 0;
+            boolean works = true;
+            // Start at 1 to skip the first parameter CommandSender
+            for (int i = 1; i < method.getParameterCount(); i++) {
+                var parameter = method.getParameters()[i];
+                // If the parameter is optional and there are not enough arguments provided by the player, stop the loop
+                // Values will be populated later on
+                if (parameter.isAnnotationPresent(Optional.class) && argIndex >= args.size()) {
+                    break;
+                } else if (args.size() <= argIndex) {
+                    // TODO: Usage message?
+                    sender.error("Not enough parameters for that command!");
+                    return;
+                }
+
+                var resolver = this.resolvers.get(parameter.getType());
+                if (resolver == null) {
+                    sender.error("No existing revolver for the " + parameter.getType().getName() + " class!");
+                    return;
+                }
+
+                try {
+                    parametersRun.add(resolver.resolve(sender, args.get(argIndex)));
+                } catch (Exception e) {
+                    // I think this can be improved, though it works for now and I don't see a problem with it yet
+                    // Resolver wouldn't work due to user input, so this method isn't the targeted one
+                    works = false;
+                    break;
+                }
+
+                argIndex++;
+            }
+
+            if (!works) continue;
+
+            var neededParams = method.getParameterCount();
+            if (neededParams > parametersRun.size()) {
+                for (int i = 0; i < optionalParams; i++) parametersRun.add(null);
+
+                if (neededParams > parametersRun.size()) {
+                    sender.reply("You need to supply more parameters to the command!");
+                    return;
+                }
             }
 
             try {
-                parametersRun.add(resolver.resolve(sender, args.get(argIndex)));
-            } catch (Exception e) {
-                // I think this can be improved, though it works for now and I don't see a problem with it yet
-                // Resolver wouldn't work due to user input, so this method isn't the targeted one
-                works = false;
-                break;
-            }
-
-            argIndex++;
-        }
-
-        if (!works) return;
-
-        var neededParams = possibleMethod.getParameterCount();
-        if (neededParams > parametersRun.size()) {
-            for (int i = 0; i < optionalParams; i++) parametersRun.add(null);
-
-            if (neededParams > parametersRun.size()) {
-                sender.reply("You need to supply more parameters to the command!");
+                method.invoke(commandData.getCommandInstance(), parametersRun.toArray());
                 return;
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                sender.error("Something went wrong invoking the command! " + exception.getMessage());
             }
-        }
-
-        try {
-            possibleMethod.invoke(commandData.getCommandInstance(), parametersRun.toArray());
-            return;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            sender.error("Something went wrong invoking the command! " + exception.getMessage());
         }
 
         sender.error("Something went wrong executing that command! No methods were found or called based on user input");
