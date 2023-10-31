@@ -64,7 +64,8 @@ public class CommandData {
         Set<CommandParamData> params = new HashSet<>();
         methods.forEach((names, method) -> {
             var paramNames = ReflectionUtils.getParametersName(method);
-            for (int i = 0; i < method.getParameterTypes().length; i++) {
+            // Start at 1 to skip the first parameter CommandSender
+            for (int i = 1; i < method.getParameterTypes().length; i++) {
                 var param = method.getParameterTypes()[i];
                 var paramData = new CommandParamData();
                 paramData.setName(paramNames.get(i));

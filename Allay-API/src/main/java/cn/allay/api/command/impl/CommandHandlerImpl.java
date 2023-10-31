@@ -2,18 +2,15 @@ package cn.allay.api.command.impl;
 
 import cn.allay.api.command.CommandHandler;
 import cn.allay.api.command.CommandSender;
-import cn.allay.api.command.annotation.Command;
-import cn.allay.api.command.annotation.DefaultExecuteFor;
-import cn.allay.api.command.annotation.Description;
 import cn.allay.api.command.annotation.Optional;
-import cn.allay.api.command.annotation.Overload;
+import cn.allay.api.command.annotation.*;
 import cn.allay.api.command.data.CommandData;
 import cn.allay.api.command.data.CommandPath;
 import cn.allay.api.command.exception.InvalidValueResolverException;
 import cn.allay.api.command.resolver.ValueResolver;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
+import cn.allay.api.utils.QuotedStringTokenizer;
 import lombok.extern.slf4j.Slf4j;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandPermission;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +28,6 @@ public abstract class CommandHandlerImpl implements CommandHandler {
     private final Map<Class<?>, ValueResolver<?>> resolvers = new HashMap<>();
 
     protected CommandHandlerImpl() {
-        this.registerValueResolver(GameType.class, (sender, input) -> GameType.valueOf(input.toUpperCase()));
         this.registerValueResolver(String.class, (sender, input) -> input);
         this.registerValueResolver(int.class, (sender, input) -> number(Integer::parseInt, input));
         this.registerValueResolver(long.class, (sender, input) -> number(Long::parseLong, input));
@@ -95,121 +91,114 @@ public abstract class CommandHandlerImpl implements CommandHandler {
     @Override
     public void dispatch(@NotNull CommandSender sender, @NotNull String command) {
         log.info("Command dispatched: " + command);
-        String[] args = command.split(" ");
-        String name = args[0];
-        args = Arrays.copyOfRange(args, 1, args.length);
+        var args = QuotedStringTokenizer.parse(command);
+        var commandName = args.remove(0);
+
         CommandData commandData = null;
-        for(CommandPath path : this.commands.keySet()) {
-            if(name.equals(path.getName())) {
+        for (var path : this.commands.keySet()) {
+            if (commandName.equals(path.getName())) {
                 commandData = this.commands.get(path);
                 break;
             }
-            for(String alias : path.getAliases()) {
-                if(alias.equals(name))
-                    // We don't break here since name should take priority over aliases?
+
+            for (String alias : path.getAliases()) {
+                if (alias.equals(commandName))
+                    // We don't break here since commandName should take priority over aliases?
                     commandData = this.commands.get(path);
             }
         }
 
-        if(commandData == null) {
-            sender.reply("§4The command `" + name + "` does not exist!");
+        if (commandData == null) {
+            sender.error("The command `" + commandName + "` does not exist!");
             return;
         }
 
         // Now we need to figure out what method to run
-        LinkedList<Method> possibleMethods = new LinkedList<>();
-        for(String[] nameAliasArray : commandData.getMethods().keySet()) {
-            boolean found = false;
-            for(String value : nameAliasArray) {
-                if(value.equals(name)) {
-                    found = true;
+        Method possibleMethod = null;
+        for (var nameAliasArray : commandData.getMethods().keySet()) {
+            for (var value : nameAliasArray) {
+                if (value.equals(commandName)) {
+                    possibleMethod = commandData.getMethods().get(nameAliasArray);
                     break;
                 }
             }
-            if(found) {
-                possibleMethods.add(commandData.getMethods().get(nameAliasArray));
-            }
         }
 
-        if(possibleMethods.isEmpty()) {
+        if (possibleMethod == null) {
             // Empty command class
-            sender.reply("§4Found command, could not find an executor for it!");
+            sender.error("Found command, could not find an executor for it!");
             return;
         }
 
-        ListIterator<Method> iterator = possibleMethods.listIterator();
-        while(iterator.hasNext()) {
-            Method method = iterator.next();
-            // The -1 is for the first parameter CommandSender
-            if(args.length > method.getParameterCount() - 1) {
-                sender.reply("You provided too many arguments!");
+        // The -1 is for the first parameter CommandSender
+        if (args.size() > possibleMethod.getParameterCount() - 1) {
+            sender.error("You provided too many arguments!");
+            return;
+        }
+
+        // If a parameter is optional, we should set the extra values passed in to null
+        // Reflection only allows the exact number of arguments to invoke a method
+        int optionalParams = 0;
+        for (int i = 0; i < possibleMethod.getParameterCount(); i++) {
+            optionalParams += (possibleMethod.getParameters()[i].isAnnotationPresent(Optional.class) ? 1 : 0);
+        }
+
+        List<Object> parametersRun = new ArrayList<>();
+        parametersRun.add(sender);
+        int argIndex = 0;
+        boolean works = true;
+        // Start at 1 to skip the first parameter CommandSender
+        for (int i = 1; i < possibleMethod.getParameterCount(); i++) {
+            var parameter = possibleMethod.getParameters()[i];
+            // If the parameter is optional and there are not enough arguments provided by the player, stop the loop
+            // Values will be populated later on
+            if (parameter.isAnnotationPresent(Optional.class) && argIndex >= args.size()) {
+                break;
+            } else if (args.size() <= argIndex) {
+                // TODO: Usage message?
+                sender.error("Not enough parameters for that command!");
                 return;
             }
 
-            // If a parameter is optional, we should set the extra values passed in to null
-            // Reflection only allows the exact number of arguments to invoke a method
-            int optionalParams = 0;
-            for(int i = 0; i < method.getParameterCount(); i++) {
-                optionalParams += (method.getParameters()[i].isAnnotationPresent(Optional.class) ? 1 : 0);
-            }
-
-            ArrayList<Object> parametersRun = new ArrayList<>();
-            parametersRun.add(sender);
-            int argIndex = 0;
-            boolean works = true;
-            // Start at 1 to skip the first parameter CommandSender
-            for(int i = 1; i < method.getParameterCount(); i++) {
-                Parameter parameter = method.getParameters()[i];
-                // If the parameter is optional and there are not enough arguments provided by the player, stop the loop
-                // Values will be populated later on
-                if(parameter.isAnnotationPresent(Optional.class) && argIndex >= args.length) {
-                    break;
-                } else if(args.length <= argIndex) {
-                    // TODO: Usage message?
-                    sender.reply("§4Not enough parameters for that command!");
-                    return;
-                }
-
-                ValueResolver<?> resolver = this.resolvers.get(parameter.getType());
-                if(resolver == null) {
-                    sender.reply("No existing revolver for the " + parameter.getType().getName() + " class!");
-                    return;
-                }
-                try {
-                    parametersRun.add(resolver.resolve(sender, args[argIndex]));
-                } catch (Exception e) {
-                    // I think this can be improved, though it works for now and I don't see a problem with it yet
-                    // Resolver wouldn't work due to user input, so this method isn't the targeted one
-                    iterator.remove();
-                    works = false;
-                    break;
-                }
-                argIndex++;
-            }
-            if(!works)
-                continue;
-
-            int neededParams = method.getParameterCount();
-            if(neededParams > parametersRun.size()) {
-                for(int i = 0; i < optionalParams; i++) {
-                    parametersRun.add(null);
-                }
-                if(neededParams > parametersRun.size()) {
-                    sender.reply("You need to supply more parameters to the command!");
-                    return;
-                }
+            var resolver = this.resolvers.get(parameter.getType());
+            if (resolver == null) {
+                sender.error("No existing revolver for the " + parameter.getType().getName() + " class!");
+                return;
             }
 
             try {
-                method.invoke(commandData.getCommandInstance(), parametersRun.toArray());
-                return;
+                parametersRun.add(resolver.resolve(sender, args.get(argIndex)));
             } catch (Exception e) {
-                e.printStackTrace();
-                sender.reply("§4Something went wrong invoking the command! " + e.getMessage());
+                // I think this can be improved, though it works for now and I don't see a problem with it yet
+                // Resolver wouldn't work due to user input, so this method isn't the targeted one
+                works = false;
+                break;
+            }
+
+            argIndex++;
+        }
+
+        if (!works) return;
+
+        var neededParams = possibleMethod.getParameterCount();
+        if (neededParams > parametersRun.size()) {
+            for (int i = 0; i < optionalParams; i++) parametersRun.add(null);
+
+            if (neededParams > parametersRun.size()) {
+                sender.reply("You need to supply more parameters to the command!");
+                return;
             }
         }
 
-        sender.reply("§4Something went wrong executing that command! No methods were found or called based on user input");
+        try {
+            possibleMethod.invoke(commandData.getCommandInstance(), parametersRun.toArray());
+            return;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            sender.error("Something went wrong invoking the command! " + exception.getMessage());
+        }
+
+        sender.error("Something went wrong executing that command! No methods were found or called based on user input");
     }
 
     @Override
