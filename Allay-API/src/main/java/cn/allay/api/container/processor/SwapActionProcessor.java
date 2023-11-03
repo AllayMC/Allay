@@ -5,13 +5,10 @@ import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.SwapAction;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -27,7 +24,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
     }
 
     @Override
-    public ItemStackResponse handle(SwapAction action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
+    public ActionResponse handle(SwapAction action, EntityPlayer player) {
         Container sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
         Container destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
         var sourceSlot = action.getSource().getSlot();
@@ -36,17 +33,16 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
         var destinationItem = destinationContainer.getItemStack(destinationSlot);
         if (sourceItem.getStackNetworkId() != action.getSource().getStackNetworkId()) {
             log.warn("mismatch stack network id!");
-            return error(requestId);
+            return error();
         }
         if (destinationItem.getStackNetworkId() != action.getDestination().getStackNetworkId()) {
             log.warn("mismatch stack network id!");
-            return error(requestId);
+            return error();
         }
         sourceContainer.setItemStack(sourceSlot, destinationItem);
         destinationContainer.setItemStack(destinationSlot, sourceItem);
-        return new ItemStackResponse(
-                ItemStackResponseStatus.OK,
-                requestId,
+        return new ActionResponse(
+                true,
                 List.of(
                         new ItemStackResponseContainer(
                                 sourceContainer.getSlotType(sourceSlot),

@@ -82,6 +82,12 @@ public interface ItemBaseComponent extends ItemComponent {
             World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace);
 
+    default boolean canMerge(ItemStack itemStack) {
+        return canMerge(itemStack, false);
+    }
+
+    boolean canMerge(ItemStack itemStack, boolean ignoreCount);
+
     // TODO: boolean useInAir();
 
     default NbtMap saveNBT() {
@@ -102,16 +108,5 @@ public interface ItemBaseComponent extends ItemComponent {
         //TODO: CanDestroy
         //TODO: CanPlaceOn
         return builder.build();
-    }
-
-    default boolean canMerge(ItemStack itemStack) {
-        var extraTag1 = saveExtraTag();
-        if (extraTag1 == null) extraTag1 = NbtMap.EMPTY;
-        var extraTag2 = itemStack.saveExtraTag();
-        if (extraTag2 == null) extraTag2 = NbtMap.EMPTY;
-        return itemStack.getItemType() == getItemType() &&
-               itemStack.getMeta() == getMeta() &&
-               extraTag1.equals(extraTag2) &&
-               itemStack.toBlockState() == toBlockState();
     }
 }

@@ -58,7 +58,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
         if (itemStack != null && other.getEntityType() == EntityItem.ITEM_TYPE) {
             var otherEntityItem = (EntityItem) other;
             var otherItemStack = otherEntityItem.getItemStack();
-            if (otherItemStack != null && otherItemStack.canMerge(itemStack) && itemStack.getCount() + otherItemStack.getCount() <= itemStack.getItemAttributes().maxStackSize()) {
+            if (otherItemStack != null && otherItemStack.canMerge(itemStack)) {
                 itemStack.setCount(itemStack.getCount() + otherItemStack.getCount());
                 otherEntityItem.setItemStack(null);
                 otherEntityItem.removeEntity();
