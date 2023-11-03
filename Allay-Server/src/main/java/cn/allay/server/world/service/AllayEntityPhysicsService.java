@@ -14,6 +14,7 @@ import cn.allay.api.world.World;
 import cn.allay.api.world.service.EntityPhysicsService;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
@@ -40,9 +41,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final FloatBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new FloatBooleanImmutablePair(0, false);
 
     protected World world;
-    protected Map<Long, Entity> entities = new Long2ObjectNonBlockingMap<>();
-    protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectNonBlockingMap<>();
-    protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectNonBlockingMap<>();
+    protected Map<Long, Entity> entities = new Long2ObjectOpenHashMap<>();
+    protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectOpenHashMap<>();
+    protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectOpenHashMap<>();
     /**
      * Regardless of the value of the entity's hasEntityCollision(), this aabb tree saves its collision result
      */

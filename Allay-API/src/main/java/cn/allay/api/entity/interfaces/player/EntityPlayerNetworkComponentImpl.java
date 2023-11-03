@@ -649,6 +649,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     }
                     player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
                 }
+                if (packet.getMessage().startsWith("rfinv")) {
+                    player.getContainer(FullContainerType.PLAYER_INVENTORY).sendContents(player);
+                    player.sendRawMessage("Inventory is refreshed!");
+                }
             }
             return PacketSignal.HANDLED;
         }
