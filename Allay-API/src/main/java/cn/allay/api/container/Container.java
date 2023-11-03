@@ -103,30 +103,37 @@ public interface Container {
         if (minSlotIndex > itemStacks.length - 1 || maxSlotIndex > itemStacks.length - 1) {
             throw new IllegalArgumentException("minSlotIndex or maxSlotIndex is out of range");
         }
-        var slot = -1;
+        var minEmptySlot = -1;
+        // First, try to merge with other item stack
         for (int index = minSlotIndex; index <= maxSlotIndex; index++) {
             var content = itemStacks[index];
             if (content == Container.EMPTY_SLOT_PLACE_HOLDER) {
-                setItemStack(index, itemStack.copy());
-                itemStack.setCount(0);
-                return index;
-            } else if (content.canMerge(itemStack)) {
+                if (minEmptySlot == -1) {
+                    minEmptySlot = index;
+                }
+                continue;
+            }
+            if (content.getCount() != content.getItemAttributes().maxStackSize() && content.canMerge(itemStack, true)) {
                 if (content.getCount() + itemStack.getCount() <= content.getItemAttributes().maxStackSize()) {
                     content.setCount(content.getCount() + itemStack.getCount());
                     itemStack.setCount(0);
-                    onSlotChange(index);
-                    return index;
                 } else {
-                    slot = index;
                     int count = itemStack.getCount();
                     int completion = content.getItemAttributes().maxStackSize() - content.getCount();
                     itemStack.setCount(count - completion);
                     content.setCount(content.getItemAttributes().maxStackSize());
-                    onSlotChange(index);
                 }
+                onSlotChange(index);
+                return index;
             }
         }
-        return slot;
+        // Second, put the item on an empty slot (if exists)
+        if (minEmptySlot != -1) {
+            setItemStack(minEmptySlot, itemStack.copy());
+            itemStack.setCount(0);
+            return minEmptySlot;
+        }
+        return -1;
     }
 
     default int tryAddItem(ItemStack itemStack) {

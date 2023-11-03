@@ -5,17 +5,13 @@ import cn.allay.api.container.FullContainerType;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.item.ItemStack;
 import lombok.extern.slf4j.Slf4j;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static cn.allay.api.item.interfaces.ItemAirStack.AIR_TYPE;
-import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus.OK;
 
 /**
  * Allay Project 2023/7/28
@@ -26,7 +22,7 @@ import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.respons
 public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
     @Override
-    public ItemStackResponse handle(T action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
+    public ActionResponse handle(T action, EntityPlayer player) {
         int slot1 = action.getSource().getSlot();
         int stackNetworkId1 = action.getSource().getStackNetworkId();
         int slot2 = action.getDestination().getSlot();
@@ -37,35 +33,31 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         var sourItem = source.getItemStack(slot1);
         if (sourItem.getItemType() == AIR_TYPE) {
             log.warn("place an air item is not allowed");
-            return error(requestId);
+            return error();
         }
         //若客户端发来的stackNetworkId小于0，说明客户端保证数据无误并要求遵从服务端的数据
         //这通常发生在当一个ItemStackRequest中有多个action时且多个action有相同的source/destination container
         //第一个action检查完id后后面的action就不需要重复检查了
         if (sourItem.getStackNetworkId() != stackNetworkId1 && stackNetworkId1 > 0) {
             log.warn("mismatch source stack network id!");
-            return error(requestId);
+            return error();
         }
         if (sourItem.getCount() < count) {
             log.warn("place an item that has not enough count is not allowed");
-            return error(requestId);
-        }
-        if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
-            //HACK: 若是从CREATED_OUTPUT拿出的，需要服务端自行新建个网络堆栈id
-            sourItem = sourItem.copy(true);
+            return error();
         }
         var destItem = destination.getItemStack(slot2);
         if (destItem.getItemType() != AIR_TYPE && destItem.getItemType() != sourItem.getItemType()) {
             log.warn("place an item to a slot that has a different item is not allowed");
-            return error(requestId);
+            return error();
         }
         if (destItem.getStackNetworkId() != stackNetworkId2 && stackNetworkId2 > 0) {
             log.warn("mismatch destination stack network id!");
-            return error(requestId);
+            return error();
         }
         if (destItem.getCount() + count > destItem.getItemAttributes().maxStackSize()) {
             log.warn("destination stack size bigger than the max stack size!");
-            return error(requestId);
+            return error();
         }
         ItemStack resultSourItem;
         ItemStack resultDestItem;
@@ -80,6 +72,10 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 destination.onSlotChange(slot2);
             } else {
                 //目标物品为空，直接移动原有堆栈到新位置，网络堆栈id使用源物品的网络堆栈id（相当于换个位置）
+                if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
+                    //HACK: 若是从CREATED_OUTPUT拿出的，需要服务端自行新建个网络堆栈id
+                    sourItem = sourItem.copy(true);
+                }
                 resultDestItem = sourItem;
                 destination.setItemStack(slot2, resultDestItem);
             }
@@ -116,9 +112,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 );
         //CREATED_OUTPUT不需要发响应（mjの奇妙hack）
         if (source.getContainerType() != FullContainerType.CREATED_OUTPUT) {
-            return new ItemStackResponse(
-                    OK,
-                    requestId,
+            return new ActionResponse(
+                    true,
                     List.of(new ItemStackResponseContainer(
                             source.getSlotType(slot1),
                             List.of(
@@ -134,9 +129,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                     ), destItemStackResponseSlot)
             );
         } else {
-            return new ItemStackResponse(
-                    OK,
-                    requestId,
+            return new ActionResponse(
+                    true,
                     List.of(destItemStackResponseSlot)
             );
         }

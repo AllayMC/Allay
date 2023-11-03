@@ -5,15 +5,12 @@ import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DropAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
 
 import static cn.allay.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
-import static org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus.OK;
 
 /**
  * Allay Project 2023/9/23
@@ -28,28 +25,27 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
     }
 
     @Override
-    public ItemStackResponse handle(DropAction action, EntityPlayer player, int requestId, LinkedHashMap<ItemStackRequestActionType, ItemStackResponse> chainInfo) {
+    public ActionResponse handle(DropAction action, EntityPlayer player) {
         Container container = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var count = action.getCount();
         var slot = action.getSource().getSlot();
         var item = container.getItemStack(slot);
         if (item.getStackNetworkId() != action.getSource().getStackNetworkId()) {
             log.warn("mismatch stack network id!");
-            return error(requestId);
+            return error();
         }
         if (item == EMPTY_SLOT_PLACE_HOLDER) {
             log.warn("cannot throw an air!");
-            return error(requestId);
+            return error();
         }
         if (item.getCount() < count) {
             log.warn("cannot throw more items than the current amount!");
-            return error(requestId);
+            return error();
         }
         player.forceDropItem(container, slot, count);
         item = container.getItemStack(slot);
-        return new ItemStackResponse(
-                        OK,
-                        requestId,
+        return new ActionResponse(
+                true,
                         Collections.singletonList(
                                 new ItemStackResponseContainer(
                                         container.getSlotType(slot),
@@ -66,5 +62,9 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                 )
                         )
         );
+//        return new ItemStackResponse(
+//                        OK,
+//                        requestId,
+//        );
     }
 }

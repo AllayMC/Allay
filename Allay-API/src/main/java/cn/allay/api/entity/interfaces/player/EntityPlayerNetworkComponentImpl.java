@@ -15,6 +15,7 @@ import cn.allay.api.container.Container;
 import cn.allay.api.container.FixedContainerId;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
+import cn.allay.api.container.processor.ActionResponse;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.attribute.Attribute;
@@ -42,10 +43,13 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventoryTransactionType;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -482,29 +486,61 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         @Override
         public PacketSignal handle(ItemStackRequestPacket packet) {
-            List<ItemStackResponse> responses = new LinkedList<>();
+            List<ItemStackResponse> encodedResponses = new LinkedList<>();
+            label:
             for (var request : packet.getRequests()) {
-                var chainInfo = new LinkedHashMap<ItemStackRequestActionType, ItemStackResponse>();
-                //chain process
+                var responses = new LinkedList<ActionResponse>();
+                // It is possible to have two same type actions in one request!
+                // HACK: Indicate that subsequent destroy action do not return a response
+                // For more details, see inventory_stack_packet.md
+                // Remove it when minecraft (mobile ver) fix it
+                boolean noResponseForDestroyAction = false;
                 for (var action : request.getActions()) {
+                    if (action.getType() == ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED) {
+                        noResponseForDestroyAction = true;
+                    }
                     ContainerActionProcessor<ItemStackRequestAction> processor = containerActionProcessorHolder.getProcessor(action.getType());
                     if (processor == null) {
                         log.warn("Unhandled inventory action type " + action.getType());
                         continue;
                     }
-                    chainInfo.put(action.getType(), processor.handle(action, player, request.getRequestId(), chainInfo));
-                }
-                //add process result
-                for (var res : chainInfo.values()) {
-                    if (res != null) {
-                        responses.add(res);
+                    var response = processor.handle(action, player);
+                    if (response != null) {
+                        if (!response.ok()) {
+                            encodedResponses.add(new ItemStackResponse(ItemStackResponseStatus.ERROR, request.getRequestId(), null));
+                            continue label;
+                        }
+                        if (noResponseForDestroyAction && action.getType() == ItemStackRequestActionType.DESTROY) {
+                            noResponseForDestroyAction = false;
+                        } else {
+                            responses.add(response);
+                        }
                     }
                 }
+                encodedResponses.add(encodeActionResponses(responses, request.getRequestId()));
             }
             var itemStackResponsePacket = new ItemStackResponsePacket();
-            itemStackResponsePacket.getEntries().addAll(responses);
+            itemStackResponsePacket.getEntries().addAll(encodedResponses);
             sendPacket(itemStackResponsePacket);
             return PacketSignal.HANDLED;
+        }
+
+        private ItemStackResponse encodeActionResponses(List<ActionResponse> responses, int requestId) {
+            var changedContainers = new HashMap<ContainerSlotType, List<ItemStackResponseSlot>>();
+            for (var response : responses) {
+                response.containers().forEach(container -> {
+                    if (!changedContainers.containsKey(container.getContainer())) {
+                        changedContainers.put(container.getContainer(), new ArrayList<>(container.getItems()));
+                    } else {
+                        changedContainers.get(container.getContainer()).addAll(container.getItems());
+                    }
+                });
+            }
+            List<ItemStackResponseContainer> containers = new ArrayList<>();
+            changedContainers.forEach((type, slots) -> {
+                containers.add(new ItemStackResponseContainer(type, slots));
+            });
+            return new ItemStackResponse(ItemStackResponseStatus.OK, requestId, containers);
         }
 
         @Override
@@ -649,8 +685,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     }
                     player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
                 }
-                if (packet.getMessage().startsWith("rfinv")) {
-                    player.getContainer(FullContainerType.PLAYER_INVENTORY).sendContents(player);
+                if (packet.getMessage().equals("rfinv")) {
+                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
                     player.sendRawMessage("Inventory is refreshed!");
                 }
             }
