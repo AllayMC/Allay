@@ -32,7 +32,6 @@ import org.joml.primitives.AABBf;
 
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 /**
@@ -346,12 +345,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             chunk.spawnEntitiesTo(thisEntity);
             networkComponent.onChunkInRangeLoaded();
         } else {
-            CompletableFuture.runAsync(() -> {
-                var levelChunkPacket = chunk.createLevelChunkPacket();
-                networkComponent.sendPacket(levelChunkPacket);
-                chunk.spawnEntitiesTo(thisEntity);
-                networkComponent.onChunkInRangeLoaded();
-            }, Server.getInstance().getVirtualThreadPool());
+            var levelChunkPacket = chunk.createLevelChunkPacket();
+            networkComponent.sendPacket(levelChunkPacket);
+            chunk.spawnEntitiesTo(thisEntity);
+            networkComponent.onChunkInRangeLoaded();
         }
     }
 
