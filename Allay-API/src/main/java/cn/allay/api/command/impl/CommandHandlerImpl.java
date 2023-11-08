@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.function.Function;
 
@@ -94,16 +93,10 @@ public abstract class CommandHandlerImpl implements CommandHandler {
         var commandName = args.remove(0);
 
         CommandData commandData = null;
-        for (var path : this.commands.keySet()) {
-            if (commandName.equals(path.getName())) {
-                commandData = this.commands.get(path);
-                break;
-            }
-
-            for (String alias : path.getAliases()) {
-                if (alias.equals(commandName))
-                    // We don't break here since commandName should take priority over aliases?
-                    commandData = this.commands.get(path);
+        for (var entry : this.commands.entrySet()) {
+            var path = entry.getKey();
+            if (commandName.equals(path.getName()) || path.getAliases().contains(commandName)) {
+                commandData = entry.getValue();
             }
         }
 
@@ -138,10 +131,7 @@ public abstract class CommandHandlerImpl implements CommandHandler {
             return;
         }
 
-        var iterator = possibleMethods.iterator();
-        while (iterator.hasNext()) {
-            var method = iterator.next();
-
+        for (Method method : possibleMethods) {
             // The -1 is for the first parameter CommandSender
             if (args.size() > method.getParameterCount() - 1) {
                 sender.error("You provided too many arguments!");

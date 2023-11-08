@@ -7,8 +7,7 @@ package cn.allay.api.component.interfaces;
  */
 public interface ComponentInitInfo {
 
-    ComponentInitInfo EMPTY = new Empty();
+    ComponentInitInfo EMPTY = new EmptyComponentInitInfo();
 
-    class Empty implements ComponentInitInfo {
-    }
+    class EmptyComponentInitInfo implements ComponentInitInfo {}
 }
