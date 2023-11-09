@@ -1,0 +1,16 @@
+package org.allaymc.api.item.enchantment.type;
+
+import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.item.enchantment.Rarity;
+import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
+
+/**
+ * @author daoge_cmd <br>
+ * Allay Project <br>
+ */
+public class EnchantmentAquaAffinityType extends AbstractEnchantmentType {
+  public static final EnchantmentAquaAffinityType AQUA_AFFINITY_TYPE = new EnchantmentAquaAffinityType();
+  private EnchantmentAquaAffinityType() {
+    super(new Identifier("minecraft:aqua_affinity"), 8, 1, Rarity.RARE);
+  }
+}

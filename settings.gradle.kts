@@ -9,5 +9,4 @@ pluginManagement {
 include(":Allay-API")
 include(":Allay-Server")
 include(":Allay-CodeGen")
-include(":Allay-WorldConverter")
 include(":Allay-Data")
