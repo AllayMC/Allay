@@ -10,22 +10,22 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 public class GamemodeCommand {
 
     @DefaultExecuteFor({"gamemode", "gm"})
-    public void gamemodeInt(CommandSender sender, int mode, @Optional EntityPlayer target) {
+    public void gamemodeInt(CommandSender sender, int mode, @Optional(defaultValue = "sender") EntityPlayer target) {
         sender.reply("int");
     }
 
     @Overload("gamemode") // only gamemode for tests
-    public void gamemodeEnum(CommandSender sender, GameType mode, @Optional EntityPlayer target) {
+    public void gamemodeEnum(CommandSender sender, GameType mode, @Optional(defaultValue = "sender") EntityPlayer target) {
         sender.reply("enum");
     }
 
     @DefaultExecuteFor("gmc")
-    public void gmc(CommandSender sender, EntityPlayer target) {
+    public void gmc(CommandSender sender, @Optional(defaultValue = "sender") EntityPlayer target) {
         gamemodeEnum(sender, GameType.CREATIVE, target);
     }
 
     @DefaultExecuteFor("gms")
-    public void gms(EntityPlayer sender, EntityPlayer target) {
+    public void gms(EntityPlayer sender, @Optional(defaultValue = "sender") EntityPlayer target) {
         gamemodeEnum(sender, GameType.SURVIVAL, target);
     }
 }
