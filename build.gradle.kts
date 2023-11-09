@@ -4,7 +4,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-group = "cn.allay"
+group = "org.allaymc"
 description = "The next generation minecraft server software"
 
 repositories {

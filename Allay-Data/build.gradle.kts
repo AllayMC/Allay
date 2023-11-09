@@ -1,4 +1,4 @@
-group = "cn.allay"
+group = "org.allaymc"
 description = "dataupdater"
 version = "0.0.1"
 

@@ -2,7 +2,7 @@ plugins {
     `java-library`
 }
 
-group = "cn.allay"
+group = "org.allaymc"
 description = "api"
 version = "0.0.1"
 

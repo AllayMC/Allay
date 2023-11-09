@@ -1,4 +1,4 @@
-group = "cn.allay"
+group = "org.allaymc"
 description = "codegen"
 version = "0.0.1"
 

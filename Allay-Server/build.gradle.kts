@@ -7,12 +7,12 @@ plugins {
     id("com.gorylenko.gradle-git-properties") version "2.4.1"
 }
 
-group = "cn.allay"
+group = "org.allaymc"
 description = "server"
 version = "0.0.1"
 
 application {
-    mainClass.set("cn.allay.server.Allay")
+    mainClass.set("org.allaymc.server.Allay")
 }
 
 dependencies {
