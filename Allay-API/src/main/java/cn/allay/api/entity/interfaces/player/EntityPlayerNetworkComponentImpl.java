@@ -3,6 +3,7 @@ package cn.allay.api.entity.interfaces.player;
 import cn.allay.api.AllayAPI;
 import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.interfaces.BlockAirBehavior;
+import cn.allay.api.block.palette.BlockStateHashPalette;
 import cn.allay.api.block.registry.BlockTypeRegistry;
 import cn.allay.api.client.data.AdventureSettings;
 import cn.allay.api.client.data.LoginData;
@@ -17,6 +18,7 @@ import cn.allay.api.container.Container;
 import cn.allay.api.container.FixedContainerId;
 import cn.allay.api.container.FullContainerType;
 import cn.allay.api.container.SimpleContainerActionProcessorHolder;
+import cn.allay.api.container.processor.ActionResponse;
 import cn.allay.api.container.processor.ContainerActionProcessor;
 import cn.allay.api.container.processor.ContainerActionProcessorHolder;
 import cn.allay.api.entity.attribute.Attribute;
@@ -44,10 +46,13 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseStatus;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventoryTransactionType;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -485,29 +490,61 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         @Override
         public PacketSignal handle(ItemStackRequestPacket packet) {
-            List<ItemStackResponse> responses = new LinkedList<>();
+            List<ItemStackResponse> encodedResponses = new LinkedList<>();
+            label:
             for (var request : packet.getRequests()) {
-                var chainInfo = new LinkedHashMap<ItemStackRequestActionType, ItemStackResponse>();
-                //chain process
+                var responses = new LinkedList<ActionResponse>();
+                // It is possible to have two same type actions in one request!
+                // HACK: Indicate that subsequent destroy action do not return a response
+                // For more details, see inventory_stack_packet.md
+                // Remove it when minecraft (mobile ver) fix it
+                boolean noResponseForDestroyAction = false;
                 for (var action : request.getActions()) {
+                    if (action.getType() == ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED) {
+                        noResponseForDestroyAction = true;
+                    }
                     ContainerActionProcessor<ItemStackRequestAction> processor = containerActionProcessorHolder.getProcessor(action.getType());
                     if (processor == null) {
                         log.warn("Unhandled inventory action type " + action.getType());
                         continue;
                     }
-                    chainInfo.put(action.getType(), processor.handle(action, player, request.getRequestId(), chainInfo));
-                }
-                //add process result
-                for (var res : chainInfo.values()) {
-                    if (res != null) {
-                        responses.add(res);
+                    var response = processor.handle(action, player);
+                    if (response != null) {
+                        if (!response.ok()) {
+                            encodedResponses.add(new ItemStackResponse(ItemStackResponseStatus.ERROR, request.getRequestId(), null));
+                            continue label;
+                        }
+                        if (noResponseForDestroyAction && action.getType() == ItemStackRequestActionType.DESTROY) {
+                            noResponseForDestroyAction = false;
+                        } else {
+                            responses.add(response);
+                        }
                     }
                 }
+                encodedResponses.add(encodeActionResponses(responses, request.getRequestId()));
             }
             var itemStackResponsePacket = new ItemStackResponsePacket();
-            itemStackResponsePacket.getEntries().addAll(responses);
+            itemStackResponsePacket.getEntries().addAll(encodedResponses);
             sendPacket(itemStackResponsePacket);
             return PacketSignal.HANDLED;
+        }
+
+        private ItemStackResponse encodeActionResponses(List<ActionResponse> responses, int requestId) {
+            var changedContainers = new HashMap<ContainerSlotType, List<ItemStackResponseSlot>>();
+            for (var response : responses) {
+                response.containers().forEach(container -> {
+                    if (!changedContainers.containsKey(container.getContainer())) {
+                        changedContainers.put(container.getContainer(), new ArrayList<>(container.getItems()));
+                    } else {
+                        changedContainers.get(container.getContainer()).addAll(container.getItems());
+                    }
+                });
+            }
+            List<ItemStackResponseContainer> containers = new ArrayList<>();
+            changedContainers.forEach((type, slots) -> {
+                containers.add(new ItemStackResponseContainer(type, slots));
+            });
+            return new ItemStackResponse(ItemStackResponseStatus.OK, requestId, containers);
         }
 
         @Override
@@ -618,6 +655,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         @Override
         public PacketSignal handle(AnimatePacket packet) {
             if (packet.getAction() == AnimatePacket.Action.SWING_ARM) {
+                // TODO: Shouldn't send to self
                 player.getCurrentChunk().addChunkPacket(packet);
             }
             return PacketSignal.HANDLED;
@@ -642,14 +680,18 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     }
                     player.sendRawMessage("TPS: " + loc.world().getTps() + ", Entity Count: " + loc.world().getEntities().size());
                 }
-                if (packet.getMessage().equals("test2")) {
-                    player.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
-                    player.sendEntityFlags(EntityFlag.USING_ITEM);
-                    var pk = new SetEntityDataPacket();
-                    pk.setRuntimeEntityId(player.getUniqueId());
-                    pk.getMetadata().setFlag(EntityFlag.USING_ITEM, true);
-                    pk.setTick(Server.getInstance().getTicks());
-                    Server.getInstance().broadcastPacket(pk);
+                if (packet.getMessage().startsWith("gb_")) {
+                    var blockStateHash = Integer.parseInt(packet.getMessage().substring(3));
+                    var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
+                    if (blockState == null) {
+                        player.sendRawMessage("unknown hash!");
+                        return PacketSignal.HANDLED;
+                    }
+                    player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
+                }
+                if (packet.getMessage().equals("rfinv")) {
+                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
+                    player.sendRawMessage("Inventory is refreshed!");
                 }
             }
             return PacketSignal.HANDLED;
@@ -719,6 +761,49 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     case START_JUMPING -> player.setOnGround(false);
                 }
             }
+        }
+
+        @Override
+        public PacketSignal handle(BlockPickRequestPacket packet) {
+            if (player.getGameType() != GameType.CREATIVE) {
+                log.warn("Player " + getOriginName() + " tried to pick block in non-creative mode!");
+                return PacketSignal.HANDLED;
+            }
+            var pos = packet.getBlockPosition();
+            // TODO: includeBlockEntityData
+            var includeBlockEntityData = packet.isAddUserData();
+            var block = player.getLocation().world().getBlockState(pos.getX(), pos.getY(), pos.getZ());
+            if (block.getBlockType() == BlockAirBehavior.AIR_TYPE) {
+                log.warn("Player " + getOriginName() + " tried to pick air!");
+                return PacketSignal.HANDLED;
+            }
+            var item = block.toItemStack();
+            item.setCount(item.getItemAttributes().maxStackSize());
+            var inventory = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+            // Foreach hot bar
+            int minEmptySlot = -1;
+            boolean success = false;
+            for (int slot = 0; slot <= 9; slot++) {
+                if (inventory.isEmpty(slot) && minEmptySlot == -1) {
+                    minEmptySlot = slot;
+                    continue;
+                }
+                var hotBarItem = inventory.getItemStack(slot);
+                if (hotBarItem.canMerge(item)) {
+                    hotBarItem.setCount(hotBarItem.getItemAttributes().maxStackSize());
+                    inventory.onSlotChange(slot);
+                    success = true;
+                }
+            }
+            if (!success) {
+                if (minEmptySlot != -1) {
+                    inventory.setItemStack(minEmptySlot, item);
+                } else {
+                    // Hot bar is full
+                    inventory.setItemInHand(item);
+                }
+            }
+            return PacketSignal.HANDLED;
         }
     }
 }

@@ -245,11 +245,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public ItemStack toItemStack() {
-            var meta = VanillaItemMetaBlockStateBiMap.getRegistry().getBlockStateHashToMetaMap(blockType).get(blockStateHash);
+            var meta = VanillaItemMetaBlockStateBiMap.getRegistry().getBlockStateHashToMetaMapper(blockType).apply(blockStateHash);
             return blockType.getItemType().createItemStack(
                     SimpleItemStackInitInfo
                             .builder()
                             .meta(meta)
+                            .count(1)
                             .build()
             );
         }

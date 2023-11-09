@@ -4,11 +4,13 @@ import cn.allay.api.block.data.BlockFace;
 import cn.allay.api.block.type.BlockState;
 import cn.allay.api.block.type.BlockType;
 import cn.allay.api.component.annotation.ComponentIdentifier;
+import cn.allay.api.component.annotation.Dependency;
 import cn.allay.api.component.interfaces.ComponentInitInfo;
 import cn.allay.api.data.VanillaItemMetaBlockStateBiMap;
 import cn.allay.api.entity.interfaces.player.EntityPlayer;
 import cn.allay.api.identifier.Identifier;
 import cn.allay.api.item.ItemStack;
+import cn.allay.api.item.component.attribute.ItemAttributeComponent;
 import cn.allay.api.item.enchantment.EnchantmentHelper;
 import cn.allay.api.item.enchantment.EnchantmentInstance;
 import cn.allay.api.item.enchantment.EnchantmentType;
@@ -48,6 +50,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     public static int getCurrentStackNetworkIdCounter() {
         return STACK_NETWORK_ID_COUNTER;
     }
+
+    @Dependency
+    protected ItemAttributeComponent attributeComponent;
 
     protected ItemType<T> itemType;
     protected int count;
@@ -159,7 +164,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     public BlockState toBlockState() {
         return itemType.getBlockType() == null ?
                 null :
-                VanillaItemMetaBlockStateBiMap.getRegistry().getMetaToBlockStateMap(itemType).get(meta);
+                VanillaItemMetaBlockStateBiMap.getRegistry().getMetaToBlockStateMapper(itemType).apply(meta);
     }
 
     @Override
@@ -286,6 +291,19 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
                         placePos.z()
                 );
         return !world.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty();
+    }
+
+    @Override
+    public boolean canMerge(ItemStack itemStack, boolean ignoreCount) {
+        var extraTag1 = saveExtraTag();
+        if (extraTag1 == null) extraTag1 = NbtMap.EMPTY;
+        var extraTag2 = itemStack.saveExtraTag();
+        if (extraTag2 == null) extraTag2 = NbtMap.EMPTY;
+        return itemStack.getItemType() == getItemType() &&
+               itemStack.getMeta() == getMeta() &&
+               (ignoreCount || count + itemStack.getCount() <= attributeComponent.getItemAttributes().maxStackSize()) &&
+               extraTag1.equals(extraTag2) &&
+               itemStack.toBlockState() == toBlockState();
     }
 
     @Override

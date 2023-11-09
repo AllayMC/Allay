@@ -33,7 +33,6 @@ import org.joml.primitives.AABBf;
 
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 /**
@@ -129,6 +128,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                     takeItemEntityPacket.setRuntimeEntityId(uniqueId);
                     takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getUniqueId());
                     Objects.requireNonNull(world.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
+                    entityItem.setItemStack(null);
                     world.removeEntity(entityItem);
                 }
                 // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
@@ -340,13 +340,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void onChunkInRangeLoaded(Chunk chunk) {
-        if (!Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) {
-            CompletableFuture.runAsync(() -> {
-                var levelChunkPacket = chunk.createLevelChunkPacket();
-                networkComponent.sendPacket(levelChunkPacket);
-                chunk.spawnEntitiesTo(thisEntity);
-                networkComponent.onChunkInRangeLoaded();
-            }, Server.getInstance().getVirtualThreadPool());
+        if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) {
+            var levelChunkPacket = chunk.createLevelChunkPacket();
+            networkComponent.sendPacket(levelChunkPacket);
+            chunk.spawnEntitiesTo(thisEntity);
+            networkComponent.onChunkInRangeLoaded();
         } else {
             var levelChunkPacket = chunk.createLevelChunkPacket();
             networkComponent.sendPacket(levelChunkPacket);

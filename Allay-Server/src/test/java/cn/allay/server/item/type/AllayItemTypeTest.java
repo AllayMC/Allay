@@ -81,17 +81,4 @@ public class AllayItemTypeTest {
             }
         }
     }
-
-    @Test
-    void validateBlockType() {
-        // Use CreativeItemRegistry as standard reference
-        for (var creativeItem : CreativeItemRegistry.getRegistry().getContent().values()) {
-            if (creativeItem.toBlockState() == null) continue;
-            var correct = creativeItem.toBlockState().getBlockType();
-            var actual = creativeItem.getItemType().getBlockType();
-            if (correct != actual) {
-                System.out.println(correct.getIdentifier() + " " + actual.getIdentifier());
-            }
-        }
-    }
 }

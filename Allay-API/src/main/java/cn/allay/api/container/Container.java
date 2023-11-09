@@ -53,6 +53,10 @@ public interface Container {
 
     ItemStack getItemStack(int slot);
 
+    default boolean isEmpty(int slot) {
+        return getItemStack(slot) == EMPTY_SLOT_PLACE_HOLDER;
+    }
+
     @UnmodifiableView
     List<ItemStack> getItemStacks();
 
@@ -88,31 +92,52 @@ public interface Container {
         viewer.sendContent(this, slot);
     }
 
-    default int tryAddItem(ItemStack itemStack) {
-        var slot = -1;
+    default int tryAddItem(ItemStack itemStack, int minSlotIndex, int maxSlotIndex) {
+        if (minSlotIndex > maxSlotIndex) {
+            throw new IllegalArgumentException("minSlotIndex > maxSlotIndex");
+        }
+        if (minSlotIndex < 0) {
+            throw new IllegalArgumentException("minSlotIndex is less than 0");
+        }
         ItemStack[] itemStacks = getItemStackArray();
-        for (int index = 0; index < itemStacks.length; index++) {
+        if (minSlotIndex > itemStacks.length - 1 || maxSlotIndex > itemStacks.length - 1) {
+            throw new IllegalArgumentException("minSlotIndex or maxSlotIndex is out of range");
+        }
+        var minEmptySlot = -1;
+        // First, try to merge with other item stack
+        for (int index = minSlotIndex; index <= maxSlotIndex; index++) {
             var content = itemStacks[index];
             if (content == Container.EMPTY_SLOT_PLACE_HOLDER) {
-                setItemStack(index, itemStack.copy());
-                itemStack.setCount(0);
-                return index;
-            } else if (content.canMerge(itemStack)) {
+                if (minEmptySlot == -1) {
+                    minEmptySlot = index;
+                }
+                continue;
+            }
+            if (content.getCount() != content.getItemAttributes().maxStackSize() && content.canMerge(itemStack, true)) {
                 if (content.getCount() + itemStack.getCount() <= content.getItemAttributes().maxStackSize()) {
                     content.setCount(content.getCount() + itemStack.getCount());
                     itemStack.setCount(0);
-                    onSlotChange(index);
-                    return index;
                 } else {
-                    slot = index;
                     int count = itemStack.getCount();
                     int completion = content.getItemAttributes().maxStackSize() - content.getCount();
                     itemStack.setCount(count - completion);
                     content.setCount(content.getItemAttributes().maxStackSize());
-                    onSlotChange(index);
                 }
+                onSlotChange(index);
+                return index;
             }
         }
-        return slot;
+        // Second, put the item on an empty slot (if exists)
+        if (minEmptySlot != -1) {
+            setItemStack(minEmptySlot, itemStack.copy());
+            itemStack.setCount(0);
+            return minEmptySlot;
+        }
+        return -1;
+    }
+
+    default int tryAddItem(ItemStack itemStack) {
+        var array = getItemStackArray();
+        return tryAddItem(itemStack, 0, array.length - 1);
     }
 }

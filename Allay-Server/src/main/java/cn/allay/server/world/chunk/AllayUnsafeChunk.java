@@ -15,6 +15,7 @@ import cn.allay.api.world.chunk.ChunkState;
 import cn.allay.api.world.chunk.UnsafeChunk;
 import cn.allay.api.world.heightmap.HeightMap;
 import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,7 +56,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.state = ChunkState.EMPTY;
         this.heightMap = new HeightMap();
         this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
-        this.entities = new Long2ObjectNonBlockingMap<>();
+        this.entities = new Long2ObjectOpenHashMap<>();
         this.blockEntities = new Int2ObjectNonBlockingMap<>();
     }
 
