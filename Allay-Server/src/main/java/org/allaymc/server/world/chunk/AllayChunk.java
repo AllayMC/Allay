@@ -309,13 +309,20 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public LevelChunkPacket createLevelChunkPacket() {
-        if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem())
-            return createLevelChunkPacketSubChunk();
-        else return createLevelChunkPacketFullChunk();
+    public LevelChunkPacket createSubChunkLevelChunkPacket() {
+        var levelChunkPacket = new LevelChunkPacket();
+        levelChunkPacket.setChunkX(this.getX());
+        levelChunkPacket.setChunkZ(this.getZ());
+        levelChunkPacket.setCachingEnabled(false);
+        levelChunkPacket.setRequestSubChunks(true);
+        //This value is used in the subchunk system to control the maximum value of sectionY requested by the client.
+        levelChunkPacket.setSubChunkLimit(getDimensionInfo().chunkSectionSize());
+        levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
+        return levelChunkPacket;
     }
 
-    private LevelChunkPacket createLevelChunkPacketFullChunk() {
+    @Override
+    public LevelChunkPacket createFullLevelChunkPacketChunk() {
         var levelChunkPacket = new LevelChunkPacket();
         levelChunkPacket.setChunkX(this.getX());
         levelChunkPacket.setChunkZ(this.getZ());
@@ -353,18 +360,6 @@ public class AllayChunk implements Chunk {
             }
         }
         return byteBuf;
-    }
-
-    private LevelChunkPacket createLevelChunkPacketSubChunk() {
-        var levelChunkPacket = new LevelChunkPacket();
-        levelChunkPacket.setChunkX(this.getX());
-        levelChunkPacket.setChunkZ(this.getZ());
-        levelChunkPacket.setCachingEnabled(false);
-        levelChunkPacket.setRequestSubChunks(true);
-        //This value is used in the subchunk system to control the maximum value of sectionY requested by the client.
-        levelChunkPacket.setSubChunkLimit(getDimensionInfo().chunkSectionSize());
-        levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
-        return levelChunkPacket;
     }
 
     @Override

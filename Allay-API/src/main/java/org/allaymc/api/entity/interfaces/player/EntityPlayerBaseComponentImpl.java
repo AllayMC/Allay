@@ -340,12 +340,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void onChunkInRangeLoaded(Chunk chunk) {
         if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) {
-            var levelChunkPacket = chunk.createLevelChunkPacket();
+            var levelChunkPacket = chunk.createSubChunkLevelChunkPacket();
             networkComponent.sendPacket(levelChunkPacket);
             chunk.spawnEntitiesTo(thisEntity);
             networkComponent.onChunkInRangeLoaded();
         } else {
-            var levelChunkPacket = chunk.createLevelChunkPacket();
+            var levelChunkPacket = chunk.createFullLevelChunkPacketChunk();
             networkComponent.sendPacket(levelChunkPacket);
             chunk.spawnEntitiesTo(thisEntity);
             networkComponent.onChunkInRangeLoaded();

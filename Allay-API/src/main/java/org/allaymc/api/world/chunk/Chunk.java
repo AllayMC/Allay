@@ -59,7 +59,10 @@ public interface Chunk extends UnsafeChunk {
     UnsafeChunk toUnsafeChunk();
 
     @ApiStatus.Internal
-    LevelChunkPacket createLevelChunkPacket();
+    LevelChunkPacket createSubChunkLevelChunkPacket();
+
+    @ApiStatus.Internal
+    LevelChunkPacket createFullLevelChunkPacketChunk();
 
     default void save(WorldStorage storage) {
         storage.writeChunk(this).join();
