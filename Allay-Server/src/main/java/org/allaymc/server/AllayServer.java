@@ -18,7 +18,7 @@ import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
-import org.allaymc.server.world.generator.jegenerator.JeGeneratorLoader;
+import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
 import eu.okaeri.configs.ConfigManager;

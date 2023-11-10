@@ -41,7 +41,7 @@ import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
-import org.allaymc.server.world.generator.jegenerator.JeGeneratorLoader;
+import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.VisibleForTesting;
 
