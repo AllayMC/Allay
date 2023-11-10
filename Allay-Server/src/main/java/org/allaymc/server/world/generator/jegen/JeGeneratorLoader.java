@@ -1,4 +1,4 @@
-package org.allaymc.server.world.generator.jegenerator;
+package org.allaymc.server.world.generator.jegen;
 
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
