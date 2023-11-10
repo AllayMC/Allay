@@ -5,7 +5,7 @@ jline = "3.24.0"
 
 [libraries]
 # NBT
-nbt = { group = "com.github.AllayMC", name = "NBT", version = "3.0.7" }
+nbt = { group = "org.allaymc", name = "NBT", version = "3.0.8" }
 # MC network protocol
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta1-SNAPSHOT" }
 # Collections
@@ -61,7 +61,7 @@ netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", vers
 #configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.0-beta.5"}
 #JeGenerator
-jegenerator = { group = "com.github.AllayMC", name = "JeGenerator-Binary", version = "1.20.2-R0.1" }
+jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.2-R0.2" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
