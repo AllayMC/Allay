@@ -87,6 +87,13 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;
 
+        @CustomKey("send-chunk-parallelly")
+        private boolean sendChunkParallelly = true;
+
+        @Comment("If the number of chunks to be sent in one batch is more than this value, the chunks will be sent in parallel")
+        @CustomKey("chunk-min-parallel-sending-threshold")
+        private int chunkMinParallelSendingThreshold = 8;
+
         @CustomKey("do-first-spawn-chunk-threshold")
         private int doFirstSpawnChunkThreshold = 36;
 

@@ -555,11 +555,16 @@ public class AllayChunkService implements ChunkService {
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
-            if (!chunkReadyToSend.isEmpty()) chunkLoader.publishClientChunkUpdate();
-            chunkReadyToSend.forEach((chunkHash, chunk) -> {
-                chunkLoader.onChunkInRangeLoaded(chunk);
-                sentChunks.add(chunkHash.longValue());
-            });
+            if (!chunkReadyToSend.isEmpty()) {
+                chunkLoader.publishClientChunkUpdate();
+                sentChunks.addAll(chunkReadyToSend.keySet());
+                var worldSettings = Server.getInstance().getServerSettings().worldSettings();
+                if (worldSettings.sendChunkParallelly() && chunkReadyToSend.size() >= worldSettings.chunkMinParallelSendingThreshold()) {
+                    chunkReadyToSend.values().parallelStream().forEach(chunkLoader::onChunkInRangeLoaded);
+                } else {
+                    chunkReadyToSend.forEach((unused, chunk) -> chunkLoader.onChunkInRangeLoaded(chunk));
+                }
+            }
         }
 
         private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {
