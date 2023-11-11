@@ -29,6 +29,7 @@ import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkRequestResult;
+import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -40,6 +41,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.allaymc.api.world.chunk.ChunkState.EMPTY;
 
@@ -495,6 +497,10 @@ public class AllayChunkService implements ChunkService {
 
         public void tick() {
             if (!chunkLoader.isLoaderActive()) return;
+            // NOTICE: Send client chunk update in every tick will solve the chunk sending bug
+            // Which client doesn't load the chunk currectly even if we have sent lcps
+            // This solution is similar to which in df-mc/DragonFly
+            chunkLoader.publishClientChunkUpdate();
             long currentLoaderChunkPosHashed;
             Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
             if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
@@ -556,14 +562,22 @@ public class AllayChunkService implements ChunkService {
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
             if (!chunkReadyToSend.isEmpty()) {
-                chunkLoader.publishClientChunkUpdate();
-                sentChunks.addAll(chunkReadyToSend.keySet());
+                // 1. Encode all lcps
+                LevelChunkPacket[] lcps;
+                var useSubChunkSendingSystem = Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem();
                 var worldSettings = Server.getInstance().getServerSettings().worldSettings();
+                Stream<Chunk> lcpStream;
                 if (worldSettings.sendChunkParallelly() && chunkReadyToSend.size() >= worldSettings.chunkMinParallelSendingThreshold()) {
-                    chunkReadyToSend.values().parallelStream().forEach(chunkLoader::onChunkInRangeLoaded);
+                    lcpStream = chunkReadyToSend.values().parallelStream();
                 } else {
-                    chunkReadyToSend.forEach((unused, chunk) -> chunkLoader.onChunkInRangeLoaded(chunk));
+                    lcpStream = chunkReadyToSend.values().stream();
                 }
+                lcps = lcpStream.map(chunk -> useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk()).toArray(LevelChunkPacket[]::new);
+                // 2. Send lcps to client
+                chunkLoader.sendLevelChunkPackets(lcps);
+                sentChunks.addAll(chunkReadyToSend.keySet());
+                // 3. Call onChunkInRangeLoaded()
+                chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeLoaded);
             }
         }
 
