@@ -82,7 +82,7 @@ public class ServerSettings extends OkaeriConfig {
         private int viewDistance = 16;
 
         @CustomKey("chunk-try-send-count-per-tick")
-        private int chunkTrySendCountPerTick = 32;
+        private int chunkTrySendCountPerTick = 16;
 
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;
