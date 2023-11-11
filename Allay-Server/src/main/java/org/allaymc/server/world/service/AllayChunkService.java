@@ -541,6 +541,10 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void loadAndSendQueuedChunks() {
+            // NOTICE: Send client chunk update in every tick will solve the chunk sending bug
+            // Which client doesn't load the chunk currectly even if we have sent lcps
+            // This solution is similar to which in df-mc/DragonFly
+            chunkLoader.publishClientChunkUpdate();
             if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int triedSendChunkCount = 0;
@@ -558,10 +562,6 @@ public class AllayChunkService implements ChunkService {
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
-            // NOTICE: Send client chunk update in every tick will solve the chunk sending bug
-            // Which client doesn't load the chunk currectly even if we have sent lcps
-            // This solution is similar to which in df-mc/DragonFly
-            chunkLoader.publishClientChunkUpdate();
             if (!chunkReadyToSend.isEmpty()) {
                 var worldSettings = Server.getInstance().getServerSettings().worldSettings();
                 var chunkSendingStrategy = worldSettings.chunkSendingStrategy();
