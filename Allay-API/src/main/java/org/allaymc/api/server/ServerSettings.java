@@ -87,8 +87,11 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;
 
-        @CustomKey("send-chunk-parallelly")
-        private boolean sendChunkParallelly = true;
+        @Comment("Possible values: ASYNC, SYNC, PARALLEL")
+        @Comment("This only works if sub-chunk sending system is not enabled")
+        @Comment("And will be forced to SYNC if sub-chunk sending system is enabled")
+        @CustomKey("chunk-sending-strategy")
+        private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.PARALLEL;
 
         @Comment("If the number of chunks to be sent in one batch is more than this value, the chunks will be sent in parallel")
         @CustomKey("chunk-min-parallel-sending-threshold")
@@ -100,6 +103,12 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Determines how long a chunk without chunk loaders will remain loaded (gt)")
         @CustomKey("remove-unneeded-chunk-cycle")
         private int removeUnneededChunkCycle = 600;
+
+        public static enum ChunkSendingStrategy {
+            ASYNC,
+            SYNC,
+            PARALLEL
+        }
     }
 
     @CustomKey("entity-settings")

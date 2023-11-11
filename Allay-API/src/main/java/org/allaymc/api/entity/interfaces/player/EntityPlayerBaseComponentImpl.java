@@ -338,7 +338,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void onChunkInRangeLoaded(Chunk chunk) {
+    public void onChunkInRangeSent(Chunk chunk) {
         chunk.spawnEntitiesTo(thisEntity);
         networkComponent.onChunkInRangeLoaded();
     }
@@ -375,9 +375,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void sendLevelChunkPackets(LevelChunkPacket[] lcps) {
-        for (var lcp : lcps) {
-            networkComponent.sendPacket(lcp);
-        }
+    public void sendLevelChunkPacket(LevelChunkPacket lcp) {
+        networkComponent.sendPacket(lcp);
     }
 }

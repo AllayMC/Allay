@@ -43,6 +43,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.*;
 import static org.allaymc.api.world.chunk.ChunkState.EMPTY;
 
 /**
@@ -497,10 +498,6 @@ public class AllayChunkService implements ChunkService {
 
         public void tick() {
             if (!chunkLoader.isLoaderActive()) return;
-            // NOTICE: Send client chunk update in every tick will solve the chunk sending bug
-            // Which client doesn't load the chunk currectly even if we have sent lcps
-            // This solution is similar to which in df-mc/DragonFly
-            chunkLoader.publishClientChunkUpdate();
             long currentLoaderChunkPosHashed;
             Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
             if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
@@ -561,23 +558,45 @@ public class AllayChunkService implements ChunkService {
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
+            // NOTICE: Send client chunk update in every tick will solve the chunk sending bug
+            // Which client doesn't load the chunk currectly even if we have sent lcps
+            // This solution is similar to which in df-mc/DragonFly
+            chunkLoader.publishClientChunkUpdate();
             if (!chunkReadyToSend.isEmpty()) {
-                // 1. Encode all lcps
-                LevelChunkPacket[] lcps;
-                var useSubChunkSendingSystem = Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem();
                 var worldSettings = Server.getInstance().getServerSettings().worldSettings();
-                Stream<Chunk> lcpStream;
-                if (worldSettings.sendChunkParallelly() && chunkReadyToSend.size() >= worldSettings.chunkMinParallelSendingThreshold()) {
-                    lcpStream = chunkReadyToSend.values().parallelStream();
-                } else {
-                    lcpStream = chunkReadyToSend.values().stream();
+                var chunkSendingStrategy = worldSettings.chunkSendingStrategy();
+                if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) {
+                    // Use SYNC mode if sub-chunk sending system is enabled
+                    // Because the encoding of sub-chunk lcp is very quick
+                    chunkSendingStrategy = SYNC;
                 }
-                lcps = lcpStream.map(chunk -> useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk()).toArray(LevelChunkPacket[]::new);
-                // 2. Send lcps to client
-                chunkLoader.sendLevelChunkPackets(lcps);
-                sentChunks.addAll(chunkReadyToSend.keySet());
-                // 3. Call onChunkInRangeLoaded()
-                chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeLoaded);
+                if (chunkSendingStrategy == ASYNC) {
+                    // Create virtual thread for each chunk
+                    chunkReadyToSend.values().forEach(chunk -> {
+                        Server.getInstance().getVirtualThreadPool().submit(() -> {
+                            chunkLoader.sendLevelChunkPacket(chunk.createFullLevelChunkPacketChunk());
+                            chunkLoader.onChunkInRangeSent(chunk);
+                        });
+                    });
+                    sentChunks.addAll(chunkReadyToSend.keySet());
+                } else {
+                    // 1. Encode all lcps
+                    LevelChunkPacket[] lcps;
+                    Stream < Chunk > lcpStream;
+                    if (chunkSendingStrategy == PARALLEL && chunkReadyToSend.size() >= worldSettings.chunkMinParallelSendingThreshold()) {
+                        lcpStream = chunkReadyToSend.values().parallelStream();
+                    } else {
+                        lcpStream = chunkReadyToSend.values().stream();
+                    }
+                    lcps = lcpStream.map(Chunk::createFullLevelChunkPacketChunk).toArray(LevelChunkPacket[]::new);
+                    // 2. Send lcps to client
+                    for (var lcp : lcps) {
+                        chunkLoader.sendLevelChunkPacket(lcp);
+                    }
+                    sentChunks.addAll(chunkReadyToSend.keySet());
+                    // 3. Call onChunkInRangeSent()
+                    chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeSent);
+                }
             }
         }
 

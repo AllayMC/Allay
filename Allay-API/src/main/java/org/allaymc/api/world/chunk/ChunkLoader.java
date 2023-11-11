@@ -30,7 +30,7 @@ public interface ChunkLoader {
 
     void publishClientChunkUpdate();
 
-    void onChunkInRangeLoaded(Chunk chunk);
+    void onChunkInRangeSent(Chunk chunk);
 
     void spawnEntity(Entity entity);
 
@@ -46,7 +46,7 @@ public interface ChunkLoader {
     void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler);
 
     @ApiStatus.Internal
-    void sendLevelChunkPackets(LevelChunkPacket[] lcps);
+    void sendLevelChunkPacket(LevelChunkPacket lcp);
 
     @ApiStatus.Internal
     void handleChunkPacket(BedrockPacket packet);
