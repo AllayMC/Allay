@@ -29,6 +29,7 @@ import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkRequestResult;
+import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -40,7 +41,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.*;
 import static org.allaymc.api.world.chunk.ChunkState.EMPTY;
 
 /**
@@ -538,6 +541,10 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void loadAndSendQueuedChunks() {
+            // NOTICE: Send client chunk update in every tick will solve the chunk sending bug
+            // Which client doesn't load the chunk currectly even if we have sent lcps
+            // This solution is similar to which in df-mc/DragonFly
+            chunkLoader.publishClientChunkUpdate();
             if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int triedSendChunkCount = 0;
@@ -555,11 +562,42 @@ public class AllayChunkService implements ChunkService {
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
-            if (!chunkReadyToSend.isEmpty()) chunkLoader.publishClientChunkUpdate();
-            chunkReadyToSend.forEach((chunkHash, chunk) -> {
-                chunkLoader.onChunkInRangeLoaded(chunk);
-                sentChunks.add(chunkHash.longValue());
-            });
+            if (!chunkReadyToSend.isEmpty()) {
+                var worldSettings = Server.getInstance().getServerSettings().worldSettings();
+                var chunkSendingStrategy = worldSettings.chunkSendingStrategy();
+                if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) {
+                    // Use SYNC mode if sub-chunk sending system is enabled
+                    // Because the encoding of sub-chunk lcp is very quick
+                    chunkSendingStrategy = SYNC;
+                }
+                if (chunkSendingStrategy == ASYNC) {
+                    // Create virtual thread for each chunk
+                    chunkReadyToSend.values().forEach(chunk -> {
+                        Server.getInstance().getVirtualThreadPool().submit(() -> {
+                            chunkLoader.sendLevelChunkPacket(chunk.createFullLevelChunkPacketChunk());
+                            chunkLoader.onChunkInRangeSent(chunk);
+                        });
+                    });
+                    sentChunks.addAll(chunkReadyToSend.keySet());
+                } else {
+                    // 1. Encode all lcps
+                    LevelChunkPacket[] lcps;
+                    Stream < Chunk > lcpStream;
+                    if (chunkSendingStrategy == PARALLEL && chunkReadyToSend.size() >= worldSettings.chunkMinParallelSendingThreshold()) {
+                        lcpStream = chunkReadyToSend.values().parallelStream();
+                    } else {
+                        lcpStream = chunkReadyToSend.values().stream();
+                    }
+                    lcps = lcpStream.map(Chunk::createFullLevelChunkPacketChunk).toArray(LevelChunkPacket[]::new);
+                    // 2. Send lcps to client
+                    for (var lcp : lcps) {
+                        chunkLoader.sendLevelChunkPacket(lcp);
+                    }
+                    sentChunks.addAll(chunkReadyToSend.keySet());
+                    // 3. Call onChunkInRangeSent()
+                    chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeSent);
+                }
+            }
         }
 
         private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {

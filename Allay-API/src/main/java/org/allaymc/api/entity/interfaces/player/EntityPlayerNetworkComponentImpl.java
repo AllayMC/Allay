@@ -455,7 +455,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         @Override
         public PacketSignal handle(RequestChunkRadiusPacket packet) {
-            player.setChunkLoadingRadius(packet.getRadius());
+            // TODO: check it
+            // It seems that we should use `maxRadius` instead of `Radius`
+            // `maxRadius` is always smaller than `Radius` and it is seems to be the real chunk loading radius
+            player.setChunkLoadingRadius(packet.getMaxRadius());
             return PacketSignal.HANDLED;
         }
 
