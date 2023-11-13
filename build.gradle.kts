@@ -31,6 +31,10 @@ tasks.wrapper {
     gradleVersion = GradleVersion.current().version
 }
 
+tasks.prepareKotlinBuildScriptModel {
+    enabled = true
+}
+
 tasks.withType<Delete> {
     enabled = true
     delete("logs", "caches", "output")
