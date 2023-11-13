@@ -1,5 +1,10 @@
-package org.allaymc.server.world.storage.rocksdb;
+package org.allaymc.server.world.storage.leveldb;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.Unpooled;
+import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.VanillaBiomeId;
@@ -11,97 +16,109 @@ import org.allaymc.api.world.heightmap.HeightMap;
 import org.allaymc.api.world.palette.Palette;
 import org.allaymc.server.utils.LevelDBKeyUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.Unpooled;
-import org.rocksdb.RocksDB;
-import org.rocksdb.RocksDBException;
-import org.rocksdb.WriteBatch;
+import org.iq80.leveldb.DB;
+import org.iq80.leveldb.WriteBatch;
+
+import java.util.Arrays;
 
 /**
  * Allay Project 8/23/2023
  *
  * @author Cool_Loong
  */
-public class RocksdbChunkSerializerV1 implements RocksdbChunkSerializer {
-    public static final RocksdbChunkSerializer INSTANCE = new RocksdbChunkSerializerV1();
+@Slf4j
+public class LevelDBChunkSerializer {
+    public static final LevelDBChunkSerializer INSTANCE = new LevelDBChunkSerializer();
 
-    private RocksdbChunkSerializerV1() {
+    private LevelDBChunkSerializer() {
     }
 
-    @Override
     public void serialize(WriteBatch writeBatch, UnsafeChunk chunk) {
         serializeBlock(writeBatch, chunk);
+        writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{UnsafeChunk.CHUNK_VERSION});
         serializeHeightAndBiome(writeBatch, chunk);
         //todo Entity and Block Entity
     }
 
-    @Override
-    public void deserialize(RocksDB db, AllayUnsafeChunk.Builder builder) {
+    public void deserialize(DB db, AllayUnsafeChunk.Builder builder) {
         deserializeBlock(db, builder);
         deserializeHeightAndBiome(db, builder);
         //todo Entity and Block Entity
     }
 
+    //serialize chunk section
     private void serializeBlock(WriteBatch writeBatch, UnsafeChunk chunk) {
-        Palette<BlockState>[] lastLayers = new Palette[ChunkSection.LAYER_COUNT];
-        // serialize chunk section
         for (int ySection = 0; ySection < chunk.getDimensionInfo().chunkSectionSize(); ySection++) {
             ChunkSection section = chunk.getSection(ySection);
             if (section == null) {
                 continue;
             }
-
             ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
             try {
                 buffer.writeByte(ChunkSection.VERSION);
-                //block data
                 buffer.writeByte(ChunkSection.LAYER_COUNT);
                 buffer.writeByte(ySection);
                 for (int i = 0; i < ChunkSection.LAYER_COUNT; i++) {
-                    section.blockLayer()[i].writeToStorageRuntime(buffer, BlockState::blockStateHash, lastLayers[i]);
-                    lastLayers[i] = section.blockLayer()[i];
+                    section.blockLayer()[i].writeToStoragePersistent(buffer, BlockState::getBlockStateTag);
                 }
-                writeBatch.put(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(chunk.getX(), chunk.getZ(), ySection), Utils.convertByteBuf2Array(buffer));
-            } catch (RocksDBException e) {
-                throw new RuntimeException(e);
+                writeBatch.put(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(chunk.getX(), chunk.getZ(), ySection, chunk.getDimensionInfo()), Utils.convertByteBuf2Array(buffer));
             } finally {
                 buffer.release();
             }
         }
     }
 
-    private void deserializeBlock(RocksDB db, AllayUnsafeChunk.Builder builder) {
-        Palette<BlockState>[] lastLayers = new Palette[ChunkSection.LAYER_COUNT];
+    //serialize chunk section
+    private void deserializeBlock(DB db, AllayUnsafeChunk.Builder builder) {
         ChunkSection[] sections = new ChunkSection[builder.getDimensionInfo().chunkSectionSize()];
-        // serialize chunk section
         for (int ySection = 0; ySection < builder.getDimensionInfo().chunkSectionSize(); ySection++) {
-            ByteBuf buf = null;
-            try {
-                byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection));
-                if (bytes != null) {
-                    ChunkSection section = new ChunkSection(ySection);
-                    buf = Unpooled.wrappedBuffer(bytes);
-                    buf.readByte();//version
-                    byte layerCount = buf.readByte();
-                    buf.readByte();//section Y
-                    for (int i = 0; i < layerCount; i++) {
-                        section.blockLayer()[i].readFromStorageRuntime(buf, (hash) -> BlockStateHashPalette.getRegistry().get(hash), lastLayers[i]);
-                        lastLayers[i] = section.blockLayer()[i];
+            byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection, builder.getDimensionInfo()));
+            if (bytes != null) {
+                ByteBuf byteBuf = null;
+                try {
+                    byteBuf = ByteBufAllocator.DEFAULT.ioBuffer(bytes.length);
+                    byteBuf.writeBytes(bytes);
+                    byte subChunkVersion = byteBuf.readByte();
+                    int layers = 2;
+                    switch (subChunkVersion) {
+                        case 9:
+                        case 8:
+                            layers = byteBuf.readByte();//layers
+                            if (subChunkVersion == 9) {
+                                byteBuf.readByte();//sectionY not use
+                            }
+                        case 1:
+                            ChunkSection section;
+                            if (layers <= 2) {
+                                section = new ChunkSection(ySection);
+                            } else {
+                                Palette[] palettes = new Palette[layers];
+                                Arrays.fill(palettes, new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState()));
+                                section = new ChunkSection(ySection, palettes);
+                            }
+                            for (int layer = 0; layer < layers; layer++) {
+                                section.blockLayer()[layer].readFromStoragePersistentFromBlockHash(byteBuf, hash -> {
+                                    BlockState blockState = BlockStateHashPalette.getRegistry().get(hash);
+                                    if (blockState == null) {
+                                        log.error("missing block hash: " + hash);
+                                    }
+                                    return blockState;
+                                });
+                            }
+                            sections[ySection] = section;
+                            break;
                     }
-                    sections[ySection] = section;
-                }
-            } catch (RocksDBException e) {
-                throw new RuntimeException(e);
-            } finally {
-                if (buf != null) {
-                    buf.release();
+                } finally {
+                    if (byteBuf != null) {
+                        byteBuf.release();
+                    }
                 }
             }
         }
         builder.sections(sections);
     }
 
+    //write biomeAndHeight
     private void serializeHeightAndBiome(WriteBatch writeBatch, UnsafeChunk chunk) {
         //Write biomeAndHeight
         ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
@@ -118,16 +135,14 @@ public class RocksdbChunkSerializerV1 implements RocksdbChunkSerializer {
                 biomePalette.writeToStorageRuntime(heightAndBiomesBuffer, BiomeType::getId, last);
                 last = biomePalette;
             }
-            writeBatch.put(LevelDBKeyUtils.DATA_3D.getKey(chunk.getX(), chunk.getZ()), Utils.convertByteBuf2Array(heightAndBiomesBuffer));
-        } catch (RocksDBException e) {
-            throw new RuntimeException(e);
+            writeBatch.put(LevelDBKeyUtils.DATA_3D.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), Utils.convertByteBuf2Array(heightAndBiomesBuffer));
         } finally {
             heightAndBiomesBuffer.release();
         }
     }
 
-    private void deserializeHeightAndBiome(RocksDB db, AllayUnsafeChunk.Builder builder) {
-        //Write biomeAndHeight
+    //read biomeAndHeight
+    private void deserializeHeightAndBiome(DB db, AllayUnsafeChunk.Builder builder) {
         ByteBuf heightAndBiomesBuffer = null;
         try {
             byte[] bytes = db.get(LevelDBKeyUtils.DATA_3D.getKey(builder.getChunkX(), builder.getChunkZ()));
@@ -148,8 +163,6 @@ public class RocksdbChunkSerializerV1 implements RocksdbChunkSerializer {
                     last = biomePalette;
                 }
             }
-        } catch (RocksDBException e) {
-            throw new RuntimeException(e);
         } finally {
             if (heightAndBiomesBuffer != null) {
                 heightAndBiomesBuffer.release();

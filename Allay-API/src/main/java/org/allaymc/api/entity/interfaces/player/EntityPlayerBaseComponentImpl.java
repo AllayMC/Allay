@@ -1,5 +1,7 @@
 package org.allaymc.api.entity.interfaces.player;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.component.annotation.ComponentEventListener;
@@ -17,8 +19,6 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.chunk.Chunk;
-import lombok.Getter;
-import lombok.Setter;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -101,7 +101,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     protected void tryPickUpItems() {
-        var world = location.world;
+        var dimension = location.dimension;
         // pick up items
         var pickUpArea = new AABBf(
                 location.x - 1.425f,
@@ -111,7 +111,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 location.y + 1.425f,
                 location.z + 1.425f
         );
-        var entityItems = world.getEntityPhysicsService().computeCollidingEntities(pickUpArea, true)
+        var entityItems = dimension.getEntityPhysicsService().computeCollidingEntities(pickUpArea, true)
                 .stream()
                 .filter(e -> e instanceof EntityItem)
                 .map(e -> (EntityItem) e)
@@ -126,9 +126,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                     TakeItemEntityPacket takeItemEntityPacket = new TakeItemEntityPacket();
                     takeItemEntityPacket.setRuntimeEntityId(uniqueId);
                     takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getUniqueId());
-                    Objects.requireNonNull(world.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
+                    Objects.requireNonNull(dimension.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
                     entityItem.setItemStack(null);
-                    world.removeEntity(entityItem);
+                    dimension.getEntityUpdateService().removeEntity(entityItem);
                 }
                 // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
                 // it's much easier to just resend the inventory.
@@ -357,7 +357,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void onChunkOutOfRange(Set<Long> chunkHashes) {
         chunkHashes
                 .stream()
-                .map(location.world.getChunkService()::getChunk).filter(Objects::nonNull)
+                .map(location.dimension.getChunkService()::getChunk).filter(Objects::nonNull)
                 .forEach(chunk -> {
                     chunk.removeChunkLoader(this);
                     chunk.despawnEntitiesFrom(thisEntity);

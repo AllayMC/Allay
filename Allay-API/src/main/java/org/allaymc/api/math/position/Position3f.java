@@ -1,8 +1,8 @@
 package org.allaymc.api.math.position;
 
-import org.allaymc.api.server.Server;
-import org.allaymc.api.world.World;
 import com.google.common.base.Objects;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.world.Dimension;
 import org.joml.Runtime;
 import org.joml.*;
 
@@ -19,80 +19,80 @@ import java.text.NumberFormat;
  * @author Cool_Loong
  */
 public class Position3f extends Vector3f implements Position3fc {
-    public World world;
+    public Dimension dimension;
 
     public Position3f(Position3fc p) {
         super(p);
-        this.world = p.world();
+        this.dimension = p.dimension();
     }
 
-    public Position3f(World world) {
+    public Position3f(Dimension dimension) {
         super();
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(float d, World world) {
+    public Position3f(float d, Dimension dimension) {
         super(d);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(float x, float y, float z, World world) {
+    public Position3f(float x, float y, float z, Dimension dimension) {
         super(x, y, z);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(Vector3fc v, World world) {
+    public Position3f(Vector3fc v, Dimension dimension) {
         super(v);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(Vector3ic v, World world) {
+    public Position3f(Vector3ic v, Dimension dimension) {
         super(v);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(Vector2fc v, float z, World world) {
+    public Position3f(Vector2fc v, float z, Dimension dimension) {
         super(v, z);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(Vector2ic v, float z, World world) {
+    public Position3f(Vector2ic v, float z, Dimension dimension) {
         super(v, z);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(float[] xyz, World world) {
+    public Position3f(float[] xyz, Dimension dimension) {
         super(xyz);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(ByteBuffer buffer, World world) {
+    public Position3f(ByteBuffer buffer, Dimension dimension) {
         super(buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(int index, ByteBuffer buffer, World world) {
+    public Position3f(int index, ByteBuffer buffer, Dimension dimension) {
         super(index, buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(FloatBuffer buffer, World world) {
+    public Position3f(FloatBuffer buffer, Dimension dimension) {
         super(buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3f(int index, FloatBuffer buffer, World world) {
+    public Position3f(int index, FloatBuffer buffer, Dimension dimension) {
         super(index, buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
     @Override
-    public World world() {
-        return world;
+    public Dimension dimension() {
+        return dimension;
     }
 
-    public void setWorld(World world) {
-        this.world = world;
+    public void setDimension(Dimension dimension) {
+        this.dimension = dimension;
     }
 
     @Override
@@ -638,7 +638,8 @@ public class Position3f extends Vector3f implements Position3fc {
         out.writeFloat(x);
         out.writeFloat(y);
         out.writeFloat(z);
-        out.writeUTF(this.world.getName());
+        out.writeUTF(this.dimension.getWorld().getWorldData().getName());
+        out.writeInt(this.dimension.getDimensionInfo().dimensionId());
     }
 
     @Override
@@ -646,7 +647,7 @@ public class Position3f extends Vector3f implements Position3fc {
         x = in.readFloat();
         y = in.readFloat();
         z = in.readFloat();
-        world = Server.getInstance().getWorldPool().getWorld(in.readUTF());
+        dimension = Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt());
     }
 
     @Override
@@ -850,21 +851,21 @@ public class Position3f extends Vector3f implements Position3fc {
         if (this == o) return true;
         if (!(o instanceof Position3fc that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equal(world, that.world());
+        return Objects.equal(dimension, that.dimension());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), world);
+        return Objects.hashCode(super.hashCode(), dimension);
     }
 
     @Override
     public String toString() {
-        return Runtime.formatNumbers(toString(Options.NUMBER_FORMAT)) + ",world=" + this.world.getName();
+        return toString(Options.NUMBER_FORMAT);
     }
 
     @Override
     public String toString(NumberFormat formatter) {
-        return super.toString(formatter) + ",world=" + this.world.getName();
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension.getWorld().getWorldData().getName() + this.dimension.getDimensionInfo().dimensionId() + ")";
     }
 }

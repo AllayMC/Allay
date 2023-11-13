@@ -1,10 +1,10 @@
 package org.allaymc.api.math.location;
 
+import com.google.common.base.Objects;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.world.World;
-import com.google.common.base.Objects;
+import org.allaymc.api.world.Dimension;
 import org.joml.Runtime;
 import org.joml.*;
 
@@ -32,110 +32,110 @@ public class Location3i extends Position3i implements Location3ic {
         this.headYaw = l.headYaw();
     }
 
-    public Location3i(int x, int y, int z, World world) {
-        super(x, y, z, world);
+    public Location3i(int x, int y, int z, Dimension dimension) {
+        super(x, y, z, dimension);
     }
 
-    public Location3i(int d, double pitch, double yaw, double headYaw, World world) {
-        super(d, world);
+    public Location3i(int d, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(d, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(int x, int y, int z, double pitch, double yaw, double headYaw, World world) {
-        super(x, y, z, world);
+    public Location3i(int x, int y, int z, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(x, y, z, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(Vector3ic v, double pitch, double yaw, double headYaw, World world) {
-        super(v, world);
+    public Location3i(Vector3ic v, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(Vector2ic v, int z, double pitch, double yaw, double headYaw, World world) {
-        super(v, z, world);
+    public Location3i(Vector2ic v, int z, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, z, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(float x, float y, float z, int mode, double pitch, double yaw, double headYaw, World world) {
-        super(x, y, z, mode, world);
+    public Location3i(float x, float y, float z, int mode, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(x, y, z, mode, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(double x, double y, double z, int mode, double pitch, double yaw, double headYaw, World world) {
-        super(x, y, z, mode, world);
+    public Location3i(double x, double y, double z, int mode, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(x, y, z, mode, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(Vector2fc v, float z, int mode, double pitch, double yaw, double headYaw, World world) {
-        super(v, z, mode, world);
+    public Location3i(Vector2fc v, float z, int mode, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, z, mode, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(Vector3fc v, int mode, double pitch, double yaw, double headYaw, World world) {
-        super(v, mode, world);
+    public Location3i(Vector3fc v, int mode, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, mode, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(Vector2dc v, float z, int mode, double pitch, double yaw, double headYaw, World world) {
-        super(v, z, mode, world);
+    public Location3i(Vector2dc v, float z, int mode, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, z, mode, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(Vector3dc v, int mode, double pitch, double yaw, double headYaw, World world) {
-        super(v, mode, world);
+    public Location3i(Vector3dc v, int mode, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, mode, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(int[] xyz, double pitch, double yaw, double headYaw, World world) {
-        super(xyz, world);
+    public Location3i(int[] xyz, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(xyz, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(ByteBuffer buffer, double pitch, double yaw, double headYaw, World world) {
-        super(buffer, world);
+    public Location3i(ByteBuffer buffer, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(buffer, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(int index, ByteBuffer buffer, double pitch, double yaw, double headYaw, World world) {
-        super(index, buffer, world);
+    public Location3i(int index, ByteBuffer buffer, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(index, buffer, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(IntBuffer buffer, double pitch, double yaw, double headYaw, World world) {
-        super(buffer, world);
+    public Location3i(IntBuffer buffer, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(buffer, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3i(int index, IntBuffer buffer, double pitch, double yaw, double headYaw, World world) {
-        super(index, buffer, world);
+    public Location3i(int index, IntBuffer buffer, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(index, buffer, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
@@ -378,7 +378,8 @@ public class Location3i extends Position3i implements Location3ic {
         out.writeDouble(pitch);
         out.writeDouble(yaw);
         out.writeDouble(headYaw);
-        out.writeUTF(this.world.getName());
+        out.writeUTF(this.dimension.getWorld().getWorldData().getName());
+        out.writeInt(this.dimension.getDimensionInfo().dimensionId());
     }
 
     @Override
@@ -389,7 +390,7 @@ public class Location3i extends Position3i implements Location3ic {
         pitch = in.readDouble();
         yaw = in.readDouble();
         headYaw = in.readDouble();
-        world = Server.getInstance().getWorldPool().getWorld(in.readUTF());
+        dimension = Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt());
     }
 
     @Override
@@ -445,12 +446,12 @@ public class Location3i extends Position3i implements Location3ic {
         if (this == o) return true;
         if (!(o instanceof Location3ic that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equal(world, that.world()) && Objects.equal(pitch, that.pitch()) && Objects.equal(yaw, that.yaw()) && Objects.equal(headYaw, that.headYaw());
+        return Objects.equal(dimension, that.dimension()) && Objects.equal(pitch, that.pitch()) && Objects.equal(yaw, that.yaw()) && Objects.equal(headYaw, that.headYaw());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), pitch, yaw, headYaw, world);
+        return Objects.hashCode(super.hashCode(), pitch, yaw, headYaw, dimension);
     }
 
     @Override
@@ -460,6 +461,6 @@ public class Location3i extends Position3i implements Location3ic {
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " world=" + this.world.getName() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " dimension=" + this.dimension.getWorld().getWorldData().getName() + this.dimension.getDimensionInfo().dimensionId() + ")";
     }
 }

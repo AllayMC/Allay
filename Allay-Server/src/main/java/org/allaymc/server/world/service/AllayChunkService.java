@@ -1,21 +1,5 @@
 package org.allaymc.server.world.service;
 
-import org.allaymc.api.annotation.SlowOperation;
-import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
-import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.HashUtils;
-import org.allaymc.api.utils.MathUtils;
-import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.World;
-import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.chunk.ChunkLoader;
-import org.allaymc.api.world.chunk.ChunkSection;
-import org.allaymc.api.world.generator.ChunkGenerateContext;
-import org.allaymc.api.world.service.ChunkService;
-import org.allaymc.api.world.storage.WorldStorage;
-import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -25,6 +9,22 @@ import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.annotation.SlowOperation;
+import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.chunk.ChunkLoader;
+import org.allaymc.api.world.chunk.ChunkSection;
+import org.allaymc.api.world.generator.ChunkGenerateContext;
+import org.allaymc.api.world.service.ChunkService;
+import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.*;
-import static org.allaymc.api.world.chunk.ChunkState.EMPTY;
+import static org.allaymc.api.world.chunk.ChunkState.NEW;
 
 /**
  * Allay Project 2023/7/1
@@ -57,14 +57,14 @@ public class AllayChunkService implements ChunkService {
     private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.getInstance().getServerSettings().genericSettings().maxClientCount());
-    private final World world;
+    private final Dimension dimension;
     @Getter
     private final WorldStorage worldStorage;
     private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
     private final Set<Long> keepLoadingChunks = Sets.newConcurrentHashSet();
 
-    public AllayChunkService(World world, WorldStorage worldStorage) {
-        this.world = world;
+    public AllayChunkService(Dimension dimension, WorldStorage worldStorage) {
+        this.dimension = dimension;
         this.worldStorage = worldStorage;
     }
 
@@ -117,9 +117,9 @@ public class AllayChunkService implements ChunkService {
 
     private Chunk generateChunk(Chunk chunk) {
         var unsafeChunk = chunk.toUnsafeChunk();
-        if (unsafeChunk.getState() == EMPTY) {
-            var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, world);
-            world.getWorldGenerator().generate(chunkGenerateContext);
+        if (unsafeChunk.getState() == NEW) {
+            var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, dimension);
+            dimension.getGenerator().generate(chunkGenerateContext);
         }
         return chunk;
     }
@@ -187,15 +187,15 @@ public class AllayChunkService implements ChunkService {
             throw new IllegalStateException("Chunk is already loaded");
         }
         //Prevent multiple threads from putting the same chunk into loadingChunks at the same time and wasting computing resources
-        var presentValue = loadingChunks.putIfAbsent(hashXZ, worldStorage.readChunk(x, z)
+        var presentValue = loadingChunks.putIfAbsent(hashXZ, worldStorage.readChunk(x, z, DimensionInfo.OVERWORLD)
                 .exceptionally(t -> {
                     log.error("Error while reading chunk (" + x + "," + z + ") !", t);
-                    return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
+                    return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
                 .thenApplyAsync(this::generateChunk, Server.getInstance().getComputeThreadPool())
                 .exceptionally(t -> {
                     log.error("Error while generating chunk (" + x + "," + z + ") !", t);
-                    return AllayUnsafeChunk.builder().emptyChunk(x, z, world.getDimensionInfo()).toSafeChunk();
+                    return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
                 .thenApply(prepareChunk -> {
                     setChunk(x, z, prepareChunk);
@@ -291,7 +291,7 @@ public class AllayChunkService implements ChunkService {
         chunk.save(worldStorage);
         chunk.getEntities().forEach((uniqueId, entity) -> {
             entity.despawnFromAll();
-            world.getEntityPhysicsService().removeEntity(entity);
+            dimension.getEntityPhysicsService().removeEntity(entity);
         });
     }
 

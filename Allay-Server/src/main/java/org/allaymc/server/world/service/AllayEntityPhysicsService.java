@@ -1,5 +1,8 @@
 package org.allaymc.server.world.service;
 
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.type.BlockState;
@@ -10,11 +13,8 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.utils.MathUtils;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.EntityPhysicsService;
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
@@ -23,8 +23,8 @@ import org.joml.primitives.AABBfc;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static org.allaymc.api.block.component.attribute.BlockAttributes.DEFAULT_FRICTION;
 import static java.lang.Math.*;
+import static org.allaymc.api.block.component.attribute.BlockAttributes.DEFAULT_FRICTION;
 
 /**
  * Allay Project 2023/8/5 <br>
@@ -40,7 +40,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static float BLOCK_COLLISION_MOTION;
     public static final FloatBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new FloatBooleanImmutablePair(0, false);
 
-    protected World world;
+    protected Dimension dimension;
     protected Map<Long, Entity> entities = new Long2ObjectOpenHashMap<>();
     protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectOpenHashMap<>();
     protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectOpenHashMap<>();
@@ -49,9 +49,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      */
     protected AABBTree<Entity> entityAABBTree = new AABBTree<>();
 
-    public AllayEntityPhysicsService(World world) {
-        this.world = world;
-        var settings = world.getServer().getServerSettings().entitySettings().physicsEngineSettings();
+    public AllayEntityPhysicsService(Dimension dimension) {
+        this.dimension = dimension;
+        var settings = dimension.getServer().getServerSettings().entitySettings().physicsEngineSettings();
         MOTION_THRESHOLD = settings.motionThreshold();
         STEPPING_OFFSET = settings.steppingOffset();
         FAT_AABB_MARGIN = settings.fatAABBMargin();
@@ -67,7 +67,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             if (!entity.computeMovementServerSide()) return;
             if (!entity.isCurrentChunkLoaded()) return;
             //TODO: liquid motion etc...
-            var collidedBlocks = world.getCollidingBlocks(entity.getOffsetAABB());
+            var collidedBlocks = dimension.getCollidingBlocks(entity.getOffsetAABB());
             if (collidedBlocks == null) {
                 //1. The entity is not stuck in the block
                 if (entity.computeEntityCollisionMotion()) computeEntityCollisionMotion(entity);
@@ -142,7 +142,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         for (int i = values.length - 1; i >= 0; i--) {
             var blockFace = values[i];
             var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
-            var blockState = world.getBlockState(offsetVec);
+            var blockState = dimension.getBlockState(offsetVec);
             if (blockState.getBlockType() == BlockAirBehavior.AIR_TYPE) {
                 var currentDistanceSqrt = entity.getLocation().distanceSquared(offsetVec.x() + 0.5f, offsetVec.y() + 0.5f, offsetVec.z() + 0.5f);
                 if (currentDistanceSqrt < distanceSqrt) {
@@ -190,7 +190,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         //TODO: 效果乘数
         float effectFactor = 1;
         float movementFactor = entity.getMovementFactor();
-        var blockUnder = world.getBlockState((int) entity.getLocation().x(), (int) (entity.getLocation().y() - 0.5), (int) entity.getLocation().z());
+        var blockUnder = dimension.getBlockState((int) entity.getLocation().x(), (int) (entity.getLocation().y() - 0.5), (int) entity.getLocation().z());
         float slipperyFactor = blockUnder != null ?
                 blockUnder.getBlockType().getBlockBehavior().getBlockAttributes(blockUnder).friction() :
                 DEFAULT_FRICTION;
@@ -314,7 +314,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var deltaX = mx;
         var collision = false;
         if (!isValidEntityArea(extendX)) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var blocks = world.getCollidingBlocks(extendX);
+        var blocks = dimension.getCollidingBlocks(extendX);
         if (blocks != null) {
             collision = true;
             //存在碰撞
@@ -357,7 +357,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var deltaZ = mz;
         var collision = false;
         if (!isValidEntityArea(extendZ)) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var blocks = world.getCollidingBlocks(extendZ);
+        var blocks = dimension.getCollidingBlocks(extendZ);
         if (blocks != null) {
             collision = true;
             //存在碰撞
@@ -404,7 +404,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var onGround = false;
         if (!isValidEntityArea(extendY))
             return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var blocks = world.getCollidingBlocks(extendY);
+        var blocks = dimension.getCollidingBlocks(extendY);
         if (blocks != null) {
             //存在碰撞
             if (down) onGround = true;
@@ -428,11 +428,11 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return new FloatBooleanImmutablePair(my, onGround);
     }
 
-    //Do not use world.isAABBInWorld(extendX|Y|Z) because entity should be able to move even if y > maxHeight
+    //Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
     protected boolean isValidEntityArea(AABBf extendAABB) {
-        return extendAABB.minY >= world.getDimensionInfo().minHeight() ||
-               world.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) ||
-               world.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
+        return extendAABB.minY >= dimension.getDimensionInfo().minHeight() ||
+                dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) ||
+                dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
     }
 
     protected boolean tryStepping(Vector3f pos, AABBf aabb, float stepHeight, boolean positive, boolean xAxis) {
@@ -441,7 +441,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var recorder = new Vector3f();
         moveAlongYAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder);
         moveAlongYAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder);
-        if (recorder.y == 0 || world.getCollidingBlocks(offsetAABB) != null) {
+        if (recorder.y == 0 || dimension.getCollidingBlocks(offsetAABB) != null) {
             return false;
         } else {
             aabb.set(offsetAABB.translate(xAxis ? -offset : 0, 0, xAxis ? 0 : -offset));
@@ -546,7 +546,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         //用一个set暂存entity避免重复
         var result = new ArrayList<Entity>();
         entityAABBTree.detectOverlaps(voxelShape.unionAABB(), result);
-        if (!ignoreEntityHasCollision) result.removeIf(entity ->  !entity.hasEntityCollision());
+        if (!ignoreEntityHasCollision) result.removeIf(entity -> !entity.hasEntityCollision());
         result.removeIf(entity -> !voxelShape.intersectsAABB(entity.getOffsetAABB()));
         return result;
     }
@@ -561,5 +561,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return result;
     }
 
-    protected record ScheduledMove(Entity entity, Location3fc newLoc) {};
+    protected record ScheduledMove(Entity entity, Location3fc newLoc) {
+    }
+
+    ;
 }

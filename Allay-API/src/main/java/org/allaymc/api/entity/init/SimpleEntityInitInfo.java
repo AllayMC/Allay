@@ -1,11 +1,11 @@
 package org.allaymc.api.entity.init;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.math.location.Location3fc;
-import org.allaymc.api.world.World;
-import lombok.Getter;
-import lombok.Setter;
+import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.jetbrains.annotations.Nullable;
@@ -17,20 +17,20 @@ import org.joml.Vector3fc;
  * @author Cool_Loong
  */
 public class SimpleEntityInitInfo<T extends Entity> implements EntityInitInfo<T> {
-    protected final World world;
+    protected final Dimension dimension;
     protected final NbtMap nbt;
     @Getter
     @Setter
     protected EntityType<T> entityType;
 
-    protected SimpleEntityInitInfo(World world, NbtMap nbt) {
-        this.world = world;
+    protected SimpleEntityInitInfo(Dimension dimension, NbtMap nbt) {
+        this.dimension = dimension;
         this.nbt = nbt;
     }
 
     @Override
-    public World world() {
-        return world;
+    public Dimension dimension() {
+        return dimension;
     }
 
     @Nullable
@@ -44,18 +44,18 @@ public class SimpleEntityInitInfo<T extends Entity> implements EntityInitInfo<T>
     }
 
     public static class Builder {
-        protected World world;
+        protected Dimension dimension;
         protected final NbtMapBuilder nbtBuilder = NbtMap.builder();
 
-        public Builder world(World world) {
-            this.world = world;
+        public Builder dimension(Dimension dimension) {
+            this.dimension = dimension;
             return this;
         }
 
         public Builder loc(Location3fc loc) {
             pos(loc.x(), loc.y(), loc.z());
             rot((float) loc.yaw(), (float) loc.pitch());
-            this.world = loc.world();
+            this.dimension = loc.dimension();
             return this;
         }
 
@@ -101,7 +101,7 @@ public class SimpleEntityInitInfo<T extends Entity> implements EntityInitInfo<T>
         }
 
         public <R extends Entity> SimpleEntityInitInfo<R> build() {
-            return new SimpleEntityInitInfo<>(world, nbtBuilder.build());
+            return new SimpleEntityInitInfo<>(dimension, nbtBuilder.build());
         }
     }
 }

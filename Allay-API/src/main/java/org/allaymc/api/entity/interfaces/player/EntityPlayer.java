@@ -108,18 +108,18 @@ public interface EntityPlayer extends
             container.setItemStack(slot, item);
         }
         var playerLoc = getLocation();
-        var world = playerLoc.world();
+        var dimension = playerLoc.dimension();
         var entityItem = EntityItem.ITEM_TYPE.createEntity(
                 SimpleEntityInitInfo
                         .builder()
-                        .world(world)
+                        .dimension(dimension)
                         .pos(playerLoc.x(), playerLoc.y() + this.getEyeHeight() - 0.25f, playerLoc.z())
                         .motion(MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f))
                         .build()
         );
         entityItem.setItemStack(droppedItemStack);
         entityItem.setPickupDelay(40);
-        world.addEntity(entityItem);
+        dimension.getEntityPhysicsService().addEntity(entityItem);
     }
 }
 

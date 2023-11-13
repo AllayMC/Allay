@@ -53,7 +53,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
 
     default void sendBlockEntityDataPacketToAll() {
         var pos = getPosition();
-        var chunk = pos.world().getChunkService().getChunkByLevelPos(pos.x(), pos.z());
+        var chunk = pos.dimension().getChunkService().getChunkByLevelPos(pos.x(), pos.z());
         Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
         var pk = createBlockEntityDataPacket();
         chunk.sendChunkPacket(pk);
@@ -67,6 +67,6 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
 
     default BlockState getBlockState() {
         var pos = getPosition();
-        return pos.world().getBlockState(pos.x(), pos.y(), pos.z());
+        return pos.dimension().getBlockState(pos.x(), pos.y(), pos.z());
     }
 }

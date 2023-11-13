@@ -1,5 +1,6 @@
 package org.allaymc.api.block.component.blockentity;
 
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
 import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
@@ -10,7 +11,6 @@ import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.position.Position3i;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Allay Project 2023/9/15
@@ -46,7 +46,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
     @ComponentEventListener
     private void onNeighborChanged(BlockOnNeighborUpdateEvent event) {
-        var pos = new Position3i(event.updated(), event.world());
+        var pos = new Position3i(event.updated(), event.dimension());
         var blockEntity = getBlockEntity(pos);
         blockEntity.onNeighborUpdate(event);
     }
@@ -54,7 +54,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     @ComponentEventListener
     private void onInteract(BlockOnInteractEvent event) {
         var pos = event.blockPos();
-        var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.world());
+        var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.dimension());
         blockEntity.onInteract(event);
     }
 

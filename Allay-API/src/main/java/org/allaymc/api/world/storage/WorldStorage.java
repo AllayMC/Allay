@@ -1,7 +1,10 @@
 package org.allaymc.api.world.storage;
 
+import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -11,7 +14,10 @@ import java.util.concurrent.CompletableFuture;
  * @author Cool_Loong
  */
 public interface WorldStorage {
-    CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ) throws WorldStorageException;
+    @ApiStatus.Internal
+    void setWorld(World world);
+
+    CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) throws WorldStorageException;
 
     CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException;
 

@@ -1,7 +1,7 @@
 package org.allaymc.api.block.function;
 
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
 /**
@@ -19,5 +19,5 @@ public interface OnNeighborUpdate {
      * @param face     The neighbor block is on the side of the current updated block
      * @param world    world instance
      */
-    void onNeighborUpdate(Vector3ic updated, Vector3ic neighbor, BlockFace face, World world);
+    void onNeighborUpdate(Vector3ic updated, Vector3ic neighbor, BlockFace face, Dimension dimension);
 }

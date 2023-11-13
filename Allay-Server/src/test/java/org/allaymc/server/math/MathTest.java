@@ -2,7 +2,7 @@ package org.allaymc.server.math;
 
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -19,12 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith({MockitoExtension.class})
 public class MathTest {
     @Mock
-    World level;
+    Dimension dim;
 
     @Test
     void position() {
-        var pos = new Position3i(1, 1, 1, level);
-        assertNotNull(pos.world());
+        var pos = new Position3i(1, 1, 1, dim);
+        assertNotNull(pos.dimension());
         assertEquals(1, pos.x());
         assertEquals(1, pos.y());
         assertEquals(1, pos.z());
@@ -36,8 +36,8 @@ public class MathTest {
 
     @Test
     void location() {
-        var loc = new Location3i(1, 1, 1, level);
-        assertNotNull(loc.world());
+        var loc = new Location3i(1, 1, 1, dim);
+        assertNotNull(loc.dimension());
         assertEquals(0d, loc.yaw());
         assertEquals(0d, loc.headYaw());
         assertEquals(0d, loc.pitch());

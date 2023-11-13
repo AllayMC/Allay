@@ -1,5 +1,6 @@
 package org.allaymc.api.item.component.base;
 
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -18,8 +19,7 @@ import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.world.World;
-import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -174,15 +174,15 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         } else {
             var blockState = toBlockState();
             return ItemData
-                .builder()
-                .definition(itemType.toNetworkDefinition())
-                .blockDefinition(blockState != null ? blockState.toNetworkBlockDefinition() : () -> 0)
-                .count(count)
-                .damage(meta)
-                .tag(saveExtraTag())
-                .usingNetId(hasStackNetworkId())
-                .netId(stackNetworkId)
-                .build();
+                    .builder()
+                    .definition(itemType.toNetworkDefinition())
+                    .blockDefinition(blockState != null ? blockState.toNetworkBlockDefinition() : () -> 0)
+                    .count(count)
+                    .damage(meta)
+                    .tag(saveExtraTag())
+                    .usingNetId(hasStackNetworkId())
+                    .netId(stackNetworkId)
+                    .build();
         }
     }
 
@@ -227,13 +227,13 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
         NbtMapBuilder displayBuilder = NbtMap.builder();
         if (!this.customName.isEmpty()) {
-            displayBuilder.put( "Name", this.customName );
+            displayBuilder.put("Name", this.customName);
         }
-        if ( !this.lore.isEmpty() ) {
-            displayBuilder.putList( "Lore", NbtType.STRING, this.lore );
+        if (!this.lore.isEmpty()) {
+            displayBuilder.putList("Lore", NbtType.STRING, this.lore);
         }
-        if ( !displayBuilder.isEmpty() ) {
-            nbtBuilder.putCompound( "display", displayBuilder.build() );
+        if (!displayBuilder.isEmpty()) {
+            nbtBuilder.putCompound("display", displayBuilder.build());
         }
         if (!enchantments.isEmpty()) {
             List<NbtMap> enchantmentNBT = new ArrayList<>();
@@ -260,20 +260,20 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     public boolean useItemOn(
             @Nullable EntityPlayer player, ItemStack itemStack,
-            World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
+            Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace) {
         if (itemStack.getItemType().getBlockType() == null)
             return false;
         var blockState = itemStack.toBlockState();
-        return tryPlaceBlockState(player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
+        return tryPlaceBlockState(player, itemStack, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
     }
 
-    protected boolean tryPlaceBlockState(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
-        if (player != null && hasEntityCollision(world, placeBlockPos, blockState))
+    protected boolean tryPlaceBlockState(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
+        if (player != null && hasEntityCollision(dimension, placeBlockPos, blockState))
             return false;
         BlockType<?> blockType = blockState.getBlockType();
         assert blockType != null;
-        boolean result = blockType.getBlockBehavior().place(player, world, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
+        boolean result = blockType.getBlockBehavior().place(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         tryConsumeItem(player, itemStack);
         return result;
     }
@@ -283,14 +283,14 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             itemStack.setCount(itemStack.getCount() - 1);
     }
 
-    protected boolean hasEntityCollision(World world, Vector3ic placePos, BlockState blockState) {
+    protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {
         var block_aabb = blockState.getBehavior().getBlockAttributes(blockState)
                 .computeOffsetVoxelShape(
                         placePos.x(),
                         placePos.y(),
                         placePos.z()
                 );
-        return !world.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty();
+        return !dimension.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty();
     }
 
     @Override
@@ -300,10 +300,10 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         var extraTag2 = itemStack.saveExtraTag();
         if (extraTag2 == null) extraTag2 = NbtMap.EMPTY;
         return itemStack.getItemType() == getItemType() &&
-               itemStack.getMeta() == getMeta() &&
-               (ignoreCount || count + itemStack.getCount() <= attributeComponent.getItemAttributes().maxStackSize()) &&
-               extraTag1.equals(extraTag2) &&
-               itemStack.toBlockState() == toBlockState();
+                itemStack.getMeta() == getMeta() &&
+                (ignoreCount || count + itemStack.getCount() <= attributeComponent.getItemAttributes().maxStackSize()) &&
+                extraTag1.equals(extraTag2) &&
+                itemStack.toBlockState() == toBlockState();
     }
 
     @Override

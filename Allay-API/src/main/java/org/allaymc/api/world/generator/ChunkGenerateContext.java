@@ -1,6 +1,6 @@
 package org.allaymc.api.world.generator;
 
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 
 /**
@@ -8,5 +8,5 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
  *
  * @author Cool_Loong
  */
-public record ChunkGenerateContext(UnsafeChunk chunk, World world) {
+public record ChunkGenerateContext(UnsafeChunk chunk, Dimension dimension) {
 }

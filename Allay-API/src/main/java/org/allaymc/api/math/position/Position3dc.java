@@ -1,6 +1,6 @@
 package org.allaymc.api.math.position;
 
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.joml.Vector3dc;
 
 /**
@@ -9,5 +9,5 @@ import org.joml.Vector3dc;
  * @author Cool_Loong
  */
 public interface Position3dc extends Vector3dc {
-    World world();
+    Dimension dimension();
 }

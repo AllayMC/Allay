@@ -1,16 +1,19 @@
 package org.allaymc.api.world.palette;
 
-import org.allaymc.api.world.bitarray.BitArray;
-import org.allaymc.api.world.bitarray.BitArrayVersion;
-import org.allaymc.api.world.chunk.Chunk;
 import com.google.common.base.Objects;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import org.allaymc.api.utils.BlockTagBytesReaderUtils;
+import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.world.bitarray.BitArray;
+import org.allaymc.api.world.bitarray.BitArrayVersion;
+import org.allaymc.api.world.chunk.Chunk;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
 import org.cloudburstmc.protocol.common.util.VarInts;
 
 import java.io.IOException;
@@ -70,7 +73,6 @@ public final class Palette<V> {
         for (int i = 0; i < size; i++) this.palette.add(deserializer.deserialize(VarInts.readInt(byteBuf)));
     }
 
-    //LevelDB
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
         byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), false));
         for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
@@ -83,7 +85,6 @@ public final class Palette<V> {
         }
     }
 
-    //LevelDB
     public void readFromStoragePersistent(ByteBuf byteBuf, PersistentDataDeserializer<V> deserializer) {
         readWords(byteBuf, readBitArrayVersion(byteBuf));
 
@@ -97,7 +98,18 @@ public final class Palette<V> {
         }
     }
 
-    //RocksDB
+    public void readFromStoragePersistentFromBlockHash(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer) {
+        readWords(byteBuf, readBitArrayVersion(byteBuf));
+        final int paletteSize = byteBuf.readIntLE();
+        try (final ByteBufInputStream bufInputStream = new ByteBufInputStream(byteBuf);
+             final LittleEndianDataInputStream input = new LittleEndianDataInputStream(bufInputStream)) {
+            for (int i = 0; i < paletteSize; i++)
+                this.palette.add(deserializer.deserialize(HashUtils.fnv1a_32(BlockTagBytesReaderUtils.fastRead(input, byteBuf))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void writeToStorageRuntime(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
         if (writeLast(byteBuf, last)) return;
         if (writeEmpty(byteBuf, serializer)) return;
@@ -108,7 +120,6 @@ public final class Palette<V> {
         for (V value : this.palette) byteBuf.writeIntLE(serializer.serialize(value));
     }
 
-    //RocksDB
     public void readFromStorageRuntime(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer, Palette<V> last) {
         final short header = byteBuf.readUnsignedByte();
 

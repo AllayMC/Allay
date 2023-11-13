@@ -5,7 +5,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.init.SimpleBlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 
 import java.util.Objects;
 
@@ -17,13 +17,13 @@ import java.util.Objects;
 public interface BlockEntityHolderComponent<T extends BlockEntity> extends BlockComponent {
     BlockEntityType<?> getBlockEntityType();
 
-    default T getBlockEntity(int x, int y, int z, World world) {
-        var blockEntity = world.getBlockEntity(x, y, z);
+    default T getBlockEntity(int x, int y, int z, Dimension dimension) {
+        var blockEntity = dimension.getBlockEntity(x, y, z);
         if (blockEntity.getBlockEntityType() != this.getBlockEntityType()) {
             throw new IllegalStateException(
                     "Mismatched block entity type at pos %d, %d, %d, %s! Expected: %s, actual: %s"
                             .formatted(
-                                    x, y, z, world.getName(),
+                                    x, y, z, dimension.toString(),
                                     this.getBlockEntityType().getBlockEntityId(), blockEntity.getBlockEntityType().getBlockEntityId()
                             )
             );
@@ -32,20 +32,20 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
     }
 
     default T getBlockEntity(Position3ic pos) {
-        return getBlockEntity(pos.x(), pos.y(), pos.z(), pos.world());
+        return getBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
-    default void createBlockEntityAt(int x, int y, int z, World world) {
-        Objects.requireNonNull(world);
-        var chunk = world.getChunkService().getChunkByLevelPos(x, z);
+    default void createBlockEntityAt(int x, int y, int z, Dimension dimension) {
+        Objects.requireNonNull(dimension);
+        var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
-            throw new IllegalStateException("Trying to create a block entity in an unload chunk! World: " + world.getName() + " at pos " + x + ", " + y + ", " + z);
+            throw new IllegalStateException("Trying to create a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }
         var presentBlockEntity = chunk.getBlockEntity(x & 15, y, z & 15);
         if (presentBlockEntity != null) {
-            throw new IllegalStateException("Trying to create a block entity in world " + world.getName() + " at pos " + x + ", " + y + ", " + z + "!");
+            throw new IllegalStateException("Trying to create a block entity in Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z + "!");
         }
-        var blockEntity = getBlockEntityType().createBlockEntity(SimpleBlockEntityInitInfo.builder().pos(x, y, z).world(world).build());
+        var blockEntity = getBlockEntityType().createBlockEntity(SimpleBlockEntityInitInfo.builder().pos(x, y, z).dimension(dimension).build());
         chunk.addBlockEntity(blockEntity);
         if (blockEntity.sendToClient()) {
             blockEntity.sendBlockEntityDataPacketToAll();
@@ -53,21 +53,21 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
     }
 
     default void createBlockEntityAt(Position3ic pos) {
-        createBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.world());
+        createBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
-    default void removeBlockEntityAt(int x, int y, int z, World world) {
-        Objects.requireNonNull(world);
-        var chunk = world.getChunkService().getChunkByLevelPos(x, z);
+    default void removeBlockEntityAt(int x, int y, int z, Dimension dimension) {
+        Objects.requireNonNull(dimension);
+        var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
-            throw new IllegalStateException("Trying to remove a block entity in an unload chunk! World: " + world.getName() + " at pos " + x + ", " + y + ", " + z);
+            throw new IllegalStateException("Trying to remove a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }
         if (chunk.removeBlockEntity(x & 15, y, z & 15) == null) {
-            throw new IllegalStateException("Trying to remove a block entity which is not exists in world " + world.getName() + " at pos " + x + ", " + y + ", " + z + "!");
+            throw new IllegalStateException("Trying to remove a block entity which is not exists in Dimension " + dimension + " at pos " + x + ", " + y + ", " + z + "!");
         }
     }
 
     default void removeBlockEntityAt(Position3ic pos) {
-        removeBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.world());
+        removeBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 }

@@ -1,13 +1,5 @@
 package org.allaymc.server.world.chunk;
 
-import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.server.Server;
-import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.chunk.*;
-import org.allaymc.api.world.palette.Palette;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
@@ -15,6 +7,13 @@ import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.chunk.*;
+import org.allaymc.api.world.palette.Palette;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
@@ -397,13 +396,11 @@ public class AllayChunk implements Chunk {
         return unsafeChunk.getZ();
     }
 
-    @Override
     public void addEntity(Entity entity) {
         unsafeChunk.addEntity(entity);
     }
 
     @Nullable
-    @Override
     public Entity removeEntity(long uniqueId) {
         return unsafeChunk.removeEntity(uniqueId);
     }

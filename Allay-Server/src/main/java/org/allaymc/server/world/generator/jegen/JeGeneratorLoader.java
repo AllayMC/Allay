@@ -1,10 +1,10 @@
 package org.allaymc.server.world.generator.jegen;
 
+import io.papermc.paperclip.Paperclip;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.api.world.generator.Generator;
 import org.allaymc.server.Allay;
-import io.papermc.paperclip.Paperclip;
 
 import java.io.File;
 import java.lang.invoke.MethodHandle;
@@ -28,7 +28,7 @@ public final class JeGeneratorLoader {
         Paperclip.setup(Allay.EXTRA_RESOURCE_CLASS_LOADER, new String[]{WORK_PATH, "--noconsole", "--nogui", "--universe=jegenerator"});
         try {
             final Class<?> JeGeneratorMain = Class.forName("org.allaymc.jegenerator.JeGeneratorMain", true, Allay.EXTRA_RESOURCE_CLASS_LOADER);
-            final MethodType methodType = MethodType.methodType(WorldGenerator.class);
+            final MethodType methodType = MethodType.methodType(Generator.class);
             overworld = MethodHandles.lookup()
                     .findStatic(JeGeneratorMain, "overworld", methodType)
                     .asFixedArity();
@@ -49,14 +49,14 @@ public final class JeGeneratorLoader {
 
     //todo add safe stop
 
-    public static WorldGenerator getJeGenerator(DimensionInfo info) {
+    public static Generator getJeGenerator(DimensionInfo info) {
         try {
             if (info == DimensionInfo.NETHER) {
-                return (WorldGenerator) nether.invokeExact();
+                return (Generator) nether.invokeExact();
             } else if (info == DimensionInfo.THE_END) {
-                return (WorldGenerator) end.invokeExact();
+                return (Generator) end.invokeExact();
             } else {
-                return (WorldGenerator) overworld.invokeExact();
+                return (Generator) overworld.invokeExact();
             }
         } catch (Throwable e) {
             throw new RuntimeException(e);

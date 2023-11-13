@@ -1,5 +1,10 @@
 package org.allaymc.server.world.chunk;
 
+import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -14,11 +19,6 @@ import org.allaymc.api.world.chunk.ChunkSection;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.heightmap.HeightMap;
-import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -53,7 +53,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.x = chunkX;
         this.z = chunkZ;
         this.dimensionInfo = dimensionInfo;
-        this.state = ChunkState.EMPTY;
+        this.state = ChunkState.NEW;
         this.heightMap = new HeightMap();
         this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
         this.entities = new Long2ObjectOpenHashMap<>();
@@ -172,12 +172,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return this.getOrCreateSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
     }
 
-    @Override
     public void addEntity(@NotNull Entity entity) {
         entities.put(entity.getUniqueId(), entity);
     }
 
-    @Override
     @Nullable
     public Entity removeEntity(long uniqueId) {
         return entities.remove(uniqueId);
@@ -277,7 +275,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
         public AllayUnsafeChunk build() {
             Preconditions.checkNotNull(dimensionInfo);
-            if (state == null) state = ChunkState.EMPTY;
+            if (state == null) state = ChunkState.NEW;
             if (sections == null) sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
             if (heightMap == null) heightMap = new HeightMap();
             if (entities == null) entities = new Long2ObjectNonBlockingMap<>();
@@ -296,7 +294,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
         public AllayUnsafeChunk emptyChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
             var chunk = new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo);
-            chunk.setState(ChunkState.EMPTY);
+            chunk.setState(ChunkState.NEW);
             return chunk;
         }
     }

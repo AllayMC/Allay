@@ -3,7 +3,7 @@ package org.allaymc.api.entity.init;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -12,7 +12,8 @@ import org.cloudburstmc.nbt.NbtMap;
  * @author daoge_cmd
  */
 public interface EntityInitInfo<T extends Entity> extends ComponentInitInfo {
-    World world();
+    Dimension dimension();
+
     NbtMap nbt();
 
     EntityType<T> getEntityType();

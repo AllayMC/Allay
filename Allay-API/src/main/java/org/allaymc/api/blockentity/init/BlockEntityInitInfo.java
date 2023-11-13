@@ -3,7 +3,7 @@ package org.allaymc.api.blockentity.init;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -12,7 +12,7 @@ import org.cloudburstmc.nbt.NbtMap;
  * @author daoge_cmd
  */
 public interface BlockEntityInitInfo<T extends BlockEntity> extends ComponentInitInfo {
-    World world();
+    Dimension dimension();
 
     NbtMap nbt();
 

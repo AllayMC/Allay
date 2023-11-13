@@ -59,7 +59,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @ComponentEventListener
     private void onReplace(BlockOnReplaceEvent event) {
         var pos = event.currentBlockState().pos();
-        var world = pos.world();
+        var dimension = pos.dimension();
         var rand = ThreadLocalRandom.current();
         for (var itemStack : container.getItemStacks()) {
             if (itemStack != Container.EMPTY_SLOT_PLACE_HOLDER) {
@@ -67,13 +67,13 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
                         SimpleEntityInitInfo
                                 .builder()
                                 .pos(pos.x() + rand.nextFloat(0.5f) + 0.25f, pos.y() + rand.nextFloat(0.5f) + 0.25f, pos.z() + rand.nextFloat(0.5f) + 0.25f)
-                                .world(world)
+                                .dimension(dimension)
                                 .motion(rand.nextFloat(0.2f) - 0.1f, 0.2f, rand.nextFloat(0.2f) - 0.1f)
                                 .build()
                 );
                 entity.setItemStack(itemStack);
                 entity.setPickupDelay(10);
-                world.addEntity(entity);
+                dimension.getEntityUpdateService().addEntity(entity);
             }
         }
     }

@@ -6,13 +6,12 @@ package org.allaymc.api.world;
  * @author LucGamesYT | daoge_cmd
  */
 public enum Difficulty {
-
     PEACEFUL,
     EASY,
     NORMAL,
     HARD;
 
-    public static Difficulty getDifficulty(int value) {
+    public static Difficulty from(int value) {
         return switch (value) {
             case 0 -> Difficulty.PEACEFUL;
             case 1 -> Difficulty.EASY;

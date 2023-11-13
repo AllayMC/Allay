@@ -2,7 +2,7 @@ package org.allaymc.api.block.component.event;
 
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.component.interfaces.ComponentEvent;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
 /**
@@ -11,5 +11,5 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 public record BlockOnNeighborUpdateEvent(Vector3ic updated, Vector3ic neighbor, BlockFace face,
-                                         World world) implements ComponentEvent {
+                                         Dimension dimension) implements ComponentEvent {
 }

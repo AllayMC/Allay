@@ -183,12 +183,12 @@ public interface EntityBaseComponent extends EntityComponent {
         var loc = getLocation();
         var cx = (int) loc.x() >> 4;
         var cz = (int) loc.z() >> 4;
-        return loc.world().getChunkService().isChunkLoaded(cx, cz);
+        return loc.dimension().getChunkService().isChunkLoaded(cx, cz);
     }
 
     default boolean isYInRange() {
         var loc = getLocation();
-        return loc.world().isYInRange(loc.y());
+        return loc.dimension().isYInRange(loc.y());
     }
 
     default boolean isInWorld() {
@@ -199,7 +199,7 @@ public interface EntityBaseComponent extends EntityComponent {
         var loc = getLocation();
         var cx = (int) loc.x() >> 4;
         var cz = (int) loc.z() >> 4;
-        return loc.world().getChunkService().getChunk(cx, cz);
+        return loc.dimension().getChunkService().getChunk(cx, cz);
     }
 
     default BlockFace getHorizontalFace() {

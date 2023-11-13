@@ -1,5 +1,11 @@
 package org.allaymc.server;
 
+import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
@@ -16,17 +22,12 @@ import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
+import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
 import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
+import org.allaymc.server.world.storage.leveldb.LevelDBWorldStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
-import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
-import eu.okaeri.configs.ConfigManager;
-import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -37,6 +38,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -158,8 +160,11 @@ public final class AllayServer implements Server {
     private void loadWorlds() {
         worldPool.setDefaultWorld(AllayWorld
                 .builder()
-                .setWorldGenerator(/*new FlatWorldGenerator()*/JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD))
-                .setWorldStorage(new AllayNonPersistentWorldStorage()/*new RocksDBWorldStorage(Path.of("output/新的世界"))*/)
+                .addDimension(new AllayDimension(JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD))
+                .addDimension(new AllayDimension(JeGeneratorLoader.getJeGenerator(DimensionInfo.NETHER), DimensionInfo.NETHER))
+                .addDimension(new AllayDimension(JeGeneratorLoader.getJeGenerator(DimensionInfo.THE_END), DimensionInfo.THE_END))
+                //.setWorldStorage(new AllayNonPersistentWorldStorage())
+                .setWorldStorage(new LevelDBWorldStorage(Path.of("world/新的世界")))
                 .build());
     }
 
@@ -171,6 +176,7 @@ public final class AllayServer implements Server {
 
     private void onTick() {
         ticks++;
+        getWorldPool().getWorlds().values().forEach(w -> w.tickTime(ticks));
     }
 
     @Override

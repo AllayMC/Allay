@@ -3,16 +3,16 @@ package org.allaymc.server.world.generator.flat;
 import org.allaymc.api.block.interfaces.BlockBedrockBehavior;
 import org.allaymc.api.block.interfaces.BlockDirtBehavior;
 import org.allaymc.api.block.interfaces.BlockGrassBehavior;
-import org.allaymc.api.world.GeneratorType;
 import org.allaymc.api.world.generator.ChunkGenerateContext;
-import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.api.world.generator.Generator;
+import org.allaymc.api.world.generator.GeneratorType;
 
 /**
  * Allay Project 2023/7/8
  *
  * @author daoge_cmd
  */
-public class FlatWorldGenerator implements WorldGenerator {
+public class FlatWorldGenerator implements Generator {
     @Override
     public void generate(ChunkGenerateContext context) {
         var bedrock = BlockBedrockBehavior.BEDROCK_TYPE.getDefaultState();

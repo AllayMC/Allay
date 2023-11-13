@@ -6,7 +6,7 @@ import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.Nullable;
@@ -79,7 +79,7 @@ public interface ItemBaseComponent extends ItemComponent {
 
     boolean useItemOn(
             @Nullable EntityPlayer player, ItemStack itemStack,
-            World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
+            Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace);
 
     default boolean canMerge(ItemStack itemStack) {

@@ -8,7 +8,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.base.ItemBaseComponentImpl;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
@@ -23,8 +23,8 @@ public interface ItemCauldronStack extends ItemStack {
           .vanillaItem(VanillaItemId.CAULDRON)
           .addComponent(initInfo -> new ItemBaseComponentImpl<>(initInfo) {
             @Override
-            public boolean useItemOn(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-              return tryPlaceBlockState(player, itemStack, world, targetBlockPos, placeBlockPos, clickPos, blockFace, BlockCauldronBehavior.CAULDRON_TYPE.getDefaultState());
+            public boolean useItemOn(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+                return tryPlaceBlockState(player, itemStack, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, BlockCauldronBehavior.CAULDRON_TYPE.getDefaultState());
             }
           }, ItemBaseComponentImpl.class)
           .build();

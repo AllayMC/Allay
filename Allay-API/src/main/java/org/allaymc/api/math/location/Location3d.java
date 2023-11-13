@@ -1,8 +1,9 @@
 package org.allaymc.api.math.location;
 
-import org.allaymc.api.math.position.Position3d;
-import org.allaymc.api.world.World;
 import com.google.common.base.Objects;
+import org.allaymc.api.math.position.Position3d;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.world.Dimension;
 import org.joml.Runtime;
 import org.joml.*;
 
@@ -30,103 +31,103 @@ public class Location3d extends Position3d implements Location3dc {
         this.headYaw = l.headYaw();
     }
 
-    public Location3d(double x, double y, double z, World world) {
-        super(x, y, z, world);
+    public Location3d(double x, double y, double z, Dimension dimension) {
+        super(x, y, z, dimension);
     }
 
-    public Location3d(double d, double pitch, double yaw, double headYaw, World world) {
-        super(d, world);
+    public Location3d(double d, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(d, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(double x, double y, double z, double pitch, double yaw, double headYaw, World world) {
-        super(x, y, z, world);
+    public Location3d(double x, double y, double z, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(x, y, z, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(Vector3fc v, double pitch, double yaw, double headYaw, World world) {
-        super(v, world);
+    public Location3d(Vector3fc v, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(Vector3ic v, double pitch, double yaw, double headYaw, World world) {
-        super(v, world);
+    public Location3d(Vector3ic v, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(Vector2fc v, double z, double pitch, double yaw, double headYaw, World world) {
-        super(v, z, world);
+    public Location3d(Vector2fc v, double z, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, z, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(Vector2ic v, double z, double pitch, double yaw, double headYaw, World world) {
-        super(v, z, world);
+    public Location3d(Vector2ic v, double z, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, z, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(Vector3dc v, double pitch, double yaw, double headYaw, World world) {
-        super(v, world);
+    public Location3d(Vector3dc v, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(Vector2dc v, double z, double pitch, double yaw, double headYaw, World world) {
-        super(v, z, world);
+    public Location3d(Vector2dc v, double z, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(v, z, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(double[] xyz, double pitch, double yaw, double headYaw, World world) {
-        super(xyz, world);
+    public Location3d(double[] xyz, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(xyz, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(float[] xyz, double pitch, double yaw, double headYaw, World world) {
-        super(xyz, world);
+    public Location3d(float[] xyz, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(xyz, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(ByteBuffer buffer, double pitch, double yaw, double headYaw, World world) {
-        super(buffer, world);
+    public Location3d(ByteBuffer buffer, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(buffer, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(int index, ByteBuffer buffer, double pitch, double yaw, double headYaw, World world) {
-        super(index, buffer, world);
+    public Location3d(int index, ByteBuffer buffer, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(index, buffer, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(DoubleBuffer buffer, double pitch, double yaw, double headYaw, World world) {
-        super(buffer, world);
+    public Location3d(DoubleBuffer buffer, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(buffer, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
     }
 
-    public Location3d(int index, DoubleBuffer buffer, double pitch, double yaw, double headYaw, World world) {
-        super(index, buffer, world);
+    public Location3d(int index, DoubleBuffer buffer, double pitch, double yaw, double headYaw, Dimension dimension) {
+        super(index, buffer, dimension);
         this.pitch = pitch;
         this.yaw = yaw;
         this.headYaw = headYaw;
@@ -914,12 +915,25 @@ public class Location3d extends Position3d implements Location3dc {
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-        super.writeExternal(out);
+        out.writeDouble(x);
+        out.writeDouble(y);
+        out.writeDouble(z);
+        out.writeDouble(pitch);
+        out.writeDouble(yaw);
+        out.writeDouble(headYaw);
+        out.writeUTF(this.dimension.getWorld().getWorldData().getName());
+        out.writeInt(this.dimension.getDimensionInfo().dimensionId());
     }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
+        x = in.readDouble();
+        y = in.readDouble();
+        z = in.readDouble();
+        pitch = in.readDouble();
+        yaw = in.readDouble();
+        headYaw = in.readDouble();
+        dimension = Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt());
     }
 
     @Override
@@ -1099,21 +1113,21 @@ public class Location3d extends Position3d implements Location3dc {
         if (this == o) return true;
         if (!(o instanceof Location3dc that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equal(world, that.world()) && Objects.equal(pitch, that.pitch()) && Objects.equal(yaw, that.yaw()) && Objects.equal(headYaw, that.headYaw());
+        return Objects.equal(dimension, that.dimension()) && Objects.equal(pitch, that.pitch()) && Objects.equal(yaw, that.yaw()) && Objects.equal(headYaw, that.headYaw());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), pitch, yaw, headYaw, world);
+        return Objects.hashCode(super.hashCode(), pitch, yaw, headYaw, dimension);
     }
 
     @Override
     public String toString() {
-        return Runtime.formatNumbers(toString(Options.NUMBER_FORMAT));
+        return toString(Options.NUMBER_FORMAT);
     }
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " world=" + this.world.getName() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " dimension=" + this.dimension.getWorld().getWorldData().getName() + this.dimension.getDimensionInfo().dimensionId() + ")";
     }
 }

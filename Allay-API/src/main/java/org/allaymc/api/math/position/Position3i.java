@@ -1,8 +1,9 @@
 package org.allaymc.api.math.position;
 
-import org.allaymc.api.server.Server;
-import org.allaymc.api.world.World;
 import com.google.common.base.Objects;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.world.Dimension;
+import org.joml.Runtime;
 import org.joml.*;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.text.NumberFormat;
 
 /**
  * Allay Project 7/30/2023
@@ -17,99 +19,100 @@ import java.nio.IntBuffer;
  * @author Cool_Loong
  */
 public class Position3i extends Vector3i implements Position3ic {
-    public World world;
+    public Dimension dimension;
 
     public Position3i(Position3ic p) {
         super(p);
-        this.world = p.world();
+        this.dimension = p.dimension();
     }
-    public Position3i(World world) {
+
+    public Position3i(Dimension dimension) {
         super();
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(int d, World world) {
+    public Position3i(int d, Dimension dimension) {
         super(d);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(int x, int y, int z, World world) {
+    public Position3i(int x, int y, int z, Dimension dimension) {
         super(x, y, z);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(Vector3ic v, World world) {
+    public Position3i(Vector3ic v, Dimension dimension) {
         super(v);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(Vector2ic v, int z, World world) {
+    public Position3i(Vector2ic v, int z, Dimension dimension) {
         super(v, z);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(float x, float y, float z, int mode, World world) {
+    public Position3i(float x, float y, float z, int mode, Dimension dimension) {
         super(x, y, z, mode);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(double x, double y, double z, int mode, World world) {
+    public Position3i(double x, double y, double z, int mode, Dimension dimension) {
         super(x, y, z, mode);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(Vector2fc v, float z, int mode, World world) {
+    public Position3i(Vector2fc v, float z, int mode, Dimension dimension) {
         super(v, z, mode);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(Vector3fc v, int mode, World world) {
+    public Position3i(Vector3fc v, int mode, Dimension dimension) {
         super(v, mode);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(Vector2dc v, float z, int mode, World world) {
+    public Position3i(Vector2dc v, float z, int mode, Dimension dimension) {
         super(v, z, mode);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(Vector3dc v, int mode, World world) {
+    public Position3i(Vector3dc v, int mode, Dimension dimension) {
         super(v, mode);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(int[] xyz, World world) {
+    public Position3i(int[] xyz, Dimension dimension) {
         super(xyz);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(ByteBuffer buffer, World world) {
+    public Position3i(ByteBuffer buffer, Dimension dimension) {
         super(buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(int index, ByteBuffer buffer, World world) {
+    public Position3i(int index, ByteBuffer buffer, Dimension dimension) {
         super(index, buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(IntBuffer buffer, World world) {
+    public Position3i(IntBuffer buffer, Dimension dimension) {
         super(buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3i(int index, IntBuffer buffer, World world) {
+    public Position3i(int index, IntBuffer buffer, Dimension dimension) {
         super(index, buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
     @Override
-    public World world() {
-        return world;
+    public Dimension dimension() {
+        return dimension;
     }
 
-    public void setWorld(World world) {
-        this.world = world;
+    public void setDimension(Dimension dimension) {
+        this.dimension = dimension;
     }
 
     @Override
@@ -319,7 +322,8 @@ public class Position3i extends Vector3i implements Position3ic {
         out.writeInt(x);
         out.writeInt(y);
         out.writeInt(z);
-        out.writeUTF(this.world.getName());
+        out.writeUTF(this.dimension.getWorld().getWorldData().getName());
+        out.writeInt(this.dimension.getDimensionInfo().dimensionId());
     }
 
     @Override
@@ -327,7 +331,7 @@ public class Position3i extends Vector3i implements Position3ic {
         x = in.readInt();
         y = in.readInt();
         z = in.readInt();
-        world = Server.getInstance().getWorldPool().getWorld(in.readUTF());
+        dimension = Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt());
     }
 
     @Override
@@ -388,11 +392,21 @@ public class Position3i extends Vector3i implements Position3ic {
         if (this == o) return true;
         if (!(o instanceof Position3ic that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equal(world, that.world());
+        return Objects.equal(dimension, that.dimension());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), world);
+        return Objects.hashCode(super.hashCode(), dimension);
+    }
+
+    @Override
+    public String toString() {
+        return toString(Options.NUMBER_FORMAT);
+    }
+
+    @Override
+    public String toString(NumberFormat formatter) {
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension.getWorld().getWorldData().getName() + this.dimension.getDimensionInfo().dimensionId() + ")";
     }
 }

@@ -33,7 +33,7 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
 
     public BlockEntityBaseComponentImpl(BlockEntityInitInfo<T> initInfo) {
         this.blockEntityType = initInfo.getBlockEntityType();
-        this.position = new Position3i(0, 0, 0, initInfo.world());
+        this.position = new Position3i(0, 0, 0, initInfo.dimension());
         loadNBT(initInfo.nbt());
     }
 

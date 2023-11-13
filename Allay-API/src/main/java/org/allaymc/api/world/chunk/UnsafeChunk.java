@@ -24,6 +24,7 @@ import java.util.Map;
 @NotThreadSafe
 public interface UnsafeChunk {
     int SECTION_SIZE = 16 * 16 * 16;
+    int CHUNK_VERSION = 40;
 
     ChunkState getState();
 
@@ -35,10 +36,6 @@ public interface UnsafeChunk {
     int getX();
 
     int getZ();
-
-    void addEntity(Entity entity);
-
-    Entity removeEntity(long uniqueId);
 
     Entity getEntity(long uniqueId);
 

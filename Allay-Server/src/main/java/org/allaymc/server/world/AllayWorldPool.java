@@ -1,5 +1,6 @@
 package org.allaymc.server.world;
 
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 
@@ -28,16 +29,15 @@ public class AllayWorldPool implements WorldPool {
 
     @Override
     public void addWorld(World world) {
-        if (worlds.containsKey(world.getName()))
-            throw new IllegalArgumentException("World " + world.getName() + " already exists");
-        worlds.put(world.getName(), world);
-        world.startTick();
+        if (worlds.containsKey(world.getWorldData().getName()))
+            throw new IllegalArgumentException("World " + world.getWorldData().getName() + " already exists");
+        worlds.put(world.getWorldData().getName(), world);
+        world.getDimensions().values().forEach(Dimension::startTick);
     }
 
     @Override
     public void setDefaultWorld(World world) {
-        if (!worlds.containsKey(world.getName()))
-            addWorld(world);
+        if (!worlds.containsKey(world.getWorldData().getName())) addWorld(world);
         this.defaultWorld = world;
     }
 

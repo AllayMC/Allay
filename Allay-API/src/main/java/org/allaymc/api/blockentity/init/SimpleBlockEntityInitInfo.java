@@ -1,10 +1,10 @@
 package org.allaymc.api.blockentity.init;
 
-import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.world.World;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
@@ -14,20 +14,20 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
  * @author daoge_cmd
  */
 public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEntityInitInfo<T> {
-    private final World world;
+    private final Dimension dimension;
     private final NbtMap nbt;
     @Getter
     @Setter
     private BlockEntityType<T> blockEntityType;
 
-    protected SimpleBlockEntityInitInfo(World world, NbtMap nbt) {
-        this.world = world;
+    protected SimpleBlockEntityInitInfo(Dimension dimension, NbtMap nbt) {
+        this.dimension = dimension;
         this.nbt = nbt;
     }
 
     @Override
-    public World world() {
-        return world;
+    public Dimension dimension() {
+        return dimension;
     }
 
     @Override
@@ -40,11 +40,11 @@ public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEn
     }
 
     public static class Builder {
-        private World world;
+        private Dimension dimension;
         private final NbtMapBuilder nbtBuilder = NbtMap.builder();
 
-        public Builder world(World world) {
-            this.world = world;
+        public Builder dimension(Dimension dimension) {
+            this.dimension = dimension;
             return this;
         }
 
@@ -66,7 +66,7 @@ public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEn
         }
 
         public <R extends BlockEntity> SimpleBlockEntityInitInfo<R> build() {
-            return new SimpleBlockEntityInitInfo<>(world, nbtBuilder.build());
+            return new SimpleBlockEntityInitInfo<>(dimension, nbtBuilder.build());
         }
     }
 }

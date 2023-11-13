@@ -1,5 +1,6 @@
 package org.allaymc.server;
 
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.block.component.attribute.VanillaBlockAttributeRegistry;
@@ -42,7 +43,6 @@ import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
 import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.VisibleForTesting;
 
 @Slf4j
@@ -50,6 +50,7 @@ public final class Allay {
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
 
     public static void main(String[] args) {
+        System.setProperty("joml.format", "false");//set JOML vectors are output without scientific notation
         log.info("Starting Allay...");
         try {
             initAllayAPI();

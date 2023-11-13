@@ -1,5 +1,8 @@
 package org.allaymc.api.entity.interfaces.player;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
@@ -27,14 +30,12 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.gamerule.GameRule;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -77,13 +78,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
-    //登录验证已完成
+    //Login verification is complete
     protected final AtomicBoolean loggedIn = new AtomicBoolean(false);
-    //玩家实体已加入世界
+    //The player entity has joined the world
     protected final AtomicBoolean online = new AtomicBoolean(false);
-    //预发送区块发送完毕，已通知客户端完成加载
+    //The prepare chunk has been sent, and the client has been notified to complete loading
     protected final AtomicBoolean firstSpawned = new AtomicBoolean(false);
-    //客户端已返回加载完成包，完全进服
+    //The client can view chunk
     protected final AtomicBoolean localInitialized = new AtomicBoolean(false);
     protected final Server server = Server.getInstance();
     @Getter
@@ -211,7 +212,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
 
-        player.getLocation().world().sendWorldTimeTo(List.of(player));
+        player.getLocation().dimension().getWorld().viewTime(List.of(player));
     }
 
     private void sendInventories() {
@@ -223,15 +224,15 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     private void initializePlayer() {
-        //TODO: save spawn world per player
-        Position3ic spawnPos = server.getDefaultWorld().getSpawnPosition();
-        player.setLocation(new Location3f(spawnPos.x(), spawnPos.y(), spawnPos.z(), spawnPos.world()));
+        Vector3ic spawnPos = server.getDefaultWorld().getWorldData().getSpawnPoint();
+        Dimension dimension = server.getDefaultWorld().getDimension(0);
+        player.setLocation(new Location3f(spawnPos.x(), spawnPos.y(), spawnPos.z(), dimension)); //TODO: save spawn world per player
         sendBasicGameData();
-        spawnPos.world().getChunkService().getOrLoadChunk(
+        dimension.getChunkService().getOrLoadChunk(
                 (int) player.getLocation().x() >> 4,
                 (int) player.getLocation().z() >> 4
         ).thenAcceptAsync((c) -> {
-            spawnPos.world().addPlayer(player);
+            dimension.addPlayer(player);
             online.set(true);
         }, Server.getInstance().getVirtualThreadPool()).exceptionally(
                 t -> {
@@ -243,21 +244,22 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     private void sendBasicGameData() {
         var spawnWorld = server.getDefaultWorld();
+        Dimension dimension = spawnWorld.getDimension(DimensionInfo.OVERWORLD.dimensionId());
         var startGamePacket = new StartGamePacket();
         startGamePacket.getGamerules().add(GameRule.SHOW_COORDINATES.toNetwork());
         startGamePacket.setUniqueEntityId(player.getUniqueId());
         startGamePacket.setRuntimeEntityId(player.getUniqueId());
         startGamePacket.setPlayerGameType(player.getGameType());
         var loc = player.getLocation();
-        var worldSpawn = spawnWorld.getSpawnPosition();
+        var worldSpawn = spawnWorld.getWorldData().getSpawnPoint(); //TODO: save spawn world per player
         startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
         startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
         startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
         startGamePacket.setSeed(spawnWorld.getWorldData().getRandomSeed());
-        startGamePacket.setDimensionId(spawnWorld.getDimensionInfo().dimensionId());
-        startGamePacket.setGeneratorId(spawnWorld.getWorldGenerator().getType().getId());
-        startGamePacket.setLevelGameType(spawnWorld.getWorldGameType());
-        startGamePacket.setDifficulty(spawnWorld.getDifficulty().ordinal());
+        startGamePacket.setDimensionId(dimension.getDimensionInfo().dimensionId());
+        startGamePacket.setGeneratorId(dimension.getGenerator().getType().getId());
+        startGamePacket.setLevelGameType(spawnWorld.getWorldData().getGameType());
+        startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         startGamePacket.setTrustingPlayers(true);
         startGamePacket.setDayCycleStopTime(0);
         startGamePacket.setLevelName(server.getServerSettings().genericSettings().motd());
@@ -265,7 +267,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setLevelId("");
         //TODO
         startGamePacket.setDefaultPlayerPermission(server.getServerSettings().genericSettings().defaultPermission());
-        startGamePacket.setServerChunkTickRange(spawnWorld.getTickingRadius());
+        startGamePacket.setServerChunkTickRange(spawnWorld.getWorldData().getServerChunkTickRange());
         startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
         startGamePacket.setPremiumWorldTemplateId("");
         startGamePacket.setInventoriesServerAuthoritative(true);
@@ -333,7 +335,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             if (firstSpawned.get()) server.getPlayerStorage().writePlayerData(player);
             server.onDisconnect(player);
             if (online.get())
-                player.getLocation().world().removePlayer(player);
+                player.getLocation().dimension().removePlayer(player);
         }
 
         @Override
@@ -569,7 +571,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 BlockFace blockFace = BlockFace.fromId(packet.getBlockFace());
                 var inv = player.getContainer(FullContainerType.PLAYER_INVENTORY);
                 var itemStack = inv.getItemInHand();
-                var world = player.getLocation().world();
+                var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case 0 -> {
                         var placePos = blockFace.offsetPos(blockPos);
@@ -583,7 +585,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
                         if (!useItemOn(itemStack, blockPos, placePos, clickPos, blockFace)) {
                             //Failed to use the item, send back origin block state to client
-                            var w = player.getLocation().world();
+                            var w = player.getLocation().dimension();
                             var blockStateClicked = w.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
                             w.sendBlockUpdateTo(blockStateClicked, blockPos.x(), blockPos.y(), blockPos.z(), 0, player);
 
@@ -614,10 +616,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
 
         private boolean useItemOn(ItemStack itemStack, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos, BlockFace blockFace) {
-            var world = player.getLocation().world();
-            var blockStateClicked = world.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
-            if (!blockStateClicked.getBehavior().onInteract(player, itemStack, world, blockPos, placePos, clickPos, blockFace))
-                return itemStack.useItemOn(player, itemStack, world, blockPos, placePos, clickPos, blockFace);
+            var dimension = player.getLocation().dimension();
+            var blockStateClicked = dimension.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
+            if (!blockStateClicked.getBehavior().onInteract(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace))
+                return itemStack.useItemOn(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace);
             else return true;
         }
 
@@ -672,12 +674,12 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                                 SimpleEntityInitInfo
                                         .builder()
                                         .pos(loc.x() + i, loc.y(), loc.z() + i)
-                                        .world(loc.world())
+                                        .dimension(loc.dimension())
                                         .build()
                         );
-                        loc.world().addEntity(entity);
+                        loc.dimension().getEntityUpdateService().addEntity(entity);
                     }
-                    player.sendRawMessage("TPS: " + loc.world().getTps() + ", Entity Count: " + loc.world().getEntities().size());
+                    player.sendRawMessage("TPS: " + loc.dimension().getTps() + ", Entity Count: " + loc.dimension().getEntities().size());
                 }
                 if (packet.getMessage().startsWith("gb_")) {
                     var blockStateHash = Integer.parseInt(packet.getMessage().substring(3));
@@ -697,7 +699,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
 
         protected void handleMovement(Vector3f newPos, Vector3f newRot) {
-            var world = player.getLocation().world();
+            var world = player.getLocation().dimension();
             var valid = movementValidator.validate(new Location3f(
                     newPos.getX(), newPos.getY(), newPos.getZ(),
                     newRot.getX(), newRot.getY(), newRot.getZ(),
@@ -719,7 +721,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         protected void handleBlockAction(List<PlayerBlockActionData> blockActions) {
             if (blockActions.isEmpty()) return;
-            var world = player.getLocation().world();
+            var world = player.getLocation().dimension();
             for (var action : blockActions) {
                 var pos = action.getBlockPosition();
                 //TODO: checking
@@ -764,7 +766,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             var pos = packet.getBlockPosition();
             // TODO: includeBlockEntityData
             var includeBlockEntityData = packet.isAddUserData();
-            var block = player.getLocation().world().getBlockState(pos.getX(), pos.getY(), pos.getZ());
+            var block = player.getLocation().dimension().getBlockState(pos.getX(), pos.getY(), pos.getZ());
             if (block.getBlockType() == BlockAirBehavior.AIR_TYPE) {
                 log.warn("Player " + getOriginName() + " tried to pick air!");
                 return PacketSignal.HANDLED;

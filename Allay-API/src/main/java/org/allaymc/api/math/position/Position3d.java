@@ -1,8 +1,8 @@
 package org.allaymc.api.math.position;
 
-import org.allaymc.api.server.Server;
-import org.allaymc.api.world.World;
 import com.google.common.base.Objects;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.world.Dimension;
 import org.joml.Runtime;
 import org.joml.*;
 
@@ -19,95 +19,95 @@ import java.text.NumberFormat;
  * @author Cool_Loong
  */
 public class Position3d extends Vector3d implements Position3dc {
-    public World world;
+    public Dimension dimension;
 
     public Position3d(Position3dc p) {
         super(p);
-        this.world = p.world();
+        this.dimension = p.dimension();
     }
 
-    public Position3d(World world) {
+    public Position3d(Dimension dimension) {
         super();
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(double d, World world) {
+    public Position3d(double d, Dimension dimension) {
         super(d);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(double x, double y, double z, World world) {
+    public Position3d(double x, double y, double z, Dimension dimension) {
         super(x, y, z);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(Vector3fc v, World world) {
+    public Position3d(Vector3fc v, Dimension dimension) {
         super(v);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(Vector3ic v, World world) {
+    public Position3d(Vector3ic v, Dimension dimension) {
         super(v);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(Vector2fc v, double z, World world) {
+    public Position3d(Vector2fc v, double z, Dimension dimension) {
         super(v, z);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(Vector2ic v, double z, World world) {
+    public Position3d(Vector2ic v, double z, Dimension dimension) {
         super(v, z);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(Vector3dc v, World world) {
+    public Position3d(Vector3dc v, Dimension dimension) {
         super(v);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(Vector2dc v, double z, World world) {
+    public Position3d(Vector2dc v, double z, Dimension dimension) {
         super(v, z);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(double[] xyz, World world) {
+    public Position3d(double[] xyz, Dimension dimension) {
         super(xyz);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(float[] xyz, World world) {
+    public Position3d(float[] xyz, Dimension dimension) {
         super(xyz);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(ByteBuffer buffer, World world) {
+    public Position3d(ByteBuffer buffer, Dimension dimension) {
         super(buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(int index, ByteBuffer buffer, World world) {
+    public Position3d(int index, ByteBuffer buffer, Dimension dimension) {
         super(index, buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(DoubleBuffer buffer, World world) {
+    public Position3d(DoubleBuffer buffer, Dimension dimension) {
         super(buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
-    public Position3d(int index, DoubleBuffer buffer, World world) {
+    public Position3d(int index, DoubleBuffer buffer, Dimension dimension) {
         super(index, buffer);
-        this.world = world;
+        this.dimension = dimension;
     }
 
     @Override
-    public World world() {
-        return world;
+    public Dimension dimension() {
+        return dimension;
     }
 
-    public void setWorld(World world) {
-        this.world = world;
+    public void setDimension(Dimension dimension) {
+        this.dimension = dimension;
     }
 
     @Override
@@ -867,7 +867,8 @@ public class Position3d extends Vector3d implements Position3dc {
         out.writeDouble(x);
         out.writeDouble(y);
         out.writeDouble(z);
-        out.writeUTF(this.world.getName());
+        out.writeUTF(this.dimension.getWorld().getWorldData().getName());
+        out.writeInt(this.dimension.getDimensionInfo().dimensionId());
     }
 
     @Override
@@ -875,7 +876,7 @@ public class Position3d extends Vector3d implements Position3dc {
         x = in.readDouble();
         y = in.readDouble();
         z = in.readDouble();
-        world = Server.getInstance().getWorldPool().getWorld(in.readUTF());
+        dimension = Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt());
     }
 
     @Override
@@ -1055,21 +1056,21 @@ public class Position3d extends Vector3d implements Position3dc {
         if (this == o) return true;
         if (!(o instanceof Position3dc that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equal(world, that.world());
+        return Objects.equal(dimension, that.dimension());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), world);
+        return Objects.hashCode(super.hashCode(), dimension);
     }
 
     @Override
     public String toString() {
-        return Runtime.formatNumbers(toString(Options.NUMBER_FORMAT)) + ",world=" + this.world.getName();
+        return toString(Options.NUMBER_FORMAT);
     }
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " world=" + this.world.getName() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension.getWorld().getWorldData().getName() + this.dimension.getDimensionInfo().dimensionId() + ")";
     }
 }

@@ -1,5 +1,7 @@
 package org.allaymc.server.utils;
 
+import org.allaymc.api.world.DimensionInfo;
+
 /**
  * Allay Project 8/22/2023
  *
@@ -81,7 +83,42 @@ public enum LevelDBKeyUtils {
         };
     }
 
-    public byte[] getKey(int chunkX, int chunkZ, int y) {
+    public byte[] getKey(int chunkX, int chunkZ, DimensionInfo dimension) {
+        if (dimension.equals(DimensionInfo.OVERWORLD)) {
+            return new byte[]{
+                    (byte) (chunkX & 0xff),
+                    (byte) ((chunkX >>> 8) & 0xff),
+                    (byte) ((chunkX >>> 16) & 0xff),
+                    (byte) ((chunkX >>> 24) & 0xff),
+                    (byte) (chunkZ & 0xff),
+                    (byte) ((chunkZ >>> 8) & 0xff),
+                    (byte) ((chunkZ >>> 16) & 0xff),
+                    (byte) ((chunkZ >>> 24) & 0xff),
+                    this.encoded
+            };
+        } else {
+            byte dimensionId = (byte) dimension.dimensionId();
+            return new byte[]{
+                    (byte) (chunkX & 0xff),
+                    (byte) ((chunkX >>> 8) & 0xff),
+                    (byte) ((chunkX >>> 16) & 0xff),
+                    (byte) ((chunkX >>> 24) & 0xff),
+                    (byte) (chunkZ & 0xff),
+                    (byte) ((chunkZ >>> 8) & 0xff),
+                    (byte) ((chunkZ >>> 16) & 0xff),
+                    (byte) ((chunkZ >>> 24) & 0xff),
+                    (byte) (dimensionId & 0xff),
+                    (byte) ((dimensionId >>> 8) & 0xff),
+                    (byte) ((dimensionId >>> 16) & 0xff),
+                    (byte) ((dimensionId >>> 24) & 0xff),
+                    this.encoded
+            };
+        }
+    }
+
+    public byte[] getKey(int chunkX, int chunkZ, int chunkSectionY) {
+        if (this.encoded != CHUNK_SECTION_PREFIX.encoded)
+            throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
         return new byte[]{
                 (byte) (chunkX & 0xff),
                 (byte) ((chunkX >>> 8) & 0xff),
@@ -92,7 +129,44 @@ public enum LevelDBKeyUtils {
                 (byte) ((chunkZ >>> 16) & 0xff),
                 (byte) ((chunkZ >>> 24) & 0xff),
                 this.encoded,
-                (byte) y
+                (byte) chunkSectionY
         };
+    }
+
+    public byte[] getKey(int chunkX, int chunkZ, int chunkSectionY, DimensionInfo dimension) {
+        if (this.encoded != CHUNK_SECTION_PREFIX.encoded)
+            throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
+        if (dimension.equals(DimensionInfo.OVERWORLD)) {
+            return new byte[]{
+                    (byte) (chunkX & 0xff),
+                    (byte) ((chunkX >>> 8) & 0xff),
+                    (byte) ((chunkX >>> 16) & 0xff),
+                    (byte) ((chunkX >>> 24) & 0xff),
+                    (byte) (chunkZ & 0xff),
+                    (byte) ((chunkZ >>> 8) & 0xff),
+                    (byte) ((chunkZ >>> 16) & 0xff),
+                    (byte) ((chunkZ >>> 24) & 0xff),
+                    this.encoded,
+                    (byte) chunkSectionY
+            };
+        } else {
+            byte dimensionId = (byte) dimension.dimensionId();
+            return new byte[]{
+                    (byte) (chunkX & 0xff),
+                    (byte) ((chunkX >>> 8) & 0xff),
+                    (byte) ((chunkX >>> 16) & 0xff),
+                    (byte) ((chunkX >>> 24) & 0xff),
+                    (byte) (chunkZ & 0xff),
+                    (byte) ((chunkZ >>> 8) & 0xff),
+                    (byte) ((chunkZ >>> 16) & 0xff),
+                    (byte) ((chunkZ >>> 24) & 0xff),
+                    (byte) (dimensionId & 0xff),
+                    (byte) ((dimensionId >>> 8) & 0xff),
+                    (byte) ((dimensionId >>> 16) & 0xff),
+                    (byte) ((dimensionId >>> 24) & 0xff),
+                    this.encoded,
+                    (byte) chunkSectionY
+            };
+        }
     }
 }

@@ -1,19 +1,22 @@
 package org.allaymc.server.world.storage.nonpersistent;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityHelper;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.cloudburstmc.nbt.NbtMap;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
@@ -29,22 +32,27 @@ import java.util.stream.Collectors;
  */
 @NotThreadSafe
 public class AllayNonPersistentWorldStorage implements WorldStorage {
-
     private final Map<Long, Chunk> chunks = new Long2ObjectOpenHashMap<>();
     private final Map<Long, Set<NbtMap>> entities = new Long2ObjectOpenHashMap<>();
     private final Map<Long, Set<NbtMap>> blockEntities = new Long2ObjectOpenHashMap<>();
-    private WorldData worldData = WorldData.DEFAULT;
+    private WorldData worldData;
 
     @Override
-    public CompletableFuture<Chunk> readChunk(int x, int z) {
-        World world = Server.getInstance().getWorldPool().getWorld(worldData.getLevelName());
+    @ApiStatus.Internal
+    public void setWorld(World world) {
+        WorldData.builder().world(world).build();
+    }
+
+    @Override
+    public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) {
+        Dimension dimension = Server.getInstance().getWorldPool().getWorld(worldData.getName()).getDimension(dimensionInfo.dimensionId());
         long l = HashUtils.hashXZ(x, z);
         var chunk = chunks.get(l);
         if (chunk == null) {
-            chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, worldData.getDimensionInfo()).toSafeChunk();
+            chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimensionInfo).toSafeChunk();
         }
-        readEntities(l).stream().map(nbt -> EntityHelper.fromNBT(world, nbt)).forEach(chunk::addEntity);
-        readBlockEntities(l).stream().map(nbt -> BlockEntityHelper.fromNBT(world, nbt)).forEach(chunk::addBlockEntity);
+        readEntities(l).stream().map(nbt -> EntityHelper.fromNBT(dimension, nbt)).forEach(e -> dimension.getEntityUpdateService().addEntity(e));
+        readBlockEntities(l).stream().map(nbt -> BlockEntityHelper.fromNBT(dimension, nbt)).forEach(chunk::addBlockEntity);
         return CompletableFuture.completedFuture(chunk);
     }
 

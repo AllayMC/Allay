@@ -1,14 +1,10 @@
 package org.allaymc.server.terminal;
 
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
-import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.MathUtils;
-import org.allaymc.api.world.chunk.Chunk;
 import lombok.extern.slf4j.Slf4j;
 import net.minecrell.terminalconsole.SimpleTerminalConsole;
+import org.allaymc.api.server.Server;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
-import org.joml.Vector3i;
 
 /**
  * Allay Project 2023/6/30
@@ -34,16 +30,6 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
         if (s.equalsIgnoreCase("stop")) {
             log.info("Server ShutDown...");
             shutdown();
-        } else if (s.startsWith("/t")) {
-            EntityPlayer entityPlayer = Server.getInstance().getDefaultWorld().getPlayers().stream().findFirst().get();
-            Vector3i floor = MathUtils.floor(entityPlayer.getLocation());
-            Chunk chunk = Server.getInstance().getDefaultWorld().getChunkService().getChunk(
-                    floor.x >> 4,
-                    floor.z >> 4
-            );
-            System.out.println(entityPlayer.getLocation());
-            System.out.println((floor.x >> 4) + ":" + (floor.z >> 4));
-            System.out.println(chunk == null);
         } else {
             //TODO
             log.info("§1TODO :)");

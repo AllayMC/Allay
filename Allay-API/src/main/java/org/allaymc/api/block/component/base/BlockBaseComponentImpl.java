@@ -15,7 +15,7 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.world.World;
+import org.allaymc.api.world.Dimension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
@@ -46,8 +46,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onNeighborUpdate(Vector3ic updated, Vector3ic neighbor, BlockFace face, World world) {
-        manager.callEvent(new BlockOnNeighborUpdateEvent(updated, neighbor, face, world));
+    public void onNeighborUpdate(Vector3ic updated, Vector3ic neighbor, BlockFace face, Dimension dimension) {
+        manager.callEvent(new BlockOnNeighborUpdateEvent(updated, neighbor, face, dimension));
     }
 
     @Override
@@ -59,8 +59,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public boolean place(@Nullable EntityPlayer player, @NotNull World world, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {
-        world.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
+    public boolean place(@Nullable EntityPlayer player, @NotNull Dimension dimension, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {
+        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         return true;
     }
 
@@ -75,8 +75,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, World world, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        var event = new BlockOnInteractEvent(player, itemStack, world, blockPos, placeBlockPos, clickPos, blockFace, false);
+    public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        var event = new BlockOnInteractEvent(player, itemStack, dimension, blockPos, placeBlockPos, clickPos, blockFace, false);
         manager.callEvent(event);
         return event.success();
     }

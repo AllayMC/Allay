@@ -1,5 +1,7 @@
 package org.allaymc.api.entity.component.base;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -21,8 +23,6 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -76,7 +76,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected boolean willBeRemovedNextTick = false;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
-        this.location = new Location3f(0, 0, 0, info.world());
+        this.location = new Location3f(0, 0, 0, info.dimension());
         this.entityType = info.getEntityType();
         this.aabb = aabb;
         this.metadata = new Metadata();
@@ -151,15 +151,15 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var newChunkX = (int) location.x() >> 4;
         var newChunkZ = (int) location.z() >> 4;
         if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
-            var oldChunk = location.world().getChunkService().getChunk(oldChunkX, oldChunkZ);
-            var newChunk = location.world().getChunkService().getChunk(newChunkX, newChunkZ);
-            if (newChunk != null) newChunk.addEntity(thisEntity);
+            var oldChunk = location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
+            var newChunk = location.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
+            if (newChunk != null) location.dimension().getEntityUpdateService().addEntity(thisEntity);
             else {
                 log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
                 //不允许移动到未加载的区块中。因为entity引用由区块持有，移动到未加载的区块会导致entity丢失
                 return;
             }
-            if (oldChunk != null) oldChunk.removeEntity(uniqueId);
+            if (oldChunk != null) location.dimension().getEntityUpdateService().removeEntity(thisEntity);
             else log.warn("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
         }
         // Calculate fall distance
@@ -170,7 +170,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         this.location.setYaw(location.yaw());
         this.location.setHeadYaw(location.headYaw());
         this.location.setPitch(location.pitch());
-        this.location.setWorld(location.world());
+        this.location.setDimension(location.dimension());
     }
 
     @Override
@@ -281,7 +281,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void removeEntity() {
-        location.world.removeEntity(thisEntity);
+        location.dimension.getEntityUpdateService().removeEntity(thisEntity);
     }
 
     @Override

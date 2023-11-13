@@ -22,7 +22,7 @@ dependencies {
     implementation(libs.bundles.logging)
     implementation(libs.bytebuddy)
     implementation(libs.libdeflate)
-    implementation(libs.rocksdb)
+    implementation(libs.leveldbjni)
     implementation(libs.netty.epoll)
     implementation(libs.jegenerator)
     testImplementation(libs.bytebuddy)

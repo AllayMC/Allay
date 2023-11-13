@@ -1,9 +1,9 @@
 package org.allaymc.api.utils;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.identifier.Identifier;
-import lombok.experimental.UtilityClass;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.jetbrains.annotations.Range;

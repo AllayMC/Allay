@@ -1,4 +1,4 @@
-package org.allaymc.api.world;
+package org.allaymc.api.world.generator;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
