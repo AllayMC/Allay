@@ -118,6 +118,7 @@ public class AllayChunkService implements ChunkService {
         if (unsafeChunk.getState() != FINISHED) {
             var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, dimension);
             dimension.getGenerator().generate(chunkGenerateContext);
+            unsafeChunk.setState(FINISHED);
         }
         return chunk;
     }
@@ -580,7 +581,7 @@ public class AllayChunkService implements ChunkService {
                 } else {
                     // 1. Encode all lcps
                     LevelChunkPacket[] lcps;
-                    Stream < Chunk > lcpStream;
+                    Stream<Chunk> lcpStream;
                     if (chunkSendingStrategy == PARALLEL && chunkReadyToSend.size() >= worldSettings.chunkMinParallelSendingThreshold()) {
                         lcpStream = chunkReadyToSend.values().parallelStream();
                     } else {
