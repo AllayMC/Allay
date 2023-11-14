@@ -4,7 +4,6 @@ import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkAccessible;
 import org.allaymc.api.world.chunk.ChunkLoader;
-import org.allaymc.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Set;
@@ -52,8 +51,6 @@ public interface ChunkService extends ChunkAccessible {
 
     @UnmodifiableView
     Set<Long> getKeepLoadingChunks();
-
-    WorldStorage getWorldStorage();
 
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();

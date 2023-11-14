@@ -6,7 +6,6 @@ import org.allaymc.api.client.data.MinecraftClientVersion;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
@@ -25,14 +24,13 @@ import org.iq80.leveldb.CompressionType;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
 import org.iq80.leveldb.WriteBatch;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -41,13 +39,12 @@ import java.util.concurrent.CompletableFuture;
  * @author Cool_Loong
  */
 @Slf4j
-public class LevelDBWorldStorage implements WorldStorage {
+public class AllayLevelDBWorldStorage implements WorldStorage {
     private final Path path;
     private final DB db;
-    private World world;
     private WorldData worldDataCache;
 
-    public LevelDBWorldStorage(Path path) throws WorldStorageException {
+    public AllayLevelDBWorldStorage(Path path) throws WorldStorageException {
         this(path, new Options()
                 .createIfMissing(true)
                 .compressionType(CompressionType.ZLIB_RAW)
@@ -55,9 +52,14 @@ public class LevelDBWorldStorage implements WorldStorage {
         );
     }
 
-    public LevelDBWorldStorage(Path path, Options options) throws WorldStorageException {
+    public AllayLevelDBWorldStorage(Path path, Options options) throws WorldStorageException {
+        String worldName = path.getName(path.getNameCount() - 1).toString();
+        File file = path.toFile();
+        if (!file.exists()) file.mkdirs();
         this.path = path;
         worldDataCache = readWorldData();
+        if (worldDataCache == null) initWorldData(worldName);
+
         File dbFolder = path.resolve("db").toFile();
         try {
             if (!dbFolder.exists()) dbFolder.mkdirs();
@@ -67,12 +69,21 @@ public class LevelDBWorldStorage implements WorldStorage {
         }
     }
 
-    @Override
-    @ApiStatus.Internal
-    public void setWorld(World world) {
-        this.world = world;
+    private void initWorldData(String worldName) {
+        File levelDat = path.resolve("level.dat").toFile();
+        try {
+            //noinspection ResultOfMethodCallIgnored
+            levelDat.createNewFile();
+            worldDataCache = WorldData.builder().build();
+            int size = Server.getInstance().getWorldPool().getWorlds().size();
+            worldDataCache.setName(worldName);
+            writeWorldData(worldDataCache);
+            Files.copy(levelDat.toPath(), path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
+            Files.writeString(path.resolve("levelname.txt"), worldName, StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
@@ -86,7 +97,7 @@ public class LevelDBWorldStorage implements WorldStorage {
                 versionValue = this.db.get(LevelDBKeyUtils.LEGACY_VERSION.getKey(x, z, dimensionInfo));
             }
             if (versionValue == null) {
-                return null;
+                return builder.build().toSafeChunk();
             }
             byte[] finalized = this.db.get(LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
             if (finalized == null) {
@@ -135,9 +146,9 @@ public class LevelDBWorldStorage implements WorldStorage {
     }
 
     @Override
-    @NotNull
     public synchronized WorldData readWorldData() throws WorldStorageException {
         File levelDat = path.resolve("level.dat").toFile();
+        if (!levelDat.exists()) return null;
         try (var input = new FileInputStream(levelDat)) {
             //The first 8 bytes are magic number
             input.skip(8);
@@ -275,7 +286,6 @@ public class LevelDBWorldStorage implements WorldStorage {
                     .useMsaGamertagsOnly(d.getBoolean("useMsaGamertagsOnly"))
                     .worldStartCount(d.getLong("worldStartCount"))
                     .worldPolicies(WorldData.WorldPolicies.builder().build())
-                    .world(world)
                     .build();
         } catch (FileNotFoundException e) {
             log.error("The level.dat file does not exist!");

@@ -9,14 +9,12 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NbtMap;
-import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
@@ -36,12 +34,6 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
     private final Map<Long, Set<NbtMap>> entities = new Long2ObjectOpenHashMap<>();
     private final Map<Long, Set<NbtMap>> blockEntities = new Long2ObjectOpenHashMap<>();
     private WorldData worldData;
-
-    @Override
-    @ApiStatus.Internal
-    public void setWorld(World world) {
-        WorldData.builder().world(world).build();
-    }
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) {

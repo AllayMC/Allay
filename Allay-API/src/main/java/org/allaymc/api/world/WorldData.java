@@ -8,6 +8,7 @@ import org.allaymc.api.client.data.MinecraftClientVersion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -31,7 +32,7 @@ public class WorldData {
     @Builder.Default
     boolean forceGameType = false;
     @Builder.Default
-    org.cloudburstmc.protocol.bedrock.data.GameType gameType = GameType.from(0);
+    org.cloudburstmc.protocol.bedrock.data.GameType gameType = GameType.from(1);
     @Builder.Default
     int generator = 1;
     @Builder.Default
@@ -105,7 +106,8 @@ public class WorldData {
     int eduOffer = 0;
     @Builder.Default
     boolean educationFeaturesEnabled = false;
-    Experiments experiments;
+    @Builder.Default
+    Experiments experiments = Experiments.builder().build();
     @Builder.Default
     boolean hasBeenLoadedInCreative = true;
     @Builder.Default
@@ -187,8 +189,12 @@ public class WorldData {
         return gameType;
     }
 
-    public String getName() {
+    public synchronized String getName() {
         return name;
+    }
+
+    public synchronized void setName(String name) {
+        this.name = name;
     }
 
     public synchronized Difficulty getDifficulty() {
@@ -238,6 +244,11 @@ public class WorldData {
 
     public synchronized void setSpawnPoint(Vector3ic spawnPoint) {
         this.spawnPoint = spawnPoint;
+    }
+
+    @ApiStatus.Internal
+    public void setWorld(World world) {
+        this.world = world;
     }
 
     @Value

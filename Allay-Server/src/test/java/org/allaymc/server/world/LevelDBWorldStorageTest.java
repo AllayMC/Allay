@@ -12,7 +12,7 @@ import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import org.allaymc.server.world.storage.leveldb.LevelDBWorldStorage;
+import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.testutils.AllayTestExtension;
 import org.apache.commons.io.FileUtils;
 import org.joml.Vector3i;
@@ -39,7 +39,7 @@ import java.util.concurrent.Executors;
 class LevelDBWorldStorageTest {
     static Server server = Mockito.mock(Server.class);
     static World mockWorld = Mockito.mock(World.class);
-    static LevelDBWorldStorage levelDBWorldStorage;
+    static AllayLevelDBWorldStorage levelDBWorldStorage;
 
     @BeforeAll
     static void mockServerSettings() {
@@ -48,8 +48,7 @@ class LevelDBWorldStorageTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        levelDBWorldStorage = new LevelDBWorldStorage(Path.of("src/test/resources/beworld"));
-        levelDBWorldStorage.setWorld(mockWorld);
+        levelDBWorldStorage = new AllayLevelDBWorldStorage(Path.of("src/test/resources/beworld"));
         @SuppressWarnings("resource") MockedStatic<Server> serve = Mockito.mockStatic(Server.class);
         serve.when(Server::getInstance).thenReturn(server);
         Mockito.when(server.getVirtualThreadPool()).thenReturn(Executors.newVirtualThreadPerTaskExecutor());
@@ -62,6 +61,7 @@ class LevelDBWorldStorageTest {
     @Order(1)
     void testLoadAllayWorldData() {
         WorldData worldData = levelDBWorldStorage.readWorldData();
+        worldData.setWorld(mockWorld);
         Assertions.assertEquals(new Vector3i(0, 32767, 0), worldData.getSpawnPoint());
         Assertions.assertEquals(48549, worldData.getTime());
         Assertions.assertEquals(Difficulty.EASY, worldData.getDifficulty());
@@ -73,6 +73,7 @@ class LevelDBWorldStorageTest {
     @Order(2)
     void testWriteAllayWorldData() {
         WorldData worldData = levelDBWorldStorage.readWorldData();
+        worldData.setWorld(mockWorld);
         worldData.setSpawnPoint(new Vector3i(1, 1, 1));
         worldData.setTime(1234);
         levelDBWorldStorage.writeWorldData(worldData);

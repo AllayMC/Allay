@@ -12,6 +12,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.EntityPhysicsService;
@@ -51,7 +52,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     public AllayEntityPhysicsService(Dimension dimension) {
         this.dimension = dimension;
-        var settings = dimension.getServer().getServerSettings().entitySettings().physicsEngineSettings();
+        var settings = Server.getInstance().getServerSettings().entitySettings().physicsEngineSettings();
         MOTION_THRESHOLD = settings.motionThreshold();
         STEPPING_OFFSET = settings.steppingOffset();
         FAT_AABB_MARGIN = settings.fatAABBMargin();

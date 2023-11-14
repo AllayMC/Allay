@@ -1,20 +1,27 @@
 package org.allaymc.server.world;
 
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
-import org.allaymc.api.server.Server;
+import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.GameLoop;
+import org.allaymc.server.scheduler.AllayScheduler;
+import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Allay Project 2023/7/1
@@ -28,23 +35,58 @@ public class AllayWorld implements World {
     @Getter
     protected final WorldData worldData;
     @Getter
-    protected final Server server;
-    @Getter
     protected final Int2ObjectOpenHashMap<Dimension> dimensionMap;
+    @Getter
+    protected final Scheduler scheduler;
+    protected final GameLoop gameLoop;
+    protected final Thread tickThread;
     protected long nextTimeSendTick = 12 * 20;
 
-    private AllayWorld(Server server,
-                       WorldStorage worldStorage,
-                       WorldData worldData,
-                       Map<Integer, Dimension> dimensions) {
+    public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
-        this.worldData = worldData == null ? worldStorage.getWorldDataCache() : worldData;
-        this.server = server;
-        this.dimensionMap = new Int2ObjectOpenHashMap<>(dimensions);
+        this.worldData = worldStorage.getWorldDataCache();
+        this.worldData.setWorld(this);
 
-        // set inject world instance
-        dimensions.values().forEach(d -> d.setWorld(this));
-        this.worldStorage.setWorld(this);
+        this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
+        this.scheduler = new AllayScheduler();
+        this.gameLoop = GameLoop.builder()
+                .onTick(gameLoop -> {
+                    try {
+                        tick(gameLoop.getTick());
+                    } catch (Throwable throwable) {
+                        log.error("Error while ticking level " + this.getWorldData().getName(), throwable);
+                    }
+                })
+                .build();
+        this.tickThread = Thread.ofPlatform()
+                .name("World Thread - " + this.getWorldData().getName())
+                .unstarted(gameLoop::startLoop);
+
+        setDimension(new AllayDimension(this, JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD));
+    }
+
+    @Override
+    public long getTick() {
+        return gameLoop.getTick();
+    }
+
+    @Override
+    public float getTps() {
+        return gameLoop.getTps();
+    }
+
+    @Override
+    public void tick(long currentTick) {
+        tickTime(currentTick);
+        scheduler.tick();
+        getDimensions().values().forEach(d -> d.tick(currentTick));
+    }
+
+    @Override
+    public void startTick() {
+        if (tickThread.getState() != Thread.State.NEW) {
+            throw new IllegalStateException("World is already start ticking!");
+        } else tickThread.start();
     }
 
     public void tickTime(long tickNumber) {
@@ -83,10 +125,9 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public void close() {
-        getDimensions().forEach((integer, dimension) -> dimension.getChunkService().unloadAllChunks());
-        saveWorldData();
-        getWorldStorage().close();
+    public void setDimension(Dimension dimension) {
+        Preconditions.checkArgument(!this.dimensionMap.containsKey(dimension.getDimensionInfo().dimensionId()));
+        this.dimensionMap.put(dimension.getDimensionInfo().dimensionId(), dimension);
     }
 
     @Override
@@ -94,36 +135,10 @@ public class AllayWorld implements World {
         getWorldStorage().writeWorldData(worldData);
     }
 
-    public static WorldBuilder builder() {
-        return new WorldBuilder();
-    }
-
-    public static class WorldBuilder {
-        @Nullable
-        private WorldData worldData;
-        private WorldStorage worldStorage;
-        private final HashMap<Integer, Dimension> dimensionMap = new HashMap<>(3);
-
-        private WorldBuilder() {
-        }
-
-        public WorldBuilder worldData(WorldData worldData) {
-            this.worldData = worldData;
-            return this;
-        }
-
-        public WorldBuilder setWorldStorage(WorldStorage worldStorage) {
-            this.worldStorage = worldStorage;
-            return this;
-        }
-
-        public WorldBuilder addDimension(Dimension dimension) {
-            dimensionMap.put(dimension.getDimensionInfo().dimensionId(), dimension);
-            return this;
-        }
-
-        public World build() {
-            return new AllayWorld(Server.getInstance(), worldStorage, worldData, dimensionMap);
-        }
+    @Override
+    public void close() {
+        getDimensions().forEach((integer, dimension) -> dimension.getChunkService().unloadAllChunks());
+        saveWorldData();
+        getWorldStorage().close();
     }
 }

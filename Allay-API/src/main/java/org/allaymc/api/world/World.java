@@ -1,7 +1,7 @@
 package org.allaymc.api.world;
 
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
-import org.allaymc.api.server.Server;
+import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -17,6 +17,12 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface World {
+    long getTick();
+
+    float getTps();
+
+    void startTick();
+
     Dimension getDimension(int dimensionId);
 
     @UnmodifiableView
@@ -25,7 +31,9 @@ public interface World {
     @UnmodifiableView
     Collection<EntityPlayer> getPlayers();
 
-    Server getServer();
+    void tick(long currentTick);
+
+    Scheduler getScheduler();
 
     WorldStorage getWorldStorage();
 
@@ -40,4 +48,6 @@ public interface World {
 
     @ApiStatus.Internal
     void tickTime(long tickNumber);
+
+    void setDimension(Dimension dimension);
 }

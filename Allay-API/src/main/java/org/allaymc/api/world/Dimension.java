@@ -9,8 +9,6 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.scheduler.Scheduler;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.world.generator.Generator;
 import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
@@ -20,7 +18,10 @@ import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3ic;
 import org.joml.primitives.AABBfc;
 
@@ -34,8 +35,7 @@ import java.util.Map;
  * @author Cool_Loong
  */
 public interface Dimension {
-    @ApiStatus.Internal
-    void setWorld(World world);
+    void tick(long currentTick);
 
     Generator getGenerator();
 
@@ -49,17 +49,7 @@ public interface Dimension {
 
     DimensionInfo getDimensionInfo();
 
-    Scheduler getScheduler();
-
-    long getTick();
-
-    float getTps();
-
-    void startTick();
-
     World getWorld();
-
-    Server getServer();
 
     @Unmodifiable
     default Map<Long, Entity> getEntities() {

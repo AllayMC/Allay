@@ -679,7 +679,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                         );
                         loc.dimension().getEntityUpdateService().addEntity(entity);
                     }
-                    player.sendRawMessage("TPS: " + loc.dimension().getTps() + ", Entity Count: " + loc.dimension().getEntities().size());
+                    player.sendRawMessage("TPS: " + loc.dimension().getWorld().getTps() + ", Entity Count: " + loc.dimension().getEntities().size());
                 }
                 if (packet.getMessage().startsWith("gb_")) {
                     var blockStateHash = Integer.parseInt(packet.getMessage().substring(3));

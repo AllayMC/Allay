@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -44,7 +43,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.*;
-import static org.allaymc.api.world.chunk.ChunkState.NEW;
+import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
 
 /**
  * Allay Project 2023/7/1
@@ -58,7 +57,6 @@ public class AllayChunkService implements ChunkService {
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.getInstance().getServerSettings().genericSettings().maxClientCount());
     private final Dimension dimension;
-    @Getter
     private final WorldStorage worldStorage;
     private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
     private final Set<Long> keepLoadingChunks = Sets.newConcurrentHashSet();
@@ -117,7 +115,7 @@ public class AllayChunkService implements ChunkService {
 
     private Chunk generateChunk(Chunk chunk) {
         var unsafeChunk = chunk.toUnsafeChunk();
-        if (unsafeChunk.getState() == NEW) {
+        if (unsafeChunk.getState() != FINISHED) {
             var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, dimension);
             dimension.getGenerator().generate(chunkGenerateContext);
         }

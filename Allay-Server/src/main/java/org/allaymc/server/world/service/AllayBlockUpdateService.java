@@ -60,7 +60,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
 
     @Override
     public void scheduleBlockUpdate(Vector3ic pos, Duration delay) {
-        scheduledUpdates.putIfAbsent(pos, dimension.getTick() + delay.toNanos() / 50000000);
+        scheduledUpdates.putIfAbsent(pos, dimension.getWorld().getTick() + delay.toNanos() / 50000000);
     }
 
     @Override

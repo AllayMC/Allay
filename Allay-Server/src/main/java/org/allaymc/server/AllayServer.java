@@ -14,7 +14,6 @@ import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.storage.PlayerStorage;
@@ -22,11 +21,9 @@ import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
-import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
-import org.allaymc.server.world.storage.leveldb.LevelDBWorldStorage;
+import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -158,14 +155,8 @@ public final class AllayServer implements Server {
     }
 
     private void loadWorlds() {
-        worldPool.setDefaultWorld(AllayWorld
-                .builder()
-                .addDimension(new AllayDimension(JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD))
-                .addDimension(new AllayDimension(JeGeneratorLoader.getJeGenerator(DimensionInfo.NETHER), DimensionInfo.NETHER))
-                .addDimension(new AllayDimension(JeGeneratorLoader.getJeGenerator(DimensionInfo.THE_END), DimensionInfo.THE_END))
-                //.setWorldStorage(new AllayNonPersistentWorldStorage())
-                .setWorldStorage(new LevelDBWorldStorage(Path.of("world/新的世界")))
-                .build());
+        AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("world/Bedrock Level1")));
+        worldPool.setDefaultWorld(defaultWorld);
     }
 
     @Override
@@ -176,7 +167,6 @@ public final class AllayServer implements Server {
 
     private void onTick() {
         ticks++;
-        getWorldPool().getWorlds().values().forEach(w -> w.tickTime(ticks));
     }
 
     @Override
