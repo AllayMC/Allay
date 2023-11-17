@@ -396,11 +396,15 @@ public class AllayChunk implements Chunk {
         return unsafeChunk.getZ();
     }
 
+    @Override
+    @ApiStatus.Internal
     public void addEntity(Entity entity) {
         unsafeChunk.addEntity(entity);
     }
 
+    @Override
     @Nullable
+    @ApiStatus.Internal
     public Entity removeEntity(long uniqueId) {
         return unsafeChunk.removeEntity(uniqueId);
     }

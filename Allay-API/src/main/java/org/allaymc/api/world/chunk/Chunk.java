@@ -1,6 +1,7 @@
 package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.storage.WorldStorage;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,6 +43,13 @@ public interface Chunk extends UnsafeChunk {
     void addChunkPacket(BedrockPacket packet);
 
     void sendChunkPacket(BedrockPacket packet);
+
+    @ApiStatus.Internal
+    void addEntity(Entity entity);
+
+    @Nullable
+    @ApiStatus.Internal
+    Entity removeEntity(long uniqueId);
 
     void sendChunkPackets();
 

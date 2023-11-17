@@ -1,5 +1,6 @@
 package org.allaymc.server.world.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityUpdateService;
@@ -13,6 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author Cool_Loong
  */
+@Slf4j
 public class AllayEntityUpdateService implements EntityUpdateService {
     protected final EntityPhysicsService entityPhysicsService;
     protected final Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
@@ -51,11 +53,17 @@ public class AllayEntityUpdateService implements EntityUpdateService {
         chunk.addEntity(entity);
         entity.spawnTo(chunk.getPlayerChunkLoaders());
         entityPhysicsService.addEntity(entity);
+        entity.setWillBeAddedNextTick(false);
         entity.setSpawned(true);
     }
 
     @Override
     public void addEntity(Entity entity) {
+        if (entity.willBeAddedNextTick()) {
+            log.warn("Trying to add an entity twice! Entity: " + entity);
+            return;
+        }
+        entity.setWillBeAddedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
                 EntityUpdateType.ADD
@@ -64,6 +72,10 @@ public class AllayEntityUpdateService implements EntityUpdateService {
 
     @Override
     public void removeEntity(Entity entity) {
+        if (entity.willBeRemovedNextTick()) {
+            log.warn("Trying to remove an entity twice! Entity: " + entity);
+            return;
+        }
         entity.setWillBeRemovedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,

@@ -11,7 +11,6 @@ import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityUpdateService;
-import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.service.AllayBlockUpdateService;
 import org.allaymc.server.world.service.AllayChunkService;
 import org.allaymc.server.world.service.AllayEntityPhysicsService;
@@ -61,6 +60,7 @@ public class AllayDimension implements Dimension {
     @Override
     public void tick(long currentTick) {
         chunkService.tick();
+        entityUpdateService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);
     }

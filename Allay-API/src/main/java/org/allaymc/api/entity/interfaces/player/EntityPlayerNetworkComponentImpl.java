@@ -625,7 +625,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         @Override
         public PacketSignal handle(PlayerAuthInputPacket packet) {
-            if (!isOnline()) return PacketSignal.UNHANDLED;
+            if (!player.isSpawned()) return PacketSignal.HANDLED;
             //客户端发送给服务端的坐标比实际坐标高了一个BaseOffset，我们需要减掉它
             handleMovement(packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
             handleBlockAction(packet.getPlayerActions());

@@ -74,6 +74,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
     protected boolean willBeRemovedNextTick = false;
+    protected boolean willBeAddedNextTick = false;
     protected boolean spawned;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
@@ -157,6 +158,17 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public boolean willBeAddedNextTick() {
+        return willBeAddedNextTick;
+    }
+
+    @Override
+    @ApiStatus.Internal
+    public void setWillBeAddedNextTick(boolean willBeAddedNextTick) {
+        this.willBeAddedNextTick = willBeAddedNextTick;
+    }
+
+    @Override
     @ApiStatus.Internal
     public void setLocation(Location3fc location) {
         var oldChunkX = (int) this.location.x >> 4;
@@ -166,13 +178,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
             var oldChunk = location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
             var newChunk = location.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-            if (newChunk != null) location.dimension().getEntityUpdateService().addEntity(thisEntity);
+            if (newChunk != null) newChunk.addEntity(thisEntity);
             else {
                 log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
-                //不允许移动到未加载的区块中。因为entity引用由区块持有，移动到未加载的区块会导致entity丢失
+                // 不允许移动到未加载的区块中。因为entity引用由区块持有，移动到未加载的区块会导致entity丢失
                 return;
             }
-            if (oldChunk != null) location.dimension().getEntityUpdateService().removeEntity(thisEntity);
+            if (oldChunk != null) oldChunk.removeEntity(thisEntity.getUniqueId());
             else log.warn("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
         }
         // Calculate fall distance
