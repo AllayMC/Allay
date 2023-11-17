@@ -690,6 +690,17 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
                     player.sendRawMessage("Inventory is refreshed!");
                 }
+                if (packet.getMessage().equals("tps")) {
+                    player.sendRawMessage("TPS: " + player.getLocation().dimension().getWorld().getTps());
+                }
+                if (packet.getMessage().equals("tps20")) {
+                    AtomicInteger count = new AtomicInteger(1);
+                    player.getLocation().dimension().getWorld().getScheduler().scheduleRepeating(() -> {
+                        count.getAndIncrement();
+                        player.sendRawMessage("TPS: " + player.getLocation().dimension().getWorld().getTps());
+                        return count.get() <= 20;
+                    }, 20);
+                }
             }
             return PacketSignal.HANDLED;
         }
