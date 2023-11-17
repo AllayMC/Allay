@@ -82,7 +82,7 @@ public class ServerSettings extends OkaeriConfig {
         private int viewDistance = 16;
 
         @CustomKey("chunk-try-send-count-per-tick")
-        private int chunkTrySendCountPerTick = 16;
+        private int chunkTrySendCountPerTick = 8;
 
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;
@@ -95,7 +95,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @Comment("If the number of chunks to be sent in one batch is more than this value, the chunks will be sent in parallel")
         @CustomKey("chunk-min-parallel-sending-threshold")
-        private int chunkMinParallelSendingThreshold = 8;
+        private int chunkMinParallelSendingThreshold = 4;
 
         @CustomKey("do-first-spawn-chunk-threshold")
         private int doFirstSpawnChunkThreshold = 36;
@@ -104,7 +104,7 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("remove-unneeded-chunk-cycle")
         private int removeUnneededChunkCycle = 600;
 
-        public static enum ChunkSendingStrategy {
+        public enum ChunkSendingStrategy {
             ASYNC,
             SYNC,
             PARALLEL
