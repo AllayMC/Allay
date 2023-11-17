@@ -73,5 +73,5 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     boolean isLocalInitialized();
 
-    void onChunkInRangeLoaded();
+    void onChunkInRangeSent();
 }

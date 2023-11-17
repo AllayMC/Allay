@@ -69,37 +69,39 @@ public class AllayDimension implements Dimension {
     public void addPlayer(EntityPlayer player) {
         players.add(player);
         chunkService.addChunkLoader(player);
+        entityUpdateService.addEntity(player);
 
-        //You can't use updateService because the player entity will be added on the next tick,
-        // and the netty thread will receive the move request asynchronously
-
-        //This sync prevents multi-threaded write, but does not guarantee strong consistency
-        synchronized (this) {
-            var chunk = (AllayChunk) player.getCurrentChunk();
-            if (chunk == null) throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
-            chunk.addEntity(player);
-            player.spawnTo(chunk.getPlayerChunkLoaders());
-            entityPhysicsService.addEntity(player);
-        }
+//        //You can't use updateService because the player entity will be added on the next tick,
+//        // and the netty thread will receive the move request asynchronously
+//
+//        //This sync prevents multi-threaded write, but does not guarantee strong consistency
+//        synchronized (this) {
+//            var chunk = (AllayChunk) player.getCurrentChunk();
+//            if (chunk == null) throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
+//            chunk.addEntity(player);
+//            player.spawnTo(chunk.getPlayerChunkLoaders());
+//            entityPhysicsService.addEntity(player);
+//        }
     }
 
     @Override
     public void removePlayer(EntityPlayer player) {
         players.remove(player);
         chunkService.removeChunkLoader(player);
+        entityUpdateService.removeEntity(player);
 
-        //You can't use updateService because the player entity will be added on the next tick,
-        // and the netty thread will receive the move request asynchronously
-
-        //This sync prevents multi-threaded write, but does not guarantee strong consistency
-        synchronized (this) {
-            var chunk = (AllayChunk) player.getCurrentChunk();
-            if (chunk == null) throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
-            entityPhysicsService.removeEntity(player);
-            chunk.removeEntity(player.getUniqueId());
-            player.despawnFromAll();
-            player.setWillBeRemovedNextTick(false);
-        }
+//        //You can't use updateService because the player entity will be added on the next tick,
+//        // and the netty thread will receive the move request asynchronously
+//
+//        //This sync prevents multi-threaded write, but does not guarantee strong consistency
+//        synchronized (this) {
+//            var chunk = (AllayChunk) player.getCurrentChunk();
+//            if (chunk == null) throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
+//            entityPhysicsService.removeEntity(player);
+//            chunk.removeEntity(player.getUniqueId());
+//            player.despawnFromAll();
+//            player.setWillBeRemovedNextTick(false);
+//        }
     }
 
     @Override

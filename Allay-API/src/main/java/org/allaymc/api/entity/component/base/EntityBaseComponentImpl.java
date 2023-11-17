@@ -74,6 +74,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
     protected boolean willBeRemovedNextTick = false;
+    protected boolean spawned;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
         this.location = new Location3f(0, 0, 0, info.dimension());
@@ -139,8 +140,20 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    @ApiStatus.Internal
     public void setWillBeRemovedNextTick(boolean willBeRemovedNextTick) {
         this.willBeRemovedNextTick = willBeRemovedNextTick;
+    }
+
+    @Override
+    public boolean isSpawned() {
+        return spawned;
+    }
+
+    @Override
+    @ApiStatus.Internal
+    public void setSpawned(boolean spawned) {
+        this.spawned = spawned;
     }
 
     @Override

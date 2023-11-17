@@ -42,7 +42,13 @@ public interface EntityBaseComponent extends EntityComponent {
 
     boolean willBeRemovedNextTick();
 
+    @ApiStatus.Internal
     void setWillBeRemovedNextTick(boolean willBeRemovedNextTick);
+
+    boolean isSpawned();
+
+    @ApiStatus.Internal
+    void setSpawned(boolean spawned);
 
     @ApiStatus.Internal
     void setLocation(Location3fc location);

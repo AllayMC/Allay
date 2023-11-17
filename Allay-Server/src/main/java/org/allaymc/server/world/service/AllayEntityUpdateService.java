@@ -27,25 +27,31 @@ public class AllayEntityUpdateService implements EntityUpdateService {
             var operation = entityUpdateOperationQueue.poll();
             var entity = operation.entity;
             switch (operation.type) {
-                case ADD -> {
-                    var chunk = (AllayChunk) entity.getCurrentChunk();
-                    if (chunk == null)
-                        throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
-                    chunk.addEntity(entity);
-                    entity.spawnTo(chunk.getPlayerChunkLoaders());
-                    entityPhysicsService.addEntity(entity);
-                }
-                case REMOVE -> {
-                    var chunk = (AllayChunk) entity.getCurrentChunk();
-                    if (chunk == null)
-                        throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
-                    entityPhysicsService.removeEntity(entity);
-                    chunk.removeEntity(entity.getUniqueId());
-                    entity.despawnFromAll();
-                    entity.setWillBeRemovedNextTick(false);
-                }
+                case ADD -> addEntityImmediately(entity);
+                case REMOVE -> removeEntityImmediately(entity);
             }
         }
+    }
+
+    private void removeEntityImmediately(Entity entity) {
+        var chunk = (AllayChunk) entity.getCurrentChunk();
+        if (chunk == null)
+            throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
+        entityPhysicsService.removeEntity(entity);
+        chunk.removeEntity(entity.getUniqueId());
+        entity.despawnFromAll();
+        entity.setWillBeRemovedNextTick(false);
+        entity.setSpawned(false);
+    }
+
+    private void addEntityImmediately(Entity entity) {
+        var chunk = (AllayChunk) entity.getCurrentChunk();
+        if (chunk == null)
+            throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
+        chunk.addEntity(entity);
+        entity.spawnTo(chunk.getPlayerChunkLoaders());
+        entityPhysicsService.addEntity(entity);
+        entity.setSpawned(true);
     }
 
     @Override

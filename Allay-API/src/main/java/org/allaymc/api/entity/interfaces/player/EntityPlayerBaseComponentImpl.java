@@ -317,7 +317,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public boolean isLoaderActive() {
-        return networkComponent.isOnline();
+        return spawned;
     }
 
     @Override
@@ -340,7 +340,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void onChunkInRangeSent(Chunk chunk) {
         chunk.spawnEntitiesTo(thisEntity);
-        networkComponent.onChunkInRangeLoaded();
+        networkComponent.onChunkInRangeSent();
     }
 
     @Override

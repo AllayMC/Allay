@@ -138,7 +138,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
-    public void onChunkInRangeLoaded() {
+    public void onChunkInRangeSent() {
         if (doFirstSpawnChunkThreshold.get() > 0) {
             if (doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
                 doFirstSpawn();
@@ -224,22 +224,18 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     private void initializePlayer() {
+        // TODO: save last pos for each player instead of using the global spawn point
         Vector3ic spawnPos = server.getDefaultWorld().getWorldData().getSpawnPoint();
         Dimension dimension = server.getDefaultWorld().getDimension(0);
-        player.setLocation(new Location3f(spawnPos.x(), spawnPos.y(), spawnPos.z(), dimension)); //TODO: save spawn world per player
-        sendBasicGameData();
-        dimension.getChunkService().getOrLoadChunk(
-                (int) player.getLocation().x() >> 4,
-                (int) player.getLocation().z() >> 4
-        ).thenAcceptAsync((c) -> {
-            dimension.addPlayer(player);
-            online.set(true);
-        }, Server.getInstance().getVirtualThreadPool()).exceptionally(
-                t -> {
-                    log.error("Error while initialize player " + getOriginName() + "!", t);
-                    return null;
-                }
+        player.setLocation(new Location3f(spawnPos.x(), spawnPos.y(), spawnPos.z(), dimension));
+        // Load the spawn point chunk first so that we can add player entity into the chunk
+        dimension.getChunkService().getChunkImmediately(
+                spawnPos.x() >> 4,
+                spawnPos.z() >> 4
         );
+        dimension.addPlayer(player);
+        sendBasicGameData();
+        online.set(true);
     }
 
     private void sendBasicGameData() {
