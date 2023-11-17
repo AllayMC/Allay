@@ -171,6 +171,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     @ApiStatus.Internal
     public void setLocation(Location3fc location) {
+        if (this.location.dimension != location.dimension()) {
+            log.warn("Entity::setLocation() doesn't allow to change entity's dimension! Please use Entity::teleport() if you don't know how to use this method!");
+            return;
+        }
         var oldChunkX = (int) this.location.x >> 4;
         var oldChunkZ = (int) this.location.z >> 4;
         var newChunkX = (int) location.x() >> 4;
@@ -181,7 +185,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             if (newChunk != null) newChunk.addEntity(thisEntity);
             else {
                 log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
-                // 不允许移动到未加载的区块中。因为entity引用由区块持有，移动到未加载的区块会导致entity丢失
+                // Moving into an unloaded chunk is not allowed. Because the entity is held by the chunk, moving to an unloaded chunk will result in the loss of the entity
                 return;
             }
             if (oldChunk != null) oldChunk.removeEntity(thisEntity.getUniqueId());
@@ -196,6 +200,30 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         this.location.setHeadYaw(location.headYaw());
         this.location.setPitch(location.pitch());
         this.location.setDimension(location.dimension());
+    }
+
+    @Override
+    public void teleport(Location3fc location) {
+        Objects.requireNonNull(location.dimension());
+        if (this.location.dimension == null) {
+            log.warn("Trying to teleport an entity whose dimension is null! Entity: {}", thisEntity);
+            return;
+        }
+        if (!this.spawned) {
+            log.warn("Trying to teleport an entity which is not spawned! Entity: {}", thisEntity);
+            return;
+        }
+        if (this.location.dimension == location.dimension()) {
+            // Teleporting in the current same dimension, and we just need to move the entity to the new coordination
+            setLocation(location);
+            broadcastMoveToViewers(location, true);
+        } else {
+            // Teleporting to another dimension, there will be more works to be done
+            // TODO: maybe needs more works
+            removeEntity();
+            setLocation(location);
+            location.dimension().getEntityUpdateService().addEntity(thisEntity);
+        }
     }
 
     @Override
@@ -334,6 +362,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void broadcastMoveToViewers(Location3fc newLoc) {
+        broadcastMoveToViewers(newLoc, false);
+    }
+
+    @Override
+    public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
         var pk = new MoveEntityDeltaPacket();
         pk.setRuntimeEntityId(getUniqueId());
         var moveFlags = computeMoveFlags(newLoc);
@@ -363,6 +396,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             locLastSent.headYaw = newLoc.headYaw();
         }
         if (onGround) pk.getFlags().add(ON_GROUND);
+        if (teleporting) pk.getFlags().add(TELEPORTING);
         sendPacketToViewers(pk);
     }
 

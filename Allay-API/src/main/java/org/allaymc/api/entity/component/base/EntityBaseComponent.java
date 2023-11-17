@@ -14,7 +14,9 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -57,6 +59,8 @@ public interface EntityBaseComponent extends EntityComponent {
 
     @ApiStatus.Internal
     void setLocation(Location3fc location);
+
+    void teleport(Location3fc location);
 
     long getUniqueId();
 
@@ -128,6 +132,8 @@ public interface EntityBaseComponent extends EntityComponent {
     void sendPacketToViewersImmediately(BedrockPacket packet);
 
     void broadcastMoveToViewers(Location3fc newLoc);
+
+    void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting);
 
     NbtMap saveNBT();
 
