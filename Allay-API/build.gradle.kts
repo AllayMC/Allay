@@ -14,9 +14,12 @@ java {
 dependencies {
     api(libs.network) {
         exclude(group = "org.cloudburstmc", module = "nbt") // use allay nbt
-        exclude(group = "com.nukkitx.fastutil") // use it.unimi.dsi.fastutil
+        exclude(group = "org.cloudburstmc.fastutil.commons")
+        exclude(group = "org.cloudburstmc.fastutil.maps")
     }
-    api(libs.blockstateupdater)
+    api(libs.blockstateupdater) {
+        exclude(group = "org.cloudburstmc", module = "nbt")
+    }
     api(libs.slf4j.api)
     api(libs.disruptor)
     api(libs.nbt)
