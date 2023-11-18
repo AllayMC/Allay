@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.allaymc.api.client.data.MinecraftClientVersion;
+import org.allaymc.api.client.data.SemVersion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -48,7 +48,7 @@ public class WorldData {
     @Builder.Default
     org.joml.Vector3ic limitedWorldOriginPoint = new Vector3i(0, 64, 0);
     @Builder.Default
-    MinecraftClientVersion minimumCompatibleClientVersion = new MinecraftClientVersion(
+    SemVersion minimumCompatibleClientVersion = new SemVersion(
             1,
             20,
             40,
@@ -131,7 +131,7 @@ public class WorldData {
     @Builder.Default
     boolean isWorldTemplateOptionLocked = false;
     @Builder.Default
-    MinecraftClientVersion lastOpenedWithVersion = new MinecraftClientVersion(
+    SemVersion lastOpenedWithVersion = new SemVersion(
             1,
             20,
             40,

@@ -3,7 +3,6 @@ package org.allaymc.api.server;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
-import eu.okaeri.configs.annotation.Header;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -82,7 +81,7 @@ public class ServerSettings extends OkaeriConfig {
         private int viewDistance = 16;
 
         @CustomKey("chunk-try-send-count-per-tick")
-        private int chunkTrySendCountPerTick = 8;
+        private int chunkTrySendCountPerTick = 4;
 
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;

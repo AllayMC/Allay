@@ -4,11 +4,15 @@ import com.google.common.base.Objects;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import org.allaymc.api.utils.BlockTagBytesReaderUtils;
+import it.unimi.dsi.fastutil.Pair;
+import org.allaymc.api.client.data.SemVersion;
 import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.PaletteUtils;
 import org.allaymc.api.world.bitarray.BitArray;
 import org.allaymc.api.world.bitarray.BitArrayVersion;
 import org.allaymc.api.world.chunk.Chunk;
+import org.cloudburstmc.blockstateupdater.BlockStateUpdaters;
+import org.cloudburstmc.blockstateupdater.util.tagupdater.CompoundTagUpdaterContext;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
@@ -19,6 +23,7 @@ import org.cloudburstmc.protocol.common.util.VarInts;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Allay Project 2023/4/14
@@ -85,28 +90,46 @@ public final class Palette<V> {
         }
     }
 
-    public void readFromStoragePersistent(ByteBuf byteBuf, PersistentDataDeserializer<V> deserializer) {
-        readWords(byteBuf, readBitArrayVersion(byteBuf));
-
-        final int paletteSize = byteBuf.readIntLE();
+    public void readFromStoragePersistent(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer) {
         try (final ByteBufInputStream bufInputStream = new ByteBufInputStream(byteBuf);
-             final NBTInputStream inputStream = NbtUtils.createReaderLE(bufInputStream)) {
-            for (int i = 0; i < paletteSize; i++)
-                this.palette.add(deserializer.deserialize((NbtMap) inputStream.readTag()));
+             final LittleEndianDataInputStream input = new LittleEndianDataInputStream(bufInputStream);
+             final NBTInputStream nbtInputStream = new NBTInputStream(input)) {
+            final BitArrayVersion bversion = readBitArrayVersion(byteBuf);
+            if (bversion == BitArrayVersion.V0) {
+                this.bitArray = bversion.createArray(Chunk.SECTION_SIZE, null);
+                this.palette.clear();
+                addBlockPalette(byteBuf, deserializer, input, nbtInputStream);
+                this.onResize(BitArrayVersion.V2);
+                return;
+            }
+            readWords(byteBuf, bversion);
+            final int paletteSize = byteBuf.readIntLE();
+            for (int i = 0; i < paletteSize; i++) {
+                addBlockPalette(byteBuf, deserializer, input, nbtInputStream);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void readFromStoragePersistentFromBlockHash(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer) {
-        readWords(byteBuf, readBitArrayVersion(byteBuf));
-        final int paletteSize = byteBuf.readIntLE();
-        try (final ByteBufInputStream bufInputStream = new ByteBufInputStream(byteBuf);
-             final LittleEndianDataInputStream input = new LittleEndianDataInputStream(bufInputStream)) {
-            for (int i = 0; i < paletteSize; i++)
-                this.palette.add(deserializer.deserialize(HashUtils.fnv1a_32(BlockTagBytesReaderUtils.fastRead(input, byteBuf))));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private void addBlockPalette(ByteBuf byteBuf,
+                                 RuntimeDataDeserializer<V> deserializer,
+                                 LittleEndianDataInputStream input,
+                                 NBTInputStream nbtInputStream) throws IOException {
+        Pair<Integer, SemVersion> p = PaletteUtils.fastReadBlockHash(input, byteBuf);
+        if (p.left() == null) {
+            NbtMap oldNbtMap = (NbtMap) nbtInputStream.readTag();
+            SemVersion semVersion = p.right();
+            int version = CompoundTagUpdaterContext.makeVersion(semVersion.major(), semVersion.minor(), semVersion.patch());
+            NbtMap newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, version);
+            var states = new TreeMap<>(newNbtMap.getCompound("states"));
+            var tag = NbtMap.builder()
+                    .putString("name", newNbtMap.getString("name"))
+                    .putCompound("states", NbtMap.fromMap(states))
+                    .build();
+            this.palette.add(deserializer.deserialize(HashUtils.fnv1a_32_nbt(tag)));
+        } else {
+            this.palette.add(deserializer.deserialize(p.left()));
         }
     }
 

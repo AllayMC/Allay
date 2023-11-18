@@ -1,6 +1,9 @@
 package org.allaymc.api.utils;
 
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.Pair;
+import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.client.data.SemVersion;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
 
@@ -11,25 +14,25 @@ import java.io.IOException;
  *
  * @author Cool_Loong
  */
-public class BlockTagBytesReaderUtils {
-    public static byte[] fastRead(LittleEndianDataInputStream input, ByteBuf byteBuf) {
+public class PaletteUtils {
+    public static Pair<Integer, SemVersion> fastReadBlockHash(LittleEndianDataInputStream input, ByteBuf byteBuf) {
         try {
             byteBuf.markReaderIndex();
             int start = byteBuf.readerIndex();
             int typeId = input.readUnsignedByte();
             NbtType<?> type = NbtType.byId(typeId);
-            input.readUTF(); // Root tag name
+            input.skipBytes(input.readUnsignedShort()); // Root tag name
             return deserialize(input, byteBuf, type, 16, start);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static byte[] deserialize(LittleEndianDataInputStream input,
-                                      ByteBuf byteBuf,
-                                      NbtType<?> type,
-                                      int maxDepth,
-                                      int start
+    private static Pair<Integer, SemVersion> deserialize(LittleEndianDataInputStream input,
+                                                         ByteBuf byteBuf,
+                                                         NbtType<?> type,
+                                                         int maxDepth,
+                                                         int start
     ) throws IOException {
         if (maxDepth < 0) {
             throw new IllegalArgumentException("NBT compound is too deeply nested");
@@ -37,18 +40,14 @@ public class BlockTagBytesReaderUtils {
         switch (type.getEnum()) {
             case END -> {
             }
-            case BYTE -> input.readByte();
-            case SHORT -> input.readShort();
-            case INT -> input.readInt();
-            case LONG -> input.readLong();
-            case FLOAT -> input.readFloat();
-            case DOUBLE -> input.readDouble();
+            case BYTE -> input.skipBytes(1);
+            case SHORT -> input.skipBytes(2);
+            case INT, FLOAT -> input.skipBytes(4);
+            case LONG, DOUBLE -> input.skipBytes(8);
             case BYTE_ARRAY -> {
-                int arraySize = input.readInt();
-                byte[] bytes = new byte[arraySize];
-                input.readFully(bytes);
+                input.skipBytes(input.readInt());
             }
-            case STRING -> input.readUTF();
+            case STRING -> input.skipBytes(input.readUnsignedShort());
             case COMPOUND -> {
                 NbtType<?> nbtType;
                 while ((nbtType = NbtType.byId(input.readUnsignedByte())) != NbtType.END) {
@@ -56,14 +55,19 @@ public class BlockTagBytesReaderUtils {
                     int end = byteBuf.readerIndex();
                     name = input.readUTF();
                     if (name.equals("version")) {
+                        int version = input.readInt();
                         byteBuf.resetReaderIndex();
+                        if (version != BlockState.VERSION) {
+                            return Pair.of(null, getSemVersion(version));
+                        }
                         byte[] result = new byte[end - start];
                         byteBuf.readBytes(result);
                         result[result.length - 1] = 0;//because an End Tag be put when at the end serialize tag
-                        input.readUTF();
-                        deserialize(input, byteBuf, nbtType, maxDepth - 1, start);
-                        input.readUnsignedByte();
-                        return result;
+
+                        input.skipBytes(input.readUnsignedShort());//UTF
+                        deserialize(input, byteBuf, nbtType, maxDepth - 1, start);//Value
+                        input.skipBytes(1);//end tag
+                        return Pair.of(HashUtils.fnv1a_32(result), null);
                     }
                     deserialize(input, byteBuf, nbtType, maxDepth - 1, start);
                 }
@@ -76,19 +80,17 @@ public class BlockTagBytesReaderUtils {
                     deserialize(input, byteBuf, listType, maxDepth - 1, start);
                 }
             }
-            case INT_ARRAY -> {
-                int arraySize = input.readInt();
-                for (int i = 0; i < arraySize; i++) {
-                    input.readInt();
-                }
-            }
-            case LONG_ARRAY -> {
-                int arraySize = input.readInt();
-                for (int i = 0; i < arraySize; i++) {
-                    input.readLong();
-                }
-            }
+            case INT_ARRAY -> input.skipBytes(input.readInt() * 4);
+            case LONG_ARRAY -> input.skipBytes(input.readInt() * 8);
         }
         return null;
+    }
+
+    public static SemVersion getSemVersion(int version) {
+        int major = (version >> 24) & 0xFF;
+        int minor = (version >> 16) & 0xFF;
+        int patch = (version >> 8) & 0xFF;
+        int revision = version & 0xFF;
+        return new SemVersion(major, minor, patch, revision, 0);
     }
 }

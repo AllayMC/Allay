@@ -182,6 +182,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     @ApiStatus.Internal
     public void setLocation(Location3fc location) {
+        if (this.location.dimension == null) {
+            this.location.dimension = location.dimension();
+        }
         var oldChunkX = (int) this.location.x >> 4;
         var oldChunkZ = (int) this.location.z >> 4;
         var newChunkX = (int) location.x() >> 4;
@@ -191,12 +194,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             var newChunk = location.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
             if (newChunk != null) newChunk.addEntity(thisEntity);
             else {
-                log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
                 // Moving into an unloaded chunk is not allowed. Because the entity is held by the chunk, moving to an unloaded chunk will result in the loss of the entity
-                return;
+                log.debug("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
             }
             if (oldChunk != null) oldChunk.removeEntity(thisEntity.getUniqueId());
-            else log.warn("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
+            else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
         }
         // Calculate fall distance
         if (!onGround) {

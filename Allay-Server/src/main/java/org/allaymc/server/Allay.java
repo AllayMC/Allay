@@ -42,7 +42,6 @@ import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
-import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import org.jetbrains.annotations.VisibleForTesting;
 
 @Slf4j
@@ -54,8 +53,8 @@ public final class Allay {
         log.info("Starting Allay...");
         try {
             initAllayAPI();
-            JeGeneratorLoader.setup();
-            JeGeneratorLoader.waitStart();
+            //JeGeneratorLoader.setup();
+            //JeGeneratorLoader.waitStart();
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
             System.exit(1);
@@ -108,5 +107,6 @@ public final class Allay {
         api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
 
         api.implement("Allay");
+        ComponentClassCacheUtils.saveCacheMapping();
     }
 }

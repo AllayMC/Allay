@@ -14,15 +14,17 @@ import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.storage.PlayerStorage;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.terminal.AllayTerminalConsole;
-import org.allaymc.server.utils.ComponentClassCacheUtils;
+import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
+import org.allaymc.server.world.generator.flat.FlatWorldGenerator;
 import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
 import org.apache.logging.log4j.Level;
@@ -155,13 +157,14 @@ public final class AllayServer implements Server {
     }
 
     private void loadWorlds() {
-        AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("world/Bedrock Level1")));
+        //AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("world/Bedrock Level1")));
+        AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Cordoba")));
+        defaultWorld.setDimension(new AllayDimension(defaultWorld, new FlatWorldGenerator(), DimensionInfo.OVERWORLD));
         worldPool.setDefaultWorld(defaultWorld);
     }
 
     @Override
     public void shutdown() {
-        ComponentClassCacheUtils.saveCacheMapping();
         System.exit(0);
     }
 

@@ -16,6 +16,7 @@ dependencies {
         exclude(group = "org.cloudburstmc", module = "nbt") // use allay nbt
         exclude(group = "com.nukkitx.fastutil") // use it.unimi.dsi.fastutil
     }
+    api(libs.blockstateupdater)
     api(libs.slf4j.api)
     api(libs.disruptor)
     api(libs.nbt)

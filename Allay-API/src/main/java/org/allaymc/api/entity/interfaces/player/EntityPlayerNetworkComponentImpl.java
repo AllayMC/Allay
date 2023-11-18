@@ -227,12 +227,12 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // TODO: save last pos for each player instead of using the global spawn point
         Vector3ic spawnPos = server.getDefaultWorld().getWorldData().getSpawnPoint();
         Dimension dimension = server.getDefaultWorld().getDimension(0);
-        player.setLocation(new Location3f(spawnPos.x(), spawnPos.y(), spawnPos.z(), dimension));
         // Load the spawn point chunk first so that we can add player entity into the chunk
         dimension.getChunkService().getChunkImmediately(
                 spawnPos.x() >> 4,
                 spawnPos.z() >> 4
         );
+        player.setLocation(new Location3f(spawnPos.x(), 100, spawnPos.z(), dimension));
         dimension.addPlayer(player);
         sendBasicGameData();
         online.set(true);

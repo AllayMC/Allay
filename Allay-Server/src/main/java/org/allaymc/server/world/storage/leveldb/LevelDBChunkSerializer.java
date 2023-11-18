@@ -92,12 +92,12 @@ public class LevelDBChunkSerializer {
                             if (layers <= 2) {
                                 section = new ChunkSection(ySection);
                             } else {
-                                Palette[] palettes = new Palette[layers];
+                                @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
                                 Arrays.fill(palettes, new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState()));
                                 section = new ChunkSection(ySection, palettes);
                             }
                             for (int layer = 0; layer < layers; layer++) {
-                                section.blockLayer()[layer].readFromStoragePersistentFromBlockHash(byteBuf, hash -> {
+                                section.blockLayer()[layer].readFromStoragePersistent(byteBuf, hash -> {
                                     BlockState blockState = BlockStateHashPalette.getRegistry().get(hash);
                                     if (blockState == null) {
                                         log.error("missing block hash: " + hash);
