@@ -7,11 +7,14 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
+import org.allaymc.api.item.tag.ItemTag;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Allay Project 2023/5/19
@@ -35,4 +38,8 @@ public interface ItemType<T extends ItemStack> extends Identified {
     default ItemDefinition toNetworkDefinition() {
         return new SimpleItemDefinition(getIdentifier().toString(), getRuntimeId(), false);
     }
+
+
+    @Unmodifiable
+    Set<ItemTag> getItemTags();
 }

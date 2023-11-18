@@ -1,10 +1,7 @@
 package org.allaymc.codegen;
 
 import com.google.gson.JsonParser;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.StringUtils;
 
@@ -12,7 +9,9 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,7 +20,7 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class VanillaItemTagGen {
-    static final Path ITEM_TAGS_FILE_PATH = Path.of(CodeGen.DATA_PATH + "unpacked/item_tags.json");
+    static final Path ITEM_TAGS_FILE_PATH = Path.of(CodeGen.DATA_PATH + "item_tags.json");
     static final ClassName ITEM_TAG_CLASS = ClassName.get("org.allaymc.api.item.tag", "ItemTag");
     static final Set<String> KEYS = new HashSet<>();
     static final String JAVA_DOC = """
@@ -50,14 +49,42 @@ public class VanillaItemTagGen {
     public static void generate() {
         TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder("VanillaItemTags")
                 .addJavadoc(JAVA_DOC)
-                .addModifiers(Modifier.PUBLIC);
+                .addModifiers(Modifier.PUBLIC)
+                .addField(
+                        FieldSpec
+                                .builder(ParameterizedTypeName.get(ClassName.get(Map.class), ClassName.get(String.class), ITEM_TAG_CLASS), "NAME_TO_TAG", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                .initializer("new $T<>()", HashMap.class)
+                                .build()
+                )
+                .addMethod(
+                        MethodSpec
+                                .methodBuilder("create")
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                .returns(ITEM_TAG_CLASS)
+                                .addParameter(String.class, "name")
+                                .addStatement("var tag = new $T(name)", ITEM_TAG_CLASS)
+                                .addStatement("NAME_TO_TAG.put(name, tag)")
+                                .addStatement("return tag")
+                                .build()
+                )
+                .addMethod(
+                        MethodSpec
+                                .methodBuilder("getTagByName")
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                .returns(ITEM_TAG_CLASS)
+                                .addParameter(String.class, "name")
+                                .addStatement("return NAME_TO_TAG.get(name)")
+                                .build()
+                );
+        var fieldNames = new HashSet<String>();
         for (var key : KEYS) {
             var fieldName = StringUtils.fastTwoPartSplit(key, ":", "")[1].toUpperCase();
+            fieldNames.add(fieldName);
             codeBuilder.addField(
                     FieldSpec
                             .builder(ITEM_TAG_CLASS, fieldName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            .initializer("new $T($S)", ITEM_TAG_CLASS, key)
+                            .initializer("create($S)", key)
                             .build()
             );
         }

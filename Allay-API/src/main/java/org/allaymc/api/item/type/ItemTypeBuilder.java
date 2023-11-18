@@ -7,6 +7,7 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
+import org.allaymc.api.item.tag.ItemTag;
 
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,8 @@ public interface ItemTypeBuilder<T extends ItemStack, C extends ItemComponent> {
     }
 
     ItemTypeBuilder<T, C> addComponent(Function<ItemStackInitInfo<T>, C> provider, Class<?> componentClass);
+
+    ItemTypeBuilder<T, C> setItemTags(ItemTag... itemTags);
 
     ItemType<T> build();
 
