@@ -98,7 +98,7 @@ public class ServerSettings extends OkaeriConfig {
         private int chunkMinParallelSendingThreshold = 4;
 
         @CustomKey("do-first-spawn-chunk-threshold")
-        private int doFirstSpawnChunkThreshold = 36;
+        private int doFirstSpawnChunkThreshold = 56;
 
         @Comment("Determines how long a chunk without chunk loaders will remain loaded (gt)")
         @CustomKey("remove-unneeded-chunk-cycle")
