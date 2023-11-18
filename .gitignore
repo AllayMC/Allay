@@ -12,3 +12,4 @@ buildSrc/**
 **/server-settings.yml
 **/bin/
 **/jegenerator/
+/worlds/**

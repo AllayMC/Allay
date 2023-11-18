@@ -9,6 +9,7 @@ import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
@@ -39,6 +40,8 @@ public interface EntityBaseComponent extends EntityComponent {
     EntityType<? extends Entity> getEntityType();
 
     Location3fc getLocation();
+
+    Dimension getDimension();
 
     boolean willBeAddedNextTick();
 
@@ -86,7 +89,8 @@ public interface EntityBaseComponent extends EntityComponent {
         return false;
     }
 
-    default void onCollideWith(Entity other) {}
+    default void onCollideWith(Entity other) {
+    }
 
     @UnmodifiableView
     Map<Long, EntityPlayer> getViewers();
@@ -120,6 +124,8 @@ public interface EntityBaseComponent extends EntityComponent {
     void despawnFrom(EntityPlayer player);
 
     void despawnFromAll();
+
+    void removeEntity();
 
     BedrockPacket createSpawnPacket();
 
