@@ -1,0 +1,684 @@
+[
+    {
+        "description": {
+            "identifier": "minecraft:brew_poison_glowstone_dust"
+        },
+        "input": "minecraft:potion_type:poison",
+        "output": "minecraft:potion_type:strong_poison",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_blaze_powder"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:strength",
+        "reagent": "minecraft:blaze_powder",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_strong_strength_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:strong_strength",
+        "output": "minecraft:potion_type:weakness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_ghast_tear"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:regeneration",
+        "reagent": "minecraft:ghast_tear",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_sugar"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:swiftness",
+        "reagent": "minecraft:sugar",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:weakness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_rabbit_foot"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:leaping",
+        "reagent": "minecraft:rabbit_foot",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_puffer_fish"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:water_breathing",
+        "reagent": "minecraft:pufferfish",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_long_mundane_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:long_mundane",
+        "output": "minecraft:potion_type:long_weakness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_magma_cream"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:fire_resistance",
+        "reagent": "minecraft:magma_cream",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_golden_carrot"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:nightvision",
+        "reagent": "minecraft:golden_carrot",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_phantom_membrane"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:slow_falling",
+        "reagent": "minecraft:phantom_membrane",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_breathing_redstone"
+        },
+        "input": "minecraft:potion_type:water_breathing",
+        "output": "minecraft:potion_type:long_water_breathing",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_breathing_speckled_melon"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:healing",
+        "reagent": "minecraft:speckled_melon",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_nightvision_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:nightvision",
+        "output": "minecraft:potion_type:invisibility",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_poison"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:poison",
+        "reagent": "minecraft:spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_awkward_turtle_helmet"
+        },
+        "input": "minecraft:potion_type:awkward",
+        "output": "minecraft:potion_type:turtle_master",
+        "reagent": "minecraft:turtle_helmet",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_fireresistance_redstone"
+        },
+        "input": "minecraft:potion_type:fire_resistance",
+        "output": "minecraft:potion_type:long_fire_resistance",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_harming_glowstone_dust"
+        },
+        "input": "minecraft:potion_type:harming",
+        "output": "minecraft:potion_type:strong_harming",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_healing_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:healing",
+        "output": "minecraft:potion_type:harming",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_healing_glowstone_dust"
+        },
+        "input": "minecraft:potion_type:healing",
+        "output": "minecraft:potion_type:strong_healing",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_invisibility_red_stone"
+        },
+        "input": "minecraft:potion_type:invisibility",
+        "output": "minecraft:potion_type:long_invisibility",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_slowness_red_stone"
+        },
+        "input": "minecraft:potion_type:slowness",
+        "output": "minecraft:potion_type:long_slowness",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_longPoison_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:long_poison",
+        "output": "minecraft:potion_type:harming",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_leaping_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:leaping",
+        "output": "minecraft:potion_type:slowness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_swiftness_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:swiftness",
+        "output": "minecraft:potion_type:slowness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_poison_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:poison",
+        "output": "minecraft:potion_type:harming",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_leaping_glow_stone"
+        },
+        "input": "minecraft:potion_type:leaping",
+        "output": "minecraft:potion_type:strong_leaping",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_leaping_red_stone"
+        },
+        "input": "minecraft:potion_type:leaping",
+        "output": "minecraft:potion_type:long_leaping",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_longnightvision_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:long_nightvision",
+        "output": "minecraft:potion_type:long_invisibility",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_rabbit_foot"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:mundane",
+        "reagent": "minecraft:rabbit_foot",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_regeneration_glowstone_dust"
+        },
+        "input": "minecraft:potion_type:regeneration",
+        "output": "minecraft:potion_type:strong_regeneration",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_longswiftness_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:long_swiftness",
+        "output": "minecraft:potion_type:long_slowness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_longleaping_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:long_leaping",
+        "output": "minecraft:potion_type:long_slowness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_long_strength_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:long_strength",
+        "output": "minecraft:potion_type:long_weakness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_mundane_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:mundane",
+        "output": "minecraft:potion_type:weakness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_nightvision_redstone"
+        },
+        "input": "minecraft:potion_type:nightvision",
+        "output": "minecraft:potion_type:long_nightvision",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_poison_redstone"
+        },
+        "input": "minecraft:potion_type:poison",
+        "output": "minecraft:potion_type:long_poison",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_red_stone"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:mundane",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_regeneration_redstone"
+        },
+        "input": "minecraft:potion_type:regeneration",
+        "output": "minecraft:potion_type:long_regeneration",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:weakness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_slowness_glowstone_dust"
+        },
+        "input": "minecraft:potion_type:slowness",
+        "output": "minecraft:potion_type:strong_slowness",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_slow_falling_redstone"
+        },
+        "input": "minecraft:potion_type:slow_falling",
+        "output": "minecraft:potion_type:long_slow_falling",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_ghast_tear"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:mundane",
+        "reagent": "minecraft:ghast_tear",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_strength_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:strength",
+        "output": "minecraft:potion_type:weakness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_strength_glowstone_dust"
+        },
+        "input": "minecraft:potion_type:strength",
+        "output": "minecraft:potion_type:strong_strength",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_strength_redstone"
+        },
+        "input": "minecraft:potion_type:strength",
+        "output": "minecraft:potion_type:long_strength",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_strongHealing_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:strong_healing",
+        "output": "minecraft:potion_type:strong_harming",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_weakness_redstone"
+        },
+        "input": "minecraft:potion_type:weakness",
+        "output": "minecraft:potion_type:long_weakness",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_swiftness_redstone"
+        },
+        "input": "minecraft:potion_type:swiftness",
+        "output": "minecraft:potion_type:long_swiftness",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_strong_poison_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:strong_poison",
+        "output": "minecraft:potion_type:strong_harming",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_magma_cream"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:mundane",
+        "reagent": "minecraft:magma_cream",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_swiftness_glowstone_dust"
+        },
+        "input": "minecraft:potion_type:swiftness",
+        "output": "minecraft:potion_type:strong_swiftness",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_nether_wart"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:Awkward",
+        "reagent": "minecraft:nether_wart",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_thick_fermented_spider_eye"
+        },
+        "input": "minecraft:potion_type:thick",
+        "output": "minecraft:potion_type:weakness",
+        "reagent": "minecraft:fermented_spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_turtleMaster_glowstone_dust"
+        },
+        "input": "minecraft:potion_type:turtle_master",
+        "output": "minecraft:potion_type:strong_turtle_master",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_spider_eye"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:mundane",
+        "reagent": "minecraft:spider_eye",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_turtleMaster_redstone"
+        },
+        "input": "minecraft:potion_type:turtle_master",
+        "output": "minecraft:potion_type:long_turtle_master",
+        "reagent": "minecraft:redstone",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_glow_stone"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:Thick",
+        "reagent": "minecraft:glowstone_dust",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_blaze_powder"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:mundane",
+        "reagent": "minecraft:blaze_powder",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_speckled_melon"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:mundane",
+        "reagent": "minecraft:speckled_melon",
+        "tags": [
+            "brewing_stand"
+        ]
+    },
+    {
+        "description": {
+            "identifier": "minecraft:brew_water_sugar"
+        },
+        "input": "minecraft:potion_type:water",
+        "output": "minecraft:potion_type:mundane",
+        "reagent": "minecraft:sugar",
+        "tags": [
+            "brewing_stand"
+        ]
+    }
+]
