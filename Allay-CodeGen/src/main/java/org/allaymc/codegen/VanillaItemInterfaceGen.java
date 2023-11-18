@@ -30,7 +30,7 @@ public class VanillaItemInterfaceGen {
     public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaItemId");
     public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemType");
     public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemTypeBuilder");
-    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/item/interfaces");
+    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/org/allaymc/api/item/interfaces");
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
     static {
