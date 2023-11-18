@@ -23,6 +23,7 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -133,6 +134,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public Location3fc getLocation() {
         return location;
+    }
+
+    @Override
+    public Dimension getDimension() {
+        return location.dimension;
+    }
+
+    @Override
+    public void removeEntity() {
+        getDimension().getEntityUpdateService().removeEntity(thisEntity);
     }
 
     @Override
