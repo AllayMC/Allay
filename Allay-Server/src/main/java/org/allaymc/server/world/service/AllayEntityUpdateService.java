@@ -29,13 +29,14 @@ public class AllayEntityUpdateService implements EntityUpdateService {
             var operation = entityUpdateOperationQueue.poll();
             var entity = operation.entity;
             switch (operation.type) {
-                case ADD -> addEntityImmediately(entity);
-                case REMOVE -> removeEntityImmediately(entity);
+                case ADD -> spawnEntityImmediately(entity);
+                case REMOVE -> despawnEntityImmediately(entity);
             }
+            operation.callback.run();
         }
     }
 
-    private void removeEntityImmediately(Entity entity) {
+    private void despawnEntityImmediately(Entity entity) {
         var chunk = (AllayChunk) entity.getCurrentChunk();
         if (chunk == null)
             throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
@@ -46,7 +47,7 @@ public class AllayEntityUpdateService implements EntityUpdateService {
         entity.setSpawned(false);
     }
 
-    private void addEntityImmediately(Entity entity) {
+    private void spawnEntityImmediately(Entity entity) {
         var chunk = (AllayChunk) entity.getCurrentChunk();
         if (chunk == null)
             throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
@@ -58,7 +59,7 @@ public class AllayEntityUpdateService implements EntityUpdateService {
     }
 
     @Override
-    public void addEntity(Entity entity) {
+    public void addEntity(Entity entity, Runnable callback) {
         if (entity.willBeAddedNextTick()) {
             log.warn("Trying to add an entity twice! Entity: " + entity);
             return;
@@ -66,12 +67,13 @@ public class AllayEntityUpdateService implements EntityUpdateService {
         entity.setWillBeAddedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
-                EntityUpdateType.ADD
+                EntityUpdateType.ADD,
+                callback
         ));
     }
 
     @Override
-    public void removeEntity(Entity entity) {
+    public void removeEntity(Entity entity, Runnable callback) {
         if (entity.willBeRemovedNextTick()) {
             log.warn("Trying to remove an entity twice! Entity: " + entity);
             return;
@@ -79,7 +81,8 @@ public class AllayEntityUpdateService implements EntityUpdateService {
         entity.setWillBeRemovedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
-                EntityUpdateType.REMOVE
+                EntityUpdateType.REMOVE,
+                callback
         ));
     }
 
@@ -88,6 +91,6 @@ public class AllayEntityUpdateService implements EntityUpdateService {
         REMOVE
     }
 
-    protected record EntityUpdateOperation(Entity entity, EntityUpdateType type) {
+    protected record EntityUpdateOperation(Entity entity, EntityUpdateType type, Runnable callback) {
     }
 }

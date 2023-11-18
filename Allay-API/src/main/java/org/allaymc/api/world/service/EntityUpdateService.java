@@ -10,7 +10,18 @@ import org.allaymc.api.entity.Entity;
 public interface EntityUpdateService {
     void tick();
 
-    void addEntity(Entity entity);
+    default void addEntity(Entity entity) {
+        addEntity(entity, () -> {
+        });
+    }
 
-    void removeEntity(Entity entity);
+
+    void addEntity(Entity entity, Runnable callback);
+
+    default void removeEntity(Entity entity) {
+        removeEntity(entity, () -> {
+        });
+    }
+
+    void removeEntity(Entity entity, Runnable callback);
 }

@@ -171,16 +171,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     @ApiStatus.Internal
     public void setLocation(Location3fc location) {
-        if (this.location.dimension != location.dimension()) {
-            log.warn("Entity::setLocation() doesn't allow to change entity's dimension! Please use Entity::teleport() if you don't know how to use this method!");
-            return;
-        }
         var oldChunkX = (int) this.location.x >> 4;
         var oldChunkZ = (int) this.location.z >> 4;
         var newChunkX = (int) location.x() >> 4;
         var newChunkZ = (int) location.z() >> 4;
         if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
-            var oldChunk = location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
+            var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
             var newChunk = location.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
             if (newChunk != null) newChunk.addEntity(thisEntity);
             else {
@@ -220,8 +216,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         } else {
             // Teleporting to another dimension, there will be more works to be done
             // TODO: maybe needs more works
-            removeEntity();
-            setLocation(location);
+            location.dimension().getEntityUpdateService().removeEntity(thisEntity, () -> {
+                location.dimension().getChunkService().getChunkImmediately((int) location.x() >> 4, (int) location.z() >> 4);
+                setLocation(location);
+            });
             location.dimension().getEntityUpdateService().addEntity(thisEntity);
         }
     }
@@ -333,11 +331,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public void removeEntity() {
-        location.dimension.getEntityUpdateService().removeEntity(thisEntity);
-    }
-
-    @Override
     public BedrockPacket createSpawnPacket() {
         var addEntityPacket = new AddEntityPacket();
         addEntityPacket.setRuntimeEntityId(uniqueId);
@@ -410,7 +403,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (abs(locLastSent.z() - newLoc.z()) > diffPositionThreshold) flags.add(HAS_Z);
         if (abs(locLastSent.yaw() - newLoc.yaw()) > diffRotationThreshold) flags.add(HAS_YAW);
         if (abs(locLastSent.pitch() - newLoc.pitch()) > diffRotationThreshold) flags.add(HAS_PITCH);
-        if (enableHeadYaw() && abs(locLastSent.headYaw() - newLoc.headYaw()) > diffRotationThreshold) flags.add(HAS_HEAD_YAW);
+        if (enableHeadYaw() && abs(locLastSent.headYaw() - newLoc.headYaw()) > diffRotationThreshold)
+            flags.add(HAS_HEAD_YAW);
         return flags;
     }
 
