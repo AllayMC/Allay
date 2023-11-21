@@ -20,23 +20,14 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean place(@Nullable EntityPlayer player, @NotNull Dimension dimension, @NotNull BlockState blockState,
-                         @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {
-        var oldBlock = dimension.getBlockState(placeBlockPos);
-        var torchFace = getFace(blockFace);
-
-        if ((!oldBlock.getBlockAttributes().isAir() && !oldBlock.getBlockAttributes().isLiquid()) ||
-                torchFace == TorchFacingDirection.UNKNOWN) return false;
-
-        var targetBlock = dimension.getBlockState(targetBlockPos);
-        if (targetBlock.getBlockAttributes().isSolid()) {
+    public boolean place(@Nullable EntityPlayer player, @NotNull Dimension dimension, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {
+        // TODO need to know if it can place, and need to know if it can layer place
+        if (player != null) {
+            TorchFacingDirection torchFace = getFace(blockFace);
+            if (torchFace == TorchFacingDirection.UNKNOWN) return false;
             blockState = blockState.setProperty(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
-        } else {
-            blockState = blockState.setProperty(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION, TorchFacingDirection.TOP);
-            var downBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
-            if (!downBlock.getBlockAttributes().isSolid()) return false;
+            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         return true;
     }
 

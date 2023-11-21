@@ -34,7 +34,7 @@ public interface Server extends TaskCreator {
     /**
      * Start the server
      */
-    void start(long timeMillis);
+    void start();
 
     void shutdown();
 

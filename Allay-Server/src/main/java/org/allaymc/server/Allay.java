@@ -49,7 +49,6 @@ public final class Allay {
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
 
     public static void main(String[] args) {
-        long startTime = System.currentTimeMillis();
         System.setProperty("joml.format", "false");//set JOML vectors are output without scientific notation
         log.info("Starting Allay...");
         try {
@@ -60,7 +59,7 @@ public final class Allay {
             log.error("Cannot init Allay API!", e);
             System.exit(1);
         }
-        Server.getInstance().start(startTime);
+        Server.getInstance().start();
     }
 
     @VisibleForTesting

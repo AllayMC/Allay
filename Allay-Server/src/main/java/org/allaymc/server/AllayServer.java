@@ -119,7 +119,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void start(long timeMillis) {
+    public void start() {
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         Configuration log4jConfig = ctx.getConfiguration();
         LoggerConfig loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
@@ -145,7 +145,7 @@ public final class AllayServer implements Server {
         this.networkServer = initNetwork();
         log.info("Starting up network server...");
         this.networkServer.start();
-        log.info("Network server started  ( " + (System.currentTimeMillis() - timeMillis) + "ms )");
+        log.info("Network server started.");
         loadWorlds();
         MAIN_THREAD_GAME_LOOP.startLoop();
     }
