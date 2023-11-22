@@ -1,5 +1,7 @@
 package org.allaymc.api;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
@@ -19,11 +21,12 @@ import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -46,7 +49,7 @@ public final class AllayAPI {
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
-    private final SequencedMap<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
+    private final Map<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean implemented = false;
 

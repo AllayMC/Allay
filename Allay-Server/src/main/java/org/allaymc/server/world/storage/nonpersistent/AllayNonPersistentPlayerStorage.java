@@ -23,7 +23,7 @@ public class AllayNonPersistentPlayerStorage implements PlayerStorage {
 
     @Override
     public void readPlayerData(EntityPlayer player) {
-        var uuid = player.getUuid();
+        var uuid = player.getUUID();
         var inv = clientInventories.get(uuid);
         if (inv != null) Objects.requireNonNull(player.getContainer(FullContainerType.PLAYER_INVENTORY)).loadNBT(inv);
         var offhandInv = clientOffhandInventories.get(uuid);
@@ -35,7 +35,7 @@ public class AllayNonPersistentPlayerStorage implements PlayerStorage {
 
     @Override
     public void writePlayerData(EntityPlayer player) {
-        var uuid = player.getUuid();
+        var uuid = player.getUUID();
         clientInventories.put(uuid, Objects.requireNonNull(player.getContainer(FullContainerType.PLAYER_INVENTORY)).saveNBT());
         clientOffhandInventories.put(uuid, Objects.requireNonNull(player.getContainer(FullContainerType.OFFHAND)).saveNBT());
         clientArmorInventories.put(uuid, Objects.requireNonNull(player.getContainer(FullContainerType.ARMOR)).saveNBT());

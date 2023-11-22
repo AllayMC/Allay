@@ -24,6 +24,7 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.World;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -142,6 +143,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public World getWorld() {
+        return location.dimension.getWorld();
+    }
+
+    @Override
     public void removeEntity() {
         getDimension().getEntityUpdateService().removeEntity(thisEntity);
     }
@@ -255,7 +261,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         for (EntityDataType<?> type : dataTypes) {
             pk.getMetadata().put(type, metadata.getEntityDataMap().get(type));
         }
-        pk.setTick(Server.getInstance().getTicks());
+        pk.setTick(this.getWorld().getTick());
         sendPacketToViewers(pk);
     }
 
@@ -267,7 +273,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         for (EntityFlag flag : flags) {
             pk.getMetadata().setFlag(flag, metadata.getFlag(flag));
         }
-        pk.setTick(Server.getInstance().getTicks());
+        pk.setTick(this.getWorld().getTick());
         sendPacketToViewers(pk);
     }
 

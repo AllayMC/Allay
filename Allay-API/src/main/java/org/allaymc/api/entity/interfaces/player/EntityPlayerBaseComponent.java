@@ -5,11 +5,7 @@ import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.component.base.EntityBaseComponent;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 import org.jetbrains.annotations.Range;
-
-import java.util.function.Function;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
 
@@ -66,10 +62,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setGameType(GameType gameType);
 
     AdventureSettings getAdventureSettings();
-
-    Function<SubChunkRequestPacket, SubChunkPacket> getSubChunkRequestHandler();
-
-    void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> subChunkRequestHandler);
 
     void sendChat(EntityPlayer sender, String message);
 

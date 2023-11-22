@@ -53,6 +53,7 @@ public final class Allay {
         log.info("Starting Allay...");
         try {
             initAllayAPI();
+            ComponentClassCacheUtils.saveCacheMapping();
             //JeGeneratorLoader.setup();
             //JeGeneratorLoader.waitStart();
         } catch (Exception e) {
@@ -107,6 +108,5 @@ public final class Allay {
         api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
 
         api.implement("Allay");
-        ComponentClassCacheUtils.saveCacheMapping();
     }
 }

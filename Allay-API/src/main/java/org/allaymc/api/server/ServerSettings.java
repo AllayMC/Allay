@@ -65,6 +65,9 @@ public class ServerSettings extends OkaeriConfig {
 
         @CustomKey("compression-threshold")
         private int compressionThreshold = 0;
+
+        @CustomKey("network-thread-number")
+        private int networkThreadNumber = 1;
     }
 
     @CustomKey("world-settings")

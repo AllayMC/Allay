@@ -11,7 +11,6 @@ import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.allaymc.api.network.NetworkServer;
-import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.DimensionInfo;
@@ -19,7 +18,6 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.storage.PlayerStorage;
 import org.allaymc.server.network.AllayNetworkServer;
-import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
@@ -61,15 +59,10 @@ public final class AllayServer implements Server {
     //执行IO密集型任务的线程池
     @Getter
     private final ExecutorService virtualThreadPool;
-    private final GameLoop MAIN_THREAD_GAME_LOOP;
     @Getter
     private ServerSettings serverSettings;
     @Getter
     private NetworkServer networkServer;
-    @Getter
-    private long ticks;
-    @Getter
-    private final Scheduler serverScheduler;
     private Thread terminalConsoleThread;
     private AllayTerminalConsole terminalConsole;
     private static volatile AllayServer instance;
@@ -94,17 +87,6 @@ public final class AllayServer implements Server {
                     return thread;
                 });
         virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
-        ticks = 0;
-        MAIN_THREAD_GAME_LOOP = GameLoop.builder()
-                .loopCountPerSec(20)
-                .onTick(loop -> {
-                    if (isRunning.get())
-                        onTick();
-                    else loop.stop();
-                })
-                .onStop(() -> isRunning.set(false))
-                .build();
-        serverScheduler = new AllayScheduler(virtualThreadPool);
     }
 
     public static AllayServer getInstance() {
@@ -134,9 +116,6 @@ public final class AllayServer implements Server {
                 getWorldPool().getWorlds().values().forEach(World::close);
                 virtualThreadPool.shutdownNow();
                 computeThreadPool.shutdownNow();
-                while (MAIN_THREAD_GAME_LOOP.isRunning()) {
-                    MAIN_THREAD_GAME_LOOP.stop();
-                }
                 System.out.println("Server ShutDown Over.");
             }
         });
@@ -147,7 +126,6 @@ public final class AllayServer implements Server {
         this.networkServer.start();
         log.info("Network server started.");
         loadWorlds();
-        MAIN_THREAD_GAME_LOOP.startLoop();
     }
 
     private void initTerminalConsole() {
@@ -166,10 +144,6 @@ public final class AllayServer implements Server {
     @Override
     public void shutdown() {
         System.exit(0);
-    }
-
-    private void onTick() {
-        ticks++;
     }
 
     @Override
@@ -214,16 +188,20 @@ public final class AllayServer implements Server {
 
     @Override
     public void onLoggedIn(EntityPlayer player) {
-        players.put(player.getUuid(), player);
+        players.put(player.getUUID(), player);
         networkServer.setPlayerCount(players.size());
     }
 
     @Override
     public void onDisconnect(EntityPlayer player) {
-        if (!player.isLoggedIn()) return;
-        players.remove(player.getUuid());
+        if (!player.isInitialized()) return;
+        this.getPlayerStorage().writePlayerData(player);
+
+        players.remove(player.getUUID());
+        player.getDimension().removePlayer(player);
+
         networkServer.setPlayerCount(players.size());
-        var playerListEntry = playerListEntryMap.remove(player.getUuid());
+        var playerListEntry = playerListEntryMap.remove(player.getUUID());
         var pk = new PlayerListPacket();
         pk.setAction(PlayerListPacket.Action.REMOVE);
         pk.getEntries().add(playerListEntry);

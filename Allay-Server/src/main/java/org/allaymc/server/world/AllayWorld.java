@@ -44,7 +44,6 @@ public class AllayWorld implements World {
         this.worldStorage = worldStorage;
         this.worldData = worldStorage.getWorldDataCache();
         this.worldData.setWorld(this);
-
         this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
         this.scheduler = new AllayScheduler();
         this.gameLoop = GameLoop.builder()
