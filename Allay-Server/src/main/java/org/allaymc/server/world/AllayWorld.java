@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -16,10 +17,7 @@ import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Allay Project 2023/7/1
@@ -72,6 +70,7 @@ public class AllayWorld implements World {
 
     @Override
     public void tick(long currentTick) {
+        getDimensions().values().forEach(e -> e.getPlayers().forEach(EntityPlayerNetworkComponent::handleDataPacket));
         tickTime(currentTick);
         scheduler.tick();
         getDimensions().values().forEach(d -> d.tick(currentTick));

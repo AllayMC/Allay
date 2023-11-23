@@ -60,7 +60,6 @@ public class AllayDimension implements Dimension {
 
     @Override
     public void tick(long currentTick) {
-        getPlayers().forEach(EntityPlayerNetworkComponent::handleDataPacket);
         chunkService.tick();
         entityUpdateService.tick();
         entityPhysicsService.tick();
