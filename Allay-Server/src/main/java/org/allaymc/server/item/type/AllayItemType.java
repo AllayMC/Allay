@@ -1,5 +1,9 @@
 package org.allaymc.server.item.type;
 
+import lombok.Getter;
+import lombok.SneakyThrows;
+import lombok.ToString;
+import me.sunlan.fastreflection.FastConstructor;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.interfaces.Component;
@@ -18,14 +22,8 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import lombok.Getter;
-import lombok.SneakyThrows;
-import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +36,7 @@ import java.util.function.Function;
  * @author daoge_cmd
  */
 public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
-    private final MethodHandle constructorMethodHandle;
+    private final FastConstructor<T> constructor;
     private final Class<T> interfaceClass;
     private final Class<T> injectedClass;
     private final List<ComponentProvider<? extends ItemComponent>> componentProviders;
@@ -70,11 +68,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         } catch (Exception e) {
             throw new ItemTypeBuildException("Failed to create item type!", e);
         }
-        MethodHandles.Lookup lookup = MethodHandles.lookup();
-        MethodType methodType = MethodType.methodType(void.class, ComponentInitInfo.class);
-        //Cache constructor Method Handle
-        var temp = lookup.findConstructor(injectedClass, methodType);
-        constructorMethodHandle = temp.asType(temp.type().changeParameterType(0, ItemStackInitInfo.class).changeReturnType(Object.class));
+        this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class));
     }
 
     public static <T extends ItemStack> ItemTypeBuilder<T, ItemComponent> builder(Class<T> interfaceClass) {
@@ -86,7 +80,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     public T createItemStack(ItemStackInitInfo<T> info) {
         //"info" for ItemAirType is useless and can be null
         if (info != null) info.setItemType(this);
-        return injectedClass.cast(constructorMethodHandle.invokeExact(info));
+        return (T) constructor.invoke(info);
     }
 
     @Override

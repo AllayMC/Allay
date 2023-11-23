@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.leveldbjni)
     implementation(libs.netty.epoll)
     implementation(libs.jegenerator)
+    implementation(libs.fastreflect)
     testImplementation(libs.bytebuddy)
 }
 

@@ -1,24 +1,23 @@
 package org.allaymc.server.world.generator.jegen;
 
 import io.papermc.paperclip.Paperclip;
+import me.sunlan.fastreflection.FastMethod;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.Generator;
 import org.allaymc.server.Allay;
 
 import java.io.File;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 public final class JeGeneratorLoader {
     public static final String WORK_PATH = "jegenerator";
-    private static MethodHandle overworld;
-    private static MethodHandle nether;
-    private static MethodHandle end;
+    private static FastMethod overworld;
+    private static FastMethod nether;
+    private static FastMethod end;
+    private static Class<?> JeGeneratorMain;
 
     public static void setup() {
         File file = Path.of(WORK_PATH).toFile();
@@ -27,17 +26,10 @@ public final class JeGeneratorLoader {
         }
         Paperclip.setup(Allay.EXTRA_RESOURCE_CLASS_LOADER, new String[]{WORK_PATH, "--noconsole", "--nogui", "--universe=jegenerator"});
         try {
-            final Class<?> JeGeneratorMain = Class.forName("org.allaymc.jegenerator.JeGeneratorMain", true, Allay.EXTRA_RESOURCE_CLASS_LOADER);
-            final MethodType methodType = MethodType.methodType(Generator.class);
-            overworld = MethodHandles.lookup()
-                    .findStatic(JeGeneratorMain, "overworld", methodType)
-                    .asFixedArity();
-            nether = MethodHandles.lookup()
-                    .findStatic(JeGeneratorMain, "nether", methodType)
-                    .asFixedArity();
-            end = MethodHandles.lookup()
-                    .findStatic(JeGeneratorMain, "end", methodType)
-                    .asFixedArity();
+            JeGeneratorMain = Class.forName("org.allaymc.jegenerator.JeGeneratorMain", true, Allay.EXTRA_RESOURCE_CLASS_LOADER);
+            overworld = FastMethod.create(JeGeneratorMain.getMethod("overworld", Generator.class));
+            nether = FastMethod.create(JeGeneratorMain.getMethod("nether", Generator.class));
+            end = FastMethod.create(JeGeneratorMain.getMethod("end", Generator.class));
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -48,15 +40,14 @@ public final class JeGeneratorLoader {
     }
 
     //todo add safe stop
-
     public static Generator getJeGenerator(DimensionInfo info) {
         try {
             if (info == DimensionInfo.NETHER) {
-                return (Generator) nether.invokeExact();
+                return (Generator) nether.invoke(JeGeneratorMain);
             } else if (info == DimensionInfo.THE_END) {
-                return (Generator) end.invokeExact();
+                return (Generator) end.invoke(JeGeneratorMain);
             } else {
-                return (Generator) overworld.invokeExact();
+                return (Generator) overworld.invoke(JeGeneratorMain);
             }
         } catch (Throwable e) {
             throw new RuntimeException(e);

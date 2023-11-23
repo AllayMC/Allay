@@ -1,5 +1,7 @@
 package org.allaymc.server.entity.type;
 
+import lombok.SneakyThrows;
+import me.sunlan.fastreflection.FastConstructor;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
@@ -15,12 +17,8 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import lombok.SneakyThrows;
 import org.joml.primitives.AABBf;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +31,7 @@ import java.util.function.Function;
  * @author daoge_cmd
  */
 public class AllayEntityType<T extends Entity> implements EntityType<T> {
-    protected final MethodHandle constructorMethodHandle;
+    protected final FastConstructor<T> constructor;
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
     protected List<ComponentProvider<? extends EntityComponent>> componentProviders;
@@ -56,11 +54,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         } catch (Exception e) {
             throw new EntityTypeBuildException("Failed to create entity type!", e);
         }
-        MethodHandles.Lookup lookup = MethodHandles.lookup();
-        MethodType methodType = MethodType.methodType(void.class, ComponentInitInfo.class);
-        //Cache constructor Method Handle
-        var temp = lookup.findConstructor(injectedClass, methodType);
-        constructorMethodHandle = temp.asType(temp.type().changeParameterType(0, EntityInitInfo.class).changeReturnType(Object.class));
+        this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class));
     }
 
     @Override
@@ -72,7 +66,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     @Override
     public T createEntity(EntityInitInfo<T> info) {
         info.setEntityType(this);
-        return injectedClass.cast(constructorMethodHandle.invokeExact(info));
+        return (T) constructor.invoke(info);
     }
 
     @Override
