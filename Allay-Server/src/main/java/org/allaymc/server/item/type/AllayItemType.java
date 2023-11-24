@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import me.sunlan.fastreflection.FastConstructor;
+import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.interfaces.Component;
@@ -20,6 +21,7 @@ import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
+import org.allaymc.server.Allay;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.jetbrains.annotations.Nullable;
@@ -68,7 +70,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         } catch (Exception e) {
             throw new ItemTypeBuildException("Failed to create item type!", e);
         }
-        this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class));
+        FastMemberLoader fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
+        this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class), fastMemberLoader, false);
     }
 
     public static <T extends ItemStack> ItemTypeBuilder<T, ItemComponent> builder(Class<T> interfaceClass) {

@@ -2,6 +2,7 @@ package org.allaymc.server.blockentity.type;
 
 import lombok.SneakyThrows;
 import me.sunlan.fastreflection.FastConstructor;
+import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.blockentity.component.base.BlockEntityBaseComponentImpl;
@@ -13,6 +14,7 @@ import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.identifier.Identifier;
+import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.entity.type.EntityTypeBuildException;
@@ -54,7 +56,8 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         } catch (Exception e) {
             throw new EntityTypeBuildException("Failed to create block entity type!", e);
         }
-        this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class));
+        FastMemberLoader fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
+        this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class), fastMemberLoader, false);
     }
 
     @Override
