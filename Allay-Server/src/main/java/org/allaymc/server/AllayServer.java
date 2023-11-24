@@ -124,7 +124,7 @@ public final class AllayServer implements Server {
         this.networkServer = initNetwork();
         log.info("Starting up network server...");
         this.networkServer.start();
-        log.info("Network server started  ( " + (System.currentTimeMillis() - timeMillis) + "ms )");
+        log.info("Network server started at " + serverSettings.networkSettings().ip() + ":" + serverSettings.networkSettings().port() + " ( " + (System.currentTimeMillis() - timeMillis) + "ms )");
         loadWorlds();
     }
 

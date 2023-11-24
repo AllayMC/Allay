@@ -86,6 +86,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @Override
     public void onOpen(byte assignedId, Container container) {
         var containerOpenPacket = new ContainerOpenPacket();
+        containerOpenPacket.setUniqueEntityId(baseComponent.getUniqueId());
         containerOpenPacket.setId(assignedId);
         var containerType = container.getContainerType();
         containerOpenPacket.setType(containerType.toNetworkType());
