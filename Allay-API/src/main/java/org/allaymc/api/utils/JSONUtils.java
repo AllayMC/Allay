@@ -609,7 +609,7 @@ public class JSONUtils {
      * @author duanxinyuan
      * 2018/6/20 14:58
      */
-    public static class NumberTypeAdapter<T> extends TypeAdapter<Number> {
+    private static class NumberTypeAdapter<T> extends TypeAdapter<Number> {
         private Class<T> c;
 
         public NumberTypeAdapter(Class<T> c) {

@@ -52,7 +52,7 @@ class ComponentTest {
         sheep = new AllayComponentInjector<Sheep>()
                 .interfaceClass(interfaceClass)
                 .component(componentProviders)
-                .inject(false)
+                .inject(true)
                 .getDeclaredConstructor(ComponentInitInfo.class)
                 .newInstance(new TestComponentInitInfo(114514));
     }
@@ -82,7 +82,7 @@ class ComponentTest {
                 () -> new AllayComponentInjector<Sheep>()
                         .interfaceClass(interfaceClass)
                         .component(componentProvidersV2)
-                        .inject(false));
+                        .inject(true));
     }
 
     @Test
@@ -103,7 +103,7 @@ class ComponentTest {
             new AllayComponentInjector<Sheep>()
                     .interfaceClass(interfaceClass)
                     .component(componentProvidersV3)
-                    .inject(false)
+                    .inject(true)
                     .getDeclaredConstructor(ComponentInitInfo.class)
                     .newInstance(new TestComponentInitInfo(114514))
                     .testMethod();
