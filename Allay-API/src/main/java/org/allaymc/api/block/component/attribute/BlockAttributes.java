@@ -1,7 +1,5 @@
 package org.allaymc.api.block.component.attribute;
 
-import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.allaymc.api.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -10,11 +8,13 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Allay Project 2023/5/1
@@ -41,7 +41,7 @@ public class BlockAttributes {
             .create();
 
     protected static AABBf parseAABBStr(String str) {
-        var numbers = StringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
+        var numbers = AllayStringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
         return new AABBf(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
     }
 
@@ -143,6 +143,7 @@ public class BlockAttributes {
     protected boolean isStemBlock = false;
     @Builder.Default
     protected boolean isSlabBlock = false;
+
     public static BlockAttributes fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockAttributes.class);
     }

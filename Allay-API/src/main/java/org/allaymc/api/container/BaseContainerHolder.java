@@ -1,6 +1,6 @@
 package org.allaymc.api.container;
 
-import org.allaymc.api.container.exception.ContainerException;
+import org.allaymc.api.exception.ContainerException;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;

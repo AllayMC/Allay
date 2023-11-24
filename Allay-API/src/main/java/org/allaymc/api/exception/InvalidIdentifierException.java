@@ -1,7 +1,7 @@
 /*
  * Decompiled with CFR 0.1.1 (FabricMC 57d88659).
  */
-package org.allaymc.api.identifier;
+package org.allaymc.api.exception;
 
 public class InvalidIdentifierException extends RuntimeException {
     public InvalidIdentifierException(String message) {

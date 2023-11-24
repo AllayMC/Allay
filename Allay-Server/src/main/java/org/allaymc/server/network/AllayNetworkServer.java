@@ -16,7 +16,7 @@ import org.allaymc.api.client.data.SemVersion;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
-import org.allaymc.api.utils.StringUtils;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
@@ -83,7 +83,7 @@ public class AllayNetworkServer implements NetworkServer {
 
     @Override
     public SemVersion getSemVersion() {
-        int[] array = StringUtils.fastSplit(getCodec().getMinecraftVersion(), ".").stream().mapToInt(Integer::parseInt).toArray();
+        int[] array = AllayStringUtils.fastSplit(getCodec().getMinecraftVersion(), ".").stream().mapToInt(Integer::parseInt).toArray();
         return new SemVersion(array[0], array[1], array[2], 0, 0);
     }
 

@@ -1,10 +1,10 @@
 package org.allaymc.api.item.component.attribute;
 
-import com.google.gson.Gson;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.allaymc.api.utils.JSONUtils;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -18,7 +18,6 @@ import org.cloudburstmc.nbt.NbtMap;
 @EqualsAndHashCode
 public class ItemAttributes {
     public static ItemAttributes DEFAULT = ItemAttributes.builder().build();
-    protected static Gson SERIALIZER = new Gson();
     @Builder.Default
     protected int armorValue = 0;
     @Builder.Default
@@ -78,7 +77,7 @@ public class ItemAttributes {
     protected float viewDamping = 1.0f;
 
     public static ItemAttributes fromJson(String json) {
-        return SERIALIZER.fromJson(json, ItemAttributes.class);
+        return JSONUtils.from(json, ItemAttributes.class);
     }
 
     //TODO: test

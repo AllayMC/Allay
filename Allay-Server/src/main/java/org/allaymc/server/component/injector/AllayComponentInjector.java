@@ -1,22 +1,24 @@
 package org.allaymc.server.component.injector;
 
-import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.*;
-import org.allaymc.api.component.exception.ComponentInjectException;
-import org.allaymc.api.component.interfaces.*;
-import org.allaymc.api.identifier.Identifier;
-import org.allaymc.api.utils.ReflectionUtils;
-import org.allaymc.server.utils.ComponentClassCacheUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
+import org.allaymc.api.component.annotation.ComponentedObject;
+import org.allaymc.api.component.annotation.*;
+import org.allaymc.api.component.interfaces.*;
+import org.allaymc.api.exception.ComponentInjectException;
+import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.server.utils.ComponentClassCacheUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -67,10 +69,11 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     @SneakyThrows
     @Override
-    public Class<T> inject(boolean createCache) {
-        if (injectedClass == null) {
+    public Class<T> inject(boolean alwaysUpdate) {
+        injectedClass = ComponentClassCacheUtils.getCacheClass(interfaceClass);
+        if (alwaysUpdate || injectedClass == null) {
             checkComponentDuplicate();
-            injectedClass = buildClass(createCache);
+            injectedClass = buildClass();
         }
         injectInitializer();
         return injectedClass;
@@ -88,7 +91,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     }
 
     @SuppressWarnings("unchecked")
-    protected Class<T> buildClass(boolean cache) {
+    protected Class<T> buildClass() {
         var bb = new ByteBuddy().subclass(interfaceClass);
         var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
         int num = 0;
@@ -139,14 +142,15 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
         bb = afterInject(componentProviders, bb);
         try (var unloaded = bb.make()) {
-            var clazz = (Class<T>) unloaded
-                    .load(getClass().getClassLoader())
-                    .getLoaded();
-            if (cache) {
-                ComponentClassCacheUtils.addCacheMapping(interfaceClass.getSimpleName(), clazz.getName());
-                unloaded.saveIn(ComponentClassCacheUtils.CACHE_ROOT_PATH.toFile());
-            }
-            return clazz;
+            // Why not directly use DynamicType.Unloaded#load for loading?
+            // This method loads a class into a subclass of InjectionClassLoader, and each dynamically generated class resides in a different class loader. This complicates the use of Fast-Reflect to optimize constructor efficiency because the init method within the constructor cannot access this class.
+            // Their class loaders are different.
+            Map<TypeDescription, File> map = unloaded.saveIn(ComponentClassCacheUtils.CACHE_ROOT_PATH.toFile());
+            @SuppressWarnings("OptionalGetWithoutIsPresent")
+            Map.Entry<TypeDescription, File> pair = map.entrySet().stream().findFirst().get();
+            // The simple class name of the interface to the dynamically generated implemented class name.
+            ComponentClassCacheUtils.addCacheMapping(interfaceClass.getSimpleName(), pair.getKey().getName());
+            return ComponentClassCacheUtils.getCacheClass(interfaceClass);
         } catch (IOException e) {
             throw new ComponentInjectException(e);
         }

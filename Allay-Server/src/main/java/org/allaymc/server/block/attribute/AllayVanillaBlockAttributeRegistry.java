@@ -1,14 +1,14 @@
 package org.allaymc.server.block.attribute;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.attribute.BlockAttributes;
 import org.allaymc.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.utils.StringUtils;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -59,7 +59,7 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
                 for (var dataEntry : blocks) {
                     VanillaBlockId type;
                     try {
-                        type = VanillaBlockId.valueOf(StringUtils.fastTwoPartSplit(dataEntry.getString("name"), ":", "")[1].toUpperCase());
+                        type = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(dataEntry.getString("name"), ":", "")[1].toUpperCase());
                     } catch (IllegalArgumentException ignore) {
                         log.error("Unknown block name: " + dataEntry.getString("name"));
                         continue;

@@ -1,4 +1,6 @@
-package org.allaymc.api;
+package org.allaymc.api.exception;
+
+import org.allaymc.api.AllayAPI;
 
 /**
  * This exception is thrown when the API module is not fully implemented <br/>

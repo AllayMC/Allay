@@ -49,7 +49,7 @@ public interface ComponentInjector<T> {
      *
      * @return the class
      */
-    Class<T> inject(boolean createCache);
+    Class<T> inject(boolean alwaysUpdate);
 
     interface ComponentInjectorFactory {
 

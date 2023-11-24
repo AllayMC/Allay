@@ -14,7 +14,6 @@ import org.allaymc.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.component.base.BlockBaseComponent;
 import org.allaymc.api.block.component.base.BlockBaseComponentImpl;
 import org.allaymc.api.block.component.custom.CustomBlockComponentImpl;
-import org.allaymc.api.block.component.exception.BlockComponentInjectException;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
@@ -25,6 +24,7 @@ import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
+import org.allaymc.api.exception.BlockComponentInjectException;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
@@ -439,8 +439,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 type.injectedClass = new AllayComponentInjector<T>()
                         .interfaceClass(interfaceClass)
                         .component(componentProviders)
-                        .useCachedClass(ComponentClassCacheUtils.loadBlockType(interfaceClass))
-                        .inject(!isCustomBlock);
+                        .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
+                        .inject(isCustomBlock);
                 type.blockBehavior = type.injectedClass.getConstructor().newInstance();
             } catch (Exception e) {
                 throw new BlockTypeBuildException("Failed to create block type!", e);

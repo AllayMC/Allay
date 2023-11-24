@@ -51,8 +51,8 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
             injectedClass = new AllayComponentInjector<T>()
                     .interfaceClass(interfaceClass)
                     .component(components)
-                    .useCachedClass(ComponentClassCacheUtils.loadBlockEntityType(interfaceClass))
-                    .inject(true);
+                    .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
+                    .inject(false);
         } catch (Exception e) {
             throw new EntityTypeBuildException("Failed to create block entity type!", e);
         }

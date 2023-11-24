@@ -1,8 +1,10 @@
-package org.allaymc.api.identifier;
+package org.allaymc.api.utils;
 
+import org.allaymc.api.exception.InvalidIdentifierException;
+import org.allaymc.api.identifier.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-import static org.allaymc.api.utils.StringUtils.fastTwoPartSplit;
+import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 
 /**
  * Some helper for {@link Identifier}
@@ -55,7 +57,7 @@ public final class IdentifierUtils {
         }
     }
 
-    static boolean isPathValid(String path) {
+    public static boolean isPathValid(String path) {
         for (int i = 0; i < path.length(); ++i) {
             if (isPathCharacterValid(path.charAt(i))) continue;
             return false;
@@ -63,11 +65,11 @@ public final class IdentifierUtils {
         return true;
     }
 
-    static boolean isPathCharacterValid(char character) {
+    public static boolean isPathCharacterValid(char character) {
         return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= '0' && character <= '9' || character == '/' || character == '.';
     }
 
-    static boolean isNamespaceValid(String namespace) {
+    public static boolean isNamespaceValid(String namespace) {
         for (int i = 0; i < namespace.length(); ++i) {
             if (isNamespaceCharacterValid(namespace.charAt(i))) continue;
             return false;
@@ -75,7 +77,7 @@ public final class IdentifierUtils {
         return true;
     }
 
-    static boolean isNamespaceCharacterValid(char character) {
+    public static boolean isNamespaceCharacterValid(char character) {
         return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= '0' && character <= '9' || character == '.';
     }
 }

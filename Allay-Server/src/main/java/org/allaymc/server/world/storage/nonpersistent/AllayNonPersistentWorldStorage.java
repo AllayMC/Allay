@@ -5,6 +5,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityHelper;
+import org.allaymc.api.exception.WorldStorageException;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
@@ -12,7 +13,6 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.storage.WorldStorage;
-import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NbtMap;
 

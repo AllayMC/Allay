@@ -18,7 +18,6 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
-import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.joml.primitives.AABBf;
 
 import java.util.ArrayList;
@@ -51,8 +50,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
             injectedClass = new AllayComponentInjector<T>()
                     .interfaceClass(interfaceClass)
                     .component(components)
-                    .useCachedClass(ComponentClassCacheUtils.loadEntityType(interfaceClass))
-                    .inject(true);
+                    .inject(false);//todo custom entity is always update
         } catch (Exception e) {
             throw new EntityTypeBuildException("Failed to create entity type!", e);
         }
