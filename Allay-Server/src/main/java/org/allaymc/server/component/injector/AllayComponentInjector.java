@@ -2,6 +2,7 @@ package org.allaymc.server.component.injector;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.SneakyThrows;
+import me.sunlan.fastreflection.FastMethod;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.description.type.TypeDescription;
@@ -231,11 +232,11 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
         protected static class Listener {
 
-            private final Method method;
+            private final FastMethod method;
             private final Object instance;
 
             Listener(Method method, Object instance) {
-                this.method = method;
+                this.method = FastMethod.create(method, true);
                 this.instance = instance;
             }
 
@@ -246,7 +247,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             void access(ComponentEvent event) {
                 try {
                     method.invoke(instance, event);
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -312,7 +313,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                         throw new ComponentInjectException("Component event listener method must be void: " + method.getName() + " in component: " + component.getClass().getName());
                     if (method.getParameterCount() != 1 || !ComponentEvent.class.isAssignableFrom(method.getParameters()[0].getType()))
                         throw new ComponentInjectException("Component event listener method must have one parameter and the parameter must be a subclass of ComponentEvent: " + method.getName() + " in component: " + component.getClass().getName());
-                    method.setAccessible(true);
+//                    method.setAccessible(true);
                     manager.registerListener((Class<? extends ComponentEvent>) method.getParameters()[0].getType(), AllayComponentManager.Listener.wrap(method, component));
                 }
             }

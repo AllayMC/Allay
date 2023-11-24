@@ -209,12 +209,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var oldChunkZ = (int) oldLoc.z() >> 4;
         var newChunkX = (int) newLoc.x() >> 4;
         var newChunkZ = (int) newLoc.z() >> 4;
-        var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
-        var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
         if (!currentDimIsNull && (oldChunkX != newChunkX || oldChunkZ != newChunkZ)) {
+            var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
             if (oldChunk != null) oldChunk.removeEntity(thisEntity.getUniqueId());
             else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
         }
+        var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
         if (newChunk != null) newChunk.addEntity(thisEntity);
         else {
             // Moving into an unloaded chunk is not allowed. Because the entity is held by the chunk, moving to an unloaded chunk will result in the loss of the entity
