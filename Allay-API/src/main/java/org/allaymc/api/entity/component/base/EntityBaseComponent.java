@@ -62,7 +62,7 @@ public interface EntityBaseComponent extends EntityComponent {
     void setSpawned(boolean spawned);
 
     @ApiStatus.Internal
-    void setLocation(Location3fc location);
+    void setLocationAndCheckChunk(Location3fc newLoc);
 
     void teleport(Location3fc location);
 

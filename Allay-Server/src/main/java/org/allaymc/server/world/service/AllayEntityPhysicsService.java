@@ -495,7 +495,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
         entity.broadcastMoveToViewers(newLoc);
-        entity.setLocation(newLoc);
+        entity.setLocationAndCheckChunk(newLoc);
         return true;
     }
 

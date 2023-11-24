@@ -80,7 +80,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected boolean spawned;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
-        this.location = new Location3f(0, 0, 0, info.dimension());
+        this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.entityType = info.getEntityType();
         this.aabb = aabb;
         this.metadata = new Metadata();
@@ -187,25 +187,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     @ApiStatus.Internal
-    public void setLocation(Location3fc location) {
-        if (this.location.dimension == null) {
-            this.location.dimension = location.dimension();
-        }
-        var oldChunkX = (int) this.location.x >> 4;
-        var oldChunkZ = (int) this.location.z >> 4;
-        var newChunkX = (int) location.x() >> 4;
-        var newChunkZ = (int) location.z() >> 4;
-        if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
-            var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
-            var newChunk = location.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-            if (newChunk != null) newChunk.addEntity(thisEntity);
-            else {
-                // Moving into an unloaded chunk is not allowed. Because the entity is held by the chunk, moving to an unloaded chunk will result in the loss of the entity
-                log.debug("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
-            }
-            if (oldChunk != null) oldChunk.removeEntity(thisEntity.getUniqueId());
-            else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
-        }
+    public void setLocationAndCheckChunk(Location3fc newLoc) {
+        checkChunk(this.location, newLoc, this.location.dimension == null);
+        setLocation(newLoc);
+    }
+
+    protected void setLocation(Location3fc location) {
         // Calculate fall distance
         if (!onGround) {
             fallDistance -= location.y() - this.location.y();
@@ -215,6 +202,24 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         this.location.setHeadYaw(location.headYaw());
         this.location.setPitch(location.pitch());
         this.location.setDimension(location.dimension());
+    }
+
+    protected void checkChunk(Location3fc oldLoc, Location3fc newLoc, boolean currentDimIsNull) {
+        var oldChunkX = (int) oldLoc.x() >> 4;
+        var oldChunkZ = (int) oldLoc.z() >> 4;
+        var newChunkX = (int) newLoc.x() >> 4;
+        var newChunkZ = (int) newLoc.z() >> 4;
+        var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
+        var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
+        if (!currentDimIsNull && (oldChunkX != newChunkX || oldChunkZ != newChunkZ)) {
+            if (oldChunk != null) oldChunk.removeEntity(thisEntity.getUniqueId());
+            else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
+        }
+        if (newChunk != null) newChunk.addEntity(thisEntity);
+        else {
+            // Moving into an unloaded chunk is not allowed. Because the entity is held by the chunk, moving to an unloaded chunk will result in the loss of the entity
+            log.debug("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
+        }
     }
 
     @Override
@@ -230,14 +235,14 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         }
         if (this.location.dimension == location.dimension()) {
             // Teleporting in the current same dimension, and we just need to move the entity to the new coordination
-            setLocation(location);
+            setLocationAndCheckChunk(location);
             broadcastMoveToViewers(location, true);
         } else {
             // Teleporting to another dimension, there will be more works to be done
             // TODO: maybe needs more works
             location.dimension().getEntityUpdateService().removeEntity(thisEntity, () -> {
                 location.dimension().getChunkService().getChunkImmediately((int) location.x() >> 4, (int) location.z() >> 4);
-                setLocation(location);
+                setLocationAndCheckChunk(location);
             });
             location.dimension().getEntityUpdateService().addEntity(thisEntity);
         }

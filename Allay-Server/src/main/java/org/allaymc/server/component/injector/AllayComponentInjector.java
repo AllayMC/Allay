@@ -1,5 +1,6 @@
 package org.allaymc.server.component.injector;
 
+import me.sunlan.fastreflection.FastMethod;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.*;
 import org.allaymc.api.component.exception.ComponentInjectException;
@@ -19,7 +20,6 @@ import net.bytebuddy.implementation.MethodDelegation;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -225,13 +225,13 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             listenerMap.computeIfAbsent(eventClass, k -> new ArrayList<>()).add(listener);
         }
 
-        protected static class Listener {
+        static class Listener {
 
-            private final Method method;
+            private final FastMethod method;
             private final Object instance;
 
             Listener(Method method, Object instance) {
-                this.method = method;
+                this.method = FastMethod.create(method, true);
                 this.instance = instance;
             }
 
@@ -242,7 +242,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             void access(ComponentEvent event) {
                 try {
                     method.invoke(instance, event);
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }
             }

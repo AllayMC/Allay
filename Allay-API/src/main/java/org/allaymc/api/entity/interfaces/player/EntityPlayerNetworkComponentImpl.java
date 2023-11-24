@@ -198,7 +198,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 spawnPos.x() >> 4,
                 spawnPos.z() >> 4
         );
-        player.setLocation(new Location3f(spawnPos.x(), 100, spawnPos.z(), dimension));
+        player.setLocationAndCheckChunk(new Location3f(spawnPos.x(), 100, spawnPos.z(), dimension));
         dimension.addPlayer(player);
 
         {
