@@ -65,8 +65,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             injectedClass = new AllayComponentInjector<T>()
                     .interfaceClass(interfaceClass)
                     .component(components)
-                    .useCachedClass(ComponentClassCacheUtils.loadItemType(interfaceClass))
-                    .inject(true);
+                    .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
+                    .inject(false);//todo custom item is always update
         } catch (Exception e) {
             throw new ItemTypeBuildException("Failed to create item type!", e);
         }

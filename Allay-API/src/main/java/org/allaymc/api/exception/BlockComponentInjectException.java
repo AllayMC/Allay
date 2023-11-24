@@ -1,6 +1,4 @@
-package org.allaymc.api.block.component.exception;
-
-import org.allaymc.api.component.exception.ComponentInjectException;
+package org.allaymc.api.exception;
 
 /**
  * The potential exception thrown while injecting component implementations into build {@link org.allaymc.api.block.type.BlockType BlockType}

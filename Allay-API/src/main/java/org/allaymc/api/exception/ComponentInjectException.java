@@ -1,4 +1,4 @@
-package org.allaymc.api.component.exception;
+package org.allaymc.api.exception;
 
 /**
  * Thrown when component injection encounters a problem

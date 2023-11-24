@@ -1,5 +1,6 @@
 package org.allaymc.api.world.storage;
 
+import org.allaymc.api.exception.WorldStorageException;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;

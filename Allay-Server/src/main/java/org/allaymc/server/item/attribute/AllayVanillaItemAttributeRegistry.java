@@ -1,13 +1,13 @@
 package org.allaymc.server.item.attribute;
 
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.component.attribute.ItemAttributes;
 import org.allaymc.api.item.component.attribute.VanillaItemAttributeRegistry;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.utils.StringUtils;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -58,7 +58,7 @@ public class AllayVanillaItemAttributeRegistry extends SimpleMappedRegistry<Vani
                 for (var dataEntry : items) {
                     VanillaItemId type;
                     try {
-                        var typeName = StringUtils.fastTwoPartSplit(dataEntry.getString("name"), ":", "")[1]
+                        var typeName = AllayStringUtils.fastTwoPartSplit(dataEntry.getString("name"), ":", "")[1]
                                 .replace(".","_").toUpperCase();
                         type = VanillaItemId.valueOf(typeName);
                     } catch (IllegalArgumentException ignore) {

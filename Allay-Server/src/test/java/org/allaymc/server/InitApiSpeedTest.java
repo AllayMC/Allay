@@ -1,6 +1,6 @@
 package org.allaymc.server;
 
-import org.allaymc.api.MissingImplementationException;
+import org.allaymc.api.exception.MissingImplementationException;
 
 public class InitApiSpeedTest {
     public static void main(String[] args) throws MissingImplementationException {

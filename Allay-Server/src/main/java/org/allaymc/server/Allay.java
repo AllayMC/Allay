@@ -2,7 +2,6 @@ package org.allaymc.server;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
-import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
@@ -15,6 +14,7 @@ import org.allaymc.api.datastruct.DynamicURLClassLoader;
 import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
+import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.item.component.attribute.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;

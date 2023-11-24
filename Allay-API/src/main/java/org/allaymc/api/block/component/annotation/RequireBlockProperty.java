@@ -1,6 +1,7 @@
 package org.allaymc.api.block.component.annotation;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.exception.BlockComponentInjectException;
 
 import java.lang.annotation.*;
 
@@ -8,7 +9,7 @@ import java.lang.annotation.*;
  * This is an annotation for validation, used on {@link org.allaymc.api.block.component.BlockComponent BlockComponent} and its subclasses,
  * to validate whether the {@link org.allaymc.api.block.type.BlockType BlockType} carrying this annotation has defined specified BlockProperty.
  * <p>
- * If validation fails due to non-existent or mismatched BlockProperty, it will throw a {@link org.allaymc.api.block.component.exception.BlockComponentInjectException BlockComponentInjectException}.
+ * If validation fails due to non-existent or mismatched BlockProperty, it will throw a {@link BlockComponentInjectException BlockComponentInjectException}.
  * <p>
  * Allay Project 2023/4/15
  *

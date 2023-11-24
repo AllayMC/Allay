@@ -18,15 +18,15 @@ class StringUtilsTest {
 
     @Test
     void fastSplit() {
-        assertEquals(List.of("aaa:bbb", "ccc:ddd"), StringUtils.fastSplit(testStr, ";"));
-        assertEquals(List.of("aaa", "bbb;ccc", "ddd"), StringUtils.fastSplit(testStr, ":"));
-        assertEquals(List.of("aaa", "bbb;ccc:ddd"), StringUtils.fastSplit(testStr, ":", 2));
-        assertThrows(IllegalArgumentException.class, () -> StringUtils.fastSplit(testStr, ":", 1));
+        assertEquals(List.of("aaa:bbb", "ccc:ddd"), AllayStringUtils.fastSplit(testStr, ";"));
+        assertEquals(List.of("aaa", "bbb;ccc", "ddd"), AllayStringUtils.fastSplit(testStr, ":"));
+        assertEquals(List.of("aaa", "bbb;ccc:ddd"), AllayStringUtils.fastSplit(testStr, ":", 2));
+        assertThrows(IllegalArgumentException.class, () -> AllayStringUtils.fastSplit(testStr, ":", 1));
     }
 
     @Test
     void fastTwoPartSplit() {
-        assertEquals(List.of("aaa", "bbb;ccc:ddd"), List.of(StringUtils.fastTwoPartSplit(testStr, ":", "")));
-        assertEquals(List.of("", "aaa:bbb;ccc:ddd"), List.of(StringUtils.fastTwoPartSplit(testStr, "?", "")));
+        assertEquals(List.of("aaa", "bbb;ccc:ddd"), List.of(AllayStringUtils.fastTwoPartSplit(testStr, ":", "")));
+        assertEquals(List.of("", "aaa:bbb;ccc:ddd"), List.of(AllayStringUtils.fastTwoPartSplit(testStr, "?", "")));
     }
 }
