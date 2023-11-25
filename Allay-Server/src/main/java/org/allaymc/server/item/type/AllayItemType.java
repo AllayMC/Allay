@@ -13,6 +13,7 @@ import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaItemTags;
+import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.component.attribute.ItemAttributeComponentImpl;
@@ -23,17 +24,13 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.utils.StringUtils;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.server.Allay;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,7 +137,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
                     .forEach(entry -> {
                         var tag = VanillaItemTags.getTagByName(entry.getKey());
                         entry.getValue().getAsJsonArray().forEach(itemId -> {
-                            var id = VanillaItemId.valueOf(StringUtils.fastTwoPartSplit(itemId.getAsString(), ":", "")[1].toUpperCase());
+                            var id = VanillaItemId.valueOf(AllayStringUtils.fastTwoPartSplit(itemId.getAsString(), ":", "")[1].toUpperCase());
                             itemId2tags.computeIfAbsent(id, unused -> new HashSet<>()).add(tag);
                         });
                     });
