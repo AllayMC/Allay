@@ -41,11 +41,11 @@ class RecipeTest {
                         "xx"
                 )
                 .keys(GRASS_KEY)
-                .output(diamond)
+                .outputs(diamond)
                 .build();
 
         assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getIdentifier());
-        assertEquals(ItemDiamondStack.DIAMOND_TYPE, grassMagic1.getOutput().getItemType());
+        assertEquals(ItemDiamondStack.DIAMOND_TYPE, grassMagic1.getOutputs()[0].getItemType());
         assertEquals("test_group", grassMagic1.getGroup());
         assertArrayEquals(new String[]{"test_tag"}, grassMagic1.getTags());
 
@@ -102,7 +102,7 @@ class RecipeTest {
                         "x"
                 )
                 .keys(GRASS_KEY)
-                .output(diamond)
+                .outputs(diamond)
                 .build();
 
         var input8 = new ShapedInput(

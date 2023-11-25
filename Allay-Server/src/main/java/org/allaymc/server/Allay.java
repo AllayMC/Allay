@@ -72,7 +72,7 @@ public final class Allay {
         if (api.isImplemented()) return;
         ComponentClassCacheUtils.checkCacheValid();
         ComponentClassCacheUtils.readCacheMapping();
-        //Common
+        // Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::getInstance);
         api.bind(Scheduler.SchedulerFactory.class, () -> asyncTaskExecutor -> {
@@ -80,34 +80,34 @@ public final class Allay {
             else return new AllayScheduler(asyncTaskExecutor);
         });
 
-        //Item
+        // Item
         api.bind(EnchantmentRegistry.class, AllayEnchantmentRegistry::new, instance -> ((AllayEnchantmentRegistry) instance).init());
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
         api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));
         api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());
 
-        //BlockEntity
+        // BlockEntity
         api.bind(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, () -> AllayBlockEntityType::builder);
         api.bind(BlockEntityTypeRegistry.class, AllayBlockEntityTypeRegistry::new, instance -> ((AllayBlockEntityTypeRegistry) instance).init());
 
-        //Block
+        // Block
         api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
         api.bind(VanillaBlockAttributeRegistry.class, () -> new AllayVanillaBlockAttributeRegistry(new AllayVanillaBlockAttributeRegistry.Loader()));
         api.bind(BlockStateHashPalette.class, AllayBlockStateHashPalette::new);
         api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
 
-        //Entity
+        // Entity
         api.bind(EffectRegistry.class, AllayEffectRegistry::new, instance -> ((AllayEffectRegistry) instance).init());
         api.bind(EntityTypeBuilder.EntityTypeBuilderFactory.class, () -> AllayEntityType::builder);
         api.bind(EntityTypeRegistry.class, AllayEntityTypeRegistry::new, instance -> ((AllayEntityTypeRegistry) instance).init());
 
-        //Biome
+        // Biome
         api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
 
-        //Misc
+        // Misc
         api.bind(VanillaItemMetaBlockStateBiMap.class, AllayVanillaItemMetaBlockStateBiMap::new, instance -> ((AllayVanillaItemMetaBlockStateBiMap) instance).init());
 
-        //Creative Item Registry
+        // Creative Item Registry
         api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
 
         // Recipe

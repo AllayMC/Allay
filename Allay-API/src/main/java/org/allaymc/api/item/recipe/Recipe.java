@@ -33,7 +33,7 @@ public interface Recipe {
     /**
      * @return 此配方的输出
      */
-    ItemStack getOutput();
+    ItemStack[] getOutputs();
 
     /**
      * @return 这个配方所适用的合成类型。例如，工作台配方应具有 "crafting_table" tag

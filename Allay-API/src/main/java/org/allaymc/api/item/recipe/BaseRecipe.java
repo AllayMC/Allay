@@ -17,14 +17,14 @@ public abstract class BaseRecipe implements Recipe {
     protected static ItemDescriptor[] EMPTY_DESCRIPTOR_ARRAY = new ItemDescriptor[0];
     protected Identifier identifier;
     protected String group;
-    protected ItemStack output;
+    protected ItemStack[] outputs;
     protected String[] tags;
-    protected ItemDescriptor[] unlockItems = EMPTY_DESCRIPTOR_ARRAY;
+    protected ItemDescriptor[] unlockItems;
 
-    protected BaseRecipe(Identifier identifier, String group, ItemStack output, String[] tags, ItemDescriptor[] unlockItems) {
+    protected BaseRecipe(Identifier identifier, String group, ItemStack[] outputs, String[] tags, ItemDescriptor[] unlockItems) {
         this.identifier = identifier;
         this.group = group;
-        this.output = output;
+        this.outputs = outputs;
         this.tags = tags;
         this.unlockItems = unlockItems;
     }
@@ -40,8 +40,8 @@ public abstract class BaseRecipe implements Recipe {
     }
 
     @Override
-    public ItemStack getOutput() {
-        return output;
+    public ItemStack[] getOutputs() {
+        return outputs;
     }
 
     @Override

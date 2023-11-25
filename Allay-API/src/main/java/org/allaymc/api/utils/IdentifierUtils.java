@@ -66,7 +66,7 @@ public final class IdentifierUtils {
     }
 
     public static boolean isPathCharacterValid(char character) {
-        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= '0' && character <= '9' || character == '/' || character == '.';
+        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '/' || character == '.';
     }
 
     public static boolean isNamespaceValid(String namespace) {
@@ -78,6 +78,6 @@ public final class IdentifierUtils {
     }
 
     public static boolean isNamespaceCharacterValid(char character) {
-        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= '0' && character <= '9' || character == '.';
+        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '.';
     }
 }

@@ -5,6 +5,7 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
@@ -19,11 +20,15 @@ public class ShapedRecipe extends BaseRecipe {
 
     protected char[][] pattern;
     protected Map<Character, ItemDescriptor> keys;
+    // 配方优先级，当出现多个匹配配方时客户端需要根据优先级决定使用哪个配方
+    // 服务端实现并不需要用到此参数，但是客户端需要
+    protected int priority;
 
-    protected ShapedRecipe(Map<Character, ItemDescriptor> keys, char[][] pattern, Identifier identifier, String group, ItemStack output, String[] tags, ItemDescriptor[] unlockItems) {
-        super(identifier, group, output, tags, unlockItems);
+    protected ShapedRecipe(Map<Character, ItemDescriptor> keys, char[][] pattern, int priority, Identifier identifier, String group, ItemStack[] outputs, String[] tags, ItemDescriptor[] unlockItems) {
+        super(identifier, group, outputs, tags, unlockItems);
         this.keys = keys;
         this.pattern = pattern;
+        this.priority = priority;
     }
 
     public static ShapedRecipeBuilder builder() {
@@ -143,17 +148,32 @@ public class ShapedRecipe extends BaseRecipe {
     public static class ShapedRecipeBuilder {
         private Map<Character, ItemDescriptor> keys;
         private char[][] pattern;
+        private int priority;
         private Identifier identifier;
         private String group;
-        private ItemStack output;
+        private ItemStack[] outputs;
         private String[] tags;
-        private ItemDescriptor[] unlockItems;
+        private String unlockCondition;
+        private ItemDescriptor[] unlockItems = EMPTY_DESCRIPTOR_ARRAY;
 
         ShapedRecipeBuilder() {
         }
 
         public ShapedRecipeBuilder keys(Map<Character, ItemDescriptor> keys) {
             this.keys = keys;
+            return this;
+        }
+
+        public ShapedRecipeBuilder pattern(List<String> stringList) {
+            var commonLength = stringList.get(0).length();
+            pattern = new char[stringList.size()][commonLength];
+            for (int row = 0; row < stringList.size(); row++) {
+                var line = stringList.get(row);
+                if (line.length() != commonLength)
+                    throw new IllegalArgumentException("All row in pattern must have the same length");
+                var charArray = line.toCharArray();
+                System.arraycopy(charArray, 0, pattern[row], 0, charArray.length);
+            }
             return this;
         }
 
@@ -218,6 +238,11 @@ public class ShapedRecipe extends BaseRecipe {
             return this;
         }
 
+        public ShapedRecipeBuilder priority(int priority) {
+            this.priority = priority;
+            return this;
+        }
+
         public ShapedRecipeBuilder identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
@@ -228,8 +253,13 @@ public class ShapedRecipe extends BaseRecipe {
             return this;
         }
 
-        public ShapedRecipeBuilder output(ItemStack output) {
-            this.output = output;
+        public ShapedRecipeBuilder outputs(ItemStack[] outputs) {
+            this.outputs = outputs;
+            return this;
+        }
+
+        public ShapedRecipeBuilder outputs(ItemStack output) {
+            this.outputs = new ItemStack[]{output};
             return this;
         }
 
@@ -243,12 +273,13 @@ public class ShapedRecipe extends BaseRecipe {
             return this;
         }
 
-        public ShapedRecipe build() {
-            return new ShapedRecipe(this.keys, this.pattern, this.identifier, this.group, this.output, this.tags, this.unlockItems);
+        public ShapedRecipeBuilder unlockCondition(String unlockCondition) {
+            this.unlockCondition = unlockCondition;
+            return this;
         }
 
-        public String toString() {
-            return "ShapedRecipe.ShapedRecipeBuilder(keys=" + this.keys + ", pattern=" + java.util.Arrays.deepToString(this.pattern) + ", identifier=" + this.identifier + ", group=" + this.group + ", output=" + this.output + ", tags=" + java.util.Arrays.deepToString(this.tags) + ", unlockItems=" + java.util.Arrays.deepToString(this.unlockItems) + ")";
+        public ShapedRecipe build() {
+            return new ShapedRecipe(this.keys, this.pattern, this.priority, this.identifier, this.group, this.outputs, this.tags, this.unlockItems);
         }
     }
 }
