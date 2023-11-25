@@ -14,6 +14,7 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.Getter;
 import org.allaymc.api.client.data.SemVersion;
 import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.utils.AllayStringUtils;

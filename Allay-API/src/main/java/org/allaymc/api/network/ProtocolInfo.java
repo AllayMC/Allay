@@ -1,8 +1,6 @@
-package org.allaymc.server.network;
+package org.allaymc.api.network;
 
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v594.Bedrock_v594;
-import org.cloudburstmc.protocol.bedrock.codec.v618.Bedrock_v618;
 import org.cloudburstmc.protocol.bedrock.codec.v622.Bedrock_v622;
 import org.jetbrains.annotations.Nullable;
 

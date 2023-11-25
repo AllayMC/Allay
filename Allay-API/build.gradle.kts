@@ -37,9 +37,3 @@ dependencies {
     }
     implementation(libs.libdeflate)
 }
-
-tasks.processResources {
-    // input directory
-    from("${rootProject.projectDir}/Allay-Data/resources")
-    include("mappings")
-}
