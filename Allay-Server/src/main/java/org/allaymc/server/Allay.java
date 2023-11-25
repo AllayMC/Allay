@@ -17,6 +17,7 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.item.component.attribute.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
+import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
@@ -36,6 +37,7 @@ import org.allaymc.server.entity.registry.AllayEntityTypeRegistry;
 import org.allaymc.server.entity.type.AllayEntityType;
 import org.allaymc.server.item.attribute.AllayVanillaItemAttributeRegistry;
 import org.allaymc.server.item.enchantment.AllayEnchantmentRegistry;
+import org.allaymc.server.item.recipe.AllayRecipeRegistry;
 import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
 import org.allaymc.server.item.registry.AllayItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
@@ -107,6 +109,9 @@ public final class Allay {
 
         //Creative Item Registry
         api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
+
+        // Recipe
+        api.bind(RecipeRegistry.class, AllayRecipeRegistry::new, instance -> ((AllayRecipeRegistry) instance).registerVanillaRecipes());
 
         api.implement("Allay");
     }
