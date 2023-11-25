@@ -184,7 +184,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             var attributeComponent = new ItemAttributeComponentImpl(attributes);
             componentProviders.put(ItemAttributeComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
             // Tags for vanilla item
-            var tags = VANILLA_ITEM_TAGS.get(vanillaItemId.getIdentifier());
+            var tags = VANILLA_ITEM_TAGS.get(vanillaItemId);
             if (tags != null) setItemTags(tags);
             return this;
         }
