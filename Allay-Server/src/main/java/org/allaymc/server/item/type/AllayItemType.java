@@ -1,5 +1,10 @@
 package org.allaymc.server.item.type;
 
+import lombok.Getter;
+import lombok.SneakyThrows;
+import lombok.ToString;
+import me.sunlan.fastreflection.FastConstructor;
+import me.sunlan.fastreflection.FastMemberLoader;
 import com.google.gson.JsonParser;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
@@ -8,7 +13,6 @@ import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaItemTags;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.component.attribute.ItemAttributeComponentImpl;
@@ -20,11 +24,9 @@ import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.utils.StringUtils;
+import org.allaymc.server.Allay;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import lombok.Getter;
-import lombok.SneakyThrows;
-import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
@@ -33,6 +35,10 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -41,7 +47,7 @@ import java.util.function.Function;
  * @author daoge_cmd
  */
 public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
-    private final MethodHandle constructorMethodHandle;
+    private final FastConstructor<T> constructor;
     private final Class<T> interfaceClass;
     private final Class<T> injectedClass;
     private final List<ComponentProvider<? extends ItemComponent>> componentProviders;
@@ -72,16 +78,13 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             injectedClass = new AllayComponentInjector<T>()
                     .interfaceClass(interfaceClass)
                     .component(components)
-                    .useCachedClass(ComponentClassCacheUtils.loadItemType(interfaceClass))
-                    .inject(true);
+                    .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
+                    .inject(false);//todo custom item is always update
         } catch (Exception e) {
             throw new ItemTypeBuildException("Failed to create item type!", e);
         }
-        MethodHandles.Lookup lookup = MethodHandles.lookup();
-        MethodType methodType = MethodType.methodType(void.class, ComponentInitInfo.class);
-        //Cache constructor Method Handle
-        var temp = lookup.findConstructor(injectedClass, methodType);
-        constructorMethodHandle = temp.asType(temp.type().changeParameterType(0, ItemStackInitInfo.class).changeReturnType(Object.class));
+        FastMemberLoader fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
+        this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class), fastMemberLoader, false);
     }
 
     public static <T extends ItemStack> ItemTypeBuilder<T, ItemComponent> builder(Class<T> interfaceClass) {
@@ -93,7 +96,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     public T createItemStack(ItemStackInitInfo<T> info) {
         //"info" for ItemAirType is useless and can be null
         if (info != null) info.setItemType(this);
-        return injectedClass.cast(constructorMethodHandle.invokeExact(info));
+        return (T) constructor.invoke(info);
     }
 
     @Override

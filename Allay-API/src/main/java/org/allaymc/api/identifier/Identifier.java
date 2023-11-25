@@ -1,8 +1,10 @@
 package org.allaymc.api.identifier;
 
-import static org.allaymc.api.identifier.IdentifierUtils.isNamespaceValid;
-import static org.allaymc.api.identifier.IdentifierUtils.isPathValid;
-import static org.allaymc.api.utils.StringUtils.fastTwoPartSplit;
+import org.allaymc.api.exception.InvalidIdentifierException;
+
+import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
+import static org.allaymc.api.utils.IdentifierUtils.isNamespaceValid;
+import static org.allaymc.api.utils.IdentifierUtils.isPathValid;
 
 /**
  * A simple logging class that implements the Identified interface

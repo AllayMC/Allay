@@ -5,7 +5,6 @@ import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.allaymc.api.network.NetworkServer;
-import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
@@ -34,7 +33,7 @@ public interface Server extends TaskCreator {
     /**
      * Start the server
      */
-    void start();
+    void start(long timeMillis);
 
     void shutdown();
 
@@ -53,8 +52,6 @@ public interface Server extends TaskCreator {
 
     NetworkServer getNetworkServer();
 
-    Scheduler getServerScheduler();
-
     @UnmodifiableView
     Map<UUID, EntityPlayer> getOnlinePlayers();
 
@@ -70,8 +67,6 @@ public interface Server extends TaskCreator {
         return getWorldPool().getDefaultWorld();
     }
 
-    long getTicks();
-
     void addToPlayerList(EntityPlayer player);
 
     void addToPlayerList(UUID uuid, long entityId, String name, DeviceInfo deviceInfo, String xuid, Skin skin);
@@ -86,7 +81,7 @@ public interface Server extends TaskCreator {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.ADD);
         getPlayerListEntryMap().forEach((uuid, entry) -> {
-            if (uuid != player.getUuid()) {
+            if (uuid != player.getUUID()) {
                 playerListPacket.getEntries().add(entry);
             }
         });

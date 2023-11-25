@@ -2,7 +2,8 @@ package org.allaymc.server.world.storage.leveldb;
 
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.client.data.MinecraftClientVersion;
+import org.allaymc.api.client.data.SemVersion;
+import org.allaymc.api.exception.WorldStorageException;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.DimensionInfo;
@@ -12,7 +13,6 @@ import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.storage.WorldStorage;
-import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.utils.LevelDBKeyUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NBTInputStream;
@@ -203,7 +203,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                     .lastPlayed(d.getLong("LastPlayed"))
                     .name(d.getString("LevelName"))
                     .limitedWorldOriginPoint(new Vector3i(d.getInt("LimitedWorldOriginX"), d.getInt("LimitedWorldOriginY"), d.getInt("LimitedWorldOriginZ")))
-                    .minimumCompatibleClientVersion(MinecraftClientVersion.from(d.getIntArray("MinimumCompatibleClientVersion")))
+                    .minimumCompatibleClientVersion(SemVersion.from(d.getIntArray("MinimumCompatibleClientVersion")))
                     .multiplayerGame(d.getBoolean("MultiplayerGame"))
                     .multiplayerGameIntent(d.getBoolean("MultiplayerGameIntent"))
                     .netherScale(d.getInt("NetherScale"))
@@ -265,7 +265,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                     .isRandomSeedAllowed(d.getBoolean("isRandomSeedAllowed"))
                     .isSingleUseWorld(d.getBoolean("isSingleUseWorld"))
                     .isWorldTemplateOptionLocked(d.getBoolean("isWorldTemplateOptionLocked"))
-                    .lastOpenedWithVersion(MinecraftClientVersion.from(d.getIntArray("lastOpenedWithVersion")))
+                    .lastOpenedWithVersion(SemVersion.from(d.getIntArray("lastOpenedWithVersion")))
                     .lightningLevel(d.getFloat("lightningLevel"))
                     .lightningTime(d.getInt("lightningTime"))
                     .limitedWorldDepth(d.getInt("limitedWorldDepth"))

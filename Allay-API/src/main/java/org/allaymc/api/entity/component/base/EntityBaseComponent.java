@@ -10,6 +10,7 @@ import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
@@ -43,6 +44,8 @@ public interface EntityBaseComponent extends EntityComponent {
 
     Dimension getDimension();
 
+    World getWorld();
+
     boolean willBeAddedNextTick();
 
     @ApiStatus.Internal
@@ -59,7 +62,7 @@ public interface EntityBaseComponent extends EntityComponent {
     void setSpawned(boolean spawned);
 
     @ApiStatus.Internal
-    void setLocation(Location3fc location);
+    void setLocationAndCheckChunk(Location3fc newLoc);
 
     void teleport(Location3fc location);
 

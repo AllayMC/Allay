@@ -37,7 +37,7 @@ tasks.prepareKotlinBuildScriptModel {
 
 tasks.withType<Delete> {
     enabled = true
-    delete("logs", "caches", "output")
+    delete("logs", "caches", "output", "server-settings.yml")
 }
 
 subprojects {

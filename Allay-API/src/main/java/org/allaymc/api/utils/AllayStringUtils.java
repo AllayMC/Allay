@@ -13,7 +13,7 @@ import java.util.List;
  * @author daoge_cmd
  */
 @UtilityClass
-public class StringUtils {
+public class AllayStringUtils {
     public static List<String> fastSplit(String str, String delimiter) {
         return fastSplit(str, delimiter, Integer.MAX_VALUE);
     }

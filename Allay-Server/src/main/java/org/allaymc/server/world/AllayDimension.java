@@ -3,6 +3,7 @@ package org.allaymc.server.world;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;

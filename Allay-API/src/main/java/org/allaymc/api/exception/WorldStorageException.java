@@ -1,4 +1,4 @@
-package org.allaymc.api.world.storage;
+package org.allaymc.api.exception;
 
 /**
  * Allay Project 2023/7/2

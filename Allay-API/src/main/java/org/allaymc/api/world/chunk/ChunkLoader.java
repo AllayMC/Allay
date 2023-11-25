@@ -4,12 +4,9 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3fc;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SubChunkPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SubChunkRequestPacket;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Set;
-import java.util.function.Function;
 
 /**
  * Allay Project 2023/7/1
@@ -41,9 +38,6 @@ public interface ChunkLoader {
     default void unloadChunk(Long chunkHash) {
         onChunkOutOfRange(Set.of(chunkHash));
     }
-
-    @ApiStatus.Internal
-    void setSubChunkRequestHandler(Function<SubChunkRequestPacket, SubChunkPacket> handler);
 
     @ApiStatus.Internal
     void sendLevelChunkPacket(LevelChunkPacket lcp);

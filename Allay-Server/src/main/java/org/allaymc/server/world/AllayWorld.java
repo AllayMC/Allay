@@ -5,23 +5,19 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.GameLoop;
 import org.allaymc.server.scheduler.AllayScheduler;
-import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Allay Project 2023/7/1
@@ -46,7 +42,6 @@ public class AllayWorld implements World {
         this.worldStorage = worldStorage;
         this.worldData = worldStorage.getWorldDataCache();
         this.worldData.setWorld(this);
-
         this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
         this.scheduler = new AllayScheduler();
         this.gameLoop = GameLoop.builder()
@@ -61,8 +56,6 @@ public class AllayWorld implements World {
         this.tickThread = Thread.ofPlatform()
                 .name("World Thread - " + this.getWorldData().getName())
                 .unstarted(gameLoop::startLoop);
-
-        setDimension(new AllayDimension(this, JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD));
     }
 
     @Override
@@ -77,6 +70,7 @@ public class AllayWorld implements World {
 
     @Override
     public void tick(long currentTick) {
+        getDimensions().values().forEach(e -> e.getPlayers().forEach(EntityPlayerNetworkComponent::handleDataPacket));
         tickTime(currentTick);
         scheduler.tick();
         getDimensions().values().forEach(d -> d.tick(currentTick));

@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Range;
 import java.time.Duration;
 import java.util.function.Supplier;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 /**
  * Allay Project 2023/6/23
  *
@@ -61,7 +63,8 @@ public class Utils {
     public void spinUntil(Supplier<Boolean> end, Duration interval) {
         while (end.get()) {
             try {
-                Thread.sleep(interval);
+                long times = MILLISECONDS.convert(interval);
+                Thread.sleep(times);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

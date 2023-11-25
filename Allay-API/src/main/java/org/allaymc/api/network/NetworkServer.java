@@ -1,5 +1,6 @@
 package org.allaymc.api.network;
 
+import org.allaymc.api.client.data.SemVersion;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 
@@ -38,6 +39,8 @@ public interface NetworkServer {
     }
 
     void setMaxPlayerCount(int maxPlayerCount, boolean update);
+
+    SemVersion getSemVersion();
 
     BedrockCodec getCodec();
 }

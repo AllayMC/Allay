@@ -2,7 +2,6 @@ package org.allaymc.api.entity.interfaces.player;
 
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.info.DeviceInfo;
-import org.allaymc.api.client.movement.ClientMovementValidator;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -18,17 +17,13 @@ import java.util.UUID;
  * @author daoge_cmd
  */
 public interface EntityPlayerNetworkComponent extends EntityComponent {
-
-    @ApiStatus.Internal
-    void setClientSession(BedrockServerSession session);
-
     LoginData getLoginData();
 
-    default String getXuid() {
+    default String getXUID() {
         return getLoginData().getXuid();
     }
 
-    default UUID getUuid() {
+    default UUID getUUID() {
         return getLoginData().getUuid();
     }
 
@@ -61,17 +56,18 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
     @Nullable
     SecretKey getEncryptionSecretKey();
 
-    ClientMovementValidator getMovementValidator();
+    /**
+     * Has the player been fully initialized?
+     * (This represents whether the player's client can see the world and proceed with gameplay.)
+     */
+    boolean isInitialized();
 
-    void setMovementValidator(ClientMovementValidator validator);
+    @ApiStatus.Internal
+    void handleDataPacket();
 
-    boolean isLoggedIn();
+    @ApiStatus.Internal
+    void setClientSession(BedrockServerSession session);
 
-    boolean isOnline();
-
-    boolean isFirstSpawned();
-
-    boolean isLocalInitialized();
-
+    @ApiStatus.Internal
     void onChunkInRangeSent();
 }

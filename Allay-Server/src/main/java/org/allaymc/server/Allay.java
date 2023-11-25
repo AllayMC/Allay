@@ -2,7 +2,6 @@ package org.allaymc.server;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
-import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
@@ -15,6 +14,7 @@ import org.allaymc.api.datastruct.DynamicURLClassLoader;
 import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
+import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.item.component.attribute.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
@@ -42,7 +42,6 @@ import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
-import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import org.jetbrains.annotations.VisibleForTesting;
 
 @Slf4j
@@ -50,17 +49,19 @@ public final class Allay {
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
 
     public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
         System.setProperty("joml.format", "false");//set JOML vectors are output without scientific notation
         log.info("Starting Allay...");
         try {
             initAllayAPI();
-            JeGeneratorLoader.setup();
-            JeGeneratorLoader.waitStart();
+            ComponentClassCacheUtils.saveCacheMapping();
+            //JeGeneratorLoader.setup();
+            //JeGeneratorLoader.waitStart();
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
             System.exit(1);
         }
-        Server.getInstance().start();
+        Server.getInstance().start(startTime);
     }
 
     @VisibleForTesting

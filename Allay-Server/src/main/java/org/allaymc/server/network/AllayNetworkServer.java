@@ -1,8 +1,5 @@
 package org.allaymc.server.network;
 
-import org.allaymc.api.network.NetworkServer;
-import org.allaymc.api.server.Server;
-import org.allaymc.api.server.ServerSettings;
 import com.google.common.base.Suppliers;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.bootstrap.ServerBootstrap;
@@ -15,6 +12,11 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.Getter;
+import org.allaymc.api.client.data.SemVersion;
+import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.server.ServerSettings;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
@@ -32,9 +34,9 @@ import java.util.function.Supplier;
  */
 @Getter
 public class AllayNetworkServer implements NetworkServer {
-    public static final Supplier<NioEventLoopGroup> SERVER_EVENT_GROUP = Suppliers.memoize(() -> new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build()));
-    public static final Supplier<EpollEventLoopGroup> SERVER_EPOLL_EVENT_GROUP = Suppliers.memoize(() -> new EpollEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Server IO #%d").setDaemon(true).build()));
-
+    public static final int nettyThreadNumber = Server.getInstance().getServerSettings().networkSettings().networkThreadNumber();
+    public static final Supplier<NioEventLoopGroup> SERVER_EVENT_GROUP = Suppliers.memoize(() -> new NioEventLoopGroup(nettyThreadNumber, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build()));
+    public static final Supplier<EpollEventLoopGroup> SERVER_EPOLL_EVENT_GROUP = Suppliers.memoize(() -> new EpollEventLoopGroup(nettyThreadNumber, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Server IO #%d").setDaemon(true).build()));
     protected static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
 
     protected InetSocketAddress bindAddress;
@@ -77,6 +79,12 @@ public class AllayNetworkServer implements NetworkServer {
                 .bind(bindAddress)
                 .syncUninterruptibly()
                 .channel();
+    }
+
+    @Override
+    public SemVersion getSemVersion() {
+        int[] array = AllayStringUtils.fastSplit(getCodec().getMinecraftVersion(), ".").stream().mapToInt(Integer::parseInt).toArray();
+        return new SemVersion(array[0], array[1], array[2], 0, 0);
     }
 
     @Override

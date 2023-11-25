@@ -1,5 +1,11 @@
 package org.allaymc.server.block.type;
 
+import com.google.common.collect.ImmutableList;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
@@ -18,6 +24,7 @@ import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
+import org.allaymc.api.exception.BlockComponentInjectException;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
@@ -27,15 +34,8 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
-import org.allaymc.server.component.exception.BlockComponentInjectException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import com.google.common.collect.ImmutableList;
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -439,8 +439,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 type.injectedClass = new AllayComponentInjector<T>()
                         .interfaceClass(interfaceClass)
                         .component(componentProviders)
-                        .useCachedClass(ComponentClassCacheUtils.loadBlockType(interfaceClass))
-                        .inject(!isCustomBlock);
+                        .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
+                        .inject(isCustomBlock);
                 type.blockBehavior = type.injectedClass.getConstructor().newInstance();
             } catch (Exception e) {
                 throw new BlockTypeBuildException("Failed to create block type!", e);

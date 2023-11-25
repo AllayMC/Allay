@@ -32,7 +32,6 @@ import org.joml.primitives.AABBf;
 
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 
 /**
  * Allay Project 2023/9/23
@@ -40,7 +39,6 @@ import java.util.function.Function;
  * @author daoge_cmd
  */
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
-
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
@@ -63,12 +61,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Getter
     @Setter
     protected int chunkTrySendCountPerTick = Server.getInstance().getServerSettings().worldSettings().chunkTrySendCountPerTick();
-    @Getter
-    @Setter
-    private Function<SubChunkRequestPacket, SubChunkPacket> subChunkRequestHandler =
-            packet -> {
-                throw new UnsupportedOperationException();
-            };
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));

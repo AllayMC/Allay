@@ -18,13 +18,17 @@ application {
 dependencies {
     api(project(":Allay-API"))
     implementation(libs.bundles.terminal)
-    implementation(libs.progressbar)
     implementation(libs.bundles.logging)
+    implementation(libs.disruptor)
+    implementation(libs.progressbar)
     implementation(libs.bytebuddy)
     implementation(libs.libdeflate)
     implementation(libs.leveldbjni)
     implementation(libs.netty.epoll)
     implementation(libs.jegenerator)
+    implementation(libs.fastreflect)
+    implementation(libs.reflections)
+    implementation(libs.caffeine)
     testImplementation(libs.bytebuddy)
 }
 
