@@ -42,4 +42,8 @@ public interface ItemType<T extends ItemStack> extends Identified {
 
     @Unmodifiable
     Set<ItemTag> getItemTags();
+
+    default boolean hasItemTag(ItemTag itemTag) {
+        return getItemTags().contains(itemTag);
+    }
 }
