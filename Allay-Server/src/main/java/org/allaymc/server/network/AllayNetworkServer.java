@@ -1,6 +1,6 @@
 package org.allaymc.server.network;
 
-import com.google.common.base.Suppliers;
+import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -25,7 +25,6 @@ import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
-import java.util.function.Supplier;
 
 /**
  * Allay Project 2023/6/23
@@ -34,9 +33,6 @@ import java.util.function.Supplier;
  */
 @Getter
 public class AllayNetworkServer implements NetworkServer {
-    public static final int nettyThreadNumber = Server.getInstance().getServerSettings().networkSettings().networkThreadNumber();
-    public static final Supplier<NioEventLoopGroup> SERVER_EVENT_GROUP = Suppliers.memoize(() -> new NioEventLoopGroup(nettyThreadNumber, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build()));
-    public static final Supplier<EpollEventLoopGroup> SERVER_EPOLL_EVENT_GROUP = Suppliers.memoize(() -> new EpollEventLoopGroup(nettyThreadNumber, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Server IO #%d").setDaemon(true).build()));
     protected static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
 
     protected InetSocketAddress bindAddress;
@@ -50,7 +46,10 @@ public class AllayNetworkServer implements NetworkServer {
 
     @Override
     public void start() {
-        var settings = server.getServerSettings();
+        final var settings = server.getServerSettings();
+        final int nettyThreadNumber = settings.networkSettings().networkThreadNumber();
+        Preconditions.checkArgument(nettyThreadNumber >= 0);
+
         this.pong = initPong(settings);
         this.bindAddress = new InetSocketAddress(settings.networkSettings().ip(), settings.networkSettings().port());
 
@@ -58,10 +57,10 @@ public class AllayNetworkServer implements NetworkServer {
         EventLoopGroup eventloopgroup;
         if (Epoll.isAvailable()) {
             oclass = EpollDatagramChannel.class;
-            eventloopgroup = SERVER_EPOLL_EVENT_GROUP.get();
+            eventloopgroup = new EpollEventLoopGroup(nettyThreadNumber, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build());
         } else {
             oclass = NioDatagramChannel.class;
-            eventloopgroup = SERVER_EVENT_GROUP.get();
+            eventloopgroup = new NioEventLoopGroup(nettyThreadNumber, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build());
         }
 
         this.channel = new ServerBootstrap()
