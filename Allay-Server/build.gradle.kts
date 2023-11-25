@@ -17,11 +17,15 @@ application {
 
 dependencies {
     api(project(":Allay-API"))
-    implementation(libs.bundles.terminal)
+    implementation(libs.mcterminal)
     implementation(libs.bundles.logging)
     implementation(libs.disruptor)
-    implementation(libs.progressbar)
-    implementation(libs.bytebuddy)
+    implementation(libs.progressbar) {
+        exclude(group = "org.apache.logging.log4j", module = "log4j-core")
+    }
+    implementation(libs.bytebuddy) {
+        exclude(group = "org.jline", module = "jline")
+    }
     implementation(libs.libdeflate)
     implementation(libs.leveldbjni)
     implementation(libs.netty.epoll)
