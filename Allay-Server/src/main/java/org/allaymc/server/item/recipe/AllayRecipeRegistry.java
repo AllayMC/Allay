@@ -100,7 +100,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 .pattern(ShapedRecipe.PatternHelper.build(patternList))
                 .keys(keys)
                 .outputs(outputs.toArray(ItemStack[]::new))
-                .tags(new String[]{obj.get("block").getAsString()})
+                .tag(obj.get("block").getAsString())
                 .uuid(UUID.fromString(obj.get("uuid").getAsString()))
                 .build();
         registerShaped(recipe);
