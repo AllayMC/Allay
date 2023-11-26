@@ -71,7 +71,7 @@ public class RecipeExportUtil {
         );
         try (InputStream resourceAsStream = RecipeExportUtil.class.getClassLoader().getResourceAsStream("unpacked/crafting_data_packet.bin")) {
             ByteBuf byteBuf = Unpooled.wrappedBuffer(resourceAsStream.readAllBytes());
-            //BDS 写入的CraftingDataPacket开头会多一个字节:52 我不知道这为什么
+            //The CraftingDataPacket written by BDS starts with an additional byte: 52. I'm not sure why this happens.
             byteBuf.skipBytes(1);
             CraftingDataPacket craftingDataPacket = new CraftingDataPacket();
             codec.getPacketDefinition(CraftingDataPacket.class).getSerializer().deserialize(byteBuf, helper, craftingDataPacket);
@@ -225,8 +225,7 @@ public class RecipeExportUtil {
             containerMixes.add(new ContainerMixDataEntry(legacyItemIds.get(containerMix.getInputId()), legacyItemIds.get(containerMix.getReagentId()), legacyItemIds.get(containerMix.getOutputId())));
         }
 
-        JSONUtils.toFile("./Allay-Data/resources/recipes." + codec.getMinecraftVersion().replace(".", "_") + ".json",
-                new Recipes(codec.getProtocolVersion(), craftingData, potionMixes, containerMixes));
+        JSONUtils.toFile("./Allay-Data/resources/recipes.json", new Recipes(codec.getProtocolVersion(), craftingData, potionMixes, containerMixes));
     }
 
     private static List<RecipeItem> writeRecipeItems(List<ItemData> inputs) {
