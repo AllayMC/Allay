@@ -22,7 +22,7 @@ import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
-import org.allaymc.server.world.generator.flat.FlatWorldGenerator;
+import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
 import org.apache.logging.log4j.Level;
@@ -121,11 +121,11 @@ public final class AllayServer implements Server {
         });
         initTerminalConsole();
         this.serverSettings = readServerSettings();
+        loadWorlds();
         this.networkServer = initNetwork();
         log.info("Starting up network server...");
         this.networkServer.start();
         log.info("Network server started at " + serverSettings.networkSettings().ip() + ":" + serverSettings.networkSettings().port() + " ( " + (System.currentTimeMillis() - timeMillis) + "ms )");
-        loadWorlds();
     }
 
     private void initTerminalConsole() {
@@ -135,9 +135,14 @@ public final class AllayServer implements Server {
     }
 
     private void loadWorlds() {
-        //AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("world/Bedrock Level1")));
+        JeGeneratorLoader.setup();
+        JeGeneratorLoader.waitStart();
         AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Cordoba")));
-        defaultWorld.setDimension(new AllayDimension(defaultWorld, new FlatWorldGenerator(), DimensionInfo.OVERWORLD));
+        defaultWorld.setDimension(new AllayDimension(defaultWorld, JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD));
+
+        //FLAT WORLD
+        //AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("world/Bedrock Level1")));
+        //defaultWorld.setDimension(new AllayDimension(defaultWorld, new FlatWorldGenerator(), DimensionInfo.OVERWORLD));
         worldPool.setDefaultWorld(defaultWorld);
     }
 
@@ -194,12 +199,11 @@ public final class AllayServer implements Server {
 
     @Override
     public void onDisconnect(EntityPlayer player) {
-        if (!player.isInitialized()) return;
-        this.getPlayerStorage().writePlayerData(player);
-
-        players.remove(player.getUUID());
+        if (player.isInitialized()) {
+            this.getPlayerStorage().writePlayerData(player);
+        }
         player.getDimension().removePlayer(player);
-
+        players.remove(player.getUUID());
         networkServer.setPlayerCount(players.size());
         var playerListEntry = playerListEntryMap.remove(player.getUUID());
         var pk = new PlayerListPacket();

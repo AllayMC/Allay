@@ -57,8 +57,6 @@ public final class Allay {
         try {
             initAllayAPI();
             ComponentClassCacheUtils.saveCacheMapping();
-            //JeGeneratorLoader.setup();
-            //JeGeneratorLoader.waitStart();
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
             System.exit(1);

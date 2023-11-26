@@ -1,6 +1,5 @@
 package org.allaymc.server.world.service;
 
-import com.google.common.collect.Sets;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
@@ -10,20 +9,19 @@ import org.allaymc.api.world.service.BlockUpdateService;
 import org.joml.Vector3ic;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AllayBlockUpdateService implements BlockUpdateService {
+    public static final int MAX_NU_PER_TICK = 65535;
     protected final Dimension dimension;
     protected final Map<Vector3ic, Long> scheduledUpdates;
-    protected final Set<NeighborUpdate> neighborUpdates;
+    protected final Queue<NeighborUpdate> neighborUpdates;
 
     public AllayBlockUpdateService(Dimension dimension) {
         this.dimension = dimension;
         this.scheduledUpdates = new ConcurrentHashMap<>();
-        this.neighborUpdates = Sets.newConcurrentHashSet();
+        this.neighborUpdates = new LinkedList<>();
     }
 
     @Override
@@ -45,7 +43,9 @@ public class AllayBlockUpdateService implements BlockUpdateService {
                 layer1.getBehavior().onScheduledUpdate(b1);
             }
         }
-        for (NeighborUpdate u : neighborUpdates) {
+        int c = 0;
+        while (!neighborUpdates.isEmpty() && c < MAX_NU_PER_TICK) {
+            var u = neighborUpdates.poll();
             var pos = u.pos;
             var neighborPos = u.neighborPos;
             var blockFace = u.blockFace;
@@ -53,8 +53,9 @@ public class AllayBlockUpdateService implements BlockUpdateService {
             BlockState layer1 = dimension.getBlockState(pos, 1);
             layer0.getBehavior().onNeighborUpdate(pos, neighborPos, blockFace, dimension);
             if (layer1.getBlockAttributes().isLiquid()) {
-                layer0.getBehavior().onNeighborUpdate(pos, neighborPos, blockFace, dimension);
+                layer1.getBehavior().onNeighborUpdate(pos, neighborPos, blockFace, dimension);
             }
+            c++;
         }
     }
 

@@ -119,7 +119,7 @@ public interface EntityPlayer extends
         );
         entityItem.setItemStack(droppedItemStack);
         entityItem.setPickupDelay(40);
-        dimension.getEntityPhysicsService().addEntity(entityItem);
+        dimension.getEntityUpdateService().addEntity(entityItem);
     }
 }
 
