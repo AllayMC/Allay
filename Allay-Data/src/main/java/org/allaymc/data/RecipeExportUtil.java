@@ -89,7 +89,6 @@ public class RecipeExportUtil {
 
             String block = null;
             UUID uuid = null;
-            Integer netId = null;
             String id = null;
 
             if (recipe instanceof TaggedCraftingData taggedCraftingData) {
@@ -97,13 +96,6 @@ public class RecipeExportUtil {
             }
             if (recipe instanceof UniqueCraftingData uniqueCraftingData) {
                 uuid = uniqueCraftingData.getUuid();
-
-                if (recipe instanceof MultiRecipeData multiRecipeData) {
-                    netId = multiRecipeData.getNetId();
-                }
-            }
-            if (recipe instanceof NetworkRecipeData networkRecipeData) {
-                netId = networkRecipeData.getNetId();
             }
             if (recipe instanceof IdentifiableRecipeData identifiableRecipeData) {
                 id = identifiableRecipeData.getId();
@@ -127,7 +119,6 @@ public class RecipeExportUtil {
                 width = shapedRecipeData.getWidth();
                 height = shapedRecipeData.getHeight();
                 uuid = shapedRecipeData.getUuid();
-                netId = shapedRecipeData.getNetId();
 
                 int charCounter = 0;
 
@@ -179,16 +170,13 @@ public class RecipeExportUtil {
 
             if (recipe instanceof ShapelessRecipeData shapelessRecipeData) {
                 uuid = shapelessRecipeData.getUuid();
-                netId = shapelessRecipeData.getNetId();
                 input = writeRecipeItemDescriptors(shapelessRecipeData.getIngredients());
             }
 
             if (recipe instanceof FurnaceRecipeData furnaceRecipeData) {
                 Integer damage = furnaceRecipeData.getInputData();
 
-                if (damage == 0x7fff) {
-                    damage = -1;
-                } else if (damage == 0) {
+                if (damage == 0) {
                     damage = null;
                 }
 
@@ -214,7 +202,7 @@ public class RecipeExportUtil {
                 template = fromNetwork(smithingTrimRecipeData.getTemplate());
             }
 
-            craftingData.add(new CraftingDataEntry(id, type, input, output, entryShape, block, uuid, netId, priority, base, addition, template, result, width, height));
+            craftingData.add(new CraftingDataEntry(id, type, input, output, entryShape, block, uuid, priority, base, addition, template, result, width, height));
         }
 
         for (PotionMixData potionMix : packet.getPotionMixData()) {
@@ -334,7 +322,6 @@ public class RecipeExportUtil {
         private String[] shape;
         private String block;
         private UUID uuid;
-        private Integer netId;
         private Integer priority;
         private Object base;
         private Object addition;

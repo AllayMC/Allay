@@ -8,16 +8,16 @@ import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.descriptor.ComplexAliasDescriptor;
+import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.descriptor.ItemIdentifierAndMetaDescriptor;
-import org.allaymc.api.item.descriptor.ItemIdentifierDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemUnknownStack;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.recipe.ShapedRecipe;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 
 import java.io.InputStreamReader;
 import java.util.*;
@@ -37,118 +37,108 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     }
 
     private void registerVanillaShapedRecipes() {
-        var array = JsonParser.parseReader(new InputStreamReader(Objects.requireNonNull(AllayItemType.class.getClassLoader().getResourceAsStream("recipes/recipe_shaped.json")))).getAsJsonArray();
+        var array = JsonParser.parseReader(new InputStreamReader(Objects.requireNonNull(AllayItemType.class.getClassLoader().getResourceAsStream("recipes.json")))).getAsJsonObject().get("recipes").getAsJsonArray();
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(array.size())
-                .setTaskName("Loading vanilla shaped recipes")
+                .setTaskName("Loading vanilla recipes")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .setUpdateIntervalMillis(100)
                 .build()) {
             for (var entry : array) {
                 var obj = entry.getAsJsonObject();
 
-                // Pattern
-                List<String> patternList = new ArrayList<>();
-                obj.getAsJsonArray("pattern").forEach(line -> {
-                    patternList.add(line.getAsString());
-                });
-
-                // Keys
-                Map<Character, ItemDescriptor> keys = new HashMap<>();
-                obj.getAsJsonObject("key").entrySet().forEach(k -> {
-                    // the length of k.getKey() must be 1 so we can safely convert it to a char
-                    var key = k.getKey().charAt(0);
-                    var itemDescriptor = parseItemDescriptor(k.getValue().getAsJsonObject());
-                    keys.put(key, itemDescriptor);
-                });
-
-                // Outputs
-                // Multi output is possible
-                List<ItemStack> outputs = new ArrayList<>();
-                var result = obj.get("result");
-                if (result.isJsonObject()) {
-                    outputs.add(parseItemStack(result.getAsJsonObject()));
-                } else {
-                    for (var output : result.getAsJsonArray()) {
-                        outputs.add(parseItemStack(output.getAsJsonObject()));
+                switch (CraftingDataType.byId(obj.get("type").getAsInt())) {
+                    case SHAPED -> parseShaped(obj);
+                    // TODO: more type
+                    default -> {
+//                        throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
                     }
                 }
 
-                // Tags
-                var tags = new ArrayList<String>();
-                obj.getAsJsonArray("tags").forEach(tag -> {
-                    tags.add(tag.getAsString());
-                });
-
-                // Unlock
-                var unlockItems = new ArrayList<ItemDescriptor>();
-                String unlockCondition = null;
-                if (obj.has("unlock")) {
-                    var unlock = obj.get("unlock");
-                    if (unlock.isJsonArray()) {
-                        unlock.getAsJsonArray().forEach(item -> {
-                            unlockItems.add(parseItemDescriptor(item.getAsJsonObject()));
-                        });
-                    } else {
-                        unlockCondition = unlock.getAsJsonObject().get("context").getAsString();
-                    }
-                }
-
-                var recipeId = obj.getAsJsonObject("description").get("identifier").getAsString();
-                var recipe = ShapedRecipe
-                        .builder()
-                        .identifier(new Identifier(recipeId))
-                        .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
-                        .group(obj.has("group") ? obj.get("group").getAsString() : "")
-                        .pattern(patternList)
-                        .keys(keys)
-                        .outputs(outputs.toArray(ItemStack[]::new))
-                        .tags(tags.toArray(String[]::new))
-                        .unlockItems(unlockItems.toArray(ItemDescriptor[]::new))
-                        .unlockCondition(unlockCondition)
-                        .build();
-                registerShaped(recipe);
-
-                pgbar.setExtraMessage(recipeId);
+                // furnace recipes don't have both id and uuid
+                pgbar.setExtraMessage(
+                        obj.has("id") ? obj.get("id").getAsString() :
+                                obj.has("uuid") ? obj.get("uuid").getAsString() : "");
                 pgbar.step();
             }
         }
     }
 
-    private ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
-        // There won't be "count" field in item descriptor
-        if (jsonObject.has("tag")) {
-            // item tag descriptor
-            var tagId = jsonObject.get("tag").getAsString();
-            var itemTag = VanillaItemTags.getTagByName(tagId);
-            Objects.requireNonNull(itemTag, "Unknown item tag: " + tagId);
-            return new ItemTagDescriptor(itemTag);
+    private void parseShaped(JsonObject obj) {
+        // Pattern
+        List<String> patternList = new ArrayList<>();
+        obj.getAsJsonArray("shape").forEach(line -> {
+            patternList.add(line.getAsString());
+        });
+
+        // Keys
+        Map<Character, ItemDescriptor> keys = new HashMap<>();
+        obj.getAsJsonObject("input").entrySet().forEach(k -> {
+            // the length of k.getKey() must be 1 so we can safely convert it to a char
+            var key = k.getKey().charAt(0);
+            var itemDescriptor = parseItemDescriptor(k.getValue().getAsJsonObject());
+            keys.put(key, itemDescriptor);
+        });
+
+        // Outputs
+        // Multi output is possible
+        List<ItemStack> outputs = new ArrayList<>();
+        var outputJson = obj.get("output");
+        if (outputJson.isJsonObject()) {
+            outputs.add(parseOutput(outputJson.getAsJsonObject()));
         } else {
-            // jsonObject.has("item") == true
-            // common item descriptor
-            var itemId = new Identifier(jsonObject.get("item").getAsString());
-            ItemDescriptor descriptor;
-            // meta (data) field is optional
-            if (jsonObject.has("data")) {
-                var data = jsonObject.get("data").getAsInt();
-                descriptor = new ItemIdentifierAndMetaDescriptor(itemId, data);
-            } else {
-                descriptor = new ItemIdentifierDescriptor(itemId);
+            for (var output : outputJson.getAsJsonArray()) {
+                outputs.add(parseOutput(output.getAsJsonObject()));
             }
-            return descriptor;
         }
+
+        var recipe = ShapedRecipe
+                .builder()
+                .identifier(new Identifier(obj.get("id").getAsString()))
+                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
+                .pattern(ShapedRecipe.PatternHelper.build(patternList))
+                .keys(keys)
+                .outputs(outputs.toArray(ItemStack[]::new))
+                .tags(new String[]{obj.get("block").getAsString()})
+                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
+                .build();
+        registerShaped(recipe);
     }
 
-    private ItemStack parseItemStack(JsonObject jsonObject) {
-        var itemId = new Identifier(jsonObject.get("item").getAsString());
+    private ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
+        return switch(jsonObject.get("type").getAsString()) {
+            case "default" -> {
+                var itemId = new Identifier(jsonObject.get("itemId").getAsString());
+                // meta (data) field is optional
+                if (jsonObject.has("auxValue")) {
+                    var meta = jsonObject.get("auxValue").getAsInt();
+                    yield new DefaultDescriptor(itemId, meta);
+                } else {
+                    yield new DefaultDescriptor(itemId);
+                }
+            }
+            case "complex_alias" -> {
+                var name = new Identifier(jsonObject.get("name").getAsString());
+                yield new ComplexAliasDescriptor(name);
+            }
+            case "item_tag" -> {
+                var tagId = jsonObject.get("itemTag").getAsString();
+                var itemTag = VanillaItemTags.getTagByName(tagId);
+                Objects.requireNonNull(itemTag, "Unknown item tag: " + tagId);
+                yield new ItemTagDescriptor(itemTag);
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + jsonObject.get("type").getAsString());
+        };
+    }
+
+    private ItemStack parseOutput(JsonObject jsonObject) {
+        var itemId = new Identifier(jsonObject.get("id").getAsString());
         var itemType = ItemTypeRegistry.getRegistry().get(itemId);
-        if (itemType == null) {
-            log.warn("Unknown item type: {}", itemId);
-            return ItemUnknownStack.UNKNOWN_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
-        }
-        var count = jsonObject.has("count") ? jsonObject.get("count").getAsInt() : 1;
-        var meta = jsonObject.has("data") ? jsonObject.get("data").getAsInt() : 0;
+        Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
+        var count = jsonObject.get("count").getAsInt();
+        var meta = jsonObject.has("damage") ? jsonObject.get("damage").getAsInt() : 0;
+        // TODO: nbt_b64
         return itemType.createItemStack(
                 SimpleItemStackInitInfo
                         .builder()

@@ -1,5 +1,6 @@
 package org.allaymc.api.item.recipe;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
@@ -7,6 +8,7 @@ import org.allaymc.api.item.descriptor.ItemDescriptor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 
@@ -24,15 +26,12 @@ public class ShapedRecipe extends BaseRecipe {
     // 服务端实现并不需要用到此参数，但是客户端需要
     protected int priority;
 
-    protected ShapedRecipe(Map<Character, ItemDescriptor> keys, char[][] pattern, int priority, Identifier identifier, String group, ItemStack[] outputs, String[] tags, ItemDescriptor[] unlockItems) {
-        super(identifier, group, outputs, tags, unlockItems);
+    @Builder
+    protected ShapedRecipe(Map<Character, ItemDescriptor> keys, char[][] pattern, int priority, Identifier identifier, ItemStack[] outputs, String tag, ItemDescriptor[] unlockItems, String unlockCondition, UUID uuid) {
+        super(identifier, outputs, tag, unlockItems, unlockCondition, uuid);
         this.keys = keys;
         this.pattern = pattern;
         this.priority = priority;
-    }
-
-    public static ShapedRecipeBuilder builder() {
-        return new ShapedRecipeBuilder();
     }
 
     @Override
@@ -145,28 +144,49 @@ public class ShapedRecipe extends BaseRecipe {
         return false;
     }
 
-    public static class ShapedRecipeBuilder {
-        private Map<Character, ItemDescriptor> keys;
-        private char[][] pattern;
-        private int priority;
-        private Identifier identifier;
-        private String group;
-        private ItemStack[] outputs;
-        private String[] tags;
-        private String unlockCondition;
-        private ItemDescriptor[] unlockItems = EMPTY_DESCRIPTOR_ARRAY;
-
-        ShapedRecipeBuilder() {
+    public interface PatternHelper {
+        static char[][] build(char a, char b, char c,
+                              char d, char e, char f,
+                              char g, char h, char i) {
+            return new char[][]{
+                    {a, b, c},
+                    {d, e, f},
+                    {g, h, i}
+            };
         }
 
-        public ShapedRecipeBuilder keys(Map<Character, ItemDescriptor> keys) {
-            this.keys = keys;
-            return this;
+        static char[][] build(char a, char b,
+                              char c, char d) {
+            return new char[][]{
+                    {a, b},
+                    {c, d}
+            };
         }
 
-        public ShapedRecipeBuilder pattern(List<String> stringList) {
+        static char[][] build(char a) {
+            return new char[][]{
+                    {a}
+            };
+        }
+
+        static char[][] build(String l1, String l2, String l3) {
+            return new char[][]{
+                    l1.toCharArray(),
+                    l2.toCharArray(),
+                    l3.toCharArray()
+            };
+        }
+
+        static char[][] build(String l1, String l2) {
+            return new char[][]{
+                    l1.toCharArray(),
+                    l2.toCharArray()
+            };
+        }
+
+        static char[][] build(List<String> stringList) {
             var commonLength = stringList.get(0).length();
-            pattern = new char[stringList.size()][commonLength];
+            char[][] pattern = new char[stringList.size()][commonLength];
             for (int row = 0; row < stringList.size(); row++) {
                 var line = stringList.get(row);
                 if (line.length() != commonLength)
@@ -174,112 +194,7 @@ public class ShapedRecipe extends BaseRecipe {
                 var charArray = line.toCharArray();
                 System.arraycopy(charArray, 0, pattern[row], 0, charArray.length);
             }
-            return this;
-        }
-
-        public ShapedRecipeBuilder pattern(char[][] pattern) {
-            this.pattern = pattern;
-            return this;
-        }
-
-        // 3x3
-        public ShapedRecipeBuilder pattern(
-                char a, char b, char c,
-                char d, char e, char f,
-                char g, char h, char i) {
-            this.pattern = new char[][]{
-                    {a, b, c},
-                    {d, e, f},
-                    {g, h, i}
-            };
-            return this;
-        }
-
-        // 2x2
-        public ShapedRecipeBuilder pattern(
-                char a, char b,
-                char c, char d) {
-            this.pattern = new char[][]{
-                    {a, b},
-                    {c, d}
-            };
-            return this;
-        }
-
-        // 1x1
-
-        public ShapedRecipeBuilder pattern(char a) {
-            this.pattern = new char[][]{
-                    {a}
-            };
-            return this;
-        }
-
-        public ShapedRecipeBuilder pattern(
-                String l1,
-                String l2,
-                String l3
-        ) {
-            this.pattern = new char[][]{
-                    l1.toCharArray(),
-                    l2.toCharArray(),
-                    l3.toCharArray()
-            };
-            return this;
-        }
-
-        public ShapedRecipeBuilder pattern(
-                String l1,
-                String l2) {
-            this.pattern = new char[][]{
-                    l1.toCharArray(),
-                    l2.toCharArray()
-            };
-            return this;
-        }
-
-        public ShapedRecipeBuilder priority(int priority) {
-            this.priority = priority;
-            return this;
-        }
-
-        public ShapedRecipeBuilder identifier(Identifier identifier) {
-            this.identifier = identifier;
-            return this;
-        }
-
-        public ShapedRecipeBuilder group(String group) {
-            this.group = group;
-            return this;
-        }
-
-        public ShapedRecipeBuilder outputs(ItemStack[] outputs) {
-            this.outputs = outputs;
-            return this;
-        }
-
-        public ShapedRecipeBuilder outputs(ItemStack output) {
-            this.outputs = new ItemStack[]{output};
-            return this;
-        }
-
-        public ShapedRecipeBuilder tags(String[] tags) {
-            this.tags = tags;
-            return this;
-        }
-
-        public ShapedRecipeBuilder unlockItems(ItemDescriptor[] unlockItems) {
-            this.unlockItems = unlockItems;
-            return this;
-        }
-
-        public ShapedRecipeBuilder unlockCondition(String unlockCondition) {
-            this.unlockCondition = unlockCondition;
-            return this;
-        }
-
-        public ShapedRecipe build() {
-            return new ShapedRecipe(this.keys, this.pattern, this.priority, this.identifier, this.group, this.outputs, this.tags, this.unlockItems);
+            return pattern;
         }
     }
 }

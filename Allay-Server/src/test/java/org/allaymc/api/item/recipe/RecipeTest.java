@@ -2,8 +2,9 @@ package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.descriptor.ItemIdentifierDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
@@ -12,6 +13,7 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(AllayTestExtension.class)
 class RecipeTest {
 
-    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new ItemIdentifierDescriptor(VanillaItemId.GRASS.getIdentifier()));
+    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(VanillaItemId.GRASS.getIdentifier()));
 
     @Test
     void testShapedRecipe() {
@@ -34,20 +36,20 @@ class RecipeTest {
         var grassMagic1 = ShapedRecipe
                 .builder()
                 .identifier(new Identifier("minecraft:grass_magic_1"))
-                .group("test_group")
-                .tags(new String[]{"test_tag"})
+                .tag("test_tag")
                 .pattern(
-                        "xx",
-                        "xx"
+                        ShapedRecipe.PatternHelper.build(
+                                "xx",
+                                "xx"
+                        )
                 )
                 .keys(GRASS_KEY)
-                .outputs(diamond)
+                .outputs(new ItemStack[]{diamond})
                 .build();
 
         assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getIdentifier());
         assertEquals(ItemDiamondStack.DIAMOND_TYPE, grassMagic1.getOutputs()[0].getItemType());
-        assertEquals("test_group", grassMagic1.getGroup());
-        assertArrayEquals(new String[]{"test_tag"}, grassMagic1.getTags());
+        assertEquals("test_tag", grassMagic1.getTag());
 
         var input1 = new ShapedInput(
                 grass(), grass(), air(),
@@ -98,11 +100,13 @@ class RecipeTest {
                 .builder()
                 .identifier(new Identifier("minecraft:grass_magic_2"))
                 .pattern(
-                        "x",
-                        "x"
+                        ShapedRecipe.PatternHelper.build(
+                                "x",
+                                "x"
+                        )
                 )
                 .keys(GRASS_KEY)
-                .outputs(diamond)
+                .outputs(new ItemStack[]{diamond})
                 .build();
 
         var input8 = new ShapedInput(

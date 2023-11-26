@@ -26,26 +26,17 @@ class ItemDescriptorTest {
     }
 
     @Test
-    void testItemIdentifierDescriptor() {
-        var descriptor = new ItemIdentifierDescriptor(ItemPlanksStack.PLANKS_TYPE.getIdentifier());
+    void testDefaultDescriptor() {
+        var descriptor = new DefaultDescriptor(ItemPlanksStack.PLANKS_TYPE.getIdentifier(), 32767);
         var plankItemStack = ItemPlanksStack.PLANKS_TYPE.createItemStack(
-                SimpleItemStackInitInfo.builder().count(1).build()
-        );
-        assertTrue(descriptor.match(plankItemStack));
-    }
-
-    @Test
-    void testItemIdentifierAndMetaDescriptor() {
-        var descriptor = new ItemIdentifierAndMetaDescriptor(ItemPlanksStack.PLANKS_TYPE.getIdentifier(), 1);
-        var plankItemStack = ItemPlanksStack.PLANKS_TYPE.createItemStack(
-                SimpleItemStackInitInfo.builder().count(1).meta(1).build()
+                SimpleItemStackInitInfo.builder().meta(1).build()
         );
         assertTrue(descriptor.match(plankItemStack));
     }
 
     @Test
     void testItemDescriptorWithCount() {
-        var descriptor = new ItemDescriptorWithCount(new ItemIdentifierDescriptor(ItemPlanksStack.PLANKS_TYPE.getIdentifier()), 32);
+        var descriptor = new ItemDescriptorWithCount(new DefaultDescriptor(ItemPlanksStack.PLANKS_TYPE.getIdentifier()), 32);
         var plankItemStack = ItemPlanksStack.PLANKS_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().count(32).build()
         );
