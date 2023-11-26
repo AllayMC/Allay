@@ -41,21 +41,21 @@ import java.util.*;
  * @author Kaooot | Cool_Loong
  */
 public class RecipeExportUtil {
-    private static final BedrockCodec codec = ProtocolInfo.getDefaultPacketCodec();
-    private static final Int2ObjectOpenHashMap<String> legacyItemIds = new Int2ObjectOpenHashMap<>();
-    private static final char[] shapeChars = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+    private static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
+    private static final Int2ObjectOpenHashMap<String> LEGACY_ITEM_IDS = new Int2ObjectOpenHashMap<>();
+    private static final char[] SHAPE_CHARS = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
     static {
         for (var i : VanillaItemId.values()) {
-            legacyItemIds.put(i.getRuntimeId(), i.getIdentifier().toString());
+            LEGACY_ITEM_IDS.put(i.getRuntimeId(), i.getIdentifier().toString());
         }
-        legacyItemIds.trim();
+        LEGACY_ITEM_IDS.trim();
     }
 
     @SneakyThrows
     public static void main(String[] args) {
         Allay.initAllayAPI();
-        BedrockCodecHelper helper = codec.createHelper();
+        BedrockCodecHelper helper = CODEC.createHelper();
         helper.setItemDefinitions(
                 SimpleDefinitionRegistry
                         .<ItemDefinition>builder()
@@ -71,10 +71,10 @@ public class RecipeExportUtil {
         );
         try (InputStream resourceAsStream = RecipeExportUtil.class.getClassLoader().getResourceAsStream("unpacked/crafting_data_packet.bin")) {
             ByteBuf byteBuf = Unpooled.wrappedBuffer(resourceAsStream.readAllBytes());
-            //BDS 写入的CraftingDataPacket开头会多一个字节:52 我不知道这为什么
+            // 跳过CraftingDataPacket的packet id
             byteBuf.skipBytes(1);
             CraftingDataPacket craftingDataPacket = new CraftingDataPacket();
-            codec.getPacketDefinition(CraftingDataPacket.class).getSerializer().deserialize(byteBuf, helper, craftingDataPacket);
+            CODEC.getPacketDefinition(CraftingDataPacket.class).getSerializer().deserialize(byteBuf, helper, craftingDataPacket);
             writeRecipes(craftingDataPacket);
         }
     }
@@ -151,7 +151,7 @@ public class RecipeExportUtil {
                         Character shapeChar = charItemMap.get(descriptor);
 
                         if (shapeChar == null) {
-                            shapeChar = shapeChars[charCounter++];
+                            shapeChar = SHAPE_CHARS[charCounter++];
 
                             charItemMap.put(descriptor, shapeChar);
                         }
@@ -192,7 +192,7 @@ public class RecipeExportUtil {
                     damage = null;
                 }
 
-                input = new RecipeItem(legacyItemIds.get(furnaceRecipeData.getInputId()), null, damage, null);
+                input = new RecipeItem(LEGACY_ITEM_IDS.get(furnaceRecipeData.getInputId()), null, damage, null);
                 output = itemFromNetwork(furnaceRecipeData.getResult());
             }
 
@@ -218,15 +218,15 @@ public class RecipeExportUtil {
         }
 
         for (PotionMixData potionMix : packet.getPotionMixData()) {
-            potionMixes.add(new PotionMixDataEntry(legacyItemIds.get(potionMix.getInputId()), potionMix.getInputMeta(), legacyItemIds.get(potionMix.getReagentId()), potionMix.getReagentMeta(), legacyItemIds.get(potionMix.getOutputId()), potionMix.getOutputMeta()));
+            potionMixes.add(new PotionMixDataEntry(LEGACY_ITEM_IDS.get(potionMix.getInputId()), potionMix.getInputMeta(), LEGACY_ITEM_IDS.get(potionMix.getReagentId()), potionMix.getReagentMeta(), LEGACY_ITEM_IDS.get(potionMix.getOutputId()), potionMix.getOutputMeta()));
         }
 
         for (ContainerMixData containerMix : packet.getContainerMixData()) {
-            containerMixes.add(new ContainerMixDataEntry(legacyItemIds.get(containerMix.getInputId()), legacyItemIds.get(containerMix.getReagentId()), legacyItemIds.get(containerMix.getOutputId())));
+            containerMixes.add(new ContainerMixDataEntry(LEGACY_ITEM_IDS.get(containerMix.getInputId()), LEGACY_ITEM_IDS.get(containerMix.getReagentId()), LEGACY_ITEM_IDS.get(containerMix.getOutputId())));
         }
 
-        JSONUtils.toFile("./Allay-Data/resources/recipes." + codec.getMinecraftVersion().replace(".", "_") + ".json",
-                new Recipes(codec.getProtocolVersion(), craftingData, potionMixes, containerMixes));
+        JSONUtils.toFile("./Allay-Data/resources/recipes." + CODEC.getMinecraftVersion().replace(".", "_") + ".json",
+                new Recipes(CODEC.getProtocolVersion(), craftingData, potionMixes, containerMixes));
     }
 
     private static List<RecipeItem> writeRecipeItems(List<ItemData> inputs) {
@@ -298,7 +298,7 @@ public class RecipeExportUtil {
             molangVersion = molangDescriptor.getMolangVersion();
         }
 
-        return new RecipeItemDescriptor(itemDescriptor.getType().name().toLowerCase(), descriptorWithCount.getCount(), name, legacyItemIds.get(itemId), auxValue, fullName, itemTag, tagExpression, molangVersion);
+        return new RecipeItemDescriptor(itemDescriptor.getType().name().toLowerCase(), descriptorWithCount.getCount(), name, LEGACY_ITEM_IDS.get(itemId), auxValue, fullName, itemTag, tagExpression, molangVersion);
     }
 
     /**
