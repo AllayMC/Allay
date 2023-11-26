@@ -213,7 +213,7 @@ public class RecipeExportUtil {
             containerMixes.add(new ContainerMixDataEntry(LEGACY_ITEM_IDS.get(containerMix.getInputId()), LEGACY_ITEM_IDS.get(containerMix.getReagentId()), LEGACY_ITEM_IDS.get(containerMix.getOutputId())));
         }
 
-        JSONUtils.toFile("./Allay-Data/resources/recipes." + CODEC.getMinecraftVersion().replace(".", "_") + ".json",
+        JSONUtils.toFile("./Allay-Data/resources/recipes.json",
                 new Recipes(CODEC.getProtocolVersion(), craftingData, potionMixes, containerMixes));
     }
 
