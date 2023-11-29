@@ -8,6 +8,7 @@ import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
+import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.entity.effect.EffectRegistry;
@@ -166,6 +167,9 @@ public final class AllayAPI {
 
         //Creative Item Registry
         requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
+
+        //Command
+        requireImpl(CommandManager.class, CommandManager.INSTANCE::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {

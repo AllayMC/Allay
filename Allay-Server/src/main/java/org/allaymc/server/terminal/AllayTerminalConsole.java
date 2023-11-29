@@ -1,5 +1,6 @@
 package org.allaymc.server.terminal;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minecrell.terminalconsole.SimpleTerminalConsole;
 import org.allaymc.api.server.Server;
@@ -12,13 +13,12 @@ import org.jline.reader.LineReaderBuilder;
  * @author daoge_cmd
  */
 @Slf4j
+@AllArgsConstructor
 public class AllayTerminalConsole extends SimpleTerminalConsole {
 
-    protected Server server;
+    public static final ConsoleSender SENDER = new ConsoleSender();
 
-    public AllayTerminalConsole(Server server) {
-        this.server = server;
-    }
+    private Server server;
 
     @Override
     protected boolean isRunning() {
@@ -27,18 +27,12 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
 
     @Override
     protected void runCommand(String s) {
-        if (s.equalsIgnoreCase("stop")) {
-            log.info("Server ShutDown...");
-            shutdown();
-        } else {
-            //TODO
-            log.info("§1TODO :)");
-        }
+        SENDER.dispatch(s);
     }
 
     @Override
     protected LineReader buildReader(LineReaderBuilder builder) {
-        //TODO: Completer
+        // TODO: Completer
         builder.appName("Allay");
         builder.option(LineReader.Option.HISTORY_BEEP, false);
         builder.option(LineReader.Option.HISTORY_IGNORE_DUPS, true);

@@ -35,5 +35,6 @@ dependencies {
     api(libs.okaeri.configs.yaml.snakeyaml) {
         exclude(group = "org.yaml", module = "snakeyaml")//use my latest version
     }
+    api(libs.bundles.commands)
     implementation(libs.libdeflate)
 }
