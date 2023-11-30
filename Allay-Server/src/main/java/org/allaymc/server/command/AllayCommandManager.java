@@ -1,6 +1,9 @@
 package org.allaymc.server.command;
 
 import cloud.commandframework.Description;
+import cloud.commandframework.annotations.AnnotationParser;
+import cloud.commandframework.arguments.parser.ParserParameters;
+import cloud.commandframework.arguments.parser.StandardParameters;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
@@ -11,13 +14,31 @@ import org.allaymc.api.command.AllayCommandRegistrationHandler;
 import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Function;
 
 @Slf4j
 public class AllayCommandManager extends CommandManager {
 
+    private final AnnotationParser<CommandSender> annotationParser;
+
     public AllayCommandManager() {
         super(CommandExecutionCoordinator.simpleCoordinator(), new AllayCommandRegistrationHandler());
 
+        Function<ParserParameters, CommandMeta> commandMetaFunction = parameters ->
+                CommandMeta.simple()
+                        // This will allow you to decorate commands with descriptions
+                        .with(CommandMeta.DESCRIPTION, parameters.get(StandardParameters.DESCRIPTION, "No description"))
+                        .build();
+
+        this.annotationParser = new AnnotationParser<>(this, CommandSender.class, commandMetaFunction);
+    }
+
+    public void init() {
+        registerCommand(new GamemodeCommand());
+
+        // for tests only
         command(commandBuilder("test", Description.of("Test cloud command using a builder"), "testalias")
                 .argument(StringArgument.quoted("input"))
                 .argument(IntegerArgument.<CommandSender>builder("number").withMin(1).withMax(100).build())
@@ -33,7 +54,6 @@ public class AllayCommandManager extends CommandManager {
             log.info(c.toString());
         });
 
-        registerCommand(new GamemodeCommand());
     }
 
     @Override
@@ -44,5 +64,16 @@ public class AllayCommandManager extends CommandManager {
     @Override
     public @NonNull CommandMeta createDefaultCommandMeta() {
         return SimpleCommandMeta.builder().build();
+    }
+
+    @Override
+    public void registerCommand(@NotNull Object commandClass) {
+        this.annotationParser.parse(commandClass);
+
+        try {
+            this.annotationParser.parseContainers();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 }

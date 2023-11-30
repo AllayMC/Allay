@@ -48,7 +48,7 @@ import java.util.function.Supplier;
 @Getter
 public final class AllayAPI {
 
-    //TODO: move to file? Prevent problems caused by compiler inlining
+    // TODO: move to file? Prevent problems caused by compiler inlining
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
@@ -133,45 +133,44 @@ public final class AllayAPI {
     }
 
     private void defaultAPIRequirements() {
-        //Common
+        // Common
         requireImpl(Server.class, Server.INSTANCE::set);
         requireImpl(ComponentInjector.ComponentInjectorFactory.class, ComponentInjector.ComponentInjectorFactory.FACTORY::set);
         requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
 
-        //Item
+        // Item
         requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
         requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);
         requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
 
-        //BlockEntity
+        // BlockEntity
         requireImpl(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, BlockEntityTypeBuilder.FACTORY::set);
         requireImpl(BlockEntityTypeRegistry.class, BlockEntityTypeRegistry.REGISTRY::set);
 
-        //Block
+        // Block
         requireImpl(BlockTypeBuilder.BlockTypeBuilderFactory.class, BlockTypeBuilder.FACTORY::set);
         requireImpl(VanillaBlockAttributeRegistry.class, VanillaBlockAttributeRegistry.REGISTRY::set);
         requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
 
-        //Entity
+        // Entity
         requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
         requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
 
-        //Biome
+        // Biome
         requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);
 
-        //Misc
+        // Misc
         requireImpl(VanillaItemMetaBlockStateBiMap.class, VanillaItemMetaBlockStateBiMap.REGISTRY::set);
 
-        //Creative Item Registry
+        // Creative Item Registry
         requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
 
-        //Command
+        // Command
         requireImpl(CommandManager.class, CommandManager.INSTANCE::set);
     }
 
-    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {
-    }
+    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {}
 }

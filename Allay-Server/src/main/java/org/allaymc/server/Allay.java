@@ -53,7 +53,7 @@ public final class Allay {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.setProperty("joml.format", "false");// set JOML vectors are output without scientific notation
+        System.setProperty("joml.format", "false"); // set JOML vectors are output without scientific notation
         log.info("Starting Allay...");
         try {
             initAllayAPI();
@@ -69,8 +69,10 @@ public final class Allay {
     public static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
+
         ComponentClassCacheUtils.checkCacheValid();
         ComponentClassCacheUtils.readCacheMapping();
+
         // Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::getInstance);
@@ -110,7 +112,7 @@ public final class Allay {
         api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
 
         // Command
-        api.bind(CommandManager.class, AllayCommandManager::new);
+        api.bind(CommandManager.class, AllayCommandManager::new, instance -> ((AllayCommandManager) instance).init());
 
         api.implement("Allay");
     }
