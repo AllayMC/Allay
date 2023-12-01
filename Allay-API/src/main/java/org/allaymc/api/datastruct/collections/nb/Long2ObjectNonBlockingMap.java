@@ -78,7 +78,7 @@ import java.util.function.Function;
  * Allay Project
  *
  * @param <TypeV> the type of mapped values
- * @author PowerNukkitX
+ * @author SuperIceCN
  * @since 1.5
  */
 @ApiStatus.Experimental

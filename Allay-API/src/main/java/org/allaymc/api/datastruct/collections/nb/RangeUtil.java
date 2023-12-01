@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 /**
  * Allay Project 2023/7/8
  *
- * @author PowerNukkitX
+ * @author SuperIceCN
  */
 @UtilityClass
 public final class RangeUtil {

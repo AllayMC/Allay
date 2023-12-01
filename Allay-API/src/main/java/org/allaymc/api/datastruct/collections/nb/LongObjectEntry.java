@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Allay Project 2023/7/8
  *
- * @author PowerNukkitX
+ * @author SuperIceCN
  */
 public interface LongObjectEntry<V> extends Map.Entry<Long, V> {
     @Deprecated

@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
  * <p>
  * Allay Project 2023/7/8
  *
- * @author PowerNukkitX
+ * @author SuperIceCN
  * @since 1.5
  */
 @ApiStatus.Experimental
