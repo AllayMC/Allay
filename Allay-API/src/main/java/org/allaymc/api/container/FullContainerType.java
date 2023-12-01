@@ -54,6 +54,12 @@ public record FullContainerType<T extends Container>(
             .mapAllSlotToType(ContainerSlotType.BARREL)
             .build();
 
+    public static final FullContainerType<CraftingTableContainer> CRAFTING_TABLE = builder()
+            .id(ContainerType.WORKBENCH)
+            .size(9)
+            .mapAllSlotToType(ContainerSlotType.CRAFTING_INPUT)
+            .build();
+
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;
