@@ -1,0 +1,63 @@
+package org.allaymc.api.item.recipe;
+
+import lombok.Getter;
+import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.item.ItemStack;
+
+import java.util.UUID;
+
+/**
+ * Allay Project 2023/11/25
+ *
+ * @author daoge_cmd
+ */
+public abstract class CraftingRecipe<INPUT extends Input> implements Recipe<INPUT>, TaggedRecipe, UniqueRecipe, IdentifiedRecipe, NetworkRecipe {
+    protected Identifier identifier;
+    protected ItemStack[] outputs;
+    protected String tag;
+    protected int networkId;
+    protected UUID uuid;
+    // 配方优先级，当出现多个匹配配方时客户端需要根据优先级决定使用哪个配方
+    // 服务端实现并不需要用到此参数，但是客户端需要
+    @Getter
+    protected int priority;
+
+    protected CraftingRecipe(Identifier identifier, ItemStack[] outputs, String tag) {
+        this(identifier, outputs, tag, UUID.randomUUID(), 0);
+    }
+
+    protected CraftingRecipe(Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
+        this.identifier = identifier;
+        this.outputs = outputs;
+        this.tag = tag;
+        this.networkId = NetworkRecipe.assignNetworkId();
+        this.uuid = uuid;
+        this.priority = priority;
+    }
+
+
+    @Override
+    public Identifier getIdentifier() {
+        return identifier;
+    }
+
+    @Override
+    public ItemStack[] getOutputs() {
+        return outputs;
+    }
+
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    @Override
+    public int getNetworkId() {
+        return networkId;
+    }
+
+    @Override
+    public UUID getUUID() {
+        return uuid;
+    }
+}

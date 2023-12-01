@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 
 import java.util.List;
 import java.util.Map;
@@ -18,28 +19,26 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
  * @author daoge_cmd
  */
 @Getter
-public class ShapedRecipe extends BaseRecipe {
+public class ShapedRecipe extends CraftingRecipe<ShapedInput> {
 
     protected char[][] pattern;
     protected Map<Character, ItemDescriptor> keys;
-    // 配方优先级，当出现多个匹配配方时客户端需要根据优先级决定使用哪个配方
-    // 服务端实现并不需要用到此参数，但是客户端需要
-    protected int priority;
 
     @Builder
-    protected ShapedRecipe(Map<Character, ItemDescriptor> keys, char[][] pattern, int priority, Identifier identifier, ItemStack[] outputs, String tag, ItemDescriptor[] unlockItems, String unlockCondition, UUID uuid) {
-        super(identifier, outputs, tag, unlockItems, unlockCondition, uuid);
+    protected ShapedRecipe(Map<Character, ItemDescriptor> keys, char[][] pattern, Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
+        super(identifier, outputs, tag, uuid, priority);
         this.keys = keys;
         this.pattern = pattern;
-        this.priority = priority;
     }
 
     @Override
-    public boolean match(Input input) {
-        ItemStack[][] inputs;
-        if (input instanceof ShapedInput shapedInput) {
-            inputs = removeUselessRowAndColumn(shapedInput.getItems());
-        } else return false;
+    public CraftingDataType getType() {
+        return CraftingDataType.SHAPED;
+    }
+
+    @Override
+    public boolean match(ShapedInput input) {
+        ItemStack[][] inputs = removeUselessRowAndColumn(input.getItems());;
 
         // Check size
         if (inputs.length > pattern.length) {
@@ -118,9 +117,8 @@ public class ShapedRecipe extends BaseRecipe {
 
         ItemStack[][] result = new ItemStack[endRow - startRow + 1][endColumn - startColumn + 1];
         for (int row = startRow; row <= endRow; row++) {
-            for (int column = startColumn; column <= endColumn; column++) {
-                result[row - startRow][column - startColumn] = inputs[row][column];
-            }
+            if (endColumn + 1 - startColumn >= 0)
+                System.arraycopy(inputs[row], startColumn, result[row - startRow], 0, endColumn + 1 - startColumn);
         }
 
         return result;
