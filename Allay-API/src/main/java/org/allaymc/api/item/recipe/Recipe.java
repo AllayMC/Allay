@@ -1,6 +1,7 @@
 package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.recipe.input.Input;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 
 /**

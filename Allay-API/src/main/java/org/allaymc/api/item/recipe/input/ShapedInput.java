@@ -1,5 +1,6 @@
-package org.allaymc.api.item.recipe;
+package org.allaymc.api.item.recipe.input;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 
@@ -9,13 +10,10 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
+@AllArgsConstructor
 public class ShapedInput implements Input {
     // 我们规定左上角物品索引为[0][0]，坐标轴为[行][列]
     protected ItemStack[][] items;
-
-    public ShapedInput(ItemStack[][] items) {
-        this.items = items;
-    }
 
     // 3x3
     public ShapedInput(

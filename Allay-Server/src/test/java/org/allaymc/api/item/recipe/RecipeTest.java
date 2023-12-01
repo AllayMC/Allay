@@ -9,11 +9,11 @@ import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
 import org.allaymc.api.item.interfaces.ItemGrassStack;
+import org.allaymc.api.item.recipe.input.ShapedInput;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;

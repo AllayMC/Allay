@@ -7,6 +7,7 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
+import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
@@ -25,6 +26,10 @@ public interface ItemType<T extends ItemStack> extends Identified {
     List<ComponentProvider<? extends ItemComponent>> getComponentProviders();
 
     T createItemStack(ItemStackInitInfo<T> info);
+
+    default T createItemStack() {
+        return createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+    }
 
     int getRuntimeId();
 

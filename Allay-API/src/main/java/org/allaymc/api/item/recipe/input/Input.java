@@ -1,4 +1,4 @@
-package org.allaymc.api.item.recipe;
+package org.allaymc.api.item.recipe.input;
 
 /**
  * Allay Project 2023/11/25

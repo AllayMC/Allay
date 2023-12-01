@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
+import org.allaymc.api.item.recipe.input.ShapedInput;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 
 import java.util.List;
