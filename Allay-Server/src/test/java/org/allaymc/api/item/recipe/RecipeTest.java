@@ -10,6 +10,7 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
 import org.allaymc.api.item.interfaces.ItemGrassStack;
 import org.allaymc.api.item.recipe.input.ShapedInput;
+import org.allaymc.api.item.recipe.input.ShapelessInput;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +31,6 @@ class RecipeTest {
 
     @Test
     void testShapedRecipe() {
-        ItemDiamondStack diamond = ItemDiamondStack.DIAMOND_TYPE.createItemStack(
-                SimpleItemStackInitInfo.builder().count(1).build()
-        );
         var grassMagic1 = ShapedRecipe
                 .builder()
                 .identifier(new Identifier("minecraft:grass_magic_1"))
@@ -44,7 +42,7 @@ class RecipeTest {
                         )
                 )
                 .keys(GRASS_KEY)
-                .outputs(new ItemStack[]{diamond})
+                .outputs(new ItemStack[]{diamond()})
                 .build();
 
         assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getIdentifier());
@@ -106,7 +104,7 @@ class RecipeTest {
                         )
                 )
                 .keys(GRASS_KEY)
-                .outputs(new ItemStack[]{diamond})
+                .outputs(new ItemStack[]{diamond()})
                 .build();
 
         var input8 = new ShapedInput(
@@ -155,6 +153,39 @@ class RecipeTest {
         assertFalse(grassMagic2.match(input6));
         assertFalse(grassMagic2.match(input7));
     }
+
+    @Test
+    void testShapeless() {
+        var grassMagic1 = ShapelessRecipe
+                .builder()
+                .identifier(new Identifier("minecraft:grass_magic_1"))
+                .ingredients(
+                        new ItemDescriptor[]{
+                                new DefaultDescriptor(VanillaItemId.GRASS.getIdentifier()),
+                                new DefaultDescriptor(VanillaItemId.GRASS.getIdentifier()),
+                                new DefaultDescriptor(VanillaItemId.GRASS.getIdentifier())
+                        }
+                )
+                .outputs(new ItemStack[]{diamond()})
+                .build();
+
+        var input1 = new ShapelessInput(grass(), grass(), grass());
+
+        assertTrue(grassMagic1.match(input1));
+
+        var input2 = new ShapelessInput(grass(), grass(), grass(), grass());
+        var input3 = new ShapelessInput(grass(), grass(), grass(), diamond());
+
+        assertFalse(grassMagic1.match(input2));
+        assertFalse(grassMagic1.match(input3));
+    }
+
+    private ItemDiamondStack diamond() {
+        return ItemDiamondStack.DIAMOND_TYPE.createItemStack(
+                SimpleItemStackInitInfo.builder().count(1).build()
+        );
+    }
+
 
     private ItemGrassStack grass() {
         return ItemGrassStack.GRASS_TYPE.createItemStack(

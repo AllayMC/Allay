@@ -1,5 +1,7 @@
 package org.allaymc.api.item.recipe;
 
+import lombok.Builder;
+import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
@@ -14,10 +16,12 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
+@Getter
 public class ShapelessRecipe extends CraftingRecipe<ShapelessInput> {
 
     protected ItemDescriptor[] ingredients;
 
+    @Builder
     protected ShapelessRecipe(ItemDescriptor[] ingredients, Identifier identifier, ItemStack[] outputs, String tag) {
         super(identifier, outputs, tag);
         this.ingredients = ingredients;
@@ -38,7 +42,7 @@ public class ShapelessRecipe extends CraftingRecipe<ShapelessInput> {
                 checkCount--;
             }
         }
-        return checkCount == 0;
+        return checkCount == 0 && itemPool.isEmpty();
     }
 
     protected int findItem(List<ItemStack> itemPool, ItemDescriptor target) {
