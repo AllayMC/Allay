@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.recipe.input.ShapelessInput;
+import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.UUID;
  * @author daoge_cmd
  */
 @Getter
-public class ShapelessRecipe extends CraftingRecipe<ShapelessInput> {
+public class ShapelessRecipe extends CraftingRecipe<CraftingInput> {
 
     protected ItemDescriptor[] ingredients;
 
@@ -29,12 +29,12 @@ public class ShapelessRecipe extends CraftingRecipe<ShapelessInput> {
     }
 
     @Override
-    public boolean match(ShapelessInput input) {
+    public boolean match(CraftingInput input) {
         if (input.getItems().length != ingredients.length) {
             return false;
         }
 
-        List<ItemStack> itemPool = new ArrayList<>(List.of(input.getItems()));
+        List<ItemStack> itemPool = new ArrayList<>(List.of(input.getFlattenItems()));
         var checkCount = ingredients.length;
         for (var ingredient : ingredients) {
             var index = findItem(itemPool, ingredient);

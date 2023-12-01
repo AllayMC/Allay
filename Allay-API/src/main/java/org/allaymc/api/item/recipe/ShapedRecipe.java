@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.recipe.input.ShapedInput;
+import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
  * @author daoge_cmd
  */
 @Getter
-public class ShapedRecipe extends CraftingRecipe<ShapedInput> {
+public class ShapedRecipe extends CraftingRecipe<CraftingInput> {
 
     protected char[][] pattern;
     protected Map<Character, ItemDescriptor> keys;
@@ -38,7 +38,7 @@ public class ShapedRecipe extends CraftingRecipe<ShapedInput> {
     }
 
     @Override
-    public boolean match(ShapedInput input) {
+    public boolean match(CraftingInput input) {
         ItemStack[][] inputs = removeUselessRowAndColumn(input.getItems());;
 
         // Check size

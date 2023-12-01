@@ -9,8 +9,7 @@ import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
 import org.allaymc.api.item.interfaces.ItemGrassStack;
-import org.allaymc.api.item.recipe.input.ShapedInput;
-import org.allaymc.api.item.recipe.input.ShapelessInput;
+import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,26 +48,26 @@ class RecipeTest {
         assertEquals(ItemDiamondStack.DIAMOND_TYPE, grassMagic1.getOutputs()[0].getItemType());
         assertEquals("test_tag", grassMagic1.getTag());
 
-        var input1 = new ShapedInput(
+        var input1 = new CraftingInput(
                 grass(), grass(), air(),
                 grass(), grass(), air(),
                 air(),   air(),   air()
         );
-        var input2 = new ShapedInput(
+        var input2 = new CraftingInput(
                 grass(), grass(),
                 grass(), grass()
         );
-        var input3 = new ShapedInput(
+        var input3 = new CraftingInput(
                 air(), grass(), grass(),
                 air(), grass(), grass(),
                 air(), air(),   air()
         );
-        var input4 = new ShapedInput(
+        var input4 = new CraftingInput(
                 air(), air(), air(),
                 air(), grass(), grass(),
                 air(), grass(), grass()
         );
-        var input5 = new ShapedInput(
+        var input5 = new CraftingInput(
                 air(), air(), air(),
                 grass(), grass(), air(),
                 grass(), grass(), air()
@@ -80,12 +79,12 @@ class RecipeTest {
         assertTrue(grassMagic1.match(input4));
         assertTrue(grassMagic1.match(input5));
 
-        var input6 = new ShapedInput(
+        var input6 = new CraftingInput(
                 grass(), grass(), grass(),
                 grass(), grass(), grass(),
                 grass(), grass(), grass()
         );
-        var input7 = new ShapedInput(
+        var input7 = new CraftingInput(
                 air(), air(), air(),
                 air(), air(), air(),
                 air(), air(), air()
@@ -107,32 +106,32 @@ class RecipeTest {
                 .outputs(new ItemStack[]{diamond()})
                 .build();
 
-        var input8 = new ShapedInput(
+        var input8 = new CraftingInput(
                 grass(), air(), air(),
                 grass(), air(), air(),
                 air(),   air(), air()
         );
-        var input9 = new ShapedInput(
+        var input9 = new CraftingInput(
                 air(), grass(), air(),
                 air(), grass(), air(),
                 air(),   air(), air()
         );
-        var input10 = new ShapedInput(
+        var input10 = new CraftingInput(
                 air(), air(), grass(),
                 air(), air(), grass(),
                 air(), air(), air()
         );
-        var input11 = new ShapedInput(
+        var input11 = new CraftingInput(
                 air(), air(), air(),
                 grass(), air(), air(),
                 grass(), air(), air()
         );
-        var input12 = new ShapedInput(
+        var input12 = new CraftingInput(
                 air(), air(), air(),
                 air(), grass(), air(),
                 air(), grass(), air()
         );
-        var input13 = new ShapedInput(
+        var input13 = new CraftingInput(
                 air(), air(), air(),
                 air(), air(), grass(),
                 air(), air(), grass()
@@ -169,12 +168,16 @@ class RecipeTest {
                 .outputs(new ItemStack[]{diamond()})
                 .build();
 
-        var input1 = new ShapelessInput(grass(), grass(), grass());
+        var input1 = new CraftingInput(grass(), grass(), grass(), air());
 
         assertTrue(grassMagic1.match(input1));
 
-        var input2 = new ShapelessInput(grass(), grass(), grass(), grass());
-        var input3 = new ShapelessInput(grass(), grass(), grass(), diamond());
+        var input2 = new CraftingInput(
+                grass(), grass(),
+                grass(), grass());
+        var input3 = new CraftingInput(
+                grass(), grass(), grass(),
+                diamond());
 
         assertFalse(grassMagic1.match(input2));
         assertFalse(grassMagic1.match(input3));
