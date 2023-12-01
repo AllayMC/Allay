@@ -23,14 +23,14 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
     @Override
     public ActionResponse handle(T action, EntityPlayer player) {
-        int slot1 = action.getSource().getSlot();
-        int stackNetworkId1 = action.getSource().getStackNetworkId();
-        int slot2 = action.getDestination().getSlot();
-        int stackNetworkId2 = action.getDestination().getStackNetworkId();
         var source = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var destination = player.getReachableContainerBySlotType(action.getDestination().getContainer());
+        int sourceSlot = source.fromNetworkSlotIndex(action.getSource().getSlot());
+        int sourceStackNetworkId = action.getSource().getStackNetworkId();
+        int destinationSlot = destination.fromNetworkSlotIndex(action.getDestination().getSlot());
+        int destinationStackNetworkId = action.getDestination().getStackNetworkId();
         int count = action.getCount();
-        var sourItem = source.getItemStack(slot1);
+        var sourItem = source.getItemStack(sourceSlot);
         if (sourItem.getItemType() == AIR_TYPE) {
             log.warn("place an air item is not allowed");
             return error();
@@ -38,7 +38,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         //若客户端发来的stackNetworkId小于0，说明客户端保证数据无误并要求遵从服务端的数据
         //这通常发生在当一个ItemStackRequest中有多个action时且多个action有相同的source/destination container
         //第一个action检查完id后后面的action就不需要重复检查了
-        if (sourItem.getStackNetworkId() != stackNetworkId1 && stackNetworkId1 > 0) {
+        if (sourItem.getStackNetworkId() != sourceStackNetworkId && sourceStackNetworkId > 0) {
             log.warn("mismatch source stack network id!");
             return error();
         }
@@ -46,12 +46,12 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             log.warn("place an item that has not enough count is not allowed");
             return error();
         }
-        var destItem = destination.getItemStack(slot2);
+        var destItem = destination.getItemStack(destinationSlot);
         if (destItem.getItemType() != AIR_TYPE && destItem.getItemType() != sourItem.getItemType()) {
             log.warn("place an item to a slot that has a different item is not allowed");
             return error();
         }
-        if (destItem.getStackNetworkId() != stackNetworkId2 && stackNetworkId2 > 0) {
+        if (destItem.getStackNetworkId() != destinationStackNetworkId && destinationStackNetworkId > 0) {
             log.warn("mismatch destination stack network id!");
             return error();
         }
@@ -64,12 +64,12 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         if (sourItem.getCount() == count) {
             //第一种：全部拿走
             resultSourItem = Container.EMPTY_SLOT_PLACE_HOLDER;
-            source.setItemStack(slot1, resultSourItem);
+            source.setItemStack(sourceSlot, resultSourItem);
             if (destItem.getItemType() != AIR_TYPE) {
                 resultDestItem = destItem;
                 //目标物品不为空，直接添加数量，目标物品网络堆栈id不变
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.onSlotChange(slot2);
+                destination.onSlotChange(destinationSlot);
             } else {
                 //目标物品为空，直接移动原有堆栈到新位置，网络堆栈id使用源物品的网络堆栈id（相当于换个位置）
                 if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
@@ -77,32 +77,32 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                     sourItem = sourItem.copy(true);
                 }
                 resultDestItem = sourItem;
-                destination.setItemStack(slot2, resultDestItem);
+                destination.setItemStack(destinationSlot, resultDestItem);
             }
         } else {
             //第二种：拿走一部分
             resultSourItem = sourItem;
             resultSourItem.setCount(resultSourItem.getCount() - count);
-            source.onSlotChange(slot1);
+            source.onSlotChange(sourceSlot);
             if (destItem.getItemType() != AIR_TYPE) {
                 //目标物品不为空
                 resultDestItem = destItem;
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.onSlotChange(slot2);
+                destination.onSlotChange(destinationSlot);
             } else {
                 //目标物品为空，为分出来的子物品堆栈新建网络堆栈id
                 resultDestItem = sourItem.copy(true);
                 resultDestItem.setCount(count);
-                destination.setItemStack(slot2, resultDestItem);
+                destination.setItemStack(destinationSlot, resultDestItem);
             }
         }
         var destItemStackResponseSlot =
                 new ItemStackResponseContainer(
-                        destination.getSlotType(slot2),
+                        destination.getSlotType(destinationSlot),
                         List.of(
                                 new ItemStackResponseSlot(
-                                        slot2,
-                                        slot2,
+                                        destination.toNetworkSlotIndex(destinationSlot),
+                                        destination.toNetworkSlotIndex(destinationSlot),
                                         resultDestItem.getCount(),
                                         resultDestItem.getStackNetworkId(),
                                         resultDestItem.getCustomName(),
@@ -115,11 +115,11 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             return new ActionResponse(
                     true,
                     List.of(new ItemStackResponseContainer(
-                            source.getSlotType(slot1),
+                            source.getSlotType(sourceSlot),
                             List.of(
                                     new ItemStackResponseSlot(
-                                            slot1,
-                                            slot1,
+                                            source.toNetworkSlotIndex(sourceSlot),
+                                            source.toNetworkSlotIndex(sourceSlot),
                                             resultSourItem.getCount(),
                                             resultSourItem.getStackNetworkId(),
                                             resultSourItem.getCustomName(),

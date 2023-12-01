@@ -84,6 +84,14 @@ public interface Container {
 
     void loadNBT(List<NbtMap> nbtList);
 
+    default int toNetworkSlotIndex(int index) {
+        return getContainerType().networkSlotIndexMapper().inverse().get(index);
+    }
+
+    default int fromNetworkSlotIndex(int index) {
+        return getContainerType().networkSlotIndexMapper().get(index);
+    }
+
     default void sendContents(ContainerViewer viewer) {
         viewer.sendContents(this);
     }
