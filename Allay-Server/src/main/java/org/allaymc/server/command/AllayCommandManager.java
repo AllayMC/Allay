@@ -1,20 +1,26 @@
 package org.allaymc.server.command;
 
 import cloud.commandframework.annotations.AnnotationParser;
+import cloud.commandframework.arguments.CommandArgument;
+import cloud.commandframework.arguments.StaticArgument;
 import cloud.commandframework.arguments.parser.ParserParameters;
 import cloud.commandframework.arguments.parser.StandardParameters;
 import cloud.commandframework.exceptions.*;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.execution.CommandResult;
+import cloud.commandframework.internal.CommandRegistrationHandler;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.meta.SimpleCommandMeta;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.command.AllayCommandRegistrationHandler;
 import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.cloudburstmc.protocol.bedrock.data.command.*;
+import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.Function;
@@ -25,11 +31,10 @@ public class AllayCommandManager extends CommandManager {
     private final AnnotationParser<CommandSender> annotationParser;
 
     public AllayCommandManager() {
-        super(CommandExecutionCoordinator.simpleCoordinator(), new AllayCommandRegistrationHandler());
+        super(CommandExecutionCoordinator.simpleCoordinator(), CommandRegistrationHandler.nullCommandRegistrationHandler());
 
         Function<ParserParameters, CommandMeta> commandMetaFunction = parameters ->
                 CommandMeta.simple()
-                        // This will allow you to decorate commands with descriptions
                         .with(CommandMeta.DESCRIPTION, parameters.get(StandardParameters.DESCRIPTION, "No description"))
                         .build();
 
@@ -37,15 +42,8 @@ public class AllayCommandManager extends CommandManager {
     }
 
     public void init() {
-        registerCommand(new GameModeCommand());
-        registerCommand(new StopCommand());
-
-        // debug
-        commands().forEach(c -> {
-            c.getArguments().forEach(arg -> log.info(arg.toString()));
-            c.getComponents().forEach(arg -> log.info(arg.toString()));
-            log.info(c.toString());
-        });
+        this.registerCommand(new GameModeCommand());
+        this.registerCommand(new StopCommand());
     }
 
     @Override
@@ -101,7 +99,55 @@ public class AllayCommandManager extends CommandManager {
         try {
             this.annotationParser.parseContainers();
         } catch (Exception exception) {
-            exception.printStackTrace();
+            throw new RuntimeException(exception);
         }
+    }
+
+    @Override
+    public @NotNull AvailableCommandsPacket createPacketFor(@NotNull EntityPlayer player) {
+        var packet = new AvailableCommandsPacket();
+
+        for (var command : this.commands()) {
+            var arguments = command.getArguments();
+            var nameArgument = arguments.remove(0);
+
+            List<String> nameAndAliases = new ArrayList<>();
+            nameAndAliases.add(nameArgument.getName());
+            if (nameArgument instanceof StaticArgument<?> argument)
+                nameAndAliases.addAll(argument.getAlternativeAliases());
+
+            packet.getCommands().add(new CommandData(
+                    nameAndAliases.get(0),
+                    command.getCommandMeta().get(CommandMeta.DESCRIPTION).get(),
+                    Collections.emptySet(),
+                    CommandPermission.ANY,
+                    getAliases(nameAndAliases),
+                    Collections.emptyList(),
+                    getOverloadParams(arguments)
+            ));
+        }
+
+        log.info(packet.toString());
+
+        return packet;
+    }
+
+    private CommandEnumData getAliases(List<String> nameAndAliases) {
+        Map<String, Set<CommandEnumConstraint>> values = new LinkedHashMap<>();
+        for (var alias : nameAndAliases) values.put(alias, Collections.emptySet());
+        return new CommandEnumData(nameAndAliases.get(0) + "Aliases", values, false);
+    }
+
+    private CommandOverloadData[] getOverloadParams(List<CommandArgument<@NonNull CommandSender, @NonNull ?>> arguments) {
+        Set<CommandParamData> params = new HashSet<>();
+        arguments.forEach(argument -> {
+            var paramData = new CommandParamData();
+            paramData.setName(argument.getName());
+            paramData.setOptional(argument.isRequired());
+            paramData.setType(CommandParam.TEXT); // TODO: check type
+            params.add(paramData);
+        });
+
+        return new CommandOverloadData[]{new CommandOverloadData(false, params.toArray(new CommandParamData[0]))};
     }
 }

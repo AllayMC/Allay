@@ -19,6 +19,7 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.chunk.Chunk;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -27,6 +28,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBf;
 
@@ -369,5 +371,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void sendLevelChunkPacket(LevelChunkPacket lcp) {
         networkComponent.sendPacket(lcp);
+    }
+
+    @Override
+    public void reply(@NotNull String message, Object... args) {
+        this.sendRawMessage(String.format(message, args));
+    }
+
+    @Override
+    public boolean hasPermission(@NonNull String permission) {
+        return true; // todo
     }
 }
