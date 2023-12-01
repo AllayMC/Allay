@@ -10,5 +10,5 @@ import org.allaymc.api.item.recipe.input.Input;
  *
  * @author daoge_cmd
  */
-public interface IdentifiedRecipe<INPUT extends Input> extends Recipe<INPUT>, Identified {
+public interface IdentifiedRecipe extends Recipe, Identified {
 }

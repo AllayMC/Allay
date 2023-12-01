@@ -1,7 +1,5 @@
 package org.allaymc.api.item.recipe;
 
-import org.allaymc.api.item.recipe.input.Input;
-
 import java.util.UUID;
 
 /**
@@ -9,7 +7,7 @@ import java.util.UUID;
  *
  * @author daoge_cmd
  */
-public interface UniqueRecipe<INPUT extends Input> extends Recipe<INPUT> {
+public interface UniqueRecipe extends Recipe {
 
     /**
      * @return 配方的UUID

@@ -27,5 +27,7 @@ public interface ContainerActionProcessorHolder {
         holder.registerProcessor(new DestroyActionProcessor());
         holder.registerProcessor(new DropActionProcessor());
         holder.registerProcessor(new SwapActionProcessor());
+        holder.registerProcessor(new CraftRecipeActionProcessor());
+        holder.registerProcessor(new ConsumeActionProcessor());
     }
 }

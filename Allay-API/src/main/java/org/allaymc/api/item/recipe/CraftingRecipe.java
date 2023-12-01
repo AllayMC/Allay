@@ -12,7 +12,7 @@ import java.util.UUID;
  *
  * @author daoge_cmd
  */
-public abstract class CraftingRecipe<INPUT extends Input> implements Recipe<INPUT>, TaggedRecipe<INPUT>, UniqueRecipe<INPUT>, IdentifiedRecipe<INPUT>, NetworkRecipe<INPUT> {
+public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueRecipe, IdentifiedRecipe, NetworkRecipe {
     protected Identifier identifier;
     protected ItemStack[] outputs;
     protected String tag;

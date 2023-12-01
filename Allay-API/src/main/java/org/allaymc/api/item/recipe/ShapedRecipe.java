@@ -6,6 +6,7 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingInput;
+import org.allaymc.api.item.recipe.input.Input;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
  * @author daoge_cmd
  */
 @Getter
-public class ShapedRecipe extends CraftingRecipe<CraftingInput> {
+public class ShapedRecipe extends CraftingRecipe {
 
     protected char[][] pattern;
     protected Map<Character, ItemDescriptor> keys;
@@ -38,8 +39,11 @@ public class ShapedRecipe extends CraftingRecipe<CraftingInput> {
     }
 
     @Override
-    public boolean match(CraftingInput input) {
-        ItemStack[][] inputs = removeUselessRowAndColumn(input.getItems());;
+    public boolean match(Input input) {
+        ItemStack[][] inputs;
+        if (input instanceof CraftingInput craftingInput) {
+            inputs = removeUselessRowAndColumn(craftingInput.getItems());;
+        } else return false;
 
         // Check size
         if (inputs.length > pattern.length) {

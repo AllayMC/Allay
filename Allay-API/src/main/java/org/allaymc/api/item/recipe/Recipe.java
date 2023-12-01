@@ -9,13 +9,13 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataTyp
  *
  * @author daoge_cmd
  */
-public interface Recipe<INPUT extends Input> {
+public interface Recipe {
     /**
      *
      * @param input 输入
      * @return 输入是否匹配配方
      */
-    boolean match(INPUT input);
+    boolean match(Input input);
 
     /**
      * @return 此配方的输出

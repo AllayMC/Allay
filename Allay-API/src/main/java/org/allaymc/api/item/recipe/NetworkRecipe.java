@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author daoge_cmd
  */
-public interface NetworkRecipe<INPUT extends Input> extends Recipe<INPUT>{
+public interface NetworkRecipe extends Recipe{
     AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(1);
 
     static int assignNetworkId() {
