@@ -15,6 +15,8 @@ public interface RecipeRegistry {
         return REGISTRY.get();
     }
 
+    NetworkRecipe<?> getRecipeByNetworkId(int networkId);
+
     void registerShaped(ShapedRecipe recipe);
 
     ShapedRecipe getShapedRecipe(Identifier identifier);

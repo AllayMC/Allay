@@ -2,6 +2,7 @@ package org.allaymc.server.item.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
@@ -13,9 +14,8 @@ import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.recipe.RecipeRegistry;
-import org.allaymc.api.item.recipe.ShapedRecipe;
-import org.allaymc.api.item.recipe.ShapelessRecipe;
+import org.allaymc.api.item.recipe.*;
+import org.allaymc.api.item.recipe.input.Input;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
@@ -31,15 +31,11 @@ import java.util.*;
  */
 @Slf4j
 public class AllayRecipeRegistry implements RecipeRegistry {
+    private final Map<Integer, NetworkRecipe<? extends Input>> networkRecipes = new Int2ObjectOpenHashMap<>();
     private final Map<Identifier, ShapedRecipe> shapedRecipes = new HashMap<>();
     private final Map<Identifier, ShapelessRecipe> shapelessRecipes = new HashMap<>();
 
     public void registerVanillaRecipes() {
-        registerVanillaShapedRecipes();
-        // TODO
-    }
-
-    private void registerVanillaShapedRecipes() {
         var stream = AllayItemType.class.getClassLoader().getResourceAsStream("recipes.json");
         if (stream == null) return;
         var array = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject().get("recipes").getAsJsonArray();
@@ -169,7 +165,13 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     }
 
     @Override
+    public NetworkRecipe<?> getRecipeByNetworkId(int networkId) {
+        return networkRecipes.get(networkId);
+    }
+
+    @Override
     public void registerShaped(ShapedRecipe recipe) {
+        networkRecipes.put(recipe.getNetworkId(), recipe);
         shapedRecipes.put(recipe.getIdentifier(), recipe);
     }
 
@@ -180,6 +182,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
 
     @Override
     public void registerShapeless(ShapelessRecipe recipe) {
+        networkRecipes.put(recipe.getNetworkId(), recipe);
         shapelessRecipes.put(recipe.getIdentifier(), recipe);
     }
 

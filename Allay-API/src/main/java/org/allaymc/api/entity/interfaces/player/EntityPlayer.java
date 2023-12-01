@@ -50,7 +50,8 @@ public interface EntityPlayer extends
                             new PlayerCursorContainer(),
                             new PlayerCreatedOutputContainer(),
                             new PlayerArmorContainer(),
-                            new PlayerOffhandContainer()
+                            new PlayerOffhandContainer(),
+                            new CraftingTableContainer()
                     ) {
                         @ComponentedObject
                         private EntityPlayer player;
