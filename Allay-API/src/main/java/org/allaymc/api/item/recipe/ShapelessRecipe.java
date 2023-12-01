@@ -10,6 +10,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataTyp
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Allay Project 2023/12/1
@@ -22,8 +23,8 @@ public class ShapelessRecipe extends CraftingRecipe<ShapelessInput> {
     protected ItemDescriptor[] ingredients;
 
     @Builder
-    protected ShapelessRecipe(ItemDescriptor[] ingredients, Identifier identifier, ItemStack[] outputs, String tag) {
-        super(identifier, outputs, tag);
+    protected ShapelessRecipe(ItemDescriptor[] ingredients, Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
+        super(identifier, outputs, tag, uuid, priority);
         this.ingredients = ingredients;
     }
 

@@ -15,9 +15,11 @@ import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.recipe.ShapedRecipe;
+import org.allaymc.api.item.recipe.ShapelessRecipe;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
 import java.util.*;
@@ -30,6 +32,7 @@ import java.util.*;
 @Slf4j
 public class AllayRecipeRegistry implements RecipeRegistry {
     private final Map<Identifier, ShapedRecipe> shapedRecipes = new HashMap<>();
+    private final Map<Identifier, ShapelessRecipe> shapelessRecipes = new HashMap<>();
 
     public void registerVanillaRecipes() {
         registerVanillaShapedRecipes();
@@ -37,7 +40,9 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     }
 
     private void registerVanillaShapedRecipes() {
-        var array = JsonParser.parseReader(new InputStreamReader(Objects.requireNonNull(AllayItemType.class.getClassLoader().getResourceAsStream("recipes.json")))).getAsJsonObject().get("recipes").getAsJsonArray();
+        var stream = AllayItemType.class.getClassLoader().getResourceAsStream("recipes.json");
+        if (stream == null) return;
+        var array = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject().get("recipes").getAsJsonArray();
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(array.size())
@@ -49,11 +54,12 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 var obj = entry.getAsJsonObject();
 
                 switch (CraftingDataType.byId(obj.get("type").getAsInt())) {
-                    case SHAPED -> parseShaped(obj);
-                    // TODO: more type
-                    default -> {
-//                        throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
+                    case SHAPELESS -> registerShapeless(parseShapeless(obj));
+                    case SHAPED -> registerShaped(parseShaped(obj));
+                    case FURNACE, FURNACE_DATA, MULTI, SHULKER_BOX, SHAPELESS_CHEMISTRY, SHAPED_CHEMISTRY, SMITHING_TRANSFORM, SMITHING_TRIM -> {
+                        // TODO
                     }
+                    default -> throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
                 }
 
                 // furnace recipes don't have both id and uuid
@@ -65,7 +71,18 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         }
     }
 
-    private void parseShaped(JsonObject obj) {
+    private ShapelessRecipe parseShapeless(JsonObject obj) {
+        return ShapelessRecipe
+                .builder()
+                .identifier(new Identifier(obj.get("id").getAsString()))
+                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
+                .outputs(parseOutputs(obj).toArray(ItemStack[]::new))
+                .tag(obj.get("block").getAsString())
+                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
+                .build();
+    }
+
+    private ShapedRecipe parseShaped(JsonObject obj) {
         // Pattern
         List<String> patternList = new ArrayList<>();
         obj.getAsJsonArray("shape").forEach(line -> {
@@ -81,6 +98,20 @@ public class AllayRecipeRegistry implements RecipeRegistry {
             keys.put(key, itemDescriptor);
         });
 
+        return ShapedRecipe
+                .builder()
+                .identifier(new Identifier(obj.get("id").getAsString()))
+                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
+                .pattern(ShapedRecipe.PatternHelper.build(patternList))
+                .keys(keys)
+                .outputs(parseOutputs(obj).toArray(ItemStack[]::new))
+                .tag(obj.get("block").getAsString())
+                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
+                .build();
+    }
+
+    @NotNull
+    private List<ItemStack> parseOutputs(JsonObject obj) {
         // Outputs
         // Multi output is possible
         List<ItemStack> outputs = new ArrayList<>();
@@ -92,18 +123,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 outputs.add(parseOutput(output.getAsJsonObject()));
             }
         }
-
-        var recipe = ShapedRecipe
-                .builder()
-                .identifier(new Identifier(obj.get("id").getAsString()))
-                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
-                .pattern(ShapedRecipe.PatternHelper.build(patternList))
-                .keys(keys)
-                .outputs(outputs.toArray(ItemStack[]::new))
-                .tag(obj.get("block").getAsString())
-                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
-                .build();
-        registerShaped(recipe);
+        return outputs;
     }
 
     private ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
@@ -156,5 +176,15 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     @Override
     public ShapedRecipe getShapedRecipe(Identifier identifier) {
         return shapedRecipes.get(identifier);
+    }
+
+    @Override
+    public void registerShapeless(ShapelessRecipe recipe) {
+        shapelessRecipes.put(recipe.getIdentifier(), recipe);
+    }
+
+    @Override
+    public ShapelessRecipe getShapelessRecipe(Identifier identifier) {
+        return shapelessRecipes.get(identifier);
     }
 }

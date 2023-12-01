@@ -11,10 +11,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.server.Allay;
 import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
@@ -42,14 +42,14 @@ import java.util.*;
  */
 public class RecipeExportUtil {
     private static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
-    private static final Int2ObjectOpenHashMap<String> LEGACY_ITEM_IDS = new Int2ObjectOpenHashMap<>();
+    private static final Int2ObjectOpenHashMap<String> ITEM_RUNTIME_ID_TO_IDENTIFIER = new Int2ObjectOpenHashMap<>();
     private static final char[] SHAPE_CHARS = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
     static {
         for (var i : VanillaItemId.values()) {
-            LEGACY_ITEM_IDS.put(i.getRuntimeId(), i.getIdentifier().toString());
+            ITEM_RUNTIME_ID_TO_IDENTIFIER.put(i.getRuntimeId(), i.getIdentifier().toString());
         }
-        LEGACY_ITEM_IDS.trim();
+        ITEM_RUNTIME_ID_TO_IDENTIFIER.trim();
     }
 
     @SneakyThrows
@@ -180,7 +180,7 @@ public class RecipeExportUtil {
                     damage = null;
                 }
 
-                input = new RecipeItem(LEGACY_ITEM_IDS.get(furnaceRecipeData.getInputId()), null, damage, null);
+                input = new RecipeItem(ITEM_RUNTIME_ID_TO_IDENTIFIER.get(furnaceRecipeData.getInputId()), null, damage, null);
                 output = itemFromNetwork(furnaceRecipeData.getResult());
             }
 
@@ -206,15 +206,18 @@ public class RecipeExportUtil {
         }
 
         for (PotionMixData potionMix : packet.getPotionMixData()) {
-            potionMixes.add(new PotionMixDataEntry(LEGACY_ITEM_IDS.get(potionMix.getInputId()), potionMix.getInputMeta(), LEGACY_ITEM_IDS.get(potionMix.getReagentId()), potionMix.getReagentMeta(), LEGACY_ITEM_IDS.get(potionMix.getOutputId()), potionMix.getOutputMeta()));
+            potionMixes.add(new PotionMixDataEntry(ITEM_RUNTIME_ID_TO_IDENTIFIER.get(potionMix.getInputId()), potionMix.getInputMeta(), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(potionMix.getReagentId()), potionMix.getReagentMeta(), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(potionMix.getOutputId()), potionMix.getOutputMeta()));
         }
 
         for (ContainerMixData containerMix : packet.getContainerMixData()) {
-            containerMixes.add(new ContainerMixDataEntry(LEGACY_ITEM_IDS.get(containerMix.getInputId()), LEGACY_ITEM_IDS.get(containerMix.getReagentId()), LEGACY_ITEM_IDS.get(containerMix.getOutputId())));
+            containerMixes.add(new ContainerMixDataEntry(ITEM_RUNTIME_ID_TO_IDENTIFIER.get(containerMix.getInputId()), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(containerMix.getReagentId()), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(containerMix.getOutputId())));
         }
 
         JSONUtils.toFile("./Allay-Data/resources/recipes.json",
-                new Recipes(CODEC.getProtocolVersion(), craftingData, potionMixes, containerMixes));
+                new Recipes(CODEC.getProtocolVersion(), craftingData, potionMixes, containerMixes),
+                writer -> {
+                    writer.setIndent("  ");
+                });
     }
 
     private static List<RecipeItem> writeRecipeItems(List<ItemData> inputs) {
@@ -286,7 +289,7 @@ public class RecipeExportUtil {
             molangVersion = molangDescriptor.getMolangVersion();
         }
 
-        return new RecipeItemDescriptor(itemDescriptor.getType().name().toLowerCase(), descriptorWithCount.getCount(), name, LEGACY_ITEM_IDS.get(itemId), auxValue, fullName, itemTag, tagExpression, molangVersion);
+        return new RecipeItemDescriptor(itemDescriptor.getType().name().toLowerCase(), descriptorWithCount.getCount(), name, ITEM_RUNTIME_ID_TO_IDENTIFIER.get(itemId), auxValue, fullName, itemTag, tagExpression, molangVersion);
     }
 
     /**

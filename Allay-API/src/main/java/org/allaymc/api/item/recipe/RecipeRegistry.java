@@ -19,5 +19,9 @@ public interface RecipeRegistry {
 
     ShapedRecipe getShapedRecipe(Identifier identifier);
 
+    void registerShapeless(ShapelessRecipe recipe);
+
+    ShapelessRecipe getShapelessRecipe(Identifier identifier);
+
     // TODO: more recipe type
 }

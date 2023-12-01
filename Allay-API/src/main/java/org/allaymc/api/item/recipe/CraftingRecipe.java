@@ -23,10 +23,6 @@ public abstract class CraftingRecipe<INPUT extends Input> implements Recipe<INPU
     @Getter
     protected int priority;
 
-    protected CraftingRecipe(Identifier identifier, ItemStack[] outputs, String tag) {
-        this(identifier, outputs, tag, UUID.randomUUID(), 0);
-    }
-
     protected CraftingRecipe(Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
         this.identifier = identifier;
         this.outputs = outputs;
