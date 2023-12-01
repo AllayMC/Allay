@@ -70,7 +70,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     public void sendContentsWithSpecificContainerId(Container container, int containerId, int slot) {
         var inventorySlotPacket = new InventorySlotPacket();
         inventorySlotPacket.setContainerId(containerId);
-        inventorySlotPacket.setSlot(slot);
+        inventorySlotPacket.setSlot(container.toNetworkSlotIndex(slot));
         inventorySlotPacket.setItem(container.getItemStack(slot).toNetworkItemData());
         networkComponent.sendPacket(inventorySlotPacket);
     }

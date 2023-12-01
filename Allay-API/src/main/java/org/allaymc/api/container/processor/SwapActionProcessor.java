@@ -27,8 +27,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
     public ActionResponse handle(SwapAction action, EntityPlayer player) {
         Container sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
         Container destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
-        var sourceSlot = action.getSource().getSlot();
-        var destinationSlot = action.getDestination().getSlot();
+        var sourceSlot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
+        var destinationSlot = destinationContainer.fromNetworkSlotIndex(action.getDestination().getSlot());
         var sourceItem = sourceContainer.getItemStack(sourceSlot);
         var destinationItem = destinationContainer.getItemStack(destinationSlot);
         if (sourceItem.getStackNetworkId() != action.getSource().getStackNetworkId()) {
@@ -48,8 +48,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                 sourceContainer.getSlotType(sourceSlot),
                                 Collections.singletonList(
                                         new ItemStackResponseSlot(
-                                                sourceSlot,
-                                                sourceSlot,
+                                                sourceContainer.toNetworkSlotIndex(sourceSlot),
+                                                sourceContainer.toNetworkSlotIndex(sourceSlot),
                                                 destinationItem.getCount(),
                                                 destinationItem.getStackNetworkId(),
                                                 destinationItem.getCustomName(),
@@ -61,8 +61,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                 destinationContainer.getSlotType(destinationSlot),
                                 Collections.singletonList(
                                         new ItemStackResponseSlot(
-                                                destinationSlot,
-                                                destinationSlot,
+                                                destinationContainer.toNetworkSlotIndex(destinationSlot),
+                                                destinationContainer.toNetworkSlotIndex(destinationSlot),
                                                 sourceItem.getCount(),
                                                 sourceItem.getStackNetworkId(),
                                                 sourceItem.getCustomName(),

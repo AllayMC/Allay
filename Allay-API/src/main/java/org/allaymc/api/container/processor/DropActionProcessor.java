@@ -28,7 +28,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
     public ActionResponse handle(DropAction action, EntityPlayer player) {
         Container container = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var count = action.getCount();
-        var slot = action.getSource().getSlot();
+        var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
         var item = container.getItemStack(slot);
         if (item.getStackNetworkId() != action.getSource().getStackNetworkId()) {
             log.warn("mismatch stack network id!");
@@ -51,8 +51,8 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                         container.getSlotType(slot),
                                         Collections.singletonList(
                                                 new ItemStackResponseSlot(
-                                                        slot,
-                                                        slot,
+                                                        container.toNetworkSlotIndex(slot),
+                                                        container.toNetworkSlotIndex(slot),
                                                         item.getCount(),
                                                         item.getStackNetworkId(),
                                                         item.getCustomName(),
@@ -62,9 +62,5 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                 )
                         )
         );
-//        return new ItemStackResponse(
-//                        OK,
-//                        requestId,
-//        );
     }
 }

@@ -33,7 +33,7 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
         }
         var container = player.getContainerBySlotType(action.getSource().getContainer());
         var count = action.getCount();
-        var slot = action.getSource().getSlot();
+        var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
         var item = container.getItemStack(slot);
         if (item.getStackNetworkId() != action.getSource().getStackNetworkId()) {
             log.warn("mismatch stack network id!");
@@ -61,8 +61,8 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
                                 container.getSlotType(slot),
                                 Collections.singletonList(
                                         new ItemStackResponseSlot(
-                                                slot,
-                                                slot,
+                                                container.toNetworkSlotIndex(slot),
+                                                container.toNetworkSlotIndex(slot),
                                                 item.getCount(),
                                                 item.getStackNetworkId(),
                                                 item.getCustomName(),

@@ -1,5 +1,7 @@
 package org.allaymc.api.container;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import org.allaymc.api.container.impl.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType;
@@ -14,7 +16,13 @@ import java.util.*;
 public record FullContainerType<T extends Container>(
         int id,
         ContainerSlotType[] slotTypeTable,
-        Set<ContainerSlotType> heldSlotTypes
+        Set<ContainerSlotType> heldSlotTypes,
+        // 原版对于某些容器提供的slot范围与allay的设计不符，例如工作台：原版为32-39，而allay为0-8
+        // 此双向映射表用于解决上诉问题
+        // The slot range provided by vanilla for some containers does not match the design of the allay. For example, crafting table: 32-39 in vanilla but 0-8 in allay
+        // This bidirectional mapping table is used to resolve appeals
+        // network slot <-> slot that allay used
+        BiMap<Integer, Integer> networkSlotIndexMapper
 ) {
 
     public static final Map<ContainerSlotType, FullContainerType<? extends Container>> SLOT_TYPE_TO_TYPE_MAP = new EnumMap<>(ContainerSlotType.class);
@@ -33,6 +41,7 @@ public record FullContainerType<T extends Container>(
     public static final FullContainerType<PlayerOffhandContainer> OFFHAND = builder()
             .size(1)
             .mapAllSlotToType(ContainerSlotType.OFFHAND)
+            .mapNetworkSlotIndex(1, 0)
             .build();
 
     public static final FullContainerType<PlayerInventoryContainer> PLAYER_INVENTORY = builder()
@@ -46,6 +55,7 @@ public record FullContainerType<T extends Container>(
     public static final FullContainerType<PlayerCreatedOutputContainer> CREATED_OUTPUT = builder()
             .size(1)
             .mapAllSlotToType(ContainerSlotType.CREATED_OUTPUT)
+            .mapNetworkSlotIndex(50, 0)
             .build();
 
     public static final FullContainerType<BarrelContainer> BARREL = builder()
@@ -58,9 +68,10 @@ public record FullContainerType<T extends Container>(
             .id(ContainerType.WORKBENCH)
             .size(9)
             .mapAllSlotToType(ContainerSlotType.CRAFTING_INPUT)
+            .mapRangedNetworkSlotIndex(32, 40, 0)
             .build();
 
-    public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes) {
+    public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;
         //There shouldn't be null entry in slotTypeTable
@@ -77,6 +88,7 @@ public record FullContainerType<T extends Container>(
             if (!mapped.equals(this))
                 throw new IllegalArgumentException("Slot type " + slotType + " is already mapped to " + SLOT_TYPE_TO_TYPE_MAP.get(slotType));
         }
+        this.networkSlotIndexMapper = networkSlotIndexMapper;
     }
 
     public static <T extends Container> FullContainerType<T> fromSlotType(ContainerSlotType type) {
@@ -103,6 +115,7 @@ public record FullContainerType<T extends Container>(
         private final Set<ContainerSlotType> heldSlotTypes = EnumSet.noneOf(ContainerSlotType.class);
         private int id = UNKNOWN_NETWORK_ID;
         private ContainerSlotType[] slotTypeTable;
+        BiMap<Integer, Integer> networkSlotIndexMapper = HashBiMap.create();
 
         public FullContainerTypeBuilder id(int id) {
             this.id = id;
@@ -143,8 +156,29 @@ public record FullContainerType<T extends Container>(
             return this;
         }
 
+        public FullContainerTypeBuilder mapNetworkSlotIndex(int networkSlotIndex, int slot) {
+            networkSlotIndexMapper.put(networkSlotIndex, slot);
+            return this;
+        }
+
+        public FullContainerTypeBuilder mapRangedNetworkSlotIndex(int l, int r, int slot) {
+            if (l > r) throw new IllegalArgumentException("Left must smaller than right!");
+            for (int i = l, j = 0; i <= r; i++, j++) {
+                networkSlotIndexMapper.put(i, slot + j);
+            }
+            return this;
+        }
+
         public <T extends Container> FullContainerType<T> build() {
-            return new FullContainerType<>(id, slotTypeTable, heldSlotTypes);
+            var allaySlotToNetworkSlot = networkSlotIndexMapper.inverse();
+            // 默认将未指定network slot映射的slot映射到自身
+            // By default, the slot that is not specified to be mapped to the network slot is mapped to itself
+            for (int i = 0; i < slotTypeTable.length; i++) {
+                if (!allaySlotToNetworkSlot.containsKey(i)) {
+                    networkSlotIndexMapper.put(i, i);
+                }
+            }
+            return new FullContainerType<>(id, slotTypeTable, heldSlotTypes, networkSlotIndexMapper);
         }
     }
 }
