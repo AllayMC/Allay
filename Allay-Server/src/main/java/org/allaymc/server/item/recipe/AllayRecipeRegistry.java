@@ -72,9 +72,16 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     }
 
     private ShapelessRecipe parseShapeless(JsonObject obj) {
+        // Ingredients
+        List<ItemDescriptor> ingredients = new ArrayList<>();
+        obj.getAsJsonArray("input").forEach(item -> {
+            ingredients.add(parseItemDescriptor(item.getAsJsonObject()));
+        });
+
         return ShapelessRecipe
                 .builder()
                 .identifier(new Identifier(obj.get("id").getAsString()))
+                .ingredients(ingredients.toArray(ItemDescriptor[]::new))
                 .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
                 .outputs(parseOutputs(obj).toArray(ItemStack[]::new))
                 .tag(obj.get("block").getAsString())

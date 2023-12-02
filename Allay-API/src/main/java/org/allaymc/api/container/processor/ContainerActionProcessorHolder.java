@@ -29,5 +29,6 @@ public interface ContainerActionProcessorHolder {
         holder.registerProcessor(new SwapActionProcessor());
         holder.registerProcessor(new CraftRecipeActionProcessor());
         holder.registerProcessor(new ConsumeActionProcessor());
+        holder.registerProcessor(new CraftResultDeprecatedActionProcessor());
     }
 }

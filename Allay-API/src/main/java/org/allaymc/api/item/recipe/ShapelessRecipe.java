@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
+
 /**
  * Allay Project 2023/12/1
  *
@@ -40,11 +42,12 @@ public class ShapelessRecipe extends CraftingRecipe {
             craftingInput = c;
         } else return false;
 
-        if (craftingInput.getItems().length != ingredients.length) {
+        var inputItems = collectNonAirItems(craftingInput.getFlattenItems());
+        if (inputItems.size() != ingredients.length) {
             return false;
         }
 
-        List<ItemStack> itemPool = new ArrayList<>(List.of(craftingInput.getFlattenItems()));
+        List<ItemStack> itemPool = new ArrayList<>(inputItems);
         var checkCount = ingredients.length;
         for (var ingredient : ingredients) {
             var index = findItem(itemPool, ingredient);
@@ -54,6 +57,16 @@ public class ShapelessRecipe extends CraftingRecipe {
             }
         }
         return checkCount == 0 && itemPool.isEmpty();
+    }
+
+    protected List<ItemStack> collectNonAirItems(ItemStack[] items) {
+        var result = new ArrayList<ItemStack>();
+        for (var item : items) {
+            if (item.getItemType() != AIR_TYPE) {
+                result.add(item);
+            }
+        }
+        return result;
     }
 
     protected int findItem(List<ItemStack> itemPool, ItemDescriptor target) {

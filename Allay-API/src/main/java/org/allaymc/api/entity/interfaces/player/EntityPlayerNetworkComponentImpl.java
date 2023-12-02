@@ -493,5 +493,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         public PacketSignal handle(CommandRequestPacket packet) {
             return push(packet);
         }
+
+        @Override
+        public PacketSignal handle(CraftingEventPacket packet) {
+            // Just ignore this packet because it's deprecated
+            return PacketSignal.HANDLED;
+        }
     }
 }

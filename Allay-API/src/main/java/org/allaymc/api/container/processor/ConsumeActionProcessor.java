@@ -32,7 +32,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
             return error();
         }
         var item = sourceContainer.getItemStack(slot);
-        if (item.getStackNetworkId() != sourceStackNetworkId) {
+        if (!validateStackNetworkId(item.getStackNetworkId(), sourceStackNetworkId)) {
             log.warn("mismatch stack network id!");
             return error();
         }

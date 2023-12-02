@@ -32,7 +32,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
         var count = action.getCount();
         var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
         var item = container.getItemStack(slot);
-        if (item.getStackNetworkId() != action.getSource().getStackNetworkId()) {
+        if (!validateStackNetworkId(item.getStackNetworkId(), action.getSource().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }

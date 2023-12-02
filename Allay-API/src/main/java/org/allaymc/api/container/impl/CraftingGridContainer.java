@@ -3,6 +3,7 @@ package org.allaymc.api.container.impl;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.container.BaseContainer;
+import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.ItemStack;
@@ -77,7 +78,8 @@ public class CraftingGridContainer extends BaseContainer {
     }
 
     protected ItemStack pickOne(int slot) {
-        var copy = content[slot].copy(false);
+        if (isEmpty(slot)) return Container.EMPTY_SLOT_PLACE_HOLDER;
+        var copy = getItemStack(slot).copy(false);
         copy.setCount(1);
         return copy;
     }

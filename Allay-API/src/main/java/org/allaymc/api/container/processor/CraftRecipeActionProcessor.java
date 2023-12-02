@@ -42,7 +42,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         } else {
             // Validate the consume action count which client sent
             // 还有一部分检查被放在了ConsumeActionProcessor里面（例如消耗物品数量检查）
-            var consumeActions = findAllContinuousConsumeActions(actions, currentActionIndex + 1);
+            var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
             var consumeActionCountNeeded = craftingGridContainer.calculateShouldConsumedItemCount();
             if (consumeActions.size() != consumeActionCountNeeded) {
                 log.warn("Mismatched consume action count! Expected: " + consumeActionCountNeeded + ", Actual: " + consumeActions.size());
@@ -78,13 +78,13 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         return ItemStackRequestActionType.CRAFT_RECIPE;
     }
 
-    protected List<ConsumeAction> findAllContinuousConsumeActions(ItemStackRequestAction[] actions, int startIndex) {
+    protected List<ConsumeAction> findAllConsumeActions(ItemStackRequestAction[] actions, int startIndex) {
         var found = new ArrayList<ConsumeAction>();
         for (int i = startIndex; i < actions.length; i++) {
             var action = actions[i];
             if (action instanceof ConsumeAction consumeAction) {
                 found.add(consumeAction);
-            } else break;
+            }
         }
         return found;
     }

@@ -60,11 +60,11 @@ public class CraftingInput implements Input {
                 }
                 if (itemStack.getItemType() != AIR_TYPE) {
                     if (itemStack.getCount() != 1) {
-                        throw new IllegalArgumentException("Air ItemStack count must be 1");
+                        throw new IllegalArgumentException("Non-air ItemStack count must be 1");
                     }
                 } else {
                     if (itemStack.getCount() != 0) {
-                        throw new IllegalArgumentException("Non-air ItemStack count must be 0");
+                        throw new IllegalArgumentException("Air ItemStack count must be 0");
                     }
                 }
             }

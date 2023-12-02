@@ -150,6 +150,40 @@ class RecipeTest {
         assertFalse(grassMagic2.match(input5));
         assertFalse(grassMagic2.match(input6));
         assertFalse(grassMagic2.match(input7));
+
+        var grassMagic3 = ShapedRecipe
+                .builder()
+                .identifier(new Identifier("minecraft:grass_magic_3"))
+                .pattern(
+                        ShapedRecipe.PatternHelper.build(
+                                'x'
+                        )
+                )
+                .keys(GRASS_KEY)
+                .outputs(new ItemStack[]{diamond()})
+                .build();
+
+        var input14 = new CraftingInput(
+                grass(), air(),
+                air(), air()
+        );
+        var input15 = new CraftingInput(
+                air(), grass(),
+                air(), air()
+        );
+        var input16 = new CraftingInput(
+                air(), air(),
+                grass(), air()
+        );
+        var input17 = new CraftingInput(
+                air(), air(),
+                air(), grass()
+        );
+
+        assertTrue(grassMagic3.match(input14));
+        assertTrue(grassMagic3.match(input15));
+        assertTrue(grassMagic3.match(input16));
+        assertTrue(grassMagic3.match(input17));
     }
 
     @Test

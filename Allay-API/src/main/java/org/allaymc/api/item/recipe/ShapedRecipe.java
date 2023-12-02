@@ -76,7 +76,7 @@ public class ShapedRecipe extends CraftingRecipe {
     public boolean match(Input input) {
         ItemStack[][] inputs;
         if (input instanceof CraftingInput craftingInput) {
-            inputs = removeUselessRowAndColumn(craftingInput.getItems());;
+            inputs = removeUselessRowAndColumn(craftingInput.getItems());
         } else return false;
 
         // Check size
@@ -92,7 +92,7 @@ public class ShapedRecipe extends CraftingRecipe {
             for (int j = 0, rowLength = row.length; j < rowLength; j++) {
                 var key = row[j];
                 var item = inputs[i][j];
-                if (key == ' ') {
+                if (key == EMPTY_KEY_CHAR) {
                     if (!item.getItemType().equals(AIR_TYPE)) {
                         return false;
                     }
@@ -125,6 +125,8 @@ public class ShapedRecipe extends CraftingRecipe {
                 startRow = row;
                 break;
             }
+            // 发现全部都是空气，直接返回空数组
+            if (row == inputs.length - 1) return EMPTY_ITEM_STACK_ARRAY;
         }
         for (int row = inputs.length - 1; row >= 0; row--) {
             if (notAllEmptyRow(inputs[row])) {
@@ -144,10 +146,6 @@ public class ShapedRecipe extends CraftingRecipe {
                 endColumn = column;
                 break;
             }
-        }
-
-        if (endRow == 0) {
-            return EMPTY_ITEM_STACK_ARRAY;
         }
 
         if (startRow == 0 && endRow == inputs.length - 1 && startColumn == 0 && endColumn == inputs[0].length - 1) {

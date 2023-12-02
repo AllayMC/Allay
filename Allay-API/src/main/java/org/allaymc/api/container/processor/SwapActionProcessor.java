@@ -32,11 +32,11 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
         var destinationSlot = destinationContainer.fromNetworkSlotIndex(action.getDestination().getSlot());
         var sourceItem = sourceContainer.getItemStack(sourceSlot);
         var destinationItem = destinationContainer.getItemStack(destinationSlot);
-        if (sourceItem.getStackNetworkId() != action.getSource().getStackNetworkId()) {
+        if (!validateStackNetworkId(sourceItem.getStackNetworkId(), action.getSource().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }
-        if (destinationItem.getStackNetworkId() != action.getDestination().getStackNetworkId()) {
+        if (!validateStackNetworkId(destinationItem.getStackNetworkId(), action.getDestination().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }
