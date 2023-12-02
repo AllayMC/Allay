@@ -2,7 +2,6 @@ package org.allaymc.api.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
-import org.allaymc.api.item.recipe.CraftingRecipe;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
@@ -43,6 +42,13 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             if (consumeActions.size() != consumeActionCountNeeded) {
                 log.warn("Mismatched consume action count! Expected: " + consumeActionCountNeeded + ", Actual: " + consumeActions.size());
                 return error();
+            }
+            if (recipe.getOutputs().length == 1) {
+                // 若配方输出物品为1，客户端将不会发送CreateAction，此时我们直接在CraftRecipeAction输出物品到CREATED_OUTPUT
+                // 若配方输出物品为多个，客户端将会发送CreateAction，此时我们将在CreateActionProcessor里面输出物品到CREATED_OUTPUT
+                var output = recipe.getOutputs()[0];
+                var createdOutput = player.getContainer(CREATED_OUTPUT);
+                createdOutput.setItemStack(0, output);
             }
         }
         return null;
