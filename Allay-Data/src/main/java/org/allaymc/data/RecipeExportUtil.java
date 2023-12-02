@@ -15,10 +15,8 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.data.VanillaItemId;
+import org.allaymc.api.utils.NbtUtils;
 import org.allaymc.server.Allay;
-import org.cloudburstmc.nbt.NBTOutputStream;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodecHelper;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
@@ -31,7 +29,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.*;
 import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.*;
 
@@ -254,7 +251,7 @@ public class RecipeExportUtil {
         String tag = null;
 
         if (itemData.getTag() != null) {
-            tag = nbtToBase64(itemData.getTag());
+            tag = NbtUtils.nbtToBase64(itemData.getTag());
         }
 
         if (damage != null && (damage == 0 || damage == -1)) {
@@ -290,20 +287,6 @@ public class RecipeExportUtil {
         }
 
         return new RecipeItemDescriptor(itemDescriptor.getType().name().toLowerCase(), descriptorWithCount.getCount(), name, ITEM_RUNTIME_ID_TO_IDENTIFIER.get(itemId), auxValue, fullName, itemTag, tagExpression, molangVersion);
-    }
-
-    /**
-     * Converts a nbt tag to a base64 encoded string
-     */
-    public static String nbtToBase64(NbtMap nbtMap) {
-        try (ByteArrayOutputStream stream = new ByteArrayOutputStream(); NBTOutputStream writer = NbtUtils.createWriterLE(stream)) {
-            writer.writeTag(nbtMap);
-            return Base64.getEncoder().encodeToString(stream.toByteArray());
-        } catch (Exception e) {
-            // Handle exceptions accordingly
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Data
