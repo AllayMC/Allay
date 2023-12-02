@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.allaymc.api.container.FullContainerType.CRAFTING_GRID;
+import static org.allaymc.api.container.FullContainerType.*;
 
 /**
  * Allay Project 2023/12/1
@@ -47,7 +47,29 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             if (consumeActions.size() != consumeActionCountNeeded) {
                 log.warn("Mismatched consume action count! Expected: " + consumeActionCountNeeded + ", Actual: " + consumeActions.size());
                 return error();
-            } else return null;
+            } else {
+                // Set first output item to CREATED_OUTPUT
+                var createdOutput = player.getContainer(CREATED_OUTPUT);
+                var outputs = craftingRecipe.getOutputs();
+                var firstOutput = outputs[0];
+                createdOutput.setItemStack(0, firstOutput);
+                if (outputs.length > 1) {
+                    // Multi-outputs, eg: cake recipe
+                    var playerInventory = player.getContainer(PLAYER_INVENTORY);
+                    var isPlayerInvFull = false;
+                    for (var i = 1; i < outputs.length; i++) {
+                        var moreOutput = outputs[i];
+                        if (isPlayerInvFull) {
+                            player.dropItemInPlayerPos(moreOutput);
+                        } else {
+                            if (playerInventory.tryAddItem(moreOutput) == -1) {
+                                isPlayerInvFull = true;
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
         }
     }
 

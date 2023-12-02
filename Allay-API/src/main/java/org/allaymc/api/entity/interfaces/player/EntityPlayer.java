@@ -1,15 +1,10 @@
 package org.allaymc.api.entity.interfaces.player;
 
-import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.*;
 import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponentImpl;
-import org.allaymc.api.entity.component.container.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.container.EntityContainerHolderComponentImpl;
 import org.allaymc.api.entity.component.container.EntityContainerViewerComponent;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.item.EntityItem;
@@ -93,6 +88,10 @@ public interface EntityPlayer extends
             item = EMPTY_SLOT_PLACE_HOLDER;
             container.setItemStack(slot, item);
         }
+        dropItemInPlayerPos(droppedItemStack);
+    }
+
+    default void dropItemInPlayerPos(ItemStack itemStack) {
         var playerLoc = getLocation();
         var dimension = playerLoc.dimension();
         var entityItem = EntityItem.ITEM_TYPE.createEntity(
@@ -103,7 +102,7 @@ public interface EntityPlayer extends
                         .motion(MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f))
                         .build()
         );
-        entityItem.setItemStack(droppedItemStack);
+        entityItem.setItemStack(itemStack);
         entityItem.setPickupDelay(40);
         dimension.getEntityUpdateService().addEntity(entityItem);
     }
