@@ -8,6 +8,7 @@ import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
+import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.entity.effect.EffectRegistry;
@@ -48,7 +49,7 @@ import java.util.function.Supplier;
 @Getter
 public final class AllayAPI {
 
-    //TODO: move to file? Prevent problems caused by compiler inlining
+    // TODO: move to file? Prevent problems caused by compiler inlining
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
@@ -170,8 +171,10 @@ public final class AllayAPI {
 
         // Recipe
         requireImpl(RecipeRegistry.class, RecipeRegistry.REGISTRY::set);
+
+        // Command
+        requireImpl(CommandManager.class, CommandManager.INSTANCE::set);
     }
 
-    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {
-    }
+    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {}
 }

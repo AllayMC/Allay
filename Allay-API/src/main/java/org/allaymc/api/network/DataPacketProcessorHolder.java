@@ -27,6 +27,7 @@ public final class DataPacketProcessorHolder {
     public static void registerDefaultPacketProcessors(DataPacketProcessorHolder holder) {
         holder.registerProcessor(new AnimatePacketProcessor());
         holder.registerProcessor(new BlockPickRequestPacketProcessor());
+        holder.registerProcessor(new CommandRequestProcessor());
         holder.registerProcessor(new ContainerClosePacketProcessor());
         holder.registerProcessor(new InteractPacketProcessor());
         holder.registerProcessor(new InventoryTransactionPacketProcessor());

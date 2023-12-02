@@ -8,6 +8,7 @@ import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
+import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.datastruct.DynamicURLClassLoader;
@@ -30,6 +31,7 @@ import org.allaymc.server.block.registry.AllayBlockTypeRegistry;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.blockentity.registry.AllayBlockEntityTypeRegistry;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
+import org.allaymc.server.command.AllayCommandManager;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.data.AllayVanillaItemMetaBlockStateBiMap;
 import org.allaymc.server.entity.effect.AllayEffectRegistry;
@@ -48,11 +50,12 @@ import org.jetbrains.annotations.VisibleForTesting;
 
 @Slf4j
 public final class Allay {
+
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.setProperty("joml.format", "false");//set JOML vectors are output without scientific notation
+        System.setProperty("joml.format", "false"); // set JOML vectors are output without scientific notation
         log.info("Starting Allay...");
         try {
             initAllayAPI();
@@ -68,8 +71,10 @@ public final class Allay {
     public static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
+
         ComponentClassCacheUtils.checkCacheValid();
         ComponentClassCacheUtils.readCacheMapping();
+
         // Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::getInstance);
@@ -110,6 +115,9 @@ public final class Allay {
 
         // Recipe
         api.bind(RecipeRegistry.class, AllayRecipeRegistry::new, instance -> ((AllayRecipeRegistry) instance).registerVanillaRecipes());
+
+        // Command
+        api.bind(CommandManager.class, AllayCommandManager::new, instance -> ((AllayCommandManager) instance).init());
 
         api.implement("Allay");
     }

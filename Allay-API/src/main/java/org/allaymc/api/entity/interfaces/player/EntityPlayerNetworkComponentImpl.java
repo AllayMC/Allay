@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.data.LoginData;
+import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Manager;
@@ -158,7 +159,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         adventureSettings.set(AdventureSettings.Type.NO_PVM, gameType == GameType.SPECTATOR);
         adventureSettings.update();
 
-        //TODO: CommandData
+        sendPacket(CommandManager.getInstance().createPacketFor(player));
 
         var updateAttributesPacket = new UpdateAttributesPacket();
         updateAttributesPacket.setRuntimeEntityId(player.getUniqueId());
@@ -485,6 +486,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         @Override
         public PacketSignal handle(BlockPickRequestPacket packet) {
+            return push(packet);
+        }
+
+        @Override
+        public PacketSignal handle(CommandRequestPacket packet) {
             return push(packet);
         }
     }
