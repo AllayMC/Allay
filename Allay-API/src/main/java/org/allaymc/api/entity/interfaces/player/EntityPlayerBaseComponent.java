@@ -2,12 +2,14 @@ package org.allaymc.api.entity.interfaces.player;
 
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.component.base.EntityBaseComponent;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
 
     void setSprinting(boolean sprinting);
 
@@ -70,4 +72,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void sendTip(String message);
 
     void sendPopup(String message);
+
+    @Override
+    default @NotNull String getName() {
+        return this.getDisplayName();
+    }
 }
