@@ -5,6 +5,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
@@ -22,7 +23,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
     @Override
-    public ActionResponse handle(T action, EntityPlayer player) {
+    public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions) {
         var source = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var destination = player.getReachableContainerBySlotType(action.getDestination().getContainer());
         int sourceSlot = source.fromNetworkSlotIndex(action.getSource().getSlot());

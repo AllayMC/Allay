@@ -3,6 +3,7 @@ package org.allaymc.api.container.processor;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.SwapAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
@@ -24,7 +25,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
     }
 
     @Override
-    public ActionResponse handle(SwapAction action, EntityPlayer player) {
+    public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions) {
         Container sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
         Container destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
         var sourceSlot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());

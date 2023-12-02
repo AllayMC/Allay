@@ -32,7 +32,7 @@ public interface EntityPlayer extends
         EntityPlayerBaseComponent,
         EntityPlayerNetworkComponent,
         EntityPlayerAttributeComponent,
-        EntityContainerHolderComponent,
+        EntityPlayerContainerHolderComponent,
         EntityContainerViewerComponent {
     EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder
             .builder(EntityPlayer.class)
@@ -46,22 +46,7 @@ public interface EntityPlayer extends
                     EntityPlayerNetworkComponentImpl.class
             )
             .addComponent(info -> new EntityAttributeComponentImpl(basicAttributes()), EntityAttributeComponentImpl.class)
-            .addComponent(info -> new EntityContainerHolderComponentImpl(
-                            new PlayerCursorContainer(),
-                            new PlayerCreatedOutputContainer(),
-                            new PlayerArmorContainer(),
-                            new PlayerOffhandContainer(),
-                            new CraftingTableContainer()
-                    ) {
-                        @ComponentedObject
-                        private EntityPlayer player;
-
-                        @Override
-                        public void onInitFinish(ComponentInitInfo initInfo) {
-                            addContainer(new PlayerInventoryContainer(player));
-                        }
-                    },
-                    EntityContainerHolderComponentImpl.class)
+            .addComponent(info -> new EntityPlayerContainerHolderComponentImpl(), EntityPlayerContainerHolderComponentImpl.class)
             .addComponent(info -> new EntityPlayerContainerViewerComponentImpl(), EntityPlayerContainerViewerComponentImpl.class)
             .build();
 

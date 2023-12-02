@@ -31,7 +31,7 @@ import java.util.*;
  */
 @Slf4j
 public class AllayRecipeRegistry implements RecipeRegistry {
-    private final Map<Integer, NetworkRecipe<? extends Input>> networkRecipes = new Int2ObjectOpenHashMap<>();
+    private final Map<Integer, NetworkRecipe> networkRecipes = new Int2ObjectOpenHashMap<>();
     private final Map<Identifier, ShapedRecipe> shapedRecipes = new HashMap<>();
     private final Map<Identifier, ShapelessRecipe> shapelessRecipes = new HashMap<>();
 
@@ -165,7 +165,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     }
 
     @Override
-    public NetworkRecipe<?> getRecipeByNetworkId(int networkId) {
+    public NetworkRecipe getRecipeByNetworkId(int networkId) {
         return networkRecipes.get(networkId);
     }
 

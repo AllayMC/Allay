@@ -2,7 +2,10 @@ package org.allaymc.api.container.processor;
 
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftResultsDeprecatedAction;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
+
+import java.util.List;
 
 /**
  * Allay Project 2023/7/29
@@ -17,7 +20,7 @@ public class CraftResultsDeprecatedActionProcessor implements ContainerActionPro
     }
 
     @Override
-    public ActionResponse handle(CraftResultsDeprecatedAction action, EntityPlayer player) {
+    public ActionResponse handle(CraftResultsDeprecatedAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions) {
         return null;
     }
 }

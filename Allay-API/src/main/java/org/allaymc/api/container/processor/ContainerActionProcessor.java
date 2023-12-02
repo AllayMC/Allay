@@ -16,7 +16,7 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
 
     ActionResponse ERROR_RESPONSE = new ActionResponse(false, List.of());
 
-    ActionResponse handle(T action, EntityPlayer player);
+    ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions);
 
     default ActionResponse error() {
         return ERROR_RESPONSE;
