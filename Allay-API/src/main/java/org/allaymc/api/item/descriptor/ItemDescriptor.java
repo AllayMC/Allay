@@ -9,4 +9,6 @@ import org.allaymc.api.item.ItemStack;
  */
 public interface ItemDescriptor {
     boolean match(ItemStack itemStack);
+
+    org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork();
 }

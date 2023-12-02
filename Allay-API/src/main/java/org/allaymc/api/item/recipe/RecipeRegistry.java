@@ -2,6 +2,10 @@ package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.identifier.Identifier;
+import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Set;
 
 /**
  * Allay Project 2023/11/25
@@ -15,6 +19,9 @@ public interface RecipeRegistry {
         return REGISTRY.get();
     }
 
+    @UnmodifiableView
+    Set<Recipe> getRecipes();
+
     NetworkRecipe getRecipeByNetworkId(int networkId);
 
     void registerShaped(ShapedRecipe recipe);
@@ -26,4 +33,6 @@ public interface RecipeRegistry {
     ShapelessRecipe getShapelessRecipe(Identifier identifier);
 
     // TODO: more recipe type
+
+    CraftingDataPacket getCraftingDataPacket();
 }

@@ -1,6 +1,6 @@
 package org.allaymc.api.item.descriptor;
 
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.item.type.ItemType;
 
 /**
  * Allay Project 2023/11/26
@@ -10,11 +10,11 @@ import org.allaymc.api.identifier.Identifier;
  * @author daoge_cmd
  */
 public class ComplexAliasDescriptor extends DefaultDescriptor {
-    public ComplexAliasDescriptor(Identifier identifier, int meta) {
-        super(identifier, meta);
+    public ComplexAliasDescriptor(ItemType<?> itemType, int meta) {
+        super(itemType, meta);
     }
 
-    public ComplexAliasDescriptor(Identifier identifier) {
-        super(identifier);
+    public ComplexAliasDescriptor(ItemType<?> itemType) {
+        super(itemType);
     }
 }

@@ -19,4 +19,11 @@ public class ItemTagDescriptor implements ItemDescriptor {
     public boolean match(ItemStack itemStack) {
         return itemStack.getItemType().hasItemTag(itemTag);
     }
+
+    @Override
+    public org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork() {
+        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemTagDescriptor(
+                itemTag.name()
+        );
+    }
 }

@@ -1,6 +1,5 @@
 package org.allaymc.api.item.recipe;
 
-import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
@@ -26,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(AllayTestExtension.class)
 class RecipeTest {
 
-    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(VanillaItemId.GRASS.getIdentifier()));
+    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(ItemGrassStack.GRASS_TYPE));
 
     @Test
     void testShapedRecipe() {
@@ -160,9 +159,9 @@ class RecipeTest {
                 .identifier(new Identifier("minecraft:grass_magic_1"))
                 .ingredients(
                         new ItemDescriptor[]{
-                                new DefaultDescriptor(VanillaItemId.GRASS.getIdentifier()),
-                                new DefaultDescriptor(VanillaItemId.GRASS.getIdentifier()),
-                                new DefaultDescriptor(VanillaItemId.GRASS.getIdentifier())
+                                new DefaultDescriptor(ItemGrassStack.GRASS_TYPE),
+                                new DefaultDescriptor(ItemGrassStack.GRASS_TYPE),
+                                new DefaultDescriptor(ItemGrassStack.GRASS_TYPE)
                         }
                 )
                 .outputs(new ItemStack[]{diamond()})

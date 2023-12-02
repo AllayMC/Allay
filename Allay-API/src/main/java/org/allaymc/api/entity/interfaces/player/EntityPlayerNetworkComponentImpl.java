@@ -16,6 +16,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.math.location.Location3f;
@@ -281,8 +282,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             creativeContentPacket.setContents(CreativeItemRegistry.getRegistry().getNetworkItemDataArray());
             sendPacket(creativeContentPacket);
 
-            var craftingDataPacket = new CraftingDataPacket();
-            craftingDataPacket.setCleanRecipes(true);
+            var craftingDataPacket = RecipeRegistry.getRegistry().getCraftingDataPacket();
             sendPacket(craftingDataPacket);
         }
     }

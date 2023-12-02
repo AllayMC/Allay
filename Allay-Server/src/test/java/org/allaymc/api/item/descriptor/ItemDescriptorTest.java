@@ -27,7 +27,7 @@ class ItemDescriptorTest {
 
     @Test
     void testDefaultDescriptor() {
-        var descriptor = new DefaultDescriptor(ItemPlanksStack.PLANKS_TYPE.getIdentifier(), 32767);
+        var descriptor = new DefaultDescriptor(ItemPlanksStack.PLANKS_TYPE, 32767);
         var plankItemStack = ItemPlanksStack.PLANKS_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().meta(1).build()
         );
@@ -36,7 +36,7 @@ class ItemDescriptorTest {
 
     @Test
     void testItemDescriptorWithCount() {
-        var descriptor = new ItemDescriptorWithCount(new DefaultDescriptor(ItemPlanksStack.PLANKS_TYPE.getIdentifier()), 32);
+        var descriptor = new ItemDescriptorWithCount(new DefaultDescriptor(ItemPlanksStack.PLANKS_TYPE), 32);
         var plankItemStack = ItemPlanksStack.PLANKS_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().count(32).build()
         );

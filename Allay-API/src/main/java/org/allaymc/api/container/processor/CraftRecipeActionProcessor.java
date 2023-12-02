@@ -53,8 +53,8 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
                 var outputs = craftingRecipe.getOutputs();
                 var firstOutput = outputs[0];
                 createdOutput.setItemStack(0, firstOutput);
+                // Multi-outputs is possible, eg: cake recipe
                 if (outputs.length > 1) {
-                    // Multi-outputs, eg: cake recipe
                     var playerInventory = player.getContainer(PLAYER_INVENTORY);
                     var isPlayerInvFull = false;
                     for (var i = 1; i < outputs.length; i++) {

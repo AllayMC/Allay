@@ -3,6 +3,7 @@ package org.allaymc.api.item.recipe;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.input.Input;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 
 /**
  * Allay Project 2023/11/25
@@ -23,4 +24,6 @@ public interface Recipe {
     ItemStack[] getOutputs();
 
     CraftingDataType getType();
+
+    RecipeData toNetworkRecipeData();
 }

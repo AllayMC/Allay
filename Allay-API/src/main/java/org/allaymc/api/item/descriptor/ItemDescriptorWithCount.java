@@ -11,12 +11,18 @@ import org.allaymc.api.item.ItemStack;
  */
 @AllArgsConstructor
 @Getter
-public class ItemDescriptorWithCount implements ItemDescriptor {
+public class ItemDescriptorWithCount {
     protected ItemDescriptor itemDescriptor;
     protected int count;
 
-    @Override
     public boolean match(ItemStack itemStack) {
         return itemDescriptor.match(itemStack) && itemStack.getCount() == count;
+    }
+
+    public org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount toNetwork() {
+        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount(
+                itemDescriptor.toNetwork(),
+                count
+        );
     }
 }

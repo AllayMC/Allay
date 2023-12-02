@@ -15,10 +15,11 @@ import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.recipe.*;
-import org.allaymc.api.item.recipe.input.Input;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
+import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
@@ -34,6 +35,9 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     private final Map<Integer, NetworkRecipe> networkRecipes = new Int2ObjectOpenHashMap<>();
     private final Map<Identifier, ShapedRecipe> shapedRecipes = new HashMap<>();
     private final Map<Identifier, ShapelessRecipe> shapelessRecipes = new HashMap<>();
+    private final Set<Recipe> recipes = new HashSet<>();
+    private List<RecipeData> networkRecipeData = null;
+    private boolean shouldUpdateNetworkRecipeDataCache = true;
 
     public void registerVanillaRecipes() {
         var stream = AllayItemType.class.getClassLoader().getResourceAsStream("recipes.json");
@@ -126,17 +130,19 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         return switch(jsonObject.get("type").getAsString()) {
             case "default" -> {
                 var itemId = new Identifier(jsonObject.get("itemId").getAsString());
+                var itemType = ItemTypeRegistry.getRegistry().get(itemId);
                 // meta (data) field is optional
                 if (jsonObject.has("auxValue")) {
                     var meta = jsonObject.get("auxValue").getAsInt();
-                    yield new DefaultDescriptor(itemId, meta);
+                    yield new DefaultDescriptor(itemType, meta);
                 } else {
-                    yield new DefaultDescriptor(itemId);
+                    yield new DefaultDescriptor(itemType);
                 }
             }
             case "complex_alias" -> {
                 var name = new Identifier(jsonObject.get("name").getAsString());
-                yield new ComplexAliasDescriptor(name);
+                var itemType = ItemTypeRegistry.getRegistry().get(name);
+                yield new ComplexAliasDescriptor(itemType);
             }
             case "item_tag" -> {
                 var tagId = jsonObject.get("itemTag").getAsString();
@@ -173,6 +179,8 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     public void registerShaped(ShapedRecipe recipe) {
         networkRecipes.put(recipe.getNetworkId(), recipe);
         shapedRecipes.put(recipe.getIdentifier(), recipe);
+        recipes.add(recipe);
+        shouldUpdateNetworkRecipeDataCache = true;
     }
 
     @Override
@@ -184,10 +192,43 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     public void registerShapeless(ShapelessRecipe recipe) {
         networkRecipes.put(recipe.getNetworkId(), recipe);
         shapelessRecipes.put(recipe.getIdentifier(), recipe);
+        recipes.add(recipe);
+        shouldUpdateNetworkRecipeDataCache = true;
     }
 
     @Override
     public ShapelessRecipe getShapelessRecipe(Identifier identifier) {
         return shapelessRecipes.get(identifier);
+    }
+
+    @Override
+    public CraftingDataPacket getCraftingDataPacket() {
+        var packet = new CraftingDataPacket();
+        packet.getCraftingData().addAll(getNetworkRecipeData());
+        // TODO packet.getPotionMixData().addAll();
+        // TODO packet.getContainerMixData().addAll();
+        packet.setCleanRecipes(true);
+        return packet;
+    }
+
+    @Override
+    public Set<Recipe> getRecipes() {
+        return Collections.unmodifiableSet(recipes);
+    }
+
+    protected List<RecipeData> getNetworkRecipeData() {
+        if (shouldUpdateNetworkRecipeDataCache) {
+            networkRecipeData = buildNetworkRecipeData();
+            shouldUpdateNetworkRecipeDataCache = false;
+        }
+        return networkRecipeData;
+    }
+
+    protected List<RecipeData> buildNetworkRecipeData() {
+        var result = new ArrayList<RecipeData>();
+        for (var recipe : recipes) {
+            result.add(recipe.toNetworkRecipeData());
+        }
+        return result;
     }
 }

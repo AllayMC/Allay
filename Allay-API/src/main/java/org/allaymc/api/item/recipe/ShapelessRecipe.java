@@ -8,6 +8,9 @@ import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.allaymc.api.item.recipe.input.Input;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapelessRecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,7 @@ public class ShapelessRecipe extends CraftingRecipe {
     protected ShapelessRecipe(ItemDescriptor[] ingredients, Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
         super(identifier, outputs, tag, uuid, priority);
         this.ingredients = ingredients;
+        this.networkRecipeDataCache = buildNetworkRecipeData();
     }
 
     @Override
@@ -65,5 +69,21 @@ public class ShapelessRecipe extends CraftingRecipe {
     @Override
     public CraftingDataType getType() {
         return CraftingDataType.SHAPELESS;
+    }
+
+    protected RecipeData buildNetworkRecipeData() {
+        return ShapelessRecipeData.of(
+                getType(), identifier.toString(),
+                buildNetworkIngredients(), buildNetworkOutputs(),
+                uuid, tag, priority, networkId
+        );
+    }
+
+    protected List<ItemDescriptorWithCount> buildNetworkIngredients() {
+        var result = new ArrayList<ItemDescriptorWithCount>();
+        for (var ingredient : ingredients) {
+            result.add(new ItemDescriptorWithCount(ingredient.toNetwork(), 1));
+        }
+        return result;
     }
 }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemType;
+import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 
 /**
  * Allay Project 2023/11/26
@@ -16,16 +18,24 @@ public class DefaultDescriptor implements ItemDescriptor {
 
     public static final int WILDCARD_META = 32767;
 
-    protected Identifier identifier;
+    protected ItemType<?> itemType;
     protected int meta;
 
-    public DefaultDescriptor(Identifier identifier) {
-        this(identifier, WILDCARD_META);
+    public DefaultDescriptor(ItemType<?> itemType) {
+        this(itemType, WILDCARD_META);
     }
 
     @Override
     public boolean match(ItemStack itemStack) {
-        return itemStack.getItemType().getIdentifier().equals(identifier) &&
+        return itemStack.getItemType().getIdentifier().equals(itemType.getIdentifier()) &&
                (meta == WILDCARD_META || itemStack.getMeta() == meta);
+    }
+
+    @Override
+    public org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork() {
+        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor(
+                itemType.toNetworkDefinition(),
+                meta
+        );
     }
 }

@@ -7,8 +7,16 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.allaymc.api.item.recipe.input.Input;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.NetworkRecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapedRecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.InvalidDescriptor;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +31,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 @Getter
 public class ShapedRecipe extends CraftingRecipe {
 
+    public static final char EMPTY_KEY_CHAR = ' ';
     protected char[][] pattern;
     protected Map<Character, ItemDescriptor> keys;
 
@@ -31,11 +40,36 @@ public class ShapedRecipe extends CraftingRecipe {
         super(identifier, outputs, tag, uuid, priority);
         this.keys = keys;
         this.pattern = pattern;
+        this.networkRecipeDataCache = buildNetworkRecipeData();
     }
 
     @Override
     public CraftingDataType getType() {
         return CraftingDataType.SHAPED;
+    }
+
+    protected RecipeData buildNetworkRecipeData() {
+        return ShapedRecipeData.of(
+                getType(), identifier.toString(),
+                pattern[0].length, pattern.length,
+                buildNetworkIngredients(), buildNetworkOutputs(), uuid,
+                tag, priority, networkId
+        );
+    }
+
+    protected List<ItemDescriptorWithCount> buildNetworkIngredients() {
+        List<ItemDescriptorWithCount> ingredients = new ArrayList<>();
+        for (var sub : pattern) {
+            for (var k : sub) {
+                if (k == EMPTY_KEY_CHAR) {
+                    ingredients.add(ItemDescriptorWithCount.EMPTY);
+                    continue;
+                }
+                var descriptor = keys.get(k);
+                ingredients.add(new ItemDescriptorWithCount(descriptor.toNetwork(), 1));
+            }
+        }
+        return ingredients;
     }
 
     @Override
