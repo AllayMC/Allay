@@ -10,6 +10,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 
@@ -21,7 +22,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 @Slf4j
 public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeAction> {
     @Override
-    public ActionResponse handle(ConsumeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions) {
+    public ActionResponse handle(ConsumeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
         var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var sourceStackNetworkId = action.getSource().getStackNetworkId();
@@ -32,7 +33,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
             return error();
         }
         var item = sourceContainer.getItemStack(slot);
-        if (!validateStackNetworkId(item.getStackNetworkId(), sourceStackNetworkId)) {
+        if (failToValidateStackNetworkId(item.getStackNetworkId(), sourceStackNetworkId)) {
             log.warn("mismatch stack network id!");
             return error();
         }

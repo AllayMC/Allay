@@ -11,6 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 
@@ -23,7 +24,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
     @Override
-    public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions) {
+    public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         var source = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var destination = player.getReachableContainerBySlotType(action.getDestination().getContainer());
         int sourceSlot = source.fromNetworkSlotIndex(action.getSource().getSlot());
@@ -36,7 +37,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             log.warn("place an air item is not allowed");
             return error();
         }
-        if (!validateStackNetworkId(sourItem.getStackNetworkId(), sourceStackNetworkId)) {
+        if (failToValidateStackNetworkId(sourItem.getStackNetworkId(), sourceStackNetworkId)) {
             log.warn("mismatch source stack network id!");
             return error();
         }
@@ -49,7 +50,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             log.warn("place an item to a slot that has a different item is not allowed");
             return error();
         }
-        if (!validateStackNetworkId(destItem.getStackNetworkId(), destinationStackNetworkId)) {
+        if (failToValidateStackNetworkId(destItem.getStackNetworkId(), destinationStackNetworkId)) {
             log.warn("mismatch destination stack network id!");
             return error();
         }

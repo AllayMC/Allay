@@ -8,7 +8,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Allay Project 2023/7/26
@@ -23,7 +23,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
     }
 
     @Override
-    public ActionResponse handle(CraftCreativeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions) {
+    public ActionResponse handle(CraftCreativeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         var item = CreativeItemRegistry.getRegistry().get(action.getCreativeItemNetworkId() - 1);
         if (item == null) {
             log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId() - 1);

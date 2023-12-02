@@ -11,6 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Allay Project 2023/10/7
@@ -25,18 +26,18 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
     }
 
     @Override
-    public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions) {
+    public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         Container sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
         Container destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
         var sourceSlot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
         var destinationSlot = destinationContainer.fromNetworkSlotIndex(action.getDestination().getSlot());
         var sourceItem = sourceContainer.getItemStack(sourceSlot);
         var destinationItem = destinationContainer.getItemStack(destinationSlot);
-        if (!validateStackNetworkId(sourceItem.getStackNetworkId(), action.getSource().getStackNetworkId())) {
+        if (failToValidateStackNetworkId(sourceItem.getStackNetworkId(), action.getSource().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }
-        if (!validateStackNetworkId(destinationItem.getStackNetworkId(), action.getDestination().getStackNetworkId())) {
+        if (failToValidateStackNetworkId(destinationItem.getStackNetworkId(), action.getDestination().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }

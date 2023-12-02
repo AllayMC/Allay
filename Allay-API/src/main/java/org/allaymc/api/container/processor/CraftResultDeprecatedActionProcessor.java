@@ -5,6 +5,8 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 
+import java.util.Map;
+
 /**
  * Allay Project 2023/12/2
  *
@@ -17,7 +19,7 @@ public class CraftResultDeprecatedActionProcessor implements ContainerActionProc
     }
 
     @Override
-    public ActionResponse handle(CraftResultsDeprecatedAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions) {
+    public ActionResponse handle(CraftResultsDeprecatedAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         return null;
     }
 }

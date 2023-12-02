@@ -11,6 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.allaymc.api.container.FullContainerType.*;
 
@@ -22,24 +23,19 @@ import static org.allaymc.api.container.FullContainerType.*;
 @Slf4j
 public class CraftRecipeActionProcessor implements ContainerActionProcessor<CraftRecipeAction> {
 
+    public static final String RECIPE_DATA_KEY = "recipe";
+
     @Override
-    public ActionResponse handle(CraftRecipeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions) {
+    public ActionResponse handle(CraftRecipeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         var craftingGridContainer = player.getContainer(CRAFTING_GRID);
         var recipe = RecipeRegistry.getRegistry().getRecipeByNetworkId(action.getRecipeNetworkId());
-        // The recipe should be a crafting recipe
-        CraftingRecipe craftingRecipe;
-        if (recipe instanceof CraftingRecipe c) {
-            craftingRecipe = c;
-        } else {
-            log.warn("The recipe should be a crafting recipe! Actual recipe's network id: " + recipe.getNetworkId());
-            return error();
-        }
         var input = craftingGridContainer.createCraftingInput();
-        var matched = craftingRecipe.match(input);
+        var matched = recipe.match(input);
         if (!matched) {
-            log.warn("Mismatched recipe! Network id: " + craftingRecipe.getNetworkId());
+            log.warn("Mismatched recipe! Network id: " + recipe.getNetworkId());
             return error();
         } else {
+            dataPool.put(RECIPE_DATA_KEY, recipe);
             // Validate the consume action count which client sent
             // 还有一部分检查被放在了ConsumeActionProcessor里面（例如消耗物品数量检查）
             var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
@@ -47,30 +43,9 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             if (consumeActions.size() != consumeActionCountNeeded) {
                 log.warn("Mismatched consume action count! Expected: " + consumeActionCountNeeded + ", Actual: " + consumeActions.size());
                 return error();
-            } else {
-                // Set first output item to CREATED_OUTPUT
-                var createdOutput = player.getContainer(CREATED_OUTPUT);
-                var outputs = craftingRecipe.getOutputs();
-                var firstOutput = outputs[0];
-                createdOutput.setItemStack(0, firstOutput);
-                // Multi-outputs is possible, eg: cake recipe
-                if (outputs.length > 1) {
-                    var playerInventory = player.getContainer(PLAYER_INVENTORY);
-                    var isPlayerInvFull = false;
-                    for (var i = 1; i < outputs.length; i++) {
-                        var moreOutput = outputs[i];
-                        if (isPlayerInvFull) {
-                            player.dropItemInPlayerPos(moreOutput);
-                        } else {
-                            if (playerInventory.tryAddItem(moreOutput) == -1) {
-                                isPlayerInvFull = true;
-                            }
-                        }
-                    }
-                }
-                return null;
             }
         }
+        return null;
     }
 
     @Override
