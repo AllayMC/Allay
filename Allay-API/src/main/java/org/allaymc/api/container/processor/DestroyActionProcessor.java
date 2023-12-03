@@ -4,11 +4,13 @@ import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DestroyAction;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
 import java.util.Collections;
+import java.util.Map;
 
 import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
@@ -26,7 +28,7 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
     }
 
     @Override
-    public ActionResponse handle(DestroyAction action, EntityPlayer player) {
+    public ActionResponse handle(DestroyAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         if (player.getGameType() != GameType.CREATIVE) {
             log.warn("only creative mode can destroy item");
             return error();
@@ -35,7 +37,7 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
         var count = action.getCount();
         var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
         var item = container.getItemStack(slot);
-        if (item.getStackNetworkId() != action.getSource().getStackNetworkId()) {
+        if (failToValidateStackNetworkId(item.getStackNetworkId(), action.getSource().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }

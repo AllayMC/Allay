@@ -11,8 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TypeInterfaceUpdater {
-    public static Path BLOCK = Path.of("Allay-API/src/main/java/cn/allay/api/block/interfaces");
-    public static Path ITEM = Path.of("Allay-API/src/main/java/cn/allay/api/item/interfaces");
+    public static Path BLOCK = Path.of("Allay-API/src/main/java/org/allaymc/api/block/interfaces");
+    public static Path ITEM = Path.of("Allay-API/src/main/java/org/allaymc/api/item/interfaces");
     public static String formatCode = "\n            ";
 
     public static void main(String[] args) {

@@ -18,6 +18,7 @@ import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.exception.MissingRequirementException;
 import org.allaymc.api.item.component.attribute.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
+import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
@@ -167,6 +168,9 @@ public final class AllayAPI {
 
         // Creative Item Registry
         requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
+
+        // Recipe
+        requireImpl(RecipeRegistry.class, RecipeRegistry.REGISTRY::set);
 
         // Command
         requireImpl(CommandManager.class, CommandManager.INSTANCE::set);

@@ -49,8 +49,8 @@ public class VanillaEntityIdEnumGen {
     }
 
     public static void generate() {
-        generateTo(PACKAGE_NAME, Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaEntityId.java"), API_IDENTIFIER_CLASS);
-        generateTo("org.allaymc.dependence", Path.of("Allay-CodeGen/src/main/java/cn/allay/dependence/VanillaEntityId.java"), DEP_IDENTIFIER_CLASS);
+        generateTo(PACKAGE_NAME, Path.of("Allay-API/src/main/java/org/allaymc/api/data/VanillaEntityId.java"), API_IDENTIFIER_CLASS);
+        generateTo("org.allaymc.dependence", Path.of("Allay-CodeGen/src/main/java/org/allaymc/dependence/VanillaEntityId.java"), DEP_IDENTIFIER_CLASS);
     }
 
     @SneakyThrows

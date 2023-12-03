@@ -29,9 +29,9 @@ public record Identifier(String namespace, String path) implements Cloneable {
         this.namespace = namespace.isEmpty() ? DEFAULT_NAMESPACE : namespace;
         this.path = path;
         if (!isNamespaceValid(this.namespace))
-            throw new InvalidIdentifierException("Non [a-z0-9_.-] character in namespace of location: " + this.namespace + NAMESPACE_SEPARATOR + this.path);
+            throw new InvalidIdentifierException("Non [a-zA-Z0-9_.-] character in namespace of location: " + this.namespace + NAMESPACE_SEPARATOR + this.path);
         if (!isPathValid(this.path))
-            throw new InvalidIdentifierException("Non [a-z0-9/._-] character in path of location: " + this.namespace + NAMESPACE_SEPARATOR + this.path);
+            throw new InvalidIdentifierException("Non [a-zA-Z0-9/._-] character in path of location: " + this.namespace + NAMESPACE_SEPARATOR + this.path);
     }
 
     public String toString() {

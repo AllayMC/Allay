@@ -4,11 +4,13 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DropAction;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
 import java.util.Collections;
+import java.util.Map;
 
 import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
 
@@ -25,12 +27,12 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
     }
 
     @Override
-    public ActionResponse handle(DropAction action, EntityPlayer player) {
+    public ActionResponse handle(DropAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         Container container = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var count = action.getCount();
         var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
         var item = container.getItemStack(slot);
-        if (item.getStackNetworkId() != action.getSource().getStackNetworkId()) {
+        if (failToValidateStackNetworkId(item.getStackNetworkId(), action.getSource().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }

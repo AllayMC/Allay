@@ -11,14 +11,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.api.data.VanillaItemId;
+import org.allaymc.api.utils.NbtUtils;
 import org.allaymc.server.Allay;
-import org.cloudburstmc.nbt.NBTOutputStream;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodecHelper;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
@@ -31,7 +29,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.*;
 import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.*;
 
@@ -41,21 +38,21 @@ import java.util.*;
  * @author Kaooot | Cool_Loong
  */
 public class RecipeExportUtil {
-    private static final BedrockCodec codec = ProtocolInfo.getDefaultPacketCodec();
-    private static final Int2ObjectOpenHashMap<String> legacyItemIds = new Int2ObjectOpenHashMap<>();
-    private static final char[] shapeChars = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+    private static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
+    private static final Int2ObjectOpenHashMap<String> ITEM_RUNTIME_ID_TO_IDENTIFIER = new Int2ObjectOpenHashMap<>();
+    private static final char[] SHAPE_CHARS = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
     static {
         for (var i : VanillaItemId.values()) {
-            legacyItemIds.put(i.getRuntimeId(), i.getIdentifier().toString());
+            ITEM_RUNTIME_ID_TO_IDENTIFIER.put(i.getRuntimeId(), i.getIdentifier().toString());
         }
-        legacyItemIds.trim();
+        ITEM_RUNTIME_ID_TO_IDENTIFIER.trim();
     }
 
     @SneakyThrows
     public static void main(String[] args) {
         Allay.initAllayAPI();
-        BedrockCodecHelper helper = codec.createHelper();
+        BedrockCodecHelper helper = CODEC.createHelper();
         helper.setItemDefinitions(
                 SimpleDefinitionRegistry
                         .<ItemDefinition>builder()
@@ -71,10 +68,10 @@ public class RecipeExportUtil {
         );
         try (InputStream resourceAsStream = RecipeExportUtil.class.getClassLoader().getResourceAsStream("unpacked/crafting_data_packet.bin")) {
             ByteBuf byteBuf = Unpooled.wrappedBuffer(resourceAsStream.readAllBytes());
-            //The CraftingDataPacket written by BDS starts with an additional byte: 52. I'm not sure why this happens.
+            // 跳过CraftingDataPacket的packet id
             byteBuf.skipBytes(1);
             CraftingDataPacket craftingDataPacket = new CraftingDataPacket();
-            codec.getPacketDefinition(CraftingDataPacket.class).getSerializer().deserialize(byteBuf, helper, craftingDataPacket);
+            CODEC.getPacketDefinition(CraftingDataPacket.class).getSerializer().deserialize(byteBuf, helper, craftingDataPacket);
             writeRecipes(craftingDataPacket);
         }
     }
@@ -89,7 +86,6 @@ public class RecipeExportUtil {
 
             String block = null;
             UUID uuid = null;
-            Integer netId = null;
             String id = null;
 
             if (recipe instanceof TaggedCraftingData taggedCraftingData) {
@@ -97,13 +93,6 @@ public class RecipeExportUtil {
             }
             if (recipe instanceof UniqueCraftingData uniqueCraftingData) {
                 uuid = uniqueCraftingData.getUuid();
-
-                if (recipe instanceof MultiRecipeData multiRecipeData) {
-                    netId = multiRecipeData.getNetId();
-                }
-            }
-            if (recipe instanceof NetworkRecipeData networkRecipeData) {
-                netId = networkRecipeData.getNetId();
             }
             if (recipe instanceof IdentifiableRecipeData identifiableRecipeData) {
                 id = identifiableRecipeData.getId();
@@ -127,7 +116,6 @@ public class RecipeExportUtil {
                 width = shapedRecipeData.getWidth();
                 height = shapedRecipeData.getHeight();
                 uuid = shapedRecipeData.getUuid();
-                netId = shapedRecipeData.getNetId();
 
                 int charCounter = 0;
 
@@ -151,7 +139,7 @@ public class RecipeExportUtil {
                         Character shapeChar = charItemMap.get(descriptor);
 
                         if (shapeChar == null) {
-                            shapeChar = shapeChars[charCounter++];
+                            shapeChar = SHAPE_CHARS[charCounter++];
 
                             charItemMap.put(descriptor, shapeChar);
                         }
@@ -179,20 +167,17 @@ public class RecipeExportUtil {
 
             if (recipe instanceof ShapelessRecipeData shapelessRecipeData) {
                 uuid = shapelessRecipeData.getUuid();
-                netId = shapelessRecipeData.getNetId();
                 input = writeRecipeItemDescriptors(shapelessRecipeData.getIngredients());
             }
 
             if (recipe instanceof FurnaceRecipeData furnaceRecipeData) {
                 Integer damage = furnaceRecipeData.getInputData();
 
-                if (damage == 0x7fff) {
-                    damage = -1;
-                } else if (damage == 0) {
+                if (damage == 0) {
                     damage = null;
                 }
 
-                input = new RecipeItem(legacyItemIds.get(furnaceRecipeData.getInputId()), null, damage, null);
+                input = new RecipeItem(ITEM_RUNTIME_ID_TO_IDENTIFIER.get(furnaceRecipeData.getInputId()), null, damage, null);
                 output = itemFromNetwork(furnaceRecipeData.getResult());
             }
 
@@ -214,18 +199,22 @@ public class RecipeExportUtil {
                 template = fromNetwork(smithingTrimRecipeData.getTemplate());
             }
 
-            craftingData.add(new CraftingDataEntry(id, type, input, output, entryShape, block, uuid, netId, priority, base, addition, template, result, width, height));
+            craftingData.add(new CraftingDataEntry(id, type, input, output, entryShape, block, uuid, priority, base, addition, template, result, width, height));
         }
 
         for (PotionMixData potionMix : packet.getPotionMixData()) {
-            potionMixes.add(new PotionMixDataEntry(legacyItemIds.get(potionMix.getInputId()), potionMix.getInputMeta(), legacyItemIds.get(potionMix.getReagentId()), potionMix.getReagentMeta(), legacyItemIds.get(potionMix.getOutputId()), potionMix.getOutputMeta()));
+            potionMixes.add(new PotionMixDataEntry(ITEM_RUNTIME_ID_TO_IDENTIFIER.get(potionMix.getInputId()), potionMix.getInputMeta(), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(potionMix.getReagentId()), potionMix.getReagentMeta(), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(potionMix.getOutputId()), potionMix.getOutputMeta()));
         }
 
         for (ContainerMixData containerMix : packet.getContainerMixData()) {
-            containerMixes.add(new ContainerMixDataEntry(legacyItemIds.get(containerMix.getInputId()), legacyItemIds.get(containerMix.getReagentId()), legacyItemIds.get(containerMix.getOutputId())));
+            containerMixes.add(new ContainerMixDataEntry(ITEM_RUNTIME_ID_TO_IDENTIFIER.get(containerMix.getInputId()), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(containerMix.getReagentId()), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(containerMix.getOutputId())));
         }
 
-        JSONUtils.toFile("./Allay-Data/resources/recipes.json", new Recipes(codec.getProtocolVersion(), craftingData, potionMixes, containerMixes));
+        JSONUtils.toFile("./Allay-Data/resources/recipes.json",
+                new Recipes(CODEC.getProtocolVersion(), craftingData, potionMixes, containerMixes),
+                writer -> {
+                    writer.setIndent("  ");
+                });
     }
 
     private static List<RecipeItem> writeRecipeItems(List<ItemData> inputs) {
@@ -262,7 +251,7 @@ public class RecipeExportUtil {
         String tag = null;
 
         if (itemData.getTag() != null) {
-            tag = nbtToBase64(itemData.getTag());
+            tag = NbtUtils.nbtToBase64(itemData.getTag());
         }
 
         if (damage != null && (damage == 0 || damage == -1)) {
@@ -297,21 +286,7 @@ public class RecipeExportUtil {
             molangVersion = molangDescriptor.getMolangVersion();
         }
 
-        return new RecipeItemDescriptor(itemDescriptor.getType().name().toLowerCase(), descriptorWithCount.getCount(), name, legacyItemIds.get(itemId), auxValue, fullName, itemTag, tagExpression, molangVersion);
-    }
-
-    /**
-     * Converts a nbt tag to a base64 encoded string
-     */
-    public static String nbtToBase64(NbtMap nbtMap) {
-        try (ByteArrayOutputStream stream = new ByteArrayOutputStream(); NBTOutputStream writer = NbtUtils.createWriterLE(stream)) {
-            writer.writeTag(nbtMap);
-            return Base64.getEncoder().encodeToString(stream.toByteArray());
-        } catch (Exception e) {
-            // Handle exceptions accordingly
-            e.printStackTrace();
-        }
-        return null;
+        return new RecipeItemDescriptor(itemDescriptor.getType().name().toLowerCase(), descriptorWithCount.getCount(), name, ITEM_RUNTIME_ID_TO_IDENTIFIER.get(itemId), auxValue, fullName, itemTag, tagExpression, molangVersion);
     }
 
     @Data
@@ -333,7 +308,6 @@ public class RecipeExportUtil {
         private String[] shape;
         private String block;
         private UUID uuid;
-        private Integer netId;
         private Integer priority;
         private Object base;
         private Object addition;

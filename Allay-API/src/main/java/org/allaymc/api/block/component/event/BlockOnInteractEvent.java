@@ -30,7 +30,7 @@ public final class BlockOnInteractEvent implements ComponentEvent {
     private final Vector3fc clickPos;
     private final BlockFace blockFace;
     @Setter
-    private boolean success = false;
+    private boolean success;
 
     /**
      *

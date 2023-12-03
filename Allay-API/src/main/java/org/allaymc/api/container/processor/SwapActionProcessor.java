@@ -3,6 +3,7 @@ package org.allaymc.api.container.processor;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.SwapAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
@@ -10,6 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Allay Project 2023/10/7
@@ -24,18 +26,18 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
     }
 
     @Override
-    public ActionResponse handle(SwapAction action, EntityPlayer player) {
+    public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         Container sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
         Container destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
         var sourceSlot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
         var destinationSlot = destinationContainer.fromNetworkSlotIndex(action.getDestination().getSlot());
         var sourceItem = sourceContainer.getItemStack(sourceSlot);
         var destinationItem = destinationContainer.getItemStack(destinationSlot);
-        if (sourceItem.getStackNetworkId() != action.getSource().getStackNetworkId()) {
+        if (failToValidateStackNetworkId(sourceItem.getStackNetworkId(), action.getSource().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }
-        if (destinationItem.getStackNetworkId() != action.getDestination().getStackNetworkId()) {
+        if (failToValidateStackNetworkId(destinationItem.getStackNetworkId(), action.getDestination().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }

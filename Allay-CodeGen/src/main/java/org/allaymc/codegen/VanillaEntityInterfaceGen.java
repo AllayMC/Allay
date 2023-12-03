@@ -27,7 +27,7 @@ public class VanillaEntityInterfaceGen {
     public static final ClassName VANILLA_ENTITY_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaEntityId");
     public static final ClassName ENTITY_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityType");
     public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityTypeBuilder");
-    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/cn/allay/api/entity/interfaces");
+    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/org/allaymc/api/entity/interfaces");
 
     @SneakyThrows
     public static void generate() {
