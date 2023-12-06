@@ -1,4 +1,4 @@
-package org.allaymc.api.client.data;
+package org.allaymc.api.datastruct;
 
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;

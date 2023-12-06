@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import it.unimi.dsi.fastutil.Pair;
-import org.allaymc.api.client.data.SemVersion;
+import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.PaletteUtils;
 import org.allaymc.api.world.bitarray.BitArray;

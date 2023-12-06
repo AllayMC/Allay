@@ -1,6 +1,6 @@
 package org.allaymc.api.network;
 
-import org.allaymc.api.client.data.SemVersion;
+import org.allaymc.api.datastruct.SemVersion;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v622.Bedrock_v622;
 

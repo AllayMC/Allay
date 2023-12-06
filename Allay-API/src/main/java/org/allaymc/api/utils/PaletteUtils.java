@@ -2,7 +2,7 @@ package org.allaymc.api.utils;
 
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.Pair;
-import org.allaymc.api.client.data.SemVersion;
+import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.network.ProtocolInfo;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;

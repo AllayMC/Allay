@@ -2,7 +2,7 @@ package org.allaymc.server.world.storage.leveldb;
 
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.client.data.SemVersion;
+import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.exception.WorldStorageException;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Difficulty;

@@ -1,4 +1,4 @@
-package org.allaymc.api.container.processor;
+package org.allaymc.server.container.processor;
 
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;

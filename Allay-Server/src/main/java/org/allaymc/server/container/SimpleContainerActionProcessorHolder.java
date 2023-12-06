@@ -1,7 +1,7 @@
-package org.allaymc.api.container;
+package org.allaymc.server.container;
 
-import org.allaymc.api.container.processor.ContainerActionProcessor;
-import org.allaymc.api.container.processor.ContainerActionProcessorHolder;
+import org.allaymc.server.container.processor.ContainerActionProcessor;
+import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;

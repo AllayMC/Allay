@@ -1,4 +1,4 @@
-package org.allaymc.api.container.processor;
+package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -10,7 +10,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import java.util.Map;
 
 import static org.allaymc.api.container.FullContainerType.CREATED_OUTPUT;
-import static org.allaymc.api.container.processor.CraftRecipeActionProcessor.RECIPE_DATA_KEY;
+import static org.allaymc.server.container.processor.CraftRecipeActionProcessor.RECIPE_DATA_KEY;
 
 /**
  * Allay Project 2023/12/2
