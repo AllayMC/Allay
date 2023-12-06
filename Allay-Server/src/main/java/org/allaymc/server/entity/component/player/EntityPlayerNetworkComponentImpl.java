@@ -79,6 +79,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected final Server server = Server.getInstance();
     protected final Queue<BedrockPacket> packetQueue;
     protected final DataPacketProcessorHolder dataPacketProcessorHolder;
+    protected final BedrockPacketHandler loginPacketHandler = new AllayClientLoginPacketHandler();
     protected BedrockServerSession session;
 
     public EntityPlayerNetworkComponentImpl() {
@@ -109,7 +110,20 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Override
     public void setClientSession(BedrockServerSession session) {
         this.session = session;
-        session.setPacketHandler(new AllayClientPacketHandler());
+        session.setPacketHandler(new BedrockPacketHandler() {
+            @Override
+            public PacketSignal handlePacket(BedrockPacket packet) {
+                if (loginPacketHandler.handlePacket(packet) == PacketSignal.HANDLED) {
+                    return PacketSignal.HANDLED;
+                }
+                return pushPacketToQueue(packet);
+            }
+        });
+    }
+
+    protected PacketSignal pushPacketToQueue(BedrockPacket packet) {
+        packetQueue.add(packet);
+        return PacketSignal.HANDLED;//For our own log packet
     }
 
     @Override
@@ -290,7 +304,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
     }
 
-    private class AllayClientPacketHandler implements BedrockPacketHandler {
+    private class AllayClientLoginPacketHandler implements BedrockPacketHandler {
 
         public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
@@ -420,86 +434,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
             //todo plugin event
             initialized.set(true);
-            return PacketSignal.HANDLED;
-        }
-
-        //The packets processing are asynchronous above
-        //--------------------------------------------------------------------------------------------------------------------
-        //The following packets are pushed into a queue to be executed synchronously in each world
-        //to avoid data race
-        private PacketSignal push(BedrockPacket packet) {
-            packetQueue.add(packet);
-            return PacketSignal.HANDLED;//For our own log packet
-        }
-
-        @Override
-        public PacketSignal handle(RequestChunkRadiusPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(InteractPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(ContainerClosePacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(ItemStackRequestPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(SubChunkRequestPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(MobEquipmentPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(InventoryTransactionPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(PlayerAuthInputPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(MovePlayerPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(AnimatePacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(TextPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(BlockPickRequestPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(CommandRequestPacket packet) {
-            return push(packet);
-        }
-
-        @Override
-        public PacketSignal handle(CraftingEventPacket packet) {
-            // Just ignore this packet because it's deprecated
             return PacketSignal.HANDLED;
         }
     }
