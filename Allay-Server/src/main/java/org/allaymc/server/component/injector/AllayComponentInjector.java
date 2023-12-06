@@ -91,7 +91,6 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     protected Class<T> buildClass() {
         var bb = new ByteBuddy().subclass(interfaceClass);
         var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
@@ -313,7 +312,6 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                         throw new ComponentInjectException("Component event listener method must be void: " + method.getName() + " in component: " + component.getClass().getName());
                     if (method.getParameterCount() != 1 || !ComponentEvent.class.isAssignableFrom(method.getParameters()[0].getType()))
                         throw new ComponentInjectException("Component event listener method must have one parameter and the parameter must be a subclass of ComponentEvent: " + method.getName() + " in component: " + component.getClass().getName());
-//                    method.setAccessible(true);
                     manager.registerListener((Class<? extends ComponentEvent>) method.getParameters()[0].getType(), AllayComponentManager.Listener.wrap(method, component));
                 }
             }

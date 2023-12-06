@@ -88,50 +88,14 @@ public interface ComponentProvider<T extends Component> {
     }
 
     @AllArgsConstructor
-    class SimpleComponentProvider<T extends Component> implements ComponentProvider<T> {
-        private Function<ComponentInitInfo, T> provider;
+    class SimpleComponentProvider<R extends Component, I extends ComponentInitInfo> implements ComponentProvider<R> {
+        private Function<I, R> provider;
         @Getter
         private Class<?> componentClass;
 
         @Override
-        public T provide(ComponentInitInfo info) {
-            return provider.apply(info);
-        }
-    }
-
-    @AllArgsConstructor
-    class BlockEntityComponentProvider<T extends BlockEntity> implements ComponentProvider<BlockEntityComponent> {
-        private Function<BlockEntityInitInfo<T>, BlockEntityComponent> provider;
-        @Getter
-        private Class<?> componentClass;
-
-        @Override
-        public BlockEntityComponent provide(ComponentInitInfo info) {
-            return provider.apply((BlockEntityInitInfo<T>) info);
-        }
-    }
-
-    @AllArgsConstructor
-    class EntityComponentProvider<T extends Entity> implements ComponentProvider<EntityComponent> {
-        private Function<EntityInitInfo<T>, EntityComponent> provider;
-        @Getter
-        private Class<?> componentClass;
-
-        @Override
-        public EntityComponent provide(ComponentInitInfo info) {
-            return provider.apply((EntityInitInfo<T>) info);
-        }
-    }
-
-    @AllArgsConstructor
-    class ItemComponentProvider<T extends ItemStack> implements ComponentProvider<ItemComponent> {
-        private Function<ItemStackInitInfo<T>, ItemComponent> provider;
-        @Getter
-        private Class<?> componentClass;
-
-        @Override
-        public ItemComponent provide(ComponentInitInfo info) {
-            return provider.apply((ItemStackInitInfo<T>) info);
+        public R provide(ComponentInitInfo info) {
+            return provider.apply((I) info);
         }
     }
 }
