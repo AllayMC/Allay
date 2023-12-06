@@ -50,7 +50,7 @@ public class AllayEntityComponentImplFactory implements EntityComponentImplFacto
 
     @Override
     public ComponentProvider<EntityComponent> createEntityContainerHolderComponent(Container... containers) {
-        return new SimpleComponentProvider<>(info -> new EntityContainerHolderComponentImpl(containers), EntityPlayerContainerHolderComponentImpl.class);
+        return new SimpleComponentProvider<>(info -> new EntityContainerHolderComponentImpl(containers), EntityContainerHolderComponentImpl.class);
     }
 
     @Override
