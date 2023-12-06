@@ -12,6 +12,7 @@ import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.datastruct.DynamicURLClassLoader;
+import org.allaymc.api.entity.component.EntityComponentImplFactory;
 import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
@@ -34,6 +35,7 @@ import org.allaymc.server.blockentity.type.AllayBlockEntityType;
 import org.allaymc.server.command.AllayCommandManager;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.data.AllayVanillaItemMetaBlockStateBiMap;
+import org.allaymc.server.entity.component.AllayEntityComponentImplFactory;
 import org.allaymc.server.entity.effect.AllayEffectRegistry;
 import org.allaymc.server.entity.registry.AllayEntityTypeRegistry;
 import org.allaymc.server.entity.type.AllayEntityType;
@@ -100,6 +102,7 @@ public final class Allay {
         api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
 
         // Entity
+        api.bind(EntityComponentImplFactory.class, AllayEntityComponentImplFactory::new);
         api.bind(EffectRegistry.class, AllayEffectRegistry::new, instance -> ((AllayEffectRegistry) instance).init());
         api.bind(EntityTypeBuilder.EntityTypeBuilderFactory.class, () -> AllayEntityType::builder);
         api.bind(EntityTypeRegistry.class, AllayEntityTypeRegistry::new, instance -> ((AllayEntityTypeRegistry) instance).init());
