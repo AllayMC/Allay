@@ -1,5 +1,6 @@
 package org.allaymc.api.block.component.attribute;
 
+import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;

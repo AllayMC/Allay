@@ -10,7 +10,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.component.attribute.BlockAttributeComponentImpl;
-import org.allaymc.api.block.component.attribute.VanillaBlockAttributeRegistry;
+import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.component.base.BlockBaseComponent;
 import org.allaymc.api.block.component.base.BlockBaseComponentImpl;
 import org.allaymc.api.block.component.custom.CustomBlockComponentImpl;

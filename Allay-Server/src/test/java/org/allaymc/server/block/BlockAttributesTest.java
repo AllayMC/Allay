@@ -1,7 +1,7 @@
 package org.allaymc.server.block;
 
 import org.allaymc.api.block.component.attribute.BlockAttributes;
-import org.allaymc.api.block.component.attribute.VanillaBlockAttributeRegistry;
+import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockId;
