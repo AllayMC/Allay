@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Gson工具类
@@ -280,7 +281,7 @@ public class JSONUtils {
      * 序列化为JSON文件
      */
     public static <V> void toFile(String path, List<V> list) {
-        try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(new File(path), true));) {
+        try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(path, true))) {
             GSON.toJson(list, new TypeToken<List<V>>() {
             }.getType(), jsonWriter);
             jsonWriter.flush();
@@ -289,11 +290,16 @@ public class JSONUtils {
         }
     }
 
+    public static <V> void toFile(String path, V v) {
+        toFile(path, v, null);
+    }
+
     /**
      * 序列化为JSON文件
      */
-    public static <V> void toFile(String path, V v) {
-        try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(new File(path), true));) {
+    public static <V> void toFile(String path, V v, Consumer<JsonWriter> jsonWriterConfigurator) {
+        try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(path, true))) {
+            if (jsonWriterConfigurator != null) jsonWriterConfigurator.accept(jsonWriter);
             GSON.toJson(v, v.getClass(), jsonWriter);
             jsonWriter.flush();
         } catch (Exception e) {
@@ -610,7 +616,7 @@ public class JSONUtils {
      * 2018/6/20 14:58
      */
     private static class NumberTypeAdapter<T> extends TypeAdapter<Number> {
-        private Class<T> c;
+        private final Class<T> c;
 
         public NumberTypeAdapter(Class<T> c) {
             this.c = c;

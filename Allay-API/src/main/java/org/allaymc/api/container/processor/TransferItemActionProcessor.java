@@ -5,11 +5,13 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.player.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import lombok.extern.slf4j.Slf4j;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseSlot;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 
@@ -22,7 +24,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
     @Override
-    public ActionResponse handle(T action, EntityPlayer player) {
+    public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         var source = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var destination = player.getReachableContainerBySlotType(action.getDestination().getContainer());
         int sourceSlot = source.fromNetworkSlotIndex(action.getSource().getSlot());
@@ -35,10 +37,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             log.warn("place an air item is not allowed");
             return error();
         }
-        //若客户端发来的stackNetworkId小于0，说明客户端保证数据无误并要求遵从服务端的数据
-        //这通常发生在当一个ItemStackRequest中有多个action时且多个action有相同的source/destination container
-        //第一个action检查完id后后面的action就不需要重复检查了
-        if (sourItem.getStackNetworkId() != sourceStackNetworkId && sourceStackNetworkId > 0) {
+        if (failToValidateStackNetworkId(sourItem.getStackNetworkId(), sourceStackNetworkId)) {
             log.warn("mismatch source stack network id!");
             return error();
         }
@@ -51,7 +50,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             log.warn("place an item to a slot that has a different item is not allowed");
             return error();
         }
-        if (destItem.getStackNetworkId() != destinationStackNetworkId && destinationStackNetworkId > 0) {
+        if (failToValidateStackNetworkId(destItem.getStackNetworkId(), destinationStackNetworkId)) {
             log.warn("mismatch destination stack network id!");
             return error();
         }
@@ -135,4 +134,5 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             );
         }
     }
+
 }

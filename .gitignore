@@ -1,15 +1,3 @@
-/.idea/
 /.gradle/
-buildSrc/**
-**/build
-**/logs
-/Allay-Data/resources/git.properties
-/Allay-Server/caches/
-/Allay-Server/output/
-/Allay-Server/src/test/resources/allayworld/db/
-/output/
-/caches/
-**/server-settings.yml
-**/bin/
-**/jegenerator/
-**/worlds/
+/.idea/
+**/build/

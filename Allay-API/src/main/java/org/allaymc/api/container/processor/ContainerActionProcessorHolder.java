@@ -21,11 +21,14 @@ public interface ContainerActionProcessorHolder {
 
     static void registerDefaultContainerActionProcessors(ContainerActionProcessorHolder holder) {
         holder.registerProcessor(new CraftCreativeActionProcessor());
-        holder.registerProcessor(new CraftResultsDeprecatedActionProcessor());
         holder.registerProcessor(new PlaceActionProcessor());
         holder.registerProcessor(new TakeActionProcessor());
         holder.registerProcessor(new DestroyActionProcessor());
         holder.registerProcessor(new DropActionProcessor());
         holder.registerProcessor(new SwapActionProcessor());
+        holder.registerProcessor(new CraftRecipeActionProcessor());
+        holder.registerProcessor(new ConsumeActionProcessor());
+        holder.registerProcessor(new CreateActionProcessor());
+        holder.registerProcessor(new CraftResultDeprecatedActionProcessor());
     }
 }

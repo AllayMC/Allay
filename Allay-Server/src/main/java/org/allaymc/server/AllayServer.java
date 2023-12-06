@@ -22,6 +22,7 @@ import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
+import org.allaymc.server.world.generator.flat.FlatWorldGenerator;
 import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;

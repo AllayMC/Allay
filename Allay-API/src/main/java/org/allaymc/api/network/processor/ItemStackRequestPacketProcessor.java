@@ -42,12 +42,15 @@ public class ItemStackRequestPacketProcessor extends DataPacketProcessor<ItemSta
         List<ItemStackResponse> encodedResponses = new LinkedList<>();
         label:
         for (var request : pk.getRequests()) {
-            var responses = new LinkedList<ActionResponse>();
             // It is possible to have two same type actions in one request!
+            var responses = new LinkedList<ActionResponse>();
             // Indicate that subsequent destroy action do not return a response
             // For more details, see inventory_stack_packet.md
             boolean noResponseForDestroyAction = false;
-            for (var action : request.getActions()) {
+            var actions = request.getActions();
+            var dataPool = new HashMap<>();
+            for (int index = 0; index < actions.length; index++) {
+                var action = actions[index];
                 if (action.getType() == ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED) {
                     noResponseForDestroyAction = true;
                 }
@@ -56,7 +59,7 @@ public class ItemStackRequestPacketProcessor extends DataPacketProcessor<ItemSta
                     log.warn("Unhandled inventory action type " + action.getType());
                     continue;
                 }
-                var response = processor.handle(action, player);
+                var response = processor.handle(action, player, index, actions, dataPool);
                 if (response != null) {
                     if (!response.ok()) {
                         encodedResponses.add(new ItemStackResponse(ItemStackResponseStatus.ERROR, request.getRequestId(), null));
@@ -88,9 +91,7 @@ public class ItemStackRequestPacketProcessor extends DataPacketProcessor<ItemSta
             });
         }
         List<ItemStackResponseContainer> containers = new ArrayList<>();
-        changedContainers.forEach((type, slots) -> {
-            containers.add(new ItemStackResponseContainer(type, slots));
-        });
+        changedContainers.forEach((type, slots) -> containers.add(new ItemStackResponseContainer(type, slots)));
         return new ItemStackResponse(ItemStackResponseStatus.OK, requestId, containers);
     }
 

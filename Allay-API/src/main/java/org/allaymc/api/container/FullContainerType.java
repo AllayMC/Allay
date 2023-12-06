@@ -64,11 +64,12 @@ public record FullContainerType<T extends Container>(
             .mapAllSlotToType(ContainerSlotType.BARREL)
             .build();
 
-    public static final FullContainerType<CraftingTableContainer> CRAFTING_TABLE = builder()
+    public static final FullContainerType<CraftingGridContainer> CRAFTING_GRID = builder()
             .id(ContainerType.WORKBENCH)
-            .size(9)
+            //Small Grid(2x2) + Crafting Table Grid(3x3)
+            .size(4 + 9)
             .mapAllSlotToType(ContainerSlotType.CRAFTING_INPUT)
-            .mapRangedNetworkSlotIndex(32, 40, 0)
+            .mapRangedNetworkSlotIndex(28, 40, 0)
             .build();
 
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
