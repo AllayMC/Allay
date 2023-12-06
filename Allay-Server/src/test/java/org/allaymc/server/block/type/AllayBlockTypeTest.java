@@ -1,7 +1,7 @@
 package org.allaymc.server.block.type;
 
-import org.allaymc.api.block.component.attribute.BlockAttributeComponentImpl;
-import org.allaymc.api.block.component.attribute.BlockAttributes;
+import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
+import org.allaymc.api.block.component.common.BlockAttributes;
 import org.allaymc.api.block.interfaces.candle.BlockBlueCandleBehavior;
 import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanBehavior;
 import org.allaymc.api.block.interfaces.wall.BlockCobbledDeepslateWallBehavior;

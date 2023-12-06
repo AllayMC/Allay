@@ -6,6 +6,8 @@ import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 
+import static org.allaymc.api.block.component.BlockComponentImplFactory.getFactory;
+
 /**
  * @author daoge_cmd | Cool_Loong <br>
  * Allay Project <br>

@@ -3,7 +3,7 @@ package org.allaymc.server.block.attribute;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.attribute.BlockAttributes;
+import org.allaymc.api.block.component.common.BlockAttributes;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.registry.RegistryLoader;

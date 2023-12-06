@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.lang.Math.*;
-import static org.allaymc.api.block.component.attribute.BlockAttributes.DEFAULT_FRICTION;
+import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRICTION;
 
 /**
  * Allay Project 2023/8/5 <br>

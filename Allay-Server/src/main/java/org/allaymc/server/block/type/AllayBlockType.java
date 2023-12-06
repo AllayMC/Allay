@@ -9,11 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
-import org.allaymc.api.block.component.attribute.BlockAttributeComponentImpl;
+import org.allaymc.api.block.component.common.CustomBlockComponent;
+import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
-import org.allaymc.api.block.component.base.BlockBaseComponent;
-import org.allaymc.api.block.component.base.BlockBaseComponentImpl;
-import org.allaymc.api.block.component.custom.CustomBlockComponentImpl;
+import org.allaymc.api.block.component.common.BlockBaseComponent;
+import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
+import org.allaymc.server.block.component.common.CustomBlockComponentImpl;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
@@ -406,7 +407,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public Builder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent) {
+        public Builder<T> addCustomBlockComponent(CustomBlockComponent customBlockComponent) {
             components.put(findComponentIdentifierInCertainClass(customBlockComponent.getClass()), customBlockComponent);
             isCustomBlock = true;
             return this;

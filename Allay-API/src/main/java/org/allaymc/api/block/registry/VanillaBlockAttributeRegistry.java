@@ -1,7 +1,7 @@
 package org.allaymc.api.block.registry;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.block.component.attribute.BlockAttributes;
+import org.allaymc.api.block.component.common.BlockAttributes;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.registry.MappedRegistry;
 

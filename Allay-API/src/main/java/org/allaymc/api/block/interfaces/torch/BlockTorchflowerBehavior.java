@@ -8,6 +8,8 @@ import org.allaymc.api.data.VanillaBlockId;
 /**
  * @author daoge_cmd | Cool_Loong <br>
  * Allay Project <br>
+ *
+ * TODO: Check can this one be in torch group?
  */
 public interface BlockTorchflowerBehavior extends BlockBehavior {
   BlockType<BlockTorchflowerBehavior> TORCHFLOWER_TYPE = BlockTypeBuilder

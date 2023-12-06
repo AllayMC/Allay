@@ -1,4 +1,4 @@
-package org.allaymc.api.block.component.attribute;
+package org.allaymc.api.block.component.common;
 
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.type.BlockState;

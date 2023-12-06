@@ -1,4 +1,4 @@
-package org.allaymc.api.block.component.custom;
+package org.allaymc.api.block.component.common;
 
 import org.allaymc.api.block.component.BlockComponent;
 

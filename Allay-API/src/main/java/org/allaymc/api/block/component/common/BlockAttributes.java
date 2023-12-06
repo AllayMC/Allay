@@ -1,4 +1,4 @@
-package org.allaymc.api.block.component.attribute;
+package org.allaymc.api.block.component.common;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

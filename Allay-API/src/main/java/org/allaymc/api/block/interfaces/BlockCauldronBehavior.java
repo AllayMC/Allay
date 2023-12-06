@@ -1,12 +1,13 @@
 package org.allaymc.api.block.interfaces;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.attribute.BlockAttributeComponentImpl;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.VoxelShape;
+
+import static org.allaymc.api.block.component.BlockComponentImplFactory.getFactory;
 
 /**
  * @author daoge_cmd | Cool_Loong <br>
@@ -17,7 +18,7 @@ public interface BlockCauldronBehavior extends BlockBehavior {
             .builder(BlockCauldronBehavior.class)
             .vanillaBlock(VanillaBlockId.CAULDRON)
             .setProperties(VanillaBlockPropertyTypes.CAULDRON_LIQUID, VanillaBlockPropertyTypes.FILL_LEVEL)
-            .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(
+            .addComponent(getFactory().createRedefinedAABBBlockAttributeComponent(
                     blockState ->
                             VoxelShape
                                     .builder()

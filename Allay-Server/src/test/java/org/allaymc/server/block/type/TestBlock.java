@@ -1,7 +1,7 @@
 package org.allaymc.server.block.type;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.custom.CustomBlockComponent;
+import org.allaymc.api.block.component.common.CustomBlockComponent;
 import org.allaymc.server.block.component.TestComponent;
 
 /**

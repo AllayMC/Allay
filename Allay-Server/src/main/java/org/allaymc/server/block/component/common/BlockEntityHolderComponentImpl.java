@@ -1,6 +1,7 @@
-package org.allaymc.api.block.component.blockentity;
+package org.allaymc.server.block.component.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.component.common.BlockEntityHolderComponent;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
 import org.allaymc.api.block.component.event.BlockOnPlaceEvent;

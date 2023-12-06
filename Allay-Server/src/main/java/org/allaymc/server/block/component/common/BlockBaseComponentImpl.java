@@ -1,6 +1,7 @@
-package org.allaymc.api.block.component.base;
+package org.allaymc.server.block.component.common;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
 import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
