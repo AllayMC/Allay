@@ -1,5 +1,6 @@
 package org.allaymc.dependence;
 
+import java.lang.String;
 import lombok.Getter;
 
 /**

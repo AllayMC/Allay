@@ -65,7 +65,7 @@ public class VanillaBlockIdEnumGen {
         TypeSpec.Builder codeBuilder = commonBuilder(identifierClass);
         addEnums(codeBuilder);
         var javaFile = JavaFile.builder("org.allaymc.dependence", codeBuilder.build()).build();
-        Files.writeString(Path.of("Allay-CodeGen/src/main/java/cn/allay/dependence/VanillaBlockId.java"), javaFile.toString());
+        Files.writeString(Path.of("Allay-CodeGen/src/main/java/org/allaymc/dependence/VanillaBlockId.java"), javaFile.toString());
     }
 
     @SneakyThrows
@@ -99,7 +99,7 @@ public class VanillaBlockIdEnumGen {
                 .replace("public BlockType", "public BlockType<?>")
                 .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.identifier.Identifier")
                 .replace("org.allaymc.dependence.VanillaBlockId", "org.allaymc.api.data.VanillaBlockId");
-        Files.writeString(Path.of("Allay-API/src/main/java/cn/allay/api/data/VanillaBlockId.java"), result);
+        Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/data/VanillaBlockId.java"), result);
     }
 
     private static void addEnums(TypeSpec.Builder codeBuilder) {

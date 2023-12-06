@@ -18,11 +18,11 @@ The output file is named ```block_palette_converted.nbt```
 
 ## 2. Update the auto-generated code
 
-(Using Allay-API/src/test/cn/allay/codegen/CodeGen.java to update. Under normal circumstances, the following files
+(Using Allay-API/src/test/org/allaymc/codegen/CodeGen.java to update. Under normal circumstances, the following files
 should not be modified manually)
 
-- ```cn/allay/block/data/VanillaBlockId.java```
-- ```cn/allay/block/property/vanilla/*```
+- ```org/allaymc/block/data/VanillaBlockId.java```
+- ```org/allaymc/block/property/vanilla/*```
 
 After the code is generated, you also need to apply "Format Code" to the generated code
 
