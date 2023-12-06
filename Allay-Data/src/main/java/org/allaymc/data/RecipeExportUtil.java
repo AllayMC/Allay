@@ -38,7 +38,7 @@ import java.util.*;
  * @author Kaooot | Cool_Loong
  */
 public class RecipeExportUtil {
-    private static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
+    private static final BedrockCodec CODEC = ProtocolInfo.PACKET_CODEC;
     private static final Int2ObjectOpenHashMap<String> ITEM_RUNTIME_ID_TO_IDENTIFIER = new Int2ObjectOpenHashMap<>();
     private static final char[] SHAPE_CHARS = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 

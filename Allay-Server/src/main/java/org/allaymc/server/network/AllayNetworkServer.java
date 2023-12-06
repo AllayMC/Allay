@@ -27,6 +27,8 @@ import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitiali
 
 import java.net.InetSocketAddress;
 
+import static org.allaymc.api.network.ProtocolInfo.PACKET_CODEC;
+
 /**
  * Allay Project 2023/6/23
  *
@@ -34,7 +36,6 @@ import java.net.InetSocketAddress;
  */
 @Getter
 public class AllayNetworkServer implements NetworkServer {
-    protected static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
 
     protected InetSocketAddress bindAddress;
     protected BedrockPong pong;
@@ -72,7 +73,7 @@ public class AllayNetworkServer implements NetworkServer {
                     @Override
                     protected void initSession(BedrockServerSession session) {
                         session.setLogging(true);
-                        session.setCodec(CODEC);
+                        session.setCodec(PACKET_CODEC);
                         server.onConnect(session);
                     }
                 })
@@ -89,7 +90,7 @@ public class AllayNetworkServer implements NetworkServer {
 
     @Override
     public BedrockCodec getCodec() {
-        return CODEC;
+        return PACKET_CODEC;
     }
 
     @Override
@@ -129,7 +130,7 @@ public class AllayNetworkServer implements NetworkServer {
                 .playerCount(0)
                 .maximumPlayerCount(settings.genericSettings().maxClientCount())
                 .gameType(settings.genericSettings().defaultGameType().name())
-                .protocolVersion(CODEC.getProtocolVersion())
+                .protocolVersion(PACKET_CODEC.getProtocolVersion())
                 .ipv4Port(settings.networkSettings().port())
                 .ipv6Port(settings.networkSettings().port());//TODO: ipv6
     }

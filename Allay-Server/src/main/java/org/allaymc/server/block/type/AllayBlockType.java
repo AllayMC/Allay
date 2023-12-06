@@ -32,6 +32,7 @@ import org.allaymc.api.item.interfaces.ItemSugarCaneStack;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
 import org.allaymc.server.component.injector.AllayComponentInjector;
@@ -223,7 +224,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             var tag = NbtMap.builder()
                     .putString("name", blockType.getIdentifier().toString())
                     .putCompound("states", NbtMap.fromMap(states))
-                    .putInt("version", VERSION)
+                    .putInt("version", ProtocolInfo.BLOCK_STATE_VERSION)
                     .build();
 
             return tag;

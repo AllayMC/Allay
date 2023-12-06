@@ -19,11 +19,6 @@ import java.util.Map;
  */
 public interface BlockState {
 
-    int VERSION = (1 << 24) | //major
-                  (20 << 16) | //minor
-                  (40 << 8) | //patch
-                  (3); //revision
-
     BlockType<?> getBlockType();
 
     int blockStateHash();

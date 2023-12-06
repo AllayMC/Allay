@@ -2,8 +2,8 @@ package org.allaymc.api.utils;
 
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.Pair;
-import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.client.data.SemVersion;
+import org.allaymc.api.network.ProtocolInfo;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
 
@@ -57,7 +57,7 @@ public class PaletteUtils {
                     if (name.equals("version")) {
                         int version = input.readInt();
                         byteBuf.resetReaderIndex();
-                        if (version != BlockState.VERSION) {
+                        if (version != ProtocolInfo.BLOCK_STATE_VERSION) {
                             return Pair.of(null, getSemVersion(version));
                         }
                         byte[] result = new byte[end - start];
