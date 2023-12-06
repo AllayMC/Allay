@@ -307,7 +307,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     protected void sendSimpleMessage(String message, TextPacket.Type type) {
         var pk = new TextPacket();
-        pk.setType(TextPacket.Type.RAW);
+        pk.setType(type);
         pk.setXuid(networkComponent.getLoginData().getXuid());
         pk.setMessage(message);
         networkComponent.sendPacket(pk);
