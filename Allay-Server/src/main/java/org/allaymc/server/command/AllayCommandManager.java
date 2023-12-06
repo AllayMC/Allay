@@ -127,8 +127,6 @@ public class AllayCommandManager extends CommandManager {
             ));
         }
 
-        log.info(packet.toString());
-
         return packet;
     }
 
