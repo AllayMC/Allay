@@ -436,8 +436,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
-        var event = new EntitySaveNBTEvent(builder);
-        manager.callEvent(event);
         builder.putString("identifier", entityType.getIdentifier().toString())
                 .putCompound("Pos",
                         NbtMap.builder()
@@ -465,13 +463,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                     attributeComponent.saveAttributes()
             );
         }
+        var event = new EntitySaveNBTEvent(builder);
+        manager.callEvent(event);
         return builder.build();
     }
 
     @Override
     public void loadNBT(NbtMap nbt) {
-        var event = new EntityLoadNBTEvent(nbt);
-        manager.callEvent(event);
         if (attributeComponent != null && nbt.containsKey("Attributes")) {
             var attributes = nbt.getList("Attributes", NbtType.COMPOUND);
             for (NbtMap attribute : attributes) {
@@ -502,6 +500,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (nbt.containsKey("OnGround")) {
             onGround = nbt.getBoolean("OnGround");
         }
+        var event = new EntityLoadNBTEvent(nbt);
+        manager.callEvent(event);
     }
 
     protected float fallDistance = 0f;

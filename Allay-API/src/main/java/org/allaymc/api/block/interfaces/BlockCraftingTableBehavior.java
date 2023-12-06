@@ -26,7 +26,7 @@ public interface BlockCraftingTableBehavior extends BlockBehavior {
               public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
                   if (!super.onInteract(player, itemStack, dimension, blockPos, placeBlockPos, clickPos, blockFace) && player != null) {
                       var craftingTableContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
-                      craftingTableContainer.setLastCraftingTablePos(blockPos);
+                      craftingTableContainer.setBlockPos(blockPos);
                       craftingTableContainer.setUsingCraftingTable(true);
                       craftingTableContainer.addViewer(player);
                       return true;

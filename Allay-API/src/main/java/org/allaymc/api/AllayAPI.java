@@ -6,6 +6,7 @@ import org.allaymc.api.block.component.attribute.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
+import org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.command.CommandManager;
@@ -147,6 +148,7 @@ public final class AllayAPI {
         requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
 
         // BlockEntity
+        requireImpl(BlockEntityComponentImplFactory.class, BlockEntityComponentImplFactory.FACTORY::set);
         requireImpl(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, BlockEntityTypeBuilder.FACTORY::set);
         requireImpl(BlockEntityTypeRegistry.class, BlockEntityTypeRegistry.REGISTRY::set);
 

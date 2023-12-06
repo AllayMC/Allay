@@ -16,10 +16,10 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 @Getter
-@Setter
 public class CraftingGridContainer extends BaseContainer {
 
-    protected Vector3ic lastCraftingTablePos;
+    protected Vector3ic craftingTablePos;
+    @Setter
     protected boolean isUsingCraftingTable = false;
 
     public CraftingGridContainer() {
@@ -33,9 +33,13 @@ public class CraftingGridContainer extends BaseContainer {
 
     @Override
     public Vector3ic getBlockPos() {
-        return lastCraftingTablePos;
+        return craftingTablePos;
     }
 
+    @Override
+    public void setBlockPos(Vector3ic blockPos) {
+        this.craftingTablePos = blockPos;
+    }
 
     @Override
     public void onClose(ContainerViewer viewer) {

@@ -1,14 +1,18 @@
-package org.allaymc.api.blockentity.component.base;
+package org.allaymc.server.blockentity.component.common;
 
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
 import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
 import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
 import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
+import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
+import org.allaymc.api.blockentity.component.event.BlockEntitySaveNBTEvent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
+import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.position.Position3i;
@@ -34,7 +38,11 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     public BlockEntityBaseComponentImpl(BlockEntityInitInfo<T> initInfo) {
         this.blockEntityType = initInfo.getBlockEntityType();
         this.position = new Position3i(0, 0, 0, initInfo.dimension());
-        loadNBT(initInfo.nbt());
+    }
+
+    @Override
+    public void onInitFinish(ComponentInitInfo initInfo) {
+        loadNBT(((BlockEntityInitInfo<?>) initInfo).nbt());
     }
 
     @Override
@@ -49,14 +57,16 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
 
     @Override
     public NbtMap saveNBT() {
-        return NbtMap.builder()
+        var builder = NbtMap.builder()
                 .putString("id", blockEntityType.getBlockEntityId())
                 .putInt("x", position.x())
                 .putInt("y", position.y())
                 .putInt("z", position.z())
                 .putString("CustomName", customName)
-                .putBoolean("isMovable", true)
-                .build();
+                .putBoolean("isMovable", true);
+        var event = new BlockEntitySaveNBTEvent(builder);
+        manager.callEvent(event);
+        return builder.build();
     }
 
     @Override
@@ -69,6 +79,8 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
         pos.y = nbt.getInt("y", position.y());
         pos.z = nbt.getInt("z", position.z());
         position = pos;
+        var event = new BlockEntityLoadNBTEvent(nbt);
+        manager.callEvent(event);
     }
 
     @Override

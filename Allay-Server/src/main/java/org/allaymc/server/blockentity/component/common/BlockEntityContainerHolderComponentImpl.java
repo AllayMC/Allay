@@ -1,14 +1,19 @@
-package org.allaymc.api.blockentity.component.container;
+package org.allaymc.server.blockentity.component.common;
 
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
+import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
+import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
+import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
 import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.utils.MathUtils;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
@@ -23,6 +28,9 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @ComponentIdentifier
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_inventory_holder_component");
     protected Container container;
+
+    @Dependency
+    protected BlockEntityBaseComponent baseComponent;
 
     public BlockEntityContainerHolderComponentImpl(Container container) {
         this.container = container;
@@ -46,6 +54,11 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @Override
     public void setContainer(Container container) {
         this.container = container;
+    }
+
+    @ComponentEventListener
+    private void onNBTLoaded(BlockEntityLoadNBTEvent event) {
+        container.setBlockPos(baseComponent.getPosition());
     }
 
     @ComponentEventListener

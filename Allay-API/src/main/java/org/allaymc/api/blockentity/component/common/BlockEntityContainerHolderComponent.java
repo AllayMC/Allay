@@ -1,4 +1,4 @@
-package org.allaymc.api.blockentity.component.container;
+package org.allaymc.api.blockentity.component.common;
 
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.container.Container;

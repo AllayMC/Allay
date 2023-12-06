@@ -7,7 +7,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
-import org.allaymc.api.blockentity.interfaces.barrel.BlockEntityBarrel;
+import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;

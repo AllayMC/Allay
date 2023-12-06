@@ -1,4 +1,4 @@
-package org.allaymc.api.blockentity.component.base;
+package org.allaymc.api.blockentity.component.common;
 
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
