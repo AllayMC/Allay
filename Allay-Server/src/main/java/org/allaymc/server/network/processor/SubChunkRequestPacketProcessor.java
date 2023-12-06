@@ -1,4 +1,4 @@
-package org.allaymc.api.network.processor;
+package org.allaymc.server.network.processor;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -8,7 +8,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.network.DataPacketProcessor;
+import org.allaymc.server.network.DataPacketProcessor;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.Chunk;

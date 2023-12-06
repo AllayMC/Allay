@@ -1,8 +1,8 @@
-package org.allaymc.api.network.processor;
+package org.allaymc.server.network.processor;
 
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.network.DataPacketProcessor;
+import org.allaymc.server.network.DataPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.InteractPacket;
 

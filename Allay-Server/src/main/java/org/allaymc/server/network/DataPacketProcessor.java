@@ -1,4 +1,4 @@
-package org.allaymc.api.network;
+package org.allaymc.server.network;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
