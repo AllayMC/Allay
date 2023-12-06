@@ -34,9 +34,8 @@ public class VanillaEntityInterfaceGen {
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var entity : VanillaEntityId.values()) {
             var entityClassSimpleName = "Entity" + Utils.convertToPascalCase(entity.getIdentifier().path());
-            var folderName = Utils.convertToPascalCase(entity.getIdentifier().path()).toLowerCase();
-            var entityClassName = ClassName.get("org.allaymc.api.entity.interfaces." + folderName, entityClassSimpleName);
-            var path = FILE_OUTPUT_PATH_BASE.resolve(folderName).resolve(entityClassSimpleName + ".java");
+            var entityClassName = ClassName.get("org.allaymc.api.entity.interfaces", entityClassSimpleName);
+            var path = FILE_OUTPUT_PATH_BASE.resolve(entityClassSimpleName + ".java");
             if (!Files.exists(path)) {
                 System.out.println("Generating " + entityClassName + "...");
                 generateEntityClass(entity, entityClassName, path);
