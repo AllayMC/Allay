@@ -83,12 +83,6 @@ public class AllayNetworkServer implements NetworkServer {
     }
 
     @Override
-    public SemVersion getSemVersion() {
-        int[] array = AllayStringUtils.fastSplit(getCodec().getMinecraftVersion(), ".").stream().mapToInt(Integer::parseInt).toArray();
-        return new SemVersion(array[0], array[1], array[2], 0, 0);
-    }
-
-    @Override
     public BedrockCodec getCodec() {
         return PACKET_CODEC;
     }

@@ -40,7 +40,5 @@ public interface NetworkServer {
 
     void setMaxPlayerCount(int maxPlayerCount, boolean update);
 
-    SemVersion getSemVersion();
-
     BedrockCodec getCodec();
 }
