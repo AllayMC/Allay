@@ -1,7 +1,7 @@
 package org.allaymc.api.block.type;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.attribute.BlockAttributes;
+import org.allaymc.api.block.component.common.BlockAttributes;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.cloudburstmc.nbt.NbtMap;
@@ -18,11 +18,6 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface BlockState {
-
-    int VERSION = (1 << 24) | //major
-                  (20 << 16) | //minor
-                  (40 << 8) | //patch
-                  (3); //revision
 
     BlockType<?> getBlockType();
 

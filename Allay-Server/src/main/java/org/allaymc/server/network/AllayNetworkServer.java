@@ -12,12 +12,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.Getter;
-import org.allaymc.api.client.data.SemVersion;
 import org.allaymc.api.network.NetworkServer;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
-import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
@@ -27,6 +24,8 @@ import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitiali
 
 import java.net.InetSocketAddress;
 
+import static org.allaymc.api.network.ProtocolInfo.PACKET_CODEC;
+
 /**
  * Allay Project 2023/6/23
  *
@@ -34,7 +33,6 @@ import java.net.InetSocketAddress;
  */
 @Getter
 public class AllayNetworkServer implements NetworkServer {
-    protected static final BedrockCodec CODEC = ProtocolInfo.getDefaultPacketCodec();
 
     protected InetSocketAddress bindAddress;
     protected BedrockPong pong;
@@ -72,7 +70,7 @@ public class AllayNetworkServer implements NetworkServer {
                     @Override
                     protected void initSession(BedrockServerSession session) {
                         session.setLogging(true);
-                        session.setCodec(CODEC);
+                        session.setCodec(PACKET_CODEC);
                         server.onConnect(session);
                     }
                 })
@@ -82,14 +80,8 @@ public class AllayNetworkServer implements NetworkServer {
     }
 
     @Override
-    public SemVersion getSemVersion() {
-        int[] array = AllayStringUtils.fastSplit(getCodec().getMinecraftVersion(), ".").stream().mapToInt(Integer::parseInt).toArray();
-        return new SemVersion(array[0], array[1], array[2], 0, 0);
-    }
-
-    @Override
     public BedrockCodec getCodec() {
-        return CODEC;
+        return PACKET_CODEC;
     }
 
     @Override
@@ -129,7 +121,7 @@ public class AllayNetworkServer implements NetworkServer {
                 .playerCount(0)
                 .maximumPlayerCount(settings.genericSettings().maxClientCount())
                 .gameType(settings.genericSettings().defaultGameType().name())
-                .protocolVersion(CODEC.getProtocolVersion())
+                .protocolVersion(PACKET_CODEC.getProtocolVersion())
                 .ipv4Port(settings.networkSettings().port())
                 .ipv6Port(settings.networkSettings().port());//TODO: ipv6
     }

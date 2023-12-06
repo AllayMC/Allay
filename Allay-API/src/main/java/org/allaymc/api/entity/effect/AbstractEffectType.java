@@ -31,7 +31,7 @@ public abstract class AbstractEffectType implements EffectType {
     }
 
     @Override
-    public org.allaymc.api.entity.effect.EffectInstance createInstance(int amplifier, int duration, boolean visible) {
+    public EffectInstance createInstance(int amplifier, int duration, boolean visible) {
         return new SimpleEffectInstance(this, amplifier, duration, visible);
     }
 }

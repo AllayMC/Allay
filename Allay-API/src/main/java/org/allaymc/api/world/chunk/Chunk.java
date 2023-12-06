@@ -2,7 +2,7 @@ package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -43,13 +43,6 @@ public interface Chunk extends UnsafeChunk {
     void addChunkPacket(BedrockPacket packet);
 
     void sendChunkPacket(BedrockPacket packet);
-
-    @ApiStatus.Internal
-    void addEntity(Entity entity);
-
-    @Nullable
-    @ApiStatus.Internal
-    Entity removeEntity(long uniqueId);
 
     void sendChunkPackets();
 

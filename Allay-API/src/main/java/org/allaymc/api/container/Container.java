@@ -45,6 +45,10 @@ public interface Container {
         throw new UnsupportedOperationException();
     }
 
+    default void setBlockPos(Vector3ic blockPos) {
+        // Do nothing in default
+    }
+
     default ContainerSlotType getSlotType(int slot) {
         return getContainerType().getSlotType(slot);
     }

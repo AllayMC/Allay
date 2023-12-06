@@ -1,12 +1,13 @@
 package org.allaymc.api.block.interfaces.stairs;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.attribute.BlockAttributeComponentImpl;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.CommonShapes;
+
+import static org.allaymc.api.block.component.BlockComponentImplFactory.getFactory;
 
 /**
  * @author daoge_cmd | Cool_Loong <br>
@@ -16,7 +17,9 @@ public interface BlockWarpedStairsBehavior extends BlockBehavior {
     BlockType<BlockWarpedStairsBehavior> WARPED_STAIRS_TYPE = BlockTypeBuilder
             .builder(BlockWarpedStairsBehavior.class)
             .vanillaBlock(VanillaBlockId.WARPED_STAIRS)
-            .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION).addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
-            .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
+            .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .addComponent(getFactory().createRedefinedAABBBlockAttributeComponent(CommonShapes::buildStairShape))
+
+            .setBlockBaseComponentSupplier(getFactory()::createBlockStairBaseComponent)
             .build();
 }

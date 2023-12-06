@@ -2,7 +2,7 @@ package org.allaymc.api.entity;
 
 import org.allaymc.api.datastruct.aabbtree.HasAABB;
 import org.allaymc.api.datastruct.aabbtree.HasLongId;
-import org.allaymc.api.entity.component.base.EntityBaseComponent;
+import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.joml.primitives.AABBf;
 
 /**

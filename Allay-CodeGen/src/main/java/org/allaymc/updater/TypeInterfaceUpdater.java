@@ -19,7 +19,7 @@ public class TypeInterfaceUpdater {
         addCode(".setBlockBaseComponentSupplier((b) -> BlockBaseComponentImpl.builder().place(CommonBlockPlaceFunctions.STAIR_PLACE).build())",
                 """
                         import org.allaymc.api.block.CommonBlockPlaceFunctions;
-                        import org.allaymc.api.block.component.base.BlockBaseComponentImpl;""",
+                        import org.allaymc.server.block.component.common.BlockBaseComponentImpl;""",
                 ".*Stairs");
     }
 

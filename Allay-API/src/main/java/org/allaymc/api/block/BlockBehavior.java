@@ -1,7 +1,7 @@
 package org.allaymc.api.block;
 
-import org.allaymc.api.block.component.attribute.BlockAttributeComponent;
-import org.allaymc.api.block.component.base.BlockBaseComponent;
+import org.allaymc.api.block.component.common.BlockAttributeComponent;
+import org.allaymc.api.block.component.common.BlockBaseComponent;
 
 /**
  * Allay Project 2023/3/19

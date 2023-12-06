@@ -7,7 +7,7 @@ import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.generator.Generator;
 import org.allaymc.api.world.service.BlockUpdateService;

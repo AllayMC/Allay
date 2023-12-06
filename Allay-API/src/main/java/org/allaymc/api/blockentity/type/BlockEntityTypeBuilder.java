@@ -32,6 +32,8 @@ public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEn
 
     BlockEntityTypeBuilder<T, C> addComponent(Function<BlockEntityInitInfo<T>, C> provider, Class<?> componentClass);
 
+    BlockEntityTypeBuilder<T, C> addComponent(ComponentProvider<BlockEntityComponent> componentProvider);
+
     interface BlockEntityTypeBuilderFactory {
         <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> create(Class<T> clazz);
     }

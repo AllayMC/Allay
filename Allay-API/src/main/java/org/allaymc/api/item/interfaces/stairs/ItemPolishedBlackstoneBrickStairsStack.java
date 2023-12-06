@@ -2,7 +2,6 @@ package org.allaymc.api.item.interfaces.stairs;
 
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.base.ItemBaseComponentImpl;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 
@@ -14,6 +13,5 @@ public interface ItemPolishedBlackstoneBrickStairsStack extends ItemStack {
     ItemType<ItemPolishedBlackstoneBrickStairsStack> POLISHED_BLACKSTONE_BRICK_STAIRS_TYPE = ItemTypeBuilder
             .builder(ItemPolishedBlackstoneBrickStairsStack.class)
             .vanillaItem(VanillaItemId.POLISHED_BLACKSTONE_BRICK_STAIRS)
-            .addComponent(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class)
             .build();
 }

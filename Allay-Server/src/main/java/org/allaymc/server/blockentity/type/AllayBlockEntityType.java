@@ -5,7 +5,7 @@ import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
-import org.allaymc.api.blockentity.component.base.BlockEntityBaseComponentImpl;
+import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -113,7 +113,13 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
 
         @Override
         public BlockEntityTypeBuilder<T, BlockEntityComponent> addComponent(Function<BlockEntityInitInfo<T>, BlockEntityComponent> provider, Class<?> componentClass) {
-            var p = new ComponentProvider.BlockEntityComponentProvider<>(provider, componentClass);
+            var p = new ComponentProvider.SimpleComponentProvider<>(provider, componentClass);
+            this.componentProviders.put(p.findComponentIdentifier(), p);
+            return this;
+        }
+
+        @Override
+        public BlockEntityTypeBuilder<T, BlockEntityComponent> addComponent(ComponentProvider<BlockEntityComponent> p) {
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }

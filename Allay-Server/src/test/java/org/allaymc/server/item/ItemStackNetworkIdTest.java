@@ -1,7 +1,7 @@
 package org.allaymc.server.item;
 
-import org.allaymc.api.item.component.base.ItemBaseComponent;
-import org.allaymc.api.item.component.base.ItemBaseComponentImpl;
+import org.allaymc.api.item.component.common.ItemBaseComponent;
+import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;

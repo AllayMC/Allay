@@ -3,20 +3,20 @@ package org.allaymc.api.block.type;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
-import org.allaymc.api.block.component.base.BlockBaseComponent;
-import org.allaymc.api.block.component.blockentity.BlockEntityHolderComponentImpl;
-import org.allaymc.api.block.component.custom.CustomBlockComponentImpl;
+import org.allaymc.api.block.component.common.BlockBaseComponent;
+import org.allaymc.api.block.component.common.CustomBlockComponent;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.identifier.Identifier;
-import org.allaymc.api.item.type.ItemType;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
+import static org.allaymc.api.block.component.BlockComponentImplFactory.getFactory;
+import static org.allaymc.api.component.interfaces.ComponentProvider.findComponentIdentifierInCertainClass;
 
 /**
  * Allay Project 2023/3/19
@@ -40,7 +40,7 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
     BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId);
 
     default BlockTypeBuilder<T> bindBlockEntity(BlockEntityType<?> blockEntityType) {
-        return addComponent(new BlockEntityHolderComponentImpl<>(blockEntityType));
+        return addComponent(getFactory().createBlockEntityHolderComponent(blockEntityType));
     }
 
     BlockTypeBuilder<T> setProperties(BlockPropertyType<?>... properties);
@@ -62,7 +62,7 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
     private Map<Identifier, BlockComponent> listComponentToMap(List<BlockComponent> components) {
         var map = new HashMap<Identifier, BlockComponent>();
         components.forEach(component -> {
-            var id = ComponentProvider.findComponentIdentifierInCertainClass(component.getClass());
+            var id = findComponentIdentifierInCertainClass(component.getClass());
             if (map.containsKey(id))
                 throw new IllegalArgumentException("Duplicate component: " + id);
             map.put(id, component);
@@ -72,7 +72,7 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
 
     BlockTypeBuilder<T> addComponent(BlockComponent component);
 
-    BlockTypeBuilder<T> addCustomBlockComponent(CustomBlockComponentImpl customBlockComponent);
+    BlockTypeBuilder<T> addCustomBlockComponent(CustomBlockComponent customBlockComponent);
 
     BlockTypeBuilder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier);
 

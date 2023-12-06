@@ -3,7 +3,7 @@ package org.allaymc.api.server;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;

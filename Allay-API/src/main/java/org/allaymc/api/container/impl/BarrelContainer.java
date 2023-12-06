@@ -13,15 +13,12 @@ import java.util.function.Supplier;
  */
 public class BarrelContainer extends BaseContainer {
 
+    // Block pos will be set through method setBlockPos()
+    // See BlockEntityContainerHolderComponent.onNBTLoaded()
     protected Vector3ic blockPos;
 
-    public BarrelContainer(Vector3ic blockPos) {
+    public BarrelContainer() {
         super(FullContainerType.BARREL);
-        this.blockPos = blockPos;
-    }
-
-    public BarrelContainer(Supplier<Vector3ic> blockPosGenerator) {
-        this(blockPosGenerator.get());
     }
 
     @Override
@@ -32,5 +29,10 @@ public class BarrelContainer extends BaseContainer {
     @Override
     public Vector3ic getBlockPos() {
         return blockPos;
+    }
+
+    @Override
+    public void setBlockPos(Vector3ic blockPos) {
+        this.blockPos = blockPos;
     }
 }
