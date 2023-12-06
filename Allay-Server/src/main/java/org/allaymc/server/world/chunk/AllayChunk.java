@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.StampedLock;
+import java.util.function.Predicate;
 
 /**
  * Allay Project 5/30/2023
@@ -42,7 +43,7 @@ public class AllayChunk implements Chunk {
     protected final StampedLock heightAndBiomeLock;
     protected final StampedLock lightLock;
     protected final Set<ChunkLoader> chunkLoaders;
-    protected final Queue<BedrockPacket> chunkPacketQueue;
+    protected final Queue<ChunkPacketEntry> chunkPacketQueue;
 
     public AllayChunk(AllayUnsafeChunk unsafeChunk) {
         this.unsafeChunk = unsafeChunk;
@@ -480,15 +481,20 @@ public class AllayChunk implements Chunk {
     @Override
     public void sendChunkPackets() {
         if (chunkPacketQueue.isEmpty()) return;
-        BedrockPacket packet;
-        while ((packet = chunkPacketQueue.poll()) != null) {
-            sendChunkPacket(packet);
+        ChunkPacketEntry entry;
+        while ((entry = chunkPacketQueue.poll()) != null) {
+            sendChunkPacket(entry.packet, entry.chunkLoaderPredicate);
         }
     }
 
     @Override
     public void addChunkPacket(BedrockPacket packet) {
-        chunkPacketQueue.add(packet);
+        chunkPacketQueue.add(new ChunkPacketEntry(packet, null));
+    }
+
+    @Override
+    public void addChunkPacket(BedrockPacket packet, @Nullable Predicate<ChunkLoader> chunkLoaderPredicate) {
+        chunkPacketQueue.add(new ChunkPacketEntry(packet, chunkLoaderPredicate));
     }
 
     @Override
@@ -518,4 +524,15 @@ public class AllayChunk implements Chunk {
             chunkLoader.handleChunkPacket(packet);
         }
     }
+
+    @Override
+    public void sendChunkPacket(BedrockPacket packet, @Nullable Predicate<ChunkLoader> chunkLoaderPredicate) {
+        for (ChunkLoader chunkLoader : chunkLoaders) {
+            if (chunkLoaderPredicate == null || chunkLoaderPredicate.test(chunkLoader)) {
+                chunkLoader.handleChunkPacket(packet);
+            }
+        }
+    }
+
+    protected record ChunkPacketEntry(BedrockPacket packet, @Nullable Predicate<ChunkLoader> chunkLoaderPredicate) {}
 }

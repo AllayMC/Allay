@@ -14,7 +14,7 @@ public class AnimatePacketProcessor extends DataPacketProcessor<AnimatePacket> {
     @Override
     public void handle(EntityPlayer player, AnimatePacket pk) {
         if (pk.getAction() == AnimatePacket.Action.SWING_ARM) {
-            player.getCurrentChunk().addChunkPacket(pk);
+            player.getCurrentChunk().addChunkPacket(pk, chunkLoader -> chunkLoader != player);
         }
     }
 
