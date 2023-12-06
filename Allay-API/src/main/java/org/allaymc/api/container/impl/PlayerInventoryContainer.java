@@ -2,7 +2,7 @@ package org.allaymc.api.container.impl;
 
 import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import lombok.Getter;
 import lombok.Setter;

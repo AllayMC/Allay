@@ -47,6 +47,8 @@ public interface EntityTypeBuilder<T extends Entity, C extends EntityComponent> 
 
     EntityTypeBuilder<T, C> addComponent(Function<EntityInitInfo<T>, EntityComponent> provider, Class<?> componentClass);
 
+    EntityTypeBuilder<T, C> addComponent(ComponentProvider<EntityComponent> componentProvider);
+
     EntityType<T> build();
 
     interface EntityTypeBuilderFactory {

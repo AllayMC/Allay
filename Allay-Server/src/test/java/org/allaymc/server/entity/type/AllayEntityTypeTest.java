@@ -1,7 +1,7 @@
 package org.allaymc.server.entity.type;
 
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
-import org.allaymc.api.entity.interfaces.sheep.EntitySheep;
+import org.allaymc.api.entity.interfaces.EntitySheep;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.testutils.AllayTestExtension;

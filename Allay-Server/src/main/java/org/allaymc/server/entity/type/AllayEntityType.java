@@ -9,7 +9,7 @@ import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
-import org.allaymc.api.entity.component.base.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
+import static org.allaymc.api.entity.component.EntityComponentImplFactory.getFactory;
 
 /**
  * Allay Project 2023/5/20
@@ -128,10 +130,15 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         @Override
+        public EntityTypeBuilder<T, EntityComponent> addComponent(ComponentProvider<EntityComponent> p) {
+            this.componentProviders.put(p.findComponentIdentifier(), p);
+            return this;
+        }
+
+        @Override
         public EntityType<T> build() {
             if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
-                addComponent(info -> new EntityBaseComponentImpl<>(info, new AABBf(0, 0, 0, 1, 1, 1)),
-                        EntityBaseComponentImpl.class);
+                addComponent(getFactory().createEntityBaseComponent(new AABBf(0, 0, 0, 1, 1, 1)));
             }
             if (identifier == null) {
                 throw new EntityTypeBuildException("identifier cannot be null!");

@@ -5,7 +5,7 @@ import org.allaymc.api.container.SimpleContainerActionProcessorHolder;
 import org.allaymc.api.container.processor.ActionResponse;
 import org.allaymc.api.container.processor.ContainerActionProcessor;
 import org.allaymc.api.container.processor.ContainerActionProcessorHolder;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.network.DataPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;

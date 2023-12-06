@@ -14,7 +14,7 @@ import cloud.commandframework.meta.SimpleCommandMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;

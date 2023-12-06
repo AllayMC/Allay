@@ -2,7 +2,7 @@ package org.allaymc.api.block.function;
 
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

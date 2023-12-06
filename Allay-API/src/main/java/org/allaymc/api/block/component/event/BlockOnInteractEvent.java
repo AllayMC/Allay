@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.component.interfaces.ComponentEvent;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 import org.jetbrains.annotations.Nullable;

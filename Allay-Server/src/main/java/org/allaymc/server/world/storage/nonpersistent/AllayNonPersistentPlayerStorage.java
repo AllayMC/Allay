@@ -1,7 +1,7 @@
 package org.allaymc.server.world.storage.nonpersistent;
 
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.storage.PlayerStorage;
 import org.cloudburstmc.nbt.NbtMap;
 

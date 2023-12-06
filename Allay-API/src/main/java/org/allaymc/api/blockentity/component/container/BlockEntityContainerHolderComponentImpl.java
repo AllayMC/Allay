@@ -7,7 +7,7 @@ import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
-import org.allaymc.api.entity.interfaces.item.EntityItem;
+import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.identifier.Identifier;
 
 import java.util.Objects;

@@ -1,7 +1,7 @@
 package org.allaymc.api.container.processor;
 
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;

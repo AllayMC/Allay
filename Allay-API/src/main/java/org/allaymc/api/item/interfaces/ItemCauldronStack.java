@@ -3,7 +3,7 @@ package org.allaymc.api.item.interfaces;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.interfaces.BlockCauldronBehavior;
 import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.base.ItemBaseComponentImpl;
 import org.allaymc.api.item.type.ItemType;

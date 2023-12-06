@@ -1,6 +1,6 @@
 package org.allaymc.api.world;
 
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.ApiStatus;

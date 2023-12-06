@@ -1,6 +1,6 @@
 package org.allaymc.api.world.storage;
 
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
  * Allay Project 2023/9/16

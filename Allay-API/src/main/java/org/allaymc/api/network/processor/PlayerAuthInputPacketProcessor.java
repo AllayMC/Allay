@@ -1,7 +1,7 @@
 package org.allaymc.api.network.processor;
 
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
-import org.allaymc.api.entity.interfaces.player.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.DataPacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;

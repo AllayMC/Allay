@@ -80,6 +80,10 @@ public class ShapedRecipe extends CraftingRecipe {
         } else return false;
 
         // Check size
+        if (inputs.length == 0) {
+            // Empty input not allowed
+            return false;
+        }
         if (inputs.length > pattern.length) {
             return false;
         }
