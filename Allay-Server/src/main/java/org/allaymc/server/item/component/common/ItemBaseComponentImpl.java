@@ -1,4 +1,4 @@
-package org.allaymc.api.item.component.base;
+package org.allaymc.server.item.component.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
@@ -11,7 +11,8 @@ import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.attribute.ItemAttributeComponent;
+import org.allaymc.api.item.component.common.ItemAttributeComponent;
+import org.allaymc.api.item.component.common.ItemBaseComponent;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;

@@ -1,7 +1,7 @@
 package org.allaymc.api.item;
 
-import org.allaymc.api.item.component.attribute.ItemAttributeComponent;
-import org.allaymc.api.item.component.base.ItemBaseComponent;
+import org.allaymc.api.item.component.common.ItemAttributeComponent;
+import org.allaymc.api.item.component.common.ItemBaseComponent;
 
 /**
  * Allay Project 2023/5/19

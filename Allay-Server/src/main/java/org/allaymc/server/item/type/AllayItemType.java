@@ -16,9 +16,9 @@ import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
-import org.allaymc.api.item.component.attribute.ItemAttributeComponentImpl;
-import org.allaymc.api.item.component.attribute.VanillaItemAttributeRegistry;
-import org.allaymc.api.item.component.base.ItemBaseComponentImpl;
+import org.allaymc.server.item.component.common.ItemAttributeComponentImpl;
+import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
+import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.tag.ItemTag;
@@ -210,6 +210,12 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         @Override
         public ItemTypeBuilder<T, ItemComponent> addComponent(Function<ItemStackInitInfo<T>, ItemComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.SimpleComponentProvider<>(provider, componentClass);
+            this.componentProviders.put(p.findComponentIdentifier(), p);
+            return this;
+        }
+
+        @Override
+        public ItemTypeBuilder<T, ItemComponent> addComponent(ComponentProvider<ItemComponent> p) {
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }

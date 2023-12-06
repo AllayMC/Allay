@@ -19,7 +19,8 @@ import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.exception.MissingRequirementException;
-import org.allaymc.api.item.component.attribute.VanillaItemAttributeRegistry;
+import org.allaymc.api.item.component.ItemComponentImplFactory;
+import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
@@ -143,6 +144,7 @@ public final class AllayAPI {
         requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
 
         // Item
+        requireImpl(ItemComponentImplFactory.class, ItemComponentImplFactory.FACTORY::set);
         requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
         requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);

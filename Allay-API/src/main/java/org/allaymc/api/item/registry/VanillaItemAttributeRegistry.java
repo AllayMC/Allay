@@ -1,7 +1,8 @@
-package org.allaymc.api.item.component.attribute;
+package org.allaymc.api.item.registry;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.data.VanillaItemId;
+import org.allaymc.api.item.component.common.ItemAttributes;
 import org.allaymc.api.registry.MappedRegistry;
 
 import java.util.Map;

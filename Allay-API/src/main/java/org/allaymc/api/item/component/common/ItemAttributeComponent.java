@@ -1,4 +1,4 @@
-package org.allaymc.api.item.component.attribute;
+package org.allaymc.api.item.component.common;
 
 import org.allaymc.api.item.component.ItemComponent;
 
