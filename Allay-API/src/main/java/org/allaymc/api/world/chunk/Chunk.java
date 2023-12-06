@@ -44,13 +44,6 @@ public interface Chunk extends UnsafeChunk {
 
     void sendChunkPacket(BedrockPacket packet);
 
-    @ApiStatus.Internal
-    void addEntity(Entity entity);
-
-    @Nullable
-    @ApiStatus.Internal
-    Entity removeEntity(long uniqueId);
-
     void sendChunkPackets();
 
     void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, int layer);

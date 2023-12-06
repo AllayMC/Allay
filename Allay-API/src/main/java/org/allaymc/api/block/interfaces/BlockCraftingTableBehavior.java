@@ -14,6 +14,7 @@ import static org.allaymc.api.block.component.BlockComponentImplFactory.getFacto
 public interface BlockCraftingTableBehavior extends BlockBehavior {
   BlockType<BlockCraftingTableBehavior> CRAFTING_TABLE_TYPE = BlockTypeBuilder
           .builder(BlockCraftingTableBehavior.class)
-          .vanillaBlock(VanillaBlockId.CRAFTING_TABLE).setBlockBaseComponentSupplier(getFactory()::createBlockCraftingTableBaseComponent)
+          .vanillaBlock(VanillaBlockId.CRAFTING_TABLE)
+          .setBlockBaseComponentSupplier(getFactory()::createBlockCraftingTableBaseComponent)
           .build();
 }

@@ -26,6 +26,7 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -212,11 +213,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var newChunkZ = (int) newLoc.z() >> 4;
         if (!currentDimIsNull && (oldChunkX != newChunkX || oldChunkZ != newChunkZ)) {
             var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
-            if (oldChunk != null) oldChunk.removeEntity(thisEntity.getUniqueId());
+            if (oldChunk != null) ((AllayChunk)oldChunk).removeEntity(thisEntity.getUniqueId());
             else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
         }
         var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-        if (newChunk != null) newChunk.addEntity(thisEntity);
+        if (newChunk != null) ((AllayChunk)newChunk).addEntity(thisEntity);
         else {
             // Moving into an unloaded chunk is not allowed. Because the entity is held by the chunk, moving to an unloaded chunk will result in the loss of the entity
             log.debug("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
