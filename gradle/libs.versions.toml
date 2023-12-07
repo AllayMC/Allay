@@ -1,6 +1,7 @@
 [versions]
-junit = "5.10.0"
-log4j = "2.21.1"
+log4j = "2.22.0"
+junit = "5.10.1"
+mockito = "5.8.0"
 cloud = "1.8.4"
 
 [libraries]
@@ -28,9 +29,9 @@ libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0
 # issue: https://github.com/apache/logging-log4j2/issues/1912
 disruptor = { group = "com.lmax", name = "disruptor", version = "3.4.4" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.15.0" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.15.1" }
 # bytecode
-bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.9" }
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.10" }
 # MC Region Loader
 hephaistos = { group = "io.github.jglrxavpok.hephaistos", name = "common", version = "2.6.1" }
 # Cache
@@ -48,21 +49,21 @@ mcterminal = { group = "net.minecrell", name = "terminalconsoleappender", versio
 # Testing dependencies
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
-mockito = { group = "org.mockito", name = "mockito-core", version = "5.4.0" }
-mockito-junit = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.6.0" }
+mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockito-junit = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
 # Code generating
 javapoet = { group = "com.squareup", name = "javapoet", version = "1.13.0" }
 # Reflections
 reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
 fastreflect = { group = "com.github.daniellansun", name = "fast-reflection", version = "08ec134a5c" }
-#Math computing
+# Math computing
 joml = { group = "org.joml", name = "joml", version = "1.10.5" }
 joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.10.0" }
-#netty epoll
-netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.96.Final" }
-#configulation lib
+# Netty epoll
+netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.101.Final" }
+# Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.0-beta.5" }
-#JeGenerator
+# JeGenerator
 jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.2-R0.3" }
 # Command framework
 cloud-core = { group = "cloud.commandframework", name = "cloud-core", version.ref = "cloud" }
