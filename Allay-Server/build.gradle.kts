@@ -52,22 +52,18 @@ tasks.processResources {
 
 // disable, please use `java -jar` to start directly
 tasks.startScripts {
-    group = ""
     enabled = false
 }
 // disable
 tasks.startShadowScripts {
-    group = ""
     enabled = false
 }
 // disable
 tasks.distTar {
-    group = ""
     enabled = false
 }
 // disable
 tasks.distZip {
-    group = ""
     enabled = false
 }
 
@@ -85,11 +81,6 @@ tasks.jmh {
     // includes.add("BlockStateUpdateJMHTest")
     // includes.add("ChunkJMHTest")
     // includes.add("ThroughList2Array")
-}
-
-// Hiding this task should use runShadow
-tasks.named("run") {
-    group = ""
 }
 
 tasks.runShadow {
