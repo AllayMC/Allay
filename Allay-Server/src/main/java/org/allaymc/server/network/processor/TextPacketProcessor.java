@@ -11,6 +11,7 @@ import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -22,9 +23,10 @@ public class TextPacketProcessor extends DataPacketProcessor<TextPacket> {
     @Override
     public void handle(EntityPlayer player, TextPacket pk) {
         if (pk.getType() == TextPacket.Type.CHAT) {
-            Server.getInstance().broadcastChat(player, pk.getMessage());
+            var message = pk.getMessage();
+            Server.getInstance().broadcastChat(player, message);
             //TODO: will be remove,debug only
-            if (pk.getMessage().equals("spawn v")) {
+            if (message.equals("spawn v")) {
                 var loc = player.getLocation();
                 for (var i = 0; i <= 0; i++) {
                     var entity = EntityVillagerV2.VILLAGER_V2_TYPE.createEntity(
@@ -38,8 +40,8 @@ public class TextPacketProcessor extends DataPacketProcessor<TextPacket> {
                 }
                 player.sendRawMessage("TPS: " + loc.dimension().getWorld().getTps() + ", Entity Count: " + loc.dimension().getEntities().size());
             }
-            if (pk.getMessage().startsWith("gb_")) {
-                var blockStateHash = Integer.parseInt(pk.getMessage().substring(3));
+            if (message.startsWith("gb_")) {
+                var blockStateHash = Integer.parseInt(message.substring(3));
                 var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
                 if (blockState == null) {
                     player.sendRawMessage("unknown hash!");
@@ -47,20 +49,28 @@ public class TextPacketProcessor extends DataPacketProcessor<TextPacket> {
                 }
                 player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
             }
-            if (pk.getMessage().equals("rfinv")) {
+            if (message.equals("rfinv")) {
                 player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
                 player.sendRawMessage("Inventory is refreshed!");
             }
-            if (pk.getMessage().equals("tps")) {
+            if (message.equals("tps")) {
                 player.sendRawMessage("TPS: " + player.getLocation().dimension().getWorld().getTps());
             }
-            if (pk.getMessage().equals("tps20")) {
+            if (message.equals("tps20")) {
                 AtomicInteger count = new AtomicInteger(1);
                 player.getLocation().dimension().getWorld().getScheduler().scheduleRepeating(() -> {
                     count.getAndIncrement();
                     player.sendRawMessage("TPS: " + player.getLocation().dimension().getWorld().getTps());
                     return count.get() <= 20;
                 }, 20);
+            }
+            if (message.equals("testjoin")) {
+                var pk2 = new TextPacket();
+                pk.setType(TextPacket.Type.TRANSLATION);
+                pk.setMessage("§e%multiplayer.player.joined");
+                pk.setParameters(List.of("liulihaocai"));
+                pk.setNeedsTranslation(true);
+                player.sendPacket(pk);
             }
         }
     }
