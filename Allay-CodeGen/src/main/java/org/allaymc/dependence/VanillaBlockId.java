@@ -1,5 +1,6 @@
 package org.allaymc.dependence;
 
+import java.lang.String;
 import lombok.Getter;
 
 /**
@@ -8,1872 +9,2004 @@ import lombok.Getter;
  * @author daoge_cmd | Cool_Loong
  */
 public enum VanillaBlockId {
-  ACACIA_BUTTON("minecraft:acacia_button", "minecraft:acacia_button"),
+  ACACIA_BUTTON("minecraft:acacia_button"),
 
-  ACACIA_DOOR("minecraft:acacia_door", "minecraft:item.acacia_door"),
+  ACACIA_DOOR("minecraft:acacia_door"),
 
-  ACACIA_FENCE("minecraft:acacia_fence", "minecraft:acacia_fence"),
+  ACACIA_FENCE("minecraft:acacia_fence"),
 
-  ACACIA_FENCE_GATE("minecraft:acacia_fence_gate", "minecraft:acacia_fence_gate"),
+  ACACIA_FENCE_GATE("minecraft:acacia_fence_gate"),
 
-  ACACIA_HANGING_SIGN("minecraft:acacia_hanging_sign", "minecraft:acacia_hanging_sign"),
+  ACACIA_HANGING_SIGN("minecraft:acacia_hanging_sign"),
 
-  ACACIA_LOG("minecraft:acacia_log", "minecraft:acacia_log"),
+  ACACIA_LOG("minecraft:acacia_log"),
 
-  ACACIA_PRESSURE_PLATE("minecraft:acacia_pressure_plate", "minecraft:acacia_pressure_plate"),
+  ACACIA_PLANKS("minecraft:acacia_planks"),
 
-  ACACIA_STAIRS("minecraft:acacia_stairs", "minecraft:acacia_stairs"),
+  ACACIA_PRESSURE_PLATE("minecraft:acacia_pressure_plate"),
 
-  ACACIA_STANDING_SIGN("minecraft:acacia_standing_sign", "minecraft:acacia_standing_sign"),
+  ACACIA_STAIRS("minecraft:acacia_stairs"),
 
-  ACACIA_TRAPDOOR("minecraft:acacia_trapdoor", "minecraft:acacia_trapdoor"),
+  ACACIA_STANDING_SIGN("minecraft:acacia_standing_sign"),
 
-  ACACIA_WALL_SIGN("minecraft:acacia_wall_sign", "minecraft:acacia_wall_sign"),
+  ACACIA_TRAPDOOR("minecraft:acacia_trapdoor"),
 
-  ACTIVATOR_RAIL("minecraft:activator_rail", "minecraft:activator_rail"),
+  ACACIA_WALL_SIGN("minecraft:acacia_wall_sign"),
 
-  AIR("minecraft:air", "minecraft:air"),
+  ACTIVATOR_RAIL("minecraft:activator_rail"),
 
-  ALLOW("minecraft:allow", "minecraft:allow"),
+  AIR("minecraft:air"),
 
-  AMETHYST_BLOCK("minecraft:amethyst_block", "minecraft:amethyst_block"),
+  ALLOW("minecraft:allow"),
 
-  AMETHYST_CLUSTER("minecraft:amethyst_cluster", "minecraft:amethyst_cluster"),
+  AMETHYST_BLOCK("minecraft:amethyst_block"),
 
-  ANCIENT_DEBRIS("minecraft:ancient_debris", "minecraft:ancient_debris"),
+  AMETHYST_CLUSTER("minecraft:amethyst_cluster"),
 
-  ANDESITE_STAIRS("minecraft:andesite_stairs", "minecraft:andesite_stairs"),
+  ANCIENT_DEBRIS("minecraft:ancient_debris"),
 
-  ANVIL("minecraft:anvil", "minecraft:anvil"),
+  ANDESITE("minecraft:andesite"),
 
-  AZALEA("minecraft:azalea", "minecraft:azalea"),
+  ANDESITE_STAIRS("minecraft:andesite_stairs"),
 
-  AZALEA_LEAVES("minecraft:azalea_leaves", "minecraft:azalea_leaves"),
+  ANVIL("minecraft:anvil"),
 
-  AZALEA_LEAVES_FLOWERED("minecraft:azalea_leaves_flowered", "minecraft:azalea_leaves_flowered"),
+  AZALEA("minecraft:azalea"),
 
-  BAMBOO("minecraft:bamboo", "minecraft:bamboo"),
+  AZALEA_LEAVES("minecraft:azalea_leaves"),
 
-  BAMBOO_BLOCK("minecraft:bamboo_block", "minecraft:bamboo_block"),
+  AZALEA_LEAVES_FLOWERED("minecraft:azalea_leaves_flowered"),
 
-  BAMBOO_BUTTON("minecraft:bamboo_button", "minecraft:bamboo_button"),
+  BAMBOO("minecraft:bamboo"),
 
-  BAMBOO_DOOR("minecraft:bamboo_door", "minecraft:bamboo_door"),
+  BAMBOO_BLOCK("minecraft:bamboo_block"),
 
-  BAMBOO_DOUBLE_SLAB("minecraft:bamboo_double_slab", "minecraft:bamboo_double_slab"),
+  BAMBOO_BUTTON("minecraft:bamboo_button"),
 
-  BAMBOO_FENCE("minecraft:bamboo_fence", "minecraft:bamboo_fence"),
+  BAMBOO_DOOR("minecraft:bamboo_door"),
 
-  BAMBOO_FENCE_GATE("minecraft:bamboo_fence_gate", "minecraft:bamboo_fence_gate"),
+  BAMBOO_DOUBLE_SLAB("minecraft:bamboo_double_slab"),
 
-  BAMBOO_HANGING_SIGN("minecraft:bamboo_hanging_sign", "minecraft:bamboo_hanging_sign"),
+  BAMBOO_FENCE("minecraft:bamboo_fence"),
 
-  BAMBOO_MOSAIC("minecraft:bamboo_mosaic", "minecraft:bamboo_mosaic"),
+  BAMBOO_FENCE_GATE("minecraft:bamboo_fence_gate"),
 
-  BAMBOO_MOSAIC_DOUBLE_SLAB("minecraft:bamboo_mosaic_double_slab", "minecraft:bamboo_mosaic_double_slab"),
+  BAMBOO_HANGING_SIGN("minecraft:bamboo_hanging_sign"),
 
-  BAMBOO_MOSAIC_SLAB("minecraft:bamboo_mosaic_slab", "minecraft:bamboo_mosaic_slab"),
+  BAMBOO_MOSAIC("minecraft:bamboo_mosaic"),
 
-  BAMBOO_MOSAIC_STAIRS("minecraft:bamboo_mosaic_stairs", "minecraft:bamboo_mosaic_stairs"),
+  BAMBOO_MOSAIC_DOUBLE_SLAB("minecraft:bamboo_mosaic_double_slab"),
 
-  BAMBOO_PLANKS("minecraft:bamboo_planks", "minecraft:bamboo_planks"),
+  BAMBOO_MOSAIC_SLAB("minecraft:bamboo_mosaic_slab"),
 
-  BAMBOO_PRESSURE_PLATE("minecraft:bamboo_pressure_plate", "minecraft:bamboo_pressure_plate"),
+  BAMBOO_MOSAIC_STAIRS("minecraft:bamboo_mosaic_stairs"),
 
-  BAMBOO_SAPLING("minecraft:bamboo_sapling", "minecraft:bamboo_sapling"),
+  BAMBOO_PLANKS("minecraft:bamboo_planks"),
 
-  BAMBOO_SLAB("minecraft:bamboo_slab", "minecraft:bamboo_slab"),
+  BAMBOO_PRESSURE_PLATE("minecraft:bamboo_pressure_plate"),
 
-  BAMBOO_STAIRS("minecraft:bamboo_stairs", "minecraft:bamboo_stairs"),
+  BAMBOO_SAPLING("minecraft:bamboo_sapling"),
 
-  BAMBOO_STANDING_SIGN("minecraft:bamboo_standing_sign", "minecraft:bamboo_standing_sign"),
+  BAMBOO_SLAB("minecraft:bamboo_slab"),
 
-  BAMBOO_TRAPDOOR("minecraft:bamboo_trapdoor", "minecraft:bamboo_trapdoor"),
+  BAMBOO_STAIRS("minecraft:bamboo_stairs"),
 
-  BAMBOO_WALL_SIGN("minecraft:bamboo_wall_sign", "minecraft:bamboo_wall_sign"),
+  BAMBOO_STANDING_SIGN("minecraft:bamboo_standing_sign"),
 
-  BARREL("minecraft:barrel", "minecraft:barrel"),
+  BAMBOO_TRAPDOOR("minecraft:bamboo_trapdoor"),
 
-  BARRIER("minecraft:barrier", "minecraft:barrier"),
+  BAMBOO_WALL_SIGN("minecraft:bamboo_wall_sign"),
 
-  BASALT("minecraft:basalt", "minecraft:basalt"),
+  BARREL("minecraft:barrel"),
 
-  BEACON("minecraft:beacon", "minecraft:beacon"),
+  BARRIER("minecraft:barrier"),
 
-  BED("minecraft:bed", "minecraft:item.bed"),
+  BASALT("minecraft:basalt"),
 
-  BEDROCK("minecraft:bedrock", "minecraft:bedrock"),
+  BEACON("minecraft:beacon"),
 
-  BEE_NEST("minecraft:bee_nest", "minecraft:bee_nest"),
+  BED("minecraft:bed"),
 
-  BEEHIVE("minecraft:beehive", "minecraft:beehive"),
+  BEDROCK("minecraft:bedrock"),
 
-  BEETROOT("minecraft:beetroot", "minecraft:item.beetroot"),
+  BEE_NEST("minecraft:bee_nest"),
 
-  BELL("minecraft:bell", "minecraft:bell"),
+  BEEHIVE("minecraft:beehive"),
 
-  BIG_DRIPLEAF("minecraft:big_dripleaf", "minecraft:big_dripleaf"),
+  BEETROOT("minecraft:beetroot"),
 
-  BIRCH_BUTTON("minecraft:birch_button", "minecraft:birch_button"),
+  BELL("minecraft:bell"),
 
-  BIRCH_DOOR("minecraft:birch_door", "minecraft:item.birch_door"),
+  BIG_DRIPLEAF("minecraft:big_dripleaf"),
 
-  BIRCH_FENCE("minecraft:birch_fence", "minecraft:birch_fence"),
+  BIRCH_BUTTON("minecraft:birch_button"),
 
-  BIRCH_FENCE_GATE("minecraft:birch_fence_gate", "minecraft:birch_fence_gate"),
+  BIRCH_DOOR("minecraft:birch_door"),
 
-  BIRCH_HANGING_SIGN("minecraft:birch_hanging_sign", "minecraft:birch_hanging_sign"),
+  BIRCH_FENCE("minecraft:birch_fence"),
 
-  BIRCH_LOG("minecraft:birch_log", "minecraft:birch_log"),
+  BIRCH_FENCE_GATE("minecraft:birch_fence_gate"),
 
-  BIRCH_PRESSURE_PLATE("minecraft:birch_pressure_plate", "minecraft:birch_pressure_plate"),
+  BIRCH_HANGING_SIGN("minecraft:birch_hanging_sign"),
 
-  BIRCH_STAIRS("minecraft:birch_stairs", "minecraft:birch_stairs"),
+  BIRCH_LOG("minecraft:birch_log"),
 
-  BIRCH_STANDING_SIGN("minecraft:birch_standing_sign", "minecraft:birch_standing_sign"),
+  BIRCH_PLANKS("minecraft:birch_planks"),
 
-  BIRCH_TRAPDOOR("minecraft:birch_trapdoor", "minecraft:birch_trapdoor"),
+  BIRCH_PRESSURE_PLATE("minecraft:birch_pressure_plate"),
 
-  BIRCH_WALL_SIGN("minecraft:birch_wall_sign", "minecraft:birch_wall_sign"),
+  BIRCH_STAIRS("minecraft:birch_stairs"),
 
-  BLACK_CANDLE("minecraft:black_candle", "minecraft:black_candle"),
+  BIRCH_STANDING_SIGN("minecraft:birch_standing_sign"),
 
-  BLACK_CANDLE_CAKE("minecraft:black_candle_cake", "minecraft:black_candle_cake"),
+  BIRCH_TRAPDOOR("minecraft:birch_trapdoor"),
 
-  BLACK_CARPET("minecraft:black_carpet", "minecraft:black_carpet"),
+  BIRCH_WALL_SIGN("minecraft:birch_wall_sign"),
 
-  BLACK_CONCRETE("minecraft:black_concrete", "minecraft:black_concrete"),
+  BLACK_CANDLE("minecraft:black_candle"),
 
-  BLACK_CONCRETE_POWDER("minecraft:black_concrete_powder", "minecraft:black_concrete_powder"),
+  BLACK_CANDLE_CAKE("minecraft:black_candle_cake"),
 
-  BLACK_GLAZED_TERRACOTTA("minecraft:black_glazed_terracotta", "minecraft:black_glazed_terracotta"),
+  BLACK_CARPET("minecraft:black_carpet"),
 
-  BLACK_SHULKER_BOX("minecraft:black_shulker_box", "minecraft:black_shulker_box"),
+  BLACK_CONCRETE("minecraft:black_concrete"),
 
-  BLACK_STAINED_GLASS("minecraft:black_stained_glass", "minecraft:black_stained_glass"),
+  BLACK_CONCRETE_POWDER("minecraft:black_concrete_powder"),
 
-  BLACK_STAINED_GLASS_PANE("minecraft:black_stained_glass_pane", "minecraft:black_stained_glass_pane"),
+  BLACK_GLAZED_TERRACOTTA("minecraft:black_glazed_terracotta"),
 
-  BLACK_TERRACOTTA("minecraft:black_terracotta", "minecraft:black_terracotta"),
+  BLACK_SHULKER_BOX("minecraft:black_shulker_box"),
 
-  BLACK_WOOL("minecraft:black_wool", "minecraft:black_wool"),
+  BLACK_STAINED_GLASS("minecraft:black_stained_glass"),
 
-  BLACKSTONE("minecraft:blackstone", "minecraft:blackstone"),
+  BLACK_STAINED_GLASS_PANE("minecraft:black_stained_glass_pane"),
 
-  BLACKSTONE_DOUBLE_SLAB("minecraft:blackstone_double_slab", "minecraft:blackstone_double_slab"),
+  BLACK_TERRACOTTA("minecraft:black_terracotta"),
 
-  BLACKSTONE_SLAB("minecraft:blackstone_slab", "minecraft:blackstone_slab"),
+  BLACK_WOOL("minecraft:black_wool"),
 
-  BLACKSTONE_STAIRS("minecraft:blackstone_stairs", "minecraft:blackstone_stairs"),
+  BLACKSTONE("minecraft:blackstone"),
 
-  BLACKSTONE_WALL("minecraft:blackstone_wall", "minecraft:blackstone_wall"),
+  BLACKSTONE_DOUBLE_SLAB("minecraft:blackstone_double_slab"),
 
-  BLAST_FURNACE("minecraft:blast_furnace", "minecraft:blast_furnace"),
+  BLACKSTONE_SLAB("minecraft:blackstone_slab"),
 
-  BLUE_CANDLE("minecraft:blue_candle", "minecraft:blue_candle"),
+  BLACKSTONE_STAIRS("minecraft:blackstone_stairs"),
 
-  BLUE_CANDLE_CAKE("minecraft:blue_candle_cake", "minecraft:blue_candle_cake"),
+  BLACKSTONE_WALL("minecraft:blackstone_wall"),
 
-  BLUE_CARPET("minecraft:blue_carpet", "minecraft:blue_carpet"),
+  BLAST_FURNACE("minecraft:blast_furnace"),
 
-  BLUE_CONCRETE("minecraft:blue_concrete", "minecraft:blue_concrete"),
+  BLUE_CANDLE("minecraft:blue_candle"),
 
-  BLUE_CONCRETE_POWDER("minecraft:blue_concrete_powder", "minecraft:blue_concrete_powder"),
+  BLUE_CANDLE_CAKE("minecraft:blue_candle_cake"),
 
-  BLUE_GLAZED_TERRACOTTA("minecraft:blue_glazed_terracotta", "minecraft:blue_glazed_terracotta"),
+  BLUE_CARPET("minecraft:blue_carpet"),
 
-  BLUE_ICE("minecraft:blue_ice", "minecraft:blue_ice"),
+  BLUE_CONCRETE("minecraft:blue_concrete"),
 
-  BLUE_SHULKER_BOX("minecraft:blue_shulker_box", "minecraft:blue_shulker_box"),
+  BLUE_CONCRETE_POWDER("minecraft:blue_concrete_powder"),
 
-  BLUE_STAINED_GLASS("minecraft:blue_stained_glass", "minecraft:blue_stained_glass"),
+  BLUE_GLAZED_TERRACOTTA("minecraft:blue_glazed_terracotta"),
 
-  BLUE_STAINED_GLASS_PANE("minecraft:blue_stained_glass_pane", "minecraft:blue_stained_glass_pane"),
+  BLUE_ICE("minecraft:blue_ice"),
 
-  BLUE_TERRACOTTA("minecraft:blue_terracotta", "minecraft:blue_terracotta"),
+  BLUE_SHULKER_BOX("minecraft:blue_shulker_box"),
 
-  BLUE_WOOL("minecraft:blue_wool", "minecraft:blue_wool"),
+  BLUE_STAINED_GLASS("minecraft:blue_stained_glass"),
 
-  BONE_BLOCK("minecraft:bone_block", "minecraft:bone_block"),
+  BLUE_STAINED_GLASS_PANE("minecraft:blue_stained_glass_pane"),
 
-  BOOKSHELF("minecraft:bookshelf", "minecraft:bookshelf"),
+  BLUE_TERRACOTTA("minecraft:blue_terracotta"),
 
-  BORDER_BLOCK("minecraft:border_block", "minecraft:border_block"),
+  BLUE_WOOL("minecraft:blue_wool"),
 
-  BRAIN_CORAL("minecraft:brain_coral", "minecraft:brain_coral"),
+  BONE_BLOCK("minecraft:bone_block"),
 
-  BREWING_STAND("minecraft:brewing_stand", "minecraft:item.brewing_stand"),
+  BOOKSHELF("minecraft:bookshelf"),
 
-  BRICK_BLOCK("minecraft:brick_block", "minecraft:brick_block"),
+  BORDER_BLOCK("minecraft:border_block"),
 
-  BRICK_STAIRS("minecraft:brick_stairs", "minecraft:brick_stairs"),
+  BRAIN_CORAL("minecraft:brain_coral"),
 
-  BROWN_CANDLE("minecraft:brown_candle", "minecraft:brown_candle"),
+  BREWING_STAND("minecraft:brewing_stand"),
 
-  BROWN_CANDLE_CAKE("minecraft:brown_candle_cake", "minecraft:brown_candle_cake"),
+  BRICK_BLOCK("minecraft:brick_block"),
 
-  BROWN_CARPET("minecraft:brown_carpet", "minecraft:brown_carpet"),
+  BRICK_STAIRS("minecraft:brick_stairs"),
 
-  BROWN_CONCRETE("minecraft:brown_concrete", "minecraft:brown_concrete"),
+  BROWN_CANDLE("minecraft:brown_candle"),
 
-  BROWN_CONCRETE_POWDER("minecraft:brown_concrete_powder", "minecraft:brown_concrete_powder"),
+  BROWN_CANDLE_CAKE("minecraft:brown_candle_cake"),
 
-  BROWN_GLAZED_TERRACOTTA("minecraft:brown_glazed_terracotta", "minecraft:brown_glazed_terracotta"),
+  BROWN_CARPET("minecraft:brown_carpet"),
 
-  BROWN_MUSHROOM("minecraft:brown_mushroom", "minecraft:brown_mushroom"),
+  BROWN_CONCRETE("minecraft:brown_concrete"),
 
-  BROWN_MUSHROOM_BLOCK("minecraft:brown_mushroom_block", "minecraft:brown_mushroom_block"),
+  BROWN_CONCRETE_POWDER("minecraft:brown_concrete_powder"),
 
-  BROWN_SHULKER_BOX("minecraft:brown_shulker_box", "minecraft:brown_shulker_box"),
+  BROWN_GLAZED_TERRACOTTA("minecraft:brown_glazed_terracotta"),
 
-  BROWN_STAINED_GLASS("minecraft:brown_stained_glass", "minecraft:brown_stained_glass"),
+  BROWN_MUSHROOM("minecraft:brown_mushroom"),
 
-  BROWN_STAINED_GLASS_PANE("minecraft:brown_stained_glass_pane", "minecraft:brown_stained_glass_pane"),
+  BROWN_MUSHROOM_BLOCK("minecraft:brown_mushroom_block"),
 
-  BROWN_TERRACOTTA("minecraft:brown_terracotta", "minecraft:brown_terracotta"),
+  BROWN_SHULKER_BOX("minecraft:brown_shulker_box"),
 
-  BROWN_WOOL("minecraft:brown_wool", "minecraft:brown_wool"),
+  BROWN_STAINED_GLASS("minecraft:brown_stained_glass"),
 
-  BUBBLE_COLUMN("minecraft:bubble_column", "minecraft:bubble_column"),
+  BROWN_STAINED_GLASS_PANE("minecraft:brown_stained_glass_pane"),
 
-  BUBBLE_CORAL("minecraft:bubble_coral", "minecraft:bubble_coral"),
+  BROWN_TERRACOTTA("minecraft:brown_terracotta"),
 
-  BUDDING_AMETHYST("minecraft:budding_amethyst", "minecraft:budding_amethyst"),
+  BROWN_WOOL("minecraft:brown_wool"),
 
-  CACTUS("minecraft:cactus", "minecraft:cactus"),
+  BUBBLE_COLUMN("minecraft:bubble_column"),
 
-  CAKE("minecraft:cake", "minecraft:item.cake"),
+  BUBBLE_CORAL("minecraft:bubble_coral"),
 
-  CALCITE("minecraft:calcite", "minecraft:calcite"),
+  BUDDING_AMETHYST("minecraft:budding_amethyst"),
 
-  CALIBRATED_SCULK_SENSOR("minecraft:calibrated_sculk_sensor", "minecraft:calibrated_sculk_sensor"),
+  CACTUS("minecraft:cactus"),
 
-  CAMERA("minecraft:camera", "minecraft:camera"),
+  CAKE("minecraft:cake"),
 
-  CAMPFIRE("minecraft:campfire", "minecraft:item.campfire"),
+  CALCITE("minecraft:calcite"),
 
-  CANDLE("minecraft:candle", "minecraft:candle"),
+  CALIBRATED_SCULK_SENSOR("minecraft:calibrated_sculk_sensor"),
 
-  CANDLE_CAKE("minecraft:candle_cake", "minecraft:candle_cake"),
+  CAMERA("minecraft:camera"),
 
-  CARROTS("minecraft:carrots", "minecraft:carrots"),
+  CAMPFIRE("minecraft:campfire"),
 
-  CARTOGRAPHY_TABLE("minecraft:cartography_table", "minecraft:cartography_table"),
+  CANDLE("minecraft:candle"),
 
-  CARVED_PUMPKIN("minecraft:carved_pumpkin", "minecraft:carved_pumpkin"),
+  CANDLE_CAKE("minecraft:candle_cake"),
 
-  CAULDRON("minecraft:cauldron", "minecraft:item.cauldron"),
+  CARROTS("minecraft:carrots"),
 
-  CAVE_VINES("minecraft:cave_vines", "minecraft:cave_vines"),
+  CARTOGRAPHY_TABLE("minecraft:cartography_table"),
 
-  CAVE_VINES_BODY_WITH_BERRIES("minecraft:cave_vines_body_with_berries", "minecraft:cave_vines_body_with_berries"),
+  CARVED_PUMPKIN("minecraft:carved_pumpkin"),
 
-  CAVE_VINES_HEAD_WITH_BERRIES("minecraft:cave_vines_head_with_berries", "minecraft:cave_vines_head_with_berries"),
+  CAULDRON("minecraft:cauldron"),
 
-  CHAIN("minecraft:chain", "minecraft:item.chain"),
+  CAVE_VINES("minecraft:cave_vines"),
 
-  CHAIN_COMMAND_BLOCK("minecraft:chain_command_block", "minecraft:chain_command_block"),
+  CAVE_VINES_BODY_WITH_BERRIES("minecraft:cave_vines_body_with_berries"),
 
-  CHEMICAL_HEAT("minecraft:chemical_heat", "minecraft:chemical_heat"),
+  CAVE_VINES_HEAD_WITH_BERRIES("minecraft:cave_vines_head_with_berries"),
 
-  CHEMISTRY_TABLE("minecraft:chemistry_table", "minecraft:chemistry_table"),
+  CHAIN("minecraft:chain"),
 
-  CHERRY_BUTTON("minecraft:cherry_button", "minecraft:cherry_button"),
+  CHAIN_COMMAND_BLOCK("minecraft:chain_command_block"),
 
-  CHERRY_DOOR("minecraft:cherry_door", "minecraft:cherry_door"),
+  CHEMICAL_HEAT("minecraft:chemical_heat"),
 
-  CHERRY_DOUBLE_SLAB("minecraft:cherry_double_slab", "minecraft:cherry_double_slab"),
+  CHEMISTRY_TABLE("minecraft:chemistry_table"),
 
-  CHERRY_FENCE("minecraft:cherry_fence", "minecraft:cherry_fence"),
+  CHERRY_BUTTON("minecraft:cherry_button"),
 
-  CHERRY_FENCE_GATE("minecraft:cherry_fence_gate", "minecraft:cherry_fence_gate"),
+  CHERRY_DOOR("minecraft:cherry_door"),
 
-  CHERRY_HANGING_SIGN("minecraft:cherry_hanging_sign", "minecraft:cherry_hanging_sign"),
+  CHERRY_DOUBLE_SLAB("minecraft:cherry_double_slab"),
 
-  CHERRY_LEAVES("minecraft:cherry_leaves", "minecraft:cherry_leaves"),
+  CHERRY_FENCE("minecraft:cherry_fence"),
 
-  CHERRY_LOG("minecraft:cherry_log", "minecraft:cherry_log"),
+  CHERRY_FENCE_GATE("minecraft:cherry_fence_gate"),
 
-  CHERRY_PLANKS("minecraft:cherry_planks", "minecraft:cherry_planks"),
+  CHERRY_HANGING_SIGN("minecraft:cherry_hanging_sign"),
 
-  CHERRY_PRESSURE_PLATE("minecraft:cherry_pressure_plate", "minecraft:cherry_pressure_plate"),
+  CHERRY_LEAVES("minecraft:cherry_leaves"),
 
-  CHERRY_SAPLING("minecraft:cherry_sapling", "minecraft:cherry_sapling"),
+  CHERRY_LOG("minecraft:cherry_log"),
 
-  CHERRY_SLAB("minecraft:cherry_slab", "minecraft:cherry_slab"),
+  CHERRY_PLANKS("minecraft:cherry_planks"),
 
-  CHERRY_STAIRS("minecraft:cherry_stairs", "minecraft:cherry_stairs"),
+  CHERRY_PRESSURE_PLATE("minecraft:cherry_pressure_plate"),
 
-  CHERRY_STANDING_SIGN("minecraft:cherry_standing_sign", "minecraft:cherry_standing_sign"),
+  CHERRY_SAPLING("minecraft:cherry_sapling"),
 
-  CHERRY_TRAPDOOR("minecraft:cherry_trapdoor", "minecraft:cherry_trapdoor"),
+  CHERRY_SLAB("minecraft:cherry_slab"),
 
-  CHERRY_WALL_SIGN("minecraft:cherry_wall_sign", "minecraft:cherry_wall_sign"),
+  CHERRY_STAIRS("minecraft:cherry_stairs"),
 
-  CHERRY_WOOD("minecraft:cherry_wood", "minecraft:cherry_wood"),
+  CHERRY_STANDING_SIGN("minecraft:cherry_standing_sign"),
 
-  CHEST("minecraft:chest", "minecraft:chest"),
+  CHERRY_TRAPDOOR("minecraft:cherry_trapdoor"),
 
-  CHISELED_BOOKSHELF("minecraft:chiseled_bookshelf", "minecraft:chiseled_bookshelf"),
+  CHERRY_WALL_SIGN("minecraft:cherry_wall_sign"),
 
-  CHISELED_DEEPSLATE("minecraft:chiseled_deepslate", "minecraft:chiseled_deepslate"),
+  CHERRY_WOOD("minecraft:cherry_wood"),
 
-  CHISELED_NETHER_BRICKS("minecraft:chiseled_nether_bricks", "minecraft:chiseled_nether_bricks"),
+  CHEST("minecraft:chest"),
 
-  CHISELED_POLISHED_BLACKSTONE("minecraft:chiseled_polished_blackstone", "minecraft:chiseled_polished_blackstone"),
+  CHISELED_BOOKSHELF("minecraft:chiseled_bookshelf"),
 
-  CHORUS_FLOWER("minecraft:chorus_flower", "minecraft:chorus_flower"),
+  CHISELED_COPPER("minecraft:chiseled_copper"),
 
-  CHORUS_PLANT("minecraft:chorus_plant", "minecraft:chorus_plant"),
+  CHISELED_DEEPSLATE("minecraft:chiseled_deepslate"),
 
-  CLAY("minecraft:clay", "minecraft:clay"),
+  CHISELED_NETHER_BRICKS("minecraft:chiseled_nether_bricks"),
 
-  CLIENT_REQUEST_PLACEHOLDER_BLOCK("minecraft:client_request_placeholder_block", "minecraft:client_request_placeholder_block"),
+  CHISELED_POLISHED_BLACKSTONE("minecraft:chiseled_polished_blackstone"),
 
-  COAL_BLOCK("minecraft:coal_block", "minecraft:coal_block"),
+  CHISELED_TUFF("minecraft:chiseled_tuff"),
 
-  COAL_ORE("minecraft:coal_ore", "minecraft:coal_ore"),
+  CHISELED_TUFF_BRICKS("minecraft:chiseled_tuff_bricks"),
 
-  COBBLED_DEEPSLATE("minecraft:cobbled_deepslate", "minecraft:cobbled_deepslate"),
+  CHORUS_FLOWER("minecraft:chorus_flower"),
 
-  COBBLED_DEEPSLATE_DOUBLE_SLAB("minecraft:cobbled_deepslate_double_slab", "minecraft:cobbled_deepslate_double_slab"),
+  CHORUS_PLANT("minecraft:chorus_plant"),
 
-  COBBLED_DEEPSLATE_SLAB("minecraft:cobbled_deepslate_slab", "minecraft:cobbled_deepslate_slab"),
+  CLAY("minecraft:clay"),
 
-  COBBLED_DEEPSLATE_STAIRS("minecraft:cobbled_deepslate_stairs", "minecraft:cobbled_deepslate_stairs"),
+  CLIENT_REQUEST_PLACEHOLDER_BLOCK("minecraft:client_request_placeholder_block"),
 
-  COBBLED_DEEPSLATE_WALL("minecraft:cobbled_deepslate_wall", "minecraft:cobbled_deepslate_wall"),
+  COAL_BLOCK("minecraft:coal_block"),
 
-  COBBLESTONE("minecraft:cobblestone", "minecraft:cobblestone"),
+  COAL_ORE("minecraft:coal_ore"),
 
-  COBBLESTONE_WALL("minecraft:cobblestone_wall", "minecraft:cobblestone_wall"),
+  COBBLED_DEEPSLATE("minecraft:cobbled_deepslate"),
 
-  COCOA("minecraft:cocoa", "minecraft:cocoa"),
+  COBBLED_DEEPSLATE_DOUBLE_SLAB("minecraft:cobbled_deepslate_double_slab"),
 
-  COLORED_TORCH_BP("minecraft:colored_torch_bp", "minecraft:colored_torch_bp"),
+  COBBLED_DEEPSLATE_SLAB("minecraft:cobbled_deepslate_slab"),
 
-  COLORED_TORCH_RG("minecraft:colored_torch_rg", "minecraft:colored_torch_rg"),
+  COBBLED_DEEPSLATE_STAIRS("minecraft:cobbled_deepslate_stairs"),
 
-  COMMAND_BLOCK("minecraft:command_block", "minecraft:command_block"),
+  COBBLED_DEEPSLATE_WALL("minecraft:cobbled_deepslate_wall"),
 
-  COMPOSTER("minecraft:composter", "minecraft:composter"),
+  COBBLESTONE("minecraft:cobblestone"),
 
-  CONDUIT("minecraft:conduit", "minecraft:conduit"),
+  COBBLESTONE_WALL("minecraft:cobblestone_wall"),
 
-  COPPER_BLOCK("minecraft:copper_block", "minecraft:copper_block"),
+  COCOA("minecraft:cocoa"),
 
-  COPPER_ORE("minecraft:copper_ore", "minecraft:copper_ore"),
+  COLORED_TORCH_BP("minecraft:colored_torch_bp"),
 
-  CORAL_BLOCK("minecraft:coral_block", "minecraft:coral_block"),
+  COLORED_TORCH_RG("minecraft:colored_torch_rg"),
 
-  CORAL_FAN("minecraft:coral_fan", "minecraft:coral_fan"),
+  COMMAND_BLOCK("minecraft:command_block"),
 
-  CORAL_FAN_DEAD("minecraft:coral_fan_dead", "minecraft:coral_fan_dead"),
+  COMPOSTER("minecraft:composter"),
 
-  CORAL_FAN_HANG("minecraft:coral_fan_hang", "minecraft:coral_fan_hang"),
+  CONDUIT("minecraft:conduit"),
 
-  CORAL_FAN_HANG2("minecraft:coral_fan_hang2", "minecraft:coral_fan_hang2"),
+  COPPER_BLOCK("minecraft:copper_block"),
 
-  CORAL_FAN_HANG3("minecraft:coral_fan_hang3", "minecraft:coral_fan_hang3"),
+  COPPER_BULB("minecraft:copper_bulb"),
 
-  CRACKED_DEEPSLATE_BRICKS("minecraft:cracked_deepslate_bricks", "minecraft:cracked_deepslate_bricks"),
+  COPPER_DOOR("minecraft:copper_door"),
 
-  CRACKED_DEEPSLATE_TILES("minecraft:cracked_deepslate_tiles", "minecraft:cracked_deepslate_tiles"),
+  COPPER_GRATE("minecraft:copper_grate"),
 
-  CRACKED_NETHER_BRICKS("minecraft:cracked_nether_bricks", "minecraft:cracked_nether_bricks"),
+  COPPER_ORE("minecraft:copper_ore"),
 
-  CRACKED_POLISHED_BLACKSTONE_BRICKS("minecraft:cracked_polished_blackstone_bricks", "minecraft:cracked_polished_blackstone_bricks"),
+  COPPER_TRAPDOOR("minecraft:copper_trapdoor"),
 
-  CRAFTING_TABLE("minecraft:crafting_table", "minecraft:crafting_table"),
+  CORAL_BLOCK("minecraft:coral_block"),
 
-  CRIMSON_BUTTON("minecraft:crimson_button", "minecraft:crimson_button"),
+  CORAL_FAN("minecraft:coral_fan"),
 
-  CRIMSON_DOOR("minecraft:crimson_door", "minecraft:item.crimson_door"),
+  CORAL_FAN_DEAD("minecraft:coral_fan_dead"),
 
-  CRIMSON_DOUBLE_SLAB("minecraft:crimson_double_slab", "minecraft:crimson_double_slab"),
+  CORAL_FAN_HANG("minecraft:coral_fan_hang"),
 
-  CRIMSON_FENCE("minecraft:crimson_fence", "minecraft:crimson_fence"),
+  CORAL_FAN_HANG2("minecraft:coral_fan_hang2"),
 
-  CRIMSON_FENCE_GATE("minecraft:crimson_fence_gate", "minecraft:crimson_fence_gate"),
+  CORAL_FAN_HANG3("minecraft:coral_fan_hang3"),
 
-  CRIMSON_FUNGUS("minecraft:crimson_fungus", "minecraft:crimson_fungus"),
+  CRACKED_DEEPSLATE_BRICKS("minecraft:cracked_deepslate_bricks"),
 
-  CRIMSON_HANGING_SIGN("minecraft:crimson_hanging_sign", "minecraft:crimson_hanging_sign"),
+  CRACKED_DEEPSLATE_TILES("minecraft:cracked_deepslate_tiles"),
 
-  CRIMSON_HYPHAE("minecraft:crimson_hyphae", "minecraft:crimson_hyphae"),
+  CRACKED_NETHER_BRICKS("minecraft:cracked_nether_bricks"),
 
-  CRIMSON_NYLIUM("minecraft:crimson_nylium", "minecraft:crimson_nylium"),
+  CRACKED_POLISHED_BLACKSTONE_BRICKS("minecraft:cracked_polished_blackstone_bricks"),
 
-  CRIMSON_PLANKS("minecraft:crimson_planks", "minecraft:crimson_planks"),
+  CRAFTER("minecraft:crafter"),
 
-  CRIMSON_PRESSURE_PLATE("minecraft:crimson_pressure_plate", "minecraft:crimson_pressure_plate"),
+  CRAFTING_TABLE("minecraft:crafting_table"),
 
-  CRIMSON_ROOTS("minecraft:crimson_roots", "minecraft:crimson_roots"),
+  CRIMSON_BUTTON("minecraft:crimson_button"),
 
-  CRIMSON_SLAB("minecraft:crimson_slab", "minecraft:crimson_slab"),
+  CRIMSON_DOOR("minecraft:crimson_door"),
 
-  CRIMSON_STAIRS("minecraft:crimson_stairs", "minecraft:crimson_stairs"),
+  CRIMSON_DOUBLE_SLAB("minecraft:crimson_double_slab"),
 
-  CRIMSON_STANDING_SIGN("minecraft:crimson_standing_sign", "minecraft:crimson_standing_sign"),
+  CRIMSON_FENCE("minecraft:crimson_fence"),
 
-  CRIMSON_STEM("minecraft:crimson_stem", "minecraft:crimson_stem"),
+  CRIMSON_FENCE_GATE("minecraft:crimson_fence_gate"),
 
-  CRIMSON_TRAPDOOR("minecraft:crimson_trapdoor", "minecraft:crimson_trapdoor"),
+  CRIMSON_FUNGUS("minecraft:crimson_fungus"),
 
-  CRIMSON_WALL_SIGN("minecraft:crimson_wall_sign", "minecraft:crimson_wall_sign"),
+  CRIMSON_HANGING_SIGN("minecraft:crimson_hanging_sign"),
 
-  CRYING_OBSIDIAN("minecraft:crying_obsidian", "minecraft:crying_obsidian"),
+  CRIMSON_HYPHAE("minecraft:crimson_hyphae"),
 
-  CUT_COPPER("minecraft:cut_copper", "minecraft:cut_copper"),
+  CRIMSON_NYLIUM("minecraft:crimson_nylium"),
 
-  CUT_COPPER_SLAB("minecraft:cut_copper_slab", "minecraft:cut_copper_slab"),
+  CRIMSON_PLANKS("minecraft:crimson_planks"),
 
-  CUT_COPPER_STAIRS("minecraft:cut_copper_stairs", "minecraft:cut_copper_stairs"),
+  CRIMSON_PRESSURE_PLATE("minecraft:crimson_pressure_plate"),
 
-  CYAN_CANDLE("minecraft:cyan_candle", "minecraft:cyan_candle"),
+  CRIMSON_ROOTS("minecraft:crimson_roots"),
 
-  CYAN_CANDLE_CAKE("minecraft:cyan_candle_cake", "minecraft:cyan_candle_cake"),
+  CRIMSON_SLAB("minecraft:crimson_slab"),
 
-  CYAN_CARPET("minecraft:cyan_carpet", "minecraft:cyan_carpet"),
+  CRIMSON_STAIRS("minecraft:crimson_stairs"),
 
-  CYAN_CONCRETE("minecraft:cyan_concrete", "minecraft:cyan_concrete"),
+  CRIMSON_STANDING_SIGN("minecraft:crimson_standing_sign"),
 
-  CYAN_CONCRETE_POWDER("minecraft:cyan_concrete_powder", "minecraft:cyan_concrete_powder"),
+  CRIMSON_STEM("minecraft:crimson_stem"),
 
-  CYAN_GLAZED_TERRACOTTA("minecraft:cyan_glazed_terracotta", "minecraft:cyan_glazed_terracotta"),
+  CRIMSON_TRAPDOOR("minecraft:crimson_trapdoor"),
 
-  CYAN_SHULKER_BOX("minecraft:cyan_shulker_box", "minecraft:cyan_shulker_box"),
+  CRIMSON_WALL_SIGN("minecraft:crimson_wall_sign"),
 
-  CYAN_STAINED_GLASS("minecraft:cyan_stained_glass", "minecraft:cyan_stained_glass"),
+  CRYING_OBSIDIAN("minecraft:crying_obsidian"),
 
-  CYAN_STAINED_GLASS_PANE("minecraft:cyan_stained_glass_pane", "minecraft:cyan_stained_glass_pane"),
+  CUT_COPPER("minecraft:cut_copper"),
 
-  CYAN_TERRACOTTA("minecraft:cyan_terracotta", "minecraft:cyan_terracotta"),
+  CUT_COPPER_SLAB("minecraft:cut_copper_slab"),
 
-  CYAN_WOOL("minecraft:cyan_wool", "minecraft:cyan_wool"),
+  CUT_COPPER_STAIRS("minecraft:cut_copper_stairs"),
 
-  DARK_OAK_BUTTON("minecraft:dark_oak_button", "minecraft:dark_oak_button"),
+  CYAN_CANDLE("minecraft:cyan_candle"),
 
-  DARK_OAK_DOOR("minecraft:dark_oak_door", "minecraft:item.dark_oak_door"),
+  CYAN_CANDLE_CAKE("minecraft:cyan_candle_cake"),
 
-  DARK_OAK_FENCE("minecraft:dark_oak_fence", "minecraft:dark_oak_fence"),
+  CYAN_CARPET("minecraft:cyan_carpet"),
 
-  DARK_OAK_FENCE_GATE("minecraft:dark_oak_fence_gate", "minecraft:dark_oak_fence_gate"),
+  CYAN_CONCRETE("minecraft:cyan_concrete"),
 
-  DARK_OAK_HANGING_SIGN("minecraft:dark_oak_hanging_sign", "minecraft:dark_oak_hanging_sign"),
+  CYAN_CONCRETE_POWDER("minecraft:cyan_concrete_powder"),
 
-  DARK_OAK_LOG("minecraft:dark_oak_log", "minecraft:dark_oak_log"),
+  CYAN_GLAZED_TERRACOTTA("minecraft:cyan_glazed_terracotta"),
 
-  DARK_OAK_PRESSURE_PLATE("minecraft:dark_oak_pressure_plate", "minecraft:dark_oak_pressure_plate"),
+  CYAN_SHULKER_BOX("minecraft:cyan_shulker_box"),
 
-  DARK_OAK_STAIRS("minecraft:dark_oak_stairs", "minecraft:dark_oak_stairs"),
+  CYAN_STAINED_GLASS("minecraft:cyan_stained_glass"),
 
-  DARK_OAK_TRAPDOOR("minecraft:dark_oak_trapdoor", "minecraft:dark_oak_trapdoor"),
+  CYAN_STAINED_GLASS_PANE("minecraft:cyan_stained_glass_pane"),
 
-  DARK_PRISMARINE_STAIRS("minecraft:dark_prismarine_stairs", "minecraft:dark_prismarine_stairs"),
+  CYAN_TERRACOTTA("minecraft:cyan_terracotta"),
 
-  DARKOAK_STANDING_SIGN("minecraft:darkoak_standing_sign", "minecraft:darkoak_standing_sign"),
+  CYAN_WOOL("minecraft:cyan_wool"),
 
-  DARKOAK_WALL_SIGN("minecraft:darkoak_wall_sign", "minecraft:darkoak_wall_sign"),
+  DARK_OAK_BUTTON("minecraft:dark_oak_button"),
 
-  DAYLIGHT_DETECTOR("minecraft:daylight_detector", "minecraft:daylight_detector"),
+  DARK_OAK_DOOR("minecraft:dark_oak_door"),
 
-  DAYLIGHT_DETECTOR_INVERTED("minecraft:daylight_detector_inverted", "minecraft:daylight_detector_inverted"),
+  DARK_OAK_FENCE("minecraft:dark_oak_fence"),
 
-  DEAD_BRAIN_CORAL("minecraft:dead_brain_coral", "minecraft:dead_brain_coral"),
+  DARK_OAK_FENCE_GATE("minecraft:dark_oak_fence_gate"),
 
-  DEAD_BUBBLE_CORAL("minecraft:dead_bubble_coral", "minecraft:dead_bubble_coral"),
+  DARK_OAK_HANGING_SIGN("minecraft:dark_oak_hanging_sign"),
 
-  DEAD_FIRE_CORAL("minecraft:dead_fire_coral", "minecraft:dead_fire_coral"),
+  DARK_OAK_LOG("minecraft:dark_oak_log"),
 
-  DEAD_HORN_CORAL("minecraft:dead_horn_coral", "minecraft:dead_horn_coral"),
+  DARK_OAK_PLANKS("minecraft:dark_oak_planks"),
 
-  DEAD_TUBE_CORAL("minecraft:dead_tube_coral", "minecraft:dead_tube_coral"),
+  DARK_OAK_PRESSURE_PLATE("minecraft:dark_oak_pressure_plate"),
 
-  DEADBUSH("minecraft:deadbush", "minecraft:deadbush"),
+  DARK_OAK_STAIRS("minecraft:dark_oak_stairs"),
 
-  DECORATED_POT("minecraft:decorated_pot", "minecraft:decorated_pot"),
+  DARK_OAK_TRAPDOOR("minecraft:dark_oak_trapdoor"),
 
-  DEEPSLATE("minecraft:deepslate", "minecraft:deepslate"),
+  DARK_PRISMARINE_STAIRS("minecraft:dark_prismarine_stairs"),
 
-  DEEPSLATE_BRICK_DOUBLE_SLAB("minecraft:deepslate_brick_double_slab", "minecraft:deepslate_brick_double_slab"),
+  DARKOAK_STANDING_SIGN("minecraft:darkoak_standing_sign"),
 
-  DEEPSLATE_BRICK_SLAB("minecraft:deepslate_brick_slab", "minecraft:deepslate_brick_slab"),
+  DARKOAK_WALL_SIGN("minecraft:darkoak_wall_sign"),
 
-  DEEPSLATE_BRICK_STAIRS("minecraft:deepslate_brick_stairs", "minecraft:deepslate_brick_stairs"),
+  DAYLIGHT_DETECTOR("minecraft:daylight_detector"),
 
-  DEEPSLATE_BRICK_WALL("minecraft:deepslate_brick_wall", "minecraft:deepslate_brick_wall"),
+  DAYLIGHT_DETECTOR_INVERTED("minecraft:daylight_detector_inverted"),
 
-  DEEPSLATE_BRICKS("minecraft:deepslate_bricks", "minecraft:deepslate_bricks"),
+  DEAD_BRAIN_CORAL("minecraft:dead_brain_coral"),
 
-  DEEPSLATE_COAL_ORE("minecraft:deepslate_coal_ore", "minecraft:deepslate_coal_ore"),
+  DEAD_BUBBLE_CORAL("minecraft:dead_bubble_coral"),
 
-  DEEPSLATE_COPPER_ORE("minecraft:deepslate_copper_ore", "minecraft:deepslate_copper_ore"),
+  DEAD_FIRE_CORAL("minecraft:dead_fire_coral"),
 
-  DEEPSLATE_DIAMOND_ORE("minecraft:deepslate_diamond_ore", "minecraft:deepslate_diamond_ore"),
+  DEAD_HORN_CORAL("minecraft:dead_horn_coral"),
 
-  DEEPSLATE_EMERALD_ORE("minecraft:deepslate_emerald_ore", "minecraft:deepslate_emerald_ore"),
+  DEAD_TUBE_CORAL("minecraft:dead_tube_coral"),
 
-  DEEPSLATE_GOLD_ORE("minecraft:deepslate_gold_ore", "minecraft:deepslate_gold_ore"),
+  DEADBUSH("minecraft:deadbush"),
 
-  DEEPSLATE_IRON_ORE("minecraft:deepslate_iron_ore", "minecraft:deepslate_iron_ore"),
+  DECORATED_POT("minecraft:decorated_pot"),
 
-  DEEPSLATE_LAPIS_ORE("minecraft:deepslate_lapis_ore", "minecraft:deepslate_lapis_ore"),
+  DEEPSLATE("minecraft:deepslate"),
 
-  DEEPSLATE_REDSTONE_ORE("minecraft:deepslate_redstone_ore", "minecraft:deepslate_redstone_ore"),
+  DEEPSLATE_BRICK_DOUBLE_SLAB("minecraft:deepslate_brick_double_slab"),
 
-  DEEPSLATE_TILE_DOUBLE_SLAB("minecraft:deepslate_tile_double_slab", "minecraft:deepslate_tile_double_slab"),
+  DEEPSLATE_BRICK_SLAB("minecraft:deepslate_brick_slab"),
 
-  DEEPSLATE_TILE_SLAB("minecraft:deepslate_tile_slab", "minecraft:deepslate_tile_slab"),
+  DEEPSLATE_BRICK_STAIRS("minecraft:deepslate_brick_stairs"),
 
-  DEEPSLATE_TILE_STAIRS("minecraft:deepslate_tile_stairs", "minecraft:deepslate_tile_stairs"),
+  DEEPSLATE_BRICK_WALL("minecraft:deepslate_brick_wall"),
 
-  DEEPSLATE_TILE_WALL("minecraft:deepslate_tile_wall", "minecraft:deepslate_tile_wall"),
+  DEEPSLATE_BRICKS("minecraft:deepslate_bricks"),
 
-  DEEPSLATE_TILES("minecraft:deepslate_tiles", "minecraft:deepslate_tiles"),
+  DEEPSLATE_COAL_ORE("minecraft:deepslate_coal_ore"),
 
-  DENY("minecraft:deny", "minecraft:deny"),
+  DEEPSLATE_COPPER_ORE("minecraft:deepslate_copper_ore"),
 
-  DETECTOR_RAIL("minecraft:detector_rail", "minecraft:detector_rail"),
+  DEEPSLATE_DIAMOND_ORE("minecraft:deepslate_diamond_ore"),
 
-  DIAMOND_BLOCK("minecraft:diamond_block", "minecraft:diamond_block"),
+  DEEPSLATE_EMERALD_ORE("minecraft:deepslate_emerald_ore"),
 
-  DIAMOND_ORE("minecraft:diamond_ore", "minecraft:diamond_ore"),
+  DEEPSLATE_GOLD_ORE("minecraft:deepslate_gold_ore"),
 
-  DIORITE_STAIRS("minecraft:diorite_stairs", "minecraft:diorite_stairs"),
+  DEEPSLATE_IRON_ORE("minecraft:deepslate_iron_ore"),
 
-  DIRT("minecraft:dirt", "minecraft:dirt"),
+  DEEPSLATE_LAPIS_ORE("minecraft:deepslate_lapis_ore"),
 
-  DIRT_WITH_ROOTS("minecraft:dirt_with_roots", "minecraft:dirt_with_roots"),
+  DEEPSLATE_REDSTONE_ORE("minecraft:deepslate_redstone_ore"),
 
-  DISPENSER("minecraft:dispenser", "minecraft:dispenser"),
+  DEEPSLATE_TILE_DOUBLE_SLAB("minecraft:deepslate_tile_double_slab"),
 
-  DOUBLE_CUT_COPPER_SLAB("minecraft:double_cut_copper_slab", "minecraft:double_cut_copper_slab"),
+  DEEPSLATE_TILE_SLAB("minecraft:deepslate_tile_slab"),
 
-  DOUBLE_PLANT("minecraft:double_plant", "minecraft:double_plant"),
+  DEEPSLATE_TILE_STAIRS("minecraft:deepslate_tile_stairs"),
 
-  DOUBLE_STONE_BLOCK_SLAB("minecraft:double_stone_block_slab", "minecraft:double_stone_block_slab"),
+  DEEPSLATE_TILE_WALL("minecraft:deepslate_tile_wall"),
 
-  DOUBLE_STONE_BLOCK_SLAB2("minecraft:double_stone_block_slab2", "minecraft:double_stone_block_slab2"),
+  DEEPSLATE_TILES("minecraft:deepslate_tiles"),
 
-  DOUBLE_STONE_BLOCK_SLAB3("minecraft:double_stone_block_slab3", "minecraft:double_stone_block_slab3"),
+  DENY("minecraft:deny"),
 
-  DOUBLE_STONE_BLOCK_SLAB4("minecraft:double_stone_block_slab4", "minecraft:double_stone_block_slab4"),
+  DETECTOR_RAIL("minecraft:detector_rail"),
 
-  DOUBLE_WOODEN_SLAB("minecraft:double_wooden_slab", "minecraft:double_wooden_slab"),
+  DIAMOND_BLOCK("minecraft:diamond_block"),
 
-  DRAGON_EGG("minecraft:dragon_egg", "minecraft:dragon_egg"),
+  DIAMOND_ORE("minecraft:diamond_ore"),
 
-  DRIED_KELP_BLOCK("minecraft:dried_kelp_block", "minecraft:dried_kelp_block"),
+  DIORITE("minecraft:diorite"),
 
-  DRIPSTONE_BLOCK("minecraft:dripstone_block", "minecraft:dripstone_block"),
+  DIORITE_STAIRS("minecraft:diorite_stairs"),
 
-  DROPPER("minecraft:dropper", "minecraft:dropper"),
+  DIRT("minecraft:dirt"),
 
-  ELEMENT_0("minecraft:element_0", "minecraft:element_0"),
+  DIRT_WITH_ROOTS("minecraft:dirt_with_roots"),
 
-  ELEMENT_1("minecraft:element_1", "minecraft:element_1"),
+  DISPENSER("minecraft:dispenser"),
 
-  ELEMENT_10("minecraft:element_10", "minecraft:element_10"),
+  DOUBLE_CUT_COPPER_SLAB("minecraft:double_cut_copper_slab"),
 
-  ELEMENT_100("minecraft:element_100", "minecraft:element_100"),
+  DOUBLE_PLANT("minecraft:double_plant"),
 
-  ELEMENT_101("minecraft:element_101", "minecraft:element_101"),
+  DOUBLE_STONE_BLOCK_SLAB("minecraft:double_stone_block_slab"),
 
-  ELEMENT_102("minecraft:element_102", "minecraft:element_102"),
+  DOUBLE_STONE_BLOCK_SLAB2("minecraft:double_stone_block_slab2"),
 
-  ELEMENT_103("minecraft:element_103", "minecraft:element_103"),
+  DOUBLE_STONE_BLOCK_SLAB3("minecraft:double_stone_block_slab3"),
 
-  ELEMENT_104("minecraft:element_104", "minecraft:element_104"),
+  DOUBLE_STONE_BLOCK_SLAB4("minecraft:double_stone_block_slab4"),
 
-  ELEMENT_105("minecraft:element_105", "minecraft:element_105"),
+  DOUBLE_WOODEN_SLAB("minecraft:double_wooden_slab"),
 
-  ELEMENT_106("minecraft:element_106", "minecraft:element_106"),
+  DRAGON_EGG("minecraft:dragon_egg"),
 
-  ELEMENT_107("minecraft:element_107", "minecraft:element_107"),
+  DRIED_KELP_BLOCK("minecraft:dried_kelp_block"),
 
-  ELEMENT_108("minecraft:element_108", "minecraft:element_108"),
+  DRIPSTONE_BLOCK("minecraft:dripstone_block"),
 
-  ELEMENT_109("minecraft:element_109", "minecraft:element_109"),
+  DROPPER("minecraft:dropper"),
 
-  ELEMENT_11("minecraft:element_11", "minecraft:element_11"),
+  ELEMENT_0("minecraft:element_0"),
 
-  ELEMENT_110("minecraft:element_110", "minecraft:element_110"),
+  ELEMENT_1("minecraft:element_1"),
 
-  ELEMENT_111("minecraft:element_111", "minecraft:element_111"),
+  ELEMENT_10("minecraft:element_10"),
 
-  ELEMENT_112("minecraft:element_112", "minecraft:element_112"),
+  ELEMENT_100("minecraft:element_100"),
 
-  ELEMENT_113("minecraft:element_113", "minecraft:element_113"),
+  ELEMENT_101("minecraft:element_101"),
 
-  ELEMENT_114("minecraft:element_114", "minecraft:element_114"),
+  ELEMENT_102("minecraft:element_102"),
 
-  ELEMENT_115("minecraft:element_115", "minecraft:element_115"),
+  ELEMENT_103("minecraft:element_103"),
 
-  ELEMENT_116("minecraft:element_116", "minecraft:element_116"),
+  ELEMENT_104("minecraft:element_104"),
 
-  ELEMENT_117("minecraft:element_117", "minecraft:element_117"),
+  ELEMENT_105("minecraft:element_105"),
 
-  ELEMENT_118("minecraft:element_118", "minecraft:element_118"),
+  ELEMENT_106("minecraft:element_106"),
 
-  ELEMENT_12("minecraft:element_12", "minecraft:element_12"),
+  ELEMENT_107("minecraft:element_107"),
 
-  ELEMENT_13("minecraft:element_13", "minecraft:element_13"),
+  ELEMENT_108("minecraft:element_108"),
 
-  ELEMENT_14("minecraft:element_14", "minecraft:element_14"),
+  ELEMENT_109("minecraft:element_109"),
 
-  ELEMENT_15("minecraft:element_15", "minecraft:element_15"),
+  ELEMENT_11("minecraft:element_11"),
 
-  ELEMENT_16("minecraft:element_16", "minecraft:element_16"),
+  ELEMENT_110("minecraft:element_110"),
 
-  ELEMENT_17("minecraft:element_17", "minecraft:element_17"),
+  ELEMENT_111("minecraft:element_111"),
 
-  ELEMENT_18("minecraft:element_18", "minecraft:element_18"),
+  ELEMENT_112("minecraft:element_112"),
 
-  ELEMENT_19("minecraft:element_19", "minecraft:element_19"),
+  ELEMENT_113("minecraft:element_113"),
 
-  ELEMENT_2("minecraft:element_2", "minecraft:element_2"),
+  ELEMENT_114("minecraft:element_114"),
 
-  ELEMENT_20("minecraft:element_20", "minecraft:element_20"),
+  ELEMENT_115("minecraft:element_115"),
 
-  ELEMENT_21("minecraft:element_21", "minecraft:element_21"),
+  ELEMENT_116("minecraft:element_116"),
 
-  ELEMENT_22("minecraft:element_22", "minecraft:element_22"),
+  ELEMENT_117("minecraft:element_117"),
 
-  ELEMENT_23("minecraft:element_23", "minecraft:element_23"),
+  ELEMENT_118("minecraft:element_118"),
 
-  ELEMENT_24("minecraft:element_24", "minecraft:element_24"),
+  ELEMENT_12("minecraft:element_12"),
 
-  ELEMENT_25("minecraft:element_25", "minecraft:element_25"),
+  ELEMENT_13("minecraft:element_13"),
 
-  ELEMENT_26("minecraft:element_26", "minecraft:element_26"),
+  ELEMENT_14("minecraft:element_14"),
 
-  ELEMENT_27("minecraft:element_27", "minecraft:element_27"),
+  ELEMENT_15("minecraft:element_15"),
 
-  ELEMENT_28("minecraft:element_28", "minecraft:element_28"),
+  ELEMENT_16("minecraft:element_16"),
 
-  ELEMENT_29("minecraft:element_29", "minecraft:element_29"),
+  ELEMENT_17("minecraft:element_17"),
 
-  ELEMENT_3("minecraft:element_3", "minecraft:element_3"),
+  ELEMENT_18("minecraft:element_18"),
 
-  ELEMENT_30("minecraft:element_30", "minecraft:element_30"),
+  ELEMENT_19("minecraft:element_19"),
 
-  ELEMENT_31("minecraft:element_31", "minecraft:element_31"),
+  ELEMENT_2("minecraft:element_2"),
 
-  ELEMENT_32("minecraft:element_32", "minecraft:element_32"),
+  ELEMENT_20("minecraft:element_20"),
 
-  ELEMENT_33("minecraft:element_33", "minecraft:element_33"),
+  ELEMENT_21("minecraft:element_21"),
 
-  ELEMENT_34("minecraft:element_34", "minecraft:element_34"),
+  ELEMENT_22("minecraft:element_22"),
 
-  ELEMENT_35("minecraft:element_35", "minecraft:element_35"),
+  ELEMENT_23("minecraft:element_23"),
 
-  ELEMENT_36("minecraft:element_36", "minecraft:element_36"),
+  ELEMENT_24("minecraft:element_24"),
 
-  ELEMENT_37("minecraft:element_37", "minecraft:element_37"),
+  ELEMENT_25("minecraft:element_25"),
 
-  ELEMENT_38("minecraft:element_38", "minecraft:element_38"),
+  ELEMENT_26("minecraft:element_26"),
 
-  ELEMENT_39("minecraft:element_39", "minecraft:element_39"),
+  ELEMENT_27("minecraft:element_27"),
 
-  ELEMENT_4("minecraft:element_4", "minecraft:element_4"),
+  ELEMENT_28("minecraft:element_28"),
 
-  ELEMENT_40("minecraft:element_40", "minecraft:element_40"),
+  ELEMENT_29("minecraft:element_29"),
 
-  ELEMENT_41("minecraft:element_41", "minecraft:element_41"),
+  ELEMENT_3("minecraft:element_3"),
 
-  ELEMENT_42("minecraft:element_42", "minecraft:element_42"),
+  ELEMENT_30("minecraft:element_30"),
 
-  ELEMENT_43("minecraft:element_43", "minecraft:element_43"),
+  ELEMENT_31("minecraft:element_31"),
 
-  ELEMENT_44("minecraft:element_44", "minecraft:element_44"),
+  ELEMENT_32("minecraft:element_32"),
 
-  ELEMENT_45("minecraft:element_45", "minecraft:element_45"),
+  ELEMENT_33("minecraft:element_33"),
 
-  ELEMENT_46("minecraft:element_46", "minecraft:element_46"),
+  ELEMENT_34("minecraft:element_34"),
 
-  ELEMENT_47("minecraft:element_47", "minecraft:element_47"),
+  ELEMENT_35("minecraft:element_35"),
 
-  ELEMENT_48("minecraft:element_48", "minecraft:element_48"),
+  ELEMENT_36("minecraft:element_36"),
 
-  ELEMENT_49("minecraft:element_49", "minecraft:element_49"),
+  ELEMENT_37("minecraft:element_37"),
 
-  ELEMENT_5("minecraft:element_5", "minecraft:element_5"),
+  ELEMENT_38("minecraft:element_38"),
 
-  ELEMENT_50("minecraft:element_50", "minecraft:element_50"),
+  ELEMENT_39("minecraft:element_39"),
 
-  ELEMENT_51("minecraft:element_51", "minecraft:element_51"),
+  ELEMENT_4("minecraft:element_4"),
 
-  ELEMENT_52("minecraft:element_52", "minecraft:element_52"),
+  ELEMENT_40("minecraft:element_40"),
 
-  ELEMENT_53("minecraft:element_53", "minecraft:element_53"),
+  ELEMENT_41("minecraft:element_41"),
 
-  ELEMENT_54("minecraft:element_54", "minecraft:element_54"),
+  ELEMENT_42("minecraft:element_42"),
 
-  ELEMENT_55("minecraft:element_55", "minecraft:element_55"),
+  ELEMENT_43("minecraft:element_43"),
 
-  ELEMENT_56("minecraft:element_56", "minecraft:element_56"),
+  ELEMENT_44("minecraft:element_44"),
 
-  ELEMENT_57("minecraft:element_57", "minecraft:element_57"),
+  ELEMENT_45("minecraft:element_45"),
 
-  ELEMENT_58("minecraft:element_58", "minecraft:element_58"),
+  ELEMENT_46("minecraft:element_46"),
 
-  ELEMENT_59("minecraft:element_59", "minecraft:element_59"),
+  ELEMENT_47("minecraft:element_47"),
 
-  ELEMENT_6("minecraft:element_6", "minecraft:element_6"),
+  ELEMENT_48("minecraft:element_48"),
 
-  ELEMENT_60("minecraft:element_60", "minecraft:element_60"),
+  ELEMENT_49("minecraft:element_49"),
 
-  ELEMENT_61("minecraft:element_61", "minecraft:element_61"),
+  ELEMENT_5("minecraft:element_5"),
 
-  ELEMENT_62("minecraft:element_62", "minecraft:element_62"),
+  ELEMENT_50("minecraft:element_50"),
 
-  ELEMENT_63("minecraft:element_63", "minecraft:element_63"),
+  ELEMENT_51("minecraft:element_51"),
 
-  ELEMENT_64("minecraft:element_64", "minecraft:element_64"),
+  ELEMENT_52("minecraft:element_52"),
 
-  ELEMENT_65("minecraft:element_65", "minecraft:element_65"),
+  ELEMENT_53("minecraft:element_53"),
 
-  ELEMENT_66("minecraft:element_66", "minecraft:element_66"),
+  ELEMENT_54("minecraft:element_54"),
 
-  ELEMENT_67("minecraft:element_67", "minecraft:element_67"),
+  ELEMENT_55("minecraft:element_55"),
 
-  ELEMENT_68("minecraft:element_68", "minecraft:element_68"),
+  ELEMENT_56("minecraft:element_56"),
 
-  ELEMENT_69("minecraft:element_69", "minecraft:element_69"),
+  ELEMENT_57("minecraft:element_57"),
 
-  ELEMENT_7("minecraft:element_7", "minecraft:element_7"),
+  ELEMENT_58("minecraft:element_58"),
 
-  ELEMENT_70("minecraft:element_70", "minecraft:element_70"),
+  ELEMENT_59("minecraft:element_59"),
 
-  ELEMENT_71("minecraft:element_71", "minecraft:element_71"),
+  ELEMENT_6("minecraft:element_6"),
 
-  ELEMENT_72("minecraft:element_72", "minecraft:element_72"),
+  ELEMENT_60("minecraft:element_60"),
 
-  ELEMENT_73("minecraft:element_73", "minecraft:element_73"),
+  ELEMENT_61("minecraft:element_61"),
 
-  ELEMENT_74("minecraft:element_74", "minecraft:element_74"),
+  ELEMENT_62("minecraft:element_62"),
 
-  ELEMENT_75("minecraft:element_75", "minecraft:element_75"),
+  ELEMENT_63("minecraft:element_63"),
 
-  ELEMENT_76("minecraft:element_76", "minecraft:element_76"),
+  ELEMENT_64("minecraft:element_64"),
 
-  ELEMENT_77("minecraft:element_77", "minecraft:element_77"),
+  ELEMENT_65("minecraft:element_65"),
 
-  ELEMENT_78("minecraft:element_78", "minecraft:element_78"),
+  ELEMENT_66("minecraft:element_66"),
 
-  ELEMENT_79("minecraft:element_79", "minecraft:element_79"),
+  ELEMENT_67("minecraft:element_67"),
 
-  ELEMENT_8("minecraft:element_8", "minecraft:element_8"),
+  ELEMENT_68("minecraft:element_68"),
 
-  ELEMENT_80("minecraft:element_80", "minecraft:element_80"),
+  ELEMENT_69("minecraft:element_69"),
 
-  ELEMENT_81("minecraft:element_81", "minecraft:element_81"),
+  ELEMENT_7("minecraft:element_7"),
 
-  ELEMENT_82("minecraft:element_82", "minecraft:element_82"),
+  ELEMENT_70("minecraft:element_70"),
 
-  ELEMENT_83("minecraft:element_83", "minecraft:element_83"),
+  ELEMENT_71("minecraft:element_71"),
 
-  ELEMENT_84("minecraft:element_84", "minecraft:element_84"),
+  ELEMENT_72("minecraft:element_72"),
 
-  ELEMENT_85("minecraft:element_85", "minecraft:element_85"),
+  ELEMENT_73("minecraft:element_73"),
 
-  ELEMENT_86("minecraft:element_86", "minecraft:element_86"),
+  ELEMENT_74("minecraft:element_74"),
 
-  ELEMENT_87("minecraft:element_87", "minecraft:element_87"),
+  ELEMENT_75("minecraft:element_75"),
 
-  ELEMENT_88("minecraft:element_88", "minecraft:element_88"),
+  ELEMENT_76("minecraft:element_76"),
 
-  ELEMENT_89("minecraft:element_89", "minecraft:element_89"),
+  ELEMENT_77("minecraft:element_77"),
 
-  ELEMENT_9("minecraft:element_9", "minecraft:element_9"),
+  ELEMENT_78("minecraft:element_78"),
 
-  ELEMENT_90("minecraft:element_90", "minecraft:element_90"),
+  ELEMENT_79("minecraft:element_79"),
 
-  ELEMENT_91("minecraft:element_91", "minecraft:element_91"),
+  ELEMENT_8("minecraft:element_8"),
 
-  ELEMENT_92("minecraft:element_92", "minecraft:element_92"),
+  ELEMENT_80("minecraft:element_80"),
 
-  ELEMENT_93("minecraft:element_93", "minecraft:element_93"),
+  ELEMENT_81("minecraft:element_81"),
 
-  ELEMENT_94("minecraft:element_94", "minecraft:element_94"),
+  ELEMENT_82("minecraft:element_82"),
 
-  ELEMENT_95("minecraft:element_95", "minecraft:element_95"),
+  ELEMENT_83("minecraft:element_83"),
 
-  ELEMENT_96("minecraft:element_96", "minecraft:element_96"),
+  ELEMENT_84("minecraft:element_84"),
 
-  ELEMENT_97("minecraft:element_97", "minecraft:element_97"),
+  ELEMENT_85("minecraft:element_85"),
 
-  ELEMENT_98("minecraft:element_98", "minecraft:element_98"),
+  ELEMENT_86("minecraft:element_86"),
 
-  ELEMENT_99("minecraft:element_99", "minecraft:element_99"),
+  ELEMENT_87("minecraft:element_87"),
 
-  EMERALD_BLOCK("minecraft:emerald_block", "minecraft:emerald_block"),
+  ELEMENT_88("minecraft:element_88"),
 
-  EMERALD_ORE("minecraft:emerald_ore", "minecraft:emerald_ore"),
+  ELEMENT_89("minecraft:element_89"),
 
-  ENCHANTING_TABLE("minecraft:enchanting_table", "minecraft:enchanting_table"),
+  ELEMENT_9("minecraft:element_9"),
 
-  END_BRICK_STAIRS("minecraft:end_brick_stairs", "minecraft:end_brick_stairs"),
+  ELEMENT_90("minecraft:element_90"),
 
-  END_BRICKS("minecraft:end_bricks", "minecraft:end_bricks"),
+  ELEMENT_91("minecraft:element_91"),
 
-  END_GATEWAY("minecraft:end_gateway", "minecraft:end_gateway"),
+  ELEMENT_92("minecraft:element_92"),
 
-  END_PORTAL("minecraft:end_portal", "minecraft:end_portal"),
+  ELEMENT_93("minecraft:element_93"),
 
-  END_PORTAL_FRAME("minecraft:end_portal_frame", "minecraft:end_portal_frame"),
+  ELEMENT_94("minecraft:element_94"),
 
-  END_ROD("minecraft:end_rod", "minecraft:end_rod"),
+  ELEMENT_95("minecraft:element_95"),
 
-  END_STONE("minecraft:end_stone", "minecraft:end_stone"),
+  ELEMENT_96("minecraft:element_96"),
 
-  ENDER_CHEST("minecraft:ender_chest", "minecraft:ender_chest"),
+  ELEMENT_97("minecraft:element_97"),
 
-  EXPOSED_COPPER("minecraft:exposed_copper", "minecraft:exposed_copper"),
+  ELEMENT_98("minecraft:element_98"),
 
-  EXPOSED_CUT_COPPER("minecraft:exposed_cut_copper", "minecraft:exposed_cut_copper"),
+  ELEMENT_99("minecraft:element_99"),
 
-  EXPOSED_CUT_COPPER_SLAB("minecraft:exposed_cut_copper_slab", "minecraft:exposed_cut_copper_slab"),
+  EMERALD_BLOCK("minecraft:emerald_block"),
 
-  EXPOSED_CUT_COPPER_STAIRS("minecraft:exposed_cut_copper_stairs", "minecraft:exposed_cut_copper_stairs"),
+  EMERALD_ORE("minecraft:emerald_ore"),
 
-  EXPOSED_DOUBLE_CUT_COPPER_SLAB("minecraft:exposed_double_cut_copper_slab", "minecraft:exposed_double_cut_copper_slab"),
+  ENCHANTING_TABLE("minecraft:enchanting_table"),
 
-  FARMLAND("minecraft:farmland", "minecraft:farmland"),
+  END_BRICK_STAIRS("minecraft:end_brick_stairs"),
 
-  FENCE_GATE("minecraft:fence_gate", "minecraft:fence_gate"),
+  END_BRICKS("minecraft:end_bricks"),
 
-  FIRE("minecraft:fire", "minecraft:fire"),
+  END_GATEWAY("minecraft:end_gateway"),
 
-  FIRE_CORAL("minecraft:fire_coral", "minecraft:fire_coral"),
+  END_PORTAL("minecraft:end_portal"),
 
-  FLETCHING_TABLE("minecraft:fletching_table", "minecraft:fletching_table"),
+  END_PORTAL_FRAME("minecraft:end_portal_frame"),
 
-  FLOWER_POT("minecraft:flower_pot", "minecraft:item.flower_pot"),
+  END_ROD("minecraft:end_rod"),
 
-  FLOWERING_AZALEA("minecraft:flowering_azalea", "minecraft:flowering_azalea"),
+  END_STONE("minecraft:end_stone"),
 
-  FLOWING_LAVA("minecraft:flowing_lava", "minecraft:flowing_lava"),
+  ENDER_CHEST("minecraft:ender_chest"),
 
-  FLOWING_WATER("minecraft:flowing_water", "minecraft:flowing_water"),
+  EXPOSED_CHISELED_COPPER("minecraft:exposed_chiseled_copper"),
 
-  FRAME("minecraft:frame", "minecraft:item.frame"),
+  EXPOSED_COPPER("minecraft:exposed_copper"),
 
-  FROG_SPAWN("minecraft:frog_spawn", "minecraft:frog_spawn"),
+  EXPOSED_COPPER_BULB("minecraft:exposed_copper_bulb"),
 
-  FROSTED_ICE("minecraft:frosted_ice", "minecraft:frosted_ice"),
+  EXPOSED_COPPER_DOOR("minecraft:exposed_copper_door"),
 
-  FURNACE("minecraft:furnace", "minecraft:furnace"),
+  EXPOSED_COPPER_GRATE("minecraft:exposed_copper_grate"),
 
-  GILDED_BLACKSTONE("minecraft:gilded_blackstone", "minecraft:gilded_blackstone"),
+  EXPOSED_COPPER_TRAPDOOR("minecraft:exposed_copper_trapdoor"),
 
-  GLASS("minecraft:glass", "minecraft:glass"),
+  EXPOSED_CUT_COPPER("minecraft:exposed_cut_copper"),
 
-  GLASS_PANE("minecraft:glass_pane", "minecraft:glass_pane"),
+  EXPOSED_CUT_COPPER_SLAB("minecraft:exposed_cut_copper_slab"),
 
-  GLOW_FRAME("minecraft:glow_frame", "minecraft:item.glow_frame"),
+  EXPOSED_CUT_COPPER_STAIRS("minecraft:exposed_cut_copper_stairs"),
 
-  GLOW_LICHEN("minecraft:glow_lichen", "minecraft:glow_lichen"),
+  EXPOSED_DOUBLE_CUT_COPPER_SLAB("minecraft:exposed_double_cut_copper_slab"),
 
-  GLOWINGOBSIDIAN("minecraft:glowingobsidian", "minecraft:glowingobsidian"),
+  FARMLAND("minecraft:farmland"),
 
-  GLOWSTONE("minecraft:glowstone", "minecraft:glowstone"),
+  FENCE_GATE("minecraft:fence_gate"),
 
-  GOLD_BLOCK("minecraft:gold_block", "minecraft:gold_block"),
+  FIRE("minecraft:fire"),
 
-  GOLD_ORE("minecraft:gold_ore", "minecraft:gold_ore"),
+  FIRE_CORAL("minecraft:fire_coral"),
 
-  GOLDEN_RAIL("minecraft:golden_rail", "minecraft:golden_rail"),
+  FLETCHING_TABLE("minecraft:fletching_table"),
 
-  GRANITE_STAIRS("minecraft:granite_stairs", "minecraft:granite_stairs"),
+  FLOWER_POT("minecraft:flower_pot"),
 
-  GRASS("minecraft:grass", "minecraft:grass"),
+  FLOWERING_AZALEA("minecraft:flowering_azalea"),
 
-  GRASS_PATH("minecraft:grass_path", "minecraft:grass_path"),
+  FLOWING_LAVA("minecraft:flowing_lava"),
 
-  GRAVEL("minecraft:gravel", "minecraft:gravel"),
+  FLOWING_WATER("minecraft:flowing_water"),
 
-  GRAY_CANDLE("minecraft:gray_candle", "minecraft:gray_candle"),
+  FRAME("minecraft:frame"),
 
-  GRAY_CANDLE_CAKE("minecraft:gray_candle_cake", "minecraft:gray_candle_cake"),
+  FROG_SPAWN("minecraft:frog_spawn"),
 
-  GRAY_CARPET("minecraft:gray_carpet", "minecraft:gray_carpet"),
+  FROSTED_ICE("minecraft:frosted_ice"),
 
-  GRAY_CONCRETE("minecraft:gray_concrete", "minecraft:gray_concrete"),
+  FURNACE("minecraft:furnace"),
 
-  GRAY_CONCRETE_POWDER("minecraft:gray_concrete_powder", "minecraft:gray_concrete_powder"),
+  GILDED_BLACKSTONE("minecraft:gilded_blackstone"),
 
-  GRAY_GLAZED_TERRACOTTA("minecraft:gray_glazed_terracotta", "minecraft:gray_glazed_terracotta"),
+  GLASS("minecraft:glass"),
 
-  GRAY_SHULKER_BOX("minecraft:gray_shulker_box", "minecraft:gray_shulker_box"),
+  GLASS_PANE("minecraft:glass_pane"),
 
-  GRAY_STAINED_GLASS("minecraft:gray_stained_glass", "minecraft:gray_stained_glass"),
+  GLOW_FRAME("minecraft:glow_frame"),
 
-  GRAY_STAINED_GLASS_PANE("minecraft:gray_stained_glass_pane", "minecraft:gray_stained_glass_pane"),
+  GLOW_LICHEN("minecraft:glow_lichen"),
 
-  GRAY_TERRACOTTA("minecraft:gray_terracotta", "minecraft:gray_terracotta"),
+  GLOWINGOBSIDIAN("minecraft:glowingobsidian"),
 
-  GRAY_WOOL("minecraft:gray_wool", "minecraft:gray_wool"),
+  GLOWSTONE("minecraft:glowstone"),
 
-  GREEN_CANDLE("minecraft:green_candle", "minecraft:green_candle"),
+  GOLD_BLOCK("minecraft:gold_block"),
 
-  GREEN_CANDLE_CAKE("minecraft:green_candle_cake", "minecraft:green_candle_cake"),
+  GOLD_ORE("minecraft:gold_ore"),
 
-  GREEN_CARPET("minecraft:green_carpet", "minecraft:green_carpet"),
+  GOLDEN_RAIL("minecraft:golden_rail"),
 
-  GREEN_CONCRETE("minecraft:green_concrete", "minecraft:green_concrete"),
+  GRANITE("minecraft:granite"),
 
-  GREEN_CONCRETE_POWDER("minecraft:green_concrete_powder", "minecraft:green_concrete_powder"),
+  GRANITE_STAIRS("minecraft:granite_stairs"),
 
-  GREEN_GLAZED_TERRACOTTA("minecraft:green_glazed_terracotta", "minecraft:green_glazed_terracotta"),
+  GRASS("minecraft:grass"),
 
-  GREEN_SHULKER_BOX("minecraft:green_shulker_box", "minecraft:green_shulker_box"),
+  GRASS_PATH("minecraft:grass_path"),
 
-  GREEN_STAINED_GLASS("minecraft:green_stained_glass", "minecraft:green_stained_glass"),
+  GRAVEL("minecraft:gravel"),
 
-  GREEN_STAINED_GLASS_PANE("minecraft:green_stained_glass_pane", "minecraft:green_stained_glass_pane"),
+  GRAY_CANDLE("minecraft:gray_candle"),
 
-  GREEN_TERRACOTTA("minecraft:green_terracotta", "minecraft:green_terracotta"),
+  GRAY_CANDLE_CAKE("minecraft:gray_candle_cake"),
 
-  GREEN_WOOL("minecraft:green_wool", "minecraft:green_wool"),
+  GRAY_CARPET("minecraft:gray_carpet"),
 
-  GRINDSTONE("minecraft:grindstone", "minecraft:grindstone"),
+  GRAY_CONCRETE("minecraft:gray_concrete"),
 
-  HANGING_ROOTS("minecraft:hanging_roots", "minecraft:hanging_roots"),
+  GRAY_CONCRETE_POWDER("minecraft:gray_concrete_powder"),
 
-  HARD_GLASS("minecraft:hard_glass", "minecraft:hard_glass"),
+  GRAY_GLAZED_TERRACOTTA("minecraft:gray_glazed_terracotta"),
 
-  HARD_GLASS_PANE("minecraft:hard_glass_pane", "minecraft:hard_glass_pane"),
+  GRAY_SHULKER_BOX("minecraft:gray_shulker_box"),
 
-  HARD_STAINED_GLASS("minecraft:hard_stained_glass", "minecraft:hard_stained_glass"),
+  GRAY_STAINED_GLASS("minecraft:gray_stained_glass"),
 
-  HARD_STAINED_GLASS_PANE("minecraft:hard_stained_glass_pane", "minecraft:hard_stained_glass_pane"),
+  GRAY_STAINED_GLASS_PANE("minecraft:gray_stained_glass_pane"),
 
-  HARDENED_CLAY("minecraft:hardened_clay", "minecraft:hardened_clay"),
+  GRAY_TERRACOTTA("minecraft:gray_terracotta"),
 
-  HAY_BLOCK("minecraft:hay_block", "minecraft:hay_block"),
+  GRAY_WOOL("minecraft:gray_wool"),
 
-  HEAVY_WEIGHTED_PRESSURE_PLATE("minecraft:heavy_weighted_pressure_plate", "minecraft:heavy_weighted_pressure_plate"),
+  GREEN_CANDLE("minecraft:green_candle"),
 
-  HONEY_BLOCK("minecraft:honey_block", "minecraft:honey_block"),
+  GREEN_CANDLE_CAKE("minecraft:green_candle_cake"),
 
-  HONEYCOMB_BLOCK("minecraft:honeycomb_block", "minecraft:honeycomb_block"),
+  GREEN_CARPET("minecraft:green_carpet"),
 
-  HOPPER("minecraft:hopper", "minecraft:item.hopper"),
+  GREEN_CONCRETE("minecraft:green_concrete"),
 
-  HORN_CORAL("minecraft:horn_coral", "minecraft:horn_coral"),
+  GREEN_CONCRETE_POWDER("minecraft:green_concrete_powder"),
 
-  ICE("minecraft:ice", "minecraft:ice"),
+  GREEN_GLAZED_TERRACOTTA("minecraft:green_glazed_terracotta"),
 
-  INFESTED_DEEPSLATE("minecraft:infested_deepslate", "minecraft:infested_deepslate"),
+  GREEN_SHULKER_BOX("minecraft:green_shulker_box"),
 
-  INFO_UPDATE("minecraft:info_update", "minecraft:info_update"),
+  GREEN_STAINED_GLASS("minecraft:green_stained_glass"),
 
-  INFO_UPDATE2("minecraft:info_update2", "minecraft:info_update2"),
+  GREEN_STAINED_GLASS_PANE("minecraft:green_stained_glass_pane"),
 
-  INVISIBLE_BEDROCK("minecraft:invisible_bedrock", "minecraft:invisible_bedrock"),
+  GREEN_TERRACOTTA("minecraft:green_terracotta"),
 
-  IRON_BARS("minecraft:iron_bars", "minecraft:iron_bars"),
+  GREEN_WOOL("minecraft:green_wool"),
 
-  IRON_BLOCK("minecraft:iron_block", "minecraft:iron_block"),
+  GRINDSTONE("minecraft:grindstone"),
 
-  IRON_DOOR("minecraft:iron_door", "minecraft:item.iron_door"),
+  HANGING_ROOTS("minecraft:hanging_roots"),
 
-  IRON_ORE("minecraft:iron_ore", "minecraft:iron_ore"),
+  HARD_GLASS("minecraft:hard_glass"),
 
-  IRON_TRAPDOOR("minecraft:iron_trapdoor", "minecraft:iron_trapdoor"),
+  HARD_GLASS_PANE("minecraft:hard_glass_pane"),
 
-  JIGSAW("minecraft:jigsaw", "minecraft:jigsaw"),
+  HARD_STAINED_GLASS("minecraft:hard_stained_glass"),
 
-  JUKEBOX("minecraft:jukebox", "minecraft:jukebox"),
+  HARD_STAINED_GLASS_PANE("minecraft:hard_stained_glass_pane"),
 
-  JUNGLE_BUTTON("minecraft:jungle_button", "minecraft:jungle_button"),
+  HARDENED_CLAY("minecraft:hardened_clay"),
 
-  JUNGLE_DOOR("minecraft:jungle_door", "minecraft:item.jungle_door"),
+  HAY_BLOCK("minecraft:hay_block"),
 
-  JUNGLE_FENCE("minecraft:jungle_fence", "minecraft:jungle_fence"),
+  HEAVY_WEIGHTED_PRESSURE_PLATE("minecraft:heavy_weighted_pressure_plate"),
 
-  JUNGLE_FENCE_GATE("minecraft:jungle_fence_gate", "minecraft:jungle_fence_gate"),
+  HONEY_BLOCK("minecraft:honey_block"),
 
-  JUNGLE_HANGING_SIGN("minecraft:jungle_hanging_sign", "minecraft:jungle_hanging_sign"),
+  HONEYCOMB_BLOCK("minecraft:honeycomb_block"),
 
-  JUNGLE_LOG("minecraft:jungle_log", "minecraft:jungle_log"),
+  HOPPER("minecraft:hopper"),
 
-  JUNGLE_PRESSURE_PLATE("minecraft:jungle_pressure_plate", "minecraft:jungle_pressure_plate"),
+  HORN_CORAL("minecraft:horn_coral"),
 
-  JUNGLE_STAIRS("minecraft:jungle_stairs", "minecraft:jungle_stairs"),
+  ICE("minecraft:ice"),
 
-  JUNGLE_STANDING_SIGN("minecraft:jungle_standing_sign", "minecraft:jungle_standing_sign"),
+  INFESTED_DEEPSLATE("minecraft:infested_deepslate"),
 
-  JUNGLE_TRAPDOOR("minecraft:jungle_trapdoor", "minecraft:jungle_trapdoor"),
+  INFO_UPDATE("minecraft:info_update"),
 
-  JUNGLE_WALL_SIGN("minecraft:jungle_wall_sign", "minecraft:jungle_wall_sign"),
+  INFO_UPDATE2("minecraft:info_update2"),
 
-  KELP("minecraft:kelp", "minecraft:item.kelp"),
+  INVISIBLE_BEDROCK("minecraft:invisible_bedrock"),
 
-  LADDER("minecraft:ladder", "minecraft:ladder"),
+  IRON_BARS("minecraft:iron_bars"),
 
-  LANTERN("minecraft:lantern", "minecraft:lantern"),
+  IRON_BLOCK("minecraft:iron_block"),
 
-  LAPIS_BLOCK("minecraft:lapis_block", "minecraft:lapis_block"),
+  IRON_DOOR("minecraft:iron_door"),
 
-  LAPIS_ORE("minecraft:lapis_ore", "minecraft:lapis_ore"),
+  IRON_ORE("minecraft:iron_ore"),
 
-  LARGE_AMETHYST_BUD("minecraft:large_amethyst_bud", "minecraft:large_amethyst_bud"),
+  IRON_TRAPDOOR("minecraft:iron_trapdoor"),
 
-  LAVA("minecraft:lava", "minecraft:lava"),
+  JIGSAW("minecraft:jigsaw"),
 
-  LEAVES("minecraft:leaves", "minecraft:leaves"),
+  JUKEBOX("minecraft:jukebox"),
 
-  LEAVES2("minecraft:leaves2", "minecraft:leaves2"),
+  JUNGLE_BUTTON("minecraft:jungle_button"),
 
-  LECTERN("minecraft:lectern", "minecraft:lectern"),
+  JUNGLE_DOOR("minecraft:jungle_door"),
 
-  LEVER("minecraft:lever", "minecraft:lever"),
+  JUNGLE_FENCE("minecraft:jungle_fence"),
 
-  LIGHT_BLOCK("minecraft:light_block", "minecraft:light_block"),
+  JUNGLE_FENCE_GATE("minecraft:jungle_fence_gate"),
 
-  LIGHT_BLUE_CANDLE("minecraft:light_blue_candle", "minecraft:light_blue_candle"),
+  JUNGLE_HANGING_SIGN("minecraft:jungle_hanging_sign"),
 
-  LIGHT_BLUE_CANDLE_CAKE("minecraft:light_blue_candle_cake", "minecraft:light_blue_candle_cake"),
+  JUNGLE_LOG("minecraft:jungle_log"),
 
-  LIGHT_BLUE_CARPET("minecraft:light_blue_carpet", "minecraft:light_blue_carpet"),
+  JUNGLE_PLANKS("minecraft:jungle_planks"),
 
-  LIGHT_BLUE_CONCRETE("minecraft:light_blue_concrete", "minecraft:light_blue_concrete"),
+  JUNGLE_PRESSURE_PLATE("minecraft:jungle_pressure_plate"),
 
-  LIGHT_BLUE_CONCRETE_POWDER("minecraft:light_blue_concrete_powder", "minecraft:light_blue_concrete_powder"),
+  JUNGLE_STAIRS("minecraft:jungle_stairs"),
 
-  LIGHT_BLUE_GLAZED_TERRACOTTA("minecraft:light_blue_glazed_terracotta", "minecraft:light_blue_glazed_terracotta"),
+  JUNGLE_STANDING_SIGN("minecraft:jungle_standing_sign"),
 
-  LIGHT_BLUE_SHULKER_BOX("minecraft:light_blue_shulker_box", "minecraft:light_blue_shulker_box"),
+  JUNGLE_TRAPDOOR("minecraft:jungle_trapdoor"),
 
-  LIGHT_BLUE_STAINED_GLASS("minecraft:light_blue_stained_glass", "minecraft:light_blue_stained_glass"),
+  JUNGLE_WALL_SIGN("minecraft:jungle_wall_sign"),
 
-  LIGHT_BLUE_STAINED_GLASS_PANE("minecraft:light_blue_stained_glass_pane", "minecraft:light_blue_stained_glass_pane"),
+  KELP("minecraft:kelp"),
 
-  LIGHT_BLUE_TERRACOTTA("minecraft:light_blue_terracotta", "minecraft:light_blue_terracotta"),
+  LADDER("minecraft:ladder"),
 
-  LIGHT_BLUE_WOOL("minecraft:light_blue_wool", "minecraft:light_blue_wool"),
+  LANTERN("minecraft:lantern"),
 
-  LIGHT_GRAY_CANDLE("minecraft:light_gray_candle", "minecraft:light_gray_candle"),
+  LAPIS_BLOCK("minecraft:lapis_block"),
 
-  LIGHT_GRAY_CANDLE_CAKE("minecraft:light_gray_candle_cake", "minecraft:light_gray_candle_cake"),
+  LAPIS_ORE("minecraft:lapis_ore"),
 
-  LIGHT_GRAY_CARPET("minecraft:light_gray_carpet", "minecraft:light_gray_carpet"),
+  LARGE_AMETHYST_BUD("minecraft:large_amethyst_bud"),
 
-  LIGHT_GRAY_CONCRETE("minecraft:light_gray_concrete", "minecraft:light_gray_concrete"),
+  LAVA("minecraft:lava"),
 
-  LIGHT_GRAY_CONCRETE_POWDER("minecraft:light_gray_concrete_powder", "minecraft:light_gray_concrete_powder"),
+  LEAVES("minecraft:leaves"),
 
-  LIGHT_GRAY_SHULKER_BOX("minecraft:light_gray_shulker_box", "minecraft:light_gray_shulker_box"),
+  LEAVES2("minecraft:leaves2"),
 
-  LIGHT_GRAY_STAINED_GLASS("minecraft:light_gray_stained_glass", "minecraft:light_gray_stained_glass"),
+  LECTERN("minecraft:lectern"),
 
-  LIGHT_GRAY_STAINED_GLASS_PANE("minecraft:light_gray_stained_glass_pane", "minecraft:light_gray_stained_glass_pane"),
+  LEVER("minecraft:lever"),
 
-  LIGHT_GRAY_TERRACOTTA("minecraft:light_gray_terracotta", "minecraft:light_gray_terracotta"),
+  LIGHT_BLOCK("minecraft:light_block"),
 
-  LIGHT_GRAY_WOOL("minecraft:light_gray_wool", "minecraft:light_gray_wool"),
+  LIGHT_BLUE_CANDLE("minecraft:light_blue_candle"),
 
-  LIGHT_WEIGHTED_PRESSURE_PLATE("minecraft:light_weighted_pressure_plate", "minecraft:light_weighted_pressure_plate"),
+  LIGHT_BLUE_CANDLE_CAKE("minecraft:light_blue_candle_cake"),
 
-  LIGHTNING_ROD("minecraft:lightning_rod", "minecraft:lightning_rod"),
+  LIGHT_BLUE_CARPET("minecraft:light_blue_carpet"),
 
-  LIME_CANDLE("minecraft:lime_candle", "minecraft:lime_candle"),
+  LIGHT_BLUE_CONCRETE("minecraft:light_blue_concrete"),
 
-  LIME_CANDLE_CAKE("minecraft:lime_candle_cake", "minecraft:lime_candle_cake"),
+  LIGHT_BLUE_CONCRETE_POWDER("minecraft:light_blue_concrete_powder"),
 
-  LIME_CARPET("minecraft:lime_carpet", "minecraft:lime_carpet"),
+  LIGHT_BLUE_GLAZED_TERRACOTTA("minecraft:light_blue_glazed_terracotta"),
 
-  LIME_CONCRETE("minecraft:lime_concrete", "minecraft:lime_concrete"),
+  LIGHT_BLUE_SHULKER_BOX("minecraft:light_blue_shulker_box"),
 
-  LIME_CONCRETE_POWDER("minecraft:lime_concrete_powder", "minecraft:lime_concrete_powder"),
+  LIGHT_BLUE_STAINED_GLASS("minecraft:light_blue_stained_glass"),
 
-  LIME_GLAZED_TERRACOTTA("minecraft:lime_glazed_terracotta", "minecraft:lime_glazed_terracotta"),
+  LIGHT_BLUE_STAINED_GLASS_PANE("minecraft:light_blue_stained_glass_pane"),
 
-  LIME_SHULKER_BOX("minecraft:lime_shulker_box", "minecraft:lime_shulker_box"),
+  LIGHT_BLUE_TERRACOTTA("minecraft:light_blue_terracotta"),
 
-  LIME_STAINED_GLASS("minecraft:lime_stained_glass", "minecraft:lime_stained_glass"),
+  LIGHT_BLUE_WOOL("minecraft:light_blue_wool"),
 
-  LIME_STAINED_GLASS_PANE("minecraft:lime_stained_glass_pane", "minecraft:lime_stained_glass_pane"),
+  LIGHT_GRAY_CANDLE("minecraft:light_gray_candle"),
 
-  LIME_TERRACOTTA("minecraft:lime_terracotta", "minecraft:lime_terracotta"),
+  LIGHT_GRAY_CANDLE_CAKE("minecraft:light_gray_candle_cake"),
 
-  LIME_WOOL("minecraft:lime_wool", "minecraft:lime_wool"),
+  LIGHT_GRAY_CARPET("minecraft:light_gray_carpet"),
 
-  LIT_BLAST_FURNACE("minecraft:lit_blast_furnace", "minecraft:lit_blast_furnace"),
+  LIGHT_GRAY_CONCRETE("minecraft:light_gray_concrete"),
 
-  LIT_DEEPSLATE_REDSTONE_ORE("minecraft:lit_deepslate_redstone_ore", "minecraft:lit_deepslate_redstone_ore"),
+  LIGHT_GRAY_CONCRETE_POWDER("minecraft:light_gray_concrete_powder"),
 
-  LIT_FURNACE("minecraft:lit_furnace", "minecraft:lit_furnace"),
+  LIGHT_GRAY_SHULKER_BOX("minecraft:light_gray_shulker_box"),
 
-  LIT_PUMPKIN("minecraft:lit_pumpkin", "minecraft:lit_pumpkin"),
+  LIGHT_GRAY_STAINED_GLASS("minecraft:light_gray_stained_glass"),
 
-  LIT_REDSTONE_LAMP("minecraft:lit_redstone_lamp", "minecraft:lit_redstone_lamp"),
+  LIGHT_GRAY_STAINED_GLASS_PANE("minecraft:light_gray_stained_glass_pane"),
 
-  LIT_REDSTONE_ORE("minecraft:lit_redstone_ore", "minecraft:lit_redstone_ore"),
+  LIGHT_GRAY_TERRACOTTA("minecraft:light_gray_terracotta"),
 
-  LIT_SMOKER("minecraft:lit_smoker", "minecraft:lit_smoker"),
+  LIGHT_GRAY_WOOL("minecraft:light_gray_wool"),
 
-  LODESTONE("minecraft:lodestone", "minecraft:lodestone"),
+  LIGHT_WEIGHTED_PRESSURE_PLATE("minecraft:light_weighted_pressure_plate"),
 
-  LOOM("minecraft:loom", "minecraft:loom"),
+  LIGHTNING_ROD("minecraft:lightning_rod"),
 
-  MAGENTA_CANDLE("minecraft:magenta_candle", "minecraft:magenta_candle"),
+  LIME_CANDLE("minecraft:lime_candle"),
 
-  MAGENTA_CANDLE_CAKE("minecraft:magenta_candle_cake", "minecraft:magenta_candle_cake"),
+  LIME_CANDLE_CAKE("minecraft:lime_candle_cake"),
 
-  MAGENTA_CARPET("minecraft:magenta_carpet", "minecraft:magenta_carpet"),
+  LIME_CARPET("minecraft:lime_carpet"),
 
-  MAGENTA_CONCRETE("minecraft:magenta_concrete", "minecraft:magenta_concrete"),
+  LIME_CONCRETE("minecraft:lime_concrete"),
 
-  MAGENTA_CONCRETE_POWDER("minecraft:magenta_concrete_powder", "minecraft:magenta_concrete_powder"),
+  LIME_CONCRETE_POWDER("minecraft:lime_concrete_powder"),
 
-  MAGENTA_GLAZED_TERRACOTTA("minecraft:magenta_glazed_terracotta", "minecraft:magenta_glazed_terracotta"),
+  LIME_GLAZED_TERRACOTTA("minecraft:lime_glazed_terracotta"),
 
-  MAGENTA_SHULKER_BOX("minecraft:magenta_shulker_box", "minecraft:magenta_shulker_box"),
+  LIME_SHULKER_BOX("minecraft:lime_shulker_box"),
 
-  MAGENTA_STAINED_GLASS("minecraft:magenta_stained_glass", "minecraft:magenta_stained_glass"),
+  LIME_STAINED_GLASS("minecraft:lime_stained_glass"),
 
-  MAGENTA_STAINED_GLASS_PANE("minecraft:magenta_stained_glass_pane", "minecraft:magenta_stained_glass_pane"),
+  LIME_STAINED_GLASS_PANE("minecraft:lime_stained_glass_pane"),
 
-  MAGENTA_TERRACOTTA("minecraft:magenta_terracotta", "minecraft:magenta_terracotta"),
+  LIME_TERRACOTTA("minecraft:lime_terracotta"),
 
-  MAGENTA_WOOL("minecraft:magenta_wool", "minecraft:magenta_wool"),
+  LIME_WOOL("minecraft:lime_wool"),
 
-  MAGMA("minecraft:magma", "minecraft:magma"),
+  LIT_BLAST_FURNACE("minecraft:lit_blast_furnace"),
 
-  MANGROVE_BUTTON("minecraft:mangrove_button", "minecraft:mangrove_button"),
+  LIT_DEEPSLATE_REDSTONE_ORE("minecraft:lit_deepslate_redstone_ore"),
 
-  MANGROVE_DOOR("minecraft:mangrove_door", "minecraft:item.mangrove_door"),
+  LIT_FURNACE("minecraft:lit_furnace"),
 
-  MANGROVE_DOUBLE_SLAB("minecraft:mangrove_double_slab", "minecraft:mangrove_double_slab"),
+  LIT_PUMPKIN("minecraft:lit_pumpkin"),
 
-  MANGROVE_FENCE("minecraft:mangrove_fence", "minecraft:mangrove_fence"),
+  LIT_REDSTONE_LAMP("minecraft:lit_redstone_lamp"),
 
-  MANGROVE_FENCE_GATE("minecraft:mangrove_fence_gate", "minecraft:mangrove_fence_gate"),
+  LIT_REDSTONE_ORE("minecraft:lit_redstone_ore"),
 
-  MANGROVE_HANGING_SIGN("minecraft:mangrove_hanging_sign", "minecraft:mangrove_hanging_sign"),
+  LIT_SMOKER("minecraft:lit_smoker"),
 
-  MANGROVE_LEAVES("minecraft:mangrove_leaves", "minecraft:mangrove_leaves"),
+  LODESTONE("minecraft:lodestone"),
 
-  MANGROVE_LOG("minecraft:mangrove_log", "minecraft:mangrove_log"),
+  LOOM("minecraft:loom"),
 
-  MANGROVE_PLANKS("minecraft:mangrove_planks", "minecraft:mangrove_planks"),
+  MAGENTA_CANDLE("minecraft:magenta_candle"),
 
-  MANGROVE_PRESSURE_PLATE("minecraft:mangrove_pressure_plate", "minecraft:mangrove_pressure_plate"),
+  MAGENTA_CANDLE_CAKE("minecraft:magenta_candle_cake"),
 
-  MANGROVE_PROPAGULE("minecraft:mangrove_propagule", "minecraft:mangrove_propagule"),
+  MAGENTA_CARPET("minecraft:magenta_carpet"),
 
-  MANGROVE_ROOTS("minecraft:mangrove_roots", "minecraft:mangrove_roots"),
+  MAGENTA_CONCRETE("minecraft:magenta_concrete"),
 
-  MANGROVE_SLAB("minecraft:mangrove_slab", "minecraft:mangrove_slab"),
+  MAGENTA_CONCRETE_POWDER("minecraft:magenta_concrete_powder"),
 
-  MANGROVE_STAIRS("minecraft:mangrove_stairs", "minecraft:mangrove_stairs"),
+  MAGENTA_GLAZED_TERRACOTTA("minecraft:magenta_glazed_terracotta"),
 
-  MANGROVE_STANDING_SIGN("minecraft:mangrove_standing_sign", "minecraft:mangrove_standing_sign"),
+  MAGENTA_SHULKER_BOX("minecraft:magenta_shulker_box"),
 
-  MANGROVE_TRAPDOOR("minecraft:mangrove_trapdoor", "minecraft:mangrove_trapdoor"),
+  MAGENTA_STAINED_GLASS("minecraft:magenta_stained_glass"),
 
-  MANGROVE_WALL_SIGN("minecraft:mangrove_wall_sign", "minecraft:mangrove_wall_sign"),
+  MAGENTA_STAINED_GLASS_PANE("minecraft:magenta_stained_glass_pane"),
 
-  MANGROVE_WOOD("minecraft:mangrove_wood", "minecraft:mangrove_wood"),
+  MAGENTA_TERRACOTTA("minecraft:magenta_terracotta"),
 
-  MEDIUM_AMETHYST_BUD("minecraft:medium_amethyst_bud", "minecraft:medium_amethyst_bud"),
+  MAGENTA_WOOL("minecraft:magenta_wool"),
 
-  MELON_BLOCK("minecraft:melon_block", "minecraft:melon_block"),
+  MAGMA("minecraft:magma"),
 
-  MELON_STEM("minecraft:melon_stem", "minecraft:melon_stem"),
+  MANGROVE_BUTTON("minecraft:mangrove_button"),
 
-  MOB_SPAWNER("minecraft:mob_spawner", "minecraft:mob_spawner"),
+  MANGROVE_DOOR("minecraft:mangrove_door"),
 
-  MONSTER_EGG("minecraft:monster_egg", "minecraft:monster_egg"),
+  MANGROVE_DOUBLE_SLAB("minecraft:mangrove_double_slab"),
 
-  MOSS_BLOCK("minecraft:moss_block", "minecraft:moss_block"),
+  MANGROVE_FENCE("minecraft:mangrove_fence"),
 
-  MOSS_CARPET("minecraft:moss_carpet", "minecraft:moss_carpet"),
+  MANGROVE_FENCE_GATE("minecraft:mangrove_fence_gate"),
 
-  MOSSY_COBBLESTONE("minecraft:mossy_cobblestone", "minecraft:mossy_cobblestone"),
+  MANGROVE_HANGING_SIGN("minecraft:mangrove_hanging_sign"),
 
-  MOSSY_COBBLESTONE_STAIRS("minecraft:mossy_cobblestone_stairs", "minecraft:mossy_cobblestone_stairs"),
+  MANGROVE_LEAVES("minecraft:mangrove_leaves"),
 
-  MOSSY_STONE_BRICK_STAIRS("minecraft:mossy_stone_brick_stairs", "minecraft:mossy_stone_brick_stairs"),
+  MANGROVE_LOG("minecraft:mangrove_log"),
 
-  MOVING_BLOCK("minecraft:moving_block", "minecraft:moving_block"),
+  MANGROVE_PLANKS("minecraft:mangrove_planks"),
 
-  MUD("minecraft:mud", "minecraft:mud"),
+  MANGROVE_PRESSURE_PLATE("minecraft:mangrove_pressure_plate"),
 
-  MUD_BRICK_DOUBLE_SLAB("minecraft:mud_brick_double_slab", "minecraft:mud_brick_double_slab"),
+  MANGROVE_PROPAGULE("minecraft:mangrove_propagule"),
 
-  MUD_BRICK_SLAB("minecraft:mud_brick_slab", "minecraft:mud_brick_slab"),
+  MANGROVE_ROOTS("minecraft:mangrove_roots"),
 
-  MUD_BRICK_STAIRS("minecraft:mud_brick_stairs", "minecraft:mud_brick_stairs"),
+  MANGROVE_SLAB("minecraft:mangrove_slab"),
 
-  MUD_BRICK_WALL("minecraft:mud_brick_wall", "minecraft:mud_brick_wall"),
+  MANGROVE_STAIRS("minecraft:mangrove_stairs"),
 
-  MUD_BRICKS("minecraft:mud_bricks", "minecraft:mud_bricks"),
+  MANGROVE_STANDING_SIGN("minecraft:mangrove_standing_sign"),
 
-  MUDDY_MANGROVE_ROOTS("minecraft:muddy_mangrove_roots", "minecraft:muddy_mangrove_roots"),
+  MANGROVE_TRAPDOOR("minecraft:mangrove_trapdoor"),
 
-  MYCELIUM("minecraft:mycelium", "minecraft:mycelium"),
+  MANGROVE_WALL_SIGN("minecraft:mangrove_wall_sign"),
 
-  NETHER_BRICK("minecraft:nether_brick", "minecraft:nether_brick"),
+  MANGROVE_WOOD("minecraft:mangrove_wood"),
 
-  NETHER_BRICK_FENCE("minecraft:nether_brick_fence", "minecraft:nether_brick_fence"),
+  MEDIUM_AMETHYST_BUD("minecraft:medium_amethyst_bud"),
 
-  NETHER_BRICK_STAIRS("minecraft:nether_brick_stairs", "minecraft:nether_brick_stairs"),
+  MELON_BLOCK("minecraft:melon_block"),
 
-  NETHER_GOLD_ORE("minecraft:nether_gold_ore", "minecraft:nether_gold_ore"),
+  MELON_STEM("minecraft:melon_stem"),
 
-  NETHER_SPROUTS("minecraft:nether_sprouts", "minecraft:item.nether_sprouts"),
+  MOB_SPAWNER("minecraft:mob_spawner"),
 
-  NETHER_WART("minecraft:nether_wart", "minecraft:item.nether_wart"),
+  MONSTER_EGG("minecraft:monster_egg"),
 
-  NETHER_WART_BLOCK("minecraft:nether_wart_block", "minecraft:nether_wart_block"),
+  MOSS_BLOCK("minecraft:moss_block"),
 
-  NETHERITE_BLOCK("minecraft:netherite_block", "minecraft:netherite_block"),
+  MOSS_CARPET("minecraft:moss_carpet"),
 
-  NETHERRACK("minecraft:netherrack", "minecraft:netherrack"),
+  MOSSY_COBBLESTONE("minecraft:mossy_cobblestone"),
 
-  NETHERREACTOR("minecraft:netherreactor", "minecraft:netherreactor"),
+  MOSSY_COBBLESTONE_STAIRS("minecraft:mossy_cobblestone_stairs"),
 
-  NORMAL_STONE_STAIRS("minecraft:normal_stone_stairs", "minecraft:normal_stone_stairs"),
+  MOSSY_STONE_BRICK_STAIRS("minecraft:mossy_stone_brick_stairs"),
 
-  NOTEBLOCK("minecraft:noteblock", "minecraft:noteblock"),
+  MOVING_BLOCK("minecraft:moving_block"),
 
-  OAK_FENCE("minecraft:oak_fence", "minecraft:oak_fence"),
+  MUD("minecraft:mud"),
 
-  OAK_HANGING_SIGN("minecraft:oak_hanging_sign", "minecraft:oak_hanging_sign"),
+  MUD_BRICK_DOUBLE_SLAB("minecraft:mud_brick_double_slab"),
 
-  OAK_LOG("minecraft:oak_log", "minecraft:oak_log"),
+  MUD_BRICK_SLAB("minecraft:mud_brick_slab"),
 
-  OAK_STAIRS("minecraft:oak_stairs", "minecraft:oak_stairs"),
+  MUD_BRICK_STAIRS("minecraft:mud_brick_stairs"),
 
-  OBSERVER("minecraft:observer", "minecraft:observer"),
+  MUD_BRICK_WALL("minecraft:mud_brick_wall"),
 
-  OBSIDIAN("minecraft:obsidian", "minecraft:obsidian"),
+  MUD_BRICKS("minecraft:mud_bricks"),
 
-  OCHRE_FROGLIGHT("minecraft:ochre_froglight", "minecraft:ochre_froglight"),
+  MUDDY_MANGROVE_ROOTS("minecraft:muddy_mangrove_roots"),
 
-  ORANGE_CANDLE("minecraft:orange_candle", "minecraft:orange_candle"),
+  MYCELIUM("minecraft:mycelium"),
 
-  ORANGE_CANDLE_CAKE("minecraft:orange_candle_cake", "minecraft:orange_candle_cake"),
+  NETHER_BRICK("minecraft:nether_brick"),
 
-  ORANGE_CARPET("minecraft:orange_carpet", "minecraft:orange_carpet"),
+  NETHER_BRICK_FENCE("minecraft:nether_brick_fence"),
 
-  ORANGE_CONCRETE("minecraft:orange_concrete", "minecraft:orange_concrete"),
+  NETHER_BRICK_STAIRS("minecraft:nether_brick_stairs"),
 
-  ORANGE_CONCRETE_POWDER("minecraft:orange_concrete_powder", "minecraft:orange_concrete_powder"),
+  NETHER_GOLD_ORE("minecraft:nether_gold_ore"),
 
-  ORANGE_GLAZED_TERRACOTTA("minecraft:orange_glazed_terracotta", "minecraft:orange_glazed_terracotta"),
+  NETHER_SPROUTS("minecraft:nether_sprouts"),
 
-  ORANGE_SHULKER_BOX("minecraft:orange_shulker_box", "minecraft:orange_shulker_box"),
+  NETHER_WART("minecraft:nether_wart"),
 
-  ORANGE_STAINED_GLASS("minecraft:orange_stained_glass", "minecraft:orange_stained_glass"),
+  NETHER_WART_BLOCK("minecraft:nether_wart_block"),
 
-  ORANGE_STAINED_GLASS_PANE("minecraft:orange_stained_glass_pane", "minecraft:orange_stained_glass_pane"),
+  NETHERITE_BLOCK("minecraft:netherite_block"),
 
-  ORANGE_TERRACOTTA("minecraft:orange_terracotta", "minecraft:orange_terracotta"),
+  NETHERRACK("minecraft:netherrack"),
 
-  ORANGE_WOOL("minecraft:orange_wool", "minecraft:orange_wool"),
+  NETHERREACTOR("minecraft:netherreactor"),
 
-  OXIDIZED_COPPER("minecraft:oxidized_copper", "minecraft:oxidized_copper"),
+  NORMAL_STONE_STAIRS("minecraft:normal_stone_stairs"),
 
-  OXIDIZED_CUT_COPPER("minecraft:oxidized_cut_copper", "minecraft:oxidized_cut_copper"),
+  NOTEBLOCK("minecraft:noteblock"),
 
-  OXIDIZED_CUT_COPPER_SLAB("minecraft:oxidized_cut_copper_slab", "minecraft:oxidized_cut_copper_slab"),
+  OAK_FENCE("minecraft:oak_fence"),
 
-  OXIDIZED_CUT_COPPER_STAIRS("minecraft:oxidized_cut_copper_stairs", "minecraft:oxidized_cut_copper_stairs"),
+  OAK_HANGING_SIGN("minecraft:oak_hanging_sign"),
 
-  OXIDIZED_DOUBLE_CUT_COPPER_SLAB("minecraft:oxidized_double_cut_copper_slab", "minecraft:oxidized_double_cut_copper_slab"),
+  OAK_LOG("minecraft:oak_log"),
 
-  PACKED_ICE("minecraft:packed_ice", "minecraft:packed_ice"),
+  OAK_PLANKS("minecraft:oak_planks"),
 
-  PACKED_MUD("minecraft:packed_mud", "minecraft:packed_mud"),
+  OAK_STAIRS("minecraft:oak_stairs"),
 
-  PEARLESCENT_FROGLIGHT("minecraft:pearlescent_froglight", "minecraft:pearlescent_froglight"),
+  OBSERVER("minecraft:observer"),
 
-  PINK_CANDLE("minecraft:pink_candle", "minecraft:pink_candle"),
+  OBSIDIAN("minecraft:obsidian"),
 
-  PINK_CANDLE_CAKE("minecraft:pink_candle_cake", "minecraft:pink_candle_cake"),
+  OCHRE_FROGLIGHT("minecraft:ochre_froglight"),
 
-  PINK_CARPET("minecraft:pink_carpet", "minecraft:pink_carpet"),
+  ORANGE_CANDLE("minecraft:orange_candle"),
 
-  PINK_CONCRETE("minecraft:pink_concrete", "minecraft:pink_concrete"),
+  ORANGE_CANDLE_CAKE("minecraft:orange_candle_cake"),
 
-  PINK_CONCRETE_POWDER("minecraft:pink_concrete_powder", "minecraft:pink_concrete_powder"),
+  ORANGE_CARPET("minecraft:orange_carpet"),
 
-  PINK_GLAZED_TERRACOTTA("minecraft:pink_glazed_terracotta", "minecraft:pink_glazed_terracotta"),
+  ORANGE_CONCRETE("minecraft:orange_concrete"),
 
-  PINK_PETALS("minecraft:pink_petals", "minecraft:pink_petals"),
+  ORANGE_CONCRETE_POWDER("minecraft:orange_concrete_powder"),
 
-  PINK_SHULKER_BOX("minecraft:pink_shulker_box", "minecraft:pink_shulker_box"),
+  ORANGE_GLAZED_TERRACOTTA("minecraft:orange_glazed_terracotta"),
 
-  PINK_STAINED_GLASS("minecraft:pink_stained_glass", "minecraft:pink_stained_glass"),
+  ORANGE_SHULKER_BOX("minecraft:orange_shulker_box"),
 
-  PINK_STAINED_GLASS_PANE("minecraft:pink_stained_glass_pane", "minecraft:pink_stained_glass_pane"),
+  ORANGE_STAINED_GLASS("minecraft:orange_stained_glass"),
 
-  PINK_TERRACOTTA("minecraft:pink_terracotta", "minecraft:pink_terracotta"),
+  ORANGE_STAINED_GLASS_PANE("minecraft:orange_stained_glass_pane"),
 
-  PINK_WOOL("minecraft:pink_wool", "minecraft:pink_wool"),
+  ORANGE_TERRACOTTA("minecraft:orange_terracotta"),
 
-  PISTON("minecraft:piston", "minecraft:piston"),
+  ORANGE_WOOL("minecraft:orange_wool"),
 
-  PISTON_ARM_COLLISION("minecraft:piston_arm_collision", "minecraft:piston_arm_collision"),
+  OXIDIZED_CHISELED_COPPER("minecraft:oxidized_chiseled_copper"),
 
-  PITCHER_CROP("minecraft:pitcher_crop", "minecraft:pitcher_crop"),
+  OXIDIZED_COPPER("minecraft:oxidized_copper"),
 
-  PITCHER_PLANT("minecraft:pitcher_plant", "minecraft:pitcher_plant"),
+  OXIDIZED_COPPER_BULB("minecraft:oxidized_copper_bulb"),
 
-  PLANKS("minecraft:planks", "minecraft:planks"),
+  OXIDIZED_COPPER_DOOR("minecraft:oxidized_copper_door"),
 
-  PODZOL("minecraft:podzol", "minecraft:podzol"),
+  OXIDIZED_COPPER_GRATE("minecraft:oxidized_copper_grate"),
 
-  POINTED_DRIPSTONE("minecraft:pointed_dripstone", "minecraft:pointed_dripstone"),
+  OXIDIZED_COPPER_TRAPDOOR("minecraft:oxidized_copper_trapdoor"),
 
-  POLISHED_ANDESITE_STAIRS("minecraft:polished_andesite_stairs", "minecraft:polished_andesite_stairs"),
+  OXIDIZED_CUT_COPPER("minecraft:oxidized_cut_copper"),
 
-  POLISHED_BASALT("minecraft:polished_basalt", "minecraft:polished_basalt"),
+  OXIDIZED_CUT_COPPER_SLAB("minecraft:oxidized_cut_copper_slab"),
 
-  POLISHED_BLACKSTONE("minecraft:polished_blackstone", "minecraft:polished_blackstone"),
+  OXIDIZED_CUT_COPPER_STAIRS("minecraft:oxidized_cut_copper_stairs"),
 
-  POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB("minecraft:polished_blackstone_brick_double_slab", "minecraft:polished_blackstone_brick_double_slab"),
+  OXIDIZED_DOUBLE_CUT_COPPER_SLAB("minecraft:oxidized_double_cut_copper_slab"),
 
-  POLISHED_BLACKSTONE_BRICK_SLAB("minecraft:polished_blackstone_brick_slab", "minecraft:polished_blackstone_brick_slab"),
+  PACKED_ICE("minecraft:packed_ice"),
 
-  POLISHED_BLACKSTONE_BRICK_STAIRS("minecraft:polished_blackstone_brick_stairs", "minecraft:polished_blackstone_brick_stairs"),
+  PACKED_MUD("minecraft:packed_mud"),
 
-  POLISHED_BLACKSTONE_BRICK_WALL("minecraft:polished_blackstone_brick_wall", "minecraft:polished_blackstone_brick_wall"),
+  PEARLESCENT_FROGLIGHT("minecraft:pearlescent_froglight"),
 
-  POLISHED_BLACKSTONE_BRICKS("minecraft:polished_blackstone_bricks", "minecraft:polished_blackstone_bricks"),
+  PINK_CANDLE("minecraft:pink_candle"),
 
-  POLISHED_BLACKSTONE_BUTTON("minecraft:polished_blackstone_button", "minecraft:polished_blackstone_button"),
+  PINK_CANDLE_CAKE("minecraft:pink_candle_cake"),
 
-  POLISHED_BLACKSTONE_DOUBLE_SLAB("minecraft:polished_blackstone_double_slab", "minecraft:polished_blackstone_double_slab"),
+  PINK_CARPET("minecraft:pink_carpet"),
 
-  POLISHED_BLACKSTONE_PRESSURE_PLATE("minecraft:polished_blackstone_pressure_plate", "minecraft:polished_blackstone_pressure_plate"),
+  PINK_CONCRETE("minecraft:pink_concrete"),
 
-  POLISHED_BLACKSTONE_SLAB("minecraft:polished_blackstone_slab", "minecraft:polished_blackstone_slab"),
+  PINK_CONCRETE_POWDER("minecraft:pink_concrete_powder"),
 
-  POLISHED_BLACKSTONE_STAIRS("minecraft:polished_blackstone_stairs", "minecraft:polished_blackstone_stairs"),
+  PINK_GLAZED_TERRACOTTA("minecraft:pink_glazed_terracotta"),
 
-  POLISHED_BLACKSTONE_WALL("minecraft:polished_blackstone_wall", "minecraft:polished_blackstone_wall"),
+  PINK_PETALS("minecraft:pink_petals"),
 
-  POLISHED_DEEPSLATE("minecraft:polished_deepslate", "minecraft:polished_deepslate"),
+  PINK_SHULKER_BOX("minecraft:pink_shulker_box"),
 
-  POLISHED_DEEPSLATE_DOUBLE_SLAB("minecraft:polished_deepslate_double_slab", "minecraft:polished_deepslate_double_slab"),
+  PINK_STAINED_GLASS("minecraft:pink_stained_glass"),
 
-  POLISHED_DEEPSLATE_SLAB("minecraft:polished_deepslate_slab", "minecraft:polished_deepslate_slab"),
+  PINK_STAINED_GLASS_PANE("minecraft:pink_stained_glass_pane"),
 
-  POLISHED_DEEPSLATE_STAIRS("minecraft:polished_deepslate_stairs", "minecraft:polished_deepslate_stairs"),
+  PINK_TERRACOTTA("minecraft:pink_terracotta"),
 
-  POLISHED_DEEPSLATE_WALL("minecraft:polished_deepslate_wall", "minecraft:polished_deepslate_wall"),
+  PINK_WOOL("minecraft:pink_wool"),
 
-  POLISHED_DIORITE_STAIRS("minecraft:polished_diorite_stairs", "minecraft:polished_diorite_stairs"),
+  PISTON("minecraft:piston"),
 
-  POLISHED_GRANITE_STAIRS("minecraft:polished_granite_stairs", "minecraft:polished_granite_stairs"),
+  PISTON_ARM_COLLISION("minecraft:piston_arm_collision"),
 
-  PORTAL("minecraft:portal", "minecraft:portal"),
+  PITCHER_CROP("minecraft:pitcher_crop"),
 
-  POTATOES("minecraft:potatoes", "minecraft:potatoes"),
+  PITCHER_PLANT("minecraft:pitcher_plant"),
 
-  POWDER_SNOW("minecraft:powder_snow", "minecraft:powder_snow"),
+  PODZOL("minecraft:podzol"),
 
-  POWERED_COMPARATOR("minecraft:powered_comparator", "minecraft:powered_comparator"),
+  POINTED_DRIPSTONE("minecraft:pointed_dripstone"),
 
-  POWERED_REPEATER("minecraft:powered_repeater", "minecraft:powered_repeater"),
+  POLISHED_ANDESITE("minecraft:polished_andesite"),
 
-  PRISMARINE("minecraft:prismarine", "minecraft:prismarine"),
+  POLISHED_ANDESITE_STAIRS("minecraft:polished_andesite_stairs"),
 
-  PRISMARINE_BRICKS_STAIRS("minecraft:prismarine_bricks_stairs", "minecraft:prismarine_bricks_stairs"),
+  POLISHED_BASALT("minecraft:polished_basalt"),
 
-  PRISMARINE_STAIRS("minecraft:prismarine_stairs", "minecraft:prismarine_stairs"),
+  POLISHED_BLACKSTONE("minecraft:polished_blackstone"),
 
-  PUMPKIN("minecraft:pumpkin", "minecraft:pumpkin"),
+  POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB("minecraft:polished_blackstone_brick_double_slab"),
 
-  PUMPKIN_STEM("minecraft:pumpkin_stem", "minecraft:pumpkin_stem"),
+  POLISHED_BLACKSTONE_BRICK_SLAB("minecraft:polished_blackstone_brick_slab"),
 
-  PURPLE_CANDLE("minecraft:purple_candle", "minecraft:purple_candle"),
+  POLISHED_BLACKSTONE_BRICK_STAIRS("minecraft:polished_blackstone_brick_stairs"),
 
-  PURPLE_CANDLE_CAKE("minecraft:purple_candle_cake", "minecraft:purple_candle_cake"),
+  POLISHED_BLACKSTONE_BRICK_WALL("minecraft:polished_blackstone_brick_wall"),
 
-  PURPLE_CARPET("minecraft:purple_carpet", "minecraft:purple_carpet"),
+  POLISHED_BLACKSTONE_BRICKS("minecraft:polished_blackstone_bricks"),
 
-  PURPLE_CONCRETE("minecraft:purple_concrete", "minecraft:purple_concrete"),
+  POLISHED_BLACKSTONE_BUTTON("minecraft:polished_blackstone_button"),
 
-  PURPLE_CONCRETE_POWDER("minecraft:purple_concrete_powder", "minecraft:purple_concrete_powder"),
+  POLISHED_BLACKSTONE_DOUBLE_SLAB("minecraft:polished_blackstone_double_slab"),
 
-  PURPLE_GLAZED_TERRACOTTA("minecraft:purple_glazed_terracotta", "minecraft:purple_glazed_terracotta"),
+  POLISHED_BLACKSTONE_PRESSURE_PLATE("minecraft:polished_blackstone_pressure_plate"),
 
-  PURPLE_SHULKER_BOX("minecraft:purple_shulker_box", "minecraft:purple_shulker_box"),
+  POLISHED_BLACKSTONE_SLAB("minecraft:polished_blackstone_slab"),
 
-  PURPLE_STAINED_GLASS("minecraft:purple_stained_glass", "minecraft:purple_stained_glass"),
+  POLISHED_BLACKSTONE_STAIRS("minecraft:polished_blackstone_stairs"),
 
-  PURPLE_STAINED_GLASS_PANE("minecraft:purple_stained_glass_pane", "minecraft:purple_stained_glass_pane"),
+  POLISHED_BLACKSTONE_WALL("minecraft:polished_blackstone_wall"),
 
-  PURPLE_TERRACOTTA("minecraft:purple_terracotta", "minecraft:purple_terracotta"),
+  POLISHED_DEEPSLATE("minecraft:polished_deepslate"),
 
-  PURPLE_WOOL("minecraft:purple_wool", "minecraft:purple_wool"),
+  POLISHED_DEEPSLATE_DOUBLE_SLAB("minecraft:polished_deepslate_double_slab"),
 
-  PURPUR_BLOCK("minecraft:purpur_block", "minecraft:purpur_block"),
+  POLISHED_DEEPSLATE_SLAB("minecraft:polished_deepslate_slab"),
 
-  PURPUR_STAIRS("minecraft:purpur_stairs", "minecraft:purpur_stairs"),
+  POLISHED_DEEPSLATE_STAIRS("minecraft:polished_deepslate_stairs"),
 
-  QUARTZ_BLOCK("minecraft:quartz_block", "minecraft:quartz_block"),
+  POLISHED_DEEPSLATE_WALL("minecraft:polished_deepslate_wall"),
 
-  QUARTZ_BRICKS("minecraft:quartz_bricks", "minecraft:quartz_bricks"),
+  POLISHED_DIORITE("minecraft:polished_diorite"),
 
-  QUARTZ_ORE("minecraft:quartz_ore", "minecraft:quartz_ore"),
+  POLISHED_DIORITE_STAIRS("minecraft:polished_diorite_stairs"),
 
-  QUARTZ_STAIRS("minecraft:quartz_stairs", "minecraft:quartz_stairs"),
+  POLISHED_GRANITE("minecraft:polished_granite"),
 
-  RAIL("minecraft:rail", "minecraft:rail"),
+  POLISHED_GRANITE_STAIRS("minecraft:polished_granite_stairs"),
 
-  RAW_COPPER_BLOCK("minecraft:raw_copper_block", "minecraft:raw_copper_block"),
+  POLISHED_TUFF("minecraft:polished_tuff"),
 
-  RAW_GOLD_BLOCK("minecraft:raw_gold_block", "minecraft:raw_gold_block"),
+  POLISHED_TUFF_DOUBLE_SLAB("minecraft:polished_tuff_double_slab"),
 
-  RAW_IRON_BLOCK("minecraft:raw_iron_block", "minecraft:raw_iron_block"),
+  POLISHED_TUFF_SLAB("minecraft:polished_tuff_slab"),
 
-  RED_CANDLE("minecraft:red_candle", "minecraft:red_candle"),
+  POLISHED_TUFF_STAIRS("minecraft:polished_tuff_stairs"),
 
-  RED_CANDLE_CAKE("minecraft:red_candle_cake", "minecraft:red_candle_cake"),
+  POLISHED_TUFF_WALL("minecraft:polished_tuff_wall"),
 
-  RED_CARPET("minecraft:red_carpet", "minecraft:red_carpet"),
+  PORTAL("minecraft:portal"),
 
-  RED_CONCRETE("minecraft:red_concrete", "minecraft:red_concrete"),
+  POTATOES("minecraft:potatoes"),
 
-  RED_CONCRETE_POWDER("minecraft:red_concrete_powder", "minecraft:red_concrete_powder"),
+  POWDER_SNOW("minecraft:powder_snow"),
 
-  RED_FLOWER("minecraft:red_flower", "minecraft:red_flower"),
+  POWERED_COMPARATOR("minecraft:powered_comparator"),
 
-  RED_GLAZED_TERRACOTTA("minecraft:red_glazed_terracotta", "minecraft:red_glazed_terracotta"),
+  POWERED_REPEATER("minecraft:powered_repeater"),
 
-  RED_MUSHROOM("minecraft:red_mushroom", "minecraft:red_mushroom"),
+  PRISMARINE("minecraft:prismarine"),
 
-  RED_MUSHROOM_BLOCK("minecraft:red_mushroom_block", "minecraft:red_mushroom_block"),
+  PRISMARINE_BRICKS_STAIRS("minecraft:prismarine_bricks_stairs"),
 
-  RED_NETHER_BRICK("minecraft:red_nether_brick", "minecraft:red_nether_brick"),
+  PRISMARINE_STAIRS("minecraft:prismarine_stairs"),
 
-  RED_NETHER_BRICK_STAIRS("minecraft:red_nether_brick_stairs", "minecraft:red_nether_brick_stairs"),
+  PUMPKIN("minecraft:pumpkin"),
 
-  RED_SANDSTONE("minecraft:red_sandstone", "minecraft:red_sandstone"),
+  PUMPKIN_STEM("minecraft:pumpkin_stem"),
 
-  RED_SANDSTONE_STAIRS("minecraft:red_sandstone_stairs", "minecraft:red_sandstone_stairs"),
+  PURPLE_CANDLE("minecraft:purple_candle"),
 
-  RED_SHULKER_BOX("minecraft:red_shulker_box", "minecraft:red_shulker_box"),
+  PURPLE_CANDLE_CAKE("minecraft:purple_candle_cake"),
 
-  RED_STAINED_GLASS("minecraft:red_stained_glass", "minecraft:red_stained_glass"),
+  PURPLE_CARPET("minecraft:purple_carpet"),
 
-  RED_STAINED_GLASS_PANE("minecraft:red_stained_glass_pane", "minecraft:red_stained_glass_pane"),
+  PURPLE_CONCRETE("minecraft:purple_concrete"),
 
-  RED_TERRACOTTA("minecraft:red_terracotta", "minecraft:red_terracotta"),
+  PURPLE_CONCRETE_POWDER("minecraft:purple_concrete_powder"),
 
-  RED_WOOL("minecraft:red_wool", "minecraft:red_wool"),
+  PURPLE_GLAZED_TERRACOTTA("minecraft:purple_glazed_terracotta"),
 
-  REDSTONE_BLOCK("minecraft:redstone_block", "minecraft:redstone_block"),
+  PURPLE_SHULKER_BOX("minecraft:purple_shulker_box"),
 
-  REDSTONE_LAMP("minecraft:redstone_lamp", "minecraft:redstone_lamp"),
+  PURPLE_STAINED_GLASS("minecraft:purple_stained_glass"),
 
-  REDSTONE_ORE("minecraft:redstone_ore", "minecraft:redstone_ore"),
+  PURPLE_STAINED_GLASS_PANE("minecraft:purple_stained_glass_pane"),
 
-  REDSTONE_TORCH("minecraft:redstone_torch", "minecraft:redstone_torch"),
+  PURPLE_TERRACOTTA("minecraft:purple_terracotta"),
 
-  REDSTONE_WIRE("minecraft:redstone_wire", "minecraft:redstone_wire"),
+  PURPLE_WOOL("minecraft:purple_wool"),
 
-  REEDS("minecraft:reeds", "minecraft:item.reeds"),
+  PURPUR_BLOCK("minecraft:purpur_block"),
 
-  REINFORCED_DEEPSLATE("minecraft:reinforced_deepslate", "minecraft:reinforced_deepslate"),
+  PURPUR_STAIRS("minecraft:purpur_stairs"),
 
-  REPEATING_COMMAND_BLOCK("minecraft:repeating_command_block", "minecraft:repeating_command_block"),
+  QUARTZ_BLOCK("minecraft:quartz_block"),
 
-  RESERVED6("minecraft:reserved6", "minecraft:reserved6"),
+  QUARTZ_BRICKS("minecraft:quartz_bricks"),
 
-  RESPAWN_ANCHOR("minecraft:respawn_anchor", "minecraft:respawn_anchor"),
+  QUARTZ_ORE("minecraft:quartz_ore"),
 
-  SAND("minecraft:sand", "minecraft:sand"),
+  QUARTZ_STAIRS("minecraft:quartz_stairs"),
 
-  SANDSTONE("minecraft:sandstone", "minecraft:sandstone"),
+  RAIL("minecraft:rail"),
 
-  SANDSTONE_STAIRS("minecraft:sandstone_stairs", "minecraft:sandstone_stairs"),
+  RAW_COPPER_BLOCK("minecraft:raw_copper_block"),
 
-  SAPLING("minecraft:sapling", "minecraft:sapling"),
+  RAW_GOLD_BLOCK("minecraft:raw_gold_block"),
 
-  SCAFFOLDING("minecraft:scaffolding", "minecraft:scaffolding"),
+  RAW_IRON_BLOCK("minecraft:raw_iron_block"),
 
-  SCULK("minecraft:sculk", "minecraft:sculk"),
+  RED_CANDLE("minecraft:red_candle"),
 
-  SCULK_CATALYST("minecraft:sculk_catalyst", "minecraft:sculk_catalyst"),
+  RED_CANDLE_CAKE("minecraft:red_candle_cake"),
 
-  SCULK_SENSOR("minecraft:sculk_sensor", "minecraft:sculk_sensor"),
+  RED_CARPET("minecraft:red_carpet"),
 
-  SCULK_SHRIEKER("minecraft:sculk_shrieker", "minecraft:sculk_shrieker"),
+  RED_CONCRETE("minecraft:red_concrete"),
 
-  SCULK_VEIN("minecraft:sculk_vein", "minecraft:sculk_vein"),
+  RED_CONCRETE_POWDER("minecraft:red_concrete_powder"),
 
-  SEA_LANTERN("minecraft:sea_lantern", "minecraft:sea_lantern"),
+  RED_FLOWER("minecraft:red_flower"),
 
-  SEA_PICKLE("minecraft:sea_pickle", "minecraft:sea_pickle"),
+  RED_GLAZED_TERRACOTTA("minecraft:red_glazed_terracotta"),
 
-  SEAGRASS("minecraft:seagrass", "minecraft:seagrass"),
+  RED_MUSHROOM("minecraft:red_mushroom"),
 
-  SHROOMLIGHT("minecraft:shroomlight", "minecraft:shroomlight"),
+  RED_MUSHROOM_BLOCK("minecraft:red_mushroom_block"),
 
-  SILVER_GLAZED_TERRACOTTA("minecraft:silver_glazed_terracotta", "minecraft:silver_glazed_terracotta"),
+  RED_NETHER_BRICK("minecraft:red_nether_brick"),
 
-  SKULL("minecraft:skull", "minecraft:item.skull"),
+  RED_NETHER_BRICK_STAIRS("minecraft:red_nether_brick_stairs"),
 
-  SLIME("minecraft:slime", "minecraft:slime"),
+  RED_SANDSTONE("minecraft:red_sandstone"),
 
-  SMALL_AMETHYST_BUD("minecraft:small_amethyst_bud", "minecraft:small_amethyst_bud"),
+  RED_SANDSTONE_STAIRS("minecraft:red_sandstone_stairs"),
 
-  SMALL_DRIPLEAF_BLOCK("minecraft:small_dripleaf_block", "minecraft:small_dripleaf_block"),
+  RED_SHULKER_BOX("minecraft:red_shulker_box"),
 
-  SMITHING_TABLE("minecraft:smithing_table", "minecraft:smithing_table"),
+  RED_STAINED_GLASS("minecraft:red_stained_glass"),
 
-  SMOKER("minecraft:smoker", "minecraft:smoker"),
+  RED_STAINED_GLASS_PANE("minecraft:red_stained_glass_pane"),
 
-  SMOOTH_BASALT("minecraft:smooth_basalt", "minecraft:smooth_basalt"),
+  RED_TERRACOTTA("minecraft:red_terracotta"),
 
-  SMOOTH_QUARTZ_STAIRS("minecraft:smooth_quartz_stairs", "minecraft:smooth_quartz_stairs"),
+  RED_WOOL("minecraft:red_wool"),
 
-  SMOOTH_RED_SANDSTONE_STAIRS("minecraft:smooth_red_sandstone_stairs", "minecraft:smooth_red_sandstone_stairs"),
+  REDSTONE_BLOCK("minecraft:redstone_block"),
 
-  SMOOTH_SANDSTONE_STAIRS("minecraft:smooth_sandstone_stairs", "minecraft:smooth_sandstone_stairs"),
+  REDSTONE_LAMP("minecraft:redstone_lamp"),
 
-  SMOOTH_STONE("minecraft:smooth_stone", "minecraft:smooth_stone"),
+  REDSTONE_ORE("minecraft:redstone_ore"),
 
-  SNIFFER_EGG("minecraft:sniffer_egg", "minecraft:sniffer_egg"),
+  REDSTONE_TORCH("minecraft:redstone_torch"),
 
-  SNOW("minecraft:snow", "minecraft:snow"),
+  REDSTONE_WIRE("minecraft:redstone_wire"),
 
-  SNOW_LAYER("minecraft:snow_layer", "minecraft:snow_layer"),
+  REEDS("minecraft:reeds"),
 
-  SOUL_CAMPFIRE("minecraft:soul_campfire", "minecraft:item.soul_campfire"),
+  REINFORCED_DEEPSLATE("minecraft:reinforced_deepslate"),
 
-  SOUL_FIRE("minecraft:soul_fire", "minecraft:soul_fire"),
+  REPEATING_COMMAND_BLOCK("minecraft:repeating_command_block"),
 
-  SOUL_LANTERN("minecraft:soul_lantern", "minecraft:soul_lantern"),
+  RESERVED6("minecraft:reserved6"),
 
-  SOUL_SAND("minecraft:soul_sand", "minecraft:soul_sand"),
+  RESPAWN_ANCHOR("minecraft:respawn_anchor"),
 
-  SOUL_SOIL("minecraft:soul_soil", "minecraft:soul_soil"),
+  SAND("minecraft:sand"),
 
-  SOUL_TORCH("minecraft:soul_torch", "minecraft:soul_torch"),
+  SANDSTONE("minecraft:sandstone"),
 
-  SPONGE("minecraft:sponge", "minecraft:sponge"),
+  SANDSTONE_STAIRS("minecraft:sandstone_stairs"),
 
-  SPORE_BLOSSOM("minecraft:spore_blossom", "minecraft:spore_blossom"),
+  SAPLING("minecraft:sapling"),
 
-  SPRUCE_BUTTON("minecraft:spruce_button", "minecraft:spruce_button"),
+  SCAFFOLDING("minecraft:scaffolding"),
 
-  SPRUCE_DOOR("minecraft:spruce_door", "minecraft:item.spruce_door"),
+  SCULK("minecraft:sculk"),
 
-  SPRUCE_FENCE("minecraft:spruce_fence", "minecraft:spruce_fence"),
+  SCULK_CATALYST("minecraft:sculk_catalyst"),
 
-  SPRUCE_FENCE_GATE("minecraft:spruce_fence_gate", "minecraft:spruce_fence_gate"),
+  SCULK_SENSOR("minecraft:sculk_sensor"),
 
-  SPRUCE_HANGING_SIGN("minecraft:spruce_hanging_sign", "minecraft:spruce_hanging_sign"),
+  SCULK_SHRIEKER("minecraft:sculk_shrieker"),
 
-  SPRUCE_LOG("minecraft:spruce_log", "minecraft:spruce_log"),
+  SCULK_VEIN("minecraft:sculk_vein"),
 
-  SPRUCE_PRESSURE_PLATE("minecraft:spruce_pressure_plate", "minecraft:spruce_pressure_plate"),
+  SEA_LANTERN("minecraft:sea_lantern"),
 
-  SPRUCE_STAIRS("minecraft:spruce_stairs", "minecraft:spruce_stairs"),
+  SEA_PICKLE("minecraft:sea_pickle"),
 
-  SPRUCE_STANDING_SIGN("minecraft:spruce_standing_sign", "minecraft:spruce_standing_sign"),
+  SEAGRASS("minecraft:seagrass"),
 
-  SPRUCE_TRAPDOOR("minecraft:spruce_trapdoor", "minecraft:spruce_trapdoor"),
+  SHROOMLIGHT("minecraft:shroomlight"),
 
-  SPRUCE_WALL_SIGN("minecraft:spruce_wall_sign", "minecraft:spruce_wall_sign"),
+  SILVER_GLAZED_TERRACOTTA("minecraft:silver_glazed_terracotta"),
 
-  STANDING_BANNER("minecraft:standing_banner", "minecraft:standing_banner"),
+  SKULL("minecraft:skull"),
 
-  STANDING_SIGN("minecraft:standing_sign", "minecraft:standing_sign"),
+  SLIME("minecraft:slime"),
 
-  STICKY_PISTON("minecraft:sticky_piston", "minecraft:sticky_piston"),
+  SMALL_AMETHYST_BUD("minecraft:small_amethyst_bud"),
 
-  STICKY_PISTON_ARM_COLLISION("minecraft:sticky_piston_arm_collision", "minecraft:sticky_piston_arm_collision"),
+  SMALL_DRIPLEAF_BLOCK("minecraft:small_dripleaf_block"),
 
-  STONE("minecraft:stone", "minecraft:stone"),
+  SMITHING_TABLE("minecraft:smithing_table"),
 
-  STONE_BLOCK_SLAB("minecraft:stone_block_slab", "minecraft:stone_block_slab"),
+  SMOKER("minecraft:smoker"),
 
-  STONE_BLOCK_SLAB2("minecraft:stone_block_slab2", "minecraft:stone_block_slab2"),
+  SMOOTH_BASALT("minecraft:smooth_basalt"),
 
-  STONE_BLOCK_SLAB3("minecraft:stone_block_slab3", "minecraft:stone_block_slab3"),
+  SMOOTH_QUARTZ_STAIRS("minecraft:smooth_quartz_stairs"),
 
-  STONE_BLOCK_SLAB4("minecraft:stone_block_slab4", "minecraft:stone_block_slab4"),
+  SMOOTH_RED_SANDSTONE_STAIRS("minecraft:smooth_red_sandstone_stairs"),
 
-  STONE_BRICK_STAIRS("minecraft:stone_brick_stairs", "minecraft:stone_brick_stairs"),
+  SMOOTH_SANDSTONE_STAIRS("minecraft:smooth_sandstone_stairs"),
 
-  STONE_BUTTON("minecraft:stone_button", "minecraft:stone_button"),
+  SMOOTH_STONE("minecraft:smooth_stone"),
 
-  STONE_PRESSURE_PLATE("minecraft:stone_pressure_plate", "minecraft:stone_pressure_plate"),
+  SNIFFER_EGG("minecraft:sniffer_egg"),
 
-  STONE_STAIRS("minecraft:stone_stairs", "minecraft:stone_stairs"),
+  SNOW("minecraft:snow"),
 
-  STONEBRICK("minecraft:stonebrick", "minecraft:stonebrick"),
+  SNOW_LAYER("minecraft:snow_layer"),
 
-  STONECUTTER("minecraft:stonecutter", "minecraft:stonecutter"),
+  SOUL_CAMPFIRE("minecraft:soul_campfire"),
 
-  STONECUTTER_BLOCK("minecraft:stonecutter_block", "minecraft:stonecutter_block"),
+  SOUL_FIRE("minecraft:soul_fire"),
 
-  STRIPPED_ACACIA_LOG("minecraft:stripped_acacia_log", "minecraft:stripped_acacia_log"),
+  SOUL_LANTERN("minecraft:soul_lantern"),
 
-  STRIPPED_BAMBOO_BLOCK("minecraft:stripped_bamboo_block", "minecraft:stripped_bamboo_block"),
+  SOUL_SAND("minecraft:soul_sand"),
 
-  STRIPPED_BIRCH_LOG("minecraft:stripped_birch_log", "minecraft:stripped_birch_log"),
+  SOUL_SOIL("minecraft:soul_soil"),
 
-  STRIPPED_CHERRY_LOG("minecraft:stripped_cherry_log", "minecraft:stripped_cherry_log"),
+  SOUL_TORCH("minecraft:soul_torch"),
 
-  STRIPPED_CHERRY_WOOD("minecraft:stripped_cherry_wood", "minecraft:stripped_cherry_wood"),
+  SPONGE("minecraft:sponge"),
 
-  STRIPPED_CRIMSON_HYPHAE("minecraft:stripped_crimson_hyphae", "minecraft:stripped_crimson_hyphae"),
+  SPORE_BLOSSOM("minecraft:spore_blossom"),
 
-  STRIPPED_CRIMSON_STEM("minecraft:stripped_crimson_stem", "minecraft:stripped_crimson_stem"),
+  SPRUCE_BUTTON("minecraft:spruce_button"),
 
-  STRIPPED_DARK_OAK_LOG("minecraft:stripped_dark_oak_log", "minecraft:stripped_dark_oak_log"),
+  SPRUCE_DOOR("minecraft:spruce_door"),
 
-  STRIPPED_JUNGLE_LOG("minecraft:stripped_jungle_log", "minecraft:stripped_jungle_log"),
+  SPRUCE_FENCE("minecraft:spruce_fence"),
 
-  STRIPPED_MANGROVE_LOG("minecraft:stripped_mangrove_log", "minecraft:stripped_mangrove_log"),
+  SPRUCE_FENCE_GATE("minecraft:spruce_fence_gate"),
 
-  STRIPPED_MANGROVE_WOOD("minecraft:stripped_mangrove_wood", "minecraft:stripped_mangrove_wood"),
+  SPRUCE_HANGING_SIGN("minecraft:spruce_hanging_sign"),
 
-  STRIPPED_OAK_LOG("minecraft:stripped_oak_log", "minecraft:stripped_oak_log"),
+  SPRUCE_LOG("minecraft:spruce_log"),
 
-  STRIPPED_SPRUCE_LOG("minecraft:stripped_spruce_log", "minecraft:stripped_spruce_log"),
+  SPRUCE_PLANKS("minecraft:spruce_planks"),
 
-  STRIPPED_WARPED_HYPHAE("minecraft:stripped_warped_hyphae", "minecraft:stripped_warped_hyphae"),
+  SPRUCE_PRESSURE_PLATE("minecraft:spruce_pressure_plate"),
 
-  STRIPPED_WARPED_STEM("minecraft:stripped_warped_stem", "minecraft:stripped_warped_stem"),
+  SPRUCE_STAIRS("minecraft:spruce_stairs"),
 
-  STRUCTURE_BLOCK("minecraft:structure_block", "minecraft:structure_block"),
+  SPRUCE_STANDING_SIGN("minecraft:spruce_standing_sign"),
 
-  STRUCTURE_VOID("minecraft:structure_void", "minecraft:structure_void"),
+  SPRUCE_TRAPDOOR("minecraft:spruce_trapdoor"),
 
-  SUSPICIOUS_GRAVEL("minecraft:suspicious_gravel", "minecraft:suspicious_gravel"),
+  SPRUCE_WALL_SIGN("minecraft:spruce_wall_sign"),
 
-  SUSPICIOUS_SAND("minecraft:suspicious_sand", "minecraft:suspicious_sand"),
+  STANDING_BANNER("minecraft:standing_banner"),
 
-  SWEET_BERRY_BUSH("minecraft:sweet_berry_bush", "minecraft:sweet_berry_bush"),
+  STANDING_SIGN("minecraft:standing_sign"),
 
-  TALLGRASS("minecraft:tallgrass", "minecraft:tallgrass"),
+  STICKY_PISTON("minecraft:sticky_piston"),
 
-  TARGET("minecraft:target", "minecraft:target"),
+  STICKY_PISTON_ARM_COLLISION("minecraft:sticky_piston_arm_collision"),
 
-  TINTED_GLASS("minecraft:tinted_glass", "minecraft:tinted_glass"),
+  STONE("minecraft:stone"),
 
-  TNT("minecraft:tnt", "minecraft:tnt"),
+  STONE_BLOCK_SLAB("minecraft:stone_block_slab"),
 
-  TORCH("minecraft:torch", "minecraft:torch"),
+  STONE_BLOCK_SLAB2("minecraft:stone_block_slab2"),
 
-  TORCHFLOWER("minecraft:torchflower", "minecraft:torchflower"),
+  STONE_BLOCK_SLAB3("minecraft:stone_block_slab3"),
 
-  TORCHFLOWER_CROP("minecraft:torchflower_crop", "minecraft:torchflower_crop"),
+  STONE_BLOCK_SLAB4("minecraft:stone_block_slab4"),
 
-  TRAPDOOR("minecraft:trapdoor", "minecraft:trapdoor"),
+  STONE_BRICK_STAIRS("minecraft:stone_brick_stairs"),
 
-  TRAPPED_CHEST("minecraft:trapped_chest", "minecraft:trapped_chest"),
+  STONE_BUTTON("minecraft:stone_button"),
 
-  TRIP_WIRE("minecraft:trip_wire", "minecraft:trip_wire"),
+  STONE_PRESSURE_PLATE("minecraft:stone_pressure_plate"),
 
-  TRIPWIRE_HOOK("minecraft:tripwire_hook", "minecraft:tripwire_hook"),
+  STONE_STAIRS("minecraft:stone_stairs"),
 
-  TUBE_CORAL("minecraft:tube_coral", "minecraft:tube_coral"),
+  STONEBRICK("minecraft:stonebrick"),
 
-  TUFF("minecraft:tuff", "minecraft:tuff"),
+  STONECUTTER("minecraft:stonecutter"),
 
-  TURTLE_EGG("minecraft:turtle_egg", "minecraft:turtle_egg"),
+  STONECUTTER_BLOCK("minecraft:stonecutter_block"),
 
-  TWISTING_VINES("minecraft:twisting_vines", "minecraft:twisting_vines"),
+  STRIPPED_ACACIA_LOG("minecraft:stripped_acacia_log"),
 
-  UNDERWATER_TORCH("minecraft:underwater_torch", "minecraft:underwater_torch"),
+  STRIPPED_BAMBOO_BLOCK("minecraft:stripped_bamboo_block"),
 
-  UNDYED_SHULKER_BOX("minecraft:undyed_shulker_box", "minecraft:undyed_shulker_box"),
+  STRIPPED_BIRCH_LOG("minecraft:stripped_birch_log"),
 
-  UNKNOWN("minecraft:unknown", "minecraft:unknown"),
+  STRIPPED_CHERRY_LOG("minecraft:stripped_cherry_log"),
 
-  UNLIT_REDSTONE_TORCH("minecraft:unlit_redstone_torch", "minecraft:unlit_redstone_torch"),
+  STRIPPED_CHERRY_WOOD("minecraft:stripped_cherry_wood"),
 
-  UNPOWERED_COMPARATOR("minecraft:unpowered_comparator", "minecraft:unpowered_comparator"),
+  STRIPPED_CRIMSON_HYPHAE("minecraft:stripped_crimson_hyphae"),
 
-  UNPOWERED_REPEATER("minecraft:unpowered_repeater", "minecraft:unpowered_repeater"),
+  STRIPPED_CRIMSON_STEM("minecraft:stripped_crimson_stem"),
 
-  VERDANT_FROGLIGHT("minecraft:verdant_froglight", "minecraft:verdant_froglight"),
+  STRIPPED_DARK_OAK_LOG("minecraft:stripped_dark_oak_log"),
 
-  VINE("minecraft:vine", "minecraft:vine"),
+  STRIPPED_JUNGLE_LOG("minecraft:stripped_jungle_log"),
 
-  WALL_BANNER("minecraft:wall_banner", "minecraft:wall_banner"),
+  STRIPPED_MANGROVE_LOG("minecraft:stripped_mangrove_log"),
 
-  WALL_SIGN("minecraft:wall_sign", "minecraft:wall_sign"),
+  STRIPPED_MANGROVE_WOOD("minecraft:stripped_mangrove_wood"),
 
-  WARPED_BUTTON("minecraft:warped_button", "minecraft:warped_button"),
+  STRIPPED_OAK_LOG("minecraft:stripped_oak_log"),
 
-  WARPED_DOOR("minecraft:warped_door", "minecraft:item.warped_door"),
+  STRIPPED_SPRUCE_LOG("minecraft:stripped_spruce_log"),
 
-  WARPED_DOUBLE_SLAB("minecraft:warped_double_slab", "minecraft:warped_double_slab"),
+  STRIPPED_WARPED_HYPHAE("minecraft:stripped_warped_hyphae"),
 
-  WARPED_FENCE("minecraft:warped_fence", "minecraft:warped_fence"),
+  STRIPPED_WARPED_STEM("minecraft:stripped_warped_stem"),
 
-  WARPED_FENCE_GATE("minecraft:warped_fence_gate", "minecraft:warped_fence_gate"),
+  STRUCTURE_BLOCK("minecraft:structure_block"),
 
-  WARPED_FUNGUS("minecraft:warped_fungus", "minecraft:warped_fungus"),
+  STRUCTURE_VOID("minecraft:structure_void"),
 
-  WARPED_HANGING_SIGN("minecraft:warped_hanging_sign", "minecraft:warped_hanging_sign"),
+  SUSPICIOUS_GRAVEL("minecraft:suspicious_gravel"),
 
-  WARPED_HYPHAE("minecraft:warped_hyphae", "minecraft:warped_hyphae"),
+  SUSPICIOUS_SAND("minecraft:suspicious_sand"),
 
-  WARPED_NYLIUM("minecraft:warped_nylium", "minecraft:warped_nylium"),
+  SWEET_BERRY_BUSH("minecraft:sweet_berry_bush"),
 
-  WARPED_PLANKS("minecraft:warped_planks", "minecraft:warped_planks"),
+  TALLGRASS("minecraft:tallgrass"),
 
-  WARPED_PRESSURE_PLATE("minecraft:warped_pressure_plate", "minecraft:warped_pressure_plate"),
+  TARGET("minecraft:target"),
 
-  WARPED_ROOTS("minecraft:warped_roots", "minecraft:warped_roots"),
+  TINTED_GLASS("minecraft:tinted_glass"),
 
-  WARPED_SLAB("minecraft:warped_slab", "minecraft:warped_slab"),
+  TNT("minecraft:tnt"),
 
-  WARPED_STAIRS("minecraft:warped_stairs", "minecraft:warped_stairs"),
+  TORCH("minecraft:torch"),
 
-  WARPED_STANDING_SIGN("minecraft:warped_standing_sign", "minecraft:warped_standing_sign"),
+  TORCHFLOWER("minecraft:torchflower"),
 
-  WARPED_STEM("minecraft:warped_stem", "minecraft:warped_stem"),
+  TORCHFLOWER_CROP("minecraft:torchflower_crop"),
 
-  WARPED_TRAPDOOR("minecraft:warped_trapdoor", "minecraft:warped_trapdoor"),
+  TRAPDOOR("minecraft:trapdoor"),
 
-  WARPED_WALL_SIGN("minecraft:warped_wall_sign", "minecraft:warped_wall_sign"),
+  TRAPPED_CHEST("minecraft:trapped_chest"),
 
-  WARPED_WART_BLOCK("minecraft:warped_wart_block", "minecraft:warped_wart_block"),
+  TRIP_WIRE("minecraft:trip_wire"),
 
-  WATER("minecraft:water", "minecraft:water"),
+  TRIPWIRE_HOOK("minecraft:tripwire_hook"),
 
-  WATERLILY("minecraft:waterlily", "minecraft:waterlily"),
+  TUBE_CORAL("minecraft:tube_coral"),
 
-  WAXED_COPPER("minecraft:waxed_copper", "minecraft:waxed_copper"),
+  TUFF("minecraft:tuff"),
 
-  WAXED_CUT_COPPER("minecraft:waxed_cut_copper", "minecraft:waxed_cut_copper"),
+  TUFF_BRICK_DOUBLE_SLAB("minecraft:tuff_brick_double_slab"),
 
-  WAXED_CUT_COPPER_SLAB("minecraft:waxed_cut_copper_slab", "minecraft:waxed_cut_copper_slab"),
+  TUFF_BRICK_SLAB("minecraft:tuff_brick_slab"),
 
-  WAXED_CUT_COPPER_STAIRS("minecraft:waxed_cut_copper_stairs", "minecraft:waxed_cut_copper_stairs"),
+  TUFF_BRICK_STAIRS("minecraft:tuff_brick_stairs"),
 
-  WAXED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_double_cut_copper_slab", "minecraft:waxed_double_cut_copper_slab"),
+  TUFF_BRICK_WALL("minecraft:tuff_brick_wall"),
 
-  WAXED_EXPOSED_COPPER("minecraft:waxed_exposed_copper", "minecraft:waxed_exposed_copper"),
+  TUFF_BRICKS("minecraft:tuff_bricks"),
 
-  WAXED_EXPOSED_CUT_COPPER("minecraft:waxed_exposed_cut_copper", "minecraft:waxed_exposed_cut_copper"),
+  TUFF_DOUBLE_SLAB("minecraft:tuff_double_slab"),
 
-  WAXED_EXPOSED_CUT_COPPER_SLAB("minecraft:waxed_exposed_cut_copper_slab", "minecraft:waxed_exposed_cut_copper_slab"),
+  TUFF_SLAB("minecraft:tuff_slab"),
 
-  WAXED_EXPOSED_CUT_COPPER_STAIRS("minecraft:waxed_exposed_cut_copper_stairs", "minecraft:waxed_exposed_cut_copper_stairs"),
+  TUFF_STAIRS("minecraft:tuff_stairs"),
 
-  WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_exposed_double_cut_copper_slab", "minecraft:waxed_exposed_double_cut_copper_slab"),
+  TUFF_WALL("minecraft:tuff_wall"),
 
-  WAXED_OXIDIZED_COPPER("minecraft:waxed_oxidized_copper", "minecraft:waxed_oxidized_copper"),
+  TURTLE_EGG("minecraft:turtle_egg"),
 
-  WAXED_OXIDIZED_CUT_COPPER("minecraft:waxed_oxidized_cut_copper", "minecraft:waxed_oxidized_cut_copper"),
+  TWISTING_VINES("minecraft:twisting_vines"),
 
-  WAXED_OXIDIZED_CUT_COPPER_SLAB("minecraft:waxed_oxidized_cut_copper_slab", "minecraft:waxed_oxidized_cut_copper_slab"),
+  UNDERWATER_TORCH("minecraft:underwater_torch"),
 
-  WAXED_OXIDIZED_CUT_COPPER_STAIRS("minecraft:waxed_oxidized_cut_copper_stairs", "minecraft:waxed_oxidized_cut_copper_stairs"),
+  UNDYED_SHULKER_BOX("minecraft:undyed_shulker_box"),
 
-  WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_oxidized_double_cut_copper_slab", "minecraft:waxed_oxidized_double_cut_copper_slab"),
+  UNKNOWN("minecraft:unknown"),
 
-  WAXED_WEATHERED_COPPER("minecraft:waxed_weathered_copper", "minecraft:waxed_weathered_copper"),
+  UNLIT_REDSTONE_TORCH("minecraft:unlit_redstone_torch"),
 
-  WAXED_WEATHERED_CUT_COPPER("minecraft:waxed_weathered_cut_copper", "minecraft:waxed_weathered_cut_copper"),
+  UNPOWERED_COMPARATOR("minecraft:unpowered_comparator"),
 
-  WAXED_WEATHERED_CUT_COPPER_SLAB("minecraft:waxed_weathered_cut_copper_slab", "minecraft:waxed_weathered_cut_copper_slab"),
+  UNPOWERED_REPEATER("minecraft:unpowered_repeater"),
 
-  WAXED_WEATHERED_CUT_COPPER_STAIRS("minecraft:waxed_weathered_cut_copper_stairs", "minecraft:waxed_weathered_cut_copper_stairs"),
+  VERDANT_FROGLIGHT("minecraft:verdant_froglight"),
 
-  WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_weathered_double_cut_copper_slab", "minecraft:waxed_weathered_double_cut_copper_slab"),
+  VINE("minecraft:vine"),
 
-  WEATHERED_COPPER("minecraft:weathered_copper", "minecraft:weathered_copper"),
+  WALL_BANNER("minecraft:wall_banner"),
 
-  WEATHERED_CUT_COPPER("minecraft:weathered_cut_copper", "minecraft:weathered_cut_copper"),
+  WALL_SIGN("minecraft:wall_sign"),
 
-  WEATHERED_CUT_COPPER_SLAB("minecraft:weathered_cut_copper_slab", "minecraft:weathered_cut_copper_slab"),
+  WARPED_BUTTON("minecraft:warped_button"),
 
-  WEATHERED_CUT_COPPER_STAIRS("minecraft:weathered_cut_copper_stairs", "minecraft:weathered_cut_copper_stairs"),
+  WARPED_DOOR("minecraft:warped_door"),
 
-  WEATHERED_DOUBLE_CUT_COPPER_SLAB("minecraft:weathered_double_cut_copper_slab", "minecraft:weathered_double_cut_copper_slab"),
+  WARPED_DOUBLE_SLAB("minecraft:warped_double_slab"),
 
-  WEB("minecraft:web", "minecraft:web"),
+  WARPED_FENCE("minecraft:warped_fence"),
 
-  WEEPING_VINES("minecraft:weeping_vines", "minecraft:weeping_vines"),
+  WARPED_FENCE_GATE("minecraft:warped_fence_gate"),
 
-  WHEAT("minecraft:wheat", "minecraft:item.wheat"),
+  WARPED_FUNGUS("minecraft:warped_fungus"),
 
-  WHITE_CANDLE("minecraft:white_candle", "minecraft:white_candle"),
+  WARPED_HANGING_SIGN("minecraft:warped_hanging_sign"),
 
-  WHITE_CANDLE_CAKE("minecraft:white_candle_cake", "minecraft:white_candle_cake"),
+  WARPED_HYPHAE("minecraft:warped_hyphae"),
 
-  WHITE_CARPET("minecraft:white_carpet", "minecraft:white_carpet"),
+  WARPED_NYLIUM("minecraft:warped_nylium"),
 
-  WHITE_CONCRETE("minecraft:white_concrete", "minecraft:white_concrete"),
+  WARPED_PLANKS("minecraft:warped_planks"),
 
-  WHITE_CONCRETE_POWDER("minecraft:white_concrete_powder", "minecraft:white_concrete_powder"),
+  WARPED_PRESSURE_PLATE("minecraft:warped_pressure_plate"),
 
-  WHITE_GLAZED_TERRACOTTA("minecraft:white_glazed_terracotta", "minecraft:white_glazed_terracotta"),
+  WARPED_ROOTS("minecraft:warped_roots"),
 
-  WHITE_SHULKER_BOX("minecraft:white_shulker_box", "minecraft:white_shulker_box"),
+  WARPED_SLAB("minecraft:warped_slab"),
 
-  WHITE_STAINED_GLASS("minecraft:white_stained_glass", "minecraft:white_stained_glass"),
+  WARPED_STAIRS("minecraft:warped_stairs"),
 
-  WHITE_STAINED_GLASS_PANE("minecraft:white_stained_glass_pane", "minecraft:white_stained_glass_pane"),
+  WARPED_STANDING_SIGN("minecraft:warped_standing_sign"),
 
-  WHITE_TERRACOTTA("minecraft:white_terracotta", "minecraft:white_terracotta"),
+  WARPED_STEM("minecraft:warped_stem"),
 
-  WHITE_WOOL("minecraft:white_wool", "minecraft:white_wool"),
+  WARPED_TRAPDOOR("minecraft:warped_trapdoor"),
 
-  WITHER_ROSE("minecraft:wither_rose", "minecraft:wither_rose"),
+  WARPED_WALL_SIGN("minecraft:warped_wall_sign"),
 
-  WOOD("minecraft:wood", "minecraft:wood"),
+  WARPED_WART_BLOCK("minecraft:warped_wart_block"),
 
-  WOODEN_BUTTON("minecraft:wooden_button", "minecraft:wooden_button"),
+  WATER("minecraft:water"),
 
-  WOODEN_DOOR("minecraft:wooden_door", "minecraft:item.wooden_door"),
+  WATERLILY("minecraft:waterlily"),
 
-  WOODEN_PRESSURE_PLATE("minecraft:wooden_pressure_plate", "minecraft:wooden_pressure_plate"),
+  WAXED_CHISELED_COPPER("minecraft:waxed_chiseled_copper"),
 
-  WOODEN_SLAB("minecraft:wooden_slab", "minecraft:wooden_slab"),
+  WAXED_COPPER("minecraft:waxed_copper"),
 
-  YELLOW_CANDLE("minecraft:yellow_candle", "minecraft:yellow_candle"),
+  WAXED_COPPER_BULB("minecraft:waxed_copper_bulb"),
 
-  YELLOW_CANDLE_CAKE("minecraft:yellow_candle_cake", "minecraft:yellow_candle_cake"),
+  WAXED_COPPER_DOOR("minecraft:waxed_copper_door"),
 
-  YELLOW_CARPET("minecraft:yellow_carpet", "minecraft:yellow_carpet"),
+  WAXED_COPPER_GRATE("minecraft:waxed_copper_grate"),
 
-  YELLOW_CONCRETE("minecraft:yellow_concrete", "minecraft:yellow_concrete"),
+  WAXED_COPPER_TRAPDOOR("minecraft:waxed_copper_trapdoor"),
 
-  YELLOW_CONCRETE_POWDER("minecraft:yellow_concrete_powder", "minecraft:yellow_concrete_powder"),
+  WAXED_CUT_COPPER("minecraft:waxed_cut_copper"),
 
-  YELLOW_FLOWER("minecraft:yellow_flower", "minecraft:yellow_flower"),
+  WAXED_CUT_COPPER_SLAB("minecraft:waxed_cut_copper_slab"),
 
-  YELLOW_GLAZED_TERRACOTTA("minecraft:yellow_glazed_terracotta", "minecraft:yellow_glazed_terracotta"),
+  WAXED_CUT_COPPER_STAIRS("minecraft:waxed_cut_copper_stairs"),
 
-  YELLOW_SHULKER_BOX("minecraft:yellow_shulker_box", "minecraft:yellow_shulker_box"),
+  WAXED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_double_cut_copper_slab"),
 
-  YELLOW_STAINED_GLASS("minecraft:yellow_stained_glass", "minecraft:yellow_stained_glass"),
+  WAXED_EXPOSED_CHISELED_COPPER("minecraft:waxed_exposed_chiseled_copper"),
 
-  YELLOW_STAINED_GLASS_PANE("minecraft:yellow_stained_glass_pane", "minecraft:yellow_stained_glass_pane"),
+  WAXED_EXPOSED_COPPER("minecraft:waxed_exposed_copper"),
 
-  YELLOW_TERRACOTTA("minecraft:yellow_terracotta", "minecraft:yellow_terracotta"),
+  WAXED_EXPOSED_COPPER_BULB("minecraft:waxed_exposed_copper_bulb"),
 
-  YELLOW_WOOL("minecraft:yellow_wool", "minecraft:yellow_wool");
+  WAXED_EXPOSED_COPPER_DOOR("minecraft:waxed_exposed_copper_door"),
+
+  WAXED_EXPOSED_COPPER_GRATE("minecraft:waxed_exposed_copper_grate"),
+
+  WAXED_EXPOSED_COPPER_TRAPDOOR("minecraft:waxed_exposed_copper_trapdoor"),
+
+  WAXED_EXPOSED_CUT_COPPER("minecraft:waxed_exposed_cut_copper"),
+
+  WAXED_EXPOSED_CUT_COPPER_SLAB("minecraft:waxed_exposed_cut_copper_slab"),
+
+  WAXED_EXPOSED_CUT_COPPER_STAIRS("minecraft:waxed_exposed_cut_copper_stairs"),
+
+  WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_exposed_double_cut_copper_slab"),
+
+  WAXED_OXIDIZED_CHISELED_COPPER("minecraft:waxed_oxidized_chiseled_copper"),
+
+  WAXED_OXIDIZED_COPPER("minecraft:waxed_oxidized_copper"),
+
+  WAXED_OXIDIZED_COPPER_BULB("minecraft:waxed_oxidized_copper_bulb"),
+
+  WAXED_OXIDIZED_COPPER_DOOR("minecraft:waxed_oxidized_copper_door"),
+
+  WAXED_OXIDIZED_COPPER_GRATE("minecraft:waxed_oxidized_copper_grate"),
+
+  WAXED_OXIDIZED_COPPER_TRAPDOOR("minecraft:waxed_oxidized_copper_trapdoor"),
+
+  WAXED_OXIDIZED_CUT_COPPER("minecraft:waxed_oxidized_cut_copper"),
+
+  WAXED_OXIDIZED_CUT_COPPER_SLAB("minecraft:waxed_oxidized_cut_copper_slab"),
+
+  WAXED_OXIDIZED_CUT_COPPER_STAIRS("minecraft:waxed_oxidized_cut_copper_stairs"),
+
+  WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_oxidized_double_cut_copper_slab"),
+
+  WAXED_WEATHERED_CHISELED_COPPER("minecraft:waxed_weathered_chiseled_copper"),
+
+  WAXED_WEATHERED_COPPER("minecraft:waxed_weathered_copper"),
+
+  WAXED_WEATHERED_COPPER_BULB("minecraft:waxed_weathered_copper_bulb"),
+
+  WAXED_WEATHERED_COPPER_DOOR("minecraft:waxed_weathered_copper_door"),
+
+  WAXED_WEATHERED_COPPER_GRATE("minecraft:waxed_weathered_copper_grate"),
+
+  WAXED_WEATHERED_COPPER_TRAPDOOR("minecraft:waxed_weathered_copper_trapdoor"),
+
+  WAXED_WEATHERED_CUT_COPPER("minecraft:waxed_weathered_cut_copper"),
+
+  WAXED_WEATHERED_CUT_COPPER_SLAB("minecraft:waxed_weathered_cut_copper_slab"),
+
+  WAXED_WEATHERED_CUT_COPPER_STAIRS("minecraft:waxed_weathered_cut_copper_stairs"),
+
+  WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_weathered_double_cut_copper_slab"),
+
+  WEATHERED_CHISELED_COPPER("minecraft:weathered_chiseled_copper"),
+
+  WEATHERED_COPPER("minecraft:weathered_copper"),
+
+  WEATHERED_COPPER_BULB("minecraft:weathered_copper_bulb"),
+
+  WEATHERED_COPPER_DOOR("minecraft:weathered_copper_door"),
+
+  WEATHERED_COPPER_GRATE("minecraft:weathered_copper_grate"),
+
+  WEATHERED_COPPER_TRAPDOOR("minecraft:weathered_copper_trapdoor"),
+
+  WEATHERED_CUT_COPPER("minecraft:weathered_cut_copper"),
+
+  WEATHERED_CUT_COPPER_SLAB("minecraft:weathered_cut_copper_slab"),
+
+  WEATHERED_CUT_COPPER_STAIRS("minecraft:weathered_cut_copper_stairs"),
+
+  WEATHERED_DOUBLE_CUT_COPPER_SLAB("minecraft:weathered_double_cut_copper_slab"),
+
+  WEB("minecraft:web"),
+
+  WEEPING_VINES("minecraft:weeping_vines"),
+
+  WHEAT("minecraft:wheat"),
+
+  WHITE_CANDLE("minecraft:white_candle"),
+
+  WHITE_CANDLE_CAKE("minecraft:white_candle_cake"),
+
+  WHITE_CARPET("minecraft:white_carpet"),
+
+  WHITE_CONCRETE("minecraft:white_concrete"),
+
+  WHITE_CONCRETE_POWDER("minecraft:white_concrete_powder"),
+
+  WHITE_GLAZED_TERRACOTTA("minecraft:white_glazed_terracotta"),
+
+  WHITE_SHULKER_BOX("minecraft:white_shulker_box"),
+
+  WHITE_STAINED_GLASS("minecraft:white_stained_glass"),
+
+  WHITE_STAINED_GLASS_PANE("minecraft:white_stained_glass_pane"),
+
+  WHITE_TERRACOTTA("minecraft:white_terracotta"),
+
+  WHITE_WOOL("minecraft:white_wool"),
+
+  WITHER_ROSE("minecraft:wither_rose"),
+
+  WOOD("minecraft:wood"),
+
+  WOODEN_BUTTON("minecraft:wooden_button"),
+
+  WOODEN_DOOR("minecraft:wooden_door"),
+
+  WOODEN_PRESSURE_PLATE("minecraft:wooden_pressure_plate"),
+
+  WOODEN_SLAB("minecraft:wooden_slab"),
+
+  YELLOW_CANDLE("minecraft:yellow_candle"),
+
+  YELLOW_CANDLE_CAKE("minecraft:yellow_candle_cake"),
+
+  YELLOW_CARPET("minecraft:yellow_carpet"),
+
+  YELLOW_CONCRETE("minecraft:yellow_concrete"),
+
+  YELLOW_CONCRETE_POWDER("minecraft:yellow_concrete_powder"),
+
+  YELLOW_FLOWER("minecraft:yellow_flower"),
+
+  YELLOW_GLAZED_TERRACOTTA("minecraft:yellow_glazed_terracotta"),
+
+  YELLOW_SHULKER_BOX("minecraft:yellow_shulker_box"),
+
+  YELLOW_STAINED_GLASS("minecraft:yellow_stained_glass"),
+
+  YELLOW_STAINED_GLASS_PANE("minecraft:yellow_stained_glass_pane"),
+
+  YELLOW_TERRACOTTA("minecraft:yellow_terracotta"),
+
+  YELLOW_WOOL("minecraft:yellow_wool");
 
   @Getter
   private final Identifier identifier;
 
-  @Getter
-  private final Identifier itemIdentifier;
-
-  VanillaBlockId(String identifier, String itemIdentifier) {
+  VanillaBlockId(String identifier) {
     this.identifier = new Identifier(identifier);
-    this.itemIdentifier = new Identifier(itemIdentifier);
   }
 }

@@ -16,6 +16,7 @@ import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
+import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.server.item.component.common.ItemAttributeComponentImpl;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
@@ -53,7 +54,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @Getter
     private final int runtimeId;
     @Getter
-    private Set<ItemTag> itemTags;
+    private final Set<ItemTag> itemTags;
     @Getter
     @Nullable
     private BlockType<?> blockTypeCache;
@@ -101,22 +102,11 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         return componentProviders;
     }
 
-    // Naming conflict prefix
-    public static final String NAMING_CONFLICT_PATH_PREFIX = "item.";
-
     @Override
     public @Nullable BlockType<?> getBlockType() {
         if (!haveTriedInitBlockTypeCache) {
             // Try to find out if this item type has a corresponding block type
-            var blockIdentifier = identifier.clone();
-            if (blockIdentifier.path().contains(NAMING_CONFLICT_PATH_PREFIX)) {
-                // In vanilla, If an item type identifier shaped like "minecraft:item.{block_identifier_path}"
-                // Then there must be an item type whose identifier is "minecraft:{block_identifier_path}"
-                // The item type whose identifier is "minecraft:item.{block_identifier_path}" is the strictly corresponding block-item
-                // And the item type whose identifier is "minecraft:{block_identifier_path}" is the type actually used in the game
-                // Example: kelp
-                blockIdentifier = new Identifier(blockIdentifier.namespace(), blockIdentifier.path().replace(NAMING_CONFLICT_PATH_PREFIX, ""));
-            }
+            var blockIdentifier = BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier);
             // Note that the block type still may be null
             blockTypeCache = BlockTypeRegistry.getRegistry().get(blockIdentifier);
             haveTriedInitBlockTypeCache = true;
@@ -149,10 +139,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders = new HashMap<>();
         protected Identifier identifier;
-        @Nullable
-        protected Identifier blockIdentifier;
         protected int runtimeId = Integer.MAX_VALUE;
-        protected Set<ItemTag> itemTags;
+        protected Set<ItemTag> itemTags = Set.of();
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -167,15 +155,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> blockIdentifier(Identifier blockIdentifier) {
-            this.blockIdentifier = blockIdentifier;
-            return this;
-        }
-
-        @Override
         public ItemTypeBuilder<T, ItemComponent> vanillaItem(VanillaItemId vanillaItemId) {
             this.identifier = vanillaItemId.getIdentifier();
-            this.blockIdentifier = vanillaItemId.getBlockIdentifier();
             this.runtimeId = vanillaItemId.getRuntimeId();
             // Attributes for vanilla item
             var attributes = VanillaItemAttributeRegistry.getRegistry().get(vanillaItemId);
