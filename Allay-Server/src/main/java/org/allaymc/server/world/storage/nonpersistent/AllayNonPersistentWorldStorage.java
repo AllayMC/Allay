@@ -35,6 +35,10 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
     private final Map<Long, Set<NbtMap>> blockEntities = new Long2ObjectOpenHashMap<>();
     private WorldData worldData;
 
+    public AllayNonPersistentWorldStorage() {
+        this.worldData = WorldData.builder().build();
+    }
+
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) {
         Dimension dimension = Server.getInstance().getWorldPool().getWorld(worldData.getName()).getDimension(dimensionInfo.dimensionId());

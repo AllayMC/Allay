@@ -18,7 +18,7 @@ import static org.allaymc.api.world.chunk.UnsafeChunk.index;
  * @author Cool_Loong
  */
 @NotThreadSafe
-public record ChunkSection(int sectionY,
+public record ChunkSection(byte sectionY,
                            Palette<BlockState>[] blockLayer,
                            Palette<BiomeType> biomes,
                            NibbleArray blockLights,
@@ -26,7 +26,7 @@ public record ChunkSection(int sectionY,
     public static final int LAYER_COUNT = 2;
     public static final int VERSION = 9;
 
-    public ChunkSection(int sectionY) {
+    public ChunkSection(byte sectionY) {
         this(sectionY,
                 new Palette[]{new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState()), new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState())},
                 new Palette<>(VanillaBiomeId.PLAINS),
@@ -34,7 +34,7 @@ public record ChunkSection(int sectionY,
                 new NibbleArray(Chunk.SECTION_SIZE));
     }
 
-    public ChunkSection(int sectionY, Palette<BlockState>[] blockLayer) {
+    public ChunkSection(byte sectionY, Palette<BlockState>[] blockLayer) {
         this(sectionY, blockLayer,
                 new Palette<>(VanillaBiomeId.PLAINS),
                 new NibbleArray(Chunk.SECTION_SIZE),
@@ -81,7 +81,7 @@ public record ChunkSection(int sectionY,
         byteBuf.writeByte(VERSION);
         //block layer count
         byteBuf.writeByte(LAYER_COUNT);
-        byteBuf.writeByte(sectionY);
+        byteBuf.writeByte(sectionY & 0xFF);
 
         blockLayer[0].writeToNetwork(byteBuf, BlockState::blockStateHash);
         blockLayer[1].writeToNetwork(byteBuf, BlockState::blockStateHash);

@@ -9,6 +9,7 @@ import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.ChunkSection;
 import org.allaymc.api.world.chunk.UnsafeChunk;
@@ -48,7 +49,7 @@ public class LevelDBChunkSerializer {
 
     //serialize chunk section
     private void serializeBlock(WriteBatch writeBatch, UnsafeChunk chunk) {
-        for (int ySection = 0; ySection < chunk.getDimensionInfo().chunkSectionSize(); ySection++) {
+        for (int ySection = chunk.getDimensionInfo().minSectionY(); ySection <= chunk.getDimensionInfo().maxSectionY(); ySection++) {
             ChunkSection section = chunk.getSection(ySection);
             if (section == null) {
                 continue;
@@ -70,9 +71,10 @@ public class LevelDBChunkSerializer {
 
     //serialize chunk section
     private void deserializeBlock(DB db, AllayUnsafeChunk.Builder builder) {
-        ChunkSection[] sections = new ChunkSection[builder.getDimensionInfo().chunkSectionSize()];
-        for (int ySection = 0; ySection < builder.getDimensionInfo().chunkSectionSize(); ySection++) {
-            byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection, builder.getDimensionInfo()));
+        DimensionInfo dimensionInfo = builder.getDimensionInfo();
+        ChunkSection[] sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
+        for (int ySection = dimensionInfo.minSectionY(); ySection <= dimensionInfo.maxSectionY(); ySection++) {
+            byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection, dimensionInfo));
             if (bytes != null) {
                 ByteBuf byteBuf = null;
                 try {
@@ -90,11 +92,11 @@ public class LevelDBChunkSerializer {
                         case 1:
                             ChunkSection section;
                             if (layers <= 2) {
-                                section = new ChunkSection(ySection);
+                                section = new ChunkSection((byte) ySection);
                             } else {
                                 @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
                                 Arrays.fill(palettes, new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState()));
-                                section = new ChunkSection(ySection, palettes);
+                                section = new ChunkSection((byte) ySection, palettes);
                             }
                             for (int layer = 0; layer < layers; layer++) {
                                 section.blockLayer()[layer].readFromStoragePersistent(byteBuf, hash -> {
@@ -128,7 +130,7 @@ public class LevelDBChunkSerializer {
             }
             Palette<BiomeType> last = null;
             Palette<BiomeType> biomePalette;
-            for (int y = 0; y < chunk.getDimensionInfo().chunkSectionSize(); y++) {
+            for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
                 ChunkSection section = chunk.getSection(y);
                 if (section == null) continue;
                 biomePalette = section.biomes();
@@ -155,7 +157,7 @@ public class LevelDBChunkSerializer {
                 builder.heightMap(new HeightMap(heights));
                 Palette<BiomeType> last = null;
                 Palette<BiomeType> biomePalette;
-                for (int y = 0; y < builder.getDimensionInfo().chunkSectionSize(); y++) {
+                for (int y = builder.getDimensionInfo().minSectionY(); y <= builder.getDimensionInfo().maxSectionY(); y++) {
                     ChunkSection section = builder.getSections()[y];
                     if (section == null) continue;
                     biomePalette = section.biomes();
