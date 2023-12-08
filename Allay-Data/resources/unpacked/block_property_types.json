@@ -453,6 +453,14 @@
                 "no_cracks"
             ]
         },
+        "crafting": {
+            "serializationName": "crafting",
+            "valueType": "BOOLEAN",
+            "values": [
+                false,
+                true
+            ]
+        },
         "damage": {
             "serializationName": "damage",
             "valueType": "ENUM",
@@ -852,18 +860,18 @@
                 true
             ]
         },
-      "minecraft_block_face": {
-        "serializationName": "minecraft:block_face",
-        "valueType": "ENUM",
-        "values": [
-          "down",
-          "east",
-          "north",
-          "south",
-          "up",
-          "west"
-        ]
-      },
+        "minecraft_block_face": {
+            "serializationName": "minecraft:block_face",
+            "valueType": "ENUM",
+            "values": [
+                "down",
+                "east",
+                "north",
+                "south",
+                "up",
+                "west"
+            ]
+        },
         "minecraft_cardinal_direction": {
             "serializationName": "minecraft:cardinal_direction",
             "valueType": "ENUM",
@@ -886,14 +894,14 @@
                 "west"
             ]
         },
-      "minecraft_vertical_half": {
-        "serializationName": "minecraft:vertical_half",
-        "valueType": "ENUM",
-        "values": [
-          "bottom",
-          "top"
-        ]
-      },
+        "minecraft_vertical_half": {
+            "serializationName": "minecraft:vertical_half",
+            "valueType": "ENUM",
+            "values": [
+                "bottom",
+                "top"
+            ]
+        },
         "moisturized_amount": {
             "serializationName": "moisturized_amount",
             "valueType": "INTEGER",
@@ -1022,6 +1030,24 @@
             "values": [
                 false,
                 true
+            ]
+        },
+        "orientation": {
+            "serializationName": "orientation",
+            "valueType": "ENUM",
+            "values": [
+                "down_east",
+                "down_north",
+                "down_south",
+                "down_west",
+                "east_up",
+                "north_up",
+                "south_up",
+                "up_east",
+                "up_north",
+                "up_south",
+                "up_west",
+                "west_up"
             ]
         },
         "output_lit_bit": {
@@ -1322,19 +1348,6 @@
                 "cut_sandstone",
                 "mossy_stone_brick",
                 "smooth_quartz",
-                "stone"
-            ]
-        },
-        "stone_type": {
-            "serializationName": "stone_type",
-            "valueType": "ENUM",
-            "values": [
-                "andesite",
-                "andesite_smooth",
-                "diorite",
-                "diorite_smooth",
-                "granite",
-                "granite_smooth",
                 "stone"
             ]
         },
