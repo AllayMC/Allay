@@ -88,10 +88,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @ApiStatus.Internal
     @NotNull
     public ChunkSection getOrCreateSection(@Range(from = -32, to = 31) int sectionY) {
-        int offsetY = sectionY - this.getDimensionInfo().minSectionY();
+        int minSectionY = this.getDimensionInfo().minSectionY();
+        int offsetY = sectionY - minSectionY;
         for (int i = 0; i <= offsetY; i++) {
             if (sections[i] == null) {
-                sections[i] = new ChunkSection((byte) sectionY);
+                sections[i] = new ChunkSection((byte)(i + minSectionY));
             }
         }
         return sections[offsetY];

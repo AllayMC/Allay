@@ -342,9 +342,9 @@ public class AllayChunk implements Chunk {
             if (section != null) {
                 section.writeToNetwork(byteBuf);
             } else {
-                ChunkSection chunkSection = new ChunkSection((byte) i);
-                this.getSections()[i - getDimensionInfo().minSectionY()] = chunkSection;
-                chunkSection.writeToNetwork(byteBuf);
+                section = new ChunkSection((byte) i);
+                this.getSections()[i - getDimensionInfo().minSectionY()] = section;
+                section.writeToNetwork(byteBuf);
             }
         }
         // Write biomes
