@@ -11,12 +11,14 @@ import org.cloudburstmc.protocol.bedrock.packet.RequestChunkRadiusPacket;
  * @author Cool_Loong
  */
 public class RequestChunkRadiusPacketProcessor extends DataPacketProcessor<RequestChunkRadiusPacket> {
-    // TODO: check it
-    // It seems that we should use `maxRadius` instead of `Radius`
-    // `maxRadius` is always smaller than `Radius` and it is seems to be the real chunk loading radius
     @Override
     public void handle(EntityPlayer player, RequestChunkRadiusPacket pk) {
-        player.setChunkLoadingRadius(pk.getMaxRadius());
+        var radius = pk.getRadius();
+        var maxRadius = pk.getMaxRadius();
+        if (radius > maxRadius) {
+            radius = maxRadius;
+        }
+        player.setChunkLoadingRadius(radius);
     }
 
     @Override
