@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.IOException;
@@ -334,18 +335,26 @@ public class AllayChunk implements Chunk {
         return levelChunkPacket;
     }
 
+    private void fillNullSections() {
+        long stamp = blockLock.writeLock();
+        try {
+            for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
+                if (unsafeChunk.getSection(i) == null) {
+                    unsafeChunk.getSections()[i - getDimensionInfo().minSectionY()] = new ChunkSection((byte)i);
+                }
+            }
+        } finally {
+            blockLock.unlockWrite(stamp);
+        }
+    }
+
     private ByteBuf writeToNetwork() {
         var byteBuf = ByteBufAllocator.DEFAULT.buffer();
+        // Prevent null section
+        fillNullSections();
         // Write blocks
         for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
-            ChunkSection section = getSection(i);
-            if (section != null) {
-                section.writeToNetwork(byteBuf);
-            } else {
-                section = new ChunkSection((byte) i);
-                this.getSections()[i - getDimensionInfo().minSectionY()] = section;
-                section.writeToNetwork(byteBuf);
-            }
+            Objects.requireNonNull(getSection(i)).writeToNetwork(byteBuf);
         }
         // Write biomes
         Palette<BiomeType> lastBiomes = null;
