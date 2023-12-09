@@ -23,6 +23,8 @@ import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
 import org.allaymc.server.world.generator.flat.FlatWorldGenerator;
+import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
+import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
 import org.apache.logging.log4j.Level;
@@ -35,6 +37,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -136,15 +139,15 @@ public final class AllayServer implements Server {
     }
 
     private void loadWorlds() {
-//        JeGeneratorLoader.setup();
-//        JeGeneratorLoader.waitStart();
-//        AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Bedrock Level")));
-//        defaultWorld.setDimension(new AllayDimension(defaultWorld, JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD));
+        JeGeneratorLoader.setup();
+        JeGeneratorLoader.waitStart();
+        AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Bedrock Level")));
+        defaultWorld.setDimension(new AllayDimension(defaultWorld, JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD));
 
 //        FLAT WORLD
 //        AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Bedrock Level")));
-        AllayWorld defaultWorld = new AllayWorld(new AllayNonPersistentWorldStorage());
-        defaultWorld.setDimension(new AllayDimension(defaultWorld, new FlatWorldGenerator(), DimensionInfo.OVERWORLD));
+//        AllayWorld defaultWorld = new AllayWorld(new AllayNonPersistentWorldStorage());
+//        defaultWorld.setDimension(new AllayDimension(defaultWorld, new FlatWorldGenerator(), DimensionInfo.OVERWORLD));
 
         worldPool.setDefaultWorld(defaultWorld);
     }

@@ -331,7 +331,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var chunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
         var loc = getLocation();
         chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
-        chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
+        chunkPublisherUpdatePacket.setRadius((getChunkLoadingRadius() + 1) << 4);
         networkComponent.sendPacket(chunkPublisherUpdatePacket);
     }
 
