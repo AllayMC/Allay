@@ -73,7 +73,8 @@ public class LevelDBChunkSerializer {
     private void deserializeBlock(DB db, AllayUnsafeChunk.Builder builder) {
         DimensionInfo dimensionInfo = builder.getDimensionInfo();
         ChunkSection[] sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
-        for (int ySection = dimensionInfo.minSectionY(); ySection <= dimensionInfo.maxSectionY(); ySection++) {
+        var minSectionY = dimensionInfo.minSectionY();
+        for (int ySection = minSectionY; ySection <= dimensionInfo.maxSectionY(); ySection++) {
             byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection, dimensionInfo));
             if (bytes != null) {
                 ByteBuf byteBuf = null;
@@ -107,7 +108,7 @@ public class LevelDBChunkSerializer {
                                     return blockState;
                                 });
                             }
-                            sections[ySection] = section;
+                            sections[ySection - minSectionY] = section;
                             break;
                     }
                 } finally {
@@ -157,8 +158,9 @@ public class LevelDBChunkSerializer {
                 builder.heightMap(new HeightMap(heights));
                 Palette<BiomeType> last = null;
                 Palette<BiomeType> biomePalette;
-                for (int y = builder.getDimensionInfo().minSectionY(); y <= builder.getDimensionInfo().maxSectionY(); y++) {
-                    ChunkSection section = builder.getSections()[y];
+                var minSectionY = builder.getDimensionInfo().minSectionY();
+                for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
+                    ChunkSection section = builder.getSections()[y - minSectionY];
                     if (section == null) continue;
                     biomePalette = section.biomes();
                     biomePalette.readFromStorageRuntime(heightAndBiomesBuffer, VanillaBiomeId::fromId, last);
