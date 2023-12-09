@@ -14,6 +14,6 @@ public interface BlockStoneBehavior extends BlockBehavior {
   BlockType<BlockStoneBehavior> STONE_TYPE = BlockTypeBuilder
           .builder(BlockStoneBehavior.class)
           .vanillaBlock(VanillaBlockId.STONE)
-          .setProperties(VanillaBlockPropertyTypes.STONE_TYPE)
+          .setProperties()
           .build();
 }

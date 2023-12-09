@@ -33,12 +33,6 @@ public interface ItemTypeBuilder<T extends ItemStack, C extends ItemComponent> {
         return identifier(new Identifier(identifier));
     }
 
-    ItemTypeBuilder<T, C> blockIdentifier(Identifier blockIdentifier);
-
-    default ItemTypeBuilder<T, C> blockIdentifier(String blockIdentifier) {
-        return blockIdentifier(new Identifier(blockIdentifier));
-    }
-
     ItemTypeBuilder<T, C> vanillaItem(VanillaItemId vanillaItemId);
 
     ItemTypeBuilder<T, C> runtimeId(int runtimeId);

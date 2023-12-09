@@ -31,7 +31,7 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
 
     public void init() {
         // Load item_meta_block_state_bimap.nbt
-        try (var reader = NbtUtils.createGZIPReader(AllayVanillaItemMetaBlockStateBiMap.class.getClassLoader().getResourceAsStream("item_meta_block_state_bimap.nbt"))) {
+        try (var reader = NbtUtils.createGZIPReader(Objects.requireNonNull(AllayVanillaItemMetaBlockStateBiMap.class.getClassLoader().getResourceAsStream("item_meta_block_state_bimap.nbt")))) {
             var nbt = (NbtMap) reader.readTag();
             nbt.forEach((itemIdentifier, metaToHash) -> {
                 ItemType<?> itemType = ItemTypeRegistry.getRegistry().get(new Identifier(itemIdentifier));

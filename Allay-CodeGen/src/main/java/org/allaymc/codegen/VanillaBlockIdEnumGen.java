@@ -71,7 +71,7 @@ public class VanillaBlockIdEnumGen {
     @SneakyThrows
     public static void generateToAPIModule() {
         var identifierClass = ClassName.get("org.allaymc.api.identifier", "Identifier");
-        var blockTypeRegistryClass = ClassName.get("org.allaymc.api.block.type", "BlockTypeRegistry");
+        var blockTypeRegistryClass = ClassName.get("org.allaymc.api.block.registry", "BlockTypeRegistry");
         var blockTypeClass = ClassName.get("org.allaymc.api.block.type", "BlockType");
         TypeSpec.Builder codeBuilder = commonBuilder(identifierClass)
                 .addMethod(MethodSpec.methodBuilder("getBlockType")
@@ -103,20 +103,12 @@ public class VanillaBlockIdEnumGen {
     }
 
     private static void addEnums(TypeSpec.Builder codeBuilder) {
-        var sortedidentifier = BLOCK_PALETTE_NBT.stream().map(block -> block.getString("name")).sorted(String::compareTo).map(Identifier::new).toList();
-        for (var identifier : sortedidentifier) {
-            var itemId = CodeGen.BLOCK_ID_TO_ITEM_ID_MAP.get(identifier.toString());
-            if (itemId == null) {
-                codeBuilder.addEnumConstant(
-                        identifier.path().toUpperCase(),
-                        TypeSpec.anonymousClassBuilder("$S", identifier.toString()).build()
-                );
-            } else {
-                codeBuilder.addEnumConstant(
-                        identifier.path().toUpperCase(),
-                        TypeSpec.anonymousClassBuilder("$S, $S", identifier.toString(), itemId).build()
-                );
-            }
+        var sortedIdentifier = BLOCK_PALETTE_NBT.stream().map(block -> block.getString("name")).sorted(String::compareTo).map(Identifier::new).toList();
+        for (var identifier : sortedIdentifier) {
+            codeBuilder.addEnumConstant(
+                    identifier.path().toUpperCase(),
+                    TypeSpec.anonymousClassBuilder("$S", identifier.toString()).build()
+            );
         }
     }
 
@@ -128,15 +120,9 @@ public class VanillaBlockIdEnumGen {
                         .builder(identifierClass, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(GETTER_CLASS)
                         .build())
-                .addField(FieldSpec
-                        .builder(identifierClass, "itemIdentifier", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(GETTER_CLASS)
-                        .build())
                 .addMethod(MethodSpec.constructorBuilder()
                         .addParameter(STRING_CLASS, "identifier")
-                        .addParameter(STRING_CLASS, "itemIdentifier")
                         .addStatement("this.identifier = new $T(identifier)", identifierClass)
-                        .addStatement("this.itemIdentifier = new $T(itemIdentifier)", identifierClass)
                         .build()
                 );
     }

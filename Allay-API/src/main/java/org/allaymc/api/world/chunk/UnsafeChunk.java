@@ -51,19 +51,43 @@ public interface UnsafeChunk {
     @UnmodifiableView
     Map<Integer, BlockEntity> getBlockEntities();
 
+    /**
+     * Gets Chunk section , range -1 -> -4 , 0 -> 59
+     * <p>
+     * Since the array index starts at 0, the maximum value is 59
+     *
+     * @param sectionY the sectionY
+     * @return the section
+     */
     @ApiStatus.Internal
     @Nullable
-    ChunkSection getSection(@Range(from = 0, to = 63) int y);
+    ChunkSection getSection(@Range(from = -32, to = 31) int sectionY);
 
     @ApiStatus.Internal
     ChunkSection[] getSections();
 
+    /**
+     * Gets Chunk section , range -1 -> -4 , 0 -> 59
+     * <p>
+     * Since the array index starts at 0, the maximum value is 59
+     *
+     * @param sectionY the y
+     * @return the section
+     */
     @ApiStatus.Internal
     @NotNull
-    ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y);
+    ChunkSection getOrCreateSection(@Range(from = -32, to = 31) int sectionY);
 
+    /**
+     * Gets Chunk section , range -1 -> -4 , 0 -> 59
+     * <p>
+     * Since the array index starts at 0, the maximum value is 59
+     *
+     * @param sectionY the y
+     * @return the section
+     */
     @UnmodifiableView
-    Collection<BlockEntity> getSectionBlockEntities(int sectionY);
+    Collection<BlockEntity> getSectionBlockEntities(@Range(from = -32, to = 31) int sectionY);
 
     void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer);
 

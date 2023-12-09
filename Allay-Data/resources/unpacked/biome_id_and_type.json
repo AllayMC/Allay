@@ -1,11 +1,11 @@
 {
     "bamboo_jungle": {
         "id": 48,
-      "type": "Jungle"
+        "type": "Jungle"
     },
     "bamboo_jungle_hills": {
         "id": 49,
-      "type": "Jungle"
+        "type": "Jungle"
     },
     "basalt_deltas": {
         "id": 181,
@@ -13,23 +13,23 @@
     },
     "beach": {
         "id": 16,
-      "type": "Beach"
+        "type": "Beach"
     },
     "birch_forest": {
         "id": 27,
-      "type": "Forest"
+        "type": "Forest"
     },
     "birch_forest_hills": {
         "id": 28,
-      "type": "Forest"
+        "type": "Forest"
     },
     "birch_forest_hills_mutated": {
         "id": 156,
-      "type": "Forest"
+        "type": "Forest"
     },
     "birch_forest_mutated": {
         "id": 155,
-      "type": "Forest"
+        "type": "Forest"
     },
     "cherry_grove": {
         "id": 192,
@@ -37,23 +37,23 @@
     },
     "cold_beach": {
         "id": 26,
-      "type": "Beach"
+        "type": "Beach"
     },
     "cold_ocean": {
         "id": 44,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "cold_taiga": {
         "id": 30,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "cold_taiga_hills": {
         "id": 31,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "cold_taiga_mutated": {
         "id": 158,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "crimson_forest": {
         "id": 179,
@@ -61,7 +61,7 @@
     },
     "deep_cold_ocean": {
         "id": 45,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "deep_dark": {
         "id": 190,
@@ -69,31 +69,31 @@
     },
     "deep_frozen_ocean": {
         "id": 47,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "deep_lukewarm_ocean": {
         "id": 43,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "deep_ocean": {
         "id": 24,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "deep_warm_ocean": {
         "id": 41,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "desert": {
         "id": 2,
-      "type": "Desert"
+        "type": "Desert"
     },
     "desert_hills": {
         "id": 17,
-      "type": "Desert"
+        "type": "Desert"
     },
     "desert_mutated": {
         "id": 130,
-      "type": "Desert"
+        "type": "Desert"
     },
     "dripstone_caves": {
         "id": 188,
@@ -101,39 +101,39 @@
     },
     "extreme_hills": {
         "id": 3,
-      "type": "ExtremeHills"
+        "type": "ExtremeHills"
     },
     "extreme_hills_edge": {
         "id": 20,
-      "type": "ExtremeHills"
+        "type": "ExtremeHills"
     },
     "extreme_hills_mutated": {
         "id": 131,
-      "type": "ExtremeHills"
+        "type": "ExtremeHills"
     },
     "extreme_hills_plus_trees": {
         "id": 34,
-      "type": "ExtremeHills"
+        "type": "ExtremeHills"
     },
     "extreme_hills_plus_trees_mutated": {
         "id": 162,
-      "type": "ExtremeHills"
+        "type": "ExtremeHills"
     },
     "flower_forest": {
         "id": 132,
-      "type": "Forest"
+        "type": "Forest"
     },
     "forest": {
         "id": 4,
-      "type": "Forest"
+        "type": "Forest"
     },
     "forest_hills": {
         "id": 18,
-      "type": "Forest"
+        "type": "Forest"
     },
     "frozen_ocean": {
         "id": 46,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "frozen_peaks": {
         "id": 183,
@@ -141,7 +141,7 @@
     },
     "frozen_river": {
         "id": 11,
-      "type": "River"
+        "type": "River"
     },
     "grove": {
         "id": 185,
@@ -149,19 +149,19 @@
     },
     "hell": {
         "id": 8,
-      "type": "Hell"
+        "type": "Hell"
     },
     "ice_mountains": {
         "id": 13,
-      "type": "Ice"
+        "type": "Ice"
     },
     "ice_plains": {
         "id": 12,
-      "type": "Ice"
+        "type": "Ice"
     },
     "ice_plains_spikes": {
         "id": 140,
-      "type": "Ice"
+        "type": "Ice"
     },
     "jagged_peaks": {
         "id": 182,
@@ -169,31 +169,31 @@
     },
     "jungle": {
         "id": 21,
-      "type": "Jungle"
+        "type": "Jungle"
     },
     "jungle_edge": {
         "id": 23,
-      "type": "Jungle"
+        "type": "Jungle"
     },
     "jungle_edge_mutated": {
         "id": 151,
-      "type": "Jungle"
+        "type": "Jungle"
     },
     "jungle_hills": {
         "id": 22,
-      "type": "Jungle"
+        "type": "Jungle"
     },
     "jungle_mutated": {
         "id": 149,
-      "type": "Jungle"
+        "type": "Jungle"
     },
     "legacy_frozen_ocean": {
         "id": 10,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "lukewarm_ocean": {
         "id": 42,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "lush_caves": {
         "id": 187,
@@ -209,87 +209,87 @@
     },
     "mega_taiga": {
         "id": 32,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "mega_taiga_hills": {
         "id": 33,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "mesa": {
         "id": 37,
-      "type": "Mesa"
+        "type": "Mesa"
     },
     "mesa_bryce": {
         "id": 165,
-      "type": "Mesa"
+        "type": "Mesa"
     },
     "mesa_plateau": {
         "id": 39,
-      "type": "Mesa"
+        "type": "Mesa"
     },
     "mesa_plateau_mutated": {
         "id": 167,
-      "type": "Mesa"
+        "type": "Mesa"
     },
     "mesa_plateau_stone": {
         "id": 38,
-      "type": "Mesa"
+        "type": "Mesa"
     },
     "mesa_plateau_stone_mutated": {
         "id": 166,
-      "type": "Mesa"
+        "type": "Mesa"
     },
     "mushroom_island": {
         "id": 14,
-      "type": "MushroomIsland"
+        "type": "MushroomIsland"
     },
     "mushroom_island_shore": {
         "id": 15,
-      "type": "MushroomIsland"
+        "type": "MushroomIsland"
     },
     "ocean": {
         "id": 0,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "plains": {
         "id": 1,
-      "type": "Plain"
+        "type": "Plain"
     },
     "redwood_taiga_hills_mutated": {
         "id": 161,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "redwood_taiga_mutated": {
         "id": 160,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "river": {
         "id": 7,
-      "type": "River"
+        "type": "River"
     },
     "roofed_forest": {
         "id": 29,
-      "type": "Forest"
+        "type": "Forest"
     },
     "roofed_forest_mutated": {
         "id": 157,
-      "type": "Forest"
+        "type": "Forest"
     },
     "savanna": {
         "id": 35,
-      "type": "Savanna"
+        "type": "Savanna"
     },
     "savanna_mutated": {
         "id": 163,
-      "type": "Savanna"
+        "type": "Savanna"
     },
     "savanna_plateau": {
         "id": 36,
-      "type": "Savanna"
+        "type": "Savanna"
     },
     "savanna_plateau_mutated": {
         "id": 164,
-      "type": "Savanna"
+        "type": "Savanna"
     },
     "snowy_slopes": {
         "id": 184,
@@ -301,7 +301,7 @@
     },
     "stone_beach": {
         "id": 25,
-      "type": "StoneBeach"
+        "type": "StoneBeach"
     },
     "stony_peaks": {
         "id": 189,
@@ -309,35 +309,35 @@
     },
     "sunflower_plains": {
         "id": 129,
-      "type": "Plain"
+        "type": "Plain"
     },
     "swampland": {
         "id": 6,
-      "type": "Swamp"
+        "type": "Swamp"
     },
     "swampland_mutated": {
         "id": 134,
-      "type": "Swamp"
+        "type": "Swamp"
     },
     "taiga": {
         "id": 5,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "taiga_hills": {
         "id": 19,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "taiga_mutated": {
         "id": 133,
-      "type": "Taiga"
+        "type": "Taiga"
     },
     "the_end": {
         "id": 9,
-      "type": "TheEnd"
+        "type": "TheEnd"
     },
     "warm_ocean": {
         "id": 40,
-      "type": "Ocean"
+        "type": "Ocean"
     },
     "warped_forest": {
         "id": 180,

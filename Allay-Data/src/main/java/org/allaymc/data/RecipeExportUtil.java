@@ -30,6 +30,8 @@ import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -76,6 +78,7 @@ public class RecipeExportUtil {
         }
     }
 
+    @SneakyThrows
     public static void writeRecipes(CraftingDataPacket packet) {
         List<CraftingDataEntry> craftingData = new ArrayList<>();
         List<PotionMixDataEntry> potionMixes = new ArrayList<>();
@@ -210,11 +213,10 @@ public class RecipeExportUtil {
             containerMixes.add(new ContainerMixDataEntry(ITEM_RUNTIME_ID_TO_IDENTIFIER.get(containerMix.getInputId()), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(containerMix.getReagentId()), ITEM_RUNTIME_ID_TO_IDENTIFIER.get(containerMix.getOutputId())));
         }
 
+        Files.deleteIfExists(Path.of("Allay-Data/resources/recipes.json"));
         JSONUtils.toFile("./Allay-Data/resources/recipes.json",
                 new Recipes(CODEC.getProtocolVersion(), craftingData, potionMixes, containerMixes),
-                writer -> {
-                    writer.setIndent("  ");
-                });
+                writer -> writer.setIndent("  "));
     }
 
     private static List<RecipeItem> writeRecipeItems(List<ItemData> inputs) {

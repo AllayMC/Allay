@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.IOException;
@@ -334,12 +335,26 @@ public class AllayChunk implements Chunk {
         return levelChunkPacket;
     }
 
+    private void fillNullSections() {
+        long stamp = blockLock.writeLock();
+        try {
+            for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
+                if (unsafeChunk.getSection(i) == null) {
+                    unsafeChunk.getSections()[i - getDimensionInfo().minSectionY()] = new ChunkSection((byte)i);
+                }
+            }
+        } finally {
+            blockLock.unlockWrite(stamp);
+        }
+    }
+
     private ByteBuf writeToNetwork() {
         var byteBuf = ByteBufAllocator.DEFAULT.buffer();
+        // Prevent null section
+        fillNullSections();
         // Write blocks
-        for (int i = 0; i < getDimensionInfo().chunkSectionSize(); i++) {
-            ChunkSection section = getOrCreateSection(i);
-            section.writeToNetwork(byteBuf);
+        for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
+            Objects.requireNonNull(getSection(i)).writeToNetwork(byteBuf);
         }
         // Write biomes
         Palette<BiomeType> lastBiomes = null;
@@ -441,12 +456,12 @@ public class AllayChunk implements Chunk {
     @Override
     @Nullable
     @ApiStatus.Internal
-    public ChunkSection getSection(@Range(from = 0, to = 63) int y) {
+    public ChunkSection getSection(@Range(from = -32, to = 31) int sectionY) {
         long stamp = blockLock.tryOptimisticRead();
         try {
             for (; ; stamp = blockLock.readLock()) {
                 if (stamp == 0L) continue;
-                ChunkSection section = unsafeChunk.getSection(y);
+                ChunkSection section = unsafeChunk.getSection(sectionY);
                 if (!blockLock.validate(stamp)) continue;
                 return section;
             }
@@ -464,17 +479,17 @@ public class AllayChunk implements Chunk {
     @Override
     @ApiStatus.Internal
     @NotNull
-    public ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y) {
+    public ChunkSection getOrCreateSection(@Range(from = -32, to = 31) int sectionY) {
         long stamp = blockLock.writeLock();
         try {
-            return unsafeChunk.getOrCreateSection(y);
+            return unsafeChunk.getOrCreateSection(sectionY);
         } finally {
             blockLock.unlockWrite(stamp);
         }
     }
 
     @Override
-    public @UnmodifiableView Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
+    public @UnmodifiableView Collection<BlockEntity> getSectionBlockEntities(@Range(from = -32, to = 31) int sectionY) {
         return unsafeChunk.getSectionBlockEntities(sectionY);
     }
 
@@ -534,5 +549,6 @@ public class AllayChunk implements Chunk {
         }
     }
 
-    protected record ChunkPacketEntry(BedrockPacket packet, @Nullable Predicate<ChunkLoader> chunkLoaderPredicate) {}
+    protected record ChunkPacketEntry(BedrockPacket packet, @Nullable Predicate<ChunkLoader> chunkLoaderPredicate) {
+    }
 }

@@ -10,6 +10,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.component.common.CustomBlockComponent;
+import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
@@ -349,6 +350,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected Map<String, BlockPropertyType<?>> properties = new HashMap<>();
         protected Identifier identifier;
         protected ItemType<?> itemType;
+        protected ItemType<?> hardItemType;
         protected boolean isCustomBlock = false;
         protected Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
 
@@ -453,19 +455,26 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         private void prepareItemType() {
-            // NOTICE: some special cases!
-            // Ask mojang for why
-            if (identifier.equals(VanillaBlockId.REEDS.getIdentifier())) {
-                itemType = ItemSugarCaneStack.SUGAR_CANE_TYPE;
-            } else {
-                itemType = ItemTypeRegistry.getRegistry().get(identifier);
-            }
+            var itemId = BlockAndItemIdMapper.blockIdToActualBlockItemId(identifier);
+            itemType = ItemTypeRegistry.getRegistry().get(itemId);
             if (itemType == null) {
-                log.debug("Cannot find item type for " + identifier + " from item type registry! Will automatically create an item type!");
+                // 没有显式注册对应的方块物品，自动注册一个进去
                 itemType = ItemTypeBuilder
                         .builder(ItemStack.class)
-                        .identifier(identifier)
+                        .identifier(itemId)
                         .build();
+                hardItemType = itemType;
+            } else {
+                // 已提前注册了额外的方块物品，添加"item."前缀
+                var hardItemId = new Identifier(itemId.namespace(), BlockAndItemIdMapper.NAMING_CONFLICT_PATH_PREFIX + itemId.path());
+                // allay会提前注册好原版中具有"item."前缀的方块物品，所以说我们再确认一下有没有这个id的物品
+                hardItemType = ItemTypeRegistry.getRegistry().get(hardItemId);
+                if (hardItemType == null) {
+                    hardItemType = ItemTypeBuilder
+                            .builder(ItemStack.class)
+                            .identifier(hardItemId)
+                            .build();
+                }
             }
         }
 

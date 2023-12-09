@@ -75,8 +75,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @ApiStatus.Internal
     @Nullable
-    public ChunkSection getSection(@Range(from = 0, to = 63) int y) {
-        return sections[y];
+    public ChunkSection getSection(@Range(from = -32, to = 31) int sectionY) {
+        return sections[sectionY - this.getDimensionInfo().minSectionY()];
     }
 
     @Override
@@ -87,22 +87,24 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @ApiStatus.Internal
     @NotNull
-    public ChunkSection getOrCreateSection(@Range(from = 0, to = 63) int y) {
-        for (int i = 0; i <= y; i++) {
+    public ChunkSection getOrCreateSection(@Range(from = -32, to = 31) int sectionY) {
+        int minSectionY = this.getDimensionInfo().minSectionY();
+        int offsetY = sectionY - minSectionY;
+        for (int i = 0; i <= offsetY; i++) {
             if (sections[i] == null) {
-                sections[i] = new ChunkSection(i);
+                sections[i] = new ChunkSection((byte)(i + minSectionY));
             }
         }
-        return sections[y];
+        return sections[offsetY];
     }
 
     @UnmodifiableView
     @Override
-    public Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
+    public Collection<BlockEntity> getSectionBlockEntities(@Range(from = -32, to = 31) int sectionY) {
         var sectionBlockEntities = new HashSet<BlockEntity>();
         for (var entry : getBlockEntities().entrySet()) {
             var blockEntity = entry.getValue();
-            if (normalY(blockEntity.getPosition().y()) >>> 4 == sectionY) {
+            if (blockEntity.getPosition().y() >> 4 == sectionY) {
                 sectionBlockEntities.add(blockEntity);
             }
         }
@@ -120,7 +122,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int layer) {
         if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
             return BlockAirBehavior.AIR_TYPE.getDefaultState();
-        ChunkSection section = this.getSection(normalY(y) >>> 4);
+        ChunkSection section = this.getSection(y >> 4);
         BlockState blockState;
         if (section == null) {
             blockState = BlockAirBehavior.AIR_TYPE.getDefaultState();
@@ -131,7 +133,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer) {
-        int sectionY = normalY(y) >>> 4;
+        int sectionY = y >> 4;
         ChunkSection section = this.getSection(sectionY);
         if (section == null) {
             section = this.getOrCreateSection(sectionY);
@@ -140,7 +142,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public @Range(from = 0, to = 15) int getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        ChunkSection section = this.getSection(normalY(y) >>> 4);
+        ChunkSection section = this.getSection(y >> 4);
         return section == null ? 0 : section.getBlockLight(x, y & 0xf, z);
     }
 
@@ -150,26 +152,26 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public @Range(from = 0, to = 15) int getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        ChunkSection section = this.getSection(normalY(y) >>> 4);
+        ChunkSection section = this.getSection(y >> 4);
         return section == null ? 0 : section.getSkyLight(x, y & 0xf, z);
     }
 
     public void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
-        this.getOrCreateSection(normalY(y) >>> 4).setBlockLight(x, y & 0xf, z, (byte) light);
+        this.getOrCreateSection(y >> 4).setBlockLight(x, y & 0xf, z, (byte) light);
     }
 
     public void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
-        this.getOrCreateSection(normalY(y) >>> 4).setSkyLight(x, y & 0xf, z, (byte) light);
+        this.getOrCreateSection(y >> 4).setSkyLight(x, y & 0xf, z, (byte) light);
     }
 
     @Override
     public void setBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
-        this.getOrCreateSection(normalY(y) >>> 4).setBiomeType(x, y & 0xf, z, biomeType);
+        this.getOrCreateSection(y >> 4).setBiomeType(x, y & 0xf, z, biomeType);
     }
 
     @Override
     public BiomeType getBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        return this.getOrCreateSection(normalY(y) >>> 4).getBiomeType(x, y & 0xf, z);
+        return this.getOrCreateSection(y >> 4).getBiomeType(x, y & 0xf, z);
     }
 
     public void addEntity(@NotNull Entity entity) {
@@ -216,10 +218,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public Chunk toSafeChunk() {
         return new AllayChunk(this);
-    }
-
-    protected int normalY(int y) {
-        return y - getDimensionInfo().minHeight();
     }
 
     @Getter

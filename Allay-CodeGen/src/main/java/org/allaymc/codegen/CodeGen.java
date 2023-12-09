@@ -23,24 +23,6 @@ public class CodeGen {
     public static final String DATA_PATH = "Allay-Data/resources/";
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    //Resources used by multiple code gen
-    public static final Path BLOCK_ID_TO_ITEM_ID_MAP_PATH = Path.of(DATA_PATH + "unpacked/block_id_to_item_id_map.nbt");
-    public static final Map<String, String> BLOCK_ID_TO_ITEM_ID_MAP = new HashMap<>();
-    public static final Map<String, String> ITEM_ID_TO_BLOCK_ID_MAP = new HashMap<>();
-
-    static {
-        try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(BLOCK_ID_TO_ITEM_ID_MAP_PATH))))) {
-            var nbt = (NbtMap) nbtReader.readTag();
-            nbt.forEach((key, value) -> {
-                BLOCK_ID_TO_ITEM_ID_MAP.put(key, value.toString());
-                ITEM_ID_TO_BLOCK_ID_MAP.put(value.toString(), key);
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
     public static void main(String[] args) {
         VanillaBiomeIdEnumGen.main(args);
         VanillaBlockInterfaceGen.main(args);
