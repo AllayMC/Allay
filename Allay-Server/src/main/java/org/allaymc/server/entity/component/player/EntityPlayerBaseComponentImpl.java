@@ -10,6 +10,7 @@ import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.i18n.I18nTranslator;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -33,9 +34,11 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBf;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -283,6 +286,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         }
     }
 
+    @Override
     public void sendChat(EntityPlayer sender, String message) {
         var pk = new TextPacket();
         pk.setType(TextPacket.Type.CHAT);
@@ -293,16 +297,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         networkComponent.sendPacket(pk);
     }
 
-    public void sendRawMessage(String message) {
-        sendSimpleMessage(message, TextPacket.Type.RAW);
-    }
-
+    @Override
     public void sendTip(String message) {
         sendSimpleMessage(message, TextPacket.Type.TIP);
     }
 
+    @Override
     public void sendPopup(String message) {
         sendSimpleMessage(message, TextPacket.Type.POPUP);
+    }
+
+    @Override
+    public void sendText(String text) {
+        sendSimpleMessage(text, TextPacket.Type.RAW);
     }
 
     protected void sendSimpleMessage(String message, TextPacket.Type type) {
@@ -379,11 +386,32 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void reply(@NotNull String message, Object... args) {
-        this.sendRawMessage(String.format(message, args));
+        this.sendText(String.format(message, args));
     }
 
     @Override
     public boolean hasPermission(@NonNull String permission) {
         return true; // todo
+    }
+
+    @Override
+    public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
+        var pair = Server.getInstance().getI18nTranslator().findI18nKey(tr);
+        var pk = new TextPacket();
+        if (forceTranslatedByClient || pair.left().startsWith(I18nTranslator.VANILLA_LANG_NAMESPACE)) {
+            pk.setType(TextPacket.Type.TRANSLATION);
+            pk.setParameters(List.of(args));
+            pk.setNeedsTranslation(true);
+        } else {
+            sendText(Server.getInstance().getI18nTranslator().tr(tr));
+        }
+        networkComponent.sendPacket(pk);
+    }
+
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    @Override
+    public void sendTr(String tr) {
+        sendTr(tr, EMPTY_STRING_ARRAY);
     }
 }

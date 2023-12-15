@@ -11,6 +11,7 @@ import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,37 +39,40 @@ public class TextPacketProcessor extends DataPacketProcessor<TextPacket> {
                     );
                     loc.dimension().getEntityUpdateService().addEntity(entity);
                 }
-                player.sendRawMessage("TPS: " + loc.dimension().getWorld().getTps() + ", Entity Count: " + loc.dimension().getEntities().size());
+                player.sendText("TPS: " + loc.dimension().getWorld().getTps() + ", Entity Count: " + loc.dimension().getEntities().size());
             }
             if (message.startsWith("gb_")) {
                 var blockStateHash = Integer.parseInt(message.substring(3));
                 var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
                 if (blockState == null) {
-                    player.sendRawMessage("unknown hash!");
+                    player.sendText("unknown hash!");
                     return;
                 }
                 player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
             }
             if (message.equals("rfinv")) {
                 player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
-                player.sendRawMessage("Inventory is refreshed!");
+                player.sendText("Inventory is refreshed!");
             }
             if (message.equals("tps")) {
-                player.sendRawMessage("TPS: " + player.getLocation().dimension().getWorld().getTps());
+                player.sendText("TPS: " + player.getLocation().dimension().getWorld().getTps());
             }
             if (message.equals("tps20")) {
                 AtomicInteger count = new AtomicInteger(1);
                 player.getLocation().dimension().getWorld().getScheduler().scheduleRepeating(() -> {
                     count.getAndIncrement();
-                    player.sendRawMessage("TPS: " + player.getLocation().dimension().getWorld().getTps());
+                    player.sendText("TPS: " + player.getLocation().dimension().getWorld().getTps());
                     return count.get() <= 20;
                 }, 20);
             }
-            if (message.equals("testjoin")) {
+            if (message.startsWith("tr")) {
                 var pk2 = new TextPacket();
                 pk.setType(TextPacket.Type.TRANSLATION);
-                pk.setMessage("§e%multiplayer.player.joined");
-                pk.setParameters(List.of("liulihaocai"));
+                var split = message.substring(3).split("-");
+                pk.setMessage(split[0]);
+                var param = new ArrayList<>(List.of(split));
+                param.removeFirst();
+                pk.setParameters(param);
                 pk.setNeedsTranslation(true);
                 player.sendPacket(pk);
             }

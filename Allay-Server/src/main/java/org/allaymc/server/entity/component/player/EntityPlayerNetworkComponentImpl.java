@@ -434,6 +434,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
             //todo plugin event
             initialized.set(true);
+            Server.getInstance().broadcastTr("§e%minecraft:multiplayer.player.joined", player.getName());
             return PacketSignal.HANDLED;
         }
     }

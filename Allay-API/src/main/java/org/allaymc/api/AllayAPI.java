@@ -53,7 +53,6 @@ import java.util.function.Supplier;
 @Getter
 public final class AllayAPI {
 
-    // TODO: move to file? Prevent problems caused by compiler inlining
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
@@ -93,7 +92,6 @@ public final class AllayAPI {
                 ((Consumer<Object>) entry.getValue().afterBound).accept(apiInstance);
             }
         }
-        log.info("This server is running " + coreName + ", implement Allay-API version §b" + API_VERSION);
         implemented = true;
     }
 

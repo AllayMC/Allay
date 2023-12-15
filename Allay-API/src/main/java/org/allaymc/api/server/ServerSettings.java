@@ -5,6 +5,7 @@ import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.allaymc.api.i18n.LangCode;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
@@ -39,6 +40,9 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("default-permission")
         @Comment("Possible values: VISITOR, MEMBER, OPERATOR")
         private PlayerPermission defaultPermission = PlayerPermission.OPERATOR;
+
+        @Comment("The language used by console")
+        private LangCode language = LangCode.en_US;
     }
 
     @CustomKey("network-settings")

@@ -6,10 +6,12 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.i18n.I18nTranslator;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
@@ -17,16 +19,16 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.storage.PlayerStorage;
+import org.allaymc.server.i18n.AllayI18NTranslator;
+import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
-import org.allaymc.server.world.generator.flat.FlatWorldGenerator;
 import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
-import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentWorldStorage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -43,6 +45,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.allaymc.api.AllayAPI.API_VERSION;
 
 @Slf4j
 public final class AllayServer implements Server {
@@ -63,6 +67,7 @@ public final class AllayServer implements Server {
     private final ExecutorService virtualThreadPool;
     @Getter
     private ServerSettings serverSettings;
+    private I18nTranslator serverI18nTranslator;
     @Getter
     private NetworkServer networkServer;
     private Thread terminalConsoleThread;
@@ -123,13 +128,14 @@ public final class AllayServer implements Server {
         });
         initTerminalConsole();
         this.serverSettings = readServerSettings();
+        this.serverI18nTranslator = new AllayI18NTranslator(new AllayI18nLoader(), serverSettings.genericSettings().language());
+        sendTr("allay:lang.set", serverSettings.genericSettings().language().toString());
         loadWorlds();
         this.networkServer = initNetwork();
-        log.info("Starting up network server...");
+        sendTr("allay:network.server.starting");
         this.networkServer.start();
-        log.info("Network server started at {}:{} ({} ms)",
-                serverSettings.networkSettings().ip(), serverSettings.networkSettings().port(),
-                (System.currentTimeMillis() - timeMillis));
+        sendTr("allay:network.server.started", serverSettings.networkSettings().ip(), String.valueOf(serverSettings.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
+        sendTr("allay:api.implemented", "Allay", API_VERSION);
     }
 
     private void initTerminalConsole() {
@@ -216,6 +222,7 @@ public final class AllayServer implements Server {
         pk.setAction(PlayerListPacket.Action.REMOVE);
         pk.getEntries().add(playerListEntry);
         broadcastPacket(pk);
+        broadcastTr("§e%minecraft:multiplayer.player.left", player.getName());
     }
 
     @Override
@@ -274,6 +281,33 @@ public final class AllayServer implements Server {
         for (var player : players.values()) {
             player.sendPacket(packet);
         }
+    }
+
+    @Override
+    public void broadcastTr(String tr) {
+        getOnlinePlayers().values().forEach(player -> player.sendTr(tr));
+        sendTr(tr);
+    }
+
+    @Override
+    public void broadcastTr(String tr, String... args) {
+        getOnlinePlayers().values().forEach(player -> player.sendTr(tr, args));
+        sendTr(tr, args);
+    }
+
+    @Override
+    public void sendTr(String tr) {
+        log.info(getI18nTranslator().tr(tr));
+    }
+
+    @Override
+    public void sendTr(String tr, String... args) {
+        log.info(getI18nTranslator().tr(tr, args));
+    }
+
+    @Override
+    public I18nTranslator getI18nTranslator() {
+        return serverI18nTranslator;
     }
 
     @Override

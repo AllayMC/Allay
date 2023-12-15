@@ -1,0 +1,6 @@
+{
+  "lang.set": "语言设置为 %1",
+  "api.implemented": "此服务器正在运行 %1, 实现Allay-API版本 §b%2",
+  "network.server.starting": "启动网络服务器中...",
+  "network.server.started": "网络服务器已在 %1:%2 启动 (%3 毫秒)"
+}
