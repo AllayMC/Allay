@@ -11,6 +11,7 @@ import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.i18n.I18nTranslator;
+import org.allaymc.api.identifier.Identifier;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -398,8 +399,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
         var pair = Server.getInstance().getI18nTranslator().findI18nKey(tr);
         var pk = new TextPacket();
-        if (forceTranslatedByClient || pair.left().startsWith(I18nTranslator.VANILLA_LANG_NAMESPACE)) {
+        var isVanillaTr = pair.left().startsWith(I18nTranslator.VANILLA_LANG_NAMESPACE);
+        if (forceTranslatedByClient || isVanillaTr) {
+            if (isVanillaTr) {
+                pk.setMessage(new StringBuilder(tr).replace(pair.right(), pair.right() + I18nTranslator.VANILLA_LANG_NAMESPACE.length() + 2, "").toString());
+            } else {
+                pk.setMessage(tr);
+            }
             pk.setType(TextPacket.Type.TRANSLATION);
+            pk.setXuid(networkComponent.getXUID());
             pk.setParameters(List.of(args));
             pk.setNeedsTranslation(true);
         } else {
