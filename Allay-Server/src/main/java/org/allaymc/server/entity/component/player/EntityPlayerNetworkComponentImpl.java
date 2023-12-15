@@ -118,6 +118,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 }
                 return pushPacketToQueue(packet);
             }
+
+            @Override
+            public void onDisconnect(String reason) {
+                server.onDisconnect(player);
+            }
         });
     }
 
@@ -307,11 +312,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     private class AllayClientLoginPacketHandler implements BedrockPacketHandler {
 
         public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
-
-        @Override
-        public void onDisconnect(String reason) {
-            server.onDisconnect(player);
-        }
 
         @Override
         public PacketSignal handle(RequestNetworkSettingsPacket packet) {

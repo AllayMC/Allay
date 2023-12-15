@@ -402,7 +402,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var isVanillaTr = pair.left().startsWith(I18nTranslator.VANILLA_LANG_NAMESPACE);
         if (forceTranslatedByClient || isVanillaTr) {
             if (isVanillaTr) {
-                pk.setMessage(new StringBuilder(tr).replace(pair.right(), pair.right() + I18nTranslator.VANILLA_LANG_NAMESPACE.length() + 2, "").toString());
+                pk.setMessage(new StringBuilder(tr).replace(pair.right() + 1, pair.right() + I18nTranslator.VANILLA_LANG_NAMESPACE.length() + 2, "").toString());
             } else {
                 pk.setMessage(tr);
             }
