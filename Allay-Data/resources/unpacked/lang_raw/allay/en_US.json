@@ -1,0 +1,6 @@
+{
+  "lang.set": "Language was set to %1",
+  "api.implemented": "This server is running %1, implement Allay-API version §b%2",
+  "network.server.starting": "Starting up network server...",
+  "network.server.started": "Network server started at %1:%2 (%3 ms)"
+}

@@ -5,12 +5,13 @@ import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.i18n.TextReceiver;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender, TextReceiver {
 
     void setSprinting(boolean sprinting);
 
@@ -68,7 +69,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void sendChat(EntityPlayer sender, String message);
 
-    void sendRawMessage(String message);
+    void sendText(String message);
 
     void sendTip(String message);
 

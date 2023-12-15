@@ -4,6 +4,7 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.i18n.I18nTranslator;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
@@ -12,7 +13,6 @@ import org.allaymc.api.world.storage.PlayerStorage;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
-import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -95,11 +95,16 @@ public interface Server extends TaskCreator {
     ExecutorService getVirtualThreadPool();
 
     default void broadcastChat(EntityPlayer sender, String message) {
-        var pk = new TextPacket();
-        pk.setType(TextPacket.Type.CHAT);
-        pk.setMessage(message);
-        pk.setSourceName(sender.getDisplayName());
-        pk.setXuid(sender.getLoginData().getXuid());
-        broadcastPacket(pk);
+        getOnlinePlayers().values().forEach(player -> player.sendChat(sender, message));
     }
+
+    void broadcastTr(String tr);
+
+    void broadcastTr(String tr, String... args);
+
+    void sendTr(String tr);
+
+    void sendTr(String tr, String... args);
+
+    I18nTranslator getI18nTranslator();
 }

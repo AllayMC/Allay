@@ -118,6 +118,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 }
                 return pushPacketToQueue(packet);
             }
+
+            @Override
+            public void onDisconnect(String reason) {
+                server.onDisconnect(player);
+            }
         });
     }
 
@@ -309,11 +314,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
         @Override
-        public void onDisconnect(String reason) {
-            server.onDisconnect(player);
-        }
-
-        @Override
         public PacketSignal handle(RequestNetworkSettingsPacket packet) {
             var protocolVersion = packet.getProtocolVersion();
             var supportedProtocolVersion = server.getNetworkServer().getCodec().getProtocolVersion();
@@ -434,6 +434,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
             //todo plugin event
             initialized.set(true);
+            Server.getInstance().broadcastTr("§e%minecraft:multiplayer.player.joined", player.getName());
             return PacketSignal.HANDLED;
         }
     }
