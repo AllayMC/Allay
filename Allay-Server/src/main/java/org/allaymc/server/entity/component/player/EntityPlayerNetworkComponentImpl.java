@@ -75,7 +75,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @ComponentedObject
     protected EntityPlayer player;
     protected final AtomicBoolean initialized = new AtomicBoolean(false);
-    protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.getInstance().getServerSettings().worldSettings().doFirstSpawnChunkThreshold());
+    protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
     protected final Server server = Server.getInstance();
     protected final Queue<BedrockPacket> packetQueue;
     protected final DataPacketProcessorHolder dataPacketProcessorHolder;
@@ -245,11 +245,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
             startGamePacket.setTrustingPlayers(true);
             startGamePacket.setDayCycleStopTime(0);
-            startGamePacket.setLevelName(server.getServerSettings().genericSettings().motd());
+            startGamePacket.setLevelName(Server.SETTINGS.genericSettings().motd());
             //TODO
             startGamePacket.setLevelId("");
             //TODO
-            startGamePacket.setDefaultPlayerPermission(server.getServerSettings().genericSettings().defaultPermission());
+            startGamePacket.setDefaultPlayerPermission(Server.SETTINGS.genericSettings().defaultPermission());
             startGamePacket.setServerChunkTickRange(spawnWorld.getWorldData().getServerChunkTickRange());
             startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
             startGamePacket.setPremiumWorldTemplateId("");
@@ -328,8 +328,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 return PacketSignal.HANDLED;
             }
             var settingsPacket = new NetworkSettingsPacket();
-            settingsPacket.setCompressionAlgorithm(server.getServerSettings().networkSettings().compressionAlgorithm());
-            settingsPacket.setCompressionThreshold(server.getServerSettings().networkSettings().compressionThreshold());
+            settingsPacket.setCompressionAlgorithm(Server.SETTINGS.networkSettings().compressionAlgorithm());
+            settingsPacket.setCompressionThreshold(Server.SETTINGS.networkSettings().compressionThreshold());
             sendPacketImmediately(settingsPacket);
             session.setCompression(settingsPacket.getCompressionAlgorithm());
             session.setCompressionLevel(settingsPacket.getCompressionThreshold());
@@ -340,7 +340,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         public PacketSignal handle(LoginPacket packet) {
             loginData = LoginData.decode(packet);
 
-            if (!loginData.isXboxAuthenticated() && server.getServerSettings().networkSettings().xboxAuth()) {
+            if (!loginData.isXboxAuthenticated() && Server.SETTINGS.networkSettings().xboxAuth()) {
                 disconnect("disconnectionScreen.notAuthenticated");
                 return PacketSignal.HANDLED;
             }
@@ -361,7 +361,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 return PacketSignal.HANDLED;
             }
 
-            if (server.getServerSettings().networkSettings().enableNetworkEncryption()) {
+            if (Server.SETTINGS.networkSettings().enableNetworkEncryption()) {
                 try {
                     var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
                     var encryptionKeyPair = EncryptionUtils.createKeyPair();
@@ -399,7 +399,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         protected void completeLogin() {
             var playStatusPacket = new PlayStatusPacket();
-            if (server.getOnlinePlayerCount() >= server.getServerSettings().genericSettings().maxClientCount()) {
+            if (server.getOnlinePlayerCount() >= Server.SETTINGS.genericSettings().maxClientCount()) {
                 playStatusPacket.setStatus(PlayStatusPacket.Status.FAILED_SERVER_FULL_SUB_CLIENT);
             } else {
                 playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);

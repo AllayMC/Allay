@@ -45,7 +45,7 @@ public class AllayNetworkServer implements NetworkServer {
 
     @Override
     public void start() {
-        final var settings = server.getServerSettings();
+        final var settings = Server.SETTINGS;
         final int nettyThreadNumber = settings.networkSettings().networkThreadNumber();
         Preconditions.checkArgument(nettyThreadNumber >= 0);
 

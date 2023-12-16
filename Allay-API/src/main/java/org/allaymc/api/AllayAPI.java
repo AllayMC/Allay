@@ -19,6 +19,7 @@ import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.exception.MissingRequirementException;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.item.component.ItemComponentImplFactory;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
@@ -58,6 +59,7 @@ public final class AllayAPI {
     private static final AllayAPI INSTANCE = new AllayAPI();
     private final Map<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
+    private boolean i18nSet = false;
     private boolean implemented = false;
 
     private AllayAPI() {
@@ -78,6 +80,9 @@ public final class AllayAPI {
      */
     @SuppressWarnings("unchecked")
     public void implement(String coreName) throws MissingImplementationException {
+        if (!i18nSet) {
+            throw new MissingImplementationException("Missing i18n implementation!");
+        }
         for (Map.Entry<Class<?>, ApiBindingAction<?>> entry : bindings.entrySet()) {
             if (entry.getValue() == null) {
                 throw new MissingImplementationException("Missing binding for " + entry.getKey().getName());
@@ -92,6 +97,7 @@ public final class AllayAPI {
                 ((Consumer<Object>) entry.getValue().afterBound).accept(apiInstance);
             }
         }
+        log.info(I18n.get().tr("allay:api.implemented", coreName, API_VERSION));
         implemented = true;
     }
 
@@ -120,6 +126,13 @@ public final class AllayAPI {
         Objects.requireNonNull(api);
         Objects.requireNonNull(bindingAction);
         bindings.put(api, new ApiBindingAction<>(bindingAction, afterBound));
+    }
+
+    public void bindI18n(I18n i18nImpl) {
+        Objects.requireNonNull(i18nImpl);
+        I18n.I18N.set(i18nImpl);
+        i18nSet = true;
+        log.info(i18nImpl.tr("allay:lang.set", i18nImpl.getLangCode().name()));
     }
 
     /**

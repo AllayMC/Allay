@@ -1,10 +1,11 @@
 package org.allaymc.api.server;
 
+import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.I18nTranslator;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
@@ -30,6 +31,17 @@ public interface Server extends TaskCreator {
         return INSTANCE.get();
     }
 
+    String SETTINGS_FILE_NAME = "server-settings.yml";
+
+    ServerSettings SETTINGS =
+            ConfigManager.create(ServerSettings.class, it -> {
+                it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
+                it.withBindFile(SETTINGS_FILE_NAME); // specify Path, File or pathname
+                it.withRemoveOrphans(true); // automatic removal of undeclared keys
+                it.saveDefaults(); // save file if does not exists
+                it.load(true); // load and save to update comments/new fields
+            });
+
     /**
      * Start the server
      */
@@ -38,13 +50,6 @@ public interface Server extends TaskCreator {
     void shutdown();
 
     boolean isRunning();
-
-    /**
-     * Get the server settings
-     *
-     * @return the server settings
-     */
-    ServerSettings getServerSettings();
 
     PlayerStorage getPlayerStorage();
 
@@ -105,6 +110,4 @@ public interface Server extends TaskCreator {
     void sendTr(String tr);
 
     void sendTr(String tr, String... args);
-
-    I18nTranslator getI18nTranslator();
 }

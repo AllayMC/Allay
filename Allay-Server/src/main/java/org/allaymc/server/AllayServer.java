@@ -6,12 +6,11 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.AllayAPI;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.I18nTranslator;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
@@ -19,7 +18,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.storage.PlayerStorage;
-import org.allaymc.server.i18n.AllayI18NTranslator;
+import org.allaymc.server.i18n.AllayI18N;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.terminal.AllayTerminalConsole;
@@ -65,9 +64,6 @@ public final class AllayServer implements Server {
     //执行IO密集型任务的线程池
     @Getter
     private final ExecutorService virtualThreadPool;
-    @Getter
-    private ServerSettings serverSettings;
-    private I18nTranslator serverI18nTranslator;
     @Getter
     private NetworkServer networkServer;
     private Thread terminalConsoleThread;
@@ -127,15 +123,11 @@ public final class AllayServer implements Server {
             }
         });
         initTerminalConsole();
-        this.serverSettings = readServerSettings();
-        this.serverI18nTranslator = new AllayI18NTranslator(new AllayI18nLoader(), serverSettings.genericSettings().language());
-        sendTr("allay:lang.set", serverSettings.genericSettings().language().toString());
         loadWorlds();
         this.networkServer = initNetwork();
         sendTr("allay:network.server.starting");
         this.networkServer.start();
-        sendTr("allay:network.server.started", serverSettings.networkSettings().ip(), String.valueOf(serverSettings.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
-        sendTr("allay:api.implemented", "Allay", API_VERSION);
+        sendTr("allay:network.server.started", SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
     }
 
     private void initTerminalConsole() {
@@ -172,16 +164,6 @@ public final class AllayServer implements Server {
     @UnmodifiableView
     public Map<UUID, EntityPlayer> getOnlinePlayers() {
         return Collections.unmodifiableMap(players);
-    }
-
-    private ServerSettings readServerSettings() {
-        return ConfigManager.create(ServerSettings.class, it -> {
-            it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
-            it.withBindFile("server-settings.yml"); // specify Path, File or pathname
-            it.withRemoveOrphans(true); // automatic removal of undeclared keys
-            it.saveDefaults(); // save file if does not exists
-            it.load(true); // load and save to update comments/new fields
-        });
     }
 
     private NetworkServer initNetwork() {
@@ -297,17 +279,12 @@ public final class AllayServer implements Server {
 
     @Override
     public void sendTr(String tr) {
-        log.info(getI18nTranslator().tr(tr));
+        log.info(I18n.get().tr(tr));
     }
 
     @Override
     public void sendTr(String tr, String... args) {
-        log.info(getI18nTranslator().tr(tr, args));
-    }
-
-    @Override
-    public I18nTranslator getI18nTranslator() {
-        return serverI18nTranslator;
+        log.info(I18n.get().tr(tr, args));
     }
 
     @Override

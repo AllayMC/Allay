@@ -2,8 +2,10 @@ package org.allaymc.server.block.registry;
 
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,7 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
 
     @SneakyThrows
     public void init() {
-        log.info("Loading Block Types...");
+        log.info(I18n.get().tr("allay:blocktype.loading"));
         var classes = ReflectionUtils.getAllClasses("org.allaymc.api.block.interfaces");
         classes.removeIf(clazz -> clazz.contains("Component"));
         try (var pgbar = ProgressBar
@@ -45,7 +47,7 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
             }
         }
         rebuildDefinitionList();
-        log.info("Loaded " + classes.size() + " Block Types");
+        log.info(I18n.get().tr("allay:blocktype.loaded", classes.size()));
     }
 
     private final List<BlockDefinition> blockDefinitions = new ArrayList<>();

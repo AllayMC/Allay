@@ -1,5 +1,6 @@
 package org.allaymc.server.item.registry;
 
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
@@ -9,6 +10,7 @@ import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -58,7 +60,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
         @SneakyThrows
         @Override
         public Map<Integer, ItemStack> load(Void input) {
-            log.info("Start loading creative item registry...");
+            log.info(I18n.get().tr("allay:creativeitem.loading"));
             var map = new TreeMap<Integer, ItemStack>();
             NbtMap nbt;
             try (var reader = NbtUtils.createGZIPReader(inputStreamSupplier.get())) {
@@ -82,7 +84,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                 );
                 map.put(index, itemStack);
             });
-            log.info("Loaded creative item registry successfully");
+            log.info(I18n.get().tr("allay:creativeitem.loaded"));
             return map;
         }
     }

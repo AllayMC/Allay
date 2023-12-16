@@ -1,10 +1,12 @@
 package org.allaymc.server.item.enchantment;
 
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +30,7 @@ public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Shor
 
     @SneakyThrows
     public void init() {
-        log.info("Loading Enchantment Types...");
+        log.info(I18n.get().tr("allay:enchtype.loading"));
         var classes = ReflectionUtils.getAllClasses("org.allaymc.api.item.enchantment.type");
         try (var pgbar = ProgressBar
                 .builder()
@@ -42,6 +44,6 @@ public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Shor
                 pgbar.step();
             }
         }
-        log.info("Loaded " + classes.size() + " Enchantment Types");
+        log.info(I18n.get().tr("allay:enchtype.loaded", classes.size()));
     }
 }

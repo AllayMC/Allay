@@ -1,6 +1,6 @@
 package org.allaymc.server.i18n;
 
-import org.allaymc.api.i18n.I18nTranslator;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ public class AllayI18nTest {
 
     public static final String[] ARGS = {"1", "2", "3", "4", "5"};
     public static final String TEST_KEY = "minecraft:translation.test.complex";
-    static I18nTranslator translator = new AllayI18NTranslator(new AllayI18nLoader(), LangCode.en_US);
+    static I18n translator = new AllayI18N(new AllayI18nLoader(), LangCode.en_US);
 
     @Test
     void testTr() {

@@ -44,6 +44,8 @@ import org.allaymc.server.entity.component.AllayEntityComponentImplFactory;
 import org.allaymc.server.entity.effect.AllayEffectRegistry;
 import org.allaymc.server.entity.registry.AllayEntityTypeRegistry;
 import org.allaymc.server.entity.type.AllayEntityType;
+import org.allaymc.server.i18n.AllayI18N;
+import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.attribute.AllayVanillaItemAttributeRegistry;
 import org.allaymc.server.item.component.AllayItemComponentImplFactory;
 import org.allaymc.server.item.enchantment.AllayEnchantmentRegistry;
@@ -82,6 +84,8 @@ public final class Allay {
 
         ComponentClassCacheUtils.checkCacheValid();
         ComponentClassCacheUtils.readCacheMapping();
+
+        api.bindI18n(new AllayI18N(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
 
         // Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);

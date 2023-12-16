@@ -2,8 +2,10 @@ package org.allaymc.server.entity.effect;
 
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectRegistry;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,7 @@ public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, 
 
     @SneakyThrows
     public void init() {
-        log.info("Loading Effect Types...");
+        log.info(I18n.get().tr("allay:effecttype.loading"));
         var classes = ReflectionUtils.getAllClasses("org.allaymc.api.entity.effect.type");
         try (var pgbar = ProgressBar
                 .builder()
@@ -40,6 +42,6 @@ public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, 
                 pgbar.step();
             }
         }
-        log.info("Loaded " + classes.size() + " Effect Types");
+        log.info(I18n.get().tr("allay:effecttype.loaded", classes.size()));
     }
 }

@@ -1,9 +1,11 @@
 package org.allaymc.server.item.registry;
 
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,7 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
 
     @SneakyThrows
     public void init() {
-        log.info("Loading Item Types...");
+        log.info(I18n.get().tr("allay:itemtype.loading"));
         var classes = ReflectionUtils.getAllClasses("org.allaymc.api.item.interfaces");
         classes.removeIf(clazz -> clazz.contains("Component"));
         try (var pgbar = ProgressBar
@@ -45,7 +47,7 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
             }
         }
         rebuildDefinitionList();
-        log.info("Loaded " + classes.size() + " Item Types");
+        log.info(I18n.get().tr("allay:itemtype.loaded", classes.size()));
     }
 
     private final List<ItemDefinition> itemDefinitions = new ArrayList<>();

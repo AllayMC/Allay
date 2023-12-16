@@ -2,9 +2,10 @@ package org.allaymc.server.i18n;
 
 import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.i18n.I18nLoader;
-import org.allaymc.api.i18n.I18nTranslator;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.lang.Math.min;
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
@@ -14,13 +15,15 @@ import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
  *
  * @author daoge_cmd
  */
-public class AllayI18NTranslator implements I18nTranslator {
+public class AllayI18N implements I18n {
 
     protected Map<String, String> langMap;
+    protected LangCode langCode;
     protected I18nLoader i18NLoader;
 
-    public AllayI18NTranslator(I18nLoader i18NLoader, LangCode langCode) {
+    public AllayI18N(I18nLoader i18NLoader, LangCode langCode) {
         this.i18NLoader = i18NLoader;
+        this.langCode = langCode;
         setLangCode(langCode);
     }
 
@@ -92,11 +95,17 @@ public class AllayI18NTranslator implements I18nTranslator {
     public String tr(String tr) {
         var pair = findI18nKey(tr);
         var lang = langMap.get(pair.left());
+        Objects.requireNonNull(lang, "No valid lang key found in \"" + tr + "\"");
         return new StringBuilder(tr).replace(pair.right(), pair.right() + pair.left().length() + 2, lang).toString();
     }
 
     @Override
     public void setLangCode(LangCode langCode) {
         this.langMap = i18NLoader.getLangMap(langCode);
+    }
+
+    @Override
+    public LangCode getLangCode() {
+        return langCode;
     }
 }

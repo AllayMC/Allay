@@ -52,7 +52,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     public AllayEntityPhysicsService(Dimension dimension) {
         this.dimension = dimension;
-        var settings = Server.getInstance().getServerSettings().entitySettings().physicsEngineSettings();
+        var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
         MOTION_THRESHOLD = settings.motionThreshold();
         STEPPING_OFFSET = settings.steppingOffset();
         FAT_AABB_MARGIN = settings.fatAABBMargin();

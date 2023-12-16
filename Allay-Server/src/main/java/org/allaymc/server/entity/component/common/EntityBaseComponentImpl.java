@@ -421,7 +421,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Location3fc newLoc) {
         var flags = EnumSet.noneOf(MoveEntityDeltaPacket.Flag.class);
-        var settings = Server.getInstance().getServerSettings().entitySettings().physicsEngineSettings();
+        var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
         var diffPositionThreshold = settings.diffPositionThreshold();
         var diffRotationThreshold = settings.diffRotationThreshold();
         if (abs(locLastSent.x() - newLoc.x()) > diffPositionThreshold) flags.add(HAS_X);

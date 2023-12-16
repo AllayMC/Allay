@@ -43,7 +43,7 @@ import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
 public class AllayChunkService implements ChunkService {
     private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
-    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.getInstance().getServerSettings().genericSettings().maxClientCount());
+    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.SETTINGS.genericSettings().maxClientCount());
     private final Dimension dimension;
     private final WorldStorage worldStorage;
     private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
@@ -96,7 +96,7 @@ public class AllayChunkService implements ChunkService {
             Long chunkHash = entry.getKey();
             var loadedChunk = entry.getValue();
             if (loadedChunk.getChunkLoaderCount() == 0 && !keepLoadingChunks.contains(chunkHash) && !unusedChunkClearCountDown.containsKey(chunkHash)) {
-                unusedChunkClearCountDown.put(chunkHash, Server.getInstance().getServerSettings().worldSettings().removeUnneededChunkCycle());
+                unusedChunkClearCountDown.put(chunkHash, Server.SETTINGS.worldSettings().removeUnneededChunkCycle());
             }
         }
     }
@@ -410,9 +410,9 @@ public class AllayChunkService implements ChunkService {
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
             if (!chunkReadyToSend.isEmpty()) {
                 chunkLoader.publishClientChunkUpdate();
-                var worldSettings = Server.getInstance().getServerSettings().worldSettings();
+                var worldSettings = Server.SETTINGS.worldSettings();
                 var chunkSendingStrategy = worldSettings.chunkSendingStrategy();
-                if (Server.getInstance().getServerSettings().worldSettings().useSubChunkSendingSystem()) {
+                if (Server.SETTINGS.worldSettings().useSubChunkSendingSystem()) {
                     // Use SYNC mode if sub-chunk sending system is enabled
                     // Because the encoding of sub-chunk lcp is very quick
                     chunkSendingStrategy = SYNC;

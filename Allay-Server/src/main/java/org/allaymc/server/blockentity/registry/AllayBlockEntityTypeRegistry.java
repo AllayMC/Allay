@@ -2,7 +2,9 @@ package org.allaymc.server.blockentity.registry;
 
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,7 @@ public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<String, B
 
     @SneakyThrows
     public void init() {
-        log.info("Loading Block Entity Types...");
+        log.info(I18n.get().tr("allay:blockentitytype.loading"));
         var classes = ReflectionUtils.getAllClasses("org.allaymc.api.blockentity.interfaces");
         classes.removeIf(clazz -> clazz.contains("Component"));
         try (var pgbar = ProgressBar
@@ -40,6 +42,6 @@ public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<String, B
                 pgbar.step();
             }
         }
-        log.info("Loaded " + classes.size() + " Block Entity Types");
+        log.info(I18n.get().tr("allay:blockentitytype.loaded", classes.size()));
     }
 }

@@ -10,8 +10,7 @@ import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.i18n.I18nTranslator;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -35,7 +34,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBf;
 
@@ -67,10 +65,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Getter
     protected String displayName;
     @Getter
-    protected int chunkLoadingRadius = Server.getInstance().getServerSettings().worldSettings().viewDistance();
+    protected int chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
     @Getter
     @Setter
-    protected int chunkTrySendCountPerTick = Server.getInstance().getServerSettings().worldSettings().chunkTrySendCountPerTick();
+    protected int chunkTrySendCountPerTick = Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
@@ -328,7 +326,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void setChunkLoadingRadius(int radius) {
-        chunkLoadingRadius = Math.min(radius, Server.getInstance().getServerSettings().worldSettings().viewDistance());
+        chunkLoadingRadius = Math.min(radius, Server.SETTINGS.worldSettings().viewDistance());
         var chunkRadiusUpdatedPacket = new ChunkRadiusUpdatedPacket();
         chunkRadiusUpdatedPacket.setRadius(chunkLoadingRadius);
         networkComponent.sendPacket(chunkRadiusUpdatedPacket);
@@ -397,12 +395,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
-        var pair = Server.getInstance().getI18nTranslator().findI18nKey(tr);
+        var pair = I18n.get().findI18nKey(tr);
         var pk = new TextPacket();
-        var isVanillaTr = pair.left().startsWith(I18nTranslator.VANILLA_LANG_NAMESPACE);
+        var isVanillaTr = pair.left().startsWith(I18n.VANILLA_LANG_NAMESPACE);
         if (forceTranslatedByClient || isVanillaTr) {
             if (isVanillaTr) {
-                pk.setMessage(new StringBuilder(tr).replace(pair.right() + 1, pair.right() + I18nTranslator.VANILLA_LANG_NAMESPACE.length() + 2, "").toString());
+                pk.setMessage(new StringBuilder(tr).replace(pair.right() + 1, pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 2, "").toString());
             } else {
                 pk.setMessage(tr);
             }
@@ -411,7 +409,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             pk.setParameters(List.of(args));
             pk.setNeedsTranslation(true);
         } else {
-            sendText(Server.getInstance().getI18nTranslator().tr(tr));
+            sendText(I18n.get().tr(tr));
         }
         networkComponent.sendPacket(pk);
     }
