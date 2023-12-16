@@ -94,7 +94,7 @@ public class AllayBlockComponentImplFactory implements BlockComponentImplFactory
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityHolderComponent<T> createBlockEntityHolderComponent(BlockEntityType<T> blockEntityType) {
+    public BlockEntityHolderComponent<?> createBlockEntityHolderComponent(BlockEntityType<?> blockEntityType) {
         return new BlockEntityHolderComponentImpl<>(blockEntityType);
     }
 }

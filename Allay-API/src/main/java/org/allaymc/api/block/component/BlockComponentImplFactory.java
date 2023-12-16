@@ -53,5 +53,5 @@ public interface BlockComponentImplFactory {
 
     BlockAttributeComponent createRedefinedAABBBlockAttributeComponent(Function<BlockState, VoxelShape> aabbRedefiner);
 
-    <T extends BlockEntity> BlockEntityHolderComponent<T> createBlockEntityHolderComponent(BlockEntityType<T> blockEntityType);
+    BlockEntityHolderComponent<?> createBlockEntityHolderComponent(BlockEntityType<?> blockEntityType);
 }
