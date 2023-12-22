@@ -67,10 +67,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     AdventureSettings getAdventureSettings();
 
-    void sendChat(EntityPlayer sender, String message);
-
-    void sendText(String message);
-
     void sendTip(String message);
 
     void sendPopup(String message);

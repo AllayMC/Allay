@@ -6,6 +6,7 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.i18n.TextReceiver;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
@@ -24,7 +25,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * The server interface
  */
-public interface Server extends TaskCreator {
+public interface Server extends TaskCreator, TextReceiver {
     ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.of();
 
     static Server getInstance() {
@@ -101,13 +102,10 @@ public interface Server extends TaskCreator {
 
     default void broadcastChat(EntityPlayer sender, String message) {
         getOnlinePlayers().values().forEach(player -> player.sendChat(sender, message));
+        sendChat(sender, message);
     }
 
     void broadcastTr(String tr);
 
     void broadcastTr(String tr, String... args);
-
-    void sendTr(String tr);
-
-    void sendTr(String tr, String... args);
 }

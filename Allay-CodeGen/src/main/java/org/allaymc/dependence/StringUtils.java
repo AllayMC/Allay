@@ -42,7 +42,7 @@ public class StringUtils {
         String[] strings = new String[]{defaultPartOne, str};
         int i = str.indexOf(delimiter);
         if (i >= 0) {
-            strings[1] = str.substring(i + 1);
+            strings[1] = str.substring(i + delimiter.length());
             if (i >= 1) {
                 strings[0] = str.substring(0, i);
             }

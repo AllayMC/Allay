@@ -14,6 +14,7 @@ import java.util.TreeMap;
  *
  * @author daoge_cmd
  */
+@Deprecated
 public class VanillaEntityDataExtractor {
 
     public static final Gson GSON = new Gson();

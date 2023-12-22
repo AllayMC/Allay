@@ -1,7 +1,5 @@
 package org.allaymc.server;
 
-import eu.okaeri.configs.ConfigManager;
-import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
@@ -11,15 +9,13 @@ import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.storage.PlayerStorage;
-import org.allaymc.server.i18n.AllayI18N;
-import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayDimension;
@@ -44,8 +40,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.allaymc.api.AllayAPI.API_VERSION;
 
 @Slf4j
 public final class AllayServer implements Server {
@@ -125,9 +119,9 @@ public final class AllayServer implements Server {
         initTerminalConsole();
         loadWorlds();
         this.networkServer = initNetwork();
-        sendTr("allay:network.server.starting");
+        sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         this.networkServer.start();
-        sendTr("allay:network.server.started", SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
+        sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
     }
 
     private void initTerminalConsole() {
@@ -204,7 +198,7 @@ public final class AllayServer implements Server {
         pk.setAction(PlayerListPacket.Action.REMOVE);
         pk.getEntries().add(playerListEntry);
         broadcastPacket(pk);
-        broadcastTr("§e%minecraft:multiplayer.player.left", player.getName());
+        broadcastTr("§e" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getName());
     }
 
     @Override
@@ -283,8 +277,24 @@ public final class AllayServer implements Server {
     }
 
     @Override
+    public void sendText(String text) {
+        log.info(text);
+    }
+
+    @Override
+    public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
+        // forceTranslatedByClient is unused
+        sendTr(tr, args);
+    }
+
+    @Override
     public void sendTr(String tr, String... args) {
         log.info(I18n.get().tr(tr, args));
+    }
+
+    @Override
+    public void sendChat(EntityPlayer sender, String message) {
+        log.info("§e<" + sender.getDisplayName() + "> " + message);
     }
 
     @Override

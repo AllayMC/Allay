@@ -1,5 +1,7 @@
 package org.allaymc.api.i18n;
 
+import org.allaymc.api.entity.interfaces.EntityPlayer;
+
 /**
  * Allay Project 2023/12/15
  *
@@ -15,4 +17,6 @@ public interface TextReceiver {
     }
 
     void sendTr(String tr);
+
+    void sendChat(EntityPlayer sender, String message);
 }

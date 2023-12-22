@@ -84,7 +84,7 @@ tasks.jmh {
 }
 
 tasks.runShadow {
-    this.jarFile = file("build/libs/Allay-Server-0.0.1-all.jar")
+    this.jarFile = file("build/libs/Allay-Server-$version-all.jar")
 }
 
 tasks.installShadowDist {

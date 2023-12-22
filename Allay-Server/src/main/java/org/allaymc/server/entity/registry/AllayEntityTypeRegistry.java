@@ -3,6 +3,7 @@ package org.allaymc.server.entity.registry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.server.Server;
@@ -36,7 +37,7 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
 
     @SneakyThrows
     public void init() {
-        log.info(I18n.get().tr("allay:entitytype.loading"));
+        log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADING));
         var classes = ReflectionUtils.getAllClasses("org.allaymc.api.entity.interfaces");
         classes.removeIf(clazz -> clazz.contains("Component"));
         try (var pgbar = ProgressBar
@@ -51,7 +52,7 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
                 pgbar.step();
             }
         }
-        log.info(I18n.get().tr("allay:entitytype.loaded", classes.size()));
+        log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADED, classes.size()));
     }
 
     @SneakyThrows

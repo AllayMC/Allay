@@ -2051,7 +2051,7 @@ realmsCreateScreen.termsAndConditionsHeader=条款和条件	#
 realmsCreateScreen.viewTermsAndConditions=条款和条件	#
 realmsCreateScreen.viewPrivacyPolicy=查看隐私政策	#
 realmsCreateScreen.durationHeader=持续时间	#
-realmsCreateScreen.durationShort=30 天	#
+realmsSharingScreen.durationShort=30 天	#
 realmsCreateScreen.durationLong=180 天	#
 realmsCreateScreen.sizeHeader=层级	#
 realmsCreateScreen.purchasePrefix.create=创建	#
@@ -8145,7 +8145,7 @@ store.createdBy=作者：%s	#
 store.seeMoreBy=查看由 %s 提供的更多内容	#
 store.seeMoreBy.multiCreatorBundle=按同捆包创建者查看更多	#
 store.fetchingItem=正在连接到市场…	#
- 
+
 store.timer.daysAbbreviated=%s天		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
 store.timer.hoursAbbreviated=%s时		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
 store.timer.minutesAbbreviated=%s分		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters

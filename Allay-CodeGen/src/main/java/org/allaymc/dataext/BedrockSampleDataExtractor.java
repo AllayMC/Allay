@@ -7,6 +7,7 @@ import java.nio.file.Path;
  *
  * @author daoge_cmd
  */
+@Deprecated
 public class BedrockSampleDataExtractor {
 
     public static final Path BEDROCK_SAMPLE_FILE_ROOT_PATH = Path.of("Data/bedrock-samples");

@@ -1,5 +1,7 @@
 package org.allaymc.dependence;
 
+import org.jetbrains.annotations.Nullable;
+
 import static org.allaymc.dependence.StringUtils.fastTwoPartSplit;
 
 /**
@@ -14,6 +16,7 @@ public final class IdentifierUtils {
         return new Identifier(fastTwoPartSplit(id, delimiter, Identifier.DEFAULT_NAMESPACE));
     }
 
+    @Nullable
     public static Identifier tryParse(String id) {
         try {
             return new Identifier(id);
@@ -22,6 +25,7 @@ public final class IdentifierUtils {
         }
     }
 
+    @Nullable
     public static Identifier of(String namespace, String path) {
         try {
             return new Identifier(namespace, path);
@@ -51,7 +55,7 @@ public final class IdentifierUtils {
         }
     }
 
-    static boolean isPathValid(String path) {
+    public static boolean isPathValid(String path) {
         for (int i = 0; i < path.length(); ++i) {
             if (isPathCharacterValid(path.charAt(i))) continue;
             return false;
@@ -59,11 +63,11 @@ public final class IdentifierUtils {
         return true;
     }
 
-    static boolean isPathCharacterValid(char character) {
-        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= '0' && character <= '9' || character == '/' || character == '.';
+    public static boolean isPathCharacterValid(char character) {
+        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '/' || character == '.';
     }
 
-    static boolean isNamespaceValid(String namespace) {
+    public static boolean isNamespaceValid(String namespace) {
         for (int i = 0; i < namespace.length(); ++i) {
             if (isNamespaceCharacterValid(namespace.charAt(i))) continue;
             return false;
@@ -71,7 +75,7 @@ public final class IdentifierUtils {
         return true;
     }
 
-    static boolean isNamespaceCharacterValid(char character) {
-        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= '0' && character <= '9' || character == '.';
+    public static boolean isNamespaceCharacterValid(char character) {
+        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '.';
     }
 }
