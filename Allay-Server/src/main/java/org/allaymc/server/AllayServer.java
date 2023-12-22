@@ -176,6 +176,7 @@ public final class AllayServer implements Server {
                         .builder()
                         .build()
         );
+        sendTr(TrKeys.A_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString());
         player.setClientSession(session);
     }
 
@@ -183,22 +184,27 @@ public final class AllayServer implements Server {
     public void onLoggedIn(EntityPlayer player) {
         players.put(player.getUUID(), player);
         networkServer.setPlayerCount(players.size());
+        addToPlayerList(player);
     }
 
     @Override
     public void onDisconnect(EntityPlayer player) {
         if (player.isInitialized()) {
             this.getPlayerStorage().writePlayerData(player);
+            broadcastTr("§e" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getName());
         }
-        player.getDimension().removePlayer(player);
-        players.remove(player.getUUID());
-        networkServer.setPlayerCount(players.size());
-        var playerListEntry = playerListEntryMap.remove(player.getUUID());
-        var pk = new PlayerListPacket();
-        pk.setAction(PlayerListPacket.Action.REMOVE);
-        pk.getEntries().add(playerListEntry);
-        broadcastPacket(pk);
-        broadcastTr("§e" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getName());
+        if (player.isSpawned()) {
+            player.getDimension().removePlayer(player);
+        }
+        if (player.isLoggedIn()) {
+            players.remove(player.getUUID());
+            networkServer.setPlayerCount(players.size());
+            var playerListEntry = playerListEntryMap.remove(player.getUUID());
+            var pk = new PlayerListPacket();
+            pk.setAction(PlayerListPacket.Action.REMOVE);
+            pk.getEntries().add(playerListEntry);
+            broadcastPacket(pk);
+        }
     }
 
     @Override
@@ -294,7 +300,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void sendChat(EntityPlayer sender, String message) {
-        log.info("§e<" + sender.getDisplayName() + "> " + message);
+        log.info("<" + sender.getDisplayName() + "> " + message);
     }
 
     @Override

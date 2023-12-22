@@ -62,6 +62,8 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
      */
     boolean isInitialized();
 
+    boolean isLoggedIn();
+
     @ApiStatus.Internal
     void handleDataPacket();
 

@@ -75,6 +75,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @ComponentedObject
     protected EntityPlayer player;
     protected final AtomicBoolean initialized = new AtomicBoolean(false);
+    protected final AtomicBoolean loggedIn = new AtomicBoolean(false);
     protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
     protected final Server server = Server.getInstance();
     protected final Queue<BedrockPacket> packetQueue;
@@ -108,6 +109,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
+    public boolean isLoggedIn() {
+        return loggedIn.get();
+    }
+
+    @Override
     public void setClientSession(BedrockServerSession session) {
         this.session = session;
         session.setPacketHandler(new BedrockPacketHandler() {
@@ -116,7 +122,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 if (loginPacketHandler.handlePacket(packet) == PacketSignal.HANDLED) {
                     return PacketSignal.HANDLED;
                 }
-                return pushPacketToQueue(packet);
+                packetQueue.add(packet);
+                return PacketSignal.HANDLED;//For our own log packet
             }
 
             @Override
@@ -124,11 +131,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 server.onDisconnect(player);
             }
         });
-    }
-
-    protected PacketSignal pushPacketToQueue(BedrockPacket packet) {
-        packetQueue.add(packet);
-        return PacketSignal.HANDLED;//For our own log packet
     }
 
     @Override
@@ -191,7 +193,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
         updateAttributesPacket.setTick(player.getWorld().getTick());
         sendPacket(updateAttributesPacket);
-        server.addToPlayerList(player);
         if (server.getOnlinePlayerCount() > 1) {
             server.sendFullPlayerListInfoTo(player);
         }
@@ -405,6 +406,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
             }
             sendPacket(playStatusPacket);
+            loggedIn.set(true);
             server.onLoggedIn(player);
             //todo plugin event
             manager.callEvent(PlayerLoggedInEvent.INSTANCE);
