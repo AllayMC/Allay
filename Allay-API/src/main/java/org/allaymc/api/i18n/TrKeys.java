@@ -51,6 +51,8 @@ public interface TrKeys {
 
   String A_NETWORK_CLIENT_CONNECTED = "%allay:network.client.connected";
 
+  String A_NETWORK_CLIENT_DISCONNECTED = "%allay:network.client.disconnected";
+
   String A_NETWORK_SERVER_STARTED = "%allay:network.server.started";
 
   String A_NETWORK_SERVER_STARTING = "%allay:network.server.starting";

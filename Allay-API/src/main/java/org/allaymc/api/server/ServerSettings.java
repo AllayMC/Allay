@@ -43,6 +43,10 @@ public class ServerSettings extends OkaeriConfig {
 
         @Comment("The language used by console")
         private LangCode language = LangCode.en_US;
+
+        @Comment("Open debug mode")
+        @Comment("If debug mode is enabled, the console will outputs more detailed information")
+        private boolean debug = false;
     }
 
     @CustomKey("network-settings")

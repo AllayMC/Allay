@@ -21,6 +21,7 @@
   "allay:itemtype.loading": "正在加载物品类型...",
   "allay:lang.set": "服务器语言已设置为 %1",
   "allay:network.client.connected": "客户端已连接, 地址: %1",
+  "allay:network.client.disconnected": "客户端断开连接, 地址: %1",
   "allay:network.server.started": "网络服务器已在 %1:%2 启动 (%3 毫秒)",
   "allay:network.server.starting": "启动网络服务器中...",
   "minecraft:achievement.acquireIron": "来硬的",

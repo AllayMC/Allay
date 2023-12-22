@@ -134,6 +134,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
+    public BedrockServerSession getClientSession() {
+        return session;
+    }
+
+    @Override
     public void onChunkInRangeSent() {
         if (doFirstSpawnChunkThreshold.get() > 0) {
             if (doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
@@ -193,6 +198,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
         updateAttributesPacket.setTick(player.getWorld().getTick());
         sendPacket(updateAttributesPacket);
+        // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
+        server.addToPlayerList(player);
         if (server.getOnlinePlayerCount() > 1) {
             server.sendFullPlayerListInfoTo(player);
         }
@@ -422,8 +429,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 }
                 case HAVE_ALL_PACKS -> {
                     var stackPacket = new ResourcePackStackPacket();
-                    stackPacket.setGameVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
+                    // Just left a '*' here, if we put in exact game version
+                    // It is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
+                    stackPacket.setGameVersion("*");
                     sendPacket(stackPacket);
+                    // TODO: possible bug here
                 }
                 case COMPLETED -> {
                     initializePlayer();

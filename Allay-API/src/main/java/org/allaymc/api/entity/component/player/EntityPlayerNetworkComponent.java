@@ -70,6 +70,8 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
     @ApiStatus.Internal
     void setClientSession(BedrockServerSession session);
 
+    BedrockServerSession getClientSession();
+
     @ApiStatus.Internal
     void onChunkInRangeSent();
 }
