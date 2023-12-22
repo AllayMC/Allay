@@ -69,7 +69,7 @@ public class AllayCommandManager extends CommandManager {
                         );
                 case NoSuchCommandException exception ->
                         this.handleException(sender, NoSuchCommandException.class, exception, (s, e) ->
-                                sender.error(I18n.get().tr("§c" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, input))
+                                sender.error(I18n.get().tr(TrKeys.M_COMMANDS_GENERIC_UNKNOWN, input))
                         );
                 case ArgumentParseException exception ->
                         this.handleException(sender, ArgumentParseException.class, exception, (s, e) ->
