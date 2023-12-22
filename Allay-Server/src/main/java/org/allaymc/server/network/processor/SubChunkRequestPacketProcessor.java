@@ -33,8 +33,10 @@ import java.util.*;
 public class SubChunkRequestPacketProcessor extends DataPacketProcessor<SubChunkRequestPacket> {
     private static final ByteBuf EMPTY_BUFFER = Unpooled.wrappedBuffer(new byte[0]);
 
-    //保存着上tick已经发送的SubChunkRequestData
-    private final Map<Long, Set<SubChunkRequestIndex>> sentSubChunks = new Long2ObjectOpenHashMap<>();
+    // This collection is temporarily disabled because the data in the collection has not been cleaned up, and there is a serious memory leak in the case of a large number of chunk sending
+    // TODO: We need a better solution to prevent hack client's DOS attack
+//    //保存着上tick已经发送的SubChunkRequestData
+//    private final Map<Long, Set<SubChunkRequestIndex>> sentSubChunks = new Long2ObjectOpenHashMap<>();
 
     record SubChunkRequestIndex(org.cloudburstmc.math.vector.Vector3i centerPosition,
                                 org.cloudburstmc.math.vector.Vector3i offset) {
@@ -80,16 +82,16 @@ public class SubChunkRequestPacketProcessor extends DataPacketProcessor<SubChunk
                 continue;
             }
 
-            var chunkHash = chunk.computeChunkHash();
-            this.sentSubChunks.putIfAbsent(chunkHash, new HashSet<>());
-            var sent = this.sentSubChunks.get(chunkHash);
-            SubChunkRequestIndex requestIndex = new SubChunkRequestIndex(centerPosition, offset);
-            if (sent.contains(requestIndex)) {
-                log.trace("Player " + player.getOriginName() + " requested sub chunk which was already sent");
-                continue;
-            } else {
-                sent.add(requestIndex);
-            }
+//            var chunkHash = chunk.computeChunkHash();
+//            this.sentSubChunks.putIfAbsent(chunkHash, new HashSet<>());
+//            var sent = this.sentSubChunks.get(chunkHash);
+//            SubChunkRequestIndex requestIndex = new SubChunkRequestIndex(centerPosition, offset);
+//            if (sent.contains(requestIndex)) {
+//                log.trace("Player " + player.getOriginName() + " requested sub chunk which was already sent");
+//                continue;
+//            } else {
+//                sent.add(requestIndex);
+//            }
 
             byte[] hMap = new byte[256];
             boolean higher = true, lower = true;
