@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
@@ -55,7 +57,7 @@ public class AllayCommandManager extends CommandManager {
             switch (throwable) {
                 case InvalidSyntaxException exception ->
                         this.handleException(sender, InvalidSyntaxException.class, exception, (s, e) ->
-                                sender.error("Invalid Command Syntax. Correct command syntax is: /" + exception.getCorrectSyntax())
+                                sender.error(I18n.get().tr(TrKeys.A_COMMAND_INVALID_SYNTAX, exception.getCorrectSyntax()))
                         );
                 case InvalidCommandSenderException exception ->
                         this.handleException(sender, InvalidCommandSenderException.class, exception, (s, e) ->
@@ -63,21 +65,18 @@ public class AllayCommandManager extends CommandManager {
                         );
                 case NoPermissionException exception ->
                         this.handleException(sender, NoPermissionException.class, exception, (s, e) ->
-                                sender.error(
-                                        "I'm sorry, but you do not have permission to perform this command. " +
-                                        "Please contact the server administrators if you believe that this is in error."
-                                )
+                                sender.error(I18n.get().tr(TrKeys.M_COMMANDS_TP_PERMISSION))
                         );
                 case NoSuchCommandException exception ->
                         this.handleException(sender, NoSuchCommandException.class, exception, (s, e) ->
-                                sender.error("Unknown command. Type \"/help\" for help.")
+                                sender.error(I18n.get().tr("§c" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, input))
                         );
                 case ArgumentParseException exception ->
                         this.handleException(sender, ArgumentParseException.class, exception, (s, e) ->
-                                sender.reply("Invalid Command Argument: " + exception.getCause().getMessage())
+                                sender.reply(I18n.get().tr("§c" + TrKeys.M_COMMANDS_GENERIC_PARAMETER_INVALID, exception.getCause().getMessage()))
                         );
                 case null, default ->
-                        sender.error("An internal error occurred while attempting to perform this command.");
+                        sender.error(I18n.get().tr(TrKeys.A_COMMAND_INTERNAL_ERROR));
             }
         });
     }
