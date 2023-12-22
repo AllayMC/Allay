@@ -23,6 +23,10 @@ public interface TrKeys {
 
   String A_BLOCKTYPE_LOADING = "%allay:blocktype.loading";
 
+  String A_COMMAND_INTERNAL_ERROR = "%allay:command.internal.error";
+
+  String A_COMMAND_INVALID_SYNTAX = "%allay:command.invalid.syntax";
+
   String A_CREATIVEITEM_LOADED = "%allay:creativeitem.loaded";
 
   String A_CREATIVEITEM_LOADING = "%allay:creativeitem.loading";
@@ -44,6 +48,8 @@ public interface TrKeys {
   String A_ITEMTYPE_LOADING = "%allay:itemtype.loading";
 
   String A_LANG_SET = "%allay:lang.set";
+
+  String A_NETWORK_CLIENT_CONNECTED = "%allay:network.client.connected";
 
   String A_NETWORK_SERVER_STARTED = "%allay:network.server.started";
 
