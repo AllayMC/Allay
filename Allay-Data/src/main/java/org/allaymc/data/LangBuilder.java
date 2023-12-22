@@ -130,6 +130,8 @@ public class LangBuilder {
         NOT_INCLUDES.add("worldConversionErrorPrompt");
         NOT_INCLUDES.add("userData");
         NOT_INCLUDES.add("title");
+        NOT_INCLUDES.add("authentication");
+        NOT_INCLUDES.add("addServer");
     }
 
     public static void main(String[] args) {

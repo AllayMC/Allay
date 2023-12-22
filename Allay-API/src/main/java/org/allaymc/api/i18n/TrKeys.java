@@ -357,26 +357,6 @@ public interface TrKeys {
 
   String M_ACTION_INTERACT_WRITE = "%minecraft:action.interact.write";
 
-  String M_ADDSERVER_ADD = "%minecraft:addServer.add";
-
-  String M_ADDSERVER_ALREADYADDED = "%minecraft:addServer.alreadyAdded";
-
-  String M_ADDSERVER_ENTERIP = "%minecraft:addServer.enterIp";
-
-  String M_ADDSERVER_ENTERNAME = "%minecraft:addServer.enterName";
-
-  String M_ADDSERVER_HIDEADDRESS = "%minecraft:addServer.hideAddress";
-
-  String M_ADDSERVER_RESOURCEPACK = "%minecraft:addServer.resourcePack";
-
-  String M_ADDSERVER_RESOURCEPACK_DISABLED = "%minecraft:addServer.resourcePack.disabled";
-
-  String M_ADDSERVER_RESOURCEPACK_ENABLED = "%minecraft:addServer.resourcePack.enabled";
-
-  String M_ADDSERVER_RESOURCEPACK_PROMPT = "%minecraft:addServer.resourcePack.prompt";
-
-  String M_ADDSERVER_TITLE = "%minecraft:addServer.title";
-
   String M_ADVMODE_ALLENTITIES = "%minecraft:advMode.allEntities";
 
   String M_ADVMODE_ALLPLAYERS = "%minecraft:advMode.allPlayers";
@@ -424,112 +404,6 @@ public interface TrKeys {
   String M_ATTRIBUTION_GOBACK = "%minecraft:attribution.goBack";
 
   String M_ATTRIBUTION_VIEWATTRIBUTION = "%minecraft:attribution.viewAttribution";
-
-  String M_AUTHENTICATION_ADALEXCEPTION = "%minecraft:authentication.adalException";
-
-  String M_AUTHENTICATION_BUYMINECRAFT = "%minecraft:authentication.buyMinecraft";
-
-  String M_AUTHENTICATION_CLICKTOPURCHASE = "%minecraft:authentication.clickToPurchase";
-
-  String M_AUTHENTICATION_DEMO_BODY_DEFAULT = "%minecraft:authentication.demo.body.default";
-
-  String M_AUTHENTICATION_DEMO_BODY_ERROR = "%minecraft:authentication.demo.body.error";
-
-  String M_AUTHENTICATION_DEMO_TITLE = "%minecraft:authentication.demo.title";
-
-  String M_AUTHENTICATION_DEMO_TITLE_ERROR = "%minecraft:authentication.demo.title.error";
-
-  String M_AUTHENTICATION_EDU_LEAVEGAME_BODY = "%minecraft:authentication.edu.leaveGame.body";
-
-  String M_AUTHENTICATION_EDU_LEAVEGAME_HELP = "%minecraft:authentication.edu.leaveGame.help";
-
-  String M_AUTHENTICATION_EDU_LEAVEGAME_TITLE = "%minecraft:authentication.edu.leaveGame.title";
-
-  String M_AUTHENTICATION_EDUCATIONONLY = "%minecraft:authentication.educationOnly";
-
-  String M_AUTHENTICATION_ERROR_ACCOUNTTYPE_BODY = "%minecraft:authentication.error.accountType.body";
-
-  String M_AUTHENTICATION_ERROR_GENERIC_BODY = "%minecraft:authentication.error.generic.body";
-
-  String M_AUTHENTICATION_ERROR_GENERIC_LINK1 = "%minecraft:authentication.error.generic.link1";
-
-  String M_AUTHENTICATION_ERROR_GENERIC_LINK2 = "%minecraft:authentication.error.generic.link2";
-
-  String M_AUTHENTICATION_ERROR_GENERIC_TITLE = "%minecraft:authentication.error.generic.title";
-
-  String M_AUTHENTICATION_ERROR_OUTOFDATE_BODY = "%minecraft:authentication.error.outOfDate.body";
-
-  String M_AUTHENTICATION_ERROR_OUTOFDATE_DOWNLOADPAGE = "%minecraft:authentication.error.outOfDate.downloadPage";
-
-  String M_AUTHENTICATION_ERROR_OUTOFDATE_TITLE = "%minecraft:authentication.error.outOfDate.title";
-
-  String M_AUTHENTICATION_EXITINGGAME = "%minecraft:authentication.exitingGame";
-
-  String M_AUTHENTICATION_FINALTRIALWARNING = "%minecraft:authentication.finalTrialWarning";
-
-  String M_AUTHENTICATION_LOCATION = "%minecraft:authentication.location";
-
-  String M_AUTHENTICATION_LOGGINGIN = "%minecraft:authentication.loggingin";
-
-  String M_AUTHENTICATION_MINECRAFTINSTEAD = "%minecraft:authentication.minecraftInstead";
-
-  String M_AUTHENTICATION_ONETRIALWARNING = "%minecraft:authentication.oneTrialWarning";
-
-  String M_AUTHENTICATION_PLEASESIGNIN = "%minecraft:authentication.pleaseSignIn";
-
-  String M_AUTHENTICATION_SIGNIN = "%minecraft:authentication.signIn";
-
-  String M_AUTHENTICATION_SIGNIN_TRYAGAIN = "%minecraft:authentication.signIn.tryAgain";
-
-  String M_AUTHENTICATION_SIGNINBUTTON = "%minecraft:authentication.signInButton";
-
-  String M_AUTHENTICATION_SIGNINREQUIRED = "%minecraft:authentication.signInRequired";
-
-  String M_AUTHENTICATION_SIGNINGINTO = "%minecraft:authentication.signingInTo";
-
-  String M_AUTHENTICATION_STORE_CONFIRM_BUTTON = "%minecraft:authentication.store.confirm.button";
-
-  String M_AUTHENTICATION_STORE_CONFIRMPURCHASE = "%minecraft:authentication.store.confirmPurchase";
-
-  String M_AUTHENTICATION_STORE_INTRO = "%minecraft:authentication.store.intro";
-
-  String M_AUTHENTICATION_STORE_POPUP_PURCHASEFAILED_MSG = "%minecraft:authentication.store.popup.purchaseFailed.msg";
-
-  String M_AUTHENTICATION_STORE_POPUP_PURCHASEFAILED_TITLE = "%minecraft:authentication.store.popup.purchaseFailed.title";
-
-  String M_AUTHENTICATION_STORE_PURCHASE_BUTTON = "%minecraft:authentication.store.purchase.button";
-
-  String M_AUTHENTICATION_STORE_PURCHASE_INFO1 = "%minecraft:authentication.store.purchase.info1";
-
-  String M_AUTHENTICATION_STORE_PURCHASE_INFO2 = "%minecraft:authentication.store.purchase.info2";
-
-  String M_AUTHENTICATION_STORE_TERMS = "%minecraft:authentication.store.terms";
-
-  String M_AUTHENTICATION_STORE_VIEWPRIVACYPOLICY = "%minecraft:authentication.store.viewPrivacyPolicy";
-
-  String M_AUTHENTICATION_STORE_VIEWTERMSANDCONDITIONS = "%minecraft:authentication.store.viewTermsAndConditions";
-
-  String M_AUTHENTICATION_TOAST_REFRESHFAILED_BODY = "%minecraft:authentication.toast.refreshFailed.body";
-
-  String M_AUTHENTICATION_TOAST_REFRESHFAILED_TITLE = "%minecraft:authentication.toast.refreshFailed.title";
-
-  String M_AUTHENTICATION_TRIALENDED = "%minecraft:authentication.trialEnded";
-
-  String M_AUTHENTICATION_TRIALENDEDTITLE = "%minecraft:authentication.trialEndedTitle";
-
-  String M_AUTHENTICATION_TRIALMESSAGETITLE = "%minecraft:authentication.trialMessageTitle";
-
-  String M_AUTHENTICATION_TRIALWARNING = "%minecraft:authentication.trialWarning";
-
-  String M_AUTHENTICATION_TRIALWELCOME = "%minecraft:authentication.trialWelcome";
-
-  String M_AUTHENTICATION_TRYAGAIN = "%minecraft:authentication.tryagain";
-
-  String M_AUTHENTICATION_UNABLETOCONNECT = "%minecraft:authentication.unableToConnect";
-
-  String M_AUTHENTICATION_UNAUTHENTICATED = "%minecraft:authentication.unauthenticated";
-
-  String M_AUTHENTICATION_WELCOME = "%minecraft:authentication.welcome";
 
   String M_AUTHSERVER_AUTHFAILED = "%minecraft:authserver.authfailed";
 
