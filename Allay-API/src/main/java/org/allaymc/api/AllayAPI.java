@@ -20,6 +20,7 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.exception.MissingRequirementException;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.component.ItemComponentImplFactory;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
@@ -97,7 +98,7 @@ public final class AllayAPI {
                 ((Consumer<Object>) entry.getValue().afterBound).accept(apiInstance);
             }
         }
-        log.info(I18n.get().tr("allay:api.implemented", coreName, API_VERSION));
+        log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, coreName, API_VERSION));
         implemented = true;
     }
 
@@ -132,7 +133,7 @@ public final class AllayAPI {
         Objects.requireNonNull(i18nImpl);
         I18n.I18N.set(i18nImpl);
         i18nSet = true;
-        log.info(i18nImpl.tr("allay:lang.set", i18nImpl.getLangCode().name()));
+        log.info(i18nImpl.tr(TrKeys.A_LANG_SET, i18nImpl.getLangCode().toString()));
     }
 
     /**
