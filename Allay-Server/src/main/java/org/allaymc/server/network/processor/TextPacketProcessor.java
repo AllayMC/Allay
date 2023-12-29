@@ -8,7 +8,10 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityVillagerV2;
 import org.allaymc.server.network.DataPacketProcessor;
 import org.allaymc.api.server.Server;
+import org.cloudburstmc.math.vector.Vector2i;
+import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
+import org.cloudburstmc.protocol.bedrock.packet.NetworkChunkPublisherUpdatePacket;
 import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 
 import java.util.ArrayList;
@@ -67,14 +70,27 @@ public class TextPacketProcessor extends DataPacketProcessor<TextPacket> {
             }
             if (message.startsWith("tr")) {
                 var pk2 = new TextPacket();
-                pk.setType(TextPacket.Type.TRANSLATION);
+                pk2.setType(TextPacket.Type.TRANSLATION);
                 var split = message.substring(3).split("-");
-                pk.setMessage(split[0]);
+                pk2.setMessage(split[0]);
                 var param = new ArrayList<>(List.of(split));
                 param.removeFirst();
-                pk.setParameters(param);
-                pk.setNeedsTranslation(true);
-                player.sendPacket(pk);
+                pk2.setParameters(param);
+                pk2.setNeedsTranslation(true);
+                player.sendPacket(pk2);
+            }
+            if (message.equals("ncp")) {
+                var pk2 = new NetworkChunkPublisherUpdatePacket();
+                var loc = player.getLocation();
+                pk2.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
+                pk2.setRadius((player.getChunkLoadingRadius() + 1) << 4);
+                var chunk = loc.dimension().getChunkService().getChunk((int) loc.x() >> 4, (int) loc.z() >> 4);
+                if (chunk == null) {
+                    player.sendText("null chunk!");
+                }
+                player.sendPacket(chunk.createFullLevelChunkPacketChunk());
+                player.sendPacket(pk2);
+                player.sendText("ok! " + loc);
             }
         }
     }
