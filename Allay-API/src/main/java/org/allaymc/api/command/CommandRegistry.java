@@ -1,7 +1,7 @@
-package org.allaymc.api.cmdv2;
+package org.allaymc.api.command;
 
-import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.registry.MappedRegistry;
+import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
 import java.util.Map;
 
@@ -11,10 +11,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface CommandRegistry extends MappedRegistry<String, Command, Map<String, Command>> {
+    AvailableCommandsPacket getAvailableCommandsPacket();
 
-    ApiInstanceHolder<CommandRegistry> REGISTRY = ApiInstanceHolder.of();
-
-    static CommandRegistry getRegistry() {
-        return REGISTRY.get();
-    }
+    void registerDefaultCommands();
 }

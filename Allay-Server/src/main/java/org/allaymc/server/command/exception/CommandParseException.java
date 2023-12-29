@@ -1,4 +1,4 @@
-package org.allaymc.server.cmdv2.exception;
+package org.allaymc.server.command.exception;
 
 /**
  * Allay Project 2023/12/29

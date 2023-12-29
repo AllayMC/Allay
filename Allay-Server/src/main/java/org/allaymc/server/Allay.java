@@ -10,8 +10,8 @@ import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
-import org.allaymc.api.cmdv2.CommandRegistry;
-import org.allaymc.api.cmdv2.tree.CommandTree;
+import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.datastruct.DynamicURLClassLoader;
@@ -38,8 +38,8 @@ import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.blockentity.component.AllayBlockEntityComponentImplFactory;
 import org.allaymc.server.blockentity.registry.AllayBlockEntityTypeRegistry;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
-import org.allaymc.server.cmdv2.AllayCommandRegistry;
-import org.allaymc.server.cmdv2.tree.AllayCommandTree;
+import org.allaymc.server.command.AllayCommandRegistry;
+import org.allaymc.server.command.tree.AllayCommandTree;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.data.AllayVanillaItemMetaBlockStateBiMap;
 import org.allaymc.server.entity.component.AllayEntityComponentImplFactory;
@@ -136,7 +136,6 @@ public final class Allay {
 
         // Command
 //        api.bind(CommandManager.class, AllayCommandManager::new, instance -> ((AllayCommandManager) instance).init());
-        api.bind(CommandRegistry.class, AllayCommandRegistry::new, instance -> ((AllayCommandRegistry) instance).init());
         api.bind(CommandTree.CommandTreeFactory.class, () -> AllayCommandTree::create);
 
         api.implement("Allay");

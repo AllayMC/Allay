@@ -384,16 +384,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void reply(@NotNull String message, Object... args) {
-        this.sendText(String.format(message, args));
-    }
-
-    @Override
-    public boolean hasPermission(@NonNull String permission) {
-        return true; // todo
-    }
-
-    @Override
     public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
         var pair = I18n.get().findI18nKey(tr);
         var pk = new TextPacket();

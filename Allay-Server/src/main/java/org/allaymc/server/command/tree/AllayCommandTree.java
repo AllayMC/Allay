@@ -1,13 +1,16 @@
-package org.allaymc.server.cmdv2.tree;
+package org.allaymc.server.command.tree;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.allaymc.api.cmdv2.CommandSender;
-import org.allaymc.api.cmdv2.tree.CommandContext;
-import org.allaymc.api.cmdv2.tree.CommandNode;
-import org.allaymc.api.cmdv2.tree.CommandTree;
-import org.allaymc.api.cmdv2.CommandResult;
-import org.allaymc.server.cmdv2.tree.node.RootNode;
+import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.command.tree.CommandContext;
+import org.allaymc.api.command.tree.CommandNode;
+import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.command.CommandResult;
+import org.allaymc.server.command.tree.node.RootNode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Allay Project 2023/12/29
@@ -22,6 +25,23 @@ public class AllayCommandTree implements CommandTree {
 
     public static CommandTree create() {
         return new AllayCommandTree();
+    }
+
+    @Override
+    public List<CommandNode> getLeaves() {
+        var leaves = new ArrayList<CommandNode>();
+        findLeaf(root, leaves);
+        return leaves;
+    }
+
+    protected void findLeaf(CommandNode node, List<CommandNode> dest) {
+        if (node.isLeaf()) {
+            dest.add(node);
+        } else {
+            for (var leaf : node.getLeaves()) {
+                findLeaf(leaf, dest);
+            }
+        }
     }
 
     @Override

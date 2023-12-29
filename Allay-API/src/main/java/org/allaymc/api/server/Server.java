@@ -5,6 +5,8 @@ import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TextReceiver;
 import org.allaymc.api.network.NetworkServer;
@@ -25,7 +27,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * The server interface
  */
-public interface Server extends TaskCreator, TextReceiver {
+public interface Server extends TaskCreator, CommandSender {
     ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.of();
 
     static Server getInstance() {
@@ -68,6 +70,8 @@ public interface Server extends TaskCreator, TextReceiver {
     void onDisconnect(EntityPlayer player);
 
     WorldPool getWorldPool();
+
+    CommandRegistry getCommandRegistry();
 
     default World getDefaultWorld() {
         return getWorldPool().getDefaultWorld();

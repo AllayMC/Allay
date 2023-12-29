@@ -1,9 +1,10 @@
-package org.allaymc.server.cmdv2.tree.node;
+package org.allaymc.server.command.tree.node;
 
-import org.allaymc.api.cmdv2.CommandResult;
-import org.allaymc.api.cmdv2.tree.CommandContext;
-import org.allaymc.api.cmdv2.tree.CommandNode;
-import org.allaymc.server.cmdv2.exception.CommandParseException;
+import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.tree.CommandContext;
+import org.allaymc.api.command.tree.CommandNode;
+import org.allaymc.server.command.exception.CommandParseException;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
@@ -92,6 +93,11 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
+    public List<CommandNode> getLeaves() {
+        return leaves;
+    }
+
+    @Override
     public CommandNode addLeaf(CommandNode leaf) {
         if (leaves == null) {
             leaves = new ArrayList<>();
@@ -145,5 +151,13 @@ public abstract class BaseNode implements CommandNode {
     @Override
     public Function<CommandContext, CommandResult> getExecutor() {
         return executor;
+    }
+
+    @Override
+    public CommandParamData toNetworkData() {
+        var data = new CommandParamData();
+        data.setName(name);
+        data.setOptional(optional);
+        return data;
     }
 }

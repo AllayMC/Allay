@@ -1,6 +1,6 @@
-package org.allaymc.api.cmdv2.tree;
+package org.allaymc.api.command.tree;
 
-import org.allaymc.api.cmdv2.CommandSender;
+import org.allaymc.api.command.CommandSender;
 
 /**
  * Allay Project 2023/12/29

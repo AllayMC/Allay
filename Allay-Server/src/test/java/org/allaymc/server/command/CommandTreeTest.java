@@ -1,7 +1,7 @@
 package org.allaymc.server.command;
 
-import org.allaymc.api.cmdv2.CommandResult;
-import org.allaymc.server.cmdv2.tree.AllayCommandTree;
+import org.allaymc.api.command.CommandResult;
+import org.allaymc.server.command.tree.AllayCommandTree;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
@@ -16,6 +18,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.storage.PlayerStorage;
+import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayDimension;
@@ -58,6 +61,8 @@ public final class AllayServer implements Server {
     //执行IO密集型任务的线程池
     @Getter
     private final ExecutorService virtualThreadPool;
+    @Getter
+    private CommandRegistry commandRegistry;
     @Getter
     private NetworkServer networkServer;
     private Thread terminalConsoleThread;
@@ -118,6 +123,8 @@ public final class AllayServer implements Server {
         });
         initTerminalConsole();
         loadWorlds();
+        this.commandRegistry = new AllayCommandRegistry();
+        this.commandRegistry.registerDefaultCommands();
         this.networkServer = initNetwork();
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         this.networkServer.start();
@@ -191,7 +198,7 @@ public final class AllayServer implements Server {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
         if (player.isInitialized()) {
             this.getPlayerStorage().writePlayerData(player);
-            broadcastTr("§e" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getName());
+            broadcastTr("§e" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
         }
         if (player.isSpawned()) {
             player.getDimension().removePlayer(player);

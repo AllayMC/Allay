@@ -1,9 +1,11 @@
-package org.allaymc.api.cmdv2.tree;
+package org.allaymc.api.command.tree;
 
-import org.allaymc.api.cmdv2.CommandResult;
+import org.allaymc.api.command.CommandResult;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -46,6 +48,8 @@ public interface CommandNode {
 
     boolean isLeaf();
 
+    List<CommandNode> getLeaves();
+
     CommandNode addLeaf(CommandNode leaf);
 
     CommandNode key(String key);
@@ -65,4 +69,6 @@ public interface CommandNode {
     CommandNode exec(Function<CommandContext, CommandResult> executor);
 
     Function<CommandContext, CommandResult> getExecutor();
+
+    CommandParamData toNetworkData();
 }

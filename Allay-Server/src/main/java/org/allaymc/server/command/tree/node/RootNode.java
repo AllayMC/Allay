@@ -1,7 +1,8 @@
-package org.allaymc.server.cmdv2.tree.node;
+package org.allaymc.server.command.tree.node;
 
-import org.allaymc.api.cmdv2.tree.CommandContext;
-import org.allaymc.api.cmdv2.tree.CommandNode;
+import org.allaymc.api.command.tree.CommandContext;
+import org.allaymc.api.command.tree.CommandNode;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -28,5 +29,10 @@ public class RootNode extends BaseNode {
     @Override
     public CommandNode up(@Range(from = 1, to = Integer.MAX_VALUE) int count) {
         throw new UnsupportedOperationException("Cannot call up() on root node");
+    }
+
+    @Override
+    public CommandParamData toNetworkData() {
+        throw new UnsupportedOperationException();
     }
 }

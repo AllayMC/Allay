@@ -1,7 +1,9 @@
-package org.allaymc.server.cmdv2.tree.node;
+package org.allaymc.server.command.tree.node;
 
-import org.allaymc.api.cmdv2.tree.CommandContext;
-import org.allaymc.api.cmdv2.tree.CommandNode;
+import org.allaymc.api.command.tree.CommandContext;
+import org.allaymc.api.command.tree.CommandNode;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
 /**
  * Allay Project 2023/12/29
@@ -26,5 +28,12 @@ public class IntNode extends BaseNode {
         context.putResult(number);
         context.popArg();
         return true;
+    }
+
+    @Override
+    public CommandParamData toNetworkData() {
+        var data = super.toNetworkData();
+        data.setType(CommandParam.INT);
+        return data;
     }
 }

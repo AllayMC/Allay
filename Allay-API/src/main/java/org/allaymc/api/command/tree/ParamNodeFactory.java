@@ -1,4 +1,4 @@
-package org.allaymc.api.cmdv2.tree;
+package org.allaymc.api.command.tree;
 
 /**
  * Allay Project 2023/12/29

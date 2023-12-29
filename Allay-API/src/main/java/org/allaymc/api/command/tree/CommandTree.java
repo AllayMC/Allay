@@ -1,8 +1,10 @@
-package org.allaymc.api.cmdv2.tree;
+package org.allaymc.api.command.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.cmdv2.CommandResult;
-import org.allaymc.api.cmdv2.CommandSender;
+import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.CommandSender;
+
+import java.util.List;
 
 /**
  * Allay Project 2023/12/29
@@ -18,6 +20,8 @@ public interface CommandTree {
     }
 
     CommandNode getRoot();
+
+    List<CommandNode> getLeaves();
 
     CommandResult parse(CommandSender sender, String[] args);
 

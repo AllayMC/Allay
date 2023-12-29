@@ -10,8 +10,8 @@ import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
-import org.allaymc.api.cmdv2.CommandRegistry;
-import org.allaymc.api.cmdv2.tree.CommandTree;
+import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.entity.component.EntityComponentImplFactory;
@@ -195,7 +195,6 @@ public final class AllayAPI {
 
         // Command
 //        requireImpl(CommandManager.class, CommandManager.INSTANCE::set);
-        requireImpl(CommandRegistry.class, CommandRegistry.REGISTRY::set);
         requireImpl(CommandTree.CommandTreeFactory.class, CommandTree.FACTORY::set);
     }
 

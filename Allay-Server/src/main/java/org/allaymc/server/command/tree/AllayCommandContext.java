@@ -1,8 +1,8 @@
-package org.allaymc.server.cmdv2.tree;
+package org.allaymc.server.command.tree;
 
 import lombok.Getter;
-import org.allaymc.api.cmdv2.CommandSender;
-import org.allaymc.api.cmdv2.tree.CommandContext;
+import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.command.tree.CommandContext;
 
 /**
  * Allay Project 2023/12/29
