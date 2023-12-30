@@ -19,42 +19,29 @@ public interface I18n {
 
     String VANILLA_LANG_NAMESPACE = "minecraft";
 
-    String tr(String tr, String... args);
+    String tr(LangCode langCode, String tr, String... args);
+
+    default String tr(LangCode langCode, String tr, Object... args) {
+        return tr(langCode, tr, Utils.objectArrayToStringArray(args));
+    }
+
+    default String tr(String tr, String... args) {
+        return tr(getDefaultLangCode(), tr, args);
+    }
 
     default String tr(String tr, Object... args) {
-        return tr(tr, Utils.objectArrayToStringArray(args));
+        return tr(getDefaultLangCode(), tr, args);
     }
 
-    String tr(String tr);
+    String tr(LangCode langCode, String tr);
 
-    void setLangCode(LangCode langCode);
+    default String tr(String tr) {
+        return tr(getDefaultLangCode(), tr);
+    }
 
-    LangCode getLangCode();
+    void setDefaultLangCode(LangCode langCode);
+
+    LangCode getDefaultLangCode();
 
     Pair<String, Integer> findI18nKey(String str);
-
-    default Pair<String, Boolean> toClientFriendlyStyle(String str, String... args) {
-        var pair = findI18nKey(str);
-        var isVanillaTr = pair.left().startsWith(I18n.VANILLA_LANG_NAMESPACE);
-        if (isVanillaTr) {
-            return Pair.of(
-                    new StringBuilder(str)
-                            .replace(
-                                    pair.right(),
-                                    pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 1,
-                                    "")
-                            .toString(),
-                    true);
-        } else {
-            return Pair.of(tr(str, args), false);
-        }
-    }
-
-    default Pair<String, Boolean> toClientFriendlyStyle(String str, Object... args) {
-        return toClientFriendlyStyle(str, Utils.objectArrayToStringArray(args));
-    }
-
-    default Pair<String, Boolean> toClientFriendlyStyle(String str) {
-        return toClientFriendlyStyle(str, new String[0]);
-    }
 }

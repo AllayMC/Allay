@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.allaymc.api.i18n.LangCode;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 
@@ -37,7 +38,7 @@ public class LoginData {
     private String xuid;
     private UUID uuid;
     private DeviceInfo deviceInfo;
-    private String languageCode;
+    private LangCode langCode;
     private String gameVersion;
     private Skin skin;
     private String identityPublicKey;
@@ -87,7 +88,7 @@ public class LoginData {
         }
 
         if (skinMap.has("LanguageCode")) {
-            this.languageCode = skinMap.get("LanguageCode").getAsString();
+            this.langCode = LangCode.valueOf(skinMap.get("LanguageCode").getAsString());
         }
 
         if (skinMap.has("GameVersion")) {

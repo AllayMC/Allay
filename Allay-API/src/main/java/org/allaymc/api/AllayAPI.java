@@ -10,7 +10,6 @@ import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
-import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
@@ -135,7 +134,7 @@ public final class AllayAPI {
         Objects.requireNonNull(i18nImpl);
         I18n.I18N.set(i18nImpl);
         i18nSet = true;
-        log.info(i18nImpl.tr(TrKeys.A_LANG_SET, i18nImpl.getLangCode().toString()));
+        log.info(i18nImpl.tr(TrKeys.A_LANG_SET, i18nImpl.getDefaultLangCode().toString()));
     }
 
     /**

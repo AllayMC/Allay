@@ -307,17 +307,18 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         networkComponent.sendPacket(pk);
     }
 
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+
     @Override
     public void sendCommandOutputs(CommandSender sender, TrContainer... outputs) {
         var pk = new CommandOutputPacket();
         pk.setType(CommandOutputType.ALL_OUTPUT);
         pk.setCommandOriginData(sender.getCommandOriginData());
         for (var output : outputs) {
-            var pair = I18n.get().toClientFriendlyStyle(output.str(), output.args());
             pk.getMessages().add(new CommandOutputMessage(
                     false,
-                    pair.left(),
-                    pair.right() ? Utils.objectArrayToStringArray(output.args()) : new String[0]));
+                    I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()),
+                    EMPTY_STRING_ARRAY));
         }
         pk.setSuccessCount(0); // Unknown usage
         pk.setData(""); // Unknown usage
@@ -423,27 +424,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
-        var pk = new TextPacket();
-        pk.setType(TextPacket.Type.TRANSLATION);
-        pk.setXuid(networkComponent.getXUID());
-        pk.setNeedsTranslation(true);
         if (forceTranslatedByClient) {
+            var pk = new TextPacket();
+            pk.setType(TextPacket.Type.TRANSLATION);
+            pk.setXuid(networkComponent.getXUID());
+            pk.setNeedsTranslation(true);
             pk.setMessage(tr);
             pk.setParameters(List.of(args));
             networkComponent.sendPacket(pk);
-            return;
-        }
-        var pair = I18n.get().toClientFriendlyStyle(tr, args);
-        if (pair.right()) {
-            pk.setMessage(pair.left());
-            pk.setParameters(List.of(args));
-            networkComponent.sendPacket(pk);
-        } else {
-            sendText(pair.left());
-        }
+        } else sendText(I18n.get().tr(thisEntity.getLangCode(), tr, args));
     }
-
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     @Override
     public void sendTr(String tr) {

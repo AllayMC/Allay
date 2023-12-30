@@ -3,6 +3,7 @@ package org.allaymc.api.entity.component.player;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.entity.component.EntityComponent;
+import org.allaymc.api.i18n.LangCode;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -31,8 +32,8 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
         return getLoginData().getDeviceInfo();
     }
 
-    default String getLanguageCode() {
-        return getLoginData().getLanguageCode();
+    default LangCode getLangCode() {
+        return getLoginData().getLangCode();
     }
 
     default boolean isXboxAuthenticated() {
