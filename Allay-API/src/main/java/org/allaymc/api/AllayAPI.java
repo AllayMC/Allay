@@ -29,6 +29,7 @@ import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -192,6 +193,9 @@ public final class AllayAPI {
 
         // Recipe
         requireImpl(RecipeRegistry.class, RecipeRegistry.REGISTRY::set);
+
+        // Perm
+        requireImpl(PermTree.PermTreeFactory.class, PermTree.FACTORY::set);
 
         // Command
 //        requireImpl(CommandManager.class, CommandManager.INSTANCE::set);

@@ -10,7 +10,8 @@ public class CommandRequestProcessor extends DataPacketProcessor<CommandRequestP
     @Override
     public void handle(EntityPlayer player, CommandRequestPacket pk) {
         // The packet returns `/command args`, this gets rid of the `/` at the start
-        player.dispatch(pk.getCommand().substring(1));
+        // TODO
+//        player.dispatch(pk.getCommand().substring(1));
     }
 
     @Override
