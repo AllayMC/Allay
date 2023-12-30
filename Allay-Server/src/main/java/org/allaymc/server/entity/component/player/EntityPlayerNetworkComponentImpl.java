@@ -188,7 +188,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         adventureSettings.set(AdventureSettings.Type.NO_PVM, gameType == GameType.SPECTATOR);
         adventureSettings.update();
 
-        sendPacket(Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player.getLangCode()));
+        sendPacket(Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player));
 
         var updateAttributesPacket = new UpdateAttributesPacket();
         updateAttributesPacket.setRuntimeEntityId(player.getUniqueId());
