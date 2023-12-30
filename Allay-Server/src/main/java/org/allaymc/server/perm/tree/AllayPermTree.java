@@ -32,7 +32,7 @@ public class AllayPermTree implements PermTree {
             var nodeName = spilt.pop();
             var hasMatch = false;
             if (node.getLeaves().isEmpty()) {
-                return false;
+                return spilt.isEmpty();
             }
             for (var leaf : node.getLeaves()) {
                 if (leaf.canMatch(nodeName)) {

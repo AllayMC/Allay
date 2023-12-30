@@ -39,8 +39,6 @@ public class AllayPermNode implements PermNode {
         return getFullName0(node.getParent(), str);
     }
 
-
-
     @Override
     public boolean canMatch(String nodeName) {
         return name.equals(nodeName);

@@ -16,16 +16,22 @@ public class PermTreeTest {
     @Test
     void testPermTree() {
         var tree = AllayPermTree.create();
+
         tree.addPerm("test.cmd.tell");
         tree.addPerm("test.cmd.say");
         tree.addPerm("test.cmd.hello");
         assertTrue(tree.hasPerm("test.cmd.tell"));
         assertTrue(tree.hasPerm("test.cmd.say"));
         assertTrue(tree.hasPerm("test.cmd.hello"));
+
         tree.removePerm("test.cmd.tell");
         assertFalse(tree.hasPerm("test.cmd.tell"));
+
         tree.removePerm("test.cmd");
         assertFalse(tree.hasPerm("test.cmd.say"));
         assertFalse(tree.hasPerm("test.cmd.hello"));
+
+        tree.addPerm("test.cmd");
+        assertTrue(tree.hasPerm("test.cmd.abc"));
     }
 }

@@ -1,6 +1,5 @@
 package org.allaymc.api.perm.tree;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
