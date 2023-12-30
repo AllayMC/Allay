@@ -36,10 +36,9 @@ public class AllayI18N implements I18n {
     public String tr(LangCode langCode, String tr, String... args) {
         var pair = findI18nKey(tr);
         var lang = langMap.get(langCode).get(pair.left());
-        if (lang == null) {
-            // key is not exist
-            return tr;
-        }
+        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(pair.left());
+        // key is not exist
+        if (lang == null) return tr;
         var argIndex = 0;
         var maxArgIndex = args.length - 1;
         var unorderedParamIndex = findUnorderedParamIndex(lang);
@@ -101,6 +100,7 @@ public class AllayI18N implements I18n {
     public String tr(LangCode langCode, String tr) {
         var pair = findI18nKey(tr);
         var lang = langMap.get(langCode).get(pair.left());
+        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(pair.left());
         Objects.requireNonNull(lang, "No valid lang key found in \"" + tr + "\"");
         return new StringBuilder(tr).replace(pair.right(), pair.right() + pair.left().length() + 2, lang).toString();
     }

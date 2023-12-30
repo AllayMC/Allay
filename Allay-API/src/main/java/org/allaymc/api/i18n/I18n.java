@@ -11,6 +11,8 @@ import org.allaymc.api.utils.Utils;
  */
 public interface I18n {
 
+    LangCode FALLBACK_LANG = LangCode.en_US;
+
     ApiInstanceHolder<I18n> I18N = ApiInstanceHolder.of();
 
     static I18n get() {
