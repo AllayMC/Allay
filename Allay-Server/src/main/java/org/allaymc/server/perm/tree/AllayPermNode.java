@@ -41,11 +41,17 @@ public class AllayPermNode implements PermNode {
 
     @Override
     public boolean canMatch(String nodeName) {
+        if (name.equals(WILDCARD)) {
+            return true;
+        }
         return name.equals(nodeName);
     }
 
     @Override
     public PermNode addLeaf(String nodeName) {
+        if (nodeName.equals(WILDCARD)) {
+            leaves.clear();
+        }
         var node = new AllayPermNode(nodeName, this);
         leaves.add(node);
         return node;

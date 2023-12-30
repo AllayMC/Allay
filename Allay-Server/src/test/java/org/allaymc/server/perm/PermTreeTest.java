@@ -31,7 +31,12 @@ public class PermTreeTest {
         assertFalse(tree.hasPerm("test.cmd.say"));
         assertFalse(tree.hasPerm("test.cmd.hello"));
 
+        // test.cmd 与 test.cmd.* 意义不同
         tree.addPerm("test.cmd");
+        assertFalse(tree.hasPerm("test.cmd.abc"));
+        tree.addPerm("test.cmd.*");
         assertTrue(tree.hasPerm("test.cmd.abc"));
+        tree.addPerm("*");
+        assertTrue(tree.hasPerm("a.b.c"));
     }
 }
