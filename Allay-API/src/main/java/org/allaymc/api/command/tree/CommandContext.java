@@ -77,7 +77,7 @@ public interface CommandContext {
                 right.append(" ").append(arg);
             }
         }
-        addOutput("§c" + TrKeys.M_COMMANDS_GENERIC_SYNTAX, left.toString(), current, right.toString());
+        addOutput("§c%" + TrKeys.M_COMMANDS_GENERIC_SYNTAX, left.toString(), current, right.toString());
     }
 
     default boolean isValidArgIndex(int index) {

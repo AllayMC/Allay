@@ -205,7 +205,7 @@ public final class AllayServer implements Server {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
         if (player.isInitialized()) {
             this.getPlayerStorage().writePlayerData(player);
-            broadcastTr("§e" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
+            broadcastTr("§e%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
         }
         if (player.isSpawned()) {
             player.getDimension().removePlayer(player);

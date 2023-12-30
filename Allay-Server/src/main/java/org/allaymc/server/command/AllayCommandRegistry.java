@@ -46,7 +46,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         var cmdName = spilt.pop(); // Command name
         var command = get(cmdName);
         if (command == null) {
-            sender.sendTr("§c" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
+            sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
             return CommandResult.failed();
         }
         try {
@@ -54,7 +54,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
             sender.handleResult(result);
             return result;
         } catch (Throwable t) {
-            sender.sendTr("§c" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
+            sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.failed();
         }
     }

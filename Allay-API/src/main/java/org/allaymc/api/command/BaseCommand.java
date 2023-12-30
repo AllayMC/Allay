@@ -53,11 +53,14 @@ public abstract class BaseCommand implements Command {
 
     @Override
     public CommandData toNetworkData() {
-        var map = new HashMap<String, Set<CommandEnumConstraint>>();
-        for (var alias : aliases) {
-            map.put(alias, Set.of());
+        CommandEnumData networkAliasesData = null;
+        if (!aliases.isEmpty()) {
+            var map = new HashMap<String, Set<CommandEnumConstraint>>();
+            for (var alias : aliases) {
+                map.put(alias, Set.of());
+            }
+            networkAliasesData = new CommandEnumData("aliases", map, false);
         }
-        var networkAliasesData = new CommandEnumData("aliases", map, false);
         CommandOverloadData[] networkOverloadsData = new CommandOverloadData[overloads.size()];
         for (int index = 0; index < overloads.size(); index++) {
             var overload = overloads.get(index);
