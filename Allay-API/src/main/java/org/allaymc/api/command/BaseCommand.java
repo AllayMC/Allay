@@ -1,6 +1,7 @@
 package org.allaymc.api.command;
 
 import lombok.Getter;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
@@ -55,7 +56,6 @@ public abstract class BaseCommand implements Command {
     private boolean networkDataPrepared = false;
     private CommandEnumData networkAliasesData = null;
     private CommandOverloadData[] networkOverloadsData = null;
-    private CommandPermission networkPerm = null;
 
     private void prepareNetworkData() {
         // Aliases
@@ -73,17 +73,14 @@ public abstract class BaseCommand implements Command {
             var overload = overloads.get(index);
             networkOverloadsData[index] = new CommandOverloadData(false, overload);
         }
-
-        // Perm
-        networkPerm = MEMBER.hasPerm(permission) ? CommandPermission.ANY : CommandPermission.ADMIN;
         networkDataPrepared = true;
     }
 
     @Override
-    public CommandData buildNetworkDataInLang(LangCode langCode) {
+    public CommandData buildNetworkDataFor(EntityPlayer player) {
         if (!networkDataPrepared) {
             prepareNetworkData();
         }
-        return new CommandData(name, I18n.get().tr(langCode, description), flags, networkPerm, networkAliasesData, List.of(), networkOverloadsData);
+        return new CommandData(name, I18n.get().tr(player.getLangCode(), description), flags, CommandPermission.ANY, networkAliasesData, List.of(), networkOverloadsData);
     }
 }

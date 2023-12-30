@@ -1,5 +1,6 @@
 package org.allaymc.api.command;
 
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
@@ -36,5 +37,5 @@ public interface Command {
 
     CommandResult execute(CommandSender sender, String[] args);
 
-    CommandData buildNetworkDataInLang(LangCode langCode);
+    CommandData buildNetworkDataFor(EntityPlayer player);
 }

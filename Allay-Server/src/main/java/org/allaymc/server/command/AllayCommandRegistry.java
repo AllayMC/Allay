@@ -4,7 +4,7 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.server.command.defaults.MeCommand;
@@ -62,10 +62,12 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
     }
 
     @Override
-    public AvailableCommandsPacket encodeAvailableCommandsPacket(LangCode langCode) {
+    public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
         var pk = new AvailableCommandsPacket();
         for (var command : getContent().values()) {
-            pk.getCommands().add(command.buildNetworkDataInLang(langCode));
+            if (player.hasPerm(command.getPermission())) {
+                pk.getCommands().add(command.buildNetworkDataFor(player));
+            }
         }
         return pk;
     }
