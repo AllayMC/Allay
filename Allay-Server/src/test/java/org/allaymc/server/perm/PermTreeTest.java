@@ -38,6 +38,9 @@ public class PermTreeTest {
         tree.addPerm("*");
         assertTrue(tree.hasPerm("a.b.c"));
 
+        tree.addPerm("*");
+        assertTrue(tree.hasPerm("a.b.c"));
+
         // 不允许在检查权限时使用通配符
         assertThrows(IllegalArgumentException.class, () -> tree.hasPerm("test.cmd.*"));
     }

@@ -10,6 +10,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TextReceiver;
 import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.perm.Permissible;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
@@ -112,4 +113,29 @@ public interface Server extends TaskCreator, CommandSender {
     void broadcastTr(String tr);
 
     void broadcastTr(String tr, String... args);
+
+    @Override
+    default boolean isOp() {
+        return true;
+    }
+
+    @Override
+    default void setOp(boolean value) {
+
+    }
+
+    @Override
+    default boolean hasPerm(String perm) {
+        return true;
+    }
+
+    @Override
+    default Permissible addPerm(String perm) {
+        return this;
+    }
+
+    @Override
+    default Permissible removePerm(String perm) {
+        return this;
+    }
 }

@@ -10,21 +10,11 @@ import org.allaymc.api.perm.tree.PermTree;
 public interface Permissible {
     boolean isOp();
 
-    boolean setOp(boolean value);
+    void setOp(boolean value);
 
-    PermTree getPermTree();
+    boolean hasPerm(String perm);
 
-    default boolean hasPerm(String perm) {
-        return getPermTree().hasPerm(perm);
-    }
+    Permissible addPerm(String perm);
 
-    default Permissible addPerm(String perm) {
-        getPermTree().addPerm(perm);
-        return this;
-    }
-
-    default Permissible removePerm(String perm) {
-        getPermTree().removePerm(perm);
-        return this;
-    }
+    Permissible removePerm(String perm);
 }

@@ -11,6 +11,8 @@ import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.perm.Permissible;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -24,6 +26,7 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.server.perm.tree.AllayPermTree;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -61,7 +64,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected AdventureSettings adventureSettings;
     @Getter
     @Setter
-    protected boolean op = true;//TODO
+    protected boolean op;
+    protected PermTree permTree;
     @Getter
     protected String displayName;
     @Getter
@@ -72,6 +76,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
+        op = true; // TODO: player perm
+        permTree = PermTree.create();
+        permTree.addPerm("*");
     }
 
     @ComponentEventListener
@@ -131,7 +138,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                     dimension.getEntityUpdateService().removeEntity(entityItem);
                 }
                 // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
-                // it's much easier to just resend the inventory.
+                // It's much easier to just resend the inventory.
                 thisEntity.sendContentsWithSpecificContainerId(inventory, FixedContainerId.PLAYER_INVENTORY, slot);
             }
         }
@@ -409,5 +416,22 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void sendTr(String tr) {
         sendTr(tr, EMPTY_STRING_ARRAY);
+    }
+
+    @Override
+    public boolean hasPerm(String perm) {
+        return permTree.hasPerm(perm);
+    }
+
+    @Override
+    public Permissible addPerm(String perm) {
+        permTree.addPerm(perm);
+        return this;
+    }
+
+    @Override
+    public Permissible removePerm(String perm) {
+        permTree.removePerm(perm);
+        return this;
     }
 }
