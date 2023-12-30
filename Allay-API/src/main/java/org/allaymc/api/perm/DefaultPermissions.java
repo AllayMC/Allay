@@ -10,10 +10,7 @@ import org.allaymc.api.perm.tree.PermTree;
  */
 public interface DefaultPermissions {
     PermTree VISITOR =
-            PermTree.create()
-                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "help")
-                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "tell")
-                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "me");
+            PermTree.create();
 
     PermTree MEMBER =
             PermTree.create()
