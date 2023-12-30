@@ -312,7 +312,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void sendChat(EntityPlayer sender, String message) {
-        log.info("<" + sender.getDisplayName() + "> " + message);
+        log.info("<" + sender.getOriginName() + "> " + message);
     }
 
     @Override

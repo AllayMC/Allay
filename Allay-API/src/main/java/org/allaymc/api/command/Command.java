@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public interface Command {
 
-    String COMMAND_PERM_PREFIX = "allay.command.";
+    String COMMAND_PERM_PREFIX = "command.";
 
     String getName();
 

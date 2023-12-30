@@ -20,7 +20,7 @@ public abstract class SimpleCommand extends BaseCommand {
         buildOverloadsFromCommandTree();
     }
 
-    public abstract void prepareCommandTree(CommandTree commandTree);
+    public abstract void prepareCommandTree(CommandTree tree);
 
     protected void buildOverloadsFromCommandTree() {
         var leaves = commandTree.getLeaves();
@@ -35,5 +35,10 @@ public abstract class SimpleCommand extends BaseCommand {
             }
             overloads.add(paramArray);
         }
+    }
+
+    @Override
+    public CommandResult execute(CommandSender sender, String[] args) {
+        return commandTree.parse(sender, args);
     }
 }

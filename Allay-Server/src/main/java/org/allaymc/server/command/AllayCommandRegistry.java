@@ -8,6 +8,7 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.command.defaults.MeCommand;
 import org.allaymc.server.command.tree.AllayCommandContext;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
@@ -29,8 +30,14 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         super(null, i -> new HashMap<>());
     }
 
+    @Override
     public void registerDefaultCommands() {
-        // TODO
+        register(new MeCommand());
+    }
+
+    @Override
+    public void register(Command command) {
+        register(command.getName(), command);
     }
 
     @Override
