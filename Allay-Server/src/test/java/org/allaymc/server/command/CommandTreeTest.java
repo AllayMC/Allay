@@ -15,7 +15,7 @@ public class CommandTreeTest {
 
     @Test
     void testParse() {
-        var tree = AllayCommandTree.create();
+        var tree = AllayCommandTree.create(null);
         tree.getRoot()
                 .key("test_bool")
                 .bool("bool")
@@ -57,7 +57,7 @@ public class CommandTreeTest {
 
     @Test
     void testOptionalParamParse() {
-        var tree = AllayCommandTree.create();
+        var tree = AllayCommandTree.create(null);
         tree.getRoot()
                 .str("test_optional")
                 .optional()
@@ -68,7 +68,7 @@ public class CommandTreeTest {
 
     @Test
     void testOnlyOneOptionalParamInLeaves() {
-        var tree = AllayCommandTree.create();
+        var tree = AllayCommandTree.create(null);
         tree.getRoot()
                 .str("test_optional1")
                 .optional();
@@ -77,7 +77,7 @@ public class CommandTreeTest {
 
     @Test
     void testNormalParamWithOptionalParamParse() {
-        var tree = AllayCommandTree.create();
+        var tree = AllayCommandTree.create(null);
         tree.getRoot()
                 .intNum("test_optional")
                 .optional()

@@ -1,6 +1,7 @@
 package org.allaymc.api.command.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 
@@ -15,8 +16,8 @@ public interface CommandTree {
 
     ApiInstanceHolder<CommandTreeFactory> FACTORY = ApiInstanceHolder.of();
 
-    static CommandTree create() {
-        return FACTORY.get().create();
+    static CommandTree create(Command command) {
+        return FACTORY.get().create(command);
     }
 
     CommandNode getRoot();
@@ -26,6 +27,6 @@ public interface CommandTree {
     CommandResult parse(CommandSender sender, String[] args);
 
     interface CommandTreeFactory {
-        CommandTree create();
+        CommandTree create(Command command);
     }
 }

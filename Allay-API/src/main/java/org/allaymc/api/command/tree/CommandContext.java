@@ -1,5 +1,6 @@
 package org.allaymc.api.command.tree;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.i18n.MayContainTrKey;
@@ -15,11 +16,15 @@ import java.util.List;
  */
 public interface CommandContext {
 
+    Command getCommand();
+
     CommandSender getSender();
 
     int getCurrentArgIndex();
 
     int getArgCount();
+
+    String[] getArgs();
 
     default boolean haveUnhandledArg() {
         return getCurrentArgIndex() < getArgCount();
@@ -56,11 +61,27 @@ public interface CommandContext {
         addOutput(output, new Object[0]);
     }
 
-    default void addSyntaxError(int index) {
-        var left = index >= 1 ? queryArg(index - 1) : "";
-        var current = queryArg(index);
-        var right = index < getArgCount() - 1 ? queryArg(index + 1) : "";
-        addOutput("§c" + TrKeys.M_COMMANDS_GENERIC_SYNTAX, left, current, right);
+    default void addSyntaxError(int errorIndex) {
+        var left = new StringBuilder(getCommand().getName());
+        var current = "";
+        var right = new StringBuilder();
+        String[] args = getArgs();
+        for (int index = 0; index < args.length; index++) {
+            var arg = args[index];
+            if (index < errorIndex) {
+                left.append(" ").append(arg);
+            } else if (index == errorIndex) {
+                left.append(" ");
+                current = arg;
+            } else {
+                right.append(" ").append(arg);
+            }
+        }
+        addOutput("§c" + TrKeys.M_COMMANDS_GENERIC_SYNTAX, left.toString(), current, right.toString());
+    }
+
+    default boolean isValidArgIndex(int index) {
+        return index >= 0 && index < getArgCount();
     }
 
     default void addSyntaxError() {

@@ -2,6 +2,7 @@ package org.allaymc.server.command.tree;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
@@ -18,13 +19,17 @@ import java.util.List;
  * @author daoge_cmd
  */
 @Getter
-@NoArgsConstructor
 public class AllayCommandTree implements CommandTree {
 
+    protected Command command;
     protected CommandNode root = new RootNode();
 
-    public static CommandTree create() {
-        return new AllayCommandTree();
+    private AllayCommandTree(Command command) {
+        this.command = command;
+    }
+
+    public static CommandTree create(Command command) {
+        return new AllayCommandTree(command);
     }
 
     @Override
@@ -46,12 +51,16 @@ public class AllayCommandTree implements CommandTree {
 
     @Override
     public CommandResult parse(CommandSender sender, String[] args) {
-        var context = new AllayCommandContext(sender, args);
+        var context = new AllayCommandContext(command, sender, args);
         return parse0(root, context);
     }
 
     protected CommandResult parse0(CommandNode node, CommandContext context) {
         if (node.isLeaf()) {
+            if (context.haveUnhandledArg()) {
+                context.addSyntaxError();
+                return context.failed();
+            }
             return node.getExecutor().apply(context);
         }
         var nextNode = node.nextNode(context);

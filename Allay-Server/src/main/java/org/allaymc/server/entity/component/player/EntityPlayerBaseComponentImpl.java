@@ -316,7 +316,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             for (int i = 0; i < output.args().length; i++) {
                 parameters[i] = output.args()[i].toString();
             }
-            pk.getMessages().add(new CommandOutputMessage(false, output.str(), parameters));
+            var pair = I18n.get().findI18nKey(output.str());
+            var isVanillaTr = pair.left().startsWith(I18n.VANILLA_LANG_NAMESPACE);
+            if (isVanillaTr) {
+                pk.getMessages().add(new CommandOutputMessage(false, new StringBuilder(output.str()).replace(pair.right() + 1, pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 2, "").toString(), parameters));
+            } else {
+                pk.getMessages().add(new CommandOutputMessage(false, I18n.get().tr(output.str(), parameters), new String[0]));
+            }
         }
         pk.setSuccessCount(0); // Unknown usage
         pk.setData(""); // Unknown usage

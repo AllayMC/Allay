@@ -2,11 +2,13 @@ package org.allaymc.server.command.tree;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.command.exception.CommandParseException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,20 +18,24 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public class AllayCommandContext implements CommandContext {
-
+    @Getter
+    protected Command command;
     @Getter
     protected CommandSender sender;
     @Getter
     protected int currentArgIndex = 0;
+    @Getter
     protected String[] args;
     protected Map<Integer, Object> results;
     @Getter
     protected List<TrContainer> outputs;
 
-    public AllayCommandContext(CommandSender sender, String[] args) {
+    public AllayCommandContext(Command command, CommandSender sender, String[] args) {
+        this.command = command;
         this.sender = sender;
         this.args = args;
         this.results = new Int2ObjectOpenHashMap<>();
+        this.outputs = new ArrayList<>();
     }
 
     @Override
