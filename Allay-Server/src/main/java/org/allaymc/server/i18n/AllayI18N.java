@@ -67,7 +67,8 @@ public class AllayI18N implements I18n {
         var split1 = fastTwoPartSplit(str, "%", "");
         var split2 = fastTwoPartSplit(split1[1], "%", split1[1]);
         var split3 = fastTwoPartSplit(split2[0], " ", split2[0]);
-        return Pair.of(split3[0], split1[0].length());
+        // if there is a '%' before the key (split1[1].isEmpty()), we need to add 1 to the start index
+        return Pair.of(split3[0], split1[0].length() + (split1[1].isEmpty() ? 1 : 0));
     }
 
     public static final String DISORDERED_PARAM_S = "%s";

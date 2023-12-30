@@ -40,8 +40,8 @@ public interface I18n {
             return Pair.of(
                     new StringBuilder(str)
                             .replace(
-                                    pair.right() + 1,
-                                    pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 2,
+                                    pair.right(),
+                                    pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 1,
                                     "")
                             .toString(),
                     true);
