@@ -17,6 +17,11 @@ public class StringNode extends BaseNode {
     }
 
     @Override
+    public Object getDefaultValue() {
+        return "";
+    }
+
+    @Override
     public boolean match(CommandContext context) {
         context.popAndPutArgToResult();
         return true;

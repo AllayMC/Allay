@@ -16,6 +16,11 @@ public class FloatNode extends BaseNode {
     }
 
     @Override
+    public Object getDefaultValue() {
+        return 0f;
+    }
+
+    @Override
     public boolean match(CommandContext context) {
         var arg = context.queryArg();
         var number = 0f;

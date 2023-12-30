@@ -16,6 +16,11 @@ public class DoubleNode extends BaseNode {
     }
 
     @Override
+    public Object getDefaultValue() {
+        return 0d;
+    }
+
+    @Override
     public boolean match(CommandContext context) {
         var arg = context.queryArg();
         var number = 0d;

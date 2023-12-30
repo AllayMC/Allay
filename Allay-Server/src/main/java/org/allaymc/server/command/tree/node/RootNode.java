@@ -22,6 +22,11 @@ public class RootNode extends BaseNode {
     }
 
     @Override
+    public Object getDefaultValue() {
+        throw new UnsupportedOperationException("Cannot call getDefaultValue() on root node");
+    }
+
+    @Override
     public CommandNode parent() {
         throw new UnsupportedOperationException("Cannot call parent() on root node");
     }

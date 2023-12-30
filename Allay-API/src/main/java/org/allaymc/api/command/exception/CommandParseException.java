@@ -1,4 +1,4 @@
-package org.allaymc.server.command.exception;
+package org.allaymc.api.command.exception;
 
 /**
  * Allay Project 2023/12/29

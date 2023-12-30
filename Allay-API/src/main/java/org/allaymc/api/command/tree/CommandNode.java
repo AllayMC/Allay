@@ -15,13 +15,20 @@ import java.util.function.Function;
  */
 public interface CommandNode {
 
-    boolean optional();
+    boolean isOptional();
 
-    CommandNode setOptional(boolean optional);
+    Object getDefaultValue();
 
-    default CommandNode setOptional() {
-        return setOptional(true);
+    CommandNode optional(boolean optional);
+
+    default CommandNode optional() {
+        return optional(true);
     }
+
+    @Nullable
+    CommandNode getOptionalLeaf();
+
+    void setOptionalLeaf(CommandNode optionalLeaf);
 
     String name();
 

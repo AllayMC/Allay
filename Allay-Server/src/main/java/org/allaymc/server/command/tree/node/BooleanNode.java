@@ -21,6 +21,11 @@ public class BooleanNode extends BaseNode {
     }
 
     @Override
+    public Object getDefaultValue() {
+        return false;
+    }
+
+    @Override
     public boolean match(CommandContext context) {
         var arg = context.queryArg();
         var bool = false;

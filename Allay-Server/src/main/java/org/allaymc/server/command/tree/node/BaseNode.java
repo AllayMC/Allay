@@ -1,9 +1,11 @@
 package org.allaymc.server.command.tree.node;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
-import org.allaymc.server.command.exception.CommandParseException;
+import org.allaymc.api.command.exception.CommandParseException;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -21,7 +23,10 @@ public abstract class BaseNode implements CommandNode {
     protected int depth;
     protected CommandNode parent;
     protected List<CommandNode> leaves;
-    protected boolean optional;
+    @Getter
+    @Setter
+    protected CommandNode optionalLeaf;
+    protected boolean optional = false;
     protected String name;
     protected Function<CommandContext, CommandResult> executor;
 
@@ -36,16 +41,25 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public boolean optional() {
+    public boolean isOptional() {
         return optional;
     }
 
     @Override
-    public CommandNode setOptional(boolean optional) {
+    public CommandNode optional(boolean optional) {
+        if (this.optional == optional) {
+            return this;
+        }
         this.optional = optional;
+        if (optional) {
+            //一个节点下只能有一个可选参数
+            if (parent.getOptionalLeaf() != null) {
+                throw new IllegalArgumentException("A node can only have one optional leaf node");
+            }
+            parent.setOptionalLeaf(this);
+        }
         return this;
     }
-
     @Override
     public int depth() {
         return depth;
@@ -79,9 +93,18 @@ public abstract class BaseNode implements CommandNode {
         if (isLeaf()) {
             return null;
         }
-        for (var leaf : leaves) {
-            if (leaf.match(context)) {
-                return leaf;
+        if (context.haveUnhandledArg()) {
+            for (var leaf : leaves) {
+                if (leaf.match(context)) {
+                    return leaf;
+                }
+            }
+        } else {
+            var optionalLeaf = getOptionalLeaf();
+            if (optionalLeaf != null) {
+                // 忽略RootNode，所以说索引为optionalLeaf.depth() - 1
+                context.putResult(optionalLeaf.depth() - 1, optionalLeaf.getDefaultValue());
+                return optionalLeaf;
             }
         }
         return null;
@@ -103,6 +126,8 @@ public abstract class BaseNode implements CommandNode {
             leaves = new ArrayList<>();
         }
         leaf.setDepth(depth + 1);
+        // 可选参数后不能有非可选参数
+        leaf.optional(optional);
         leaves.add(leaf);
         return leaf;
     }

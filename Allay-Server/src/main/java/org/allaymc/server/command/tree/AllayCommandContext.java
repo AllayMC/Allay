@@ -1,11 +1,14 @@
 package org.allaymc.server.command.tree;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.i18n.TrContainer;
+import org.allaymc.api.command.exception.CommandParseException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Allay Project 2023/12/29
@@ -19,14 +22,14 @@ public class AllayCommandContext implements CommandContext {
     @Getter
     protected int currentArgIndex = 0;
     protected String[] args;
-    protected Object[] results;
+    protected Map<Integer, Object> results;
     @Getter
     protected List<TrContainer> outputs;
 
     public AllayCommandContext(CommandSender sender, String[] args) {
         this.sender = sender;
         this.args = args;
-        this.results = new Object[args.length];
+        this.results = new Int2ObjectOpenHashMap<>();
     }
 
     @Override
@@ -36,6 +39,9 @@ public class AllayCommandContext implements CommandContext {
 
     @Override
     public String popArg() {
+        if (!haveUnhandledArg()) {
+            throw new CommandParseException("No more args!");
+        }
         return args[currentArgIndex++];
     }
 
@@ -45,13 +51,13 @@ public class AllayCommandContext implements CommandContext {
     }
 
     @Override
-    public void putResult(Object result, int index) {
-        results[index] = result;
+    public void putResult(int index, Object result) {
+        results.put(index, result);
     }
 
     @Override
     public <T> T getResult(int index) {
-        return (T) results[index];
+        return (T) results.get(index);
     }
 
     @Override

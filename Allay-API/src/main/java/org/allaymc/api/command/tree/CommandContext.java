@@ -21,6 +21,10 @@ public interface CommandContext {
 
     int getArgCount();
 
+    default boolean haveUnhandledArg() {
+        return getCurrentArgIndex() < getArgCount();
+    }
+
     String popArg();
 
     String queryArg(int index);
@@ -29,10 +33,10 @@ public interface CommandContext {
         return queryArg(getCurrentArgIndex());
     }
 
-    void putResult(Object result, int index);
+    void putResult(int index, Object result);
 
     default void putResult(Object result) {
-        putResult(result, getCurrentArgIndex());
+        putResult(getCurrentArgIndex(), result);
     }
 
     default void popAndPutArgToResult() {

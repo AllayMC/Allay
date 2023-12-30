@@ -21,6 +21,11 @@ public class KeyNode extends BaseNode {
     }
 
     @Override
+    public Object getDefaultValue() {
+        return "";
+    }
+
+    @Override
     public boolean match(CommandContext context) {
         var arg = context.queryArg();
         if (name.equals(arg)) {

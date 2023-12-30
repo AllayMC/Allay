@@ -1,11 +1,10 @@
 package org.allaymc.server.command;
 
-import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/12/29
@@ -53,6 +52,42 @@ public class CommandTreeTest {
         res = tree.parse(null, new String[]{"test_enums", "b"});
         assertTrue(res.isSuccess());
         res = tree.parse(null, new String[]{"test_int", "1"});
+        assertTrue(res.isSuccess());
+    }
+
+    @Test
+    void testOptionalParamParse() {
+        var tree = AllayCommandTree.create();
+        tree.getRoot()
+                .str("test_optional")
+                .optional()
+                .exec(context -> "".equals(context.getResult(0)) ? context.success() : context.failed());
+        var res = tree.parse(null, new String[0]);
+        assertTrue(res.isSuccess());
+    }
+
+    @Test
+    void testOnlyOneOptionalParamInLeaves() {
+        var tree = AllayCommandTree.create();
+        tree.getRoot()
+                .str("test_optional1")
+                .optional();
+        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional2").optional());
+    }
+
+    @Test
+    void testNormalParamWithOptionalParamParse() {
+        var tree = AllayCommandTree.create();
+        tree.getRoot()
+                .intNum("test_optional")
+                .optional()
+                .exec(CommandContext::failed)
+                .root()
+                .bool("test_normal")
+                .exec(CommandContext::success);
+        var res = tree.parse(null, new String[]{"1"});
+        assertFalse(res.isSuccess());
+        res = tree.parse(null, new String[]{"true"});
         assertTrue(res.isSuccess());
     }
 }
