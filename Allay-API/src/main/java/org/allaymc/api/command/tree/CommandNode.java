@@ -1,11 +1,11 @@
 package org.allaymc.api.command.tree;
 
 import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.SenderType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -85,8 +85,11 @@ public interface CommandNode {
     }
 
     CommandNode exec(Function<CommandContext, CommandResult> executor);
+    CommandNode exec(Function<CommandContext, CommandResult> executor, SenderType any);
 
     Function<CommandContext, CommandResult> getExecutor();
+
+    SenderType getSenderType();
 
     CommandParamData toNetworkData();
 }

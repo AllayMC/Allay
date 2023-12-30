@@ -1,6 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.palette.BlockStateHashPalette;
+import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FixedContainerId;
@@ -27,10 +28,6 @@ public class GameTestCommand extends SimpleCommand {
                 .key("gb")
                 .intNum("blockStateHash")
                 .exec(context -> {
-                    if (!context.getSender().isPlayer()) {
-                        context.addOutput("§cThis command can only be executed by player!");
-                        return context.failed();
-                    }
                     var player = context.getSender().asPlayer();
                     int blockStateHash = context.getResult(1);
                     var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
@@ -40,40 +37,28 @@ public class GameTestCommand extends SimpleCommand {
                     }
                     player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
                     return context.success();
-                })
+                }, SenderType.PLAYER)
                 .root()
                 .key("rfinv")
                 .exec(context -> {
-                    if (!context.getSender().isPlayer()) {
-                        context.addOutput("§cThis command can only be executed by player!");
-                        return context.failed();
-                    }
                     var player = context.getSender().asPlayer();
                     player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
                     context.addOutput("§aInventory is refreshed!");
                     return context.success();
-                })
+                }, SenderType.PLAYER)
                 .root()
                 .key("tps")
                 .exec(context -> {
-                    if (!context.getSender().isPlayer()) {
-                        context.addOutput("§cThis command can only be executed by player!");
-                        return context.failed();
-                    }
                     var player = context.getSender().asPlayer();
                     player.sendText("§aTPS: " + player.getLocation().dimension().getWorld().getTps() + ", Entity Count: " + player.getLocation().dimension().getEntities().size());
                     return context.success();
-                })
+                }, SenderType.PLAYER)
                 .root()
                 .key("translate")
                 .str("key")
                 .enums("lang", LangCode.class)
                 .optional()
                 .exec(context -> {
-                    if (!context.getSender().isPlayer()) {
-                        context.addOutput("§cThis command can only be executed by player!");
-                        return context.failed();
-                    }
                     var player = context.getSender().asPlayer();
                     String key = context.getResult(1);
                     String lang = context.getResult(2);
@@ -86,6 +71,6 @@ public class GameTestCommand extends SimpleCommand {
                         return context.failed();
                     }
                     return context.success();
-                });
+                }, SenderType.PLAYER);
     }
 }

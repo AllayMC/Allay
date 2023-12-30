@@ -9,6 +9,7 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.server.command.defaults.GameTestCommand;
 import org.allaymc.server.command.defaults.MeCommand;
+import org.allaymc.server.command.defaults.StopCommand;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
     public void registerDefaultCommands() {
         register(new MeCommand());
         register(new GameTestCommand());
+        register(new StopCommand());
     }
 
     @Override

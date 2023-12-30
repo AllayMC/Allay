@@ -3,6 +3,7 @@ package org.allaymc.server.command.tree.node;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.exception.CommandParseException;
@@ -29,6 +30,7 @@ public abstract class BaseNode implements CommandNode {
     protected boolean optional = false;
     protected String name;
     protected Function<CommandContext, CommandResult> executor;
+    protected SenderType senderType = SenderType.ANY;
 
     public BaseNode(String name, CommandNode parent) {
         this.name = name;
@@ -169,13 +171,24 @@ public abstract class BaseNode implements CommandNode {
 
     @Override
     public CommandNode exec(Function<CommandContext, CommandResult> executor) {
+        return exec(executor, SenderType.ANY);
+    }
+
+    @Override
+    public CommandNode exec(Function<CommandContext, CommandResult> executor, SenderType senderType) {
         this.executor = executor;
+        this.senderType = senderType;
         return this;
     }
 
     @Override
     public Function<CommandContext, CommandResult> getExecutor() {
         return executor;
+    }
+
+    @Override
+    public SenderType getSenderType() {
+        return senderType;
     }
 
     @Override

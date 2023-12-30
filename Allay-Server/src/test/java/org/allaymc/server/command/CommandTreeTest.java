@@ -1,5 +1,6 @@
 package org.allaymc.server.command;
 
+import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.junit.jupiter.api.Test;

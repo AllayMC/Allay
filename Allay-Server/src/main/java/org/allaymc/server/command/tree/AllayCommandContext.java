@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.command.exception.CommandParseException;
@@ -69,5 +70,11 @@ public class AllayCommandContext implements CommandContext {
     @Override
     public void addOutput(String output, Object... args) {
         outputs.add(new TrContainer(output, args));
+    }
+
+    @Override
+    public SenderType getSenderType() {
+        if(sender.isPlayer()) return SenderType.PLAYER;
+        return SenderType.SERVER;
     }
 }
