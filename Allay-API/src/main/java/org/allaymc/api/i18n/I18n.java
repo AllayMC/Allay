@@ -2,6 +2,7 @@ package org.allaymc.api.i18n;
 
 import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.utils.Utils;
 
 /**
  * Allay Project 2023/12/15
@@ -21,11 +22,7 @@ public interface I18n {
     String tr(String tr, String... args);
 
     default String tr(String tr, Object... args) {
-        String[] argsStr = new String[args.length];
-        for (int i = 0; i < args.length; i++) {
-            argsStr[i] = args[i].toString();
-        }
-        return tr(tr, argsStr);
+        return tr(tr, Utils.objectArrayToStringArray(args));
     }
 
     String tr(String tr);

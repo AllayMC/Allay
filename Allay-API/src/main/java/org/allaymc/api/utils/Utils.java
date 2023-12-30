@@ -70,4 +70,12 @@ public class Utils {
             }
         }
     }
+
+    public String[] objectArrayToStringArray(Object[] objectArray) {
+        String[] stringArray = new String[objectArray.length];
+        for (int i = 0; i < objectArray.length; i++) {
+            stringArray[i] = objectArray[i].toString();
+        }
+        return stringArray;
+    }
 }

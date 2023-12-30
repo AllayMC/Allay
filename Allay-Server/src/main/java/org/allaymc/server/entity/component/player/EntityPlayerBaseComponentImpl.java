@@ -15,6 +15,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.perm.Permissible;
 import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -312,16 +313,23 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         pk.setType(CommandOutputType.ALL_OUTPUT);
         pk.setCommandOriginData(sender.getCommandOriginData());
         for (var output : outputs) {
-            String[] parameters = new String[output.args().length];
-            for (int i = 0; i < output.args().length; i++) {
-                parameters[i] = output.args()[i].toString();
-            }
             var pair = I18n.get().findI18nKey(output.str());
             var isVanillaTr = pair.left().startsWith(I18n.VANILLA_LANG_NAMESPACE);
             if (isVanillaTr) {
-                pk.getMessages().add(new CommandOutputMessage(false, new StringBuilder(output.str()).replace(pair.right() + 1, pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 2, "").toString(), parameters));
+                pk.getMessages().add(
+                        new CommandOutputMessage(
+                                false,
+                                new StringBuilder(output.str())
+                                        .replace(
+                                                pair.right() + 1,
+                                                pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 2,
+                                                "")
+                                        .toString(),
+                                Utils.objectArrayToStringArray(output.args())
+                        )
+                );
             } else {
-                pk.getMessages().add(new CommandOutputMessage(false, I18n.get().tr(output.str(), parameters), new String[0]));
+                pk.getMessages().add(new CommandOutputMessage(false, I18n.get().tr(output.str(), output.args()), new String[0]));
             }
         }
         pk.setSuccessCount(0); // Unknown usage
