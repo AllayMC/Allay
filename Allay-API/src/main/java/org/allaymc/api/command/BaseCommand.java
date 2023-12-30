@@ -7,6 +7,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 
+import static org.allaymc.api.perm.DefaultPermissions.*;
+
 /**
  * Allay Project 2023/12/29
  *
@@ -18,15 +20,19 @@ public abstract class BaseCommand implements Command {
     @Getter
     @MayContainTrKey
     protected String description;
+    @Getter
+    protected String permission;
     protected Set<CommandData.Flag> flags = new HashSet<>();
     protected List<String> aliases = new ArrayList<>();
     protected List<CommandParamData[]> overloads = new ArrayList<>();
 
-    public BaseCommand(String name, String description) {
+    public BaseCommand(String name, @MayContainTrKey String description, String permission) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(description);
+        Objects.requireNonNull(permission);
         this.name = name;
         this.description = description;
+        this.permission = permission;
     }
 
     @Override
@@ -46,7 +52,6 @@ public abstract class BaseCommand implements Command {
 
     @Override
     public CommandData toNetworkData() {
-        // TODO: Perm
         var map = new HashMap<String, Set<CommandEnumConstraint>>();
         for (var alias : aliases) {
             map.put(alias, Set.of());
@@ -57,6 +62,7 @@ public abstract class BaseCommand implements Command {
             var overload = overloads.get(index);
             networkOverloadsData[index] = new CommandOverloadData(false, overload);
         }
-        return new CommandData(name, description, flags, CommandPermission.ANY, networkAliasesData, List.of(), networkOverloadsData);
+        var perm = MEMBER.hasPerm(permission) ? CommandPermission.ANY : CommandPermission.ADMIN;
+        return new CommandData(name, description, flags, perm, networkAliasesData, List.of(), networkOverloadsData);
     }
 }

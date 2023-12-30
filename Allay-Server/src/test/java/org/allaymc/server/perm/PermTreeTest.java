@@ -44,4 +44,20 @@ public class PermTreeTest {
         // 不允许在检查权限时使用通配符
         assertThrows(IllegalArgumentException.class, () -> tree.hasPerm("test.cmd.*"));
     }
+
+    @Test
+    void testPermTreeExtend() {
+        var parent = AllayPermTree
+                .create()
+                .addPerm("test.a")
+                .addPerm("test.cmd.*");
+        var tree = AllayPermTree
+                .create()
+                .extendFrom(parent)
+                .addPerm("test.b");
+
+        assertTrue(tree.hasPerm("test.a"));
+        assertTrue(tree.hasPerm("test.cmd.abc"));
+        assertTrue(tree.hasPerm("test.b"));
+    }
 }

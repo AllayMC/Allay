@@ -15,6 +15,8 @@ import java.util.Set;
  */
 public interface Command {
 
+    String COMMAND_PERM_PREFIX = "allay.command.";
+
     String getName();
 
     @UnmodifiableView
@@ -29,7 +31,7 @@ public interface Command {
     @UnmodifiableView
     Set<CommandData.Flag> getFlags();
 
-    // TODO: Perm
+    String getPermission();
 
     CommandResult execute(CommandSender sender, String[] args);
 

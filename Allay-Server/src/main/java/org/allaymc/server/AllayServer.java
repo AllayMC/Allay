@@ -315,16 +315,6 @@ public final class AllayServer implements Server {
         return isRunning.get();
     }
 
-    @Override
-    public boolean isOp() {
-        return true;
-    }
-
-    @Override
-    public boolean setOp(boolean value) {
-        throw new UnsupportedOperationException("Cannot set op on server");
-    }
-
     private class AllayTerminalConsoleThread extends Thread {
         public AllayTerminalConsoleThread() {
             super("Console Thread");
