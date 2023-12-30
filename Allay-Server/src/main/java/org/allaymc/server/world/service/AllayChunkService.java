@@ -391,6 +391,9 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void loadAndSendQueuedChunks() {
+            // Send ncp to client every tick to reduce the possibility of chunk disappearing.
+            // This solution is same to what dragonfly does
+            chunkLoader.publishClientChunkUpdate();
             if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int triedSendChunkCount = 0;
@@ -409,7 +412,6 @@ public class AllayChunkService implements ChunkService {
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
             if (!chunkReadyToSend.isEmpty()) {
-                chunkLoader.publishClientChunkUpdate();
                 var worldSettings = Server.SETTINGS.worldSettings();
                 var chunkSendingStrategy = worldSettings.chunkSendingStrategy();
                 if (Server.SETTINGS.worldSettings().useSubChunkSendingSystem()) {
