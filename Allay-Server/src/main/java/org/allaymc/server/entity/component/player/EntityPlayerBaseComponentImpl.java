@@ -373,7 +373,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void publishClientChunkUpdate() {
         var chunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
-        var loc = getCmdExecuteLocation();
+        var loc = getLocation();
         chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
         chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
         networkComponent.sendPacket(chunkPublisherUpdatePacket);
