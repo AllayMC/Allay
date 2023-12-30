@@ -1,5 +1,6 @@
 package org.allaymc.api.command;
 
+import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
@@ -35,5 +36,5 @@ public interface Command {
 
     CommandResult execute(CommandSender sender, String[] args);
 
-    CommandData toNetworkData();
+    CommandData buildNetworkDataInLang(LangCode langCode);
 }

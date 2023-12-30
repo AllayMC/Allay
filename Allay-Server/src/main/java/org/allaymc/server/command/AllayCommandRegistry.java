@@ -4,15 +4,12 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.command.defaults.MeCommand;
-import org.allaymc.server.command.tree.AllayCommandContext;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -59,26 +56,16 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         }
     }
 
-    protected AvailableCommandsPacket packetCache = null;
-
     @Override
     public Command register(String s, Command command) {
-        packetCache = null;
         return super.register(s, command);
     }
 
     @Override
-    public AvailableCommandsPacket getAvailableCommandsPacket() {
-        if (packetCache == null) {
-            packetCache = encodeAvailableCommandsPacket();
-        }
-        return packetCache;
-    }
-
-    protected AvailableCommandsPacket encodeAvailableCommandsPacket() {
+    public AvailableCommandsPacket encodeAvailableCommandsPacket(LangCode langCode) {
         var pk = new AvailableCommandsPacket();
         for (var command : getContent().values()) {
-            pk.getCommands().add(command.toNetworkData());
+            pk.getCommands().add(command.buildNetworkDataInLang(langCode));
         }
         return pk;
     }

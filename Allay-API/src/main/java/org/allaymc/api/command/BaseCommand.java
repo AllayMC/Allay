@@ -2,6 +2,7 @@ package org.allaymc.api.command;
 
 import lombok.Getter;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -51,9 +52,13 @@ public abstract class BaseCommand implements Command {
         return Collections.unmodifiableSet(flags);
     }
 
-    @Override
-    public CommandData toNetworkData() {
-        CommandEnumData networkAliasesData = null;
+    private boolean networkDataPrepared = false;
+    private CommandEnumData networkAliasesData = null;
+    private CommandOverloadData[] networkOverloadsData = null;
+    private CommandPermission networkPerm = null;
+
+    private void prepareNetworkData() {
+        // Aliases
         if (!aliases.isEmpty()) {
             var map = new HashMap<String, Set<CommandEnumConstraint>>();
             for (var alias : aliases) {
@@ -61,12 +66,24 @@ public abstract class BaseCommand implements Command {
             }
             networkAliasesData = new CommandEnumData("aliases", map, false);
         }
-        CommandOverloadData[] networkOverloadsData = new CommandOverloadData[overloads.size()];
+
+        // Overloads
+        networkOverloadsData = new CommandOverloadData[overloads.size()];
         for (int index = 0; index < overloads.size(); index++) {
             var overload = overloads.get(index);
             networkOverloadsData[index] = new CommandOverloadData(false, overload);
         }
-        var perm = MEMBER.hasPerm(permission) ? CommandPermission.ANY : CommandPermission.ADMIN;
-        return new CommandData(name, I18n.get().tr(description), flags, perm, networkAliasesData, List.of(), networkOverloadsData);
+
+        // Perm
+        networkPerm = MEMBER.hasPerm(permission) ? CommandPermission.ANY : CommandPermission.ADMIN;
+        networkDataPrepared = true;
+    }
+
+    @Override
+    public CommandData buildNetworkDataInLang(LangCode langCode) {
+        if (!networkDataPrepared) {
+            prepareNetworkData();
+        }
+        return new CommandData(name, I18n.get().tr(langCode, description), flags, networkPerm, networkAliasesData, List.of(), networkOverloadsData);
     }
 }
