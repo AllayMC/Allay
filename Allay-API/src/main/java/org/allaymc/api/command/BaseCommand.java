@@ -1,6 +1,7 @@
 package org.allaymc.api.command;
 
 import lombok.Getter;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -63,6 +64,6 @@ public abstract class BaseCommand implements Command {
             networkOverloadsData[index] = new CommandOverloadData(false, overload);
         }
         var perm = MEMBER.hasPerm(permission) ? CommandPermission.ANY : CommandPermission.ADMIN;
-        return new CommandData(name, description, flags, perm, networkAliasesData, List.of(), networkOverloadsData);
+        return new CommandData(name, I18n.get().toClientFriendlyStyle(description).left(), flags, perm, networkAliasesData, List.of(), networkOverloadsData);
     }
 }

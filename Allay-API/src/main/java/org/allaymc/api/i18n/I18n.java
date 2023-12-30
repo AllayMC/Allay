@@ -32,4 +32,29 @@ public interface I18n {
     LangCode getLangCode();
 
     Pair<String, Integer> findI18nKey(String str);
+
+    default Pair<String, Boolean> toClientFriendlyStyle(String str, String... args) {
+        var pair = findI18nKey(str);
+        var isVanillaTr = pair.left().startsWith(I18n.VANILLA_LANG_NAMESPACE);
+        if (isVanillaTr) {
+            return Pair.of(
+                    new StringBuilder(str)
+                            .replace(
+                                    pair.right() + 1,
+                                    pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 2,
+                                    "")
+                            .toString(),
+                    true);
+        } else {
+            return Pair.of(tr(str, args), false);
+        }
+    }
+
+    default Pair<String, Boolean> toClientFriendlyStyle(String str, Object... args) {
+        return toClientFriendlyStyle(str, Utils.objectArrayToStringArray(args));
+    }
+
+    default Pair<String, Boolean> toClientFriendlyStyle(String str) {
+        return toClientFriendlyStyle(str, new String[0]);
+    }
 }

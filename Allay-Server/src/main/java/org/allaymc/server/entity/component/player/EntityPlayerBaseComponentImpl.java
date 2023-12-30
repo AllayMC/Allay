@@ -313,24 +313,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         pk.setType(CommandOutputType.ALL_OUTPUT);
         pk.setCommandOriginData(sender.getCommandOriginData());
         for (var output : outputs) {
-            var pair = I18n.get().findI18nKey(output.str());
-            var isVanillaTr = pair.left().startsWith(I18n.VANILLA_LANG_NAMESPACE);
-            if (isVanillaTr) {
-                pk.getMessages().add(
-                        new CommandOutputMessage(
-                                false,
-                                new StringBuilder(output.str())
-                                        .replace(
-                                                pair.right() + 1,
-                                                pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 2,
-                                                "")
-                                        .toString(),
-                                Utils.objectArrayToStringArray(output.args())
-                        )
-                );
-            } else {
-                pk.getMessages().add(new CommandOutputMessage(false, I18n.get().tr(output.str(), output.args()), new String[0]));
-            }
+            var pair = I18n.get().toClientFriendlyStyle(output.str(), output.args());
+            pk.getMessages().add(new CommandOutputMessage(
+                    false,
+                    pair.left(),
+                    pair.right() ? Utils.objectArrayToStringArray(output.args()) : new String[0]));
         }
         pk.setSuccessCount(0); // Unknown usage
         pk.setData(""); // Unknown usage
@@ -436,23 +423,24 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
-        var pair = I18n.get().findI18nKey(tr);
         var pk = new TextPacket();
-        var isVanillaTr = pair.left().startsWith(I18n.VANILLA_LANG_NAMESPACE);
-        if (forceTranslatedByClient || isVanillaTr) {
-            if (isVanillaTr) {
-                pk.setMessage(new StringBuilder(tr).replace(pair.right() + 1, pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 2, "").toString());
-            } else {
-                pk.setMessage(tr);
-            }
-            pk.setType(TextPacket.Type.TRANSLATION);
-            pk.setXuid(networkComponent.getXUID());
+        pk.setType(TextPacket.Type.TRANSLATION);
+        pk.setXuid(networkComponent.getXUID());
+        pk.setNeedsTranslation(true);
+        if (forceTranslatedByClient) {
+            pk.setMessage(tr);
             pk.setParameters(List.of(args));
-            pk.setNeedsTranslation(true);
-        } else {
-            sendText(I18n.get().tr(tr));
+            networkComponent.sendPacket(pk);
+            return;
         }
-        networkComponent.sendPacket(pk);
+        var pair = I18n.get().toClientFriendlyStyle(tr, args);
+        if (pair.right()) {
+            pk.setMessage(pair.left());
+            pk.setParameters(List.of(args));
+            networkComponent.sendPacket(pk);
+        } else {
+            sendText(pair.left());
+        }
     }
 
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
