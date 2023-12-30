@@ -53,6 +53,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
             sender.handleResult(result);
             return result;
         } catch (Throwable t) {
+            t.printStackTrace();
             sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.failed();
         }

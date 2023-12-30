@@ -37,7 +37,8 @@ public class AllayI18N implements I18n {
         var pair = findI18nKey(tr);
         var lang = langMap.get(langCode).get(pair.left());
         if (lang == null) {
-            throw new IllegalArgumentException("Cannot find lang for key " + pair.left());
+            // key is not exist
+            return tr;
         }
         var argIndex = 0;
         var maxArgIndex = args.length - 1;
