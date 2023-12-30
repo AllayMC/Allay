@@ -3,8 +3,7 @@ package org.allaymc.server.perm;
 import org.allaymc.server.perm.tree.AllayPermTree;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/12/30
@@ -38,5 +37,8 @@ public class PermTreeTest {
         assertTrue(tree.hasPerm("test.cmd.abc"));
         tree.addPerm("*");
         assertTrue(tree.hasPerm("a.b.c"));
+
+        // 不允许在检查权限时使用通配符
+        assertThrows(IllegalArgumentException.class, () -> tree.hasPerm("test.cmd.*"));
     }
 }

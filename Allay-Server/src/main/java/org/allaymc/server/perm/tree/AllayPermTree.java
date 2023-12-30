@@ -26,6 +26,9 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public boolean hasPerm(String perm) {
+        if (perm.contains("*")) {
+            throw new IllegalArgumentException("Using wildcard in method hasPerm() is not allowed!");
+        }
         var spilt = new LinkedList<>(AllayStringUtils.fastSplit(perm, "."));
         var node = root;
         while (!spilt.isEmpty()) {
