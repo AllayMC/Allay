@@ -101,7 +101,7 @@ public class AllayI18N implements I18n {
         var pair = findI18nKey(tr);
         var lang = langMap.get(langCode).get(pair.left());
         if (lang == null) lang = langMap.get(FALLBACK_LANG).get(pair.left());
-        Objects.requireNonNull(lang, "No valid lang key found in \"" + tr + "\"");
+        if (lang == null) return tr;
         return new StringBuilder(tr).replace(pair.right(), pair.right() + pair.left().length() + 2, lang).toString();
     }
 
