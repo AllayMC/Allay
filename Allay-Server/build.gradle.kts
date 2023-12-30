@@ -33,7 +33,6 @@ dependencies {
     implementation(libs.fastreflect)
     implementation(libs.reflections)
     implementation(libs.caffeine)
-    implementation(libs.bundles.commands)
     testImplementation(libs.bytebuddy)
 }
 

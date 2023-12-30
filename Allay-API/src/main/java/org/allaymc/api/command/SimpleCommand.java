@@ -30,7 +30,7 @@ public abstract class SimpleCommand extends BaseCommand {
             var index = leaf.depth() - 1;
             while (node.depth() != 0) {
                 paramArray[index] = node.toNetworkData();
-                node = node.root();
+                node = node.parent();
                 index--;
             }
             overloads.add(paramArray);

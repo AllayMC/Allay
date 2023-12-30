@@ -7,6 +7,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.server.command.defaults.GameTestCommand;
 import org.allaymc.server.command.defaults.MeCommand;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
@@ -30,6 +31,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
     @Override
     public void registerDefaultCommands() {
         register(new MeCommand());
+        register(new GameTestCommand());
     }
 
     @Override

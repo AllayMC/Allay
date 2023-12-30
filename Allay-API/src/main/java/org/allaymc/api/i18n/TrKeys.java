@@ -3947,6 +3947,142 @@ public interface TrKeys {
 
   String M_GAMEMODE_SURVIVAL = "minecraft:gameMode.survival";
 
+  String M_GAMETEST_ASSERT_COULDNOTSETBLOCK = "minecraft:gameTest.assert.couldNotSetBlock";
+
+  String M_GAMETEST_ASSERT_COULDNOTSPAWNENTITY = "minecraft:gameTest.assert.couldNotSpawnEntity";
+
+  String M_GAMETEST_ASSERT_DIDNOTEXPECTENTITYINSTANCE = "minecraft:gameTest.assert.didNotExpectEntityInstance";
+
+  String M_GAMETEST_ASSERT_DIDNOTEXPECTENTITYOFTYPE = "minecraft:gameTest.assert.didNotExpectEntityOfType";
+
+  String M_GAMETEST_ASSERT_EXPECTBLOCK = "minecraft:gameTest.assert.expectBlock";
+
+  String M_GAMETEST_ASSERT_EXPECTBLOCKWITHSTATE = "minecraft:gameTest.assert.expectBlockWithState";
+
+  String M_GAMETEST_ASSERT_EXPECTCAULDRON = "minecraft:gameTest.assert.expectCauldron";
+
+  String M_GAMETEST_ASSERT_EXPECTEMPTYCONTAINER = "minecraft:gameTest.assert.expectEmptyContainer";
+
+  String M_GAMETEST_ASSERT_EXPECTENTITYINSTANCE = "minecraft:gameTest.assert.expectEntityInstance";
+
+  String M_GAMETEST_ASSERT_EXPECTENTITYOFTYPE = "minecraft:gameTest.assert.expectEntityOfType";
+
+  String M_GAMETEST_ASSERT_EXPECTITEMINCONTAINER = "minecraft:gameTest.assert.expectItemInContainer";
+
+  String M_GAMETEST_ASSERT_EXPECTITEMOFTYPE = "minecraft:gameTest.assert.expectItemOfType";
+
+  String M_GAMETEST_ASSERT_EXPECTWATERLOGGED = "minecraft:gameTest.assert.expectWaterLogged";
+
+  String M_GAMETEST_ASSERT_HASARMOR = "minecraft:gameTest.assert.hasArmor";
+
+  String M_GAMETEST_ASSERT_HASCOMPONENT = "minecraft:gameTest.assert.hasComponent";
+
+  String M_GAMETEST_ASSERT_INVALIDENTITYINSTANCE = "minecraft:gameTest.assert.invalidEntityInstance";
+
+  String M_GAMETEST_ASSERT_INVALIDFLUIDTYPE = "minecraft:gameTest.assert.invalidFluidType";
+
+  String M_GAMETEST_ASSERT_MISSINGARMOR = "minecraft:gameTest.assert.missingArmor";
+
+  String M_GAMETEST_ASSERT_MISSINGBUTTON = "minecraft:gameTest.assert.missingButton";
+
+  String M_GAMETEST_ASSERT_MISSINGCOMPONENT = "minecraft:gameTest.assert.missingComponent";
+
+  String M_GAMETEST_ASSERT_MISSINGEXPLOSIONCOMPONENT = "minecraft:gameTest.assert.missingExplosionComponent";
+
+  String M_GAMETEST_ASSERT_MISSINGLEVER = "minecraft:gameTest.assert.missingLever";
+
+  String M_GAMETEST_ASSERT_MOBWONTMOVE = "minecraft:gameTest.assert.mobWontMove";
+
+  String M_GAMETEST_ASSERT_NOCONTAINERFOUND = "minecraft:gameTest.assert.noContainerFound";
+
+  String M_GAMETEST_ASSERT_NOPATHFOUND = "minecraft:gameTest.assert.noPathFound";
+
+  String M_GAMETEST_ASSERT_ONLYWORKSWITHMOBS = "minecraft:gameTest.assert.onlyWorksWithMobs";
+
+  String M_GAMETEST_ASSERT_PATHFOUND = "minecraft:gameTest.assert.pathFound";
+
+  String M_GAMETEST_ASSERT_UNEXPECTEDBLOCK = "minecraft:gameTest.assert.unexpectedBlock";
+
+  String M_GAMETEST_ASSERT_UNEXPECTEDBLOCKSTATE = "minecraft:gameTest.assert.unexpectedBlockState";
+
+  String M_GAMETEST_ASSERT_UNEXPECTEDDATARESULT = "minecraft:gameTest.assert.unexpectedDataResult";
+
+  String M_GAMETEST_ASSERT_UNEXPECTEDITEMOFTYPE = "minecraft:gameTest.assert.unexpectedItemOfType";
+
+  String M_GAMETEST_ASSERT_UNEXPECTEDPARAMETERVALUE = "minecraft:gameTest.assert.unexpectedParameterValue";
+
+  String M_GAMETEST_ASSERT_UNEXPECTEDREDSTONEPOWERLEVEL = "minecraft:gameTest.assert.unexpectedRedstonePowerLevel";
+
+  String M_GAMETEST_ASSERT_UNEXPECTEDWATERLOGGED = "minecraft:gameTest.assert.unexpectedWaterLogged";
+
+  String M_GAMETEST_ASSERT_WRONGENTITYITEMCOUNT = "minecraft:gameTest.assert.wrongEntityItemCount";
+
+  String M_GAMETEST_DESCRIPTION = "minecraft:gameTest.description";
+
+  String M_GAMETEST_ERROR_CANNOTFINDLOOKEDATBLOCK = "minecraft:gameTest.error.cannotFindLookedAtBlock";
+
+  String M_GAMETEST_ERROR_CANNOTFINDSTUCTUREBLOCKCONTAININGBLOCK = "minecraft:gameTest.error.cannotFindStuctureBlockContainingBlock";
+
+  String M_GAMETEST_ERROR_FAILCONDITIONMET = "minecraft:gameTest.error.failConditionMet";
+
+  String M_GAMETEST_ERROR_FAILED = "minecraft:gameTest.error.failed";
+
+  String M_GAMETEST_ERROR_FLAKYFAILED = "minecraft:gameTest.error.flakyFailed";
+
+  String M_GAMETEST_ERROR_FLAKYFAILEDSHOWSUCCESSES = "minecraft:gameTest.error.flakyFailedShowSuccesses";
+
+  String M_GAMETEST_ERROR_FLAKYTESTERROR = "minecraft:gameTest.error.flakyTestError";
+
+  String M_GAMETEST_ERROR_MISSINGSTRUCTURE = "minecraft:gameTest.error.missingStructure";
+
+  String M_GAMETEST_ERROR_NOFINISHEDSEQUENCES = "minecraft:gameTest.error.noFinishedSequences";
+
+  String M_GAMETEST_ERROR_NOTESTSFOUND = "minecraft:gameTest.error.noTestsFound";
+
+  String M_GAMETEST_ERROR_REPEATCOUNTTOOSMALL = "minecraft:gameTest.error.repeatCountTooSmall";
+
+  String M_GAMETEST_ERROR_STRUCTURENOTSPAWNED = "minecraft:gameTest.error.structureNotSpawned";
+
+  String M_GAMETEST_ERROR_STRUCTURETOOBIG = "minecraft:gameTest.error.structureTooBig";
+
+  String M_GAMETEST_ERROR_SUCCEEDEDININVALIDTICK = "minecraft:gameTest.error.succeededInInvalidTick";
+
+  String M_GAMETEST_ERROR_TESTMISSING = "minecraft:gameTest.error.testMissing";
+
+  String M_GAMETEST_ERROR_TIMEOUT = "minecraft:gameTest.error.timeout";
+
+  String M_GAMETEST_ERROR_UNKNOWNCOMMANDMODE = "minecraft:gameTest.error.unknownCommandMode";
+
+  String M_GAMETEST_ERROR_UNKOWNEVENT = "minecraft:gameTest.error.unkownEvent";
+
+  String M_GAMETEST_OPTIONALPREFIX = "minecraft:gameTest.optionalPrefix";
+
+  String M_GAMETEST_REPORT_ALLREQUIREDTESTSPASSED = "minecraft:gameTest.report.allRequiredTestsPassed";
+
+  String M_GAMETEST_REPORT_BOOKTITLE = "minecraft:gameTest.report.bookTitle";
+
+  String M_GAMETEST_REPORT_OPTIONALFAILURES = "minecraft:gameTest.report.optionalFailures";
+
+  String M_GAMETEST_REPORT_SOMETESTSFAILED = "minecraft:gameTest.report.someTestsFailed";
+
+  String M_GAMETEST_REPORT_TESTCOUNT = "minecraft:gameTest.report.testCount";
+
+  String M_GAMETEST_REPORT_TESTLOCATION = "minecraft:gameTest.report.testLocation";
+
+  String M_GAMETEST_REPORT_TICKCOUNT = "minecraft:gameTest.report.tickCount";
+
+  String M_GAMETEST_SUCCESS_FLAKYPASSED = "minecraft:gameTest.success.flakyPassed";
+
+  String M_GAMETEST_SUCCESS_FLAKYPASSEDENOUGH = "minecraft:gameTest.success.flakyPassedEnough";
+
+  String M_GAMETEST_SUCCESS_PASSED = "minecraft:gameTest.success.passed";
+
+  String M_GAMETEST_SUCCESS_RELATIVEPOSITION = "minecraft:gameTest.success.relativePosition";
+
+  String M_GAMETEST_SUCCESS_RUNNINGTESTS = "minecraft:gameTest.success.runningTests";
+
+  String M_GAMETEST_SUCCESS_TESTSSTARTED = "minecraft:gameTest.success.testsStarted";
+
   String M_IMMERSIVE_READER_BOOK_PAGE_HEADER = "minecraft:immersive_reader.book_page_header";
 
   String M_IMMERSIVE_READER_ERROR_IDENTITY_FAILURE = "minecraft:immersive_reader.error.identity_failure";

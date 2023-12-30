@@ -34,7 +34,6 @@ public class LangBuilder {
         NOT_INCLUDES.add("accounts");
         NOT_INCLUDES.add("apple");
         NOT_INCLUDES.add("dynamicPackage");
-        NOT_INCLUDES.add("gameTest");
         NOT_INCLUDES.add("clientscript");
         NOT_INCLUDES.add("script");
         NOT_INCLUDES.add("tips");

@@ -5,6 +5,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -72,6 +73,16 @@ public interface CommandNode {
     CommandNode bool(String name);
 
     CommandNode enums(String name, String... enums);
+
+    default CommandNode enums(String name, Class<? extends Enum<?>> enumClass) {
+        Enum<?>[] enumConstants = enumClass.getEnumConstants();
+        var values = new String[enumConstants.length];
+        for (int index = 0; index < enumConstants.length; index++) {
+            var e = enumConstants[index];
+            values[index] = e.name();
+        }
+        return enums(name, values);
+    }
 
     CommandNode exec(Function<CommandContext, CommandResult> executor);
 

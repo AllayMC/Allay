@@ -65,11 +65,7 @@ netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", vers
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.0-beta.5" }
 # JeGenerator
 jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.2-R0.3" }
-# Command framework
-cloud-core = { group = "cloud.commandframework", name = "cloud-core", version.ref = "cloud" }
-cloud-annotations = { group = "cloud.commandframework", name = "cloud-annotations", version.ref = "cloud" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 test = ["junit-jupiter-api", "junit-jupiter-engine", "mockito", "mockito-junit"]
-commands = ["cloud-core", "cloud-annotations"]

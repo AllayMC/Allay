@@ -70,4 +70,14 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void sendTip(String message);
 
     void sendPopup(String message);
+
+    @Override
+    default boolean isPlayer() {
+        return true;
+    }
+
+    @Override
+    default boolean isEntity() {
+        return true;
+    }
 }
