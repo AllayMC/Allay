@@ -28,15 +28,30 @@
 
 ### 不带通配符时权限的匹配（测试代码见test/perm/PermTreeTest.java)
 
+#### eg1:
+
 令玩家cool_loong拥有权限```allay.cmd.tell```
 
 则玩家cool_loong拥有权限:
 
 ```allay```
-```allay.cmd.```
+```allay.cmd```
 ```allay.cmd.tell```
 
-但不拥有权限```allay.cmd.help```
+但不拥有权限```allay.cmd.help```等
+
+#### eg2:
+
+
+令玩家cool_loong拥有权限```allay.cmd```
+
+则玩家cool_loong拥有权限:
+
+```allay```
+```allay.cmd```
+
+但不拥有权限```allay.cmd.tell```, ```allay.cmd.help```等
+
 
 ### 带通配符时权限的匹配
 
@@ -46,7 +61,7 @@
 则玩家cool_loong拥有权限（只列举部分，由于存在通配符）:
 
 ```allay```
-```allay.cmd.```
+```allay.cmd```
 ```allay.cmd.tell```
 ```allay.cmd.a```
 ```allay.cmd.b```
@@ -54,4 +69,4 @@
 ```allay.cmd.a.b.c```
 etc...
 
-但不拥有权限```allay.eat.daoge```
+但不拥有权限```allay.eat.daoge```等
