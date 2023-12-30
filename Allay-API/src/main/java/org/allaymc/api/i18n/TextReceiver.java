@@ -1,5 +1,6 @@
 package org.allaymc.api.i18n;
 
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
@@ -19,4 +20,6 @@ public interface TextReceiver {
     void sendTr(String tr);
 
     void sendChat(EntityPlayer sender, String message);
+
+    void sendCommandOutputs(CommandSender sender, TrContainer... outputs);
 }

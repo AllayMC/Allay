@@ -134,8 +134,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return entityType;
     }
 
-    @Override
-    public Location3fc getLocation() {
+    public Location3fc getCmdExecuteLocation() {
         return location;
     }
 

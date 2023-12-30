@@ -56,9 +56,8 @@ public class AllayCommandTree implements CommandTree {
         }
         var nextNode = node.nextNode(context);
         if (nextNode == null) {
-            // 子节点没有匹配项
-            // TODO: log
-            return CommandResult.FAILED;
+            context.addSyntaxError();
+            return context.failed();
         } else return parse0(nextNode, context);
     }
 }

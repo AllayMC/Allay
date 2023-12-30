@@ -11,7 +11,10 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
@@ -35,6 +38,8 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -311,8 +316,32 @@ public final class AllayServer implements Server {
     }
 
     @Override
+    public void sendCommandOutputs(CommandSender sender, TrContainer... outputs) {
+        for (var output : outputs) {
+            log.info("[" + sender.getName() + "] " + I18n.get().tr(output.str(), output.args()));
+        }
+    }
+
+    @Override
     public boolean isRunning() {
         return isRunning.get();
+    }
+
+    @Override
+    public String getName() {
+        return "Server";
+    }
+
+    private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
+
+    @Override
+    public CommandOriginData getCommandOriginData() {
+        return SERVER_COMMAND_ORIGIN_DATA;
+    }
+
+    @Override
+    public Location3fc getCmdExecuteLocation() {
+        return new Location3f(0, 0, 0, getDefaultWorld().getDimension(DimensionInfo.OVERWORLD.dimensionId()));
     }
 
     private class AllayTerminalConsoleThread extends Thread {

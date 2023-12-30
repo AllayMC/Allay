@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
@@ -11,6 +12,7 @@ import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.perm.Permissible;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
@@ -26,17 +28,18 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.perm.tree.AllayPermTree;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBf;
 
@@ -304,6 +307,33 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
+    public void sendCommandOutputs(CommandSender sender, TrContainer... outputs) {
+        var pk = new CommandOutputPacket();
+        pk.setType(CommandOutputType.ALL_OUTPUT);
+        pk.setCommandOriginData(sender.getCommandOriginData());
+        for (var output : outputs) {
+            String[] parameters = new String[output.args().length];
+            for (int i = 0; i < output.args().length; i++) {
+                parameters[i] = output.args()[i].toString();
+            }
+            pk.getMessages().add(new CommandOutputMessage(false, output.str(), parameters));
+        }
+        pk.setSuccessCount(0); // Unknown usage
+        pk.setData(""); // Unknown usage
+        networkComponent.sendPacket(pk);
+    }
+
+    protected CommandOriginData commandOriginData;
+
+    @Override
+    public CommandOriginData getCommandOriginData() {
+        if (commandOriginData == null) {
+            commandOriginData = new CommandOriginData(CommandOriginType.PLAYER, networkComponent.getLoginData().getUuid(), "", 0);
+        }
+        return commandOriginData;
+    }
+
+    @Override
     public void sendTip(String message) {
         sendSimpleMessage(message, TextPacket.Type.TIP);
     }
@@ -342,7 +372,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void publishClientChunkUpdate() {
         var chunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
-        var loc = getLocation();
+        var loc = getCmdExecuteLocation();
         chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
         chunkPublisherUpdatePacket.setRadius((getChunkLoadingRadius() + 1) << 4);
         networkComponent.sendPacket(chunkPublisherUpdatePacket);
@@ -433,5 +463,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public Permissible removePerm(String perm) {
         permTree.removePerm(perm);
         return this;
+    }
+
+    @Override
+    public String getName() {
+        return thisEntity.getOriginName();
     }
 }

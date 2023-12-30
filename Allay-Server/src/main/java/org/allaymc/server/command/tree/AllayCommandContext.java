@@ -3,6 +3,9 @@ package org.allaymc.server.command.tree;
 import lombok.Getter;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
+import org.allaymc.api.i18n.TrContainer;
+
+import java.util.List;
 
 /**
  * Allay Project 2023/12/29
@@ -17,11 +20,18 @@ public class AllayCommandContext implements CommandContext {
     protected int currentArgIndex = 0;
     protected String[] args;
     protected Object[] results;
+    @Getter
+    protected List<TrContainer> outputs;
 
     public AllayCommandContext(CommandSender sender, String[] args) {
         this.sender = sender;
         this.args = args;
         this.results = new Object[args.length];
+    }
+
+    @Override
+    public int getArgCount() {
+        return args.length;
     }
 
     @Override
@@ -42,5 +52,10 @@ public class AllayCommandContext implements CommandContext {
     @Override
     public <T> T getResult(int index) {
         return (T) results[index];
+    }
+
+    @Override
+    public void addOutput(String output, Object... args) {
+        outputs.add(new TrContainer(output, args));
     }
 }

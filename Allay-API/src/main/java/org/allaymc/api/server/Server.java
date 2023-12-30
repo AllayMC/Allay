@@ -6,9 +6,11 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TextReceiver;
+import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.perm.Permissible;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
@@ -20,6 +22,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -137,5 +140,10 @@ public interface Server extends TaskCreator, CommandSender {
     @Override
     default Permissible removePerm(String perm) {
         return this;
+    }
+
+    default void broadcastCommandOutputs(CommandSender sender, TrContainer... outputs) {
+        sendCommandOutputs(sender, outputs);
+        getOnlinePlayers().values().forEach(player -> player.sendCommandOutputs(sender, outputs));
     }
 }
