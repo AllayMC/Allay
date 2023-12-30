@@ -3,7 +3,7 @@ package org.allaymc.api.command.tree;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.command.SenderType;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
@@ -89,13 +89,11 @@ public interface CommandContext {
         addSyntaxError(getCurrentArgIndex());
     }
 
-    default void addSenderTypeError() {
-        addOutput("§cThis command can only be executed by a player!");
+    default void addSenderTypeError(CommandNode node) {
+        addOutput("§c" + I18n.get().tr(node.getSenderType().i18Key()));
     }
 
     List<TrContainer> getOutputs();
-
-    SenderType getSenderType();
 
     default CommandResult success() {
         return CommandResult.success(this);

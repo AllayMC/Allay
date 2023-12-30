@@ -25,6 +25,12 @@ public interface TrKeys {
 
   String A_COMMAND_INTERNAL_ERROR = "allay:command.internal.error";
 
+  String A_COMMAND_EXECUTOR_NOT_SERVER = "allay:command.executor.notServer";
+
+  String A_COMMAND_EXECUTOR_NOT_PLAYER = "allay:command.executor.notPlayer";
+
+  String A_COMMAND_EXECUTOR_NOT_ENTITY = "allay:command.executor.notEntity";
+
   String A_COMMAND_INVALID_SYNTAX = "allay:command.invalid.syntax";
 
   String A_CREATIVEITEM_LOADED = "allay:creativeitem.loaded";

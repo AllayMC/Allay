@@ -1,10 +1,8 @@
 package org.allaymc.server.command.tree;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandTree;
@@ -62,9 +60,9 @@ public class AllayCommandTree implements CommandTree {
                 context.addSyntaxError();
                 return context.failed();
             }
-            if(node.getSenderType() != context.getSenderType() && node.getSenderType() != SenderType.ANY) {
+            if(!node.getSenderType().validate(context.getSender())) {
                 // Sender type isn't correct, send an error!
-                context.addSenderTypeError();
+                context.addSenderTypeError(node);
                 return context.failed();
             }
             return node.getExecutor().apply(context);

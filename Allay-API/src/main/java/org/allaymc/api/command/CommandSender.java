@@ -50,4 +50,12 @@ public interface CommandSender extends TextReceiver, Permissible {
     default Entity asEntity() {
         return (Entity) this;
     }
+
+    default boolean isServer() {
+        return false;
+    }
+
+    default Server asServer() {
+        return (Server) this;
+    }
 }

@@ -71,10 +71,4 @@ public class AllayCommandContext implements CommandContext {
     public void addOutput(String output, Object... args) {
         outputs.add(new TrContainer(output, args));
     }
-
-    @Override
-    public SenderType getSenderType() {
-        if(sender.isPlayer()) return SenderType.PLAYER;
-        return SenderType.SERVER;
-    }
 }
