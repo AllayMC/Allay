@@ -1,12 +1,14 @@
 package org.allaymc.api.command.tree;
 
 import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -19,6 +21,8 @@ public interface CommandNode {
     boolean isOptional();
 
     Object getDefaultValue();
+
+    CommandNode defaultValue(Object defaultValue);
 
     CommandNode optional(boolean optional);
 
@@ -60,19 +64,47 @@ public interface CommandNode {
 
     CommandNode addLeaf(CommandNode leaf);
 
-    CommandNode key(String key);
+    CommandNode key(String key, String defaultValue);
 
-    CommandNode str(String name);
+    default CommandNode key(String key) {
+        return key(key, "");
+    }
 
-    CommandNode intNum(String name);
+    CommandNode str(String name, String defaultValue);
 
-    CommandNode floatNum(String name);
+    default CommandNode str(String name) {
+        return str(name, "");
+    }
 
-    CommandNode doubleNum(String name);
+    CommandNode intNum(String name, int defaultValue);
 
-    CommandNode bool(String name);
+    default CommandNode intNum(String name) {
+        return intNum(name, 0);
+    }
 
-    CommandNode enums(String name, String... enums);
+    CommandNode floatNum(String name, float defaultValue);
+
+    default CommandNode floatNum(String name) {
+        return floatNum(name, 0f);
+    }
+
+    CommandNode doubleNum(String name, double defaultValue);
+
+    default CommandNode doubleNum(String name) {
+        return doubleNum(name, 0d);
+    }
+
+    CommandNode bool(String name, boolean defaultValue);
+
+    default CommandNode bool(String name) {
+        return bool(name, false);
+    }
+
+    CommandNode enums(String name, String defaultValue, String... enums);
+
+    default CommandNode enums(String name, String... enums) {
+        return enums(name, "", enums);
+    }
 
     default CommandNode enums(String name, Class<? extends Enum<?>> enumClass) {
         Enum<?>[] enumConstants = enumClass.getEnumConstants();
@@ -84,12 +116,9 @@ public interface CommandNode {
         return enums(name, values);
     }
 
-    CommandNode exec(Function<CommandContext, CommandResult> executor);
-    CommandNode exec(Function<CommandContext, CommandResult> executor, SenderType any);
+    <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> executor, SenderType<SENDER_TYPE> senderType);
 
-    Function<CommandContext, CommandResult> getExecutor();
-
-    SenderType getSenderType();
+    CommandResult applyExecutor(CommandContext context);
 
     CommandParamData toNetworkData();
 }

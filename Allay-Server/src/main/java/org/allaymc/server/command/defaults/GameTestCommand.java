@@ -50,13 +50,13 @@ public class GameTestCommand extends SimpleCommand {
                 .key("tps")
                 .exec(context -> {
                     var player = context.getSender().asPlayer();
-                    player.sendText("§aTPS: " + player.getLocation().dimension().getWorld().getTps() + ", Entity Count: " + player.getLocation().dimension().getEntities().size());
+                    player.sendText("§aTPS: " + player.getLocation().dimension().getWorld().getTps());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
                 .key("translate")
                 .str("key")
-                .enums("lang", LangCode.class)
+                .enums("langCode", LangCode.class)
                 .optional()
                 .exec(context -> {
                     var player = context.getSender().asPlayer();

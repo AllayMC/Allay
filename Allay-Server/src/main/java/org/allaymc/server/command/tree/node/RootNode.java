@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Range;
 public class RootNode extends BaseNode {
 
     public RootNode() {
-        super("ROOT", null);
+        super("ROOT", null, null);
     }
 
     @Override

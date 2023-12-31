@@ -11,13 +11,8 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
  * @author daoge_cmd
  */
 public class DoubleNode extends BaseNode {
-    public DoubleNode(String name, CommandNode parent) {
-        super(name, parent);
-    }
-
-    @Override
-    public Object getDefaultValue() {
-        return 0d;
+    public DoubleNode(String name, CommandNode parent, double defaultValue) {
+        super(name, parent, defaultValue);
     }
 
     @Override

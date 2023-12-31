@@ -23,15 +23,11 @@ public interface TrKeys {
 
   String A_BLOCKTYPE_LOADING = "allay:blocktype.loading";
 
-  String A_COMMAND_INTERNAL_ERROR = "allay:command.internal.error";
+  String A_COMMAND_GENERIC_SENDER_NOTENTITY = "allay:command.generic.sender.notEntity";
 
-  String A_COMMAND_EXECUTOR_NOT_SERVER = "allay:command.executor.notServer";
+  String A_COMMAND_GENERIC_SENDER_NOTPLAYER = "allay:command.generic.sender.notPlayer";
 
-  String A_COMMAND_EXECUTOR_NOT_PLAYER = "allay:command.executor.notPlayer";
-
-  String A_COMMAND_EXECUTOR_NOT_ENTITY = "allay:command.executor.notEntity";
-
-  String A_COMMAND_INVALID_SYNTAX = "allay:command.invalid.syntax";
+  String A_COMMAND_GENERIC_SENDER_NOTSERVER = "allay:command.generic.sender.notServer";
 
   String A_CREATIVEITEM_LOADED = "allay:creativeitem.loaded";
 

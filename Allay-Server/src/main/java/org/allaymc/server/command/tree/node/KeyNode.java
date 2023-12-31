@@ -15,14 +15,8 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class KeyNode extends BaseNode {
-
-    public KeyNode(String key, CommandNode parent) {
-        super(key, parent);
-    }
-
-    @Override
-    public Object getDefaultValue() {
-        return "";
+    public KeyNode(String key, CommandNode parent, String defaultValue) {
+        super(key, parent, defaultValue);
     }
 
     @Override

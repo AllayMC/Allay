@@ -6,8 +6,6 @@
   "network.client.connected": "Client connected, IP: %1",
   "network.client.disconnected": "Client disconnected, IP: %1",
   "allay.starting": "Starting up allay...",
-  "command.invalid.syntax": "Invalid Command Syntax. Correct command syntax is: /%1",
-  "command.internal.error": "An internal error occurred while attempting to perform this command",
   "blocktype.loading": "Loading block types...",
   "blocktype.loaded": "Loaded %1 block types",
   "blockattr.loading": "Loading vanilla block attribute data...",
@@ -23,5 +21,8 @@
   "itemtype.loading": "Loading item types...",
   "itemtype.loaded": "Loaded %1 item types",
   "creativeitem.loading": "Loading creative items...",
-  "creativeitem.loaded": "Creative items is loaded"
+  "creativeitem.loaded": "Creative items is loaded",
+  "command.generic.sender.notServer": "This command can only be executed by the server!",
+  "command.generic.sender.notPlayer": "This command can only be executed by a player!",
+  "command.generic.sender.notEntity": "This command can only be executed by an entity!"
 }

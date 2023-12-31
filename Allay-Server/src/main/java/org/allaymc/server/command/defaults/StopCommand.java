@@ -14,7 +14,7 @@ public class StopCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
-            context.getSender().sendText("Shutting down the server!");
+            context.getSender().sendTr(TrKeys.M_COMMANDS_STOP_START);
             Server.getInstance().shutdown();
             return context.success();
         });

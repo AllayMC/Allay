@@ -60,12 +60,7 @@ public class AllayCommandTree implements CommandTree {
                 context.addSyntaxError();
                 return context.failed();
             }
-            if(!node.getSenderType().validate(context.getSender())) {
-                // Sender type isn't correct, send an error!
-                context.addSenderTypeError(node);
-                return context.failed();
-            }
-            return node.getExecutor().apply(context);
+            return node.applyExecutor(context);
         }
         var nextNode = node.nextNode(context);
         if (nextNode == null) {

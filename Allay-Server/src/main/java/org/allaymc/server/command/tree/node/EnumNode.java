@@ -17,15 +17,9 @@ import java.util.Set;
  */
 public class EnumNode extends BaseNode {
     protected String[] values;
-
-    public EnumNode(String name, CommandNode parent, String... values) {
-        super(name, parent);
+    public EnumNode(String name, CommandNode parent, Object defaultValue, String... values) {
+        super(name, parent, defaultValue);
         this.values = values;
-    }
-
-    @Override
-    public Object getDefaultValue() {
-        return "";
     }
 
     @Override

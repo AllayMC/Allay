@@ -3,6 +3,7 @@ package org.allaymc.server.command.tree.node;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Range;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -30,11 +32,23 @@ public abstract class BaseNode implements CommandNode {
     protected boolean optional = false;
     protected String name;
     protected Function<CommandContext, CommandResult> executor;
-    protected SenderType senderType = SenderType.ANY;
+    @Getter
+    protected Object defaultValue;
 
     public BaseNode(String name, CommandNode parent) {
+        this(name, parent, null);
+    }
+
+    public BaseNode(String name, CommandNode parent, Object defaultValue) {
         this.name = name;
         this.parent = parent;
+        this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public CommandNode defaultValue(Object defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
     }
 
     @Override
@@ -135,60 +149,57 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public CommandNode key(String key) {
-        return addLeaf(new KeyNode(key, this));
+    public CommandNode key(String key, String defaultValue) {
+        return addLeaf(new KeyNode(key, this, defaultValue));
     }
 
     @Override
-    public CommandNode str(String name) {
-        return addLeaf(new StringNode(name, this));
+    public CommandNode str(String name, String defaultValue) {
+        return addLeaf(new StringNode(name, this, defaultValue));
     }
 
     @Override
-    public CommandNode intNum(String name) {
-        return addLeaf(new IntNode(name, this));
+    public CommandNode intNum(String name, int defaultValue) {
+        return addLeaf(new IntNode(name, this, defaultValue));
     }
 
     @Override
-    public CommandNode floatNum(String name) {
-        return addLeaf(new FloatNode(name, this));
+    public CommandNode floatNum(String name, float defaultValue) {
+        return addLeaf(new FloatNode(name, this, defaultValue));
     }
 
     @Override
-    public CommandNode doubleNum(String name) {
-        return addLeaf(new DoubleNode(name, this));
+    public CommandNode doubleNum(String name, double defaultValue) {
+        return addLeaf(new DoubleNode(name, this, defaultValue));
     }
 
     @Override
-    public CommandNode bool(String name) {
-        return addLeaf(new BooleanNode(name, this));
+    public CommandNode bool(String name, boolean defaultValue) {
+        return addLeaf(new BooleanNode(name, this, defaultValue));
     }
 
     @Override
-    public CommandNode enums(String name, String... enums) {
-        return addLeaf(new EnumNode(name, this, enums));
+    public CommandNode enums(String name, String defaultValue, String... enums) {
+        return addLeaf(new EnumNode(name, this, defaultValue, enums));
     }
 
     @Override
-    public CommandNode exec(Function<CommandContext, CommandResult> executor) {
-        return exec(executor, SenderType.ANY);
-    }
-
-    @Override
-    public CommandNode exec(Function<CommandContext, CommandResult> executor, SenderType senderType) {
-        this.executor = executor;
-        this.senderType = senderType;
+    public <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> biExecutor, SenderType<SENDER_TYPE> senderType) {
+        this.executor = context -> {
+            var sender = context.getSender();
+            if (senderType.validate(sender)) {
+                return biExecutor.apply(context, (SENDER_TYPE) context.getSender());
+            } else {
+                context.addOutput("§c%" + senderType.errorMsg());
+                return context.failed();
+            }
+        };
         return this;
     }
 
     @Override
-    public Function<CommandContext, CommandResult> getExecutor() {
-        return executor;
-    }
-
-    @Override
-    public SenderType getSenderType() {
-        return senderType;
+    public CommandResult applyExecutor(CommandContext context) {
+        return executor.apply(context);
     }
 
     @Override

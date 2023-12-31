@@ -11,13 +11,8 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
  * @author daoge_cmd
  */
 public class FloatNode extends BaseNode {
-    public FloatNode(String name, CommandNode parent) {
-        super(name, parent);
-    }
-
-    @Override
-    public Object getDefaultValue() {
-        return 0f;
+    public FloatNode(String name, CommandNode parent, float defaultValue) {
+        super(name, parent, defaultValue);
     }
 
     @Override

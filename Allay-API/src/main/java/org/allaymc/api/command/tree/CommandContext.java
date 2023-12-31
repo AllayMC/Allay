@@ -89,10 +89,6 @@ public interface CommandContext {
         addSyntaxError(getCurrentArgIndex());
     }
 
-    default void addSenderTypeError(CommandNode node) {
-        addOutput("§c" + I18n.get().tr(node.getSenderType().i18Key()));
-    }
-
     List<TrContainer> getOutputs();
 
     default CommandResult success() {

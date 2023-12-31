@@ -7,7 +7,6 @@ import org.allaymc.api.i18n.LangCode;
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static java.lang.Math.min;
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;

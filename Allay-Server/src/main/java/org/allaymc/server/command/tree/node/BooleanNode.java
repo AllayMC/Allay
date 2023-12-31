@@ -16,13 +16,8 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class BooleanNode extends BaseNode {
-    public BooleanNode(String name, CommandNode parent) {
-        super(name, parent);
-    }
-
-    @Override
-    public Object getDefaultValue() {
-        return false;
+    public BooleanNode(String name, CommandNode parent, boolean defaultValue) {
+        super(name, parent, defaultValue);
     }
 
     @Override

@@ -11,14 +11,8 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
  * @author daoge_cmd
  */
 public class IntNode extends BaseNode {
-
-    public IntNode(String name, CommandNode parent) {
-        super(name, parent);
-    }
-
-    @Override
-    public Object getDefaultValue() {
-        return 0;
+    public IntNode(String name, CommandNode parent, int defaultValue) {
+        super(name, parent, defaultValue);
     }
 
     @Override
