@@ -27,8 +27,7 @@ public class GameTestCommand extends SimpleCommand {
         tree.getRoot()
                 .key("gb")
                 .intNum("blockStateHash")
-                .exec(context -> {
-                    var player = context.getSender().asPlayer();
+                .exec((context, player) -> {
                     int blockStateHash = context.getResult(1);
                     var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
                     if (blockState == null) {
@@ -40,16 +39,14 @@ public class GameTestCommand extends SimpleCommand {
                 }, SenderType.PLAYER)
                 .root()
                 .key("rfinv")
-                .exec(context -> {
-                    var player = context.getSender().asPlayer();
+                .exec((context, player) -> {
                     player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
                     context.addOutput("§aInventory is refreshed!");
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
                 .key("tps")
-                .exec(context -> {
-                    var player = context.getSender().asPlayer();
+                .exec((context, player) -> {
                     player.sendText("§aTPS: " + player.getLocation().dimension().getWorld().getTps());
                     return context.success();
                 }, SenderType.PLAYER)
@@ -58,8 +55,7 @@ public class GameTestCommand extends SimpleCommand {
                 .str("key")
                 .enums("langCode", LangCode.class)
                 .optional()
-                .exec(context -> {
-                    var player = context.getSender().asPlayer();
+                .exec((context, player) -> {
                     String key = context.getResult(1);
                     String lang = context.getResult(2);
                     if (lang.isEmpty()) lang = LangCode.en_US.name();

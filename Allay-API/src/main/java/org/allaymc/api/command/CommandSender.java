@@ -1,7 +1,5 @@
 package org.allaymc.api.command;
 
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TextReceiver;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3fc;
@@ -33,29 +31,5 @@ public interface CommandSender extends TextReceiver, Permissible {
                 sendCommandOutputs(this, result.context().getOutputs().toArray(TrContainer[]::new));
             }
         }
-    }
-    
-    default boolean isPlayer() {
-        return false;
-    }
-
-    default EntityPlayer asPlayer() {
-        return (EntityPlayer) this;
-    }
-    
-    default boolean isEntity() {
-        return false;
-    }
-
-    default Entity asEntity() {
-        return (Entity) this;
-    }
-
-    default boolean isServer() {
-        return false;
-    }
-
-    default Server asServer() {
-        return (Server) this;
     }
 }

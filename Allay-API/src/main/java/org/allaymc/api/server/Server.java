@@ -146,10 +146,4 @@ public interface Server extends TaskCreator, CommandSender {
         sendCommandOutputs(sender, outputs);
         getOnlinePlayers().values().forEach(player -> player.sendCommandOutputs(sender, outputs));
     }
-
-    // CommandSender override
-    @Override
-    default boolean isServer() {
-        return true;
-    }
 }
