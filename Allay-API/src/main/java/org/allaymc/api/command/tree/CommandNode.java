@@ -118,6 +118,10 @@ public interface CommandNode {
 
     <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> executor, SenderType<SENDER_TYPE> senderType);
 
+    default CommandNode exec(Function<CommandContext, CommandResult> executor) {
+        return exec((context, sender) -> executor.apply(context), SenderType.ANY);
+    }
+
     CommandResult applyExecutor(CommandContext context);
 
     CommandParamData toNetworkData();
