@@ -100,7 +100,7 @@ public interface CommandNode {
         return bool(name, false);
     }
 
-    CommandNode enums(String name, String defaultValue, String... enums);
+    CommandNode enums(String name, String defaultValue, String[] enums);
 
     default CommandNode enums(String name, String... enums) {
         return enums(name, "", enums);

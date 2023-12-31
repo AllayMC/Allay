@@ -179,7 +179,7 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public CommandNode enums(String name, String defaultValue, String... enums) {
+    public CommandNode enums(String name, String defaultValue, String[] enums) {
         return addLeaf(new EnumNode(name, this, defaultValue, enums));
     }
 

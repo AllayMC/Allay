@@ -91,4 +91,29 @@ public class CommandTreeTest {
         res = tree.parse(null, new String[]{"true"});
         assertTrue(res.isSuccess());
     }
+
+    @Test
+    void testDoubleOptionalNode() {
+        var tree = AllayCommandTree.create(null);
+        tree.getRoot()
+                .enums("opt1", "d1", new String[]{"a", "b", "c"})
+                .optional()
+                .enums("opt2", "d2", new String[]{"d", "e", "f"})
+                .optional()
+                .exec(context -> {
+                    var r1 = context.getResult(0);
+                    var r2 = context.getResult(1);
+                    if (r1.equals("a") && r2.equals("d")) {
+                        return context.success();
+                    }
+                    if (r1.equals("d1") && r2.equals("d2")) {
+                        return context.success();
+                    }
+                    return context.failed();
+                });
+        var res = tree.parse(null, new String[]{"a", "d"});
+        assertTrue(res.isSuccess());
+        res = tree.parse(null, new String[]{});
+        assertTrue(res.isSuccess());
+    }
 }
