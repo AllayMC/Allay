@@ -1,9 +1,8 @@
-package org.allaymc.api.command.tree.node;
+package org.allaymc.api.command.tree;
 
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.tree.CommandContext;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Range;
 
@@ -12,12 +11,14 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static org.allaymc.api.command.tree.CommandNodeFactory.getFactory;
+
 /**
  * Allay Project 2023/12/29
  *
  * @author daoge_cmd
  */
-public interface CommandNode extends CommandNodeFactory {
+public interface CommandNode {
 
     boolean isOptional();
 
@@ -95,43 +96,58 @@ public interface CommandNode extends CommandNodeFactory {
     CommandResult applyExecutor(CommandContext context);
 
     CommandParamData toNetworkData();
-    CommandNode key(String key, String defaultValue);
+
+    default CommandNode key(String key, String defaultValue) {
+        return addLeaf(getFactory().key(key, this, defaultValue));
+    }
 
     default CommandNode key(String key) {
         return key(key, "");
     }
 
-    CommandNode str(String name, String defaultValue);
+    default CommandNode str(String name, String defaultValue) {
+        return addLeaf(getFactory().str(name, this, defaultValue));
+    }
 
     default CommandNode str(String name) {
         return str(name, "");
     }
 
-    CommandNode intNum(String name, int defaultValue);
+    default CommandNode intNum(String name, int defaultValue) {
+        return addLeaf(getFactory().intNum(name, this, defaultValue));
+    }
 
     default CommandNode intNum(String name) {
         return intNum(name, 0);
     }
 
-    CommandNode floatNum(String name, float defaultValue);
+    default CommandNode floatNum(String name, float defaultValue) {
+        return addLeaf(getFactory().floatNum(name, this, defaultValue));
+    }
 
     default CommandNode floatNum(String name) {
         return floatNum(name, 0f);
     }
 
-    CommandNode doubleNum(String name, double defaultValue);
+    default CommandNode doubleNum(String name, double defaultValue) {
+        return addLeaf(getFactory().doubleNum(name, this, defaultValue));
+    }
 
     default CommandNode doubleNum(String name) {
         return doubleNum(name, 0d);
     }
 
-    CommandNode bool(String name, boolean defaultValue);
+    default CommandNode bool(String name, boolean defaultValue) {
+        return addLeaf(getFactory().bool(name, this, defaultValue));
+    }
 
     default CommandNode bool(String name) {
         return bool(name, false);
     }
 
-    CommandNode enums(String name, String defaultValue, String[] enums);
+    default CommandNode enums(String name, String defaultValue, String[] enums) {
+        return addLeaf(getFactory().enums(name, this, defaultValue, enums));
+    }
 
     default CommandNode enums(String name, String... enums) {
         return enums(name, "", enums);

@@ -1,12 +1,12 @@
-package org.allaymc.api.command.tree.node;
+package org.allaymc.api.command.tree;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.exception.CommandParseException;
+import org.allaymc.api.command.tree.node.*;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -183,41 +183,6 @@ public abstract class BaseNode implements CommandNode {
             leaf = p;
             p = leaf.parent();
         }
-    }
-
-    @Override
-    public CommandNode key(String key, String defaultValue) {
-        return addLeaf(new KeyNode(key, this, defaultValue));
-    }
-
-    @Override
-    public CommandNode str(String name, String defaultValue) {
-        return addLeaf(new StringNode(name, this, defaultValue));
-    }
-
-    @Override
-    public CommandNode intNum(String name, int defaultValue) {
-        return addLeaf(new IntNode(name, this, defaultValue));
-    }
-
-    @Override
-    public CommandNode floatNum(String name, float defaultValue) {
-        return addLeaf(new FloatNode(name, this, defaultValue));
-    }
-
-    @Override
-    public CommandNode doubleNum(String name, double defaultValue) {
-        return addLeaf(new DoubleNode(name, this, defaultValue));
-    }
-
-    @Override
-    public CommandNode bool(String name, boolean defaultValue) {
-        return addLeaf(new BooleanNode(name, this, defaultValue));
-    }
-
-    @Override
-    public CommandNode enums(String name, String defaultValue, String[] enums) {
-        return addLeaf(new EnumNode(name, this, defaultValue, enums));
     }
 
     @Override

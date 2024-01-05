@@ -4,10 +4,10 @@ import lombok.Getter;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
-import org.allaymc.api.command.tree.node.CommandNode;
+import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.command.CommandResult;
-import org.allaymc.api.command.tree.node.RootNode;
+import org.allaymc.server.command.tree.node.RootNode;
 
 import java.util.ArrayList;
 import java.util.List;
