@@ -102,7 +102,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("This only works if sub-chunk sending system is not enabled")
         @Comment("And will be forced to SYNC if sub-chunk sending system is enabled")
         @CustomKey("chunk-sending-strategy")
-        private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.ASYNC;
+        private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.SYNC;
 
         @Comment("If the number of chunks to be sent in one batch is more than this value, the chunks will be sent in parallel")
         @CustomKey("chunk-min-parallel-sending-threshold")
