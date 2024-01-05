@@ -1,6 +1,5 @@
 package org.allaymc.api.i18n;
 
-import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.utils.Utils;
 
@@ -45,9 +44,32 @@ public interface I18n {
 
     LangCode getDefaultLangCode();
 
-    record KeyInfo(int startIndex, int endIndex, String key) {}
+    record KeyInfo(int startIndex, int endIndex, int colonIndex, String key, boolean hasStarter) {
+        public static final KeyInfo EMPTY = new KeyInfo(-1, -1, -1, null, false);
+    }
 
     KeyInfo findI18nKey(String str);
+
+    default String toClientStyle(String tr) {
+        return toClientStyle(tr, Utils.EMPTY_STRING_ARRAY);
+    }
+
+    default String toClientStyle(String tr, String... args) {
+        var keyInfo = findI18nKey(tr);
+        var namespace = tr.substring(keyInfo.hasStarter ? keyInfo.startIndex + 1 : keyInfo.startIndex, keyInfo.colonIndex);
+        if (VANILLA_LANG_NAMESPACE.equals(namespace)) {
+            String left;
+            if (keyInfo.hasStarter) {
+                // 保留 '%'
+                left = tr.substring(0, keyInfo.startIndex + 1);
+            } else {
+                left = "";
+            }
+            return left + tr.substring(keyInfo.colonIndex + 1);
+        } else {
+            return tr(tr, args);
+        }
+    }
 
     static boolean isValidKeyCharacter(char character) {
         return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '.' || character == ':';

@@ -1,6 +1,5 @@
 package org.allaymc.server.i18n;
 
-import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.i18n.I18nLoader;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
@@ -9,8 +8,8 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import static java.lang.Math.min;
+import static org.allaymc.api.i18n.I18n.KeyInfo.EMPTY;
 import static org.allaymc.api.i18n.I18n.isValidKeyCharacter;
-import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 
 /**
  * Allay Project 2023/12/15
@@ -34,10 +33,10 @@ public class AllayI18N implements I18n {
 
     @Override
     public String tr(LangCode langCode, String tr, String... args) {
-        var pair = findI18nKey(tr);
-        var lang = langMap.get(langCode).get(pair.key());
-        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(pair.key());
-        // key is not exist
+        var keyInfo = findI18nKey(tr);
+        if (keyInfo == EMPTY) return tr;
+        var lang = langMap.get(langCode).get(keyInfo.key());
+        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(keyInfo.key());
         if (lang == null) return tr;
         var argIndex = 0;
         var maxArgIndex = args.length - 1;
@@ -64,32 +63,39 @@ public class AllayI18N implements I18n {
             order++;
             orderedParamIndex = findOrderedParamIndex(lang, order);
         }
-        return new StringBuilder(tr).replace(pair.startIndex(), pair.endIndex() + 1, lang).toString();
+        return new StringBuilder(tr).replace(keyInfo.startIndex(), keyInfo.endIndex() + 1, lang).toString();
     }
 
     @Override
     public KeyInfo findI18nKey(String str) {
         var startIndex = str.indexOf("%");
         var index = 0;
+        var hasStarter = false;
         if (startIndex == -1) {
             // No '%' was found
             startIndex = 0;
         } else {
+            hasStarter = true;
             // Jump over '%'
             index = startIndex + 1;
         }
+        var colonIndex = -1;
         var keyBuilder = new StringBuilder();
         for (/**/; index < str.length(); index++) {
             var c = str.charAt(index);
+            if (c == ':') {
+                if (colonIndex == -1) {
+                    colonIndex = index;
+                } else {
+                    // Illegal key style: more than one colon
+                    return EMPTY;
+                }
+            }
             if (isValidKeyCharacter(c)) {
                 keyBuilder.append(c);
             } else break;
         }
-        return new KeyInfo(startIndex, index - 1, keyBuilder.toString());
-//        var split1 = fastTwoPartSplit(str, "%", "");
-//        var split2 = fastTwoPartSplit(split1[1], "%", split1[1]);
-//        var split3 = fastTwoPartSplit(split2[0], " ", split2[0]);
-//        return Pair.of(split3[0], split1[0].length());
+        return new KeyInfo(startIndex, index - 1, colonIndex, keyBuilder.toString(), hasStarter);
     }
 
     public static final String DISORDERED_PARAM_S = "%s";
@@ -115,11 +121,12 @@ public class AllayI18N implements I18n {
 
     @Override
     public String tr(LangCode langCode, String tr) {
-        var pair = findI18nKey(tr);
-        var lang = langMap.get(langCode).get(pair.key());
-        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(pair.key());
+        var keyInfo = findI18nKey(tr);
+        if (keyInfo == EMPTY) return tr;
+        var lang = langMap.get(langCode).get(keyInfo.key());
+        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(keyInfo.key());
         if (lang == null) return tr;
-        return new StringBuilder(tr).replace(pair.startIndex(), pair.endIndex() + 1, lang).toString();
+        return new StringBuilder(tr).replace(keyInfo.startIndex(), keyInfo.endIndex() + 1, lang).toString();
     }
 
     @Override

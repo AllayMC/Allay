@@ -26,6 +26,7 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.perm.Permissible;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -295,8 +296,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         }
     }
 
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
-
     @Override
     public void sendCommandOutputs(CommandSender sender, TrContainer... outputs) {
         var pk = new CommandOutputPacket();
@@ -306,7 +305,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             pk.getMessages().add(new CommandOutputMessage(
                     false,
                     I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()),
-                    EMPTY_STRING_ARRAY));
+                    Utils.EMPTY_STRING_ARRAY));
         }
         pk.setSuccessCount(0); // Unknown usage
         pk.setData(""); // Unknown usage
@@ -425,7 +424,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void sendTr(String key) {
-        sendTr(key, EMPTY_STRING_ARRAY);
+        sendTr(key, Utils.EMPTY_STRING_ARRAY);
     }
 
     @Override

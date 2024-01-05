@@ -2,6 +2,7 @@ package org.allaymc.server.command;
 
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandContext;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -72,7 +73,7 @@ public class CommandTreeTest {
                 .str("test_optional")
                 .optional()
                 .exec(context -> "".equals(context.getResult(0)) ? context.success() : context.failed());
-        var res = tree.parse(null, new String[0]);
+        var res = tree.parse(null, Utils.EMPTY_STRING_ARRAY);
         assertTrue(res.isSuccess());
     }
 

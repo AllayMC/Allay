@@ -7,6 +7,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.GameTestCommand;
 import org.allaymc.server.command.defaults.MeCommand;
 import org.allaymc.server.command.defaults.StopCommand;
@@ -51,7 +52,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
             return CommandResult.failed();
         }
         try {
-            var result = command.execute(sender, spilt.toArray(new String[0]));
+            var result = command.execute(sender, spilt.toArray(Utils.EMPTY_STRING_ARRAY));
             sender.handleResult(result);
             return result;
         } catch (Throwable t) {

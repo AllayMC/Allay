@@ -16,6 +16,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  */
 @UtilityClass
 public class Utils {
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
     public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
         int length = bytes1.length;
         for (byte[] bytes : bytes2) {

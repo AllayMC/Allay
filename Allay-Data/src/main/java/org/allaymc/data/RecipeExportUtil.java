@@ -16,6 +16,7 @@ import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.utils.NbtUtils;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.server.Allay;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodecHelper;
@@ -157,7 +158,7 @@ public class RecipeExportUtil {
                     shapes.add(new String(chars));
                 }
 
-                entryShape = shapes.toArray(new String[0]);
+                entryShape = shapes.toArray(Utils.EMPTY_STRING_ARRAY);
 
                 Map<Character, RecipeItemDescriptor> charItemMapReversed = new HashMap<>();
 
