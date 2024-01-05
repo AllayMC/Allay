@@ -1,7 +1,6 @@
 package org.allaymc.server.perm.tree;
 
 import lombok.Getter;
-import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.utils.AllayStringUtils;

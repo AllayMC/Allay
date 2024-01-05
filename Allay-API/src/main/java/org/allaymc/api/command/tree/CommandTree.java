@@ -4,6 +4,7 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.command.tree.node.CommandNode;
 
 import java.util.List;
 

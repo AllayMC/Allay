@@ -1,4 +1,4 @@
-package org.allaymc.server.command.tree.node;
+package org.allaymc.api.command.tree.node;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandContext;
-import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.exception.CommandParseException;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Nullable;

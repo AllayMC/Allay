@@ -1,7 +1,6 @@
-package org.allaymc.server.command.tree.node;
+package org.allaymc.api.command.tree.node;
 
 import org.allaymc.api.command.tree.CommandContext;
-import org.allaymc.api.command.tree.CommandNode;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
@@ -10,17 +9,17 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
  *
  * @author daoge_cmd
  */
-public class FloatNode extends BaseNode {
-    public FloatNode(String name, CommandNode parent, float defaultValue) {
+public class DoubleNode extends BaseNode {
+    public DoubleNode(String name, CommandNode parent, double defaultValue) {
         super(name, parent, defaultValue);
     }
 
     @Override
     public boolean match(CommandContext context) {
         var arg = context.queryArg();
-        var number = 0f;
+        var number = 0d;
         try {
-            number = Float.parseFloat(arg);
+            number = Double.parseDouble(arg);
         } catch (NumberFormatException e) {
             return false;
         }
