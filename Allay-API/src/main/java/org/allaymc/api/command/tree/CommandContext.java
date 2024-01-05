@@ -31,6 +31,10 @@ public interface CommandContext {
         return getCurrentArgIndex() < getArgCount();
     }
 
+    default int getLeftArgCount() {
+        return getArgCount() - getCurrentArgIndex();
+    }
+
     String popArg();
 
     String queryArg(int index);
@@ -48,12 +52,6 @@ public interface CommandContext {
     default void popAndPutArgToResult() {
         putResult(queryArg());
         popArg();
-    }
-
-    <T> T getResult(int index);
-
-    default <T> T getResult() {
-        return getResult(getCurrentArgIndex());
     }
 
     void addOutput(@MayContainTrKey String output, Object... args);
@@ -97,5 +95,51 @@ public interface CommandContext {
 
     default CommandResult failed() {
         return CommandResult.failed(this);
+    }
+
+    <T> T getResult(int index);
+
+    default <T> T getFirstResult() {
+        return getResult(0);
+    }
+
+    default <T> T getSecondResult() {
+        return getResult(1);
+    }
+
+    default <T> T getThirdResult() {
+        return getResult(2);
+    }
+
+    default <T> T getFourthResult() {
+        return getResult(3);
+    }
+
+    default <T> T getFifthResult() {
+        return getResult(4);
+    }
+
+    default <T> T getSixthResult() {
+        return getResult(5);
+    }
+
+    default <T> T getSeventhResult() {
+        return getResult(6);
+    }
+
+    default <T> T getEighthResult() {
+        return getResult(7);
+    }
+
+    default <T> T getNinthResult() {
+        return getResult(8);
+    }
+
+    default <T> T getTenthResult() {
+        return getResult(9);
+    }
+
+    default <T> T getEleventhResult() {
+        return getResult(10);
     }
 }

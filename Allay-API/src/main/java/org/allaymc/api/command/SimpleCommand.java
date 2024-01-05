@@ -28,7 +28,7 @@ public abstract class SimpleCommand extends BaseCommand {
             var paramArray = new CommandParamData[leaf.depth()];
             var node = leaf;
             var index = leaf.depth() - 1;
-            while (node.depth() != 0) {
+            while (!node.isRoot()) {
                 paramArray[index] = node.toNetworkData();
                 node = node.parent();
                 index--;

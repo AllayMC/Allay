@@ -1,9 +1,11 @@
 package org.allaymc.server.command;
 
-import org.allaymc.api.command.SenderType;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.server.command.tree.AllayCommandTree;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,9 +16,16 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class CommandTreeTest {
 
+    static Command mockCmd = Mockito.mock(Command.class);
+
+    @BeforeAll
+    static void init() {
+        Mockito.when(mockCmd.getName()).thenReturn("test");
+    }
+
     @Test
-    void testParse() {
-        var tree = AllayCommandTree.create(null);
+    void testSimpleParse() {
+        var tree = AllayCommandTree.create(mockCmd);
         tree.getRoot()
                 .key("test_bool")
                 .bool("bool")
@@ -58,7 +67,7 @@ public class CommandTreeTest {
 
     @Test
     void testOptionalParamParse() {
-        var tree = AllayCommandTree.create(null);
+        var tree = AllayCommandTree.create(mockCmd);
         tree.getRoot()
                 .str("test_optional")
                 .optional()
@@ -69,7 +78,7 @@ public class CommandTreeTest {
 
     @Test
     void testOnlyOneOptionalParamInLeaves() {
-        var tree = AllayCommandTree.create(null);
+        var tree = AllayCommandTree.create(mockCmd);
         tree.getRoot()
                 .str("test_optional1")
                 .optional();
@@ -78,7 +87,7 @@ public class CommandTreeTest {
 
     @Test
     void testNormalParamWithOptionalParamParse() {
-        var tree = AllayCommandTree.create(null);
+        var tree = AllayCommandTree.create(mockCmd);
         tree.getRoot()
                 .intNum("test_optional")
                 .optional()
@@ -94,7 +103,7 @@ public class CommandTreeTest {
 
     @Test
     void testDoubleOptionalNode() {
-        var tree = AllayCommandTree.create(null);
+        var tree = AllayCommandTree.create(mockCmd);
         tree.getRoot()
                 .enums("opt1", "d1", new String[]{"a", "b", "c"})
                 .optional()
@@ -115,5 +124,28 @@ public class CommandTreeTest {
         assertTrue(res.isSuccess());
         res = tree.parse(null, new String[]{});
         assertTrue(res.isSuccess());
+    }
+
+    @Test
+    void testComplexOptionalNode() {
+        var tree = AllayCommandTree.create(mockCmd);
+        tree.getRoot()
+                .key("a")
+                .optional()
+                .key("b")
+                .optional()
+                .exec(CommandContext::success)
+                .root()
+                .key("a")
+                .key("b")
+                .key("c")
+                .key("d")
+                .exec(CommandContext::success);
+        var res = tree.parse(null, new String[]{"a", "b"});
+        assertTrue(res.isSuccess());
+        res = tree.parse(null, new String[]{"a", "b", "c", "d"});
+        assertTrue(res.isSuccess());
+        res = tree.parse(null, new String[]{"a", "b", "c"});
+        assertFalse(res.isSuccess());
     }
 }

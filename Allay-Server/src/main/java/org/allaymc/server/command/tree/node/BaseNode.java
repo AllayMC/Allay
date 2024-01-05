@@ -34,12 +34,18 @@ public abstract class BaseNode implements CommandNode {
     protected Function<CommandContext, CommandResult> executor;
     @Getter
     protected Object defaultValue;
+    @Getter
+    @Setter
+    protected int minArgCostBranch;
+    @Getter
+    @Setter
+    protected int maxArgCostBranch;
 
-    public BaseNode(String name, CommandNode parent) {
+    protected BaseNode(String name, CommandNode parent) {
         this(name, parent, null);
     }
 
-    public BaseNode(String name, CommandNode parent, Object defaultValue) {
+    protected BaseNode(String name, CommandNode parent, Object defaultValue) {
         this.name = name;
         this.parent = parent;
         this.defaultValue = defaultValue;
@@ -62,20 +68,22 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public CommandNode optional(boolean optional) {
-        if (this.optional == optional) {
-            return this;
+    public CommandNode optional() {
+        // 无需重复设置
+        if (optional) return this;
+        //一个节点下只能有一个可选参数
+        if (parent.getOptionalLeaf() != null) {
+            throw new IllegalArgumentException("A node can only have one optional leaf node");
         }
-        this.optional = optional;
-        if (optional) {
-            //一个节点下只能有一个可选参数
-            if (parent.getOptionalLeaf() != null) {
-                throw new IllegalArgumentException("A node can only have one optional leaf node");
-            }
-            parent.setOptionalLeaf(this);
-        }
+        this.optional = true;
+        parent.setOptionalLeaf(this);
+        // 若节点是可选的，则最小参数消耗为0，否则为1（不允许非可选节点不消耗参数）
+        setMinArgCostBranch(optional ? 0 : 1);
+        // 更新分支最小参数消耗（optional不影响最大参数消耗）
+        updateMinArgCostBranch(this);
         return this;
     }
+
     @Override
     public int depth() {
         return depth;
@@ -110,8 +118,9 @@ public abstract class BaseNode implements CommandNode {
             return null;
         }
         if (context.haveUnhandledArg()) {
+            var leftArgCount = context.getLeftArgCount();
             for (var leaf : leaves) {
-                if (leaf.match(context)) {
+                if (leftArgCount >= leaf.getMinArgCostBranch() && leftArgCount <= leaf.getMaxArgCostBranch() && leaf.match(context)) {
                     return leaf;
                 }
             }
@@ -142,10 +151,39 @@ public abstract class BaseNode implements CommandNode {
             leaves = new ArrayList<>();
         }
         leaf.setDepth(depth + 1);
+        leaf.setMaxArgCostBranch(leaf.getMaxArgCost());
+        updateMaxArgCostBranch(leaf);
         // 可选参数后不能有非可选参数
-        leaf.optional(optional);
+        // 分支最小参数消耗在optional()中更新
+        if (optional) {
+            leaf.optional();
+        }
         leaves.add(leaf);
         return leaf;
+    }
+
+    protected void updateMinArgCostBranch(CommandNode leaf) {
+        var p = leaf.parent();
+        while (!p.isRoot()) {
+            var min = p.getMinArgCostBranch() + leaf.getMinArgCostBranch();
+            if (min < p.getMinArgCostBranch()) {
+                p.setMinArgCostBranch(min);
+            }
+            leaf = p;
+            p = leaf.parent();
+        }
+    }
+
+    protected void updateMaxArgCostBranch(CommandNode leaf) {
+        var p = leaf.parent();
+        while (!p.isRoot()) {
+            var max = p.getMaxArgCostBranch() + leaf.getMaxArgCostBranch();
+            if (max > p.getMaxArgCostBranch()) {
+                p.setMaxArgCostBranch(max);
+            }
+            leaf = p;
+            p = leaf.parent();
+        }
     }
 
     @Override

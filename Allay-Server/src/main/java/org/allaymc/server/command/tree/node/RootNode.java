@@ -40,4 +40,19 @@ public class RootNode extends BaseNode {
     public CommandParamData toNetworkData() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public int getMaxArgCost() {
+        throw new UnsupportedOperationException("Cannot call getMaxArgCost() on root node");
+    }
+
+    @Override
+    public int getMaxArgCostBranch() {
+        throw new UnsupportedOperationException("Cannot call getMaxArgCost() on root node");
+    }
+
+    @Override
+    public int getMinArgCostBranch() {
+        throw new UnsupportedOperationException("Cannot call getMinArgCost() on root node");
+    }
 }
