@@ -129,6 +129,9 @@ public class CommandTreeTest {
     @Test
     void testComplexOptionalNode() {
         var tree = AllayCommandTree.create(mockCmd);
+        // tree description:
+        // /test [a] [b]
+        // /test <a> <b> <c> <d>
         tree.getRoot()
                 .key("a")
                 .optional()
