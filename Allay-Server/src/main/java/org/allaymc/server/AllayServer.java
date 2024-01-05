@@ -160,6 +160,9 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
+        for (var player : getOnlinePlayers().values()) {
+            player.disconnect(TrKeys.M_DISCONNECT_CLOSED);
+        }
         System.exit(0);
     }
 
@@ -290,11 +293,6 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void sendTr(String key) {
-        log.info(I18n.get().tr(key));
-    }
-
-    @Override
     public void sendText(String text) {
         log.info(text);
     }
@@ -302,11 +300,6 @@ public final class AllayServer implements Server {
     @Override
     public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
         // forceTranslatedByClient is unused
-        sendTr(key, args);
-    }
-
-    @Override
-    public void sendTr(String key, String... args) {
         log.info(I18n.get().tr(key, args));
     }
 

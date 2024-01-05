@@ -11,6 +11,8 @@ import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 
+import java.util.List;
+
 /**
  * Allay Project 2023/12/30
  *
@@ -55,13 +57,16 @@ public class GameTestCommand extends SimpleCommand {
                 .str("key")
                 .enums("langCode", LangCode.class)
                 .optional()
+                .remain("args")
+                .optional()
                 .exec((context, player) -> {
                     String key = context.getResult(1);
                     String lang = context.getResult(2);
+                    List<String> args = context.getResult(3);
                     if (lang.isEmpty()) lang = LangCode.en_US.name();
                     var langCode = LangCode.valueOf(lang);
                     try {
-                        player.sendText(I18n.get().tr(langCode, key));
+                        player.sendText(I18n.get().tr(langCode, key, args));
                     } catch (Throwable t) {
                         context.addOutput("§cUnknown key!");
                         return context.failed();
@@ -71,9 +76,11 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("trc")
                 .str("key")
+                .remain("args")
                 .exec((context, player) -> {
                     String key = context.getResult(1);
-                    player.sendTr(key, true);
+                    List<String> args = context.getResult(2);
+                    player.sendTr(key, true, args.toArray(String[]::new));
                     return context.success();
                 }, SenderType.PLAYER);
     }

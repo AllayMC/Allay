@@ -4,6 +4,7 @@ import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.i18n.MayContainTrKey;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -48,9 +49,11 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     void sendPacketImmediately(BedrockPacket packet);
 
-    void disconnect(String reason);
+    default void disconnect(@MayContainTrKey String reason) {
+        disconnect(reason, false);
+    }
 
-    void disconnect(String reason, boolean hideReason);
+    void disconnect(@MayContainTrKey String reason, boolean hideReason);
 
     boolean isNetworkEncryptionEnabled();
 

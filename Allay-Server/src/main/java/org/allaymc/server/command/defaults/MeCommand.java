@@ -19,7 +19,7 @@ public class MeCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                .str("message")
+                .msg("message")
                 .exec(context -> {
                     Server.getInstance().broadcastTr(TrKeys.M_CHAT_TYPE_EMOTE, context.getSender().getName(), context.getResult(0));
                     return context.success();

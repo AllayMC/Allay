@@ -1,5 +1,6 @@
 package org.allaymc.api.i18n;
 
+import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.utils.Utils;
 
@@ -20,23 +21,23 @@ public interface I18n {
 
     String VANILLA_LANG_NAMESPACE = "minecraft";
 
-    String tr(LangCode langCode, String tr, String... args);
+    String tr(LangCode langCode, @MayContainTrKey String tr, String... args);
 
-    default String tr(LangCode langCode, String tr, Object... args) {
+    default String tr(LangCode langCode, @MayContainTrKey String tr, Object... args) {
         return tr(langCode, tr, Utils.objectArrayToStringArray(args));
     }
 
-    default String tr(String tr, String... args) {
+    default String tr(@MayContainTrKey String tr, String... args) {
         return tr(getDefaultLangCode(), tr, args);
     }
 
-    default String tr(String tr, Object... args) {
+    default String tr(@MayContainTrKey String tr, Object... args) {
         return tr(getDefaultLangCode(), tr, args);
     }
 
-    String tr(LangCode langCode, String tr);
+    String tr(LangCode langCode, @MayContainTrKey String tr);
 
-    default String tr(String tr) {
+    default String tr(@MayContainTrKey String tr) {
         return tr(getDefaultLangCode(), tr);
     }
 
@@ -48,13 +49,25 @@ public interface I18n {
         public static final KeyInfo EMPTY = new KeyInfo(-1, -1, -1, null, false);
     }
 
-    KeyInfo findI18nKey(String str);
+    KeyInfo findI18nKey(@MayContainTrKey String str);
 
-    default String toClientStyle(String tr) {
-        return toClientStyle(tr, Utils.EMPTY_STRING_ARRAY);
+    default String toClientFriendlyStyle(@MayContainTrKey String tr) {
+        return toClientFriendlyStyle(getDefaultLangCode(), tr);
     }
 
-    default String toClientStyle(String tr, String... args) {
+    default String toClientFriendlyStyle(LangCode langCode, @MayContainTrKey String tr) {
+        return toClientFriendlyStyle(langCode, tr, Utils.EMPTY_STRING_ARRAY);
+    }
+
+    default String toClientFriendlyStyle(@MayContainTrKey String tr, String... args) {
+        return toClientFriendlyStyle(getDefaultLangCode(), tr, args);
+    }
+
+    default String toClientFriendlyStyle(LangCode langCode, @MayContainTrKey String tr, String... args) {
+        return toClientFriendlyStyle0(langCode, tr, args).first();
+    }
+
+    default Pair<String, Boolean> toClientFriendlyStyle0(LangCode langCode, @MayContainTrKey String tr, String... args) {
         var keyInfo = findI18nKey(tr);
         var namespace = tr.substring(keyInfo.hasStarter ? keyInfo.startIndex + 1 : keyInfo.startIndex, keyInfo.colonIndex);
         if (VANILLA_LANG_NAMESPACE.equals(namespace)) {
@@ -65,10 +78,11 @@ public interface I18n {
             } else {
                 left = "";
             }
-            return left + tr.substring(keyInfo.colonIndex + 1);
+            return Pair.of(left + tr.substring(keyInfo.colonIndex + 1), true);
         } else {
-            return tr(tr, args);
+            return Pair.of(tr(langCode, tr, args), false);
         }
+
     }
 
     static boolean isValidKeyCharacter(char character) {

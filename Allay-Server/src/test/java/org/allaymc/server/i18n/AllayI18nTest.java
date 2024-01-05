@@ -2,9 +2,7 @@ package org.allaymc.server.i18n;
 
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
-import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,14 +34,14 @@ public class AllayI18nTest {
 
     @Test
     void testToClientFriendlyStyle() {
-        assertEquals("aaa%" + TEST_VANILLA_KEY_NO_NAMESPACE, translator.toClientStyle("aaa%" + TEST_VANILLA_KEY, ARGS));
-        assertEquals("%" + TEST_VANILLA_KEY_NO_NAMESPACE, translator.toClientStyle("%" + TEST_VANILLA_KEY, ARGS));
-        assertEquals(TEST_VANILLA_KEY_NO_NAMESPACE, translator.toClientStyle(TEST_VANILLA_KEY, ARGS));
-        assertEquals("aaa%" + TEST_VANILLA_KEY_NO_NAMESPACE + " eee", translator.toClientStyle("aaa%" + TEST_VANILLA_KEY + " eee", ARGS));
+        assertEquals("aaa%" + TEST_VANILLA_KEY_NO_NAMESPACE, translator.toClientFriendlyStyle("aaa%" + TEST_VANILLA_KEY, ARGS));
+        assertEquals("%" + TEST_VANILLA_KEY_NO_NAMESPACE, translator.toClientFriendlyStyle("%" + TEST_VANILLA_KEY, ARGS));
+        assertEquals(TEST_VANILLA_KEY_NO_NAMESPACE, translator.toClientFriendlyStyle(TEST_VANILLA_KEY, ARGS));
+        assertEquals("aaa%" + TEST_VANILLA_KEY_NO_NAMESPACE + " eee", translator.toClientFriendlyStyle("aaa%" + TEST_VANILLA_KEY + " eee", ARGS));
 
-        assertEquals("aaaStarting up allay...", translator.toClientStyle("aaa%" + TEST_ALLAY_KEY));
-        assertEquals("Starting up allay...", translator.toClientStyle("%" + TEST_ALLAY_KEY));
-        assertEquals("Starting up allay...", translator.toClientStyle(TEST_ALLAY_KEY));
-        assertEquals("aaaStarting up allay... eee", translator.toClientStyle("aaa%" + TEST_ALLAY_KEY + " eee"));
+        assertEquals("aaaStarting up allay...", translator.toClientFriendlyStyle("aaa%" + TEST_ALLAY_KEY));
+        assertEquals("Starting up allay...", translator.toClientFriendlyStyle("%" + TEST_ALLAY_KEY));
+        assertEquals("Starting up allay...", translator.toClientFriendlyStyle(TEST_ALLAY_KEY));
+        assertEquals("aaaStarting up allay... eee", translator.toClientFriendlyStyle("aaa%" + TEST_ALLAY_KEY + " eee"));
     }
 }

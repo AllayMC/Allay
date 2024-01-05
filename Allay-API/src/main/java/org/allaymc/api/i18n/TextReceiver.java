@@ -17,7 +17,9 @@ public interface TextReceiver {
         sendTr(key, false, args);
     }
 
-    void sendTr(@MayContainTrKey String key);
+    default void sendTr(@MayContainTrKey String key) {
+        sendTr(key, false);
+    }
 
     void sendCommandOutputs(CommandSender sender, TrContainer... outputs);
 }

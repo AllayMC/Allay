@@ -44,4 +44,14 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     public CommandNode enums(String name, CommandNode parent, String defaultValue, String[] enums) {
         return new EnumNode(name, parent, defaultValue, enums);
     }
+
+    @Override
+    public CommandNode msg(String name, CommandNode parent, String defaultValue) {
+        return new MessageNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode remain(String name, CommandNode parent, Object defaultValue) {
+        return new RemainArgNode(name, parent, defaultValue);
+    }
 }

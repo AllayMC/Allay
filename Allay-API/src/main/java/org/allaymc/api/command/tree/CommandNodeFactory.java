@@ -28,4 +28,8 @@ public interface CommandNodeFactory {
     CommandNode bool(String name, CommandNode parent, boolean defaultValue);
 
     CommandNode enums(String name, CommandNode parent, String defaultValue, String[] enums);
+
+    CommandNode msg(String name, CommandNode parent, String defaultValue);
+
+    CommandNode remain(String name, CommandNode parent, Object defaultValue);
 }

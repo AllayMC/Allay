@@ -7,6 +7,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -161,5 +162,21 @@ public interface CommandNode {
             values[index] = e.name();
         }
         return enums(name, values);
+    }
+
+    default CommandNode msg(String name) {
+        return msg(name, "");
+    }
+
+    default CommandNode msg(String name, String defaultValue) {
+        return addLeaf(getFactory().msg(name, this, defaultValue));
+    }
+
+    default CommandNode remain(String name) {
+        return remain(name, Collections.EMPTY_LIST);
+    }
+
+    default CommandNode remain(String name, Object defaultValue) {
+        return addLeaf(getFactory().remain(name, this, defaultValue));
     }
 }

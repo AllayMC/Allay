@@ -413,18 +413,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
         if (forceTranslatedByClient) {
             var pk = new TextPacket();
-            pk.setType(TextPacket.Type.RAW);
+            pk.setType(TextPacket.Type.TRANSLATION);
             pk.setXuid("");
             pk.setNeedsTranslation(true);
             pk.setMessage(key);
             pk.setParameters(List.of(args));
             networkComponent.sendPacket(pk);
         } else sendText(I18n.get().tr(thisEntity.getLangCode(), key, args));
-    }
-
-    @Override
-    public void sendTr(String key) {
-        sendTr(key, Utils.EMPTY_STRING_ARRAY);
     }
 
     @Override
