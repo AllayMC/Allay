@@ -45,5 +45,11 @@ public interface I18n {
 
     LangCode getDefaultLangCode();
 
-    Pair<String, Integer> findI18nKey(String str);
+    record KeyInfo(int startIndex, int endIndex, String key) {}
+
+    KeyInfo findI18nKey(String str);
+
+    static boolean isValidKeyCharacter(char character) {
+        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '.' || character == ':';
+    }
 }

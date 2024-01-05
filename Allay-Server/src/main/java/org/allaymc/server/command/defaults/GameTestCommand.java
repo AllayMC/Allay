@@ -51,7 +51,7 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("translate")
+                .key("trs")
                 .str("key")
                 .enums("langCode", LangCode.class)
                 .optional()
@@ -66,6 +66,14 @@ public class GameTestCommand extends SimpleCommand {
                         context.addOutput("§cUnknown key!");
                         return context.failed();
                     }
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("trc")
+                .str("key")
+                .exec((context, player) -> {
+                    String key = context.getResult(1);
+                    player.sendTr(key, true);
                     return context.success();
                 }, SenderType.PLAYER);
     }

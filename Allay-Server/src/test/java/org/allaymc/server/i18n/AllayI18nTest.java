@@ -26,10 +26,9 @@ public class AllayI18nTest {
         assertEquals("Prefix, 15 again 2 and 4 lastly 3 and also 4 again!", translator.tr(TEST_KEY, ARGS));
         assertEquals("Prefix, 15 again 2 and 4 lastly 3 and also 4 again!", translator.tr("%" + TEST_KEY, ARGS));
         assertEquals("aaa Prefix, 15 again 2 and 4 lastly 3 and also 4 again!", translator.tr("aaa %" + TEST_KEY, ARGS));
-        assertEquals("aaa Prefix, 15 again 2 and 4 lastly 3 and also 4 again!bbb", translator.tr("aaa %" + TEST_KEY + " bbb", ARGS));
-        assertEquals("aaa Prefix, 15 again 2 and 4 lastly 3 and also 4 again!bbb", translator.tr("aaa %" + TEST_KEY + "%bbb", ARGS));
-        assertEquals("aaa Prefix, 15 again 2 and 4 lastly 3 and also 4 again! bbb", translator.tr("aaa %" + TEST_KEY + "% bbb", ARGS));
-        assertEquals("aaa Prefix, 15 again 2 and 4 lastly 3 and also 4 again!%bbb", translator.tr("aaa %" + TEST_KEY + "%%bbb", ARGS));
-        assertThrows(IllegalArgumentException.class, () -> translator.tr("%%" + TEST_KEY, ARGS));
+        assertEquals("aaa Prefix, 15 again 2 and 4 lastly 3 and also 4 again! bbb", translator.tr("aaa %" + TEST_KEY + " bbb", ARGS));
+        assertEquals("aaa Prefix, 15 again 2 and 4 lastly 3 and also 4 again!%bbb", translator.tr("aaa %" + TEST_KEY + "%bbb", ARGS));
+        assertEquals("aaa Prefix, 15 again 2 and 4 lastly 3 and also 4 again!% bbb", translator.tr("aaa %" + TEST_KEY + "% bbb", ARGS));
+        assertEquals("aaa Prefix, 15 again 2 and 4 lastly 3 and also 4 again!%%bbb", translator.tr("aaa %" + TEST_KEY + "%%bbb", ARGS));
     }
 }

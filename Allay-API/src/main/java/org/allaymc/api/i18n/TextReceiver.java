@@ -11,15 +11,13 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 public interface TextReceiver {
     void sendText(String text);
 
-    void sendTr(@MayContainTrKey String tr, boolean forceTranslatedByClient, String... args);
+    void sendTr(@MayContainTrKey String key, boolean forceTranslatedByClient, String... args);
 
-    default void sendTr(String tr, String... args) {
-        sendTr(tr, false, args);
+    default void sendTr(@MayContainTrKey String key, String... args) {
+        sendTr(key, false, args);
     }
 
-    void sendTr(@MayContainTrKey String tr);
-
-    void sendChat(EntityPlayer sender, String message);
+    void sendTr(@MayContainTrKey String key);
 
     void sendCommandOutputs(CommandSender sender, TrContainer... outputs);
 }

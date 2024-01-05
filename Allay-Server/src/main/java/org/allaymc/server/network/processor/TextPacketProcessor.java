@@ -15,8 +15,8 @@ public class TextPacketProcessor extends DataPacketProcessor<TextPacket> {
     @Override
     public void handle(EntityPlayer player, TextPacket pk) {
         if (pk.getType() == TextPacket.Type.CHAT) {
-            var message = pk.getMessage();
-            Server.getInstance().broadcastChat(player, message);
+            var message = "<" + player.getDisplayName() + "> " + pk.getMessage();
+            Server.getInstance().broadcastMessage(message);
         }
     }
 

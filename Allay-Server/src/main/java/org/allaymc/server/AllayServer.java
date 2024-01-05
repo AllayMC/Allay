@@ -290,8 +290,8 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void sendTr(String tr) {
-        log.info(I18n.get().tr(tr));
+    public void sendTr(String key) {
+        log.info(I18n.get().tr(key));
     }
 
     @Override
@@ -300,19 +300,14 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
+    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
         // forceTranslatedByClient is unused
-        sendTr(tr, args);
+        sendTr(key, args);
     }
 
     @Override
-    public void sendTr(String tr, String... args) {
-        log.info(I18n.get().tr(tr, args));
-    }
-
-    @Override
-    public void sendChat(EntityPlayer sender, String message) {
-        log.info("<" + sender.getOriginName() + "> " + message);
+    public void sendTr(String key, String... args) {
+        log.info(I18n.get().tr(key, args));
     }
 
     @Override

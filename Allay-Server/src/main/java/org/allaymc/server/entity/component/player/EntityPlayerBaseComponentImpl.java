@@ -295,17 +295,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         }
     }
 
-    @Override
-    public void sendChat(EntityPlayer sender, String message) {
-        var pk = new TextPacket();
-        pk.setType(TextPacket.Type.CHAT);
-        pk.setMessage(message);
-        pk.setSourceName(sender.getDisplayName());
-        pk.setXuid(sender.getLoginData().getXuid());
-        pk.setPlatformChatId(sender.getLoginData().getDeviceInfo().getDeviceId());
-        networkComponent.sendPacket(pk);
-    }
-
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     @Override
@@ -422,21 +411,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
+    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
         if (forceTranslatedByClient) {
             var pk = new TextPacket();
-            pk.setType(TextPacket.Type.TRANSLATION);
-            pk.setXuid(networkComponent.getXUID());
+            pk.setType(TextPacket.Type.RAW);
+            pk.setXuid("");
             pk.setNeedsTranslation(true);
-            pk.setMessage(tr);
+            pk.setMessage(key);
             pk.setParameters(List.of(args));
             networkComponent.sendPacket(pk);
-        } else sendText(I18n.get().tr(thisEntity.getLangCode(), tr, args));
+        } else sendText(I18n.get().tr(thisEntity.getLangCode(), key, args));
     }
 
     @Override
-    public void sendTr(String tr) {
-        sendTr(tr, EMPTY_STRING_ARRAY);
+    public void sendTr(String key) {
+        sendTr(key, EMPTY_STRING_ARRAY);
     }
 
     @Override
