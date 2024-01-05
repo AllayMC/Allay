@@ -139,6 +139,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return location;
     }
 
+    public Location3fc getCmdExecuteLocation() {
+        return location;
+    }
+
     @Override
     public Dimension getDimension() {
         return location.dimension;

@@ -1,14 +1,15 @@
 package org.allaymc.server.i18n;
 
-import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.i18n.I18nLoader;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
+
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static java.lang.Math.min;
-import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
+import static org.allaymc.api.i18n.I18n.KeyInfo.EMPTY;
+import static org.allaymc.api.i18n.I18n.isValidKeyCharacter;
 
 /**
  * Allay Project 2023/12/15
@@ -17,23 +18,26 @@ import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
  */
 public class AllayI18N implements I18n {
 
-    protected Map<String, String> langMap;
-    protected LangCode langCode;
+    protected EnumMap<LangCode, Map<String, String>> langMap = new EnumMap<>(LangCode.class);
+    protected LangCode defaultLangCode;
     protected I18nLoader i18NLoader;
 
-    public AllayI18N(I18nLoader i18NLoader, LangCode langCode) {
+    public AllayI18N(I18nLoader i18NLoader, LangCode defaultLangCode) {
         this.i18NLoader = i18NLoader;
-        this.langCode = langCode;
-        setLangCode(langCode);
+        this.defaultLangCode = defaultLangCode;
+        setDefaultLangCode(defaultLangCode);
+        for (var langCode : LangCode.values()) {
+            langMap.put(langCode, i18NLoader.getLangMap(langCode));
+        }
     }
 
     @Override
-    public String tr(String tr, String... args) {
-        var pair = findI18nKey(tr);
-        var lang = langMap.get(pair.left());
-        if (lang == null) {
-            throw new IllegalArgumentException("Cannot find lang for key " + pair.left());
-        }
+    public String tr(LangCode langCode, String tr, String... args) {
+        var keyInfo = findI18nKey(tr);
+        if (keyInfo == EMPTY) return tr;
+        var lang = langMap.get(langCode).get(keyInfo.key());
+        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(keyInfo.key());
+        if (lang == null) return tr;
         var argIndex = 0;
         var maxArgIndex = args.length - 1;
         var unorderedParamIndex = findUnorderedParamIndex(lang);
@@ -59,15 +63,39 @@ public class AllayI18N implements I18n {
             order++;
             orderedParamIndex = findOrderedParamIndex(lang, order);
         }
-        return new StringBuilder(tr).replace(pair.right(), pair.right() + pair.left().length() + 2, lang).toString();
+        return new StringBuilder(tr).replace(keyInfo.startIndex(), keyInfo.endIndex() + 1, lang).toString();
     }
 
     @Override
-    public Pair<String, Integer> findI18nKey(String str) {
-        var split1 = fastTwoPartSplit(str, "%", "");
-        var split2 = fastTwoPartSplit(split1[1], "%", split1[1]);
-        var split3 = fastTwoPartSplit(split2[0], " ", split2[0]);
-        return Pair.of(split3[0], split1[0].length());
+    public KeyInfo findI18nKey(String str) {
+        var startIndex = str.indexOf("%");
+        var index = 0;
+        var hasStarter = false;
+        if (startIndex == -1) {
+            // No '%' was found
+            startIndex = 0;
+        } else {
+            hasStarter = true;
+            // Jump over '%'
+            index = startIndex + 1;
+        }
+        var colonIndex = -1;
+        var keyBuilder = new StringBuilder();
+        for (/**/; index < str.length(); index++) {
+            var c = str.charAt(index);
+            if (c == ':') {
+                if (colonIndex == -1) {
+                    colonIndex = index;
+                } else {
+                    // Illegal key style: more than one colon
+                    return EMPTY;
+                }
+            }
+            if (isValidKeyCharacter(c)) {
+                keyBuilder.append(c);
+            } else break;
+        }
+        return new KeyInfo(startIndex, index - 1, colonIndex, keyBuilder.toString(), hasStarter);
     }
 
     public static final String DISORDERED_PARAM_S = "%s";
@@ -92,20 +120,22 @@ public class AllayI18N implements I18n {
     }
 
     @Override
-    public String tr(String tr) {
-        var pair = findI18nKey(tr);
-        var lang = langMap.get(pair.left());
-        Objects.requireNonNull(lang, "No valid lang key found in \"" + tr + "\"");
-        return new StringBuilder(tr).replace(pair.right(), pair.right() + pair.left().length() + 2, lang).toString();
+    public String tr(LangCode langCode, String tr) {
+        var keyInfo = findI18nKey(tr);
+        if (keyInfo == EMPTY) return tr;
+        var lang = langMap.get(langCode).get(keyInfo.key());
+        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(keyInfo.key());
+        if (lang == null) return tr;
+        return new StringBuilder(tr).replace(keyInfo.startIndex(), keyInfo.endIndex() + 1, lang).toString();
     }
 
     @Override
-    public void setLangCode(LangCode langCode) {
-        this.langMap = i18NLoader.getLangMap(langCode);
+    public void setDefaultLangCode(LangCode defaultLangCode) {
+        this.defaultLangCode = defaultLangCode;
     }
 
     @Override
-    public LangCode getLangCode() {
-        return langCode;
+    public LangCode getDefaultLangCode() {
+        return defaultLangCode;
     }
 }

@@ -6,17 +6,25 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.storage.PlayerStorage;
+import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
+import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
@@ -30,6 +38,8 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -58,6 +68,8 @@ public final class AllayServer implements Server {
     //执行IO密集型任务的线程池
     @Getter
     private final ExecutorService virtualThreadPool;
+    @Getter
+    private CommandRegistry commandRegistry;
     @Getter
     private NetworkServer networkServer;
     private Thread terminalConsoleThread;
@@ -118,6 +130,8 @@ public final class AllayServer implements Server {
         });
         initTerminalConsole();
         loadWorlds();
+        this.commandRegistry = new AllayCommandRegistry();
+        this.commandRegistry.registerDefaultCommands();
         this.networkServer = initNetwork();
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         this.networkServer.start();
@@ -146,6 +160,9 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
+        for (var player : getOnlinePlayers().values()) {
+            player.disconnect(TrKeys.M_DISCONNECT_CLOSED);
+        }
         System.exit(0);
     }
 
@@ -191,7 +208,7 @@ public final class AllayServer implements Server {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
         if (player.isInitialized()) {
             this.getPlayerStorage().writePlayerData(player);
-            broadcastTr("§e" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getName());
+            broadcastTr("§e%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
         }
         if (player.isSpawned()) {
             player.getDimension().removePlayer(player);
@@ -276,34 +293,43 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void sendTr(String tr) {
-        log.info(I18n.get().tr(tr));
-    }
-
-    @Override
     public void sendText(String text) {
         log.info(text);
     }
 
     @Override
-    public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
+    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
         // forceTranslatedByClient is unused
-        sendTr(tr, args);
+        log.info(I18n.get().tr(key, args));
     }
 
     @Override
-    public void sendTr(String tr, String... args) {
-        log.info(I18n.get().tr(tr, args));
-    }
-
-    @Override
-    public void sendChat(EntityPlayer sender, String message) {
-        log.info("<" + sender.getDisplayName() + "> " + message);
+    public void sendCommandOutputs(CommandSender sender, TrContainer... outputs) {
+        for (var output : outputs) {
+            log.info("[" + sender.getName() + "] " + I18n.get().tr(output.str(), output.args()));
+        }
     }
 
     @Override
     public boolean isRunning() {
         return isRunning.get();
+    }
+
+    @Override
+    public String getName() {
+        return "Server";
+    }
+
+    private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
+
+    @Override
+    public CommandOriginData getCommandOriginData() {
+        return SERVER_COMMAND_ORIGIN_DATA;
+    }
+
+    @Override
+    public Location3fc getCmdExecuteLocation() {
+        return new Location3f(0, 0, 0, getDefaultWorld().getDimension(DimensionInfo.OVERWORLD.dimensionId()));
     }
 
     private class AllayTerminalConsoleThread extends Thread {

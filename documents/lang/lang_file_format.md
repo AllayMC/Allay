@@ -1,4 +1,4 @@
-考虑以下这些翻译字符串:
+考虑以下这些多语言key:
 
 ### 例1
 
@@ -23,3 +23,21 @@ world_recovery.error.insufficient_space=空间不足，无法进行回复。需�
 若参数为[1,2]，则输出为```空间不足，无法进行回复。需要：1。可用：2。```
 
 即占位符可不声明类型
+
+### 关于'%'的使用
+
+百分号'%'用于指示多语言key的开头
+
+例如你可以这么写：
+
+```aaa%multiplayer.player.joined```
+
+其中```%multiplayer.player.joined```会被替换，而开头的```aaa```会保留
+
+当然还可以这么写(尽管没有什么意义):```%multiplayer.player.joined```
+
+在确定多语言key右边界时，会从多语言key的开头开始往右遍历
+
+若遇到一个非法（不能用于多语言key）的字符，则停止遍历，将上一个字符作为右边界。有关哪些字符合法，详见方法```org.allaymc.api.i18n.I18n.isValidKeyCharacter```
+
+如果遍历期间连续出现了两次```:```，则此key将不被认为是一个合法的多语言key

@@ -10,7 +10,8 @@ import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
-import org.allaymc.api.command.CommandManager;
+import org.allaymc.api.command.tree.CommandNodeFactory;
+import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.entity.component.EntityComponentImplFactory;
@@ -28,6 +29,7 @@ import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -133,7 +135,7 @@ public final class AllayAPI {
         Objects.requireNonNull(i18nImpl);
         I18n.I18N.set(i18nImpl);
         i18nSet = true;
-        log.info(i18nImpl.tr(TrKeys.A_LANG_SET, i18nImpl.getLangCode().toString()));
+        log.info(i18nImpl.tr(TrKeys.A_LANG_SET, i18nImpl.getDefaultLangCode().toString()));
     }
 
     /**
@@ -192,8 +194,12 @@ public final class AllayAPI {
         // Recipe
         requireImpl(RecipeRegistry.class, RecipeRegistry.REGISTRY::set);
 
+        // Perm
+        requireImpl(PermTree.PermTreeFactory.class, PermTree.FACTORY::set);
+
         // Command
-        requireImpl(CommandManager.class, CommandManager.INSTANCE::set);
+        requireImpl(CommandTree.CommandTreeFactory.class, CommandTree.FACTORY::set);
+        requireImpl(CommandNodeFactory.class, CommandNodeFactory.FACTORY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {}

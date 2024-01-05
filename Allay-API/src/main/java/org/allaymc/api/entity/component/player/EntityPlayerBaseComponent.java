@@ -11,7 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender, TextReceiver {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
 
     void setSprinting(boolean sprinting);
 
@@ -70,9 +70,4 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void sendTip(String message);
 
     void sendPopup(String message);
-
-    @Override
-    default @NotNull String getName() {
-        return this.getDisplayName();
-    }
 }

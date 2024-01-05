@@ -81,8 +81,12 @@ public class BaseContainer implements Container {
 
     @Override
     public void addViewer(ContainerViewer viewer) {
-        if (viewers.containsValue(viewer))
-            throw new ContainerException("viewer already exists");
+        if (viewers.containsValue(viewer)) {
+            log.warn("Viewer already exists! Container: " + this.containerType + ", Viewer: " + viewer);
+            removeViewer(viewer);
+            addViewer(viewer);
+            return;
+        }
         var assignedId = viewer.assignInventoryId();
         if (viewers.containsKey(assignedId)) {
             removeViewer(viewers.get(assignedId));

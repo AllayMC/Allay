@@ -5,9 +5,12 @@ import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.client.info.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TextReceiver;
+import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.perm.Permissible;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
@@ -25,7 +28,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * The server interface
  */
-public interface Server extends TaskCreator, TextReceiver {
+public interface Server extends TaskCreator, CommandSender {
     ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.of();
 
     static Server getInstance() {
@@ -69,6 +72,8 @@ public interface Server extends TaskCreator, TextReceiver {
 
     WorldPool getWorldPool();
 
+    CommandRegistry getCommandRegistry();
+
     default World getDefaultWorld() {
         return getWorldPool().getDefaultWorld();
     }
@@ -100,12 +105,42 @@ public interface Server extends TaskCreator, TextReceiver {
 
     ExecutorService getVirtualThreadPool();
 
-    default void broadcastChat(EntityPlayer sender, String message) {
-        getOnlinePlayers().values().forEach(player -> player.sendChat(sender, message));
-        sendChat(sender, message);
+    default void broadcastMessage(String message) {
+        getOnlinePlayers().values().forEach(player -> player.sendText(message));
+        sendText(message);
     }
 
     void broadcastTr(String tr);
 
     void broadcastTr(String tr, String... args);
+
+    @Override
+    default boolean isOp() {
+        return true;
+    }
+
+    @Override
+    default void setOp(boolean value) {
+
+    }
+
+    @Override
+    default boolean hasPerm(String perm) {
+        return true;
+    }
+
+    @Override
+    default Permissible addPerm(String perm) {
+        return this;
+    }
+
+    @Override
+    default Permissible removePerm(String perm) {
+        return this;
+    }
+
+    default void broadcastCommandOutputs(CommandSender sender, TrContainer... outputs) {
+        sendCommandOutputs(sender, outputs);
+        getOnlinePlayers().values().forEach(player -> player.sendCommandOutputs(sender, outputs));
+    }
 }

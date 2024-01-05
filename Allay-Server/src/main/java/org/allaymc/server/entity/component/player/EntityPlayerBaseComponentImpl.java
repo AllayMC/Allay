@@ -4,36 +4,43 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
+import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
+import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityItem;
-import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
-import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.perm.Permissible;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBf;
 
@@ -61,7 +68,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected AdventureSettings adventureSettings;
     @Getter
     @Setter
-    protected boolean op = true;//TODO
+    protected boolean op;
+    protected PermTree permTree;
     @Getter
     protected String displayName;
     @Getter
@@ -72,6 +80,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
+        op = true; // TODO: player perm
+        permTree = PermTree.create();
+        permTree.addPerm("*");
     }
 
     @ComponentEventListener
@@ -131,7 +142,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                     dimension.getEntityUpdateService().removeEntity(entityItem);
                 }
                 // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
-                // it's much easier to just resend the inventory.
+                // It's much easier to just resend the inventory.
                 thisEntity.sendContentsWithSpecificContainerId(inventory, FixedContainerId.PLAYER_INVENTORY, slot);
             }
         }
@@ -286,14 +297,29 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void sendChat(EntityPlayer sender, String message) {
-        var pk = new TextPacket();
-        pk.setType(TextPacket.Type.CHAT);
-        pk.setMessage(message);
-        pk.setSourceName(sender.getDisplayName());
-        pk.setXuid(sender.getLoginData().getXuid());
-        pk.setPlatformChatId(sender.getLoginData().getDeviceInfo().getDeviceId());
+    public void sendCommandOutputs(CommandSender sender, TrContainer... outputs) {
+        var pk = new CommandOutputPacket();
+        pk.setType(CommandOutputType.ALL_OUTPUT);
+        pk.setCommandOriginData(sender.getCommandOriginData());
+        for (var output : outputs) {
+            pk.getMessages().add(new CommandOutputMessage(
+                    false,
+                    I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()),
+                    Utils.EMPTY_STRING_ARRAY));
+        }
+        pk.setSuccessCount(0); // Unknown usage
+        pk.setData(""); // Unknown usage
         networkComponent.sendPacket(pk);
+    }
+
+    protected CommandOriginData commandOriginData;
+
+    @Override
+    public CommandOriginData getCommandOriginData() {
+        if (commandOriginData == null) {
+            commandOriginData = new CommandOriginData(CommandOriginType.PLAYER, networkComponent.getLoginData().getUuid(), "", 0);
+        }
+        return commandOriginData;
     }
 
     @Override
@@ -337,7 +363,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var chunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
         var loc = getLocation();
         chunkPublisherUpdatePacket.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
-        chunkPublisherUpdatePacket.setRadius((getChunkLoadingRadius() + 1) << 4);
+        chunkPublisherUpdatePacket.setRadius(getChunkLoadingRadius() << 4);
         networkComponent.sendPacket(chunkPublisherUpdatePacket);
     }
 
@@ -384,40 +410,37 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void reply(@NotNull String message, Object... args) {
-        this.sendText(String.format(message, args));
-    }
-
-    @Override
-    public boolean hasPermission(@NonNull String permission) {
-        return true; // todo
-    }
-
-    @Override
-    public void sendTr(String tr, boolean forceTranslatedByClient, String... args) {
-        var pair = I18n.get().findI18nKey(tr);
-        var pk = new TextPacket();
-        var isVanillaTr = pair.left().startsWith(I18n.VANILLA_LANG_NAMESPACE);
-        if (forceTranslatedByClient || isVanillaTr) {
-            if (isVanillaTr) {
-                pk.setMessage(new StringBuilder(tr).replace(pair.right() + 1, pair.right() + I18n.VANILLA_LANG_NAMESPACE.length() + 2, "").toString());
-            } else {
-                pk.setMessage(tr);
-            }
+    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
+        if (forceTranslatedByClient) {
+            var pk = new TextPacket();
             pk.setType(TextPacket.Type.TRANSLATION);
-            pk.setXuid(networkComponent.getXUID());
-            pk.setParameters(List.of(args));
+            pk.setXuid("");
             pk.setNeedsTranslation(true);
-        } else {
-            sendText(I18n.get().tr(tr));
-        }
-        networkComponent.sendPacket(pk);
+            pk.setMessage(key);
+            pk.setParameters(List.of(args));
+            networkComponent.sendPacket(pk);
+        } else sendText(I18n.get().tr(thisEntity.getLangCode(), key, args));
     }
 
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+    @Override
+    public boolean hasPerm(String perm) {
+        return permTree.hasPerm(perm);
+    }
 
     @Override
-    public void sendTr(String tr) {
-        sendTr(tr, EMPTY_STRING_ARRAY);
+    public Permissible addPerm(String perm) {
+        permTree.addPerm(perm);
+        return this;
+    }
+
+    @Override
+    public Permissible removePerm(String perm) {
+        permTree.removePerm(perm);
+        return this;
+    }
+
+    @Override
+    public String getName() {
+        return thisEntity.getOriginName();
     }
 }

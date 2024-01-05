@@ -16,8 +16,6 @@ import org.jline.reader.LineReaderBuilder;
 @AllArgsConstructor
 public class AllayTerminalConsole extends SimpleTerminalConsole {
 
-    public static final ConsoleSender SENDER = new ConsoleSender();
-
     private Server server;
 
     @Override
@@ -26,13 +24,15 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
     }
 
     @Override
-    protected void runCommand(String s) {
-        SENDER.dispatch(s);
+    protected void runCommand(String cmd) {
+        if (cmd.startsWith("/")) {
+            cmd = cmd.substring(1);
+        }
+        server.getCommandRegistry().execute(server, cmd);
     }
 
     @Override
     protected LineReader buildReader(LineReaderBuilder builder) {
-        // TODO: Completer
         builder.appName("Allay");
         builder.option(LineReader.Option.HISTORY_BEEP, false);
         builder.option(LineReader.Option.HISTORY_IGNORE_DUPS, true);

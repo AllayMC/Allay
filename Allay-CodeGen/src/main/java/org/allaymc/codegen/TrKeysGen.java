@@ -40,7 +40,7 @@ public class TrKeysGen {
             codeBuilder.addField(
                     FieldSpec
                             .builder(ClassName.get(String.class), fieldName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            .initializer("\"%" + key + "\"")
+                            .initializer("\"" + key + "\"")
                             .build()
             );
         }

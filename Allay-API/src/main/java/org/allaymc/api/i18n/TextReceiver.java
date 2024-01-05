@@ -1,5 +1,6 @@
 package org.allaymc.api.i18n;
 
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
@@ -10,13 +11,15 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 public interface TextReceiver {
     void sendText(String text);
 
-    void sendTr(String tr, boolean forceTranslatedByClient, String... args);
+    void sendTr(@MayContainTrKey String key, boolean forceTranslatedByClient, String... args);
 
-    default void sendTr(String tr, String... args) {
-        sendTr(tr, false, args);
+    default void sendTr(@MayContainTrKey String key, String... args) {
+        sendTr(key, false, args);
     }
 
-    void sendTr(String tr);
+    default void sendTr(@MayContainTrKey String key) {
+        sendTr(key, false);
+    }
 
-    void sendChat(EntityPlayer sender, String message);
+    void sendCommandOutputs(CommandSender sender, TrContainer... outputs);
 }

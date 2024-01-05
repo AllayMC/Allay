@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.data.LoginData;
-import org.allaymc.api.command.CommandManager;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Manager;
@@ -18,6 +17,9 @@ import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
+import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
@@ -158,13 +160,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
-    public void disconnect(String reason) {
-        session.disconnect(reason);
-    }
-
-    @Override
-    public void disconnect(String reason, boolean hideReason) {
-        session.disconnect(reason, hideReason);
+    public void disconnect(@MayContainTrKey String reason, boolean hideReason) {
+        session.disconnect(I18n.get().toClientFriendlyStyle(reason), hideReason);
     }
 
     protected void doFirstSpawnPlayer() {
@@ -189,7 +186,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         adventureSettings.set(AdventureSettings.Type.NO_PVM, gameType == GameType.SPECTATOR);
         adventureSettings.update();
 
-        sendPacket(CommandManager.getInstance().createPacketFor(player));
+        sendPacket(Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player));
 
         var updateAttributesPacket = new UpdateAttributesPacket();
         updateAttributesPacket.setRuntimeEntityId(player.getUniqueId());
@@ -349,23 +346,23 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             loginData = LoginData.decode(packet);
 
             if (!loginData.isXboxAuthenticated() && Server.SETTINGS.networkSettings().xboxAuth()) {
-                disconnect("disconnectionScreen.notAuthenticated");
+                disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTAUTHENTICATED);
                 return PacketSignal.HANDLED;
             }
 
             var name = loginData.getDisplayName();
             if (!NAME_PATTERN.matcher(name).matches()) {
-                disconnect("disconnectionScreen.invalidName");
+                disconnect(TrKeys.M_DISCONNECTIONSCREEN_INVALIDNAME);
                 return PacketSignal.HANDLED;
             }
 
             if (server.getOnlinePlayers().containsKey(loginData.getUuid())) {
-                disconnect("disconnectionScreen.loggedinOtherLocation");
+                disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
                 return PacketSignal.HANDLED;
             }
 
             if (!loginData.getSkin().isValid()) {
-                session.disconnect("disconnectionScreen.invalidSkin");
+                session.disconnect(TrKeys.M_DISCONNECTIONSCREEN_INVALIDSKIN);
                 return PacketSignal.HANDLED;
             }
 
@@ -446,7 +443,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
             //todo plugin event
             initialized.set(true);
-            Server.getInstance().broadcastTr("§e%minecraft:multiplayer.player.joined", player.getName());
+            Server.getInstance().broadcastTr("§e%minecraft:multiplayer.player.joined", player.getOriginName());
             return PacketSignal.HANDLED;
         }
     }

@@ -10,7 +10,9 @@ import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
-import org.allaymc.api.command.CommandManager;
+import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.command.tree.CommandNodeFactory;
+import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.datastruct.DynamicURLClassLoader;
@@ -26,6 +28,7 @@ import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -37,7 +40,9 @@ import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.blockentity.component.AllayBlockEntityComponentImplFactory;
 import org.allaymc.server.blockentity.registry.AllayBlockEntityTypeRegistry;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
-import org.allaymc.server.command.AllayCommandManager;
+import org.allaymc.server.command.AllayCommandRegistry;
+import org.allaymc.server.command.tree.AllayCommandNodeFactory;
+import org.allaymc.server.command.tree.AllayCommandTree;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.data.AllayVanillaItemMetaBlockStateBiMap;
 import org.allaymc.server.entity.component.AllayEntityComponentImplFactory;
@@ -53,6 +58,7 @@ import org.allaymc.server.item.recipe.AllayRecipeRegistry;
 import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
 import org.allaymc.server.item.registry.AllayItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
@@ -132,8 +138,12 @@ public final class Allay {
         // Recipe
         api.bind(RecipeRegistry.class, AllayRecipeRegistry::new, instance -> ((AllayRecipeRegistry) instance).registerVanillaRecipes());
 
+        // Perm
+        api.bind(PermTree.PermTreeFactory.class, () -> AllayPermTree::create);
+
         // Command
-        api.bind(CommandManager.class, AllayCommandManager::new, instance -> ((AllayCommandManager) instance).init());
+        api.bind(CommandTree.CommandTreeFactory.class, () -> AllayCommandTree::create);
+        api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
 
         api.implement("Allay");
     }

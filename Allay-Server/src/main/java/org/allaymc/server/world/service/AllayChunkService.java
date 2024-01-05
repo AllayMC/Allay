@@ -22,10 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -391,6 +388,9 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void loadAndSendQueuedChunks() {
+//            // Send ncp to client every tick to reduce the possibility of chunk disappearing.
+//            // This solution is same to what dragonfly does
+//            chunkLoader.publishClientChunkUpdate();
             if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int triedSendChunkCount = 0;
@@ -409,10 +409,10 @@ public class AllayChunkService implements ChunkService {
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
             if (!chunkReadyToSend.isEmpty()) {
-                chunkLoader.publishClientChunkUpdate();
                 var worldSettings = Server.SETTINGS.worldSettings();
                 var chunkSendingStrategy = worldSettings.chunkSendingStrategy();
-                if (Server.SETTINGS.worldSettings().useSubChunkSendingSystem()) {
+                var useSubChunkSendingSystem = Server.SETTINGS.worldSettings().useSubChunkSendingSystem();
+                if (useSubChunkSendingSystem) {
                     // Use SYNC mode if sub-chunk sending system is enabled
                     // Because the encoding of sub-chunk lcp is very quick
                     chunkSendingStrategy = SYNC;
@@ -421,6 +421,7 @@ public class AllayChunkService implements ChunkService {
                     // Create virtual thread for each chunk
                     chunkReadyToSend.values().forEach(chunk -> {
                         Server.getInstance().getVirtualThreadPool().submit(() -> {
+                            chunkLoader.publishClientChunkUpdate();
                             chunkLoader.sendLevelChunkPacket(chunk.createFullLevelChunkPacketChunk());
                             chunkLoader.onChunkInRangeSent(chunk);
                         });
@@ -428,15 +429,16 @@ public class AllayChunkService implements ChunkService {
                     sentChunks.addAll(chunkReadyToSend.keySet());
                 } else {
                     // 1. Encode all lcps
-                    LevelChunkPacket[] lcps;
+                    List<LevelChunkPacket> lcps;
                     Stream<Chunk> lcpStream;
                     if (chunkSendingStrategy == PARALLEL && chunkReadyToSend.size() >= worldSettings.chunkMinParallelSendingThreshold()) {
                         lcpStream = chunkReadyToSend.values().parallelStream();
                     } else {
                         lcpStream = chunkReadyToSend.values().stream();
                     }
-                    lcps = lcpStream.map(Chunk::createFullLevelChunkPacketChunk).toArray(LevelChunkPacket[]::new);
+                    lcps = lcpStream.map(chunk -> useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk()).toList();
                     // 2. Send lcps to client
+                    chunkLoader.publishClientChunkUpdate();
                     for (var lcp : lcps) {
                         chunkLoader.sendLevelChunkPacket(lcp);
                     }
