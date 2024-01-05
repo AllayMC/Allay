@@ -8,7 +8,9 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
@@ -45,9 +47,9 @@ public class EnumNode extends BaseNode {
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
-        var map = new HashMap<String, Set<CommandEnumConstraint>>();
+        var map = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
         for (var value : values) {
-            map.put(value, Set.of());
+            map.put(value, Collections.emptySet());
         }
         data.setEnumData(new CommandEnumData(name, map, false));
         data.setType(CommandParam.TEXT);
