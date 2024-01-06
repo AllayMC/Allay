@@ -105,7 +105,11 @@ public interface UnsafeChunk {
 
     int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
 
-    short[] getHeights();
+    /**
+     * 不同于getHeight(), 此方法返回的short[]数组中的所有值都大于等于0（可以理解为getHeight() - minHeight()）
+     * @return 高度图
+     */
+    short[] getHeightArray();
 
     void setBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType);
 

@@ -126,7 +126,7 @@ public class LevelDBChunkSerializer {
         //Write biomeAndHeight
         ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
-            for (short height : chunk.getHeights()) {
+            for (short height : chunk.getHeightArray()) {
                 heightAndBiomesBuffer.writeShortLE(height);
             }
             Palette<BiomeType> last = null;

@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.IOException;
@@ -71,12 +70,12 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public short[] getHeights() {
+    public short[] getHeightArray() {
         long stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
             for (; ; stamp = heightAndBiomeLock.readLock()) {
                 if (stamp == 0L) continue;
-                short[] result = unsafeChunk.getHeights();
+                short[] result = unsafeChunk.getHeightArray();
                 if (!heightAndBiomeLock.validate(stamp)) continue;
                 return result;
             }

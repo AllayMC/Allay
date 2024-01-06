@@ -151,7 +151,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public short[] getHeights() {
+    public short[] getHeightArray() {
         return this.heightMap.getHeights();
     }
 
