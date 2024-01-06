@@ -1,6 +1,7 @@
 package org.allaymc.api.perm.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
@@ -56,11 +57,16 @@ public interface PermTree {
 
     PermTree extendFrom(PermTree parent);
 
+    PermTree copyFrom(PermTree parent);
+
     List<PermNode> getLeaves();
 
     boolean isOp();
 
     PermTree setOp(boolean op);
+
+    @Nullable
+    PermTree getParent();
 
     interface PermTreeFactory {
         PermTree create();

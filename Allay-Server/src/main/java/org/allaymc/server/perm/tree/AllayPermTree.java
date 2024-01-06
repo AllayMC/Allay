@@ -1,6 +1,7 @@
 package org.allaymc.server.perm.tree;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;
@@ -19,6 +20,9 @@ import java.util.function.Consumer;
 @Getter
 public class AllayPermTree implements PermTree {
 
+    @Nullable
+    @Getter
+    protected PermTree parent;
     protected PermNode root = new AllayRootPermNode("ROOT");
     protected Map<String, Consumer<PermChangeType>> listeners = new HashMap<>();
 
@@ -42,6 +46,9 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public boolean hasPerm(String perm) {
+        if (parent != null && parent.hasPerm(perm)) {
+            return true;
+        }
         if (perm.contains("*")) {
             throw new IllegalArgumentException("Using wildcard in method hasPerm() is not allowed!");
         }
@@ -71,6 +78,9 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public PermTree addPerm(String perm, boolean callListener) {
+        if (parent != null && parent.hasPerm(perm)) {
+            return this;
+        }
         var spilt = new LinkedList<>(AllayStringUtils.fastSplit(perm, "."));
         var node = root;
         while (!spilt.isEmpty()) {
@@ -129,11 +139,17 @@ public class AllayPermTree implements PermTree {
     }
 
     @Override
-    public PermTree extendFrom(PermTree parent) {
+    public PermTree copyFrom(PermTree parent) {
         for (var leaf : parent.getLeaves()) {
             addPerm(leaf.getFullName());
         }
         this.listeners.putAll(parent.getPermListeners());
+        return this;
+    }
+
+    @Override
+    public PermTree extendFrom(PermTree parent) {
+        this.parent = parent;
         return this;
     }
 

@@ -48,6 +48,28 @@ public class PermTreeTest {
     }
 
     @Test
+    void testPermTreeCopy() {
+        var parent = AllayPermTree
+                .create()
+                .addPerm("test.a")
+                .addPerm("test.cmd.*");
+        var tree = AllayPermTree
+                .create()
+                .copyFrom(parent)
+                .addPerm("test.b");
+
+        assertTrue(tree.hasPerm("test.a"));
+        assertTrue(tree.hasPerm("test.cmd.abc"));
+        assertTrue(tree.hasPerm("test.b"));
+
+        parent.addPerm("test.d");
+        assertFalse(tree.hasPerm("test.d"));
+
+        parent.removePerm("test.a");
+        assertTrue(tree.hasPerm("test.a"));
+    }
+
+    @Test
     void testPermTreeExtend() {
         var parent = AllayPermTree
                 .create()
@@ -61,6 +83,12 @@ public class PermTreeTest {
         assertTrue(tree.hasPerm("test.a"));
         assertTrue(tree.hasPerm("test.cmd.abc"));
         assertTrue(tree.hasPerm("test.b"));
+
+        parent.addPerm("test.d");
+        assertTrue(tree.hasPerm("test.d"));
+
+        parent.removePerm("test.a");
+        assertFalse(tree.hasPerm("test.a"));
     }
 
     @Test
