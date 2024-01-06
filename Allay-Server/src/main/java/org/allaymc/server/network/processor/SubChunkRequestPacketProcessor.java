@@ -26,7 +26,6 @@ import java.util.*;
 
 /**
  * Allay Project 11/22/2023
- * TODO: fix it
  *
  * @author Cool_Loong
  */
@@ -66,10 +65,10 @@ public class SubChunkRequestPacketProcessor extends DataPacketProcessor<SubChunk
         var positionOffsets = pk.getPositionOffsets();
         DimensionInfo dimensionInfo = DimensionInfo.of(pk.getDimension());
         for (var offset : positionOffsets) {
-            int sectionY = centerPosition.getY() + offset.getY() - (dimensionInfo.minSectionY());
+            int sectionY = centerPosition.getY() + offset.getY()/* - (dimensionInfo.minSectionY())*/;
 
             HeightMapDataType hMapType = HeightMapDataType.NO_DATA;
-            if (sectionY < 0 || sectionY >= dimensionInfo.chunkSectionSize()) {
+            if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
                 log.info("Player " + player.getOriginName() + " requested sub chunk which is out of bounds");
                 createSubChunkData(responseData, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null, null);
                 continue;
@@ -100,7 +99,7 @@ public class SubChunkRequestPacketProcessor extends DataPacketProcessor<SubChunk
                 for (int z = 0; z < 16; z++) {
                     int y = chunk.getHeight(x, z);
                     int i = (z << 4) | x;
-                    int hSectionY = (y - dimensionInfo.minHeight()) >> 4;
+                    int hSectionY = y >> 4;
                     if (hSectionY > sectionY) {
                         hMap[i] = 16;
                         lower = false;
@@ -108,7 +107,7 @@ public class SubChunkRequestPacketProcessor extends DataPacketProcessor<SubChunk
                         hMap[i] = -1;
                         higher = false;
                     } else {
-                        hMap[i] = (byte) (y - ((hSectionY << 4) + dimensionInfo.minHeight()));
+                        hMap[i] = (byte) (y - (hSectionY << 4));
                         higher = false;
                         lower = false;
                     }
