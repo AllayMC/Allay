@@ -37,7 +37,7 @@ public final class Abilities {
     private float flySpeed = DEFAULT_FLY_SPEED;
     @Getter
     @Setter
-    private boolean sendUpdate;
+    private boolean sendToClient;
 
     public Abilities(EntityPlayer player) {
         this.player = player;
@@ -54,32 +54,32 @@ public final class Abilities {
     }
 
     public void applyGameType(GameType gameType) {
-        setSendUpdate(false);
+        setSendToClient(false);
         var tree = player.getPermTree();
-        tree.setPerm(PermKeys.MAY_FLY, gameType != GameType.SURVIVAL && gameType != GameType.ADVENTURE);
-        tree.setPerm(PermKeys.ATTACK_MOBS, gameType != GameType.SPECTATOR);
+        // 只设置必须设置的权限
+        tree.setPerm(PermKeys.BUILD, gameType != GameType.SPECTATOR);
+        tree.setPerm(PermKeys.MINE, gameType != GameType.SPECTATOR);
+        tree.setPerm(PermKeys.DOORS_AND_SWITCHES, gameType != GameType.SPECTATOR);
+        tree.setPerm(PermKeys.OPEN_CONTAINERS, gameType != GameType.SPECTATOR);
         tree.setPerm(PermKeys.ATTACK_PLAYERS, gameType != GameType.SPECTATOR);
+        tree.setPerm(PermKeys.ATTACK_MOBS, gameType != GameType.SPECTATOR);
+        tree.setPerm(PermKeys.MAY_FLY, gameType != GameType.SURVIVAL && gameType != GameType.ADVENTURE);
+        // 不需要管SUMMON_LIGHTNING和CHAT，让插件可以控制而不会在切换模式后重置
+        // 以下的几个能力不需要集成到权限树里面
         set(Ability.NO_CLIP, gameType == GameType.SPECTATOR);
         set(Ability.FLYING, gameType == GameType.SPECTATOR);
-        setHardcodedAbilities();
-        setSendUpdate(true);
-        sendToClient();
-    }
-
-    private void setHardcodedAbilities() {
-        set(Ability.TELEPORT, true);
-        if (player.getGameType() == GameType.CREATIVE) {
-            abilities.add(Ability.INSTABUILD);
-        }
+        set(Ability.INSTABUILD, gameType == GameType.CREATIVE);
         // 这边设置这个OPERATOR_COMMANDS的目的仅仅是让OP客户端能显示快捷指令
-        if (player.isOp()) {
-            abilities.add(Ability.OPERATOR_COMMANDS);
-        }
+        set(Ability.OPERATOR_COMMANDS, player.isOp());
+        set(Ability.TELEPORT, true);
+        setSendToClient(true);
+        sendToClient();
     }
 
     public void set(Ability ability, boolean value) {
         if (value) abilities.add(ability);
         else abilities.remove(ability);
+        sendToClient();
     }
 
     public void setWalkSpeed(float walkSpeed) {
@@ -115,7 +115,7 @@ public final class Abilities {
     }
 
     public void sendToClient() {
-        if (!sendUpdate) return;
+        if (!sendToClient) return;
         UpdateAbilitiesPacket updateAbilitiesPacket = createUpdateAbilitiesPacket();
 
         AbilityLayer abilityLayer = new AbilityLayer();

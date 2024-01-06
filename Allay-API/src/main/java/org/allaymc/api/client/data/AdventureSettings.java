@@ -26,8 +26,9 @@ public final class AdventureSettings {
     private boolean immutableWorld = false;
     private boolean showNameTags = true;
     private boolean autoJump = true;
+    @Getter
     @Setter
-    private boolean sendUpdate = true;
+    private boolean sendToClient = true;
 
     public AdventureSettings(EntityPlayer player) {
         this.player = player;
@@ -43,12 +44,12 @@ public final class AdventureSettings {
     }
 
     public void applyGameType(GameType gameType) {
-        sendUpdate(false);
+        sendToClient(false);
         player.getPermTree().setPerm(PermKeys.PVM, gameType == SPECTATOR);
         player.getPermTree().setPerm(PermKeys.MVP, gameType == SPECTATOR);
         immutableWorld = gameType == SPECTATOR;
         showNameTags = gameType != SPECTATOR;
-        sendUpdate(true);
+        sendToClient(true);
         sendToClient();
     }
 
@@ -78,7 +79,7 @@ public final class AdventureSettings {
     }
 
     public void sendToClient() {
-        if (!sendUpdate) return;
+        if (!sendToClient) return;
         UpdateAdventureSettingsPacket updateAdventureSettingsPacket = new UpdateAdventureSettingsPacket();
         updateAdventureSettingsPacket.setAutoJump(autoJump);
         updateAdventureSettingsPacket.setImmutableWorld(immutableWorld);
