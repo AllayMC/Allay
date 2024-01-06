@@ -161,7 +161,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void disconnect(@MayContainTrKey String reason, boolean hideReason) {
-        session.disconnect(I18n.get().toClientFriendlyStyle(reason), hideReason);
+        session.disconnect(I18n.get().tr(reason), hideReason);
     }
 
     protected void doFirstSpawnPlayer() {
