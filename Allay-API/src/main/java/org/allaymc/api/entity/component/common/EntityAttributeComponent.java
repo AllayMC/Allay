@@ -18,15 +18,13 @@ import java.util.List;
  * @author daoge_cmd
  */
 public interface EntityAttributeComponent extends EntityComponent {
-
-    static List<AttributeType> basicAttributes() {
+    static List<AttributeType> basicPlayerAttributes() {
         return Lists.newArrayList(
                 AttributeType.HEALTH,
-                AttributeType.ABSORPTION,
-                AttributeType.ATTACK_DAMAGE,
-                AttributeType.FOLLOW_RANGE,
+                AttributeType.PLAYER_HUNGER,
                 AttributeType.MOVEMENT,
-                AttributeType.KNOCKBACK_RESISTANCE
+                AttributeType.PLAYER_LEVEL,
+                AttributeType.PLAYER_EXPERIENCE
         );
     }
 

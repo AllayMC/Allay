@@ -1,6 +1,7 @@
 package org.allaymc.api.entity.attribute;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
@@ -10,19 +11,18 @@ import org.cloudburstmc.protocol.bedrock.data.AttributeData;
  *
  * @author JukeboxMC | daoge_cmd
  */
+@Getter
 @ToString
 public class Attribute implements Cloneable {
 
-    @Getter
     private final String key;
     private final float defaultValue;
-    @Getter
+    @Setter
     private float minValue;
-    @Getter
+    @Setter
     private float maxValue;
-    @Getter
+    @Setter
     private float currentValue;
-    private boolean dirty;
 
     public Attribute(String key, float minValue, float maxValue, float currentValue, float defaultValue) {
         this.key = key;
@@ -30,31 +30,10 @@ public class Attribute implements Cloneable {
         this.maxValue = maxValue;
         this.currentValue = currentValue;
         this.defaultValue = currentValue;
-        this.dirty = true;
-    }
-
-    public void setMinValue(float minValue) {
-        this.minValue = minValue;
-    }
-
-    public void setMaxValue(float maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public void setCurrentValue(float currentValue) {
-        this.currentValue = currentValue;
-        this.dirty = true;
-    }
-
-    public boolean isDirty() {
-        boolean value = this.dirty;
-        this.dirty = false;
-        return value;
     }
 
     public void reset() {
         this.currentValue = this.defaultValue;
-        this.dirty = true;
     }
 
     public AttributeData toNetwork() {

@@ -37,7 +37,7 @@ public interface EntityPlayer extends
           .vanillaEntity(VanillaEntityId.PLAYER)
           .addComponent(getFactory().createEntityPlayerBaseComponent())
           .addComponent(getFactory().createEntityPlayerNetworkComponent())
-          .addComponent(getFactory().createEntityAttributeComponent(basicAttributes()))
+          .addComponent(getFactory().createEntityAttributeComponent(basicPlayerAttributes()))
           .addComponent(getFactory().createEntityPlayerContainerHolderComponent())
           .addComponent(getFactory().createEntityPlayerContainerViewerComponent())
           .build();
