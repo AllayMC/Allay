@@ -24,7 +24,6 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
-import org.allaymc.api.perm.Permissible;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
@@ -60,7 +59,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Dependency
     protected EntityPlayerNetworkComponent networkComponent;
     @Getter
-    @Setter
     protected GameType gameType = GameType.CREATIVE;
     @Getter
     @Setter
@@ -104,6 +102,18 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         this.displayName = displayName;
         metadata.setString(EntityDataTypes.NAME, displayName);
         sendEntityData(EntityDataTypes.NAME);
+    }
+
+    @Override
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
+        this.adventureSettings.applyGameType(gameType);
+        this.abilities.applyGameType(gameType);
+        var pk = new UpdatePlayerGameTypePacket();
+        pk.setGameType(gameType);
+        pk.setEntityId(uniqueId);
+        networkComponent.sendPacket(pk);
+        sendPacketToViewers(pk);
     }
 
     @Override
@@ -298,7 +308,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void sendCommandOutputs(CommandSender sender, TrContainer... outputs) {
+    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         var pk = new CommandOutputPacket();
         pk.setType(CommandOutputType.ALL_OUTPUT);
         pk.setCommandOriginData(sender.getCommandOriginData());
@@ -308,7 +318,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                     I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()),
                     Utils.EMPTY_STRING_ARRAY));
         }
-        pk.setSuccessCount(0); // Unknown usage
+        pk.setSuccessCount(status);
         pk.setData(""); // Unknown usage
         networkComponent.sendPacket(pk);
     }

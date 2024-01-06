@@ -3,6 +3,7 @@ package org.allaymc.api.command.tree;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
+import org.allaymc.api.entity.Entity;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.Range;
 
@@ -77,10 +78,10 @@ public interface CommandNode {
         return up(depth());
     }
 
-    boolean match(CommandContext helper);
+    boolean match(CommandContext context);
 
     @Nullable
-    CommandNode nextNode(CommandContext helper);
+    CommandNode nextNode(CommandContext context);
 
     boolean isLeaf();
 
@@ -178,5 +179,13 @@ public interface CommandNode {
 
     default CommandNode remain(String name, Object defaultValue) {
         return addLeaf(getFactory().remain(name, this, defaultValue));
+    }
+
+    default CommandNode target(String name) {
+        return addLeaf(getFactory().target(name, this, Collections.EMPTY_LIST));
+    }
+
+    default CommandNode target(String name, List<Entity> defaultValue) {
+        return addLeaf(getFactory().target(name, this, defaultValue));
     }
 }

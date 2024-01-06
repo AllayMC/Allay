@@ -1,7 +1,7 @@
 package org.allaymc.api.i18n;
 
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.utils.Utils;
 
 /**
  * Allay Project 2023/12/15
@@ -17,9 +17,13 @@ public interface TextReceiver {
         sendTr(key, false, args);
     }
 
-    default void sendTr(@MayContainTrKey String key) {
-        sendTr(key, false);
+    default void sendTr(@MayContainTrKey String key, Object... args) {
+        sendTr(key, Utils.objectArrayToStringArray(args));
     }
 
-    void sendCommandOutputs(CommandSender sender, TrContainer... outputs);
+    default void sendTr(@MayContainTrKey String key) {
+        sendTr(key, false, Utils.EMPTY_STRING_ARRAY);
+    }
+
+    void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs);
 }

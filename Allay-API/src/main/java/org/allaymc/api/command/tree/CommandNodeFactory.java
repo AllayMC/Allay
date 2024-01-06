@@ -1,6 +1,9 @@
 package org.allaymc.api.command.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.entity.Entity;
+
+import java.util.List;
 
 /**
  * Allay Project 2024/1/5
@@ -32,4 +35,6 @@ public interface CommandNodeFactory {
     CommandNode msg(String name, CommandNode parent, String defaultValue);
 
     CommandNode remain(String name, CommandNode parent, Object defaultValue);
+
+    CommandNode target(String name, CommandNode parent, List<Entity> defaultValue);
 }

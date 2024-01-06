@@ -61,8 +61,9 @@ public abstract class BaseCommand implements Command {
         // Aliases
         if (!aliases.isEmpty()) {
             var map = new HashMap<String, Set<CommandEnumConstraint>>();
+            map.put(name, Collections.emptySet());
             for (var alias : aliases) {
-                map.put(alias, Set.of());
+                map.put(alias, Collections.emptySet());
             }
             networkAliasesData = new CommandEnumData("aliases", map, false);
         }

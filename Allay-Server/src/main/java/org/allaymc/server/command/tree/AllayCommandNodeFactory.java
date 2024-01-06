@@ -2,7 +2,10 @@ package org.allaymc.server.command.tree;
 
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandNodeFactory;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.server.command.tree.node.*;
+
+import java.util.List;
 
 /**
  * Allay Project 2024/1/5
@@ -53,5 +56,10 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     @Override
     public CommandNode remain(String name, CommandNode parent, Object defaultValue) {
         return new RemainArgNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode target(String name, CommandNode parent, List<Entity> defaultValue) {
+        return new TargetNode(name, parent, defaultValue);
     }
 }

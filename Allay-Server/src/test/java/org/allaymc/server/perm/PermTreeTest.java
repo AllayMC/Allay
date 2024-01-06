@@ -76,4 +76,15 @@ public class PermTreeTest {
                 .addPerm("test2.114514");
         assertTrue(testFlag2.get());
     }
+
+    @Test
+    void testOp() {
+        var tree = AllayPermTree
+                .create();
+        assertFalse(tree.isOp());
+        tree.setOp(true);
+        assertTrue(tree.isOp());
+        assertEquals(1, tree.getRoot().getLeaves().size());
+        assertEquals("*", tree.getRoot().getLeaves().get(0).getFullName());
+    }
 }

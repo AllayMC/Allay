@@ -10,7 +10,6 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.network.NetworkServer;
-import org.allaymc.api.perm.Permissible;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
@@ -119,8 +118,8 @@ public interface Server extends TaskCreator, CommandSender {
         throw new UnsupportedOperationException("Cannot call setOp() on server instance!");
     }
 
-    default void broadcastCommandOutputs(CommandSender sender, TrContainer... outputs) {
-        sendCommandOutputs(sender, outputs);
-        getOnlinePlayers().values().forEach(player -> player.sendCommandOutputs(sender, outputs));
+    default void broadcastCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
+        sendCommandOutputs(sender, status, outputs);
+        getOnlinePlayers().values().forEach(player -> player.sendCommandOutputs(sender, status, outputs));
     }
 }

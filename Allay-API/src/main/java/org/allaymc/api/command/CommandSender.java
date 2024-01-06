@@ -25,10 +25,10 @@ public interface CommandSender extends TextReceiver, Permissible {
         if (result.context() == null) return;
         if (getCmdExecuteLocation().dimension().getWorld().getWorldData().getGameRule(GameRule.SEND_COMMAND_FEEDBACK)) {
             if (result.isSuccess()) {
-                Server.getInstance().broadcastCommandOutputs(this, result.context().getOutputs().toArray(TrContainer[]::new));
+                Server.getInstance().broadcastCommandOutputs(this, result.status(), result.context().getOutputs().toArray(TrContainer[]::new));
             } else {
                 // 如果报错了就只给自己发消息
-                sendCommandOutputs(this, result.context().getOutputs().toArray(TrContainer[]::new));
+                sendCommandOutputs(this, result.status(), result.context().getOutputs().toArray(TrContainer[]::new));
             }
         }
     }

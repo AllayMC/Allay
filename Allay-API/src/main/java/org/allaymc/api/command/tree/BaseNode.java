@@ -39,11 +39,11 @@ public abstract class BaseNode implements CommandNode {
     @Setter
     protected int maxArgCostBranch;
 
-    protected BaseNode(String name, CommandNode parent) {
+    public BaseNode(String name, CommandNode parent) {
         this(name, parent, null);
     }
 
-    protected BaseNode(String name, CommandNode parent, Object defaultValue) {
+    public BaseNode(String name, CommandNode parent, Object defaultValue) {
         this.name = name;
         this.parent = parent;
         this.defaultValue = defaultValue;
@@ -191,7 +191,7 @@ public abstract class BaseNode implements CommandNode {
             if (senderType.validate(sender)) {
                 return biExecutor.apply(context, (SENDER_TYPE) context.getSender());
             } else {
-                context.addOutput("§c%" + senderType.errorMsg());
+                context.addInvalidExecutorError(senderType);
                 return context.failed();
             }
         };

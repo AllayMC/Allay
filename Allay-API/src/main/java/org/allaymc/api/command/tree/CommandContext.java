@@ -3,10 +3,13 @@ package org.allaymc.api.command.tree;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.command.SenderType;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.world.gamerule.GameRule;
 
 import java.util.List;
 
@@ -76,7 +79,23 @@ public interface CommandContext {
                 right.append(" ").append(arg);
             }
         }
-        addOutput("§c%" + TrKeys.M_COMMANDS_GENERIC_SYNTAX, left.toString(), current, right.toString());
+        addOutput(TrKeys.M_COMMANDS_GENERIC_SYNTAX, left.toString(), current, right.toString());
+    }
+
+    default void addInvalidExecutorError(SenderType<?> correctSenderType) {
+        addOutput(correctSenderType.errorMsg());
+    }
+
+    default void addNoTargetMatchError() {
+        addOutput(TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
+    }
+
+    default void addTooManyTargetsError() {
+        addOutput(TrKeys.M_COMMANDS_GENERIC_TOOMANYTARGETS);
+    }
+
+    default void addPlayerNotFoundError() {
+        addOutput(TrKeys.M_COMMANDS_GENERIC_PLAYER_NOTFOUND);
     }
 
     default boolean isValidArgIndex(int index) {
@@ -85,6 +104,12 @@ public interface CommandContext {
 
     default void addSyntaxError() {
         addSyntaxError(getCurrentArgIndex());
+    }
+
+    default void sendWhisperTo(EntityPlayer player, @MayContainTrKey String message, Object... args) {
+        if (player.getDimension().getWorld().getWorldData().getGameRule(GameRule.SEND_COMMAND_FEEDBACK)) {
+            player.sendTr(message, args);
+        }
     }
 
     List<TrContainer> getOutputs();

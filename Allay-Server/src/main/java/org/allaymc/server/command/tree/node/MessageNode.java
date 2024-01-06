@@ -17,13 +17,13 @@ public class MessageNode extends BaseNode {
     }
 
     @Override
-    public boolean match(CommandContext helper) {
+    public boolean match(CommandContext context) {
         var builder = new StringBuilder();
-        var index = helper.getCurrentArgIndex();
-        while (helper.haveUnhandledArg()) {
-            builder.append(helper.popArg()).append(" ");
+        var index = context.getCurrentArgIndex();
+        while (context.haveUnhandledArg()) {
+            builder.append(context.popArg()).append(" ");
         }
-        helper.putResult(index, builder.toString().trim());
+        context.putResult(index, builder.toString().trim());
         return true;
     }
 

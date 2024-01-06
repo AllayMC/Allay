@@ -5,6 +5,7 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.server.network.DataPacketProcessor;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
@@ -41,8 +42,8 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
                     }
                     this.spamCheckTime = System.currentTimeMillis();
 
-                    if (!useItemOn(player, itemStack, blockPos, placePos, clickPos, blockFace)) {
-                        //Failed to use the item, send back origin block state to client
+                    if (!interactBlockOrUseItem(player, itemStack, blockPos, placePos, clickPos, blockFace)) {
+                        //Failed to interact, send back origin block state to client
                         var w = player.getLocation().dimension();
                         var blockStateClicked = w.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
                         w.sendBlockUpdateTo(blockStateClicked, blockPos.x(), blockPos.y(), blockPos.z(), 0, player);
@@ -76,12 +77,14 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
         return System.currentTimeMillis() - this.spamCheckTime >= 100;
     }
 
-    private static boolean useItemOn(EntityPlayer player, ItemStack itemStack, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos, BlockFace blockFace) {
+    private static boolean interactBlockOrUseItem(EntityPlayer player, ItemStack itemStack, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos, BlockFace blockFace) {
         var dimension = player.getLocation().dimension();
         var blockStateClicked = dimension.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
-        if (!blockStateClicked.getBehavior().onInteract(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace))
-            return itemStack.useItemOn(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace);
-        else return true;
+        if (!blockStateClicked.getBehavior().onInteract(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace)) {
+            if (itemStack.getItemType() != ItemAirStack.AIR_TYPE) {
+                return itemStack.useItemOn(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace);
+            } else return false;
+        } else return true;
     }
 
     @Override

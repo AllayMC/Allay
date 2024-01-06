@@ -146,7 +146,8 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public boolean isOp() {
-        return root.getName().equals("*");
+        var rootLeaves = root.getLeaves();
+        return rootLeaves.size() == 1 && rootLeaves.get(0).getName().equals("*");
     }
 
     @Override

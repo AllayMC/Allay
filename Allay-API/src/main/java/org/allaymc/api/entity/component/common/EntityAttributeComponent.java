@@ -26,7 +26,7 @@ public interface EntityAttributeComponent extends EntityComponent {
                 AttributeType.ATTACK_DAMAGE,
                 AttributeType.FOLLOW_RANGE,
                 AttributeType.MOVEMENT,
-                AttributeType.KNOCKBACK_RESISTENCE
+                AttributeType.KNOCKBACK_RESISTANCE
         );
     }
 

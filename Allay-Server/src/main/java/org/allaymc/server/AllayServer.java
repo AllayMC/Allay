@@ -25,13 +25,11 @@ import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.storage.PlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
-import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
 import org.allaymc.server.world.generator.flat.FlatWorldGenerator;
-import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
 import org.apache.logging.log4j.Level;
@@ -305,9 +303,9 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void sendCommandOutputs(CommandSender sender, TrContainer... outputs) {
+    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         for (var output : outputs) {
-            log.info("[" + sender.getName() + "] " + I18n.get().tr(output.str(), output.args()));
+            log.info("[" + sender.getName() + "] " + (status <= 0 ? "§c" : "") + I18n.get().tr(output.str(), output.args()));
         }
     }
 

@@ -61,9 +61,20 @@ public final class Abilities {
         tree.setPerm(PermKeys.ATTACK_PLAYERS, gameType != GameType.SPECTATOR);
         set(Ability.NO_CLIP, gameType == GameType.SPECTATOR);
         set(Ability.FLYING, gameType == GameType.SPECTATOR);
-        set(Ability.TELEPORT, true);
+        setHardcodedAbilities();
         setSendUpdate(true);
         update();
+    }
+
+    private void setHardcodedAbilities() {
+        set(Ability.TELEPORT, true);
+        if (player.getGameType() == GameType.CREATIVE) {
+            abilities.add(Ability.INSTABUILD);
+        }
+        // 这边设置这个OPERATOR_COMMANDS的目的仅仅是让OP客户端能显示快捷指令
+        if (player.isOp()) {
+            abilities.add(Ability.OPERATOR_COMMANDS);
+        }
     }
 
     public void set(Ability ability, boolean value) {
@@ -110,20 +121,10 @@ public final class Abilities {
         AbilityLayer abilityLayer = new AbilityLayer();
         abilityLayer.setLayerType(AbilityLayer.Type.BASE);
         abilityLayer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
-
         abilityLayer.getAbilityValues().addAll(abilities);
 
         abilityLayer.getAbilityValues().add(Ability.WALK_SPEED);
         abilityLayer.getAbilityValues().add(Ability.FLY_SPEED);
-
-        if (player.getGameType() == GameType.CREATIVE) {
-            abilityLayer.getAbilityValues().add(Ability.INSTABUILD);
-        }
-
-        if (player.isOp()) {
-            abilityLayer.getAbilityValues().add(Ability.OPERATOR_COMMANDS);
-        }
-
         abilityLayer.setWalkSpeed(this.walkSpeed);
         abilityLayer.setFlySpeed(this.flySpeed);
 
