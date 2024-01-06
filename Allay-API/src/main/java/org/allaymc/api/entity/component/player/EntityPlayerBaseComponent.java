@@ -1,5 +1,6 @@
 package org.allaymc.api.entity.component.player;
 
+import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.command.CommandSender;
@@ -57,15 +58,25 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void setSkin(Skin skin);
 
-    boolean isOp();
-
-    void setOp(boolean op);
-
     GameType getGameType();
 
     void setGameType(GameType gameType);
 
     AdventureSettings getAdventureSettings();
+
+    Abilities getAbilities();
+
+    default void setWalkSpeed(float walkSpeed) {
+        getAbilities().setWalkSpeed(walkSpeed);
+    }
+
+    default void setFlySpeed(float flySpeed) {
+        getAbilities().setFlySpeed(flySpeed);
+    }
+
+    default void setFlying(boolean flying) {
+        getAbilities().setFlying(flying);
+    }
 
     void sendTip(String message);
 

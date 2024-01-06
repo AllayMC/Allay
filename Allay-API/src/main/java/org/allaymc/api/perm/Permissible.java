@@ -8,13 +8,33 @@ import org.allaymc.api.perm.tree.PermTree;
  * @author daoge_cmd
  */
 public interface Permissible {
-    boolean isOp();
+    default boolean isOp() {
+        return getPermTree().isOp();
+    }
 
-    void setOp(boolean value);
+    default void setOp(boolean value) {
+        getPermTree().setOp(value);
+    }
 
-    boolean hasPerm(String perm);
+    default boolean hasPerm(String perm) {
+        return getPermTree().hasPerm(perm);
+    }
 
-    Permissible addPerm(String perm);
+    default Permissible addPerm(String perm) {
+        getPermTree().addPerm(perm);
+        return this;
+    }
 
-    Permissible removePerm(String perm);
+    default Permissible removePerm(String perm) {
+        getPermTree().removePerm(perm);
+        return this;
+    }
+
+    default Permissible setPerm(String perm, boolean value) {
+        if (value) addPerm(perm);
+        else removePerm(perm);
+        return this;
+    }
+
+    PermTree getPermTree();
 }

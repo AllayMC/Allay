@@ -2,6 +2,7 @@ package org.allaymc.server.entity.component.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.command.CommandSender;
@@ -67,8 +68,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Getter
     protected AdventureSettings adventureSettings;
     @Getter
-    @Setter
-    protected boolean op;
+    protected Abilities abilities;
+    @Getter
     protected PermTree permTree;
     @Getter
     protected String displayName;
@@ -80,9 +81,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
-        op = true; // TODO: player perm
-        permTree = PermTree.create();
-        permTree.addPerm("*");
     }
 
     @ComponentEventListener
@@ -95,7 +93,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
         super.onInitFinish(initInfo);
-        this.adventureSettings = new AdventureSettings(thisEntity);
+        permTree = PermTree.create();
+        permTree.setOp(true); // TODO: perm db
+        adventureSettings = new AdventureSettings(thisEntity);
+        abilities = new Abilities(thisEntity);
     }
 
     @Override
@@ -420,23 +421,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             pk.setParameters(List.of(args));
             networkComponent.sendPacket(pk);
         } else sendText(I18n.get().tr(thisEntity.getLangCode(), key, args));
-    }
-
-    @Override
-    public boolean hasPerm(String perm) {
-        return permTree.hasPerm(perm);
-    }
-
-    @Override
-    public Permissible addPerm(String perm) {
-        permTree.addPerm(perm);
-        return this;
-    }
-
-    @Override
-    public Permissible removePerm(String perm) {
-        permTree.removePerm(perm);
-        return this;
     }
 
     @Override

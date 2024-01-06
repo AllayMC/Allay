@@ -1,7 +1,5 @@
 package org.allaymc.api.perm;
 
-import org.allaymc.api.command.Command;
-
 /**
  * Allay Project 2024/1/6
  *
@@ -15,8 +13,10 @@ public interface PermKeys {
     String OPEN_CONTAINERS = "ability.open_containers";
     String ATTACK_PLAYERS = "ability.attack_players";
     String ATTACK_MOBS = "ability.attack_mobs";
-    String OPERATOR_COMMANDS = Command.COMMAND_PERM_PREFIX + "*";
-    String TELEPORT = "ability.teleport";
     String MAY_FLY = "ability.mayfly";
     String SUMMON_LIGHTNING = "ability.summon_lightning";
+    String CHAT = "ability.chat";
+    // Vanilla adventure settings
+    String PVM = "adventure_setting.pvm";
+    String MVP = "adventure_setting.mvp";
 }

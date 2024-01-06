@@ -20,6 +20,5 @@ public interface DefaultPermissions {
 
     PermTree OPERATOR =
             PermTree.create()
-                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "tell")
                     .addPerm("*");
 }

@@ -115,28 +115,8 @@ public interface Server extends TaskCreator, CommandSender {
     void broadcastTr(String tr, String... args);
 
     @Override
-    default boolean isOp() {
-        return true;
-    }
-
-    @Override
     default void setOp(boolean value) {
-
-    }
-
-    @Override
-    default boolean hasPerm(String perm) {
-        return true;
-    }
-
-    @Override
-    default Permissible addPerm(String perm) {
-        return this;
-    }
-
-    @Override
-    default Permissible removePerm(String perm) {
-        return this;
+        throw new UnsupportedOperationException("Cannot call setOp() on server instance!");
     }
 
     default void broadcastCommandOutputs(CommandSender sender, TrContainer... outputs) {

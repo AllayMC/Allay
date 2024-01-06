@@ -1,8 +1,10 @@
 package org.allaymc.api.perm.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -20,6 +22,11 @@ public interface PermTree {
 
     PermTree registerPermListener(String perm, Consumer<PermChangeType> callback);
 
+    @UnmodifiableView
+    Map<String, Consumer<PermChangeType>> getPermListeners();
+
+    void clear();
+
     enum PermChangeType {
         ADD,
         REMOVE
@@ -27,15 +34,33 @@ public interface PermTree {
 
     PermNode getRoot();
 
-    PermTree addPerm(String perm);
+    PermTree addPerm(String perm, boolean callListener);
+
+    default PermTree addPerm(String perm) {
+        return addPerm(perm, true);
+    }
+
+    default PermTree setPerm(String perm, boolean value) {
+        if (value) addPerm(perm);
+        else removePerm(perm);
+        return this;
+    }
 
     boolean hasPerm(String perm);
 
-    PermTree removePerm(String perm);
+    PermTree removePerm(String perm, boolean callListener);
+
+    default PermTree removePerm(String perm) {
+        return removePerm(perm, true);
+    }
 
     PermTree extendFrom(PermTree parent);
 
     List<PermNode> getLeaves();
+
+    boolean isOp();
+
+    PermTree setOp(boolean op);
 
     interface PermTreeFactory {
         PermTree create();

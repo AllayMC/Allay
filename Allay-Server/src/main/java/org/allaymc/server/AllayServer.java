@@ -16,6 +16,7 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
@@ -330,6 +331,11 @@ public final class AllayServer implements Server {
     @Override
     public Location3fc getCmdExecuteLocation() {
         return new Location3f(0, 0, 0, getDefaultWorld().getDimension(DimensionInfo.OVERWORLD.dimensionId()));
+    }
+
+    @Override
+    public PermTree getPermTree() {
+        return DefaultPermissions.OPERATOR;
     }
 
     private class AllayTerminalConsoleThread extends Thread {

@@ -173,18 +173,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         setEntityDataPacket.setTick(player.getWorld().getTick());
         sendPacket(setEntityDataPacket);
 
-        var adventureSettings = player.getAdventureSettings();
-        adventureSettings.set(AdventureSettings.Type.OPERATOR, player.isOp());
-        adventureSettings.set(AdventureSettings.Type.TELEPORT, true);
         var gameType = player.getGameType();
-        adventureSettings.set(AdventureSettings.Type.WORLD_IMMUTABLE, gameType == GameType.SPECTATOR);
-        adventureSettings.set(AdventureSettings.Type.ALLOW_FLIGHT, gameType != GameType.SURVIVAL && gameType != GameType.ADVENTURE);
-        adventureSettings.set(AdventureSettings.Type.NO_CLIP, gameType == GameType.SPECTATOR);
-        adventureSettings.set(AdventureSettings.Type.FLYING, gameType == GameType.SPECTATOR);
-        adventureSettings.set(AdventureSettings.Type.ATTACK_MOBS, gameType == GameType.SURVIVAL || gameType == GameType.CREATIVE);
-        adventureSettings.set(AdventureSettings.Type.ATTACK_PLAYERS, gameType == GameType.SURVIVAL || gameType == GameType.CREATIVE);
-        adventureSettings.set(AdventureSettings.Type.NO_PVM, gameType == GameType.SPECTATOR);
-        adventureSettings.update();
+        player.getAdventureSettings().applyGameType(gameType);
+        player.getAbilities().applyGameType(gameType);
 
         sendPacket(Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player));
 
