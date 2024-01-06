@@ -409,6 +409,7 @@ public class AllayChunkService implements ChunkService {
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
             if (!chunkReadyToSend.isEmpty()) {
+                chunkLoader.publishClientChunkUpdate();
                 var worldSettings = Server.SETTINGS.worldSettings();
                 var chunkSendingStrategy = worldSettings.chunkSendingStrategy();
                 var useSubChunkSendingSystem = Server.SETTINGS.worldSettings().useSubChunkSendingSystem();
@@ -421,7 +422,6 @@ public class AllayChunkService implements ChunkService {
                     // Create virtual thread for each chunk
                     chunkReadyToSend.values().forEach(chunk -> {
                         Server.getInstance().getVirtualThreadPool().submit(() -> {
-                            chunkLoader.publishClientChunkUpdate();
                             chunkLoader.sendLevelChunkPacket(chunk.createFullLevelChunkPacketChunk());
                             chunkLoader.onChunkInRangeSent(chunk);
                         });
@@ -438,7 +438,6 @@ public class AllayChunkService implements ChunkService {
                     }
                     lcps = lcpStream.map(chunk -> useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk()).toList();
                     // 2. Send lcps to client
-                    chunkLoader.publishClientChunkUpdate();
                     for (var lcp : lcps) {
                         chunkLoader.sendLevelChunkPacket(lcp);
                     }

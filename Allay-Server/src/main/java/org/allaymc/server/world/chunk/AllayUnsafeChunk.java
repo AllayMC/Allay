@@ -111,12 +111,16 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return Collections.unmodifiableCollection(sectionBlockEntities);
     }
 
+    //基岩版3d-data保存heightMap是以0为索引保存的，所以这里需要减去/加上世界最小值，详情查看
+    //Bedrock Edition 3d-data saves the height map start from index of 0, so need to subtract/add the world minimum height here, see for details:
+    //https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
+
     public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
-        return this.heightMap.get(x, z);
+        return this.heightMap.get(x, z) + dimensionInfo.minHeight();
     }
 
     public void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, @Range(from = -512, to = 511) int height) {
-        this.heightMap.set(x, z, (short) height);
+        this.heightMap.set(x, z, (short) (height - dimensionInfo.minHeight()));
     }
 
     public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int layer) {
