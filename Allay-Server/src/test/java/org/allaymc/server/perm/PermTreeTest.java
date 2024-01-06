@@ -3,6 +3,8 @@ package org.allaymc.server.perm;
 import org.allaymc.server.perm.tree.AllayPermTree;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -59,5 +61,19 @@ public class PermTreeTest {
         assertTrue(tree.hasPerm("test.a"));
         assertTrue(tree.hasPerm("test.cmd.abc"));
         assertTrue(tree.hasPerm("test.b"));
+    }
+
+    @Test
+    void testPermListener() {
+        AtomicBoolean testFlag1 = new AtomicBoolean(false);
+        var tree = AllayPermTree
+                .create()
+                .registerPermListener("test1.a", type -> testFlag1.set(true))
+                .addPerm("test1.a");
+        assertTrue(testFlag1.get());
+        AtomicBoolean testFlag2 = new AtomicBoolean(false);
+        tree.registerPermListener("test2.*", type -> testFlag2.set(true))
+                .addPerm("test2.114514");
+        assertTrue(testFlag2.get());
     }
 }

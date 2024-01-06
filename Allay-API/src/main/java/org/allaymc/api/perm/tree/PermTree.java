@@ -3,6 +3,7 @@ package org.allaymc.api.perm.tree;
 import org.allaymc.api.ApiInstanceHolder;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/12/30
@@ -15,6 +16,13 @@ public interface PermTree {
 
     static PermTree create() {
         return FACTORY.get().create();
+    }
+
+    PermTree registerPermListener(String perm, Consumer<PermChangeType> callback);
+
+    enum PermChangeType {
+        ADD,
+        REMOVE
     }
 
     PermNode getRoot();

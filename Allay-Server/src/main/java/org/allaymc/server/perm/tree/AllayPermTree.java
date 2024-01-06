@@ -5,9 +5,9 @@ import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.utils.AllayStringUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/12/30
@@ -18,12 +18,21 @@ import java.util.List;
 public class AllayPermTree implements PermTree {
 
     protected PermNode root = new AllayRootPermNode("ROOT");
+    protected Map<String, Consumer<PermChangeType>> listeners = new HashMap<>();
 
     protected AllayPermTree() {
     }
 
     public static PermTree create() {
         return new AllayPermTree();
+    }
+
+    @Override
+    public PermTree registerPermListener(String perm, Consumer<PermChangeType> callback) {
+//        if (perm.endsWith("*"))
+//            perm = perm.substring(0, perm.length() - 1);
+        listeners.put(perm, callback);
+        return this;
     }
 
     @Override
@@ -73,6 +82,8 @@ public class AllayPermTree implements PermTree {
             }
             if (!hasMatch) {
                 node = node.addLeaf(nodeName);
+                var listener = findListener(perm);
+                if (listener != null) listener.accept(PermChangeType.ADD);
             }
         }
         return this;
@@ -89,6 +100,8 @@ public class AllayPermTree implements PermTree {
                 for (var leaf : node.getLeaves()) {
                     if (leaf.canMatch(nodeName)) {
                         if (spilt.isEmpty()) {
+                            var listener = findListener(perm);
+                            if (listener != null) listener.accept(PermChangeType.REMOVE);
                             node.getLeaves().remove(leaf);
                             return this;
                         } else {
@@ -129,5 +142,30 @@ public class AllayPermTree implements PermTree {
                 findLeaf(leaf, dest);
             }
         }
+    }
+
+    @Nullable
+    protected Consumer<PermChangeType> findListener(String perm) {
+        for (var entry : listeners.entrySet()) {
+            var listenedPerm = entry.getKey();
+            if (isPermSubset(listenedPerm, perm)) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return 权限p2是否是权限p1的子集
+     */
+    protected boolean isPermSubset(String p1, String p2) {
+        if (p1.equals(p2)) {
+            return true;
+        }
+        if (!p1.endsWith("*")) {
+            // p1没有通配符
+            return false;
+        }
+        return p2.startsWith(p1.substring(0, p1.length() - 2));
     }
 }
