@@ -26,7 +26,6 @@ public class GameModeCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .enums("gamemode", CommonEnum.GAMEMODE_ENUM)
-                // 这边有意将默认值设为null
                 .target("player")
                 .optional()
                 .exec(context -> {

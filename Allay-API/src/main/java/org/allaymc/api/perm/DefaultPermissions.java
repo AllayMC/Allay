@@ -14,7 +14,7 @@ public interface DefaultPermissions {
 
     PermTree MEMBER =
             PermTree.create()
-                    .extendFrom(VISITOR)
+                    .copyFrom(VISITOR)
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "help")
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "me");
 
