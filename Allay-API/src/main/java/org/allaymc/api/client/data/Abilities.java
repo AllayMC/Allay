@@ -63,7 +63,7 @@ public final class Abilities {
         set(Ability.FLYING, gameType == GameType.SPECTATOR);
         setHardcodedAbilities();
         setSendUpdate(true);
-        update();
+        sendToClient();
     }
 
     private void setHardcodedAbilities() {
@@ -84,17 +84,17 @@ public final class Abilities {
 
     public void setWalkSpeed(float walkSpeed) {
         this.walkSpeed = walkSpeed;
-        update();
+        sendToClient();
     }
 
     public void setFlySpeed(float flySpeed) {
         this.flySpeed = flySpeed;
-        update();
+        sendToClient();
     }
 
     public void setFlying(boolean flying) {
         set(Ability.FLYING, flying);
-        update();
+        sendToClient();
     }
 
     private Consumer<PermTree.PermChangeType> syncTo(Ability ability) {
@@ -110,11 +110,11 @@ public final class Abilities {
                 if (reverse) abilities.add(ability);
                 else abilities.remove(ability);
             }
-            update();
+            sendToClient();
         };
     }
 
-    public void update() {
+    public void sendToClient() {
         if (!sendUpdate) return;
         UpdateAbilitiesPacket updateAbilitiesPacket = createUpdateAbilitiesPacket();
 

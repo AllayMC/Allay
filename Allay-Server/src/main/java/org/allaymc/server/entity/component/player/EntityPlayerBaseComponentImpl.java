@@ -107,8 +107,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
+
         this.adventureSettings.applyGameType(gameType);
         this.abilities.applyGameType(gameType);
+
+        this.metadata.setFlag(EntityFlag.SILENT, gameType == GameType.SPECTATOR);
+        this.metadata.setFlag(EntityFlag.HAS_COLLISION, gameType != GameType.SPECTATOR);
+
         var pk = new UpdatePlayerGameTypePacket();
         pk.setGameType(gameType);
         pk.setEntityId(uniqueId);

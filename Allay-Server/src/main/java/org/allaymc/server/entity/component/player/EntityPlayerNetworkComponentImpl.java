@@ -4,7 +4,6 @@ import io.netty.util.internal.PlatformDependent;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
@@ -12,9 +11,8 @@ import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.entity.attribute.Attribute;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
+import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.i18n.I18n;
@@ -25,18 +23,21 @@ import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.server.network.DataPacketProcessor;
-import org.allaymc.server.network.DataPacketProcessorHolder;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.DataPacketProcessorHolder;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.*;
+import org.cloudburstmc.protocol.bedrock.data.AuthoritativeMovementMode;
+import org.cloudburstmc.protocol.bedrock.data.ChatRestrictionLevel;
+import org.cloudburstmc.protocol.bedrock.data.GamePublishSetting;
+import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -179,18 +180,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         sendPacket(Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player));
 
-        var updateAttributesPacket = new UpdateAttributesPacket();
-        updateAttributesPacket.setRuntimeEntityId(player.getUniqueId());
-        for (Attribute attribute : player.getAttributes()) {
-            updateAttributesPacket.getAttributes().add(attribute.toNetwork());
-        }
-        updateAttributesPacket.setTick(player.getWorld().getTick());
-        sendPacket(updateAttributesPacket);
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
         server.addToPlayerList(player);
         if (server.getOnlinePlayerCount() > 1) {
             server.sendFullPlayerListInfoTo(player);
         }
+
+        player.sendAttributesToClient();
 
         sendInventories();
 

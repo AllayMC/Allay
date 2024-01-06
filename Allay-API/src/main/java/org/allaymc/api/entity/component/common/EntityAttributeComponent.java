@@ -57,4 +57,6 @@ public interface EntityAttributeComponent extends EntityComponent {
         }
         return list;
     }
+
+    void sendAttributesToClient();
 }

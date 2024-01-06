@@ -34,11 +34,11 @@ public final class AdventureSettings {
         var tree = player.getPermTree();
         tree.registerPermListener(PermKeys.PVM, type -> {
             noPVM = type == REMOVE;
-            update();
+            sendToClient();
         });
         tree.registerPermListener(PermKeys.MVP, type -> {
             noMVP = type == REMOVE;
-            update();
+            sendToClient();
         });
     }
 
@@ -49,35 +49,35 @@ public final class AdventureSettings {
         immutableWorld = gameType == SPECTATOR;
         showNameTags = gameType != SPECTATOR;
         sendUpdate(true);
-        update();
+        sendToClient();
     }
 
     public void setNoPVM(boolean noPVM) {
         this.noPVM = noPVM;
-        update();
+        sendToClient();
     }
 
     public void setNoMVP(boolean noMVP) {
         this.noMVP = noMVP;
-        update();
+        sendToClient();
     }
 
     public void setImmutableWorld(boolean immutableWorld) {
         this.immutableWorld = immutableWorld;
-        update();
+        sendToClient();
     }
 
     public void setShowNameTags(boolean showNameTags) {
         this.showNameTags = showNameTags;
-        update();
+        sendToClient();
     }
 
     public void setAutoJump(boolean autoJump) {
         this.autoJump = autoJump;
-        update();
+        sendToClient();
     }
 
-    public void update() {
+    public void sendToClient() {
         if (!sendUpdate) return;
         UpdateAdventureSettingsPacket updateAdventureSettingsPacket = new UpdateAdventureSettingsPacket();
         updateAdventureSettingsPacket.setAutoJump(autoJump);
