@@ -14,7 +14,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * Allay Project 2023/5/1

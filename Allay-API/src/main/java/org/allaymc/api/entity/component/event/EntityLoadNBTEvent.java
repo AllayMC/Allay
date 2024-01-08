@@ -1,9 +1,9 @@
 package org.allaymc.api.entity.component.event;
 
-import org.allaymc.api.component.interfaces.ComponentEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.component.interfaces.ComponentEvent;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**

@@ -1,5 +1,8 @@
 package org.allaymc.server.data;
 
+import it.unimi.dsi.fastutil.Function;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -7,9 +10,6 @@ import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
-import it.unimi.dsi.fastutil.Function;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 

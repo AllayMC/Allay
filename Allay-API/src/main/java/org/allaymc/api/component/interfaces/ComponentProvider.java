@@ -1,19 +1,10 @@
 package org.allaymc.api.component.interfaces;
 
-import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.component.BlockEntityComponent;
-import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityComponent;
-import org.allaymc.api.entity.init.EntityInitInfo;
-import org.allaymc.api.identifier.Identifier;
-import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.ItemComponent;
-import org.allaymc.api.item.init.ItemStackInitInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.identifier.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;

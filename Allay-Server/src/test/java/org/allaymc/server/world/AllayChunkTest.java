@@ -1,5 +1,6 @@
 package org.allaymc.server.world;
 
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockWaterBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockWoodBehavior;
@@ -9,8 +10,6 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.testutils.AllayTestExtension;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

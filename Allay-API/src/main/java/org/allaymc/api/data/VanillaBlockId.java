@@ -1,9 +1,8 @@
 package org.allaymc.api.data;
 
-import java.lang.String;
 import lombok.Getter;
-import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.identifier.Identifier;
 import org.jetbrains.annotations.Nullable;
 

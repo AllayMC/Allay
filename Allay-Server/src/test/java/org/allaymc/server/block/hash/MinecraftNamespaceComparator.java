@@ -1,7 +1,7 @@
 package org.allaymc.server.block.hash;
 
-import org.allaymc.testutils.AllayTestExtension;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.nio.charset.StandardCharsets;

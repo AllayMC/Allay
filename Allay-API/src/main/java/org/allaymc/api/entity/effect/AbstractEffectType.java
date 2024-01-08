@@ -1,9 +1,9 @@
 package org.allaymc.api.entity.effect;
 
-import org.allaymc.api.identifier.Identifier;
 import lombok.Getter;
+import org.allaymc.api.identifier.Identifier;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * Allay Project 2023/10/27

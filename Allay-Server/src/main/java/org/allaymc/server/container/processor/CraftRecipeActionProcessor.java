@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.allaymc.api.container.FullContainerType.*;
+import static org.allaymc.api.container.FullContainerType.CRAFTING_GRID;
+import static org.allaymc.api.container.FullContainerType.CREATED_OUTPUT;
 
 /**
  * Allay Project 2023/12/1

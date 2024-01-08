@@ -11,7 +11,6 @@ import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;

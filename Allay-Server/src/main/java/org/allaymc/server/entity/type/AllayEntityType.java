@@ -9,7 +9,6 @@ import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
-import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
@@ -18,6 +17,7 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
+import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.joml.primitives.AABBf;
 
 import java.util.ArrayList;

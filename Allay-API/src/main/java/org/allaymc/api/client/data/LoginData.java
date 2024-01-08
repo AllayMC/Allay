@@ -1,9 +1,5 @@
 package org.allaymc.api.client.data;
 
-import org.allaymc.api.client.info.Device;
-import org.allaymc.api.client.info.DeviceInfo;
-import org.allaymc.api.client.info.UIProfile;
-import org.allaymc.api.client.skin.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,6 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.allaymc.api.client.info.Device;
+import org.allaymc.api.client.info.DeviceInfo;
+import org.allaymc.api.client.info.UIProfile;
+import org.allaymc.api.client.skin.*;
 import org.allaymc.api.i18n.LangCode;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;

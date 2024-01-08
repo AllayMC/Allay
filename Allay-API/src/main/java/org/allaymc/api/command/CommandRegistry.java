@@ -1,7 +1,6 @@
 package org.allaymc.api.command;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.registry.MappedRegistry;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 

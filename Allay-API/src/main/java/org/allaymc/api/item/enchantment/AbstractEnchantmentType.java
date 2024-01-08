@@ -1,7 +1,7 @@
 package org.allaymc.api.item.enchantment;
 
-import org.allaymc.api.identifier.Identifier;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
+import org.allaymc.api.identifier.Identifier;
 
 import java.util.Map;
 

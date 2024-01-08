@@ -7,7 +7,6 @@ import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.identifier.Identifier;
-import com.google.common.collect.Lists;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
 import java.util.*;

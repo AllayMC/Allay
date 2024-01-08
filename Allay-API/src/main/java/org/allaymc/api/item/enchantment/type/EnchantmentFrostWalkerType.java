@@ -1,8 +1,8 @@
 package org.allaymc.api.item.enchantment.type;
 
 import org.allaymc.api.identifier.Identifier;
-import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
+import org.allaymc.api.item.enchantment.Rarity;
 
 /**
  * Allay Project 2023/10/21

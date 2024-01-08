@@ -1,9 +1,9 @@
 package org.allaymc.server;
 
-import org.allaymc.api.utils.MathUtils;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.utils.MathUtils;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;

@@ -1,9 +1,9 @@
 package org.allaymc.api.client.skin;
 
-import org.allaymc.api.utils.Utils;
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.utils.Utils;
 import org.cloudburstmc.protocol.bedrock.data.skin.*;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.json.internal.json_simple.JSONValue;

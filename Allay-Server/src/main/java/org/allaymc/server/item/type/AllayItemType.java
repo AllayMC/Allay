@@ -1,11 +1,11 @@
 package org.allaymc.server.item.type;
 
+import com.google.gson.JsonParser;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
-import com.google.gson.JsonParser;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.interfaces.Component;
@@ -16,27 +16,23 @@ import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
-import org.allaymc.api.utils.BlockAndItemIdMapper;
-import org.allaymc.server.item.component.common.ItemAttributeComponentImpl;
-import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
-import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
+import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.server.Allay;
 import org.allaymc.server.component.injector.AllayComponentInjector;
+import org.allaymc.server.item.component.common.ItemAttributeComponentImpl;
+import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 /**

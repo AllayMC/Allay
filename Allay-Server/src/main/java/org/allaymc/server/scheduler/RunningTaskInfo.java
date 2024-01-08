@@ -1,8 +1,8 @@
 package org.allaymc.server.scheduler;
 
-import org.allaymc.api.scheduler.task.Task;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.scheduler.task.Task;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

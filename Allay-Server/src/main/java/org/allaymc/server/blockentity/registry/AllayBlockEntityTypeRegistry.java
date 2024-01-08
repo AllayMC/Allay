@@ -1,16 +1,15 @@
 package org.allaymc.server.blockentity.registry;
 
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ConsoleProgressBarConsumer;
+import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import me.tongfei.progressbar.ConsoleProgressBarConsumer;
-import me.tongfei.progressbar.ProgressBar;
 
 import java.util.HashMap;
 import java.util.Map;

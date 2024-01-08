@@ -4,10 +4,10 @@ import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.component.interfaces.ComponentProvider.SimpleComponentProvider;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.component.ItemComponentImplFactory;
-import org.allaymc.server.item.component.air.ItemAirBaseComponentImpl;
-import org.allaymc.server.item.component.cauldron.ItemCauldronBaseComponentImpl;
 import org.allaymc.api.item.component.common.ItemAttributes;
 import org.allaymc.api.item.init.ItemStackInitInfo;
+import org.allaymc.server.item.component.air.ItemAirBaseComponentImpl;
+import org.allaymc.server.item.component.cauldron.ItemCauldronBaseComponentImpl;
 import org.allaymc.server.item.component.common.ItemAttributeComponentImpl;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 

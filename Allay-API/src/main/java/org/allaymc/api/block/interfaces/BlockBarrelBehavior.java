@@ -6,6 +6,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
 import org.allaymc.api.data.VanillaBlockId;
+
 import static org.allaymc.api.block.component.BlockComponentImplFactory.getFactory;
 import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
 import static org.allaymc.api.data.VanillaBlockPropertyTypes.OPEN_BIT;

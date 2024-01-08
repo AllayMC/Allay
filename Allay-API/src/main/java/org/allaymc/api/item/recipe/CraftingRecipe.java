@@ -3,9 +3,7 @@ package org.allaymc.api.item.recipe;
 import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.recipe.input.Input;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.NetworkRecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 
 import java.util.ArrayList;

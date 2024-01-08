@@ -3,14 +3,11 @@ package org.allaymc.api.command;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
-
-import static org.allaymc.api.perm.DefaultPermissions.*;
 
 /**
  * Allay Project 2023/12/29

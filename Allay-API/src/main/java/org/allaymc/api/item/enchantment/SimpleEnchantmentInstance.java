@@ -1,8 +1,5 @@
 package org.allaymc.api.item.enchantment;
 
-import org.allaymc.api.item.enchantment.EnchantmentInstance;
-import org.allaymc.api.item.enchantment.EnchantmentType;
-
 /**
  * Allay Project 2023/10/21
  *

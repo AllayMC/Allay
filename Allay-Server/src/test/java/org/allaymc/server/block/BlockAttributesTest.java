@@ -1,16 +1,16 @@
 package org.allaymc.server.block;
 
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.BlockAttributes;
-import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
+import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.testutils.AllayTestExtension;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.awt.*;
+import java.awt.Color;
 
 import static org.junit.jupiter.api.Assertions.*;
 

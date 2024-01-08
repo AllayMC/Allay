@@ -5,7 +5,6 @@ import org.allaymc.api.i18n.LangCode;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Allay Project 2023/12/15

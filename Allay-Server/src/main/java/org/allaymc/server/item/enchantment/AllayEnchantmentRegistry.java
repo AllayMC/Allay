@@ -1,21 +1,17 @@
 package org.allaymc.server.item.enchantment;
 
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import me.tongfei.progressbar.ConsoleProgressBarConsumer;
+import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
-import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import me.tongfei.progressbar.ConsoleProgressBarConsumer;
-import me.tongfei.progressbar.ProgressBar;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Allay Project 2023/10/21

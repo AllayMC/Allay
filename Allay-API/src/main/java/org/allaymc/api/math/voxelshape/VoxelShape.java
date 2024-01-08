@@ -1,7 +1,7 @@
 package org.allaymc.api.math.voxelshape;
 
-import org.allaymc.api.block.data.BlockFace;
 import lombok.Getter;
+import org.allaymc.api.block.data.BlockFace;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;

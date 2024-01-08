@@ -18,7 +18,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
 import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
 import static org.allaymc.api.entity.component.EntityComponentImplFactory.getFactory;
-import static org.allaymc.api.entity.component.common.EntityAttributeComponent.*;
+import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicPlayerAttributes;
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 
 /**

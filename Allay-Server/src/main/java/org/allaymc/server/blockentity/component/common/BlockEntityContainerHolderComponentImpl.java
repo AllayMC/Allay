@@ -13,7 +13,6 @@ import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.identifier.Identifier;
-import org.allaymc.api.utils.MathUtils;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;

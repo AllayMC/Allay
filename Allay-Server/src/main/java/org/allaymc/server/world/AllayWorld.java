@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -17,7 +17,10 @@ import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Allay Project 2023/7/1

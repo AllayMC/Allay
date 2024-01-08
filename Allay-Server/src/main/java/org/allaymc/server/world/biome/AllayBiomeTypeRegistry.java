@@ -1,11 +1,11 @@
 package org.allaymc.server.world.biome;
 
+import lombok.SneakyThrows;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.world.biome.BiomeData;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
-import lombok.SneakyThrows;
 import org.cloudburstmc.nbt.MutableNbtMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;

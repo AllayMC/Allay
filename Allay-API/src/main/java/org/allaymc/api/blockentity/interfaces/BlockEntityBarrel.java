@@ -5,7 +5,6 @@ import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderCo
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.container.impl.BarrelContainer;
-import org.joml.Vector3i;
 
 import static org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory.getFactory;
 

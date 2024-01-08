@@ -1,8 +1,8 @@
 package org.allaymc.server.component.event;
 
-import org.allaymc.api.component.interfaces.ComponentEvent;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.component.interfaces.ComponentEvent;
 
 /**
  * Allay Project 2023/5/6

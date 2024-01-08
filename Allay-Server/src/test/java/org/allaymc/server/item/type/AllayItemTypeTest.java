@@ -3,7 +3,6 @@ package org.allaymc.server.item.type;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
-import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;

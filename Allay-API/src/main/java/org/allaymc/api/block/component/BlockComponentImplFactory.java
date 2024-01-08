@@ -7,7 +7,6 @@ import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.common.BlockEntityHolderComponent;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 

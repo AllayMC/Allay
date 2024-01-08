@@ -1,6 +1,5 @@
 package org.allaymc.server.block.type;
 
-import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
 import org.allaymc.api.block.component.common.BlockAttributes;
 import org.allaymc.api.block.interfaces.candle.BlockBlueCandleBehavior;
 import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanBehavior;
@@ -15,6 +14,7 @@ import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.server.block.component.TestComponentImpl;
 import org.allaymc.server.block.component.TestComponentImplV2;
 import org.allaymc.server.block.component.TestCustomBlockComponentImpl;
+import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

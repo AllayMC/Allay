@@ -1,10 +1,10 @@
 package org.allaymc.server.item;
 
 import org.allaymc.api.item.component.common.ItemBaseComponent;
-import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
+import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

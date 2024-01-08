@@ -4,10 +4,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.command.SenderType;
+import org.allaymc.api.command.exception.CommandParseException;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.command.exception.CommandParseException;
 
 import java.util.ArrayList;
 import java.util.List;

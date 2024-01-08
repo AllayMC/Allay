@@ -2,10 +2,8 @@ package org.allaymc.api.item.descriptor;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 
 /**
  * Allay Project 2023/11/26

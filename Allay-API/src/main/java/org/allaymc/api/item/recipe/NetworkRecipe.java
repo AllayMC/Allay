@@ -1,7 +1,5 @@
 package org.allaymc.api.item.recipe;
 
-import org.allaymc.api.item.recipe.input.Input;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**

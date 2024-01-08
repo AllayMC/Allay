@@ -4,8 +4,6 @@ import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.FullContainerType;
 import org.joml.Vector3ic;
 
-import java.util.function.Supplier;
-
 /**
  * Allay Project 2023/9/15
  *
