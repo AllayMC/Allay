@@ -6,9 +6,12 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.entity.init.SimpleEntityInitInfo;
+import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 
 import java.util.List;
@@ -81,6 +84,26 @@ public class GameTestCommand extends SimpleCommand {
                     String key = context.getResult(1);
                     List<String> args = context.getResult(2);
                     player.sendTr(key, true, args.toArray(String[]::new));
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("spawn")
+                .str("entityType")
+                .exec((context, player) -> {
+                    var entityType = EntityTypeRegistry.getRegistry().get(new Identifier((String)context.getResult(1)));
+                    if (entityType == null) {
+                        context.addOutput("§cUnknown entity type!");
+                        return context.failed();
+                    }
+                    var dim = player.getLocation().dimension();
+                    var loc = player.getLocation();
+                    var entity = entityType.createEntity(
+                            SimpleEntityInitInfo.builder()
+                                    .dimension(dim)
+                                    .loc(loc)
+                                    .build()
+                    );
+                    dim.getEntityUpdateService().addEntity(entity);
                     return context.success();
                 }, SenderType.PLAYER);
     }

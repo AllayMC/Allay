@@ -185,7 +185,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             server.sendFullPlayerListInfoTo(player);
         }
 
-        player.sendAttributesToClient();
+        player.sendAttributesIfIsPlayer();
 
         sendInventories();
 

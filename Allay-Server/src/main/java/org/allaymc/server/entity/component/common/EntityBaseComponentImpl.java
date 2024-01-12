@@ -149,10 +149,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                 // So we set dead back to false
                 dead = false;
             }
+            return;
         }
     }
 
     protected void checkDead() {
+        if (attributeComponent == null) return;
         if (attributeComponent.getHealth() < 1) {
             attributeComponent.setHealth(0);
             dead = true;

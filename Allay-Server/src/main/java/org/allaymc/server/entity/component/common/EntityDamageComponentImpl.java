@@ -25,5 +25,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public void attack(DamageContainer damage) {
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
+        if (damage.getAttacker() != null) {
+            baseComponent.knockback(damage.getAttacker().getLocation());
+        }
     }
 }

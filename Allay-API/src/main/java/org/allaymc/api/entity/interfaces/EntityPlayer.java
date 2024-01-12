@@ -5,6 +5,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerViewerComponent;
+import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
@@ -31,7 +32,8 @@ public interface EntityPlayer extends
         EntityPlayerNetworkComponent,
         EntityPlayerAttributeComponent,
         EntityPlayerContainerHolderComponent,
-        EntityContainerViewerComponent {
+        EntityContainerViewerComponent,
+        EntityDamageComponent {
   EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder
           .builder(EntityPlayer.class)
           .vanillaEntity(VanillaEntityId.PLAYER)
@@ -40,6 +42,7 @@ public interface EntityPlayer extends
           .addComponent(getFactory().createEntityAttributeComponent(basicPlayerAttributes()))
           .addComponent(getFactory().createEntityPlayerContainerHolderComponent())
           .addComponent(getFactory().createEntityPlayerContainerViewerComponent())
+          .addComponent(getFactory().createEntityDamageComponent())
           .build();
 
   default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {

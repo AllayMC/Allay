@@ -1,6 +1,5 @@
 package org.allaymc.api.entity.component.common;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
@@ -19,12 +18,24 @@ import java.util.List;
  */
 public interface EntityAttributeComponent extends EntityComponent {
     static List<AttributeType> basicPlayerAttributes() {
-        return Lists.newArrayList(
-                AttributeType.HEALTH,
+        var list = basicEntityAttributes();
+        list.addAll(Lists.newArrayList(
                 AttributeType.PLAYER_HUNGER,
-                AttributeType.MOVEMENT,
+                AttributeType.PLAYER_SATURATION,
+                AttributeType.PLAYER_EXHAUSTION,
                 AttributeType.PLAYER_LEVEL,
                 AttributeType.PLAYER_EXPERIENCE
+        ));
+        return list;
+    }
+
+    static List<AttributeType> basicEntityAttributes() {
+        return Lists.newArrayList(
+                AttributeType.ABSORPTION,
+                AttributeType.KNOCKBACK_RESISTANCE,
+                AttributeType.HEALTH,
+                AttributeType.MOVEMENT,
+                AttributeType.FALL_DAMAGE
         );
     }
 
@@ -54,5 +65,5 @@ public interface EntityAttributeComponent extends EntityComponent {
         return list;
     }
 
-    void sendAttributesToClient();
+    void sendAttributesIfIsPlayer();
 }

@@ -105,6 +105,7 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
                         } else {
                             return;
                         }
+                        // TODO: Check whether the player can touch the target entity or not (to prevent cheater)
                         var itemInHand = player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
                         var itemAttackDamage = itemInHand.calculateAttackDamage();
                         damageable.attack(player, itemAttackDamage);

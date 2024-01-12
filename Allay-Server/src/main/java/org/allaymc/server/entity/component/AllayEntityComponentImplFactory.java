@@ -12,6 +12,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.common.EntityContainerHolderComponentImpl;
+import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.item.EntityItemBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
@@ -65,5 +66,10 @@ public class AllayEntityComponentImplFactory implements EntityComponentImplFacto
     @Override
     public ComponentProvider<EntityComponent> createEntityPlayerNetworkComponent() {
         return new SimpleComponentProvider<>(info -> new EntityPlayerNetworkComponentImpl(), EntityPlayerNetworkComponentImpl.class);
+    }
+
+    @Override
+    public ComponentProvider<EntityComponent> createEntityDamageComponent() {
+        return new SimpleComponentProvider<>(info -> new EntityDamageComponentImpl(), EntityDamageComponentImpl.class);
     }
 }

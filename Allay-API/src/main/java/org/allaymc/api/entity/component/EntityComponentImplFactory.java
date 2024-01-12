@@ -36,4 +36,6 @@ public interface EntityComponentImplFactory {
     ComponentProvider<EntityComponent> createEntityPlayerContainerViewerComponent();
 
     ComponentProvider<EntityComponent> createEntityPlayerNetworkComponent();
+
+    ComponentProvider<EntityComponent> createEntityDamageComponent();
 }
