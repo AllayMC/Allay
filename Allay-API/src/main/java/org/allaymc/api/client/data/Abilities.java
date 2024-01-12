@@ -36,8 +36,8 @@ public final class Abilities {
     @Getter
     private float flySpeed = DEFAULT_FLY_SPEED;
     @Getter
-    @Setter
-    private boolean sendToClient;
+    private boolean dirty = false;
+
 
     public Abilities(EntityPlayer player) {
         this.player = player;
@@ -54,7 +54,6 @@ public final class Abilities {
     }
 
     public void applyGameType(GameType gameType) {
-        setSendToClient(false);
         var tree = player.getPermTree();
         // 只设置必须设置的权限
         tree.setPerm(PermKeys.BUILD, gameType != GameType.SPECTATOR);
@@ -72,29 +71,27 @@ public final class Abilities {
         // 这边设置这个OPERATOR_COMMANDS的目的仅仅是让OP客户端能显示快捷指令
         set(Ability.OPERATOR_COMMANDS, player.isOp());
         set(Ability.TELEPORT, true);
-        setSendToClient(true);
-        sendToClient();
+        sync();
     }
 
     public void set(Ability ability, boolean value) {
         if (value) abilities.add(ability);
         else abilities.remove(ability);
-        sendToClient();
+        dirty = true;
     }
 
     public void setWalkSpeed(float walkSpeed) {
         this.walkSpeed = walkSpeed;
-        sendToClient();
+        dirty = true;
     }
 
     public void setFlySpeed(float flySpeed) {
         this.flySpeed = flySpeed;
-        sendToClient();
+        dirty = true;
     }
 
     public void setFlying(boolean flying) {
         set(Ability.FLYING, flying);
-        sendToClient();
     }
 
     private Consumer<PermTree.PermChangeType> syncTo(Ability ability) {
@@ -110,12 +107,11 @@ public final class Abilities {
                 if (reverse) abilities.add(ability);
                 else abilities.remove(ability);
             }
-            sendToClient();
         };
     }
 
-    public void sendToClient() {
-        if (!sendToClient) return;
+    public void sync() {
+        if (!dirty) return;
         UpdateAbilitiesPacket updateAbilitiesPacket = createUpdateAbilitiesPacket();
 
         AbilityLayer abilityLayer = new AbilityLayer();
@@ -131,6 +127,7 @@ public final class Abilities {
         updateAbilitiesPacket.getAbilityLayers().add(abilityLayer);
 
         player.sendPacket(updateAbilitiesPacket);
+        dirty = false;
     }
 
     @NotNull

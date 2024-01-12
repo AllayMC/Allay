@@ -100,8 +100,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-        metadata.setString(EntityDataTypes.NAME, displayName);
-        sendEntityData(EntityDataTypes.NAME);
+        setAndSendEntityData(EntityDataTypes.NAME, displayName);
     }
 
     @Override
@@ -111,8 +110,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         this.adventureSettings.applyGameType(gameType);
         this.abilities.applyGameType(gameType);
 
-        this.metadata.setFlag(EntityFlag.SILENT, gameType == GameType.SPECTATOR);
-        this.metadata.setFlag(EntityFlag.HAS_COLLISION, gameType != GameType.SPECTATOR);
+        setAndSendEntityFlag(EntityFlag.SILENT, gameType == GameType.SPECTATOR);
+        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, gameType != GameType.SPECTATOR);
 
         var pk = new UpdatePlayerGameTypePacket();
         pk.setGameType(gameType);
@@ -124,7 +123,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void tick() {
         super.tick();
+        syncData();
         tryPickUpItems();
+    }
+
+    protected void syncData() {
+        abilities.sync();
+        adventureSettings.sync();
     }
 
     protected void tryPickUpItems() {
@@ -201,57 +206,52 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public boolean isSprinting() {
-        return metadata.getFlag(EntityFlag.SPRINTING);
+        return metadata.get(EntityFlag.SPRINTING);
     }
 
     @Override
     public void setSprinting(boolean sprinting) {
-        metadata.setFlag(EntityFlag.SPRINTING, sprinting);
-        sendEntityFlags(EntityFlag.SPRINTING);
+        setAndSendEntityFlag(EntityFlag.SPRINTING, sprinting);
     }
 
     @Override
     public boolean isSneaking() {
-        return metadata.getFlag(EntityFlag.SNEAKING);
+        return metadata.get(EntityFlag.SNEAKING);
     }
 
     @Override
     public void setSneaking(boolean sneaking) {
-        metadata.setFlag(EntityFlag.SNEAKING, sneaking);
-        sendEntityFlags(EntityFlag.SNEAKING);
+        setAndSendEntityFlag(EntityFlag.SNEAKING, sneaking);
     }
 
     @Override
     public boolean isSwimming() {
-        return metadata.getFlag(EntityFlag.SWIMMING);
+        return metadata.get(EntityFlag.SWIMMING);
     }
 
     @Override
     public void setSwimming(boolean swimming) {
-        metadata.setFlag(EntityFlag.SWIMMING, swimming);
-        sendEntityFlags(EntityFlag.SWIMMING);
+        setAndSendEntityFlag(EntityFlag.SWIMMING, swimming);
     }
 
     @Override
     public boolean isGliding() {
-        return metadata.getFlag(EntityFlag.GLIDING);
+        return metadata.get(EntityFlag.GLIDING);
     }
 
     @Override
     public void setGliding(boolean gliding) {
-        metadata.setFlag(EntityFlag.GLIDING, gliding);
-        sendEntityFlags(EntityFlag.GLIDING);
+        setAndSendEntityFlag(EntityFlag.GLIDING, gliding);
     }
 
     @Override
     public boolean isCrawling() {
-        return metadata.getFlag(EntityFlag.CRAWLING);
+        return metadata.get(EntityFlag.CRAWLING);
     }
 
     @Override
     public void setCrawling(boolean crawling) {
-        metadata.setFlag(EntityFlag.CRAWLING, crawling);
-        sendEntityFlags(EntityFlag.CRAWLING);
+        setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
     }
 
     @Override

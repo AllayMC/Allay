@@ -37,7 +37,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     protected void initMetadata() {
         super.initMetadata();
-        metadata.setFlag(EntityFlag.HAS_COLLISION, false);
+        metadata.set(EntityFlag.HAS_COLLISION, false);
     }
 
     @Override

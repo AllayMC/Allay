@@ -74,12 +74,36 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void sendEntityFlags(EntityFlag... flags);
 
+    default <T> void setAndSendEntityData(EntityDataType<T> dataType, T value) {
+        getMetadata().set(dataType, value);
+        sendEntityData(dataType);
+    }
+
+    default void setAndSendEntityFlag(EntityFlag flag, boolean value) {
+        getMetadata().set(flag, true);
+        sendEntityFlags(flag);
+    }
+
+    default void addAndSendEntityFlags(EntityFlag... flags) {
+        for (EntityFlag flag : flags) {
+            getMetadata().set(flag, true);
+        }
+        sendEntityFlags(flags);
+    }
+
+    default void removeAndSendEntityFlags(EntityFlag... flags) {
+        for (EntityFlag flag : flags) {
+            getMetadata().set(flag, false);
+        }
+        sendEntityFlags(flags);
+    }
+
     AABBfc getAABB();
 
     void setAABB(AABBf aabb);
 
     default boolean hasEntityCollision() {
-        return getMetadata().getFlag(EntityFlag.HAS_COLLISION);
+        return getMetadata().get(EntityFlag.HAS_COLLISION);
     }
 
     void setHasEntityCollision(boolean hasEntityCollision);
@@ -184,7 +208,7 @@ public interface EntityBaseComponent extends EntityComponent {
     }
 
     default boolean hasGravity() {
-        return getMetadata().getFlag(EntityFlag.HAS_GRAVITY);
+        return getMetadata().get(EntityFlag.HAS_GRAVITY);
     }
 
     void setHasGravity(boolean hasGravity);

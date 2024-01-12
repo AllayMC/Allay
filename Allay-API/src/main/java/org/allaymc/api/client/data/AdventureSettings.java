@@ -27,59 +27,54 @@ public final class AdventureSettings {
     private boolean showNameTags = true;
     private boolean autoJump = true;
     @Getter
-    @Setter
-    private boolean sendToClient = true;
+    private boolean dirty = false;
 
     public AdventureSettings(EntityPlayer player) {
         this.player = player;
         var tree = player.getPermTree();
         tree.registerPermListener(PermKeys.PVM, type -> {
             noPVM = type == REMOVE;
-            sendToClient();
         });
         tree.registerPermListener(PermKeys.MVP, type -> {
             noMVP = type == REMOVE;
-            sendToClient();
         });
     }
 
     public void applyGameType(GameType gameType) {
-        sendToClient(false);
         player.getPermTree().setPerm(PermKeys.PVM, gameType == SPECTATOR);
         player.getPermTree().setPerm(PermKeys.MVP, gameType == SPECTATOR);
         immutableWorld = gameType == SPECTATOR;
         showNameTags = gameType != SPECTATOR;
-        sendToClient(true);
-        sendToClient();
+        sync();
     }
 
     public void setNoPVM(boolean noPVM) {
         this.noPVM = noPVM;
-        sendToClient();
+        dirty = true;
     }
 
     public void setNoMVP(boolean noMVP) {
         this.noMVP = noMVP;
-        sendToClient();
+        dirty = true;
     }
 
     public void setImmutableWorld(boolean immutableWorld) {
         this.immutableWorld = immutableWorld;
-        sendToClient();
+        dirty = true;
     }
 
     public void setShowNameTags(boolean showNameTags) {
         this.showNameTags = showNameTags;
-        sendToClient();
+        dirty = true;
     }
 
     public void setAutoJump(boolean autoJump) {
         this.autoJump = autoJump;
-        sendToClient();
+        dirty = true;
     }
 
-    public void sendToClient() {
-        if (!sendToClient) return;
+    public void sync() {
+        if (!dirty) return;
         UpdateAdventureSettingsPacket updateAdventureSettingsPacket = new UpdateAdventureSettingsPacket();
         updateAdventureSettingsPacket.setAutoJump(autoJump);
         updateAdventureSettingsPacket.setImmutableWorld(immutableWorld);
@@ -88,5 +83,6 @@ public final class AdventureSettings {
         updateAdventureSettingsPacket.setShowNameTags(showNameTags);
 
         player.sendPacket(updateAdventureSettingsPacket);
+        dirty = false;
     }
 }

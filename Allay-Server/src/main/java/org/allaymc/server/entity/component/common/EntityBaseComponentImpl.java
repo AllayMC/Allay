@@ -95,14 +95,14 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     protected void initMetadata() {
-        metadata.setInt(EntityDataTypes.PLAYER_INDEX, 0);
-        metadata.setShort(EntityDataTypes.AIR_SUPPLY, (short) 400);
-        metadata.setShort(EntityDataTypes.AIR_SUPPLY_MAX, (short) 400);
+        metadata.set(EntityDataTypes.PLAYER_INDEX, 0);
+        metadata.set(EntityDataTypes.AIR_SUPPLY, (short) 400);
+        metadata.set(EntityDataTypes.AIR_SUPPLY_MAX, (short) 400);
         updateHitBoxAndCollisionBoxMetadata();
-        metadata.setFlag(EntityFlag.HAS_GRAVITY, true);
-        metadata.setFlag(EntityFlag.HAS_COLLISION, true);
-        metadata.setFlag(EntityFlag.CAN_CLIMB, true);
-        metadata.setFlag(EntityFlag.BREATHING, true);
+        metadata.set(EntityFlag.HAS_GRAVITY, true);
+        metadata.set(EntityFlag.HAS_COLLISION, true);
+        metadata.set(EntityFlag.CAN_CLIMB, true);
+        metadata.set(EntityFlag.BREATHING, true);
     }
 
     private NbtMap buildAABBTag() {
@@ -120,8 +120,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     private void updateHitBoxAndCollisionBoxMetadata() {
-        metadata.setNBT(EntityDataTypes.HITBOX, buildAABBTag());
-        metadata.setVector3f(EntityDataTypes.COLLISION_BOX,
+        metadata.set(EntityDataTypes.HITBOX, buildAABBTag());
+        metadata.set(EntityDataTypes.COLLISION_BOX,
                 org.cloudburstmc.math.vector.Vector3f.from(
                         aabb.maxX() - aabb.minX(),
                         aabb.maxY() - aabb.minY(),
@@ -282,7 +282,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var pk = new SetEntityDataPacket();
         pk.setRuntimeEntityId(uniqueId);
         for (EntityFlag flag : flags) {
-            pk.getMetadata().setFlag(flag, metadata.getFlag(flag));
+            pk.getMetadata().setFlag(flag, metadata.get(flag));
         }
         pk.setTick(this.getWorld().getTick());
         sendPacketToViewers(pk);
@@ -302,7 +302,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void setHasEntityCollision(boolean hasEntityCollision) {
-        metadata.setFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
+        metadata.set(EntityFlag.HAS_COLLISION, hasEntityCollision);
         sendEntityFlags(EntityFlag.HAS_COLLISION);
     }
 
@@ -336,7 +336,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void setHasGravity(boolean hasGravity) {
-        metadata.setFlag(EntityFlag.HAS_GRAVITY, hasGravity);
+        metadata.set(EntityFlag.HAS_GRAVITY, hasGravity);
         sendEntityFlags(EntityFlag.HAS_GRAVITY);
     }
 
@@ -568,11 +568,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             int g = (color[1] / count) & 0xff;
             int b = (color[2] / count) & 0xff;
 
-            this.metadata.setInt(EntityDataTypes.EFFECT_COLOR, (r << 16) + (g << 8) + b);
-            this.metadata.setByte(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
+            this.metadata.set(EntityDataTypes.EFFECT_COLOR, (r << 16) + (g << 8) + b);
+            this.metadata.set(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
         } else {
-            this.metadata.setInt(EntityDataTypes.EFFECT_COLOR, 0);
-            this.metadata.setByte(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
+            this.metadata.set(EntityDataTypes.EFFECT_COLOR, 0);
+            this.metadata.set(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
         }
 
         sendEntityData(EntityDataTypes.EFFECT_COLOR, EntityDataTypes.EFFECT_AMBIENCE);
