@@ -6,7 +6,6 @@ import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.jetbrains.annotations.Range;
 
 /**
  * Allay Project 2023/7/22
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.Range;
 public class PlayerInventoryContainer extends BaseContainer {
 
     @Setter
-    @Range(from = 0, to = 8)
     protected int handSlot = 0;
     protected EntityPlayer player;
 

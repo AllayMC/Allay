@@ -8,7 +8,6 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 
 /**
@@ -33,7 +32,7 @@ public class SimpleEntityInitInfo<T extends Entity> implements EntityInitInfo<T>
         return dimension;
     }
 
-    @Nullable
+
     @Override
     public NbtMap nbt() {
         return nbt;

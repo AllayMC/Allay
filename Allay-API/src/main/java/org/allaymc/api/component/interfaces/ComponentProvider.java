@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.identifier.Identifier;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,13 +48,7 @@ public interface ComponentProvider<T extends Component> {
     Class<?> getComponentClass();
 
     @SneakyThrows
-    @Nullable
-    default Identifier findComponentIdentifier() {
-        return findComponentIdentifier(getComponentClass());
-    }
 
-    @SneakyThrows
-    @Nullable
     static Identifier findComponentIdentifier(Class<?> clazz) {
         Identifier identifier = null;
         while (identifier == null) {
@@ -67,7 +60,7 @@ public interface ComponentProvider<T extends Component> {
     }
 
     @SneakyThrows
-    @Nullable
+
     static Identifier findComponentIdentifierInCertainClass(Class<?> clazz) {
         for (var field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(ComponentIdentifier.class) && Identifier.class == field.getType() && isStatic(field.getModifiers())) {
@@ -76,6 +69,12 @@ public interface ComponentProvider<T extends Component> {
             }
         }
         return null;
+    }
+
+    @SneakyThrows
+
+    default Identifier findComponentIdentifier() {
+        return findComponentIdentifier(getComponentClass());
     }
 
     @AllArgsConstructor

@@ -4,7 +4,6 @@ import org.allaymc.api.command.tree.BaseNode;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
-import org.jetbrains.annotations.Range;
 
 /**
  * Allay Project 2023/12/29
@@ -33,7 +32,7 @@ public class RootNode extends BaseNode {
     }
 
     @Override
-    public CommandNode up(@Range(from = 1, to = Integer.MAX_VALUE) int count) {
+    public CommandNode up(int count) {
         throw new UnsupportedOperationException("Cannot call up() on root node");
     }
 

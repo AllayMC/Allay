@@ -20,11 +20,8 @@ import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.heightmap.HeightMap;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
 import java.util.Collections;
@@ -73,10 +70,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         } while (!STATE_FIELD.compareAndSet(this, curr, next));
     }
 
-    @ApiStatus.Internal
-    @Nullable
-    public ChunkSection getSection(@Range(from = -32, to = 31) int sectionY) {
-        return sections[sectionY - this.getDimensionInfo().minSectionY()];
+    private static void checkXYZ(int x, int y, int z) {
+        Preconditions.checkArgument(x >= 0 && x <= 15);
+        Preconditions.checkArgument(y >= -512 && y <= 511);
+        Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
     @Override
@@ -86,8 +83,15 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @ApiStatus.Internal
-    @NotNull
-    public ChunkSection getOrCreateSection(@Range(from = -32, to = 31) int sectionY) {
+
+    public ChunkSection getSection(int sectionY) {
+        Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
+        return sections[sectionY - this.getDimensionInfo().minSectionY()];
+    }
+
+    @ApiStatus.Internal
+    public ChunkSection getOrCreateSection(int sectionY) {
+        Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
         int minSectionY = this.getDimensionInfo().minSectionY();
         int offsetY = sectionY - minSectionY;
         for (int i = 0; i <= offsetY; i++) {
@@ -98,9 +102,14 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return sections[offsetY];
     }
 
+    //基岩版3d-data保存heightMap是以0为索引保存的，所以这里需要减去/加上世界最小值，详情查看
+    //Bedrock Edition 3d-data saves the height map start from index of 0, so need to subtract/add the world minimum height here, see for details:
+    //https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
+
     @UnmodifiableView
     @Override
-    public Collection<BlockEntity> getSectionBlockEntities(@Range(from = -32, to = 31) int sectionY) {
+    public Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
+        Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
         var sectionBlockEntities = new HashSet<BlockEntity>();
         for (var entry : getBlockEntities().entrySet()) {
             var blockEntity = entry.getValue();
@@ -111,19 +120,21 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return Collections.unmodifiableCollection(sectionBlockEntities);
     }
 
-    //基岩版3d-data保存heightMap是以0为索引保存的，所以这里需要减去/加上世界最小值，详情查看
-    //Bedrock Edition 3d-data saves the height map start from index of 0, so need to subtract/add the world minimum height here, see for details:
-    //https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
-
-    public int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
+    public int getHeight(int x, int z) {
+        Preconditions.checkArgument(x >= 0 && x <= 15);
+        Preconditions.checkArgument(z >= 0 && z <= 15);
         return this.heightMap.get(x, z) + dimensionInfo.minHeight();
     }
 
-    public void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, @Range(from = -512, to = 511) int height) {
+    public void setHeight(int x, int z, int height) {
+        Preconditions.checkArgument(x >= 0 && x <= 15);
+        Preconditions.checkArgument(z >= 0 && z <= 15);
+        Preconditions.checkArgument(height >= -512 && height <= 511);
         this.heightMap.set(x, z, (short) (height - dimensionInfo.minHeight()));
     }
 
-    public BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int layer) {
+    public BlockState getBlockState(int x, int y, int z, int layer) {
+        checkXYZ(x, y, z);
         if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
             return BlockAirBehavior.AIR_TYPE.getDefaultState();
         ChunkSection section = this.getSection(y >> 4);
@@ -136,7 +147,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return blockState;
     }
 
-    public void setBlockState(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer) {
+    public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
+        checkXYZ(x, y, z);
         int sectionY = y >> 4;
         ChunkSection section = this.getSection(sectionY);
         if (section == null) {
@@ -145,44 +157,49 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         section.setBlockState(x, y & 0xf, z, blockState, layer);
     }
 
-    public @Range(from = 0, to = 15) int getBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
-        ChunkSection section = this.getSection(y >> 4);
-        return section == null ? 0 : section.getBlockLight(x, y & 0xf, z);
-    }
-
     @Override
     public short[] getHeightArray() {
         return this.heightMap.getHeights();
     }
 
-    public @Range(from = 0, to = 15) int getSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
+    public int getBlockLight(int x, int y, int z) {
+        checkXYZ(x, y, z);
+        ChunkSection section = this.getSection(y >> 4);
+        return section == null ? 0 : section.getBlockLight(x, y & 0xf, z);
+    }
+
+    public int getSkyLight(int x, int y, int z) {
+        checkXYZ(x, y, z);
         ChunkSection section = this.getSection(y >> 4);
         return section == null ? 0 : section.getSkyLight(x, y & 0xf, z);
     }
 
-    public void setBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
+    public void setBlockLight(int x, int y, int z, int light) {
         this.getOrCreateSection(y >> 4).setBlockLight(x, y & 0xf, z, (byte) light);
     }
 
-    public void setSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, int light) {
+    public void setSkyLight(int x, int y, int z, int light) {
+        checkXYZ(x, y, z);
         this.getOrCreateSection(y >> 4).setSkyLight(x, y & 0xf, z, (byte) light);
     }
 
     @Override
-    public void setBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType) {
+    public void setBiome(int x, int y, int z, BiomeType biomeType) {
         this.getOrCreateSection(y >> 4).setBiomeType(x, y & 0xf, z, biomeType);
     }
 
     @Override
-    public BiomeType getBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z) {
+    public BiomeType getBiome(int x, int y, int z) {
+        checkXYZ(x, y, z);
         return this.getOrCreateSection(y >> 4).getBiomeType(x, y & 0xf, z);
     }
 
-    public void addEntity(@NotNull Entity entity) {
+    public void addEntity(Entity entity) {
+        Preconditions.checkNotNull(entity);
         entities.put(entity.getUniqueId(), entity);
     }
 
-    @Nullable
+
     public Entity removeEntity(long uniqueId) {
         return entities.remove(uniqueId);
     }
@@ -198,7 +215,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public void addBlockEntity(@NotNull BlockEntity blockEntity) {
+    public void addBlockEntity(BlockEntity blockEntity) {
+        Preconditions.checkNotNull(blockEntity);
         var pos = blockEntity.getPosition();
         var key = HashUtils.hashChunkXYZ(pos.x(), pos.y(), pos.z());
         blockEntities.put(key, blockEntity);

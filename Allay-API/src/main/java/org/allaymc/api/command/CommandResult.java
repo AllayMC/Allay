@@ -2,14 +2,12 @@ package org.allaymc.api.command;
 
 import org.allaymc.api.command.tree.CommandContext;
 
-import javax.annotation.Nullable;
-
 /**
  * Allay Project 2023/12/29
  *
  * @author daoge_cmd
  */
-public record CommandResult(int status, @Nullable CommandContext context) {
+public record CommandResult(int status, CommandContext context) {
 
     public static int FAILED_STATUS = 0;
     public static int SUCCESS_STATUS = 1;

@@ -8,7 +8,6 @@ import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.identifier.Identified;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.type.ItemType;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
@@ -36,7 +35,6 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     Map<Integer, BlockState> getBlockStateHashMap();
 
     @UnmodifiableView
-    @Nullable
     Map<Long, BlockState> getSpecialValueMap();
 
     byte getSpecialValueBits();

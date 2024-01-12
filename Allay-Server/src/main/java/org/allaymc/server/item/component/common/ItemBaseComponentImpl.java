@@ -26,7 +26,6 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -219,7 +218,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    @Nullable
+
     public NbtMap saveExtraTag() {
         NbtMapBuilder nbtBuilder = NbtMap.builder();
         if (durability != 0) {
@@ -260,7 +259,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public boolean useItemOn(
-            @Nullable EntityPlayer player, ItemStack itemStack,
+            EntityPlayer player, ItemStack itemStack,
             Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace) {
         if (itemStack.getItemType().getBlockType() == null)
@@ -269,7 +268,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         return tryPlaceBlockState(player, itemStack, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
     }
 
-    protected boolean tryPlaceBlockState(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
+    protected boolean tryPlaceBlockState(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
         if (player != null && hasEntityCollision(dimension, placeBlockPos, blockState))
             return false;
         BlockType<?> blockType = blockState.getBlockType();

@@ -47,7 +47,6 @@ import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.joml.Vector3ic;
 
-import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
 import java.util.List;
 import java.util.Queue;
@@ -73,7 +72,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Getter
     protected boolean networkEncryptionEnabled = false;
     @Getter
-    @Nullable
+
     protected SecretKey encryptionSecretKey;
     @ComponentedObject
     protected EntityPlayer player;

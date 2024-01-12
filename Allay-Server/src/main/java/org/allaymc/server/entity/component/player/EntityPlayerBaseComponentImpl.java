@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.client.data.Abilities;
@@ -41,7 +42,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.jetbrains.annotations.Range;
 import org.joml.primitives.AABBf;
 
 import java.util.List;
@@ -260,7 +260,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void setHandSlot(@Range(from = 0, to = 8) int handSlot) {
+    public void setHandSlot(int handSlot) {
+        Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
         var inv = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
         inv.setHandSlot(handSlot);
         var itemStack = inv.getItemStack(handSlot);

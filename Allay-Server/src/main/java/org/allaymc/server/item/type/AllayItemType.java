@@ -29,7 +29,6 @@ import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.item.component.common.ItemAttributeComponentImpl;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
 import java.util.*;
@@ -52,7 +51,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @Getter
     private final Set<ItemTag> itemTags;
     @Getter
-    @Nullable
+
     private BlockType<?> blockTypeCache;
     private boolean haveTriedInitBlockTypeCache;
 
@@ -99,7 +98,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     }
 
     @Override
-    public @Nullable BlockType<?> getBlockType() {
+    public BlockType<?> getBlockType() {
         if (!haveTriedInitBlockTypeCache) {
             // Try to find out if this item type has a corresponding block type
             var blockIdentifier = BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier);

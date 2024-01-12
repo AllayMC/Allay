@@ -3,7 +3,6 @@ package org.allaymc.server.network;
 import org.allaymc.server.network.processor.*;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 
@@ -15,7 +14,7 @@ import java.util.EnumMap;
 public final class DataPacketProcessorHolder {
     private final EnumMap<BedrockPacketType, DataPacketProcessor<BedrockPacket>> processorEnumMap = new EnumMap<>(BedrockPacketType.class);
 
-    public @Nullable DataPacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
+    public DataPacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
         return processorEnumMap.get(packet.getPacketType());
     }
 

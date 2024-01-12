@@ -1,7 +1,5 @@
 package org.allaymc.api.registry;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -26,7 +24,7 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
      * @param key the key
      * @return the value registered by the given key.
      */
-    @Nullable
+
     default VALUE get(KEY key) {
         return getContent().get(key);
     }

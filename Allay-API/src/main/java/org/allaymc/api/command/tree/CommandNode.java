@@ -5,9 +5,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.entity.Entity;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
-import org.jetbrains.annotations.Range;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -51,7 +49,7 @@ public interface CommandNode {
 
     CommandNode optional();
 
-    @Nullable
+
     CommandNode getOptionalLeaf();
 
     void setOptionalLeaf(CommandNode optionalLeaf);
@@ -68,7 +66,7 @@ public interface CommandNode {
 
     CommandNode parent();
 
-    CommandNode up(@Range(from = 1, to = Integer.MAX_VALUE) int count);
+    CommandNode up(int count);
 
     default CommandNode up() {
         return up(1);
@@ -80,7 +78,7 @@ public interface CommandNode {
 
     boolean match(CommandContext context);
 
-    @Nullable
+
     CommandNode nextNode(CommandContext context);
 
     boolean isLeaf();

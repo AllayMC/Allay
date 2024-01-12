@@ -8,6 +8,7 @@ import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
 import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.block.function.Place;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -17,8 +18,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -60,7 +59,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public boolean place(@Nullable EntityPlayer player, @NotNull Dimension dimension, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {
+    public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        Place.checkParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         return true;
     }
@@ -76,7 +76,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+    public boolean onInteract(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
         var event = new BlockOnInteractEvent(player, itemStack, dimension, blockPos, placeBlockPos, clickPos, blockFace, false);
         manager.callEvent(event);
         return event.success();

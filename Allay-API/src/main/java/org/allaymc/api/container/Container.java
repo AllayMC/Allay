@@ -9,7 +9,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3ic;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -79,7 +78,7 @@ public interface Container {
 
     void removeViewer(ContainerViewer viewer);
 
-    @Nullable
+
     ContainerViewer removeViewer(byte viewerId);
 
     void onSlotChange(int slot);

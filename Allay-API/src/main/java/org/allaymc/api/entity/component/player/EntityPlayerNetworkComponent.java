@@ -9,7 +9,6 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
 
-import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
 import java.util.UUID;
 
@@ -57,7 +56,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     boolean isNetworkEncryptionEnabled();
 
-    @Nullable
+
     SecretKey getEncryptionSecretKey();
 
     /**

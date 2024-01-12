@@ -7,7 +7,6 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.jetbrains.annotations.Range;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
 
@@ -33,7 +32,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     int getHandSlot();
 
-    void setHandSlot(@Range(from = 0, to = 8) int handSlot);
+    void setHandSlot(int handSlot);
 
     @Override
     default float getBaseOffset() {

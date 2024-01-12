@@ -22,7 +22,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
 import java.util.*;
@@ -119,7 +118,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 .build();
     }
 
-    @NotNull
+
     private List<ItemStack> parseOutputs(JsonObject obj) {
         // Outputs
         // Multi output is possible

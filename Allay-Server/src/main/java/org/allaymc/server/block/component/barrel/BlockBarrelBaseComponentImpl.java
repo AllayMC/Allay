@@ -3,14 +3,13 @@ package org.allaymc.server.block.component.barrel;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.function.Place;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -29,7 +28,8 @@ public class BlockBarrelBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean place(@Nullable EntityPlayer player, @NotNull Dimension dimension, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {
+    public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        Place.checkParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         if (player != null) {
             if (abs(player.getLocation().x() - placeBlockPos.x()) < 2 && abs(player.getLocation().z() - placeBlockPos.z()) < 2) {
                 var y = player.getLocation().y() + player.getEyeHeight();

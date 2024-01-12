@@ -7,7 +7,6 @@ import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -19,7 +18,7 @@ import java.util.function.Consumer;
 @Getter
 public class AllayPermTree implements PermTree {
 
-    @Nullable
+
     @Getter
     protected PermTree parent;
     protected PermNode root = new AllayRootPermNode("ROOT");
@@ -193,7 +192,7 @@ public class AllayPermTree implements PermTree {
         }
     }
 
-    @Nullable
+
     protected Consumer<PermChangeType> findListener(String perm) {
         for (var entry : listeners.entrySet()) {
             var listenedPerm = entry.getKey();

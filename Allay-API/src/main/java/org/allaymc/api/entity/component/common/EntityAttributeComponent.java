@@ -1,5 +1,6 @@
 package org.allaymc.api.entity.component.common;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
@@ -7,7 +8,6 @@ import org.allaymc.api.entity.component.EntityComponent;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.jetbrains.annotations.Range;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +40,8 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     float getAttributeValue(AttributeType attributeType);
 
-    default void setHealth(@Range(from = 0, to = Integer.MAX_VALUE) float value) {
+    default void setHealth(float value) {
+        Preconditions.checkArgument(value >= 0);
         setAttribute(AttributeType.HEALTH, value);
     }
 

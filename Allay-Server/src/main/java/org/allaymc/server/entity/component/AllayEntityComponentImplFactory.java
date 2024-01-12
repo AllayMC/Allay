@@ -19,7 +19,6 @@ import org.allaymc.server.entity.component.player.EntityPlayerContainerViewerCom
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.joml.primitives.AABBfc;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -39,7 +38,7 @@ public class AllayEntityComponentImplFactory implements EntityComponentImplFacto
     }
 
     @Override
-    public ComponentProvider<EntityComponent> createEntityItemBaseComponent(@Nullable ItemStack itemStack) {
+    public ComponentProvider<EntityComponent> createEntityItemBaseComponent(ItemStack itemStack) {
         return new SimpleComponentProvider<EntityComponent, EntityInitInfo<EntityItem>>(info -> new EntityItemBaseComponentImpl(info, itemStack), EntityItemBaseComponentImpl.class);
     }
 

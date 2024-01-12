@@ -2,7 +2,6 @@ package org.allaymc.api.world.gamerule;
 
 import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -56,7 +55,7 @@ public enum GameRule {
         this.type = type;
     }
 
-    @Nullable
+
     public static GameRule fromName(String name) {
         return Arrays.stream(values()).filter(gameRule -> gameRule.getName().equals(name)).findFirst().orElse(null);
     }

@@ -13,8 +13,6 @@ import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.primitives.AABBf;
 
-import javax.annotation.Nullable;
-
 import static org.allaymc.api.item.ItemHelper.fromNBT;
 
 /**
@@ -29,7 +27,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     protected int pickupDelay = 10;
     protected int age;
 
-    public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, @Nullable ItemStack itemStack) {
+    public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, ItemStack itemStack) {
         super(info, new AABBf(-0.125f, 0.0f, -0.125f, 0.125f, 0.25f, 0.125f));
         this.itemStack = itemStack;
     }

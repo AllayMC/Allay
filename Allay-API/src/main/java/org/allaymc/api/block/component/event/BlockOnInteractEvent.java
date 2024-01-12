@@ -8,7 +8,6 @@ import org.allaymc.api.component.interfaces.ComponentEvent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -22,7 +21,7 @@ import java.util.Objects;
 @Getter
 @Accessors(fluent = true)
 public final class BlockOnInteractEvent implements ComponentEvent {
-    private final @Nullable EntityPlayer player;
+    private final EntityPlayer player;
     private final ItemStack itemStack;
     private final Dimension dimension;
     private final Vector3ic blockPos;
@@ -35,7 +34,7 @@ public final class BlockOnInteractEvent implements ComponentEvent {
     /**
      *
      */
-    public BlockOnInteractEvent(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos,
+    public BlockOnInteractEvent(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos,
                                 Vector3ic placeBlockPos, Vector3fc clickPos,
                                 BlockFace blockFace, boolean success) {
         this.player = player;

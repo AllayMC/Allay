@@ -2,7 +2,6 @@ package org.allaymc.api.block.property.type;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
  * @author daoge_cmd
  */
 public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyType {
-    @Nullable
+
     static Type getPropertyType(Class<?> clazz) {
         if (clazz == BooleanPropertyType.class) return Type.BOOLEAN;
         else if (clazz == IntPropertyType.class) return Type.INT;

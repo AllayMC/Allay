@@ -1,5 +1,6 @@
 package org.allaymc.api.world;
 
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
@@ -18,8 +19,6 @@ import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3ic;
@@ -150,7 +149,10 @@ public interface Dimension {
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
-    default BlockState[][][] getBlockStates(int x, int y, int z, @Range(from = 1, to = Integer.MAX_VALUE) int sizeX, @Range(from = 1, to = Integer.MAX_VALUE) int sizeY, @Range(from = 1, to = Integer.MAX_VALUE) int sizeZ, int layer) {
+    default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
+        Preconditions.checkArgument(sizeX >= 1);
+        Preconditions.checkArgument(sizeY >= 1);
+        Preconditions.checkArgument(sizeZ >= 1);
         BlockState[][][] blockStates = new BlockState[sizeX][sizeY][sizeZ];
         int startX = x >> 4;
         int endX = (x + sizeX - 1) >> 4;
@@ -185,7 +187,7 @@ public interface Dimension {
         return blockStates;
     }
 
-    @Nullable
+
     default BlockState[][][] getCollidingBlocks(AABBfc aabb) {
         return getCollidingBlocks(aabb, 0);
     }

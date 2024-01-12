@@ -1,12 +1,12 @@
 package org.allaymc.api.item.init;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
-import org.jetbrains.annotations.Range;
 
 import static org.allaymc.api.item.component.common.ItemBaseComponent.EMPTY_STACK_NETWORK_ID;
 
@@ -79,7 +79,8 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
             return this;
         }
 
-        public Builder stackNetworkId(@Range(from = 0, to = Integer.MAX_VALUE) int stackNetworkId) {
+        public Builder stackNetworkId(int stackNetworkId) {
+            Preconditions.checkArgument(stackNetworkId >= 0);
             this.stackNetworkId = stackNetworkId;
             this.autoAssignStackNetworkId = false;
             return this;

@@ -7,7 +7,6 @@ import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.item.ItemStack;
 import org.joml.primitives.AABBfc;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -26,7 +25,7 @@ public interface EntityComponentImplFactory {
 
     ComponentProvider<EntityComponent> createEntityPlayerBaseComponent();
 
-    ComponentProvider<EntityComponent> createEntityItemBaseComponent(@Nullable ItemStack itemStack);
+    ComponentProvider<EntityComponent> createEntityItemBaseComponent(ItemStack itemStack);
 
     ComponentProvider<EntityComponent> createEntityAttributeComponent(List<AttributeType> attributeTypes);
 

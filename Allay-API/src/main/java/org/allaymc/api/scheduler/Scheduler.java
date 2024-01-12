@@ -3,7 +3,6 @@ package org.allaymc.api.scheduler;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.scheduler.task.Task;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -49,6 +48,6 @@ public interface Scheduler {
 
         ApiInstanceHolder<SchedulerFactory> FACTORY = ApiInstanceHolder.of();
 
-        Scheduler createScheduler(@Nullable ExecutorService asyncTaskExecutor);
+        Scheduler createScheduler(ExecutorService asyncTaskExecutor);
     }
 }

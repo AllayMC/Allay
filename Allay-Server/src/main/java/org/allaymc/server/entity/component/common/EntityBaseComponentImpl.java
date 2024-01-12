@@ -35,7 +35,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -69,7 +68,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @ComponentedObject
     protected T thisEntity;
     @Dependency(soft = true)
-    @Nullable
+
     protected EntityAttributeComponent attributeComponent;
     protected EntityType<T> entityType;
     protected AABBfc aabb;

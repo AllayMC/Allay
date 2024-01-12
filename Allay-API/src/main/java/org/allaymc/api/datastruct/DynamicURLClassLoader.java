@@ -1,7 +1,7 @@
 package org.allaymc.api.datastruct;
 
+import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -23,7 +23,8 @@ public class DynamicURLClassLoader extends URLClassLoader {
         super.addURL(url);
     }
 
-    public void addJar(@NotNull File jarFile) {
+    public void addJar(File jarFile) {
+        Preconditions.checkNotNull(jarFile);
         try {
             addURL(jarFile.toURI().toURL());
         } catch (MalformedURLException e) {
@@ -31,7 +32,8 @@ public class DynamicURLClassLoader extends URLClassLoader {
         }
     }
 
-    public void addJar(@NotNull String jarPath) {
+    public void addJar(String jarPath) {
+        Preconditions.checkNotNull(jarPath);
         addJar(new File(jarPath));
     }
 }

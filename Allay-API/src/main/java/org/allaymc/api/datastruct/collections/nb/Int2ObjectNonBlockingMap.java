@@ -1,9 +1,9 @@
 package org.allaymc.api.datastruct.collections.nb;
 
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.AbstractIntSet;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -434,7 +434,8 @@ public class Int2ObjectNonBlockingMap<TypeV>
     /**
      * Auto-boxing version of {@link #remove(int, Object)}.
      */
-    public boolean remove(@NotNull Object key, Object Val) {
+    public boolean remove(Object key, Object Val) {
+        Preconditions.checkNotNull(key);
         return (key instanceof Integer) && remove(((Integer) key).intValue(), Val);
     }
 

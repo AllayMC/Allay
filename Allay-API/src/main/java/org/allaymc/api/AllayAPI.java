@@ -34,7 +34,6 @@ import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -114,7 +113,7 @@ public final class AllayAPI {
      *
      * @param api the interface
      */
-    public <T> void requireImpl(Class<T> api, @Nullable Consumer<T> apiInstanceConsumer) {
+    public <T> void requireImpl(Class<T> api, Consumer<T> apiInstanceConsumer) {
         bindings.put(api, null);
         if (apiInstanceConsumer != null) {
             consumers.put(api, apiInstanceConsumer);
@@ -125,7 +124,7 @@ public final class AllayAPI {
         bind(api, supplier, null);
     }
 
-    public <T> void bind(Class<T> api, Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {
+    public <T> void bind(Class<T> api, Supplier<T> bindingAction, Consumer<T> afterBound) {
         Objects.requireNonNull(api);
         Objects.requireNonNull(bindingAction);
         bindings.put(api, new ApiBindingAction<>(bindingAction, afterBound));
@@ -202,5 +201,6 @@ public final class AllayAPI {
         requireImpl(CommandNodeFactory.class, CommandNodeFactory.FACTORY::set);
     }
 
-    private record ApiBindingAction<T>(Supplier<T> bindingAction, @Nullable Consumer<T> afterBound) {}
+    private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {
+    }
 }

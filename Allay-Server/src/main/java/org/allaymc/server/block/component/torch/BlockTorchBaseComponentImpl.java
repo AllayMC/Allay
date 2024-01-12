@@ -1,8 +1,10 @@
 package org.allaymc.server.block.component.torch;
 
+import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.function.Place;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
@@ -11,8 +13,6 @@ import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -22,9 +22,22 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         super(blockType);
     }
 
+    private static TorchFacingDirection computeTorchFacingDirection(BlockFace blockFace) {
+        Preconditions.checkNotNull(blockFace);
+        TorchFacingDirection torchFace = TorchFacingDirection.UNKNOWN;
+        switch (blockFace) {
+            case UP -> torchFace = TorchFacingDirection.TOP;
+            case WEST -> torchFace = TorchFacingDirection.EAST;
+            case EAST -> torchFace = TorchFacingDirection.WEST;
+            case NORTH -> torchFace = TorchFacingDirection.SOUTH;
+            case SOUTH -> torchFace = TorchFacingDirection.NORTH;
+        }
+        return torchFace;
+    }
+
     @Override
-    public boolean place(@Nullable EntityPlayer player, @NotNull Dimension dimension, @NotNull BlockState blockState,
-                         @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, Vector3fc clickPos, @NotNull BlockFace blockFace) {
+    public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        Place.checkParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         var oldBlock = dimension.getBlockState(placeBlockPos);
         var torchFace = computeTorchFacingDirection(blockFace);
 
@@ -41,17 +54,5 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         }
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         return true;
-    }
-
-    private static TorchFacingDirection computeTorchFacingDirection(@NotNull BlockFace blockFace) {
-        TorchFacingDirection torchFace = TorchFacingDirection.UNKNOWN;
-        switch (blockFace) {
-            case UP -> torchFace = TorchFacingDirection.TOP;
-            case WEST -> torchFace = TorchFacingDirection.EAST;
-            case EAST -> torchFace = TorchFacingDirection.WEST;
-            case NORTH -> torchFace = TorchFacingDirection.SOUTH;
-            case SOUTH -> torchFace = TorchFacingDirection.NORTH;
-        }
-        return torchFace;
     }
 }

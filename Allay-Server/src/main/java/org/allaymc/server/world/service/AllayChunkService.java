@@ -18,7 +18,6 @@ import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
@@ -116,13 +115,13 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
-    @Nullable
+
     public Chunk getChunk(int x, int z) {
         return loadedChunks.get(HashUtils.hashXZ(x, z));
     }
 
     @Override
-    @Nullable
+
     public Chunk getChunk(long chunkHash) {
         return loadedChunks.get(chunkHash);
     }

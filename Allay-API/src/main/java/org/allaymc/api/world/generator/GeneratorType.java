@@ -1,9 +1,9 @@
 package org.allaymc.api.world.generator;
 
+import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Range;
 
 /**
  * Allay Project 2023/6/3
@@ -23,7 +23,8 @@ public enum GeneratorType {
     private final int id;
 
     @Contract("_ -> new")
-    public static GeneratorType of(@Range(from = 0, to = 4) int id) {
+    public static GeneratorType of(int id) {
+        Preconditions.checkArgument(id >= 0 && id <= 4);
         return values()[id];
     }
 }

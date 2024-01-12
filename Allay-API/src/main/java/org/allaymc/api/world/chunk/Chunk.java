@@ -7,10 +7,8 @@ import org.allaymc.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -42,23 +40,23 @@ public interface Chunk extends UnsafeChunk {
 
     void addChunkPacket(BedrockPacket packet);
 
-    void addChunkPacket(BedrockPacket packet, @Nullable Predicate<ChunkLoader> chunkLoaderPredicate);
+    void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
     void sendChunkPacket(BedrockPacket packet);
 
-    void sendChunkPacket(BedrockPacket packet, @Nullable Predicate<ChunkLoader> chunkLoaderPredicate);
+    void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
     void sendChunkPackets();
 
-    void compareAndSetBlock(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BlockState expectedValue, BlockState newValue, int layer);
+    void compareAndSetBlock(int x, int y, int z, BlockState expectedValue, BlockState newValue, int layer);
 
-    void compareAndSetBiome(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, BiomeType expectedValue, BiomeType newValue);
+    void compareAndSetBiome(int x, int y, int z, BiomeType expectedValue, BiomeType newValue);
 
-    void compareAndSetBlockLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue);
+    void compareAndSetBlockLight(int x, int y, int z, int expectedValue, int newValue);
 
-    void compareAndSetSkyLight(@Range(from = 0, to = 15) int x, @Range(from = -512, to = 511) int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int expectedValue, @Range(from = 0, to = 15) int newValue);
+    void compareAndSetSkyLight(int x, int y, int z, int expectedValue, int newValue);
 
-    void compareAndSetHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, @Range(from = -512, to = 511) int expectedValue, @Range(from = -512, to = 511) int newValue);
+    void compareAndSetHeight(int x, int z, int expectedValue, int newValue);
 
     void batchProcess(UnsafeChunkOperate operate);
 

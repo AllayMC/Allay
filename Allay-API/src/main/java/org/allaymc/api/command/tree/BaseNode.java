@@ -1,5 +1,6 @@
 package org.allaymc.api.command.tree;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.command.CommandResult;
@@ -7,8 +8,6 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.exception.CommandParseException;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +97,8 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public CommandNode up(@Range(from = 1, to = Integer.MAX_VALUE) int count) {
+    public CommandNode up(int count) {
+        Preconditions.checkArgument(count >= 1);
         if (count > depth) {
             throw new CommandParseException("ParamNode.up(count): count is bigger than depth");
         }
@@ -109,7 +109,7 @@ public abstract class BaseNode implements CommandNode {
         return node;
     }
 
-    @Nullable
+
     @Override
     public CommandNode nextNode(CommandContext context) {
         if (isLeaf()) {

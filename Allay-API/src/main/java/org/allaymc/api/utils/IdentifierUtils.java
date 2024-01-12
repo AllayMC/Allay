@@ -2,7 +2,6 @@ package org.allaymc.api.utils;
 
 import org.allaymc.api.exception.InvalidIdentifierException;
 import org.allaymc.api.identifier.Identifier;
-import org.jetbrains.annotations.Nullable;
 
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 
@@ -18,7 +17,7 @@ public final class IdentifierUtils {
         return new Identifier(fastTwoPartSplit(id, delimiter, Identifier.DEFAULT_NAMESPACE));
     }
 
-    @Nullable
+
     public static Identifier tryParse(String id) {
         try {
             return new Identifier(id);
@@ -27,7 +26,7 @@ public final class IdentifierUtils {
         }
     }
 
-    @Nullable
+
     public static Identifier of(String namespace, String path) {
         try {
             return new Identifier(namespace, path);

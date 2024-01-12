@@ -4,7 +4,6 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -28,5 +27,5 @@ public interface OnInteract {
      *         For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return true
      *         If false is returned, the useItemOn method of the player's item will continue to be called
      */
-    boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
+    boolean onInteract(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
 }

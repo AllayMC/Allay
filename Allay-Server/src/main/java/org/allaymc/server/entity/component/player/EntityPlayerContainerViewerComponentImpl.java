@@ -20,7 +20,6 @@ import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerOpenPacket;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryContentPacket;
 import org.cloudburstmc.protocol.bedrock.packet.InventorySlotPacket;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 /**
@@ -126,13 +125,13 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    @Nullable
+
     public <T extends Container> T getOpenedContainer(FullContainerType<T> type) {
         return (T) type2ContainerBiMap.get(type);
     }
 
     @Override
-    @Nullable
+
     public Container getOpenedContainer(byte id) {
         return id2ContainerBiMap.get(id);
     }

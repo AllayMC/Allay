@@ -1,15 +1,13 @@
 package org.allaymc.codegen;
 
-import org.allaymc.dependence.VanillaBlockId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.Nullable;
+import org.allaymc.dependence.VanillaBlockId;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -99,7 +97,7 @@ public class VanillaBlockInterfaceGen {
         }
     }
 
-    @Nullable
+
     private static String tryFindSpecifiedFolderName(String blockClassSimpleName) {
         for (var entry : SUB_PACKAGE_GROUPERS.entrySet()) {
             var pattern = entry.getKey();

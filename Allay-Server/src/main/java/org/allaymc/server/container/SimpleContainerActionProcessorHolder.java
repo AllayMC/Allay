@@ -3,7 +3,6 @@ package org.allaymc.server.container;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
@@ -20,7 +19,7 @@ public class SimpleContainerActionProcessorHolder implements ContainerActionProc
     EnumMap<ItemStackRequestActionType, ContainerActionProcessor<?>> PROCESSORS = new EnumMap<>(ItemStackRequestActionType.class);
 
     @Override
-    public <R extends ContainerActionProcessor<?>> @Nullable R getProcessor(ItemStackRequestActionType type) {
+    public <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type) {
         return (R) PROCESSORS.get(type);
     }
 

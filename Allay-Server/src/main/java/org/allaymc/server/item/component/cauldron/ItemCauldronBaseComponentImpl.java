@@ -8,7 +8,6 @@ import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemCauldronStack;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -23,7 +22,7 @@ public class ItemCauldronBaseComponentImpl extends ItemBaseComponentImpl<ItemCau
     }
 
     @Override
-    public boolean useItemOn(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+    public boolean useItemOn(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
         return tryPlaceBlockState(player, itemStack, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, BlockCauldronBehavior.CAULDRON_TYPE.getDefaultState());
     }
 }

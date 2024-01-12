@@ -38,7 +38,6 @@ import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.cloudburstmc.nbt.NbtMap;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -79,7 +78,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     @Getter
     private final Map<Integer, BlockState> blockStateHashMap;
     @Getter
-    @Nullable
+
     private final Map<Long, BlockState> specialValueMap;
     @Getter
     private final byte specialValueBits;

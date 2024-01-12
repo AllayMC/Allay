@@ -1,7 +1,6 @@
 package org.allaymc.api.client.data;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.perm.PermKeys;
 import org.allaymc.api.perm.tree.PermTree;
@@ -11,7 +10,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandPermission;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAbilitiesPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -130,7 +128,7 @@ public final class Abilities {
         dirty = false;
     }
 
-    @NotNull
+
     private UpdateAbilitiesPacket createUpdateAbilitiesPacket() {
         UpdateAbilitiesPacket updateAbilitiesPacket = new UpdateAbilitiesPacket();
         updateAbilitiesPacket.setUniqueEntityId(player.getUniqueId());

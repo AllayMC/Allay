@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeType;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 
@@ -212,12 +211,12 @@ public enum VanillaBiomeId implements BiomeType {
         this.type = type;
     }
 
-    @Nullable
+
     public static BiomeType fromId(int id) {
         return MAP1.get(id);
     }
 
-    @Nullable
+
     public static BiomeType fromIdentifier(Identifier identifier) {
         return MAP2.get(identifier);
     }

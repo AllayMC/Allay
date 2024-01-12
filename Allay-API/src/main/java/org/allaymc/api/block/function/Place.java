@@ -1,11 +1,10 @@
 package org.allaymc.api.block.function;
 
+import com.google.common.base.Preconditions;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -16,5 +15,15 @@ import org.joml.Vector3ic;
  */
 @FunctionalInterface
 public interface Place {
-    boolean place(@Nullable EntityPlayer player, @NotNull Dimension dimension, @NotNull BlockState blockState, @NotNull Vector3ic targetBlockPos, @NotNull Vector3ic placeBlockPos, @NotNull Vector3fc clickPos, @NotNull BlockFace blockFace);
+    static void checkParam(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        // player is nullable
+        Preconditions.checkNotNull(dimension);
+        Preconditions.checkNotNull(blockState);
+        Preconditions.checkNotNull(targetBlockPos);
+        Preconditions.checkNotNull(placeBlockPos);
+        // clickPos is nullable
+        Preconditions.checkNotNull(blockFace);
+    }
+
+    boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
 }

@@ -8,7 +8,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -23,7 +22,7 @@ public class BlockCraftingTableBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     @Override
-    public boolean onInteract(@Nullable EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+    public boolean onInteract(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
         if (!super.onInteract(player, itemStack, dimension, blockPos, placeBlockPos, clickPos, blockFace) && player != null) {
             var craftingTableContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
             craftingTableContainer.setBlockPos(blockPos);

@@ -2,7 +2,6 @@ package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.entity.Entity;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -13,10 +12,10 @@ import java.util.Map;
 public interface EntityOperate {
     void addEntity(Entity entity);
 
-    @Nullable
+
     Entity removeEntity(Long uniqueId);
 
-    @Nullable
+
     default Entity removeEntity(Entity entity) {
         return removeEntity(entity.getUniqueId());
     }

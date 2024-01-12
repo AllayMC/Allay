@@ -1,7 +1,5 @@
 package org.allaymc.dependence;
 
-import org.jetbrains.annotations.Nullable;
-
 import static org.allaymc.dependence.StringUtils.fastTwoPartSplit;
 
 /**
@@ -16,7 +14,7 @@ public final class IdentifierUtils {
         return new Identifier(fastTwoPartSplit(id, delimiter, Identifier.DEFAULT_NAMESPACE));
     }
 
-    @Nullable
+
     public static Identifier tryParse(String id) {
         try {
             return new Identifier(id);
@@ -25,7 +23,7 @@ public final class IdentifierUtils {
         }
     }
 
-    @Nullable
+
     public static Identifier of(String namespace, String path) {
         try {
             return new Identifier(namespace, path);

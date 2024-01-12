@@ -9,7 +9,6 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -68,7 +67,7 @@ public interface ItemBaseComponent extends ItemComponent {
 
     ItemStack copy(boolean newStackNetworkId);
 
-    @Nullable
+
     NbtMap saveExtraTag();
 
     NbtMap getCustomNBTContent();
@@ -78,7 +77,7 @@ public interface ItemBaseComponent extends ItemComponent {
     void loadExtraTag(NbtMap extraTag);
 
     boolean useItemOn(
-            @Nullable EntityPlayer player, ItemStack itemStack,
+            EntityPlayer player, ItemStack itemStack,
             Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace);
 

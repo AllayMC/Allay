@@ -1,12 +1,12 @@
 package org.allaymc.api.utils;
 
+import com.google.common.base.Preconditions;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.identifier.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
-import org.jetbrains.annotations.Range;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -111,7 +111,10 @@ public class HashUtils {
         return (int) hashXZ;
     }
 
-    public int hashChunkXYZ(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 16777216) int y, @Range(from = 0, to = 15) int z) {
+    public int hashChunkXYZ(int x, int y, int z) {
+        Preconditions.checkArgument(x >= 0 && x <= 15);
+        Preconditions.checkArgument(y >= 0 && y <= 16777216);
+        Preconditions.checkArgument(z >= 0 && z <= 15);
         //Make sure x and z are in the range of 0-15
         x &= 0xF;  //4 bits
         z &= 0xF;  //4 bits
