@@ -108,4 +108,6 @@ public interface ItemBaseComponent extends ItemComponent {
         //TODO: CanPlaceOn
         return builder.build();
     }
+
+    float calculateAttackDamage();
 }

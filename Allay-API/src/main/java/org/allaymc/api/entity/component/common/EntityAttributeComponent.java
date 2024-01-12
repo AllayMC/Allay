@@ -40,10 +40,7 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     float getAttributeValue(AttributeType attributeType);
 
-    default void setHealth(float value) {
-        Preconditions.checkArgument(value >= 0);
-        setAttribute(AttributeType.HEALTH, value);
-    }
+    void setHealth(float value);
 
     default float getHealth() {
         return getAttributeValue(AttributeType.HEALTH);

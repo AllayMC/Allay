@@ -37,6 +37,7 @@ public interface EntityBaseComponent extends EntityComponent {
     float SNEAKING_MOVEMENT_FACTOR = 0.3f;
     float STOP_MOVEMENT_FACTOR = 0f;
     float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
+    float MAX_Y_KNOCKBACK_MOTION = 0.4f;
 
     EntityType<? extends Entity> getEntityType();
 
@@ -45,6 +46,8 @@ public interface EntityBaseComponent extends EntityComponent {
     Dimension getDimension();
 
     World getWorld();
+
+    boolean isDead();
 
     boolean willBeAddedNextTick();
 
@@ -264,4 +267,8 @@ public interface EntityBaseComponent extends EntityComponent {
             return BlockFace.SOUTH;
         }
     }
+
+    void knockback(Vector3fc source);
+
+    void knockback(Vector3fc source, float kb);
 }

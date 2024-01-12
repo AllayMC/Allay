@@ -30,6 +30,7 @@ import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -42,9 +43,11 @@ import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.min;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
@@ -57,6 +60,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
+
     protected static AtomicLong UNIQUE_ID_COUNTER = new AtomicLong(0);
 
     protected final Location3f location;
@@ -68,7 +72,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @ComponentedObject
     protected T thisEntity;
     @Dependency(soft = true)
-
     protected EntityAttributeComponent attributeComponent;
     protected EntityType<T> entityType;
     protected AABBfc aabb;
@@ -79,6 +82,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected boolean willBeRemovedNextTick = false;
     protected boolean willBeAddedNextTick = false;
     protected boolean spawned;
+    protected boolean dead;
+    public static final int DEFAULT_DEAD_TIMER = 20;
+    protected int deadTimer;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -129,6 +135,43 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public void tick() {
+        checkDead();
+        if (dead) {
+            if (deadTimer > 0) {
+                deadTimer--;
+            }
+            if (deadTimer == 0){
+                // Spawn dead particle
+                spawnDeadParticle();
+                removeEntity();
+                // After call 'removeEntity()', this entity won't be ticked in next tick
+                // So we set dead back to false
+                dead = false;
+            }
+        }
+    }
+
+    protected void checkDead() {
+        if (attributeComponent.getHealth() < 1) {
+            attributeComponent.setHealth(0);
+            dead = true;
+            deadTimer = DEFAULT_DEAD_TIMER;
+        }
+    }
+
+    protected void spawnDeadParticle() {
+        var offsetAABB = getOffsetAABB();
+        for (float x = offsetAABB.minX(); x <= offsetAABB.maxX(); x += 0.5f) {
+            for (float z = offsetAABB.minZ(); z <= offsetAABB.maxZ(); z += 0.5f) {
+                for (float y = offsetAABB.minY(); y <= offsetAABB.maxY(); y += 0.5f) {
+                    this.getDimension().addParticle(ParticleType.EXPLODE, new Vector3f(x, y, z));
+                }
+            }
+        }
+    }
+
+    @Override
     public EntityType<? extends Entity> getEntityType() {
         return entityType;
     }
@@ -150,6 +193,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public World getWorld() {
         return location.dimension.getWorld();
+    }
+
+    @Override
+    public boolean isDead() {
+        return dead;
     }
 
     @Override
@@ -337,6 +385,33 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public void setHasGravity(boolean hasGravity) {
         metadata.set(EntityFlag.HAS_GRAVITY, hasGravity);
         sendEntityFlags(EntityFlag.HAS_GRAVITY);
+    }
+
+    @Override
+    public void knockback(Vector3fc source) {
+        var kb = 1 - attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+        if (kb <= 0) return;
+        knockback(source, kb);
+    }
+
+    @Override
+    public void knockback(Vector3fc source, float kb) {
+        Vector3f vec;
+        if (getLocation().distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
+            vec = getLocation().sub(source, new Vector3f()).normalize().mul(kb);
+            vec.y = 0;
+        } else {
+            // Random kb direction if distance <= 0.01m
+            var rand = ThreadLocalRandom.current();
+            var rx = rand.nextFloat(1) - 0.5f;
+            var rz = rand.nextFloat(1) - 0.5f;
+            vec = new Vector3f(rx, 0, rz).normalize().mul(kb);
+        }
+        setMotion(new Vector3f(
+                motion.x / 2f + vec.x,
+                min(onGround ? motion.y / 2f + kb : motion.y, MAX_Y_KNOCKBACK_MOTION),
+                motion.z / 2f + vec.z
+        ));
     }
 
     @Override

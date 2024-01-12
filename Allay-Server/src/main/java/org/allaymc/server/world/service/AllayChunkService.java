@@ -261,6 +261,11 @@ public class AllayChunkService implements ChunkService {
         loadedChunks.values().forEach(consumer);
     }
 
+    @Override
+    public Collection<Chunk> getLoadedChunks() {
+        return loadedChunks.values();
+    }
+
     public void unloadChunk(int x, int z) {
         unloadChunk(HashUtils.hashXZ(x, z));
     }

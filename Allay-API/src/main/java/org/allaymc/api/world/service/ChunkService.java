@@ -6,6 +6,7 @@ import org.allaymc.api.world.chunk.ChunkAccessible;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -60,4 +61,6 @@ public interface ChunkService extends ChunkAccessible {
     void removeChunkLoader(ChunkLoader chunkLoader);
 
     void forEachLoadedChunks(Consumer<Chunk> consumer);
+
+    Collection<Chunk> getLoadedChunks();
 }

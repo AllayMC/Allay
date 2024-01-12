@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.common;
 
+import com.google.common.base.Preconditions;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.entity.attribute.Attribute;
@@ -69,5 +70,11 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         }
         updateAttributesPacket.setTick(player.getWorld().getTick());
         player.sendPacket(updateAttributesPacket);
+    }
+
+    @Override
+    public void setHealth(float value) {
+        Preconditions.checkArgument(value >= 0);
+        setAttribute(AttributeType.HEALTH, value);
     }
 }

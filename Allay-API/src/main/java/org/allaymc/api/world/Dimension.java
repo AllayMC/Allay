@@ -10,6 +10,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.generator.Generator;
 import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
@@ -17,10 +18,13 @@ import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityUpdateService;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
+import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
+import org.cloudburstmc.protocol.bedrock.packet.SpawnParticleEffectPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 import org.joml.primitives.AABBfc;
 
@@ -55,6 +59,16 @@ public interface Dimension {
         var entities = new Long2ObjectOpenHashMap<Entity>();
         getChunkService().forEachLoadedChunks(chunk -> entities.putAll(chunk.getEntities()));
         return Collections.unmodifiableMap(entities);
+    }
+
+    default Entity getEntityByUniqueId(long uniqueId) {
+        for (var chunk : getChunkService().getLoadedChunks()) {
+            var entity = chunk.getEntities().get(uniqueId);
+            if (entity != null) {
+                return entity;
+            }
+        }
+        return null;
     }
 
     void addPlayer(EntityPlayer player);
@@ -322,5 +336,17 @@ public interface Dimension {
 
     default BlockEntity getBlockEntity(Vector3ic pos) {
         return getBlockEntity(pos.x(), pos.y(), pos.z());
+    }
+
+    default void addParticle(ParticleType particleType, Vector3fc pos) {
+        addParticle(particleType, pos, 0);
+    }
+
+    default void addParticle(ParticleType particleType, Vector3fc pos, int data) {
+        var pk = new LevelEventPacket();
+        pk.setType(particleType);
+        pk.setPosition(MathUtils.JOMLVecTocbVec(pos));
+        pk.setData(data);
+        getChunkService().getChunkByLevelPos((int) pos.x(), (int) pos.z()).addChunkPacket(pk);
     }
 }
