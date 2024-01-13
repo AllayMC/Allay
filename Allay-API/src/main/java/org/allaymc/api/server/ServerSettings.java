@@ -161,6 +161,10 @@ public class ServerSettings extends OkaeriConfig {
 
             @CustomKey("fat-aabb-margin")
             private float fatAABBMargin = 0.0005f;
+
+            @Comment("Delta move packet will reduce the network pressure if there are a lot of entities")
+            @CustomKey("use-delta-move-packet")
+            private boolean useDeltaMovePacket = false;
         }
     }
 }

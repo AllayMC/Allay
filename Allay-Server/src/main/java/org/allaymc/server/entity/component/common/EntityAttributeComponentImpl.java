@@ -10,9 +10,12 @@ import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.identifier.Identifier;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
 import java.util.*;
+
+import static java.lang.Math.max;
 
 /**
  * Allay Project 2023/7/9
@@ -81,7 +84,6 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @Override
     public void setHealth(float value) {
-        Preconditions.checkArgument(value >= 0);
-        setAttribute(AttributeType.HEALTH, value);
+        setAttribute(AttributeType.HEALTH, max(0, value < 1 ? 0 : value));
     }
 }

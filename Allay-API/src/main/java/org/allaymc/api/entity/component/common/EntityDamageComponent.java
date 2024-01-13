@@ -10,13 +10,17 @@ import org.allaymc.api.entity.damage.DamageContainer;
  * @author daoge_cmd
  */
 public interface EntityDamageComponent extends EntityComponent {
-    void attack(DamageContainer damage);
+    boolean attack(DamageContainer damage);
 
-    default void attack(float damage) {
-        attack(DamageContainer.simpleAttack(damage));
+    default boolean attack(float damage) {
+        return attack(DamageContainer.simpleAttack(damage));
     }
 
-    default void attack(Entity attacker, float damage) {
-        attack(DamageContainer.entityAttack(attacker, damage));
+    default boolean attack(Entity attacker, float damage) {
+        return attack(DamageContainer.entityAttack(attacker, damage));
     }
+
+    DamageContainer getLastDamage();
+
+    long getLastDamageTime();
 }

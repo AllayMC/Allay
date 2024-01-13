@@ -6,7 +6,10 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
@@ -104,6 +107,15 @@ public class GameTestCommand extends SimpleCommand {
                                     .build()
                     );
                     dim.getEntityUpdateService().addEntity(entity);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("clearEntities")
+                .exec((context, player) -> {
+                    player.getLocation().dimension().getEntities().values().forEach(entity -> {
+                        if (entity instanceof EntityPlayer) return;
+                        else entity.removeEntity();
+                    });
                     return context.success();
                 }, SenderType.PLAYER);
     }

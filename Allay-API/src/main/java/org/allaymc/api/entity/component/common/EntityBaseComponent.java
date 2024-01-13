@@ -14,8 +14,10 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
@@ -37,7 +39,6 @@ public interface EntityBaseComponent extends EntityComponent {
     float SNEAKING_MOVEMENT_FACTOR = 0.3f;
     float STOP_MOVEMENT_FACTOR = 0f;
     float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
-    float MAX_Y_KNOCKBACK_MOTION = 0.4f;
 
     EntityType<? extends Entity> getEntityType();
 
@@ -271,4 +272,12 @@ public interface EntityBaseComponent extends EntityComponent {
     void knockback(Vector3fc source);
 
     void knockback(Vector3fc source, float kb);
+
+    default void sendEntityEvent(EntityEventType event, int data) {
+        var pk = new EntityEventPacket();
+        pk.setRuntimeEntityId(getUniqueId());
+        pk.setType(event);
+        pk.setData(data);
+        sendPacketToViewers(pk);
+    }
 }

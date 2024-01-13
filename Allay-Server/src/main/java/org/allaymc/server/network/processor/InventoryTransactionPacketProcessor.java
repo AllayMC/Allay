@@ -106,6 +106,7 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
                             return;
                         }
                         // TODO: Check whether the player can touch the target entity or not (to prevent cheater)
+                        // TODO: Critical hit
                         var itemInHand = player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
                         var itemAttackDamage = itemInHand.calculateAttackDamage();
                         damageable.attack(player, itemAttackDamage);

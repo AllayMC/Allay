@@ -183,7 +183,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void broadcastMoveToViewers(Location3fc newLoc) {
-        super.broadcastMoveToViewers(new Location3f(newLoc).add(0, getBaseOffset(), 0));
+        var loc = new Location3f(newLoc);
+        loc.add(0, getBaseOffset(), 0f);
+        super.broadcastMoveToViewers(loc, false);
     }
 
     @Override

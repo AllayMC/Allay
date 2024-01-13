@@ -24,6 +24,7 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.server.world.chunk.AllayChunk;
@@ -33,6 +34,7 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.ApiStatus;
@@ -137,6 +139,15 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void tick() {
         checkDead();
+    }
+
+    protected void checkDead() {
+        if (attributeComponent == null) return;
+        if (attributeComponent.getHealth() == 0 && !dead) {
+            dead = true;
+            deadTimer = DEFAULT_DEAD_TIMER;
+            sendEntityEvent(EntityEventType.DEATH, 0);
+        }
         if (dead) {
             if (deadTimer > 0) {
                 deadTimer--;
@@ -150,15 +161,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                 dead = false;
             }
             return;
-        }
-    }
-
-    protected void checkDead() {
-        if (attributeComponent == null) return;
-        if (attributeComponent.getHealth() < 1) {
-            attributeComponent.setHealth(0);
-            dead = true;
-            deadTimer = DEFAULT_DEAD_TIMER;
         }
     }
 
@@ -400,20 +402,20 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public void knockback(Vector3fc source, float kb) {
         Vector3f vec;
         if (getLocation().distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
-            vec = getLocation().sub(source, new Vector3f()).normalize().mul(kb);
-            vec.y = 0;
-        } else {
             // Random kb direction if distance <= 0.01m
             var rand = ThreadLocalRandom.current();
             var rx = rand.nextFloat(1) - 0.5f;
             var rz = rand.nextFloat(1) - 0.5f;
             vec = new Vector3f(rx, 0, rz).normalize().mul(kb);
+        } else {
+            vec = getLocation().sub(source, new Vector3f()).normalize().mul(kb);
+            vec.y = 0;
         }
-        setMotion(new Vector3f(
+        motion = new Vector3f(
                 motion.x / 2f + vec.x,
-                min(onGround ? motion.y / 2f + kb : motion.y, MAX_Y_KNOCKBACK_MOTION),
+                min(motion.y / 2 + kb, kb),
                 motion.z / 2f + vec.z
-        ));
+        );
     }
 
     @Override
@@ -466,6 +468,33 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
+        // TODO: Send motion
+        var movementPk = Server.SETTINGS.entitySettings().physicsEngineSettings().useDeltaMovePacket() ?
+                createDeltaMovePacket(newLoc, teleporting) :
+                createAbsoluteMovePacket(newLoc, teleporting);
+        var motionPk = createMotionPacket();
+        sendPacketToViewers(movementPk);
+        sendPacketToViewers(motionPk);
+    }
+
+    protected BedrockPacket createMotionPacket() {
+        var pk = new SetEntityMotionPacket();
+        pk.setRuntimeEntityId(getUniqueId());
+        pk.setMotion(MathUtils.JOMLVecTocbVec(motion));
+        return pk;
+    }
+
+    protected BedrockPacket createAbsoluteMovePacket(Location3fc newLoc, boolean teleporting) {
+        var pk = new MoveEntityAbsolutePacket();
+        pk.setRuntimeEntityId(getUniqueId());
+        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(newLoc.x(), newLoc.y(), newLoc.z()));
+        pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(newLoc.pitch(), newLoc.yaw(), newLoc.headYaw()));
+        pk.setOnGround(onGround);
+        pk.setTeleported(teleporting);
+        return pk;
+    }
+
+    protected BedrockPacket createDeltaMovePacket(Location3fc newLoc, boolean teleporting) {
         var pk = new MoveEntityDeltaPacket();
         pk.setRuntimeEntityId(getUniqueId());
         var moveFlags = computeMoveFlags(newLoc);
@@ -496,7 +525,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         }
         if (onGround) pk.getFlags().add(ON_GROUND);
         if (teleporting) pk.getFlags().add(TELEPORTING);
-        sendPacketToViewers(pk);
+        return pk;
     }
 
     protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Location3fc newLoc) {

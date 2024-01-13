@@ -222,7 +222,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected void forceApplyMotion(Entity entity) {
-        updateEntityLocation(entity, new Location3f(entity.getLocation()).add(entity.getMotion()));
+        var loc = new Location3f(entity.getLocation());
+        loc.add(entity.getMotion());
+        updateEntityLocation(entity, loc);
     }
 
     protected boolean applyMotion(Entity entity) {
