@@ -5,6 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
@@ -106,10 +107,10 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
                             return;
                         }
                         // TODO: Check whether the player can touch the target entity or not (to prevent cheater)
-                        // TODO: Critical hit
                         var itemInHand = player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
-                        var itemAttackDamage = itemInHand.calculateAttackDamage();
-                        damageable.attack(player, itemAttackDamage);
+                        var damage = DamageContainer.entityAttack(player, itemInHand.calculateAttackDamage());
+                        damage.setCritical(!player.isOnGround());
+                        damageable.attack(damage);
                     }
                 }
             }

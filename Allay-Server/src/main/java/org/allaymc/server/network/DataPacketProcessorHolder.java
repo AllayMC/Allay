@@ -32,7 +32,6 @@ public final class DataPacketProcessorHolder {
         holder.registerProcessor(new InventoryTransactionPacketProcessor());
         holder.registerProcessor(new ItemStackRequestPacketProcessor());
         holder.registerProcessor(new MobEquipmentPacketProcessor());
-        holder.registerProcessor(new MovePlayerPacketProcessor());
         holder.registerProcessor(new PlayerAuthInputPacketProcessor());
         holder.registerProcessor(new RequestChunkRadiusPacketProcessor());
         holder.registerProcessor(new SubChunkRequestPacketProcessor());

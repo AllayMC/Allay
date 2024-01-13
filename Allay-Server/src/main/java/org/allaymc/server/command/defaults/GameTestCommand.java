@@ -92,29 +92,36 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("spawn")
                 .str("entityType")
+                .intNum("count", 1)
+                .optional()
                 .exec((context, player) -> {
                     var entityType = EntityTypeRegistry.getRegistry().get(new Identifier((String)context.getResult(1)));
+                    int count = context.getResult(2);
                     if (entityType == null) {
                         context.addOutput("§cUnknown entity type!");
                         return context.failed();
                     }
-                    var dim = player.getLocation().dimension();
-                    var loc = player.getLocation();
-                    var entity = entityType.createEntity(
-                            SimpleEntityInitInfo.builder()
-                                    .dimension(dim)
-                                    .loc(loc)
-                                    .build()
-                    );
-                    dim.getEntityUpdateService().addEntity(entity);
+                    for (var i = 0; i <= count; i++) {
+                        var dim = player.getLocation().dimension();
+                        var loc = player.getLocation();
+                        var entity = entityType.createEntity(
+                                SimpleEntityInitInfo.builder()
+                                        .dimension(dim)
+                                        .loc(loc)
+                                        .build()
+                        );
+                        dim.getEntityUpdateService().addEntity(entity);
+                    }
+                    context.addOutput("§aSpawned " + count + " " + entityType.getIdentifier().toString());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("clearEntities")
+                .key("cleare")
                 .exec((context, player) -> {
                     player.getLocation().dimension().getEntities().values().forEach(entity -> {
-                        if (entity instanceof EntityPlayer) return;
-                        else entity.removeEntity();
+                        if (!(entity instanceof EntityPlayer)) {
+                            entity.removeEntity();
+                        }
                     });
                     return context.success();
                 }, SenderType.PLAYER);

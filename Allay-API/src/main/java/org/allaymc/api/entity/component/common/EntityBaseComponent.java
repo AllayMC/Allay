@@ -16,6 +16,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -278,6 +279,18 @@ public interface EntityBaseComponent extends EntityComponent {
         pk.setRuntimeEntityId(getUniqueId());
         pk.setType(event);
         pk.setData(data);
+        sendPacketToViewers(pk);
+    }
+
+    default void sendAnimation(AnimatePacket.Action action) {
+        sendAnimation(action, 0);
+    }
+
+    default void sendAnimation(AnimatePacket.Action action, float rowingTime) {
+        var pk = new AnimatePacket();
+        pk.setRuntimeEntityId(getUniqueId());
+        pk.setAction(action);
+        pk.setRowingTime(rowingTime);
         sendPacketToViewers(pk);
     }
 }

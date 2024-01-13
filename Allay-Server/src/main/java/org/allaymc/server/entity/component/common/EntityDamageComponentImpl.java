@@ -9,6 +9,7 @@ import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
+import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
 /**
  * Allay Project 2024/1/12
@@ -36,8 +37,12 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         }
         lastDamage = damage;
         lastDamageTime = currentTime;
+        damage.updateFinalDamage(d -> d * (damage.isCritical() ? 1.5f : 1f));
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
         baseComponent.sendEntityEvent(EntityEventType.HURT, 2);
+        if (damage.isCritical()) {
+            baseComponent.sendAnimation(AnimatePacket.Action.CRITICAL_HIT);
+        }
         if (damage.getAttacker() != null) {
             baseComponent.knockback(damage.getAttacker().getLocation());
         }

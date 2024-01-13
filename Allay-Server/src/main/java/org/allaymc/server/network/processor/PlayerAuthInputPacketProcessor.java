@@ -72,7 +72,6 @@ public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAu
                 case STOP_GLIDING -> player.setGliding(false);
                 case START_CRAWLING -> player.setCrawling(true);
                 case STOP_CRAWLING -> player.setCrawling(false);
-                case START_JUMPING -> player.setOnGround(false);
             }
         }
     }

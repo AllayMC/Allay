@@ -25,6 +25,8 @@ public class DamageContainer {
     protected float knockback = DEFAULT_KNOCK_BACK;
     @Setter
     protected int coolDown = DEFAULT_DAMAGE_COOL_DOWN;
+    @Setter
+    protected boolean critical = false;
 
     public DamageContainer(Entity attacker, DamageType damageType, float sourceDamage) {
         // attacker is nullable

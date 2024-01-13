@@ -489,8 +489,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var queue = entry.getValue();
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
+                var entity = scheduledMove.entity;
                 if (updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc))
                     entityAABBTree.update(scheduledMove.entity);
+                // ScheduledMove不由服务端计算，但是我们需要计算onGround状态
+                // 若是服务端计算的移动，onGround状态会在applyMotion()中计算
+                var aabb = scheduledMove.entity.getOffsetAABB();
+                aabb.minY -= FAT_AABB_MARGIN;
+                entity.setOnGround(entity.getDimension().getCollidingBlocks(aabb) != null);
             }
         }
     }
