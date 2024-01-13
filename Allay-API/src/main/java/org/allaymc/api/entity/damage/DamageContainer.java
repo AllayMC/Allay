@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Getter
 public class DamageContainer {
     public static final float DEFAULT_KNOCK_BACK = 0.3f;
-    public static final int DEFAULT_DAMAGE_COOLDOWN = 10;
+    public static final int DEFAULT_DAMAGE_COOL_DOWN = 10;
     protected Entity attacker;
     protected DamageType damageType;
     protected float sourceDamage;
@@ -24,7 +24,7 @@ public class DamageContainer {
     @Setter
     protected float knockback = DEFAULT_KNOCK_BACK;
     @Setter
-    protected int cooldown = DEFAULT_DAMAGE_COOLDOWN;
+    protected int coolDown = DEFAULT_DAMAGE_COOL_DOWN;
 
     public DamageContainer(Entity attacker, DamageType damageType, float sourceDamage) {
         // attacker is nullable

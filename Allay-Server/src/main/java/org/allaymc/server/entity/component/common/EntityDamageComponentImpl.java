@@ -9,7 +9,6 @@ import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 
 /**
  * Allay Project 2024/1/12
@@ -32,7 +31,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public boolean attack(DamageContainer damage) {
         var currentTime = baseComponent.getWorld().getTick();
-        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCooldown()) {
+        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
             return false;
         }
         lastDamage = damage;
