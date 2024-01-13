@@ -101,7 +101,7 @@ public class GameTestCommand extends SimpleCommand {
                         context.addOutput("§cUnknown entity type!");
                         return context.failed();
                     }
-                    for (var i = 0; i <= count; i++) {
+                    for (var i = 1; i <= count; i++) {
                         var dim = player.getLocation().dimension();
                         var loc = player.getLocation();
                         var entity = entityType.createEntity(
