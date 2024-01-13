@@ -3,6 +3,7 @@
  */
 package org.allaymc.data;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.annotations.SerializedName;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -69,7 +70,8 @@ public class RecipeExportUtil {
                         .addAll(BlockTypeRegistry.getRegistry().getBlockDefinitions())
                         .build()
         );
-        try (InputStream resourceAsStream = RecipeExportUtil.class.getClassLoader().getResourceAsStream("unpacked/crafting_data_packet.bin")) {
+        try (InputStream resourceAsStream = RecipeExportUtil.class.getClassLoader().getResourceAsStream("crafting_data_packet.bin")) {
+            Preconditions.checkNotNull(resourceAsStream);
             ByteBuf byteBuf = Unpooled.wrappedBuffer(resourceAsStream.readAllBytes());
             // 跳过CraftingDataPacket的packet id
             byteBuf.skipBytes(1);
