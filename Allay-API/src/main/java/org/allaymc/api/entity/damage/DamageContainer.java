@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * Allay Project 2024/1/12
@@ -46,7 +47,7 @@ public class DamageContainer {
         return new DamageContainer(attacker, DamageType.ENTITY_ATTACK, sourceDamage);
     }
 
-    public void updateFinalDamage(Function<Float, Float> updater) {
+    public void updateFinalDamage(UnaryOperator<Float> updater) {
         this.finalDamage = updater.apply(this.finalDamage);
     }
 
