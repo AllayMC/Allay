@@ -27,13 +27,13 @@ public class DamageContainer {
     @Setter
     protected int coolDown = DEFAULT_DAMAGE_COOL_DOWN;
     @Setter
-    protected boolean critical = false;
+    protected boolean critical;
 
     public DamageContainer(Entity attacker, DamageType damageType, float sourceDamage) {
         // attacker is nullable
         Preconditions.checkNotNull(damageType);
         this.attacker = attacker;
-        this.critical = attacker.canCriticalAttack();
+        if (attacker != null) this.critical = attacker.canCriticalAttack();
         this.damageType = damageType;
         this.sourceDamage = sourceDamage;
         this.finalDamage = sourceDamage;
