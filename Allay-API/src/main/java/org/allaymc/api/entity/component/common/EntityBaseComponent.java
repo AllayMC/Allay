@@ -293,4 +293,8 @@ public interface EntityBaseComponent extends EntityComponent {
         pk.setRowingTime(rowingTime);
         sendPacketToViewers(pk);
     }
+
+    default boolean canCriticalAttack() {
+        return !isOnGround() && getMotion().y() < 0;
+    }
 }

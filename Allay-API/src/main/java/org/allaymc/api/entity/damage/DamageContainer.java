@@ -32,6 +32,7 @@ public class DamageContainer {
         // attacker is nullable
         Preconditions.checkNotNull(damageType);
         this.attacker = attacker;
+        this.critical = attacker.canCriticalAttack();
         this.damageType = damageType;
         this.sourceDamage = sourceDamage;
         this.finalDamage = sourceDamage;
