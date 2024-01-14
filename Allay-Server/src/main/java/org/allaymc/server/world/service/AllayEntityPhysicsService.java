@@ -490,6 +490,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
                 var entity = scheduledMove.entity;
+                // 计算delta pos (motion)
+                var motion = scheduledMove.newLoc.sub(entity.getLocation(), new Vector3f());
+                entity.setMotion(motion);
                 if (updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc))
                     entityAABBTree.update(scheduledMove.entity);
                 // ScheduledMove不由服务端计算，但是我们需要计算onGround状态
