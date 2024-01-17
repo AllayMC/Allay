@@ -107,6 +107,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
 
+        this.fallDistance = 0;
+
         this.adventureSettings.applyGameType(gameType);
         this.abilities.applyGameType(gameType);
 

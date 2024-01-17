@@ -12,8 +12,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
+import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.event.EntityLoadNBTEvent;
 import org.allaymc.api.entity.component.event.EntitySaveNBTEvent;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.init.EntityInitInfo;
@@ -27,10 +29,12 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
@@ -48,8 +52,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
@@ -63,7 +66,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
-    protected static AtomicLong UNIQUE_ID_COUNTER = new AtomicLong(0);
+    public static final int DEFAULT_DEAD_TIMER = 20;
+
+    protected static final AtomicLong UNIQUE_ID_COUNTER = new AtomicLong(0);
 
     protected final Location3f location;
     protected final Location3f locLastSent = new Location3f(0, 0, 0, null);
@@ -85,8 +90,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected boolean willBeAddedNextTick = false;
     protected boolean spawned;
     protected boolean dead;
-    public static final int DEFAULT_DEAD_TIMER = 20;
     protected int deadTimer;
+    protected float fallDistance = 0f;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -149,10 +154,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             sendEntityEvent(EntityEventType.DEATH, 0);
         }
         if (dead) {
-            if (deadTimer > 0) {
-                deadTimer--;
-            }
-            if (deadTimer == 0){
+            if (deadTimer > 0) deadTimer--;
+            if (deadTimer == 0) {
                 // Spawn dead particle
                 spawnDeadParticle();
                 removeEntity();
@@ -160,7 +163,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                 // So we set dead back to false
                 dead = false;
             }
-            return;
         }
     }
 
@@ -183,6 +185,21 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public Location3fc getLocation() {
         return location;
+    }
+
+    protected void setLocation(Location3fc location) {
+        // Calculate fall distance
+        if (!this.onGround) {
+            if (this.fallDistance < 0) this.fallDistance = 0;
+
+            this.fallDistance -= location.y() - this.location.y();
+        }
+
+        this.location.set(location);
+        this.location.setYaw(location.yaw());
+        this.location.setHeadYaw(location.headYaw());
+        this.location.setPitch(location.pitch());
+        this.location.setDimension(location.dimension());
     }
 
     public Location3fc getCmdExecuteLocation() {
@@ -249,18 +266,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         setLocation(newLoc);
     }
 
-    protected void setLocation(Location3fc location) {
-        // Calculate fall distance
-        if (!onGround) {
-            fallDistance -= location.y() - this.location.y();
-        }
-        this.location.set(location);
-        this.location.setYaw(location.yaw());
-        this.location.setHeadYaw(location.headYaw());
-        this.location.setPitch(location.pitch());
-        this.location.setDimension(location.dimension());
-    }
-
     protected void checkChunk(Location3fc oldLoc, Location3fc newLoc, boolean currentDimIsNull) {
         var oldChunkX = (int) oldLoc.x() >> 4;
         var oldChunkZ = (int) oldLoc.z() >> 4;
@@ -268,11 +273,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var newChunkZ = (int) newLoc.z() >> 4;
         if (!currentDimIsNull && (oldChunkX != newChunkX || oldChunkZ != newChunkZ)) {
             var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
-            if (oldChunk != null) ((AllayChunk)oldChunk).removeEntity(thisEntity.getUniqueId());
+            if (oldChunk != null) ((AllayChunk) oldChunk).removeEntity(thisEntity.getUniqueId());
             else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
         }
         var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-        if (newChunk != null) ((AllayChunk)newChunk).addEntity(thisEntity);
+        if (newChunk != null) ((AllayChunk) newChunk).addEntity(thisEntity);
         else {
             // Moving into an unloaded chunk is not allowed. Because the entity is held by the chunk, moving to an unloaded chunk will result in the loss of the entity
             log.debug("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
@@ -380,9 +385,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
-        if (fallDistance > 0) {
-            onFall();
-        }
+        if (this.fallDistance > 0) this.onFall();
     }
 
     @Override
@@ -566,7 +569,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                                 .build())
                 .putBoolean("OnGround", onGround);
         if (attributeComponent != null) {
-            //TODO: use component event
+            // TODO: use component event
             builder.putList(
                     "Attributes",
                     NbtType.COMPOUND,
@@ -614,8 +617,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         manager.callEvent(event);
     }
 
-    protected float fallDistance = 0f;
-
     @Override
     public float getFallDistance() {
         return fallDistance;
@@ -623,7 +624,22 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void onFall() {
-        //TODO: fall damage
+        if (!this.onGround) return;
+
+        // todo: farmland replace to dirt
+
+        if (!((boolean) this.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;
+
+        if (this.thisEntity instanceof EntityDamageComponent entity) {
+            if (entity instanceof EntityPlayer player && (player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR))
+                return;
+
+            var damage = this.fallDistance - 3;
+            // todo: + effects, - blocks for damage
+            if (damage > 0) entity.attack(new DamageContainer(this.thisEntity, DamageContainer.DamageType.FALL, damage));
+        }
+
+        this.fallDistance = 0;
     }
 
     @Override
