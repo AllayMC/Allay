@@ -48,11 +48,11 @@ public class RootNode extends BaseNode {
 
     @Override
     public int getMaxArgCostBranch() {
-        throw new UnsupportedOperationException("Cannot call getMaxArgCost() on root node");
+        throw new UnsupportedOperationException("Cannot call getMaxArgCostBranch() on root node");
     }
 
     @Override
     public int getMinArgCostBranch() {
-        throw new UnsupportedOperationException("Cannot call getMinArgCost() on root node");
+        throw new UnsupportedOperationException("Cannot call getMinArgCostBranch() on root node");
     }
 }
