@@ -1,13 +1,18 @@
 package org.allaymc.server.entity.component.common;
 
 import lombok.Getter;
+import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
+import org.allaymc.api.entity.component.event.EntityFallEvent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.world.gamerule.GameRule;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
@@ -32,20 +37,31 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public boolean attack(DamageContainer damage) {
         var currentTime = baseComponent.getWorld().getTick();
-        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
-            return false;
-        }
+        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return false;
+
         lastDamage = damage;
         lastDamageTime = currentTime;
+
         damage.updateFinalDamage(d -> d * (damage.isCritical() ? 1.5f : 1f));
+
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
         baseComponent.sendEntityEvent(EntityEventType.HURT, 2);
-        if (damage.isCritical()) {
-            baseComponent.sendAnimation(AnimatePacket.Action.CRITICAL_HIT);
-        }
-        if (damage.getAttacker() != null) {
-            baseComponent.knockback(damage.getAttacker().getLocation());
-        }
+
+        if (damage.isCritical()) baseComponent.sendAnimation(AnimatePacket.Action.CRITICAL_HIT);
+        if (damage.getAttacker() != null) baseComponent.knockback(damage.getAttacker().getLocation());
         return true;
+    }
+
+    @ComponentEventListener
+    private void onEntityFall(EntityFallEvent event) {
+        var entity = event.entity();
+        if (!((boolean) entity.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;
+
+        if (entity instanceof EntityPlayer player)
+            if (player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR)
+                return;
+
+        var damage = event.fallDistance() - 3;
+        if (damage > 0) this.attack(new DamageContainer(entity, DamageContainer.DamageType.FALL, damage));
     }
 }

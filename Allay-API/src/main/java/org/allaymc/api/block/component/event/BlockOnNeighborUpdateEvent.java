@@ -10,6 +10,10 @@ import org.joml.Vector3ic;
  *
  * @author daoge_cmd
  */
-public record BlockOnNeighborUpdateEvent(Vector3ic updated, Vector3ic neighbor, BlockFace face,
-                                         Dimension dimension) implements ComponentEvent {
+public record BlockOnNeighborUpdateEvent(
+        Vector3ic updated,
+        Vector3ic neighbor,
+        BlockFace face,
+        Dimension dimension
+) implements ComponentEvent {
 }

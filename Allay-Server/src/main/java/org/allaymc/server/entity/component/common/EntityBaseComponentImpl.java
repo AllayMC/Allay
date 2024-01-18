@@ -12,10 +12,9 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
-import org.allaymc.api.entity.component.common.EntityDamageComponent;
+import org.allaymc.api.entity.component.event.EntityFallEvent;
 import org.allaymc.api.entity.component.event.EntityLoadNBTEvent;
 import org.allaymc.api.entity.component.event.EntitySaveNBTEvent;
-import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.init.EntityInitInfo;
@@ -29,12 +28,10 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
-import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
@@ -52,7 +49,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
@@ -626,18 +624,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public void onFall() {
         if (!this.onGround) return;
 
-        // todo: farmland replace to dirt
-
-        if (!((boolean) this.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;
-
-        if (this.thisEntity instanceof EntityDamageComponent entity) {
-            if (entity instanceof EntityPlayer player && (player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR))
-                return;
-
-            var damage = this.fallDistance - 3;
-            // todo: + effects, - blocks for damage
-            if (damage > 0) entity.attack(new DamageContainer(this.thisEntity, DamageContainer.DamageType.FALL, damage));
-        }
+        this.manager.callEvent(new EntityFallEvent(this.thisEntity, this.fallDistance));
 
         this.fallDistance = 0;
     }
