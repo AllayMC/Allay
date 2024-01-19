@@ -21,7 +21,7 @@ public class GameRuleCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                .enums("gamerule", GAMERULE_ENUM)
+                .enums("rule", GAMERULE_ENUM)
                 .str("value")
                 .optional()
                 .exec(context -> {

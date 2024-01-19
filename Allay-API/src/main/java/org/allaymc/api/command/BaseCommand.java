@@ -76,7 +76,7 @@ public abstract class BaseCommand implements Command {
             for (var alias : aliases) {
                 map.put(alias, Collections.emptySet());
             }
-            networkAliasesData = new CommandEnumData("aliases", map, false);
+            networkAliasesData = new CommandEnumData(name + "Aliases", map, false);
         }
 
         // Overloads
