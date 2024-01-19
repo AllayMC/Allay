@@ -39,7 +39,7 @@ public class CraftingTableContainer extends CraftingContainer {
     @Override
     public int calculateShouldConsumedItemCount() {
         var count = 0;
-        for (var i = 4; i <= 12; i++) {
+        for (var i = 0; i < 9; i++) {
             if (!isEmpty(i)) count++;
         }
         return count;
