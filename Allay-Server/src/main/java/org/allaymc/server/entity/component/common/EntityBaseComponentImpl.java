@@ -271,7 +271,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var newChunkZ = (int) newLoc.z() >> 4;
         if (!currentDimIsNull && (oldChunkX != newChunkX || oldChunkZ != newChunkZ)) {
             var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
-            if (oldChunk != null) ((AllayChunk) oldChunk).removeEntity(thisEntity.getUniqueId());
+            if (oldChunk != null) ((AllayChunk) oldChunk).removeEntity(uniqueId);
             else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
         }
         var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
@@ -624,7 +624,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public void onFall() {
         if (!this.onGround) return;
 
-        this.manager.callEvent(new EntityFallEvent(this.thisEntity, this.fallDistance));
+        this.manager.callEvent(new EntityFallEvent(this.fallDistance));
 
         this.fallDistance = 0;
     }
