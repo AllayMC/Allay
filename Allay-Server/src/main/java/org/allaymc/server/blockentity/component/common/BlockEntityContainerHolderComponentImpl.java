@@ -13,6 +13,7 @@ import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.identifier.Identifier;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
@@ -88,5 +89,15 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
                 dimension.getEntityUpdateService().addEntity(entity);
             }
         }
+    }
+
+    @Override
+    public <T extends Container> T getContainerBySlotType(ContainerSlotType slotType) {
+        // BlockEntityContainerHolder can only hold one container in its lifetime
+        // So we only need to check the slotType which caller provided
+        if (!container.getContainerType().heldSlotTypes().contains(slotType)) {
+            throw new IllegalArgumentException("The container " + container.getContainerType() + " does not have the slot type " + slotType);
+        }
+        return (T) container;
     }
 }

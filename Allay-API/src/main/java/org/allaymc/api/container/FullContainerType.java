@@ -25,7 +25,6 @@ public record FullContainerType<T extends Container>(
         BiMap<Integer, Integer> networkSlotIndexMapper
 ) {
 
-//    public static final Map<ContainerSlotType, FullContainerType<? extends Container>> SLOT_TYPE_TO_TYPE_MAP = new EnumMap<>(ContainerSlotType.class);
     public static final int UNKNOWN_NETWORK_ID = Integer.MIN_VALUE;
 
     public static final FullContainerType<PlayerCursorContainer> CURSOR = builder()
@@ -66,7 +65,8 @@ public record FullContainerType<T extends Container>(
 
     public static final FullContainerType<CraftingGridContainer> CRAFTING_GRID = builder()
             .id(ContainerType.WORKBENCH)
-            //Small Grid(2x2) + Crafting Table Grid(3x3)
+            // TODO: split it
+            // Small Grid(2x2) + Crafting Table Grid(3x3)
             .size(4 + 9)
             .mapAllSlotToType(ContainerSlotType.CRAFTING_INPUT)
             .mapRangedNetworkSlotIndex(28, 40, 0)
@@ -82,10 +82,6 @@ public record FullContainerType<T extends Container>(
         this.heldSlotTypes = heldSlotTypes;
         this.networkSlotIndexMapper = networkSlotIndexMapper;
     }
-
-//    public static <T extends Container> FullContainerType<T> fromSlotType(ContainerSlotType type) {
-//        return (FullContainerType<T>) SLOT_TYPE_TO_TYPE_MAP.get(type);
-//    }
 
     public static FullContainerTypeBuilder builder() {
         return new FullContainerTypeBuilder();
