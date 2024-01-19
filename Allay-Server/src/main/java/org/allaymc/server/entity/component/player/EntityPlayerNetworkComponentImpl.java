@@ -341,14 +341,14 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 return PacketSignal.HANDLED;
             }
 
-            if (server.getOnlinePlayers().containsKey(loginData.getUuid())) {
-                disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
-                return PacketSignal.HANDLED;
-            }
-
             if (!loginData.getSkin().isValid()) {
                 session.disconnect(TrKeys.M_DISCONNECTIONSCREEN_INVALIDSKIN);
                 return PacketSignal.HANDLED;
+            }
+
+            var otherDevice = server.getOnlinePlayers().get(loginData.getUuid());
+            if (otherDevice != null) {
+                otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
             }
 
             if (Server.SETTINGS.networkSettings().enableNetworkEncryption()) {
