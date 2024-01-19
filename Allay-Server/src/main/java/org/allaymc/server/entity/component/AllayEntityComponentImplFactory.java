@@ -14,10 +14,7 @@ import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.common.EntityContainerHolderComponentImpl;
 import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.item.EntityItemBaseComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerContainerViewerComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.component.player.*;
 import org.joml.primitives.AABBfc;
 
 import java.util.List;
@@ -71,5 +68,10 @@ public class AllayEntityComponentImplFactory implements EntityComponentImplFacto
     @Override
     public ComponentProvider<EntityComponent> createEntityDamageComponent() {
         return new SimpleComponentProvider<>(info -> new EntityDamageComponentImpl(), EntityDamageComponentImpl.class);
+    }
+
+    @Override
+    public ComponentProvider<EntityComponent> createEntityPlayerDamageComponent() {
+        return new SimpleComponentProvider<>(info -> new EntityPlayerDamageComponentImpl(), EntityDamageComponentImpl.class);
     }
 }

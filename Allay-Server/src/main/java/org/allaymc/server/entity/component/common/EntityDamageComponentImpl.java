@@ -40,6 +40,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean attack(DamageContainer damage) {
+        if (!canAttack(damage)) return false;
         var currentTime = baseComponent.getWorld().getTick();
         if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return false;
 
@@ -53,6 +54,11 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
         if (damage.isCritical()) baseComponent.sendAnimation(AnimatePacket.Action.CRITICAL_HIT);
         if (damage.getAttacker() != null) baseComponent.knockback(damage.getAttacker().getLocation());
+        return true;
+    }
+
+    @Override
+    public boolean canAttack(DamageContainer damage) {
         return true;
     }
 
