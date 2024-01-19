@@ -12,6 +12,7 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
+import org.allaymc.api.world.storage.NativeFileWorldStorage;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.utils.LevelDBKeyUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -39,7 +40,7 @@ import java.util.concurrent.CompletableFuture;
  * @author Cool_Loong
  */
 @Slf4j
-public class AllayLevelDBWorldStorage implements WorldStorage {
+public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     private final Path path;
     private final DB db;
     private WorldData worldDataCache;
@@ -416,5 +417,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         builder.put("spawnradius", worldData.getGameRules().get(GameRule.SPAWN_RADIUS));
         builder.put("tntexplodes", worldData.getGameRules().get(GameRule.TNT_EXPLODES));
         return builder.build();
+    }
+
+    @Override
+    public Path getWorldFolderPath() {
+        return path;
     }
 }
