@@ -31,16 +31,14 @@ public interface ContainerViewer {
     <T extends Container> T getOpenedContainer(FullContainerType<T> type);
 
 
-    default <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType) {
-        return getOpenedContainer(FullContainerType.fromSlotType(slotType));
-    }
+    <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType);
 
 
     Container getOpenedContainer(byte id);
 
     @UnmodifiableView
-    BiMap<Byte, Container> getId2ContainerBiMap();
+    BiMap<Byte, Container> getIdToContainer();
 
     @UnmodifiableView
-    BiMap<FullContainerType<?>, Container> getType2ContainerBiMap();
+    BiMap<FullContainerType<?>, Container> getTypeToContainer();
 }

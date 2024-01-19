@@ -16,11 +16,15 @@ import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3i;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerOpenPacket;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryContentPacket;
 import org.cloudburstmc.protocol.bedrock.packet.InventorySlotPacket;
 import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Allay Project 2023/9/23
@@ -40,8 +44,9 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
 
-    protected HashBiMap<Byte, Container> id2ContainerBiMap = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
-    protected HashBiMap<FullContainerType<?>, Container> type2ContainerBiMap = HashBiMap.create(new Object2ObjectOpenHashMap<>());
+    protected BiMap<Byte, Container> idToContainer = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
+    protected BiMap<FullContainerType<?>, Container> typeToContainer = HashBiMap.create(new Object2ObjectOpenHashMap<>());
+    protected Map<ContainerSlotType, FullContainerType<?>> slotTypeToFullType = new HashMap<>();
 
     @Override
     public byte assignInventoryId() {
@@ -53,7 +58,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     @Override
     public void sendContents(Container container) {
-        var id = id2ContainerBiMap.inverse().get(container);
+        var id = idToContainer.inverse().get(container);
         if (id == null)
             throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
         sendContentsWithSpecificContainerId(container, id);
@@ -78,7 +83,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     @Override
     public void sendContent(Container container, int slot) {
-        var id = id2ContainerBiMap.inverse().get(container);
+        var id = idToContainer.inverse().get(container);
         if (id == null)
             throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
         sendContentsWithSpecificContainerId(container, id, slot);
@@ -98,8 +103,9 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         }
         networkComponent.sendPacket(containerOpenPacket);
 
-        id2ContainerBiMap.put(assignedId, container);
-        type2ContainerBiMap.put(container.getContainerType(), container);
+        idToContainer.put(assignedId, container);
+        typeToContainer.put(container.getContainerType(), container);
+        container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.put(slotType, container.getContainerType()));
 
         //We should send the container's contents to client if the container is not held by the entity
         if (containerHolderComponent.getContainer(containerType) == null) {
@@ -109,40 +115,46 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     @Override
     public void onClose(byte assignedId, Container container) {
-        if (!id2ContainerBiMap.containsKey(assignedId))
+        if (!idToContainer.containsKey(assignedId))
             throw new IllegalArgumentException("Trying to close a container which is not opened! Type: " + container.getContainerType());
         var containerClosePacket = new ContainerClosePacket();
         containerClosePacket.setId(assignedId);
         networkComponent.sendPacket(containerClosePacket);
 
-        type2ContainerBiMap.remove(id2ContainerBiMap.remove(assignedId).getContainerType());
+        typeToContainer.remove(idToContainer.remove(assignedId).getContainerType());
+        container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.remove(slotType));
     }
 
     @Override
     public void onSlotChange(Container container, int slot) {
-        var id = id2ContainerBiMap.inverse().get(container);
+        var id = idToContainer.inverse().get(container);
         sendContentsWithSpecificContainerId(container, id != null ? id : FixedContainerId.PLAYER_INVENTORY, slot);
     }
 
     @Override
 
     public <T extends Container> T getOpenedContainer(FullContainerType<T> type) {
-        return (T) type2ContainerBiMap.get(type);
+        return (T) typeToContainer.get(type);
+    }
+
+    @Override
+    public <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType) {
+        return (T) getOpenedContainer(slotTypeToFullType.get(slotType));
     }
 
     @Override
 
     public Container getOpenedContainer(byte id) {
-        return id2ContainerBiMap.get(id);
+        return idToContainer.get(id);
     }
 
     @Override
-    public @UnmodifiableView BiMap<Byte, Container> getId2ContainerBiMap() {
-        return id2ContainerBiMap;
+    public @UnmodifiableView BiMap<Byte, Container> getIdToContainer() {
+        return idToContainer;
     }
 
     @Override
-    public @UnmodifiableView BiMap<FullContainerType<?>, Container> getType2ContainerBiMap() {
-        return type2ContainerBiMap;
+    public @UnmodifiableView BiMap<FullContainerType<?>, Container> getTypeToContainer() {
+        return typeToContainer;
     }
 }
