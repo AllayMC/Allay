@@ -114,6 +114,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
         setAndSendEntityFlag(EntityFlag.SILENT, gameType == GameType.SPECTATOR);
         setAndSendEntityFlag(EntityFlag.HAS_COLLISION, gameType != GameType.SPECTATOR);
+        setHasGravity(gameType != GameType.CREATIVE && gameType != GameType.SPECTATOR);
 
         var pk = new UpdatePlayerGameTypePacket();
         pk.setGameType(gameType);

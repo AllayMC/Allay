@@ -3,7 +3,9 @@ package org.allaymc.server.entity.component.common;
 import lombok.Getter;
 import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
@@ -29,6 +31,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     protected EntityBaseComponent baseComponent;
     @Dependency
     protected EntityAttributeComponent attributeComponent;
+    @ComponentedObject
+    protected Entity entity;
     @Getter
     protected DamageContainer lastDamage;
     @Getter
@@ -52,14 +56,15 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         return true;
     }
 
+    @Override
+    public boolean hasFallDamage() {
+        return baseComponent.hasGravity();
+    }
+
     @ComponentEventListener
     private void onEntityFall(EntityFallEvent event) {
-        var entity = event.entity();
-        if (!((boolean) entity.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;
-
-        if (entity instanceof EntityPlayer player)
-            if (player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR)
-                return;
+        if (!hasFallDamage()) return;
+        if (!((boolean) baseComponent.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;
 
         var damage = event.fallDistance() - 3;
         if (damage > 0) this.attack(new DamageContainer(entity, DamageContainer.DamageType.FALL, damage));

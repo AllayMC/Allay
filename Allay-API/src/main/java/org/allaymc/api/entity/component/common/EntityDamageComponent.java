@@ -23,4 +23,6 @@ public interface EntityDamageComponent extends EntityComponent {
     DamageContainer getLastDamage();
 
     long getLastDamageTime();
+
+    boolean hasFallDamage();
 }
