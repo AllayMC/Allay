@@ -27,7 +27,6 @@ import java.util.List;
 public class GameTestCommand extends SimpleCommand {
     public GameTestCommand() {
         super("gametest", TrKeys.M_GAMETEST_DESCRIPTION);
-        aliases.add("gt");
         flags.add(CommandData.Flag.TEST_USAGE);
     }
 

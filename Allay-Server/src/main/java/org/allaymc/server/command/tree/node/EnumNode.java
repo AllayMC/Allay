@@ -46,11 +46,12 @@ public class EnumNode extends BaseNode {
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
+        data.setName(name);
         var map = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
         for (var value : values) {
             map.put(value, Collections.emptySet());
         }
-        data.setEnumData(new CommandEnumData(name, map, false));
+        data.setEnumData(new CommandEnumData(name + "Enums", map, false));
         data.setType(CommandParam.TEXT);
         return data;
     }
