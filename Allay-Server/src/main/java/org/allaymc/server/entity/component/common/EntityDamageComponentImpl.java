@@ -11,10 +11,8 @@ import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.event.EntityFallEvent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
@@ -50,10 +48,16 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         damage.updateFinalDamage(d -> d * (damage.isCritical() ? 1.5f : 1f));
 
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
-        baseComponent.sendEntityEvent(EntityEventType.HURT, 2);
+        baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
 
-        if (damage.isCritical()) baseComponent.sendAnimation(AnimatePacket.Action.CRITICAL_HIT);
-        if (damage.getAttacker() != null) baseComponent.knockback(damage.getAttacker().getLocation());
+        if (damage.isCritical()) baseComponent.applyAnimation(AnimatePacket.Action.CRITICAL_HIT);
+        if (damage.getAttacker() != null) {
+            if (damage.hasCustomKnockback()) {
+                baseComponent.knockback(damage.getAttacker().getLocation(), damage.getCustomKnockback());
+            } else {
+                baseComponent.knockback(damage.getAttacker().getLocation());
+            }
+        }
         return true;
     }
 

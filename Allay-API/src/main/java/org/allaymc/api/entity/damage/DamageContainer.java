@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.attribute.AttributeType;
 
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -15,7 +16,6 @@ import java.util.function.UnaryOperator;
  */
 @Getter
 public class DamageContainer {
-    public static final float DEFAULT_KNOCK_BACK = 0.3f;
     public static final int DEFAULT_DAMAGE_COOL_DOWN = 10;
     protected Entity attacker;
     protected DamageType damageType;
@@ -23,7 +23,7 @@ public class DamageContainer {
     @Setter
     protected float finalDamage;
     @Setter
-    protected float knockback = DEFAULT_KNOCK_BACK;
+    protected float customKnockback = -1;
     @Setter
     protected int coolDown = DEFAULT_DAMAGE_COOL_DOWN;
     @Setter
@@ -45,6 +45,10 @@ public class DamageContainer {
 
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
         return new DamageContainer(attacker, DamageType.ENTITY_ATTACK, sourceDamage);
+    }
+
+    public boolean hasCustomKnockback() {
+        return customKnockback != -1;
     }
 
     public void updateFinalDamage(UnaryOperator<Float> updater) {
