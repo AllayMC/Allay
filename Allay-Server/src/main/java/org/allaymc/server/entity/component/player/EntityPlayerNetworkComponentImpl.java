@@ -72,7 +72,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Getter
     protected boolean networkEncryptionEnabled = false;
     @Getter
-
     protected SecretKey encryptionSecretKey;
     @ComponentedObject
     protected EntityPlayer player;
