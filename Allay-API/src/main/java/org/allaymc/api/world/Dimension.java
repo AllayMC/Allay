@@ -19,6 +19,7 @@ import org.allaymc.api.world.service.EntityUpdateService;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SpawnParticleEffectPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
@@ -348,5 +349,11 @@ public interface Dimension {
         pk.setPosition(MathUtils.JOMLVecTocbVec(pos));
         pk.setData(data);
         getChunkService().getChunkByLevelPos((int) pos.x(), (int) pos.z()).addChunkPacket(pk);
+    }
+
+    default void broadcastPacket(BedrockPacket packet) {
+        for (var player : getPlayers()) {
+            player.sendPacket(packet);
+        }
     }
 }

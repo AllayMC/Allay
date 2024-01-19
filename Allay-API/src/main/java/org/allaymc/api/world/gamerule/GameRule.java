@@ -4,6 +4,8 @@ import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Allay Project 2023/3/4
@@ -34,7 +36,7 @@ public enum GameRule {
     PVP("pvp", true, Type.BOOLEAN),
     RANDOM_TICK_SPEED("randomTickSpeed", 1, Type.INT),
     SEND_COMMAND_FEEDBACK("sendCommandFeedback", true, Type.BOOLEAN),
-    SHOW_COORDINATES("showCoordinates", true, Type.BOOLEAN), //Implemented
+    SHOW_COORDINATES("showCoordinates", false, Type.BOOLEAN),
     SHOW_DEATH_MESSAGES("showDeathMessages", true, Type.BOOLEAN),
     SPAWN_RADIUS("spawnRadius", 5, Type.INT),
     TNT_EXPLODES("tntExplodes", true, Type.BOOLEAN),
@@ -44,6 +46,8 @@ public enum GameRule {
     SHOW_BORDER_EFFECT("showBorderEffect", true, Type.BOOLEAN),
     FUNCTION_COMMAND_LIMIT("functionCommandLimit", 10000, Type.INT),
     DO_LIMITED_CRAFTING("dolimitedcrafting", false, Type.BOOLEAN);
+
+    private static final Map<String, GameRule> BY_NAME = new HashMap<>();
 
     private final String name;
     private final Object defaultValue;
@@ -65,7 +69,11 @@ public enum GameRule {
     }
 
     public GameRuleData<?> toNetwork() {
-        return new GameRuleData<>(this.name, this.defaultValue);
+        return new GameRuleData<>(name, defaultValue);
+    }
+
+    public <T> GameRuleData<T> toNetwork(T value) {
+        return new GameRuleData<>(name, value);
     }
 
     public enum Type {

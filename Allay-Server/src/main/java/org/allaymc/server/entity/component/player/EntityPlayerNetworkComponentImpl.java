@@ -218,8 +218,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             //send BaseGamePacket
             var spawnWorld = server.getDefaultWorld();
             var startGamePacket = new StartGamePacket();
-            // TODO: send game rules
-            startGamePacket.getGamerules().add(GameRule.SHOW_COORDINATES.toNetwork());
+            startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
             startGamePacket.setUniqueEntityId(player.getUniqueId());
             startGamePacket.setRuntimeEntityId(player.getUniqueId());
             startGamePacket.setPlayerGameType(player.getGameType());

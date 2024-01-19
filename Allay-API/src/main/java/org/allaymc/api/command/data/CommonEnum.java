@@ -2,7 +2,10 @@ package org.allaymc.api.command.data;
 
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+
+import java.util.Arrays;
 
 import static org.cloudburstmc.protocol.bedrock.data.GameType.*;
 
@@ -40,5 +43,11 @@ public interface CommonEnum {
             // 不应该其他情况
             default -> gameType.toString();
         };
+    }
+
+    String[] GAMERULE_ENUM = Arrays.stream(GameRule.values()).map(GameRule::getName).toArray(String[]::new);
+
+    static GameRule getGameRuleFromName(String name) {
+        return GameRule.fromName(name);
     }
 }

@@ -1,5 +1,6 @@
 package org.allaymc.api.world.gamerule;
 
+import org.allaymc.api.world.World;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.packet.GameRulesChangedPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -16,7 +17,8 @@ public class GameRules {
 
     private final Map<GameRule, Object> gameRules = new HashMap<>();
 
-    private GameRulesChangedPacket changedPacket;
+    // Used as dirty flag
+    private boolean dirty;
 
     public GameRules() {
         for (GameRule gameRule : GameRule.values()) {
@@ -34,30 +36,32 @@ public class GameRules {
     }
 
     public void put(GameRule gameRule, Object o) {
-        this.gameRules.put(gameRule, o);
-        this.changedPacket = null;
+        gameRules.put(gameRule, o);
+        dirty = true;
     }
 
     @SuppressWarnings("unchecked")
     public <V> V get(GameRule gameRule) {
-        return (V) this.gameRules.getOrDefault(gameRule, gameRule.getDefaultValue());
+        return (V) gameRules.getOrDefault(gameRule, gameRule.getDefaultValue());
     }
 
-    public boolean requiresUpdate() {
-        return this.changedPacket == null;
+    public void sync(World world) {
+        if (!dirty) return;
+        world.broadcastPacket(buildPacket());
+        dirty = false;
     }
 
-    public GameRulesChangedPacket updatePacket() {
-        if (!this.requiresUpdate()) {
-            return this.changedPacket;
-        }
-        this.changedPacket = new GameRulesChangedPacket();
+    public GameRulesChangedPacket buildPacket() {
+        var pk = new GameRulesChangedPacket();
+        pk.getGameRules().addAll(toNetworkGameRuleData());
+        return pk;
+    }
+
+    public List<GameRuleData<?>> toNetworkGameRuleData() {
         List<GameRuleData<?>> gameRuleData = new ArrayList<>();
         for (var entry : this.getGameRules().entrySet()) {
             gameRuleData.add(new GameRuleData<>(entry.getKey().getName(), entry.getValue()));
         }
-        this.changedPacket.getGameRules().addAll(gameRuleData);
-        return this.changedPacket;
+        return gameRuleData;
     }
-
 }

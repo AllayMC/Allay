@@ -14,6 +14,7 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.GameLoop;
 import org.allaymc.server.scheduler.AllayScheduler;
+import org.cloudburstmc.protocol.bedrock.packet.GameRulesChangedPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -74,9 +75,14 @@ public class AllayWorld implements World {
     @Override
     public void tick(long currentTick) {
         getDimensions().values().forEach(e -> e.getPlayers().forEach(EntityPlayerNetworkComponent::handleDataPacket));
+        syncData();
         tickTime(currentTick);
         scheduler.tick();
         getDimensions().values().forEach(d -> d.tick(currentTick));
+    }
+
+    protected void syncData() {
+        worldData.getGameRules().sync(this);
     }
 
     @Override
@@ -125,6 +131,11 @@ public class AllayWorld implements World {
     public void setDimension(Dimension dimension) {
         Preconditions.checkArgument(!this.dimensionMap.containsKey(dimension.getDimensionInfo().dimensionId()));
         this.dimensionMap.put(dimension.getDimensionInfo().dimensionId(), dimension);
+    }
+
+    @Override
+    public void setGameRule(GameRule gamerule, Object value) {
+        worldData.setGameRule(gamerule, value);
     }
 
     @Override

@@ -9,10 +9,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.server.command.defaults.GameModeCommand;
-import org.allaymc.server.command.defaults.GameTestCommand;
-import org.allaymc.server.command.defaults.MeCommand;
-import org.allaymc.server.command.defaults.StopCommand;
+import org.allaymc.server.command.defaults.*;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
 import java.util.HashMap;
@@ -39,6 +36,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new GameTestCommand());
         register(new StopCommand());
         register(new GameModeCommand());
+        register(new GameRuleCommand());
     }
 
     @Override

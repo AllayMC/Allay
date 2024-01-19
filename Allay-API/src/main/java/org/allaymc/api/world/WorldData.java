@@ -7,11 +7,14 @@ import lombok.Value;
 import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
+import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -94,7 +97,6 @@ public class WorldData {
     @Builder.Default
     boolean commandsEnabled = true;
     @Builder.Default
-    @Getter(AccessLevel.NONE)
     GameRules gameRules = new GameRules();
     @Builder.Default
     long currentTick = 0L;
@@ -221,10 +223,6 @@ public class WorldData {
 
     public synchronized void setCurrentTick(long currentTick) {
         this.currentTick = currentTick;
-    }
-
-    public Map<GameRule, Object> getGameRules() {
-        return gameRules.getGameRules();
     }
 
     public synchronized void setGameRule(GameRule gameRule, Object o) {
