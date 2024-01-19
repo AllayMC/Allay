@@ -16,75 +16,26 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 @Getter
-public class CraftingGridContainer extends BaseContainer {
-
-    protected Vector3ic craftingTablePos;
-    @Setter
-    protected boolean isUsingCraftingTable = false;
+public class CraftingGridContainer extends CraftingContainer {
 
     public CraftingGridContainer() {
         super(FullContainerType.CRAFTING_GRID);
     }
 
     @Override
-    public boolean hasBlockPos() {
-        return true;
-    }
-
-    @Override
-    public Vector3ic getBlockPos() {
-        return craftingTablePos;
-    }
-
-    @Override
-    public void setBlockPos(Vector3ic blockPos) {
-        this.craftingTablePos = blockPos;
-    }
-
-    @Override
-    public void onClose(ContainerViewer viewer) {
-        if (isUsingCraftingTable) {
-            isUsingCraftingTable = false;
-        }
-    }
-
     public int calculateShouldConsumedItemCount() {
         var count = 0;
-        if (isUsingCraftingTable) {
-            for (var i = 4; i <= 12; i++) {
-                if (!isEmpty(i)) count++;
-            }
-        } else {
-            for (var i = 0; i <= 4; i++) {
-                if (!isEmpty(i)) count++;
-            }
+        for (var i = 0; i < 4; i++) {
+            if (!isEmpty(i)) count++;
         }
         return count;
     }
 
+    @Override
     public CraftingInput createCraftingInput() {
-        return isUsingCraftingTable ? createCraftingTableInput() : createCraftingGridInput();
-    }
-
-    public CraftingInput createCraftingGridInput() {
         return new CraftingInput(
                 pickOne(0), pickOne(1),
                 pickOne(2), pickOne(3)
         );
-    }
-
-    public CraftingInput createCraftingTableInput() {
-        return new CraftingInput(
-                pickOne(4), pickOne(5), pickOne(6),
-                pickOne(7), pickOne(8), pickOne(9),
-                pickOne(10), pickOne(11), pickOne(12)
-        );
-    }
-
-    protected ItemStack pickOne(int slot) {
-        if (isEmpty(slot)) return Container.EMPTY_SLOT_PLACE_HOLDER;
-        var copy = getItemStack(slot).copy(false);
-        copy.setCount(1);
-        return copy;
     }
 }
