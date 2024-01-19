@@ -211,14 +211,14 @@ public final class AllayServer implements Server {
         }
         if (player.isSpawned()) {
             player.getDimension().removePlayer(player);
-            players.remove(player.getUUID());
-            networkServer.setPlayerCount(players.size());
             var playerListEntry = playerListEntryMap.remove(player.getUUID());
             var pk = new PlayerListPacket();
             pk.setAction(PlayerListPacket.Action.REMOVE);
             pk.getEntries().add(playerListEntry);
             broadcastPacket(pk);
         }
+        players.remove(player.getUUID());
+        networkServer.setPlayerCount(players.size());
     }
 
     @Override

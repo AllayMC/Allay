@@ -72,7 +72,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Getter
     protected boolean networkEncryptionEnabled = false;
     @Getter
-
     protected SecretKey encryptionSecretKey;
     @ComponentedObject
     protected EntityPlayer player;
@@ -173,9 +172,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         setEntityDataPacket.setTick(player.getWorld().getTick());
         sendPacket(setEntityDataPacket);
 
-        var gameType = player.getGameType();
-        player.getAdventureSettings().applyGameType(gameType);
-        player.getAbilities().applyGameType(gameType);
+        // Update abilities, adventure settings, entity flags that are related to game type
+        player.setGameType(player.getGameType());
 
         sendPacket(Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player));
 
@@ -220,12 +218,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             //send BaseGamePacket
             var spawnWorld = server.getDefaultWorld();
             var startGamePacket = new StartGamePacket();
+            // TODO: send game rules
             startGamePacket.getGamerules().add(GameRule.SHOW_COORDINATES.toNetwork());
             startGamePacket.setUniqueEntityId(player.getUniqueId());
             startGamePacket.setRuntimeEntityId(player.getUniqueId());
             startGamePacket.setPlayerGameType(player.getGameType());
             var loc = player.getLocation();
-            var worldSpawn = spawnWorld.getWorldData().getSpawnPoint(); //TODO: save spawn world per player
+            var worldSpawn = spawnWorld.getWorldData().getSpawnPoint(); // TODO: save spawn world per player
             startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
             startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
             startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
@@ -342,14 +341,14 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 return PacketSignal.HANDLED;
             }
 
-            if (server.getOnlinePlayers().containsKey(loginData.getUuid())) {
-                disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
-                return PacketSignal.HANDLED;
-            }
-
             if (!loginData.getSkin().isValid()) {
                 session.disconnect(TrKeys.M_DISCONNECTIONSCREEN_INVALIDSKIN);
                 return PacketSignal.HANDLED;
+            }
+
+            var otherDevice = server.getOnlinePlayers().get(loginData.getUuid());
+            if (otherDevice != null) {
+                otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
             }
 
             if (Server.SETTINGS.networkSettings().enableNetworkEncryption()) {

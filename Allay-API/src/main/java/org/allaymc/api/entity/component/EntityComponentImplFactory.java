@@ -38,4 +38,6 @@ public interface EntityComponentImplFactory {
     ComponentProvider<EntityComponent> createEntityPlayerNetworkComponent();
 
     ComponentProvider<EntityComponent> createEntityDamageComponent();
+
+    ComponentProvider<EntityComponent> createEntityPlayerDamageComponent();
 }

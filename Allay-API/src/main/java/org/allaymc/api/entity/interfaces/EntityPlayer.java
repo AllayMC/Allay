@@ -42,7 +42,7 @@ public interface EntityPlayer extends
           .addComponent(getFactory().createEntityAttributeComponent(basicPlayerAttributes()))
           .addComponent(getFactory().createEntityPlayerContainerHolderComponent())
           .addComponent(getFactory().createEntityPlayerContainerViewerComponent())
-          .addComponent(getFactory().createEntityDamageComponent())
+          .addComponent(getFactory().createEntityPlayerDamageComponent())
           .build();
 
   default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {

@@ -16,9 +16,7 @@ public interface ContainerHolder {
 
     <T extends Container> T getContainer(FullContainerType<T> type);
 
-    default <T extends Container> T getContainerBySlotType(ContainerSlotType slotType) {
-        return getContainer(FullContainerType.fromSlotType(slotType));
-    }
+    <T extends Container> T getContainerBySlotType(ContainerSlotType slotType);
 
     void addContainer(Container container);
 }

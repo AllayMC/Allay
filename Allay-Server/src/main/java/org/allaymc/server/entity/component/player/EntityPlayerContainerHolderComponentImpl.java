@@ -22,7 +22,9 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 new PlayerCreatedOutputContainer(),
                 new PlayerArmorContainer(),
                 new PlayerOffhandContainer(),
-                new CraftingGridContainer());
+                new CraftingGridContainer(),
+                new CraftingTableContainer()
+        );
     }
 
     @Override

@@ -40,6 +40,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.primitives.AABBf;
@@ -114,7 +115,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
         setAndSendEntityFlag(EntityFlag.SILENT, gameType == GameType.SPECTATOR);
         setAndSendEntityFlag(EntityFlag.HAS_COLLISION, gameType != GameType.SPECTATOR);
-        setHasGravity(gameType != GameType.CREATIVE && gameType != GameType.SPECTATOR);
+        setHasGravity(gameType != GameType.SPECTATOR);
 
         var pk = new UpdatePlayerGameTypePacket();
         pk.setGameType(gameType);
@@ -447,5 +448,27 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public String getName() {
         return thisEntity.getOriginName();
+    }
+
+    @Override
+    public void applyEntityEvent(EntityEventType event, int data) {
+        var pk = new EntityEventPacket();
+        pk.setRuntimeEntityId(getUniqueId());
+        pk.setType(event);
+        pk.setData(data);
+        sendPacketToViewers(pk);
+        // Player should also send the packet to itself
+        networkComponent.sendPacket(pk);
+    }
+
+    @Override
+    public void applyAnimation(AnimatePacket.Action action, float rowingTime) {
+        var pk = new AnimatePacket();
+        pk.setRuntimeEntityId(getUniqueId());
+        pk.setAction(action);
+        pk.setRowingTime(rowingTime);
+        sendPacketToViewers(pk);
+        // Player should also send the packet to itself
+        networkComponent.sendPacket(pk);
     }
 }

@@ -24,9 +24,8 @@ public class BlockCraftingTableBaseComponentImpl extends BlockBaseComponentImpl 
     @Override
     public boolean onInteract(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
         if (!super.onInteract(player, itemStack, dimension, blockPos, placeBlockPos, clickPos, blockFace) && player != null) {
-            var craftingTableContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
+            var craftingTableContainer = player.getContainer(FullContainerType.CRAFTING_TABLE);
             craftingTableContainer.setBlockPos(blockPos);
-            craftingTableContainer.setUsingCraftingTable(true);
             craftingTableContainer.addViewer(player);
             return true;
         }

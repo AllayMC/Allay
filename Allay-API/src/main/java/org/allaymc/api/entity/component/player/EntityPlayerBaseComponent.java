@@ -7,6 +7,8 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
+import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
 

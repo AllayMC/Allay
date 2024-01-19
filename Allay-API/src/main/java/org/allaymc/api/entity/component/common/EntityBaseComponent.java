@@ -274,7 +274,7 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void knockback(Vector3fc source, float kb);
 
-    default void sendEntityEvent(EntityEventType event, int data) {
+    default void applyEntityEvent(EntityEventType event, int data) {
         var pk = new EntityEventPacket();
         pk.setRuntimeEntityId(getUniqueId());
         pk.setType(event);
@@ -282,11 +282,11 @@ public interface EntityBaseComponent extends EntityComponent {
         sendPacketToViewers(pk);
     }
 
-    default void sendAnimation(AnimatePacket.Action action) {
-        sendAnimation(action, 0);
+    default void applyAnimation(AnimatePacket.Action action) {
+        applyAnimation(action, 0);
     }
 
-    default void sendAnimation(AnimatePacket.Action action, float rowingTime) {
+    default void applyAnimation(AnimatePacket.Action action, float rowingTime) {
         var pk = new AnimatePacket();
         pk.setRuntimeEntityId(getUniqueId());
         pk.setAction(action);

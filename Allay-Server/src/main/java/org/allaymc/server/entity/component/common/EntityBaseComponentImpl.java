@@ -149,7 +149,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (attributeComponent.getHealth() == 0 && !dead) {
             dead = true;
             deadTimer = DEFAULT_DEAD_TIMER;
-            sendEntityEvent(EntityEventType.DEATH, 0);
+            applyEntityEvent(EntityEventType.DEATH, 0);
         }
         if (dead) {
             if (deadTimer > 0) deadTimer--;

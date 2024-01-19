@@ -1,8 +1,11 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.impl.CraftingContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.recipe.RecipeRegistry;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -12,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.allaymc.api.container.FullContainerType.CRAFTING_GRID;
 import static org.allaymc.api.container.FullContainerType.CREATED_OUTPUT;
 
 /**
@@ -27,9 +29,13 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
 
     @Override
     public ActionResponse handle(CraftRecipeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        var craftingGridContainer = player.getContainer(CRAFTING_GRID);
+        CraftingContainer craftingContainer = player.getContainer(FullContainerType.CRAFTING_TABLE);
+        if (craftingContainer == null) {
+            // The player is not opening a crafting table, using crafting grid instead
+            craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
+        }
         var recipe = RecipeRegistry.getRegistry().getRecipeByNetworkId(action.getRecipeNetworkId());
-        var input = craftingGridContainer.createCraftingInput();
+        var input = craftingContainer.createCraftingInput();
         var matched = recipe.match(input);
         if (!matched) {
             log.warn("Mismatched recipe! Network id: " + recipe.getNetworkId());
@@ -39,7 +45,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             // Validate the consume action count which client sent
             // 还有一部分检查被放在了ConsumeActionProcessor里面（例如消耗物品数量检查）
             var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
-            var consumeActionCountNeeded = craftingGridContainer.calculateShouldConsumedItemCount();
+            var consumeActionCountNeeded = craftingContainer.calculateShouldConsumedItemCount();
             if (consumeActions.size() != consumeActionCountNeeded) {
                 log.warn("Mismatched consume action count! Expected: " + consumeActionCountNeeded + ", Actual: " + consumeActions.size());
                 return error();

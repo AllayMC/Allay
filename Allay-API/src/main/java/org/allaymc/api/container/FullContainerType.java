@@ -25,7 +25,6 @@ public record FullContainerType<T extends Container>(
         BiMap<Integer, Integer> networkSlotIndexMapper
 ) {
 
-    public static final Map<ContainerSlotType, FullContainerType<? extends Container>> SLOT_TYPE_TO_TYPE_MAP = new EnumMap<>(ContainerSlotType.class);
     public static final int UNKNOWN_NETWORK_ID = Integer.MIN_VALUE;
 
     public static final FullContainerType<PlayerCursorContainer> CURSOR = builder()
@@ -65,11 +64,17 @@ public record FullContainerType<T extends Container>(
             .build();
 
     public static final FullContainerType<CraftingGridContainer> CRAFTING_GRID = builder()
-            .id(ContainerType.WORKBENCH)
-            //Small Grid(2x2) + Crafting Table Grid(3x3)
-            .size(4 + 9)
+            .id(ContainerType.INVENTORY)
+            .size(4)
             .mapAllSlotToType(ContainerSlotType.CRAFTING_INPUT)
-            .mapRangedNetworkSlotIndex(28, 40, 0)
+            .mapRangedNetworkSlotIndex(28, 31, 0)
+            .build();
+
+    public static final FullContainerType<CraftingTableContainer> CRAFTING_TABLE = builder()
+            .id(ContainerType.WORKBENCH)
+            .size(9)
+            .mapAllSlotToType(ContainerSlotType.CRAFTING_INPUT)
+            .mapRangedNetworkSlotIndex(32, 40, 0)
             .build();
 
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
@@ -80,20 +85,7 @@ public record FullContainerType<T extends Container>(
             if (slotType == null) throw new IllegalArgumentException("Slot type table shouldn't contain null entry!");
         }
         this.heldSlotTypes = heldSlotTypes;
-        for (ContainerSlotType slotType : heldSlotTypes) {
-            var mapped = SLOT_TYPE_TO_TYPE_MAP.get(slotType);
-            if (mapped == null) {
-                SLOT_TYPE_TO_TYPE_MAP.put(slotType, this);
-                continue;
-            }
-            if (!mapped.equals(this))
-                throw new IllegalArgumentException("Slot type " + slotType + " is already mapped to " + SLOT_TYPE_TO_TYPE_MAP.get(slotType));
-        }
         this.networkSlotIndexMapper = networkSlotIndexMapper;
-    }
-
-    public static <T extends Container> FullContainerType<T> fromSlotType(ContainerSlotType type) {
-        return (FullContainerType<T>) SLOT_TYPE_TO_TYPE_MAP.get(type);
     }
 
     public static FullContainerTypeBuilder builder() {
