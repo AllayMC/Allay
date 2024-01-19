@@ -218,7 +218,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     public void addBlockEntity(BlockEntity blockEntity) {
         Preconditions.checkNotNull(blockEntity);
         var pos = blockEntity.getPosition();
-        var key = HashUtils.hashChunkXYZ(pos.x(), pos.y(), pos.z());
+        var key = HashUtils.hashChunkXYZ(pos.x() & 15, pos.y() & 15, pos.z() & 15);
         blockEntities.put(key, blockEntity);
     }
 
