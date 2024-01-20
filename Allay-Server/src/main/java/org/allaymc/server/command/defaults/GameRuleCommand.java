@@ -16,6 +16,7 @@ public class GameRuleCommand extends SimpleCommand {
 
     public GameRuleCommand() {
         super("gamerule", TrKeys.M_COMMANDS_GAMERULE_DESCRIPTION);
+        aliases.add("gr");
     }
 
     @Override
