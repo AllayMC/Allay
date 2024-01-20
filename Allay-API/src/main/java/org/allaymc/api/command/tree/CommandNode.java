@@ -5,6 +5,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.entity.Entity;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +49,6 @@ public interface CommandNode {
     CommandNode defaultValue(Object defaultValue);
 
     CommandNode optional();
-
 
     CommandNode getOptionalLeaf();
 
@@ -94,6 +94,20 @@ public interface CommandNode {
     }
 
     CommandResult applyExecutor(CommandContext context);
+
+    CommandNode addParamOption(CommandParamOption option);
+
+    default CommandNode suppressEnumAutoCompletion() {
+        return addParamOption(CommandParamOption.SUPPRESS_ENUM_AUTOCOMPLETION);
+    }
+
+    default CommandNode hasSemanticConstraint() {
+        return addParamOption(CommandParamOption.HAS_SEMANTIC_CONSTRAINT);
+    }
+
+    default CommandNode enumAsChainedCommand() {
+        return addParamOption(CommandParamOption.ENUM_AS_CHAINED_COMMAND);
+    }
 
     CommandParamData toNetworkData();
 
@@ -147,6 +161,10 @@ public interface CommandNode {
 
     default CommandNode enums(String name, String defaultValue, String[] enums) {
         return addLeaf(getFactory().enums(name, this, defaultValue, enums));
+    }
+
+    default CommandNode enums(String name, String defaultValue, String enumName, String[] enums) {
+        return addLeaf(getFactory().enums(name, this, enumName, defaultValue, enums));
     }
 
     default CommandNode enums(String name, String... enums) {

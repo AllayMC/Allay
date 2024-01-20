@@ -1,6 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.palette.BlockStateHashPalette;
+import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
@@ -15,8 +16,13 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.JSONUtils;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -27,7 +33,7 @@ import java.util.List;
 public class GameTestCommand extends SimpleCommand {
     public GameTestCommand() {
         super("gametest", TrKeys.M_GAMETEST_DESCRIPTION);
-        aliases.add("gt");
+//        aliases.add("gt");
         flags.add(CommandData.Flag.TEST_USAGE);
     }
 
@@ -125,6 +131,20 @@ public class GameTestCommand extends SimpleCommand {
                         }
                     });
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("dumpcmd")
+                .exec((context, player) -> {
+                    var cmdPk = Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player);
+                    try {
+                        Files.deleteIfExists(Path.of("cmd_pk_allay.json"));
+                    } catch (IOException e) {
+                        context.addOutput("§c" + e);
+                        return context.failed();
+                    }
+                    JSONUtils.toFile("cmd_pk_allay.json", cmdPk, writer -> writer.setIndent("  "));
+                    return context.success();
                 }, SenderType.PLAYER);
+
     }
 }

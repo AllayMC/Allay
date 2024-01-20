@@ -8,9 +8,9 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.exception.CommandParseException;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -37,6 +37,7 @@ public abstract class BaseNode implements CommandNode {
     @Getter
     @Setter
     protected int maxArgCostBranch;
+    protected Set<CommandParamOption> paramOptions = EnumSet.noneOf(CommandParamOption.class);;
 
     public BaseNode(String name, CommandNode parent) {
         this(name, parent, null);
@@ -204,10 +205,17 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
+    public CommandNode addParamOption(CommandParamOption option) {
+        paramOptions.add(option);
+        return this;
+    }
+
+    @Override
     public CommandParamData toNetworkData() {
         var data = new CommandParamData();
         data.setName(name);
         data.setOptional(optional);
+        data.getOptions().addAll(paramOptions);
         return data;
     }
 }

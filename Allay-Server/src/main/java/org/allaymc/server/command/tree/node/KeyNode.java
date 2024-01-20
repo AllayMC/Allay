@@ -35,8 +35,7 @@ public class KeyNode extends BaseNode {
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
-        data.setEnumData(new CommandEnumData(name, Map.of(name, Set.of()), false));
-        data.setType(CommandParam.TEXT);
+        data.setEnumData(new CommandEnumData(name + "Key", Map.of(name, Set.of()), false));
         return data;
     }
 }

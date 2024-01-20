@@ -32,7 +32,7 @@ public abstract class BaseCommand implements Command {
 
     static {
         var defaultParam = new CommandParamData();
-        defaultParam.setName("default");
+        defaultParam.setName("args");
         defaultParam.setType(CommandParam.TEXT);
         defaultParam.setOptional(true);
         DEFAULT_OVERLOAD_DATA = new CommandOverloadData[1];
@@ -46,6 +46,7 @@ public abstract class BaseCommand implements Command {
         this.name = name;
         this.description = description;
         this.permission = permission;
+        // We just add NOT_CHEAT flag to all commands as the available_commands_packet is unique to each player
         flags.add(NOT_CHEAT);
     }
 
@@ -76,7 +77,7 @@ public abstract class BaseCommand implements Command {
             for (var alias : aliases) {
                 map.put(alias, Collections.emptySet());
             }
-            networkAliasesData = new CommandEnumData(name + "Aliases", map, false);
+            networkAliasesData = new CommandEnumData(name + "CommandAliases", map, false);
         }
 
         // Overloads

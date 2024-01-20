@@ -35,7 +35,7 @@ public class MessageNode extends BaseNode {
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
-        data.setType(CommandParam.MESSAGE);
+        data.setType(CommandParam.MESSAGE_ROOT);
         return data;
     }
 

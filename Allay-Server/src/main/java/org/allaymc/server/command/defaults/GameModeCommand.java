@@ -19,7 +19,7 @@ import java.util.List;
 public class GameModeCommand extends SimpleCommand {
     public GameModeCommand() {
         super("gamemode", TrKeys.M_COMMANDS_GAMEMODE_DESCRIPTION);
-        aliases.add("gm");
+//        aliases.add("gm");
     }
 
     @Override

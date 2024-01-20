@@ -40,11 +40,12 @@ public class BooleanNode extends BaseNode {
             "false", Set.of()
     );
 
+    public static CommandEnumData BOOLEAN_ENUM_DATA = new CommandEnumData("Boolean", BOOLEAN_ENUM_DATA_VALUE, false);
+
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
-        data.setEnumData(new CommandEnumData(name, BOOLEAN_ENUM_DATA_VALUE, false));
-        data.setType(CommandParam.TEXT);
+        data.setEnumData(BOOLEAN_ENUM_DATA);
         return data;
     }
 }

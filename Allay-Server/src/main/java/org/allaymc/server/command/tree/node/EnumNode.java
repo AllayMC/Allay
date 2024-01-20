@@ -18,9 +18,18 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class EnumNode extends BaseNode {
+    protected String enumName;
     protected String[] values;
-    public EnumNode(String name, CommandNode parent, Object defaultValue, String... values) {
+
+    public EnumNode(String name, CommandNode parent, Object defaultValue, String[] values) {
         super(name, parent, defaultValue);
+        this.enumName = name + "Enums";
+        this.values = values;
+    }
+
+    public EnumNode(String name, CommandNode parent, Object defaultValue, String enumName, String[] values) {
+        super(name, parent, defaultValue);
+        this.enumName = enumName;
         this.values = values;
     }
 
@@ -46,13 +55,11 @@ public class EnumNode extends BaseNode {
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
-        data.setName(name);
         var map = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
         for (var value : values) {
             map.put(value, Collections.emptySet());
         }
-        data.setEnumData(new CommandEnumData(name + "Enums", map, false));
-        data.setType(CommandParam.TEXT);
+        data.setEnumData(new CommandEnumData(enumName, map, false));
         return data;
     }
 }
