@@ -28,17 +28,6 @@ public abstract class BaseCommand implements Command {
     protected List<String> aliases = new ArrayList<>();
     protected List<CommandParamData[]> overloads = new ArrayList<>();
 
-    protected static CommandOverloadData[] DEFAULT_OVERLOAD_DATA;
-
-    static {
-        var defaultParam = new CommandParamData();
-        defaultParam.setName("args");
-        defaultParam.setType(CommandParam.TEXT);
-        defaultParam.setOptional(true);
-        DEFAULT_OVERLOAD_DATA = new CommandOverloadData[1];
-        DEFAULT_OVERLOAD_DATA[0] = new CommandOverloadData(false, new CommandParamData[]{defaultParam});
-    }
-
     public BaseCommand(String name, @MayContainTrKey String description, String permission) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(description);
@@ -82,9 +71,7 @@ public abstract class BaseCommand implements Command {
         }
 
         // Overloads
-        if (overloads.isEmpty()) {
-            networkOverloadsData = DEFAULT_OVERLOAD_DATA;
-        } else {
+        if (!overloads.isEmpty()) {
             networkOverloadsData = new CommandOverloadData[overloads.size()];
             for (int index = 0; index < overloads.size(); index++) {
                 var overload = overloads.get(index);
