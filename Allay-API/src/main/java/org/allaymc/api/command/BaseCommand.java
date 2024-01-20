@@ -71,6 +71,7 @@ public abstract class BaseCommand implements Command {
 
     private void prepareNetworkData() {
         // Aliases
+        // TODO: seems that the vanilla aliases implementation causes a lot of problems
         if (!aliases.isEmpty()) {
             var map = new HashMap<String, Set<CommandEnumConstraint>>();
             map.put(name, Collections.emptySet());
