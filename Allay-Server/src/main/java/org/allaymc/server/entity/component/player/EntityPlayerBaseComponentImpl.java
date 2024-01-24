@@ -55,6 +55,7 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
+
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
@@ -77,6 +78,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Getter
     @Setter
     protected int chunkTrySendCountPerTick = Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
+    protected CommandOriginData commandOriginData;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
@@ -149,8 +151,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         );
         var entityItems = dimension.getEntityPhysicsService().computeCollidingEntities(pickUpArea, true)
                 .stream()
-                .filter(e -> e instanceof EntityItem)
-                .map(e -> (EntityItem) e)
+                .filter(EntityItem.class::isInstance)
+                .map(EntityItem.class::cast)
                 .filter(EntityItemBaseComponent::canBePicked)
                 .toList();
         for (var entityItem : entityItems) {
@@ -174,15 +176,23 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
+    public void teleport(Location3fc location) {
+        super.teleport(location);
+
+        var movementPacket = Server.SETTINGS.entitySettings().physicsEngineSettings().useDeltaMovePacket() ?
+                createDeltaMovePacket(location, true) :
+                createAbsoluteMovePacket(location, true);
+        this.networkComponent.sendPacket(movementPacket);
+    }
+
+    @Override
     public void spawnTo(EntityPlayer player) {
-        if (thisEntity != player)
-            super.spawnTo(player);
+        if (thisEntity != player) super.spawnTo(player);
     }
 
     @Override
     public void despawnFrom(EntityPlayer player) {
-        if (thisEntity != player)
-            super.despawnFrom(player);
+        if (thisEntity != player) super.despawnFrom(player);
     }
 
     @Override
@@ -206,7 +216,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         addPlayerPacket.setGameType(gameType);
         addPlayerPacket.getMetadata().putAll(this.metadata.getEntityDataMap());
         addPlayerPacket.setDeviceId(networkComponent.getLoginData().getDeviceInfo().getDeviceId());
-        addPlayerPacket.setHand(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().toNetworkItemData());//TODO: itemInHand
+        addPlayerPacket.setHand(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().toNetworkItemData());
         return addPlayerPacket;
     }
 
@@ -283,7 +293,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public boolean computeMovementServerSide() {
-        //TODO: fake client
+        // TODO: fake client
         return false;
     }
 
@@ -334,8 +344,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         pk.setData(""); // Unknown usage
         networkComponent.sendPacket(pk);
     }
-
-    protected CommandOriginData commandOriginData;
 
     @Override
     public CommandOriginData getCommandOriginData() {
