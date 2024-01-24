@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.component.common;
 
-import com.google.common.base.Preconditions;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -10,12 +9,12 @@ import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.identifier.Identifier;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
 import java.util.*;
 
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * Allay Project 2023/7/9
@@ -26,11 +25,13 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_attribute_component");
+
+    protected final Map<AttributeType, Attribute> attributes = new EnumMap<>(AttributeType.class);
+
     @ComponentedObject
     protected Entity entity;
     @Dependency(soft = true)
     protected EntityPlayerNetworkComponent networkComponent;
-    protected final Map<AttributeType, Attribute> attributes = new EnumMap<>(AttributeType.class);
 
     public EntityAttributeComponentImpl(List<AttributeType> attributeTypes) {
         attributeTypes.forEach(this::addAttribute);
@@ -54,8 +55,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     @Override
     public void setAttribute(AttributeType attributeType, float value) {
         Attribute attribute = this.attributes.get(attributeType);
-        if (attribute != null)
-            attribute.setCurrentValue(value);
+        if (attribute != null) attribute.setCurrentValue(value);
         sendAttributesIfIsPlayer();
     }
 
@@ -84,6 +84,13 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @Override
     public void setHealth(float value) {
-        setAttribute(AttributeType.HEALTH, max(0, value < 1 ? 0 : value));
+        setAttribute(AttributeType.HEALTH, max(0, min(value, this.getMaxHealth())));
+    }
+
+    @Override
+    public void setMaxHealth(float value) {
+        var maxHealth = this.getAttribute(AttributeType.HEALTH);
+        maxHealth.setMaxValue(value);
+        this.setAttribute(maxHealth);
     }
 }

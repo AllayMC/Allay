@@ -28,20 +28,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Cool_Loong
  */
 @Slf4j
+@Getter
 public class AllayDimension implements Dimension {
-    @Getter
     protected final Generator generator;
-    @Getter
     protected final ChunkService chunkService;
-    @Getter
     protected final EntityPhysicsService entityPhysicsService;
-    @Getter
     protected final BlockUpdateService blockUpdateService;
-    @Getter
     protected final EntityUpdateService entityUpdateService;
-    @Getter
     protected final DimensionInfo dimensionInfo;
-    @Getter
     protected final World world;
     protected final Set<EntityPlayer> players;
 
@@ -66,10 +60,10 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
-    public void addPlayer(EntityPlayer player) {
+    public void addPlayer(EntityPlayer player, Runnable runnable) {
         players.add(player);
         chunkService.addChunkLoader(player);
-        entityUpdateService.addEntity(player);
+        entityUpdateService.addEntity(player, runnable);
     }
 
     @Override

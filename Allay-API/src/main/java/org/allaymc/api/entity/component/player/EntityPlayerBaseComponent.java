@@ -7,30 +7,28 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
 
-    void setSprinting(boolean sprinting);
-
     boolean isSprinting();
 
-    void setSneaking(boolean sneaking);
+    void setSprinting(boolean sprinting);
 
     boolean isSneaking();
 
-    void setSwimming(boolean swimming);
+    void setSneaking(boolean sneaking);
 
     boolean isSwimming();
 
-    void setGliding(boolean gliding);
+    void setSwimming(boolean swimming);
 
     boolean isGliding();
 
-    void setCrawling(boolean crawling);
+    void setGliding(boolean gliding);
 
     boolean isCrawling();
+
+    void setCrawling(boolean crawling);
 
     int getHandSlot();
 
@@ -45,8 +43,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     default boolean enableHeadYaw() {
         return true;
     }
-
-    boolean computeMovementServerSide();
 
     String getDisplayName();
 

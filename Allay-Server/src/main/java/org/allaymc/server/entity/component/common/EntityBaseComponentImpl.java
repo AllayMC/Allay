@@ -658,6 +658,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         }
     }
 
+    @Override
+    public void removeAllEffects() {
+        this.effects.keySet().forEach(this::removeEffect);
+    }
+
     protected void calculateEffectColor() {
         int[] color = new int[3];
         int count = 0;

@@ -12,16 +12,14 @@ import org.cloudburstmc.protocol.bedrock.data.AttributeData;
  * @author JukeboxMC | daoge_cmd
  */
 @Getter
+@Setter
 @ToString
 public class Attribute implements Cloneable {
 
     private final String key;
     private final float defaultValue;
-    @Setter
     private float minValue;
-    @Setter
     private float maxValue;
-    @Setter
     private float currentValue;
 
     public Attribute(String key, float minValue, float maxValue, float currentValue, float defaultValue) {
@@ -29,7 +27,7 @@ public class Attribute implements Cloneable {
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.currentValue = currentValue;
-        this.defaultValue = currentValue;
+        this.defaultValue = defaultValue;
     }
 
     public void reset() {

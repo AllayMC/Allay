@@ -17,6 +17,7 @@ import java.util.List;
  * @author daoge_cmd
  */
 public interface EntityAttributeComponent extends EntityComponent {
+
     static List<AttributeType> basicPlayerAttributes() {
         var list = basicEntityAttributes();
         list.addAll(Lists.newArrayList(
@@ -51,17 +52,21 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     float getAttributeValue(AttributeType attributeType);
 
-    void setHealth(float value);
-
     default float getHealth() {
         return getAttributeValue(AttributeType.HEALTH);
     }
 
+    void setHealth(float value);
+
+    default float getMaxHealth() {
+        return this.getAttribute(AttributeType.HEALTH).getMaxValue();
+    }
+
+    void setMaxHealth(float value);
+
     default NbtList<NbtMap> saveAttributes() {
         NbtList<NbtMap> list = new NbtList<>(NbtType.COMPOUND);
-        for (Attribute attribute : this.getAttributes()) {
-            list.add(attribute.toNBT());
-        }
+        this.getAttributes().stream().map(Attribute::toNBT).forEach(list::add);
         return list;
     }
 

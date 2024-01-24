@@ -1,4 +1,4 @@
-import org.gradle.tooling.model.java.JavaRuntime
+import java.nio.charset.StandardCharsets
 
 plugins {
     java
@@ -89,7 +89,7 @@ subprojects {
     }
 
     tasks.withType<JavaCompile> {
-        options.encoding = "utf-8"
+        options.encoding = StandardCharsets.UTF_8.name()
     }
 
     tasks.withType<Copy> {
@@ -97,7 +97,7 @@ subprojects {
     }
 
     tasks.withType<Javadoc> {
-        options.encoding = "utf-8"
+        options.encoding = StandardCharsets.UTF_8.name()
         val javadocOptions = options as CoreJavadocOptions
         javadocOptions.addStringOption(
             "source",

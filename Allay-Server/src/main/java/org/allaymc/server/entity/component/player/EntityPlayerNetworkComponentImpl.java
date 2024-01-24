@@ -214,88 +214,86 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         player.setLocationAndCheckChunk(new Location3f(spawnPos.x(), 100, spawnPos.z(), dimension));
         dimension.addPlayer(player);
 
-        {
-            //send BaseGamePacket
-            var spawnWorld = server.getDefaultWorld();
-            var startGamePacket = new StartGamePacket();
-            startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
-            startGamePacket.setUniqueEntityId(player.getUniqueId());
-            startGamePacket.setRuntimeEntityId(player.getUniqueId());
-            startGamePacket.setPlayerGameType(player.getGameType());
-            var loc = player.getLocation();
-            var worldSpawn = spawnWorld.getWorldData().getSpawnPoint(); // TODO: save spawn world per player
-            startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
-            startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
-            startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
-            startGamePacket.setSeed(spawnWorld.getWorldData().getRandomSeed());
-            startGamePacket.setDimensionId(dimension.getDimensionInfo().dimensionId());
-            startGamePacket.setGeneratorId(dimension.getGenerator().getType().getId());
-            startGamePacket.setLevelGameType(spawnWorld.getWorldData().getGameType());
-            startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
-            startGamePacket.setTrustingPlayers(true);
-            startGamePacket.setDayCycleStopTime(0);
-            startGamePacket.setLevelName(Server.SETTINGS.genericSettings().motd());
-            //TODO
-            startGamePacket.setLevelId("");
-            //TODO
-            startGamePacket.setDefaultPlayerPermission(Server.SETTINGS.genericSettings().defaultPermission());
-            startGamePacket.setServerChunkTickRange(spawnWorld.getWorldData().getServerChunkTickRange());
-            startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
-            startGamePacket.setPremiumWorldTemplateId("");
-            startGamePacket.setInventoriesServerAuthoritative(true);
-            startGamePacket.setItemDefinitions(ItemTypeRegistry.getRegistry().getItemDefinitions());
-            startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
-            startGamePacket.setServerAuthoritativeBlockBreaking(true);
-            startGamePacket.setCommandsEnabled(true);
-            startGamePacket.setMultiplayerGame(true);
-            startGamePacket.setBroadcastingToLan(true);
-            startGamePacket.setMultiplayerCorrelationId(UUID.randomUUID().toString());
-            startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
-            startGamePacket.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
-            //TODO
-            startGamePacket.setCurrentTick(0);
-            startGamePacket.setServerEngine("Allay");
-            startGamePacket.setBlockRegistryChecksum(0L);
-            startGamePacket.setPlayerPropertyData(NbtMap.EMPTY);
-            startGamePacket.setWorldTemplateId(new UUID(0, 0));
-            startGamePacket.setWorldEditor(false);
-            startGamePacket.setChatRestrictionLevel(ChatRestrictionLevel.NONE);
-            startGamePacket.setSpawnBiomeType(SpawnBiomeType.DEFAULT);
-            startGamePacket.setCustomBiomeName("");
-            startGamePacket.setEducationProductionId("");
-            startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
-            startGamePacket.setBlockNetworkIdsHashed(true);
-            sendPacket(startGamePacket);
+        // send BaseGamePacket
+        var spawnWorld = server.getDefaultWorld();
+        var startGamePacket = new StartGamePacket();
+        startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
+        startGamePacket.setUniqueEntityId(player.getUniqueId());
+        startGamePacket.setRuntimeEntityId(player.getUniqueId());
+        startGamePacket.setPlayerGameType(player.getGameType());
+        var loc = player.getLocation();
+        var worldSpawn = spawnWorld.getWorldData().getSpawnPoint(); // TODO: save spawn world per player
+        startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
+        startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
+        startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
+        startGamePacket.setSeed(spawnWorld.getWorldData().getRandomSeed());
+        startGamePacket.setDimensionId(dimension.getDimensionInfo().dimensionId());
+        startGamePacket.setGeneratorId(dimension.getGenerator().getType().getId());
+        startGamePacket.setLevelGameType(spawnWorld.getWorldData().getGameType());
+        startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
+        startGamePacket.setTrustingPlayers(true);
+        startGamePacket.setDayCycleStopTime(0);
+        startGamePacket.setLevelName(Server.SETTINGS.genericSettings().motd());
+        // TODO
+        startGamePacket.setLevelId("");
+        // TODO
+        startGamePacket.setDefaultPlayerPermission(Server.SETTINGS.genericSettings().defaultPermission());
+        startGamePacket.setServerChunkTickRange(spawnWorld.getWorldData().getServerChunkTickRange());
+        startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
+        startGamePacket.setPremiumWorldTemplateId("");
+        startGamePacket.setInventoriesServerAuthoritative(true);
+        startGamePacket.setItemDefinitions(ItemTypeRegistry.getRegistry().getItemDefinitions());
+        startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
+        startGamePacket.setServerAuthoritativeBlockBreaking(true);
+        startGamePacket.setCommandsEnabled(true);
+        startGamePacket.setMultiplayerGame(true);
+        startGamePacket.setBroadcastingToLan(true);
+        startGamePacket.setMultiplayerCorrelationId(UUID.randomUUID().toString());
+        startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
+        startGamePacket.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
+        // TODO
+        startGamePacket.setCurrentTick(0);
+        startGamePacket.setServerEngine("Allay");
+        startGamePacket.setBlockRegistryChecksum(0L);
+        startGamePacket.setPlayerPropertyData(NbtMap.EMPTY);
+        startGamePacket.setWorldTemplateId(new UUID(0, 0));
+        startGamePacket.setWorldEditor(false);
+        startGamePacket.setChatRestrictionLevel(ChatRestrictionLevel.NONE);
+        startGamePacket.setSpawnBiomeType(SpawnBiomeType.DEFAULT);
+        startGamePacket.setCustomBiomeName("");
+        startGamePacket.setEducationProductionId("");
+        startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
+        startGamePacket.setBlockNetworkIdsHashed(true);
+        sendPacket(startGamePacket);
 
-            session.getPeer().getCodecHelper().setItemDefinitions(
-                    SimpleDefinitionRegistry
-                            .<ItemDefinition>builder()
-                            .addAll(startGamePacket.getItemDefinitions())
-                            .build()
-            );
+        session.getPeer().getCodecHelper().setItemDefinitions(
+                SimpleDefinitionRegistry
+                        .<ItemDefinition>builder()
+                        .addAll(startGamePacket.getItemDefinitions())
+                        .build()
+        );
 
-            session.getPeer().getCodecHelper().setBlockDefinitions(
-                    SimpleDefinitionRegistry
-                            .<BlockDefinition>builder()
-                            .addAll(BlockTypeRegistry.getRegistry().getBlockDefinitions())
-                            .build()
-            );
+        session.getPeer().getCodecHelper().setBlockDefinitions(
+                SimpleDefinitionRegistry
+                        .<BlockDefinition>builder()
+                        .addAll(BlockTypeRegistry.getRegistry().getBlockDefinitions())
+                        .build()
+        );
 
-            var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();
-            availableEntityIdentifiersPacket.setIdentifiers(EntityTypeRegistry.getRegistry().getAvailableEntityIdentifierTag());
-            sendPacket(availableEntityIdentifiersPacket);
+        var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();
+        availableEntityIdentifiersPacket.setIdentifiers(EntityTypeRegistry.getRegistry().getAvailableEntityIdentifierTag());
+        sendPacket(availableEntityIdentifiersPacket);
 
-            var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
-            biomeDefinitionListPacket.setDefinitions(BiomeTypeRegistry.getRegistry().getBiomeDefinition());
-            sendPacket(biomeDefinitionListPacket);
+        var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
+        biomeDefinitionListPacket.setDefinitions(BiomeTypeRegistry.getRegistry().getBiomeDefinition());
+        sendPacket(biomeDefinitionListPacket);
 
-            var creativeContentPacket = new CreativeContentPacket();
-            creativeContentPacket.setContents(CreativeItemRegistry.getRegistry().getNetworkItemDataArray());
-            sendPacket(creativeContentPacket);
+        var creativeContentPacket = new CreativeContentPacket();
+        creativeContentPacket.setContents(CreativeItemRegistry.getRegistry().getNetworkItemDataArray());
+        sendPacket(creativeContentPacket);
 
-            var craftingDataPacket = RecipeRegistry.getRegistry().getCraftingDataPacket();
-            sendPacket(craftingDataPacket);
-        }
+        var craftingDataPacket = RecipeRegistry.getRegistry().getCraftingDataPacket();
+        sendPacket(craftingDataPacket);
     }
 
     private class AllayClientLoginPacketHandler implements BedrockPacketHandler {

@@ -35,6 +35,7 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface EntityBaseComponent extends EntityComponent {
+
     float SPRINTING_MOVEMENT_FACTOR = 1.3f;
     float WALKING_MOVEMENT_FACTOR = 1f;
     float SNEAKING_MOVEMENT_FACTOR = 0.3f;
@@ -121,8 +122,7 @@ public interface EntityBaseComponent extends EntityComponent {
         return false;
     }
 
-    default void onCollideWith(Entity other) {
-    }
+    default void onCollideWith(Entity other) {}
 
     @UnmodifiableView
     Map<Long, EntityPlayer> getViewers();
@@ -181,8 +181,9 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void removeEffect(EffectType effectType);
 
-    default void tick() {
-    }
+    void removeAllEffects();
+
+    default void tick() {}
 
     default boolean enableHeadYaw() {
         return false;

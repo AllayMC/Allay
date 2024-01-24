@@ -6,7 +6,7 @@ import org.allaymc.server.network.DataPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.CommandRequestPacket;
 
-public class CommandRequestProcessor extends DataPacketProcessor<CommandRequestPacket> {
+public class CommandRequestPacketProcessor extends DataPacketProcessor<CommandRequestPacket> {
 
     @Override
     public void handle(EntityPlayer player, CommandRequestPacket pk) {

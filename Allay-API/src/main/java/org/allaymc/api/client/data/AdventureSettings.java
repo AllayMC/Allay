@@ -1,7 +1,6 @@
 package org.allaymc.api.client.data;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.perm.PermKeys;
@@ -32,20 +31,15 @@ public final class AdventureSettings {
     public AdventureSettings(EntityPlayer player) {
         this.player = player;
         var tree = player.getPermTree();
-        tree.registerPermListener(PermKeys.PVM, type -> {
-            noPVM = type == REMOVE;
-        });
-        tree.registerPermListener(PermKeys.MVP, type -> {
-            noMVP = type == REMOVE;
-        });
+        tree.registerPermListener(PermKeys.PVM, type -> this.setNoPVM(type == REMOVE));
+        tree.registerPermListener(PermKeys.MVP, type -> this.setNoMVP(type == REMOVE));
     }
 
     public void applyGameType(GameType gameType) {
         player.getPermTree().setPerm(PermKeys.PVM, gameType == SPECTATOR);
         player.getPermTree().setPerm(PermKeys.MVP, gameType == SPECTATOR);
-        immutableWorld = gameType == SPECTATOR;
-        showNameTags = gameType != SPECTATOR;
-        sync();
+        this.setImmutableWorld(gameType == SPECTATOR);
+        this.setShowNameTags(gameType != SPECTATOR);
     }
 
     public void setNoPVM(boolean noPVM) {
@@ -75,14 +69,14 @@ public final class AdventureSettings {
 
     public void sync() {
         if (!dirty) return;
-        UpdateAdventureSettingsPacket updateAdventureSettingsPacket = new UpdateAdventureSettingsPacket();
-        updateAdventureSettingsPacket.setAutoJump(autoJump);
-        updateAdventureSettingsPacket.setImmutableWorld(immutableWorld);
-        updateAdventureSettingsPacket.setNoMvP(noMVP);
-        updateAdventureSettingsPacket.setNoPvM(noPVM);
-        updateAdventureSettingsPacket.setShowNameTags(showNameTags);
+        UpdateAdventureSettingsPacket packet = new UpdateAdventureSettingsPacket();
+        packet.setAutoJump(autoJump);
+        packet.setImmutableWorld(immutableWorld);
+        packet.setNoMvP(noMVP);
+        packet.setNoPvM(noPVM);
+        packet.setShowNameTags(showNameTags);
 
-        player.sendPacket(updateAdventureSettingsPacket);
+        player.sendPacket(packet);
         dirty = false;
     }
 }

@@ -20,24 +20,18 @@ import java.util.Set;
  * @author Cool_Loong
  */
 public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAuthInputPacket> {
-    @Override
-    public void handle(EntityPlayer player, PlayerAuthInputPacket pk) {
-        //客户端发送给服务端的坐标比实际坐标高了一个BaseOffset，我们需要减掉它
-        handleMovement(player, pk.getPosition().sub(0, player.getBaseOffset(), 0), pk.getRotation());
-        handleBlockAction(player, pk.getPlayerActions());
-        handleInputData(player, pk.getInputData());
-    }
 
     protected static void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
+        if (!player.isSpawned()) return;
         var world = player.getLocation().dimension();
-        world.getEntityPhysicsService()
-                .offerScheduledMove(
-                        player,
-                        new Location3f(
-                                newPos.getX(), newPos.getY(), newPos.getZ(),
-                                newRot.getX(), newRot.getY(), newRot.getZ(),
-                                world)
-                );
+        world.getEntityPhysicsService().offerScheduledMove(
+                player,
+                new Location3f(
+                        newPos.getX(), newPos.getY(), newPos.getZ(),
+                        newRot.getX(), newRot.getY(), newRot.getZ(),
+                        world
+                )
+        );
     }
 
     protected static void handleBlockAction(EntityPlayer player, List<PlayerBlockActionData> blockActions) {
@@ -46,9 +40,7 @@ public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAu
         for (var action : blockActions) {
             var pos = action.getBlockPosition();
             switch (action.getAction()) {
-                case START_BREAK -> {
-                    world.sendLevelEventPacket(pos, LevelEvent.BLOCK_START_BREAK, 0);
-                }
+                case START_BREAK -> world.sendLevelEventPacket(pos, LevelEvent.BLOCK_START_BREAK, 0);
                 case BLOCK_PREDICT_DESTROY -> {
                     var oldState = world.getBlockState(pos.getX(), pos.getY(), pos.getZ());
                     world.setBlockState(pos.getX(), pos.getY(), pos.getZ(), BlockAirBehavior.AIR_TYPE.getDefaultState());
@@ -74,6 +66,14 @@ public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAu
                 case STOP_CRAWLING -> player.setCrawling(false);
             }
         }
+    }
+
+    @Override
+    public void handle(EntityPlayer player, PlayerAuthInputPacket pk) {
+        // 客户端发送给服务端的坐标比实际坐标高了一个BaseOffset，我们需要减掉它
+        handleMovement(player, pk.getPosition().sub(0, player.getBaseOffset(), 0), pk.getRotation());
+        handleBlockAction(player, pk.getPlayerActions());
+        handleInputData(player, pk.getInputData());
     }
 
     @Override

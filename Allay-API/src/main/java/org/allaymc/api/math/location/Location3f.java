@@ -1,6 +1,7 @@
 package org.allaymc.api.math.location;
 
 import com.google.common.base.Objects;
+import lombok.Setter;
 import org.allaymc.api.math.position.Position3f;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
@@ -19,7 +20,9 @@ import java.text.NumberFormat;
  *
  * @author Cool_Loong
  */
+@Setter
 public class Location3f extends Position3f implements Location3fc {
+
     public double pitch;
     public double yaw;
     public double headYaw;
@@ -127,18 +130,6 @@ public class Location3f extends Position3f implements Location3fc {
         return headYaw;
     }
 
-    public void setYaw(double yaw) {
-        this.yaw = yaw;
-    }
-
-    public void setPitch(double pitch) {
-        this.pitch = pitch;
-    }
-
-    public void setHeadYaw(double headYaw) {
-        this.headYaw = headYaw;
-    }
-
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeFloat(x);
@@ -152,7 +143,7 @@ public class Location3f extends Position3f implements Location3fc {
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException {
         x = in.readFloat();
         y = in.readFloat();
         z = in.readFloat();

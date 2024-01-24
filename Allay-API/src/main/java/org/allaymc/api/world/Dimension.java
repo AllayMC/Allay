@@ -72,7 +72,11 @@ public interface Dimension {
         return null;
     }
 
-    void addPlayer(EntityPlayer player);
+    default void addPlayer(EntityPlayer player) {
+        this.addPlayer(player, () -> {});
+    }
+
+    void addPlayer(EntityPlayer player, Runnable runnable);
 
     void removePlayer(EntityPlayer player);
 
