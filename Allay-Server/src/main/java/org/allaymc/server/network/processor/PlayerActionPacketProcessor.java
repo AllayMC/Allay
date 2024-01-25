@@ -8,7 +8,6 @@ import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SetEntityDataPacket;
 
 public class PlayerActionPacketProcessor extends DataPacketProcessor<PlayerActionPacket> {
 
@@ -21,7 +20,6 @@ public class PlayerActionPacketProcessor extends DataPacketProcessor<PlayerActio
 
             dimension.getChunkService().getChunkImmediately(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
             dimension.addPlayer(player, () -> {
-                player.setSpawned(true);
                 player.teleport(new Location3f(spawnPoint.x(), 64, spawnPoint.z(), dimension));
 
                 player.setSprinting(false);
@@ -30,15 +28,8 @@ public class PlayerActionPacketProcessor extends DataPacketProcessor<PlayerActio
                 player.removeAllEffects();
 
                 player.setHealth(player.getMaxHealth());
-                player.sendAttributesIfIsPlayer();
 
-                player.getMetadata().set(EntityDataTypes.AIR_SUPPLY, (short) 400);
-
-                var setEntityDataPacket = new SetEntityDataPacket();
-                setEntityDataPacket.setRuntimeEntityId(player.getUniqueId());
-                setEntityDataPacket.getMetadata().putAll(player.getMetadata().getEntityDataMap());
-                setEntityDataPacket.setTick(player.getWorld().getTick());
-                player.sendPacket(setEntityDataPacket);
+                player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, (short) 400);
             });
         }
     }
