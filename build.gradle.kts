@@ -11,7 +11,6 @@ description = "The next generation minecraft server software"
 
 repositories {
     mavenCentral()
-    maven("https://plugins.gradle.org/m2/")
     mavenLocal()
 }
 
