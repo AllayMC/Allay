@@ -2,9 +2,8 @@ package org.allaymc.server.client.storage.nbtfile;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.allaymc.api.client.storage.BasePlayerStorage;
 import org.allaymc.api.client.storage.NativeFilePlayerStorage;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.client.storage.PlayerData;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,13 +26,19 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
     }
 
     @Override
-    public void readPlayerData(EntityPlayer player) {
+    public PlayerData readPlayerData(UUID uuid) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public void savePlayerData(UUID uuid, PlayerData playerData) {
 
     }
 
     @Override
-    public void writePlayerData(EntityPlayer player) {
-
+    public boolean removePlayerData(UUID uuid) {
+        return false;
     }
 
     @Override

@@ -52,6 +52,8 @@ public interface Server extends TaskCreator, CommandSender {
 
     void tick(long currentTick);
 
+    long getTick();
+
     void shutdown();
 
     boolean isRunning();

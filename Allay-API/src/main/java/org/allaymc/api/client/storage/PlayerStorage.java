@@ -26,7 +26,9 @@ public interface PlayerStorage {
 
     void savePlayerData(UUID uuid, PlayerData playerData);
 
-    void savePlayerData(EntityPlayer player);
+    default void savePlayerData(EntityPlayer player) {
+        savePlayerData(player.getUUID(), player.savePlayerData());
+    }
 
     boolean removePlayerData(UUID uuid);
 

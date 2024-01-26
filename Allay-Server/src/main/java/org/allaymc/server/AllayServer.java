@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.client.storage.PlayerStorage;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
@@ -22,7 +23,6 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
-import org.allaymc.api.client.storage.PlayerStorage;
 import org.allaymc.server.client.storage.empty.AllayEmptyPlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
@@ -75,6 +75,16 @@ public final class AllayServer implements Server {
     private Thread terminalConsoleThread;
     private AllayTerminalConsole terminalConsole;
     private static volatile AllayServer instance;
+    private final GameLoop gameLoop = GameLoop.builder()
+            .loopCountPerSec(20)
+            .onTick(gameLoop -> {
+                try {
+                    tick(gameLoop.getTick());
+                } catch (Throwable throwable) {
+                    log.error("Error while ticking server", throwable);
+                }
+            })
+            .build();
 
     private AllayServer() {
         DEBUG = Server.SETTINGS.genericSettings().debug();
@@ -136,22 +146,17 @@ public final class AllayServer implements Server {
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         this.networkServer.start();
         sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
-        GameLoop.builder()
-                .loopCountPerSec(20)
-                .onTick(gameLoop -> {
-                    try {
-                        tick(gameLoop.getTick());
-                    } catch (Throwable throwable) {
-                        log.error("Error while ticking server", throwable);
-                    }
-                })
-                .build()
-                .startLoop();
+        gameLoop.startLoop();
     }
 
     @Override
     public void tick(long currentTick) {
         playerStorage.tick(currentTick);
+    }
+
+    @Override
+    public long getTick() {
+        return gameLoop.getTick();
     }
 
     private void initTerminalConsole() {
@@ -222,7 +227,7 @@ public final class AllayServer implements Server {
     public void onDisconnect(EntityPlayer player) {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
         if (player.isInitialized()) {
-            this.getPlayerStorage().writePlayerData(player);
+            this.getPlayerStorage().savePlayerData(player);
             broadcastTr("§e%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
         }
         if (player.isSpawned()) {
