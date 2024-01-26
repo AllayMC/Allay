@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.Dependency;
@@ -79,6 +80,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Setter
     protected int chunkTrySendCountPerTick = Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
     protected CommandOriginData commandOriginData;
+    protected Location3fc spawnPoint;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
@@ -297,6 +299,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public NbtMap saveNBT() {
+        //TODO: AdventureSettings & Abilities
         return super.saveNBT().toBuilder()
                 .putList(
                         "Offhand",
@@ -315,6 +318,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void loadNBT(NbtMap nbt) {
+        //TODO: AdventureSettings & Abilities
         super.loadNBT(nbt);
         if (nbt.containsKey("Offhand")) {
             containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(nbt.getList("Offhand", NbtType.COMPOUND));
@@ -359,6 +363,24 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void sendPopup(String message) {
         sendSimpleMessage(message, TextPacket.Type.POPUP);
+    }
+
+    @Override
+    public PlayerData savePlayerData() {
+        return PlayerData.builder()
+                .playerNBT(saveNBT())
+                .currentWorldName(getWorld().getWorldData().getName())
+                .currentDimensionId(getDimension().getDimensionInfo().dimensionId())
+                .spawnPoint(new org.joml.Vector3f(spawnPoint))
+                .spawnPointRotation(new org.joml.Vector2d(spawnPoint.yaw(), spawnPoint.pitch()))
+                .spawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName())
+                .spawnPointDimensionId(spawnPoint.dimension().getDimensionInfo().dimensionId())
+                .build();
+    }
+
+    @Override
+    public void loadPlayerData(PlayerData playerData) {
+        // TODO
     }
 
     @Override

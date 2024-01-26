@@ -3,6 +3,7 @@ package org.allaymc.api.entity.component.player;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.math.location.Location3fc;
@@ -76,4 +77,8 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void sendTip(String message);
 
     void sendPopup(String message);
+
+    PlayerData savePlayerData();
+
+    void loadPlayerData(PlayerData playerData);
 }
