@@ -1,4 +1,4 @@
-package org.allaymc.api.client.info;
+package org.allaymc.api.client.data;
 
 import lombok.Getter;
 import lombok.ToString;

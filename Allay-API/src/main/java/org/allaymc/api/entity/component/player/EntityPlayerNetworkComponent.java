@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.component.player;
 
 import org.allaymc.api.client.data.LoginData;
-import org.allaymc.api.client.info.DeviceInfo;
+import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;

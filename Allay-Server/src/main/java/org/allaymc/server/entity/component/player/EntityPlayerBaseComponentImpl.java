@@ -299,8 +299,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public NbtMap saveNBT() {
-        //TODO: AdventureSettings & Abilities
         return super.saveNBT().toBuilder()
+                .putList("Perm", NbtType.STRING, permTree.save())
                 .putList(
                         "Offhand",
                         NbtType.COMPOUND,
@@ -318,8 +318,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void loadNBT(NbtMap nbt) {
-        //TODO: AdventureSettings & Abilities
         super.loadNBT(nbt);
+        if (nbt.containsKey("Perm")) {
+            permTree.load(nbt.getList("Perm", NbtType.STRING));
+        }
         if (nbt.containsKey("Offhand")) {
             containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(nbt.getList("Offhand", NbtType.COMPOUND));
         }

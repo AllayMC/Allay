@@ -1,4 +1,4 @@
-package org.allaymc.api.client.info;
+package org.allaymc.api.client.data;
 
 /**
  * Allay Project 2023/6/23

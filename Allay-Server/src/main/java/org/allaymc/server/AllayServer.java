@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.client.info.DeviceInfo;
+import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandSender;

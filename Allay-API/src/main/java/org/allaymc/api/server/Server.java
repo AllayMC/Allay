@@ -3,7 +3,7 @@ package org.allaymc.api.server;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.client.info.DeviceInfo;
+import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandSender;

@@ -1,8 +1,12 @@
 package org.allaymc.api.perm.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
+import org.cloudburstmc.nbt.NbtList;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -64,8 +68,21 @@ public interface PermTree {
 
     PermTree setOp(boolean op);
 
-
     PermTree getParent();
+
+    default List<String> save() {
+        var list = new ArrayList<String>();
+        for (var leaf : getLeaves()) {
+            list.add(leaf.getFullName());
+        }
+        return list;
+    }
+
+    default void load(List<String> perms) {
+        for (var perm : perms) {
+            addPerm(perm);
+        }
+    }
 
     interface PermTreeFactory {
         PermTree create();
