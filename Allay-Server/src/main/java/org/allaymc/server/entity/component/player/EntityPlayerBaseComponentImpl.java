@@ -26,6 +26,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
@@ -80,7 +81,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Setter
     protected int chunkTrySendCountPerTick = Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
     protected CommandOriginData commandOriginData;
-    protected Location3fc spawnPoint;
+    @Getter
+    @Setter
+    protected Location3ic spawnPoint;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
@@ -319,9 +322,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        if (nbt.containsKey("Perm")) {
-            permTree.load(nbt.getList("Perm", NbtType.STRING));
-        }
+        // TODO: fix perm
+        // This line make server un-join-able!
+//        if (nbt.containsKey("Perm")) {
+//            permTree.load(nbt.getList("Perm", NbtType.STRING));
+//        }
         if (nbt.containsKey("Offhand")) {
             containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(nbt.getList("Offhand", NbtType.COMPOUND));
         }
@@ -373,16 +378,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 .playerNBT(saveNBT())
                 .currentWorldName(getWorld().getWorldData().getName())
                 .currentDimensionId(getDimension().getDimensionInfo().dimensionId())
-                .spawnPoint(new org.joml.Vector3f(spawnPoint))
-                .spawnPointRotation(new org.joml.Vector2d(spawnPoint.yaw(), spawnPoint.pitch()))
+                .spawnPoint(new org.joml.Vector3i(spawnPoint.x(), spawnPoint.y(), spawnPoint.z()))
                 .spawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName())
                 .spawnPointDimensionId(spawnPoint.dimension().getDimensionInfo().dimensionId())
                 .build();
-    }
-
-    @Override
-    public void loadPlayerData(PlayerData playerData) {
-        // TODO
     }
 
     @Override

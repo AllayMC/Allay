@@ -24,6 +24,10 @@ public interface PlayerStorage {
 
     PlayerData readPlayerData(UUID uuid);
 
+    default PlayerData readPlayerData(EntityPlayer player) {
+        return readPlayerData(player.getUUID());
+    }
+
     void savePlayerData(UUID uuid, PlayerData playerData);
 
     default void savePlayerData(EntityPlayer player) {

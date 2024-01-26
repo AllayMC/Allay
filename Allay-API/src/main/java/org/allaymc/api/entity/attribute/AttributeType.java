@@ -2,6 +2,9 @@ package org.allaymc.api.entity.attribute;
 
 import org.cloudburstmc.nbt.NbtMap;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Allay Project 2023/7/9
  *
@@ -32,6 +35,14 @@ public enum AttributeType {
     PLAYER_LEVEL("minecraft:player.level", 0, 24791, 0),
     PLAYER_EXPERIENCE("minecraft:player.experience", 0, 1, 0);
 
+    private static final Map<String, AttributeType> KEY_LOOK_UP = new HashMap<>();
+
+    static {
+        for (AttributeType attributeType : values()) {
+            KEY_LOOK_UP.put(attributeType.key, attributeType);
+        }
+    }
+
     private final String key;
     private final float minValue;
     private final float maxValue;
@@ -48,13 +59,7 @@ public enum AttributeType {
         return new Attribute(this.key, this.minValue, this.maxValue, this.defaultValue, this.defaultValue);
     }
 
-    public static Attribute fromNBT(NbtMap nbt) {
-        return new Attribute(
-                nbt.getString("Name"),
-                nbt.getFloat("Min"),
-                nbt.getFloat("Max"),
-                nbt.getFloat("Current"),
-                nbt.getFloat("Base")
-        );
+    public static AttributeType byKey(String key) {
+        return KEY_LOOK_UP.get(key);
     }
 }

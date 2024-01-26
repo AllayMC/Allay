@@ -15,11 +15,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AllayCachedPlayerStorage implements PlayerStorage {
 
-    public static final int CACHE_TIME = 20 * 60; // 5 minute
+    public static final int CACHE_TIME = 20 * 60 * 5; // 5 minute
 
     protected PlayerStorage playerStorage;
     protected Map<UUID, DataEntry> cache = new ConcurrentHashMap<>();
     protected long currentTick;
+
+    public AllayCachedPlayerStorage(PlayerStorage playerStorage) {
+        this.playerStorage = playerStorage;
+    }
 
     @Override
     public void tick(long currentTick) {

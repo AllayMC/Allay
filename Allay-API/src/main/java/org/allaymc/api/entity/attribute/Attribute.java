@@ -48,6 +48,16 @@ public class Attribute implements Cloneable {
                 .build();
     }
 
+    public static Attribute fromNBT(NbtMap nbt) {
+        return new Attribute(
+                nbt.getString("Name"),
+                nbt.getFloat("Min"),
+                nbt.getFloat("Max"),
+                nbt.getFloat("Current"),
+                nbt.getFloat("Base")
+        );
+    }
+
     @Override
     protected Attribute clone() throws CloneNotSupportedException {
         return (Attribute) super.clone();

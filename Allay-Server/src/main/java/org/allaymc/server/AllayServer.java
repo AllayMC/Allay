@@ -23,7 +23,8 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
-import org.allaymc.server.client.storage.empty.AllayEmptyPlayerStorage;
+import org.allaymc.server.client.storage.AllayCachedPlayerStorage;
+import org.allaymc.server.client.storage.nbtfile.AllayNBTFilePlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.terminal.AllayTerminalConsole;
@@ -92,8 +93,7 @@ public final class AllayServer implements Server {
         worldPool = new AllayWorldPool();
         isRunning = new AtomicBoolean(true);
         playerListEntryMap = new Object2ObjectOpenHashMap<>();
-        //TODO: client storage
-        playerStorage = new AllayEmptyPlayerStorage();
+        playerStorage = new AllayNBTFilePlayerStorage(Path.of("players"));
         computeThreadPool = new ThreadPoolExecutor(
                 Runtime.getRuntime().availableProcessors(),
                 Runtime.getRuntime().availableProcessors(),

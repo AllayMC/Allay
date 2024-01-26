@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.common;
 
+import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -7,8 +8,11 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
+import org.allaymc.api.entity.component.event.EntityLoadNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.identifier.Identifier;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
 import java.util.*;
@@ -37,6 +41,18 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         attributeTypes.forEach(this::addAttribute);
     }
 
+    @ComponentEventListener
+    private void onLoadNBT(EntityLoadNBTEvent event) {
+        var nbt = event.getNbt();
+        if (nbt.containsKey("Attributes")) {
+            for (NbtMap compound : nbt.getList("Attributes", NbtType.COMPOUND)) {
+                var attribute = Attribute.fromNBT(compound);
+                attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
+            }
+            sendAttributesIfIsPlayer();
+        }
+    }
+
     @Override
     public void addAttribute(AttributeType attributeType) {
         this.attributes.put(attributeType, attributeType.newAttributeInstance());
@@ -61,7 +77,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @Override
     public void setAttribute(Attribute attribute) {
-        this.attributes.put(AttributeType.valueOf(attribute.getKey()), attribute);
+        this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
         sendAttributesIfIsPlayer();
     }
 

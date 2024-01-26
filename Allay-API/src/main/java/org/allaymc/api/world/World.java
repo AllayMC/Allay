@@ -27,6 +27,18 @@ public interface World {
 
     Dimension getDimension(int dimensionId);
 
+    default Dimension getOverWorld() {
+        return getDimension(DimensionInfo.OVERWORLD.dimensionId());
+    }
+
+    default Dimension getNether() {
+        return getDimension(DimensionInfo.NETHER.dimensionId());
+    }
+
+    default Dimension getTheEnd() {
+        return getDimension(DimensionInfo.THE_END.dimensionId());
+    }
+
     @UnmodifiableView
     Map<Integer, Dimension> getDimensions();
 
