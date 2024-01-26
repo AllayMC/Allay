@@ -13,7 +13,7 @@ import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
-import org.allaymc.api.world.storage.PlayerStorage;
+import org.allaymc.api.client.storage.PlayerStorage;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
@@ -49,6 +49,8 @@ public interface Server extends TaskCreator, CommandSender {
      * Start the server
      */
     void start(long timeMillis);
+
+    void tick(long currentTick);
 
     void shutdown();
 

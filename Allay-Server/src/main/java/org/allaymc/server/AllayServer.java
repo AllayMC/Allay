@@ -22,7 +22,8 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
-import org.allaymc.api.world.storage.PlayerStorage;
+import org.allaymc.api.client.storage.PlayerStorage;
+import org.allaymc.server.client.storage.empty.AllayEmptyPlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.terminal.AllayTerminalConsole;
@@ -31,7 +32,6 @@ import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
 import org.allaymc.server.world.generator.flat.FlatWorldGenerator;
 import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
-import org.allaymc.server.world.storage.nonpersistent.AllayNullPlayerStorage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -83,7 +83,7 @@ public final class AllayServer implements Server {
         isRunning = new AtomicBoolean(true);
         playerListEntryMap = new Object2ObjectOpenHashMap<>();
         //TODO: client storage
-        playerStorage = new AllayNullPlayerStorage();
+        playerStorage = new AllayEmptyPlayerStorage();
         computeThreadPool = new ThreadPoolExecutor(
                 Runtime.getRuntime().availableProcessors(),
                 Runtime.getRuntime().availableProcessors(),
@@ -136,6 +136,22 @@ public final class AllayServer implements Server {
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         this.networkServer.start();
         sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
+        GameLoop.builder()
+                .loopCountPerSec(20)
+                .onTick(gameLoop -> {
+                    try {
+                        tick(gameLoop.getTick());
+                    } catch (Throwable throwable) {
+                        log.error("Error while ticking server", throwable);
+                    }
+                })
+                .build()
+                .startLoop();
+    }
+
+    @Override
+    public void tick(long currentTick) {
+        playerStorage.tick(currentTick);
     }
 
     private void initTerminalConsole() {

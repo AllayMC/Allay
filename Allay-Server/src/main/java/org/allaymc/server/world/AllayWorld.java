@@ -79,6 +79,7 @@ public class AllayWorld implements World {
         tickTime(currentTick);
         scheduler.tick();
         getDimensions().values().forEach(d -> d.tick(currentTick));
+        worldStorage.tick(currentTick);
     }
 
     protected void syncData() {
