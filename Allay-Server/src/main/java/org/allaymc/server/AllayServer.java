@@ -31,7 +31,7 @@ import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.AllayWorldPool;
 import org.allaymc.server.world.generator.flat.FlatWorldGenerator;
 import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
-import org.allaymc.server.world.storage.nonpersistent.AllayNonPersistentPlayerStorage;
+import org.allaymc.server.world.storage.nonpersistent.AllayNullPlayerStorage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -83,7 +83,7 @@ public final class AllayServer implements Server {
         isRunning = new AtomicBoolean(true);
         playerListEntryMap = new Object2ObjectOpenHashMap<>();
         //TODO: client storage
-        playerStorage = new AllayNonPersistentPlayerStorage();
+        playerStorage = new AllayNullPlayerStorage();
         computeThreadPool = new ThreadPoolExecutor(
                 Runtime.getRuntime().availableProcessors(),
                 Runtime.getRuntime().availableProcessors(),
