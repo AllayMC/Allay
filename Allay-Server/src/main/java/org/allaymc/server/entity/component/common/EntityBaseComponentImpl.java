@@ -469,13 +469,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
-        // TODO: Send motion
-        var movementPk = Server.SETTINGS.entitySettings().physicsEngineSettings().useDeltaMovePacket() ?
-                createDeltaMovePacket(newLoc, teleporting) :
-                createAbsoluteMovePacket(newLoc, teleporting);
+        var movementPk = createMovePacket(newLoc, teleporting);
         var motionPk = createMotionPacket();
         sendPacketToViewers(movementPk);
         sendPacketToViewers(motionPk);
+    }
+
+    protected BedrockPacket createMovePacket(Location3fc newLoc, boolean teleporting) {
+        return Server.SETTINGS.entitySettings().physicsEngineSettings().useDeltaMovePacket() ?
+                createDeltaMovePacket(newLoc, teleporting) :
+                createAbsoluteMovePacket(newLoc, teleporting);
     }
 
     protected BedrockPacket createMotionPacket() {

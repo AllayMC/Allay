@@ -178,11 +178,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void teleport(Location3fc location) {
         super.teleport(location);
-
-        var movementPacket = Server.SETTINGS.entitySettings().physicsEngineSettings().useDeltaMovePacket() ?
-                createDeltaMovePacket(location, true) :
-                createAbsoluteMovePacket(location, true);
-        this.networkComponent.sendPacket(movementPacket);
+        // For player, we also need to send move packet to client
+        // However, there is no need to send motion packet as we are teleporting the player
+        networkComponent.sendPacket(createMovePacket(location, true));
     }
 
     @Override
@@ -196,10 +194,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void broadcastMoveToViewers(Location3fc newLoc) {
+    public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
         var loc = new Location3f(newLoc);
         loc.add(0, getBaseOffset(), 0f);
-        super.broadcastMoveToViewers(loc, false);
+        super.broadcastMoveToViewers(loc, teleporting);
     }
 
     @Override

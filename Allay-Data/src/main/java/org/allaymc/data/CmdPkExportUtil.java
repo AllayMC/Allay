@@ -1,8 +1,6 @@
 package org.allaymc.data;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.SneakyThrows;
@@ -11,7 +9,6 @@ import org.allaymc.api.utils.JSONUtils;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodecHelper;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
-import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
 import java.io.InputStream;
 import java.nio.file.Files;
