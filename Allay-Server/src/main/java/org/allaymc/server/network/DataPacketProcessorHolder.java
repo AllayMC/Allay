@@ -1,10 +1,15 @@
 package org.allaymc.server.network;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.*;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 import java.util.EnumMap;
+import java.util.function.BiConsumer;
 
 /**
  * Allay Project 11/22/2023
@@ -14,8 +19,14 @@ import java.util.EnumMap;
 public final class DataPacketProcessorHolder {
 
     private final EnumMap<BedrockPacketType, DataPacketProcessor<BedrockPacket>> processors = new EnumMap<>(BedrockPacketType.class);
+    @Getter
+    @Setter
+    private BiConsumer<EntityPlayer, String> disconnectProcessor;
 
     public static void registerDefaultPacketProcessors(DataPacketProcessorHolder holder) {
+        holder.setDisconnectProcessor((player, reason) -> {
+            Server.getInstance().onDisconnect(player, reason);
+        });
         holder.registerProcessor(new AnimatePacketProcessor());
         holder.registerProcessor(new BlockPickRequestPacketProcessor());
         holder.registerProcessor(new CommandRequestPacketProcessor());

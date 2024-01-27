@@ -222,13 +222,13 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void onDisconnect(EntityPlayer player) {
+    public void onDisconnect(EntityPlayer player, String reason) {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
         if (player.isInitialized()) {
-            this.getPlayerStorage().savePlayerData(player);
             broadcastTr("§e%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
         }
         if (player.isSpawned()) {
+            this.getPlayerStorage().savePlayerData(player);
             player.getDimension().removePlayer(player);
             var playerListEntry = playerListEntryMap.remove(player.getUUID());
             var pk = new PlayerListPacket();

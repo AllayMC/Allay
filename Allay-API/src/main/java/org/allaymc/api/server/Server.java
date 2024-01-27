@@ -71,7 +71,7 @@ public interface Server extends TaskCreator, CommandSender {
 
     void onLoggedIn(EntityPlayer player);
 
-    void onDisconnect(EntityPlayer player);
+    void onDisconnect(EntityPlayer player, String reason);
 
     WorldPool getWorldPool();
 

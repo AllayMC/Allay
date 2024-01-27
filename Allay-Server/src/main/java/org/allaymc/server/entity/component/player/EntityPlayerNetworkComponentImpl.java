@@ -88,6 +88,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
     protected final Server server = Server.getInstance();
     protected final Queue<BedrockPacket> packetQueue;
+    // It will be set while client disconnecting from server
+    protected String disconnectReason;
     protected final DataPacketProcessorHolder dataPacketProcessorHolder;
     protected final BedrockPacketHandler loginPacketHandler = new AllayClientLoginPacketHandler();
     protected BedrockServerSession session;
@@ -108,6 +110,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             } else {
                 processor.handle(player, pk);
             }
+        }
+        // Before client disconnect, there may be other packets which are not handled
+        // So we handle disconnect after we handled all other packets
+        if (disconnectReason != null) {
+            // Client is disconnected from server
+            dataPacketProcessorHolder.getDisconnectProcessor().accept(player, disconnectReason);
+            disconnectReason = null;
         }
     }
 
@@ -136,7 +145,12 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             @Override
             public void onDisconnect(String reason) {
-                server.onDisconnect(player);
+                // Have spawned, handle disconnect in world main thread
+                if (baseComponent.isSpawned())
+                    disconnectReason = reason;
+                // If the player is not spawned, we call Server::onDisconnect() directly
+                // As it won't cause any concurrent problem
+                else server.onDisconnect(player, reason);
             }
         });
     }
