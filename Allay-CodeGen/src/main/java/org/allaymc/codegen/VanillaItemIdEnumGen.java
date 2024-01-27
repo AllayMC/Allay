@@ -5,7 +5,6 @@ import org.allaymc.dependence.StringUtils;
 import org.allaymc.dependence.VanillaItemId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
@@ -20,6 +19,8 @@ import static org.allaymc.codegen.VanillaItemInterfaceGen.MAPPED_ITEM_DATA;
  * @author daoge_cmd
  */
 public class VanillaItemIdEnumGen {
+    private static final ClassName VANILLA_ITEM_ID_CLASS = ClassName.get("org.allaymc.api.data", "VanillaItemId");
+    private static final ClassName IDENTIFIER_CLASS = ClassName.get("org.allaymc.api.identifier", "Identifier");
     private static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
     private static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
     private static final String JAVA_DOC = """
@@ -61,15 +62,14 @@ public class VanillaItemIdEnumGen {
         );
         codeBuilder.addMethod(MethodSpec.methodBuilder("fromIdentifier")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addParameter(Identifier.class, "identifier")
+                .addParameter(IDENTIFIER_CLASS, "identifier")
                 .addCode("""
                         try{
                             return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH));
                         }catch(IllegalArgumentException ignore){
                             return null;
                         }""")
-                .addAnnotation(Nullable.class)
-                .returns(VanillaItemId.class)
+                .returns(VANILLA_ITEM_ID_CLASS)
                 .build()
         );
         addEnums(codeBuilder);
