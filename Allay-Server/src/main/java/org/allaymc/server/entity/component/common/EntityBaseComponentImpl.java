@@ -598,8 +598,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             location.setPitch(rot.y);
         }
         if (nbt.containsKey("Motion")) {
-            var motion = readVector3f(nbt, "Motion", "dx", "dy", "dz");
-            motion.set(motion);
+            // 什么? mot!
+            var mot = readVector3f(nbt, "Motion", "dx", "dy", "dz");
+            motion.set(mot);
         }
         if (nbt.containsKey("OnGround")) {
             onGround = nbt.getBoolean("OnGround");
