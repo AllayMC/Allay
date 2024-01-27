@@ -3,7 +3,7 @@ package org.allaymc.api.server;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.client.info.DeviceInfo;
+import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandSender;
@@ -13,7 +13,7 @@ import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
-import org.allaymc.api.world.storage.PlayerStorage;
+import org.allaymc.api.client.storage.PlayerStorage;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
@@ -50,6 +50,10 @@ public interface Server extends TaskCreator, CommandSender {
      */
     void start(long timeMillis);
 
+    void tick(long currentTick);
+
+    long getTick();
+
     void shutdown();
 
     boolean isRunning();
@@ -67,7 +71,7 @@ public interface Server extends TaskCreator, CommandSender {
 
     void onLoggedIn(EntityPlayer player);
 
-    void onDisconnect(EntityPlayer player);
+    void onDisconnect(EntityPlayer player, String reason);
 
     WorldPool getWorldPool();
 

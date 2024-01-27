@@ -4,10 +4,9 @@ import com.google.common.collect.Lists;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.EntityComponent;
-import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -64,11 +63,13 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     void setMaxHealth(float value);
 
-    default NbtList<NbtMap> saveAttributes() {
-        NbtList<NbtMap> list = new NbtList<>(NbtType.COMPOUND);
-        this.getAttributes().stream().map(Attribute::toNBT).forEach(list::add);
+    default List<NbtMap> saveAttributes() {
+        List<NbtMap> list = new ArrayList<>();
+        for (var attribute : getAttributes()) {
+            list.add(attribute.toNBT());
+        }
         return list;
     }
 
-    void sendAttributesIfIsPlayer();
+    default void sendAttributesToClient() {}
 }

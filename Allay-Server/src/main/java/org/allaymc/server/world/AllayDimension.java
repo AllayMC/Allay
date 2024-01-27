@@ -2,6 +2,7 @@ package org.allaymc.server.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
@@ -52,6 +53,11 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
+    public void networkTick() {
+        players.forEach(EntityPlayerNetworkComponent::handleDataPacket);
+    }
+
+    @Override
     public void tick(long currentTick) {
         chunkService.tick();
         entityUpdateService.tick();
@@ -68,9 +74,9 @@ public class AllayDimension implements Dimension {
 
     @Override
     public void removePlayer(EntityPlayer player) {
-        players.remove(player);
-        chunkService.removeChunkLoader(player);
         entityUpdateService.removeEntity(player);
+        chunkService.removeChunkLoader(player);
+        players.remove(player);
     }
 
     @Override

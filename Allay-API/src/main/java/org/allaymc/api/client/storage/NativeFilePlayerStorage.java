@@ -1,4 +1,4 @@
-package org.allaymc.api.world.storage;
+package org.allaymc.api.client.storage;
 
 import java.nio.file.Path;
 
@@ -8,5 +8,5 @@ import java.nio.file.Path;
  * @author daoge_cmd
  */
 public interface NativeFilePlayerStorage extends PlayerStorage {
-    Path getClientDBPath();
+    Path getDataFolderPath();
 }

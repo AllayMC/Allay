@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.client.data.LoginData;
+import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
+import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.container.FixedContainerId;
@@ -23,10 +25,11 @@ import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3i;
+import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
-import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.network.DataPacketProcessor;
 import org.allaymc.server.network.DataPacketProcessorHolder;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -45,7 +48,7 @@ import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
-import org.joml.Vector3ic;
+import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
 import java.util.List;
@@ -54,6 +57,9 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
+
+import static org.allaymc.api.utils.NbtUtils.readVector3f;
+import static org.allaymc.api.utils.NbtUtils.writeVector3f;
 
 /**
  * Allay Project 2023/10/14
@@ -75,11 +81,15 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected SecretKey encryptionSecretKey;
     @ComponentedObject
     protected EntityPlayer player;
+    @Dependency
+    protected EntityPlayerBaseComponentImpl baseComponent;
     protected final AtomicBoolean initialized = new AtomicBoolean(false);
     protected final AtomicBoolean loggedIn = new AtomicBoolean(false);
     protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
     protected final Server server = Server.getInstance();
     protected final Queue<BedrockPacket> packetQueue;
+    // It will be set while client disconnecting from server
+    protected String disconnectReason;
     protected final DataPacketProcessorHolder dataPacketProcessorHolder;
     protected final BedrockPacketHandler loginPacketHandler = new AllayClientLoginPacketHandler();
     protected BedrockServerSession session;
@@ -92,7 +102,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void handleDataPacket() {
-        if (!isInitialized()) return;
         BedrockPacket pk;
         while ((pk = this.packetQueue.poll()) != null) {
             DataPacketProcessor<BedrockPacket> processor = this.dataPacketProcessorHolder.getProcessor(pk);
@@ -101,6 +110,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             } else {
                 processor.handle(player, pk);
             }
+        }
+        // Before client disconnect, there may be other packets which are not handled
+        // So we handle disconnect after we handled all other packets
+        if (disconnectReason != null) {
+            // Client is disconnected from server
+            dataPacketProcessorHolder.getDisconnectProcessor().accept(player, disconnectReason);
+            disconnectReason = null;
         }
     }
 
@@ -129,7 +145,12 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             @Override
             public void onDisconnect(String reason) {
-                server.onDisconnect(player);
+                // Have spawned, handle disconnect in world main thread
+                if (baseComponent.isSpawned())
+                    disconnectReason = reason;
+                // If the player is not spawned, we call Server::onDisconnect() directly
+                // As it won't cause any concurrent problem
+                else server.onDisconnect(player, reason);
             }
         });
     }
@@ -164,7 +185,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     protected void doFirstSpawnPlayer() {
-        server.getPlayerStorage().readPlayerData(player);
+        // Load EntityPlayer's NBT
+        player.loadNBT(server.getPlayerStorage().readPlayerData(player).getPlayerNBT());
 
         var setEntityDataPacket = new SetEntityDataPacket();
         setEntityDataPacket.setRuntimeEntityId(player.getUniqueId());
@@ -183,7 +205,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             server.sendFullPlayerListInfoTo(player);
         }
 
-        player.sendAttributesIfIsPlayer();
+        player.sendAttributesToClient();
 
         sendInventories();
 
@@ -192,10 +214,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(playStatusPacket);
 
         player.getLocation().dimension().getWorld().viewTime(List.of(player));
+        // Save player data the first time
+        server.getPlayerStorage().savePlayerData(player);
     }
 
     private void sendInventories() {
-        //TODO: setHolder
         player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
         player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
         player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
@@ -203,26 +226,45 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     private void initializePlayer() {
-        // TODO: save last pos for each player instead of using the global spawn point
-        Vector3ic spawnPos = server.getDefaultWorld().getWorldData().getSpawnPoint();
-        Dimension dimension = server.getDefaultWorld().getDimension(0);
-        // Load the spawn point chunk first so that we can add player entity into the chunk
+        // initializePlayer() method will read all the data in PlayerData except playerNBT
+        // To be more exactly, we will validate and set player's current pos and spawn point in this method
+        // And playerNBT will be used in EntityPlayer::loadNBT() in doFirstSpawnPlayer() method
+        var playerData = server.getPlayerStorage().readPlayerData(player);
+        // Validate and set player pos
+        Dimension dimension;
+        Vector3fc currentPos;
+        var logOffWorld = server.getWorldPool().getWorld(playerData.getCurrentWorldName());
+        if (logOffWorld == null) {
+            // The world where player logged off doesn't exist
+            dimension = server.getWorldPool().getGlobalSpawnPoint().dimension();
+            currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
+            // The old pos stored in playerNBT is invalid, we should replace it with the new one!
+            var builder = playerData.getPlayerNBT().toBuilder();
+            writeVector3f(builder, "Pos", "x", "y", "z", currentPos);
+            playerData.setPlayerNBT(builder.build());
+        } else {
+            dimension = logOffWorld.getDimension(playerData.getCurrentDimensionId());
+            // Read current pos from playerNBT
+            currentPos = readVector3f(playerData.getPlayerNBT(), "Pos", "x", "y", "z");
+        }
+        // Validate and set spawn point
+        validateAndSetSpawnPoint(playerData);
+        // Load the current point chunk firstly so that we can add player entity into the chunk
         dimension.getChunkService().getChunkImmediately(
-                spawnPos.x() >> 4,
-                spawnPos.z() >> 4
+                (int) currentPos.x() >> 4,
+                (int) currentPos.z() >> 4
         );
-        player.setLocationAndCheckChunk(new Location3f(spawnPos.x(), 100, spawnPos.z(), dimension));
+        baseComponent.setLocation(new Location3f(currentPos.x(), currentPos.y(), currentPos.z(), dimension), false);
         dimension.addPlayer(player);
 
-        // send BaseGamePacket
-        var spawnWorld = server.getDefaultWorld();
+        var spawnWorld = dimension.getWorld();
         var startGamePacket = new StartGamePacket();
         startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
         startGamePacket.setUniqueEntityId(player.getUniqueId());
         startGamePacket.setRuntimeEntityId(player.getUniqueId());
         startGamePacket.setPlayerGameType(player.getGameType());
         var loc = player.getLocation();
-        var worldSpawn = spawnWorld.getWorldData().getSpawnPoint(); // TODO: save spawn world per player
+        var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
         startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
         startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
@@ -232,11 +274,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setLevelGameType(spawnWorld.getWorldData().getGameType());
         startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         startGamePacket.setTrustingPlayers(true);
-        startGamePacket.setDayCycleStopTime(0);
         startGamePacket.setLevelName(Server.SETTINGS.genericSettings().motd());
-        // TODO
         startGamePacket.setLevelId("");
-        // TODO
         startGamePacket.setDefaultPlayerPermission(Server.SETTINGS.genericSettings().defaultPermission());
         startGamePacket.setServerChunkTickRange(spawnWorld.getWorldData().getServerChunkTickRange());
         startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
@@ -251,8 +290,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setMultiplayerCorrelationId(UUID.randomUUID().toString());
         startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
         startGamePacket.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
-        // TODO
-        startGamePacket.setCurrentTick(0);
         startGamePacket.setServerEngine("Allay");
         startGamePacket.setBlockRegistryChecksum(0L);
         startGamePacket.setPlayerPropertyData(NbtMap.EMPTY);
@@ -294,6 +331,23 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         var craftingDataPacket = RecipeRegistry.getRegistry().getCraftingDataPacket();
         sendPacket(craftingDataPacket);
+    }
+
+    protected void validateAndSetSpawnPoint(PlayerData playerData) {
+        Location3ic spawnPoint;
+        var spawnWorld = server.getWorldPool().getWorld(playerData.getSpawnPointWorldName());
+        if (spawnWorld == null) {
+            // 出生点所在的世界不存在
+            // 使用全局出生点替代
+            spawnPoint = server.getWorldPool().getGlobalSpawnPoint();
+            playerData.setSpawnPoint(spawnPoint);
+            playerData.setSpawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName());
+            playerData.setSpawnPointDimensionId(spawnPoint.dimension().getDimensionInfo().dimensionId());
+        } else {
+            var vec = playerData.getSpawnPoint();
+            spawnPoint = new Location3i(vec.x(), vec.y(), vec.z(), spawnWorld.getDimension(playerData.getSpawnPointDimensionId()));
+        }
+        player.setSpawnPoint(spawnPoint);
     }
 
     private class AllayClientLoginPacketHandler implements BedrockPacketHandler {

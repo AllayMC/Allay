@@ -333,9 +333,7 @@ public class AllayChunkService implements ChunkService {
         private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
         private final int chunkTrySendCountPerTick;
         private final LongArrayFIFOQueue chunkSendQueue;
-        private long lastLoaderChunkPosHashed = -1;
-
-
+        private long lastLoaderChunkPosHashed = Long.MAX_VALUE;
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;

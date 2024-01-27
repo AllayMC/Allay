@@ -13,6 +13,8 @@ import java.util.concurrent.CompletableFuture;
  * @author Cool_Loong
  */
 public interface WorldStorage {
+    default void tick(long currentTick) {}
+
     CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) throws WorldStorageException;
 
     CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException;

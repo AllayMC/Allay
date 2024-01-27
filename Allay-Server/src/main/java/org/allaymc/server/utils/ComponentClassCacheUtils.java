@@ -25,12 +25,14 @@ import java.util.Properties;
 @SuppressWarnings("unchecked")
 public final class ComponentClassCacheUtils {
     public static final Path CACHE_ROOT_PATH = Path.of("caches");
-    private static Object2ObjectOpenHashMap<String, String> CACHE_MAP = new Object2ObjectOpenHashMap<>();
+    private static final Object2ObjectOpenHashMap<String, String> CACHE_MAP = new Object2ObjectOpenHashMap<>();
 
     static {
-        File file1 = CACHE_ROOT_PATH.toFile();
-        if (!file1.exists()) {
-            file1.mkdir();
+        File cacheRootDir = CACHE_ROOT_PATH.toFile();
+        if (!cacheRootDir.exists()) {
+            if (!cacheRootDir.mkdir()) {
+                throw new RuntimeException("Can't create cache directory!");
+            }
         }
         try {
             Allay.EXTRA_RESOURCE_CLASS_LOADER.addURL(CACHE_ROOT_PATH.toUri().toURL());

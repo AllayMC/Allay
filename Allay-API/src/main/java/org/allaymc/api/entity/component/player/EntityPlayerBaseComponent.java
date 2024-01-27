@@ -3,11 +3,14 @@ package org.allaymc.api.entity.component.player;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.joml.Vector3ic;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
 
@@ -76,4 +79,10 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void sendTip(String message);
 
     void sendPopup(String message);
+
+    PlayerData savePlayerData();
+
+    Location3ic getSpawnPoint();
+
+    void setSpawnPoint(Location3ic spawnPoint);
 }

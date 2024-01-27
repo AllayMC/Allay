@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.perm.PermKeys;
 import org.allaymc.api.perm.tree.PermTree;
+import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.AbilityLayer;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -92,22 +93,6 @@ public final class Abilities {
         set(Ability.FLYING, flying);
     }
 
-    private Consumer<PermTree.PermChangeType> syncTo(Ability ability) {
-        return syncTo(ability, false);
-    }
-
-    private Consumer<PermTree.PermChangeType> syncTo(Ability ability, boolean reverse) {
-        return type -> {
-            if (type == ADD) {
-                if (reverse) abilities.remove(ability);
-                else abilities.add(ability);
-            } else {
-                if (reverse) abilities.add(ability);
-                else abilities.remove(ability);
-            }
-        };
-    }
-
     public void sync() {
         if (!dirty) return;
         UpdateAbilitiesPacket updateAbilitiesPacket = createUpdateAbilitiesPacket();
@@ -128,6 +113,21 @@ public final class Abilities {
         dirty = false;
     }
 
+    private Consumer<PermTree.PermChangeType> syncTo(Ability ability) {
+        return syncTo(ability, false);
+    }
+
+    private Consumer<PermTree.PermChangeType> syncTo(Ability ability, boolean reverse) {
+        return type -> {
+            if (type == ADD) {
+                if (reverse) abilities.remove(ability);
+                else abilities.add(ability);
+            } else {
+                if (reverse) abilities.add(ability);
+                else abilities.remove(ability);
+            }
+        };
+    }
 
     private UpdateAbilitiesPacket createUpdateAbilitiesPacket() {
         UpdateAbilitiesPacket updateAbilitiesPacket = new UpdateAbilitiesPacket();

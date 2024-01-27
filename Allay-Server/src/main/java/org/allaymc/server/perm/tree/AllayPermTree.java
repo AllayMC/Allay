@@ -1,6 +1,7 @@
 package org.allaymc.server.perm.tree;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;
@@ -10,6 +11,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static org.allaymc.api.perm.tree.PermTree.PermChangeType.ADD;
+import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;
+
 /**
  * Allay Project 2023/12/30
  *
@@ -17,18 +21,22 @@ import java.util.function.Consumer;
  */
 @Getter
 public class AllayPermTree implements PermTree {
-
-
     @Getter
     protected PermTree parent;
     protected PermNode root = new AllayRootPermNode("ROOT");
     protected Map<String, Consumer<PermChangeType>> listeners = new HashMap<>();
+    protected final String name;
 
-    protected AllayPermTree() {
+    protected AllayPermTree(String name) {
+        this.name = name;
+    }
+
+    public static PermTree create(String name) {
+        return new AllayPermTree(name);
     }
 
     public static PermTree create() {
-        return new AllayPermTree();
+        return new AllayPermTree("");
     }
 
     @Override
@@ -43,12 +51,21 @@ public class AllayPermTree implements PermTree {
     }
 
     @Override
+    public void notifyAllPermListeners() {
+        var leaves = getLeaves();
+        // 当存在parent时，parent的权限也会被考虑
+        // 但是parent的监听器不会被调用
+        if (parent != null) leaves.addAll(parent.getLeaves());
+        for (var leaf : leaves) {
+            String perm = leaf.getFullName();
+            callListener(perm, ADD);
+        }
+    }
+
+    @Override
     public boolean hasPerm(String perm) {
         if (parent != null && parent.hasPerm(perm)) {
             return true;
-        }
-        if (perm.contains("*")) {
-            throw new IllegalArgumentException("Using wildcard in method hasPerm() is not allowed!");
         }
         var spilt = new LinkedList<>(AllayStringUtils.fastSplit(perm, "."));
         var node = root;
@@ -59,9 +76,7 @@ public class AllayPermTree implements PermTree {
                 return false;
             }
             for (var leaf : node.getLeaves()) {
-                if (leaf.isWildcardNode()) {
-                    return true;
-                } else if (leaf.canMatch(nodeName)) {
+                if (leaf.canMatch(nodeName)) {
                     node = leaf;
                     hasMatch = true;
                     break;
@@ -96,8 +111,7 @@ public class AllayPermTree implements PermTree {
             if (!hasMatch) {
                 node = node.addLeaf(nodeName);
                 if (callListener) {
-                    var listener = findListener(perm);
-                    if (listener != null) listener.accept(PermChangeType.ADD);
+                    callListener(perm, ADD);
                 }
             }
         }
@@ -116,8 +130,7 @@ public class AllayPermTree implements PermTree {
                     if (leaf.canMatch(nodeName)) {
                         if (spilt.isEmpty()) {
                             if (callListener) {
-                                var listener = findListener(perm);
-                                if (listener != null) listener.accept(PermChangeType.REMOVE);
+                                callListener(perm, REMOVE);
                             }
                             node.getLeaves().remove(leaf);
                             return this;
@@ -146,8 +159,10 @@ public class AllayPermTree implements PermTree {
     }
 
     @Override
-    public PermTree extendFrom(PermTree parent) {
+    public PermTree extendFrom(PermTree parent, boolean callListener) {
         this.parent = parent;
+        if (callListener)
+            parent.getLeaves().stream().map(PermNode::getFullName).forEach(perm -> callListener(perm, ADD));
         return this;
     }
 
@@ -160,14 +175,13 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public boolean isOp() {
-        var rootLeaves = root.getLeaves();
-        return rootLeaves.size() == 1 && rootLeaves.get(0).getName().equals("*");
+        return containsSubSet(DefaultPermissions.OPERATOR);
     }
 
     @Override
     public PermTree setOp(boolean op) {
         if (op) {
-            addPerm("*");
+            if (!isOp()) extendFrom(DefaultPermissions.OPERATOR);
         } else {
             clear();
             extendFrom(DefaultPermissions.MEMBER);
@@ -182,6 +196,11 @@ public class AllayPermTree implements PermTree {
         }
     }
 
+    @Override
+    public boolean containsSubSet(PermTree other) {
+        return other.getLeaves().stream().map(PermNode::getFullName).allMatch(this::hasPerm);
+    }
+
     protected void findLeaf(PermNode node, List<PermNode> dest) {
         if (node.isLeaf()) {
             dest.add(node);
@@ -192,28 +211,8 @@ public class AllayPermTree implements PermTree {
         }
     }
 
-
-    protected Consumer<PermChangeType> findListener(String perm) {
-        for (var entry : listeners.entrySet()) {
-            var listenedPerm = entry.getKey();
-            if (isPermSubset(listenedPerm, perm)) {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @return 权限p2是否是权限p1的子集
-     */
-    protected boolean isPermSubset(String p1, String p2) {
-        if (p1.equals(p2)) {
-            return true;
-        }
-        if (!p1.endsWith("*")) {
-            // p1没有通配符
-            return false;
-        }
-        return p2.startsWith(p1.substring(0, p1.length() - 2));
+    protected void callListener(String perm, PermChangeType type) {
+        var listener = listeners.get(perm);
+        if (listener != null) listener.accept(type);
     }
 }

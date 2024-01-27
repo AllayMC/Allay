@@ -9,6 +9,7 @@ import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
@@ -26,6 +27,7 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.utils.NbtUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.server.world.chunk.AllayChunk;
@@ -51,6 +53,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
+import static org.allaymc.api.utils.NbtUtils.readVector2f;
+import static org.allaymc.api.utils.NbtUtils.readVector3f;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
@@ -185,14 +189,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return location;
     }
 
-    protected void setLocation(Location3fc location) {
-        // Calculate fall distance
-        if (!this.onGround) {
-            if (this.fallDistance < 0) this.fallDistance = 0;
+    public void setLocation(Location3fc location) {
+        setLocation(location, true);
+    }
 
+    public void setLocation(Location3fc location, boolean calculateFallDistance) {
+        // Calculate fall distance
+        if (calculateFallDistance && !this.onGround) {
+            if (this.fallDistance < 0) this.fallDistance = 0;
             this.fallDistance -= location.y() - this.location.y();
         }
-
         this.location.set(location);
         this.location.setYaw(location.yaw());
         this.location.setHeadYaw(location.headYaw());
@@ -584,32 +590,18 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void loadNBT(NbtMap nbt) {
-        if (attributeComponent != null && nbt.containsKey("Attributes")) {
-            var attributes = nbt.getList("Attributes", NbtType.COMPOUND);
-            for (NbtMap attribute : attributes) {
-                attributeComponent.setAttribute(AttributeType.fromNBT(attribute));
-            }
-        }
         if (nbt.containsKey("Pos")) {
-            NbtMap pos = nbt.getCompound("Pos");
-            location.set(
-                    pos.getFloat("x"),
-                    pos.getFloat("y"),
-                    pos.getFloat("z")
-            );
+            var pos = readVector3f(nbt, "Pos", "x", "y", "z");
+            location.set(pos.x, pos.y, pos.z);
         }
         if (nbt.containsKey("Rotation")) {
-            NbtMap rotation = nbt.getCompound("Rotation");
-            location.setYaw(rotation.getFloat("yaw"));
-            location.setPitch(rotation.getFloat("pitch"));
+            var rot = readVector2f(nbt, "Rotation", "yaw", "pitch");
+            location.setYaw(rot.x);
+            location.setPitch(rot.y);
         }
         if (nbt.containsKey("Motion")) {
-            NbtMap motion = nbt.getCompound("Motion");
-            this.motion.set(
-                    motion.getFloat("dx"),
-                    motion.getFloat("dy"),
-                    motion.getFloat("dz")
-            );
+            var motion = readVector3f(nbt, "Motion", "dx", "dy", "dz");
+            motion.set(motion);
         }
         if (nbt.containsKey("OnGround")) {
             onGround = nbt.getBoolean("OnGround");

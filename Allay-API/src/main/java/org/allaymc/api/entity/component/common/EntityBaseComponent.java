@@ -171,6 +171,12 @@ public interface EntityBaseComponent extends EntityComponent {
 
     NbtMap saveNBT();
 
+    default NbtMap saveNBTWithoutPos() {
+        var builder = saveNBT().toBuilder();
+        builder.remove("Pos");
+        return builder.build();
+    }
+
     void loadNBT(NbtMap nbt);
 
     float getFallDistance();

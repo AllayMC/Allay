@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
+import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.Dependency;
@@ -25,6 +26,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
@@ -79,6 +81,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Setter
     protected int chunkTrySendCountPerTick = Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
     protected CommandOriginData commandOriginData;
+    @Getter
+    @Setter
+    protected Location3ic spawnPoint;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
@@ -208,7 +213,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         addPlayerPacket.setUuid(networkComponent.getLoginData().getUuid());
         addPlayerPacket.setUsername(networkComponent.getOriginName());
         addPlayerPacket.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().getDeviceId());
-        addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
+        addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
         addPlayerPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         addPlayerPacket.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         addPlayerPacket.setGameType(gameType);
@@ -298,6 +303,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT().toBuilder()
+                .putCompound("Perm", permTree.saveNBT())
                 .putList(
                         "Offhand",
                         NbtType.COMPOUND,
@@ -316,6 +322,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
+        if (nbt.containsKey("Perm")) {
+            permTree.loadNBT(nbt.getCompound("Perm"));
+        }
         if (nbt.containsKey("Offhand")) {
             containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(nbt.getList("Offhand", NbtType.COMPOUND));
         }
@@ -359,6 +368,18 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void sendPopup(String message) {
         sendSimpleMessage(message, TextPacket.Type.POPUP);
+    }
+
+    @Override
+    public PlayerData savePlayerData() {
+        return PlayerData.builder()
+                .playerNBT(saveNBT())
+                .currentWorldName(getWorld().getWorldData().getName())
+                .currentDimensionId(getDimension().getDimensionInfo().dimensionId())
+                .spawnPoint(new org.joml.Vector3i(spawnPoint.x(), spawnPoint.y(), spawnPoint.z()))
+                .spawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName())
+                .spawnPointDimensionId(spawnPoint.dimension().getDimensionInfo().dimensionId())
+                .build();
     }
 
     @Override

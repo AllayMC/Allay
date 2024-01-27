@@ -9,8 +9,6 @@ import java.util.List;
  */
 public interface PermNode {
 
-    String WILDCARD = "*";
-
     String getName();
 
     String getFullName();
@@ -22,10 +20,6 @@ public interface PermNode {
     PermNode addLeaf(String nodeName);
 
     boolean isLeaf();
-
-    default boolean isWildcardNode() {
-        return getName().equals(WILDCARD);
-    }
 
     default boolean isRoot() {
         return false;

@@ -39,6 +39,8 @@ import java.util.Map;
  * @author Cool_Loong
  */
 public interface Dimension {
+    void networkTick();
+
     void tick(long currentTick);
 
     Generator getGenerator();

@@ -83,7 +83,7 @@ public interface Container {
 
     void onSlotChange(int slot);
 
-    NbtList<NbtMap> saveNBT();
+    List<NbtMap> saveNBT();
 
     void loadNBT(List<NbtMap> nbtList);
 
