@@ -32,6 +32,10 @@ public class PlayerInventoryContainer extends BaseContainer {
         setItemStack(handSlot, itemStack);
     }
 
+    public void clearItemInHand() {
+        clearSlot(handSlot);
+    }
+
     @Override
     public void onSlotChange(int slot) {
         super.onSlotChange(slot);

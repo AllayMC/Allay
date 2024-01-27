@@ -5,6 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
@@ -53,6 +54,8 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Dependency
     protected ItemAttributeComponent attributeComponent;
+    @ComponentedObject
+    protected T thisItemStack;
 
     protected ItemType<T> itemType;
     protected int count;
@@ -259,28 +262,32 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public boolean useItemOn(
-            EntityPlayer player, ItemStack itemStack,
+            EntityPlayer player,
             Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
             BlockFace blockFace) {
-        if (itemStack.getItemType().getBlockType() == null)
+        if (thisItemStack.getItemType().getBlockType() == null)
             return false;
-        var blockState = itemStack.toBlockState();
-        return tryPlaceBlockState(player, itemStack, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
+        var blockState = thisItemStack.toBlockState();
+        return tryPlaceBlockState(player, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
     }
 
-    protected boolean tryPlaceBlockState(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
+    @Override
+    public boolean useItemInAir(EntityPlayer player) {
+        return false;
+    }
+
+    protected boolean tryPlaceBlockState(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
         if (player != null && hasEntityCollision(dimension, placeBlockPos, blockState))
             return false;
         BlockType<?> blockType = blockState.getBlockType();
-        assert blockType != null;
         boolean result = blockType.getBlockBehavior().place(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
-        tryConsumeItem(player, itemStack);
+        tryConsumeItem(player);
         return result;
     }
 
-    protected void tryConsumeItem(EntityPlayer player, ItemStack itemStack) {
+    protected void tryConsumeItem(EntityPlayer player) {
         if (player == null || player.getGameType() != GameType.CREATIVE)
-            itemStack.setCount(itemStack.getCount() - 1);
+            thisItemStack.setCount(thisItemStack.getCount() - 1);
     }
 
     protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {

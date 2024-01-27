@@ -56,6 +56,8 @@ public class GameTestCommand extends SimpleCommand {
                 .key("rfinv")
                 .exec((context, player) -> {
                     player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
+                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
+                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
                     context.addOutput("§aInventory is refreshed!");
                     return context.success();
                 }, SenderType.PLAYER)

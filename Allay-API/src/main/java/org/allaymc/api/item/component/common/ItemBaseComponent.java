@@ -77,9 +77,11 @@ public interface ItemBaseComponent extends ItemComponent {
     void loadExtraTag(NbtMap extraTag);
 
     boolean useItemOn(
-            EntityPlayer player, ItemStack itemStack,
-            Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
-            BlockFace blockFace);
+            EntityPlayer player, Dimension dimension,
+            Vector3ic targetBlockPos, Vector3ic placeBlockPos,
+            Vector3fc clickPos, BlockFace blockFace);
+
+    boolean useItemInAir(EntityPlayer player);
 
     default boolean canMerge(ItemStack itemStack) {
         return canMerge(itemStack, false);

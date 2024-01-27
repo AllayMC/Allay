@@ -73,7 +73,14 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
-                        // TODO
+                        if (itemStack.useItemInAir(player)) {
+                            if (!player.hasAction()) {
+                                player.setAction(true);
+                                // TODO: check meaning of this return
+                                // return;
+                            }
+                            player.setAction(false);
+                        }
                     }
                     case ITEM_USE_BREAK_BLOCK -> {
                         // TODO
@@ -122,12 +129,12 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
         return System.currentTimeMillis() - this.spamCheckTime >= 100;
     }
 
-    private static boolean interactBlockOrUseItem(EntityPlayer player, ItemStack itemStack, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos, BlockFace blockFace) {
+    private boolean interactBlockOrUseItem(EntityPlayer player, ItemStack itemStack, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos, BlockFace blockFace) {
         var dimension = player.getLocation().dimension();
         var blockStateClicked = dimension.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
         if (!blockStateClicked.getBehavior().onInteract(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace)) {
             if (itemStack.getItemType() != AIR_TYPE) {
-                return itemStack.useItemOn(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace);
+                return itemStack.useItemOn(player, dimension, blockPos, placePos, clickPos, blockFace);
             } else return false;
         } else return true;
     }

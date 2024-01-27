@@ -9,6 +9,7 @@ import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
 
@@ -85,4 +86,14 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setSpawnPoint(Location3ic spawnPoint);
 
     void sendLocationToSelf();
+
+    default boolean hasAction() {
+        return getMetadata().get(EntityFlag.USING_ITEM);
+    }
+
+    default void setAction(boolean value) {
+        if (value != hasAction()) {
+            setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
+        }
+    }
 }

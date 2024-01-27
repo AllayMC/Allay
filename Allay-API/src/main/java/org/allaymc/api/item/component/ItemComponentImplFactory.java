@@ -22,6 +22,8 @@ public interface ItemComponentImplFactory {
 
     ComponentProvider<ItemComponent> createItemAirBaseComponent();
 
+    ComponentProvider<ItemComponent> createItemArmorBaseComponent();
+
     ComponentProvider<ItemComponent> createItemAttributeComponent(ItemAttributes itemAttributes);
 
     ComponentProvider<ItemComponent> createDefaultItemAttributeComponent();

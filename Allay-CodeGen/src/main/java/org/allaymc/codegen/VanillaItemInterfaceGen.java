@@ -89,6 +89,10 @@ public class VanillaItemInterfaceGen {
         registerSubPackage(Pattern.compile(".*StainedGlassPaneStack"), "stainedglasspane");
         registerSubPackage(Pattern.compile(".*GlassStack"), "glass");
         registerSubPackage(Pattern.compile(".*GlassPaneStack"), "glasspane");
+        registerSubPackage(Pattern.compile(".*HelmetStack"), "helmet");
+        registerSubPackage(Pattern.compile(".*ChestplateStack"), "chestplate");
+        registerSubPackage(Pattern.compile(".*LeggingsStack"), "leggings");
+        registerSubPackage(Pattern.compile(".*BootsStack"), "boots");
         if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
         for (var item : VanillaItemId.values()) {
             var itemClassSimpleName = item == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0Stack" : "Item" + Utils.convertToPascalCase(item.getIdentifier().path().replace(".", "_")) + "Stack";
@@ -101,7 +105,7 @@ public class VanillaItemInterfaceGen {
                 if (!Files.exists(folderPath)) Files.createDirectories(folderPath);
                 generateItemClass(item, itemClassName, path);
             } else {
-                System.out.println("Class " + itemClassName + " already exists during block class generating!");
+                System.out.println("Class " + itemClassName + " already exists during item class generating!");
             }
         }
     }

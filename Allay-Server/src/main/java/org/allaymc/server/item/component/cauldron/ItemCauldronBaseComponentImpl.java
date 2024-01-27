@@ -22,7 +22,7 @@ public class ItemCauldronBaseComponentImpl extends ItemBaseComponentImpl<ItemCau
     }
 
     @Override
-    public boolean useItemOn(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        return tryPlaceBlockState(player, itemStack, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, BlockCauldronBehavior.CAULDRON_TYPE.getDefaultState());
+    public boolean useItemOn(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        return tryPlaceBlockState(player, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, BlockCauldronBehavior.CAULDRON_TYPE.getDefaultState());
     }
 }
