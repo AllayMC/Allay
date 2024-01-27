@@ -165,12 +165,12 @@ public final class AllayServer implements Server {
 
     private void loadWorlds() {
         // TODO: World loading logic
-//        JeGeneratorLoader.setup();
-//        JeGeneratorLoader.waitStart();
-//        AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Bedrock Level")));
-//        defaultWorld.setDimension(new AllayDimension(defaultWorld, JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD));
+        // JeGeneratorLoader.setup();
+        // JeGeneratorLoader.waitStart();
+        // AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Bedrock Level")));
+        // defaultWorld.setDimension(new AllayDimension(defaultWorld, JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD));
 
-//        FLAT WORLD
+        // FLAT WORLD
         AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Bedrock Level")));
         defaultWorld.setDimension(new AllayDimension(defaultWorld, new FlatWorldGenerator(), DimensionInfo.OVERWORLD));
 
@@ -179,9 +179,8 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
-        for (var player : getOnlinePlayers().values()) {
-            player.disconnect(TrKeys.M_DISCONNECT_CLOSED);
-        }
+        for (var player : getOnlinePlayers().values()) player.disconnect(TrKeys.M_DISCONNECT_CLOSED);
+        SETTINGS.save();
         System.exit(0);
     }
 
