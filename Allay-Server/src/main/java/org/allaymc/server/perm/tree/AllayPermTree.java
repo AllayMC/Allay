@@ -42,6 +42,19 @@ public class AllayPermTree implements PermTree {
     }
 
     @Override
+    public void notifyAllPermListeners() {
+        var leaves = getLeaves();
+        // 当存在parent时，parent的权限也会被考虑
+        // 但是parent的监听器不会被调用
+        if (parent != null) leaves.addAll(parent.getLeaves());
+        for (var leaf : leaves) {
+            String perm = leaf.getFullName();
+            var listener = listeners.get(perm);
+            if (listener != null) listener.accept(PermChangeType.ADD);
+        }
+    }
+
+    @Override
     public boolean hasPerm(String perm) {
         if (parent != null && parent.hasPerm(perm)) {
             return true;
@@ -90,7 +103,7 @@ public class AllayPermTree implements PermTree {
             if (!hasMatch) {
                 node = node.addLeaf(nodeName);
                 if (callListener) {
-                    var listener = findListener(perm);
+                    var listener = listeners.get(perm);
                     if (listener != null) listener.accept(PermChangeType.ADD);
                 }
             }
@@ -110,7 +123,7 @@ public class AllayPermTree implements PermTree {
                     if (leaf.canMatch(nodeName)) {
                         if (spilt.isEmpty()) {
                             if (callListener) {
-                                var listener = findListener(perm);
+                                var listener = listeners.get(perm);
                                 if (listener != null) listener.accept(PermChangeType.REMOVE);
                             }
                             node.getLeaves().remove(leaf);
@@ -188,26 +201,5 @@ public class AllayPermTree implements PermTree {
                 findLeaf(leaf, dest);
             }
         }
-    }
-
-
-    protected Consumer<PermChangeType> findListener(String perm) {
-        for (var entry : listeners.entrySet()) {
-            var listenedPerm = entry.getKey();
-            if (isPermSubset(listenedPerm, perm)) {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @return Whether permission p2 is a subset of permission p1
-     */
-    protected boolean isPermSubset(String p1, String p2) {
-        if (p1.equals(p2)) {
-            return true;
-        }
-        return p2.startsWith(p1.substring(0, p1.length() - 2));
     }
 }

@@ -26,6 +26,8 @@ public interface PermTree {
     @UnmodifiableView
     Map<String, Consumer<PermChangeType>> getPermListeners();
 
+    void notifyAllPermListeners();
+
     void clear();
 
     boolean containsSubSet(PermTree other);
