@@ -38,7 +38,7 @@ public class EnumNode extends BaseNode {
         var arg = context.queryArg();
         boolean matched = false;
         for (String value : values) {
-            if (value.equals(arg)) {
+            if (customEquals(value, arg)) {
                 matched = true;
                 break;
             }
@@ -50,6 +50,10 @@ public class EnumNode extends BaseNode {
         } else {
             return false;
         }
+    }
+
+    protected boolean customEquals(String s1, String s2) {
+        return s1.equals(s2);
     }
 
     @Override
