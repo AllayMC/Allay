@@ -58,7 +58,8 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
             Files.move(oldPath, path);
             log.error("Error while writing player data " + uuid, e);
         }
-        // delete temp file
+        // delete uuid_old.nbt file
+        Files.deleteIfExists(oldPath);
     }
 
     @SneakyThrows
