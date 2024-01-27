@@ -65,6 +65,15 @@ public class AllayCachedPlayerStorage implements PlayerStorage {
         return cache.containsKey(uuid) || playerStorage.hasPlayerData(uuid);
     }
 
+    @Override
+    public void close() {
+        for (var e : cache.entrySet()) {
+            var dataEntry = e.getValue();
+            cache.remove(e.getKey());
+            playerStorage.savePlayerData(e.getKey(), dataEntry.playerData);
+        }
+    }
+
     @AllArgsConstructor
     protected static class DataEntry {
         long createTick;

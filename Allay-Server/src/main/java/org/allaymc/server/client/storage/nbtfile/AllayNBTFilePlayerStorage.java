@@ -73,6 +73,11 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
         return Files.exists(buildPlayerDataFilePath(uuid));
     }
 
+    @Override
+    public void close() {
+        // Do nothing
+    }
+
     protected Path buildPlayerDataFilePath(UUID uuid) {
         return dataFolderPath.resolve(uuid.toString() + ".nbt");
     }

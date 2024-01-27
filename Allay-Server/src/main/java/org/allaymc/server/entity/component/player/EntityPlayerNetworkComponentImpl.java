@@ -111,6 +111,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 processor.handle(player, pk);
             }
         }
+        handleDisconnect();
+    }
+
+    public void handleDisconnect() {
         // Before client disconnect, there may be other packets which are not handled
         // So we handle disconnect after we handled all other packets
         if (disconnectReason != null) {
@@ -140,12 +144,12 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     return PacketSignal.HANDLED;
                 }
                 packetQueue.add(packet);
-                return PacketSignal.HANDLED;//For our own log packet
+                return PacketSignal.HANDLED;
             }
 
             @Override
             public void onDisconnect(String reason) {
-                // Have spawned, handle disconnect in world main thread
+                // Handle disconnect in world main thread
                 if (baseComponent.isSpawned())
                     disconnectReason = reason;
                 // If the player is not spawned, we call Server::onDisconnect() directly

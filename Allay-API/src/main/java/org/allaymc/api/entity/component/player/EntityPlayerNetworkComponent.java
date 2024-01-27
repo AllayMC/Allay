@@ -59,6 +59,9 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     SecretKey getEncryptionSecretKey();
 
+    @ApiStatus.Internal
+    void handleDisconnect();
+
     /**
      * Has the player been fully initialized?
      * (This represents whether the player's client can see the world and proceed with gameplay.)

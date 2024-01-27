@@ -19,6 +19,9 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface World {
+
+    Thread getThread();
+
     long getTick();
 
     float getTps();

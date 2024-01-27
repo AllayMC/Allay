@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.Dimension;
@@ -14,7 +13,6 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.GameLoop;
 import org.allaymc.server.scheduler.AllayScheduler;
-import org.cloudburstmc.protocol.bedrock.packet.GameRulesChangedPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -39,7 +37,8 @@ public class AllayWorld implements World {
     @Getter
     protected final Scheduler scheduler;
     protected final GameLoop gameLoop;
-    protected final Thread tickThread;
+    @Getter
+    protected final Thread thread;
     protected long nextTimeSendTick = 12 * 20;
 
     public AllayWorld(WorldStorage worldStorage) {
@@ -57,7 +56,7 @@ public class AllayWorld implements World {
                     }
                 })
                 .build();
-        this.tickThread = Thread.ofPlatform()
+        this.thread = Thread.ofPlatform()
                 .name("World Thread - " + this.getWorldData().getName())
                 .unstarted(gameLoop::startLoop);
     }
@@ -89,9 +88,9 @@ public class AllayWorld implements World {
 
     @Override
     public void startTick() {
-        if (tickThread.getState() != Thread.State.NEW) {
+        if (thread.getState() != Thread.State.NEW) {
             throw new IllegalStateException("World is already start ticking!");
-        } else tickThread.start();
+        } else thread.start();
     }
 
     public void tickTime(long tickNumber) {
@@ -147,7 +146,13 @@ public class AllayWorld implements World {
 
     @Override
     public void close() {
-        getDimensions().forEach((integer, dimension) -> dimension.getChunkService().unloadAllChunks());
+        getDimensions().forEach((integer, dimension) -> {
+            // Players were disconnected in Server::shutdown()
+            // However, the log off related logic is deferred until the world main thread executes, which has stopped at this time
+            // So we should handle player disconnect here
+            ((AllayDimension) dimension).handlePlayersDisconnect();
+            dimension.getChunkService().unloadAllChunks();
+        });
         saveWorldData();
         getWorldStorage().close();
     }

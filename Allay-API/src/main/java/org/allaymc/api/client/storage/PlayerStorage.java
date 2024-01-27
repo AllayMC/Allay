@@ -41,4 +41,6 @@ public interface PlayerStorage {
     default boolean hasPlayerData(EntityPlayer player) {
         return hasPlayerData(player.getUUID());
     }
+
+    void close();
 }

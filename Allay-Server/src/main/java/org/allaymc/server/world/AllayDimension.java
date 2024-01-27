@@ -57,6 +57,10 @@ public class AllayDimension implements Dimension {
         players.forEach(EntityPlayerNetworkComponent::handleDataPacket);
     }
 
+    public void handlePlayersDisconnect() {
+        players.forEach(EntityPlayer::handleDisconnect);
+    }
+
     @Override
     public void tick(long currentTick) {
         chunkService.tick();

@@ -164,6 +164,7 @@ public final class AllayServer implements Server {
     }
 
     private void loadWorlds() {
+        // TODO: World loading logic
 //        JeGeneratorLoader.setup();
 //        JeGeneratorLoader.waitStart();
 //        AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Bedrock Level")));
