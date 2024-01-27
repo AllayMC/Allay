@@ -46,12 +46,19 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
     @Override
     public void savePlayerData(UUID uuid, PlayerData playerData) {
         var path = buildPlayerDataFilePath(uuid);
-        Files.deleteIfExists(path);
+        var oldPath = path.resolveSibling(uuid + "_old.nbt");
+        if (Files.exists(path)) {
+            // rename current file to uuid_old.nbt
+            Files.move(path, oldPath);
+        }
         try (var writer = NbtUtils.createGZIPWriter(Files.newOutputStream(path))) {
             writer.writeTag(playerData.toNBT());
         } catch (IOException e) {
-            throw new RuntimeException("Error while writing player data " + uuid, e);
+            // error, rename uuid_old.nbt file to uuid.nbt
+            Files.move(oldPath, path);
+            log.error("Error while writing player data " + uuid, e);
         }
+        // delete temp file
     }
 
     @SneakyThrows
