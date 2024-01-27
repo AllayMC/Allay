@@ -76,6 +76,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
+    private static void checkXZ(int x, int z) {
+        Preconditions.checkArgument(x >= 0 && x <= 15);
+        Preconditions.checkArgument(z >= 0 && z <= 15);
+    }
+
     @Override
     @ApiStatus.Internal
     public ChunkSection[] getSections() {
@@ -134,9 +139,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public BlockState getBlockState(int x, int y, int z, int layer) {
-        checkXYZ(x, y, z);
         if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
             return BlockAirBehavior.AIR_TYPE.getDefaultState();
+        checkXZ(x, z);
         ChunkSection section = this.getSection(y >> 4);
         BlockState blockState;
         if (section == null) {

@@ -69,6 +69,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide()) return;
             if (!entity.isCurrentChunkLoaded()) return;
+            if (entity.getLocation().y() < dimension.getDimensionInfo().minHeight()) return;
             //TODO: liquid motion etc...
             var collidedBlocks = dimension.getCollidingBlocks(entity.getOffsetAABB());
             if (collidedBlocks == null) {
