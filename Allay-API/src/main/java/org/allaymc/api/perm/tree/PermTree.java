@@ -1,9 +1,6 @@
 package org.allaymc.api.perm.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.cloudburstmc.nbt.NbtList;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.ArrayList;
@@ -30,6 +27,8 @@ public interface PermTree {
     Map<String, Consumer<PermChangeType>> getPermListeners();
 
     void clear();
+
+    boolean containsSubSet(PermTree other);
 
     enum PermChangeType {
         ADD,

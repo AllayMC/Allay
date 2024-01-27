@@ -1,7 +1,10 @@
 package org.allaymc.server.perm;
 
+import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.server.perm.tree.AllayPermTree;
+import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -12,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author daoge_cmd
  */
+@ExtendWith(AllayTestExtension.class)
 public class PermTreeTest {
 
     @Test
@@ -32,19 +36,19 @@ public class PermTreeTest {
         assertFalse(tree.hasPerm("test.cmd.say"));
         assertFalse(tree.hasPerm("test.cmd.hello"));
 
-        // test.cmd 与 test.cmd.* 意义不同
-        tree.addPerm("test.cmd");
-        assertFalse(tree.hasPerm("test.cmd.abc"));
-        tree.addPerm("test.cmd.*");
-        assertTrue(tree.hasPerm("test.cmd.abc"));
-        tree.addPerm("*");
-        assertTrue(tree.hasPerm("a.b.c"));
-
-        tree.addPerm("*");
-        assertTrue(tree.hasPerm("a.b.c"));
-
-        // 不允许在检查权限时使用通配符
-        assertThrows(IllegalArgumentException.class, () -> tree.hasPerm("test.cmd.*"));
+//        // test.cmd 与 test.cmd.* 意义不同
+//        tree.addPerm("test.cmd");
+//        assertFalse(tree.hasPerm("test.cmd.abc"));
+//        tree.addPerm("test.cmd.*");
+//        assertTrue(tree.hasPerm("test.cmd.abc"));
+//        tree.addPerm("*");
+//        assertTrue(tree.hasPerm("a.b.c"));
+//
+//        tree.addPerm("*");
+//        assertTrue(tree.hasPerm("a.b.c"));
+//
+//        // 不允许在检查权限时使用通配符
+//        assertThrows(IllegalArgumentException.class, () -> tree.hasPerm("test.cmd.*"));
     }
 
     @Test
@@ -52,7 +56,7 @@ public class PermTreeTest {
         var parent = AllayPermTree
                 .create()
                 .addPerm("test.a")
-                .addPerm("test.cmd.*");
+                .addPerm("test.cmd.abc");
         var tree = AllayPermTree
                 .create()
                 .copyFrom(parent)
@@ -74,7 +78,7 @@ public class PermTreeTest {
         var parent = AllayPermTree
                 .create()
                 .addPerm("test.a")
-                .addPerm("test.cmd.*");
+                .addPerm("test.cmd.abc");
         var tree = AllayPermTree
                 .create()
                 .extendFrom(parent)
@@ -94,15 +98,10 @@ public class PermTreeTest {
     @Test
     void testPermListener() {
         AtomicBoolean testFlag1 = new AtomicBoolean(false);
-        var tree = AllayPermTree
-                .create()
+        AllayPermTree.create()
                 .registerPermListener("test1.a", type -> testFlag1.set(true))
                 .addPerm("test1.a");
         assertTrue(testFlag1.get());
-        AtomicBoolean testFlag2 = new AtomicBoolean(false);
-        tree.registerPermListener("test2.*", type -> testFlag2.set(true))
-                .addPerm("test2.114514");
-        assertTrue(testFlag2.get());
     }
 
     @Test
@@ -112,7 +111,30 @@ public class PermTreeTest {
         assertFalse(tree.isOp());
         tree.setOp(true);
         assertTrue(tree.isOp());
-        assertEquals(1, tree.getRoot().getLeaves().size());
-        assertEquals("*", tree.getRoot().getLeaves().get(0).getFullName());
+        assertTrue(tree.containsSubSet(DefaultPermissions.OPERATOR));
+    }
+
+    @Test
+    void testSubSet() {
+        var full = AllayPermTree
+                .create()
+                .addPerm("test.a")
+                .addPerm("test.cmd.abc");
+        var sub1 = AllayPermTree
+                .create()
+                .addPerm("test.a");
+        var sub2 = AllayPermTree
+                .create()
+                .addPerm("test.cmd.abc");
+        var invalidSub1 = AllayPermTree
+                .create()
+                .addPerm("test.b");
+        var invalidSub2 = AllayPermTree
+                .create()
+                .addPerm("test.cmd.def");
+        assertTrue(full.containsSubSet(sub1));
+        assertTrue(full.containsSubSet(sub2));
+        assertFalse(full.containsSubSet(invalidSub1));
+        assertFalse(full.containsSubSet(invalidSub2));
     }
 }

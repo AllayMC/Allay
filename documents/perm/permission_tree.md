@@ -12,21 +12,7 @@
 
 ```allay.text.color```
 
-### 表示一组权限节点
-
-可用通配符“*”表示此权限节点下可能的所有子节点
-
-带通配符的例子：
-
-```allay.cmd.*```
-
-```*```
-
-请注意，上述两个例子不指代一个具体的权限节点，而是一组权限节点
-
-这意味着你不能在调用方法```hasPerm(String perm)```时使用通配符！
-
-### 不带通配符时权限的匹配（测试代码见test/perm/PermTreeTest.java)
+### 权限的匹配（测试代码见test/perm/PermTreeTest.java)
 
 #### eg1:
 
@@ -42,7 +28,6 @@
 
 #### eg2:
 
-
 令玩家cool_loong拥有权限```allay.cmd```
 
 则玩家cool_loong拥有权限:
@@ -51,22 +36,3 @@
 ```allay.cmd```
 
 但不拥有权限```allay.cmd.tell```, ```allay.cmd.help```等
-
-
-### 带通配符时权限的匹配
-
-令玩家cool_loong拥有权限```allay.cmd.*```
-
-
-则玩家cool_loong拥有权限（只列举部分，由于存在通配符）:
-
-```allay```
-```allay.cmd```
-```allay.cmd.tell```
-```allay.cmd.a```
-```allay.cmd.b```
-```allay.cmd.a.b```
-```allay.cmd.a.b.c```
-etc...
-
-但不拥有权限```allay.eat.daoge```等

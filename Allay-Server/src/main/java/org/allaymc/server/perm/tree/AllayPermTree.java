@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 @Getter
 public class AllayPermTree implements PermTree {
 
-
     @Getter
     protected PermTree parent;
     protected PermNode root = new AllayRootPermNode("ROOT");
@@ -47,9 +46,6 @@ public class AllayPermTree implements PermTree {
         if (parent != null && parent.hasPerm(perm)) {
             return true;
         }
-        if (perm.contains("*")) {
-            throw new IllegalArgumentException("Using wildcard in method hasPerm() is not allowed!");
-        }
         var spilt = new LinkedList<>(AllayStringUtils.fastSplit(perm, "."));
         var node = root;
         while (!spilt.isEmpty()) {
@@ -59,9 +55,7 @@ public class AllayPermTree implements PermTree {
                 return false;
             }
             for (var leaf : node.getLeaves()) {
-                if (leaf.isWildcardNode()) {
-                    return true;
-                } else if (leaf.canMatch(nodeName)) {
+                if (leaf.canMatch(nodeName)) {
                     node = leaf;
                     hasMatch = true;
                     break;
@@ -160,14 +154,13 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public boolean isOp() {
-        var rootLeaves = root.getLeaves();
-        return rootLeaves.size() == 1 && rootLeaves.get(0).getName().equals("*");
+        return containsSubSet(DefaultPermissions.OPERATOR);
     }
 
     @Override
     public PermTree setOp(boolean op) {
         if (op) {
-            addPerm("*");
+            if (!isOp()) copyFrom(DefaultPermissions.OPERATOR);
         } else {
             clear();
             extendFrom(DefaultPermissions.MEMBER);
@@ -180,6 +173,11 @@ public class AllayPermTree implements PermTree {
         for (var leaf : getLeaves()) {
             removePerm(leaf.getFullName());
         }
+    }
+
+    @Override
+    public boolean containsSubSet(PermTree other) {
+        return other.getLeaves().stream().map(PermNode::getFullName).allMatch(this::hasPerm);
     }
 
     protected void findLeaf(PermNode node, List<PermNode> dest) {
@@ -204,15 +202,11 @@ public class AllayPermTree implements PermTree {
     }
 
     /**
-     * @return 权限p2是否是权限p1的子集
+     * @return Whether permission p2 is a subset of permission p1
      */
     protected boolean isPermSubset(String p1, String p2) {
         if (p1.equals(p2)) {
             return true;
-        }
-        if (!p1.endsWith("*")) {
-            // p1没有通配符
-            return false;
         }
         return p2.startsWith(p1.substring(0, p1.length() - 2));
     }

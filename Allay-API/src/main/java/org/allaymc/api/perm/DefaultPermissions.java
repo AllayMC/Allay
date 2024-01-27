@@ -10,15 +10,22 @@ import org.allaymc.api.perm.tree.PermTree;
  */
 public interface DefaultPermissions {
     PermTree VISITOR =
-            PermTree.create();
+            PermTree.create()
+                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "help");
 
     PermTree MEMBER =
             PermTree.create()
-                    .copyFrom(VISITOR)
-                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "help")
+                    .extendFrom(VISITOR)
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "me");
 
     PermTree OPERATOR =
             PermTree.create()
-                    .addPerm("*");
+                    .extendFrom(MEMBER)
+                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gamemode")
+                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gm")
+                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gamerule")
+                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gr")
+                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gametest")
+                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gt")
+                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "stop");
 }
