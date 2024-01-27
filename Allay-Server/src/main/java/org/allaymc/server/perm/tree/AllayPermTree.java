@@ -160,7 +160,7 @@ public class AllayPermTree implements PermTree {
     @Override
     public PermTree setOp(boolean op) {
         if (op) {
-            if (!isOp()) copyFrom(DefaultPermissions.OPERATOR);
+            if (!isOp()) extendFrom(DefaultPermissions.OPERATOR);
         } else {
             clear();
             extendFrom(DefaultPermissions.MEMBER);
