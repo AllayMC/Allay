@@ -10,6 +10,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static org.allaymc.api.perm.tree.PermTree.PermChangeType.ADD;
+import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;
+
 /**
  * Allay Project 2023/12/30
  *
@@ -49,8 +52,7 @@ public class AllayPermTree implements PermTree {
         if (parent != null) leaves.addAll(parent.getLeaves());
         for (var leaf : leaves) {
             String perm = leaf.getFullName();
-            var listener = listeners.get(perm);
-            if (listener != null) listener.accept(PermChangeType.ADD);
+            callListener(perm, ADD);
         }
     }
 
@@ -103,8 +105,7 @@ public class AllayPermTree implements PermTree {
             if (!hasMatch) {
                 node = node.addLeaf(nodeName);
                 if (callListener) {
-                    var listener = listeners.get(perm);
-                    if (listener != null) listener.accept(PermChangeType.ADD);
+                    callListener(perm, ADD);
                 }
             }
         }
@@ -123,8 +124,7 @@ public class AllayPermTree implements PermTree {
                     if (leaf.canMatch(nodeName)) {
                         if (spilt.isEmpty()) {
                             if (callListener) {
-                                var listener = listeners.get(perm);
-                                if (listener != null) listener.accept(PermChangeType.REMOVE);
+                                callListener(perm, REMOVE);
                             }
                             node.getLeaves().remove(leaf);
                             return this;
@@ -155,6 +155,7 @@ public class AllayPermTree implements PermTree {
     @Override
     public PermTree extendFrom(PermTree parent) {
         this.parent = parent;
+        parent.getLeaves().stream().map(PermNode::getFullName).forEach(perm -> callListener(perm, ADD));
         return this;
     }
 
@@ -201,5 +202,10 @@ public class AllayPermTree implements PermTree {
                 findLeaf(leaf, dest);
             }
         }
+    }
+
+    protected void callListener(String perm, PermChangeType type) {
+        var listener = listeners.get(perm);
+        if (listener != null) listener.accept(type);
     }
 }
