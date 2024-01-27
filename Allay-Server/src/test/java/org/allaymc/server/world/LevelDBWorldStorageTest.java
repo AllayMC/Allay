@@ -52,7 +52,6 @@ class LevelDBWorldStorageTest {
         @SuppressWarnings("resource") MockedStatic<Server> serve = Mockito.mockStatic(Server.class);
         serve.when(Server::getInstance).thenReturn(server);
         Mockito.when(server.getVirtualThreadPool()).thenReturn(Executors.newVirtualThreadPerTaskExecutor());
-        Mockito.when(Server.SETTINGS).thenReturn(new ServerSettings());
         Mockito.when(mockWorld.getPlayers()).thenReturn(List.of());
     }
 
