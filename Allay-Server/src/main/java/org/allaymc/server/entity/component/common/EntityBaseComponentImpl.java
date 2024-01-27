@@ -189,14 +189,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return location;
     }
 
-    protected void setLocation(Location3fc location) {
-        // Calculate fall distance
-        if (!this.onGround) {
-            if (this.fallDistance < 0) this.fallDistance = 0;
+    public void setLocation(Location3fc location) {
+        setLocation(location, true);
+    }
 
+    public void setLocation(Location3fc location, boolean calculateFallDistance) {
+        // Calculate fall distance
+        if (calculateFallDistance && !this.onGround) {
+            if (this.fallDistance < 0) this.fallDistance = 0;
             this.fallDistance -= location.y() - this.location.y();
         }
-
         this.location.set(location);
         this.location.setYaw(location.yaw());
         this.location.setHeadYaw(location.headYaw());

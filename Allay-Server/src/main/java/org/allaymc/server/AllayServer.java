@@ -23,7 +23,6 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
-import org.allaymc.server.client.storage.AllayCachedPlayerStorage;
 import org.allaymc.server.client.storage.nbtfile.AllayNBTFilePlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
@@ -135,7 +134,6 @@ public final class AllayServer implements Server {
                 getWorldPool().getWorlds().values().forEach(World::close);
                 virtualThreadPool.shutdownNow();
                 computeThreadPool.shutdownNow();
-                System.out.println("Server ShutDown Over.");
             }
         });
         initTerminalConsole();

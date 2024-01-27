@@ -8,6 +8,7 @@ import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
+import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.container.FixedContainerId;
@@ -80,6 +81,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected SecretKey encryptionSecretKey;
     @ComponentedObject
     protected EntityPlayer player;
+    @Dependency
+    protected EntityPlayerBaseComponentImpl baseComponent;
     protected final AtomicBoolean initialized = new AtomicBoolean(false);
     protected final AtomicBoolean loggedIn = new AtomicBoolean(false);
     protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
@@ -97,7 +100,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void handleDataPacket() {
-        if (!isInitialized()) return;
         BedrockPacket pk;
         while ((pk = this.packetQueue.poll()) != null) {
             DataPacketProcessor<BedrockPacket> processor = this.dataPacketProcessorHolder.getProcessor(pk);
@@ -171,8 +173,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected void doFirstSpawnPlayer() {
         // Load EntityPlayer's NBT
         player.loadNBT(server.getPlayerStorage().readPlayerData(player).getPlayerNBT());
-        // Save player data the first time
-        server.getPlayerStorage().savePlayerData(player);
 
         var setEntityDataPacket = new SetEntityDataPacket();
         setEntityDataPacket.setRuntimeEntityId(player.getUniqueId());
@@ -200,6 +200,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(playStatusPacket);
 
         player.getLocation().dimension().getWorld().viewTime(List.of(player));
+        // Save player data the first time
+        server.getPlayerStorage().savePlayerData(player);
     }
 
     private void sendInventories() {
@@ -238,7 +240,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 (int) currentPos.x() >> 4,
                 (int) currentPos.z() >> 4
         );
-        player.setLocationAndCheckChunk(new Location3f(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
+        baseComponent.setLocation(new Location3f(currentPos.x(), currentPos.y(), currentPos.z(), dimension), false);
         dimension.addPlayer(player);
 
         var spawnWorld = dimension.getWorld();

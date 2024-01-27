@@ -6,6 +6,8 @@ import org.allaymc.api.perm.tree.PermTree;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.allaymc.api.perm.PermKeys.*;
+
 /**
  * Allay Project 2023/12/30
  *
@@ -13,13 +15,17 @@ import java.util.Map;
  */
 public final class DefaultPermissions {
 
-    public static final PermTree VISITOR =
-            PermTree.create("Visitor")
-                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "help");
+    public static final PermTree VISITOR = PermTree.create("Visitor");
 
     public static final PermTree MEMBER =
             PermTree.create("Member")
                     .extendFrom(VISITOR)
+                    .addPerm(BUILD).addPerm(MINE)
+                    .addPerm(DOORS_AND_SWITCHES).addPerm(OPEN_CONTAINERS)
+                    .addPerm(ATTACK_PLAYERS).addPerm(ATTACK_MOBS)
+                    .addPerm(SUMMON_LIGHTNING).addPerm(CHAT)
+                    .addPerm(PVM).addPerm(MVP)
+                    .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "help")
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "me");
 
     public static final PermTree OPERATOR =

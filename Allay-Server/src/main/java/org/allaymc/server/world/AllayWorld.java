@@ -74,7 +74,8 @@ public class AllayWorld implements World {
 
     @Override
     public void tick(long currentTick) {
-        getDimensions().values().forEach(e -> e.getPlayers().forEach(EntityPlayerNetworkComponent::handleDataPacket));
+        // Handle data packet firstly
+        getDimensions().values().forEach(Dimension::networkTick);
         syncData();
         tickTime(currentTick);
         scheduler.tick();
