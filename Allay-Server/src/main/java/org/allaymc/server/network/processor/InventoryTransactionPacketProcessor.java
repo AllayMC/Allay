@@ -18,6 +18,8 @@ import org.cloudburstmc.protocol.bedrock.packet.InventoryTransactionPacket;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
+import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
+
 /**
  * Allay Project 11/22/2023
  *
@@ -108,8 +110,10 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
                         }
                         // TODO: Check whether the player can touch the target entity or not (to prevent cheater)
                         var itemInHand = player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
-                        var damage = DamageContainer.entityAttack(player, itemInHand.calculateAttackDamage());
-                        damageable.attack(damage);
+                        var damage = itemInHand.calculateAttackDamage();
+                        if (damage == 0) damage = 1;
+                        var damageContainer = DamageContainer.entityAttack(player, damage);
+                        damageable.attack(damageContainer);
                     }
                 }
             }
@@ -124,7 +128,7 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
         var dimension = player.getLocation().dimension();
         var blockStateClicked = dimension.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
         if (!blockStateClicked.getBehavior().onInteract(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace)) {
-            if (itemStack.getItemType() != ItemAirStack.AIR_TYPE) {
+            if (itemStack.getItemType() != AIR_TYPE) {
                 return itemStack.useItemOn(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace);
             } else return false;
         } else return true;
