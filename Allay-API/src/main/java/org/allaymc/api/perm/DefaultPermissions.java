@@ -3,23 +3,27 @@ package org.allaymc.api.perm;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.perm.tree.PermTree;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Allay Project 2023/12/30
  *
  * @author daoge_cmd
  */
-public interface DefaultPermissions {
-    PermTree VISITOR =
-            PermTree.create()
+public final class DefaultPermissions {
+
+    public static final PermTree VISITOR =
+            PermTree.create("Visitor")
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "help");
 
-    PermTree MEMBER =
-            PermTree.create()
+    public static final PermTree MEMBER =
+            PermTree.create("Member")
                     .extendFrom(VISITOR)
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "me");
 
-    PermTree OPERATOR =
-            PermTree.create()
+    public static final PermTree OPERATOR =
+            PermTree.create("Operator")
                     .extendFrom(MEMBER)
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gamemode")
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gm")
@@ -28,4 +32,16 @@ public interface DefaultPermissions {
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gametest")
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "gt")
                     .addPerm(SimpleCommand.COMMAND_PERM_PREFIX + "stop");
+
+    private static final Map<String, PermTree> NAME_LOOK_UP = new HashMap<>();
+
+    static {
+        NAME_LOOK_UP.put(VISITOR.getName(), VISITOR);
+        NAME_LOOK_UP.put(MEMBER.getName(), MEMBER);
+        NAME_LOOK_UP.put(OPERATOR.getName(), OPERATOR);
+    }
+
+    public static PermTree byName(String name) {
+        return NAME_LOOK_UP.get(name);
+    }
 }

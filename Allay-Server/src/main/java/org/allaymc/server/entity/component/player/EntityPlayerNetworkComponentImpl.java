@@ -28,7 +28,6 @@ import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.server.network.DataPacketProcessor;
 import org.allaymc.server.network.DataPacketProcessorHolder;
@@ -192,7 +191,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             server.sendFullPlayerListInfoTo(player);
         }
 
-        player.sendAttributesIfIsPlayer();
+        player.sendAttributesToClient();
 
         sendInventories();
 

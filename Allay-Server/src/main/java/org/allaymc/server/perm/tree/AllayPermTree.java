@@ -1,6 +1,7 @@
 package org.allaymc.server.perm.tree;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;
@@ -20,17 +21,22 @@ import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;
  */
 @Getter
 public class AllayPermTree implements PermTree {
-
     @Getter
     protected PermTree parent;
     protected PermNode root = new AllayRootPermNode("ROOT");
     protected Map<String, Consumer<PermChangeType>> listeners = new HashMap<>();
+    protected final String name;
 
-    protected AllayPermTree() {
+    protected AllayPermTree(String name) {
+        this.name = name;
+    }
+
+    public static PermTree create(String name) {
+        return new AllayPermTree(name);
     }
 
     public static PermTree create() {
-        return new AllayPermTree();
+        return new AllayPermTree("");
     }
 
     @Override
@@ -153,9 +159,10 @@ public class AllayPermTree implements PermTree {
     }
 
     @Override
-    public PermTree extendFrom(PermTree parent) {
+    public PermTree extendFrom(PermTree parent, boolean callListener) {
         this.parent = parent;
-        parent.getLeaves().stream().map(PermNode::getFullName).forEach(perm -> callListener(perm, ADD));
+        if (callListener)
+            parent.getLeaves().stream().map(PermNode::getFullName).forEach(perm -> callListener(perm, ADD));
         return this;
     }
 

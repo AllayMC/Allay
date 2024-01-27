@@ -1,6 +1,9 @@
 package org.allaymc.api.perm.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.perm.DefaultPermissions;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.ArrayList;
@@ -20,6 +23,12 @@ public interface PermTree {
     static PermTree create() {
         return FACTORY.get().create();
     }
+
+    static PermTree create(String name) {
+        return FACTORY.get().create(name);
+    }
+
+    String getName();
 
     PermTree registerPermListener(String perm, Consumer<PermChangeType> callback);
 
@@ -59,7 +68,11 @@ public interface PermTree {
         return removePerm(perm, true);
     }
 
-    PermTree extendFrom(PermTree parent);
+    default PermTree extendFrom(PermTree parent) {
+        return extendFrom(parent, true);
+    }
+
+    PermTree extendFrom(PermTree parent, boolean callListener);
 
     PermTree copyFrom(PermTree parent);
 
@@ -71,21 +84,34 @@ public interface PermTree {
 
     PermTree getParent();
 
-    default List<String> save() {
+    default NbtMap saveNBT() {
+        var builder = NbtMap.builder();
         var list = new ArrayList<String>();
         for (var leaf : getLeaves()) {
             list.add(leaf.getFullName());
         }
-        return list;
+        builder.putList("Perms", NbtType.STRING, list);
+        if (getParent() != null)
+            builder.putString("Parent", getParent().getName());
+        return builder.build();
     }
 
-    default void load(List<String> perms) {
-        for (var perm : perms) {
-            addPerm(perm);
-        }
+    default void loadNBT(NbtMap nbt) {
+        loadNBT(nbt, true);
+    }
+
+    default void loadNBT(NbtMap nbt, boolean callListener) {
+        for (var perm : nbt.getList("Perms", NbtType.STRING))
+            addPerm(perm, callListener);
+        if (nbt.containsKey("Parent"))
+            extendFrom(DefaultPermissions.byName(nbt.getString("Parent")), callListener);
     }
 
     interface PermTreeFactory {
-        PermTree create();
+        default PermTree create() {
+            return create("");
+        }
+
+        PermTree create(String name);
     }
 }

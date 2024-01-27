@@ -4,9 +4,7 @@ import com.google.common.collect.Lists;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.EntityComponent;
-import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,5 +71,5 @@ public interface EntityAttributeComponent extends EntityComponent {
         return list;
     }
 
-    void sendAttributesIfIsPlayer();
+    default void sendAttributesToClient() {}
 }

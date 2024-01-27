@@ -213,7 +213,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         addPlayerPacket.setUuid(networkComponent.getLoginData().getUuid());
         addPlayerPacket.setUsername(networkComponent.getOriginName());
         addPlayerPacket.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().getDeviceId());
-        addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
+        addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
         addPlayerPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         addPlayerPacket.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         addPlayerPacket.setGameType(gameType);
@@ -303,7 +303,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT().toBuilder()
-                .putList("Perm", NbtType.STRING, permTree.save())
+                .putCompound("Perm", permTree.saveNBT())
                 .putList(
                         "Offhand",
                         NbtType.COMPOUND,
@@ -322,11 +322,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        // TODO: fix perm
-        // This line make server un-join-able!
-//        if (nbt.containsKey("Perm")) {
-//            permTree.load(nbt.getList("Perm", NbtType.STRING));
-//        }
+        if (nbt.containsKey("Perm")) {
+            permTree.loadNBT(nbt.getCompound("Perm"));
+        }
         if (nbt.containsKey("Offhand")) {
             containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(nbt.getList("Offhand", NbtType.COMPOUND));
         }

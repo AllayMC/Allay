@@ -49,7 +49,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
                 var attribute = Attribute.fromNBT(compound);
                 attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
             }
-            sendAttributesIfIsPlayer();
+            sendAttributesToClient();
         }
     }
 
@@ -72,13 +72,13 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     public void setAttribute(AttributeType attributeType, float value) {
         Attribute attribute = this.attributes.get(attributeType);
         if (attribute != null) attribute.setCurrentValue(value);
-        sendAttributesIfIsPlayer();
+        sendAttributesToClient();
     }
 
     @Override
     public void setAttribute(Attribute attribute) {
         this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
-        sendAttributesIfIsPlayer();
+        sendAttributesToClient();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @Override
-    public void sendAttributesIfIsPlayer() {
+    public void sendAttributesToClient() {
         if (networkComponent == null) return;
         var updateAttributesPacket = new UpdateAttributesPacket();
         updateAttributesPacket.setRuntimeEntityId(entity.getUniqueId());
