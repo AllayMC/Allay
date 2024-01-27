@@ -21,7 +21,6 @@ import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SpawnParticleEffectPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -352,7 +351,7 @@ public interface Dimension {
     default void addParticle(ParticleType particleType, Vector3fc pos, int data) {
         var pk = new LevelEventPacket();
         pk.setType(particleType);
-        pk.setPosition(MathUtils.JOMLVecTocbVec(pos));
+        pk.setPosition(MathUtils.JOMLVecToCBVec(pos));
         pk.setData(data);
         getChunkService().getChunkByLevelPos((int) pos.x(), (int) pos.z()).addChunkPacket(pk);
     }

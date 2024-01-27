@@ -22,7 +22,6 @@ import java.util.Set;
 public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAuthInputPacket> {
 
     protected static void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
-        if (!player.isInitialized()) return;
         var world = player.getLocation().dimension();
         world.getEntityPhysicsService().offerScheduledMove(
                 player,
@@ -70,6 +69,7 @@ public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAu
 
     @Override
     public void handle(EntityPlayer player, PlayerAuthInputPacket pk) {
+        if (!player.isInitialized() || !player.isSpawned()) return;
         // 客户端发送给服务端的坐标比实际坐标高了一个BaseOffset，我们需要减掉它
         handleMovement(player, pk.getPosition().sub(0, player.getBaseOffset(), 0), pk.getRotation());
         handleBlockAction(player, pk.getPlayerActions());

@@ -96,7 +96,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         var containerType = container.getContainerType();
         containerOpenPacket.setType(containerType.toNetworkType());
         if (container.hasBlockPos()) {
-            containerOpenPacket.setBlockPosition(MathUtils.JOMLVecTocbVec(container.getBlockPos()));
+            containerOpenPacket.setBlockPosition(MathUtils.JOMLVecToCBVec(container.getBlockPos()));
         } else {
             var location = baseComponent.getLocation();
             containerOpenPacket.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));

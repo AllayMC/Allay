@@ -3,6 +3,7 @@ package org.allaymc.server.world.service;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.type.BlockState;
@@ -33,6 +34,7 @@ import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRI
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     public static float MOTION_THRESHOLD;
@@ -536,8 +538,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     @Override
     public void offerScheduledMove(Entity entity, Location3fc newLoc) {
-        if (!entities.containsKey(entity.getUniqueId()))
-            throw new IllegalArgumentException("Entity " + entity.getUniqueId() + " is not registered in this service");
+        if (!entities.containsKey(entity.getUniqueId())) {
+            log.warn("Entity " + entity.getUniqueId() + " is not registered in physics service");
+            return;
+        }
         if (entity.getLocation().equals(newLoc))
             return;
         scheduledMoveQueue.computeIfAbsent(entity.getUniqueId(), k -> new ConcurrentLinkedQueue<>()).offer(new ScheduledMove(entity, newLoc));

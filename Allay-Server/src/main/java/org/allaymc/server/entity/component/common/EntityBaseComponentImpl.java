@@ -9,7 +9,6 @@ import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
@@ -27,7 +26,6 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
-import org.allaymc.api.utils.NbtUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.server.world.chunk.AllayChunk;
@@ -490,7 +488,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected BedrockPacket createMotionPacket() {
         var pk = new SetEntityMotionPacket();
         pk.setRuntimeEntityId(getUniqueId());
-        pk.setMotion(MathUtils.JOMLVecTocbVec(motion));
+        pk.setMotion(MathUtils.JOMLVecToCBVec(motion));
         return pk;
     }
 

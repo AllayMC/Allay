@@ -15,27 +15,27 @@ import static java.lang.StrictMath.*;
 @UtilityClass
 public class MathUtils {
 
-    public Vector3ic cbVecToJOMLVec(org.cloudburstmc.math.vector.Vector3i cbVec) {
+    public Vector3ic CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3i cbVec) {
         return new Vector3i(cbVec.getX(), cbVec.getY(), cbVec.getZ());
     }
 
-    public org.cloudburstmc.math.vector.Vector3i JOMLVecTocbVec(Vector3ic JOMLVec) {
+    public org.cloudburstmc.math.vector.Vector3i JOMLVecToCBVec(Vector3ic JOMLVec) {
         return org.cloudburstmc.math.vector.Vector3i.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
     }
 
-    public Vector3dc cbVecToJOMLVec(org.cloudburstmc.math.vector.Vector3d cbVec) {
+    public Vector3dc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3d cbVec) {
         return new Vector3d(cbVec.getX(), cbVec.getY(), cbVec.getZ());
     }
 
-    public org.cloudburstmc.math.vector.Vector3d JOMLVecTocbVec(Vector3dc JOMLVec) {
+    public org.cloudburstmc.math.vector.Vector3d JOMLVecToCBVec(Vector3dc JOMLVec) {
         return org.cloudburstmc.math.vector.Vector3d.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
     }
 
-    public Vector3fc cbVecToJOMLVec(org.cloudburstmc.math.vector.Vector3f cbVec) {
+    public Vector3fc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3f cbVec) {
         return new Vector3f(cbVec.getX(), cbVec.getY(), cbVec.getZ());
     }
 
-    public org.cloudburstmc.math.vector.Vector3f JOMLVecTocbVec(Vector3fc JOMLVec) {
+    public org.cloudburstmc.math.vector.Vector3f JOMLVecToCBVec(Vector3fc JOMLVec) {
         return org.cloudburstmc.math.vector.Vector3f.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
     }
 

@@ -8,11 +8,9 @@ import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.server.network.DataPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
-import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventoryTransactionType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryTransactionPacket;
 import org.joml.Vector3fc;
@@ -41,8 +39,8 @@ public class InventoryTransactionPacketProcessor extends DataPacketProcessor<Inv
         var transactionType = pk.getTransactionType();
         switch (transactionType) {
             case ITEM_USE -> {
-                Vector3ic blockPos = MathUtils.cbVecToJOMLVec(pk.getBlockPosition());
-                Vector3fc clickPos = MathUtils.cbVecToJOMLVec(pk.getClickPosition());
+                Vector3ic blockPos = MathUtils.CBVecToJOMLVec(pk.getBlockPosition());
+                Vector3fc clickPos = MathUtils.CBVecToJOMLVec(pk.getClickPosition());
                 BlockFace blockFace = BlockFace.fromId(pk.getBlockFace());
                 var inv = player.getContainer(FullContainerType.PLAYER_INVENTORY);
                 var itemStack = inv.getItemInHand();

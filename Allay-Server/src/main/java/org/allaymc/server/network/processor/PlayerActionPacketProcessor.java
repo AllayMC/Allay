@@ -14,21 +14,15 @@ public class PlayerActionPacketProcessor extends DataPacketProcessor<PlayerActio
     @Override
     public void handle(EntityPlayer player, PlayerActionPacket packet) {
         if (packet.getAction() == PlayerActionType.RESPAWN) {
-            var defaultWorld = Server.getInstance().getDefaultWorld();
-            var dimension = defaultWorld.getDimension(0);
-            var spawnPoint = defaultWorld.getWorldData().getSpawnPoint();
-
+            var spawnPoint = player.getSpawnPoint();
+            var dimension = spawnPoint.dimension();
             dimension.getChunkService().getChunkImmediately(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
             dimension.addPlayer(player, () -> {
-                player.teleport(new Location3f(spawnPoint.x(), 64, spawnPoint.z(), dimension));
-
+                player.teleport(new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), dimension));
                 player.setSprinting(false);
                 player.setSneaking(false);
-
                 player.removeAllEffects();
-
                 player.setHealth(player.getMaxHealth());
-
                 player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, (short) 400);
             });
         }

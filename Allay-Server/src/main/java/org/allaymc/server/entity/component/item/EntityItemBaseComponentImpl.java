@@ -117,8 +117,8 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
         addItemEntityPacket.setRuntimeEntityId(uniqueId);
         addItemEntityPacket.setUniqueEntityId(uniqueId);
         addItemEntityPacket.setItemInHand(itemStack.toNetworkItemData());
-        addItemEntityPacket.setPosition(MathUtils.JOMLVecTocbVec(location));
-        addItemEntityPacket.setMotion(MathUtils.JOMLVecTocbVec(motion));
+        addItemEntityPacket.setPosition(MathUtils.JOMLVecToCBVec(location));
+        addItemEntityPacket.setMotion(MathUtils.JOMLVecToCBVec(motion));
         addItemEntityPacket.getMetadata().putAll(metadata.getEntityDataMap());
         return addItemEntityPacket;
     }
