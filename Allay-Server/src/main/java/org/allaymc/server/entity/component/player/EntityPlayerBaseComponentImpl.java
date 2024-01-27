@@ -185,7 +185,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         super.teleport(location);
         // For player, we also need to send move packet to client
         // However, there is no need to send motion packet as we are teleporting the player
-        networkComponent.sendPacket(createMovePacket(location, true));
+        sendLocationToSelf();
     }
 
     @Override
@@ -380,6 +380,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 .spawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName())
                 .spawnPointDimensionId(spawnPoint.dimension().getDimensionInfo().dimensionId())
                 .build();
+    }
+
+    @Override
+    public void sendLocationToSelf() {
+        networkComponent.sendPacket(createMovePacket(location, true));
     }
 
     @Override

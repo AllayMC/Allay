@@ -9,4 +9,5 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
  * @author Cool_Loong
  */
 public record ChunkGenerateContext(UnsafeChunk chunk, Dimension dimension) {
+
 }

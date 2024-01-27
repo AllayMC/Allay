@@ -22,7 +22,7 @@ import java.util.Set;
 public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAuthInputPacket> {
 
     protected static void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
-        if (!player.isSpawned()) return;
+        if (!player.isInitialized()) return;
         var world = player.getLocation().dimension();
         world.getEntityPhysicsService().offerScheduledMove(
                 player,

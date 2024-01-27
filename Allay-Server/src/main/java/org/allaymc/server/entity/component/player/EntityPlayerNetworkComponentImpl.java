@@ -481,7 +481,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         @Override
         public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
-            //todo plugin event
+            // We only accept player's movement inputs which are after SetLocalPlayerAsInitializedPacket
+            // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
+            // Otherwise the client will snap into the ground
+            player.sendLocationToSelf();
             initialized.set(true);
             Server.getInstance().broadcastTr("§e%minecraft:multiplayer.player.joined", player.getOriginName());
             return PacketSignal.HANDLED;

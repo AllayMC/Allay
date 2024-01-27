@@ -497,7 +497,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected BedrockPacket createAbsoluteMovePacket(Location3fc newLoc, boolean teleporting) {
         var pk = new MoveEntityAbsolutePacket();
         pk.setRuntimeEntityId(getUniqueId());
-        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(newLoc.x(), newLoc.y(), newLoc.z()));
+        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(newLoc.x(), newLoc.y() + getBaseOffset(), newLoc.z()));
         pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(newLoc.pitch(), newLoc.yaw(), newLoc.headYaw()));
         pk.setOnGround(onGround);
         pk.setTeleported(teleporting);
@@ -515,7 +515,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         }
         if (moveFlags.contains(HAS_Y)) {
             pk.setY(newLoc.y());
-            locLastSent.y = newLoc.y();
+            locLastSent.y = newLoc.y() + getBaseOffset();
         }
         if (moveFlags.contains(HAS_Z)) {
             pk.setZ(newLoc.z());
