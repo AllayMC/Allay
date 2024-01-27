@@ -77,10 +77,14 @@ public class PermTreeTest {
                 .create()
                 .addPerm("test.a")
                 .addPerm("test.cmd.abc");
+        var f1 = new AtomicBoolean(false);
         var tree = AllayPermTree
                 .create()
-                .extendFrom(parent)
-                .addPerm("test.b");
+                .addPerm("test.b")
+                .registerPermListener("test.a", type -> f1.set(type == ADD))
+                .extendFrom(parent);
+
+        assertTrue(f1.get());
 
         assertTrue(tree.hasPerm("test.a"));
         assertTrue(tree.hasPerm("test.cmd.abc"));
