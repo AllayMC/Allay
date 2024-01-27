@@ -146,7 +146,24 @@ public class GameTestCommand extends SimpleCommand {
                     }
                     JSONUtils.toFile("cmd_pk_allay.json", cmdPk, writer -> writer.setIndent("  "));
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.PLAYER)
+                .root()
+                .key("suicide")
+                .exec((context, player) -> {
+                    player.attack(114514);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("setperm")
+                .str("perm")
+                .bool("value")
+                .exec((context) -> {
+                    String perm = context.getSecondResult();
+                    boolean value = context.getThirdResult();
+                    context.getSender().setPerm(perm, value);
+                    context.addOutput("Perm " + perm + " was set to " + value);
+                    return context.success();
+                });
 
     }
 }

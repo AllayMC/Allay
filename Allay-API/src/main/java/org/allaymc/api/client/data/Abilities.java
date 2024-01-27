@@ -37,7 +37,6 @@ public final class Abilities {
     @Getter
     private boolean dirty = false;
 
-
     public Abilities(EntityPlayer player) {
         this.player = player;
         var tree = player.getPermTree();
@@ -122,9 +121,11 @@ public final class Abilities {
             if (type == ADD) {
                 if (reverse) abilities.remove(ability);
                 else abilities.add(ability);
+                dirty = true;
             } else {
                 if (reverse) abilities.add(ability);
                 else abilities.remove(ability);
+                dirty = true;
             }
         };
     }
