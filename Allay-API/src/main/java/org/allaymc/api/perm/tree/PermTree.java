@@ -33,7 +33,12 @@ public interface PermTree {
     PermTree registerPermListener(String perm, Consumer<PermChangeType> callback);
 
     @UnmodifiableView
-    Map<String, Consumer<PermChangeType>> getPermListeners();
+    default Map<String, Consumer<PermChangeType>> getPermListeners() {
+        return getPermListeners(false);
+    }
+
+    @UnmodifiableView
+    Map<String, Consumer<PermChangeType>> getPermListeners(boolean includeParent);
 
     void notifyAllPermListeners();
 
@@ -76,7 +81,11 @@ public interface PermTree {
 
     PermTree copyFrom(PermTree parent);
 
-    List<PermNode> getLeaves();
+    default List<PermNode> getLeaves() {
+        return getLeaves(false);
+    }
+
+    List<PermNode> getLeaves(boolean includeParent);
 
     boolean isOp();
 

@@ -46,8 +46,12 @@ public class AllayPermTree implements PermTree {
     }
 
     @Override
-    public @UnmodifiableView Map<String, Consumer<PermChangeType>> getPermListeners() {
-        return Collections.unmodifiableMap(listeners);
+    public @UnmodifiableView Map<String, Consumer<PermChangeType>> getPermListeners(boolean includeParent) {
+        var map = new HashMap<>(listeners);
+        if (parent != null && includeParent) {
+            map.putAll(parent.getPermListeners(true));
+        }
+        return Collections.unmodifiableMap(map);
     }
 
     @Override
@@ -151,10 +155,10 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public PermTree copyFrom(PermTree parent) {
-        for (var leaf : parent.getLeaves()) {
+        for (var leaf : parent.getLeaves(true)) {
             addPerm(leaf.getFullName());
         }
-        this.listeners.putAll(parent.getPermListeners());
+        this.listeners.putAll(parent.getPermListeners(true));
         return this;
     }
 
@@ -162,14 +166,18 @@ public class AllayPermTree implements PermTree {
     public PermTree extendFrom(PermTree parent, boolean callListener) {
         this.parent = parent;
         if (callListener)
-            parent.getLeaves().stream().map(PermNode::getFullName).forEach(perm -> callListener(perm, ADD));
+            parent.getLeaves(true).stream().map(PermNode::getFullName).forEach(perm -> callListener(perm, ADD));
         return this;
     }
 
     @Override
-    public List<PermNode> getLeaves() {
+    public List<PermNode> getLeaves(boolean includeParent) {
         var leaves = new ArrayList<PermNode>();
+        if (root.getLeaves().isEmpty()) return leaves;
         findLeaf(root, leaves);
+        if (parent != null && includeParent) {
+            leaves.addAll(parent.getLeaves(true));
+        }
         return leaves;
     }
 
@@ -198,7 +206,7 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public boolean containsSubSet(PermTree other) {
-        return other.getLeaves().stream().map(PermNode::getFullName).allMatch(this::hasPerm);
+        return other.getLeaves(true).stream().map(PermNode::getFullName).allMatch(this::hasPerm);
     }
 
     protected void findLeaf(PermNode node, List<PermNode> dest) {
