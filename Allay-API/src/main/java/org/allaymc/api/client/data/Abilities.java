@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.perm.PermKeys;
 import org.allaymc.api.perm.tree.PermTree;
-import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.AbilityLayer;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -28,12 +27,16 @@ public final class Abilities {
 
     public static final float DEFAULT_WALK_SPEED = 0.1f;
     public static final float DEFAULT_FLY_SPEED = 0.05f;
-    private final EntityPlayer player;
+
     private final Set<Ability> abilities = EnumSet.noneOf(Ability.class);
+
+    private final EntityPlayer player;
+
     @Getter
     private float walkSpeed = DEFAULT_WALK_SPEED;
     @Getter
     private float flySpeed = DEFAULT_FLY_SPEED;
+
     @Getter
     private boolean dirty = false;
 
@@ -48,7 +51,7 @@ public final class Abilities {
         tree.registerPermListener(PermKeys.ATTACK_MOBS, syncTo(Ability.ATTACK_MOBS));
         tree.registerPermListener(PermKeys.MAY_FLY, syncTo(Ability.MAY_FLY));
         tree.registerPermListener(PermKeys.SUMMON_LIGHTNING, syncTo(Ability.LIGHTNING));
-        tree.registerPermListener(PermKeys.CHAT, syncTo(Ability.MUTED, true));
+        tree.registerPermListener(PermKeys.MUTED, syncTo(Ability.MUTED));
     }
 
     public void applyGameType(GameType gameType) {
@@ -121,12 +124,11 @@ public final class Abilities {
             if (type == ADD) {
                 if (reverse) abilities.remove(ability);
                 else abilities.add(ability);
-                dirty = true;
             } else {
                 if (reverse) abilities.add(ability);
                 else abilities.remove(ability);
-                dirty = true;
             }
+            dirty = true;
         };
     }
 
