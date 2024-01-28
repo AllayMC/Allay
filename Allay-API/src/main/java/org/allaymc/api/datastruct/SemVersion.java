@@ -1,6 +1,9 @@
 package org.allaymc.api.datastruct;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.*;
+
+import java.lang.reflect.Type;
 
 public record SemVersion(int major, int minor, int patch, int revision, int build) {
 
@@ -14,5 +17,26 @@ public record SemVersion(int major, int minor, int patch, int revision, int buil
 
     public int[] toArray() {
         return new int[]{major, minor, patch, revision, build};
+    }
+
+    public static class Serializer implements JsonSerializer<SemVersion> {
+
+        @Override
+        public JsonElement serialize(SemVersion src, Type typeOfSrc, JsonSerializationContext context) {
+            var json = new JsonArray();
+            json.add(src.major);
+            json.add(src.minor);
+            json.add(src.patch);
+            return json;
+        }
+    }
+
+    public static class Deserializer implements JsonDeserializer<SemVersion> {
+
+        @Override
+        public SemVersion deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            var array = json.getAsJsonArray();
+            return new SemVersion(array.get(0).getAsInt(), array.get(1).getAsInt(), array.get(2).getAsInt(), 0, 0);
+        }
     }
 }

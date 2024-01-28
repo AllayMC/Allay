@@ -27,6 +27,7 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -71,6 +72,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
+    protected final AtomicBoolean initialized = new AtomicBoolean(false);
+    protected final AtomicBoolean loggedIn = new AtomicBoolean(false);
+    protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
+    protected final Server server = Server.getInstance();
+    protected final Queue<BedrockPacket> packetQueue;
+    protected final DataPacketProcessorHolder dataPacketProcessorHolder;
+    protected final BedrockPacketHandler loginPacketHandler = new AllayClientLoginPacketHandler();
     @Manager
     protected ComponentManager<EntityPlayer> manager;
     @Getter
@@ -83,15 +91,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected EntityPlayer player;
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
-    protected final AtomicBoolean initialized = new AtomicBoolean(false);
-    protected final AtomicBoolean loggedIn = new AtomicBoolean(false);
-    protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
-    protected final Server server = Server.getInstance();
-    protected final Queue<BedrockPacket> packetQueue;
     // It will be set while client disconnecting from server
     protected String disconnectReason;
-    protected final DataPacketProcessorHolder dataPacketProcessorHolder;
-    protected final BedrockPacketHandler loginPacketHandler = new AllayClientLoginPacketHandler();
     protected BedrockServerSession session;
 
     public EntityPlayerNetworkComponentImpl() {
@@ -135,6 +136,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
+    public BedrockServerSession getClientSession() {
+        return session;
+    }
+
+    @Override
     public void setClientSession(BedrockServerSession session) {
         this.session = session;
         session.setPacketHandler(new BedrockPacketHandler() {
@@ -152,16 +158,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 // Handle disconnect in world main thread
                 if (baseComponent.isSpawned())
                     disconnectReason = reason;
-                // If the player is not spawned, we call Server::onDisconnect() directly
-                // As it won't cause any concurrent problem
+                    // If the player is not spawned, we call Server::onDisconnect() directly
+                    // As it won't cause any concurrent problem
                 else server.onDisconnect(player, reason);
             }
         });
-    }
-
-    @Override
-    public BedrockServerSession getClientSession() {
-        return session;
     }
 
     @Override
@@ -226,7 +227,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
         player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
         player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
-        //No need to send cursor's content to client because there is nothing in cursor
+        // No need to send cursor's content to client because there is nothing in cursor
     }
 
     private void initializePlayer() {
@@ -421,7 +422,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     handshakePacket.setJwt(encryptionJWT);
                     sendPacketImmediately(handshakePacket);
                     session.enableEncryption(encryptionSecretKey);
-                    //completeLogin() when client send back ClientToServerHandshakePacket
+                    // completeLogin() when client send back ClientToServerHandshakePacket
                 } catch (Exception exception) {
                     log.warn("Failed to initialize encryption for client " + name, exception);
                     disconnect("disconnectionScreen.internalError");
@@ -452,29 +453,54 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             sendPacket(playStatusPacket);
             loggedIn.set(true);
             server.onLoggedIn(player);
-            //todo plugin event
+            // todo plugin event
             manager.callEvent(PlayerLoggedInEvent.INSTANCE);
-            //TODO: Resource Packs
-            sendPacket(new ResourcePacksInfoPacket());
+            // TODO: Resource Packs
+            var packsInfoPacket = new ResourcePacksInfoPacket();
+            packsInfoPacket.setForcedToAccept(Server.SETTINGS.genericSettings().forceResourcePacks());
+            PackRegistry.getRegistry().getContent().forEach((id, pack) -> {
+                packsInfoPacket.getResourcePackInfos().add(new ResourcePacksInfoPacket.Entry(
+                        pack.getId().toString(),
+                        pack.getStringVersion(),
+                        pack.getSize(),
+                        "",
+                        "",
+                        "",
+                        false,
+                        false
+                ));
+            });
+            sendPacket(packsInfoPacket);
         }
 
         @Override
         public PacketSignal handle(ResourcePackClientResponsePacket packet) {
             switch (packet.getStatus()) {
                 case SEND_PACKS -> {
-                    //TODO: RP load
+                    for (var packId : packet.getPackIds()) {
+                        var resourcePack = PackRegistry.getRegistry().get(UUID.fromString(packId.split("_")[0]));
+                        if (resourcePack == null) {
+                            disconnect(TrKeys.M_DISCONNECTIONSCREEN_RESOURCEPACK);
+                            return PacketSignal.HANDLED;
+                        }
+
+                        session.sendPacket(resourcePack.toNetwork());
+                    }
                 }
                 case HAVE_ALL_PACKS -> {
                     var stackPacket = new ResourcePackStackPacket();
+                    stackPacket.setForcedToAccept(Server.SETTINGS.genericSettings().forceResourcePacks());
+                    stackPacket.getResourcePacks().addAll(PackRegistry.getRegistry().getEncodedResourcePacks());
+                    // todo: experiments
+
                     // Just left a '*' here, if we put in exact game version
                     // It is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
                     stackPacket.setGameVersion("*");
                     sendPacket(stackPacket);
                     // TODO: possible bug here
                 }
-                case COMPLETED -> {
-                    initializePlayer();
-                }
+                case COMPLETED -> initializePlayer();
+                default -> disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
             }
             return PacketSignal.HANDLED;
         }

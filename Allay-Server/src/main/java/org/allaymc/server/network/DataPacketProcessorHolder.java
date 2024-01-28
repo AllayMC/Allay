@@ -37,6 +37,7 @@ public final class DataPacketProcessorHolder {
         holder.registerProcessor(new PlayerActionPacketProcessor());
         holder.registerProcessor(new PlayerAuthInputPacketProcessor());
         holder.registerProcessor(new RequestChunkRadiusPacketProcessor());
+        holder.registerProcessor(new ResourcePackChunkRequestPacketProcessor());
         holder.registerProcessor(new RespawnPacketProcessor());
         holder.registerProcessor(new SetDefaultGameTypePacketProcessor());
         holder.registerProcessor(new SetPlayerGameTypePacketProcessor());

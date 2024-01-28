@@ -30,6 +30,7 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -199,6 +200,9 @@ public final class AllayAPI {
         // Command
         requireImpl(CommandTree.CommandTreeFactory.class, CommandTree.FACTORY::set);
         requireImpl(CommandNodeFactory.class, CommandNodeFactory.FACTORY::set);
+
+        // Resource pack
+        requireImpl(PackRegistry.class, PackRegistry.REGISTRY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {

@@ -6,6 +6,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.UtilityClass;
+import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.exception.FormativeException;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,12 +31,14 @@ import java.util.function.Consumer;
  * <p>
  * 2023/11/24
  */
+@UtilityClass
 public class JSONUtils {
+
     private static final Gson GSON;
 
     static {
         GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss");
-        gsonBuilder.disableHtmlEscaping();//禁止将部分特殊字符转义为unicode编码
+        gsonBuilder.disableHtmlEscaping(); // 禁止将部分特殊字符转义为unicode编码
         registerTypeAdapter(gsonBuilder);
         GSON = gsonBuilder.create();
     }
@@ -51,6 +55,10 @@ public class JSONUtils {
         gsonBuilder.registerTypeAdapter(double.class, new NumberTypeAdapter<>(double.class));
         gsonBuilder.registerTypeAdapter(Double.class, new NumberTypeAdapter<>(Double.class));
         gsonBuilder.registerTypeAdapter(BigDecimal.class, new NumberTypeAdapter<>(BigDecimal.class));
+
+        // custom
+        gsonBuilder.registerTypeAdapter(SemVersion.class, new SemVersion.Serializer());
+        gsonBuilder.registerTypeAdapter(SemVersion.class, new SemVersion.Deserializer());
     }
 
     /**
@@ -453,7 +461,7 @@ public class JSONUtils {
                     } else {
                         return BooleanUtils.toBoolean(string);
                     }
-                } else {//number
+                } else {// number
                     return BooleanUtils.toBoolean(jsonByKey.getAsInt());
                 }
             }
@@ -616,6 +624,7 @@ public class JSONUtils {
      * 2018/6/20 14:58
      */
     private static class NumberTypeAdapter<T> extends TypeAdapter<Number> {
+
         private final Class<T> c;
 
         public NumberTypeAdapter(Class<T> c) {
@@ -694,6 +703,7 @@ public class JSONUtils {
     @Setter
     @Getter
     public static class GsonException extends FormativeException {
+
         public GsonException() {
             super();
         }
