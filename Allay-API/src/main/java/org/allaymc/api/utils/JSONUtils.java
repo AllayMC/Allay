@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.exception.FormativeException;
+import org.allaymc.api.pack.Pack;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -59,6 +60,8 @@ public class JSONUtils {
         // custom
         gsonBuilder.registerTypeAdapter(SemVersion.class, new SemVersion.Serializer());
         gsonBuilder.registerTypeAdapter(SemVersion.class, new SemVersion.Deserializer());
+        gsonBuilder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Deserializer());
+        gsonBuilder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Serializer());
     }
 
     /**

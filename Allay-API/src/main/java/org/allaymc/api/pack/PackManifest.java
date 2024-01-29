@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.utils.JSONUtils;
-import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -30,16 +29,7 @@ public class PackManifest {
 
     private Header header;
 
-    private Metadata metadata;
-
     private List<Module> modules = Collections.emptyList();
-
-    private List<Dependency> dependencies = Collections.emptyList();
-
-    private List<String> capabilities = Collections.emptyList();
-
-    @SerializedName("subpacks")
-    private List<SubPack> subPacks = Collections.emptyList();
 
     public static PackManifest load(PackLoader loader) {
         Objects.requireNonNull(loader);
@@ -69,21 +59,7 @@ public class PackManifest {
         private String name;
         private String description;
         private UUID uuid;
-        @SerializedName("platform_locked")
-        private boolean platformLocked;
         private SemVersion version;
-        @SerializedName("min_engine_version")
-        private SemVersion minEngineVersion;
-        @SerializedName("pack_scope")
-        private String packScope = "global";
-        @SerializedName("directory_load")
-        private boolean directoryLoad;
-        @SerializedName("load_before_game")
-        private boolean loadBeforeGame;
-        @SerializedName("lock_template_options")
-        private boolean lockTemplateOptions;
-        @SerializedName("population_control")
-        private boolean populationControl;
     }
 
     @Data
@@ -92,31 +68,6 @@ public class PackManifest {
         private UUID uuid;
         private String description;
         private SemVersion version;
-        private ResourcePackType type;
-    }
-
-    @Data
-    public static class Metadata {
-
-        private List<String> authors;
-        private String license;
-        private String url;
-    }
-
-    @Data
-    public static class Dependency {
-
-        private UUID uuid;
-        private SemVersion version;
-    }
-
-    @Data
-    public static class SubPack {
-
-        @SerializedName("folder_name")
-        private String folderName;
-        private String name;
-        @SerializedName("memory_tier")
-        private int memoryTier;
+        private Pack.Type type;
     }
 }

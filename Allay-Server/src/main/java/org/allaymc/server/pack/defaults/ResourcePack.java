@@ -3,7 +3,6 @@ package org.allaymc.server.pack.defaults;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackLoader;
 import org.allaymc.api.pack.PackManifest;
-import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
 
 /**
  * Allay Project 28/01/2024
@@ -19,8 +18,8 @@ public class ResourcePack extends Pack {
     }
 
     @Override
-    public ResourcePackType getType() {
-        return ResourcePackType.RESOURCES;
+    public Type getType() {
+        return Type.RESOURCES;
     }
 
     @Override

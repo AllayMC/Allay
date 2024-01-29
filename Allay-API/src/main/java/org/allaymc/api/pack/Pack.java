@@ -1,10 +1,10 @@
 package org.allaymc.api.pack;
 
+import com.google.gson.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.datastruct.SemVersion;
 import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkDataPacket;
@@ -20,12 +20,11 @@ import java.util.UUID;
  *
  * @author IWareQ, Cloudburst Server
  */
-@Slf4j
 @Getter
 @RequiredArgsConstructor
 public abstract class Pack implements AutoCloseable {
 
-    public static final int MAX_CHUNK_SIZE = 32 * 1024; // 32KB
+    public static final int MAX_CHUNK_SIZE = 100 * 1024; // 100KB, from BDS
 
     private final PackLoader loader;
     private final PackManifest manifest;
@@ -77,12 +76,12 @@ public abstract class Pack implements AutoCloseable {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public ByteBuf getChunk(int offset, int length) {
         byte[] chunk;
-        if (this.getSize() - offset > length) chunk = new byte[length];
+        if ((this.getSize() - offset) > length) chunk = new byte[length];
         else chunk = new byte[(int) (this.getSize() - offset)];
 
-        try (var stream = Files.newInputStream(this.loader.getNetworkPreparedFile().join())) {
-            stream.skip(offset);
-            stream.read(chunk);
+        try (var input = Files.newInputStream(this.loader.getNetworkPreparedFile().join())) {
+            input.skip(offset);
+            input.read(chunk);
         } catch (Exception exception) {
             throw new IllegalStateException("Unable to read pack chunk");
         }
@@ -90,7 +89,7 @@ public abstract class Pack implements AutoCloseable {
         return Unpooled.wrappedBuffer(chunk);
     }
 
-    public abstract ResourcePackType getType();
+    public abstract Type getType();
 
     public ResourcePackDataInfoPacket toNetwork() {
         var packet = new ResourcePackDataInfoPacket();
@@ -100,7 +99,7 @@ public abstract class Pack implements AutoCloseable {
         packet.setChunkCount((long) Math.ceil(this.getSize() / (double) MAX_CHUNK_SIZE));
         packet.setCompressedPackSize(this.getSize());
         packet.setHash(this.getHash());
-        packet.setType(this.getType());
+        packet.setType(this.getType().toNetwork());
         return packet;
     }
 
@@ -109,8 +108,8 @@ public abstract class Pack implements AutoCloseable {
         packet.setPackId(this.getId());
         packet.setPackVersion(this.getStringVersion());
         packet.setChunkIndex(chunkIndex);
+        packet.setData(this.getChunk(MAX_CHUNK_SIZE * chunkIndex, MAX_CHUNK_SIZE));
         packet.setProgress((long) MAX_CHUNK_SIZE * chunkIndex);
-        packet.setData(this.getChunk((int) packet.getProgress(), MAX_CHUNK_SIZE));
         return packet;
     }
 
@@ -129,6 +128,33 @@ public abstract class Pack implements AutoCloseable {
     @Override
     public int hashCode() {
         return this.getId().hashCode();
+    }
+
+    public enum Type {
+
+        RESOURCES,
+        DATA,
+        SCRIPT;
+
+        public ResourcePackType toNetwork() {
+            return ResourcePackType.values()[this.ordinal() + 1];
+        }
+
+        public static class Serializer implements JsonSerializer<Type> {
+
+            @Override
+            public JsonElement serialize(Type src, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
+                return new JsonPrimitive(src.name().toLowerCase());
+            }
+        }
+
+        public static class Deserializer implements JsonDeserializer<Type> {
+
+            @Override
+            public Type deserialize(JsonElement json, java.lang.reflect.Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                return Type.valueOf(json.getAsString().toUpperCase());
+            }
+        }
     }
 
     @FunctionalInterface

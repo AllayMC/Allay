@@ -2,8 +2,8 @@ package org.allaymc.api.pack;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.registry.MappedRegistry;
-import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackStackPacket;
+import org.cloudburstmc.protocol.bedrock.packet.ResourcePacksInfoPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.nio.file.Path;
@@ -26,15 +26,17 @@ public interface PackRegistry extends MappedRegistry<UUID, Pack, Map<UUID, Pack>
 
     void loadResourcePacks(Path path);
 
+    ResourcePackStackPacket getPackStackPacket();
+
+    ResourcePacksInfoPacket getPacksInfoPacket();
+
     void registerLoaderFactory(PackLoader.Factory factory);
 
     @UnmodifiableView
     List<PackLoader.Factory> getLoadersFactory();
 
-    void registerPackFactory(ResourcePackType packType, Pack.Factory factory);
+    void registerPackFactory(Pack.Type packType, Pack.Factory factory);
 
     @UnmodifiableView
-    Map<ResourcePackType, Pack.Factory> getPacksFactory();
-
-    List<ResourcePackStackPacket.Entry> getEncodedResourcePacks();
+    Map<Pack.Type, Pack.Factory> getPacksFactory();
 }
