@@ -34,10 +34,10 @@ public class PackManifest {
     public static PackManifest load(PackLoader loader) {
         Objects.requireNonNull(loader);
 
-        if (!loader.hasAsset(PATH)) return null;
+        if (!loader.hasFile(PATH)) return null;
 
         try {
-            return JSONUtils.from(loader.getAsset(PATH), PackManifest.class);
+            return JSONUtils.from(loader.getFile(PATH), PackManifest.class);
         } catch (IllegalStateException | IOException exception) {
             log.error("Failed to load " + loader.getLocation(), exception);
             return null;

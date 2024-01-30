@@ -3,6 +3,8 @@ package org.allaymc.server.pack;
 import com.google.common.base.Preconditions;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackLoader;
 import org.allaymc.api.pack.PackManifest;
@@ -50,12 +52,13 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
         this.registerPackFactory(Pack.Type.RESOURCES, ResourcePack.FACTORY);
         // todo: more pack factories
 
+        log.info(I18n.get().tr(TrKeys.A_PACK_LOADING));
         this.loadResourcePacks(resourcePacksPath);
     }
 
     @Override
     public void loadResourcePacks(Path path) {
-        Preconditions.checkNotNull(path, "directoryPath");
+        Preconditions.checkNotNull(path, "path");
         Preconditions.checkArgument(Files.isDirectory(path), "%s is not a directory", path);
 
         // find loaders
@@ -101,7 +104,7 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
 
         if (!this.getContent().isEmpty()) this.generatePackets();
 
-        log.info("Successfully loaded {} resource packs", this.getContent().size());
+        log.info(I18n.get().tr(TrKeys.A_PACK_LOADED, this.getContent().size()));
     }
 
     @Override

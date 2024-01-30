@@ -24,5 +24,7 @@
   "creativeitem.loaded": "Creative items is loaded",
   "command.generic.sender.notServer": "This command can only be executed by the server!",
   "command.generic.sender.notPlayer": "This command can only be executed by a player!",
-  "command.generic.sender.notEntity": "This command can only be executed by an entity!"
+  "command.generic.sender.notEntity": "This command can only be executed by an entity!",
+  "pack.loading": "Loading packs...",
+  "pack.loaded": "Loaded %1 packs"
 }

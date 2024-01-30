@@ -45,13 +45,13 @@ public class ZipPackLoader implements PackLoader {
     }
 
     @Override
-    public boolean hasAsset(Path path) {
+    public boolean hasFile(Path path) {
         var entry = this.getEntry(path);
         return entry != null && !entry.isDirectory();
     }
 
     @Override
-    public InputStream getAsset(Path path) throws IOException {
+    public InputStream getFile(Path path) throws IOException {
         var entry = this.getEntry(path);
         if (entry == null) return null;
         return this.zipFile.getInputStream(entry);

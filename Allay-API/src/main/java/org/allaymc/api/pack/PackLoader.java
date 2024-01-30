@@ -15,9 +15,9 @@ public interface PackLoader extends AutoCloseable {
 
     Path getLocation();
 
-    boolean hasAsset(Path path);
+    boolean hasFile(Path path);
 
-    InputStream getAsset(Path path) throws IOException;
+    InputStream getFile(Path path) throws IOException;
 
     boolean hasFolder(Path folder);
 
