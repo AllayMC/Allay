@@ -108,8 +108,6 @@ public interface EntityBaseComponent extends EntityComponent {
 
     AABBfc getAABB();
 
-    void setAABB(AABBf aabb);
-
     default boolean hasEntityCollision() {
         return getMetadata().get(EntityFlag.HAS_COLLISION);
     }

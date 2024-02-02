@@ -26,8 +26,8 @@ import java.util.List;
  */
 public class AllayEntityComponentImplFactory implements EntityComponentImplFactory {
     @Override
-    public ComponentProvider<EntityComponent> createEntityBaseComponent(AABBfc aabb) {
-        return new SimpleComponentProvider<EntityComponent, EntityInitInfo<?>>(info -> new EntityBaseComponentImpl<>(info, aabb), EntityBaseComponentImpl.class);
+    public ComponentProvider<EntityComponent> createEntityBaseComponent() {
+        return new SimpleComponentProvider<EntityComponent, EntityInitInfo<?>>(EntityBaseComponentImpl::new, EntityBaseComponentImpl.class);
     }
 
     @Override

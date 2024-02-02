@@ -22,7 +22,7 @@ public interface EntityVillagerV2 extends
   EntityType<EntityVillagerV2> VILLAGER_V2_TYPE = EntityTypeBuilder
           .builder(EntityVillagerV2.class)
           .vanillaEntity(VanillaEntityId.VILLAGER_V2)
-          .addComponent(getFactory().createEntityBaseComponent(new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f)))
+          .addComponent(getFactory().createEntityBaseComponent())
           .addComponent(getFactory().createEntityAttributeComponent(basicEntityAttributes()))
           .addComponent(getFactory().createEntityDamageComponent())
           .build();

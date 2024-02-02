@@ -138,7 +138,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         @Override
         public EntityType<T> build() {
             if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
-                addComponent(getFactory().createEntityBaseComponent(new AABBf(0, 0, 0, 1, 1, 1)));
+                addComponent(getFactory().createEntityBaseComponent());
             }
             if (identifier == null) {
                 throw new EntityTypeBuildException("identifier cannot be null!");

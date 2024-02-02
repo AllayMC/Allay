@@ -12,6 +12,7 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 
 import static org.allaymc.api.item.ItemHelper.fromNBT;
 
@@ -28,8 +29,13 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     protected int age;
 
     public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, ItemStack itemStack) {
-        super(info, new AABBf(-0.125f, 0.0f, -0.125f, 0.125f, 0.25f, 0.125f));
+        super(info);
         this.itemStack = itemStack;
+    }
+
+    @Override
+    public AABBfc getAABB() {
+        return new AABBf(-0.125f, 0.0f, -0.125f, 0.125f, 0.25f, 0.125f);
     }
 
     @Override

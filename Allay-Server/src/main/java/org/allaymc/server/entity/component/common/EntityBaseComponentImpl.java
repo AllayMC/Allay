@@ -81,7 +81,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Dependency(soft = true)
     protected EntityAttributeComponent attributeComponent;
     protected EntityType<T> entityType;
-    protected AABBfc aabb;
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
     protected Map<EffectType, EffectInstance> effects = new HashMap<>();
     protected Vector3f motion = new Vector3f();
@@ -93,10 +92,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected int deadTimer;
     protected float fallDistance = 0f;
 
-    public EntityBaseComponentImpl(EntityInitInfo<T> info, AABBfc aabb) {
+    public EntityBaseComponentImpl(EntityInitInfo<T> info) {
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.entityType = info.getEntityType();
-        this.aabb = aabb;
         this.metadata = new Metadata();
     }
 
@@ -118,6 +116,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     private NbtMap buildAABBTag() {
+        var aabb = getAABB();
         return NbtMap.builder()
                 .putFloat("MinX", 0)
                 .putFloat("MinY", 0)
@@ -133,6 +132,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     private void updateHitBoxAndCollisionBoxMetadata() {
         metadata.set(EntityDataTypes.HITBOX, buildAABBTag());
+        var aabb = getAABB();
         metadata.set(EntityDataTypes.COLLISION_BOX,
                 org.cloudburstmc.math.vector.Vector3f.from(
                         aabb.maxX() - aabb.minX(),
@@ -354,14 +354,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public AABBfc getAABB() {
-        return aabb;
-    }
-
-    @Override
-    public void setAABB(AABBf aabb) {
-        this.aabb = aabb;
-        updateHitBoxAndCollisionBoxMetadata();
-        sendEntityData(EntityDataTypes.HITBOX, EntityDataTypes.COLLISION_BOX);
+        // Default aabb is player's
+        return new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f);
     }
 
     @Override

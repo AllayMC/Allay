@@ -46,6 +46,7 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 
 import java.util.List;
 import java.util.Objects;
@@ -86,7 +87,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected Location3ic spawnPoint;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
-        super(info, new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f));
+        super(info);
+    }
+
+    @Override
+    public AABBfc getAABB() {
+        return new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f);
     }
 
     @ComponentEventListener

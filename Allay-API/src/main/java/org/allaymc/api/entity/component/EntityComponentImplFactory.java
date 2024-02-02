@@ -21,7 +21,7 @@ public interface EntityComponentImplFactory {
         return FACTORY.get();
     }
 
-    ComponentProvider<EntityComponent> createEntityBaseComponent(AABBfc aabb);
+    ComponentProvider<EntityComponent> createEntityBaseComponent();
 
     ComponentProvider<EntityComponent> createEntityPlayerBaseComponent();
 
