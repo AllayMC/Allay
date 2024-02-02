@@ -72,7 +72,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     private void initWorldData(String worldName) {
         File levelDat = path.resolve("level.dat").toFile();
         try {
-            //noinspection ResultOfMethodCallIgnored
+            // noinspection ResultOfMethodCallIgnored
             levelDat.createNewFile();
             worldDataCache = WorldData.builder().build();
             int size = Server.getInstance().getWorldPool().getWorlds().size();
@@ -239,6 +239,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                     .bonusChestSpawned(d.getBoolean("bonusChestSpawned"))
                     .cheatsEnabled(d.getBoolean("cheatsEnabled"))
                     .commandsEnabled(d.getBoolean("commandsEnabled"))
+                    .gameRules(gameRules)
                     .currentTick(d.getLong("currentTick"))
                     .daylightCycle(d.getInt("daylightCycle"))
                     .editorWorldType(d.getInt("editorWorldType"))
