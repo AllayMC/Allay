@@ -62,8 +62,7 @@ public class AllayWorld implements World {
                 .unstarted(gameLoop::startLoop);
     }
 
-    @Override
-    public void networkTick() {
+    protected void networkTick() {
         PacketQueueEntry entry;
         while ((entry = packetQueue.poll()) != null) {
             entry.player.handleDataPacket(entry.packet);
@@ -71,8 +70,7 @@ public class AllayWorld implements World {
         handlePlayersDisconnect();
     }
 
-    @Override
-    public void handlePlayersDisconnect() {
+    protected void handlePlayersDisconnect() {
         dimensionMap.values().forEach(dim -> dim.getPlayers().forEach(EntityPlayer::handleDisconnect));
     }
 
