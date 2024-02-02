@@ -127,6 +127,11 @@ public class AllayWorld implements World {
     }
 
     @Override
+    public float getMSTP() {
+        return gameLoop.getMSTP();
+    }
+
+    @Override
     public void tick(long currentTick) {
         syncData();
         tickTime(currentTick);
