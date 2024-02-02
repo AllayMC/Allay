@@ -46,7 +46,7 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
 
     @SneakyThrows
     private void init() {
-        var resourcePacksPath = Path.of("resourcepacks");
+        var resourcePacksPath = Path.of("resource_packs");
         Files.createDirectories(resourcePacksPath);
 
         this.registerLoaderFactory(ZipPackLoader.FACTORY);
