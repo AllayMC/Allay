@@ -23,7 +23,8 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
-import org.allaymc.server.client.storage.nbtfile.AllayNBTFilePlayerStorage;
+import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
+import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.terminal.AllayTerminalConsole;
@@ -75,6 +76,8 @@ public final class AllayServer implements Server {
     private Thread terminalConsoleThread;
     private AllayTerminalConsole terminalConsole;
     private static volatile AllayServer instance;
+    private int nextPlayerDataAutoSaveTime = 0;
+
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
             .onTick(gameLoop -> {
@@ -92,7 +95,9 @@ public final class AllayServer implements Server {
         worldPool = new AllayWorldPool();
         isRunning = new AtomicBoolean(true);
         playerListEntryMap = new Object2ObjectOpenHashMap<>();
-        playerStorage = new AllayNBTFilePlayerStorage(Path.of("players"));
+        playerStorage = Server.SETTINGS.storageSettings().savePlayerData() ?
+                new AllayNBTFilePlayerStorage(Path.of("players")) :
+                AllayEmptyPlayerStorage.INSTANCE;
         computeThreadPool = new ThreadPoolExecutor(
                 Runtime.getRuntime().availableProcessors(),
                 Runtime.getRuntime().availableProcessors(),
@@ -150,6 +155,14 @@ public final class AllayServer implements Server {
     @Override
     public void tick(long currentTick) {
         playerStorage.tick(currentTick);
+        autoSavePlayerData(currentTick);
+    }
+
+    private void autoSavePlayerData(long currentTick) {
+        if (currentTick >= nextPlayerDataAutoSaveTime) {
+            savePlayerData();
+            nextPlayerDataAutoSaveTime += Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
+        }
     }
 
     @Override
@@ -308,6 +321,11 @@ public final class AllayServer implements Server {
     public void broadcastTr(String tr, String... args) {
         getOnlinePlayers().values().forEach(player -> player.sendTr(tr, args));
         sendTr(tr, args);
+    }
+
+    @Override
+    public void savePlayerData() {
+        players.values().forEach(playerStorage::savePlayerData);
     }
 
     @Override

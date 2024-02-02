@@ -126,4 +126,6 @@ public interface Server extends TaskCreator, CommandSender {
         sendCommandOutputs(sender, status, outputs);
         getOnlinePlayers().values().forEach(player -> player.sendCommandOutputs(sender, status, outputs));
     }
+
+    void savePlayerData();
 }

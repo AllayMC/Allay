@@ -174,4 +174,19 @@ public class ServerSettings extends OkaeriConfig {
             private boolean useDeltaMovePacket = false;
         }
     }
+
+    @CustomKey("storage-settings")
+    private StorageSettings storageSettings = new StorageSettings();
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class StorageSettings extends OkaeriConfig {
+        @CustomKey("save-player-data")
+        @Comment("If set to false, the player's data will not be saved")
+        private boolean savePlayerData = true;
+
+        @CustomKey("save-player-data-cycle")
+        @Comment("Determines the cycle of player data auto saving")
+        private int playerDataAutoSaveCycle = 20 * 60;
+    }
 }

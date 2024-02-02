@@ -1,4 +1,4 @@
-package org.allaymc.server.client.storage.nbtfile;
+package org.allaymc.server.client.storage;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
