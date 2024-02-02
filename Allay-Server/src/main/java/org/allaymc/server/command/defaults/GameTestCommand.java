@@ -1,14 +1,11 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.palette.BlockStateHashPalette;
-import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
@@ -119,7 +116,7 @@ public class GameTestCommand extends SimpleCommand {
                                         .loc(loc)
                                         .build()
                         );
-                        dim.getEntityUpdateService().addEntity(entity);
+                        dim.getEntityService().addEntity(entity);
                     }
                     context.addOutput("§aSpawned " + count + " " + entityType.getIdentifier().toString());
                     return context.success();
@@ -129,7 +126,7 @@ public class GameTestCommand extends SimpleCommand {
                 .exec((context, player) -> {
                     player.getLocation().dimension().getEntities().values().forEach(entity -> {
                         if (!(entity instanceof EntityPlayer)) {
-                            entity.removeEntity();
+                            entity.despawn();
                         }
                     });
                     return context.success();

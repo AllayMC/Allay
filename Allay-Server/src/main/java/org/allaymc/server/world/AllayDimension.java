@@ -10,11 +10,11 @@ import org.allaymc.api.world.generator.Generator;
 import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.service.EntityPhysicsService;
-import org.allaymc.api.world.service.EntityUpdateService;
+import org.allaymc.api.world.service.EntityService;
 import org.allaymc.server.world.service.AllayBlockUpdateService;
 import org.allaymc.server.world.service.AllayChunkService;
 import org.allaymc.server.world.service.AllayEntityPhysicsService;
-import org.allaymc.server.world.service.AllayEntityUpdateService;
+import org.allaymc.server.world.service.AllayEntityService;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
@@ -34,7 +34,7 @@ public class AllayDimension implements Dimension {
     protected final ChunkService chunkService;
     protected final EntityPhysicsService entityPhysicsService;
     protected final BlockUpdateService blockUpdateService;
-    protected final EntityUpdateService entityUpdateService;
+    protected final EntityService entityService;
     protected final DimensionInfo dimensionInfo;
     protected final World world;
     protected final Set<EntityPlayer> players;
@@ -45,7 +45,7 @@ public class AllayDimension implements Dimension {
         this.generator = generator;
         this.chunkService = new AllayChunkService(this, world.getWorldStorage());
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
-        this.entityUpdateService = new AllayEntityUpdateService(entityPhysicsService);
+        this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.players = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
@@ -53,7 +53,7 @@ public class AllayDimension implements Dimension {
     @Override
     public void tick(long currentTick) {
         chunkService.tick();
-        entityUpdateService.tick();
+        entityService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);
     }
@@ -62,12 +62,12 @@ public class AllayDimension implements Dimension {
     public void addPlayer(EntityPlayer player, Runnable runnable) {
         players.add(player);
         chunkService.addChunkLoader(player);
-        entityUpdateService.addEntity(player, runnable);
+        entityService.addEntity(player, runnable);
     }
 
     @Override
     public void removePlayer(EntityPlayer player) {
-        entityUpdateService.removeEntity(player);
+        entityService.removeEntity(player);
         chunkService.removeChunkLoader(player);
         players.remove(player);
     }

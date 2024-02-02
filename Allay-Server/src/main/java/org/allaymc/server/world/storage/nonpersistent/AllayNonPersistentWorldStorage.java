@@ -47,7 +47,7 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
         if (chunk == null) {
             chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimensionInfo).toSafeChunk();
         }
-        readEntities(l).stream().map(nbt -> EntityHelper.fromNBT(dimension, nbt)).forEach(e -> dimension.getEntityUpdateService().addEntity(e));
+        readEntities(l).stream().map(nbt -> EntityHelper.fromNBT(dimension, nbt)).forEach(e -> dimension.getEntityService().addEntity(e));
         readBlockEntities(l).stream().map(nbt -> BlockEntityHelper.fromNBT(dimension, nbt)).forEach(chunk::addBlockEntity);
         return CompletableFuture.completedFuture(chunk);
     }

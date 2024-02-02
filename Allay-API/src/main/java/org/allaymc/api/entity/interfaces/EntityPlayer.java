@@ -87,7 +87,7 @@ public interface EntityPlayer extends Entity, EntityPlayerBaseComponent, EntityP
         );
         entityItem.setItemStack(itemStack);
         entityItem.setPickupDelay(40);
-        dimension.getEntityUpdateService().addEntity(entityItem);
+        dimension.getEntityService().addEntity(entityItem);
     }
 }
 

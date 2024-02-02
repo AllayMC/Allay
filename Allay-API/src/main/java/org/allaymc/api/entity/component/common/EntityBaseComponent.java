@@ -52,17 +52,19 @@ public interface EntityBaseComponent extends EntityComponent {
 
     boolean isDead();
 
-    boolean willBeAddedNextTick();
+    boolean willBeSpawnedNextTick();
 
     @ApiStatus.Internal
-    void setWillBeAddedNextTick(boolean willBeAddedNextTick);
+    void setWillBeSpawnedNextTick(boolean willBeSpawnedNextTick);
 
-    boolean willBeRemovedNextTick();
+    boolean willBeDespawnedNextTick();
 
     @ApiStatus.Internal
-    void setWillBeRemovedNextTick(boolean willBeRemovedNextTick);
+    void setWillBeDespawnedNextTick(boolean willBeDespawnedNextTick);
 
     boolean isSpawned();
+
+    boolean canBeSpawned();
 
     @ApiStatus.Internal
     void setSpawned(boolean spawned);
@@ -157,7 +159,7 @@ public interface EntityBaseComponent extends EntityComponent {
 
     void despawnFromAll();
 
-    void removeEntity();
+    void despawn();
 
     BedrockPacket createSpawnPacket();
 

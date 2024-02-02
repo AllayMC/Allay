@@ -1,9 +1,10 @@
 package org.allaymc.server.world.service;
 
+import io.netty.util.internal.PlatformDependent;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.world.service.EntityPhysicsService;
-import org.allaymc.api.world.service.EntityUpdateService;
+import org.allaymc.api.world.service.EntityService;
 import org.allaymc.server.world.chunk.AllayChunk;
 
 import java.util.Queue;
@@ -15,11 +16,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author Cool_Loong
  */
 @Slf4j
-public class AllayEntityUpdateService implements EntityUpdateService {
+public class AllayEntityService implements EntityService {
     protected final EntityPhysicsService entityPhysicsService;
-    protected final Queue<EntityUpdateOperation> entityUpdateOperationQueue = new ConcurrentLinkedQueue<>();
+    protected final Queue<EntityUpdateOperation> entityUpdateOperationQueue = PlatformDependent.newMpscQueue();
 
-    public AllayEntityUpdateService(EntityPhysicsService entityPhysicsService) {
+    public AllayEntityService(EntityPhysicsService entityPhysicsService) {
         this.entityPhysicsService = entityPhysicsService;
     }
 
@@ -43,7 +44,7 @@ public class AllayEntityUpdateService implements EntityUpdateService {
         entityPhysicsService.removeEntity(entity);
         chunk.removeEntity(entity.getUniqueId());
         entity.despawnFromAll();
-        entity.setWillBeRemovedNextTick(false);
+        entity.setWillBeDespawnedNextTick(false);
         entity.setSpawned(false);
     }
 
@@ -54,17 +55,17 @@ public class AllayEntityUpdateService implements EntityUpdateService {
         chunk.addEntity(entity);
         entity.spawnTo(chunk.getPlayerChunkLoaders());
         entityPhysicsService.addEntity(entity);
-        entity.setWillBeAddedNextTick(false);
+        entity.setWillBeSpawnedNextTick(false);
         entity.setSpawned(true);
     }
 
     @Override
     public void addEntity(Entity entity, Runnable callback) {
-        if (entity.willBeAddedNextTick()) {
+        if (!entity.canBeSpawned()) {
             log.warn("Trying to add an entity twice! Entity: " + entity);
             return;
         }
-        entity.setWillBeAddedNextTick(true);
+        entity.setWillBeSpawnedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
                 EntityUpdateType.ADD,
@@ -74,11 +75,11 @@ public class AllayEntityUpdateService implements EntityUpdateService {
 
     @Override
     public void removeEntity(Entity entity, Runnable callback) {
-        if (entity.willBeRemovedNextTick()) {
+        if (entity.willBeDespawnedNextTick()) {
             log.warn("Trying to remove an entity twice! Entity: " + entity);
             return;
         }
-        entity.setWillBeRemovedNextTick(true);
+        entity.setWillBeDespawnedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
                 EntityUpdateType.REMOVE,

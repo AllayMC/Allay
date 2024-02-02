@@ -45,7 +45,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
         if (age != -1) {
             age++;
             if (age >= MAX_AGE) {
-                removeEntity();
+                despawn();
             }
         }
         // update pick up delay
@@ -61,7 +61,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
             if (otherItemStack != null && otherItemStack.canMerge(itemStack)) {
                 itemStack.setCount(itemStack.getCount() + otherItemStack.getCount());
                 otherEntityItem.setItemStack(null);
-                otherEntityItem.removeEntity();
+                otherEntityItem.despawn();
             }
         }
     }

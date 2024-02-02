@@ -7,7 +7,7 @@ import org.allaymc.api.entity.Entity;
  *
  * @author Cool_Loong
  */
-public interface EntityUpdateService {
+public interface EntityService {
     void tick();
 
     default void addEntity(Entity entity) {

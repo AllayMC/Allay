@@ -86,7 +86,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
                 );
                 entity.setItemStack(itemStack);
                 entity.setPickupDelay(10);
-                dimension.getEntityUpdateService().addEntity(entity);
+                dimension.getEntityService().addEntity(entity);
             }
         }
     }

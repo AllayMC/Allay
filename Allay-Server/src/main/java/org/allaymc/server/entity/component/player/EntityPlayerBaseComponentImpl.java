@@ -171,7 +171,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                     takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getUniqueId());
                     Objects.requireNonNull(dimension.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
                     entityItem.setItemStack(null);
-                    dimension.getEntityUpdateService().removeEntity(entityItem);
+                    dimension.getEntityService().removeEntity(entityItem);
                 }
                 // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
                 // It's much easier to just resend the inventory.

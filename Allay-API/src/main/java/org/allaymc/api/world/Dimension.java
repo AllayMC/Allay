@@ -15,7 +15,7 @@ import org.allaymc.api.world.generator.Generator;
 import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.service.EntityPhysicsService;
-import org.allaymc.api.world.service.EntityUpdateService;
+import org.allaymc.api.world.service.EntityService;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
@@ -49,7 +49,7 @@ public interface Dimension {
 
     BlockUpdateService getBlockUpdateService();
 
-    EntityUpdateService getEntityUpdateService();
+    EntityService getEntityService();
 
     DimensionInfo getDimensionInfo();
 

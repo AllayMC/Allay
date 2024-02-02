@@ -86,8 +86,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected Map<EffectType, EffectInstance> effects = new HashMap<>();
     protected Vector3f motion = new Vector3f();
     protected boolean onGround = true;
-    protected boolean willBeRemovedNextTick = false;
-    protected boolean willBeAddedNextTick = false;
+    protected boolean willBeDespawnedNextTick = false;
+    protected boolean willBeSpawnedNextTick = false;
     protected boolean spawned;
     protected boolean dead;
     protected int deadTimer;
@@ -158,7 +158,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             if (deadTimer == 0) {
                 // Spawn dead particle
                 spawnDeadParticle();
-                removeEntity();
+                despawn();
                 // After call 'removeEntity()', this entity won't be ticked in next tick
                 // So we set dead back to false
                 dead = false;
@@ -224,19 +224,19 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public void removeEntity() {
-        getDimension().getEntityUpdateService().removeEntity(thisEntity);
+    public void despawn() {
+        getDimension().getEntityService().removeEntity(thisEntity);
     }
 
     @Override
-    public boolean willBeRemovedNextTick() {
-        return willBeRemovedNextTick;
+    public boolean willBeDespawnedNextTick() {
+        return willBeDespawnedNextTick;
     }
 
     @Override
     @ApiStatus.Internal
-    public void setWillBeRemovedNextTick(boolean willBeRemovedNextTick) {
-        this.willBeRemovedNextTick = willBeRemovedNextTick;
+    public void setWillBeDespawnedNextTick(boolean willBeDespawnedNextTick) {
+        this.willBeDespawnedNextTick = willBeDespawnedNextTick;
     }
 
     @Override
@@ -251,14 +251,20 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public boolean willBeAddedNextTick() {
-        return willBeAddedNextTick;
+    public boolean canBeSpawned() {
+        return location.x != Integer.MAX_VALUE && location.y != Integer.MAX_VALUE && location.z != Integer.MAX_VALUE &&
+               location.dimension != null && !spawned && !willBeSpawnedNextTick;
+    }
+
+    @Override
+    public boolean willBeSpawnedNextTick() {
+        return willBeSpawnedNextTick;
     }
 
     @Override
     @ApiStatus.Internal
-    public void setWillBeAddedNextTick(boolean willBeAddedNextTick) {
-        this.willBeAddedNextTick = willBeAddedNextTick;
+    public void setWillBeSpawnedNextTick(boolean willBeSpawnedNextTick) {
+        this.willBeSpawnedNextTick = willBeSpawnedNextTick;
     }
 
     @Override
@@ -304,11 +310,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         } else {
             // Teleporting to another dimension, there will be more works to be done
             // TODO: maybe needs more works
-            location.dimension().getEntityUpdateService().removeEntity(thisEntity, () -> {
+            location.dimension().getEntityService().removeEntity(thisEntity, () -> {
                 location.dimension().getChunkService().getChunkImmediately((int) location.x() >> 4, (int) location.z() >> 4);
                 setLocationAndCheckChunk(location);
             });
-            location.dimension().getEntityUpdateService().addEntity(thisEntity);
+            location.dimension().getEntityService().addEntity(thisEntity);
         }
     }
 
