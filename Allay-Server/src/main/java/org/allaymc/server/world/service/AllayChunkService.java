@@ -76,9 +76,9 @@ public class AllayChunkService implements ChunkService {
             var chunk = getChunk(entry.getKey());
             return chunk == null || chunk.getChunkLoaderCount() > 0 || keepLoadingChunks.contains(entry.getKey());
         });
-        //Update countdown
+        // Update countdown
         unusedChunkClearCountDown.replaceAll((chunkHash, countDown) -> countDown - 1);
-        //Remove countdown ended unused chunks
+        // Remove countdown ended unused chunks
         unusedChunkClearCountDown.entrySet().removeIf(entry -> {
             boolean shouldRemove = entry.getValue() == 0;
             if (shouldRemove) {
@@ -87,7 +87,7 @@ public class AllayChunkService implements ChunkService {
             return shouldRemove;
         });
 
-        //Add unused chunk to the clear countdown map
+        // Add unused chunk to the clear countdown map
         for (var entry : loadedChunks.entrySet()) {
             Long chunkHash = entry.getKey();
             var loadedChunk = entry.getValue();
@@ -115,7 +115,6 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
-
     public Chunk getChunk(int x, int z) {
         return loadedChunks.get(HashUtils.hashXZ(x, z));
     }
@@ -143,20 +142,19 @@ public class AllayChunkService implements ChunkService {
 
     @Override
     public CompletableFuture<Set<Chunk>> getOrLoadRangedChunk(int x, int z, int range) {
-        // 用于存储CompletableFuture的集合
+        // The set used to store CompletableFutures
         Set<CompletableFuture<Chunk>> futureSet = new HashSet<>();
 
-        // 遍历(x, z)为中心，半径为range的区块
         for (int dx = -range; dx <= range; dx++) {
             for (int dz = -range; dz <= range; dz++) {
                 if (dx * dx + dz * dz <= range * range) {
-                    // 获取或加载每一个块，并将返回的CompletableFuture添加到集合中
+                    // Get or load each chunk and add the returned CompletableFuture to the set
                     futureSet.add(getOrLoadChunk(x + dx, z + dz));
                 }
             }
         }
 
-        // 当所有的CompletableFuture都完成时，返回一个新的CompletableFuture
+        // When all the CompletableFutures are completed, return a new CompletableFuture
         return CompletableFuture.allOf(futureSet.toArray(new CompletableFuture[0]))
                 .thenApplyAsync(v -> futureSet.stream()
                         .map(CompletableFuture::join)
@@ -169,7 +167,7 @@ public class AllayChunkService implements ChunkService {
         if (isChunkLoaded(hashXZ)) {
             throw new IllegalStateException("Chunk is already loaded");
         }
-        //Prevent multiple threads from putting the same chunk into loadingChunks at the same time and wasting computing resources
+        // Prevent multiple threads from putting the same chunk into loadingChunks at the same time and wasting computing resources
         var presentValue = loadingChunks.putIfAbsent(hashXZ, worldStorage.readChunk(x, z, DimensionInfo.OVERWORLD)
                 .exceptionally(t -> {
                     log.error("Error while reading chunk (" + x + "," + z + ") !", t);
@@ -319,7 +317,7 @@ public class AllayChunkService implements ChunkService {
                 var chunkDZ1 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash1);
                 var chunkDX2 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash2);
                 var chunkDZ2 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash2);
-                //Compare distance to loader
+                // Compare distance to loader
                 return Integer.compare(
                         chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1,
                         chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2
@@ -327,9 +325,9 @@ public class AllayChunkService implements ChunkService {
             }
         };
         private final ChunkLoader chunkLoader;
-        //保存着上tick已经发送的全部区块hash值
+        // Save all chunk hash values that have been sent in the last tick
         private final LongOpenHashSet sentChunks = new LongOpenHashSet();
-        //保存着这tick将要发送的全部区块hash值
+        // Save all chunk hash values that will be sent in this tick
         private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
         private final int chunkTrySendCountPerTick;
         private final LongArrayFIFOQueue chunkSendQueue;
@@ -337,7 +335,8 @@ public class AllayChunkService implements ChunkService {
 
         ChunkLoaderManager(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
-            this.chunkSendQueue = new LongArrayFIFOQueue(chunkLoader.getChunkLoadingRadius() * chunkLoader.getChunkLoadingRadius());
+            // S = pi * radius ^ 2
+            this.chunkSendQueue = new LongArrayFIFOQueue((int) Math.ceil(chunkLoader.getChunkLoadingRadius() * chunkLoader.getChunkLoadingRadius() * Math.PI));
             this.chunkTrySendCountPerTick = chunkLoader.getChunkTrySendCountPerTick();
         }
 
@@ -376,9 +375,9 @@ public class AllayChunkService implements ChunkService {
 
         private void removeOutOfRadiusChunks() {
             Sets.SetView<Long> difference = Sets.difference(sentChunks, inRadiusChunks);
-            //卸载超出范围的区块
+            // Unload chunks out of range
             chunkLoader.onChunkOutOfRange(difference);
-            //剩下sentChunks和inRadiusChunks的交集
+            // The intersection of sentChunks and inRadiusChunks
             sentChunks.removeAll(difference);
         }
 
@@ -428,7 +427,6 @@ public class AllayChunkService implements ChunkService {
                             chunkLoader.onChunkInRangeSent(chunk);
                         });
                     });
-                    sentChunks.addAll(chunkReadyToSend.keySet());
                 } else {
                     // 1. Encode all lcps
                     List<LevelChunkPacket> lcps;
@@ -443,10 +441,10 @@ public class AllayChunkService implements ChunkService {
                     for (var lcp : lcps) {
                         chunkLoader.sendLevelChunkPacket(lcp);
                     }
-                    sentChunks.addAll(chunkReadyToSend.keySet());
                     // 3. Call onChunkInRangeSent()
                     chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeSent);
                 }
+                sentChunks.addAll(chunkReadyToSend.keySet());
             }
         }
 

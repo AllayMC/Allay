@@ -117,14 +117,14 @@ public class AllayWorld implements World {
         if (worldData.getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) {
             if (tickNumber >= nextTimeSendTick) {
                 worldData.addTime(TIME_SENDING_INTERVAL);
-                viewTime(getPlayers());
+                sendTime(getPlayers());
                 nextTimeSendTick = tickNumber + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
             }
         }
     }
 
     @Override
-    public void viewTime(Collection<EntityPlayer> players) {
+    public void sendTime(Collection<EntityPlayer> players) {
         var setTimePk = new SetTimePacket();
         setTimePk.setTime((int) worldData.getTime());
         for (var player : players) {
