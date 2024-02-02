@@ -7,11 +7,11 @@ import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
+import org.cloudburstmc.protocol.common.PacketSignal;
 
 public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
-
     @Override
-    public void handleSync(EntityPlayer player, PlayerActionPacket packet) {
+    public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet) {
         if (packet.getAction() == PlayerActionType.RESPAWN) {
             var spawnPoint = player.getSpawnPoint();
             var dimension = spawnPoint.dimension();
@@ -24,7 +24,9 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 player.setHealth(player.getMaxHealth());
                 player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, (short) 400);
             });
+            return PacketSignal.HANDLED;
         }
+        return PacketSignal.UNHANDLED;
     }
 
     @Override

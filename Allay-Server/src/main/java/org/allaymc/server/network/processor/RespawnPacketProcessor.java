@@ -5,12 +5,13 @@ import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
+import org.cloudburstmc.protocol.common.PacketSignal;
 
 public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
 
     @Override
-    public void handleSync(EntityPlayer player, RespawnPacket packet) {
-        if (packet.getState() != RespawnPacket.State.CLIENT_READY) return;
+    public PacketSignal handleAsync(EntityPlayer player, RespawnPacket packet) {
+        if (packet.getState() != RespawnPacket.State.CLIENT_READY) return PacketSignal.HANDLED;
 
         var respawnPacket = new RespawnPacket();
         respawnPacket.setRuntimeEntityId(player.getUniqueId());
@@ -18,6 +19,7 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
         respawnPacket.setPosition(Vector3f.from(sp.x(), sp.y(), sp.z()));
         respawnPacket.setState(RespawnPacket.State.SERVER_READY);
         player.sendPacket(respawnPacket);
+        return PacketSignal.HANDLED;
     }
 
     @Override
