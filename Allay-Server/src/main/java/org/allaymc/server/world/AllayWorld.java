@@ -78,7 +78,7 @@ public class AllayWorld implements World {
 
     @Override
     public void handleSyncPacket(EntityPlayer player, BedrockPacket packet) {
-
+        packetQueue.add(new PacketQueueEntry(player, packet));
     }
 
     @Override
