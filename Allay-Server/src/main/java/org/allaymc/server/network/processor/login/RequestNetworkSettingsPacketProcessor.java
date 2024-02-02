@@ -33,7 +33,6 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         settingsPacket.setCompressionThreshold(Server.SETTINGS.networkSettings().compressionThreshold());
         player.sendPacketImmediately(settingsPacket);
         player.getClientSession().setCompression(settingsPacket.getCompressionAlgorithm());
-        player.getClientSession().setCompressionLevel(settingsPacket.getCompressionThreshold());
         return;
 
     }

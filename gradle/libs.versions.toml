@@ -8,7 +8,7 @@ cloud = "1.8.4"
 # NBT
 nbt = { group = "org.allaymc", name = "NBT", version = "3.0.8" }
 # MC network protocol
-network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta1-20240120.154215-116" }
+network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta1-SNAPSHOT" }
 # block-state-updater
 blockstateupdater = { group = "org.cloudburstmc", name = "block-state-updater", version = "1.20.50-SNAPSHOT" }
 # Collections
