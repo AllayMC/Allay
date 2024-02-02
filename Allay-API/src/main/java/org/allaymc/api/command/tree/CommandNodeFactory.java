@@ -34,6 +34,10 @@ public interface CommandNodeFactory {
 
     CommandNode enums(String name, CommandNode parent, String enumName, String defaultValue, String[] enums);
 
+    CommandNode enumsIgnoreCase(String name, CommandNode parent, String defaultValue, String[] enums);
+
+    CommandNode enumsIgnoreCase(String name, CommandNode parent, String enumName, String defaultValue, String[] enums);
+
     CommandNode msg(String name, CommandNode parent, String defaultValue);
 
     CommandNode remain(String name, CommandNode parent, Object defaultValue);

@@ -54,6 +54,16 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     }
 
     @Override
+    public CommandNode enumsIgnoreCase(String name, CommandNode parent, String defaultValue, String[] enums) {
+        return new EnumIgnoreCaseNode(name, parent, defaultValue, enums);
+    }
+
+    @Override
+    public CommandNode enumsIgnoreCase(String name, CommandNode parent, String enumName, String defaultValue, String[] enums) {
+        return new EnumIgnoreCaseNode(name, parent, defaultValue, enumName, enums);
+    }
+
+    @Override
     public CommandNode msg(String name, CommandNode parent, String defaultValue) {
         return new MessageNode(name, parent, defaultValue);
     }

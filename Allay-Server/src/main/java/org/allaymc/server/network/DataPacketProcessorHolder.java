@@ -42,6 +42,7 @@ public final class DataPacketProcessorHolder {
         holder.registerProcessor(new SetPlayerGameTypePacketProcessor());
         holder.registerProcessor(new SubChunkRequestPacketProcessor());
         holder.registerProcessor(new TextPacketProcessor());
+        holder.registerProcessor(new SettingsCommandPacketProcessor());
     }
 
     public DataPacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {

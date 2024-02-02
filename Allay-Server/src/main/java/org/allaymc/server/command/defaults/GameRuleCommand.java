@@ -27,12 +27,12 @@ public class GameRuleCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                .enums("rule", "", "BoolGameRule", BOOL_GAMERULE_ENUM)
+                .enumsIgnoreCase("rule", "", "BoolGameRule", BOOL_GAMERULE_ENUM)
                 .bool("value")
                 .optional()
                 .exec(executor(true))
                 .root()
-                .enums("rule", "", "IntGameRule", INT_GAMERULE_ENUM)
+                .enumsIgnoreCase("rule", "", "IntGameRule", INT_GAMERULE_ENUM)
                 .intNum("value")
                 .optional()
                 .exec(executor(false));

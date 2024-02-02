@@ -181,6 +181,14 @@ public interface CommandNode {
         return enums(name, values);
     }
 
+    default CommandNode enumsIgnoreCase(String name, String defaultValue, String[] enums) {
+        return addLeaf(getFactory().enumsIgnoreCase(name, this, defaultValue, enums));
+    }
+
+    default CommandNode enumsIgnoreCase(String name, String defaultValue, String enumName, String[] enums) {
+        return addLeaf(getFactory().enumsIgnoreCase(name, this, enumName, defaultValue, enums));
+    }
+
     default CommandNode msg(String name) {
         return msg(name, "");
     }

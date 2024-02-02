@@ -47,8 +47,6 @@ public enum GameRule {
     FUNCTION_COMMAND_LIMIT("functionCommandLimit", 10000, Type.INT),
     DO_LIMITED_CRAFTING("dolimitedcrafting", false, Type.BOOLEAN);
 
-    private static final Map<String, GameRule> BY_NAME = new HashMap<>();
-
     private final String name;
     private final Object defaultValue;
     private final Type type;
@@ -61,7 +59,7 @@ public enum GameRule {
 
 
     public static GameRule fromName(String name) {
-        return Arrays.stream(values()).filter(gameRule -> gameRule.getName().equals(name)).findFirst().orElse(null);
+        return Arrays.stream(values()).filter(gameRule -> gameRule.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     public static boolean parseByteToBoolean(byte value) {
