@@ -28,6 +28,7 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -57,6 +58,7 @@ import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
 import org.allaymc.server.item.registry.AllayItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.perm.tree.AllayPermTree;
+import org.allaymc.server.pack.AllayPackRegistry;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
@@ -142,6 +144,9 @@ public final class Allay {
         // Command
         api.bind(CommandTree.CommandTreeFactory.class, () -> AllayCommandTree::create);
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
+
+        // Resource pack
+        api.bind(PackRegistry.class, AllayPackRegistry::new);
 
         api.implement("Allay");
     }

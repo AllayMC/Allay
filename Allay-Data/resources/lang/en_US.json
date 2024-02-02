@@ -25,6 +25,8 @@
   "allay:network.client.disconnected": "Client disconnected, IP: %1",
   "allay:network.server.started": "Network server started at %1:%2 (%3 ms)",
   "allay:network.server.starting": "Starting up network server...",
+  "allay:pack.loading": "Loading packs...",
+  "allay:pack.loaded": "Loaded %1 packs",
   "minecraft:achievement.acquireIron": "Acquire Hardware",
   "minecraft:achievement.acquireIron.desc": "Smelt an iron ingot",
   "minecraft:achievement.alternativeFuel": "Alternative Fuel",

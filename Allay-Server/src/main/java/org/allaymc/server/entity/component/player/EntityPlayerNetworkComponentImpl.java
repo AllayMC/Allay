@@ -27,6 +27,7 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -71,6 +72,17 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
+
+    protected final AtomicBoolean initialized = new AtomicBoolean(false);
+    protected final AtomicBoolean loggedIn = new AtomicBoolean(false);
+    protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
+
+    protected final Server server = Server.getInstance();
+    protected final Queue<BedrockPacket> packetQueue;
+    protected final DataPacketProcessorHolder dataPacketProcessorHolder;
+
+    protected final BedrockPacketHandler loginPacketHandler = new AllayClientLoginPacketHandler();
+
     @Manager
     protected ComponentManager<EntityPlayer> manager;
     @Getter
@@ -83,15 +95,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected EntityPlayer player;
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
-    protected final AtomicBoolean initialized = new AtomicBoolean(false);
-    protected final AtomicBoolean loggedIn = new AtomicBoolean(false);
-    protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
-    protected final Server server = Server.getInstance();
-    protected final Queue<BedrockPacket> packetQueue;
     // It will be set while client disconnecting from server
     protected String disconnectReason;
-    protected final DataPacketProcessorHolder dataPacketProcessorHolder;
-    protected final BedrockPacketHandler loginPacketHandler = new AllayClientLoginPacketHandler();
     protected BedrockServerSession session;
 
     public EntityPlayerNetworkComponentImpl() {
@@ -135,14 +140,17 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
+    public BedrockServerSession getClientSession() {
+        return session;
+    }
+
+    @Override
     public void setClientSession(BedrockServerSession session) {
         this.session = session;
         session.setPacketHandler(new BedrockPacketHandler() {
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
-                if (loginPacketHandler.handlePacket(packet) == PacketSignal.HANDLED) {
-                    return PacketSignal.HANDLED;
-                }
+                if (loginPacketHandler.handlePacket(packet) == PacketSignal.HANDLED) return PacketSignal.HANDLED;
                 packetQueue.add(packet);
                 return PacketSignal.HANDLED;
             }
@@ -152,16 +160,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 // Handle disconnect in world main thread
                 if (baseComponent.isSpawned())
                     disconnectReason = reason;
-                // If the player is not spawned, we call Server::onDisconnect() directly
-                // As it won't cause any concurrent problem
+                    // If the player is not spawned, we call Server::onDisconnect() directly
+                    // As it won't cause any concurrent problem
                 else server.onDisconnect(player, reason);
             }
         });
-    }
-
-    @Override
-    public BedrockServerSession getClientSession() {
-        return session;
     }
 
     @Override
@@ -226,7 +229,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
         player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
         player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
-        //No need to send cursor's content to client because there is nothing in cursor
+        // No need to send cursor's content to client because there is nothing in cursor
     }
 
     private void initializePlayer() {
@@ -406,28 +409,29 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
             }
 
-            if (Server.SETTINGS.networkSettings().enableNetworkEncryption()) {
-                try {
-                    var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
-                    var encryptionKeyPair = EncryptionUtils.createKeyPair();
-                    var encryptionToken = EncryptionUtils.generateRandomToken();
-                    encryptionSecretKey = EncryptionUtils.getSecretKey(
-                            encryptionKeyPair.getPrivate(), clientKey,
-                            encryptionToken
-                    );
-                    var encryptionJWT = EncryptionUtils.createHandshakeJwt(encryptionKeyPair, encryptionToken);
-                    networkEncryptionEnabled = true;
-                    var handshakePacket = new ServerToClientHandshakePacket();
-                    handshakePacket.setJwt(encryptionJWT);
-                    sendPacketImmediately(handshakePacket);
-                    session.enableEncryption(encryptionSecretKey);
-                    //completeLogin() when client send back ClientToServerHandshakePacket
-                } catch (Exception exception) {
-                    log.warn("Failed to initialize encryption for client " + name, exception);
-                    disconnect("disconnectionScreen.internalError");
-                }
-            } else {
+            if (!Server.SETTINGS.networkSettings().enableNetworkEncryption()) {
                 completeLogin();
+                return PacketSignal.HANDLED;
+            }
+
+            try {
+                var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
+                var encryptionKeyPair = EncryptionUtils.createKeyPair();
+                var encryptionToken = EncryptionUtils.generateRandomToken();
+                encryptionSecretKey = EncryptionUtils.getSecretKey(
+                        encryptionKeyPair.getPrivate(), clientKey,
+                        encryptionToken
+                );
+                var encryptionJWT = EncryptionUtils.createHandshakeJwt(encryptionKeyPair, encryptionToken);
+                networkEncryptionEnabled = true;
+                var handshakePacket = new ServerToClientHandshakePacket();
+                handshakePacket.setJwt(encryptionJWT);
+                sendPacketImmediately(handshakePacket);
+                session.enableEncryption(encryptionSecretKey);
+                // completeLogin() when client send back ClientToServerHandshakePacket
+            } catch (Exception exception) {
+                log.warn("Failed to initialize encryption for client " + name, exception);
+                disconnect("disconnectionScreen.internalError");
             }
 
             return PacketSignal.HANDLED;
@@ -435,10 +439,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         @Override
         public PacketSignal handle(ClientToServerHandshakePacket packet) {
-            if (isNetworkEncryptionEnabled()) {
-                completeLogin();
-            } else
-                log.warn("Client " + player.getOriginName() + " sent ClientToServerHandshakePacket without encryption enabled");
+            if (isNetworkEncryptionEnabled()) completeLogin();
+            else log.warn("Client " + player.getOriginName() + " sent ClientToServerHandshakePacket without encryption enabled");
             return PacketSignal.HANDLED;
         }
 
@@ -452,30 +454,41 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             sendPacket(playStatusPacket);
             loggedIn.set(true);
             server.onLoggedIn(player);
-            //todo plugin event
+            // todo plugin event
             manager.callEvent(PlayerLoggedInEvent.INSTANCE);
-            //TODO: Resource Packs
-            sendPacket(new ResourcePacksInfoPacket());
+            sendPacket(PackRegistry.getRegistry().getPacksInfoPacket());
         }
 
         @Override
         public PacketSignal handle(ResourcePackClientResponsePacket packet) {
             switch (packet.getStatus()) {
                 case SEND_PACKS -> {
-                    //TODO: RP load
+                    for (var packId : packet.getPackIds()) {
+                        var pack = PackRegistry.getRegistry().get(UUID.fromString(packId.split("_")[0]));
+                        if (pack == null) {
+                            disconnect(TrKeys.M_DISCONNECTIONSCREEN_RESOURCEPACK);
+                            return PacketSignal.HANDLED;
+                        }
+
+                        sendPacket(pack.toNetwork());
+                    }
                 }
-                case HAVE_ALL_PACKS -> {
-                    var stackPacket = new ResourcePackStackPacket();
-                    // Just left a '*' here, if we put in exact game version
-                    // It is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
-                    stackPacket.setGameVersion("*");
-                    sendPacket(stackPacket);
-                    // TODO: possible bug here
-                }
-                case COMPLETED -> {
-                    initializePlayer();
-                }
+                case HAVE_ALL_PACKS -> sendPacket(PackRegistry.getRegistry().getPackStackPacket());
+                case COMPLETED -> initializePlayer();
+                default -> disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
             }
+            return PacketSignal.HANDLED;
+        }
+
+        @Override
+        public PacketSignal handle(ResourcePackChunkRequestPacket packet) {
+            var pack = PackRegistry.getRegistry().get(packet.getPackId());
+            if (pack == null) {
+                player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_RESOURCEPACK);
+                return PacketSignal.HANDLED;
+            }
+
+            player.sendPacket(pack.getChunkDataPacket(packet.getChunkIndex()));
             return PacketSignal.HANDLED;
         }
 

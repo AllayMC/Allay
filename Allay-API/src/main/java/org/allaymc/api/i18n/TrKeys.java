@@ -1,5 +1,7 @@
 package org.allaymc.api.i18n;
 
+import java.lang.String;
+
 /**
  * @author daoge_cmd <br>
  * Allay Project <br>
@@ -56,6 +58,10 @@ public interface TrKeys {
   String A_NETWORK_SERVER_STARTED = "allay:network.server.started";
 
   String A_NETWORK_SERVER_STARTING = "allay:network.server.starting";
+
+  String A_PACK_LOADING = "allay:pack.loading";
+
+  String A_PACK_LOADED = "allay:pack.loaded";
 
   String M_ACHIEVEMENT_ACQUIREIRON = "minecraft:achievement.acquireIron";
 
