@@ -29,6 +29,8 @@ public interface World {
 
     float getTps();
 
+    float getMSTP();
+
     void startTick();
 
     Dimension getDimension(int dimensionId);
