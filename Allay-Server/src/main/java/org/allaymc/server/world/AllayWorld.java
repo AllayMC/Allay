@@ -40,7 +40,8 @@ public class AllayWorld implements World {
     protected final GameLoop gameLoop;
     @Getter
     protected final Thread thread;
-    protected long nextTimeSendTick = 12 * 20;
+    protected long nextTimeSendTick;
+    public static final int TIME_SENDING_INTERVAL = 12 * 20;
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
@@ -111,15 +112,18 @@ public class AllayWorld implements World {
         } else thread.start();
     }
 
+    @Override
     public void tickTime(long tickNumber) {
         if (worldData.getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) {
             if (tickNumber >= nextTimeSendTick) {
-                worldData.addTime();
-                nextTimeSendTick = tickNumber + 12 * 20; //Client send the time every 12 seconds
+                worldData.addTime(TIME_SENDING_INTERVAL);
+                viewTime(getPlayers());
+                nextTimeSendTick = tickNumber + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
             }
         }
     }
 
+    @Override
     public void viewTime(Collection<EntityPlayer> players) {
         var setTimePk = new SetTimePacket();
         setTimePk.setTime((int) worldData.getTime());

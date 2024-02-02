@@ -1,21 +1,15 @@
 package org.allaymc.api.world;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
-import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Getter
 @Builder
@@ -213,12 +207,14 @@ public class WorldData {
 
     public synchronized void setTime(long time) {
         this.time = time;
-        world.viewTime(world.getPlayers());
     }
 
     public synchronized void addTime() {
         this.time++;
-        world.viewTime(world.getPlayers());
+    }
+
+    public synchronized void addTime(int value) {
+        this.time += value;
     }
 
     public synchronized void setCurrentTick(long currentTick) {
