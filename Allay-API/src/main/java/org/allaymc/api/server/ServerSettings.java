@@ -84,6 +84,10 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("network-thread-number")
         @Comment("0 == the server will automatically determine the number of netty threads")
         private int networkThreadNumber = 0;
+
+        @CustomKey("max-packets-handle-count-once")
+        @Comment("The maximum number of packets that can be processed at once")
+        private int maxPacketsHandleCountAtOnce = 128;
     }
 
     @CustomKey("world-settings")

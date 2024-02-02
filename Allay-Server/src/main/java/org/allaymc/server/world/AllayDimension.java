@@ -59,6 +59,11 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
+    public void close() {
+        chunkService.unloadAllChunks();
+    }
+
+    @Override
     public void addPlayer(EntityPlayer player, Runnable runnable) {
         players.add(player);
         chunkService.addChunkLoader(player);

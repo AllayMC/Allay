@@ -135,6 +135,11 @@ public final class AllayServer implements Server {
         Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
             @Override
             public void run() {
+                players.values().forEach(player -> player.disconnect(TrKeys.M_DISCONNECT_CLOSED));
+                while (!players.isEmpty()) {
+                    Thread.yield();
+                    // Spin until all players are disconnected
+                }
                 isRunning.compareAndSet(true, false);
                 getWorldPool().getWorlds().values().forEach(World::close);
                 virtualThreadPool.shutdownNow();

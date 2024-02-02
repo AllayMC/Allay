@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
@@ -19,6 +20,7 @@ import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Allay Project 2023/7/1
@@ -29,6 +31,7 @@ import java.util.*;
 public class AllayWorld implements World {
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet) {}
     protected final Queue<PacketQueueEntry> packetQueue = PlatformDependent.newMpscQueue();
+    protected final AtomicBoolean networkLock = new AtomicBoolean(false);
     @Getter
     protected final WorldStorage worldStorage;
     @Getter
@@ -40,8 +43,10 @@ public class AllayWorld implements World {
     protected final GameLoop gameLoop;
     @Getter
     protected final Thread thread;
+    protected final Thread networkThread;
     protected long nextTimeSendTick;
     public static final int TIME_SENDING_INTERVAL = 12 * 20;
+    public static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxPacketsHandleCountAtOnce();
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
@@ -51,28 +56,59 @@ public class AllayWorld implements World {
         this.scheduler = new AllayScheduler();
         this.gameLoop = GameLoop.builder()
                 .onTick(gameLoop -> {
+                    if (!Server.getInstance().isRunning()) {
+                        gameLoop.stop();
+                        return;
+                    }
+                    while (!networkLock.compareAndSet(false, true)) {
+                        // Spin
+                        // We don't use Thread.yield() here, because we don't want to block the world main thread
+                    }
                     try {
                         tick(gameLoop.getTick());
                     } catch (Throwable throwable) {
                         log.error("Error while ticking level " + this.getWorldData().getName(), throwable);
+                    } finally {
+                        networkLock.set(false);
                     }
                 })
                 .build();
         this.thread = Thread.ofPlatform()
                 .name("World Thread - " + this.getWorldData().getName())
                 .unstarted(gameLoop::startLoop);
+        this.networkThread = Thread.ofVirtual()
+                .name("World Network Thread - " + this.getWorldData().getName())
+                .start(this::networkTick);
     }
 
     protected void networkTick() {
-        PacketQueueEntry entry;
-        while ((entry = packetQueue.poll()) != null) {
-            entry.player.handleDataPacket(entry.packet);
+        while (Server.getInstance().isRunning()) {
+            while ((packetQueue.isEmpty() && !shouldHandlePlayersDisconnect()) || !networkLock.compareAndSet(false, true)) {
+                // Spin
+                Thread.yield();
+            }
+            try {
+                PacketQueueEntry entry;
+                int count = 0;
+                while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
+                    entry.player.handleDataPacket(entry.packet);
+                    count++;
+                }
+                handlePlayersDisconnect();
+            } catch (Throwable throwable) {
+                log.error("Error while handling sync packet in world " + this.getWorldData().getName(), throwable);
+            } finally {
+                networkLock.set(false);
+            }
         }
-        handlePlayersDisconnect();
     }
 
     protected void handlePlayersDisconnect() {
         dimensionMap.values().forEach(dim -> dim.getPlayers().forEach(EntityPlayer::handleDisconnect));
+    }
+
+    protected boolean shouldHandlePlayersDisconnect() {
+        return dimensionMap.values().stream().anyMatch(dim -> dim.getPlayers().stream().anyMatch(EntityPlayer::shouldHandleDisconnect));
     }
 
     @Override
@@ -92,8 +128,6 @@ public class AllayWorld implements World {
 
     @Override
     public void tick(long currentTick) {
-        // Handle data packet firstly
-        networkTick();
         syncData();
         tickTime(currentTick);
         scheduler.tick();
@@ -168,13 +202,7 @@ public class AllayWorld implements World {
 
     @Override
     public void close() {
-        getDimensions().forEach((integer, dimension) -> {
-            // Players were disconnected in Server::shutdown()
-            // However, the log off related logic is deferred until the world main thread executes, which has stopped at this time
-            // So we should handle player disconnect here
-            handlePlayersDisconnect();
-            dimension.getChunkService().unloadAllChunks();
-        });
+        dimensionMap.values().forEach(Dimension::close);
         saveWorldData();
         getWorldStorage().close();
     }

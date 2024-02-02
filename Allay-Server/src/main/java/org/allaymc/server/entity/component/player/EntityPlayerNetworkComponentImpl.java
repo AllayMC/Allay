@@ -117,6 +117,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
+    public boolean shouldHandleDisconnect() {
+        return disconnectReason != null;
+    }
+
+    @Override
     public void setInitialized() {
         if (initialized) log.warn("Player.initialized is set twice");
         this.initialized = true;
@@ -148,12 +153,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             @Override
             public void onDisconnect(String reason) {
-                // Handle disconnect in world main thread
-                if (baseComponent.isSpawned())
-                    disconnectReason = reason;
-                    // If the player is not spawned, we call Server::onDisconnect() directly
-                    // As it won't cause any concurrent problem
-                else server.onDisconnect(player, reason);
+                disconnectReason = reason;
             }
         });
     }
