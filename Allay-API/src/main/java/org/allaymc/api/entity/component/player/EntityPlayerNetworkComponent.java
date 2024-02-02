@@ -1,10 +1,11 @@
 package org.allaymc.api.entity.component.player;
 
-import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.data.DeviceInfo;
+import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -19,6 +20,8 @@ import java.util.UUID;
  */
 public interface EntityPlayerNetworkComponent extends EntityComponent {
     LoginData getLoginData();
+
+    PacketProcessorHolder getPacketProcessorHolder();
 
     default String getXUID() {
         return getLoginData().getXuid();
@@ -56,8 +59,13 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     boolean isNetworkEncryptionEnabled();
 
+    @ApiStatus.Internal
+    void setNetworkEncryptionEnabled(boolean enabled);
 
     SecretKey getEncryptionSecretKey();
+
+    @ApiStatus.Internal
+    void setEncryptionSecretKey(SecretKey secretKey);
 
     @ApiStatus.Internal
     void handleDisconnect();
@@ -68,10 +76,13 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
      */
     boolean isInitialized();
 
+    @ApiStatus.Internal
+    void setInitialized();
+
     boolean isLoggedIn();
 
     @ApiStatus.Internal
-    void handleDataPacket();
+    void handleDataPacket(BedrockPacket packet);
 
     @ApiStatus.Internal
     void setClientSession(BedrockServerSession session);
@@ -80,4 +91,13 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     @ApiStatus.Internal
     void onChunkInRangeSent();
+
+    @ApiStatus.Internal
+    void initializePlayer();
+
+    @ApiStatus.Internal
+    void completeLogin();
+
+    @ApiStatus.Internal
+    void setLoginData(LoginData loginData);
 }

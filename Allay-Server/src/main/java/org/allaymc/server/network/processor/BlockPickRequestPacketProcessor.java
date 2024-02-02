@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;
@@ -15,16 +15,16 @@ import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;
  * @author Cool_Loong
  */
 @Slf4j
-public class BlockPickRequestPacketProcessor extends DataPacketProcessor<BlockPickRequestPacket> {
+public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRequestPacket> {
     @Override
-    public void handle(EntityPlayer player, BlockPickRequestPacket pk) {
+    public void handleSync(EntityPlayer player, BlockPickRequestPacket packet) {
         if (player.getGameType() != GameType.CREATIVE) {
             log.warn("Player " + player.getOriginName() + " tried to pick block in non-creative mode!");
             return;
         }
-        var pos = pk.getBlockPosition();
+        var pos = packet.getBlockPosition();
         // TODO: includeBlockEntityData
-        var includeBlockEntityData = pk.isAddUserData();
+        var includeBlockEntityData = packet.isAddUserData();
         var block = player.getLocation().dimension().getBlockState(pos.getX(), pos.getY(), pos.getZ());
         if (block.getBlockType() == BlockAirBehavior.AIR_TYPE) {
             log.warn("Player " + player.getOriginName() + " tried to pick air!");

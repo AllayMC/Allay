@@ -6,7 +6,7 @@ import org.allaymc.server.container.SimpleContainerActionProcessorHolder;
 import org.allaymc.server.container.processor.ActionResponse;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -29,7 +29,7 @@ import java.util.List;
  * @author Cool_Loong
  */
 @Slf4j
-public class ItemStackRequestPacketProcessor extends DataPacketProcessor<ItemStackRequestPacket> {
+public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRequestPacket> {
     protected final ContainerActionProcessorHolder containerActionProcessorHolder;
 
     public ItemStackRequestPacketProcessor() {
@@ -38,10 +38,10 @@ public class ItemStackRequestPacketProcessor extends DataPacketProcessor<ItemSta
     }
 
     @Override
-    public void handle(EntityPlayer player, ItemStackRequestPacket pk) {
+    public void handleSync(EntityPlayer player, ItemStackRequestPacket packet) {
         List<ItemStackResponse> encodedResponses = new LinkedList<>();
         label:
-        for (var request : pk.getRequests()) {
+        for (var request : packet.getRequests()) {
             // It is possible to have two same type actions in one request!
             var responses = new LinkedList<ActionResponse>();
             // Indicate that subsequent destroy action do not return a response

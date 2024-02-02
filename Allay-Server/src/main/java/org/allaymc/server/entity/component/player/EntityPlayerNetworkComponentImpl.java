@@ -1,7 +1,7 @@
 package org.allaymc.server.entity.component.player;
 
-import io.netty.util.internal.PlatformDependent;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.client.data.LoginData;
@@ -19,7 +19,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
@@ -27,12 +26,12 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
-import org.allaymc.server.network.DataPacketProcessor;
-import org.allaymc.server.network.DataPacketProcessorHolder;
+import org.allaymc.server.network.processor.AllayPacketProcessorHolder;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -45,19 +44,16 @@ import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
 import java.util.List;
-import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Pattern;
 
 import static org.allaymc.api.utils.NbtUtils.readVector3f;
 import static org.allaymc.api.utils.NbtUtils.writeVector3f;
@@ -73,70 +69,57 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
 
-    protected final AtomicBoolean initialized = new AtomicBoolean(false);
-    protected final AtomicBoolean loggedIn = new AtomicBoolean(false);
-    protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
+    @Getter
+    protected boolean initialized = false;
+    @Getter
+    protected boolean loggedIn = false;
+    protected AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
 
     protected final Server server = Server.getInstance();
-    protected final Queue<BedrockPacket> packetQueue;
-    protected final DataPacketProcessorHolder dataPacketProcessorHolder;
-
-    protected final BedrockPacketHandler loginPacketHandler = new AllayClientLoginPacketHandler();
+    @Getter
+    protected final PacketProcessorHolder packetProcessorHolder = new AllayPacketProcessorHolder();
 
     @Manager
     protected ComponentManager<EntityPlayer> manager;
-    @Getter
-    protected LoginData loginData;
-    @Getter
-    protected boolean networkEncryptionEnabled = false;
-    @Getter
-    protected SecretKey encryptionSecretKey;
     @ComponentedObject
     protected EntityPlayer player;
+    @Getter
+    @Setter
+    protected LoginData loginData;
+    @Getter
+    @Setter
+    protected boolean networkEncryptionEnabled = false;
+    @Getter
+    @Setter
+    protected SecretKey encryptionSecretKey;
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
     // It will be set while client disconnecting from server
     protected String disconnectReason;
     protected BedrockServerSession session;
 
-    public EntityPlayerNetworkComponentImpl() {
-        packetQueue = PlatformDependent.newSpscQueue();
-        dataPacketProcessorHolder = new DataPacketProcessorHolder();
-        DataPacketProcessorHolder.registerDefaultPacketProcessors(dataPacketProcessorHolder);
+    @Override
+    public void handleDataPacket(BedrockPacket packet) {
+        var processor = packetProcessorHolder.getProcessor(packet);
+        // processor won't be null as we have checked it the time it arrived
+        processor.handleSync(player, packet);
     }
 
     @Override
-    public void handleDataPacket() {
-        BedrockPacket pk;
-        while ((pk = this.packetQueue.poll()) != null) {
-            DataPacketProcessor<BedrockPacket> processor = this.dataPacketProcessorHolder.getProcessor(pk);
-            if (processor == null) {
-                log.warn("Received packet without a packet handler for {}: {}", session.getSocketAddress(), pk);
-            } else {
-                processor.handle(player, pk);
-            }
-        }
-        handleDisconnect();
-    }
-
     public void handleDisconnect() {
         // Before client disconnect, there may be other packets which are not handled
         // So we handle disconnect after we handled all other packets
         if (disconnectReason != null) {
             // Client is disconnected from server
-            dataPacketProcessorHolder.getDisconnectProcessor().accept(player, disconnectReason);
+            packetProcessorHolder.getDisconnectProcessor().accept(player, disconnectReason);
             disconnectReason = null;
         }
     }
 
     @Override
-    public boolean isInitialized() {
-        return initialized.get();
-    }
-
-    @Override
-    public boolean isLoggedIn() {
-        return loggedIn.get();
+    public void setInitialized() {
+        if (initialized) log.warn("Player.initialized is set twice");
+        this.initialized = true;
     }
 
     @Override
@@ -150,8 +133,16 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         session.setPacketHandler(new BedrockPacketHandler() {
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
-                if (loginPacketHandler.handlePacket(packet) == PacketSignal.HANDLED) return PacketSignal.HANDLED;
-                packetQueue.add(packet);
+                var processor = packetProcessorHolder.getProcessor(packet);
+                if (processor == null) {
+                    log.warn("Received a packet without packet handler: " + packet);
+                    return PacketSignal.HANDLED;
+                }
+                if (processor.handleAsync(player, packet) != PacketSignal.HANDLED) {
+                    var world = player.getWorld();
+                    Preconditions.checkNotNull(world, "Player that is not in any world cannot handle sync packet");
+                    world.addSyncPacketToQueue(player, packet);
+                }
                 return PacketSignal.HANDLED;
             }
 
@@ -232,7 +223,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // No need to send cursor's content to client because there is nothing in cursor
     }
 
-    private void initializePlayer() {
+    @Override
+    public void initializePlayer() {
         // initializePlayer() method will read all the data in PlayerData except playerNBT
         // To be more exactly, we will validate and set player's current pos and spawn point in this method
         // And playerNBT will be used in EntityPlayer::loadNBT() in doFirstSpawnPlayer() method
@@ -357,150 +349,19 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         player.setSpawnPoint(spawnPoint);
     }
 
-    private class AllayClientLoginPacketHandler implements BedrockPacketHandler {
-
-        public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
-
-        @Override
-        public PacketSignal handle(RequestNetworkSettingsPacket packet) {
-            var protocolVersion = packet.getProtocolVersion();
-            var supportedProtocolVersion = server.getNetworkServer().getCodec().getProtocolVersion();
-            if (protocolVersion != supportedProtocolVersion) {
-                var loginFailedPacket = new PlayStatusPacket();
-                if (protocolVersion > supportedProtocolVersion) {
-                    loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
-                } else {
-                    loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
-                }
-                session.sendPacketImmediately(loginFailedPacket);
-                return PacketSignal.HANDLED;
-            }
-            var settingsPacket = new NetworkSettingsPacket();
-            settingsPacket.setCompressionAlgorithm(Server.SETTINGS.networkSettings().compressionAlgorithm());
-            settingsPacket.setCompressionThreshold(Server.SETTINGS.networkSettings().compressionThreshold());
-            sendPacketImmediately(settingsPacket);
-            session.setCompression(settingsPacket.getCompressionAlgorithm());
-            session.setCompressionLevel(settingsPacket.getCompressionThreshold());
-            return PacketSignal.HANDLED;
+    @Override
+    public void completeLogin() {
+        var playStatusPacket = new PlayStatusPacket();
+        if (server.getOnlinePlayerCount() >= Server.SETTINGS.genericSettings().maxClientCount()) {
+            playStatusPacket.setStatus(PlayStatusPacket.Status.FAILED_SERVER_FULL_SUB_CLIENT);
+        } else {
+            playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
         }
-
-        @Override
-        public PacketSignal handle(LoginPacket packet) {
-            loginData = LoginData.decode(packet);
-
-            if (!loginData.isXboxAuthenticated() && Server.SETTINGS.networkSettings().xboxAuth()) {
-                disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTAUTHENTICATED);
-                return PacketSignal.HANDLED;
-            }
-
-            var name = loginData.getDisplayName();
-            if (!NAME_PATTERN.matcher(name).matches()) {
-                disconnect(TrKeys.M_DISCONNECTIONSCREEN_INVALIDNAME);
-                return PacketSignal.HANDLED;
-            }
-
-            if (!loginData.getSkin().isValid()) {
-                session.disconnect(TrKeys.M_DISCONNECTIONSCREEN_INVALIDSKIN);
-                return PacketSignal.HANDLED;
-            }
-
-            var otherDevice = server.getOnlinePlayers().get(loginData.getUuid());
-            if (otherDevice != null) {
-                otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
-            }
-
-            if (!Server.SETTINGS.networkSettings().enableNetworkEncryption()) {
-                completeLogin();
-                return PacketSignal.HANDLED;
-            }
-
-            try {
-                var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
-                var encryptionKeyPair = EncryptionUtils.createKeyPair();
-                var encryptionToken = EncryptionUtils.generateRandomToken();
-                encryptionSecretKey = EncryptionUtils.getSecretKey(
-                        encryptionKeyPair.getPrivate(), clientKey,
-                        encryptionToken
-                );
-                var encryptionJWT = EncryptionUtils.createHandshakeJwt(encryptionKeyPair, encryptionToken);
-                networkEncryptionEnabled = true;
-                var handshakePacket = new ServerToClientHandshakePacket();
-                handshakePacket.setJwt(encryptionJWT);
-                sendPacketImmediately(handshakePacket);
-                session.enableEncryption(encryptionSecretKey);
-                // completeLogin() when client send back ClientToServerHandshakePacket
-            } catch (Exception exception) {
-                log.warn("Failed to initialize encryption for client " + name, exception);
-                disconnect("disconnectionScreen.internalError");
-            }
-
-            return PacketSignal.HANDLED;
-        }
-
-        @Override
-        public PacketSignal handle(ClientToServerHandshakePacket packet) {
-            if (isNetworkEncryptionEnabled()) completeLogin();
-            else log.warn("Client " + player.getOriginName() + " sent ClientToServerHandshakePacket without encryption enabled");
-            return PacketSignal.HANDLED;
-        }
-
-        protected void completeLogin() {
-            var playStatusPacket = new PlayStatusPacket();
-            if (server.getOnlinePlayerCount() >= Server.SETTINGS.genericSettings().maxClientCount()) {
-                playStatusPacket.setStatus(PlayStatusPacket.Status.FAILED_SERVER_FULL_SUB_CLIENT);
-            } else {
-                playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
-            }
-            sendPacket(playStatusPacket);
-            loggedIn.set(true);
-            server.onLoggedIn(player);
-            // todo plugin event
-            manager.callEvent(PlayerLoggedInEvent.INSTANCE);
-            sendPacket(PackRegistry.getRegistry().getPacksInfoPacket());
-        }
-
-        @Override
-        public PacketSignal handle(ResourcePackClientResponsePacket packet) {
-            switch (packet.getStatus()) {
-                case SEND_PACKS -> {
-                    for (var packId : packet.getPackIds()) {
-                        var pack = PackRegistry.getRegistry().get(UUID.fromString(packId.split("_")[0]));
-                        if (pack == null) {
-                            disconnect(TrKeys.M_DISCONNECTIONSCREEN_RESOURCEPACK);
-                            return PacketSignal.HANDLED;
-                        }
-
-                        sendPacket(pack.toNetwork());
-                    }
-                }
-                case HAVE_ALL_PACKS -> sendPacket(PackRegistry.getRegistry().getPackStackPacket());
-                case COMPLETED -> initializePlayer();
-                default -> disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
-            }
-            return PacketSignal.HANDLED;
-        }
-
-        @Override
-        public PacketSignal handle(ResourcePackChunkRequestPacket packet) {
-            var pack = PackRegistry.getRegistry().get(packet.getPackId());
-            if (pack == null) {
-                player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_RESOURCEPACK);
-                return PacketSignal.HANDLED;
-            }
-
-            player.sendPacket(pack.getChunkDataPacket(packet.getChunkIndex()));
-            return PacketSignal.HANDLED;
-        }
-
-        @Override
-        public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
-            // We only accept player's movement inputs which are after SetLocalPlayerAsInitializedPacket
-            // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
-            // Otherwise the client will snap into the ground
-            player.sendLocationToSelf();
-            initialized.set(true);
-            Server.getInstance().broadcastTr("§e%minecraft:multiplayer.player.joined", player.getOriginName());
-            return PacketSignal.HANDLED;
-        }
+        sendPacket(playStatusPacket);
+        loggedIn = true;
+        server.onLoggedIn(player);
+        // TODO: plugin event
+        manager.callEvent(PlayerLoggedInEvent.INSTANCE);
+        sendPacket(PackRegistry.getRegistry().getPacksInfoPacket());
     }
 }

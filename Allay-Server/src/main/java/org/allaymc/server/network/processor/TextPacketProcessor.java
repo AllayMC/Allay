@@ -2,7 +2,7 @@ package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 
@@ -11,11 +11,11 @@ import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
  *
  * @author Cool_Loong
  */
-public class TextPacketProcessor extends DataPacketProcessor<TextPacket> {
+public class TextPacketProcessor extends PacketProcessor<TextPacket> {
     @Override
-    public void handle(EntityPlayer player, TextPacket pk) {
-        if (pk.getType() == TextPacket.Type.CHAT) {
-            var message = "<" + player.getDisplayName() + "> " + pk.getMessage();
+    public void handleSync(EntityPlayer player, TextPacket packet) {
+        if (packet.getType() == TextPacket.Type.CHAT) {
+            var message = "<" + player.getDisplayName() + "> " + packet.getMessage();
             Server.getInstance().broadcastMessage(message);
         }
     }

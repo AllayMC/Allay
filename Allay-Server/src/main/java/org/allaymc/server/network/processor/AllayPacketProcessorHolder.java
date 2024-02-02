@@ -1,10 +1,12 @@
-package org.allaymc.server.network;
+package org.allaymc.server.network.processor;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.network.processor.PacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.network.processor.*;
+import org.allaymc.server.network.processor.login.*;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
@@ -16,16 +18,30 @@ import java.util.function.BiConsumer;
  *
  * @author Cool_Loong
  */
-public final class DataPacketProcessorHolder {
+public class AllayPacketProcessorHolder implements PacketProcessorHolder {
 
-    private final EnumMap<BedrockPacketType, DataPacketProcessor<BedrockPacket>> processors = new EnumMap<>(BedrockPacketType.class);
+    private final EnumMap<BedrockPacketType, PacketProcessor<BedrockPacket>> processors = new EnumMap<>(BedrockPacketType.class);
     @Getter
     @Setter
     private BiConsumer<EntityPlayer, String> disconnectProcessor;
 
-    public static void registerDefaultPacketProcessors(DataPacketProcessorHolder holder) {
+    public AllayPacketProcessorHolder() {
+        registerDefaultPacketProcessors(this);
+    }
+
+    protected void registerDefaultPacketProcessors(AllayPacketProcessorHolder holder) {
+        // Disconnect processor
         holder.setDisconnectProcessor(Server.getInstance()::onDisconnect);
 
+        // Login packet processors
+        holder.registerProcessor(new RequestNetworkSettingsPacketProcessor());
+        holder.registerProcessor(new LoginPacketProcessor());
+        holder.registerProcessor(new ClientToServerHandshakePacketProcessor());
+        holder.registerProcessor(new ResourcePackClientResponsePacketProcessor());
+        holder.registerProcessor(new SetLocalPlayerAsInitializedPacketProcessor());
+        holder.registerProcessor(new ResourcePackChunkRequestPacketProcessor());
+
+        // Common packet processors
         holder.registerProcessor(new AnimatePacketProcessor());
         holder.registerProcessor(new BlockPickRequestPacketProcessor());
         holder.registerProcessor(new CommandRequestPacketProcessor());
@@ -45,12 +61,12 @@ public final class DataPacketProcessorHolder {
         holder.registerProcessor(new SettingsCommandPacketProcessor());
     }
 
-    public DataPacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
+    public PacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
         return processors.get(packet.getPacketType());
     }
 
     @SuppressWarnings("unchecked")
-    public void registerProcessor(DataPacketProcessor<? extends BedrockPacket> processor) {
-        processors.put(processor.getPacketType(), (DataPacketProcessor<BedrockPacket>) processor);
+    public void registerProcessor(PacketProcessor<? extends BedrockPacket> processor) {
+        processors.put(processor.getPacketType(), (PacketProcessor<BedrockPacket>) processor);
     }
 }

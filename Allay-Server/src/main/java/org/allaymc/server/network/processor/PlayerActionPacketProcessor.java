@@ -2,17 +2,16 @@ package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.server.Server;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
+import org.cloudburstmc.protocol.common.PacketSignal;
 
-public class PlayerActionPacketProcessor extends DataPacketProcessor<PlayerActionPacket> {
-
+public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
     @Override
-    public void handle(EntityPlayer player, PlayerActionPacket packet) {
+    public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet) {
         if (packet.getAction() == PlayerActionType.RESPAWN) {
             var spawnPoint = player.getSpawnPoint();
             var dimension = spawnPoint.dimension();
@@ -25,7 +24,9 @@ public class PlayerActionPacketProcessor extends DataPacketProcessor<PlayerActio
                 player.setHealth(player.getMaxHealth());
                 player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, (short) 400);
             });
+            return PacketSignal.HANDLED;
         }
+        return PacketSignal.UNHANDLED;
     }
 
     @Override

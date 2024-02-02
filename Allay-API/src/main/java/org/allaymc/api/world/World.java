@@ -20,6 +20,9 @@ import java.util.Map;
  */
 public interface World {
 
+    @ApiStatus.Internal
+    void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet);
+
     Thread getThread();
 
     long getTick();

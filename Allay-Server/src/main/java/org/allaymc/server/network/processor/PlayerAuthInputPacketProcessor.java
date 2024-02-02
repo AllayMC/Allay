@@ -3,13 +3,14 @@ package org.allaymc.server.network.processor;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
 import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
+import org.cloudburstmc.protocol.common.PacketSignal;
 
 import java.util.List;
 import java.util.Set;
@@ -19,7 +20,7 @@ import java.util.Set;
  *
  * @author Cool_Loong
  */
-public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAuthInputPacket> {
+public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
     protected static void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
         var world = player.getLocation().dimension();
@@ -68,12 +69,22 @@ public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAu
     }
 
     @Override
-    public void handle(EntityPlayer player, PlayerAuthInputPacket pk) {
-        if (!player.isInitialized() || !player.isSpawned()) return;
-        // 客户端发送给服务端的坐标比实际坐标高了一个BaseOffset，我们需要减掉它
-        handleMovement(player, pk.getPosition().sub(0, player.getBaseOffset(), 0), pk.getRotation());
-        handleBlockAction(player, pk.getPlayerActions());
-        handleInputData(player, pk.getInputData());
+    public void handleSync(EntityPlayer player, PlayerAuthInputPacket packet) {
+        if (notReadyForInput(player)) return;
+        handleBlockAction(player, packet.getPlayerActions());
+        handleInputData(player, packet.getInputData());
+    }
+
+    @Override
+    public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket packet) {
+        if (notReadyForInput(player)) return PacketSignal.UNHANDLED;
+        // The pos which client sends to the server is higher than the actual coordinates (one base offset)
+        handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
+        return PacketSignal.UNHANDLED;
+    }
+
+    protected boolean notReadyForInput(EntityPlayer player) {
+        return !player.isInitialized() || !player.isSpawned();
     }
 
     @Override

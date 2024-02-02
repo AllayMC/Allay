@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
+import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ public class AllayChunk implements Chunk {
         this.blockLock = new StampedLock();
         this.heightAndBiomeLock = new StampedLock();
         this.lightLock = new StampedLock();
-        this.chunkPacketQueue = new ConcurrentLinkedQueue<>();
+        this.chunkPacketQueue = PlatformDependent.newMpscQueue();
         this.chunkLoaders = ObjectSets.synchronize(new ObjectOpenHashSet<>());
     }
 
