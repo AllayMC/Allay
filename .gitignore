@@ -1,8 +1,5 @@
 /.gradle/
 /.idea/
 **/build/
-/caches/
-/jegenerator/
-/logs/
-/worlds/
-server-settings.yml
+**/bin/
+/run/

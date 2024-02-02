@@ -158,7 +158,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
             NbtMap abilities = d.getCompound("abilities");
             NbtMap experiments = d.getCompound("experiments");
             GameRules gameRules = new GameRules();
-            gameRules.put(GameRule.COMMAND_BLOCK_OUTPUT, d.getBoolean("bonusChestSpawned"));
+            gameRules.put(GameRule.COMMAND_BLOCK_OUTPUT, d.getBoolean("commandblockoutput"));
             gameRules.put(GameRule.COMMAND_BLOCKS_ENABLED, d.getBoolean("commandblocksenabled"));
             gameRules.put(GameRule.DO_DAYLIGHT_CYCLE, d.getBoolean("dodaylightcycle"));
             gameRules.put(GameRule.DO_ENTITY_DROPS, d.getBoolean("doentitydrops"));

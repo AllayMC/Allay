@@ -24,9 +24,8 @@ public final class DataPacketProcessorHolder {
     private BiConsumer<EntityPlayer, String> disconnectProcessor;
 
     public static void registerDefaultPacketProcessors(DataPacketProcessorHolder holder) {
-        holder.setDisconnectProcessor((player, reason) -> {
-            Server.getInstance().onDisconnect(player, reason);
-        });
+        holder.setDisconnectProcessor(Server.getInstance()::onDisconnect);
+
         holder.registerProcessor(new AnimatePacketProcessor());
         holder.registerProcessor(new BlockPickRequestPacketProcessor());
         holder.registerProcessor(new CommandRequestPacketProcessor());
@@ -39,6 +38,8 @@ public final class DataPacketProcessorHolder {
         holder.registerProcessor(new PlayerAuthInputPacketProcessor());
         holder.registerProcessor(new RequestChunkRadiusPacketProcessor());
         holder.registerProcessor(new RespawnPacketProcessor());
+        holder.registerProcessor(new SetDefaultGameTypePacketProcessor());
+        holder.registerProcessor(new SetPlayerGameTypePacketProcessor());
         holder.registerProcessor(new SubChunkRequestPacketProcessor());
         holder.registerProcessor(new TextPacketProcessor());
         holder.registerProcessor(new SettingsCommandPacketProcessor());

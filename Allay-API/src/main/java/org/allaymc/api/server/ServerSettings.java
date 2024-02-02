@@ -4,6 +4,7 @@ import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.allaymc.api.i18n.LangCode;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -21,6 +22,7 @@ public class ServerSettings extends OkaeriConfig {
     private GenericSettings genericSettings = new GenericSettings();
 
     @Getter
+    @Setter
     @Accessors(fluent = true)
     public static class GenericSettings extends OkaeriConfig {
 

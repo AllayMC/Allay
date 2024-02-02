@@ -83,6 +83,9 @@ tasks.jmh {
 }
 
 tasks.runShadow {
+    val runningDir = File("${rootProject.projectDir}/run/")
+    runningDir.mkdirs()
+    workingDir = runningDir
     this.jarFile = file("build/libs/Allay-Server-$version-all.jar")
 }
 
