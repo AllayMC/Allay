@@ -17,7 +17,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;
 @Slf4j
 public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRequestPacket> {
     @Override
-    public void handle(EntityPlayer player, BlockPickRequestPacket pk) {
+    public void handleSync(EntityPlayer player, BlockPickRequestPacket pk) {
         if (player.getGameType() != GameType.CREATIVE) {
             log.warn("Player " + player.getOriginName() + " tried to pick block in non-creative mode!");
             return;

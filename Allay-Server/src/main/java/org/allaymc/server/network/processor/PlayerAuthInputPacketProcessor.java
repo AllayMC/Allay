@@ -10,6 +10,7 @@ import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
 import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
+import org.cloudburstmc.protocol.common.PacketSignal;
 
 import java.util.List;
 import java.util.Set;
@@ -68,12 +69,22 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     @Override
-    public void handle(EntityPlayer player, PlayerAuthInputPacket pk) {
-        if (!player.isInitialized() || !player.isSpawned()) return;
-        // 客户端发送给服务端的坐标比实际坐标高了一个BaseOffset，我们需要减掉它
-        handleMovement(player, pk.getPosition().sub(0, player.getBaseOffset(), 0), pk.getRotation());
+    public void handleSync(EntityPlayer player, PlayerAuthInputPacket pk) {
+        if (notReadyForInput(player)) return;
         handleBlockAction(player, pk.getPlayerActions());
         handleInputData(player, pk.getInputData());
+    }
+
+    @Override
+    public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket pk) {
+        if (notReadyForInput(player)) return PacketSignal.UNHANDLED;
+        // The pos which client sends to the server is higher than the actual coordinates (one base offset)
+        handleMovement(player, pk.getPosition().sub(0, player.getBaseOffset(), 0), pk.getRotation());
+        return PacketSignal.UNHANDLED;
+    }
+
+    protected boolean notReadyForInput(EntityPlayer player) {
+        return !player.isInitialized() || !player.isSpawned();
     }
 
     @Override

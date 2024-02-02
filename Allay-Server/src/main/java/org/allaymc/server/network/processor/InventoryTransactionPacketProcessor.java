@@ -35,7 +35,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     public static final int ITEM_USE_ON_ENTITY_ATTACK = 1;
 
     @Override
-    public void handle(EntityPlayer player, InventoryTransactionPacket pk) {
+    public void handleSync(EntityPlayer player, InventoryTransactionPacket pk) {
         var transactionType = pk.getTransactionType();
         switch (transactionType) {
             case ITEM_USE -> {

@@ -11,7 +11,7 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
 public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
 
     @Override
-    public void handle(EntityPlayer player, PlayerActionPacket packet) {
+    public void handleSync(EntityPlayer player, PlayerActionPacket packet) {
         if (packet.getAction() == PlayerActionType.RESPAWN) {
             var spawnPoint = player.getSpawnPoint();
             var dimension = spawnPoint.dimension();

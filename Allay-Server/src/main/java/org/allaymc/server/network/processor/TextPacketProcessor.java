@@ -13,7 +13,7 @@ import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
  */
 public class TextPacketProcessor extends PacketProcessor<TextPacket> {
     @Override
-    public void handle(EntityPlayer player, TextPacket pk) {
+    public void handleSync(EntityPlayer player, TextPacket pk) {
         if (pk.getType() == TextPacket.Type.CHAT) {
             var message = "<" + player.getDisplayName() + "> " + pk.getMessage();
             Server.getInstance().broadcastMessage(message);

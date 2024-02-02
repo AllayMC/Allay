@@ -9,7 +9,7 @@ import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
 public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
 
     @Override
-    public void handle(EntityPlayer player, RespawnPacket packet) {
+    public void handleSync(EntityPlayer player, RespawnPacket packet) {
         if (packet.getState() != RespawnPacket.State.CLIENT_READY) return;
 
         var respawnPacket = new RespawnPacket();

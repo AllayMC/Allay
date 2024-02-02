@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.component.player;
 
-import io.netty.util.internal.PlatformDependent;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
@@ -31,7 +30,6 @@ import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
-import org.allaymc.server.network.PacketProcessor;
 import org.allaymc.server.network.PacketProcessorHolder;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -54,7 +52,6 @@ import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
 import java.util.List;
-import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -107,7 +104,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void handleDataPacket(BedrockPacket packet) {
         var processor = packetProcessorHolder.getProcessor(packet);
         // processor won't be null as we have checked it the time it arrived
-        processor.handle(player, packet);
+        processor.handleSync(player, packet);
     }
 
     @Override
@@ -148,12 +145,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     log.warn("Received a packet without packet handler: " + packet);
                     return PacketSignal.HANDLED;
                 }
-                if (processor.isAsync(player, packet)) {
-                    processor.handle(player, packet);
-                } else {
+                if (processor.handleAsync(player, packet) != PacketSignal.HANDLED) {
                     var world = player.getWorld();
                     Preconditions.checkNotNull(world, "Player is handling sync packet who is not in any world");
-                    world.handleSyncPacket(player, packet);
+                    world.addSyncPacketToQueue(player, packet);
                 }
                 return PacketSignal.HANDLED;
             }
