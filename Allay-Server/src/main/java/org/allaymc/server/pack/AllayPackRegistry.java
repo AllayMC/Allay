@@ -38,6 +38,9 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
 
     public AllayPackRegistry() {
         super(null, i -> new HashMap<>());
+        // Just left a '*' here, if we put in exact game version
+        // It is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
+        this.packStack.setGameVersion("*");
         this.init();
     }
 
@@ -139,9 +142,6 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
         this.packStack.setForcedToAccept(forceResourcePacks);
         this.packStack.getBehaviorPacks().clear();
         this.packStack.getResourcePacks().clear();
-        // Just left a '*' here, if we put in exact game version
-        // It is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
-        this.packStack.setGameVersion("*");
 
         for (var pack : this.getContent().values()) {
             if (pack.getType() == Pack.Type.RESOURCES) {
