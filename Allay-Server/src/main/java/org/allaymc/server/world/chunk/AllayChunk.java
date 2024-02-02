@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSets;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -25,7 +24,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Predicate;
 
@@ -50,7 +48,8 @@ public class AllayChunk implements Chunk {
         this.heightAndBiomeLock = new StampedLock();
         this.lightLock = new StampedLock();
         this.chunkPacketQueue = PlatformDependent.newMpscQueue();
-        this.chunkLoaders = ObjectSets.synchronize(new ObjectOpenHashSet<>());
+        // No need to use concurrent-safe set as addChunkLoader() & removeChunkLoader() are only used in AllayChunkService which is single-thread
+        this.chunkLoaders = new ObjectOpenHashSet<>();
     }
 
     private static void checkXZ(int x, int z) {

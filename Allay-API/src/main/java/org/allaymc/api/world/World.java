@@ -64,7 +64,7 @@ public interface World {
     void close();
 
     @ApiStatus.Internal
-    void viewTime(Collection<EntityPlayer> players);
+    void sendTime(Collection<EntityPlayer> players);
 
     @ApiStatus.Internal
     void tickTime(long tickNumber);
