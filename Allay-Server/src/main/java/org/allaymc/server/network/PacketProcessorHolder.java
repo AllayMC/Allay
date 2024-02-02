@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.*;
+import org.allaymc.server.network.processor.login.*;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
@@ -28,8 +29,18 @@ public final class PacketProcessorHolder {
     }
 
     public static void registerDefaultPacketProcessors(PacketProcessorHolder holder) {
+        // Disconnect processor
         holder.setDisconnectProcessor(Server.getInstance()::onDisconnect);
 
+        // Login packet processors
+        holder.registerProcessor(new RequestNetworkSettingsPacketProcessor());
+        holder.registerProcessor(new LoginPacketProcessor());
+        holder.registerProcessor(new ClientToServerHandshakePacketProcessor());
+        holder.registerProcessor(new ResourcePackClientResponsePacketProcessor());
+        holder.registerProcessor(new SetLocalPlayerAsInitializedPacketProcessor());
+        holder.registerProcessor(new ResourcePackChunkRequestPacketProcessor());
+
+        // Common packet processors
         holder.registerProcessor(new AnimatePacketProcessor());
         holder.registerProcessor(new BlockPickRequestPacketProcessor());
         holder.registerProcessor(new CommandRequestPacketProcessor());

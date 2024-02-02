@@ -38,10 +38,10 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
     }
 
     @Override
-    public void handleSync(EntityPlayer player, ItemStackRequestPacket pk) {
+    public void handleSync(EntityPlayer player, ItemStackRequestPacket packet) {
         List<ItemStackResponse> encodedResponses = new LinkedList<>();
         label:
-        for (var request : pk.getRequests()) {
+        for (var request : packet.getRequests()) {
             // It is possible to have two same type actions in one request!
             var responses = new LinkedList<ActionResponse>();
             // Indicate that subsequent destroy action do not return a response

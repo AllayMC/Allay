@@ -12,9 +12,9 @@ import org.cloudburstmc.protocol.bedrock.packet.RequestChunkRadiusPacket;
  */
 public class RequestChunkRadiusPacketProcessor extends PacketProcessor<RequestChunkRadiusPacket> {
     @Override
-    public void handleSync(EntityPlayer player, RequestChunkRadiusPacket pk) {
-        var radius = pk.getRadius();
-        var maxRadius = pk.getMaxRadius();
+    public void handleSync(EntityPlayer player, RequestChunkRadiusPacket packet) {
+        var radius = packet.getRadius();
+        var maxRadius = packet.getMaxRadius();
         if (radius > maxRadius) {
             radius = maxRadius;
         }

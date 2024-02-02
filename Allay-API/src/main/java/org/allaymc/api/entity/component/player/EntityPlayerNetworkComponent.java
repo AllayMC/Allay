@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.component.player;
 
-import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.data.DeviceInfo;
+import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
@@ -19,6 +19,9 @@ import java.util.UUID;
  */
 public interface EntityPlayerNetworkComponent extends EntityComponent {
     LoginData getLoginData();
+
+    @ApiStatus.Internal
+    void setLoginData(LoginData loginData);
 
     default String getXUID() {
         return getLoginData().getXuid();
@@ -56,8 +59,13 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     boolean isNetworkEncryptionEnabled();
 
+    @ApiStatus.Internal
+    void setNetworkEncryptionEnabled(boolean enabled);
 
     SecretKey getEncryptionSecretKey();
+
+    @ApiStatus.Internal
+    void setEncryptionSecretKey(SecretKey secretKey);
 
     @ApiStatus.Internal
     void handleDisconnect();
@@ -67,6 +75,9 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
      * (This represents whether the player's client can see the world and proceed with gameplay.)
      */
     boolean isInitialized();
+
+    @ApiStatus.Internal
+    void setInitialized();
 
     boolean isLoggedIn();
 
@@ -80,4 +91,10 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     @ApiStatus.Internal
     void onChunkInRangeSent();
+
+    @ApiStatus.Internal
+    void initializePlayer();
+
+    @ApiStatus.Internal
+    void completeLogin();
 }

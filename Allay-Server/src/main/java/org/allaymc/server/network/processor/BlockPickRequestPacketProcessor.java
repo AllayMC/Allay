@@ -17,14 +17,14 @@ import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;
 @Slf4j
 public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRequestPacket> {
     @Override
-    public void handleSync(EntityPlayer player, BlockPickRequestPacket pk) {
+    public void handleSync(EntityPlayer player, BlockPickRequestPacket packet) {
         if (player.getGameType() != GameType.CREATIVE) {
             log.warn("Player " + player.getOriginName() + " tried to pick block in non-creative mode!");
             return;
         }
-        var pos = pk.getBlockPosition();
+        var pos = packet.getBlockPosition();
         // TODO: includeBlockEntityData
-        var includeBlockEntityData = pk.isAddUserData();
+        var includeBlockEntityData = packet.isAddUserData();
         var block = player.getLocation().dimension().getBlockState(pos.getX(), pos.getY(), pos.getZ());
         if (block.getBlockType() == BlockAirBehavior.AIR_TYPE) {
             log.warn("Player " + player.getOriginName() + " tried to pick air!");

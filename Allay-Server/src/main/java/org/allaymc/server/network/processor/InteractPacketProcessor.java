@@ -13,8 +13,8 @@ import org.cloudburstmc.protocol.bedrock.packet.InteractPacket;
  */
 public class InteractPacketProcessor extends PacketProcessor<InteractPacket> {
     @Override
-    public void handleSync(EntityPlayer player, InteractPacket pk) {
-        switch (pk.getAction()) {
+    public void handleSync(EntityPlayer player, InteractPacket packet) {
+        switch (packet.getAction()) {
             case OPEN_INVENTORY -> {
                 player.getContainer(FullContainerType.PLAYER_INVENTORY).addViewer(player);
             }

@@ -69,17 +69,17 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     @Override
-    public void handleSync(EntityPlayer player, PlayerAuthInputPacket pk) {
+    public void handleSync(EntityPlayer player, PlayerAuthInputPacket packet) {
         if (notReadyForInput(player)) return;
-        handleBlockAction(player, pk.getPlayerActions());
-        handleInputData(player, pk.getInputData());
+        handleBlockAction(player, packet.getPlayerActions());
+        handleInputData(player, packet.getInputData());
     }
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket pk) {
+    public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket packet) {
         if (notReadyForInput(player)) return PacketSignal.UNHANDLED;
         // The pos which client sends to the server is higher than the actual coordinates (one base offset)
-        handleMovement(player, pk.getPosition().sub(0, player.getBaseOffset(), 0), pk.getRotation());
+        handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
         return PacketSignal.UNHANDLED;
     }
 

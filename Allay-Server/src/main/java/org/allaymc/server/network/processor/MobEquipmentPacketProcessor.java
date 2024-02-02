@@ -12,8 +12,8 @@ import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
  */
 public class MobEquipmentPacketProcessor extends PacketProcessor<MobEquipmentPacket> {
     @Override
-    public void handleSync(EntityPlayer player, MobEquipmentPacket pk) {
-        var handSlot = pk.getHotbarSlot();
+    public void handleSync(EntityPlayer player, MobEquipmentPacket packet) {
+        var handSlot = packet.getHotbarSlot();
         player.setHandSlot(handSlot);
     }
 

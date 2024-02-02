@@ -35,17 +35,17 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     public static final int ITEM_USE_ON_ENTITY_ATTACK = 1;
 
     @Override
-    public void handleSync(EntityPlayer player, InventoryTransactionPacket pk) {
-        var transactionType = pk.getTransactionType();
+    public void handleSync(EntityPlayer player, InventoryTransactionPacket packet) {
+        var transactionType = packet.getTransactionType();
         switch (transactionType) {
             case ITEM_USE -> {
-                Vector3ic blockPos = MathUtils.CBVecToJOMLVec(pk.getBlockPosition());
-                Vector3fc clickPos = MathUtils.CBVecToJOMLVec(pk.getClickPosition());
-                BlockFace blockFace = BlockFace.fromId(pk.getBlockFace());
+                Vector3ic blockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
+                Vector3fc clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
+                BlockFace blockFace = BlockFace.fromId(packet.getBlockFace());
                 var inv = player.getContainer(FullContainerType.PLAYER_INVENTORY);
                 var itemStack = inv.getItemInHand();
                 var world = player.getLocation().dimension();
-                switch (pk.getActionType()) {
+                switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
                         var placePos = blockFace.offsetPos(blockPos);
                         if (!canInteract()) {
@@ -88,7 +88,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
             }
             case NORMAL -> {
-                for (var action : pk.getActions()) {
+                for (var action : packet.getActions()) {
                     if (action.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) {
                         if (action.getSource().getFlag().equals(InventorySource.Flag.DROP_ITEM)) {
                             //Do not ask me why mojang still use the old item transaction pk even the server-auth inv was enabled
@@ -99,9 +99,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
             }
             case ITEM_USE_ON_ENTITY -> {
-                var target = player.getDimension().getEntityByUniqueId(pk.getRuntimeEntityId());
-                Preconditions.checkNotNull(target, "Player " + player.getOriginName() + " try to attack a entity which doesn't exist! Entity id: " + pk.getRuntimeEntityId());
-                switch (pk.getActionType()) {
+                var target = player.getDimension().getEntityByUniqueId(packet.getRuntimeEntityId());
+                Preconditions.checkNotNull(target, "Player " + player.getOriginName() + " try to attack a entity which doesn't exist! Entity id: " + packet.getRuntimeEntityId());
+                switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
                         // TODO
                     }

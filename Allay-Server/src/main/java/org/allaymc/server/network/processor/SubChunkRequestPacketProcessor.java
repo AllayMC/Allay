@@ -61,11 +61,11 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
     }
 
     @Override
-    public void handleSync(EntityPlayer player, SubChunkRequestPacket pk) {
+    public void handleSync(EntityPlayer player, SubChunkRequestPacket packet) {
         List<SubChunkData> responseData = new ArrayList<>();
-        var centerPosition = pk.getSubChunkPosition();
-        var positionOffsets = pk.getPositionOffsets();
-        DimensionInfo dimensionInfo = DimensionInfo.of(pk.getDimension());
+        var centerPosition = packet.getSubChunkPosition();
+        var positionOffsets = packet.getPositionOffsets();
+        DimensionInfo dimensionInfo = DimensionInfo.of(packet.getDimension());
         for (var offset : positionOffsets) {
             int sectionY = centerPosition.getY() + offset.getY()/* - (dimensionInfo.minSectionY())*/;
 
@@ -137,7 +137,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         }
         SubChunkPacket subChunkPacket = new SubChunkPacket();
         subChunkPacket.setSubChunks(responseData);
-        subChunkPacket.setDimension(pk.getDimension());
+        subChunkPacket.setDimension(packet.getDimension());
         subChunkPacket.setCenterPosition(centerPosition);
         player.sendPacket(subChunkPacket);
     }

@@ -12,9 +12,9 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
  */
 public class AnimatePacketProcessor extends PacketProcessor<AnimatePacket> {
     @Override
-    public void handleSync(EntityPlayer player, AnimatePacket pk) {
-        if (pk.getAction() == AnimatePacket.Action.SWING_ARM) {
-            player.getCurrentChunk().addChunkPacket(pk, chunkLoader -> chunkLoader != player);
+    public void handleSync(EntityPlayer player, AnimatePacket packet) {
+        if (packet.getAction() == AnimatePacket.Action.SWING_ARM) {
+            player.getCurrentChunk().addChunkPacket(packet, chunkLoader -> chunkLoader != player);
         }
     }
 
