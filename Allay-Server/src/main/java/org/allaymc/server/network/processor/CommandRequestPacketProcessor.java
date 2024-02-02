@@ -2,11 +2,11 @@ package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.CommandRequestPacket;
 
-public class CommandRequestPacketProcessor extends DataPacketProcessor<CommandRequestPacket> {
+public class CommandRequestPacketProcessor extends PacketProcessor<CommandRequestPacket> {
 
     @Override
     public void handle(EntityPlayer player, CommandRequestPacket pk) {

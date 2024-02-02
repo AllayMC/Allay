@@ -2,14 +2,13 @@ package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.server.Server;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
 
-public class PlayerActionPacketProcessor extends DataPacketProcessor<PlayerActionPacket> {
+public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
 
     @Override
     public void handle(EntityPlayer player, PlayerActionPacket packet) {

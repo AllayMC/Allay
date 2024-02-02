@@ -31,8 +31,8 @@ import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
-import org.allaymc.server.network.DataPacketProcessor;
-import org.allaymc.server.network.DataPacketProcessorHolder;
+import org.allaymc.server.network.PacketProcessor;
+import org.allaymc.server.network.PacketProcessorHolder;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -49,6 +49,7 @@ import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
@@ -78,8 +79,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected final AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
 
     protected final Server server = Server.getInstance();
-    protected final Queue<BedrockPacket> packetQueue;
-    protected final DataPacketProcessorHolder dataPacketProcessorHolder;
+    protected final PacketProcessorHolder packetProcessorHolder;
 
     protected final BedrockPacketHandler loginPacketHandler = new AllayClientLoginPacketHandler();
 
@@ -100,31 +100,23 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected BedrockServerSession session;
 
     public EntityPlayerNetworkComponentImpl() {
-        packetQueue = PlatformDependent.newSpscQueue();
-        dataPacketProcessorHolder = new DataPacketProcessorHolder();
-        DataPacketProcessorHolder.registerDefaultPacketProcessors(dataPacketProcessorHolder);
+        packetProcessorHolder = new PacketProcessorHolder();
     }
 
     @Override
-    public void handleDataPacket() {
-        BedrockPacket pk;
-        while ((pk = this.packetQueue.poll()) != null) {
-            DataPacketProcessor<BedrockPacket> processor = this.dataPacketProcessorHolder.getProcessor(pk);
-            if (processor == null) {
-                log.warn("Received packet without a packet handler for {}: {}", session.getSocketAddress(), pk);
-            } else {
-                processor.handle(player, pk);
-            }
-        }
-        handleDisconnect();
+    public void handleDataPacket(BedrockPacket packet) {
+        var processor = packetProcessorHolder.getProcessor(packet);
+        // processor won't be null as we have checked it the time it arrived
+        processor.handle(player, packet);
     }
 
+    @Override
     public void handleDisconnect() {
         // Before client disconnect, there may be other packets which are not handled
         // So we handle disconnect after we handled all other packets
         if (disconnectReason != null) {
             // Client is disconnected from server
-            dataPacketProcessorHolder.getDisconnectProcessor().accept(player, disconnectReason);
+            packetProcessorHolder.getDisconnectProcessor().accept(player, disconnectReason);
             disconnectReason = null;
         }
     }
@@ -151,7 +143,18 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
                 if (loginPacketHandler.handlePacket(packet) == PacketSignal.HANDLED) return PacketSignal.HANDLED;
-                packetQueue.add(packet);
+                var processor = packetProcessorHolder.getProcessor(packet);
+                if (processor == null) {
+                    log.warn("Received a packet without packet handler: " + packet);
+                    return PacketSignal.HANDLED;
+                }
+                if (processor.isAsync(player, packet)) {
+                    processor.handle(player, packet);
+                } else {
+                    var world = player.getWorld();
+                    Preconditions.checkNotNull(world, "Player is handling sync packet who is not in any world");
+                    world.handleSyncPacket(player, packet);
+                }
                 return PacketSignal.HANDLED;
             }
 

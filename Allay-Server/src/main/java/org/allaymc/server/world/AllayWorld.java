@@ -1,6 +1,7 @@
 package org.allaymc.server.world;
 
 import com.google.common.base.Preconditions;
+import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,13 +14,11 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.GameLoop;
 import org.allaymc.server.scheduler.AllayScheduler;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Allay Project 2023/7/1
@@ -28,6 +27,8 @@ import java.util.Map;
  */
 @Slf4j
 public class AllayWorld implements World {
+    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet) {}
+    protected final Queue<PacketQueueEntry> packetQueue = PlatformDependent.newMpscQueue();
     @Getter
     protected final WorldStorage worldStorage;
     @Getter
@@ -62,6 +63,25 @@ public class AllayWorld implements World {
     }
 
     @Override
+    public void networkTick() {
+        PacketQueueEntry entry;
+        while ((entry = packetQueue.poll()) != null) {
+            entry.player.handleDataPacket(entry.packet);
+        }
+        handlePlayersDisconnect();
+    }
+
+    @Override
+    public void handlePlayersDisconnect() {
+        dimensionMap.values().forEach(dim -> dim.getPlayers().forEach(EntityPlayer::handleDisconnect));
+    }
+
+    @Override
+    public void handleSyncPacket(EntityPlayer player, BedrockPacket packet) {
+
+    }
+
+    @Override
     public long getTick() {
         return gameLoop.getTick();
     }
@@ -74,7 +94,7 @@ public class AllayWorld implements World {
     @Override
     public void tick(long currentTick) {
         // Handle data packet firstly
-        getDimensions().values().forEach(Dimension::networkTick);
+        networkTick();
         syncData();
         tickTime(currentTick);
         scheduler.tick();
@@ -150,7 +170,7 @@ public class AllayWorld implements World {
             // Players were disconnected in Server::shutdown()
             // However, the log off related logic is deferred until the world main thread executes, which has stopped at this time
             // So we should handle player disconnect here
-            ((AllayDimension) dimension).handlePlayersDisconnect();
+            handlePlayersDisconnect();
             dimension.getChunkService().unloadAllChunks();
         });
         saveWorldData();

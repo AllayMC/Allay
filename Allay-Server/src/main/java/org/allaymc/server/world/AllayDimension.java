@@ -2,7 +2,6 @@ package org.allaymc.server.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
@@ -40,7 +39,6 @@ public class AllayDimension implements Dimension {
     protected final World world;
     protected final Set<EntityPlayer> players;
 
-
     public AllayDimension(World world, Generator generator, DimensionInfo dimensionInfo) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
@@ -50,15 +48,6 @@ public class AllayDimension implements Dimension {
         this.entityUpdateService = new AllayEntityUpdateService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.players = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    }
-
-    @Override
-    public void networkTick() {
-        players.forEach(EntityPlayerNetworkComponent::handleDataPacket);
-    }
-
-    public void handlePlayersDisconnect() {
-        players.forEach(EntityPlayer::handleDisconnect);
     }
 
     @Override

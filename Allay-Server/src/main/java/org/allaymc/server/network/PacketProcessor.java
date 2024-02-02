@@ -9,8 +9,12 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
  *
  * @author Cool_Loong
  */
-public abstract class DataPacketProcessor<T extends BedrockPacket> {
+public abstract class PacketProcessor<T extends BedrockPacket> {
     public abstract void handle(EntityPlayer player, T pk);
+
+    public boolean isAsync(EntityPlayer player, T pk) {
+        return false;
+    }
 
     public abstract BedrockPacketType getPacketType();
 }

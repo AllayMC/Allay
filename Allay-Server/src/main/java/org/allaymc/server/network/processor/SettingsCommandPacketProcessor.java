@@ -2,7 +2,7 @@ package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.SettingsCommandPacket;
 
@@ -11,7 +11,7 @@ import org.cloudburstmc.protocol.bedrock.packet.SettingsCommandPacket;
  *
  * @author daoge_cmd
  */
-public class SettingsCommandPacketProcessor extends DataPacketProcessor<SettingsCommandPacket> {
+public class SettingsCommandPacketProcessor extends PacketProcessor<SettingsCommandPacket> {
     @Override
     public void handle(EntityPlayer player, SettingsCommandPacket pk) {
         Server.getInstance().getCommandRegistry().execute(player, pk.getCommand().substring(1));

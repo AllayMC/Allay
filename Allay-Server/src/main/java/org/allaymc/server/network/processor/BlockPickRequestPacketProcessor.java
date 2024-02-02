@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;
@@ -15,7 +15,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;
  * @author Cool_Loong
  */
 @Slf4j
-public class BlockPickRequestPacketProcessor extends DataPacketProcessor<BlockPickRequestPacket> {
+public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRequestPacket> {
     @Override
     public void handle(EntityPlayer player, BlockPickRequestPacket pk) {
         if (player.getGameType() != GameType.CREATIVE) {

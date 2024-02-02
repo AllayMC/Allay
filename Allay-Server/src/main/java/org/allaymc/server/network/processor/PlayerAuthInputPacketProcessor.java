@@ -3,7 +3,7 @@ package org.allaymc.server.network.processor;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
@@ -19,7 +19,7 @@ import java.util.Set;
  *
  * @author Cool_Loong
  */
-public class PlayerAuthInputPacketProcessor extends DataPacketProcessor<PlayerAuthInputPacket> {
+public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
     protected static void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
         var world = player.getLocation().dimension();

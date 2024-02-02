@@ -2,7 +2,7 @@ package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.SetDefaultGameTypePacket;
@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.packet.SetDefaultGameTypePacket;
  *
  * @author IWareQ
  */
-public class SetDefaultGameTypePacketProcessor extends DataPacketProcessor<SetDefaultGameTypePacket> {
+public class SetDefaultGameTypePacketProcessor extends PacketProcessor<SetDefaultGameTypePacket> {
 
     @Override
     public void handle(EntityPlayer player, SetDefaultGameTypePacket pk) {

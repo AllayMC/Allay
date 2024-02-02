@@ -11,7 +11,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkSection;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
@@ -32,7 +32,7 @@ import java.util.Objects;
  * @author Cool_Loong
  */
 @Slf4j
-public class SubChunkRequestPacketProcessor extends DataPacketProcessor<SubChunkRequestPacket> {
+public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequestPacket> {
     private static final ByteBuf EMPTY_BUFFER = Unpooled.wrappedBuffer(new byte[0]);
 
     // This collection is temporarily disabled because the data in the collection has not been cleaned up, and there is a serious memory leak in the case of a large number of chunk sending

@@ -20,6 +20,12 @@ import java.util.Map;
  */
 public interface World {
 
+    void handlePlayersDisconnect();
+
+    void handleSyncPacket(EntityPlayer player, BedrockPacket packet);
+
+    void networkTick();
+
     Thread getThread();
 
     long getTick();

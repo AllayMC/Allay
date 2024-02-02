@@ -16,14 +16,18 @@ import java.util.function.BiConsumer;
  *
  * @author Cool_Loong
  */
-public final class DataPacketProcessorHolder {
+public final class PacketProcessorHolder {
 
-    private final EnumMap<BedrockPacketType, DataPacketProcessor<BedrockPacket>> processors = new EnumMap<>(BedrockPacketType.class);
+    private final EnumMap<BedrockPacketType, PacketProcessor<BedrockPacket>> processors = new EnumMap<>(BedrockPacketType.class);
     @Getter
     @Setter
     private BiConsumer<EntityPlayer, String> disconnectProcessor;
 
-    public static void registerDefaultPacketProcessors(DataPacketProcessorHolder holder) {
+    public PacketProcessorHolder() {
+        registerDefaultPacketProcessors(this);
+    }
+
+    public static void registerDefaultPacketProcessors(PacketProcessorHolder holder) {
         holder.setDisconnectProcessor(Server.getInstance()::onDisconnect);
 
         holder.registerProcessor(new AnimatePacketProcessor());
@@ -45,12 +49,12 @@ public final class DataPacketProcessorHolder {
         holder.registerProcessor(new SettingsCommandPacketProcessor());
     }
 
-    public DataPacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
+    public PacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
         return processors.get(packet.getPacketType());
     }
 
     @SuppressWarnings("unchecked")
-    public void registerProcessor(DataPacketProcessor<? extends BedrockPacket> processor) {
-        processors.put(processor.getPacketType(), (DataPacketProcessor<BedrockPacket>) processor);
+    public void registerProcessor(PacketProcessor<? extends BedrockPacket> processor) {
+        processors.put(processor.getPacketType(), (PacketProcessor<BedrockPacket>) processor);
     }
 }

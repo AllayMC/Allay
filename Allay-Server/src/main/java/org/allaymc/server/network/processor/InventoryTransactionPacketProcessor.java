@@ -9,7 +9,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.MathUtils;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryTransactionPacket;
@@ -23,7 +23,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
  *
  * @author Cool_Loong
  */
-public class InventoryTransactionPacketProcessor extends DataPacketProcessor<InventoryTransactionPacket> {
+public class InventoryTransactionPacketProcessor extends PacketProcessor<InventoryTransactionPacket> {
     protected long spamCheckTime;
 
     public static final int ITEM_USE_CLICK_BLOCK = 0;

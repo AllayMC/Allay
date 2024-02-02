@@ -1,13 +1,12 @@
 package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.utils.MathUtils;
-import org.allaymc.server.network.DataPacketProcessor;
+import org.allaymc.server.network.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
 
-public class RespawnPacketProcessor extends DataPacketProcessor<RespawnPacket> {
+public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
 
     @Override
     public void handle(EntityPlayer player, RespawnPacket packet) {
