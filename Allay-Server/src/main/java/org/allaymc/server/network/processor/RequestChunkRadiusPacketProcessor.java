@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.server.network.PacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.RequestChunkRadiusPacket;
 

@@ -9,7 +9,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.MathUtils;
-import org.allaymc.server.network.PacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryTransactionPacket;

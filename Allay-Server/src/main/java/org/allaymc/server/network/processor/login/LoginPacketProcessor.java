@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.network.processor.login.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;

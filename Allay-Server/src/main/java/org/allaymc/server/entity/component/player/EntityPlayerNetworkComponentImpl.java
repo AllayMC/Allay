@@ -26,11 +26,12 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
-import org.allaymc.server.network.PacketProcessorHolder;
+import org.allaymc.server.network.processor.AllayPacketProcessorHolder;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -75,7 +76,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
 
     protected final Server server = Server.getInstance();
-    protected final PacketProcessorHolder packetProcessorHolder;
+    @Getter
+    protected final PacketProcessorHolder packetProcessorHolder = new AllayPacketProcessorHolder();
 
     @Manager
     protected ComponentManager<EntityPlayer> manager;
@@ -95,10 +97,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     // It will be set while client disconnecting from server
     protected String disconnectReason;
     protected BedrockServerSession session;
-
-    public EntityPlayerNetworkComponentImpl() {
-        packetProcessorHolder = new PacketProcessorHolder();
-    }
 
     @Override
     public void handleDataPacket(BedrockPacket packet) {

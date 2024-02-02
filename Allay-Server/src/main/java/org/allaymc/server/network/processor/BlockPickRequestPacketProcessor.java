@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.server.network.PacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;

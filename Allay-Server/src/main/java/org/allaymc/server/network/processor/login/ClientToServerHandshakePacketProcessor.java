@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor.login;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.network.processor.login.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ClientToServerHandshakePacket;
 

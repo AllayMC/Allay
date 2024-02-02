@@ -1,10 +1,11 @@
-package org.allaymc.server.network;
+package org.allaymc.server.network.processor;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.network.processor.PacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.network.processor.*;
 import org.allaymc.server.network.processor.login.*;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -17,18 +18,18 @@ import java.util.function.BiConsumer;
  *
  * @author Cool_Loong
  */
-public final class PacketProcessorHolder {
+public class AllayPacketProcessorHolder implements PacketProcessorHolder {
 
     private final EnumMap<BedrockPacketType, PacketProcessor<BedrockPacket>> processors = new EnumMap<>(BedrockPacketType.class);
     @Getter
     @Setter
     private BiConsumer<EntityPlayer, String> disconnectProcessor;
 
-    public PacketProcessorHolder() {
+    public AllayPacketProcessorHolder() {
         registerDefaultPacketProcessors(this);
     }
 
-    public static void registerDefaultPacketProcessors(PacketProcessorHolder holder) {
+    protected void registerDefaultPacketProcessors(AllayPacketProcessorHolder holder) {
         // Disconnect processor
         holder.setDisconnectProcessor(Server.getInstance()::onDisconnect);
 

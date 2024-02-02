@@ -11,7 +11,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkSection;
-import org.allaymc.server.network.PacketProcessor;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;

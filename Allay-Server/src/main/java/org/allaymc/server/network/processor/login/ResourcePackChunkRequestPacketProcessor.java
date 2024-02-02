@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.network.processor.login.ILoginPacketProcessor;
 import org.allaymc.api.pack.PackRegistry;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkRequestPacket;
