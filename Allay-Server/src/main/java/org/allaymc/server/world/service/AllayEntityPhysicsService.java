@@ -319,7 +319,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var deltaX = mx;
         var collision = false;
-        if (!isValidEntityArea(extendX)) return EMPTY_FLOAT_BOOLEAN_PAIR;
+        if (notValidEntityArea(extendX)) return EMPTY_FLOAT_BOOLEAN_PAIR;
         var blocks = dimension.getCollidingBlocks(extendX);
         if (blocks != null) {
             collision = true;
@@ -362,7 +362,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var deltaZ = mz;
         var collision = false;
-        if (!isValidEntityArea(extendZ)) return EMPTY_FLOAT_BOOLEAN_PAIR;
+        if (notValidEntityArea(extendZ)) return EMPTY_FLOAT_BOOLEAN_PAIR;
         var blocks = dimension.getCollidingBlocks(extendZ);
         if (blocks != null) {
             collision = true;
@@ -408,7 +408,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         var deltaY = my;
         var onGround = false;
-        if (!isValidEntityArea(extendY))
+        if (notValidEntityArea(extendY))
             return EMPTY_FLOAT_BOOLEAN_PAIR;
         var blocks = dimension.getCollidingBlocks(extendY);
         if (blocks != null) {
@@ -435,10 +435,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     //Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
-    protected boolean isValidEntityArea(AABBf extendAABB) {
-        return extendAABB.minY >= dimension.getDimensionInfo().minHeight() ||
-                dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) ||
-                dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
+    protected boolean notValidEntityArea(AABBf extendAABB) {
+        return !(extendAABB.minY >= dimension.getDimensionInfo().minHeight()) &&
+               !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
+               !dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
     }
 
     protected boolean tryStepping(Vector3f pos, AABBf aabb, float stepHeight, boolean positive, boolean xAxis) {
