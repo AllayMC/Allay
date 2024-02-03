@@ -4,6 +4,7 @@ import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorFactory;
+import org.allaymc.server.world.generator.empty.VoidWorldGenerator;
 import org.allaymc.server.world.generator.flat.FlatWorldGenerator;
 import org.allaymc.server.world.generator.jegen.JeGeneratorLoader;
 
@@ -23,6 +24,7 @@ public class AllayWorldGeneratorFactory extends SimpleMappedRegistry<String, Fun
     }
 
     protected void init() {
+        register("VOID", unused -> new VoidWorldGenerator());
         register("FLAT", FlatWorldGenerator::new);
         // TODO: Pass preset to je generator loader
         register("JEGEN_OVERWORLD", preset -> JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD));
