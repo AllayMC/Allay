@@ -32,7 +32,7 @@ public interface Command {
     @UnmodifiableView
     Set<CommandData.Flag> getFlags();
 
-    String getPermission();
+    List<String> getPermissions();
 
     CommandResult execute(CommandSender sender, String[] args);
 

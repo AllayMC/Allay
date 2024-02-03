@@ -1,5 +1,6 @@
 package org.allaymc.api.command;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
@@ -18,23 +19,27 @@ import static org.cloudburstmc.protocol.bedrock.data.command.CommandData.Flag.NO
  */
 public abstract class BaseCommand implements Command {
     @Getter
-    protected String name;
+    protected final String name;
     @Getter
     @MayContainTrKey
-    protected String description;
+    protected final String description;
     @Getter
-    protected String permission;
-    protected Set<CommandData.Flag> flags = new HashSet<>();
-    protected List<String> aliases = new ArrayList<>();
-    protected List<CommandParamData[]> overloads = new ArrayList<>();
+    protected final List<String> permissions;
+    protected final Set<CommandData.Flag> flags = new HashSet<>();
+    protected final List<String> aliases = new ArrayList<>();
+    protected final List<CommandParamData[]> overloads = new ArrayList<>();
 
-    public BaseCommand(String name, @MayContainTrKey String description, String permission) {
+    public BaseCommand(String name, @MayContainTrKey String description) {
+        this(name, description, Lists.newArrayList(COMMAND_PERM_PREFIX + name));
+    }
+
+    public BaseCommand(String name, @MayContainTrKey String description, List<String> permissions) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(description);
-        Objects.requireNonNull(permission);
+        Objects.requireNonNull(permissions);
         this.name = name;
         this.description = description;
-        this.permission = permission;
+        this.permissions = permissions;
         // We just add NOT_CHEAT flag to all commands as the available_commands_packet is unique to each player
         flags.add(NOT_CHEAT);
     }

@@ -14,7 +14,7 @@ public abstract class SimpleCommand extends BaseCommand {
     protected CommandTree commandTree;
 
     public SimpleCommand(String name, @MayContainTrKey String description) {
-        super(name, description, COMMAND_PERM_PREFIX + name);
+        super(name, description);
         this.commandTree = CommandTree.create(this);
         prepareCommandTree(this.commandTree);
         buildOverloadsFromCommandTree();
