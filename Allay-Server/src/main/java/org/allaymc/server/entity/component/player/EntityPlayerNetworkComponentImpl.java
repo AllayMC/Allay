@@ -168,7 +168,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void onChunkInRangeSent() {
         if (doFirstSpawnChunkThreshold.get() > 0) {
             if (doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
-                doFirstSpawnPlayer();
+                doFirstSpawn();
             }
         }
     }
@@ -192,7 +192,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         hideDisconnectReason = hideReason;
     }
 
-    protected void doFirstSpawnPlayer() {
+    protected void doFirstSpawn() {
         // Load EntityPlayer's NBT
         player.loadNBT(server.getPlayerStorage().readPlayerData(player).getPlayerNBT());
 
