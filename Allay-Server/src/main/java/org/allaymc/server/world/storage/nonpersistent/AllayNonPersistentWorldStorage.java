@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
  * Allay Project 2023/7/1
  *
  * @author daoge_cmd
+ *
+ * TODO: optimize it for better memory footprint
  */
 @NotThreadSafe
 public class AllayNonPersistentWorldStorage implements WorldStorage {
