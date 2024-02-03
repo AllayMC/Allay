@@ -15,3 +15,6 @@
 /resource_packs/
 /players/
 /worlds/
+/caches/
+/logs/
+/server-settings.yml
