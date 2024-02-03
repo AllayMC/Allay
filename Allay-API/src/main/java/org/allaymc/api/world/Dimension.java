@@ -41,6 +41,8 @@ public interface Dimension {
 
     void tick(long currentTick);
 
+    void close();
+
     Generator getGenerator();
 
     ChunkService getChunkService();

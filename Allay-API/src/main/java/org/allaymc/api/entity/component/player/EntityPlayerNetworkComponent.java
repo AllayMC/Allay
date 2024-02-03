@@ -76,6 +76,8 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
      */
     boolean isInitialized();
 
+    boolean shouldHandleDisconnect();
+
     @ApiStatus.Internal
     void setInitialized();
 

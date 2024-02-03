@@ -23,7 +23,8 @@ public final class GameLoop {
     private final Runnable onStop;
     @Getter
     private final int loopCountPerSec;
-    private final float[] tickAverage = new float[20];
+    private final float[] tickSummary = new float[20];
+    private final float[] MSTPSummary = new float[20];
     @Getter
     private long tick;
 
@@ -34,7 +35,8 @@ public final class GameLoop {
         this.onTick = onTick;
         this.onStop = onStop;
         this.loopCountPerSec = loopCountPerSec;
-        Arrays.fill(tickAverage, 20f);
+        Arrays.fill(tickSummary, 20f);
+        Arrays.fill(MSTPSummary, 0f);
     }
 
     public static GameLoopBuilder builder() {
@@ -43,27 +45,34 @@ public final class GameLoop {
 
     public float getTps() {
         float sum = 0;
-        int count = this.tickAverage.length;
-        for (float aTickAverage : this.tickAverage) {
-            sum += aTickAverage;
+        int count = tickSummary.length;
+        for (float tick : tickSummary) {
+            sum += tick;
         }
-        return (float) MathUtils.round(sum / count, 2);
+        return sum / count;
+    }
+
+    public float getMSTP() {
+        float sum = 0;
+        int count = MSTPSummary.length;
+        for (float mstp : MSTPSummary) {
+            sum += mstp;
+        }
+        return sum / count;
     }
 
     public void startLoop() {
         onStart.run();
         long nanoSleepTime = 0;
         long idealNanoSleepPerTick = 1000000000 / loopCountPerSec;
-        while (this.isRunning.get()) {
+        while (isRunning.get()) {
             // Figure out how long it took to tick
             long startTickTime = System.nanoTime();
             onTick.accept(this);
             tick++;
             long timeTakenToTick = System.nanoTime() - startTickTime;
-            if (timeTakenToTick == 0) timeTakenToTick = 1;
-            float tick = Math.max(0, Math.min(20, 1000000000 / timeTakenToTick));
-            System.arraycopy(this.tickAverage, 1, this.tickAverage, 0, this.tickAverage.length - 1);
-            this.tickAverage[this.tickAverage.length - 1] = tick;
+            updateMSTP(timeTakenToTick, MSTPSummary);
+            updateTPS(timeTakenToTick);
 
             long sumOperateTime = System.nanoTime() - startTickTime;
             // Sleep for the ideal time but take into account the time spent running the tick
@@ -88,8 +97,19 @@ public final class GameLoop {
         onStop.run();
     }
 
+    private void updateTPS(long timeTakenToTick) {
+        float tick = Math.max(0, Math.min(20, 1000000000 / (timeTakenToTick == 0 ? 1 : timeTakenToTick)));
+        System.arraycopy(tickSummary, 1, tickSummary, 0, tickSummary.length - 1);
+        tickSummary[tickSummary.length - 1] = tick;
+    }
+
+    private void updateMSTP(float timeTakenToTick, float[] mstpSummary) {
+        System.arraycopy(mstpSummary, 1, mstpSummary, 0, mstpSummary.length - 1);
+        mstpSummary[mstpSummary.length - 1] = timeTakenToTick / 1000000f;
+    }
+
     public void stop() {
-        this.isRunning.set(false);
+        isRunning.set(false);
     }
 
     public boolean isRunning() {
