@@ -66,10 +66,6 @@ tasks.distZip {
     enabled = false
 }
 
-tasks.named<Delete>("clean") {
-    delete("logs", "caches")
-}
-
 tasks.sourcesJar {
     dependsOn("generateGitProperties")
 }

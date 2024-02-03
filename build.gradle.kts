@@ -36,9 +36,20 @@ tasks.prepareKotlinBuildScriptModel {
     enabled = true
 }
 
-tasks.withType<Delete> {
+//The build of the root module does not need to write logic,
+//and the build of the same name of all submodules will be automatically called
+tasks.register<DefaultTask>("buildFast") {
+    group = "alpha build"
+}
+
+tasks.build {
+    group = "alpha build"
+}
+
+tasks.clean {
+    group = "alpha build"
     enabled = true
-    delete("logs", "caches", "output", "server-settings.yml")
+    delete("logs", "caches", "output", "players", "server-settings.yml", "resource_packs", "run", "worlds")
 }
 
 subprojects {
@@ -50,12 +61,12 @@ subprojects {
     java.targetCompatibility = JavaVersion.VERSION_21
 
     repositories {
+        mavenLocal()
         mavenCentral()
+        maven("https://www.jitpack.io/")
         maven("https://repo.opencollab.dev/maven-releases/")
         maven("https://repo.opencollab.dev/maven-snapshots/")
-        maven("https://www.jitpack.io/")
         maven("https://storehouse.okaeri.eu/repository/maven-public/")
-        mavenLocal()
     }
 
     dependencies {
@@ -73,13 +84,32 @@ subprojects {
         withSourcesJar()
     }
 
+    tasks.register<DefaultTask>("buildFast") {
+        dependsOn(tasks.build)
+        group = "alpha build"
+        tasks["javadoc"].enabled = false
+        tasks["javadocJar"].enabled = false
+        tasks["sourcesJar"].enabled = false
+        tasks["compileTestJava"].enabled = false
+        tasks["processTestResources"].enabled = false
+        tasks["testClasses"].enabled = false
+        tasks["test"].enabled = false
+        tasks["check"].enabled = false
+    }
+
     tasks.build {
+        group = "alpha build"
         dependsOn("shadowJar")
+    }
+
+    tasks.clean {
+        group = "alpha build"
+        enabled = true
+        delete("logs", "caches", "output", "players", "server-settings.yml", "resource_packs", "run", "worlds")
     }
 
     // disable
     tasks.assemble {
-        group = ""
         enabled = false
     }
 

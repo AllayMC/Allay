@@ -2,4 +2,16 @@
 /.idea/
 **/build/
 **/bin/
+
+#runing output file
 /run/
+/Allay-Server/caches/
+/Allay-Server/logs/
+/Allay-Server/players/
+/Allay-Server/resource_packs/
+/Allay-Server/server-settings.yml
+/Allay-Server/worlds/
+/jegenerator/
+/resource_packs/
+/players/
+/worlds/
