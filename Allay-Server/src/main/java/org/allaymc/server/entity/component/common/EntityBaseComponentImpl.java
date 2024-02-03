@@ -305,11 +305,15 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         }
         if (this.location.dimension == target.dimension()) {
             // Teleporting in the current same dimension, and we just need to move the entity to the new coordination
-            setLocationAndCheckChunk(target);
-            broadcastMoveToViewers(target, true);
+            teleportInDimension(target);
         } else {
             teleportOverDimension(target);
         }
+    }
+
+    protected void teleportInDimension(Location3fc target) {
+        setLocationAndCheckChunk(target);
+        broadcastMoveToViewers(target, true);
     }
 
     protected void teleportOverDimension(Location3fc target) {

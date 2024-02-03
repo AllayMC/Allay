@@ -12,21 +12,27 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
     @Override
     public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet) {
-        if (packet.getAction() == PlayerActionType.RESPAWN) {
-            var spawnPoint = player.getSpawnPoint();
-            var dimension = spawnPoint.dimension();
-            dimension.getChunkService().getChunkImmediately(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
-            dimension.addPlayer(player, () -> {
-                player.teleport(new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), dimension));
-                player.setSprinting(false);
-                player.setSneaking(false);
-                player.removeAllEffects();
-                player.setHealth(player.getMaxHealth());
-                player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, (short) 400);
-            });
-            return PacketSignal.HANDLED;
-        }
-        return PacketSignal.UNHANDLED;
+        return switch (packet.getAction()) {
+            case RESPAWN -> {
+                var spawnPoint = player.getSpawnPoint();
+                var dimension = spawnPoint.dimension();
+                dimension.getChunkService().getChunkImmediately(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
+                dimension.addPlayer(player, () -> {
+                    player.teleport(new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), dimension));
+                    player.setSprinting(false);
+                    player.setSneaking(false);
+                    player.removeAllEffects();
+                    player.setHealth(player.getMaxHealth());
+                    player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, (short) 400);
+                });
+                yield PacketSignal.HANDLED;
+            }
+            case DIMENSION_CHANGE_SUCCESS -> {
+                player.sendDimensionChangeSuccess();
+                yield PacketSignal.HANDLED;
+            }
+            default -> PacketSignal.UNHANDLED;
+        };
     }
 
     @Override

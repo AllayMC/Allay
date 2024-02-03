@@ -10,6 +10,7 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.jetbrains.annotations.ApiStatus;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
 
@@ -96,4 +97,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
             setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
         }
     }
+
+    @ApiStatus.Internal
+    void sendDimensionChangeSuccess();
 }

@@ -71,7 +71,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
             HeightMapDataType hMapType = HeightMapDataType.NO_DATA;
             if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
-                log.info("Player " + player.getOriginName() + " requested sub chunk which is out of bounds");
+                log.warn("Player " + player.getOriginName() + " requested sub chunk which is out of bounds");
                 createSubChunkData(responseData, SubChunkRequestResult.INDEX_OUT_OF_BOUNDS, offset, hMapType, null, null, null);
                 continue;
             }
@@ -79,7 +79,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             int cx = centerPosition.getX() + offset.getX(), cz = centerPosition.getZ() + offset.getZ();
             Chunk chunk = player.getDimension().getChunkService().getChunk(cx, cz);
             if (chunk == null) {
-                log.info("Player " + player.getOriginName() + " requested sub chunk which is not loaded");
+                log.warn("Player " + player.getOriginName() + " requested sub chunk which is not loaded");
                 createSubChunkData(responseData, SubChunkRequestResult.CHUNK_NOT_FOUND, offset, hMapType, null, null, null);
                 continue;
             }

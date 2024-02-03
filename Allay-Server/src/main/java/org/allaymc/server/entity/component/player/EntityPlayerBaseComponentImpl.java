@@ -38,6 +38,7 @@ import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
@@ -86,6 +87,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Getter
     @Setter
     protected Location3ic spawnPoint;
+    protected boolean needDimensionChangeACK;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info);
@@ -188,8 +190,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void teleport(Location3fc target) {
-        super.teleport(target);
+    protected void teleportInDimension(Location3fc target) {
+        super.teleportInDimension(target);
         // For player, we also need to send move packet to client
         // However, there is no need to send motion packet as we are teleporting the player
         sendLocationToSelf();
@@ -205,11 +207,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         this.location.dimension().removePlayer(thisEntity, () -> {
             targetDim.getChunkService().getChunkImmediately((int) target.x() >> 4, (int) target.z() >> 4);
             setLocation(target, false);
+            sendLocationToSelf();
+            if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
+                var changeDimensionPacket = new ChangeDimensionPacket();
+                changeDimensionPacket.setDimension(targetDim.getDimensionInfo().dimensionId());
+                changeDimensionPacket.setPosition(MathUtils.JOMLVecToCBVec(target));
+                networkComponent.sendPacket(changeDimensionPacket);
+                needDimensionChangeACK = true;
+            }
             targetDim.addPlayer(thisEntity);
-            var pk = new ChangeDimensionPacket();
-            pk.setDimension(targetDim.getDimensionInfo().dimensionId());
-            pk.setPosition(MathUtils.JOMLVecToCBVec(target));
-            networkComponent.sendPacket(pk);
         });
     }
 
@@ -449,8 +455,22 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void onChunkInRangeSent(Chunk chunk) {
+        if (needDimensionChangeACK) {
+            needDimensionChangeACK = false;
+            sendDimensionChangeSuccess();
+        }
         chunk.spawnEntitiesTo(thisEntity);
         networkComponent.onChunkInRangeSent();
+    }
+
+    @Override
+    public void sendDimensionChangeSuccess() {
+        var ackPk = new PlayerActionPacket();
+        ackPk.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
+        ackPk.setRuntimeEntityId(uniqueId);
+        ackPk.setBlockPosition(Vector3i.ZERO);
+        ackPk.setResultPosition(Vector3i.ZERO);
+        networkComponent.sendPacket(ackPk);
     }
 
     @Override
