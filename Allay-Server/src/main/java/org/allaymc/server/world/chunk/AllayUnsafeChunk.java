@@ -29,6 +29,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
+import static org.allaymc.api.block.interfaces.BlockAirBehavior.AIR_TYPE;
+
 @NotThreadSafe
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AllayUnsafeChunk implements UnsafeChunk {

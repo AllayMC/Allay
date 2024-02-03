@@ -29,6 +29,7 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
@@ -187,11 +188,24 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void teleport(Location3fc location) {
-        super.teleport(location);
+    public void teleport(Location3fc target) {
+        super.teleport(target);
         // For player, we also need to send move packet to client
         // However, there is no need to send motion packet as we are teleporting the player
         sendLocationToSelf();
+    }
+
+    @Override
+    protected void teleportOverDimension(Location3fc target) {
+        this.location.dimension().removePlayer(thisEntity, () -> {
+            target.dimension().getChunkService().getChunkImmediately((int) target.x() >> 4, (int) target.z() >> 4);
+            setLocation(target, false);
+            target.dimension().addPlayer(thisEntity);
+            var pk = new ChangeDimensionPacket();
+            pk.setDimension(target.dimension().getDimensionInfo().dimensionId());
+            pk.setPosition(MathUtils.JOMLVecToCBVec(target));
+            networkComponent.sendPacket(pk);
+        });
     }
 
     @Override

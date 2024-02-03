@@ -32,6 +32,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import static org.allaymc.api.block.interfaces.BlockAirBehavior.AIR_TYPE;
+
 /**
  * Allay Project 11/12/2023
  *
@@ -75,12 +77,16 @@ public interface Dimension {
     }
 
     default void addPlayer(EntityPlayer player) {
-        this.addPlayer(player, () -> {});
+        addPlayer(player, () -> {});
     }
 
     void addPlayer(EntityPlayer player, Runnable runnable);
 
-    void removePlayer(EntityPlayer player);
+    default void removePlayer(EntityPlayer player) {
+        removePlayer(player, () -> {});
+    }
+
+    void removePlayer(EntityPlayer player, Runnable runnable);
 
     @UnmodifiableView
     Collection<EntityPlayer> getPlayers();
@@ -162,7 +168,7 @@ public interface Dimension {
 
     default BlockState getBlockState(int x, int y, int z, int layer) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
-            return BlockAirBehavior.AIR_TYPE.getDefaultState();
+            return AIR_TYPE.getDefaultState();
         var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
             chunk = getChunkService().getChunkImmediately(x >> 4, z >> 4);
@@ -202,6 +208,17 @@ public interface Dimension {
                             }
                         }
                     });
+                } else {
+                    var air = AIR_TYPE.getDefaultState();
+                    for (int localX = localStartX; localX < localEndX; localX++) {
+                        for (int globalY = y; globalY < y + sizeY; globalY++) {
+                            for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
+                                int globalX = cX + localX;
+                                int globalZ = cZ + localZ;
+                                blockStates[globalX - x][globalY - y][globalZ - z] = air;
+                            }
+                        }
+                    }
                 }
             }
         }

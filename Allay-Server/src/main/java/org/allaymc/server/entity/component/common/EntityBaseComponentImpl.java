@@ -293,8 +293,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public void teleport(Location3fc location) {
-        Objects.requireNonNull(location.dimension());
+    public void teleport(Location3fc target) {
+        Objects.requireNonNull(target.dimension());
         if (this.location.dimension == null) {
             log.warn("Trying to teleport an entity whose dimension is null! Entity: {}", thisEntity);
             return;
@@ -303,19 +303,22 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             log.warn("Trying to teleport an entity which is not spawned! Entity: {}", thisEntity);
             return;
         }
-        if (this.location.dimension == location.dimension()) {
+        if (this.location.dimension == target.dimension()) {
             // Teleporting in the current same dimension, and we just need to move the entity to the new coordination
-            setLocationAndCheckChunk(location);
-            broadcastMoveToViewers(location, true);
+            setLocationAndCheckChunk(target);
+            broadcastMoveToViewers(target, true);
         } else {
-            // Teleporting to another dimension, there will be more works to be done
-            // TODO: maybe needs more works
-            location.dimension().getEntityService().removeEntity(thisEntity, () -> {
-                location.dimension().getChunkService().getChunkImmediately((int) location.x() >> 4, (int) location.z() >> 4);
-                setLocationAndCheckChunk(location);
-            });
-            location.dimension().getEntityService().addEntity(thisEntity);
+            teleportOverDimension(target);
         }
+    }
+
+    protected void teleportOverDimension(Location3fc target) {
+        // Teleporting to another dimension, there will be more works to be done
+        this.location.dimension().getEntityService().removeEntity(thisEntity, () -> {
+            target.dimension().getChunkService().getChunkImmediately((int) target.x() >> 4, (int) target.z() >> 4);
+            setLocation(target, false);
+            target.dimension().getEntityService().addEntity(thisEntity);
+        });
     }
 
     @Override

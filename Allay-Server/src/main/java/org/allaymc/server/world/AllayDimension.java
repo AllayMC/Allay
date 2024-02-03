@@ -71,8 +71,8 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
-    public void removePlayer(EntityPlayer player) {
-        entityService.removeEntity(player);
+    public void removePlayer(EntityPlayer player, Runnable runnable) {
+        entityService.removeEntity(player, runnable);
         chunkService.removeChunkLoader(player);
         players.remove(player);
     }
