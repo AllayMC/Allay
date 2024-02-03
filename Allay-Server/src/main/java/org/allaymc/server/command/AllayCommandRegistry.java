@@ -57,7 +57,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
             sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
             return CommandResult.failed();
         }
-        if (!sender.hasPerm(command.getPermission())) {
+        if (!sender.hasPerm(command.getPermissions())) {
             sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
             return CommandResult.failed();
         }
@@ -81,7 +81,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
     public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
         var pk = new AvailableCommandsPacket();
         for (var command : getContent().values()) {
-            if (player.hasPerm(command.getPermission())) {
+            if (player.hasPerm(command.getPermissions())) {
                 pk.getCommands().add(command.buildNetworkDataFor(player));
             }
         }

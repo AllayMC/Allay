@@ -112,8 +112,6 @@ public interface PermTree {
     default void loadNBT(NbtMap nbt, boolean callListener) {
         for (var perm : nbt.getList("Perms", NbtType.STRING))
             addPerm(perm, callListener);
-        if (nbt.containsKey("Parent"))
-            extendFrom(DefaultPermissions.byName(nbt.getString("Parent")), callListener);
     }
 
     interface PermTreeFactory {

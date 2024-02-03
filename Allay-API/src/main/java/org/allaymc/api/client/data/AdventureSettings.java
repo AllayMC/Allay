@@ -36,10 +36,11 @@ public final class AdventureSettings {
     }
 
     public void applyGameType(GameType gameType) {
-        player.getPermTree().setPerm(PermKeys.PVM, gameType == SPECTATOR);
-        player.getPermTree().setPerm(PermKeys.MVP, gameType == SPECTATOR);
+        player.getPermTree().setPerm(PermKeys.PVM, gameType != SPECTATOR);
+        player.getPermTree().setPerm(PermKeys.MVP, gameType != SPECTATOR);
         this.setImmutableWorld(gameType == SPECTATOR);
         this.setShowNameTags(gameType != SPECTATOR);
+        dirty = true;
         sync();
     }
 

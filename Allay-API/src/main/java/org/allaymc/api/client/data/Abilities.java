@@ -72,6 +72,7 @@ public final class Abilities {
         // 这边设置这个OPERATOR_COMMANDS的目的仅仅是让OP客户端能显示快捷指令
         set(Ability.OPERATOR_COMMANDS, player.isOp());
         set(Ability.TELEPORT, true);
+        dirty = true;
         sync();
     }
 

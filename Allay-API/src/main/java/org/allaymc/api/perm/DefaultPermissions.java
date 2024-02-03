@@ -24,18 +24,15 @@ public final class DefaultPermissions {
                     .addPerm(DOORS_AND_SWITCHES).addPerm(OPEN_CONTAINERS)
                     .addPerm(ATTACK_PLAYERS).addPerm(ATTACK_MOBS)
                     .addPerm(SUMMON_LIGHTNING).addPerm(PVM).addPerm(MVP)
-                    .addPerm(Command.COMMAND_PERM_PREFIX + "help")
+//                    .addPerm(Command.COMMAND_PERM_PREFIX + "help") TODO
                     .addPerm(Command.COMMAND_PERM_PREFIX + "me");
 
     public static final PermTree OPERATOR =
             PermTree.create("Operator")
                     .extendFrom(MEMBER)
                     .addPerm(Command.COMMAND_PERM_PREFIX + "gamemode")
-                    .addPerm(Command.COMMAND_PERM_PREFIX + "gm")
                     .addPerm(Command.COMMAND_PERM_PREFIX + "gamerule")
-                    .addPerm(Command.COMMAND_PERM_PREFIX + "gr")
                     .addPerm(Command.COMMAND_PERM_PREFIX + "gametest")
-                    .addPerm(Command.COMMAND_PERM_PREFIX + "gt")
                     .addPerm(Command.COMMAND_PERM_PREFIX + "stop");
 
     private static final Map<String, PermTree> NAME_LOOK_UP = new HashMap<>();

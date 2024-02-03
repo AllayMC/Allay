@@ -155,10 +155,10 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public PermTree copyFrom(PermTree parent) {
+        this.listeners.putAll(parent.getPermListeners(true));
         for (var leaf : parent.getLeaves(true)) {
             addPerm(leaf.getFullName());
         }
-        this.listeners.putAll(parent.getPermListeners(true));
         return this;
     }
 

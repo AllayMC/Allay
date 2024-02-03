@@ -24,6 +24,8 @@ public class LongTimePermTreeTest {
         assertFalse(tree.isOp());
         tree.setOp(true);
         assertTrue(tree.isOp());
+        tree.addPerm("test.extra");
+        assertTrue(tree.isOp());
         assertTrue(tree.containsSubSet(DefaultPermissions.OPERATOR));
     }
 }
