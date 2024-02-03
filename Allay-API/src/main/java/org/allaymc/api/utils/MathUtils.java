@@ -78,6 +78,10 @@ public class MathUtils {
         return x;
     }
 
+    public boolean isInRange(float l, float value, float r) {
+        return l <= value && value <= r;
+    }
+
     /**
      * 通过yaw与pitch计算出等价的Vector3方向向量
      *

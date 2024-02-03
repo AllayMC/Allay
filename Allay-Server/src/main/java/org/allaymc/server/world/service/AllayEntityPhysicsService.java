@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.lang.Math.*;
 import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRICTION;
+import static org.allaymc.api.utils.MathUtils.isInRange;
 
 /**
  * Allay Project 2023/8/5 <br>
@@ -326,7 +327,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             //存在碰撞
             var minX = (float) floor(extendX.minX);
             var maxX = computeMax(minX, 0, blocks);
-            if (minX <= x && x <= maxX) {
+            if (isInRange(minX, x, maxX)) {
                 //卡方块里面了
                 deltaX = 0;
             } else {
@@ -369,7 +370,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             //存在碰撞
             var minZ = (float) floor(extendZ.minZ);
             var maxZ = computeMax(minZ, 2, blocks);
-            if (minZ <= z && z <= maxZ) {
+            if (isInRange(minZ, z, maxZ)) {
                 //卡方块里面了
                 deltaZ = 0;
             } else {
@@ -416,7 +417,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             if (down) onGround = true;
             var minY = (float) floor(extendY.minY);
             var maxY = computeMax(minY, 1, blocks);
-            if (minY <= y && y <= maxY) {
+            if (isInRange(minY, y, maxY)) {
                 //卡方块里面了
                 deltaY = 0;
             } else {
