@@ -26,5 +26,7 @@
   "command.generic.sender.notPlayer": "This command can only be executed by a player!",
   "command.generic.sender.notEntity": "This command can only be executed by an entity!",
   "pack.loading": "Loading packs...",
-  "pack.loaded": "Loaded %1 packs"
+  "pack.loaded": "Loaded %1 packs",
+  "world.loading": "Loading world %1",
+  "world.loaded": "World %1 is loaded"
 }

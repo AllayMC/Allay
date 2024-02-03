@@ -143,7 +143,7 @@ public final class AllayServer implements Server {
             }
         });
         initTerminalConsole();
-        loadWorlds();
+        worldPool.loadWorlds();
         this.commandRegistry = new AllayCommandRegistry();
         this.commandRegistry.registerDefaultCommands();
         this.networkServer = initNetwork();
@@ -184,20 +184,6 @@ public final class AllayServer implements Server {
         terminalConsole = new AllayTerminalConsole(this);
         terminalConsoleThread = new AllayTerminalConsoleThread();
         terminalConsoleThread.start();
-    }
-
-    private void loadWorlds() {
-        // TODO: World loading logic
-        // JeGeneratorLoader.setup();
-        // JeGeneratorLoader.waitStart();
-        // AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Bedrock Level")));
-        // defaultWorld.setDimension(new AllayDimension(defaultWorld, JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD), DimensionInfo.OVERWORLD));
-
-        // FLAT WORLD
-        AllayWorld defaultWorld = new AllayWorld(new AllayLevelDBWorldStorage(Path.of("worlds/Bedrock Level")));
-        defaultWorld.setDimension(new AllayDimension(defaultWorld, new FlatWorldGenerator(), DimensionInfo.OVERWORLD));
-
-        worldPool.setDefaultWorld(defaultWorld);
     }
 
     @Override

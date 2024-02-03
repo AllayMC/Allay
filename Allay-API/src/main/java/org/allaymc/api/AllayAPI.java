@@ -34,6 +34,7 @@ import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
+import org.allaymc.api.world.generator.WorldGeneratorFactory;
 import org.allaymc.api.world.storage.WorldStorageFactory;
 
 import java.util.HashMap;
@@ -191,6 +192,7 @@ public final class AllayAPI {
 
         // World
         requireImpl(WorldStorageFactory.class, WorldStorageFactory.FACTORY::set);
+        requireImpl(WorldGeneratorFactory.class, WorldGeneratorFactory.FACTORY::set);
 
         // Creative Item Registry
         requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);

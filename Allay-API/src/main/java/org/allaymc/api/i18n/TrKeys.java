@@ -59,9 +59,13 @@ public interface TrKeys {
 
   String A_NETWORK_SERVER_STARTING = "allay:network.server.starting";
 
+  String A_PACK_LOADED = "allay:pack.loaded";
+
   String A_PACK_LOADING = "allay:pack.loading";
 
-  String A_PACK_LOADED = "allay:pack.loaded";
+  String A_WORLD_LOADED = "allay:world.loaded";
+
+  String A_WORLD_LOADING = "allay:world.loading";
 
   String M_ACHIEVEMENT_ACQUIREIRON = "minecraft:achievement.acquireIron";
 

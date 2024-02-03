@@ -24,5 +24,9 @@
   "creativeitem.loaded": "加载创造模式物品完成",
   "command.generic.sender.notServer": "这个命令只能被服务器执行！",
   "command.generic.sender.notPlayer": "这个命令只能被玩家执行！",
-  "command.generic.sender.notEntity": "这个命令只能被实体执行！"
+  "command.generic.sender.notEntity": "这个命令只能被实体执行！",
+  "pack.loading": "正在加载资源包...",
+  "pack.loaded": "成功加载 %1 个资源包",
+  "world.loading": "正在加载世界 %1",
+  "world.loaded": "世界 %1 已加载"
 }
