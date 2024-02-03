@@ -203,6 +203,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
             targetDim.getWorld().sendTime(thisEntity);
+            networkComponent.sendPacket(targetDim.getWorld().getWorldData().getGameRules().buildPacket());
         }
         this.location.dimension().removePlayer(thisEntity, () -> {
             targetDim.getChunkService().getChunkImmediately((int) target.x() >> 4, (int) target.z() >> 4);
