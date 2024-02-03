@@ -18,6 +18,7 @@ import org.cloudburstmc.nbt.NbtUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 2023/5/26
@@ -30,7 +31,7 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
     private NbtMap availableEntityIdentifierTag;
 
     public AllayEntityTypeRegistry() {
-        super(null, input -> new HashMap<>());
+        super(null, input -> new ConcurrentHashMap<>());
         loadVanillaEntityIdentifierTag();
     }
 

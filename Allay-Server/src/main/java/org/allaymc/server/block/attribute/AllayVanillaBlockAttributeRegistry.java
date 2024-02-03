@@ -55,6 +55,7 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
             log.info("Start loading vanilla block attribute data registry...");
             try (var reader = NbtUtils.createGZIPReader(streamSupplier.get())) {
                 var blocks = ((NbtMap) reader.readTag()).getList("block", NbtType.COMPOUND);
+                // No need to use ConcurrentHashMap as it won't be modified after loading
                 var loaded = new EnumMap<VanillaBlockId, Map<Integer, BlockAttributes>>(VanillaBlockId.class);
                 for (var dataEntry : blocks) {
                     VanillaBlockId type;

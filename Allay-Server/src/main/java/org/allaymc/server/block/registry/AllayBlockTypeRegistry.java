@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 2023/3/26
@@ -26,7 +27,7 @@ import java.util.Map;
 @Slf4j
 public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>> implements BlockTypeRegistry {
     public AllayBlockTypeRegistry() {
-        super(null, input -> new HashMap<>());
+        super(null, input -> new ConcurrentHashMap<>());
     }
 
     @SneakyThrows

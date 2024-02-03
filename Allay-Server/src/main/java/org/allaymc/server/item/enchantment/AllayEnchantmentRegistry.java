@@ -12,6 +12,7 @@ import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
 import org.allaymc.api.utils.ReflectionUtils;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 2023/10/21
@@ -21,7 +22,7 @@ import java.util.HashMap;
 @Slf4j
 public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Short, Identifier, EnchantmentType> implements EnchantmentRegistry {
     public AllayEnchantmentRegistry() {
-        super(null, input -> new MapPair<>(new HashMap<>(), new HashMap<>()));
+        super(null, input -> new MapPair<>(new ConcurrentHashMap<>(), new ConcurrentHashMap<>()));
     }
 
     @SneakyThrows

@@ -13,6 +13,7 @@ import org.allaymc.api.utils.ReflectionUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 2023/9/15
@@ -22,7 +23,7 @@ import java.util.Map;
 @Slf4j
 public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<String, BlockEntityType<?>, Map<String, BlockEntityType<?>>>  implements BlockEntityTypeRegistry {
     public AllayBlockEntityTypeRegistry() {
-        super(null, input -> new HashMap<>());
+        super(null, input -> new ConcurrentHashMap<>());
     }
 
     @SneakyThrows

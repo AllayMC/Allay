@@ -16,8 +16,10 @@ import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
@@ -85,7 +87,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                 map.put(index, itemStack);
             });
             log.info(I18n.get().tr(TrKeys.A_CREATIVEITEM_LOADED));
-            return map;
+            return Collections.synchronizedMap(map);
         }
     }
 }

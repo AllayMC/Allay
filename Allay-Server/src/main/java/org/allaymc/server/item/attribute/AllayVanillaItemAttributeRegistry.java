@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
@@ -54,7 +55,7 @@ public class AllayVanillaItemAttributeRegistry extends SimpleMappedRegistry<Vani
             log.info("Start loading vanilla item attribute data registry...");
             try (var reader = NbtUtils.createGZIPReader(streamSupplier.get())) {
                 var items = ((NbtMap) reader.readTag()).getList("item", NbtType.COMPOUND);
-                var loaded = new HashMap<VanillaItemId, ItemAttributes>();
+                var loaded = new ConcurrentHashMap<VanillaItemId, ItemAttributes>();
                 for (var dataEntry : items) {
                     VanillaItemId type;
                     try {

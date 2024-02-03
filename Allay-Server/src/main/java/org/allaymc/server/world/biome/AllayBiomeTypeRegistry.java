@@ -13,6 +13,7 @@ import org.cloudburstmc.nbt.NbtUtils;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 2023/6/23
@@ -24,7 +25,7 @@ public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, Biom
     private MutableNbtMap biomeDefinition;
 
     public AllayBiomeTypeRegistry() {
-        super(null, input -> new HashMap<>());
+        super(null, input -> new ConcurrentHashMap<>());
         loadVanillaBiomeDefinition();
     }
 

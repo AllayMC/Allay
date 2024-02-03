@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 28/01/2024
@@ -37,7 +38,7 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
     private final ResourcePackStackPacket packStack = new ResourcePackStackPacket();
 
     public AllayPackRegistry() {
-        super(null, i -> new HashMap<>());
+        super(null, i -> new ConcurrentHashMap<>());
         // Just left a '*' here, if we put in exact game version
         // It is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
         this.packStack.setGameVersion("*");

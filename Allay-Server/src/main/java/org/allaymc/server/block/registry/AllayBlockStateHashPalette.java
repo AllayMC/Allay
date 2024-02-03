@@ -7,6 +7,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 2023/5/29
@@ -16,6 +17,6 @@ import java.util.Map;
 @Slf4j
 public class AllayBlockStateHashPalette extends SimpleMappedRegistry<Integer, BlockState, Map<Integer, BlockState>> implements BlockStateHashPalette {
     public AllayBlockStateHashPalette() {
-        super(null, input -> new Int2ObjectOpenHashMap<>());
+        super(null, input -> new ConcurrentHashMap<>());
     }
 }

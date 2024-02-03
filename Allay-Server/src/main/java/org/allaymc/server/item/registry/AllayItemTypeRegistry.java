@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 2023/5/19
@@ -26,7 +27,7 @@ import java.util.Map;
 @Slf4j
 public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> implements ItemTypeRegistry {
     public AllayItemTypeRegistry() {
-        super(null, input -> new HashMap<>());
+        super(null, input -> new ConcurrentHashMap<>());
     }
 
     @SneakyThrows

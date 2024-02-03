@@ -15,6 +15,7 @@ import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.allaymc.api.utils.AllayStringUtils.spiltCommandArgs;
 
@@ -27,7 +28,7 @@ import static org.allaymc.api.utils.AllayStringUtils.spiltCommandArgs;
 public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, Map<String, Command>> implements CommandRegistry {
 
     public AllayCommandRegistry() {
-        super(null, i -> new HashMap<>());
+        super(null, i -> new ConcurrentHashMap<>());
     }
 
     @Override
