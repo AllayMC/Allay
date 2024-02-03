@@ -165,12 +165,10 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public void sendTime(Collection<EntityPlayer> players) {
+    public void sendTime(EntityPlayer player) {
         var setTimePk = new SetTimePacket();
         setTimePk.setTime((int) worldData.getTime());
-        for (var player : players) {
-            player.sendPacket(setTimePk);
-        }
+        player.sendPacket(setTimePk);
     }
 
     @Override

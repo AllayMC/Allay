@@ -197,12 +197,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     protected void teleportOverDimension(Location3fc target) {
+        var currentDim = location.dimension();
+        var targetDim = target.dimension();
+        if (currentDim.getWorld() != targetDim.getWorld()) {
+            targetDim.getWorld().sendTime(thisEntity);
+        }
         this.location.dimension().removePlayer(thisEntity, () -> {
-            target.dimension().getChunkService().getChunkImmediately((int) target.x() >> 4, (int) target.z() >> 4);
+            targetDim.getChunkService().getChunkImmediately((int) target.x() >> 4, (int) target.z() >> 4);
             setLocation(target, false);
-            target.dimension().addPlayer(thisEntity);
+            targetDim.addPlayer(thisEntity);
             var pk = new ChangeDimensionPacket();
-            pk.setDimension(target.dimension().getDimensionInfo().dimensionId());
+            pk.setDimension(targetDim.getDimensionInfo().dimensionId());
             pk.setPosition(MathUtils.JOMLVecToCBVec(target));
             networkComponent.sendPacket(pk);
         });

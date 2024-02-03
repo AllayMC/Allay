@@ -66,7 +66,14 @@ public interface World {
     void close();
 
     @ApiStatus.Internal
-    void sendTime(Collection<EntityPlayer> players);
+    default void sendTime(Collection<EntityPlayer> players) {
+        for (var player : players) {
+            sendTime(player);
+        }
+    }
+
+    @ApiStatus.Internal
+    void sendTime(EntityPlayer player);
 
     @ApiStatus.Internal
     void tickTime(long tickNumber);
