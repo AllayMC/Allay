@@ -40,6 +40,7 @@ public final class AdventureSettings {
         player.getPermTree().setPerm(PermKeys.MVP, gameType == SPECTATOR);
         this.setImmutableWorld(gameType == SPECTATOR);
         this.setShowNameTags(gameType != SPECTATOR);
+        sync();
     }
 
     public void setNoPVM(boolean noPVM) {
