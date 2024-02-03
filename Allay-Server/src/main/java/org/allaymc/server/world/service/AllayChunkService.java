@@ -101,7 +101,7 @@ public class AllayChunkService implements ChunkService {
         var unsafeChunk = chunk.toUnsafeChunk();
         if (unsafeChunk.getState() != FINISHED) {
             var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, dimension);
-            dimension.getGenerator().generate(chunkGenerateContext);
+            dimension.getWorldGenerator().generate(chunkGenerateContext);
             unsafeChunk.setState(FINISHED);
         }
         return chunk;

@@ -3,7 +3,7 @@ package org.allaymc.server.world.generator.jegen;
 import io.papermc.paperclip.Paperclip;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.generator.Generator;
+import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.Allay;
 
 import java.io.File;
@@ -16,9 +16,9 @@ import java.time.temporal.ChronoUnit;
 
 public final class JeGeneratorLoader {
     public static final String WORK_PATH = "jegenerator";
-    private static MethodHandle overworld;
-    private static MethodHandle nether;
-    private static MethodHandle end;
+    private static MethodHandle OVERWORLD;
+    private static MethodHandle NETHER;
+    private static MethodHandle THE_END;
 
     public static void setup() {
         File file = Path.of(WORK_PATH).toFile();
@@ -28,14 +28,14 @@ public final class JeGeneratorLoader {
         Paperclip.setup(Allay.EXTRA_RESOURCE_CLASS_LOADER, new String[]{WORK_PATH, "--noconsole", "--nogui", "--universe=jegenerator"});
         try {
             final Class<?> JeGeneratorMain = Class.forName("org.allaymc.jegenerator.JeGeneratorMain", true, Allay.EXTRA_RESOURCE_CLASS_LOADER);
-            final MethodType methodType = MethodType.methodType(Generator.class);
-            overworld = MethodHandles.lookup()
+            final MethodType methodType = MethodType.methodType(WorldGenerator.class);
+            OVERWORLD = MethodHandles.lookup()
                     .findStatic(JeGeneratorMain, "overworld", methodType)
                     .asFixedArity();
-            nether = MethodHandles.lookup()
+            NETHER = MethodHandles.lookup()
                     .findStatic(JeGeneratorMain, "nether", methodType)
                     .asFixedArity();
-            end = MethodHandles.lookup()
+            THE_END = MethodHandles.lookup()
                     .findStatic(JeGeneratorMain, "end", methodType)
                     .asFixedArity();
         } catch (Throwable e) {
@@ -47,14 +47,14 @@ public final class JeGeneratorLoader {
         Utils.spinUntil(() -> !System.getProperties().getOrDefault("complete_start", false).equals("true"), Duration.of(20, ChronoUnit.MILLIS));
     }
 
-    public static Generator getJeGenerator(DimensionInfo info) {
+    public static WorldGenerator getJeGenerator(DimensionInfo info) {
         try {
             if (info == DimensionInfo.NETHER) {
-                return (Generator) nether.invokeExact();
+                return (WorldGenerator) NETHER.invokeExact();
             } else if (info == DimensionInfo.THE_END) {
-                return (Generator) end.invokeExact();
+                return (WorldGenerator) THE_END.invokeExact();
             } else {
-                return (Generator) overworld.invokeExact();
+                return (WorldGenerator) OVERWORLD.invokeExact();
             }
         } catch (Throwable e) {
             throw new RuntimeException(e);

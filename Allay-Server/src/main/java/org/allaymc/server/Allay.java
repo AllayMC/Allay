@@ -32,6 +32,7 @@ import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
+import org.allaymc.api.world.generator.WorldGeneratorFactory;
 import org.allaymc.api.world.storage.WorldStorageFactory;
 import org.allaymc.server.block.attribute.AllayVanillaBlockAttributeRegistry;
 import org.allaymc.server.block.component.AllayBlockComponentImplFactory;
@@ -63,6 +64,7 @@ import org.allaymc.server.pack.AllayPackRegistry;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
+import org.allaymc.server.world.generator.AllayWorldGeneratorFactory;
 import org.allaymc.server.world.storage.AllayWorldStorageFactory;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -135,7 +137,8 @@ public final class Allay {
         api.bind(VanillaItemMetaBlockStateBiMap.class, AllayVanillaItemMetaBlockStateBiMap::new, instance -> ((AllayVanillaItemMetaBlockStateBiMap) instance).init());
 
         // World
-        api.bind(WorldStorageFactory.class, AllayWorldStorageFactory::new, instance -> ((AllayWorldStorageFactory) instance).init());
+        api.bind(WorldStorageFactory.class, AllayWorldStorageFactory::new);
+        api.bind(WorldGeneratorFactory.class, AllayWorldGeneratorFactory::new);
 
         // Creative Item Registry
         api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));

@@ -279,7 +279,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
         startGamePacket.setSeed(spawnWorld.getWorldData().getRandomSeed());
         startGamePacket.setDimensionId(dimension.getDimensionInfo().dimensionId());
-        startGamePacket.setGeneratorId(dimension.getGenerator().getType().getId());
+        startGamePacket.setGeneratorId(dimension.getWorldGenerator().getType().getId());
         startGamePacket.setLevelGameType(spawnWorld.getWorldData().getGameType());
         startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         startGamePacket.setTrustingPlayers(true);

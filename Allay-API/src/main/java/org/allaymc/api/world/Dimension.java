@@ -11,7 +11,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.MathUtils;
-import org.allaymc.api.world.generator.Generator;
+import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.service.EntityPhysicsService;
@@ -43,7 +43,7 @@ public interface Dimension {
 
     void close();
 
-    Generator getGenerator();
+    WorldGenerator getWorldGenerator();
 
     ChunkService getChunkService();
 

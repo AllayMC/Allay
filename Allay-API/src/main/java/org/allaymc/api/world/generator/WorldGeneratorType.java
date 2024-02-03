@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Contract;
  */
 @AllArgsConstructor
 @Getter
-public enum GeneratorType {
+public enum WorldGeneratorType {
     LIMIT(0),
     INFINITE(1),
     FLAT(2),
@@ -23,7 +23,7 @@ public enum GeneratorType {
     private final int id;
 
     @Contract("_ -> new")
-    public static GeneratorType of(int id) {
+    public static WorldGeneratorType of(int id) {
         Preconditions.checkArgument(id >= 0 && id <= 4);
         return values()[id];
     }
