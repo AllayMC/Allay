@@ -70,9 +70,19 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
 
     @Getter
+    protected boolean loggedIn = false;
+    @Getter
+    @Setter
+    protected boolean networkEncryptionEnabled = false;
+    @Getter
     protected boolean initialized = false;
     @Getter
-    protected boolean loggedIn = false;
+    @Setter
+    protected boolean disconnected = false;
+    // It will be set while client disconnecting from server
+    // Otherwise, it will be null
+    protected String disconnectReason = null;
+    protected boolean hideDisconnectReason = false;
     protected AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
 
     protected final Server server = Server.getInstance();
@@ -88,14 +98,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected LoginData loginData;
     @Getter
     @Setter
-    protected boolean networkEncryptionEnabled = false;
-    @Getter
-    @Setter
     protected SecretKey encryptionSecretKey;
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
-    // It will be set while client disconnecting from server
-    protected String disconnectReason;
     protected BedrockServerSession session;
 
     @Override
@@ -107,18 +112,19 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void handleDisconnect() {
-        // Before client disconnect, there may be other packets which are not handled
-        // So we handle disconnect after we handled all other packets
         if (disconnectReason != null) {
-            // Client is disconnected from server
-            packetProcessorHolder.getDisconnectProcessor().accept(player, disconnectReason);
-            disconnectReason = null;
+            disconnected = true;
+            // Do not believe that the client will disconnect proactively
+            // Especially for cheater, the BedrockPacketHandler::onDisconnect() method may won't be called
+            // If we call server.onDisconnect() in BedrockPacketHandler::onDisconnect(),
+            // cheaters will be able to create a lot of fake clients and make the server OOM
+            server.onDisconnect(player, disconnectReason);
         }
     }
 
     @Override
     public boolean shouldHandleDisconnect() {
-        return disconnectReason != null;
+        return !disconnected && disconnectReason != null;
     }
 
     @Override
@@ -179,7 +185,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void disconnect(@MayContainTrKey String reason, boolean hideReason) {
-        session.disconnect(I18n.get().tr(reason), hideReason);
+        // Send disconnect packet to client
+        player.getClientSession().disconnect(disconnectReason, hideDisconnectReason);
+        // Disconnection will be handled in handleDisconnect() method
+        disconnectReason = I18n.get().tr(reason);
+        hideDisconnectReason = hideReason;
     }
 
     protected void doFirstSpawnPlayer() {

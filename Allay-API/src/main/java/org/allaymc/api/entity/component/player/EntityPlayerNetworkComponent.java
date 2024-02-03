@@ -57,6 +57,8 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     void disconnect(@MayContainTrKey String reason, boolean hideReason);
 
+    boolean isDisconnected();
+
     boolean isNetworkEncryptionEnabled();
 
     @ApiStatus.Internal

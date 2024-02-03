@@ -135,11 +135,7 @@ public final class AllayServer implements Server {
         Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
             @Override
             public void run() {
-                players.values().forEach(player -> player.disconnect(TrKeys.M_DISCONNECT_CLOSED));
-                while (!players.isEmpty()) {
-                    Thread.yield();
-                    // Spin until all players are disconnected
-                }
+                kickAllPlayersAndBlock();
                 isRunning.compareAndSet(true, false);
                 getWorldPool().getWorlds().values().forEach(World::close);
                 virtualThreadPool.shutdownNow();
@@ -155,6 +151,15 @@ public final class AllayServer implements Server {
         this.networkServer.start();
         sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
         gameLoop.startLoop();
+    }
+
+    @Override
+    public void kickAllPlayersAndBlock() {
+        players.values().forEach(player -> player.disconnect(TrKeys.M_DISCONNECT_CLOSED));
+        while (!players.isEmpty()) {
+            Thread.yield();
+            // Spin until all players are disconnected
+        }
     }
 
     @Override
@@ -197,9 +202,9 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
-        for (var player : getOnlinePlayers().values()) player.disconnect(TrKeys.M_DISCONNECT_CLOSED);
         SETTINGS.save();
         System.exit(0);
+        // ShutdownHook will handle the rest
     }
 
     @Override

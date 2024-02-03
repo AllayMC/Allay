@@ -94,6 +94,8 @@ public class AllayWorld implements World {
                     entry.player.handleDataPacket(entry.packet);
                     count++;
                 }
+                // Before client disconnect, there may be other packets which are not handled
+                // So we handle disconnect after we handled all other packets
                 handlePlayersDisconnect();
             } catch (Throwable throwable) {
                 log.error("Error while handling sync packet in world " + this.getWorldData().getName(), throwable);

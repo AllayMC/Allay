@@ -50,6 +50,8 @@ public interface Server extends TaskCreator, CommandSender {
      */
     void start(long timeMillis);
 
+    void kickAllPlayersAndBlock();
+
     void tick(long currentTick);
 
     long getTick();
