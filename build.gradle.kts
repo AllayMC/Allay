@@ -49,7 +49,17 @@ tasks.build {
 tasks.clean {
     group = "alpha build"
     enabled = true
-    delete("logs", "caches", "output", "players", "server-settings.yml", "resource_packs", "run", "worlds")
+    delete(
+        "jegenerator",
+        "logs",
+        "caches",
+        "output",
+        "players",
+        "server-settings.yml",
+        "resource_packs",
+        "run",
+        "worlds"
+    )
 }
 
 subprojects {
@@ -105,7 +115,17 @@ subprojects {
     tasks.clean {
         group = "alpha build"
         enabled = true
-        delete("logs", "caches", "output", "players", "server-settings.yml", "resource_packs", "run", "worlds")
+        delete(
+            "jegenerator",
+            "logs",
+            "caches",
+            "output",
+            "players",
+            "server-settings.yml",
+            "resource_packs",
+            "run",
+            "worlds"
+        )
     }
 
     // disable

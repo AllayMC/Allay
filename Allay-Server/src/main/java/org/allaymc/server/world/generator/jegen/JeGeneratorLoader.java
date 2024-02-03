@@ -13,8 +13,10 @@ import java.lang.invoke.MethodType;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class JeGeneratorLoader {
+    private static final AtomicBoolean loaded = new AtomicBoolean(false);
     public static final String WORK_PATH = "jegenerator";
     private static MethodHandle OVERWORLD;
     private static MethodHandle NETHER;
@@ -48,6 +50,10 @@ public final class JeGeneratorLoader {
     }
 
     public static WorldGenerator getJeGenerator(DimensionInfo info) {
+        if (loaded.compareAndSet(false, true)) {
+            JeGeneratorLoader.setup();
+            JeGeneratorLoader.waitStart();
+        }
         try {
             if (info == DimensionInfo.NETHER) {
                 return (WorldGenerator) NETHER.invokeExact();

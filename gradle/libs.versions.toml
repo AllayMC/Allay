@@ -64,7 +64,7 @@ netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", vers
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.0-beta.5" }
 # JeGenerator
-jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.2-R0.3" }
+jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.2-R0.4" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
