@@ -13,6 +13,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.JSONUtils;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
@@ -166,7 +167,28 @@ public class GameTestCommand extends SimpleCommand {
                     context.getSender().setPerm(perm, value);
                     context.addOutput("Perm " + perm + " was set to " + value);
                     return context.success();
-                });
+                })
+                .root()
+                .key("tp")
+                .str("world")
+                .intNum("dimId")
+                .exec((context, player) -> {
+                    String worldName = context.getSecondResult();
+                    int dimId = context.getThirdResult();
+                    var world = Server.getInstance().getWorldPool().getWorld(worldName);
+                    if (world == null) {
+                        context.addOutput("§cUnknown world: " + worldName);
+                        return context.failed();
+                    }
+                    var dim = world.getDimension(dimId);
+                    if (dim == null) {
+                        context.addOutput("§cUnknown dimension: " + dimId);
+                        return context.failed();
+                    }
+                    player.teleport(new Location3f(0, 64, 0, dim));
+                    context.addOutput("Teleported to " + worldName + ":" + dimId);
+                    return context.success();
+                }, SenderType.PLAYER);
 
     }
 }
