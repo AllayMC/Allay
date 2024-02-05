@@ -1,5 +1,6 @@
 package org.allaymc.api.pack;
 
+import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class PackManifest {
     private Header header;
 
     private List<Module> modules = Collections.emptyList();
+    private List<Capability> capabilities = Collections.emptyList();
 
     public static PackManifest load(PackLoader loader) {
         Objects.requireNonNull(loader);
@@ -51,6 +53,30 @@ public class PackManifest {
                 this.header.name != null &&
                 this.header.uuid != null &&
                 this.header.version != null;
+    }
+
+    public enum Capability {
+
+        CHEMISTRY,
+        EDITOREXTENSION,
+        EXPERIMENTAL_CUSTOM_UI,
+        RAYTRACED;
+
+        public static class Serializer implements JsonSerializer<Capability> {
+
+            @Override
+            public JsonElement serialize(Capability src, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
+                return new JsonPrimitive(src.name().toLowerCase());
+            }
+        }
+
+        public static class Deserializer implements JsonDeserializer<Capability> {
+
+            @Override
+            public Capability deserialize(JsonElement json, java.lang.reflect.Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                return Capability.valueOf(json.getAsString().toUpperCase());
+            }
+        }
     }
 
     @Data

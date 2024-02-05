@@ -9,6 +9,8 @@ import org.allaymc.api.datastruct.SemVersion;
 import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkDataPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackDataInfoPacket;
+import org.cloudburstmc.protocol.bedrock.packet.ResourcePackStackPacket;
+import org.cloudburstmc.protocol.bedrock.packet.ResourcePacksInfoPacket;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -113,6 +115,23 @@ public abstract class Pack implements AutoCloseable {
         return packet;
     }
 
+    public ResourcePacksInfoPacket.Entry toEntryInfo() {
+        return new ResourcePacksInfoPacket.Entry(
+                this.getId().toString(),
+                this.getStringVersion(),
+                this.getSize(),
+                "",
+                "",
+                this.getId().toString(),
+                this.getType() == Pack.Type.SCRIPT,
+                this.manifest.getCapabilities().contains(PackManifest.Capability.RAYTRACED)
+        );
+    }
+
+    public ResourcePackStackPacket.Entry toEntryStack() {
+        return new ResourcePackStackPacket.Entry(this.getId().toString(), this.getStringVersion(), "");
+    }
+
     @Override
     public void close() throws Exception {
         this.loader.close();
@@ -130,10 +149,13 @@ public abstract class Pack implements AutoCloseable {
         return this.getId().hashCode();
     }
 
+    // Taken from https://learn.microsoft.com/en-us/minecraft/creator/reference/content/addonsreference/examples/addonmanifest?view=minecraft-bedrock-stable#modules
     public enum Type {
 
         RESOURCES,
         DATA,
+        SKIN_PACK,
+        WORLD_TEMPLATE,
         SCRIPT;
 
         public ResourcePackType toNetwork() {

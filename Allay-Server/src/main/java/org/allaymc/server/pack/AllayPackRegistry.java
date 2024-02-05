@@ -39,8 +39,8 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
 
     public AllayPackRegistry() {
         super(null, i -> new ConcurrentHashMap<>());
-        // Just left a '*' here, if we put in exact game version
-        // It is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
+        // Just left a '*' here, if we put in an exact game version,
+        // it is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
         this.packStack.setGameVersion("*");
         this.init();
     }
@@ -134,7 +134,7 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
         return loader;
     }
 
-    public void generatePackets() {
+    private void generatePackets() {
         var forceResourcePacks = Server.SETTINGS.genericSettings().forceResourcePacks();
         this.packsInfos.setForcedToAccept(forceResourcePacks);
         this.packsInfos.getBehaviorPackInfos().clear();
@@ -145,19 +145,27 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
         this.packStack.getResourcePacks().clear();
 
         for (var pack : this.getContent().values()) {
-            if (pack.getType() == Pack.Type.RESOURCES) {
-                packsInfos.getResourcePackInfos().add(new ResourcePacksInfoPacket.Entry(
-                        pack.getId().toString(),
-                        pack.getStringVersion(),
-                        pack.getSize(), "", "",
-                        pack.getId().toString(),
-                        false, false
-                ));
-                packStack.getResourcePacks().add(new ResourcePackStackPacket.Entry(
-                        pack.getId().toString(),
-                        pack.getStringVersion(),
-                        ""
-                ));
+            var id = pack.getId().toString();
+            var version = pack.getStringVersion();
+            var type = pack.getType();
+
+            var packEntry = new ResourcePacksInfoPacket.Entry(
+                    id,
+                    version,
+                    pack.getSize(),
+                    "",
+                    "",
+                    id,
+                    type == Pack.Type.SCRIPT,
+                    pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED)
+            );
+            var stackEntry = new ResourcePackStackPacket.Entry(id, version, "");
+            if (type == Pack.Type.RESOURCES) {
+                packsInfos.getResourcePackInfos().add(packEntry);
+                packStack.getResourcePacks().add(stackEntry);
+            } else if (type == Pack.Type.DATA || type == Pack.Type.SCRIPT) {
+                packsInfos.getBehaviorPackInfos().add(packEntry);
+                packStack.getBehaviorPacks().add(stackEntry);
             }
         }
     }
