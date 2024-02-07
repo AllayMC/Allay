@@ -182,6 +182,7 @@ public final class AllayServer implements Server {
             kickAllPlayersAndBlock();
             isRunning.compareAndSet(true, false);
             worldPool.close();
+            playerStorage.close();
             virtualThreadPool.shutdownNow();
             computeThreadPool.shutdownNow();
             System.exit(0);
