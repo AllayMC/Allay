@@ -2,6 +2,7 @@ package org.allaymc.server.pack.loader;
 
 import lombok.SneakyThrows;
 import org.allaymc.api.pack.PackLoader;
+import org.allaymc.server.pack.PackUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,11 +99,9 @@ public class ZipPackLoader implements PackLoader {
 
     private static class ZipFactory implements Factory {
 
-        private static final PathMatcher MATCHER = FileSystems.getDefault().getPathMatcher("glob:**.{zip,mcpack}");
-
         @Override
         public boolean canLoad(Path path) {
-            return MATCHER.matches(path);
+            return PackUtils.isZipPack(path);
         }
 
         @Override

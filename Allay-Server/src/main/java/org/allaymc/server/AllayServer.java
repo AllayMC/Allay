@@ -321,7 +321,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void savePlayerData() {
-        players.values().forEach(playerStorage::savePlayerData);
+        players.values().stream().filter(EntityPlayer::isInitialized).forEach(playerStorage::savePlayerData);
     }
 
     @Override

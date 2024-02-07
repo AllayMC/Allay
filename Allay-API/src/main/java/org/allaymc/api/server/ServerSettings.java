@@ -197,7 +197,7 @@ public class ServerSettings extends OkaeriConfig {
     public static class ResourcePackSettings extends OkaeriConfig {
 
         @CustomKey("auto-encrypt")
-        @Comment("If set to true, resource packs will be automatically encrypted")
+        @Comment("If set to true, packs will be automatically encrypted")
         private boolean autoEncrypt = true;
 
         @CustomKey("max-chunk-size")
