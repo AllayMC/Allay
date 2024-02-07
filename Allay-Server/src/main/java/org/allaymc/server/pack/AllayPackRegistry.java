@@ -82,20 +82,18 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
         for (var loader : foundedLoaders) {
             var manifest = PackManifest.load(loader);
             if (manifest == null || !manifest.isValid()) continue;
+            log.info(I18n.get().tr(TrKeys.A_PACK_LOADING_ENTRY, manifest.getHeader().getName()));
             loader2manifest.put(loader, manifest);
         }
 
         foundedLoaders.clear();
 
-        for (var entry : loader2manifest.entrySet()) {
-            var loader = entry.getKey();
-            var manifest = entry.getValue();
-
+        loader2manifest.forEach((loader, manifest) -> {
             var module = manifest.getModules().getFirst();
             var factory = this.packFactories.get(module.getType());
             if (factory == null) {
                 log.warn("Unsupported pack type {}", module.getType());
-                continue;
+                return;
             }
 
             var uuid = manifest.getHeader().getUuid();
@@ -104,7 +102,8 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
 
             // prepare for network
             loader.getNetworkPreparedFile();
-        }
+            log.info(I18n.get().tr(TrKeys.A_PACK_LOADED_ENTRY, pack.getName()));
+        });
 
         if (!this.getContent().isEmpty()) this.generatePackets();
 
@@ -135,7 +134,7 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
     }
 
     private void generatePackets() {
-        var forceResourcePacks = Server.SETTINGS.genericSettings().forceResourcePacks();
+        var forceResourcePacks = Server.SETTINGS.resourcePackSettings().forceResourcePacks();
         this.packsInfos.setForcedToAccept(forceResourcePacks);
         this.packsInfos.getBehaviorPackInfos().clear();
         this.packsInfos.getResourcePackInfos().clear();
@@ -153,8 +152,8 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
                     id,
                     version,
                     pack.getSize(),
-                    "",
-                    "",
+                    pack.getContentKey(),
+                    "", // TODO: Sub pack name
                     id,
                     type == Pack.Type.SCRIPT,
                     pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED)

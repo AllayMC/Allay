@@ -49,11 +49,6 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Open debug mode")
         @Comment("If debug mode is enabled, the console will outputs more detailed information")
         private boolean debug = false;
-
-        @Comment("true - the player must accept resource packs, otherwise he will not log in to the server")
-        @Comment("false - the player can log in to the server without accepting resource packs")
-        @CustomKey("force-resource-packs")
-        private boolean forceResourcePacks = false;
     }
 
     @CustomKey("network-settings")
@@ -210,6 +205,12 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Decrease this value may reduce the pressure on the network when sending packs to multiple clients")
         @Comment("However, it may also increase the time it takes to send the packs")
         private int maxChunkSize = 100; // 100KB, from BDS
+
+        @Comment("true - the player must accept resource packs, otherwise he will not log in to the server")
+        @Comment("false - the player can log in to the server without accepting resource packs")
+        @CustomKey("force-resource-packs")
+        private boolean forceResourcePacks = false;
+
         // TODO: URL packs configuration
     }
 }

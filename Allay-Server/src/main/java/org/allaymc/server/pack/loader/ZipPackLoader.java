@@ -1,10 +1,12 @@
 package org.allaymc.server.pack.loader;
 
+import lombok.SneakyThrows;
 import org.allaymc.api.pack.PackLoader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.concurrent.CompletableFuture;
@@ -80,6 +82,13 @@ public class ZipPackLoader implements PackLoader {
         if (this.networkPreparedFuture == null)
             this.networkPreparedFuture = CompletableFuture.completedFuture(this.path);
         return this.networkPreparedFuture;
+    }
+
+    @SneakyThrows
+    @Override
+    public String findContentKey() {
+        var keyFilePath = path.getParent().resolve(path.getFileName() + ".key");
+        return Files.exists(keyFilePath) ? Files.readString(keyFilePath) : "";
     }
 
     @Override
