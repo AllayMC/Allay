@@ -38,6 +38,7 @@ public class AllayDimension implements Dimension {
     protected final DimensionInfo dimensionInfo;
     protected final World world;
     protected final Set<EntityPlayer> players;
+    protected final Set<EntityPlayer> unmodifiablePlayersView;
 
     public AllayDimension(World world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
@@ -48,6 +49,7 @@ public class AllayDimension implements Dimension {
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.players = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        this.unmodifiablePlayersView = Collections.unmodifiableSet(players);
     }
 
     @Override
@@ -78,8 +80,9 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
-    public @UnmodifiableView Collection<EntityPlayer> getPlayers() {
-        return Collections.unmodifiableCollection(players);
+    @UnmodifiableView
+    public Set<EntityPlayer> getPlayers() {
+        return unmodifiablePlayersView;
     }
 
     @Override

@@ -78,11 +78,12 @@ public class AllayWorld implements World {
                 .unstarted(gameLoop::startLoop);
         this.networkThread = Thread.ofVirtual()
                 .name("World Network Thread - " + this.getWorldData().getName())
-                .start(this::networkTick);
+                .unstarted(this::networkTick);
     }
 
     protected void networkTick() {
         while (Server.getInstance().isRunning()) {
+            // TODO: buggy!
             while ((packetQueue.isEmpty() && !shouldHandlePlayersDisconnect()) || !networkLock.compareAndSet(false, true)) {
                 // Spin
                 Thread.yield();
@@ -110,7 +111,12 @@ public class AllayWorld implements World {
     }
 
     protected boolean shouldHandlePlayersDisconnect() {
-        return dimensionMap.values().stream().anyMatch(dim -> dim.getPlayers().stream().anyMatch(EntityPlayer::shouldHandleDisconnect));
+        // Do not use stream API to improve performance
+        // Because this is a high-frequency method
+        for (var dim : dimensionMap.values())
+            for (var entityPlayer : dim.getPlayers())
+                if (entityPlayer.shouldHandleDisconnect()) return true;
+        return false;
     }
 
     @Override
@@ -150,7 +156,10 @@ public class AllayWorld implements World {
     public void startTick() {
         if (thread.getState() != Thread.State.NEW) {
             throw new IllegalStateException("World is already start ticking!");
-        } else thread.start();
+        } else {
+            thread.start();
+            networkThread.start();
+        }
     }
 
     @Override

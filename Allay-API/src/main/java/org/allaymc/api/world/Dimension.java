@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
-import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
@@ -28,9 +27,9 @@ import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 import org.joml.primitives.AABBfc;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 import static org.allaymc.api.block.interfaces.BlockAirBehavior.AIR_TYPE;
 
@@ -89,7 +88,7 @@ public interface Dimension {
     void removePlayer(EntityPlayer player, Runnable runnable);
 
     @UnmodifiableView
-    Collection<EntityPlayer> getPlayers();
+    Set<EntityPlayer> getPlayers();
 
     static UpdateBlockPacket createBlockUpdatePacket(BlockState blockState, int x, int y, int z, int layer) {
         var updateBlockPacket = new UpdateBlockPacket();
