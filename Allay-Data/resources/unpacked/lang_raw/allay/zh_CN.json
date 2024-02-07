@@ -27,6 +27,11 @@
   "command.generic.sender.notEntity": "这个命令只能被实体执行！",
   "pack.loading": "正在加载资源包...",
   "pack.loaded": "成功加载 %1 个资源包",
+  "pack.loading.entry": "正在加载资源包 %1",
+  "pack.loaded.entry": "成功加载资源包 %1",
+  "pack.autoencrypt.enabled": "资源包自动加密已开启，准备加密资源包...",
+  "pack.encrypting": "正在加密资源包 %1",
+  "pack.encrypted": "资源包 %1 已加密。密钥为: %2",
   "world.loading": "正在加载世界 %1",
   "world.loaded": "世界 %1 已加载"
 }
