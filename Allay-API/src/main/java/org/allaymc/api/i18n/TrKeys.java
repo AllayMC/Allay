@@ -59,9 +59,19 @@ public interface TrKeys {
 
   String A_NETWORK_SERVER_STARTING = "allay:network.server.starting";
 
+  String A_PACK_AUTOENCRYPT_ENABLED = "allay:pack.autoencrypt.enabled";
+
+  String A_PACK_ENCRYPTED = "allay:pack.encrypted";
+
+  String A_PACK_ENCRYPTING = "allay:pack.encrypting";
+
   String A_PACK_LOADED = "allay:pack.loaded";
 
+  String A_PACK_LOADED_ENTRY = "allay:pack.loaded.entry";
+
   String A_PACK_LOADING = "allay:pack.loading";
+
+  String A_PACK_LOADING_ENTRY = "allay:pack.loading.entry";
 
   String A_WORLD_LOADED = "allay:world.loaded";
 
