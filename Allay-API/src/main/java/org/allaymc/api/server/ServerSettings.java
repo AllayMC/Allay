@@ -193,4 +193,15 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Determines the cycle of player data auto saving")
         private int playerDataAutoSaveCycle = 20 * 60;
     }
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class ResourcePackSettings extends OkaeriConfig {
+
+        @CustomKey("auto-encrypt")
+        @Comment("If set to true, resource packs will be automatically encrypted")
+        private boolean autoEncrypt = true;
+
+        // TODO: URL packs configuration
+    }
 }
