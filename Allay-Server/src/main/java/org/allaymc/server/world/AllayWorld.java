@@ -83,10 +83,14 @@ public class AllayWorld implements World {
 
     protected void networkTick() {
         while (Server.getInstance().isRunning()) {
-            // TODO: buggy!
-            while ((packetQueue.isEmpty() && !shouldHandlePlayersDisconnect()) || !networkLock.compareAndSet(false, true)) {
-                // Spin
+            if (!packetQueue.isEmpty() || shouldHandlePlayersDisconnect()) {
+                while (!networkLock.compareAndSet(false, true)) {
+                    // Spin
+                    Thread.yield();
+                }
+            } else {
                 Thread.yield();
+                continue;
             }
             try {
                 PacketQueueEntry entry;
