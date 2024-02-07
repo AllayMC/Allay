@@ -194,6 +194,9 @@ public class ServerSettings extends OkaeriConfig {
         private int playerDataAutoSaveCycle = 20 * 60;
     }
 
+    @CustomKey("resource-pack-settings")
+    private ResourcePackSettings resourcePackSettings = new ResourcePackSettings();
+
     @Getter
     @Accessors(fluent = true)
     public static class ResourcePackSettings extends OkaeriConfig {
@@ -202,6 +205,11 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("If set to true, resource packs will be automatically encrypted")
         private boolean autoEncrypt = true;
 
+        @CustomKey("max-chunk-size")
+        @Comment("The maximum size of a resource pack chunk (unit: KB)")
+        @Comment("Decrease this value may reduce the pressure on the network when sending packs to multiple clients")
+        @Comment("However, it may also increase the time it takes to send the packs")
+        private int maxChunkSize = 100; // 100KB, from BDS
         // TODO: URL packs configuration
     }
 }
