@@ -6,6 +6,7 @@ import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.allaymc.api.datastruct.SemVersion;
+import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkDataPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackDataInfoPacket;
@@ -26,10 +27,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public abstract class Pack implements AutoCloseable {
 
-    public static final int MAX_CHUNK_SIZE = 100 * 1024; // 100KB, from BDS
+    public static final int MAX_CHUNK_SIZE = Server.SETTINGS.resourcePackSettings().maxChunkSize() * 1024;
 
     private final PackLoader loader;
     private final PackManifest manifest;
+    // Will be empty if this is not an encrypted pack
+    private final String contentKey;
 
     private byte[] hash;
 

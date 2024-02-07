@@ -27,6 +27,11 @@
   "command.generic.sender.notEntity": "This command can only be executed by an entity!",
   "pack.loading": "Loading packs...",
   "pack.loaded": "Loaded %1 packs",
+  "pack.loading.entry": "Loading pack %1",
+  "pack.loaded.entry": "Pack loaded successfully %1",
+  "pack.autoencrypt.enabled": "Pack auto encrypting is enabled, encryption is starting...",
+  "pack.encrypting": "Encrypting pack %1",
+  "pack.encrypted": "Pack %1 is encrypted. Key: %2",
   "world.loading": "Loading world %1",
   "world.loaded": "World %1 is loaded"
 }

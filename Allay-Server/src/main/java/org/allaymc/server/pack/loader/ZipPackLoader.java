@@ -1,10 +1,13 @@
 package org.allaymc.server.pack.loader;
 
+import lombok.SneakyThrows;
 import org.allaymc.api.pack.PackLoader;
+import org.allaymc.server.pack.PackUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.concurrent.CompletableFuture;
@@ -82,6 +85,13 @@ public class ZipPackLoader implements PackLoader {
         return this.networkPreparedFuture;
     }
 
+    @SneakyThrows
+    @Override
+    public String findContentKey() {
+        var keyFilePath = path.getParent().resolve(path.getFileName() + ".key");
+        return Files.exists(keyFilePath) ? Files.readString(keyFilePath) : "";
+    }
+
     @Override
     public void close() throws IOException {
         this.zipFile.close();
@@ -89,11 +99,9 @@ public class ZipPackLoader implements PackLoader {
 
     private static class ZipFactory implements Factory {
 
-        private static final PathMatcher MATCHER = FileSystems.getDefault().getPathMatcher("glob:**.{zip,mcpack}");
-
         @Override
         public boolean canLoad(Path path) {
-            return MATCHER.matches(path);
+            return PackUtils.isZipPack(path);
         }
 
         @Override

@@ -14,7 +14,7 @@ public class ResourcePack extends Pack {
     public static final Pack.Factory FACTORY = ResourcePack::new;
 
     private ResourcePack(PackLoader loader, PackManifest manifest) {
-        super(loader, manifest);
+        super(loader, manifest, loader.findContentKey());
     }
 
     @Override

@@ -25,6 +25,8 @@ public interface PackLoader extends AutoCloseable {
 
     CompletableFuture<Path> getNetworkPreparedFile();
 
+    String findContentKey();
+
     interface Factory {
 
         boolean canLoad(Path path);

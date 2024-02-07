@@ -49,11 +49,6 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Open debug mode")
         @Comment("If debug mode is enabled, the console will outputs more detailed information")
         private boolean debug = false;
-
-        @Comment("true - the player must accept resource packs, otherwise he will not log in to the server")
-        @Comment("false - the player can log in to the server without accepting resource packs")
-        @CustomKey("force-resource-packs")
-        private boolean forceResourcePacks = false;
     }
 
     @CustomKey("network-settings")
@@ -192,5 +187,30 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("save-player-data-cycle")
         @Comment("Determines the cycle of player data auto saving")
         private int playerDataAutoSaveCycle = 20 * 60;
+    }
+
+    @CustomKey("resource-pack-settings")
+    private ResourcePackSettings resourcePackSettings = new ResourcePackSettings();
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class ResourcePackSettings extends OkaeriConfig {
+
+        @CustomKey("auto-encrypt")
+        @Comment("If set to true, packs will be automatically encrypted")
+        private boolean autoEncrypt = true;
+
+        @CustomKey("max-chunk-size")
+        @Comment("The maximum size of a resource pack chunk (unit: KB)")
+        @Comment("Decrease this value may reduce the pressure on the network when sending packs to multiple clients")
+        @Comment("However, it may also increase the time it takes to send the packs")
+        private int maxChunkSize = 100; // 100KB, from BDS
+
+        @Comment("true - the player must accept resource packs, otherwise he will not log in to the server")
+        @Comment("false - the player can log in to the server without accepting resource packs")
+        @CustomKey("force-resource-packs")
+        private boolean forceResourcePacks = false;
+
+        // TODO: URL packs configuration
     }
 }
