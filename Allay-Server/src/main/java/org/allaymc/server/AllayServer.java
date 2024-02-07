@@ -129,7 +129,13 @@ public final class AllayServer implements Server {
             loggerConfig.setLevel(Level.TRACE);
             ctx.updateLoggers();
         }
-        Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {@Override public void run() {shutdown();}});
+        Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
+            @Override
+            public void run() {
+                // TODO: it seems not works
+                shutdown();
+            }
+        });
         initTerminalConsole();
         worldPool.loadWorlds();
         this.commandRegistry = new AllayCommandRegistry();
