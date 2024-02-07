@@ -129,16 +129,7 @@ public final class AllayServer implements Server {
             loggerConfig.setLevel(Level.TRACE);
             ctx.updateLoggers();
         }
-        Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
-            @Override
-            public void run() {
-                kickAllPlayersAndBlock();
-                isRunning.compareAndSet(true, false);
-                getWorldPool().getWorlds().values().forEach(World::close);
-                virtualThreadPool.shutdownNow();
-                computeThreadPool.shutdownNow();
-            }
-        });
+        Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {@Override public void run() {shutdown();}});
         initTerminalConsole();
         worldPool.loadWorlds();
         this.commandRegistry = new AllayCommandRegistry();
@@ -185,12 +176,16 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
-        SETTINGS.save();
-        // TODO: We need a better solution instead of just call System.exit() here
-        // It has caused a lot of problems like the server won't stop even we have called shutdown()
-        // Because ShutDownHookThread will be blocked in kickAllPlayersAndBlock() forever
-        System.exit(0);
-        // ShutdownHook will handle the rest
+        // Start a thread to handle server shutdown
+        Thread.ofPlatform().start(() -> {
+            SETTINGS.save();
+            kickAllPlayersAndBlock();
+            isRunning.compareAndSet(true, false);
+            worldPool.close();
+            virtualThreadPool.shutdownNow();
+            computeThreadPool.shutdownNow();
+            System.exit(0);
+        });
     }
 
     @Override

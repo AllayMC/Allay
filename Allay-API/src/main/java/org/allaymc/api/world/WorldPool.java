@@ -38,4 +38,6 @@ public interface WorldPool {
 
     @ApiStatus.Internal
     void loadWorlds();
+
+    void close();
 }
