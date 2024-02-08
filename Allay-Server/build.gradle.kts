@@ -33,6 +33,8 @@ dependencies {
     implementation(libs.fastreflect)
     implementation(libs.reflections)
     implementation(libs.caffeine)
+    implementation(libs.bundles.graaljs)
+
     testImplementation(libs.bytebuddy)
 }
 

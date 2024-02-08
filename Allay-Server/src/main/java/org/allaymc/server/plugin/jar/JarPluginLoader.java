@@ -40,6 +40,7 @@ public class JarPluginLoader implements PluginLoader {
     @Override
     public PluginContainer loadPlugin() {
         // Load main class
+        // No need to try-with-resources, as we want to keep the class loader alive until server shutdown
         JarPluginClassLoader classLoader = new JarPluginClassLoader(new URL[]{pluginPath.toUri().toURL()});
         var mainClass = classLoader.loadClass(descriptor.getMain());
         if (!Plugin.class.isAssignableFrom(mainClass)) {
