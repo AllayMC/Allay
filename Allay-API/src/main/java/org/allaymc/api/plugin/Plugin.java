@@ -6,9 +6,10 @@ package org.allaymc.api.plugin;
  * @author daoge_cmd
  */
 public interface Plugin {
-    void onLoad();
 
-    void onEnable();
+    default void onLoad() {}
 
-    void onDisable();
+    default void onEnable() {}
+
+    default void onDisable() {}
 }
