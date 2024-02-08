@@ -35,6 +35,7 @@ public class AllayPluginManager implements PluginManager {
 
         // 2. Find and use plugin loader to load plugin descriptor for each plugin path
         Map<String, PluginDescriptor> descriptors = new HashMap<>();
+        Map<String, PluginLoader> loaders = new HashMap<>();
         for (var path : paths) {
             var loader = findLoader(path);
             if (loader == null) continue;
@@ -45,21 +46,38 @@ public class AllayPluginManager implements PluginManager {
                 continue;
             }
             descriptors.put(name, descriptor);
+            loaders.put(name, loader);
         }
 
         // 3. Check for circular dependencies
         var dag = new DAG<String>();
         try {
-            for (var descriptor : descriptors.values())
-                for (var dependency : descriptor.getDependencies())
-                    dag.addEdge(dependency.name(), descriptor.getName());
+            // Add all plugin names to dag firstly
+            descriptors.keySet().forEach(dag::createNode);
+            for (var descriptor : descriptors.values()) {
+                for (var dependency : descriptor.getDependencies()) {
+                    var depNode = dag.getNode(dependency.name());
+                    if (depNode == null) {
+                        if (!dependency.optional())
+                            throw new PluginException("Plugin " + descriptor.getName() + " require a dependency plugin " + dependency.name() + " which is not exists!");
+                        else continue;
+                    }
+                    depNode.addChild(dag.getNode(descriptor.getName()));
+                }
+            }
             dag.update();
         } catch (CycleFoundException cfe) {
-            log.error(cfe.getMessage());
-            throw cfe;
+            throw new PluginException(cfe);
         }
 
-        // 4. Load plugins (parent -> child) TODO
+        // 4. Load plugins (parent -> child)
+        dag.visit(node -> {
+            var descriptor = descriptors.get(node.getObject());
+            var loader = loaders.get(node.getObject());
+            var pluginContainer = loader.loadPlugin();
+            pluginContainer.plugin().onLoad();
+            plugins.put(descriptor.getName(), pluginContainer);
+        });
     }
 
     @Override
