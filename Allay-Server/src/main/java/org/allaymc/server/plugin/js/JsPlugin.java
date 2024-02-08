@@ -18,11 +18,17 @@ import java.io.File;
  */
 public class JsPlugin extends Plugin {
 
+    protected File entranceFile;
     protected Context jsContext;
     protected Logger log;
 
-    @SneakyThrows
     public JsPlugin(File entranceFile) {
+        this.entranceFile = entranceFile;
+    }
+
+    @SneakyThrows
+    @Override
+    public void onLoad() {
         log = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
         jsContext = Context.newBuilder("js")
                 .allowAllAccess(true)
@@ -30,23 +36,20 @@ public class JsPlugin extends Plugin {
                 .allowHostAccess(HostAccess.ALL)
                 .allowHostClassLoading(true)
                 .allowHostClassLookup(className -> true)
+                .option("js.esm-eval-returns-exports", "true")
                 .build();
         initGlobalMembers();
         jsContext.eval(
                 Source.newBuilder("js", entranceFile)
                         .build()
         );
+        tryCallJsFunction("onLoad");
     }
 
     protected void initGlobalMembers() {
         var binding = jsContext.getBindings("js");
         binding.putMember("plugin", this);
         binding.putMember("console", log);
-    }
-
-    @Override
-    public void onLoad() {
-        tryCallJsFunction("onLoad");
     }
 
     @Override

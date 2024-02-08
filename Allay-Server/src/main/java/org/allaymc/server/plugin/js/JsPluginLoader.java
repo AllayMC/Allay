@@ -53,7 +53,9 @@ public class JsPluginLoader implements PluginLoader {
         if (!Files.exists(dataFolder)) {
             Files.createDirectory(dataFolder);
         }
-        return new PluginContainer(jsPlugin, descriptor, this, dataFolder);
+        var pluginContainer = new PluginContainer(jsPlugin, descriptor, this, dataFolder);
+        jsPlugin.setPluginContainer(pluginContainer);
+        return pluginContainer;
     }
 
     public static class JsPluginLoaderFactory implements PluginLoaderFactory {

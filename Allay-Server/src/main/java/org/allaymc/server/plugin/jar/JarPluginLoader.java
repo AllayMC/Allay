@@ -48,18 +48,20 @@ public class JarPluginLoader implements PluginLoader {
             throw new PluginException("Main class must implement interface Plugin: " + descriptor.getEntrance());
         }
         // Try to construct plugin instance
-        Plugin pluginInstance = null;
+        Plugin pluginInstance;
         try {
             pluginInstance = (Plugin) mainClass.getConstructor().newInstance();
         } catch (Exception e) {
-            log.error("Error while constructing plugin instance! Plugin: " + descriptor.getName(), e);
+            throw new PluginException("Error while constructing plugin instance! Plugin: " + descriptor.getName());
         }
         // Create data folder for plugin
         var dataFolder = DEFAULT_PLUGIN_FOLDER.resolve(descriptor.getName());
         if (!Files.exists(dataFolder)) {
             Files.createDirectory(dataFolder);
         }
-        return new PluginContainer(pluginInstance, descriptor, this, dataFolder);
+        var pluginContainer = new PluginContainer(pluginInstance, descriptor, this, dataFolder);
+        pluginInstance.setPluginContainer(pluginContainer);
+        return pluginContainer;
     }
 
     protected Class<?> findMainClass() {
