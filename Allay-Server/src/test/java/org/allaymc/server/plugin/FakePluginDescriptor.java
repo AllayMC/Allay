@@ -30,6 +30,11 @@ public class FakePluginDescriptor implements PluginDescriptor {
     }
 
     @Override
+    public String getEntrance() {
+        return "";
+    }
+
+    @Override
     public String getDescription() {
         return "";
     }

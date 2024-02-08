@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.plugin.*;
 import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.server.plugin.SimplePluginDescriptor;
 
 import java.net.URL;
 import java.nio.file.*;
@@ -20,7 +21,7 @@ public class JarPluginLoader implements PluginLoader {
 
     protected Path pluginPath;
     protected FileSystem jarFileSystem;
-    protected JarPluginDescriptor descriptor;
+    protected SimplePluginDescriptor descriptor;
 
     @SneakyThrows
     public JarPluginLoader(Path pluginPath) {
@@ -31,8 +32,8 @@ public class JarPluginLoader implements PluginLoader {
     @SneakyThrows
     @Override
     public PluginDescriptor loadDescriptor() {
-        descriptor = JSONUtils.from(Files.newBufferedReader(jarFileSystem.getPath("plugin.json")), JarPluginDescriptor.class);
-        JarPluginDescriptor.checkDescriptorValid(descriptor);
+        descriptor = JSONUtils.from(Files.newBufferedReader(jarFileSystem.getPath("plugin.json")), SimplePluginDescriptor.class);
+        PluginDescriptor.checkDescriptorValid(descriptor);
         return descriptor;
     }
 
@@ -42,9 +43,9 @@ public class JarPluginLoader implements PluginLoader {
         // Load main class
         // No need to try-with-resources, as we want to keep the class loader alive until server shutdown
         JarPluginClassLoader classLoader = new JarPluginClassLoader(new URL[]{pluginPath.toUri().toURL()});
-        var mainClass = classLoader.loadClass(descriptor.getMain());
+        var mainClass = classLoader.loadClass(descriptor.getEntrance());
         if (!Plugin.class.isAssignableFrom(mainClass)) {
-            throw new PluginException("Main class must implement interface Plugin: " + descriptor.getMain());
+            throw new PluginException("Main class must implement interface Plugin: " + descriptor.getEntrance());
         }
         // Try to construct plugin instance
         Plugin pluginInstance = null;

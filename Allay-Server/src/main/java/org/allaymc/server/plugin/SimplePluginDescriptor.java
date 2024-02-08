@@ -14,6 +14,7 @@ import java.util.List;
  */
 @Getter
 public class SimplePluginDescriptor implements PluginDescriptor {
+    private String entrance;
     private String name;
     private String description;
     private String version;
