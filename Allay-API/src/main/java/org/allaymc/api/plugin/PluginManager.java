@@ -14,11 +14,15 @@ public interface PluginManager {
     @ApiStatus.Internal
     void loadPlugins();
 
+    void enablePlugins();
+
+    void disablePlugins();
+
     void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory);
 
     void registerSource(PluginSource pluginSource);
 
-    Map<String, PluginContainer> getPlugins();
+    Map<String, PluginContainer> getPluginContainers();
 
-    PluginContainer getPlugin(String name);
+    PluginContainer getPluginContainer(String name);
 }

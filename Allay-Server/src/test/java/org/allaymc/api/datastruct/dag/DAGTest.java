@@ -20,7 +20,7 @@ public class DAGTest {
 
     @Test
     public void createNodeTest() {
-        Node<String> node = DAG.createNode("Node0");
+        DAG.createNode("Node0");
         assertEquals(1, DAG.getNodes().size());
     }
 

@@ -20,6 +20,7 @@ public class AllayPluginManager implements PluginManager {
     protected Set<PluginSource> sources = new HashSet<>();
     protected Set<PluginLoader.PluginLoaderFactory> loaderFactories = new HashSet<>();
     protected Map<String, PluginContainer> plugins = new HashMap<>();
+    protected DAG<String> dag = new DAG<>();
 
     public AllayPluginManager() {
         registerLoaderFactory(new JarPluginLoader.JarPluginLoaderFactory());
@@ -50,7 +51,6 @@ public class AllayPluginManager implements PluginManager {
         }
 
         // 3. Check for circular dependencies
-        var dag = new DAG<String>();
         try {
             // Add all plugin names to dag firstly
             descriptors.keySet().forEach(dag::createNode);
@@ -75,8 +75,24 @@ public class AllayPluginManager implements PluginManager {
             var descriptor = descriptors.get(node.getObject());
             var loader = loaders.get(node.getObject());
             var pluginContainer = loader.loadPlugin();
-            pluginContainer.plugin().onLoad();
             plugins.put(descriptor.getName(), pluginContainer);
+            pluginContainer.plugin().onLoad();
+        });
+    }
+
+    @Override
+    public void enablePlugins() {
+        dag.visit(node -> {
+            var pluginContainer = getPluginContainer(node.getObject());
+            pluginContainer.plugin().onEnable();
+        });
+    }
+
+    @Override
+    public void disablePlugins() {
+        dag.visit(node -> {
+            var pluginContainer = getPluginContainer(node.getObject());
+            pluginContainer.plugin().onDisable();
         });
     }
 
@@ -91,12 +107,12 @@ public class AllayPluginManager implements PluginManager {
     }
 
     @Override
-    public Map<String, PluginContainer> getPlugins() {
+    public Map<String, PluginContainer> getPluginContainers() {
         return Collections.unmodifiableMap(plugins);
     }
 
     @Override
-    public PluginContainer getPlugin(String name) {
+    public PluginContainer getPluginContainer(String name) {
         return plugins.get(name);
     }
 
