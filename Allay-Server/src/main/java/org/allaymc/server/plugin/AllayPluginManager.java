@@ -50,13 +50,9 @@ public class AllayPluginManager implements PluginManager {
         // 3. Check for circular dependencies
         var dag = new DAG<String>();
         try {
-            for (var descriptor : descriptors.values()) {
-                var node = dag.getOrCreateNode(descriptor.getName());
-                for (var dependency : descriptor.getDependencies()) {
-                    var depNode = dag.getOrCreateNode(dependency.name());
-                    node.addParent(depNode);
-                }
-            }
+            for (var descriptor : descriptors.values())
+                for (var dependency : descriptor.getDependencies())
+                    dag.addEdge(dependency.name(), descriptor.getName());
             dag.update();
         } catch (CycleFoundException cfe) {
             log.error(cfe.getMessage());

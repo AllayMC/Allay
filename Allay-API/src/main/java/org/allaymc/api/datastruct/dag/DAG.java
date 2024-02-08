@@ -101,10 +101,8 @@ public class DAG<T> {
      * @param child Child
      */
     public void addEdge(T parent, T child) {
-        Node<T> parentNode = getNode(parent);
-        Node<T> childNode = getNode(child);
-        if (parentNode == null) parentNode = createNode(parent);
-        if (childNode == null) childNode = createNode(child);
+        Node<T> parentNode = getOrCreateNode(parent);
+        Node<T> childNode = getOrCreateNode(child);
         parentNode.addChild(childNode);
     }
 
