@@ -1,0 +1,6 @@
+{
+  "entrance": "main.js",
+  "name": "Example-Plugin-Js",
+  "authors": ["daoge_cmd"],
+  "version": "1.0.0"
+}
