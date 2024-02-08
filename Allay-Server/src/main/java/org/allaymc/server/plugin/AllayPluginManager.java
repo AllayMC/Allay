@@ -154,7 +154,6 @@ public class AllayPluginManager implements PluginManager {
         for (var loaderFactory : loaderFactories) {
             if (loaderFactory.canLoad(pluginPath)) return loaderFactory.create(pluginPath);
         }
-        log.warn("Can't find loader for plugin " + pluginPath);
         return null;
     }
 }
