@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -25,21 +26,59 @@ public class AllayPluginManagerTest extends AllayPluginManager {
         assertThrows(PluginException.class, () -> checkCircularDependencies(descriptors));
     }
 
-
     @Test
     void testCheckCircularDependenciesV2() {
         var descriptors = builder()
                 .add("a")
-                .dependOn("c")
+                .dependOn("b")
                 .end()
                 .add("b")
-                .dependOn("a")
+                .dependOn("c")
                 .end()
                 .add("c")
                 .dependOn("a")
                 .end()
                 .build();
         assertThrows(PluginException.class, () -> checkCircularDependencies(descriptors));
+    }
+
+    @Test
+    void testCheckCircularDependenciesV3() {
+        var descriptors = builder()
+                .add("a")
+                .dependOn("b")
+                .end()
+                .add("b")
+                .dependOn("c")
+                .end()
+                .add("c")
+                .softDependOn("a")
+                .end()
+                .build();
+        assertThrows(PluginException.class, () -> checkCircularDependencies(descriptors));
+    }
+
+    @Test
+    void testCheckCircularDependenciesV4() {
+        var descriptors = builder()
+                .add("a")
+                .softDependOn("a")
+                .end()
+                .build();
+        assertThrows(PluginException.class, () -> checkCircularDependencies(descriptors));
+    }
+
+    @Test
+    void testSoftDependency() {
+        var descriptors = builder()
+                .add("a")
+                .dependOn("b")
+                .end()
+                .add("b")
+                .softDependOn("c")
+                .end()
+                .build();
+        assertDoesNotThrow(() -> checkCircularDependencies(descriptors));
     }
 
     static DescriptorMapBuilder builder() {
