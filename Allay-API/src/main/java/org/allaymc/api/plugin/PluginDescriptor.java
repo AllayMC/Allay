@@ -1,28 +1,28 @@
 package org.allaymc.api.plugin;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Allay Project 2024/2/8
  *
  * @author daoge_cmd
+ *
+ * If the plugin does not provide certain information,
+ * it will populate an empty object/value instead of leaving it null
  */
 public interface PluginDescriptor {
-    String getName();
+    String name();
 
-    Optional<String> getDescription();
+    // Plugins can leave this information unavailable
+    String description();
 
-    String getVersion();
+    String version();
 
-    List<String> getAuthors();
+    List<String> authors();
 
-    List<PluginDependency> getDependencies();
+    // Plugins can leave this information unavailable
+    List<PluginDependency> dependencies();
 
-    /**
-     * Plugin's website specified in the plugin.yml.
-     *
-     * @return website url
-     */
-    Optional<String> getWebsite();
+    // Plugins can leave this information unavailable
+    String website();
 }

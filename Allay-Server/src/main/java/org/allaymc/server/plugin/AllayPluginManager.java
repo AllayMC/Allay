@@ -48,7 +48,7 @@ public class AllayPluginManager implements PluginManager {
             var loader = findLoader(path);
             if (loader == null) continue;
             var descriptor = loader.loadDescriptor();
-            var name = descriptor.getName();
+            var name = descriptor.name();
             if (descriptors.containsKey(name)) {
                 log.warn("Duplicate plugin is found, name: " + name);
                 continue;
@@ -66,7 +66,7 @@ public class AllayPluginManager implements PluginManager {
             var descriptor = descriptors.get(node.getObject());
             var loader = loaders.get(node.getObject());
             var pluginContainer = loader.loadPlugin();
-            plugins.put(descriptor.getName(), pluginContainer);
+            plugins.put(descriptor.name(), pluginContainer);
             pluginContainer.plugin().onLoad();
         });
     }
@@ -76,14 +76,14 @@ public class AllayPluginManager implements PluginManager {
             // Add all plugin names to dag firstly
             descriptors.keySet().forEach(dag::createNode);
             for (var descriptor : descriptors.values()) {
-                for (var dependency : descriptor.getDependencies()) {
+                for (var dependency : descriptor.dependencies()) {
                     var depNode = dag.getNode(dependency.name());
                     if (depNode == null) {
                         if (!dependency.optional())
-                            throw new PluginException("Plugin " + descriptor.getName() + " require a dependency plugin " + dependency.name() + " which is not exists!");
+                            throw new PluginException("Plugin " + descriptor.name() + " require a dependency plugin " + dependency.name() + " which is not exists!");
                         else continue;
                     }
-                    depNode.addChild(dag.getNode(descriptor.getName()));
+                    depNode.addChild(dag.getNode(descriptor.name()));
                 }
             }
             dag.update();

@@ -1,11 +1,11 @@
 package org.allaymc.server.plugin;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.plugin.PluginDescriptor;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Allay Project 2024/2/8
@@ -13,6 +13,7 @@ import java.util.Optional;
  * @author daoge_cmd
  */
 @Getter
+@Accessors(fluent = true)
 public class FakePluginDescriptor implements PluginDescriptor {
 
     protected String name;
@@ -31,12 +32,12 @@ public class FakePluginDescriptor implements PluginDescriptor {
     }
 
     @Override
-    public Optional<String> getDescription() {
-        return Optional.empty();
+    public String description() {
+        return "";
     }
 
     @Override
-    public Optional<String> getWebsite() {
-        return Optional.empty();
+    public String website() {
+        return "";
     }
 }
