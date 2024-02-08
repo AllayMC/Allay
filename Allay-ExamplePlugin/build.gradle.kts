@@ -16,3 +16,7 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.shadowJar {
+    destinationDirectory = File("${rootProject.projectDir}/run/plugins")
+}
