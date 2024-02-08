@@ -5,6 +5,7 @@ import org.allaymc.api.datastruct.dag.CycleFoundException;
 import org.allaymc.api.datastruct.dag.DAG;
 import org.allaymc.api.plugin.*;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -29,14 +30,21 @@ public class AllayPluginManager implements PluginManager {
     @Override
     public void loadPlugins() {
         // 1. Load possible plugin paths from plugin sources
-        Set<Path> paths = new HashSet<>();
-        for (var source : sources) {
-            paths.addAll(source.find());
-        }
+        Set<Path> paths = findPluginPaths();
 
         // 2. Find and use plugin loader to load plugin descriptor for each plugin path
         Map<String, PluginDescriptor> descriptors = new HashMap<>();
         Map<String, PluginLoader> loaders = new HashMap<>();
+        findLoadersAndLoadDescriptors(paths, descriptors, loaders);
+
+        // 3. Check for circular dependencies
+        checkCircularDependencies(descriptors);
+
+        // 4. Load plugins (parent -> child)
+        onLoad(descriptors, loaders);
+    }
+
+    protected void findLoadersAndLoadDescriptors(Set<Path> paths, Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
         for (var path : paths) {
             var loader = findLoader(path);
             if (loader == null) continue;
@@ -49,8 +57,22 @@ public class AllayPluginManager implements PluginManager {
             descriptors.put(name, descriptor);
             loaders.put(name, loader);
         }
+    }
 
-        // 3. Check for circular dependencies
+    private record Result(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
+    }
+
+    protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
+        dag.visit(node -> {
+            var descriptor = descriptors.get(node.getObject());
+            var loader = loaders.get(node.getObject());
+            var pluginContainer = loader.loadPlugin();
+            plugins.put(descriptor.getName(), pluginContainer);
+            pluginContainer.plugin().onLoad();
+        });
+    }
+
+    protected void checkCircularDependencies(Map<String, ? extends PluginDescriptor> descriptors) {
         try {
             // Add all plugin names to dag firstly
             descriptors.keySet().forEach(dag::createNode);
@@ -69,15 +91,14 @@ public class AllayPluginManager implements PluginManager {
         } catch (CycleFoundException cfe) {
             throw new PluginException(cfe);
         }
+    }
 
-        // 4. Load plugins (parent -> child)
-        dag.visit(node -> {
-            var descriptor = descriptors.get(node.getObject());
-            var loader = loaders.get(node.getObject());
-            var pluginContainer = loader.loadPlugin();
-            plugins.put(descriptor.getName(), pluginContainer);
-            pluginContainer.plugin().onLoad();
-        });
+    protected Set<Path> findPluginPaths() {
+        Set<Path> paths = new HashSet<>();
+        for (var source : sources) {
+            paths.addAll(source.find());
+        }
+        return paths;
     }
 
     @Override

@@ -7,7 +7,6 @@ package org.allaymc.api.plugin;
  */
 public record PluginDependency(
         String name,
-        String version,
         boolean optional
 ) {
 }
