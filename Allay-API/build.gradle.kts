@@ -6,11 +6,6 @@ group = "org.allaymc"
 description = "api"
 version = "0.0.1"
 
-java {
-    java.sourceCompatibility = JavaVersion.VERSION_17
-    java.targetCompatibility = JavaVersion.VERSION_17
-}
-
 dependencies {
     api(libs.network) {
         exclude(group = "org.cloudburstmc", module = "nbt") // use allay nbt
