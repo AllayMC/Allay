@@ -3,6 +3,8 @@ package org.allaymc.server.plugin;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.datastruct.dag.CycleFoundException;
 import org.allaymc.api.datastruct.dag.DAG;
+import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.*;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
 import org.allaymc.server.plugin.js.JsPluginLoader;
@@ -58,7 +60,7 @@ public class AllayPluginManager implements PluginManager {
             var descriptor = loader.loadDescriptor();
             var name = descriptor.getName();
             if (descriptors.containsKey(name)) {
-                log.warn("Duplicate plugin is found, name: " + name);
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DUPLICATE, name));
                 continue;
             }
             descriptors.put(name, descriptor);
@@ -69,12 +71,13 @@ public class AllayPluginManager implements PluginManager {
     protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
         dag.visit(node -> {
             var descriptor = descriptors.get(node.getObject());
+            log.info(I18n.get().tr(TrKeys.A_PLUGIN_LOADING, descriptor.getName()));
             var loader = loaders.get(node.getObject());
             PluginContainer pluginContainer;
             try {
                 pluginContainer = loader.loadPlugin();
             } catch (Exception e) {
-                log.error("Error while loading plugin " + descriptor.getName(), e);
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName()), e);
                 return;
             }
             plugins.put(descriptor.getName(), pluginContainer);
@@ -91,7 +94,7 @@ public class AllayPluginManager implements PluginManager {
                     var depNode = dag.getNode(dependency.name());
                     if (depNode == null) {
                         if (!dependency.optional())
-                            throw new PluginException("Plugin " + descriptor.getName() + " require a dependency plugin " + dependency.name() + " which is not exists!");
+                            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
                         else continue;
                     }
                     depNode.addChild(dag.getNode(descriptor.getName()));
@@ -115,10 +118,11 @@ public class AllayPluginManager implements PluginManager {
     public void enablePlugins() {
         dag.visit(node -> {
             var pluginContainer = getPluginContainer(node.getObject());
+            log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
                 pluginContainer.plugin().onEnable();
             } catch (Exception e) {
-                log.error("Error while enabling plugin " + pluginContainer.descriptor().getName(), e);
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }
         });
     }
@@ -127,10 +131,11 @@ public class AllayPluginManager implements PluginManager {
     public void disablePlugins() {
         dag.visit(node -> {
             var pluginContainer = getPluginContainer(node.getObject());
+            log.info(I18n.get().tr(TrKeys.A_PLUGIN_DISABLING, pluginContainer.descriptor().getName()));
             try {
                 pluginContainer.plugin().onDisable();
             } catch (Exception e) {
-                log.error("Error while disabling plugin " + pluginContainer.descriptor().getName(), e);
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }
         });
     }

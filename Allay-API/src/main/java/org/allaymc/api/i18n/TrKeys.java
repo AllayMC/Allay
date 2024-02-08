@@ -73,6 +73,28 @@ public interface TrKeys {
 
   String A_PACK_LOADING_ENTRY = "allay:pack.loading.entry";
 
+  String A_PLUGIN_CONSTRUCT_INSTANCE_ERROR = "allay:plugin.construct.instance.error";
+
+  String A_PLUGIN_DEPENDENCY_MISSING = "allay:plugin.dependency.missing";
+
+  String A_PLUGIN_DISABLE_ERROR = "allay:plugin.disable.error";
+
+  String A_PLUGIN_DISABLING = "allay:plugin.disabling";
+
+  String A_PLUGIN_DUPLICATE = "allay:plugin.duplicate";
+
+  String A_PLUGIN_ENABLE_ERROR = "allay:plugin.enable.error";
+
+  String A_PLUGIN_ENABLING = "allay:plugin.enabling";
+
+  String A_PLUGIN_ENTRANCE_MISSING = "allay:plugin.entrance.missing";
+
+  String A_PLUGIN_JAR_ENTRANCE_TYPEINVALID = "allay:plugin.jar.entrance.typeinvalid";
+
+  String A_PLUGIN_LOAD_ERROR = "allay:plugin.load.error";
+
+  String A_PLUGIN_LOADING = "allay:plugin.loading";
+
   String A_WORLD_LOADED = "allay:world.loaded";
 
   String A_WORLD_LOADING = "allay:world.loading";

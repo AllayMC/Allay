@@ -33,5 +33,16 @@
   "pack.encrypting": "正在加密资源包 %1",
   "pack.encrypted": "资源包 %1 已加密。密钥为: %2",
   "world.loading": "正在加载世界 %1",
-  "world.loaded": "世界 %1 已加载"
+  "world.loaded": "世界 %1 已加载",
+  "plugin.duplicate": "找到重复的插件 %1",
+  "plugin.loading": "正在读取插件 %1",
+  "plugin.load.error": "读取插件 %1 时发生错误: %2",
+  "plugin.dependency.missing": "插件 %1 缺少依赖 %2",
+  "plugin.enabling": "正在开启插件 %1",
+  "plugin.enable.error": "开启插件 %1 时发生错误: %2",
+  "plugin.disabling": "正在关闭插件 %1",
+  "plugin.disable.error": "卸载插件 %1 时发生错误: %2",
+  "plugin.construct.instance.error": "创建插件 %1 实例时发生错误 %2",
+  "plugin.entrance.missing": "无法找到插件 %1 的入口",
+  "plugin.jar.mainclass.typeinvalid": "插件 %1 的主类未继承Plugin"
 }

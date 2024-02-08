@@ -33,5 +33,16 @@
   "pack.encrypting": "Encrypting pack %1",
   "pack.encrypted": "Pack %1 is encrypted. Key: %2",
   "world.loading": "Loading world %1",
-  "world.loaded": "World %1 is loaded"
+  "world.loaded": "World %1 is loaded",
+  "plugin.duplicate": "Find duplicate plugin %1",
+  "plugin.loading": "Loading plugin %1",
+  "plugin.load.error": "Error while loading plugin %1. Error: %2",
+  "plugin.dependency.missing": "Plugin %1 is depending on plugin %2, which is not found",
+  "plugin.enabling": "Enabling plugin %1",
+  "plugin.enable.error": "Error while enabling plugin %1. Error: %2",
+  "plugin.disabling": "Disabling plugin %1",
+  "plugin.disable.error": "Error while disabling plugin %1. Error: %2",
+  "plugin.construct.instance.error": "Error while constructing plugin instance for plugin %1. Error: %2",
+  "plugin.entrance.missing": "Can't find the entrance of plugin %1",
+  "plugin.jar.entrance.typeinvalid": "The entrance class of plugin %1 is not a subclass of Plugin"
 }

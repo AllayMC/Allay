@@ -195,9 +195,12 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
+        // TODO: check the reason
+        // Do not move this line down
+        // Otherwise server-settings.yml will be blank after shutdown
+        SETTINGS.save();
         // Start a thread to handle server shutdown
         Thread.ofPlatform().start(() -> {
-            SETTINGS.save();
             kickAllPlayersAndBlock();
             isRunning.compareAndSet(true, false);
             worldPool.close();

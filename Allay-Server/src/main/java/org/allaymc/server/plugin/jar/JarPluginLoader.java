@@ -3,6 +3,8 @@ package org.allaymc.server.plugin.jar;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.*;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.server.plugin.SimplePluginDescriptor;
@@ -47,14 +49,14 @@ public class JarPluginLoader implements PluginLoader {
         // noinspection resource: No need to try-with-resources, as we want to keep the class loader alive until server shutdown
         Class<?> mainClass = findMainClass();
         if (!Plugin.class.isAssignableFrom(mainClass)) {
-            throw new PluginException("Main class must implement interface Plugin: " + descriptor.getEntrance());
+            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_JAR_ENTRANCE_TYPEINVALID, descriptor.getName()));
         }
         // Try to construct plugin instance
         Plugin pluginInstance;
         try {
             pluginInstance = (Plugin) mainClass.getConstructor().newInstance();
         } catch (Exception e) {
-            throw new PluginException("Error while constructing plugin instance! Plugin: " + descriptor.getName());
+            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_CONSTRUCT_INSTANCE_ERROR, descriptor.getName()));
         }
         // Create data folder for plugin
         var dataFolder = DEFAULT_PLUGIN_FOLDER.resolve(descriptor.getName());
@@ -71,7 +73,7 @@ public class JarPluginLoader implements PluginLoader {
             var classLoader = new JarPluginClassLoader(new URL[]{pluginPath.toUri().toURL()});
             return classLoader.loadClass(descriptor.getEntrance());
         } catch (ClassNotFoundException e1) {
-            throw new PluginException("Main class not found: " + descriptor.getEntrance());
+            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_ENTRANCE_MISSING, descriptor.getName()));
         } catch (MalformedURLException e2) {
             throw new PluginException("Invalid URL: " + pluginPath.toUri());
         }
