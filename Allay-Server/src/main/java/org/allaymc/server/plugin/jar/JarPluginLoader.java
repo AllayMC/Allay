@@ -1,5 +1,6 @@
 package org.allaymc.server.plugin.jar;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.plugin.*;
@@ -20,6 +21,7 @@ import static org.allaymc.server.plugin.DefaultPluginSource.DEFAULT_PLUGIN_FOLDE
 @Slf4j
 public class JarPluginLoader implements PluginLoader {
 
+    @Getter
     protected Path pluginPath;
     protected FileSystem jarFileSystem;
     protected PluginDescriptor descriptor;

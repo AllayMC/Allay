@@ -1,5 +1,6 @@
 package org.allaymc.server.plugin.js;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.allaymc.api.plugin.PluginContainer;
 import org.allaymc.api.plugin.PluginDescriptor;
@@ -22,6 +23,7 @@ import static org.allaymc.server.plugin.DefaultPluginSource.DEFAULT_PLUGIN_FOLDE
  */
 public class JsPluginLoader implements PluginLoader {
 
+    @Getter
     protected Path pluginPath;
     protected PluginDescriptor descriptor;
 

@@ -1,13 +1,14 @@
-let log;
+import {a} from './another.js';
 
-function onLoad() {
-    log.info("Example-Plugin-Js has been loaded!");
+export function onLoad() {
+    console.info("Example-Plugin-Js has been loaded!");
 }
 
-function onEnable() {
-    log.info("Example-Plugin-Js has been enabled!");
+export function onEnable() {
+    console.info("Example-Plugin-Js has been enabled!");
+    a(console);
 }
 
-function onDisable() {
-    log.info("Example-Plugin-Js has been disabled!");
+export function onDisable() {
+    console.info("Example-Plugin-Js has been disabled!");
 }

@@ -5,6 +5,7 @@ import org.allaymc.api.plugin.Plugin;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
+import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.io.IOAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ public class JsPlugin extends Plugin {
 
     protected File entranceFile;
     protected Context jsContext;
+    protected Value jsExport;
     protected Logger log;
 
     public JsPlugin(File entranceFile) {
@@ -31,16 +33,18 @@ public class JsPlugin extends Plugin {
     public void onLoad() {
         log = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
         jsContext = Context.newBuilder("js")
-                .allowAllAccess(true)
                 .allowIO(IOAccess.ALL)
+                .allowAllAccess(true)
                 .allowHostAccess(HostAccess.ALL)
                 .allowHostClassLoading(true)
                 .allowHostClassLookup(className -> true)
                 .option("js.esm-eval-returns-exports", "true")
                 .build();
         initGlobalMembers();
-        jsContext.eval(
+        jsExport = jsContext.eval(
                 Source.newBuilder("js", entranceFile)
+                        .name(entranceFile.getName())
+                        .mimeType("application/javascript+module")
                         .build()
         );
         tryCallJsFunction("onLoad");
@@ -63,8 +67,7 @@ public class JsPlugin extends Plugin {
     }
 
     protected void tryCallJsFunction(String onLoad) {
-        var binding = jsContext.getBindings("js");
-        var func = binding.getMember(onLoad);
+        var func = jsExport.getMember(onLoad);
         if (func.canExecute())
             func.executeVoid();
     }

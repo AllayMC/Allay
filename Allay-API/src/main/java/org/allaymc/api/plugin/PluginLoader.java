@@ -1,6 +1,5 @@
 package org.allaymc.api.plugin;
 
-import java.net.MalformedURLException;
 import java.nio.file.Path;
 
 /**
@@ -9,6 +8,8 @@ import java.nio.file.Path;
  * @author daoge_cmd
  */
 public interface PluginLoader {
+
+    Path getPluginPath();
 
     PluginDescriptor loadDescriptor();
 
