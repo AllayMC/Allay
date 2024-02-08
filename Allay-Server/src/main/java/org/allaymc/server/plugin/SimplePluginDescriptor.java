@@ -26,7 +26,7 @@ public class SimplePluginDescriptor implements PluginDescriptor {
         return description;
     }
 
-    public List<PluginDependency> fetDependencies() {
+    public List<PluginDependency> getDependencies() {
         if (dependencies == null) dependencies = Collections.emptyList();
         return dependencies;
     }

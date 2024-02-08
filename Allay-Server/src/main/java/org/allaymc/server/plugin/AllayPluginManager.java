@@ -59,14 +59,17 @@ public class AllayPluginManager implements PluginManager {
         }
     }
 
-    private record Result(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
-    }
-
     protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
         dag.visit(node -> {
             var descriptor = descriptors.get(node.getObject());
             var loader = loaders.get(node.getObject());
-            var pluginContainer = loader.loadPlugin();
+            PluginContainer pluginContainer;
+            try {
+                pluginContainer = loader.loadPlugin();
+            } catch (Exception e) {
+                log.error("Error while loading plugin " + descriptor.getName(), e);
+                return;
+            }
             plugins.put(descriptor.getName(), pluginContainer);
             pluginContainer.plugin().onLoad();
         });
@@ -105,7 +108,11 @@ public class AllayPluginManager implements PluginManager {
     public void enablePlugins() {
         dag.visit(node -> {
             var pluginContainer = getPluginContainer(node.getObject());
-            pluginContainer.plugin().onEnable();
+            try {
+                pluginContainer.plugin().onEnable();
+            } catch (Exception e) {
+                log.error("Error while enabling plugin " + pluginContainer.descriptor().getName(), e);
+            }
         });
     }
 
@@ -113,7 +120,11 @@ public class AllayPluginManager implements PluginManager {
     public void disablePlugins() {
         dag.visit(node -> {
             var pluginContainer = getPluginContainer(node.getObject());
-            pluginContainer.plugin().onDisable();
+            try {
+                pluginContainer.plugin().onDisable();
+            } catch (Exception e) {
+                log.error("Error while disabling plugin " + pluginContainer.descriptor().getName(), e);
+            }
         });
     }
 

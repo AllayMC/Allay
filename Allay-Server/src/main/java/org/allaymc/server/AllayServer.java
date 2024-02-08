@@ -147,6 +147,7 @@ public final class AllayServer implements Server {
         this.networkServer = new AllayNetworkServer(this);
         this.pluginManager = new AllayPluginManager();
         pluginManager.loadPlugins();
+        pluginManager.enablePlugins();
         // TODO: plugin
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         this.networkServer.start();

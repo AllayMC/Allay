@@ -1,5 +1,6 @@
 package org.allaymc.api.plugin;
 
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 
 /**

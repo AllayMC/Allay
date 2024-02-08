@@ -1,18 +1,21 @@
 package org.allaymc.server.plugin.jar;
 
 import lombok.SneakyThrows;
-import org.allaymc.api.plugin.PluginContainer;
-import org.allaymc.api.plugin.PluginDescriptor;
-import org.allaymc.api.plugin.PluginLoader;
+import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.plugin.*;
 import org.allaymc.api.utils.JSONUtils;
 
+import java.net.URL;
 import java.nio.file.*;
+
+import static org.allaymc.server.plugin.DefaultPluginSource.DEFAULT_PLUGIN_FOLDER;
 
 /**
  * Allay Project 2024/2/8
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class JarPluginLoader implements PluginLoader {
 
     protected Path pluginPath;
@@ -33,10 +36,28 @@ public class JarPluginLoader implements PluginLoader {
         return descriptor;
     }
 
+    @SneakyThrows
     @Override
     public PluginContainer loadPlugin() {
-        // TODO
-        return null;
+        // Load main class
+        JarPluginClassLoader classLoader = new JarPluginClassLoader(new URL[]{pluginPath.toUri().toURL()});
+        var mainClass = classLoader.loadClass(descriptor.getMain());
+        if (!Plugin.class.isAssignableFrom(mainClass)) {
+            throw new PluginException("Main class must implement interface Plugin: " + descriptor.getMain());
+        }
+        // Try to construct plugin instance
+        Plugin pluginInstance = null;
+        try {
+            pluginInstance = (Plugin) mainClass.getConstructor().newInstance();
+        } catch (Exception e) {
+            log.error("Error while constructing plugin instance! Plugin: " + descriptor.getName(), e);
+        }
+        // Create data folder for plugin
+        var dataFolder = DEFAULT_PLUGIN_FOLDER.resolve(descriptor.getName());
+        if (!Files.exists(dataFolder)) {
+            Files.createDirectory(dataFolder);
+        }
+        return new PluginContainer(pluginInstance, descriptor, this, dataFolder);
     }
 
     public static class JarPluginLoaderFactory implements PluginLoaderFactory {
