@@ -7,6 +7,7 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
@@ -42,9 +43,8 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
     @Override
     public void register(Command command) {
         register(command.getName(), command);
-        for (var aliases : command.getAliases()) {
-            register(aliases, command);
-        }
+        command.getAliases().forEach(alias -> register(alias, command));
+        command.getPermissions().forEach(DefaultPermissions.OPERATOR::addPerm);
     }
 
     @Override
@@ -69,11 +69,6 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
             sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.failed();
         }
-    }
-
-    @Override
-    public Command register(String s, Command command) {
-        return super.register(s, command);
     }
 
     @Override

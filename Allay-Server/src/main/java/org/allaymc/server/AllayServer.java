@@ -20,16 +20,17 @@ import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.plugin.PluginManager;
+import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.plugin.AllayPluginManager;
+import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayWorldPool;
 import org.apache.logging.log4j.Level;
@@ -72,6 +73,8 @@ public final class AllayServer implements Server {
     private CommandRegistry commandRegistry;
     @Getter
     private PluginManager pluginManager;
+    @Getter
+    private Scheduler scheduler;
     @Getter
     private NetworkServer networkServer;
     private Thread terminalConsoleThread;
@@ -145,6 +148,7 @@ public final class AllayServer implements Server {
         this.commandRegistry = new AllayCommandRegistry();
         this.commandRegistry.registerDefaultCommands();
         this.networkServer = new AllayNetworkServer(this);
+        this.scheduler = new AllayScheduler();
         this.pluginManager = new AllayPluginManager();
         pluginManager.loadPlugins();
         pluginManager.enablePlugins();
@@ -166,6 +170,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void tick(long currentTick) {
+        this.scheduler.tick();
         playerStorage.tick(currentTick);
         autoSavePlayerData(currentTick);
     }

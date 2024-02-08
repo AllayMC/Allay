@@ -41,8 +41,8 @@ public class JarPluginLoader implements PluginLoader {
     @SneakyThrows
     @Override
     public PluginContainer loadPlugin() {
-        // Load main class
-        // No need to try-with-resources, as we want to keep the class loader alive until server shutdown
+        // Load the main class
+        // noinspection resource: No need to try-with-resources, as we want to keep the class loader alive until server shutdown
         Class<?> mainClass = findMainClass();
         if (!Plugin.class.isAssignableFrom(mainClass)) {
             throw new PluginException("Main class must implement interface Plugin: " + descriptor.getEntrance());

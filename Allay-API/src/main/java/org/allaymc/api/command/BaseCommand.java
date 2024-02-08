@@ -18,6 +18,7 @@ import static org.cloudburstmc.protocol.bedrock.data.command.CommandData.Flag.NO
  * @author daoge_cmd
  */
 public abstract class BaseCommand implements Command {
+
     @Getter
     protected final String name;
     @Getter
@@ -29,17 +30,19 @@ public abstract class BaseCommand implements Command {
     protected final List<String> aliases = new ArrayList<>();
     protected final List<CommandParamData[]> overloads = new ArrayList<>();
 
+    private boolean networkDataPrepared = false;
+
+    private CommandEnumData networkAliasesData = null;
+    private CommandOverloadData[] networkOverloadsData = null;
+
     public BaseCommand(String name, @MayContainTrKey String description) {
         this(name, description, Lists.newArrayList(COMMAND_PERM_PREFIX + name));
     }
 
     public BaseCommand(String name, @MayContainTrKey String description, List<String> permissions) {
-        Objects.requireNonNull(name);
-        Objects.requireNonNull(description);
-        Objects.requireNonNull(permissions);
-        this.name = name;
-        this.description = description;
-        this.permissions = permissions;
+        this.name = Objects.requireNonNull(name);
+        this.description = Objects.requireNonNull(description);
+        this.permissions = Objects.requireNonNull(permissions);
         // We just add NOT_CHEAT flag to all commands as the available_commands_packet is unique to each player
         flags.add(NOT_CHEAT);
     }
@@ -59,21 +62,15 @@ public abstract class BaseCommand implements Command {
         return Collections.unmodifiableSet(flags);
     }
 
-    private boolean networkDataPrepared = false;
-    private CommandEnumData networkAliasesData = null;
-    private CommandOverloadData[] networkOverloadsData = null;
-
     private void prepareNetworkData() {
         // Aliases
         // TODO: seems that the vanilla aliases implementation causes a lot of problems
-        if (!aliases.isEmpty()) {
-            var map = new HashMap<String, Set<CommandEnumConstraint>>();
-            map.put(name, Collections.emptySet());
-            for (var alias : aliases) {
-                map.put(alias, Collections.emptySet());
-            }
-            networkAliasesData = new CommandEnumData(name + "CommandAliases", map, false);
+        var map = new HashMap<String, Set<CommandEnumConstraint>>();
+        map.put(name, Collections.emptySet());
+        for (var alias : aliases) {
+            map.put(alias, Collections.emptySet());
         }
+        networkAliasesData = new CommandEnumData(name + "CommandAliases", map, false);
 
         // Overloads
         if (!overloads.isEmpty()) {
@@ -82,15 +79,15 @@ public abstract class BaseCommand implements Command {
                 var overload = overloads.get(index);
                 networkOverloadsData[index] = new CommandOverloadData(false, overload);
             }
+        } else {
+            networkOverloadsData = new CommandOverloadData[]{new CommandOverloadData(false, new CommandParamData[0])};
         }
         networkDataPrepared = true;
     }
 
     @Override
     public CommandData buildNetworkDataFor(EntityPlayer player) {
-        if (!networkDataPrepared) {
-            prepareNetworkData();
-        }
+        if (!networkDataPrepared) prepareNetworkData();
         return new CommandData(name, I18n.get().tr(player.getLangCode(), description), flags, CommandPermission.ANY, networkAliasesData, List.of(), networkOverloadsData);
     }
 }
