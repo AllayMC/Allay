@@ -1,3 +1,3 @@
-export function a(log) {
-    log.info("a() been called!");
+export function a() {
+    console.info("a() been called!");
 }

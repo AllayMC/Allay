@@ -6,7 +6,7 @@ export function onLoad() {
 
 export function onEnable() {
     console.info("Example-Plugin-Js has been enabled!");
-    a(console);
+    a();
 }
 
 export function onDisable() {
