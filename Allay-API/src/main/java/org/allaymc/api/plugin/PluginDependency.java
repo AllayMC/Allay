@@ -6,7 +6,7 @@ package org.allaymc.api.plugin;
  * @author daoge_cmd
  */
 public record PluginDependency(
-        String pluginName,
+        String name,
         String version,
         boolean optional
 ) {

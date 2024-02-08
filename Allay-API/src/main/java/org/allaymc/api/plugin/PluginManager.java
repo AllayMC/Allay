@@ -16,6 +16,8 @@ public interface PluginManager {
 
     void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory);
 
+    void registerSource(PluginSource pluginSource);
+
     Map<String, PluginContainer> getPlugins();
 
     PluginContainer getPlugin(String name);

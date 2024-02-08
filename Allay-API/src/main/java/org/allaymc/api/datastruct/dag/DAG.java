@@ -31,6 +31,17 @@ public class DAG<T> {
     }
 
     /**
+     * Get or creates node with given object
+     *
+     * @param object to create node with
+     * @return Node with given object
+     */
+    public Node<T> getOrCreateNode(T object) {
+        Node<T> node = getNode(object);
+        return node != null ? node : createNode(object);
+    }
+
+    /**
      * Creates node with given object
      *
      * @param object to create node with
@@ -82,7 +93,7 @@ public class DAG<T> {
         n.getParents().forEach(node -> {
             checkForCycles(node, path);
         });
-        path.remove(path.size() - 1);
+        path.removeLast();
     }
 
     /**
@@ -111,7 +122,7 @@ public class DAG<T> {
             sb.append(path.get(i).getObject().toString());
             sb.append("->");
         }
-        sb.append(path.get(path.size() - 1).getObject().toString());
+        sb.append(path.getLast().getObject().toString());
         return sb.toString();
     }
 
