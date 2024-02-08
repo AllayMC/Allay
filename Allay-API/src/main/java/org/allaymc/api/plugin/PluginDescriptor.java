@@ -1,5 +1,7 @@
 package org.allaymc.api.plugin;
 
+import org.cloudburstmc.protocol.common.util.Preconditions;
+
 import java.util.List;
 
 /**
@@ -25,4 +27,10 @@ public interface PluginDescriptor {
 
     // Plugins can leave this information unavailable
     String getWebsite();
+
+    static void checkDescriptorValid(PluginDescriptor descriptor) {
+        Preconditions.checkNotNull(descriptor.getName(), "Plugin name cannot be null");
+        Preconditions.checkNotNull(descriptor.getVersion(), "Plugin version cannot be null");
+        Preconditions.checkNotNull(descriptor.getAuthors(), "Plugin authors cannot be null");
+    }
 }

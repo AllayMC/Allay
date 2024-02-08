@@ -5,7 +5,6 @@ import org.allaymc.api.plugin.PluginContainer;
 import org.allaymc.api.plugin.PluginDescriptor;
 import org.allaymc.api.plugin.PluginLoader;
 import org.allaymc.api.utils.JSONUtils;
-import org.allaymc.server.plugin.SimplePluginDescriptor;
 
 import java.nio.file.*;
 
@@ -30,6 +29,7 @@ public class JarPluginLoader implements PluginLoader {
     @Override
     public PluginDescriptor loadDescriptor() {
         descriptor = JSONUtils.from(Files.newBufferedReader(jarFileSystem.getPath("plugin.json")), JarPluginDescriptor.class);
+        JarPluginDescriptor.checkDescriptorValid(descriptor);
         return descriptor;
     }
 
