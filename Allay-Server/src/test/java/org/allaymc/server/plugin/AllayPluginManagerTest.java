@@ -1,7 +1,9 @@
 package org.allaymc.server.plugin;
 
+import org.allaymc.api.datastruct.dag.DAG;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.plugin.PluginException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -15,6 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author daoge_cmd
  */
 public class AllayPluginManagerTest extends AllayPluginManager {
+
+    @BeforeEach
+    void cleanUp() {
+        dag = new DAG<>();
+    }
 
     @Test
     void testCheckCircularDependenciesV1() {
