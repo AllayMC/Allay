@@ -1,5 +1,5 @@
 group = "org.allaymc"
-description = "dataupdater"
+description = "data"
 version = "0.0.1"
 
 dependencies {

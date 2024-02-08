@@ -25,6 +25,11 @@ public class AllayPluginManager implements PluginManager {
     }
 
     @Override
+    public void loadPlugins() {
+        // TODO
+    }
+
+    @Override
     public void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory) {
         loaderFactories.add(loaderFactory);
     }
