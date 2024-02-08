@@ -1,11 +1,10 @@
 package org.allaymc.server.plugin;
 
 import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.plugin.PluginDescriptor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,8 +13,6 @@ import java.util.List;
  * @author daoge_cmd
  */
 @Getter
-@Setter
-@Accessors(fluent = true)
 public class SimplePluginDescriptor implements PluginDescriptor {
     private String name;
     private String description;
@@ -23,4 +20,19 @@ public class SimplePluginDescriptor implements PluginDescriptor {
     private List<String> authors;
     private List<PluginDependency> dependencies;
     private String website;
+
+    public String getDescription() {
+        if (description == null) description = "";
+        return description;
+    }
+
+    public List<PluginDependency> fetDependencies() {
+        if (dependencies == null) dependencies = Collections.emptyList();
+        return dependencies;
+    }
+
+    public String getWebsite() {
+        if (website == null) website = "";
+        return website;
+    }
 }

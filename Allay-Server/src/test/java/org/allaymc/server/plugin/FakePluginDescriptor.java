@@ -1,7 +1,6 @@
 package org.allaymc.server.plugin;
 
 import lombok.Getter;
-import lombok.experimental.Accessors;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.plugin.PluginDescriptor;
 
@@ -13,7 +12,6 @@ import java.util.List;
  * @author daoge_cmd
  */
 @Getter
-@Accessors(fluent = true)
 public class FakePluginDescriptor implements PluginDescriptor {
 
     protected String name;
@@ -32,12 +30,12 @@ public class FakePluginDescriptor implements PluginDescriptor {
     }
 
     @Override
-    public String description() {
+    public String getDescription() {
         return "";
     }
 
     @Override
-    public String website() {
+    public String getWebsite() {
         return "";
     }
 }

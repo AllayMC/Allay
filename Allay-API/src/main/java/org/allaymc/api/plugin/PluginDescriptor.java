@@ -11,18 +11,18 @@ import java.util.List;
  * it will populate an empty object/value instead of leaving it null
  */
 public interface PluginDescriptor {
-    String name();
+    String getName();
 
     // Plugins can leave this information unavailable
-    String description();
+    String getDescription();
 
-    String version();
+    String getVersion();
 
-    List<String> authors();
-
-    // Plugins can leave this information unavailable
-    List<PluginDependency> dependencies();
+    List<String> getAuthors();
 
     // Plugins can leave this information unavailable
-    String website();
+    List<PluginDependency> getDependencies();
+
+    // Plugins can leave this information unavailable
+    String getWebsite();
 }
