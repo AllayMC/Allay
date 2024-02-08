@@ -1,15 +1,22 @@
 package org.allaymc.api.plugin;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Allay Project 2024/2/8
  *
  * @author daoge_cmd
  */
-public interface Plugin {
+@Setter
+@Getter
+public abstract class Plugin {
 
-    default void onLoad() {}
+    protected PluginContainer pluginContainer;
 
-    default void onEnable() {}
+    public void onLoad() {}
 
-    default void onDisable() {}
+    public void onEnable() {}
+
+    public void onDisable() {}
 }

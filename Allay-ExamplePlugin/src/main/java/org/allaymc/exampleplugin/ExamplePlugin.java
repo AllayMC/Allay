@@ -9,7 +9,7 @@ import org.allaymc.api.plugin.Plugin;
  * @author daoge_cmd
  */
 @Slf4j
-public class ExamplePlugin implements Plugin {
+public class ExamplePlugin extends Plugin {
     @Override
     public void onLoad() {
         log.info("ExamplePlugin loaded!");

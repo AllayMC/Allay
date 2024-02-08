@@ -46,9 +46,8 @@ public class JsPluginLoader implements PluginLoader {
         if (!Files.exists(entrancePath)) {
             throw new PluginException("Entrance js file not found: " + entrancePath);
         }
-        var source = Files.readString(entrancePath);
         // Create js plugin instance
-        var jsPlugin = new JsPlugin(source);
+        var jsPlugin = new JsPlugin(entrancePath.toFile());
         // Create data folder for plugin
         var dataFolder = DEFAULT_PLUGIN_FOLDER.resolve(descriptor.getName());
         if (!Files.exists(dataFolder)) {
