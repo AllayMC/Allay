@@ -1,5 +1,7 @@
 package org.allaymc.api.datastruct.dag;
 
+import lombok.Getter;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,9 +16,10 @@ import java.util.function.Consumer;
  */
 public class Node<T> {
 
-    private List<Node<T>> parents;
-    private List<Node<T>> children;
-    private T object;
+    private final List<Node<T>> parents;
+    private final List<Node<T>> children;
+    @Getter
+    private final T object;
 
     protected Node(T object) {
         this.object = object;
@@ -47,10 +50,6 @@ public class Node<T> {
         }
     }
 
-    public T getObject() {
-        return object;
-    }
-
     List<Node<T>> getParents() {
         return parents;
     }
@@ -59,21 +58,22 @@ public class Node<T> {
         return children;
     }
 
-    public void addParents(Node<T>... par) {
-        for (Node<T> n : par) {
+    @SafeVarargs
+    public final void addParents(Node<T>... parents) {
+        for (Node<T> n : parents) {
             addParent(n);
         }
     }
 
     public void addParent(Node<T> parent) {
-        if (parent == this) throw new CycleFoundException(this.toString() + "->" + this.toString());
+        if (parent == this) throw new CycleFoundException(this + "->" + this);
         parents.add(parent);
         if (parent.getChildren().contains(this)) return;
         parent.addChild(this);
     }
 
     public void addChild(Node<T> child) {
-        if (child == this) throw new CycleFoundException(this.toString() + "->" + this.toString());
+        if (child == this) throw new CycleFoundException(this + "->" + this);
         children.add(child);
         if (child.getParents().contains(this)) return;
         child.addParent(this);
@@ -83,15 +83,8 @@ public class Node<T> {
     public String toString() {
         return "Node{" +
                 "object=" + object.toString() +
-//                ", parents=" + parents.size() +
-//                ", children=" + children.size() +
+                ", parents=" + parents.size() +
+                ", children=" + children.size() +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Node)
-            return object.equals(((Node<T>) obj).getObject());
-        else return false;
     }
 }

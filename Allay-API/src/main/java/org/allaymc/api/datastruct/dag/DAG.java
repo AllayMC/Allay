@@ -9,8 +9,8 @@ import java.util.function.Consumer;
  */
 public class DAG<T> {
 
-    private Map<T, Node<T>> nodes;
-    private List<Node<T>> roots;
+    private final Map<T, Node<T>> nodes;
+    private final List<Node<T>> roots;
 
     public DAG() {
         nodes = new LinkedHashMap<>();
@@ -54,7 +54,7 @@ public class DAG<T> {
 
     private void findRoots() {
         for (Node<T> n : nodes.values()) {
-            if (n.getParents().size() == 0)
+            if (n.getParents().isEmpty())
                 roots.add(n);
         }
     }
