@@ -5,6 +5,7 @@ import org.allaymc.api.datastruct.dag.CycleFoundException;
 import org.allaymc.api.datastruct.dag.DAG;
 import org.allaymc.api.plugin.*;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
+import org.allaymc.server.plugin.js.JsPluginLoader;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -25,6 +26,7 @@ public class AllayPluginManager implements PluginManager {
     public AllayPluginManager() {
         registerSource(new DefaultPluginSource());
         registerLoaderFactory(new JarPluginLoader.JarPluginLoaderFactory());
+        registerLoaderFactory(new JsPluginLoader.JsPluginLoaderFactory());
     }
 
     @Override

@@ -27,7 +27,7 @@ public class DefaultPluginSource implements PluginSource {
     @Override
     public Set<Path> find() {
         try(var stream = Files.list(DEFAULT_PLUGIN_FOLDER)) {
-            return stream.filter(Files::isRegularFile).collect(Collectors.toSet());
+            return stream.collect(Collectors.toSet());
         }
     }
 }

@@ -6,6 +6,7 @@ import org.allaymc.api.plugin.*;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.server.plugin.SimplePluginDescriptor;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.*;
 
@@ -21,7 +22,7 @@ public class JarPluginLoader implements PluginLoader {
 
     protected Path pluginPath;
     protected FileSystem jarFileSystem;
-    protected SimplePluginDescriptor descriptor;
+    protected PluginDescriptor descriptor;
 
     @SneakyThrows
     public JarPluginLoader(Path pluginPath) {
@@ -42,8 +43,7 @@ public class JarPluginLoader implements PluginLoader {
     public PluginContainer loadPlugin() {
         // Load main class
         // No need to try-with-resources, as we want to keep the class loader alive until server shutdown
-        JarPluginClassLoader classLoader = new JarPluginClassLoader(new URL[]{pluginPath.toUri().toURL()});
-        var mainClass = classLoader.loadClass(descriptor.getEntrance());
+        Class<?> mainClass = findMainClass();
         if (!Plugin.class.isAssignableFrom(mainClass)) {
             throw new PluginException("Main class must implement interface Plugin: " + descriptor.getEntrance());
         }
@@ -62,13 +62,24 @@ public class JarPluginLoader implements PluginLoader {
         return new PluginContainer(pluginInstance, descriptor, this, dataFolder);
     }
 
+    protected Class<?> findMainClass() {
+        try {
+            var classLoader = new JarPluginClassLoader(new URL[]{pluginPath.toUri().toURL()});
+            return classLoader.loadClass(descriptor.getEntrance());
+        } catch (ClassNotFoundException e1) {
+            throw new PluginException("Main class not found: " + descriptor.getEntrance());
+        } catch (MalformedURLException e2) {
+            throw new PluginException("Invalid URL: " + pluginPath.toUri());
+        }
+    }
+
     public static class JarPluginLoaderFactory implements PluginLoaderFactory {
 
         protected static final PathMatcher PATH_MATCHER = FileSystems.getDefault().getPathMatcher("glob:**.jar");
 
         @Override
         public boolean canLoad(Path pluginPath) {
-            return PATH_MATCHER.matches(pluginPath);
+            return PATH_MATCHER.matches(pluginPath) && Files.isRegularFile(pluginPath);
         }
 
         @Override
