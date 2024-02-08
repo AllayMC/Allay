@@ -18,7 +18,7 @@ public class JarPluginLoader implements PluginLoader {
 
     protected Path pluginPath;
     protected FileSystem jarFileSystem;
-    protected PluginDescriptor descriptor;
+    protected JarPluginDescriptor descriptor;
 
     @SneakyThrows
     public JarPluginLoader(Path pluginPath) {
@@ -29,7 +29,7 @@ public class JarPluginLoader implements PluginLoader {
     @SneakyThrows
     @Override
     public PluginDescriptor loadDescriptor() {
-        descriptor = JSONUtils.from(Files.newBufferedReader(jarFileSystem.getPath("plugin.json")), SimplePluginDescriptor.class);
+        descriptor = JSONUtils.from(Files.newBufferedReader(jarFileSystem.getPath("plugin.json")), JarPluginDescriptor.class);
         return descriptor;
     }
 

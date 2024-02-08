@@ -1,4 +1,5 @@
 {
+  "main": "org.allaymc.exampleplugin.ExamplePlugin",
   "name": "Example-Plugin",
   "authors": ["daoge_cmd"],
   "version": "1.0.0"
