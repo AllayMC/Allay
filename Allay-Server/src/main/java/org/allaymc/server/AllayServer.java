@@ -19,6 +19,7 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.world.DimensionInfo;
@@ -28,6 +29,7 @@ import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.network.AllayNetworkServer;
+import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.world.AllayWorldPool;
 import org.apache.logging.log4j.Level;
@@ -68,6 +70,8 @@ public final class AllayServer implements Server {
     private final ExecutorService virtualThreadPool;
     @Getter
     private CommandRegistry commandRegistry;
+    @Getter
+    private PluginManager pluginManager;
     @Getter
     private NetworkServer networkServer;
     private Thread terminalConsoleThread;
@@ -140,7 +144,9 @@ public final class AllayServer implements Server {
         worldPool.loadWorlds();
         this.commandRegistry = new AllayCommandRegistry();
         this.commandRegistry.registerDefaultCommands();
-        this.networkServer = initNetwork();
+        this.networkServer = new AllayNetworkServer(this);
+        this.pluginManager = new AllayPluginManager();
+        // TODO: plugin
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         this.networkServer.start();
         sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
@@ -204,10 +210,6 @@ public final class AllayServer implements Server {
     @UnmodifiableView
     public Map<UUID, EntityPlayer> getOnlinePlayers() {
         return Collections.unmodifiableMap(players);
-    }
-
-    private NetworkServer initNetwork() {
-        return new AllayNetworkServer(this);
     }
 
     @Override

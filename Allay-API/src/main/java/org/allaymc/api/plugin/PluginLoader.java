@@ -8,9 +8,14 @@ import java.nio.file.Path;
  * @author daoge_cmd
  */
 public interface PluginLoader {
-    boolean canLoad(Path path);
 
     PluginDescriptor loadDescriptor();
 
-    Plugin loadPlugin();
+    PluginContainer loadPlugin();
+
+    interface PluginLoaderFactory {
+        boolean canLoad(Path pluginPath);
+
+        PluginLoader create(Path pluginPath);
+    }
 }

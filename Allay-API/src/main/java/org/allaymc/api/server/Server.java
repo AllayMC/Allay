@@ -10,6 +10,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
@@ -51,6 +52,8 @@ public interface Server extends TaskCreator, CommandSender {
     void start(long timeMillis);
 
     void kickAllPlayersAndBlock();
+
+    PluginManager getPluginManager();
 
     void tick(long currentTick);
 

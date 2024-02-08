@@ -1,6 +1,6 @@
 package org.allaymc.api.plugin;
 
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Allay Project 2024/2/8
@@ -8,9 +8,9 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface PluginManager {
-    void registerLoader(PluginLoader loader);
+    void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory);
 
-    Set<Plugin> getPlugins();
+    Map<String, PluginContainer> getPlugins();
 
-    Plugin getPlugin(String name);
+    PluginContainer getPlugin(String name);
 }
