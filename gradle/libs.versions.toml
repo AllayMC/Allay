@@ -68,7 +68,7 @@ jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.
 # GraalJS
 polyglot = { group = "org.graalvm.polyglot", name = "polyglot", version = "23.1.2" }
 js = { group = "org.graalvm.polyglot", name = "js", version = "23.1.2"}
-chromeinspector = { group = "org.graalvm.tools", name = "chromeinspector", version = "23.0.3"}
+chromeinspector = { group = "org.graalvm.tools", name = "chromeinspector", version = "23.1.2"}
 
 
 [bundles]
