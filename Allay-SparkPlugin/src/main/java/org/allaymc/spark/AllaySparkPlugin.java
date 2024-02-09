@@ -65,7 +65,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
         Server.getInstance().getScheduler().scheduleRepeating(() -> {
             task.run();
             return false;
-        }, 1, true);
+        }, 0, true);
     }
 
     // https://stackoverflow.com/questions/20795373/how-to-map-levels-of-java-util-logging-and-slf4j-logger

@@ -36,6 +36,7 @@ import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.AuthoritativeMovementMode;
 import org.cloudburstmc.protocol.bedrock.data.ChatRestrictionLevel;
@@ -373,5 +374,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // TODO: plugin event
         manager.callEvent(PlayerLoggedInEvent.INSTANCE);
         sendPacket(PackRegistry.getRegistry().getPacksInfoPacket());
+    }
+
+    @Override
+    public int getPing() {
+        return (int) this.session.getPeer().getChannel().pipeline().get(RakSessionCodec.class).getPing();
     }
 }

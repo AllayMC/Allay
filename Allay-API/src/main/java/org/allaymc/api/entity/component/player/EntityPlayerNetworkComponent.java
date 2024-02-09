@@ -104,4 +104,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     @ApiStatus.Internal
     void setLoginData(LoginData loginData);
+
+    @ApiStatus.Internal
+    int getPing();
 }
