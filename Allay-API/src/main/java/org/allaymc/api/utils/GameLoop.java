@@ -97,7 +97,7 @@ public final class GameLoop {
     }
 
     private void updateTPS(long timeTakenToTick) {
-        float tick = Math.max(0, Math.min(20, 1000000000 / (timeTakenToTick == 0 ? 1 : timeTakenToTick)));
+        float tick = Math.max(0, Math.min(20, 1000000000f / (timeTakenToTick == 0 ? 1 : timeTakenToTick)));
         System.arraycopy(tickSummary, 1, tickSummary, 0, tickSummary.length - 1);
         tickSummary[tickSummary.length - 1] = tick;
     }

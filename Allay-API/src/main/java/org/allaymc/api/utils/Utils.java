@@ -3,6 +3,7 @@ package org.allaymc.api.utils;
 import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.block.type.BlockState;
 
 import java.time.Duration;
 import java.util.function.Supplier;
@@ -17,6 +18,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 @UtilityClass
 public class Utils {
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
+    public static final BlockState[][][] EMPTY_BLOCK_STATE_ARRAY_3D = new BlockState[0][0][0];
 
     public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
         int length = bytes1.length;

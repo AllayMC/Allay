@@ -10,6 +10,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
@@ -176,9 +177,7 @@ public interface Dimension {
     }
 
     default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
-        Preconditions.checkArgument(sizeX >= 1);
-        Preconditions.checkArgument(sizeY >= 1);
-        Preconditions.checkArgument(sizeZ >= 1);
+        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) return Utils.EMPTY_BLOCK_STATE_ARRAY_3D;
         BlockState[][][] blockStates = new BlockState[sizeX][sizeY][sizeZ];
         int startX = x >> 4;
         int endX = (x + sizeX - 1) >> 4;
