@@ -8,6 +8,7 @@ import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.io.IOAccess;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -19,25 +20,39 @@ public class JsPlugin extends Plugin {
 
     protected Context jsContext;
     protected Value jsExport;
-    protected JSPluginProxyLogger log;
+    protected Logger logger;
+    protected JSPluginProxyLogger proxyLogger;
 
     @Override
     public void setPluginContainer(PluginContainer pluginContainer) {
         super.setPluginContainer(pluginContainer);
-        log = new JSPluginProxyLogger(LoggerFactory.getLogger(pluginContainer.descriptor().getName()));
+        logger = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
+        proxyLogger = new JSPluginProxyLogger(logger);
     }
 
     @SneakyThrows
     @Override
     public void onLoad() {
-        jsContext = Context.newBuilder("js")
+        // ClassCastException won't happen
+        var chromeDebugPort = ((JsPluginDescriptor) pluginContainer.descriptor()).getDebugPort();
+        var cbd = Context.newBuilder("js")
                 .allowIO(IOAccess.ALL)
                 .allowAllAccess(true)
                 .allowHostAccess(HostAccess.ALL)
                 .allowHostClassLoading(true)
                 .allowHostClassLookup(className -> true)
-                .option("js.esm-eval-returns-exports", "true")
-                .build();
+                .allowExperimentalOptions(true)
+                .option("js.esm-eval-returns-exports", "true");
+        if (chromeDebugPort > 0) {
+            logger.info("Debug mode for js plugin " + pluginContainer.descriptor().getName() + " is enabled. Port: " + chromeDebugPort);
+            // Debug mode is enabled
+            cbd.option("inspect", String.valueOf(chromeDebugPort))
+                    .option("inspect.Path", pluginContainer.descriptor().getName())
+                    .option("inspect.Suspend", "true")
+                    .option("inspect.Internal", "true")
+                    .option("inspect.SourcePath", pluginContainer.loader().getPluginPath().toFile().getAbsolutePath());
+        }
+        jsContext = cbd.build();
         initGlobalMembers();
         var entranceJsFileName = pluginContainer.descriptor().getEntrance();
         var path = pluginContainer.loader().getPluginPath().resolve(entranceJsFileName);
@@ -53,7 +68,7 @@ public class JsPlugin extends Plugin {
     protected void initGlobalMembers() {
         var binding = jsContext.getBindings("js");
         binding.putMember("plugin", this);
-        binding.putMember("console", log);
+        binding.putMember("console", proxyLogger);
     }
 
     @Override

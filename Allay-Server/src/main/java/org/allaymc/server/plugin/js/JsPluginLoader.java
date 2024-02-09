@@ -34,7 +34,7 @@ public class JsPluginLoader implements PluginLoader {
     @SneakyThrows
     @Override
     public PluginDescriptor loadDescriptor() {
-        descriptor = JSONUtils.from(Files.newBufferedReader(pluginPath.resolve("plugin.json")), SimplePluginDescriptor.class);
+        descriptor = JSONUtils.from(Files.newBufferedReader(pluginPath.resolve("plugin.json")), JsPluginDescriptor.class);
         PluginDescriptor.checkDescriptorValid(descriptor);
         return descriptor;
     }
