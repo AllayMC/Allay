@@ -27,8 +27,8 @@ import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.pack.PackRegistry;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -59,13 +59,14 @@ import org.allaymc.server.item.recipe.AllayRecipeRegistry;
 import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
 import org.allaymc.server.item.registry.AllayItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
-import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.pack.AllayPackRegistry;
+import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
 import org.allaymc.server.world.generator.AllayWorldGeneratorFactory;
 import org.allaymc.server.world.storage.AllayWorldStorageFactory;
+import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
 @Slf4j
@@ -75,7 +76,8 @@ public final class Allay {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.setProperty("joml.format", "false"); // set JOML vectors are output without scientific notation
+        System.setProperty("joml.format", "false"); // set JOML vectors are output without a scientific notation
+        System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // enable async logging
         log.info("Starting Allay...");
         try {
             initAllayAPI();

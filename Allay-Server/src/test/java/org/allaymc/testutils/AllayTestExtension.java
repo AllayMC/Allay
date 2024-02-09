@@ -13,10 +13,9 @@ import org.junit.jupiter.api.extension.ExtensionContext;
  * @author daoge_cmd
  */
 public class AllayTestExtension implements BeforeAllCallback {
+
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        //Init allay api
-        if (!AllayAPI.getInstance().isImplemented())
-            Allay.initAllayAPI();
+        if (!AllayAPI.getInstance().isImplemented()) Allay.initAllayAPI();
     }
 }
