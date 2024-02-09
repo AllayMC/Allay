@@ -8,11 +8,7 @@ import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.io.IOAccess;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.nio.file.Files;
 
 /**
  * Allay Project 2024/2/9
@@ -23,12 +19,12 @@ public class JsPlugin extends Plugin {
 
     protected Context jsContext;
     protected Value jsExport;
-    protected Logger log;
+    protected JSPluginProxyLogger log;
 
     @Override
     public void setPluginContainer(PluginContainer pluginContainer) {
         super.setPluginContainer(pluginContainer);
-        log = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
+        log = new JSPluginProxyLogger(LoggerFactory.getLogger(pluginContainer.descriptor().getName()));
     }
 
     @SneakyThrows
