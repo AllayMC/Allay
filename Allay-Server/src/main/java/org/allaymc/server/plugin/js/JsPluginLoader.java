@@ -9,10 +9,8 @@ import org.allaymc.api.plugin.PluginLoader;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.server.plugin.SimplePluginDescriptor;
 
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 
 import static org.allaymc.api.plugin.PluginContainer.createPluginContainer;
 import static org.allaymc.server.plugin.DefaultPluginSource.getOrCreateDataFolder;
