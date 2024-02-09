@@ -58,7 +58,7 @@ public class JsPluginLoader implements PluginLoader {
 
     public static class JsPluginLoaderFactory implements PluginLoaderFactory {
 
-        protected static final PathMatcher PATH_MATCHER = FileSystems.getDefault().getPathMatcher("glob:**.js");
+        protected static final PathMatcher PATH_MATCHER = FileSystems.getDefault().getPathMatcher("glob:@*/");
 
         @Override
         public boolean canLoad(Path pluginPath) {
