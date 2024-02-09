@@ -94,7 +94,7 @@ public class JsPlugin extends Plugin {
 
     protected void tryCallJsFunction(String onLoad) {
         var func = jsExport.getMember(onLoad);
-        if (func.canExecute())
+        if (func != null && func.canExecute())
             func.executeVoid();
     }
 }
