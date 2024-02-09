@@ -48,7 +48,7 @@ public class JsPluginLoader implements PluginLoader {
             throw new PluginException("Entrance js file not found: " + entrancePath);
         }
         return createPluginContainer(
-                new JsPlugin(entrancePath.toFile()),
+                new JsPlugin(),
                 descriptor, this,
                 getOrCreateDataFolder(descriptor.getName())
         );

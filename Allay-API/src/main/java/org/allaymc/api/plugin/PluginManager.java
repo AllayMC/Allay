@@ -3,6 +3,7 @@ package org.allaymc.api.plugin;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Allay Project 2024/2/8
@@ -22,7 +23,11 @@ public interface PluginManager {
 
     void registerSource(PluginSource pluginSource);
 
-    Map<String, PluginContainer> getPluginContainers();
+    Map<String, PluginContainer> getPlugins();
 
-    PluginContainer getPluginContainer(String name);
+    PluginContainer getPlugin(String name);
+
+    Map<String, PluginContainer> getEnabledPlugins();
+
+    boolean isPluginEnabled(String name);
 }

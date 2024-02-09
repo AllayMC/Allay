@@ -2,6 +2,7 @@ package org.allaymc.server.plugin.js;
 
 import lombok.SneakyThrows;
 import org.allaymc.api.plugin.Plugin;
+import org.allaymc.api.plugin.PluginContainer;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Files;
 
 /**
  * Allay Project 2024/2/9
@@ -19,19 +21,19 @@ import java.io.File;
  */
 public class JsPlugin extends Plugin {
 
-    protected File entranceFile;
     protected Context jsContext;
     protected Value jsExport;
     protected Logger log;
 
-    public JsPlugin(File entranceFile) {
-        this.entranceFile = entranceFile;
+    @Override
+    public void setPluginContainer(PluginContainer pluginContainer) {
+        super.setPluginContainer(pluginContainer);
+        log = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
     }
 
     @SneakyThrows
     @Override
     public void onLoad() {
-        log = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
         jsContext = Context.newBuilder("js")
                 .allowIO(IOAccess.ALL)
                 .allowAllAccess(true)
@@ -41,9 +43,11 @@ public class JsPlugin extends Plugin {
                 .option("js.esm-eval-returns-exports", "true")
                 .build();
         initGlobalMembers();
+        var entranceJsFileName = pluginContainer.descriptor().getEntrance();
+        var path = pluginContainer.loader().getPluginPath().resolve(entranceJsFileName);
         jsExport = jsContext.eval(
-                Source.newBuilder("js", entranceFile)
-                        .name(entranceFile.getName())
+                Source.newBuilder("js", path.toFile())
+                        .name(entranceJsFileName)
                         .mimeType("application/javascript+module")
                         .build()
         );
@@ -64,6 +68,11 @@ public class JsPlugin extends Plugin {
     @Override
     public void onDisable() {
         tryCallJsFunction("onDisable");
+    }
+
+    @Override
+    public boolean isReloadable() {
+        return true;
     }
 
     protected void tryCallJsFunction(String onLoad) {

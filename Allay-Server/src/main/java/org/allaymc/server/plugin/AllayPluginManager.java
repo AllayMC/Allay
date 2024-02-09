@@ -24,6 +24,7 @@ public class AllayPluginManager implements PluginManager {
     protected Set<PluginLoader.PluginLoaderFactory> loaderFactories = new HashSet<>();
     protected Map<String, PluginContainer> plugins = new HashMap<>();
     protected DAG<String> dag = new DAG<>();
+    protected Map<String, PluginContainer> enabledPlugins = new HashMap<>();
 
     public AllayPluginManager() {
         registerSource(new DefaultPluginSource());
@@ -117,20 +118,22 @@ public class AllayPluginManager implements PluginManager {
     @Override
     public void enablePlugins() {
         dag.visit(node -> {
-            var pluginContainer = getPluginContainer(node.getObject());
+            var pluginContainer = getPlugin(node.getObject());
+            if (isPluginEnabled(pluginContainer.descriptor().getName())) return;
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
                 pluginContainer.plugin().onEnable();
             } catch (Exception e) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }
+            enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
         });
     }
 
     @Override
     public void disablePlugins() {
         dag.visit(node -> {
-            var pluginContainer = getPluginContainer(node.getObject());
+            var pluginContainer = getPlugin(node.getObject());
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_DISABLING, pluginContainer.descriptor().getName()));
             try {
                 pluginContainer.plugin().onDisable();
@@ -151,13 +154,23 @@ public class AllayPluginManager implements PluginManager {
     }
 
     @Override
-    public Map<String, PluginContainer> getPluginContainers() {
+    public Map<String, PluginContainer> getPlugins() {
         return Collections.unmodifiableMap(plugins);
     }
 
     @Override
-    public PluginContainer getPluginContainer(String name) {
+    public PluginContainer getPlugin(String name) {
         return plugins.get(name);
+    }
+
+    @Override
+    public Map<String, PluginContainer> getEnabledPlugins() {
+        return Collections.unmodifiableMap(enabledPlugins);
+    }
+
+    @Override
+    public boolean isPluginEnabled(String name) {
+        return enabledPlugins.containsKey(name);
     }
 
     protected PluginLoader findLoader(Path pluginPath) {
