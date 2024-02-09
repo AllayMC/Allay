@@ -58,11 +58,9 @@ public class JsPluginLoader implements PluginLoader {
 
     public static class JsPluginLoaderFactory implements PluginLoaderFactory {
 
-        protected static final PathMatcher PATH_MATCHER = FileSystems.getDefault().getPathMatcher("glob:@*/");
-
         @Override
         public boolean canLoad(Path pluginPath) {
-            return PATH_MATCHER.matches(pluginPath) && Files.isDirectory(pluginPath);
+            return pluginPath.getFileName().toString().startsWith("@") && Files.isDirectory(pluginPath);
         }
 
         @Override
