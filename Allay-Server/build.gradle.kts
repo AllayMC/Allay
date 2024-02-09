@@ -35,7 +35,7 @@ dependencies {
     implementation(libs.caffeine)
     implementation(libs.polyglot)
     implementation(libs.js)
-    implementation(libs.bundles.graaljs)
+    implementation(libs.bundles.graalvm)
 
     testImplementation(libs.bytebuddy)
 }
