@@ -6,8 +6,6 @@ package org.allaymc.api.plugin;
  * @author daoge_cmd
  */
 public class PluginException extends RuntimeException {
-    public PluginException() {
-    }
 
     public PluginException(String message) {
         super(message);

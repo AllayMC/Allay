@@ -19,5 +19,4 @@ public record PluginContainer(
         plugin.setPluginContainer(pluginContainer);
         return pluginContainer;
     }
-
 }

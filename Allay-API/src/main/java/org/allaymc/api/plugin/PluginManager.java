@@ -3,7 +3,6 @@ package org.allaymc.api.plugin;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Allay Project 2024/2/8

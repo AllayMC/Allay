@@ -16,6 +16,7 @@ public interface PluginLoader {
     PluginContainer loadPlugin();
 
     interface PluginLoaderFactory {
+
         boolean canLoad(Path pluginPath);
 
         PluginLoader create(Path pluginPath);
