@@ -60,18 +60,6 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("tps")
-                .exec((context, player) -> {
-                    player.sendText("§aTPS: " + player.getLocation().dimension().getWorld().getTps());
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
-                .key("mstp")
-                .exec((context, player) -> {
-                    player.sendText("§aMSTP: " + player.getLocation().dimension().getWorld().getMSTP());
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
                 .key("trs")
                 .str("key")
                 .enums("langCode", LangCode.class)
