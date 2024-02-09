@@ -82,6 +82,12 @@ public class JsPlugin extends Plugin {
     }
 
     @Override
+    public void onUnload() {
+        tryCallJsFunction("onUnload");
+        jsContext.close(true);
+    }
+
+    @Override
     public boolean isReloadable() {
         return true;
     }

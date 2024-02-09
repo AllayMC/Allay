@@ -30,6 +30,11 @@ public abstract class Plugin {
     public void onDisable() {}
 
     /**
+     * When the plugin is unloaded, call
+     */
+    public void onUnload() {}
+
+    /**
      * @return Whether the plugin can be reloaded
      */
     public boolean isReloadable() {
@@ -46,6 +51,7 @@ public abstract class Plugin {
     public final void reload() {
         if (!isReloadable()) throw new UnsupportedOperationException("This plugin is not a reloadable plugin!");
         onDisable();
+        onUnload();
         onLoad();
         onEnable();
     }
