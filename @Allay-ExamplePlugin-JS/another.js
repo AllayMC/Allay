@@ -1,3 +1,3 @@
 export function a() {
-    console.info("a() been called!");
+    console.info("a() is been called!");
 }
