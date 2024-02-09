@@ -39,6 +39,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new GameModeCommand());
         register(new GameRuleCommand());
         register(new TpsCommand());
+        register(new KickCommand());
     }
 
     @Override
