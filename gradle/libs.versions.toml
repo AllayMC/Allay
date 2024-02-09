@@ -3,6 +3,7 @@ log4j = "2.22.0"
 junit = "5.10.1"
 mockito = "5.8.0"
 cloud = "1.8.4"
+graalvm = "23.0.0"
 
 [libraries]
 # NBT
@@ -66,12 +67,14 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 # JeGenerator
 jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.2-R0.4" }
 # GraalJS
-polyglot = { group = "org.graalvm.polyglot", name = "polyglot", version = "23.1.2" }
-js = { group = "org.graalvm.polyglot", name = "js", version = "23.1.2"}
-chromeinspector = { group = "org.graalvm.tools", name = "chromeinspector", version = "23.0.3"}
+sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graalvm" }
+js = { group = "org.graalvm.js", name = "js", version.ref = "graalvm" }
+polyglot = { group = "org.graalvm.polyglot", name = "polyglot", version.ref = "graalvm" }
+chromeinspector = { group = "org.graalvm.tools", name = "chromeinspector", version.ref = "graalvm" }
+profiler = { group = "org.graalvm.tools", name = "profiler", version.ref = "graalvm" }
 
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 test = ["junit-jupiter-api", "junit-jupiter-engine", "mockito", "mockito-junit"]
-graaljs= ["polyglot", "js", "chromeinspector"]
+graaljs = ["sdk", "js", "polyglot", "chromeinspector", "profiler"]
