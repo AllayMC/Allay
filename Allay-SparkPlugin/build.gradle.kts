@@ -29,15 +29,17 @@ dependencies {
     implementation("me.lucko:bytesocks-java-client:1.0-20230828.145440-5") {
         exclude(module = "slf4j-api")
     }
+    implementation("net.kyori:adventure-text-feature-pagination:4.0.0-SNAPSHOT") {
+        exclude(module = "adventure-api")
+    }
 }
 
 tasks.processResources {
-    from(sourceSets.main.get().resources.srcDirs) {
+    filesMatching("plugin.json") {
         expand(
             "description" to project.description,
             "version" to project.version
         )
-        include("plugin.json")
     }
 }
 
@@ -58,22 +60,3 @@ tasks.shadowJar {
     exclude("META-INF/maven/**")
     exclude("META-INF/proguard/**")
 }
-
-artifacts {
-    archives(tasks.shadowJar)
-    shadow(tasks.shadowJar)
-}
-
-/*protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:3.21.11" }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                java {
-                    // option("lite")
-                    // option 'lite'
-                }
-            }
-        }
-    }
-}*/
