@@ -1,6 +1,6 @@
 {
   "entrance": "org.allaymc.exampleplugin.ExamplePlugin",
-  "name": "Example-Plugin",
+  "name": "ExamplePlugin",
   "authors": ["daoge_cmd"],
   "version": "1.0.0"
 }
