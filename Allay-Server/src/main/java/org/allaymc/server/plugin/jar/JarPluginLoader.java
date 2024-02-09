@@ -13,7 +13,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.*;
 
-import static org.allaymc.server.plugin.DefaultPluginSource.DEFAULT_PLUGIN_FOLDER;
+import static org.allaymc.api.plugin.PluginContainer.createPluginContainer;
+import static org.allaymc.server.plugin.DefaultPluginSource.getOrCreateDataFolder;
 
 /**
  * Allay Project 2024/2/8
@@ -46,7 +47,6 @@ public class JarPluginLoader implements PluginLoader {
     @Override
     public PluginContainer loadPlugin() {
         // Load the main class
-        // noinspection resource: No need to try-with-resources, as we want to keep the class loader alive until server shutdown
         Class<?> mainClass = findMainClass();
         if (!Plugin.class.isAssignableFrom(mainClass)) {
             throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_JAR_ENTRANCE_TYPEINVALID, descriptor.getName()));
@@ -58,18 +58,16 @@ public class JarPluginLoader implements PluginLoader {
         } catch (Exception e) {
             throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_CONSTRUCT_INSTANCE_ERROR, descriptor.getName()));
         }
-        // Create data folder for plugin
-        var dataFolder = DEFAULT_PLUGIN_FOLDER.resolve(descriptor.getName());
-        if (!Files.exists(dataFolder)) {
-            Files.createDirectory(dataFolder);
-        }
-        var pluginContainer = new PluginContainer(pluginInstance, descriptor, this, dataFolder);
-        pluginInstance.setPluginContainer(pluginContainer);
-        return pluginContainer;
+        return createPluginContainer(
+                pluginInstance,
+                descriptor, this,
+                getOrCreateDataFolder(descriptor.getName())
+        );
     }
 
     protected Class<?> findMainClass() {
         try {
+            // noinspection resource: No need to try-with-resources, as we want to keep the class loader alive until server shutdown
             var classLoader = new JarPluginClassLoader(new URL[]{pluginPath.toUri().toURL()});
             return classLoader.loadClass(descriptor.getEntrance());
         } catch (ClassNotFoundException e1) {

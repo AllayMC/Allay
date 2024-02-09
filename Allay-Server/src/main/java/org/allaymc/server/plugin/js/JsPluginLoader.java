@@ -14,7 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 
-import static org.allaymc.server.plugin.DefaultPluginSource.DEFAULT_PLUGIN_FOLDER;
+import static org.allaymc.api.plugin.PluginContainer.createPluginContainer;
+import static org.allaymc.server.plugin.DefaultPluginSource.getOrCreateDataFolder;
 
 /**
  * Allay Project 2024/2/9
@@ -48,16 +49,11 @@ public class JsPluginLoader implements PluginLoader {
         if (!Files.exists(entrancePath)) {
             throw new PluginException("Entrance js file not found: " + entrancePath);
         }
-        // Create js plugin instance
-        var jsPlugin = new JsPlugin(entrancePath.toFile());
-        // Create data folder for plugin
-        var dataFolder = DEFAULT_PLUGIN_FOLDER.resolve(descriptor.getName());
-        if (!Files.exists(dataFolder)) {
-            Files.createDirectory(dataFolder);
-        }
-        var pluginContainer = new PluginContainer(jsPlugin, descriptor, this, dataFolder);
-        jsPlugin.setPluginContainer(pluginContainer);
-        return pluginContainer;
+        return createPluginContainer(
+                new JsPlugin(entrancePath.toFile()),
+                descriptor, this,
+                getOrCreateDataFolder(descriptor.getName())
+        );
     }
 
     public static class JsPluginLoaderFactory implements PluginLoaderFactory {

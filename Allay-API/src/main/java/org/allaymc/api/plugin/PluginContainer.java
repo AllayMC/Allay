@@ -14,4 +14,10 @@ public record PluginContainer(
         Path dataFolder
 ) {
 
+    public static PluginContainer createPluginContainer(Plugin plugin, PluginDescriptor descriptor, PluginLoader loader, Path dataFolder) {
+        var pluginContainer = new PluginContainer(plugin, descriptor, loader, dataFolder);
+        plugin.setPluginContainer(pluginContainer);
+        return pluginContainer;
+    }
+
 }
