@@ -101,7 +101,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
 
     @Override
     public ClassSourceLookup createClassSourceLookup() {
-        return new AllayClassSourceLookup();
+        return new AllayClassSourceLookup(Server.getInstance().getPluginManager());
     }
 
     @Override

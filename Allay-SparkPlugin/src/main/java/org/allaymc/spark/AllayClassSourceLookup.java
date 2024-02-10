@@ -1,9 +1,10 @@
 package org.allaymc.spark;
 
 import me.lucko.spark.common.sampler.source.ClassSourceLookup;
+import org.allaymc.api.plugin.PluginManager;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Allay Project 08/02/2024
@@ -12,19 +13,18 @@ import java.net.URISyntaxException;
  */
 public class AllayClassSourceLookup extends ClassSourceLookup.ByFirstUrlSource {
 
-    private static final Class<?> JAR_PLUGIN_CLASS_LOADER;
+    private final Map<ClassLoader, String> classLoaders2PluginName = new HashMap<>();
 
-    static {
-        try {
-            JAR_PLUGIN_CLASS_LOADER = Class.forName("org.allaymc.server.plugin.jar.JarPluginClassLoader");
-        } catch (ClassNotFoundException exception) {
-            throw new RuntimeException(exception);
-        }
+    public AllayClassSourceLookup(PluginManager manager) {
+        manager.getEnabledPlugins().values().forEach(container -> classLoaders2PluginName.put(
+                container.plugin().getClass().getClassLoader(),
+                container.descriptor().getName())
+        );
     }
 
     @Override
-    public String identify(ClassLoader loader) throws IOException, URISyntaxException {
-        if (!JAR_PLUGIN_CLASS_LOADER.isAssignableFrom(loader.getClass())) return null;
-        return super.identify(loader);
+    public String identify(ClassLoader loader) {
+        if (!this.classLoaders2PluginName.containsKey(loader)) return null;
+        return this.classLoaders2PluginName.get(loader);
     }
 }
