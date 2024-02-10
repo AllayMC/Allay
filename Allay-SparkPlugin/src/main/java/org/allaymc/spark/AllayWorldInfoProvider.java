@@ -7,6 +7,8 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.chunk.Chunk;
 
+import java.util.HashMap;
+
 /**
  * Allay Project 10/02/2024
  *
@@ -52,19 +54,13 @@ public class AllayWorldInfoProvider implements WorldInfoProvider {
         return result;
     }
 
-    @Override
-    public boolean mustCallSync() {
-        return true;
-    }
-
     public static class AllayChunkInfo extends AbstractChunkInfo<EntityType<?>> {
 
-        private final CountMap<EntityType<?>> entityCounts;
+        private final CountMap<EntityType<?>> entityCounts = new CountMap.Simple<>(new HashMap<>());
 
         protected AllayChunkInfo(Chunk chunk) {
             super(chunk.getX(), chunk.getZ());
 
-            this.entityCounts = new CountMap.EnumKeyed(EntityType.class);
             for (var entity : chunk.getEntities().values())
                 this.entityCounts.increment(entity.getEntityType());
         }
