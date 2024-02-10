@@ -13,8 +13,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          java-version: '20'
-          distribution: 'temurin'
+          java-version: '21'
+          distribution: 'graalvm'
           cache: 'gradle'
       - run: gradle build
       - name: Upload Allay-API
