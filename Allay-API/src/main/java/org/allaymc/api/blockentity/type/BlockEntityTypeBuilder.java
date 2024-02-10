@@ -24,7 +24,7 @@ public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEn
 
     BlockEntityType<T> build();
 
-    BlockEntityTypeBuilder<T, C> blockEntityId(String id);
+    BlockEntityTypeBuilder<T, C> identifier(Identifier identifier);
 
     BlockEntityTypeBuilder<T, C> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
 

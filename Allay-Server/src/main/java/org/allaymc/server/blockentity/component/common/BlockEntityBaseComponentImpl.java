@@ -58,7 +58,7 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder()
-                .putString("id", blockEntityType.getBlockEntityId())
+                .putString("id", blockEntityType.getIdentifier().toString())
                 .putInt("x", position.x())
                 .putInt("y", position.y())
                 .putInt("z", position.z())

@@ -24,7 +24,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
                     "Mismatched block entity type at pos %d, %d, %d, %s! Expected: %s, actual: %s"
                             .formatted(
                                     x, y, z, dimension.toString(),
-                                    this.getBlockEntityType().getBlockEntityId(), blockEntity.getBlockEntityType().getBlockEntityId()
+                                    this.getBlockEntityType().getIdentifier(), blockEntity.getBlockEntityType().getIdentifier()
                             )
             );
         }

@@ -5,6 +5,7 @@ import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderCo
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.container.impl.BarrelContainer;
+import org.allaymc.api.identifier.Identifier;
 
 import static org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory.getFactory;
 
@@ -14,10 +15,9 @@ import static org.allaymc.api.blockentity.component.BlockEntityComponentImplFact
  * @author daoge_cmd
  */
 public interface BlockEntityBarrel extends BlockEntity, BlockEntityContainerHolderComponent {
-    String BLOCK_ENTITY_ID = "Barrel";
     BlockEntityType<BlockEntityBarrel> BARREL_TYPE = BlockEntityTypeBuilder
             .builder(BlockEntityBarrel.class)
-            .blockEntityId(BLOCK_ENTITY_ID)
+            .identifier(new Identifier("minecraft:barrel"))
             .addComponent(getFactory().createBlockEntityBarrelBaseComponent())
             .addComponent(getFactory().createBlockEntityContainerHolderComponent(new BarrelContainer()))
             .build();

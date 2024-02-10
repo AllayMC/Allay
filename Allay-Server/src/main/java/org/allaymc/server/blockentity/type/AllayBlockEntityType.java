@@ -1,5 +1,6 @@
 package org.allaymc.server.blockentity.type;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
@@ -33,19 +34,22 @@ import java.util.function.Function;
  * @author daoge_cmd
  */
 public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityType<T> {
+
     protected final FastConstructor<T> constructor;
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
+    @Getter
     protected List<ComponentProvider<? extends BlockEntityComponent>> componentProviders;
-    protected String blockEntityId;
+    @Getter
+    protected Identifier identifier;
 
     @SneakyThrows
     protected AllayBlockEntityType(Class<T> interfaceClass,
                                    List<ComponentProvider<? extends BlockEntityComponent>> componentProviders,
-                                   String blockEntityId) {
+                                   Identifier identifier) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
-        this.blockEntityId = blockEntityId;
+        this.identifier = identifier;
         try {
             ArrayList<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
             injectedClass = new AllayComponentInjector<T>()
@@ -60,9 +64,8 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class), fastMemberLoader, false);
     }
 
-    @Override
-    public List<ComponentProvider<? extends BlockEntityComponent>> getComponentProviders() {
-        return componentProviders;
+    public static <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> builder(Class<T> interfaceClass) {
+        return new Builder<>(interfaceClass);
     }
 
     @ApiStatus.Internal
@@ -73,27 +76,19 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         return (T) constructor.invoke(info);
     }
 
-    @Override
-    public String getBlockEntityId() {
-        return blockEntityId;
-    }
-
-    public static <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> builder(Class<T> interfaceClass) {
-        return new Builder<>(interfaceClass);
-    }
-
     public static class Builder<T extends BlockEntity> implements BlockEntityTypeBuilder<T, BlockEntityComponent> {
+
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders = new HashMap<>();
-        protected String blockEntityId;
+        protected Identifier identifier;
 
         public Builder(Class<T> interfaceClass) {
             this.interfaceClass = interfaceClass;
         }
 
         @Override
-        public BlockEntityTypeBuilder<T, BlockEntityComponent> blockEntityId(String id) {
-            this.blockEntityId = id;
+        public BlockEntityTypeBuilder<T, BlockEntityComponent> identifier(Identifier identifier) {
+            this.identifier = identifier;
             return this;
         }
 
@@ -129,10 +124,10 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
             if (!componentProviders.containsKey(BlockEntityBaseComponentImpl.IDENTIFIER)) {
                 addComponent(BlockEntityBaseComponentImpl::new, BlockEntityBaseComponentImpl.class);
             }
-            if (blockEntityId == null)
+            if (identifier == null)
                 throw new EntityTypeBuildException("identifier cannot be null!");
-            var type = new AllayBlockEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), blockEntityId);
-            BlockEntityTypeRegistry.getRegistry().register(blockEntityId, type);
+            var type = new AllayBlockEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier);
+            BlockEntityTypeRegistry.getRegistry().register(identifier, type);
             return type;
         }
     }

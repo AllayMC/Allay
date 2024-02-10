@@ -3,8 +3,9 @@ package org.allaymc.spark;
 import me.lucko.spark.common.platform.world.AbstractChunkInfo;
 import me.lucko.spark.common.platform.world.CountMap;
 import me.lucko.spark.common.platform.world.WorldInfoProvider;
-import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.Chunk;
 
 import java.util.HashMap;
@@ -47,32 +48,41 @@ public class AllayWorldInfoProvider implements WorldInfoProvider {
                 var chunks = dimension.getChunkService().getLoadedChunks();
                 var chunkInfos = chunks.stream().map(AllayChunkInfo::new).toList();
 
-                result.put(world.getWorldData().getName() + "_" + dimension.getDimensionInfo().toString(), chunkInfos);
+                result.put(world.getWorldData().getName() + "_" + getDimensionName(dimension.getDimensionInfo()), chunkInfos);
             }
         }
 
         return result;
     }
 
-    public static class AllayChunkInfo extends AbstractChunkInfo<EntityType<?>> {
+    private String getDimensionName(DimensionInfo dimensionInfo) {
+        return switch (dimensionInfo.dimensionId()) {
+            case 0 -> "overworld";
+            case 1 -> "the_nether";
+            case 2 -> "the_end";
+            default -> dimensionInfo.dimensionId() + "";
+        };
+    }
 
-        private final CountMap<EntityType<?>> entityCounts = new CountMap.Simple<>(new HashMap<>());
+    public static class AllayChunkInfo extends AbstractChunkInfo<Identifier> {
+
+        private final CountMap<Identifier> entityCounts = new CountMap.Simple<>(new HashMap<>());
 
         protected AllayChunkInfo(Chunk chunk) {
             super(chunk.getX(), chunk.getZ());
 
-            for (var entity : chunk.getEntities().values())
-                this.entityCounts.increment(entity.getEntityType());
+            chunk.getEntities().values().forEach(entity -> this.entityCounts.increment(entity.getEntityType().getIdentifier()));
+            chunk.getBlockEntities().values().forEach(entity -> this.entityCounts.increment(entity.getBlockEntityType().getIdentifier()));
         }
 
         @Override
-        public CountMap<EntityType<?>> getEntityCounts() {
+        public CountMap<Identifier> getEntityCounts() {
             return this.entityCounts;
         }
 
         @Override
-        public String entityTypeName(EntityType type) {
-            return type.getIdentifier().path();
+        public String entityTypeName(Identifier identifier) {
+            return identifier.path();
         }
     }
 }
