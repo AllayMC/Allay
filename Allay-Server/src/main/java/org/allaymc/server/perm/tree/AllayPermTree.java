@@ -173,8 +173,8 @@ public class AllayPermTree implements PermTree {
     @Override
     public List<PermNode> getLeaves(boolean includeParent) {
         var leaves = new ArrayList<PermNode>();
-        if (root.getLeaves().isEmpty()) return leaves;
-        findLeaf(root, leaves);
+        if (!root.getLeaves().isEmpty())
+            findLeaf(root, leaves);
         if (parent != null && includeParent) {
             leaves.addAll(parent.getLeaves(true));
         }
