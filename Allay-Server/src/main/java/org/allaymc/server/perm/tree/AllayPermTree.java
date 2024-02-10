@@ -1,7 +1,6 @@
 package org.allaymc.server.perm.tree;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;

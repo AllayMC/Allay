@@ -109,9 +109,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void onInitFinish(ComponentInitInfo initInfo) {
         super.onInitFinish(initInfo);
         permTree = PermTree.create();
-        permTree.setOp(true); // TODO: perm db
+        // TODO: OP system
+        permTree.setOp(true);
         adventureSettings = new AdventureSettings(thisEntity);
         abilities = new Abilities(thisEntity);
+        // Init adventure settings and abilities
+        permTree.notifyAllPermListeners();
     }
 
     @Override
@@ -355,7 +358,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
         if (nbt.containsKey("Perm")) {
-            permTree.loadNBT(nbt.getCompound("Perm"));
+            permTree.loadNBT(nbt.getCompound("Perm"), true);
         }
         if (nbt.containsKey("Offhand")) {
             containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(nbt.getList("Offhand", NbtType.COMPOUND));
