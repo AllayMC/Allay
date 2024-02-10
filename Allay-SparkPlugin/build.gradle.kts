@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("com.google.protobuf") version "0.9.1"
+    id("com.google.protobuf") version "0.9.4"
 }
 
 group = "org.allaymc"
