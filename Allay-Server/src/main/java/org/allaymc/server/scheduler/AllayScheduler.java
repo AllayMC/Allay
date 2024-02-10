@@ -15,7 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author daoge_cmd
  */
 public class AllayScheduler implements Scheduler {
-    protected static final Comparator<RunningTaskInfo> COMPARATOR = Comparator.comparing(RunningTaskInfo::getNextRunTick).reversed();
+
+    protected static final Comparator<RunningTaskInfo> COMPARATOR = Comparator.comparing(RunningTaskInfo::getNextRunTick);
     protected static final int INITIAL_CAPACITY = 11;
 
     protected final ExecutorService asyncTaskExecutor;
@@ -37,17 +38,15 @@ public class AllayScheduler implements Scheduler {
         while (!queue.isEmpty() && queue.peek().getNextRunTick() <= tickCounter) {
             var taskInfo = queue.poll();
             var task = taskInfo.getTask();
-            //1. Confirm validity
+            // 1. Confirm validity
             if (taskInfo.isCancelled() || !task.getTaskCreator().isValid()) {
                 cancelTask(taskInfo);
                 continue;
             }
 
-            //2. Run it
-            if (taskInfo.isAsync())
-                asyncTaskExecutor.submit(() -> runTask(taskInfo));
-            else
-                runTask(taskInfo);
+            // 2. Run it
+            if (taskInfo.isAsync()) asyncTaskExecutor.submit(() -> runTask(taskInfo));
+            else runTask(taskInfo);
         }
     }
 
@@ -89,12 +88,9 @@ public class AllayScheduler implements Scheduler {
             cancelTask(info);
         } finally {
             info.setRunning(false);
-            //Run only once
-            if (!info.isRepeating()) {
-                cancelTask(info);
-            } else {
-                addTask(info, false);
-            }
+            // Run only once
+            if (!info.isRepeating()) cancelTask(info);
+            else addTask(info, false);
         }
     }
 
@@ -110,12 +106,8 @@ public class AllayScheduler implements Scheduler {
     }
 
     protected void addTask(RunningTaskInfo taskInfo, boolean firstTime) {
-        if (taskInfo.isRepeating())
-            taskInfo.setNextRunTick(tickCounter + taskInfo.getPeriod());
-        else
-            taskInfo.setNextRunTick(tickCounter + taskInfo.getDelay());
-        queue.add(taskInfo);
-        if (firstTime)
-            taskCount.incrementAndGet();
+        taskInfo.setNextRunTick(tickCounter + (taskInfo.isRepeating() ? taskInfo.getPeriod() : taskInfo.getDelay()));
+        queue.offer(taskInfo);
+        if (firstTime) taskCount.incrementAndGet();
     }
 }

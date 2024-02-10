@@ -5,11 +5,15 @@ import me.lucko.spark.common.SparkPlatform;
 import me.lucko.spark.common.SparkPlugin;
 import me.lucko.spark.common.monitor.ping.PlayerPingProvider;
 import me.lucko.spark.common.platform.PlatformInfo;
+import me.lucko.spark.common.platform.world.WorldInfoProvider;
 import me.lucko.spark.common.sampler.source.ClassSourceLookup;
+import me.lucko.spark.common.sampler.source.SourceMetadata;
+import me.lucko.spark.common.tick.TickHook;
 import org.allaymc.api.plugin.Plugin;
 import org.allaymc.api.server.Server;
 
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -55,9 +59,9 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
     public Stream<AllayCommandSender> getCommandSenders() {
         var server = Server.getInstance();
         return Stream.concat(
-                server.getOnlinePlayers().values().stream().map(AllayCommandSender::new),
-                Stream.of(new AllayCommandSender(server))
-        );
+                server.getOnlinePlayers().values().stream(),
+                Stream.of(server)
+        ).map(AllayCommandSender::new);
     }
 
     @Override
@@ -65,7 +69,15 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
         Server.getInstance().getScheduler().scheduleRepeating(() -> {
             task.run();
             return false;
-        }, 0, true);
+        }, 1, true);
+    }
+
+    @Override
+    public void executeSync(Runnable task) {
+        Server.getInstance().getScheduler().scheduleRepeating(() -> {
+            task.run();
+            return false;
+        }, 1);
     }
 
     // https://stackoverflow.com/questions/20795373/how-to-map-levels-of-java-util-logging-and-slf4j-logger
@@ -83,13 +95,33 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
     }
 
     @Override
+    public TickHook createTickHook() {
+        return new AllayTickHook(Server.getInstance().getScheduler());
+    }
+
+    @Override
     public ClassSourceLookup createClassSourceLookup() {
         return new AllayClassSourceLookup();
     }
 
     @Override
+    public Collection<SourceMetadata> getKnownSources() {
+        return SourceMetadata.gather(
+                Server.getInstance().getPluginManager().getPlugins().values(),
+                container -> container.descriptor().getName(),
+                container -> container.descriptor().getVersion(),
+                container -> String.join(", ", container.descriptor().getAuthors())
+        );
+    }
+
+    @Override
     public PlayerPingProvider createPlayerPingProvider() {
         return new AllayPlayerPingProvider(Server.getInstance());
+    }
+
+    @Override
+    public WorldInfoProvider createWorldInfoProvider() {
+        return new AllayWorldInfoProvider();
     }
 
     @Override
