@@ -18,13 +18,13 @@ jobs:
           cache: 'gradle'
       - run: gradle build
       - name: Upload Allay-API
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           name: Allay-API
           path: Allay-API/build/libs/Allay-API.jar
       - name: Upload Allay-Server
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           name: Allay-Server
