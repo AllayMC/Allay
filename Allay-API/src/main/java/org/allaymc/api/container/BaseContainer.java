@@ -156,7 +156,7 @@ public class BaseContainer implements Container {
                     .toBuilder()
                     .putByte("Slot", (byte) slot)
                     .build();
-            list.add(slot, nbt);
+            list.add(nbt);
         }
         return new NbtList<>(NbtType.COMPOUND, list);
     }
