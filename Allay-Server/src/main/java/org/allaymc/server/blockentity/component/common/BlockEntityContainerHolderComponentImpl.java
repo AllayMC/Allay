@@ -18,6 +18,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Allay Project 2023/9/16
@@ -32,16 +33,16 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @Dependency
     protected BlockEntityBaseComponent baseComponent;
 
-    public BlockEntityContainerHolderComponentImpl(Container container) {
-        this.container = container;
+    public BlockEntityContainerHolderComponentImpl(Supplier<Container> containerSupplier) {
+        this.container = containerSupplier.get();
     }
 
     public BlockEntityContainerHolderComponentImpl(
-            Container container,
+            Supplier<Container> containerSupplier,
             Consumer<ContainerViewer> onOpenListener,
             Consumer<ContainerViewer> onCloseListener
     ) {
-        this.container = container;
+        this.container = containerSupplier.get();
         this.container.addOnOpenListener(onOpenListener);
         this.container.addOnCloseListener(onCloseListener);
     }

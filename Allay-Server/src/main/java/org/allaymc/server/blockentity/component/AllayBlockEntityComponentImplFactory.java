@@ -12,6 +12,7 @@ import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentI
 import org.allaymc.server.blockentity.component.common.BlockEntityContainerHolderComponentImpl;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Allay Project 2023/12/6
@@ -30,12 +31,12 @@ public class AllayBlockEntityComponentImplFactory implements BlockEntityComponen
     }
 
     @Override
-    public ComponentProvider<BlockEntityComponent> createBlockEntityContainerHolderComponent(Container container) {
-        return new SimpleComponentProvider<>(info -> new BlockEntityContainerHolderComponentImpl(container), BlockEntityContainerHolderComponentImpl.class);
+    public ComponentProvider<BlockEntityComponent> createBlockEntityContainerHolderComponent(Supplier<Container> containerSupplier) {
+        return new SimpleComponentProvider<>(info -> new BlockEntityContainerHolderComponentImpl(containerSupplier), BlockEntityContainerHolderComponentImpl.class);
     }
 
     @Override
-    public ComponentProvider<BlockEntityComponent> createBlockEntityContainerHolderComponent(Container container, Consumer<ContainerViewer> onOpenListener, Consumer<ContainerViewer> onCloseListener) {
-        return new SimpleComponentProvider<>(info -> new BlockEntityContainerHolderComponentImpl(container, onOpenListener, onCloseListener), BlockEntityContainerHolderComponentImpl.class);
+    public ComponentProvider<BlockEntityComponent> createBlockEntityContainerHolderComponent(Supplier<Container> containerSupplier, Consumer<ContainerViewer> onOpenListener, Consumer<ContainerViewer> onCloseListener) {
+        return new SimpleComponentProvider<>(info -> new BlockEntityContainerHolderComponentImpl(containerSupplier, onOpenListener, onCloseListener), BlockEntityContainerHolderComponentImpl.class);
     }
 }

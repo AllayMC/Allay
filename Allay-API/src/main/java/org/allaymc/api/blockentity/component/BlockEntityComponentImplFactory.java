@@ -6,6 +6,7 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Allay Project 2023/12/6
@@ -24,9 +25,9 @@ public interface BlockEntityComponentImplFactory {
 
     ComponentProvider<BlockEntityComponent> createBlockEntityBarrelBaseComponent();
 
-    ComponentProvider<BlockEntityComponent> createBlockEntityContainerHolderComponent(Container container);
+    ComponentProvider<BlockEntityComponent> createBlockEntityContainerHolderComponent(Supplier<Container> containerSupplier);
 
-    ComponentProvider<BlockEntityComponent> createBlockEntityContainerHolderComponent(Container container,
+    ComponentProvider<BlockEntityComponent> createBlockEntityContainerHolderComponent(Supplier<Container> containerSupplier,
                                                                                       Consumer<ContainerViewer> onOpenListener,
                                                                                       Consumer<ContainerViewer> onCloseListener);
 }

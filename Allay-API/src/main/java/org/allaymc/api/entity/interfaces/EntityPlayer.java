@@ -26,8 +26,24 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
  * @author daoge_cmd <br>
  * Allay Project <br>
  */
-public interface EntityPlayer extends Entity, EntityPlayerBaseComponent, EntityPlayerNetworkComponent, EntityPlayerAttributeComponent, EntityPlayerContainerHolderComponent, EntityContainerViewerComponent, EntityDamageComponent {
-    EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder.builder(EntityPlayer.class).vanillaEntity(VanillaEntityId.PLAYER).addComponent(getFactory().createEntityPlayerBaseComponent()).addComponent(getFactory().createEntityPlayerNetworkComponent()).addComponent(getFactory().createEntityAttributeComponent(basicPlayerAttributes())).addComponent(getFactory().createEntityPlayerContainerHolderComponent()).addComponent(getFactory().createEntityPlayerContainerViewerComponent()).addComponent(getFactory().createEntityPlayerDamageComponent()).build();
+public interface EntityPlayer extends
+        Entity,
+        EntityPlayerBaseComponent,
+        EntityPlayerNetworkComponent,
+        EntityPlayerAttributeComponent,
+        EntityPlayerContainerHolderComponent,
+        EntityContainerViewerComponent,
+        EntityDamageComponent {
+    EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder
+            .builder(EntityPlayer.class)
+            .vanillaEntity(VanillaEntityId.PLAYER)
+            .addComponent(getFactory().createEntityPlayerBaseComponent())
+            .addComponent(getFactory().createEntityPlayerNetworkComponent())
+            .addComponent(getFactory().createEntityAttributeComponent(basicPlayerAttributes()))
+            .addComponent(getFactory().createEntityPlayerContainerHolderComponent())
+            .addComponent(getFactory().createEntityPlayerContainerViewerComponent())
+            .addComponent(getFactory().createEntityPlayerDamageComponent())
+            .build();
 
     default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
         var container = getOpenedContainer(slotType);

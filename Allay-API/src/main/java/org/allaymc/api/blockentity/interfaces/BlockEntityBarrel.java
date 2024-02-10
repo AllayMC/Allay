@@ -19,7 +19,7 @@ public interface BlockEntityBarrel extends BlockEntity, BlockEntityContainerHold
             .builder(BlockEntityBarrel.class)
             .identifier(new Identifier("minecraft:barrel"))
             .addComponent(getFactory().createBlockEntityBarrelBaseComponent())
-            .addComponent(getFactory().createBlockEntityContainerHolderComponent(new BarrelContainer()))
+            .addComponent(getFactory().createBlockEntityContainerHolderComponent(BarrelContainer::new))
             .build();
 
 }
