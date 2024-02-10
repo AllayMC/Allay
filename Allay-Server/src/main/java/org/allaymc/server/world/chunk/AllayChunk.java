@@ -130,7 +130,9 @@ public class AllayChunk implements Chunk {
 
     @Override
     public BlockState getBlockState(int x, int y, int z, int layer) {
-        checkXYZ(x, y, z);
+        // Do not check y here, as if y is invalid we will return air
+        // See test AllayChunkTest.testInvalidGetBlockStateMethodCall()
+        checkXZ(x, z);
         long stamp = blockLock.tryOptimisticRead();
         try {
             for (; ; stamp = blockLock.readLock()) {
