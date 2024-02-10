@@ -14,12 +14,12 @@ jobs:
         with:
           fetch-depth: 0
       - name: 'Qodana Scan All'
-        uses: JetBrains/qodana-action@v2023.2
+        uses: JetBrains/qodana-action@v2023.3
         if: ${{ github.event_name == 'workflow_dispatch'}}
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
       - name: 'Qodana Scan PUSH'
-        uses: JetBrains/qodana-action@v2023.2
+        uses: JetBrains/qodana-action@v2023.3
         if: ${{ github.event_name != 'workflow_dispatch'}}
         with:
           pr-mode: true
