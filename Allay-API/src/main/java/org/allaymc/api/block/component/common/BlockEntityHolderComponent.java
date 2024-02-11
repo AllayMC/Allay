@@ -19,6 +19,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
 
     default T getBlockEntity(int x, int y, int z, Dimension dimension) {
         var blockEntity = dimension.getBlockEntity(x, y, z);
+        if (blockEntity == null) return null;
         if (blockEntity.getBlockEntityType() != this.getBlockEntityType()) {
             throw new IllegalStateException(
                     "Mismatched block entity type at pos %d, %d, %d, %s! Expected: %s, actual: %s"
