@@ -2,6 +2,9 @@ package org.allaymc.api.plugin;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.server.Server;
 
 /**
  * Allay Project 2024/2/8
@@ -54,5 +57,21 @@ public abstract class Plugin {
         onUnload();
         onLoad();
         onEnable();
+    }
+
+    public Server getServer() {
+        return Server.getInstance();
+    }
+
+    public Scheduler getScheduler() {
+        return this.getServer().getScheduler();
+    }
+
+    public PluginManager getPluginManager() {
+        return this.getServer().getPluginManager();
+    }
+
+    public CommandRegistry getCommandRegistry() {
+        return this.getServer().getCommandRegistry();
     }
 }

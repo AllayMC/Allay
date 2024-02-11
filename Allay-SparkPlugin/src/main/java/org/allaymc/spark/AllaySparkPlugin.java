@@ -10,7 +10,6 @@ import me.lucko.spark.common.sampler.source.ClassSourceLookup;
 import me.lucko.spark.common.sampler.source.SourceMetadata;
 import me.lucko.spark.common.tick.TickHook;
 import org.allaymc.api.plugin.Plugin;
-import org.allaymc.api.server.Server;
 
 import java.nio.file.Path;
 import java.util.Collection;
@@ -32,7 +31,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
         this.platform = new SparkPlatform(this);
         this.platform.enable();
 
-        Server.getInstance().getCommandRegistry().register(new AllaySparkCommand(this.platform));
+        this.getCommandRegistry().register(new AllaySparkCommand(this.platform));
     }
 
     @Override
@@ -57,7 +56,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
 
     @Override
     public Stream<AllayCommandSender> getCommandSenders() {
-        var server = Server.getInstance();
+        var server = this.getServer();
         return Stream.concat(
                 server.getOnlinePlayers().values().stream(),
                 Stream.of(server)
@@ -66,7 +65,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
 
     @Override
     public void executeAsync(Runnable task) {
-        Server.getInstance().getScheduler().scheduleRepeating(() -> {
+        this.getScheduler().scheduleRepeating(() -> {
             task.run();
             return false;
         }, 1, true);
@@ -74,7 +73,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
 
     @Override
     public void executeSync(Runnable task) {
-        Server.getInstance().getScheduler().scheduleRepeating(() -> {
+        this.getScheduler().scheduleRepeating(() -> {
             task.run();
             return false;
         }, 1);
@@ -96,18 +95,18 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
 
     @Override
     public TickHook createTickHook() {
-        return new AllayTickHook(Server.getInstance().getScheduler());
+        return new AllayTickHook(this.getScheduler());
     }
 
     @Override
     public ClassSourceLookup createClassSourceLookup() {
-        return new AllayClassSourceLookup(Server.getInstance().getPluginManager());
+        return new AllayClassSourceLookup(this.getPluginManager());
     }
 
     @Override
     public Collection<SourceMetadata> getKnownSources() {
         return SourceMetadata.gather(
-                Server.getInstance().getPluginManager().getPlugins().values(),
+                this.getPluginManager().getPlugins().values(),
                 container -> container.descriptor().getName(),
                 container -> container.descriptor().getVersion(),
                 container -> String.join(", ", container.descriptor().getAuthors())
@@ -116,7 +115,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
 
     @Override
     public PlayerPingProvider createPlayerPingProvider() {
-        return new AllayPlayerPingProvider(Server.getInstance());
+        return new AllayPlayerPingProvider(this.getServer());
     }
 
     @Override
