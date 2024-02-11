@@ -47,6 +47,11 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
     public void savePlayerData(UUID uuid, PlayerData playerData) {
         var path = buildPlayerDataFilePath(uuid);
         var oldPath = path.resolveSibling(uuid + "_old.nbt");
+        if (Files.exists(oldPath)) {
+            // The old file
+            log.warn("Undeleted tmp player data file is found, which may caused by incorrect shutdown. File: " + oldPath);
+            Files.delete(oldPath);
+        }
         if (Files.exists(path)) {
             // rename current file to uuid_old.nbt
             Files.move(path, oldPath);
