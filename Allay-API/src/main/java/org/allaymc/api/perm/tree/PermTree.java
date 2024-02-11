@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static org.allaymc.api.perm.DefaultPermissions.*;
+
 /**
  * Allay Project 2023/12/30
  *
@@ -102,6 +104,12 @@ public interface PermTree {
         builder.putList("Perms", NbtType.STRING, list);
         if (getParent() != null)
             builder.putString("Parent", getParent().getName());
+        builder.put(
+                "PermLevel",
+                containsSubSet(OPERATOR) ? OPERATOR.getName() :
+                        containsSubSet(MEMBER) ? MEMBER.getName() :
+                                VISITOR.getName()
+        );
         return builder.build();
     }
 
@@ -112,6 +120,7 @@ public interface PermTree {
     default void loadNBT(NbtMap nbt, boolean callListener) {
         for (var perm : nbt.getList("Perms", NbtType.STRING))
             addPerm(perm, callListener);
+        copyFrom(DefaultPermissions.byName(nbt.getString("PermLevel")));
     }
 
     interface PermTreeFactory {

@@ -29,15 +29,12 @@ public final class DefaultPermissions {
 
     public static final PermTree OPERATOR = PermTree.create("Operator").extendFrom(MEMBER);
 
-    private static final Map<String, PermTree> NAME_LOOK_UP = new HashMap<>();
-
-    static {
-        NAME_LOOK_UP.put(VISITOR.getName(), VISITOR);
-        NAME_LOOK_UP.put(MEMBER.getName(), MEMBER);
-        NAME_LOOK_UP.put(OPERATOR.getName(), OPERATOR);
-    }
-
     public static PermTree byName(String name) {
-        return NAME_LOOK_UP.get(name);
+        return switch (name) {
+            case "Visitor" -> VISITOR;
+            case "Member" -> MEMBER;
+            case "Operator" -> OPERATOR;
+            default -> null;
+        };
     }
 }
