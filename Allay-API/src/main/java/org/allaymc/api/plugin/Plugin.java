@@ -63,7 +63,7 @@ public abstract class Plugin {
         return Server.getInstance();
     }
 
-    public Scheduler getScheduler() {
+    public Scheduler getServerScheduler() {
         return this.getServer().getScheduler();
     }
 
