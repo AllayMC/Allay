@@ -41,6 +41,10 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     private void onBlockRemove(BlockOnReplaceEvent event) {
         var pos = event.currentBlockState().pos();
         var blockEntity = getBlockEntity(pos);
+        if (blockEntity == null) {
+            log.warn("Block entity not found at pos: {}", pos);
+            return;
+        }
         blockEntity.onReplace(event);
         removeBlockEntityAt(pos);
     }
