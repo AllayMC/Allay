@@ -7,6 +7,7 @@ import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
+import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.Dependency;
@@ -46,6 +47,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.data.event.SlashCommandExecutedEventData;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
@@ -373,24 +375,28 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
-        var pk = new CommandOutputPacket();
-        pk.setType(CommandOutputType.ALL_OUTPUT);
-        pk.setCommandOriginData(sender.getCommandOriginData());
+        var cmdOutputPk = new CommandOutputPacket();
+        cmdOutputPk.setType(CommandOutputType.ALL_OUTPUT);
+        cmdOutputPk.setCommandOriginData(sender.getCommandOriginData());
         for (var output : outputs) {
-            pk.getMessages().add(new CommandOutputMessage(
-                    false,
+            cmdOutputPk.getMessages().add(new CommandOutputMessage(
+                    status != CommandResult.FAILED_STATUS, // Indicates if the output message was one of a successful command execution
                     I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()),
                     Utils.EMPTY_STRING_ARRAY));
         }
-        pk.setSuccessCount(status);
-        pk.setData(""); // Unknown usage
-        networkComponent.sendPacket(pk);
+        cmdOutputPk.setSuccessCount(status);
+        networkComponent.sendPacket(cmdOutputPk);
     }
 
     @Override
     public CommandOriginData getCommandOriginData() {
         if (commandOriginData == null) {
-            commandOriginData = new CommandOriginData(CommandOriginType.PLAYER, networkComponent.getLoginData().getUuid(), "", 0);
+            commandOriginData = new CommandOriginData(
+                    CommandOriginType.PLAYER,
+                    networkComponent.getLoginData().getUuid(),
+                    "",
+                    -1
+            );
         }
         return commandOriginData;
     }
