@@ -80,7 +80,7 @@ public final class AllayServer implements Server {
     private Thread terminalConsoleThread;
     private AllayTerminalConsole terminalConsole;
     private static volatile AllayServer instance;
-    private int nextPlayerDataAutoSaveTime = 0;
+    private long nextPlayerDataAutoSaveTime = 0;
 
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
@@ -178,7 +178,7 @@ public final class AllayServer implements Server {
     private void autoSavePlayerData(long currentTick) {
         if (currentTick >= nextPlayerDataAutoSaveTime) {
             savePlayerData();
-            nextPlayerDataAutoSaveTime += Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
+            nextPlayerDataAutoSaveTime = currentTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
         }
     }
 
