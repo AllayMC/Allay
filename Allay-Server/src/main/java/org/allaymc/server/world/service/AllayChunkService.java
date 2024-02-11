@@ -109,9 +109,8 @@ public class AllayChunkService implements ChunkService {
 
     private void setChunk(int x, int z, Chunk chunk) {
         var chunkHash = HashUtils.hashXZ(x, z);
-        if (isChunkLoaded(chunkHash))
+        if (loadedChunks.putIfAbsent(chunkHash, chunk) != null)
             throw new IllegalStateException("Trying to set a chunk (" + x + "," + z + ") which is already loaded");
-        loadedChunks.put(chunkHash, chunk);
     }
 
     @Override
