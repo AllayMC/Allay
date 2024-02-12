@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.datastruct.aabbtree.AABBOverlapFilter;
 import org.allaymc.api.datastruct.aabbtree.AABBTree;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.entity.Entity;
@@ -24,6 +25,7 @@ import org.joml.primitives.AABBfc;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Predicate;
 
 import static java.lang.Math.*;
 import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRICTION;
@@ -550,22 +552,20 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     @Override
-    public List<Entity> computeCollidingEntities(AABBfc aabb, boolean ignoreEntityHasCollision) {
+    public List<Entity> computeCollidingEntities(AABBfc aabb, AABBOverlapFilter<Entity> predicate) {
         var result = new ArrayList<Entity>();
-        entityAABBTree.detectOverlaps(aabb, result);
-        if (!ignoreEntityHasCollision) {
-            result.removeIf(e -> !e.hasEntityCollision());
-        }
+        entityAABBTree.detectOverlaps(aabb, predicate, result);
         return result;
     }
 
     @Override
     public List<Entity> computeCollidingEntities(VoxelShape voxelShape, boolean ignoreEntityHasCollision) {
-        //用一个set暂存entity避免重复
         var result = new ArrayList<Entity>();
-        entityAABBTree.detectOverlaps(voxelShape.unionAABB(), result);
-        if (!ignoreEntityHasCollision) result.removeIf(entity -> !entity.hasEntityCollision());
-        result.removeIf(entity -> !voxelShape.intersectsAABB(entity.getOffsetAABB()));
+        entityAABBTree.detectOverlaps(voxelShape.unionAABB(), entity -> {
+            if (!ignoreEntityHasCollision && !entity.hasEntityCollision())
+                return false;
+            return voxelShape.intersectsAABB(entity.getOffsetAABB());
+        }, result);
         return result;
     }
 
@@ -579,8 +579,5 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return result;
     }
 
-    protected record ScheduledMove(Entity entity, Location3fc newLoc) {
-    }
-
-    ;
+    protected record ScheduledMove(Entity entity, Location3fc newLoc) {}
 }
