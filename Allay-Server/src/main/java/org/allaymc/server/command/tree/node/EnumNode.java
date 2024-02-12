@@ -1,5 +1,6 @@
 package org.allaymc.server.command.tree.node;
 
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.tree.BaseNode;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
@@ -17,6 +18,7 @@ import java.util.Set;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class EnumNode extends BaseNode {
 
     protected String enumName;
@@ -25,13 +27,24 @@ public class EnumNode extends BaseNode {
     public EnumNode(String name, CommandNode parent, Object defaultValue, String[] values) {
         super(name, parent, defaultValue);
         this.enumName = name + "Enums";
-        this.values = values;
+        this.values = checkValues(values);
     }
 
     public EnumNode(String name, CommandNode parent, Object defaultValue, String enumName, String[] values) {
         super(name, parent, defaultValue);
         this.enumName = enumName;
-        this.values = values;
+        this.values = checkValues(values);
+    }
+
+    protected String[] checkValues(String[] values) {
+        for (int index = 0; index < values.length; index++) {
+            var lowerCase = values[index].toLowerCase();
+            if (!values[index].equals(lowerCase)) {
+                log.warn("Upper case character is not allowed in command enum value! Value: {}", values[index]);
+                values[index] = lowerCase;
+            }
+        }
+        return values;
     }
 
     @Override
