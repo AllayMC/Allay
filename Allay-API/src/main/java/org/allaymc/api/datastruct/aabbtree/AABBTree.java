@@ -32,10 +32,9 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
     private final Deque<Integer> freeNodes;
     private final FrustumIntersection frustumIntersection;
     private final RayAabIntersection rayIntersection;
-
+    private final float fatAABBMargin;
     @Getter
     private int root;
-    private final float fatAABBMargin;
 
     public AABBTree() {
         this(new AreaAABBHeuristicFunction<>(), DEFAULT_FAT_AABB_MARGIN);
@@ -414,14 +413,13 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             return;
         }
 
-        Deque<Integer> stack = new ArrayDeque<>();
-        stack.offer(root);
+        int[] stack = new int[nodes.size()];
+        int stackSize = 0;
+        stack[stackSize++] = root;
 
-        while (!stack.isEmpty()) {
-            int nodeIndex = stack.pop();
-            if (nodeIndex == AABBTreeNode.INVALID_NODE_INDEX) {
-                continue;
-            }
+        while (stackSize > 0) {
+            int nodeIndex = stack[--stackSize];
+            if (nodeIndex == AABBTreeNode.INVALID_NODE_INDEX) continue;
 
             AABBTreeNode<T> node = getNodeAt(nodeIndex);
             AABBf nodeAABB = node.getAABB();
@@ -432,8 +430,8 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
                         result.add(nodeData);
                     }
                 } else {
-                    stack.offer(node.getLeftChild());
-                    stack.offer(node.getRightChild());
+                    stack[stackSize++] = node.getRightChild();
+                    stack[stackSize++] = node.getLeftChild();
                 }
             }
         }
@@ -446,5 +444,4 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
     public int size() {
         return objects.size();
     }
-
 }
