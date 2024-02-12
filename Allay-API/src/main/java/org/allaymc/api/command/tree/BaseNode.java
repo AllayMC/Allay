@@ -37,7 +37,7 @@ public abstract class BaseNode implements CommandNode {
     @Getter
     @Setter
     protected int maxArgCostBranch;
-    protected Set<CommandParamOption> paramOptions = EnumSet.noneOf(CommandParamOption.class);;
+    protected Set<CommandParamOption> paramOptions = EnumSet.noneOf(CommandParamOption.class);
 
     public BaseNode(String name, CommandNode parent) {
         this(name, parent, null);

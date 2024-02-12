@@ -5,11 +5,11 @@ import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumConstraint;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -18,6 +18,7 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class EnumNode extends BaseNode {
+
     protected String enumName;
     protected String[] values;
 
@@ -52,18 +53,16 @@ public class EnumNode extends BaseNode {
         }
     }
 
-    protected boolean customEquals(String s1, String s2) {
-        return s1.equals(s2);
-    }
-
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
-        var map = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
-        for (var value : values) {
-            map.put(value, Collections.emptySet());
-        }
+        Map<String, Set<CommandEnumConstraint>> map = new LinkedHashMap<>();
+        for (var value : values) map.put(value, Collections.emptySet());
         data.setEnumData(new CommandEnumData(enumName, map, false));
         return data;
+    }
+
+    protected boolean customEquals(String s1, String s2) {
+        return s1.equals(s2);
     }
 }

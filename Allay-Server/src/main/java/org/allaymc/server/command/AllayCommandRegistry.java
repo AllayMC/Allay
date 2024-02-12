@@ -46,7 +46,6 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
     @Override
     public void register(Command command) {
         register(command.getName(), command);
-        command.getAliases().forEach(alias -> register(alias, command));
         command.getPermissions().forEach(DefaultPermissions.OPERATOR::addPerm);
     }
 

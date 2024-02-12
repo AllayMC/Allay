@@ -64,13 +64,10 @@ public abstract class BaseCommand implements Command {
 
     private void prepareNetworkData() {
         // Aliases
-        // TODO: seems that the vanilla aliases implementation causes a lot of problems
-        var map = new HashMap<String, Set<CommandEnumConstraint>>();
-        map.put(name, Collections.emptySet());
-        for (var alias : aliases) {
-            map.put(alias, Collections.emptySet());
-        }
-        networkAliasesData = new CommandEnumData(name + "CommandAliases", map, false);
+        Map<String, Set<CommandEnumConstraint>> values = new LinkedHashMap<>();
+        for (var alias : aliases) values.put(alias, Collections.emptySet());
+        values.put(name, Collections.emptySet());
+        networkAliasesData = new CommandEnumData(name + "CommandAliases", values, false);
 
         // Overloads
         if (!overloads.isEmpty()) {
