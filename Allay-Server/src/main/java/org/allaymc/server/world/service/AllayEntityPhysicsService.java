@@ -25,7 +25,6 @@ import org.joml.primitives.AABBfc;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Predicate;
 
 import static java.lang.Math.*;
 import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRICTION;
@@ -553,14 +552,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     @Override
     public List<Entity> computeCollidingEntities(AABBfc aabb, AABBOverlapFilter<Entity> predicate) {
-        var result = new ArrayList<Entity>();
+        var result = new LinkedList<Entity>();
         entityAABBTree.detectOverlaps(aabb, predicate, result);
         return result;
     }
 
     @Override
     public List<Entity> computeCollidingEntities(VoxelShape voxelShape, boolean ignoreEntityHasCollision) {
-        var result = new ArrayList<Entity>();
+        var result = new LinkedList<Entity>();
         entityAABBTree.detectOverlaps(voxelShape.unionAABB(), entity -> {
             if (!ignoreEntityHasCollision && !entity.hasEntityCollision())
                 return false;
