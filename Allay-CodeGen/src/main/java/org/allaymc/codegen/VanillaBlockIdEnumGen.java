@@ -7,7 +7,6 @@ import lombok.SneakyThrows;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.DataInputStream;
@@ -89,7 +88,6 @@ public class VanillaBlockIdEnumGen {
                                 }catch(IllegalArgumentException ignore){
                                     return null;
                                 }""")
-                        .addAnnotation(Nullable.class)
                         .returns(VanillaBlockId.class)
                         .build()
                 );
