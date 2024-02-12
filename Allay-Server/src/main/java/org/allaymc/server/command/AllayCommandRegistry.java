@@ -53,7 +53,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
     public CommandResult execute(CommandSender sender, String cmd) {
         var spilt = new LinkedList<>(spiltCommandArgs(cmd));
         var cmdName = spilt.pop(); // Command name
-        var command = get(cmdName);
+        var command = this.findCommand(cmdName);
         if (command == null) {
             sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
             return CommandResult.failed();
@@ -71,6 +71,15 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
             sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.failed();
         }
+    }
+
+    protected Command findCommand(String nameOrAlias) {
+        var result = this.get(nameOrAlias);
+        if (result != null) return result;
+
+        return this.getContent().values().stream()
+                .filter(command -> command.getAliases().contains(nameOrAlias))
+                .findFirst().orElse(null);
     }
 
     @Override
