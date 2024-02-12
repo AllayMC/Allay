@@ -19,7 +19,6 @@ public class KickCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                .key("kick")
                 // TODO: Should use target(), but target() can only match players in default world
                 .str("player")
                 .exec(context -> {
