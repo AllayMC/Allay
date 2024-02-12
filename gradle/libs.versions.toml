@@ -70,7 +70,6 @@ sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graalvm" }
 chromeinspector-tool = { group = "org.graalvm.tools", name = "chromeinspector-tool", version.ref = "graalvm" }
 profiler-tool = { group = "org.graalvm.tools", name = "profiler-tool", version.ref = "graalvm" }
 
-
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 test = ["junit-jupiter-api", "junit-jupiter-engine", "mockito", "mockito-junit"]
