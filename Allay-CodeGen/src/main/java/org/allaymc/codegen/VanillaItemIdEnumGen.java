@@ -1,8 +1,6 @@
 package org.allaymc.codegen;
 
-import org.allaymc.dependence.Identifier;
 import org.allaymc.dependence.StringUtils;
-import org.allaymc.dependence.VanillaItemId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 
