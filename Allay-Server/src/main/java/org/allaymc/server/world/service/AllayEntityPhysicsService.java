@@ -579,8 +579,5 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return result;
     }
 
-    protected record ScheduledMove(Entity entity, Location3fc newLoc) {
-    }
-
-    ;
+    protected record ScheduledMove(Entity entity, Location3fc newLoc) {}
 }
