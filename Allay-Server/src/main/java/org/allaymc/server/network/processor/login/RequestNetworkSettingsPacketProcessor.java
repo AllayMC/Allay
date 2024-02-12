@@ -30,8 +30,9 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         }
         var settingsPacket = new NetworkSettingsPacket();
         settingsPacket.setCompressionAlgorithm(Server.SETTINGS.networkSettings().compressionAlgorithm());
-        settingsPacket.setCompressionThreshold(Server.SETTINGS.networkSettings().compressionThreshold());
+        // NOTICE: We don't need to set the compression threshold after MCBE 1.20.60
         player.sendPacketImmediately(settingsPacket);
+        // NOTICE: The NetworkSettingsPacket shouldn't be compressed
         player.getClientSession().setCompression(settingsPacket.getCompressionAlgorithm());
         return;
 
