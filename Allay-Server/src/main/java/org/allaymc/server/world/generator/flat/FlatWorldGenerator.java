@@ -38,7 +38,6 @@ public class FlatWorldGenerator extends WorldGenerator {
             list.add(dirt);
             list.add(dirt);
             list.add(grass);
-            return;
         } else {
             for (var layer : AllayStringUtils.fastSplit(preset, ";")) {
                 var entry = AllayStringUtils.fastTwoPartSplit(layer, "x", "");
