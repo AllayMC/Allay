@@ -9,9 +9,9 @@ import org.allaymc.api.item.type.ItemTypeBuilder;
  * @author daoge_cmd <br>
  * Allay Project <br>
  */
-public interface ItemScuteStack extends ItemStack {
-  ItemType<ItemScuteStack> SCUTE_TYPE = ItemTypeBuilder
-          .builder(ItemScuteStack.class)
-          .vanillaItem(VanillaItemId.SCUTE)
+public interface ItemTurtleScuteStack extends ItemStack {
+  ItemType<ItemTurtleScuteStack> TURTLE_SCUTE_TYPE = ItemTypeBuilder
+          .builder(ItemTurtleScuteStack.class)
+          .vanillaItem(VanillaItemId.TURTLE_SCUTE)
           .build();
 }

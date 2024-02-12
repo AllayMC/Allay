@@ -64,12 +64,11 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 # JeGenerator
 jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.2-R0.4" }
 # GraalJS
-js = { group = "org.graalvm.polyglot", name = "js", version.ref = "graalvm" }
+js = { group = "org.graalvm.polyglot", name = "js-community", version.ref = "graalvm" }
 polyglot = { group = "org.graalvm.polyglot", name = "polyglot", version.ref = "graalvm" }
 sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graalvm" }
 chromeinspector-tool = { group = "org.graalvm.tools", name = "chromeinspector-tool", version.ref = "graalvm" }
 profiler-tool = { group = "org.graalvm.tools", name = "profiler-tool", version.ref = "graalvm" }
-
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]

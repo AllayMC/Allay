@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.BiomeType;
 import org.allaymc.dependence.Identifier;
-import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
@@ -114,7 +113,6 @@ public class VanillaBiomeIdEnumGen {
                 .addParameter(INT_CLASS, "id")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addCode("return MAP1.get(id);")
-                .addAnnotation(Nullable.class)
                 .returns(BiomeType.class)
                 .build());
         codeBuilder.addMethod(MethodSpec
@@ -122,7 +120,6 @@ public class VanillaBiomeIdEnumGen {
                 .addParameter(IDENTIFIER_CLASS, "identifier")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addCode("return MAP2.get(identifier);")
-                .addAnnotation(Nullable.class)
                 .returns(BiomeType.class)
                 .build());
         var builtCode = codeBuilder.build();

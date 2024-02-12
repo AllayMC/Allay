@@ -346,28 +346,6 @@
                 3
             ]
         },
-        "color": {
-            "serializationName": "color",
-            "valueType": "ENUM",
-            "values": [
-                "black",
-                "blue",
-                "brown",
-                "cyan",
-                "gray",
-                "green",
-                "light_blue",
-                "lime",
-                "magenta",
-                "orange",
-                "pink",
-                "purple",
-                "red",
-                "silver",
-                "white",
-                "yellow"
-            ]
-        },
         "color_bit": {
             "serializationName": "color_bit",
             "valueType": "BOOLEAN",
@@ -1415,6 +1393,18 @@
                 "top",
                 "unknown",
                 "west"
+            ]
+        },
+        "trial_spawner_state": {
+            "serializationName": "trial_spawner_state",
+            "valueType": "INTEGER",
+            "values": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
             ]
         },
         "triggered_bit": {

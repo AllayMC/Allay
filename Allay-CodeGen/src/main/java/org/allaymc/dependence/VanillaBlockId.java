@@ -981,13 +981,73 @@ public enum VanillaBlockId {
 
   HANGING_ROOTS("minecraft:hanging_roots"),
 
+  HARD_BLACK_STAINED_GLASS("minecraft:hard_black_stained_glass"),
+
+  HARD_BLACK_STAINED_GLASS_PANE("minecraft:hard_black_stained_glass_pane"),
+
+  HARD_BLUE_STAINED_GLASS("minecraft:hard_blue_stained_glass"),
+
+  HARD_BLUE_STAINED_GLASS_PANE("minecraft:hard_blue_stained_glass_pane"),
+
+  HARD_BROWN_STAINED_GLASS("minecraft:hard_brown_stained_glass"),
+
+  HARD_BROWN_STAINED_GLASS_PANE("minecraft:hard_brown_stained_glass_pane"),
+
+  HARD_CYAN_STAINED_GLASS("minecraft:hard_cyan_stained_glass"),
+
+  HARD_CYAN_STAINED_GLASS_PANE("minecraft:hard_cyan_stained_glass_pane"),
+
   HARD_GLASS("minecraft:hard_glass"),
 
   HARD_GLASS_PANE("minecraft:hard_glass_pane"),
 
-  HARD_STAINED_GLASS("minecraft:hard_stained_glass"),
+  HARD_GRAY_STAINED_GLASS("minecraft:hard_gray_stained_glass"),
 
-  HARD_STAINED_GLASS_PANE("minecraft:hard_stained_glass_pane"),
+  HARD_GRAY_STAINED_GLASS_PANE("minecraft:hard_gray_stained_glass_pane"),
+
+  HARD_GREEN_STAINED_GLASS("minecraft:hard_green_stained_glass"),
+
+  HARD_GREEN_STAINED_GLASS_PANE("minecraft:hard_green_stained_glass_pane"),
+
+  HARD_LIGHT_BLUE_STAINED_GLASS("minecraft:hard_light_blue_stained_glass"),
+
+  HARD_LIGHT_BLUE_STAINED_GLASS_PANE("minecraft:hard_light_blue_stained_glass_pane"),
+
+  HARD_LIGHT_GRAY_STAINED_GLASS("minecraft:hard_light_gray_stained_glass"),
+
+  HARD_LIGHT_GRAY_STAINED_GLASS_PANE("minecraft:hard_light_gray_stained_glass_pane"),
+
+  HARD_LIME_STAINED_GLASS("minecraft:hard_lime_stained_glass"),
+
+  HARD_LIME_STAINED_GLASS_PANE("minecraft:hard_lime_stained_glass_pane"),
+
+  HARD_MAGENTA_STAINED_GLASS("minecraft:hard_magenta_stained_glass"),
+
+  HARD_MAGENTA_STAINED_GLASS_PANE("minecraft:hard_magenta_stained_glass_pane"),
+
+  HARD_ORANGE_STAINED_GLASS("minecraft:hard_orange_stained_glass"),
+
+  HARD_ORANGE_STAINED_GLASS_PANE("minecraft:hard_orange_stained_glass_pane"),
+
+  HARD_PINK_STAINED_GLASS("minecraft:hard_pink_stained_glass"),
+
+  HARD_PINK_STAINED_GLASS_PANE("minecraft:hard_pink_stained_glass_pane"),
+
+  HARD_PURPLE_STAINED_GLASS("minecraft:hard_purple_stained_glass"),
+
+  HARD_PURPLE_STAINED_GLASS_PANE("minecraft:hard_purple_stained_glass_pane"),
+
+  HARD_RED_STAINED_GLASS("minecraft:hard_red_stained_glass"),
+
+  HARD_RED_STAINED_GLASS_PANE("minecraft:hard_red_stained_glass_pane"),
+
+  HARD_WHITE_STAINED_GLASS("minecraft:hard_white_stained_glass"),
+
+  HARD_WHITE_STAINED_GLASS_PANE("minecraft:hard_white_stained_glass_pane"),
+
+  HARD_YELLOW_STAINED_GLASS("minecraft:hard_yellow_stained_glass"),
+
+  HARD_YELLOW_STAINED_GLASS_PANE("minecraft:hard_yellow_stained_glass_pane"),
 
   HARDENED_CLAY("minecraft:hardened_clay"),
 
@@ -1746,6 +1806,8 @@ public enum VanillaBlockId {
   TRAPDOOR("minecraft:trapdoor"),
 
   TRAPPED_CHEST("minecraft:trapped_chest"),
+
+  TRIAL_SPAWNER("minecraft:trial_spawner"),
 
   TRIP_WIRE("minecraft:trip_wire"),
 
