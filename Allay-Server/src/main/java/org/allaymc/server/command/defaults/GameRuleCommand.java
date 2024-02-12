@@ -43,11 +43,11 @@ public class GameRuleCommand extends SimpleCommand {
             var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
             var gamerule = GameRule.fromName(context.getFirstResult());
             if (context.getSecondResult() != null) {
-                Object value = isBoolGameRule ? (Boolean) context.getSecondResult() : (Integer) context.getSecondResult();
+                var value = isBoolGameRule ? (boolean) context.getSecondResult() : (int) context.getSecondResult();
                 world.setGameRule(gamerule, value);
                 context.addOutput(TrKeys.M_COMMANDS_GAMERULE_SUCCESS, gamerule.getName(), value);
             } else {
-                Object value = world.getWorldData().getGameRule(gamerule);
+                var value = world.getWorldData().getGameRule(gamerule);
                 context.addOutput(String.valueOf(value));
             }
             return context.success();

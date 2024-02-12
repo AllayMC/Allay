@@ -16,12 +16,20 @@ import static org.cloudburstmc.protocol.bedrock.data.GameType.*;
  */
 public interface CommonEnum {
 
-    String[] GAMEMODE_ENUM = new String[] {
+    String[] GAMEMODE_ENUM = new String[]{
             "survival", "s", "0",
             "c", "creative", "1",
             "adventure", "a", "2",
             "spectator", "spc", "6"
     };
+    String[] BOOL_GAMERULE_ENUM = Arrays.stream(GameRule.values())
+            .filter(rule -> rule.getType() == GameRule.Type.BOOLEAN)
+            .map(gameRule -> gameRule.getName().toLowerCase())
+            .toArray(String[]::new);
+    String[] INT_GAMERULE_ENUM = Arrays.stream(GameRule.values())
+            .filter(rule -> rule.getType() == GameRule.Type.INT)
+            .map(gameRule -> gameRule.getName().toLowerCase())
+            .toArray(String[]::new);
 
     static GameType getGameTypeFromString(String str) {
         return switch (str.trim().toLowerCase()) {
@@ -44,10 +52,6 @@ public interface CommonEnum {
             default -> gameType.toString();
         };
     }
-
-    String[] BOOL_GAMERULE_ENUM = Arrays.stream(GameRule.values()).filter(rule -> rule.getType() == GameRule.Type.BOOLEAN).map(GameRule::getName).toArray(String[]::new);
-
-    String[] INT_GAMERULE_ENUM = Arrays.stream(GameRule.values()).filter(rule -> rule.getType() == GameRule.Type.INT).map(GameRule::getName).toArray(String[]::new);
 
     static GameRule getGameRuleFromName(String name) {
         return GameRule.fromName(name);
