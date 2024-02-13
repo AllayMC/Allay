@@ -4,6 +4,7 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.entity.Entity;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 
@@ -211,5 +212,17 @@ public interface CommandNode {
 
     default CommandNode target(String name, List<Entity> defaultValue) {
         return addLeaf(getFactory().target(name, this, defaultValue));
+    }
+
+    default CommandNode gameMode() {
+        return gameMode("gameMode");
+    }
+
+    default CommandNode gameMode(String name) {
+        return addLeaf(getFactory().gameMode(name, this, null));
+    }
+
+    default CommandNode gameMode(String name, GameType defaultValue) {
+        return addLeaf(getFactory().gameMode(name, this, defaultValue));
     }
 }

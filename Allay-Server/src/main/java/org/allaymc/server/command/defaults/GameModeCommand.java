@@ -7,6 +7,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,18 +26,14 @@ public class GameModeCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                .enums("gamemode", CommonEnum.GAMEMODE_ENUM)
+                .gameMode()
                 .target("player")
                 .optional()
                 .exec(context -> {
-                    var gametype = CommonEnum.getGameTypeFromString(context.getFirstResult());
-                    if (gametype == null) {
-                        context.addSyntaxError(1);
-                        return context.failed();
-                    }
+                    GameType gameType = context.getFirstResult();
                     List<EntityPlayer> players = new ArrayList<>();
                     if (context.getArgCount() == 1) {
-                        // 未填写"target"参数
+                        // target arg is missing
                         if (context.getSender() instanceof EntityPlayer player) {
                             players.add(player);
                         } else {
@@ -44,7 +41,7 @@ public class GameModeCommand extends SimpleCommand {
                             return context.failed();
                         }
                     } else {
-                        // 有填写"target"参数，检查是否匹配到目标
+                        // target arg is filled, check if the target is matched
                         players.addAll(context.getSecondResult());
                         if (players.isEmpty()) {
                             context.addNoTargetMatchError();
@@ -52,13 +49,13 @@ public class GameModeCommand extends SimpleCommand {
                         }
                     }
                     for (var player : players) {
-                        var gametypeName = I18n.get().tr(player.getLangCode(), CommonEnum.getGameTypeTrKey(gametype));
-                        player.setGameType(gametype);
+                        var gameTypeName = I18n.get().tr(player.getLangCode(), CommonEnum.getGameTypeTrKey(gameType));
+                        player.setGameType(gameType);
                         if (player == context.getSender()) {
-                            context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_SELF, gametypeName);
+                            context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_SELF, gameTypeName);
                         } else {
-                            context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_OTHER, gametypeName);
-                            context.sendWhisperTo(player, TrKeys.M_GAMEMODE_CHANGED, gametypeName);
+                            context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_OTHER, gameTypeName);
+                            context.sendWhisperTo(player, TrKeys.M_GAMEMODE_CHANGED, gameTypeName);
                         }
                     }
                     return context.success();

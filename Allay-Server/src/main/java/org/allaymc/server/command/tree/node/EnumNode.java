@@ -58,12 +58,17 @@ public class EnumNode extends BaseNode {
             }
         }
         if (matched) {
-            context.putResult(arg);
+            context.putResult(argToResult(arg));
             context.popArg();
             return true;
         } else {
             return false;
         }
+    }
+
+    protected Object argToResult(String arg) {
+        // In default implementation, the result is the same as the arg
+        return arg;
     }
 
     @Override

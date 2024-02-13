@@ -2,6 +2,7 @@ package org.allaymc.api.command.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.entity.Entity;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 import java.util.List;
 
@@ -43,4 +44,6 @@ public interface CommandNodeFactory {
     CommandNode remain(String name, CommandNode parent, Object defaultValue);
 
     CommandNode target(String name, CommandNode parent, List<Entity> defaultValue);
+
+    CommandNode gameMode(String name, CommandNode parent, GameType defaultValue);
 }

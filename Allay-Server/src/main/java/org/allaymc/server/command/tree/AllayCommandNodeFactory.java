@@ -4,6 +4,7 @@ import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.server.command.tree.node.*;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 import java.util.List;
 
@@ -76,5 +77,10 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     @Override
     public CommandNode target(String name, CommandNode parent, List<Entity> defaultValue) {
         return new TargetNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode gameMode(String name, CommandNode parent, GameType defaultValue) {
+        return new GameModeNode(name, parent, defaultValue);
     }
 }

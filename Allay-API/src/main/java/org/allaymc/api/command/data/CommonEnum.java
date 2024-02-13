@@ -48,7 +48,6 @@ public interface CommonEnum {
             case CREATIVE -> TrKeys.M_GAMEMODE_CREATIVE;
             case ADVENTURE -> TrKeys.M_GAMEMODE_ADVENTURE;
             case SPECTATOR -> TrKeys.M_GAMEMODE_SPECTATOR;
-            // 不应该其他情况
             default -> gameType.toString();
         };
     }
