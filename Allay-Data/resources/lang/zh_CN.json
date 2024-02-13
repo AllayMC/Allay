@@ -1,6 +1,6 @@
 {
   "allay:allay.starting": "正在启动allay...",
-  "allay:api.implemented": "此服务器正在运行 %1, 实现Allay-API版本 §b%2",
+  "allay:api.implemented": "此服务器正在运行 §b%1§f, 实现Allay-API版本 §b%2",
   "allay:blockattr.loaded": "加载原版方块属性表完成",
   "allay:blockattr.loading": "正在加载原版方块属性表...",
   "allay:blockentitytype.loaded": "加载完成 %1 个方块实体类型",
