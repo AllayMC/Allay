@@ -33,6 +33,8 @@ public enum LangCode {
 
     private final String string;
 
+    private static final LangCode[] VALUES = values();
+
     LangCode(String string) {
         this.string = string;
     }
@@ -40,5 +42,21 @@ public enum LangCode {
     @Override
     public String toString() {
         return this.string;
+    }
+
+    public static LangCode byName(String name) {
+        return byName(name, false);
+    }
+
+    public static LangCode byName(String name, boolean ignoreCase) {
+        for (LangCode langCode : VALUES) {
+            if (langCode.name().equals(name)) {
+                return langCode;
+            }
+            if (ignoreCase && langCode.name().equalsIgnoreCase(name)) {
+                return langCode;
+            }
+        }
+        return null;
     }
 }

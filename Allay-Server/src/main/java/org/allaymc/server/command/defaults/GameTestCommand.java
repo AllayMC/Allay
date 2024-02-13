@@ -70,8 +70,9 @@ public class GameTestCommand extends SimpleCommand {
                     String key = context.getResult(1);
                     String lang = context.getResult(2);
                     List<String> args = context.getResult(3);
-                    if (lang.isEmpty()) lang = LangCode.en_US.name();
-                    var langCode = LangCode.valueOf(lang);
+                    LangCode langCode;
+                    if (lang.isEmpty()) langCode = I18n.FALLBACK_LANG;
+                    else langCode = LangCode.byName(lang, true);
                     try {
                         player.sendText(I18n.get().tr(langCode, key, args));
                     } catch (Throwable t) {

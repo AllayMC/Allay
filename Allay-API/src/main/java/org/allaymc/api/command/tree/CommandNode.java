@@ -10,6 +10,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -177,7 +178,7 @@ public interface CommandNode {
         var values = new String[enumConstants.length];
         for (int index = 0; index < enumConstants.length; index++) {
             var e = enumConstants[index];
-            values[index] = e.name();
+            values[index] = e.name().toLowerCase();
         }
         return enums(name, values);
     }
