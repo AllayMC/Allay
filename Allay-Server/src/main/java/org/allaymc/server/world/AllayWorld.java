@@ -46,7 +46,7 @@ public class AllayWorld implements World {
     protected final Thread networkThread;
     protected long nextTimeSendTick;
     public static final int TIME_SENDING_INTERVAL = 12 * 20;
-    public static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncPacketsHandleCountAtOnce();
+    public static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
