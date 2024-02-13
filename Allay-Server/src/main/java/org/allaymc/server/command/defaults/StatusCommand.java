@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.Dimension;
@@ -72,8 +73,7 @@ public class StatusCommand extends SimpleCommand {
     }
 
     public StatusCommand() {
-        // TODO: I18n
-        super("status", "status command");
+        super("status", TrKeys.A_COMMAND_STATUS_DESCRIPTION);
     }
 
     @Override

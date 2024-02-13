@@ -29,6 +29,12 @@ public interface TrKeys {
 
   String A_COMMAND_GENERIC_SENDER_NOTSERVER = "allay:command.generic.sender.notServer";
 
+  String A_COMMAND_PLUGIN_DESCRIPTION = "allay:command.plugin.description";
+
+  String A_COMMAND_STATUS_DESCRIPTION = "allay:command.status.description";
+
+  String A_COMMAND_TPS_DESCRIPTION = "allay:command.tps.description";
+
   String A_CREATIVEITEM_LOADED = "allay:creativeitem.loaded";
 
   String A_CREATIVEITEM_LOADING = "allay:creativeitem.loading";

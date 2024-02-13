@@ -2,6 +2,7 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
 
 /**
@@ -12,8 +13,7 @@ import org.allaymc.api.server.Server;
 public class KickCommand extends SimpleCommand {
 
     public KickCommand() {
-        // TODO: I18n
-        super("kick", "Kick a player");
+        super("kick", TrKeys.M_COMMANDS_KICK_DESCRIPTION);
     }
 
     @Override

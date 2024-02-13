@@ -47,7 +47,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         try (var pgbar = ProgressBar
                 .builder()
                 .setInitialMax(array.size())
-                .setTaskName("Loading vanilla recipes")
+                .setTaskName("Loading Vanilla Recipes")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .setUpdateIntervalMillis(100)
                 .build()) {

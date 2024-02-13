@@ -10,7 +10,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
