@@ -69,6 +69,8 @@ polyglot = { group = "org.graalvm.polyglot", name = "polyglot", version.ref = "g
 sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graalvm" }
 chromeinspector-tool = { group = "org.graalvm.tools", name = "chromeinspector-tool", version.ref = "graalvm" }
 profiler-tool = { group = "org.graalvm.tools", name = "profiler-tool", version.ref = "graalvm" }
+# Native Operating System and Hardware Information
+oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.4.12" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]

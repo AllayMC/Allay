@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.polyglot)
     implementation(libs.js)
     implementation(libs.bundles.graalvm)
+    implementation(libs.oshi)
 
     testImplementation(libs.bytebuddy)
 }
