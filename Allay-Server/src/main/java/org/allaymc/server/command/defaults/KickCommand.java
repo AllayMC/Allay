@@ -30,7 +30,7 @@ public class KickCommand extends SimpleCommand {
                             return context.success();
                         }
                     }
-                    context.addOutput("§cUnknown player: " + name);
+                    context.addError("Unknown player: " + name);
                     return context.failed();
                 });
     }

@@ -36,7 +36,7 @@ public class PluginCommand extends SimpleCommand {
                     var manager = Server.getInstance().getPluginManager();
                     String name = context.getSecondResult();
                     if (!manager.isPluginEnabled(name)) {
-                        context.addOutput("§cPlugin " + name + " is not enabled!");
+                        context.addError("Plugin " + name + " is not enabled!");
                         return context.failed();
                     }
                     var plugin = manager.getPlugin(name).plugin();

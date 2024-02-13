@@ -9,6 +9,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
@@ -56,11 +57,11 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         var cmdName = spilt.pop(); // Command name
         var command = this.findCommand(cmdName);
         if (command == null) {
-            sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
+            sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
             return CommandResult.failed();
         }
         if (!sender.hasPerm(command.getPermissions())) {
-            sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
+            sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
             return CommandResult.failed();
         }
         try {
@@ -69,7 +70,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
             return result;
         } catch (Throwable t) {
             log.error("Error while execute command " + cmdName, t);
-            sender.sendTr("§c%" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
+            sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.failed();
         }
     }

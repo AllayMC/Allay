@@ -16,6 +16,7 @@ import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.api.utils.TextFormat;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class GameTestCommand extends SimpleCommand {
                     int blockStateHash = context.getResult(1);
                     var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
                     if (blockState == null) {
-                        context.addOutput("§cUnknown block state hash!");
+                        context.addOutput(TextFormat.RED + "Unknown block state hash!");
                         return context.failed();
                     }
                     player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
@@ -76,7 +77,7 @@ public class GameTestCommand extends SimpleCommand {
                     try {
                         player.sendText(I18n.get().tr(langCode, key, args));
                     } catch (Throwable t) {
-                        context.addOutput("§cUnknown key!");
+                        context.addOutput(TextFormat.RED + "Unknown key!");
                         return context.failed();
                     }
                     return context.success();
@@ -100,7 +101,7 @@ public class GameTestCommand extends SimpleCommand {
                     var entityType = EntityTypeRegistry.getRegistry().get(new Identifier((String)context.getResult(1)));
                     int count = context.getResult(2);
                     if (entityType == null) {
-                        context.addOutput("§cUnknown entity type!");
+                        context.addOutput(TextFormat.RED + "Unknown entity type!");
                         return context.failed();
                     }
                     for (var i = 1; i <= count; i++) {
@@ -134,7 +135,7 @@ public class GameTestCommand extends SimpleCommand {
                     try {
                         Files.deleteIfExists(Path.of("cmd_pk_allay.json"));
                     } catch (IOException e) {
-                        context.addOutput("§c" + e);
+                        context.addOutput(TextFormat.RED + "" + e);
                         return context.failed();
                     }
                     JSONUtils.toFile("cmd_pk_allay.json", cmdPk, writer -> writer.setIndent("  "));
@@ -166,12 +167,12 @@ public class GameTestCommand extends SimpleCommand {
                     int dimId = context.getThirdResult();
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
-                        context.addOutput("§cUnknown world: " + worldName);
+                        context.addOutput(TextFormat.RED + "Unknown world: " + worldName);
                         return context.failed();
                     }
                     var dim = world.getDimension(dimId);
                     if (dim == null) {
-                        context.addOutput("§cUnknown dimension: " + dimId);
+                        context.addOutput(TextFormat.RED + "Unknown dimension: " + dimId);
                         return context.failed();
                     }
                     player.teleport(new Location3f(0, 64, 0, dim));
