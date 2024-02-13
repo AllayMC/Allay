@@ -10,7 +10,7 @@
   "allay:command.generic.sender.notEntity": "This command can only be executed by an entity!",
   "allay:command.generic.sender.notPlayer": "This command can only be executed by a player!",
   "allay:command.generic.sender.notServer": "This command can only be executed by the server!",
-  "allay:command.plugin.description": "Show plugin list",
+  "allay:command.plugin.description": "Manage plugins",
   "allay:command.status.description": "Get the status of the server",
   "allay:command.tps.description": "Show TPS or MSPT of the current world",
   "allay:command.version.description": "Query server version information",

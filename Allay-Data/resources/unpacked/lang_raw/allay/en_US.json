@@ -26,7 +26,7 @@
   "command.generic.sender.notPlayer": "This command can only be executed by a player!",
   "command.generic.sender.notEntity": "This command can only be executed by an entity!",
   "command.status.description": "Get the status of the server",
-  "command.plugin.description": "Show plugin list",
+  "command.plugin.description": "Manage plugins",
   "command.tps.description": "Show TPS or MSPT of the current world",
   "command.version.description": "Query server version information",
   "pack.loading": "Loading packs...",

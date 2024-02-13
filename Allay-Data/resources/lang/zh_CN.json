@@ -10,7 +10,7 @@
   "allay:command.generic.sender.notEntity": "这个命令只能被实体执行！",
   "allay:command.generic.sender.notPlayer": "这个命令只能被玩家执行！",
   "allay:command.generic.sender.notServer": "这个命令只能被服务器执行！",
-  "allay:command.plugin.description": "显示插件列表",
+  "allay:command.plugin.description": "管理插件",
   "allay:command.status.description": "获取服务器状态",
   "allay:command.tps.description": "获取当前世界的TPS或MSPT",
   "allay:command.version.description": "查询服务器版本信息",
