@@ -2,11 +2,9 @@ package org.allaymc.spark;
 
 import me.lucko.spark.common.SparkPlatform;
 import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SimpleCommand;
-import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandTree;
-
-import java.util.function.Function;
 
 /**
  * Allay Project 08/02/2024
@@ -19,45 +17,44 @@ public class AllaySparkCommand extends SimpleCommand {
 
     public AllaySparkCommand(SparkPlatform platform) {
         super("spark", "spark");
-        this.permissions.add("spark");
         this.platform = platform;
     }
 
+    // only for game overloads
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                .key("help").exec(executor()).root()
+                .key("help").root()
                 .key("profiler")
-                .key("info").exec(executor()).up()
-                .key("open").exec(executor()).up()
+                .key("info").up()
+                .key("open").up()
                 .key("start").enums("startFlags",
                         "--timeout",
                         "--thread",
                         "--only-ticks-over",
                         "--interval",
                         "--alloc"
-                ).exec(executor()).up(2)
-                .key("stop").exec(executor()).up()
-                .key("cancel").exec(executor()).root()
-                .key("tps").exec(executor()).root()
-                .key("ping").enums("pingFlags", "--player").exec(executor()).root()
-                .key("healthreport").enums("healthreportFlags", "--memory", "--network").exec(executor()).root()
+                ).str("value").optional().up(2)
+                .key("stop").up()
+                .key("cancel").root()
+                .key("tps").root()
+                .key("ping").enums("pingFlags", "--player").optional().str("value").root()
+                .key("healthreport").enums("healthreportFlags", "--memory", "--network").optional().str("value").optional().root()
                 .key("tickmonitor").enums("tickmonitorFlags",
                         "--threshold",
                         "--threshold-tick",
                         "--without-gc"
-                ).exec(executor()).root()
-                .key("gc").exec(executor()).root()
-                .key("gcmonitor").exec(executor()).root()
-                .key("heapsummary").enums("heapsummaryFlags", "--save-to-file").exec(executor()).root()
-                .key("heapdump").enums("heapdumpFlags", "--compress").exec(executor()).root()
-                .key("activity").enums("activityFlags", "--page").exec(executor());
+                ).optional().str("value").optional().optional().root()
+                .key("gc").root()
+                .key("gcmonitor").root()
+                .key("heapsummary").enums("heapsummaryFlags", "--save-to-file").optional().str("value").root()
+                .key("heapdump").enums("heapdumpFlags", "--compress").str("value").root()
+                .key("activity").enums("activityFlags", "--page").str("value");
     }
 
-    protected Function<CommandContext, CommandResult> executor() {
-        return context -> {
-            this.platform.executeCommand(new AllayCommandSender(context.getSender()), context.getArgs());
-            return context.success();
-        };
+    @Override
+    public CommandResult execute(CommandSender sender, String[] args) {
+        this.platform.executeCommand(new AllayCommandSender(sender), args);
+        return CommandResult.success(null);
     }
 }
