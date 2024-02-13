@@ -81,6 +81,8 @@ public final class AllayServer implements Server {
     private AllayTerminalConsole terminalConsole;
     private static volatile AllayServer instance;
     private long nextPlayerDataAutoSaveTime = 0;
+    @Getter
+    private long startTime;
 
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
@@ -145,17 +147,18 @@ public final class AllayServer implements Server {
         });
         initTerminalConsole();
         worldPool.loadWorlds();
-        this.commandRegistry = new AllayCommandRegistry();
-        this.commandRegistry.registerDefaultCommands();
-        this.networkServer = new AllayNetworkServer(this);
-        this.scheduler = new AllayScheduler();
-        this.pluginManager = new AllayPluginManager();
+        commandRegistry = new AllayCommandRegistry();
+        commandRegistry.registerDefaultCommands();
+        networkServer = new AllayNetworkServer(this);
+        scheduler = new AllayScheduler();
+        pluginManager = new AllayPluginManager();
         pluginManager.loadPlugins();
         pluginManager.enablePlugins();
         // TODO: plugin
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
-        this.networkServer.start();
-        sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(System.currentTimeMillis() - timeMillis));
+        networkServer.start();
+        startTime = System.currentTimeMillis();
+        sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(startTime - timeMillis));
         gameLoop.startLoop();
     }
 

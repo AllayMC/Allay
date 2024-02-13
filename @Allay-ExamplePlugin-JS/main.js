@@ -9,7 +9,6 @@ export function onEnable() {
     a();
 }
 
-
 export function onDisable() {
     console.info("Example-Plugin-Js has been disabled!");
 }

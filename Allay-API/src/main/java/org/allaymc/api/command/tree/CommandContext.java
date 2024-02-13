@@ -8,6 +8,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.gamerule.GameRule;
 
 import java.util.List;
@@ -60,6 +61,14 @@ public interface CommandContext {
 
     default void addOutput(@MayContainTrKey String output) {
         addOutput(output, new Object[0]);
+    }
+
+    default void addError(@MayContainTrKey String output) {
+        addOutput(TextFormat.RED + output, new Object[0]);
+    }
+
+    default void addError(@MayContainTrKey String output, Object... args) {
+        addOutput(TextFormat.RED + output, args);
     }
 
     default void addSyntaxError(int errorIndex) {

@@ -41,6 +41,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new TpsCommand());
         register(new KickCommand());
         register(new PluginCommand());
+        register(new StatusCommand());
     }
 
     @Override

@@ -23,7 +23,7 @@ public final class GameLoop {
     @Getter
     private final int loopCountPerSec;
     private final float[] tickSummary = new float[20];
-    private final float[] MSTPSummary = new float[20];
+    private final float[] MSPTSummary = new float[20];
     @Getter
     private long tick;
 
@@ -35,11 +35,15 @@ public final class GameLoop {
         this.onStop = onStop;
         this.loopCountPerSec = loopCountPerSec;
         Arrays.fill(tickSummary, 20f);
-        Arrays.fill(MSTPSummary, 0f);
+        Arrays.fill(MSPTSummary, 0f);
     }
 
     public static GameLoopBuilder builder() {
         return new GameLoopBuilder();
+    }
+
+    public float getTickUsage() {
+        return getMSPT() / (1.0f / loopCountPerSec);
     }
 
     public float getTps() {
@@ -51,11 +55,11 @@ public final class GameLoop {
         return sum / count;
     }
 
-    public float getMSTP() {
+    public float getMSPT() {
         float sum = 0;
-        int count = MSTPSummary.length;
-        for (float mstp : MSTPSummary) {
-            sum += mstp;
+        int count = MSPTSummary.length;
+        for (float mspt : MSPTSummary) {
+            sum += mspt;
         }
         return sum / count;
     }
@@ -70,7 +74,7 @@ public final class GameLoop {
             onTick.accept(this);
             tick++;
             long timeTakenToTick = System.nanoTime() - startTickTime;
-            updateMSTP(timeTakenToTick, MSTPSummary);
+            updateMSTP(timeTakenToTick, MSPTSummary);
             updateTPS(timeTakenToTick);
 
             long sumOperateTime = System.nanoTime() - startTickTime;

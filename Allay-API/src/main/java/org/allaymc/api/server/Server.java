@@ -52,6 +52,8 @@ public interface Server extends TaskCreator, CommandSender {
      */
     void start(long timeMillis);
 
+    long getStartTime();
+
     void kickAllPlayersAndBlock();
 
     Scheduler getScheduler();

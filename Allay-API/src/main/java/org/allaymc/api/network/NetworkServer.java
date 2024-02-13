@@ -39,5 +39,9 @@ public interface NetworkServer {
 
     void setMaxPlayerCount(int maxPlayerCount, boolean update);
 
+    default int getMaxPlayerCount() {
+        return getPong().maximumPlayerCount();
+    }
+
     BedrockCodec getCodec();
 }

@@ -139,8 +139,13 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public float getMSTP() {
-        return gameLoop.getMSTP();
+    public float getMSPT() {
+        return gameLoop.getMSPT();
+    }
+
+    @Override
+    public float getTickUsage() {
+        return gameLoop.getTickUsage();
     }
 
     @Override

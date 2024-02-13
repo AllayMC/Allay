@@ -25,9 +25,9 @@ public class TpsCommand extends SimpleCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("mstp")
+                .key("mspt")
                 .exec((context, player) -> {
-                    player.sendText("§aMSTP: " + player.getLocation().dimension().getWorld().getMSTP());
+                    player.sendText("§aMSPT: " + player.getLocation().dimension().getWorld().getMSPT());
                     return context.success();
                 }, SenderType.PLAYER);
     }

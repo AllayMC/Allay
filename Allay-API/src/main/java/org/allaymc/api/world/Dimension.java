@@ -66,6 +66,10 @@ public interface Dimension {
         return Collections.unmodifiableMap(entities);
     }
 
+    default int getEntityCount() {
+        return getChunkService().getLoadedChunks().stream().mapToInt(chunk -> chunk.getEntities().size()).sum();
+    }
+
     default Entity getEntityByUniqueId(long uniqueId) {
         for (var chunk : getChunkService().getLoadedChunks()) {
             var entity = chunk.getEntities().get(uniqueId);
@@ -358,6 +362,10 @@ public interface Dimension {
 
     default BlockEntity getBlockEntity(Vector3ic pos) {
         return getBlockEntity(pos.x(), pos.y(), pos.z());
+    }
+
+    default int getBlockEntityCount() {
+        return getChunkService().getLoadedChunks().stream().mapToInt(chunk -> chunk.getBlockEntities().size()).sum();
     }
 
     default void addParticle(ParticleType particleType, Vector3fc pos) {

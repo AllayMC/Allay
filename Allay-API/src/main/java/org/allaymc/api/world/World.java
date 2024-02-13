@@ -29,7 +29,9 @@ public interface World {
 
     float getTps();
 
-    float getMSTP();
+    float getMSPT();
+
+    float getTickUsage();
 
     void startTick();
 
