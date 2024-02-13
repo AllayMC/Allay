@@ -73,9 +73,6 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("compression-algorithm")
         private PacketCompressionAlgorithm compressionAlgorithm = PacketCompressionAlgorithm.ZLIB;
 
-        @CustomKey("compression-threshold")
-        private int compressionThreshold = 1;
-
         @CustomKey("network-thread-number")
         @Comment("0 == the server will automatically determine the number of netty threads")
         private int networkThreadNumber = 0;
