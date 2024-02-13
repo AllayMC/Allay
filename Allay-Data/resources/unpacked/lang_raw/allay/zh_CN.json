@@ -1,6 +1,6 @@
 {
   "lang.set": "服务器语言已设置为 %1",
-  "api.implemented": "此服务器正在运行 %1, 实现Allay-API版本 §b%2",
+  "api.implemented": "此服务器正在运行 §b%1§f, 实现Allay-API版本 §b%2",
   "network.server.starting": "启动网络服务器中...",
   "network.server.started": "网络服务器已在 %1:%2 启动 (%3 毫秒)",
   "network.client.connected": "客户端已连接, 地址: %1",
@@ -28,6 +28,7 @@
   "command.status.description": "获取服务器状态",
   "command.plugin.description": "显示插件列表",
   "command.tps.description": "获取当前世界的TPS或MSPT",
+  "command.version.description": "查询服务器版本信息",
   "pack.loading": "正在加载资源包...",
   "pack.loaded": "成功加载 %1 个资源包",
   "pack.loading.entry": "正在加载资源包 %1",

@@ -13,6 +13,7 @@
   "allay:command.plugin.description": "Show plugin list",
   "allay:command.status.description": "Get the status of the server",
   "allay:command.tps.description": "Show TPS or MSPT of the current world",
+  "allay:command.version.description": "Query server version information",
   "allay:creativeitem.loaded": "Creative items is loaded",
   "allay:creativeitem.loading": "Loading creative items...",
   "allay:effecttype.loaded": "Loaded %1 effect types",

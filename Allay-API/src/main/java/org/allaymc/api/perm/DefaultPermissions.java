@@ -25,7 +25,8 @@ public final class DefaultPermissions {
                     .addPerm(ATTACK_PLAYERS).addPerm(ATTACK_MOBS)
                     .addPerm(SUMMON_LIGHTNING).addPerm(PVM).addPerm(MVP)
                     // .addPerm(Command.COMMAND_PERM_PREFIX + "help") // TODO
-                    .addPerm(Command.COMMAND_PERM_PREFIX + "me");
+                    .addPerm(Command.COMMAND_PERM_PREFIX + "me")
+                    .addPerm(Command.COMMAND_PERM_PREFIX + "version");
 
     public static final PermTree OPERATOR = PermTree.create("Operator").extendFrom(MEMBER);
 

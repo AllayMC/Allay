@@ -1,6 +1,6 @@
 {
   "lang.set": "Server language was set to %1",
-  "api.implemented": "This server is running %1, implement Allay-API version §b%2",
+  "api.implemented": "This server is running §b%1§f, implement Allay-API version §b%2",
   "network.server.starting": "Starting up network server...",
   "network.server.started": "Network server started at %1:%2 (%3 ms)",
   "network.client.connected": "Client connected, IP: %1",
@@ -28,6 +28,7 @@
   "command.status.description": "Get the status of the server",
   "command.plugin.description": "Show plugin list",
   "command.tps.description": "Show TPS or MSPT of the current world",
+  "command.version.description": "Query server version information",
   "pack.loading": "Loading packs...",
   "pack.loaded": "Loaded %1 packs",
   "pack.loading.entry": "Loading pack %1",

@@ -66,6 +66,7 @@ public final class AllayAPI {
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean i18nSet = false;
     private boolean implemented = false;
+    private String coreName;
 
     private AllayAPI() {
         defaultAPIRequirements();
@@ -102,6 +103,7 @@ public final class AllayAPI {
                 ((Consumer<Object>) entry.getValue().afterBound).accept(apiInstance);
             }
         }
+        this.coreName = coreName;
         log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, coreName, API_VERSION));
         implemented = true;
     }
