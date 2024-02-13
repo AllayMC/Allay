@@ -1,4 +1,4 @@
-package org.allaymc.api.data;
+package org.allaymc.api.utils;
 
 import com.google.common.collect.Maps;
 
