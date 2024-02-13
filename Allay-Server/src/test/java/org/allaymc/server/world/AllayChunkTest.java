@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockWaterBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockWoodBehavior;
+import org.allaymc.api.blockentity.init.SimpleBlockEntityInitInfo;
+import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.Chunk;
@@ -13,7 +15,7 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @ExtendWith(AllayTestExtension.class)
@@ -55,5 +57,19 @@ class AllayChunkTest {
     void testUpdateHeight() {
         chunk.setHeight(0, 0, 100);
         assertEquals(100, chunk.getHeight(0, 0));
+    }
+
+    @Test
+    void testUpdateBlockEntity() {
+        var blockEntity = BlockEntityBarrel.BARREL_TYPE.createBlockEntity(
+                SimpleBlockEntityInitInfo
+                        .builder()
+                        .pos(11, 45, 14)
+                        .build()
+        );
+        chunk.addBlockEntity(blockEntity);
+        assertNotNull(chunk.getBlockEntity(11, 45, 14));
+        chunk.removeBlockEntity(11, 45, 14);
+        assertNull(chunk.getBlockEntity(11, 45, 14));
     }
 }
