@@ -10,6 +10,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static org.allaymc.api.perm.DefaultPermissions.MEMBER;
+import static org.allaymc.api.perm.DefaultPermissions.OPERATOR;
 import static org.allaymc.api.perm.tree.PermTree.PermChangeType.ADD;
 import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;
 
@@ -182,16 +184,15 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public boolean isOp() {
-        return containsSubSet(DefaultPermissions.OPERATOR);
+        return containsSubSet(OPERATOR);
     }
 
     @Override
     public PermTree setOp(boolean op) {
         if (op) {
-            if (!isOp()) copyFrom(DefaultPermissions.OPERATOR);
+            if (!isOp()) copyFrom(OPERATOR);
         } else {
-            clear();
-            copyFrom(DefaultPermissions.MEMBER);
+            OPERATOR.getLeaves().stream().map(PermNode::getFullName).forEach(this::removePerm);
         }
         return this;
     }
