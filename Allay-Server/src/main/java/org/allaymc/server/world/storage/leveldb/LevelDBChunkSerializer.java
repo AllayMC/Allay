@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
+import org.allaymc.api.block.interfaces.BlockUnknownBehavior;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.VanillaBiomeId;
@@ -103,7 +104,8 @@ public class LevelDBChunkSerializer {
                                 section.blockLayer()[layer].readFromStoragePersistent(byteBuf, hash -> {
                                     BlockState blockState = BlockStateHashPalette.getRegistry().get(hash);
                                     if (blockState == null) {
-                                        log.error("missing block hash: " + hash);
+                                        log.error("Unknown block state hash: " + hash);
+                                        blockState = BlockUnknownBehavior.UNKNOWN_TYPE.getDefaultState();
                                     }
                                     return blockState;
                                 });
