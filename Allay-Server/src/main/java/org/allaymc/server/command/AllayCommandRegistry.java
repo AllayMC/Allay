@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.allaymc.api.utils.AllayStringUtils.spiltCommandArgs;
+import static org.allaymc.api.utils.AllayStringUtils.spiltRelativeArgs;
 
 /**
  * Allay Project 2023/12/29
@@ -44,6 +45,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new PluginCommand());
         register(new StatusCommand());
         register(new VersionCommand());
+        register(new TeleportCommand());
     }
 
     @Override
@@ -54,7 +56,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
 
     @Override
     public CommandResult execute(CommandSender sender, String cmd) {
-        var spilt = new LinkedList<>(spiltCommandArgs(cmd));
+        var spilt = spiltCommandArgs(spiltRelativeArgs(cmd));
         var cmdName = spilt.pop(); // Command name
         var command = this.findCommand(cmdName);
         if (command == null) {

@@ -17,7 +17,7 @@ class StringUtilsTest {
     static String testStr = "aaa:bbb;ccc:ddd";
 
     @Test
-    void fastSplit() {
+    void testFastSplit() {
         assertEquals(List.of("aaa:bbb", "ccc:ddd"), AllayStringUtils.fastSplit(testStr, ";"));
         assertEquals(List.of("aaa", "bbb;ccc", "ddd"), AllayStringUtils.fastSplit(testStr, ":"));
         assertEquals(List.of("aaa", "bbb;ccc:ddd"), AllayStringUtils.fastSplit(testStr, ":", 2));
@@ -25,8 +25,14 @@ class StringUtilsTest {
     }
 
     @Test
-    void fastTwoPartSplit() {
+    void testFastTwoPartSplit() {
         assertEquals(List.of("aaa", "bbb;ccc:ddd"), List.of(AllayStringUtils.fastTwoPartSplit(testStr, ":", "")));
         assertEquals(List.of("", "aaa:bbb;ccc:ddd"), List.of(AllayStringUtils.fastTwoPartSplit(testStr, "?", "")));
+    }
+
+    @Test
+    void testSpiltRelativeArgs() {
+        assertEquals("/tp @s ~ ~ ~", AllayStringUtils.spiltRelativeArgs("/tp @s ~~~"));
+        assertEquals("/tp @s ~1 ~1 ~1", AllayStringUtils.spiltRelativeArgs("/tp @s ~1~1~1"));
     }
 }

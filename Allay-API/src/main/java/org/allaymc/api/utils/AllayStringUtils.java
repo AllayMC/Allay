@@ -3,6 +3,8 @@ package org.allaymc.api.utils;
 import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -59,9 +61,9 @@ public class AllayStringUtils {
      * @param cmdLine the cmd line
      * @return 命令参数数组
      */
-    public static ArrayList<String> spiltCommandArgs(String cmdLine) {
+    public static LinkedList<String> spiltCommandArgs(String cmdLine) {
         StringBuilder sb = new StringBuilder(cmdLine);
-        ArrayList<String> args = new ArrayList<>();
+        LinkedList<String> args = new LinkedList<>();
         boolean notQuoted = true;
         int curlyBraceCount = 0;
         int start = 0;
@@ -96,5 +98,22 @@ public class AllayStringUtils {
             args.add(arg);
         }
         return args;
+    }
+
+    /**
+     * spilt relative args. For example: "~~~" -> "~ ~ ~" <P>
+     * 如果在一个~前没找到空格，就在此~前添加一个空格 <P>
+     * If there isn't a space before a '~' char, add a space before this '~' char
+     * @param cmdLine the cmd line
+     * @return processed cmdline
+     */
+    public static String spiltRelativeArgs(String cmdLine) {
+        StringBuilder sb = new StringBuilder(cmdLine);
+        for (int i = 0; i < sb.length(); i++) {
+            if (sb.charAt(i) == '~' && (i == 0 || sb.charAt(i - 1) != ' ')) {
+                sb.insert(i, ' ');
+            }
+        }
+        return sb.toString();
     }
 }
