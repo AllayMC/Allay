@@ -179,7 +179,9 @@ public class StatusCommand extends SimpleCommand {
     protected static void printWorldInfo(CommandContext context) {
         for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
             context.addOutput(TextFormat.GREEN + "---- " + TextFormat.WHITE + "World " + world.getWorldData().getName() + " Status" + TextFormat.GREEN + " ----");
-            context.addOutput(TextFormat.GOLD + "TickUsage: " + TextFormat.WHITE + world.getTickUsage() * 100);
+            context.addOutput(TextFormat.GOLD + "TPS: " + TextFormat.WHITE + world.getTps());
+            context.addOutput(TextFormat.GOLD + "MSPT: " + TextFormat.WHITE + world.getMSPT());
+            context.addOutput(TextFormat.GOLD + "TickUsage: " + TextFormat.WHITE + world.getTickUsage() * 100f + "%");
             world.getDimensions().values().forEach(dimension -> printDimensionInfo(context, dimension));
         }
     }

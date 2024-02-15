@@ -43,7 +43,7 @@ public final class GameLoop {
     }
 
     public float getTickUsage() {
-        return getMSPT() / (1.0f / loopCountPerSec);
+        return getMSPT() / (1000f / loopCountPerSec);
     }
 
     public float getTps() {

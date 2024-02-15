@@ -141,8 +141,9 @@ public final class Palette<V> {
         for (int word : this.bitArray.words())
             byteBuf.writeIntLE(word);
         byteBuf.writeIntLE(this.palette.size());
-        for (V value : this.palette)
+        for (V value : this.palette) {
             byteBuf.writeIntLE(serializer.serialize(value));
+        }
     }
 
     public void readFromStorageRuntime(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer, Palette<V> last) {
