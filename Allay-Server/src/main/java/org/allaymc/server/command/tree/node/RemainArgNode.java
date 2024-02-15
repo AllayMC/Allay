@@ -20,12 +20,11 @@ public class RemainArgNode extends BaseNode {
 
     @Override
     public boolean match(CommandContext context) {
-        var index = context.getCurrentArgIndex();
         var args = new ArrayList<String>();
         while (context.haveUnhandledArg()) {
             args.add(context.popArg());
         }
-        context.putResult(index, args);
+        context.putResult(args);
         return true;
     }
 

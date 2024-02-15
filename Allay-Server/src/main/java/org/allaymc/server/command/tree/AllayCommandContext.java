@@ -25,6 +25,8 @@ public class AllayCommandContext implements CommandContext {
     @Getter
     protected int currentArgIndex = 0;
     @Getter
+    protected int currentResultIndex = 0;
+    @Getter
     protected String[] args;
     protected Map<Integer, Object> results;
     @Getter
@@ -57,8 +59,8 @@ public class AllayCommandContext implements CommandContext {
     }
 
     @Override
-    public void putResult(int index, Object result) {
-        results.put(index, result);
+    public void putResult(Object result) {
+        results.put(currentResultIndex++, result);
     }
 
     @Override

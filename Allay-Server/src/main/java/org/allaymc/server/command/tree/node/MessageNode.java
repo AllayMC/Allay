@@ -19,11 +19,10 @@ public class MessageNode extends BaseNode {
     @Override
     public boolean match(CommandContext context) {
         var builder = new StringBuilder();
-        var index = context.getCurrentArgIndex();
         while (context.haveUnhandledArg()) {
             builder.append(context.popArg()).append(" ");
         }
-        context.putResult(index, builder.toString().trim());
+        context.putResult(builder.toString().trim());
         return true;
     }
 

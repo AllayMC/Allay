@@ -127,7 +127,7 @@ public abstract class BaseNode implements CommandNode {
             var optionalLeaf = getOptionalLeaf();
             if (optionalLeaf != null) {
                 // 忽略RootNode，所以说索引为optionalLeaf.depth() - 1
-                context.putResult(optionalLeaf.depth() - 1, optionalLeaf.getDefaultValue());
+                context.putResult(optionalLeaf.getDefaultValue());
                 return optionalLeaf;
             }
         }

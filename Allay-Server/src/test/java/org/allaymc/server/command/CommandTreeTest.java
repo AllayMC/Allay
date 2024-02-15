@@ -2,7 +2,9 @@ package org.allaymc.server.command;
 
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandContext;
+import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ public class CommandTreeTest {
     @BeforeAll
     static void init() {
         Mockito.when(mockCmd.getName()).thenReturn("test");
+        CommandNodeFactory.FACTORY.set(new AllayCommandNodeFactory());
     }
 
     @Test

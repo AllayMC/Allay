@@ -99,21 +99,4 @@ public class AllayStringUtils {
         }
         return args;
     }
-
-    /**
-     * spilt relative args. For example: "~~~" -> "~ ~ ~" <P>
-     * 如果在一个~前没找到空格，就在此~前添加一个空格 <P>
-     * If there isn't a space before a '~' char, add a space before this '~' char
-     * @param cmdLine the cmd line
-     * @return processed cmdline
-     */
-    public static String spiltRelativeArgs(String cmdLine) {
-        StringBuilder sb = new StringBuilder(cmdLine);
-        for (int i = 0; i < sb.length(); i++) {
-            if (sb.charAt(i) == '~' && (i == 0 || sb.charAt(i - 1) != ' ')) {
-                sb.insert(i, ' ');
-            }
-        }
-        return sb.toString();
-    }
 }

@@ -26,6 +26,8 @@ public interface CommandContext {
 
     int getCurrentArgIndex();
 
+    int getCurrentResultIndex();
+
     int getArgCount();
 
     String[] getArgs();
@@ -46,16 +48,7 @@ public interface CommandContext {
         return queryArg(getCurrentArgIndex());
     }
 
-    void putResult(int index, Object result);
-
-    default void putResult(Object result) {
-        putResult(getCurrentArgIndex(), result);
-    }
-
-    default void popAndPutArgToResult() {
-        putResult(queryArg());
-        popArg();
-    }
+    void putResult(Object result);
 
     void addOutput(@MayContainTrKey String output, Object... args);
 

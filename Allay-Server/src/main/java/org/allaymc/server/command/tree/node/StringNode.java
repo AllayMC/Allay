@@ -18,7 +18,7 @@ public class StringNode extends BaseNode {
 
     @Override
     public boolean match(CommandContext context) {
-        context.popAndPutArgToResult();
+        context.putResult(context.popArg());
         return true;
     }
 
