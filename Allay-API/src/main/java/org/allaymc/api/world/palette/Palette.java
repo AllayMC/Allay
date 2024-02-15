@@ -138,9 +138,11 @@ public final class Palette<V> {
         if (writeEmpty(byteBuf, serializer)) return;
 
         byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), true));
-        for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
+        for (int word : this.bitArray.words())
+            byteBuf.writeIntLE(word);
         byteBuf.writeIntLE(this.palette.size());
-        for (V value : this.palette) byteBuf.writeIntLE(serializer.serialize(value));
+        for (V value : this.palette)
+            byteBuf.writeIntLE(serializer.serialize(value));
     }
 
     public void readFromStorageRuntime(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer, Palette<V> last) {
@@ -222,7 +224,8 @@ public final class Palette<V> {
         for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
 
         this.bitArray.writeSizeToNetwork(byteBuf, this.palette.size());
-        for (V value : this.palette) VarInts.writeInt(byteBuf, serializer.serialize(value));
+        for (V value : this.palette)
+            VarInts.writeInt(byteBuf, serializer.serialize(value));
     }
 
 

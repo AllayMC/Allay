@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import java.lang.String;
 import java.util.HashMap;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.identifier.Identifier;
 
@@ -13,6 +14,7 @@ import org.allaymc.api.identifier.Identifier;
  * @author daoge_cmd | Cool_Loong
  */
 @Getter
+@Slf4j
 public enum VanillaBiomeId implements BiomeType {
   OCEAN(new Identifier("minecraft:ocean"), 0, "Ocean"),
 
@@ -210,10 +212,20 @@ public enum VanillaBiomeId implements BiomeType {
   }
 
   public static BiomeType fromId(int id) {
-    return MAP1.get(id);
+    var type =  MAP1.get(id);
+    if (type == null) {
+      log.warn("Unknown biome id: {}", id);
+      type = PLAINS;
+    }
+    return type;
   }
 
   public static BiomeType fromIdentifier(Identifier identifier) {
-    return MAP2.get(identifier);
+    var type =  MAP2.get(identifier);
+    if (type == null) {
+      log.warn("Unknown biome identifier: {}", identifier);
+      type = PLAINS;
+    }
+    return type;
   }
 }
