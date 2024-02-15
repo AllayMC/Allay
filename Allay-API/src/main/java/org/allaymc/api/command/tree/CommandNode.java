@@ -7,6 +7,7 @@ import org.allaymc.api.entity.Entity;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
+import org.joml.Vector3fc;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +42,7 @@ public interface CommandNode {
     void setMaxArgCostBranch(int maxArgCostBranch);
 
     /**
-     * @return 这个node将会消耗几个参数，可以返回一个足够大的数来表示无穷
+     * @return 这个node最多会消耗几个参数，可以返回一个足够大的数来表示无穷
      */
     default int getMaxArgCost() {
         return 1;
@@ -224,5 +225,13 @@ public interface CommandNode {
 
     default CommandNode gameMode(String name, GameType defaultValue) {
         return addLeaf(getFactory().gameMode(name, this, defaultValue));
+    }
+
+    default CommandNode pos(String name) {
+        return pos(name, null);
+    }
+
+    default CommandNode pos(String name, Vector3fc defaultValue) {
+        return addLeaf(getFactory().pos(name, this, defaultValue));
     }
 }

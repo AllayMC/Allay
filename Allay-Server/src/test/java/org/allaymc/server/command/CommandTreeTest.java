@@ -1,11 +1,14 @@
 package org.allaymc.server.command;
 
 import org.allaymc.api.command.Command;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNodeFactory;
+import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
+import org.joml.Vector3f;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,10 +23,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CommandTreeTest {
 
     static Command mockCmd = Mockito.mock(Command.class);
+    static CommandSender mockSender = Mockito.mock(CommandSender.class);
+    static Location3f cmdExecLoc = new Location3f(0, 0, 0, null);
 
     @BeforeAll
     static void init() {
         Mockito.when(mockCmd.getName()).thenReturn("test");
+        Mockito.when(mockSender.getCmdExecuteLocation()).thenReturn(cmdExecLoc);
         CommandNodeFactory.FACTORY.set(new AllayCommandNodeFactory());
     }
 
@@ -59,13 +65,13 @@ public class CommandTreeTest {
                     return i == 1 ? context.success() : context.failed();
                 });
 
-        var res = tree.parse(null, new String[]{"test_bool", "true"});
+        var res = tree.parse(mockSender, new String[]{"test_bool", "true"});
         assertTrue(res.isSuccess());
-        res = tree.parse(null, new String[]{"test_str", "a"});
+        res = tree.parse(mockSender, new String[]{"test_str", "a"});
         assertTrue(res.isSuccess());
-        res = tree.parse(null, new String[]{"test_enums", "b"});
+        res = tree.parse(mockSender, new String[]{"test_enums", "b"});
         assertTrue(res.isSuccess());
-        res = tree.parse(null, new String[]{"test_int", "1"});
+        res = tree.parse(mockSender, new String[]{"test_int", "1"});
         assertTrue(res.isSuccess());
     }
 
@@ -76,7 +82,7 @@ public class CommandTreeTest {
                 .str("test_optional")
                 .optional()
                 .exec(context -> "".equals(context.getResult(0)) ? context.success() : context.failed());
-        var res = tree.parse(null, Utils.EMPTY_STRING_ARRAY);
+        var res = tree.parse(mockSender, Utils.EMPTY_STRING_ARRAY);
         assertTrue(res.isSuccess());
     }
 
@@ -99,9 +105,9 @@ public class CommandTreeTest {
                 .root()
                 .bool("test_normal")
                 .exec(CommandContext::success);
-        var res = tree.parse(null, new String[]{"1"});
+        var res = tree.parse(mockSender, new String[]{"1"});
         assertFalse(res.isSuccess());
-        res = tree.parse(null, new String[]{"true"});
+        res = tree.parse(mockSender, new String[]{"true"});
         assertTrue(res.isSuccess());
     }
 
@@ -124,9 +130,9 @@ public class CommandTreeTest {
                     }
                     return context.failed();
                 });
-        var res = tree.parse(null, new String[]{"a", "d"});
+        var res = tree.parse(mockSender, new String[]{"a", "d"});
         assertTrue(res.isSuccess());
-        res = tree.parse(null, new String[]{});
+        res = tree.parse(mockSender, new String[]{});
         assertTrue(res.isSuccess());
     }
 
@@ -148,11 +154,34 @@ public class CommandTreeTest {
                 .key("c")
                 .key("d")
                 .exec(CommandContext::success);
-        var res = tree.parse(null, new String[]{"a", "b"});
+        var res = tree.parse(mockSender, new String[]{"a", "b"});
         assertTrue(res.isSuccess());
-        res = tree.parse(null, new String[]{"a", "b", "c", "d"});
+        res = tree.parse(mockSender, new String[]{"a", "b", "c", "d"});
         assertTrue(res.isSuccess());
-        res = tree.parse(null, new String[]{"a", "b", "c"});
+        res = tree.parse(mockSender, new String[]{"a", "b", "c"});
         assertFalse(res.isSuccess());
+    }
+
+    @Test
+    void testPosNode() {
+        var tree = AllayCommandTree.create(mockCmd);
+        Vector3f dest = new Vector3f();
+        tree.getRoot()
+                .pos("pos")
+                .exec(context -> {
+                    dest.set((Vector3f)context.getFirstResult());
+                    return context.success();
+                });
+        tree.parse(mockSender, new String[]{"11", "45", "14"});
+        assertEquals(new Vector3f(11, 45, 14), dest);
+        cmdExecLoc.set(19, 19, 810);
+        tree.parse(mockSender, new String[]{"~1", "~2", "~3"});
+        assertEquals(new Vector3f(19 + 1, 19 + 2, 810 + 3), dest);
+        tree.parse(mockSender, new String[]{"~-1", "~-2", "~-3"});
+        assertEquals(new Vector3f(19 - 1, 19 - 2, 810 - 3), dest);
+        tree.parse(mockSender, new String[]{"~1.5", "~2.5", "~3.5"});
+        assertEquals(new Vector3f(19 + 1.5f, 19 + 2.5f, 810 + 3.5f), dest);
+        tree.parse(mockSender, new String[]{"19", "19", "810"});
+        assertEquals(new Vector3f(19, 19, 810), dest);
     }
 }
