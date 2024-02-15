@@ -83,7 +83,7 @@ public interface CommandContext {
         addOutput(TrKeys.M_COMMANDS_GENERIC_SYNTAX, left.toString(), current, right.toString());
     }
 
-    default void addInvalidExecutorError(SenderType correctSenderType) {
+    default void addInvalidExecutorError(SenderType<?> correctSenderType) {
         addOutput(correctSenderType.errorMsg());
     }
 
