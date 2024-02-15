@@ -7,14 +7,14 @@ import org.allaymc.api.server.Server;
 
 import java.util.function.Function;
 
-public record SenderType<SENDER_TYPE extends CommandSender>(
+public record SenderType(
         Function<CommandSender, Boolean> validator,
         @MayContainTrKey String errorMsg
 ) {
 
-    public static SenderType<CommandSender> ANY = new SenderType<>(sender -> true, ""); // Can't be a wrong executor
-    public static SenderType<Server> SERVER = new SenderType<>(Server.class::isInstance, TrKeys.A_COMMAND_GENERIC_SENDER_NOTSERVER);
-    public static SenderType<EntityPlayer> PLAYER = new SenderType<>(EntityPlayer.class::isInstance, TrKeys.A_COMMAND_GENERIC_SENDER_NOTPLAYER);
+    public static SenderType ANY = new SenderType(sender -> true, ""); // Can't be a wrong executor
+    public static SenderType SERVER = new SenderType(Server.class::isInstance, TrKeys.A_COMMAND_GENERIC_SENDER_NOTSERVER);
+    public static SenderType PLAYER = new SenderType(EntityPlayer.class::isInstance, TrKeys.A_COMMAND_GENERIC_SENDER_NOTPLAYER);
     // TODO: entity sender type
     // public static SenderType<Entity> ENTITY = new SenderType(CommandSender::isEntity, TrKeys.A_COMMAND_GENERIC_SENDER_NOTENTITY);
 

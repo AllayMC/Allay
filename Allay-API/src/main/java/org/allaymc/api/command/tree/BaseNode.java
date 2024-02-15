@@ -186,7 +186,7 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> biExecutor, SenderType<SENDER_TYPE> senderType) {
+    public <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> biExecutor, SenderType senderType) {
         this.executor = context -> {
             var sender = context.getSender();
             if (senderType.validate(sender)) {

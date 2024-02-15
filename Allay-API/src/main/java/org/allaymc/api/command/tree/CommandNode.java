@@ -89,7 +89,7 @@ public interface CommandNode {
 
     CommandNode addLeaf(CommandNode leaf);
 
-    <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> executor, SenderType<SENDER_TYPE> senderType);
+    <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> executor, SenderType senderType);
 
     default CommandNode exec(Function<CommandContext, CommandResult> executor) {
         return exec((context, sender) -> executor.apply(context), SenderType.ANY);
