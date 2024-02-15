@@ -98,8 +98,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public EntityBaseComponentImpl(EntityInitInfo<T> info) {
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.entityType = info.getEntityType();
-        setDisplayName(entityType.getIdentifier().toString());
         this.metadata = new Metadata();
+        setDisplayName(entityType.getIdentifier().toString());
     }
 
     @Override
