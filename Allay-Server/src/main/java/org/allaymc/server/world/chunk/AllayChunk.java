@@ -360,7 +360,11 @@ public class AllayChunk implements Chunk {
         levelChunkPacket.setCachingEnabled(false);
         levelChunkPacket.setRequestSubChunks(false);
         levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionSize());
-        levelChunkPacket.setData(writeToNetwork());
+        try {
+            levelChunkPacket.setData(writeToNetwork());
+        } catch (Throwable t) {
+            levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
+        }
         return levelChunkPacket;
     }
 
