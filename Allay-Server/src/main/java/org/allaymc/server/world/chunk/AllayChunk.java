@@ -360,7 +360,6 @@ public class AllayChunk implements Chunk {
         levelChunkPacket.setCachingEnabled(false);
         levelChunkPacket.setRequestSubChunks(false);
         levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionSize());
-        //Chunk encoding
         levelChunkPacket.setData(writeToNetwork());
         return levelChunkPacket;
     }
@@ -380,6 +379,17 @@ public class AllayChunk implements Chunk {
 
     private ByteBuf writeToNetwork() {
         var byteBuf = ByteBufAllocator.DEFAULT.buffer();
+        try {
+            writeToNetwork0(byteBuf);
+            return byteBuf;
+        } catch (Throwable t) {
+            log.error("Error while encoding chunk(x=" + getX() + ", z=" + getZ() + ")!", t);
+            byteBuf.release();
+            throw t;
+        }
+    }
+
+    private void writeToNetwork0(ByteBuf byteBuf) {
         // Prevent null section
         fillNullSections();
         // Write blocks
@@ -404,7 +414,6 @@ public class AllayChunk implements Chunk {
                 log.error("Error while encoding block entities in chunk(x=" + getX() + ", z=" + getZ() + ")!", e);
             }
         }
-        return byteBuf;
     }
 
     @Override
