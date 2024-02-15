@@ -44,6 +44,10 @@ public interface EntityBaseComponent extends EntityComponent {
 
     EntityType<? extends Entity> getEntityType();
 
+    String getDisplayName();
+
+    void setDisplayName(String displayName);
+
     Location3fc getLocation();
 
     Dimension getDimension();

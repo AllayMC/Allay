@@ -1,6 +1,7 @@
 package org.allaymc.server.entity.component.common;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
@@ -91,10 +92,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected boolean dead;
     protected int deadTimer;
     protected float fallDistance = 0f;
+    @Getter
+    protected String displayName;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info) {
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.entityType = info.getEntityType();
+        setDisplayName(entityType.getIdentifier().toString());
         this.metadata = new Metadata();
     }
 
@@ -180,6 +184,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public EntityType<? extends Entity> getEntityType() {
         return entityType;
+    }
+
+    @Override
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+        setAndSendEntityData(EntityDataTypes.NAME, displayName);
     }
 
     @Override

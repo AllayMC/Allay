@@ -79,8 +79,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Getter
     protected PermTree permTree;
     @Getter
-    protected String displayName;
-    @Getter
     protected int chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
     @Getter
     @Setter
@@ -117,12 +115,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         abilities = new Abilities(thisEntity);
         // Init adventure settings and abilities
         permTree.notifyAllPermListeners();
-    }
-
-    @Override
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-        setAndSendEntityData(EntityDataTypes.NAME, displayName);
     }
 
     @Override

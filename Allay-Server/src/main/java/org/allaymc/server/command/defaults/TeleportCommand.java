@@ -31,8 +31,7 @@ public class TeleportCommand extends SimpleCommand {
                     var loc = new Location3f(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
                     for (Entity target : targets) {
                         target.teleport(loc);
-                        // TODO: Entity name
-                        context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, target.getEntityType().getIdentifier(), pos.x, pos.y, pos.z);
+                        context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, target.getDisplayName(), pos.x, pos.y, pos.z);
                     }
                     return context.success();
                 });
