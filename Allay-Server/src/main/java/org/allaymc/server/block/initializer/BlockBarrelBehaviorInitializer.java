@@ -8,8 +8,6 @@ import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.server.block.component.barrel.BlockBarrelBaseComponentImpl;
 
-import static org.allaymc.api.block.component.BlockComponentImplFactory.getFactory;
-
 /**
  * @author daoge_cmd <br>
  * Allay Project <br>

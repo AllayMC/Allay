@@ -3,6 +3,7 @@ package org.allaymc.api.world.chunk;
 import io.netty.buffer.ByteBuf;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.datastruct.NibbleArray;
 import org.allaymc.api.world.biome.BiomeType;
@@ -10,6 +11,7 @@ import org.allaymc.api.world.palette.Palette;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
+import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 import static org.allaymc.api.world.chunk.UnsafeChunk.index;
 
 /**
@@ -28,7 +30,7 @@ public record ChunkSection(byte sectionY,
 
     public ChunkSection(byte sectionY) {
         this(sectionY,
-                new Palette[]{new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState()), new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState())},
+                new Palette[]{new Palette<>(AIR_TYPE.getDefaultState()), new Palette<>(AIR_TYPE.getDefaultState())},
                 new Palette<>(VanillaBiomeId.PLAINS),
                 new NibbleArray(Chunk.SECTION_SIZE),
                 new NibbleArray(Chunk.SECTION_SIZE));
@@ -74,7 +76,7 @@ public record ChunkSection(byte sectionY,
     }
 
     public boolean isEmpty() {
-        return blockLayer[0].isEmpty() && blockLayer[0].get(0) == BlockAirBehavior.AIR_TYPE.getDefaultState();
+        return blockLayer[0].isEmpty() && blockLayer[0].get(0) == AIR_TYPE.getDefaultState();
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {

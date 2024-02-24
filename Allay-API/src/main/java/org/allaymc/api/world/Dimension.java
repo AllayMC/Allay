@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import static org.allaymc.api.block.interfaces.BlockAirBehavior.AIR_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 
 /**
  * Allay Project 11/12/2023
