@@ -1,8 +1,6 @@
 package org.allaymc.api.container;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;

@@ -11,7 +11,6 @@ import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
 import org.allaymc.api.utils.ReflectionUtils;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

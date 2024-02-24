@@ -46,17 +46,11 @@ public class CommandTreeTest {
                 .root()
                 .key("test_str")
                 .str("str")
-                .exec(context -> {
-                    System.out.println((String) context.getResult(1));
-                    return context.success();
-                })
+                .exec(CommandContext::success)
                 .root()
                 .key("test_enums")
                 .enums("enums", "a", "b", "c", "d")
-                .exec(context -> {
-                    System.out.println((String) context.getResult(1));
-                    return context.success();
-                })
+                .exec(CommandContext::success)
                 .root()
                 .key("test_int")
                 .intNum("int")

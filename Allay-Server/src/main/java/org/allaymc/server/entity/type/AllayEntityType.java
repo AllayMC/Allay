@@ -18,7 +18,6 @@ import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
-import org.joml.primitives.AABBf;
 
 import java.util.ArrayList;
 import java.util.HashMap;

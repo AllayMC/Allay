@@ -1,7 +1,6 @@
 package org.allaymc.server.item.component.cauldron;
 
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.interfaces.BlockCauldronBehavior;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemCauldronStack;

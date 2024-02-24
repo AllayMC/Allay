@@ -3,7 +3,7 @@ package org.allaymc.api.entity.effect;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.identifier.Identifier;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Allay Project 2023/10/27

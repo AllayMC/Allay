@@ -1,9 +1,7 @@
 package org.allaymc.api.world.chunk;
 
 import io.netty.buffer.ByteBuf;
-import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.datastruct.NibbleArray;
 import org.allaymc.api.world.biome.BiomeType;

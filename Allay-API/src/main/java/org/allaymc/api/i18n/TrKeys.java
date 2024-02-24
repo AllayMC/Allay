@@ -1,7 +1,5 @@
 package org.allaymc.api.i18n;
 
-import java.lang.String;
-
 /**
  * @author daoge_cmd <br>
  * Allay Project <br>

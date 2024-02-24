@@ -96,7 +96,7 @@ class ComponentTest {
         componentProvidersV3.add(ComponentProvider.of(() -> new SimpleTestAnonymousClassComponent() {
             @Override
             public void testMethod() {
-                System.out.println("TestAnonymousClassComponent");
+                // Nothing here
             }
         }, SimpleTestAnonymousClassComponent.class));
         assertDoesNotThrow(() -> {

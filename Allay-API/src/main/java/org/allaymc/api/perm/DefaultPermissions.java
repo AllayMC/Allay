@@ -3,9 +3,6 @@ package org.allaymc.api.perm;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.perm.tree.PermTree;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.allaymc.api.perm.PermKeys.*;
 
 /**

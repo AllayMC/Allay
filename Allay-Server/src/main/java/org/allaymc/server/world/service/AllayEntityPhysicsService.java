@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.datastruct.aabbtree.AABBOverlapFilter;
 import org.allaymc.api.datastruct.aabbtree.AABBTree;

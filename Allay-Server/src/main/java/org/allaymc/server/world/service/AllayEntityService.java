@@ -8,7 +8,6 @@ import org.allaymc.api.world.service.EntityService;
 import org.allaymc.server.world.chunk.AllayChunk;
 
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Allay Project 11/12/2023

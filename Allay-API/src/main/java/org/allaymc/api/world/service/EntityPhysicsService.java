@@ -8,7 +8,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.joml.primitives.AABBfc;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Allay Project 2023/8/3
