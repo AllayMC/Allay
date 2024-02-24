@@ -22,7 +22,5 @@ public interface BlockBarrelBehavior extends
             .builder(BlockBarrelBehavior.class)
             .vanillaBlock(VanillaBlockId.BARREL)
             .setProperties(FACING_DIRECTION, OPEN_BIT)
-            .setBlockBaseComponentSupplier(getFactory()::createBlockBarrelBaseComponent)
-            .bindBlockEntity(BlockEntityTypes.BARREL_TYPE)
             .build();
 }

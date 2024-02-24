@@ -1,0 +1,21 @@
+package org.allaymc.server.block.initializer;
+
+import org.allaymc.api.block.interfaces.BlockStrippedWarpedHyphaeBehavior;
+import org.allaymc.api.block.type.BlockTypeBuilder;
+import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.data.VanillaBlockPropertyTypes;
+
+/**
+ * @author daoge_cmd <br>
+ * Allay Project <br>
+ */
+public interface BlockStrippedWarpedHyphaeBehaviorInitializer {
+  static void init() {
+    BlockTypes.STRIPPED_WARPED_HYPHAE_TYPE = BlockTypeBuilder
+            .builder(BlockStrippedWarpedHyphaeBehavior.class)
+            .vanillaBlock(VanillaBlockId.STRIPPED_WARPED_HYPHAE)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .build();
+  }
+}

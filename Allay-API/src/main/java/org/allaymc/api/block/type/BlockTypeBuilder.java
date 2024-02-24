@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static org.allaymc.api.block.component.BlockComponentImplFactory.getFactory;
 import static org.allaymc.api.component.interfaces.ComponentProvider.findComponentIdentifierInCertainClass;
 
 /**
@@ -39,9 +38,7 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
 
     BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId);
 
-    default BlockTypeBuilder<T> bindBlockEntity(BlockEntityType<?> blockEntityType) {
-        return addComponent(getFactory().createBlockEntityHolderComponent(blockEntityType));
-    }
+    BlockTypeBuilder<T> bindBlockEntity(BlockEntityType<?> blockEntityType);
 
     BlockTypeBuilder<T> setProperties(BlockPropertyType<?>... properties);
 

@@ -19,7 +19,6 @@ public interface BlockDeepslateBrickStairsBehavior extends BlockBehavior {
             .vanillaBlock(VanillaBlockId.DEEPSLATE_BRICK_STAIRS)
             .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
             .addComponent(getFactory().createRedefinedAABBBlockAttributeComponent(CommonShapes::buildStairShape))
-
             .setBlockBaseComponentSupplier(getFactory()::createBlockStairBaseComponent)
             .build();
 }
