@@ -1,8 +1,5 @@
 package org.allaymc.server.world.generator.flat;
 
-import org.allaymc.api.block.interfaces.BlockBedrockBehavior;
-import org.allaymc.api.block.interfaces.BlockDirtBehavior;
-import org.allaymc.api.block.interfaces.BlockGrassBehavior;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.identifier.Identifier;
@@ -12,6 +9,8 @@ import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorType;
 
 import java.util.ArrayList;
+
+import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
  * Allay Project 2023/7/8
@@ -30,9 +29,9 @@ public class FlatWorldGenerator extends WorldGenerator {
     protected void parsePreset() {
         var list = new ArrayList<BlockState>();
         if (preset.isBlank()) {
-            var bedrock = BlockBedrockBehavior.BEDROCK_TYPE.getDefaultState();
-            var grass = BlockGrassBehavior.GRASS_TYPE.getDefaultState();
-            var dirt = BlockDirtBehavior.DIRT_TYPE.getDefaultState();
+            var bedrock = BEDROCK_TYPE.getDefaultState();
+            var grass = GRASS_TYPE.getDefaultState();
+            var dirt = DIRT_TYPE.getDefaultState();
             list.add(bedrock);
             list.add(dirt);
             list.add(dirt);

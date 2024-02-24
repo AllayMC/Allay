@@ -18,15 +18,12 @@ import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
-import org.joml.primitives.AABBf;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
-import static org.allaymc.api.entity.component.EntityComponentImplFactory.getFactory;
 
 /**
  * Allay Project 2023/5/20
@@ -138,7 +135,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         @Override
         public EntityType<T> build() {
             if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
-                addComponent(getFactory().createEntityBaseComponent());
+                addComponent(EntityBaseComponentImpl::new, EntityBaseComponentImpl.class);
             }
             if (identifier == null) {
                 throw new EntityTypeBuildException("identifier cannot be null!");

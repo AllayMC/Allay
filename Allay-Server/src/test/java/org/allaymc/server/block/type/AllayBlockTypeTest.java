@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
+import static org.allaymc.api.block.type.BlockTypes.*;
 import static org.allaymc.server.block.type.AllayBlockType.computeSpecialValue;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -137,7 +138,7 @@ class AllayBlockTypeTest {
 
     @Test
     void testBlockStateHash() {
-        var b1 = BlockCobbledDeepslateWallBehavior.COBBLED_DEEPSLATE_WALL_TYPE.getDefaultState();
+        var b1 = COBBLED_DEEPSLATE_WALL_TYPE.getDefaultState();
         b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
         b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
         b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
@@ -145,12 +146,12 @@ class AllayBlockTypeTest {
         b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
         assertEquals(1789459903, b1.unsignedBlockStateHash());
 
-        var b2 = BlockBlueCandleBehavior.BLUE_CANDLE_TYPE.getDefaultState();
+        var b2 = BLUE_CANDLE_TYPE.getDefaultState();
         b2 = b2.setProperty(VanillaBlockPropertyTypes.CANDLES, 2);
         b2 = b2.setProperty(VanillaBlockPropertyTypes.LIT, false);
         assertEquals(4220034033L, b2.unsignedBlockStateHash());
 
-        var b3 = BlockCoralFanBehavior.CORAL_FAN_TYPE.getDefaultState();
+        var b3 = CORAL_FAN_TYPE.getDefaultState();
         b3 = b3.setProperty(VanillaBlockPropertyTypes.CORAL_COLOR, CoralColor.BLUE);
         b3 = b3.setProperty(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION, 0);
         assertEquals(781710940, b3.unsignedBlockStateHash());

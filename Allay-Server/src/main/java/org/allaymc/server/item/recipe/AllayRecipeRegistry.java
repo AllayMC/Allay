@@ -49,7 +49,6 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 .setInitialMax(array.size())
                 .setTaskName("Loading Vanilla Recipes")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var entry : array) {
                 var obj = entry.getAsJsonObject();

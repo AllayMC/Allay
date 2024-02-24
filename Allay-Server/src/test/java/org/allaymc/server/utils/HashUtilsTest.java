@@ -13,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 
+import static org.allaymc.api.block.type.BlockTypes.WOOD_TYPE;
+
 @ExtendWith({AllayTestExtension.class})
 public class HashUtilsTest {
     static BlockState testBlockState;
@@ -20,7 +22,7 @@ public class HashUtilsTest {
 
     @BeforeAll
     static void before() {
-        testBlockState = BlockWoodBehavior.WOOD_TYPE.getDefaultState();
+        testBlockState = WOOD_TYPE.getDefaultState();
     }
 
     @Test

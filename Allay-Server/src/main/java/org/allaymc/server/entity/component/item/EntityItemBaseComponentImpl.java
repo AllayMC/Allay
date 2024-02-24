@@ -4,6 +4,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
@@ -27,6 +28,10 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     protected ItemStack itemStack;
     protected int pickupDelay = 10;
     protected int age;
+
+    public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info) {
+        super(info);
+    }
 
     public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, ItemStack itemStack) {
         super(info);
@@ -61,7 +66,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     public void onCollideWith(Entity other) {
         // check can merge
-        if (itemStack != null && other.getEntityType() == EntityItem.ITEM_TYPE) {
+        if (itemStack != null && other.getEntityType() == EntityTypes.ITEM_TYPE) {
             var otherEntityItem = (EntityItem) other;
             var otherItemStack = otherEntityItem.getItemStack();
             if (otherItemStack != null && otherItemStack.canMerge(itemStack)) {

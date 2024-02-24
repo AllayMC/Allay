@@ -18,6 +18,7 @@ import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
+import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaBlockId;
@@ -34,6 +35,7 @@ import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
+import org.allaymc.server.block.component.common.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
@@ -371,6 +373,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
             components.put(BlockAttributeComponentImpl.IDENTIFIER, BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap));
             return this;
+        }
+
+        @Override
+        public BlockTypeBuilder<T> bindBlockEntity(BlockEntityType<?> blockEntityType) {
+            return addComponent(new BlockEntityHolderComponentImpl<>(blockEntityType));
         }
 
         @Override

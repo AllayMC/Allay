@@ -15,7 +15,6 @@ import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,18 +37,16 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
     @SneakyThrows
     public void init() {
         log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADING));
-        var classes = ReflectionUtils.getAllClasses("org.allaymc.api.entity.interfaces");
-        classes.removeIf(clazz -> clazz.contains("Component"));
-        try (var pgbar = ProgressBar
+        var classes = ReflectionUtils.getAllClasses("org.allaymc.server.entity.initializer");
+        try (var progressBar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Entity Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var entityClassName : classes) {
-                Class.forName(entityClassName);
-                pgbar.step();
+                Class.forName(entityClassName).getMethod("init").invoke(null);
+                progressBar.step();
             }
         }
         log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADED, classes.size()));

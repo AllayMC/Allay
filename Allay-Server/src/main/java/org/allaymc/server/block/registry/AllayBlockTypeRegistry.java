@@ -14,7 +14,6 @@ import org.allaymc.api.utils.ReflectionUtils;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,18 +32,16 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
     @SneakyThrows
     public void init() {
         log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADING));
-        var classes = ReflectionUtils.getAllClasses("org.allaymc.api.block.interfaces");
-        classes.removeIf(clazz -> clazz.contains("Component"));
-        try (var pgbar = ProgressBar
+        var classes = ReflectionUtils.getAllClasses("org.allaymc.server.block.initializer");
+        try (var progressBar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Block Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var blockClassName : classes) {
-                Class.forName(blockClassName);
-                pgbar.step();
+                Class.forName(blockClassName).getMethod("init").invoke(null);
+                progressBar.step();
             }
         }
         rebuildDefinitionList();

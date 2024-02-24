@@ -189,7 +189,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-        setAndSendEntityData(EntityDataTypes.NAME, displayName);
     }
 
     @Override

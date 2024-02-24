@@ -1,6 +1,5 @@
 package org.allaymc.api.data;
 
-import java.lang.String;
 import lombok.Getter;
 import org.allaymc.api.identifier.Identifier;
 

@@ -1,8 +1,6 @@
 package org.allaymc.api.container;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -13,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+
 /**
  * Allay Project 2023/7/15
  *
@@ -20,7 +20,9 @@ import java.util.function.Consumer;
  */
 public interface Container {
 
-    ItemStack EMPTY_SLOT_PLACE_HOLDER = ItemAirStack.AIR_TYPE.createItemStack(null);
+    // We can provide a null info for air type
+    // And only for air type we can do that
+    ItemStack EMPTY_SLOT_PLACE_HOLDER = AIR_TYPE.createItemStack(null);
 
     FullContainerType<?> getContainerType();
 

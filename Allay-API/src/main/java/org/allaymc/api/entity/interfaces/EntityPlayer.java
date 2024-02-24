@@ -2,7 +2,6 @@ package org.allaymc.api.entity.interfaces;
 
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
@@ -11,16 +10,13 @@ import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
-import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.entity.type.EntityTypeBuilder;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
 import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
-import static org.allaymc.api.entity.component.EntityComponentImplFactory.getFactory;
-import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicPlayerAttributes;
-import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 
 /**
  * @author daoge_cmd <br>
@@ -34,16 +30,6 @@ public interface EntityPlayer extends
         EntityPlayerContainerHolderComponent,
         EntityContainerViewerComponent,
         EntityDamageComponent {
-    EntityType<EntityPlayer> PLAYER_TYPE = EntityTypeBuilder
-            .builder(EntityPlayer.class)
-            .vanillaEntity(VanillaEntityId.PLAYER)
-            .addComponent(getFactory().createEntityPlayerBaseComponent())
-            .addComponent(getFactory().createEntityPlayerNetworkComponent())
-            .addComponent(getFactory().createEntityAttributeComponent(basicPlayerAttributes()))
-            .addComponent(getFactory().createEntityPlayerContainerHolderComponent())
-            .addComponent(getFactory().createEntityPlayerContainerViewerComponent())
-            .addComponent(getFactory().createEntityPlayerDamageComponent())
-            .build();
 
     default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
         var container = getOpenedContainer(slotType);
@@ -94,7 +80,7 @@ public interface EntityPlayer extends
     default void dropItemInPlayerPos(ItemStack itemStack) {
         var playerLoc = getLocation();
         var dimension = playerLoc.dimension();
-        var entityItem = EntityItem.ITEM_TYPE.createEntity(
+        var entityItem = EntityTypes.ITEM_TYPE.createEntity(
                 SimpleEntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(playerLoc.x(), playerLoc.y() + this.getEyeHeight() - 0.25f, playerLoc.z())

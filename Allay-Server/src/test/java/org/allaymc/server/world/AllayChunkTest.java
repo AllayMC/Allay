@@ -15,6 +15,8 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.allaymc.api.block.type.BlockTypes.*;
+import static org.allaymc.api.blockentity.type.BlockEntityTypes.BARREL_TYPE;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
@@ -24,15 +26,15 @@ class AllayChunkTest {
 
     @Test
     void testInvalidGetBlockStateMethodCall() {
-        assertEquals(BlockAirBehavior.AIR_TYPE.getDefaultState(), chunk.getBlockState(0, -10000, 0));
+        assertEquals(AIR_TYPE.getDefaultState(), chunk.getBlockState(0, -10000, 0));
     }
 
     @Test
     void testUpdateBlockState() {
-        chunk.setBlockState(0, 0, 0, BlockWoodBehavior.WOOD_TYPE.getDefaultState(), 0);
-        chunk.setBlockState(0, 0, 0, BlockWaterBehavior.WATER_TYPE.getDefaultState(), 1);
-        assertEquals(BlockWoodBehavior.WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 0));
-        assertEquals(BlockWaterBehavior.WATER_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 1));
+        chunk.setBlockState(0, 0, 0, WOOD_TYPE.getDefaultState(), 0);
+        chunk.setBlockState(0, 0, 0, WATER_TYPE.getDefaultState(), 1);
+        assertEquals(WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 0));
+        assertEquals(WATER_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 1));
     }
 
     @Test
@@ -61,7 +63,7 @@ class AllayChunkTest {
 
     @Test
     void testUpdateBlockEntity() {
-        var blockEntity = BlockEntityBarrel.BARREL_TYPE.createBlockEntity(
+        var blockEntity = BARREL_TYPE.createBlockEntity(
                 SimpleBlockEntityInitInfo
                         .builder()
                         .pos(11, 45, 14)

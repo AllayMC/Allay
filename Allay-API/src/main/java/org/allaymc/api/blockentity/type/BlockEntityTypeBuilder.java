@@ -9,6 +9,7 @@ import org.allaymc.api.identifier.Identifier;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Allay Project 2023/9/15
@@ -31,6 +32,10 @@ public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEn
     BlockEntityTypeBuilder<T, C> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
 
     BlockEntityTypeBuilder<T, C> addComponent(Function<BlockEntityInitInfo<T>, C> provider, Class<?> componentClass);
+
+    default BlockEntityTypeBuilder<T, C> addComponent(Supplier<C> supplier, Class<?> componentClass) {
+        return addComponent(info -> supplier.get(), componentClass);
+    }
 
     BlockEntityTypeBuilder<T, C> addComponent(ComponentProvider<BlockEntityComponent> componentProvider);
 

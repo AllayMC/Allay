@@ -29,18 +29,16 @@ public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<Identifie
     @SneakyThrows
     public void init() {
         log.info(I18n.get().tr(TrKeys.A_BLOCKENTITYTYPE_LOADING));
-        var classes = ReflectionUtils.getAllClasses("org.allaymc.api.blockentity.interfaces");
-        classes.removeIf(clazz -> clazz.contains("Component"));
-        try (var pgbar = ProgressBar
+        var classes = ReflectionUtils.getAllClasses("org.allaymc.server.blockentity.initializer");
+        try (var progressBar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Block Entity Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var entityClassName : classes) {
-                Class.forName(entityClassName);
-                pgbar.step();
+                Class.forName(entityClassName).getMethod("init").invoke(null);
+                progressBar.step();
             }
         }
         log.info(I18n.get().tr(TrKeys.A_BLOCKENTITYTYPE_LOADED, classes.size()));

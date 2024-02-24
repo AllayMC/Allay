@@ -1,6 +1,5 @@
 package org.allaymc.api.world;
 
-import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
@@ -32,7 +31,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import static org.allaymc.api.block.interfaces.BlockAirBehavior.AIR_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 
 /**
  * Allay Project 11/12/2023

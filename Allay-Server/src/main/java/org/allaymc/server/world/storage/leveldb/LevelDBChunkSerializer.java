@@ -4,8 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.interfaces.BlockAirBehavior;
-import org.allaymc.api.block.interfaces.BlockUnknownBehavior;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.VanillaBiomeId;
@@ -22,6 +20,9 @@ import org.iq80.leveldb.DB;
 import org.iq80.leveldb.WriteBatch;
 
 import java.util.Arrays;
+
+import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.UNKNOWN_TYPE;
 
 /**
  * Allay Project 8/23/2023
@@ -97,7 +98,7 @@ public class LevelDBChunkSerializer {
                                 section = new ChunkSection((byte) ySection);
                             } else {
                                 @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
-                                Arrays.fill(palettes, new Palette<>(BlockAirBehavior.AIR_TYPE.getDefaultState()));
+                                Arrays.fill(palettes, new Palette<>(AIR_TYPE.getDefaultState()));
                                 section = new ChunkSection((byte) ySection, palettes);
                             }
                             for (int layer = 0; layer < layers; layer++) {
@@ -105,7 +106,7 @@ public class LevelDBChunkSerializer {
                                     BlockState blockState = BlockStateHashPalette.getRegistry().get(hash);
                                     if (blockState == null) {
                                         log.error("Unknown block state hash: " + hash);
-                                        blockState = BlockUnknownBehavior.UNKNOWN_TYPE.getDefaultState();
+                                        blockState = UNKNOWN_TYPE.getDefaultState();
                                     }
                                     return blockState;
                                 });

@@ -14,6 +14,7 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
@@ -47,6 +48,18 @@ public interface EntityBaseComponent extends EntityComponent {
     String getDisplayName();
 
     void setDisplayName(String displayName);
+
+    default void setNameTag(String nameTag) {
+        setAndSendEntityData(EntityDataTypes.NAME, nameTag);
+    }
+
+    default String getNameTag() {
+        return getMetadata().get(EntityDataTypes.NAME);
+    }
+
+    default void clearNameTag() {
+        setAndSendEntityData(EntityDataTypes.NAME, "");
+    }
 
     Location3fc getLocation();
 

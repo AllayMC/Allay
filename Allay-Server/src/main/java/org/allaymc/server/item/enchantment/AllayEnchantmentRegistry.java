@@ -11,7 +11,6 @@ import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
 import org.allaymc.api.utils.ReflectionUtils;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -34,7 +33,6 @@ public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Shor
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Enchantment Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var enchantmentClassName : classes) {
                 Class.forName(enchantmentClassName);

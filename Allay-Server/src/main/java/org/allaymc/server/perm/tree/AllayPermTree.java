@@ -1,7 +1,6 @@
 package org.allaymc.server.perm.tree;
 
 import lombok.Getter;
-import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static org.allaymc.api.perm.DefaultPermissions.MEMBER;
 import static org.allaymc.api.perm.DefaultPermissions.OPERATOR;
 import static org.allaymc.api.perm.tree.PermTree.PermChangeType.ADD;
 import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;

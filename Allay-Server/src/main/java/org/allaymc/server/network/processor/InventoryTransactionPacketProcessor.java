@@ -16,7 +16,7 @@ import org.cloudburstmc.protocol.bedrock.packet.InventoryTransactionPacket;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
-import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 
 /**
  * Allay Project 11/22/2023

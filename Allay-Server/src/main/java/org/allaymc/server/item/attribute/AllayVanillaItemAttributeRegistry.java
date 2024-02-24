@@ -14,7 +14,6 @@ import org.cloudburstmc.nbt.NbtUtils;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;

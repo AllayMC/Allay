@@ -67,7 +67,6 @@ public interface ItemBaseComponent extends ItemComponent {
 
     ItemStack copy(boolean newStackNetworkId);
 
-
     NbtMap saveExtraTag();
 
     NbtMap getCustomNBTContent();
@@ -98,14 +97,12 @@ public interface ItemBaseComponent extends ItemComponent {
                 .putString("Name", getItemType().getIdentifier().toString());
         var extraTag = saveExtraTag();
         if (extraTag != null) {
-            builder.putCompound("tag", saveExtraTag());
+            builder.putCompound("tag", extraTag);
         }
         var blockState = toBlockState();
         if (blockState != null) {
             builder.put("Block", blockState.getBlockStateTag());
         }
-        // User's custom nbt content
-        builder.putAll(getCustomNBTContent());
         //TODO: CanDestroy
         //TODO: CanPlaceOn
         return builder.build();

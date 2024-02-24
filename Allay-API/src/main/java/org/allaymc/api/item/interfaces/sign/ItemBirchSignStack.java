@@ -1,17 +1,10 @@
 package org.allaymc.api.item.interfaces.sign;
 
-import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.item.type.ItemTypeBuilder;
 
 /**
  * @author daoge_cmd <br>
  * Allay Project <br>
  */
 public interface ItemBirchSignStack extends ItemStack {
-  ItemType<ItemBirchSignStack> BIRCH_SIGN_TYPE = ItemTypeBuilder
-          .builder(ItemBirchSignStack.class)
-          .vanillaItem(VanillaItemId.BIRCH_SIGN)
-          .build();
 }

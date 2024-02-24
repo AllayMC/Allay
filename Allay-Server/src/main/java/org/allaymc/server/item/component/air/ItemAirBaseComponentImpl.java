@@ -5,7 +5,7 @@ import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 
-import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 
 /**
  * Allay Project 2023/12/6

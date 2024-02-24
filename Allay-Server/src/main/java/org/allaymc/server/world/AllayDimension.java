@@ -17,7 +17,6 @@ import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.allaymc.server.world.service.AllayEntityService;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

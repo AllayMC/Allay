@@ -3,9 +3,9 @@ package org.allaymc.codegen;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.VanillaBlockId;
+import org.jetbrains.annotations.NotNull;
 
 import javax.lang.model.element.Modifier;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
@@ -23,16 +23,15 @@ import static org.allaymc.codegen.VanillaBlockPropertyTypeGen.BLOCK_PROPERTY_TYP
  *
  * @author daoge_cmd | Cool_Loong
  */
-public class VanillaBlockInterfaceGen {
+public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
 
     public static final ClassName BLOCK_BEHAVIOR_CLASS_NAME = ClassName.get("org.allaymc.api.block", "BlockBehavior");
     public static final ClassName VANILLA_BLOCK_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaBlockId");
     public static final ClassName VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaBlockPropertyTypes");
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockType");
+    public static final ClassName BLOCK_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockTypes");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockTypeBuilder");
-    public static Path FILE_OUTPUT_PATH_BASE = Path.of("Allay-API/src/main/java/org/allaymc/api/block/interfaces");
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
-
 
     public static void main(String[] args) {
         VanillaBlockIdEnumGen.generate();
@@ -42,6 +41,108 @@ public class VanillaBlockInterfaceGen {
 
     @SneakyThrows
     public static void generate() {
+        registerSubPackages();
+        var interfaceDir = Path.of("Allay-API/src/main/java/org/allaymc/api/block/interfaces");
+        if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
+        var initializerDir = Path.of("Allay-Server/src/main/java/org/allaymc/server/block/initializer");
+        if (!Files.exists(initializerDir)) Files.createDirectories(initializerDir);
+        var typesClass = TypeSpec.classBuilder(BLOCK_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+        for (var id : VanillaBlockId.values()) {
+            typesClass.addField(
+                    FieldSpec.builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, generateClassFullName(id)), id.name() + "_TYPE")
+                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                            .build()
+            );
+            var blockClassSimpleName = generateClassSimpleName(id);
+            var blockClassFullName = generateClassFullName(id);
+            var folderName = tryFindSpecifiedFolderName(blockClassSimpleName);
+            var folderPath = folderName != null ? interfaceDir.resolve(folderName) : interfaceDir;
+            var path = folderPath.resolve(blockClassSimpleName + ".java");
+            if (!Files.exists(path)) {
+                System.out.println("Generating " + blockClassSimpleName + "...");
+                if (!Files.exists(folderPath))
+                    Files.createDirectories(folderPath);
+                generateClass(BLOCK_BEHAVIOR_CLASS_NAME, blockClassFullName, path);
+                generateBlockTypeInitializer(id, blockClassFullName);
+            }
+        }
+        var javaFile = JavaFile.builder(BLOCK_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
+        System.out.println("Generating " + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java ...");
+        Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/block/type/" + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
+    }
+
+    @SneakyThrows
+    private static void generateBlockTypeInitializer(VanillaBlockId id, ClassName blockClassName) {
+        var folderName = tryFindSpecifiedFolderName(blockClassName.simpleName());
+        var packageName = "org.allaymc.server.block.initializer" + (folderName != null ? "." + folderName : "");
+        var className = ClassName.get(packageName, blockClassName.simpleName() + "Initializer");
+        var initializer = CodeBlock.builder();
+        initializer
+                .add("$T.$N = $T\n", BLOCK_TYPES_CLASS_NAME, id.name() + "_TYPE", BLOCK_TYPE_BUILDER_CLASS_NAME)
+                .add("        .builder($T.class)\n", blockClassName)
+                .add("        .vanillaBlock($T.$N)\n", VANILLA_BLOCK_ID_CLASS_NAME, id.name());
+        var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(id.getIdentifier().toString());
+        var states = blockPaletteData.getCompound("states");
+        if (!states.isEmpty()) {
+            initializer.add("        .setProperties(");
+            AtomicInteger count = new AtomicInteger();
+            states.forEach((name, value) -> {
+                var propertyName = BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name.replaceAll(":", "_")) && BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.containsKey(id.getIdentifier().toString()) ?
+                        BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(id.getIdentifier().toString()).get(name.replaceAll(":", "_")).toUpperCase() : name.replaceAll(":", "_").toUpperCase();
+                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME, propertyName);
+            });
+            initializer.add(")\n");
+        }
+        initializer.add("        .build();");
+        var clazz = TypeSpec.interfaceBuilder(className)
+                .addModifiers(Modifier.PUBLIC)
+                .addJavadoc(
+                        "@author daoge_cmd <br>\n" +
+                        "Allay Project <br>\n")
+                .addMethod(
+                        MethodSpec.methodBuilder("init")
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                .addCode(initializer.build())
+                                .build()
+                )
+                .build();
+        var filePath = Path.of("Allay-Server/src/main/java/" + packageName.replace(".", "/") + "/" + className.simpleName() + ".java");
+        if (!Files.exists(filePath)) {
+            var folderPath = filePath.getParent();
+            if (!Files.exists(folderPath))
+                Files.createDirectories(folderPath);
+            var javaFile = JavaFile.builder(className.packageName(), clazz).build();
+            System.out.println("Generating " + className.simpleName() + ".java ...");
+            Files.writeString(filePath, javaFile.toString());
+        }
+    }
+
+    private static ClassName generateClassFullName(VanillaBlockId id) {
+        var simpleName = generateClassSimpleName(id);
+        var folderName = tryFindSpecifiedFolderName(simpleName);
+        return ClassName.get("org.allaymc.api.block.interfaces" + (folderName != null ? "." + folderName : ""), simpleName);
+    }
+
+    @NotNull
+    private static String generateClassSimpleName(VanillaBlockId id) {
+        return "Block" + Utils.convertToPascalCase(id.getIdentifier().path()) + "Behavior";
+    }
+
+    private static String tryFindSpecifiedFolderName(String blockClassSimpleName) {
+        for (var entry : SUB_PACKAGE_GROUPERS.entrySet()) {
+            var pattern = entry.getKey();
+            if (pattern.matcher(blockClassSimpleName).find()) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    private static void registerSubPackage(Pattern regex, String packageName) {
+        SUB_PACKAGE_GROUPERS.put(regex, packageName);
+    }
+
+    private static void registerSubPackages() {
         registerSubPackage(Pattern.compile(".*Slab\\d?Behavior"), "slab");
         registerSubPackage(Pattern.compile(".*StairsBehavior"), "stairs");
         registerSubPackage(Pattern.compile(".*DoorBehavior"), "door");
@@ -80,73 +181,6 @@ public class VanillaBlockInterfaceGen {
         registerSubPackage(Pattern.compile(".*GlassPaneBehavior"), "glasspane");
         registerSubPackage(Pattern.compile(".*AmethystBudBehavior"), "amethystbud");
         registerSubPackage(Pattern.compile(".*Torch.*Behavior"),"torch");
-        if (!Files.exists(FILE_OUTPUT_PATH_BASE)) Files.createDirectories(FILE_OUTPUT_PATH_BASE);
-        for (var block : VanillaBlockId.values()) {
-            var blockClassSimpleName = "Block" + Utils.convertToPascalCase(block.getIdentifier().path()) + "Behavior";
-            var folderName = tryFindSpecifiedFolderName(blockClassSimpleName);
-            var blockClassName = ClassName.get("org.allaymc.api.block.interfaces" + (folderName != null ? "." + folderName : ""), blockClassSimpleName);
-            var folderPath = folderName != null ? FILE_OUTPUT_PATH_BASE.resolve(folderName) : FILE_OUTPUT_PATH_BASE;
-            var path = folderPath.resolve(blockClassSimpleName + ".java");
-            if (!Files.exists(path)) {
-                System.out.println("Generating " + blockClassName + "...");
-                if (!Files.exists(folderPath)) Files.createDirectories(folderPath);
-                generateBlockClass(block, blockClassName, path);
-            } else {
-                System.out.println("Class " + blockClassName + " already exists during block class generating!");
-            }
-        }
-    }
-
-
-    private static String tryFindSpecifiedFolderName(String blockClassSimpleName) {
-        for (var entry : SUB_PACKAGE_GROUPERS.entrySet()) {
-            var pattern = entry.getKey();
-            if (pattern.matcher(blockClassSimpleName).find()) {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
-    private static void registerSubPackage(Pattern regex, String packageName) {
-        SUB_PACKAGE_GROUPERS.put(regex, packageName);
-    }
-
-    private static void generateBlockClass(VanillaBlockId vanillaBlockId, ClassName blockClassName, Path path) throws IOException {
-        TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(blockClassName)
-                .addSuperinterface(BLOCK_BEHAVIOR_CLASS_NAME)
-                .addJavadoc(
-                        "@author daoge_cmd | Cool_Loong <br>\n" +
-                        "Allay Project <br>\n")
-                .addField(generateBlockTypeField(vanillaBlockId, blockClassName))
-                .addModifiers(Modifier.PUBLIC);
-        var javaFile = JavaFile.builder(blockClassName.packageName(), codeBuilder.build()).build();
-        System.out.println("Generating " + blockClassName + ".java ...");
-        Files.writeString(path, javaFile.toString());
-    }
-
-    private static FieldSpec generateBlockTypeField(VanillaBlockId vanillaBlockId, ClassName blockClassName) {
-        var initializer = CodeBlock.builder();
-        initializer
-                .add("$T\n        .builder($T.class)\n", BLOCK_TYPE_BUILDER_CLASS_NAME, blockClassName)
-                .add("        .vanillaBlock($T.$N)\n", VANILLA_BLOCK_ID_CLASS_NAME, vanillaBlockId.name());
-        var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(vanillaBlockId.getIdentifier().toString());
-        var states = blockPaletteData.getCompound("states");
-        if (!states.isEmpty()) {
-            initializer.add("        .setProperties(");
-            AtomicInteger count = new AtomicInteger();
-            states.forEach((name, value) -> {
-                var propertyName = BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name.replaceAll(":", "_")) && BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.containsKey(vanillaBlockId.getIdentifier().toString()) ?
-                        BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(vanillaBlockId.getIdentifier().toString()).get(name.replaceAll(":", "_")).toUpperCase() : name.replaceAll(":", "_").toUpperCase();
-                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME, propertyName);
-            });
-            initializer.add(")\n");
-        }
-        initializer.add("        .build()");
-        return FieldSpec
-                .builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, blockClassName), vanillaBlockId.name() + "_TYPE")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer(initializer.build())
-                .build();
+        registerSubPackage(Pattern.compile(".*Torchflower.*Behavior"),"torchflower");
     }
 }

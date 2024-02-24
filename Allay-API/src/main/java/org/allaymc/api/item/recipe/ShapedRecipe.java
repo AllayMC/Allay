@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 
 /**
  * Allay Project 2023/11/25

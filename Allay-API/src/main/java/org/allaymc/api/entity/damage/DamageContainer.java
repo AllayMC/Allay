@@ -4,9 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.attribute.AttributeType;
 
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 /**

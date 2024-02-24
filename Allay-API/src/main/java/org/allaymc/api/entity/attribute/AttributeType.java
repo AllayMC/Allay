@@ -1,7 +1,5 @@
 package org.allaymc.api.entity.attribute;
 
-import org.cloudburstmc.nbt.NbtMap;
-
 import java.util.HashMap;
 import java.util.Map;
 

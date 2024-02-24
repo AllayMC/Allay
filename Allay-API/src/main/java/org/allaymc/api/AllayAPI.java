@@ -2,19 +2,16 @@ package org.allaymc.api;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.BlockComponentImplFactory;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
-import org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
-import org.allaymc.api.entity.component.EntityComponentImplFactory;
 import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
@@ -22,15 +19,14 @@ import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.exception.MissingRequirementException;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.item.component.ItemComponentImplFactory;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.pack.PackRegistry;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -162,26 +158,22 @@ public final class AllayAPI {
         requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
 
         // Item
-        requireImpl(ItemComponentImplFactory.class, ItemComponentImplFactory.FACTORY::set);
         requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
         requireImpl(VanillaItemAttributeRegistry.class, VanillaItemAttributeRegistry.REGISTRY::set);
         requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
 
         // BlockEntity
-        requireImpl(BlockEntityComponentImplFactory.class, BlockEntityComponentImplFactory.FACTORY::set);
         requireImpl(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, BlockEntityTypeBuilder.FACTORY::set);
         requireImpl(BlockEntityTypeRegistry.class, BlockEntityTypeRegistry.REGISTRY::set);
 
         // Block
-        requireImpl(BlockComponentImplFactory.class, BlockComponentImplFactory.FACTORY::set);
         requireImpl(BlockTypeBuilder.BlockTypeBuilderFactory.class, BlockTypeBuilder.FACTORY::set);
         requireImpl(VanillaBlockAttributeRegistry.class, VanillaBlockAttributeRegistry.REGISTRY::set);
         requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
 
         // Entity
-        requireImpl(EntityComponentImplFactory.class, EntityComponentImplFactory.FACTORY::set);
         requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
         requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
