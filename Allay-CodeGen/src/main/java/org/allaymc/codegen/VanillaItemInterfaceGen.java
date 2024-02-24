@@ -22,9 +22,10 @@ import java.util.regex.Pattern;
  * @author daoge_cmd
  */
 public class VanillaItemInterfaceGen extends BaseInterfaceGen {
+
     public static final Map<String, NbtMap> MAPPED_ITEM_DATA = new TreeMap<>();
     public static final Path ITEM_DATA_FILE_PATH = Path.of(CodeGen.DATA_PATH + "item_data.nbt");
-    public static final ClassName ITEM_CLASS_NAME = ClassName.get("org.allaymc.api.item", "ItemStack");
+    public static final ClassName ITEM_STACK_CLASS_NAME = ClassName.get("org.allaymc.api.item", "ItemStack");
     public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaItemId");
     public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemType");
     public static final ClassName ITEM_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemTypes");
@@ -64,13 +65,13 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
             var folderName = tryFindSpecifiedFolderName(itemClassSimpleName);
             var folderPath = folderName != null ? interfaceDir.resolve(folderName) : interfaceDir;
             var path = folderPath.resolve(itemClassSimpleName + ".java");
-//            if (!Files.exists(path)) {
+            if (!Files.exists(path)) {
                 System.out.println("Generating " + itemClassSimpleName + "...");
                 if (!Files.exists(folderPath))
                     Files.createDirectories(folderPath);
-                generateClass(ITEM_CLASS_NAME, itemClassFullName, path);
+                generateClass(ITEM_STACK_CLASS_NAME, itemClassFullName, path);
                 generateItemTypeInitializer(id, itemClassFullName);
-//            }
+            }
         }
         var javaFile = JavaFile.builder(ITEM_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
         System.out.println("Generating " + ITEM_TYPES_CLASS_NAME.simpleName() + ".java ...");

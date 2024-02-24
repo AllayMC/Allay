@@ -16,14 +16,14 @@ import java.nio.file.Path;
  */
 public abstract class BaseInterfaceGen {
     protected static void generateClass(ClassName superClassName, ClassName itemClassName, Path path) throws IOException {
-        TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(itemClassName)
-                .addSuperinterface(superClassName)
-                .addJavadoc(
-                        "@author daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
-                .addModifiers(Modifier.PUBLIC);
-        var javaFile = JavaFile.builder(itemClassName.packageName(), codeBuilder.build()).build();
-        System.out.println("Generating " + itemClassName + ".java ...");
-        Files.writeString(path, javaFile.toString());
+//        TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(itemClassName)
+//                .addSuperinterface(superClassName)
+//                .addJavadoc(
+//                        "@author daoge_cmd <br>\n" +
+//                        "Allay Project <br>\n")
+//                .addModifiers(Modifier.PUBLIC);
+//        var javaFile = JavaFile.builder(itemClassName.packageName(), codeBuilder.build()).build();
+//        System.out.println("Generating " + itemClassName + ".java ...");
+//        Files.writeString(path, javaFile.toString());
     }
 }
