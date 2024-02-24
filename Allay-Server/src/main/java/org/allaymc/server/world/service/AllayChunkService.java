@@ -177,11 +177,11 @@ public class AllayChunkService implements ChunkService {
                     log.error("Error while generating chunk (" + x + "," + z + ") !", t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
-                .thenApply(prepareChunk -> {
+                .thenApplyAsync(prepareChunk -> {
                     setChunk(x, z, prepareChunk);
                     loadingChunks.remove(hashXZ);
                     return prepareChunk;
-                })
+                }, Server.getInstance().getVirtualThreadPool())
         );
         if (presentValue == null) {
             return loadingChunks.get(hashXZ);
