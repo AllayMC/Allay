@@ -10,8 +10,5 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
  * Allay Project <br>
  */
 public interface EntityThrownTrident extends Entity {
-  EntityType<EntityThrownTrident> THROWN_TRIDENT_TYPE = EntityTypeBuilder
-          .builder(EntityThrownTrident.class)
-          .vanillaEntity(VanillaEntityId.THROWN_TRIDENT)
-          .build();
+  
 }

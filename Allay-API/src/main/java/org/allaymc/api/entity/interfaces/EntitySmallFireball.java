@@ -10,8 +10,5 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
  * Allay Project <br>
  */
 public interface EntitySmallFireball extends Entity {
-  EntityType<EntitySmallFireball> SMALL_FIREBALL_TYPE = EntityTypeBuilder
-          .builder(EntitySmallFireball.class)
-          .vanillaEntity(VanillaEntityId.SMALL_FIREBALL)
-          .build();
+  
 }

@@ -52,6 +52,8 @@ import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.allaymc.api.entity.type.EntityTypes.PLAYER_TYPE;
+
 @Slf4j
 public final class AllayServer implements Server {
     private final boolean DEBUG;
@@ -232,7 +234,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void onConnect(BedrockServerSession session) {
-        var player = EntityPlayer.PLAYER_TYPE.createEntity(
+        var player = PLAYER_TYPE.createEntity(
                 SimpleEntityInitInfo
                         .builder()
                         .build()

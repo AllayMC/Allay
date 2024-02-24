@@ -10,8 +10,5 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
  * Allay Project <br>
  */
 public interface EntityShulkerBullet extends Entity {
-  EntityType<EntityShulkerBullet> SHULKER_BULLET_TYPE = EntityTypeBuilder
-          .builder(EntityShulkerBullet.class)
-          .vanillaEntity(VanillaEntityId.SHULKER_BULLET)
-          .build();
+  
 }

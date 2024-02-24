@@ -10,8 +10,5 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
  * Allay Project <br>
  */
 public interface EntityEvocationFang extends Entity {
-  EntityType<EntityEvocationFang> EVOCATION_FANG_TYPE = EntityTypeBuilder
-          .builder(EntityEvocationFang.class)
-          .vanillaEntity(VanillaEntityId.EVOCATION_FANG)
-          .build();
+  
 }

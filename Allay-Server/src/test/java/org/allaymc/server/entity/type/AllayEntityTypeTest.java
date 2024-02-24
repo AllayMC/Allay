@@ -2,6 +2,7 @@ package org.allaymc.server.entity.type;
 
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntitySheep;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.testutils.AllayTestExtension;
@@ -24,7 +25,7 @@ class AllayEntityTypeTest {
 
     @BeforeAll
     static void init() {
-        sheep = EntitySheep.SHEEP_TYPE.createEntity(SimpleEntityInitInfo.builder().pos(0, 1, 2).dimension(mockDimension).build());
+        sheep = EntityTypes.SHEEP_TYPE.createEntity(SimpleEntityInitInfo.builder().pos(0, 1, 2).dimension(mockDimension).build());
     }
 
     @Test

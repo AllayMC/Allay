@@ -10,8 +10,5 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
  * Allay Project <br>
  */
 public interface EntityHopperMinecart extends Entity {
-  EntityType<EntityHopperMinecart> HOPPER_MINECART_TYPE = EntityTypeBuilder
-          .builder(EntityHopperMinecart.class)
-          .vanillaEntity(VanillaEntityId.HOPPER_MINECART)
-          .build();
+  
 }

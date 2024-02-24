@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static org.allaymc.api.entity.component.EntityComponentImplFactory.getFactory;
-
 /**
  * Allay Project 2023/5/20
  *
@@ -138,7 +136,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         @Override
         public EntityType<T> build() {
             if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
-                addComponent(getFactory().createEntityBaseComponent());
+                addComponent(EntityBaseComponentImpl::new, EntityBaseComponentImpl.class);
             }
             if (identifier == null) {
                 throw new EntityTypeBuildException("identifier cannot be null!");

@@ -12,6 +12,7 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
@@ -77,7 +78,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         var rand = ThreadLocalRandom.current();
         for (var itemStack : container.getItemStacks()) {
             if (itemStack != Container.EMPTY_SLOT_PLACE_HOLDER) {
-                var entity = EntityItem.ITEM_TYPE.createEntity(
+                var entity = EntityTypes.ITEM_TYPE.createEntity(
                         SimpleEntityInitInfo
                                 .builder()
                                 .pos(pos.x() + rand.nextFloat(0.5f) + 0.25f, pos.y() + rand.nextFloat(0.5f) + 0.25f, pos.z() + rand.nextFloat(0.5f) + 0.25f)

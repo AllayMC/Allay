@@ -14,7 +14,6 @@ import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
-import org.allaymc.api.entity.component.EntityComponentImplFactory;
 import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
@@ -181,7 +180,6 @@ public final class AllayAPI {
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
 
         // Entity
-        requireImpl(EntityComponentImplFactory.class, EntityComponentImplFactory.FACTORY::set);
         requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
         requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);

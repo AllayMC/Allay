@@ -10,8 +10,5 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
  * Allay Project <br>
  */
 public interface EntityElderGuardian extends Entity {
-  EntityType<EntityElderGuardian> ELDER_GUARDIAN_TYPE = EntityTypeBuilder
-          .builder(EntityElderGuardian.class)
-          .vanillaEntity(VanillaEntityId.ELDER_GUARDIAN)
-          .build();
+  
 }

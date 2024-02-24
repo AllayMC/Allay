@@ -10,8 +10,5 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
  * Allay Project <br>
  */
 public interface EntitySkeletonHorse extends Entity {
-  EntityType<EntitySkeletonHorse> SKELETON_HORSE_TYPE = EntityTypeBuilder
-          .builder(EntitySkeletonHorse.class)
-          .vanillaEntity(VanillaEntityId.SKELETON_HORSE)
-          .build();
+  
 }
