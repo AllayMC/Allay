@@ -7,7 +7,6 @@ import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
-import org.allaymc.api.blockentity.component.BlockEntityComponentImplFactory;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.command.tree.CommandNodeFactory;
@@ -28,8 +27,8 @@ import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.pack.PackRegistry;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
@@ -168,7 +167,6 @@ public final class AllayAPI {
         requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
 
         // BlockEntity
-        requireImpl(BlockEntityComponentImplFactory.class, BlockEntityComponentImplFactory.FACTORY::set);
         requireImpl(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, BlockEntityTypeBuilder.FACTORY::set);
         requireImpl(BlockEntityTypeRegistry.class, BlockEntityTypeRegistry.REGISTRY::set);
 

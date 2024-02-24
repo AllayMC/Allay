@@ -5,6 +5,7 @@ import org.allaymc.api.block.component.common.BlockEntityHolderComponent;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
+import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.data.VanillaBlockId;
 
 import static org.allaymc.api.block.component.BlockComponentImplFactory.getFactory;
@@ -22,6 +23,6 @@ public interface BlockBarrelBehavior extends
             .vanillaBlock(VanillaBlockId.BARREL)
             .setProperties(FACING_DIRECTION, OPEN_BIT)
             .setBlockBaseComponentSupplier(getFactory()::createBlockBarrelBaseComponent)
-            .bindBlockEntity(BlockEntityBarrel.BARREL_TYPE)
+            .bindBlockEntity(BlockEntityTypes.BARREL_TYPE)
             .build();
 }
