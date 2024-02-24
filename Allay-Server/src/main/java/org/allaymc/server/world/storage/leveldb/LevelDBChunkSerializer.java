@@ -165,7 +165,7 @@ public class LevelDBChunkSerializer {
                     ChunkSection section = builder.getSections()[y - minSectionY];
                     if (section == null) continue;
                     biomePalette = section.biomes();
-                    biomePalette.readFromStorageRuntime(heightAndBiomesBuffer, VanillaBiomeId::fromId, last);
+                    biomePalette.readFromStorageRuntime(heightAndBiomesBuffer, LevelDBChunkSerializer::getBiomeByIdNonNull, last);
                     last = biomePalette;
                 }
             }
@@ -174,5 +174,14 @@ public class LevelDBChunkSerializer {
                 heightAndBiomesBuffer.release();
             }
         }
+    }
+
+    private static BiomeType getBiomeByIdNonNull(int id) {
+        var biome = VanillaBiomeId.fromId(id);
+        if (biome == null) {
+            log.warn("Unknown biome id: {}", id);
+            biome = VanillaBiomeId.PLAINS;
+        }
+        return biome;
     }
 }

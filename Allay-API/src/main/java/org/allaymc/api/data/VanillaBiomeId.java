@@ -212,20 +212,10 @@ public enum VanillaBiomeId implements BiomeType {
   }
 
   public static BiomeType fromId(int id) {
-    var type =  MAP1.get(id);
-    if (type == null) {
-      log.warn("Unknown biome id: {}", id);
-      type = PLAINS;
-    }
-    return type;
+    return MAP1.get(id);
   }
 
   public static BiomeType fromIdentifier(Identifier identifier) {
-    var type =  MAP2.get(identifier);
-    if (type == null) {
-      log.warn("Unknown biome identifier: {}", identifier);
-      type = PLAINS;
-    }
-    return type;
+    return MAP2.get(identifier);
   }
 }
