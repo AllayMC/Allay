@@ -58,13 +58,13 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
             var folderName = tryFindSpecifiedFolderName(blockClassSimpleName);
             var folderPath = folderName != null ? interfaceDir.resolve(folderName) : interfaceDir;
             var path = folderPath.resolve(blockClassSimpleName + ".java");
-//            if (!Files.exists(path)) {
+            if (!Files.exists(path)) {
                 System.out.println("Generating " + blockClassSimpleName + "...");
                 if (!Files.exists(folderPath))
                     Files.createDirectories(folderPath);
                 generateClass(BLOCK_BEHAVIOR_CLASS_NAME, blockClassFullName, path);
                 generateBlockTypeInitializer(id, blockClassFullName);
-//            }
+            }
         }
         var javaFile = JavaFile.builder(BLOCK_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
         System.out.println("Generating " + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java ...");
@@ -181,5 +181,6 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*GlassPaneBehavior"), "glasspane");
         registerSubPackage(Pattern.compile(".*AmethystBudBehavior"), "amethystbud");
         registerSubPackage(Pattern.compile(".*Torch.*Behavior"),"torch");
+        registerSubPackage(Pattern.compile(".*Torchflower.*Behavior"),"torchflower");
     }
 }

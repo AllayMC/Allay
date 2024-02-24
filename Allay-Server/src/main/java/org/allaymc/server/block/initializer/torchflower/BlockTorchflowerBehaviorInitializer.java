@@ -1,4 +1,4 @@
-package org.allaymc.server.block.initializer.torch;
+package org.allaymc.server.block.initializer.torchflower;
 
 import org.allaymc.api.block.interfaces.torch.BlockTorchflowerBehavior;
 import org.allaymc.api.block.type.BlockTypeBuilder;
