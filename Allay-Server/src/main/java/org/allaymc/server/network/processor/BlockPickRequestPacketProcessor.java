@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.network.processor.PacketProcessor;
@@ -26,7 +27,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         // TODO: includeBlockEntityData
         var includeBlockEntityData = packet.isAddUserData();
         var block = player.getLocation().dimension().getBlockState(pos.getX(), pos.getY(), pos.getZ());
-        if (block.getBlockType() == BlockAirBehavior.AIR_TYPE) {
+        if (block.getBlockType() == BlockTypes.AIR_TYPE) {
             log.warn("Player " + player.getOriginName() + " tried to pick air!");
             return;
         }

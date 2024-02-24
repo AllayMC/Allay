@@ -29,6 +29,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
+import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
+
 @NotThreadSafe
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AllayUnsafeChunk implements UnsafeChunk {
@@ -140,12 +142,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public BlockState getBlockState(int x, int y, int z, int layer) {
         if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
-            return BlockAirBehavior.AIR_TYPE.getDefaultState();
+            return AIR_TYPE.getDefaultState();
         checkXZ(x, z);
         ChunkSection section = this.getSection(y >> 4);
         BlockState blockState;
         if (section == null) {
-            blockState = BlockAirBehavior.AIR_TYPE.getDefaultState();
+            blockState = AIR_TYPE.getDefaultState();
         } else {
             blockState = section.getBlockState(x, y & 0xf, z, layer);
         }

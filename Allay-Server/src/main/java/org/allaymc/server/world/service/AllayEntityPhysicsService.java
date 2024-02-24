@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.lang.Math.*;
 import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRICTION;
+import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 import static org.allaymc.api.utils.MathUtils.isInRange;
 
 /**
@@ -149,7 +150,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var blockFace = values[i];
             var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
             var blockState = dimension.getBlockState(offsetVec);
-            if (blockState.getBlockType() == BlockAirBehavior.AIR_TYPE) {
+            if (blockState.getBlockType() == AIR_TYPE) {
                 var currentDistanceSqrt = entity.getLocation().distanceSquared(offsetVec.x() + 0.5f, offsetVec.y() + 0.5f, offsetVec.z() + 0.5f);
                 if (currentDistanceSqrt < distanceSqrt) {
                     movingDirection = blockFace;

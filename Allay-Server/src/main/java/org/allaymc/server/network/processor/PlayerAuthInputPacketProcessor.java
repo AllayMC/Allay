@@ -1,6 +1,5 @@
 package org.allaymc.server.network.processor;
 
-import org.allaymc.api.block.interfaces.BlockAirBehavior;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.processor.PacketProcessor;
@@ -14,6 +13,8 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 
 import java.util.List;
 import java.util.Set;
+
+import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 
 /**
  * Allay Project 11/22/2023
@@ -43,7 +44,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case START_BREAK -> world.sendLevelEventPacket(pos, LevelEvent.BLOCK_START_BREAK, 0);
                 case BLOCK_PREDICT_DESTROY -> {
                     var oldState = world.getBlockState(pos.getX(), pos.getY(), pos.getZ());
-                    world.setBlockState(pos.getX(), pos.getY(), pos.getZ(), BlockAirBehavior.AIR_TYPE.getDefaultState());
+                    world.setBlockState(pos.getX(), pos.getY(), pos.getZ(), AIR_TYPE.getDefaultState());
                     world.sendLevelEventPacket(pos, LevelEvent.BLOCK_STOP_BREAK, 0);
                     world.sendLevelEventPacket(pos, LevelEvent.PARTICLE_DESTROY_BLOCK, oldState.blockStateHash());
                 }

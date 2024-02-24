@@ -33,7 +33,7 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
     @SneakyThrows
     public void init() {
         log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADING));
-        var classes = ReflectionUtils.getAllClasses("org.allaymc.api.block.initializer");
+        var classes = ReflectionUtils.getAllClasses("org.allaymc.server.block.initializer");
         try (var progressBar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
