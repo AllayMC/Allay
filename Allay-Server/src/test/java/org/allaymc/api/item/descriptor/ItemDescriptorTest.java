@@ -8,6 +8,8 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.allaymc.api.item.type.ItemTypes.ACACIA_PLANKS_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.PLANKS_TYPE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -20,7 +22,7 @@ class ItemDescriptorTest {
     @Test
     void testItemTagDescriptor() {
         var descriptor = new ItemTagDescriptor(VanillaItemTags.PLANKS);
-        var plankItemStack = ItemAcaciaPlanksStack.ACACIA_PLANKS_TYPE.createItemStack(
+        var plankItemStack = ACACIA_PLANKS_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()
         );
         assertTrue(descriptor.match(plankItemStack));
@@ -28,8 +30,8 @@ class ItemDescriptorTest {
 
     @Test
     void testDefaultDescriptor() {
-        var descriptor = new DefaultDescriptor(ItemPlanksStack.PLANKS_TYPE, 32767);
-        var plankItemStack = ItemPlanksStack.PLANKS_TYPE.createItemStack(
+        var descriptor = new DefaultDescriptor(PLANKS_TYPE, 32767);
+        var plankItemStack = PLANKS_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().meta(1).build()
         );
         assertTrue(descriptor.match(plankItemStack));
@@ -37,8 +39,8 @@ class ItemDescriptorTest {
 
     @Test
     void testItemDescriptorWithCount() {
-        var descriptor = new ItemDescriptorWithCount(new DefaultDescriptor(ItemPlanksStack.PLANKS_TYPE), 32);
-        var plankItemStack = ItemPlanksStack.PLANKS_TYPE.createItemStack(
+        var descriptor = new ItemDescriptorWithCount(new DefaultDescriptor(PLANKS_TYPE), 32);
+        var plankItemStack = PLANKS_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().count(32).build()
         );
         assertTrue(descriptor.match(plankItemStack));

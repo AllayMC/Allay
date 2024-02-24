@@ -12,6 +12,7 @@ import org.allaymc.api.item.tag.ItemTag;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.allaymc.api.component.interfaces.ComponentProvider.toMap;
 
@@ -50,6 +51,10 @@ public interface ItemTypeBuilder<T extends ItemStack, C extends ItemComponent> {
     }
 
     ItemTypeBuilder<T, C> addComponent(Function<ItemStackInitInfo<T>, C> provider, Class<?> componentClass);
+
+    default ItemTypeBuilder<T, C> addComponent(Supplier<C> supplier, Class<?> componentClass) {
+        return addComponent(unused -> supplier.get(), componentClass);
+    }
 
     ItemTypeBuilder<T, C> addComponent(ComponentProvider<ItemComponent> componentProvider);
 

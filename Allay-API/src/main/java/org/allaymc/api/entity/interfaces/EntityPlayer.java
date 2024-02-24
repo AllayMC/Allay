@@ -16,7 +16,7 @@ import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
 import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
-import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 
 /**
  * @author daoge_cmd <br>

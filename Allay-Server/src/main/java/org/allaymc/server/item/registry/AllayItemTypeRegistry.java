@@ -33,18 +33,16 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
     @SneakyThrows
     public void init() {
         log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADING));
-        var classes = ReflectionUtils.getAllClasses("org.allaymc.api.item.interfaces");
-        classes.removeIf(clazz -> clazz.contains("Component"));
-        try (var pgbar = ProgressBar
+        var classes = ReflectionUtils.getAllClasses("org.allaymc.server.item.initializer");
+        try (var progressBar = ProgressBar
                 .builder()
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Item Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var itemClassName : classes) {
-                Class.forName(itemClassName);
-                pgbar.step();
+                Class.forName(itemClassName).getMethod("init").invoke(null);
+                progressBar.step();
             }
         }
         rebuildDefinitionList();

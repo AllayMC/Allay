@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
+import static org.allaymc.api.item.type.ItemTypes.DIAMOND_TYPE;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -23,19 +24,19 @@ public class AllayItemTypeTest {
 
     @Test
     void testCreation() {
-        var itemStack = ItemDiamondStack.DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        var itemStack = DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
         assertEquals(1, itemStack.getCount());
         assertEquals(0, itemStack.getMeta());
         assertEquals(0, itemStack.getDurability());
         assertEquals("", itemStack.getCustomName());
         assertEquals(NbtMap.EMPTY, itemStack.getCustomNBTContent());
         assertEquals(List.of(), itemStack.getLore());
-        assertEquals(ItemDiamondStack.DIAMOND_TYPE, itemStack.getItemType());
+        assertEquals(DIAMOND_TYPE, itemStack.getItemType());
     }
 
     @Test
     void testGenericFunctions() {
-        var itemStack = ItemDiamondStack.DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        var itemStack = DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
 
         // Count
         itemStack.setCount(2);
@@ -67,17 +68,8 @@ public class AllayItemTypeTest {
                         .build()
         );
         var savedItemStackNBT = itemStack.saveNBT();
-        assertTrue(savedItemStackNBT.containsKey("testKey"));
-        assertEquals("testValue", savedItemStackNBT.getString("testKey"));
-    }
-
-    @Test
-    void test() {
-        for (var i : ItemTypeRegistry.getRegistry().getContent().values()) {
-            var b = BlockTypeRegistry.getRegistry().get(i.getIdentifier());
-            if (b == null && i.getBlockIdentifier() != null) {
-                System.out.println(i.getIdentifier());
-            }
-        }
+        var extraTag = savedItemStackNBT.getCompound("tag");
+        assertTrue(extraTag.containsKey("testKey"));
+        assertEquals("testValue", extraTag.getString("testKey"));
     }
 }

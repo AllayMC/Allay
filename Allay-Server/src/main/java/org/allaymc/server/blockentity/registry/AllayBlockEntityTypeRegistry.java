@@ -35,7 +35,6 @@ public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<Identifie
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Block Entity Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var entityClassName : classes) {
                 Class.forName(entityClassName).getMethod("init").invoke(null);

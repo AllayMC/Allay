@@ -5,6 +5,7 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
@@ -20,8 +21,8 @@ public class ItemStackEqualsTest {
      */
     @Test
     void testEquals() {
-        ItemStack i1 = ItemAirStack.AIR_TYPE.createItemStack();
-        ItemStack i2 = ItemAirStack.AIR_TYPE.createItemStack();
+        ItemStack i1 = AIR_TYPE.createItemStack();
+        ItemStack i2 = AIR_TYPE.createItemStack();
 
         assertNotEquals(i1, i2);
     }

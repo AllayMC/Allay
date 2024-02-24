@@ -44,7 +44,6 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Entity Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var entityClassName : classes) {
                 Class.forName(entityClassName).getMethod("init").invoke(null);

@@ -3,7 +3,7 @@ package org.allaymc.api.item.recipe.input;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 
-import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 
 /**
  * Allay Project 2023/12/1

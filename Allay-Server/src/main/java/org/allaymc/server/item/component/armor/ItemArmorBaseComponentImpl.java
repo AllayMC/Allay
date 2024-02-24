@@ -45,7 +45,7 @@ public class ItemArmorBaseComponentImpl<T extends ItemStack> extends ItemBaseCom
         armorContainer.setItemStack(getArmorType().ordinal(), itemStack);
     }
 
-    public ArmorType getArmorType() {
+    protected ArmorType getArmorType() {
         var identifier = getItemType().getIdentifier().toString();
         if (identifier.contains("helmet")) return ArmorType.HELMET;
         if (identifier.contains("chestplate")) return ArmorType.CHESTPLATE;

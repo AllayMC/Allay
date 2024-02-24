@@ -15,6 +15,7 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.allaymc.api.blockentity.type.BlockEntityTypes.BARREL_TYPE;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
@@ -61,7 +62,7 @@ class AllayChunkTest {
 
     @Test
     void testUpdateBlockEntity() {
-        var blockEntity = BlockEntityBarrel.BARREL_TYPE.createBlockEntity(
+        var blockEntity = BARREL_TYPE.createBlockEntity(
                 SimpleBlockEntityInitInfo
                         .builder()
                         .pos(11, 45, 14)

@@ -33,7 +33,6 @@ public class AllayEffectRegistry extends SimpleDoubleKeyMappedRegistry<Integer, 
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Effect Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var effectClassName : classes) {
                 Class.forName(effectClassName);

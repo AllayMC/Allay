@@ -34,7 +34,6 @@ public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Shor
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Enchantment Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var enchantmentClassName : classes) {
                 Class.forName(enchantmentClassName);

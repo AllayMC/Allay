@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemTypes;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -15,7 +16,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static org.allaymc.api.item.ItemHelper.fromNBT;
-import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_TYPE;
 
 /**
  * Allay Project 2023/7/15
@@ -70,7 +70,7 @@ public class BaseContainer implements Container {
 
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
-        if (itemStack.getItemType() == AIR_TYPE && itemStack != EMPTY_SLOT_PLACE_HOLDER) {
+        if (itemStack.getItemType() == ItemTypes.AIR_TYPE && itemStack != EMPTY_SLOT_PLACE_HOLDER) {
             // NOTICE: Please use clearSlot() instead of using this method if you want to clear a slot!
             itemStack = EMPTY_SLOT_PLACE_HOLDER;
         }

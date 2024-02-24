@@ -18,7 +18,6 @@ import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.exception.MissingImplementationException;
-import org.allaymc.api.item.component.ItemComponentImplFactory;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
@@ -49,7 +48,6 @@ import org.allaymc.server.entity.type.AllayEntityType;
 import org.allaymc.server.i18n.AllayI18N;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.attribute.AllayVanillaItemAttributeRegistry;
-import org.allaymc.server.item.component.AllayItemComponentImplFactory;
 import org.allaymc.server.item.enchantment.AllayEnchantmentRegistry;
 import org.allaymc.server.item.recipe.AllayRecipeRegistry;
 import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
@@ -109,7 +107,6 @@ public final class Allay {
         });
 
         // Item
-        api.bind(ItemComponentImplFactory.class, AllayItemComponentImplFactory::new);
         api.bind(EnchantmentRegistry.class, AllayEnchantmentRegistry::new, instance -> ((AllayEnchantmentRegistry) instance).init());
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
         api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));

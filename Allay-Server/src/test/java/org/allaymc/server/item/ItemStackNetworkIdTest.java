@@ -9,6 +9,8 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.DIAMOND_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -20,15 +22,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ItemStackNetworkIdTest {
     @Test
     void testItemAirStackNetworkId() {
-        assertEquals(ItemBaseComponent.EMPTY_STACK_NETWORK_ID, ItemAirStack.AIR_TYPE.createItemStack(null).getStackNetworkId());
+        assertEquals(ItemBaseComponent.EMPTY_STACK_NETWORK_ID, AIR_TYPE.createItemStack(null).getStackNetworkId());
     }
 
     @Test
     void testItemStackNetworkIdAssignment() {
         var currentNID = ItemBaseComponentImpl.getCurrentStackNetworkIdCounter();
-        var itemStack = ItemDiamondStack.DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().build());
+        var itemStack = DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().build());
         assertEquals(currentNID, itemStack.getStackNetworkId());
-        itemStack = ItemDiamondStack.DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().stackNetworkId(1).build());
+        itemStack = DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().stackNetworkId(1).build());
         assertEquals(1, itemStack.getStackNetworkId());
     }
 }

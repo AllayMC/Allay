@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 
+import static org.allaymc.api.item.type.ItemTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(AllayTestExtension.class)
 class RecipeTest {
 
-    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(ItemGrassStack.GRASS_TYPE));
+    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(GRASS_TYPE));
 
     @Test
     void testShapedRecipe() {
@@ -44,7 +45,7 @@ class RecipeTest {
                 .build();
 
         assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getIdentifier());
-        assertEquals(ItemDiamondStack.DIAMOND_TYPE, grassMagic1.getOutputs()[0].getItemType());
+        assertEquals(DIAMOND_TYPE, grassMagic1.getOutputs()[0].getItemType());
         assertEquals("test_tag", grassMagic1.getTag());
 
         var input1 = new CraftingInput(
@@ -193,9 +194,9 @@ class RecipeTest {
                 .identifier(new Identifier("minecraft:grass_magic_1"))
                 .ingredients(
                         new ItemDescriptor[]{
-                                new DefaultDescriptor(ItemGrassStack.GRASS_TYPE),
-                                new DefaultDescriptor(ItemGrassStack.GRASS_TYPE),
-                                new DefaultDescriptor(ItemGrassStack.GRASS_TYPE)
+                                new DefaultDescriptor(GRASS_TYPE),
+                                new DefaultDescriptor(GRASS_TYPE),
+                                new DefaultDescriptor(GRASS_TYPE)
                         }
                 )
                 .outputs(new ItemStack[]{diamond()})
@@ -217,20 +218,20 @@ class RecipeTest {
     }
 
     private ItemDiamondStack diamond() {
-        return ItemDiamondStack.DIAMOND_TYPE.createItemStack(
+        return DIAMOND_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()
         );
     }
 
 
     private ItemGrassStack grass() {
-        return ItemGrassStack.GRASS_TYPE.createItemStack(
+        return GRASS_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()
         );
     }
 
     private ItemAirStack air() {
-        return ItemAirStack.AIR_TYPE.createItemStack(
+        return AIR_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()
         );
     }

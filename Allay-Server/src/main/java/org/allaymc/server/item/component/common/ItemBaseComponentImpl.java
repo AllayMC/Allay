@@ -21,6 +21,7 @@ import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -172,7 +173,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public ItemData toNetworkItemData() {
-        if (itemType == ItemAirStack.AIR_TYPE) {
+        if (itemType == ItemTypes.AIR_TYPE) {
             return ItemData.AIR;
         } else {
             var blockState = toBlockState();
@@ -246,6 +247,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             nbtBuilder.putList("ench", NbtType.COMPOUND, enchantmentNBT);
         }
         //TODO: item lock type
+
+        // Custom NBT content
+        nbtBuilder.putAll(customNBTContent);
 
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }

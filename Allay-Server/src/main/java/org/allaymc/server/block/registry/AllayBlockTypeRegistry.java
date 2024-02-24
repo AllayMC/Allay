@@ -40,7 +40,6 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
                 .setInitialMax(classes.size())
                 .setTaskName("Loading Block Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .setUpdateIntervalMillis(100)
                 .build()) {
             for (var blockClassName : classes) {
                 Class.forName(blockClassName);
