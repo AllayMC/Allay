@@ -8,6 +8,7 @@ import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
+import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
@@ -36,6 +37,7 @@ import org.allaymc.server.block.registry.AllayBlockTypeRegistry;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.blockentity.registry.AllayBlockEntityTypeRegistry;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
+import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.allaymc.server.component.injector.AllayComponentInjector;
@@ -145,6 +147,7 @@ public final class Allay {
         api.bind(PermTree.PermTreeFactory.class, () -> AllayPermTree::create);
 
         // Command
+        api.bind(EntitySelectorAPI.class, AllayEntitySelectorAPI::new);
         api.bind(CommandTree.CommandTreeFactory.class, () -> AllayCommandTree::create);
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
 

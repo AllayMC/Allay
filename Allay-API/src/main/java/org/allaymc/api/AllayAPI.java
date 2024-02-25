@@ -8,6 +8,7 @@ import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
+import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
@@ -198,6 +199,7 @@ public final class AllayAPI {
         requireImpl(PermTree.PermTreeFactory.class, PermTree.FACTORY::set);
 
         // Command
+        requireImpl(EntitySelectorAPI.class, EntitySelectorAPI.API::set);
         requireImpl(CommandTree.CommandTreeFactory.class, CommandTree.FACTORY::set);
         requireImpl(CommandNodeFactory.class, CommandNodeFactory.FACTORY::set);
 
