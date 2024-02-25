@@ -4,7 +4,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import lombok.Getter;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.NPCCommandSender;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
@@ -160,9 +159,9 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         //选择最近玩家
         if (selectorType == NEAREST_PLAYER && entities.size() != 1) {
             Entity nearest = null;
-            double min = Double.MAX_VALUE;
+            float min = Float.MAX_VALUE;
             for (var entity : entities) {
-                var distanceSquared = 0d;
+                var distanceSquared = 0f;
                 if ((distanceSquared = senderLocation.distanceSquared(entity.getLocation())) < min) {
                     min = distanceSquared;
                     nearest = entity;
