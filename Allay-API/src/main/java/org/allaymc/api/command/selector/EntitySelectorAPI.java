@@ -213,7 +213,7 @@ public class EntitySelectorAPI {
 
         if (inputArguments != null) {
             for (String arg : separateArguments(inputArguments)) {
-                var split = AllayStringUtils.fastSplit(ARGUMENT_JOINER, arg, 2);
+                var split = AllayStringUtils.fastSplit(arg, ARGUMENT_JOINER, 2);
                 String argName = split.get(0);
 
                 if (!registry.containsKey(argName)) {

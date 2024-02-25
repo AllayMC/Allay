@@ -3,6 +3,7 @@ package org.allaymc.server.command.tree;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.command.tree.node.*;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3fc;
@@ -78,6 +79,11 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     @Override
     public CommandNode target(String name, CommandNode parent, List<Entity> defaultValue) {
         return new TargetNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode playerTarget(String name, CommandNode parent, List<EntityPlayer> defaultValue) {
+        return new PlayerTargetNode(name, parent, defaultValue);
     }
 
     @Override

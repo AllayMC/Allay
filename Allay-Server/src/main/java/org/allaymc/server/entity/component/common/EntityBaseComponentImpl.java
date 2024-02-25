@@ -722,11 +722,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public void handleResult(CommandResult result) {
-        // Do nothing
-    }
-
-    @Override
     public boolean isEntity() {
         return true;
     }
