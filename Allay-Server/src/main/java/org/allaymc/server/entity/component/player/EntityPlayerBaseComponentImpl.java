@@ -548,4 +548,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         // Player should also send the packet to itself
         networkComponent.sendPacket(pk);
     }
+
+    @Override
+    public boolean isPlayer() {
+        return true;
+    }
+
+    @Override
+    public EntityPlayer asPlayer() {
+        return thisEntity;
+    }
 }

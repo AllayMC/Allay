@@ -3,6 +3,8 @@ package org.allaymc.server.entity.component.common;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -22,9 +24,12 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.perm.DefaultPermissions;
+import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
@@ -34,6 +39,8 @@ import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
@@ -211,10 +218,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         this.location.setHeadYaw(location.headYaw());
         this.location.setPitch(location.pitch());
         this.location.setDimension(location.dimension());
-    }
-
-    public Location3fc getCmdExecuteLocation() {
-        return location;
     }
 
     @Override
@@ -699,5 +702,57 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         }
 
         sendEntityData(EntityDataTypes.EFFECT_COLOR, EntityDataTypes.EFFECT_AMBIENCE);
+    }
+
+    @Override
+    public String getName() {
+        return getDisplayName();
+    }
+
+    private static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
+
+    @Override
+    public CommandOriginData getCommandOriginData(){
+        return ENTITY_COMMAND_ORIGIN_DATA;
+    }
+
+    @Override
+    public Location3fc getCmdExecuteLocation() {
+        return getLocation();
+    }
+
+    @Override
+    public void handleResult(CommandResult result) {
+        // Do nothing
+    }
+
+    @Override
+    public boolean isEntity() {
+        return true;
+    }
+
+    @Override
+    public Entity asEntity() {
+        return thisEntity;
+    }
+
+    @Override
+    public void sendText(String text) {
+        // Do nothing
+    }
+
+    @Override
+    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
+        // Do nothing
+    }
+
+    @Override
+    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
+        // Do nothing
+    }
+
+    @Override
+    public PermTree getPermTree() {
+        return DefaultPermissions.OPERATOR;
     }
 }

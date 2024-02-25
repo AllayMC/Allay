@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component.common;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.entity.effect.EffectInstance;
@@ -13,6 +15,8 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
@@ -29,13 +33,14 @@ import org.joml.primitives.AABBfc;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Allay Project 2023/5/26
  *
  * @author daoge_cmd
  */
-public interface EntityBaseComponent extends EntityComponent {
+public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     float SPRINTING_MOVEMENT_FACTOR = 1.3f;
     float WALKING_MOVEMENT_FACTOR = 1f;

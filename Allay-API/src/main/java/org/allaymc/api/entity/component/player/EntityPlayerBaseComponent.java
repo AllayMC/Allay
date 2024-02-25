@@ -6,13 +6,14 @@ import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.jetbrains.annotations.ApiStatus;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, CommandSender {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
 
     boolean isSprinting();
 
