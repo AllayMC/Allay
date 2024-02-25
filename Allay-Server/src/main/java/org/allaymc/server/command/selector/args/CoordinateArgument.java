@@ -1,4 +1,4 @@
-package org.allaymc.api.command.selector.args.impl;
+package org.allaymc.server.command.selector.args;
 
 import org.allaymc.api.command.selector.args.ISelectorArgument;
 

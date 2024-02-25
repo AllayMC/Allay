@@ -1,12 +1,11 @@
-package org.allaymc.api.command.selector;
+package org.allaymc.server.command.selector;
 
+import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.server.Server;
 
 /**
  * 一些有关目标选择器解析的常用静态函数
  */
-
-
 public class ParseUtils {
     /**
      * 解析偏移int值

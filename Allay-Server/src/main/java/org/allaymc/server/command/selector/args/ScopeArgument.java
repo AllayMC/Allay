@@ -1,4 +1,4 @@
-package org.allaymc.api.command.selector.args.impl;
+package org.allaymc.server.command.selector.args;
 
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.selector.SelectorType;
@@ -11,8 +11,6 @@ import java.util.Map;
 /**
  * args like dx,dy,dz.
  */
-
-
 public abstract class ScopeArgument implements ISelectorArgument {
     @Override
     public int getPriority() {

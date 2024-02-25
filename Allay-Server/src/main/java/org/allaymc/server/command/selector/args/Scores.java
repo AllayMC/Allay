@@ -1,11 +1,11 @@
-package org.allaymc.api.command.selector.args.impl;
+package org.allaymc.server.command.selector.args;
 
 //import org.allaymc.api.entity.interfaces.EntityPlayer;
 //import org.allaymc.api.server.Server;
 //import org.allaymc.api.utils.AllayStringUtils;
 //import org.allaymc.api.command.CommandSender;
 //import org.allaymc.api.command.selector.SelectorSyntaxException;
-//import org.allaymc.api.command.selector.ParseUtils;
+//import org.allaymc.server.command.selector.ParseUtils;
 //import org.allaymc.api.command.selector.SelectorType;
 //import org.allaymc.api.command.selector.args.CachedSimpleSelectorArgument;
 //import org.allaymc.api.entity.Entity;
