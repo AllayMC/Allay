@@ -39,12 +39,10 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
     private static final Cache<String, Map<String, List<String>>> ARGS_CACHE = Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();
     private static final Cache<String, Boolean> MATCHES_CACHE = Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();
 
-    Map<String, ISelectorArgument> registry;
-    List<ISelectorArgument> orderedArgs;
+    Map<String, ISelectorArgument> registry = new HashMap<>();
+    List<ISelectorArgument> orderedArgs = new ArrayList<>();
 
     public AllayEntitySelectorAPI() {
-        registry = new HashMap<>();
-        orderedArgs = new ArrayList<>();
         registerDefaultArguments();
     }
 
@@ -71,6 +69,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
 //        registerArgument(new Scores()); TODO
     }
 
+    @Override
     public List<Entity> matchEntities(CommandSender sender, String token) throws SelectorSyntaxException {
         var cachedMatches = MATCHES_CACHE.getIfPresent(token);
         //先从缓存确认不是非法选择器
@@ -172,10 +171,12 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         return entities;
     }
 
+    @Override
     public boolean checkValid(String token) {
         return MATCHES_CACHE.get(token, k -> ENTITY_SELECTOR.matcher(token).matches());
     }
 
+    @Override
     public boolean registerArgument(ISelectorArgument argument) {
         if (!registry.containsKey(argument.getKeyName())) {
             registry.put(argument.getKeyName(), argument);
