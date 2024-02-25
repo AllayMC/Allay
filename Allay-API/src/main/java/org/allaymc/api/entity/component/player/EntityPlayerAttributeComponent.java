@@ -11,12 +11,12 @@ import org.allaymc.api.entity.component.common.EntityAttributeComponent;
  */
 public interface EntityPlayerAttributeComponent extends EntityAttributeComponent {
 
-    default void setLevel(int value) {
+    default void setExperienceLevel(int value) {
         Preconditions.checkArgument(value >= 0 && value <= 24791);
         setAttribute(AttributeType.PLAYER_LEVEL, value);
     }
 
-    default int getLevel() {
+    default int getExperienceLevel() {
         return (int) getAttributeValue(AttributeType.PLAYER_LEVEL);
     }
 

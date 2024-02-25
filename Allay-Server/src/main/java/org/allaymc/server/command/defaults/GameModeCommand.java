@@ -27,7 +27,7 @@ public class GameModeCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .gameMode()
-                .target("player")
+                .playerTarget("players")
                 .optional()
                 .exec(context -> {
                     GameType gameType = context.getFirstResult();

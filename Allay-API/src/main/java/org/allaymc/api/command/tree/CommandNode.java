@@ -1,9 +1,11 @@
 package org.allaymc.api.command.tree;
 
+import com.google.common.collect.Lists;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
@@ -200,7 +202,7 @@ public interface CommandNode {
     }
 
     default CommandNode remain(String name) {
-        return remain(name, Collections.EMPTY_LIST);
+        return remain(name, Lists.newArrayList());
     }
 
     default CommandNode remain(String name, Object defaultValue) {
@@ -208,11 +210,19 @@ public interface CommandNode {
     }
 
     default CommandNode target(String name) {
-        return addLeaf(getFactory().target(name, this, Collections.EMPTY_LIST));
+        return addLeaf(getFactory().target(name, this, Lists.newArrayList()));
     }
 
     default CommandNode target(String name, List<Entity> defaultValue) {
         return addLeaf(getFactory().target(name, this, defaultValue));
+    }
+
+    default CommandNode playerTarget(String name) {
+        return addLeaf(getFactory().playerTarget(name, this, Lists.newArrayList()));
+    }
+
+    default CommandNode playerTarget(String name, List<EntityPlayer> defaultValue) {
+        return addLeaf(getFactory().playerTarget(name, this, defaultValue));
     }
 
     default CommandNode gameMode() {
