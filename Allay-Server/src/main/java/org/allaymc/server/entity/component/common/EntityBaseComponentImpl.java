@@ -418,7 +418,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void knockback(Vector3fc source) {
-        var kb = 1 - attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+        var resistance = 0.6f;
+        if (attributeComponent != null) {
+            resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+        }
+        var kb = 1 - resistance;
         if (kb <= 0) return;
         knockback(source, kb);
     }
