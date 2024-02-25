@@ -77,6 +77,15 @@ public interface Server extends TaskCreator, CommandSender {
     @UnmodifiableView
     Map<UUID, EntityPlayer> getOnlinePlayers();
 
+    default EntityPlayer findOnlinePlayerByName(String playerName) {
+        for (var player : getOnlinePlayers().values()) {
+            if (player.getName().equals(playerName)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
     void onConnect(BedrockServerSession session);
 
     void onLoggedIn(EntityPlayer player);
