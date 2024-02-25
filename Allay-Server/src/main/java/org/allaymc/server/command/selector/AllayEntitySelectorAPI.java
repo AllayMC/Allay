@@ -28,9 +28,6 @@ import static org.allaymc.api.command.selector.SelectorType.*;
  * Allay Project 2024/2/25
  *
  * @author daoge_cmd
- *
- * 目标选择器API<p/>
- * 通过{@code getAPI()}方法获取API对象
  */
 public class AllayEntitySelectorAPI implements EntitySelectorAPI {
     /**
