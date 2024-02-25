@@ -33,7 +33,7 @@ public class TestforCommand extends SimpleCommand {
                         var name = entity.getDisplayName();
                         if (name.isBlank()) name = entity.getEntityType().getIdentifier().toString();
                         return name;
-                    }).collect(Collectors.joining(",")));
+                    }).collect(Collectors.joining(", ")));
                     return context.success(entities.size());
                 });
     }
