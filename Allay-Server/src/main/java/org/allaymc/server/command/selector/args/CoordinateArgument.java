@@ -1,13 +1,13 @@
 package org.allaymc.server.command.selector.args;
 
-import org.allaymc.api.command.selector.args.ISelectorArgument;
+import org.allaymc.api.command.selector.args.SelectorArgument;
 
 /**
  * args like x,y,z.
  */
 
 
-public abstract class CoordinateArgument implements ISelectorArgument {
+public abstract class CoordinateArgument implements SelectorArgument {
 
     @Override
     public int getPriority() {

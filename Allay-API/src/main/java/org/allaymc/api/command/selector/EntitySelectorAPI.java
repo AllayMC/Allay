@@ -2,7 +2,7 @@ package org.allaymc.api.command.selector;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.command.selector.args.ISelectorArgument;
+import org.allaymc.api.command.selector.args.SelectorArgument;
 import org.allaymc.api.entity.Entity;
 
 import java.util.List;
@@ -45,5 +45,5 @@ public interface EntitySelectorAPI {
      * @param argument 选择器参数对象
      * @return 是否注册成功（若已存在相同key值的选择器参数则注册失败，返回false）
      */
-    boolean registerArgument(ISelectorArgument argument);
+    boolean registerArgument(SelectorArgument argument);
 }

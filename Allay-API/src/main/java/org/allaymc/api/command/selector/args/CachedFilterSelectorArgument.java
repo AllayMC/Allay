@@ -20,7 +20,7 @@ import java.util.function.Function;
  */
 
 
-public abstract class CachedFilterSelectorArgument implements ISelectorArgument {
+public abstract class CachedFilterSelectorArgument implements SelectorArgument {
 
     Cache<Set<String>, Function<List<Entity>, List<Entity>>> cache;
 

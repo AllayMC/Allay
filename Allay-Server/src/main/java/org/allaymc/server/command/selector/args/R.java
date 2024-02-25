@@ -4,14 +4,14 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.server.command.selector.ParseUtils;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.SelectorType;
-import org.allaymc.api.command.selector.args.ISelectorArgument;
+import org.allaymc.api.command.selector.args.SelectorArgument;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3f;
 
 import java.util.function.Predicate;
 
 
-public class R implements ISelectorArgument {
+public class R implements SelectorArgument {
     @Override
     public Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3f basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());

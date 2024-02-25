@@ -19,7 +19,7 @@ import java.util.function.Predicate;
  */
 
 
-public interface ISelectorArgument extends Comparable<ISelectorArgument>{
+public interface SelectorArgument extends Comparable<SelectorArgument>{
     /**
      * 根据给定的参数表返回特定的{@code List<Predicate<Entity>>}
      * @param arguments 参数列表
@@ -90,7 +90,7 @@ public interface ISelectorArgument extends Comparable<ISelectorArgument>{
     }
 
     @Override
-    default int compareTo(@NotNull ISelectorArgument o) {
+    default int compareTo(@NotNull SelectorArgument o) {
         return Integer.compare(this.getPriority(), o.getPriority());
     }
 }

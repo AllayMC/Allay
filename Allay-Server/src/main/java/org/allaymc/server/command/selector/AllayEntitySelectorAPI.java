@@ -8,7 +8,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.NPCCommandSender;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
-import org.allaymc.api.command.selector.args.ISelectorArgument;
+import org.allaymc.api.command.selector.args.SelectorArgument;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
@@ -36,8 +36,8 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
     private static final Cache<String, Map<String, List<String>>> ARGS_CACHE = Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();
     private static final Cache<String, Boolean> MATCHES_CACHE = Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();
 
-    Map<String, ISelectorArgument> registry = new HashMap<>();
-    List<ISelectorArgument> orderedArgs = new ArrayList<>();
+    Map<String, SelectorArgument> registry = new HashMap<>();
+    List<SelectorArgument> orderedArgs = new ArrayList<>();
 
     public AllayEntitySelectorAPI() {
         registerDefaultArguments();
@@ -174,7 +174,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
     }
 
     @Override
-    public boolean registerArgument(ISelectorArgument argument) {
+    public boolean registerArgument(SelectorArgument argument) {
         if (!registry.containsKey(argument.getKeyName())) {
             registry.put(argument.getKeyName(), argument);
             orderedArgs.add(argument);

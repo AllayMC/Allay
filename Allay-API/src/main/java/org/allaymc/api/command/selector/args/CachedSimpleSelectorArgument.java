@@ -20,7 +20,7 @@ import java.util.function.Predicate;
  */
 
 
-public abstract class CachedSimpleSelectorArgument implements ISelectorArgument {
+public abstract class CachedSimpleSelectorArgument implements SelectorArgument {
 
     Cache<Set<String>, Predicate<Entity>> cache;
 

@@ -2,7 +2,7 @@ package org.allaymc.server.command.selector.args;
 
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.selector.SelectorType;
-import org.allaymc.api.command.selector.args.ISelectorArgument;
+import org.allaymc.api.command.selector.args.SelectorArgument;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * args like dx,dy,dz.
  */
-public abstract class ScopeArgument implements ISelectorArgument {
+public abstract class ScopeArgument implements SelectorArgument {
     @Override
     public int getPriority() {
         return 2;
