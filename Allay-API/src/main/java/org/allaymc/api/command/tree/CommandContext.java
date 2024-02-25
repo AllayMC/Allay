@@ -119,6 +119,10 @@ public interface CommandContext {
         return CommandResult.success(this);
     }
 
+    default CommandResult success(int status) {
+        return new CommandResult(status, this);
+    }
+
     default CommandResult failed() {
         return CommandResult.failed(this);
     }
