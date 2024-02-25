@@ -54,7 +54,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         registerArgument(new R());
         registerArgument(new RM());
         registerArgument(new Name());
-//        registerArgument(new Tag()); TODO
+        registerArgument(new Tag());
         registerArgument(new L());
         registerArgument(new LM());
         registerArgument(new M());

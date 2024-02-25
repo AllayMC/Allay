@@ -31,6 +31,7 @@ import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -326,4 +327,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     default boolean canCriticalAttack() {
         return !isOnGround() && getMotion().y() < 0;
     }
+
+    boolean addTag(String tag);
+
+    boolean removeTag(String tag);
+
+    boolean hasTag(String tag);
+
+    @UnmodifiableView
+    Set<String> getTags();
 }

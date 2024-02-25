@@ -101,6 +101,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected float fallDistance = 0f;
     @Getter
     protected String displayName;
+    protected Set<String> tags = new HashSet<>();
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info) {
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -592,13 +593,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                                 .putFloat("dz", motion.z())
                                 .build())
                 .putBoolean("OnGround", onGround);
-        if (attributeComponent != null) {
-            // TODO: use component event
-            builder.putList(
-                    "Attributes",
-                    NbtType.COMPOUND,
-                    attributeComponent.saveAttributes()
-            );
+        if (!tags.isEmpty()) {
+            builder.putList("Tags", NbtType.STRING, new ArrayList<>(tags));
         }
         var event = new EntitySaveNBTEvent(builder);
         manager.callEvent(event);
@@ -623,6 +619,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         }
         if (nbt.containsKey("OnGround")) {
             onGround = nbt.getBoolean("OnGround");
+        }
+        if (nbt.containsKey("Tags")) {
+            tags.addAll(nbt.getList("Tags", NbtType.STRING));
         }
         var event = new EntityLoadNBTEvent(nbt);
         manager.callEvent(event);
@@ -749,5 +748,26 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public PermTree getPermTree() {
         return DefaultPermissions.OPERATOR;
+    }
+
+    @Override
+    public boolean addTag(String tag) {
+        return tags.add(tag);
+    }
+
+    @Override
+    public boolean removeTag(String tag) {
+        return tags.remove(tag);
+    }
+
+    @Override
+    public boolean hasTag(String tag) {
+        return tags.contains(tag);
+    }
+
+    @Override
+    @UnmodifiableView
+    public Set<String> getTags() {
+        return Collections.unmodifiableSet(tags);
     }
 }

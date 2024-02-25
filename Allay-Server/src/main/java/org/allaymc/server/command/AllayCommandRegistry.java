@@ -47,6 +47,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new WorldCommand());
         register(new OpCommand());
         register(new TestforCommand());
+        register(new TagCommand());
     }
 
     @Override

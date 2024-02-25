@@ -9,6 +9,7 @@ import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.event.EntityLoadNBTEvent;
+import org.allaymc.api.entity.component.event.EntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.identifier.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
@@ -51,6 +52,15 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
             }
             sendAttributesToClient();
         }
+    }
+
+    @ComponentEventListener
+    private void onSaveNBT(EntitySaveNBTEvent event) {
+        event.getNbt().putList(
+                "Attributes",
+                NbtType.COMPOUND,
+                saveAttributes()
+        );
     }
 
     @Override

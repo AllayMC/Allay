@@ -47,6 +47,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
