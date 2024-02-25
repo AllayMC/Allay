@@ -25,11 +25,11 @@ public class OpCommand extends SimpleCommand {
                     String playerName = context.getFirstResult();
                     var player = Server.getInstance().findOnlinePlayerByName(playerName);
                     if (player == null) {
-                        context.addError(TrKeys.M_COMMANDS_GENERIC_PLAYER_NOTFOUND);
+                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_PLAYER_NOTFOUND);
                         return context.failed();
                     }
                     if (player.isOp()) {
-                        context.addError(TrKeys.M_COMMANDS_OP_FAILED, playerName);
+                        context.addError("%" + TrKeys.M_COMMANDS_OP_FAILED, playerName);
                         return context.failed();
                     }
                     player.setOp(true);

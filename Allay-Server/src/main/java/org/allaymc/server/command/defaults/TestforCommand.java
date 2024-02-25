@@ -26,7 +26,7 @@ public class TestforCommand extends SimpleCommand {
                 .exec(context -> {
                     List<Entity> entities = context.getFirstResult();
                     if (entities.isEmpty()) {
-                        context.addError(TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
+                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
                         return context.failed();
                     }
                     context.addOutput(TrKeys.M_COMMANDS_TESTFOR_SUCCESS, entities.stream().map(entity -> {
