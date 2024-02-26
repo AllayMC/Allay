@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.server.player.PlayerInitializedEvent;
+import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.login.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;
@@ -27,7 +27,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         if (event.isCancelled()) {
             player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
         }
-        // We only accept player's movement inputs which are after SetLocalPlayerAsInitializedPacket
+        // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,
         // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
         // Otherwise the client will snap into the ground
         player.sendLocationToSelf();

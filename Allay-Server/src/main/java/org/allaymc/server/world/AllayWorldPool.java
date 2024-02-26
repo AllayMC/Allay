@@ -4,7 +4,7 @@ import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.eventbus.server.misc.WorldLoadEvent;
+import org.allaymc.api.eventbus.event.server.misc.WorldLoadEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 /**
  * Allay Project 2023/7/8
  *
@@ -32,9 +31,9 @@ public final class AllayWorldPool implements WorldPool {
 
     public static final Path WORLDS_FOLDER = Path.of("worlds");
     public static final String SETTINGS_FILE_NAME = "worlds.yml";
+    private final Map<String, World> worlds = new ConcurrentHashMap<>();
     @Getter
     private WorldConfig worldConfig;
-    private final Map<String, World> worlds = new ConcurrentHashMap<>();
 
     public AllayWorldPool() {
         loadWorldConfig();
@@ -87,7 +86,7 @@ public final class AllayWorldPool implements WorldPool {
             it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
             it.withBindFile(WORLDS_FOLDER.resolve(SETTINGS_FILE_NAME)); // specify Path, File or pathname
             it.withRemoveOrphans(true); // automatic removal of undeclared keys
-            it.saveDefaults(); // save file if does not exists
+            it.saveDefaults(); // save file if it does not exist
             it.load(true); // load and save to update comments/new fields
         });
     }
