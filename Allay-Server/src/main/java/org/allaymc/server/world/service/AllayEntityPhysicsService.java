@@ -46,6 +46,11 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final float FAT_AABB_MARGIN;
     public static final float BLOCK_COLLISION_MOTION;
 
+    private static final float MOMENTUM_FACTOR = 0.91f;
+    private static final float GROUND_VELOCITY_FACTOR = 0.1f;
+    private static final float AIR_VELOCITY_FACTOR = 0.02f;
+    private static final float DRAG_FACTOR = 0.98f;
+
     private static final int X = 0;
     private static final int Y = 1;
     private static final int Z = 2;
@@ -199,31 +204,40 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         entity.addMotion(collisionMotion);
     }
 
+    /**
+     * See: <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
+     */
     protected void updateMotion(Entity entity) {
-        // https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas
-        // TODO: Effect multiplier
-        float effectFactor = 1;
-        float movementFactor = entity.getMovementFactor();
+        var motion = entity.getMotion();
         var blockUnder = dimension.getBlockState((int) entity.getLocation().x(), (int) (entity.getLocation().y() - 0.5), (int) entity.getLocation().z());
-        float slipperyFactor = blockUnder != null ?
+
+        // 1. Multiplier factors
+        var movementFactor = entity.getMovementFactor();
+
+        // TODO: Effects Multiplier factor
+        var effectFactor = 1F;
+
+        var slipperinessMultiplier = blockUnder != null ?
                 blockUnder.getBlockType().getBlockBehavior().getBlockAttributes(blockUnder).friction() :
                 DEFAULT_FRICTION;
-        float mx = entity.getMotion().x();
-        float my = entity.getMotion().y();
-        float mz = entity.getMotion().z();
-        float newMx;
-        float newMz;
-        float approachMx = mx * slipperyFactor * 0.91f;
-        float approachMz = mz * slipperyFactor * 0.91f;
-        double yaw = entity.getLocation().yaw();
+
+        var momentumMx = motion.x() * slipperinessMultiplier * MOMENTUM_FACTOR;
+        var momentumMz = motion.z() * slipperinessMultiplier * MOMENTUM_FACTOR;
+
+        // 2. Complete Formulas
+        var velocityFactor = entity.isOnGround() ? GROUND_VELOCITY_FACTOR : AIR_VELOCITY_FACTOR;
+        var acceleration = velocityFactor * movementFactor;
         if (entity.isOnGround()) {
-            newMx = (float) (approachMx + 0.1f * movementFactor * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.sin(yaw));
-            newMz = (float) (approachMz + 0.1f * movementFactor * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.cos(yaw));
-        } else {
-            newMx = (float) (approachMx + 0.02f * movementFactor * Math.sin(yaw));
-            newMz = (float) (approachMz + 0.02f * movementFactor * Math.cos(yaw));
+            acceleration = (float) (movementFactor * effectFactor * Math.pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
         }
-        float newMy = (my - (entity.hasGravity() ? entity.getGravity() : 0f)) * 0.98f;
+
+        var yaw = entity.getLocation().yaw();
+
+        var newMx = (float) (momentumMx + acceleration * Math.sin(yaw));
+        var newMz = (float) (momentumMz + acceleration * Math.cos(yaw));
+        // Skip Sprint jump boost because this service does not handle player
+
+        var newMy = (motion.y() - (entity.hasGravity() ? entity.getGravity() : 0f)) * DRAG_FACTOR;
         entity.setMotion(checkMotionThreshold(new Vector3f(newMx, newMy, newMz)));
     }
 

@@ -1,7 +1,6 @@
 package org.allaymc.api.entity.component.common;
 
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
@@ -15,8 +14,6 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
@@ -31,10 +28,8 @@ import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Allay Project 2023/5/26
@@ -55,12 +50,12 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     void setDisplayName(String displayName);
 
-    default void setNameTag(String nameTag) {
-        setAndSendEntityData(EntityDataTypes.NAME, nameTag);
-    }
-
     default String getNameTag() {
         return getMetadata().get(EntityDataTypes.NAME);
+    }
+
+    default void setNameTag(String nameTag) {
+        setAndSendEntityData(EntityDataTypes.NAME, nameTag);
     }
 
     default void clearNameTag() {
@@ -87,10 +82,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     boolean isSpawned();
 
-    boolean canBeSpawned();
-
     @ApiStatus.Internal
     void setSpawned(boolean spawned);
+
+    boolean canBeSpawned();
 
     @ApiStatus.Internal
     void setLocationAndCheckChunk(Location3fc newLoc);
@@ -249,8 +244,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     void setHasGravity(boolean hasGravity);
 
     /**
-     * 给定yaw，若移动乘数不为0实体将往yaw指定的方向前进 <p>
-     * 参见：<a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas/zh">...</a>
+     * Given yaw, if the movement multiplier is not 0, the entity will move towards the direction specified by yaw. <p>
+     * See: <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
      */
     default float getMovementFactor() {
         return STOP_MOVEMENT_FACTOR;

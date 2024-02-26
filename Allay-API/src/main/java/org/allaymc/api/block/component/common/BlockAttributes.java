@@ -14,7 +14,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * Allay Project 2023/5/1
@@ -26,6 +26,10 @@ import java.awt.*;
 @Builder(toBuilder = true)
 @EqualsAndHashCode
 public class BlockAttributes {
+
+    /**
+     * See: <a href="https://www.mcpk.wiki/wiki/Slipperiness">Slipperiness</a>
+     */
     public static final float DEFAULT_FRICTION = 0.6f;
     public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
     protected static Gson SERIALIZER = new GsonBuilder()
@@ -39,27 +43,12 @@ public class BlockAttributes {
                 return new Color(r, g, b, a);
             })
             .create();
-
-    protected static AABBf parseAABBStr(String str) {
-        var numbers = AllayStringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
-        return new AABBf(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
-    }
-
-    public VoxelShape computeOffsetVoxelShape(float x, float y, float z) {
-        return voxelShape.translate(x, y, z);
-    }
-
-    public VoxelShape computeOffsetVoxelShape(Vector3fc vector) {
-        return computeOffsetVoxelShape(vector.x(), vector.y(), vector.z());
-    }
-
     /**
      * block collision box
      */
     @Builder.Default
     @SerializedName("aabbCollision")
     protected VoxelShape voxelShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
-
     @Builder.Default
     protected Color color = Color.BLACK;
     @Builder.Default
@@ -144,11 +133,16 @@ public class BlockAttributes {
     @Builder.Default
     protected boolean isSlabBlock = false;
 
+    protected static AABBf parseAABBStr(String str) {
+        var numbers = AllayStringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
+        return new AABBf(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5));
+    }
+
     public static BlockAttributes fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockAttributes.class);
     }
 
-    //TODO: test
+    // TODO: test
     public static BlockAttributes fromNBT(NbtMap nbt) {
         var colorObj = nbt.getCompound("color");
         var color = new Color(
@@ -198,5 +192,13 @@ public class BlockAttributes {
                 .thickness(nbt.getFloat("thickness"))
                 .translucency(nbt.getFloat("translucency"))
                 .build();
+    }
+
+    public VoxelShape computeOffsetVoxelShape(float x, float y, float z) {
+        return voxelShape.translate(x, y, z);
+    }
+
+    public VoxelShape computeOffsetVoxelShape(Vector3fc vector) {
+        return computeOffsetVoxelShape(vector.x(), vector.y(), vector.z());
     }
 }
