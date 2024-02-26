@@ -6,9 +6,11 @@ import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.event.server.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
@@ -63,6 +65,9 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
 
     @Override
     public CommandResult execute(CommandSender sender, String cmd) {
+        var event = new CommandExecuteEvent(sender, cmd);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) return CommandResult.fail();
         var spilt = spiltCommandArgs(cmd);
         var cmdName = spilt.pop(); // Command name
         var command = this.findCommand(cmdName);

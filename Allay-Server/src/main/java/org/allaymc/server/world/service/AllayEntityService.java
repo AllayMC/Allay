@@ -3,6 +3,8 @@ package org.allaymc.server.world.service;
 import io.netty.util.internal.PlatformDependent;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.event.world.entity.EntityDespawnEvent;
+import org.allaymc.api.event.world.entity.EntitySpawnEvent;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityService;
 import org.allaymc.server.world.chunk.AllayChunk;
@@ -37,6 +39,8 @@ public class AllayEntityService implements EntityService {
     }
 
     private void removeEntityImmediately(Entity entity) {
+        var event = new EntityDespawnEvent(entity);
+        entity.getWorld().getEventBus().callEvent(event);
         var chunk = (AllayChunk) entity.getCurrentChunk();
         if (chunk == null)
             throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
@@ -48,6 +52,8 @@ public class AllayEntityService implements EntityService {
     }
 
     private void addEntityImmediately(Entity entity) {
+        var event = new EntitySpawnEvent(entity);
+        entity.getWorld().getEventBus().callEvent(event);
         var chunk = (AllayChunk) entity.getCurrentChunk();
         if (chunk == null)
             throw new IllegalStateException("Entity can't spawn in unloaded chunk!");

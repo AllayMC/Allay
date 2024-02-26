@@ -24,6 +24,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.event.world.entity.EntityDieEvent;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.location.Location3f;
@@ -161,6 +162,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected void checkDead() {
         if (attributeComponent == null) return;
         if (attributeComponent.getHealth() == 0 && !dead) {
+            var event = new EntityDieEvent(thisEntity);
+            getWorld().getEventBus().callEvent(event);
             dead = true;
             deadTimer = DEFAULT_DEAD_TIMER;
             applyEntityEvent(EntityEventType.DEATH, 0);
@@ -407,7 +410,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
-        if (this.fallDistance > 0) this.onFall();
+        if (this.fallDistance > 0 || onGround) this.onFall();
     }
 
     @Override
@@ -638,10 +641,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void onFall() {
-        if (!this.onGround) return;
-
+        var event = new org.allaymc.api.event.world.entity.EntityFallEvent(thisEntity, fallDistance);
+        getWorld().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            this.fallDistance = 0;
+            return;
+        }
         this.manager.callEvent(new EntityFallEvent(this.fallDistance));
-
         this.fallDistance = 0;
     }
 
