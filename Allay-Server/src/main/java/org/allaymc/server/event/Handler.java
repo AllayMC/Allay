@@ -3,7 +3,6 @@ package org.allaymc.server.event;
 import me.sunlan.fastreflection.FastMemberLoader;
 import me.sunlan.fastreflection.FastMethod;
 import org.allaymc.api.event.EventException;
-import org.allaymc.api.server.Server;
 
 import java.lang.reflect.Method;
 import java.util.Map;
