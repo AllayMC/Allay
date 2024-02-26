@@ -64,6 +64,15 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
     }
 
     @Override
+    public Command unregister(String name) {
+        var cmd = getContent().remove(name);
+        if (cmd != null) {
+            cmd.getPermissions().forEach(DefaultPermissions.OPERATOR::removePerm);
+        }
+        return cmd;
+    }
+
+    @Override
     public CommandResult execute(CommandSender sender, String cmd) {
         var event = new CommandExecuteEvent(sender, cmd);
         Server.getInstance().getEventBus().callEvent(event);

@@ -23,11 +23,13 @@ public class ExamplePlugin extends Plugin {
     public void onEnable() {
         log.info("ExamplePlugin enabled!");
         Server.getInstance().getEventBus().registerListener(serverEventListener);
+        Server.getInstance().getCommandRegistry().register(new ExampleCommand());
     }
 
     @Override
     public void onDisable() {
         log.info("ExamplePlugin disabled!");
         Server.getInstance().getEventBus().unregisterListener(serverEventListener);
+        Server.getInstance().getCommandRegistry().unregister("example-cmd");
     }
 }

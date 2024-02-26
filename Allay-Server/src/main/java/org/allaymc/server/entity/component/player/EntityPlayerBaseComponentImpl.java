@@ -1,8 +1,10 @@
 package org.allaymc.server.entity.component.player;
 
 import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
@@ -23,6 +25,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.form.type.Form;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
@@ -50,15 +53,15 @@ import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Allay Project 2023/9/23
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
 
     @Dependency
@@ -86,6 +89,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Setter
     protected Location3ic spawnPoint;
     protected boolean needDimensionChangeACK;
+    protected AtomicInteger formIdCounter = new AtomicInteger(0);
+    protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
+    protected Map<Integer, Form> serverSettingForms = new Int2ObjectOpenHashMap<>();
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info);
@@ -557,5 +563,51 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public EntityPlayer asPlayer() {
         return thisEntity;
+    }
+
+    @Override
+    public Map<Integer, Form> getForms() {
+        return Collections.unmodifiableMap(forms);
+    }
+
+    @Override
+    public Form getForm(int id) {
+        return forms.get(id);
+    }
+
+    @Override
+    public Form removeForm(int id) {
+        return forms.remove(id);
+    }
+
+    public Map<Integer, Form> getServerSettingForms() {
+        return Collections.unmodifiableMap(serverSettingForms);
+    }
+
+    @Override
+    public Form getServerSettingForm(int id) {
+        return serverSettingForms.get(id);
+    }
+
+    @Override
+    public Form removeServerSettingForm(int id) {
+        return serverSettingForms.remove(id);
+    }
+
+    @Override
+    public void showForm(Form form) {
+        if (this.forms.size() > 100) {
+            networkComponent.disconnect("Possible DoS vulnerability: More Than 100 FormWindow sent to client already.");
+        }
+        var packet = new ModalFormRequestPacket();
+        var id = assignFormId();
+        packet.setFormId(id);
+        packet.setFormData(form.toJson());
+        forms.putIfAbsent(id, form);
+        networkComponent.sendPacket(packet);
+    }
+
+    protected int assignFormId() {
+        return formIdCounter.getAndIncrement();
     }
 }

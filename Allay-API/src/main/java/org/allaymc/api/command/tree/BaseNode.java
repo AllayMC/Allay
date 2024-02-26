@@ -193,7 +193,7 @@ public abstract class BaseNode implements CommandNode {
         this.executor = context -> {
             var sender = context.getSender();
             if (senderType.validate(sender)) {
-                return biExecutor.apply(context, (SENDER_TYPE) context.getSender());
+                return biExecutor.apply(context, senderType.caster().apply(context.getSender()));
             } else {
                 context.addInvalidExecutorError(senderType);
                 return context.fail();

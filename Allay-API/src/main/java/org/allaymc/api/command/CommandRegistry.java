@@ -18,6 +18,8 @@ public interface CommandRegistry extends MappedRegistry<String, Command, Map<Str
 
     void register(Command command);
 
+    Command unregister(String name);
+
     /**
      * @param sender 命令发送者
      * @param cmd 命令，不包含斜杠

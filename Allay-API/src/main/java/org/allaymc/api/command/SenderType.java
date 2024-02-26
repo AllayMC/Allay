@@ -10,14 +10,15 @@ import java.util.function.Function;
 
 public record SenderType<SENDER_TYPE extends CommandSender>(
         Function<CommandSender, Boolean> validator,
+        Function<CommandSender, SENDER_TYPE> caster,
         @MayContainTrKey String errorMsg
 ) {
 
-    public static SenderType<CommandSender> ANY = new SenderType<>(sender -> true, ""); // Can't be a wrong executor
-    public static SenderType<Server> SERVER = new SenderType<>(Server.class::isInstance, TrKeys.A_COMMAND_GENERIC_SENDER_NOTSERVER);
-    public static SenderType<EntityPlayer> PLAYER = new SenderType<>(CommandSender::isPlayer, TrKeys.A_COMMAND_GENERIC_SENDER_NOTPLAYER);
+    public static SenderType<CommandSender> ANY = new SenderType<>(sender -> true, cs -> cs, ""); // Can't be a wrong executor
+    public static SenderType<Server> SERVER = new SenderType<>(Server.class::isInstance, Server.class::cast, TrKeys.A_COMMAND_GENERIC_SENDER_NOTSERVER);
+    public static SenderType<EntityPlayer> PLAYER = new SenderType<>(CommandSender::isPlayer, CommandSender::asPlayer, TrKeys.A_COMMAND_GENERIC_SENDER_NOTPLAYER);
     // TODO: entity sender type
-     public static SenderType<Entity> ENTITY = new SenderType<>(CommandSender::isEntity, TrKeys.A_COMMAND_GENERIC_SENDER_NOTENTITY);
+     public static SenderType<Entity> ENTITY = new SenderType<>(CommandSender::isEntity, CommandSender::asEntity, TrKeys.A_COMMAND_GENERIC_SENDER_NOTENTITY);
 
     public boolean validate(CommandSender sender) {
         return validator.apply(sender);
