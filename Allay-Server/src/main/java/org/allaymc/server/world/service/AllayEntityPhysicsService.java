@@ -312,140 +312,15 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected Pair<Float, Boolean> moveAlongXAxisAndStopWhenCollision(AABBf aabb, float mx, Vector3f recorder) {
-        if (mx == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var extendX = new AABBf(aabb);
-        // 计算射线X轴起点坐标
-        float x;
-        if (mx < 0) {
-            // 向X轴负方向移动
-            x = aabb.minX;
-            extendX.maxX -= extendX.lengthX();
-            extendX.minX += mx;
-        } else {
-            // 向X轴正方向移动
-            x = aabb.maxX;
-            extendX.minX += extendX.lengthX();
-            extendX.maxX += mx;
-        }
-        var deltaX = mx;
-        var collision = false;
-        if (notValidEntityArea(extendX)) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var blocks = dimension.getCollidingBlocks(extendX);
-        if (blocks != null) {
-            collision = true;
-            // 存在碰撞
-            var minX = (float) floor(extendX.minX);
-            var maxX = computeMax(minX, 0, blocks);
-            if (isInRange(minX, x, maxX)) {
-                // 卡方块里面了
-                deltaX = 0;
-            } else {
-                deltaX = min(abs(x - minX), abs(x - maxX));
-                if (mx < 0) deltaX = -deltaX;
-                if (abs(deltaX) <= FAT_AABB_MARGIN) deltaX = 0;
-            }
-            // x轴方向速度归零
-            mx = 0;
-        }
-        // 移动碰撞箱
-        aabb.translate(deltaX, 0, 0);
-        // 更新坐标
-        recorder.x += deltaX;
-        return new FloatBooleanImmutablePair(mx, collision);
-        // return moveAlongAxisAndStopWhenCollision(aabb, mx, recorder, X);
+        return moveAlongAxisAndStopWhenCollision(aabb, mx, recorder, X);
     }
 
     protected Pair<Float, Boolean> moveAlongYAxisAndStopWhenCollision(AABBf aabb, float my, Vector3f recorder) {
-        /*if (my == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        AABBf extendY = new AABBf(aabb);
-        // 计算射线Y轴起点坐标
-        float y;
-        boolean down = false;
-        // 检查范围不包括实体aabb
-        if (my < 0) {
-            // 向下移动
-            down = true;
-            y = aabb.minY;
-            extendY.maxY -= extendY.lengthY();
-            extendY.minY += my;
-        } else {
-            // 向上移动
-            y = aabb.maxY;
-            extendY.minY += extendY.lengthY();
-            extendY.maxY += my;
-        }
-        log.info(extendY.toString());
-        var deltaY = my;
-        var onGround = false;
-        if (notValidEntityArea(extendY))
-            return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var blocks = dimension.getCollidingBlocks(extendY);
-        if (blocks != null) {
-            // 存在碰撞
-            if (down) onGround = true;
-            var minY = (float) floor(extendY.minY);
-            var maxY = computeMax(minY, 1, blocks);
-            if (isInRange(minY, y, maxY)) {
-                // 卡方块里面了
-                deltaY = 0;
-            } else {
-                deltaY = min(abs(y - minY), abs(y - maxY));
-                if (my < 0) deltaY = -deltaY;
-                if (abs(deltaY) <= FAT_AABB_MARGIN) deltaY = 0;
-            }
-            // y轴方向速度归零
-            my = 0;
-        }
-        // 移动碰撞箱
-        aabb.translate(0, deltaY, 0);
-        // 更新坐标
-        recorder.y += deltaY;
-        return new FloatBooleanImmutablePair(my, onGround);*/
         return moveAlongAxisAndStopWhenCollision(aabb, my, recorder, Y);
     }
 
     protected Pair<Float, Boolean> moveAlongZAxisAndStopWhenCollision(AABBf aabb, float mz, Vector3f recorder) {
-        if (mz == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var extendZ = new AABBf(aabb);
-        // 计算射线Z轴起点坐标
-        float z;
-        if (mz < 0) {
-            // 向Z轴负方向移动
-            z = aabb.minZ;
-            extendZ.maxZ -= extendZ.lengthZ();
-            extendZ.minZ += mz;
-        } else {
-            // 向Z轴正方向移动
-            z = aabb.maxZ;
-            extendZ.minZ += extendZ.lengthZ();
-            extendZ.maxZ += mz;
-        }
-        var deltaZ = mz;
-        var collision = false;
-        if (notValidEntityArea(extendZ)) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var blocks = dimension.getCollidingBlocks(extendZ);
-        if (blocks != null) {
-            collision = true;
-            // 存在碰撞
-            var minZ = (float) floor(extendZ.minZ);
-            var maxZ = computeMax(minZ, 2, blocks);
-            if (isInRange(minZ, z, maxZ)) {
-                // 卡方块里面了
-                deltaZ = 0;
-            } else {
-                deltaZ = min(abs(z - minZ), abs(z - maxZ));
-                if (mz < 0) deltaZ = -deltaZ;
-                if (abs(deltaZ) <= FAT_AABB_MARGIN) deltaZ = 0;
-            }
-            // z轴方向速度归零
-            mz = 0;
-        }
-        // 移动碰撞箱
-        aabb.translate(0, 0, deltaZ);
-        // 更新坐标
-        recorder.z += deltaZ;
-        return new FloatBooleanImmutablePair(mz, collision);
-        // return moveAlongAxisAndStopWhenCollision(aabb, mz, recorder, Z);
+        return moveAlongAxisAndStopWhenCollision(aabb, mz, recorder, Z);
     }
 
     /**
@@ -474,18 +349,21 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         switch (axis) {
             case X:
                 coordinate = shouldTowardsNegative ? aabb.minX : aabb.maxX;
-                extendAxis.minX += shouldTowardsNegative ? m : extendAxis.lengthX();
-                extendAxis.maxX += shouldTowardsNegative ? -extendAxis.lengthX() : m;
+                var lengthX = extendAxis.lengthX();
+                extendAxis.minX += shouldTowardsNegative ? m : lengthX;
+                extendAxis.maxX += shouldTowardsNegative ? -lengthX : m;
                 break;
             case Y:
                 coordinate = shouldTowardsNegative ? aabb.minY : aabb.maxY;
-                extendAxis.minY += shouldTowardsNegative ? m : extendAxis.lengthY();
-                extendAxis.maxY += shouldTowardsNegative ? -extendAxis.lengthY() : m;
+                var lengthY = extendAxis.lengthY();
+                extendAxis.minY += shouldTowardsNegative ? m : lengthY;
+                extendAxis.maxY += shouldTowardsNegative ? -lengthY : m;
                 break;
             case Z:
                 coordinate = shouldTowardsNegative ? aabb.minZ : aabb.maxZ;
-                extendAxis.minZ += shouldTowardsNegative ? m : extendAxis.lengthZ();
-                extendAxis.maxZ += shouldTowardsNegative ? -extendAxis.lengthZ() : m;
+                var lengthZ = extendAxis.lengthZ();
+                extendAxis.minZ += shouldTowardsNegative ? m : lengthZ;
+                extendAxis.maxZ += shouldTowardsNegative ? -lengthZ : m;
                 break;
             default:
                 throw new IllegalArgumentException("Invalid axis provided");
