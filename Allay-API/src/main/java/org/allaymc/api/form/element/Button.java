@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class Button {
+public final class Button {
 
     private String text;
     private ButtonImageData image;

@@ -11,7 +11,7 @@ import org.allaymc.api.form.FormException;
  */
 @Setter
 @Getter
-public class ButtonImageData {
+public final class ButtonImageData {
 
     public static final String PATH_TYPE = "path";
     public static final String URL_TYPE = "url";

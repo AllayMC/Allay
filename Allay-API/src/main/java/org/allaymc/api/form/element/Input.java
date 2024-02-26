@@ -9,7 +9,7 @@ import lombok.Setter;
  *
  * @author daoge_cmd
  */
-public class Input extends CustomFormElement {
+public final class Input extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "input";

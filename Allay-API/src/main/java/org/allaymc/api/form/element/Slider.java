@@ -9,7 +9,7 @@ import lombok.Setter;
  *
  * @author daoge_cmd
  */
-public class Slider extends CustomFormElement {
+public final class Slider extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "slider";

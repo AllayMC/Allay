@@ -4,14 +4,16 @@ import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
-import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.form.type.Form;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Map;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
 
@@ -101,4 +103,20 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     @ApiStatus.Internal
     void sendDimensionChangeSuccess();
+
+    @UnmodifiableView
+    Map<Integer, Form> getForms();
+
+    Form getForm(int id);
+
+    Form removeForm(int id);
+
+    @UnmodifiableView
+    Map<Integer, Form> getServerSettingForms();
+
+    Form getServerSettingForm(int id);
+
+    Form removeServerSettingForm(int id);
+
+    void showForm(Form form);
 }

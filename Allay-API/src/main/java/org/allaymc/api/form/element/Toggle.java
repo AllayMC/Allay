@@ -9,7 +9,7 @@ import lombok.Setter;
  *
  * @author daoge_cmd
  */
-public class Toggle extends CustomFormElement {
+public final class Toggle extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "toggle";

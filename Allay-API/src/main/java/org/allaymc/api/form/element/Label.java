@@ -8,7 +8,7 @@ import lombok.Setter;
  *
  * @author daoge_cmd
  */
-public class Label extends CustomFormElement {
+public final class Label extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "label";

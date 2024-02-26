@@ -6,7 +6,7 @@ import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.server.command.CommandExecuteEvent;
+import org.allaymc.api.eventbus.event.server.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.registry.SimpleMappedRegistry;
@@ -61,6 +61,15 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
     public void register(Command command) {
         register(command.getName(), command);
         command.getPermissions().forEach(DefaultPermissions.OPERATOR::addPerm);
+    }
+
+    @Override
+    public Command unregister(String name) {
+        var cmd = getContent().remove(name);
+        if (cmd != null) {
+            cmd.getPermissions().forEach(DefaultPermissions.OPERATOR::removePerm);
+        }
+        return cmd;
     }
 
     @Override
