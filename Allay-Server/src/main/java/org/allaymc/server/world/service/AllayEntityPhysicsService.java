@@ -275,12 +275,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * @param motion         The component of the object's movement velocity along the specified axis (X or Z).
      * @param aabb           The Axis-Aligned Bounding Box (AABB) of the object.
      * @param enableStepping Flag indicating whether the object can step over obstacles.
-     * @param axis           The axis along which the motion is applied (X, Y, or Z).
+     * @param axis           The axis along which the motion is applied (X or Z).
      *
      * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections.
      */
     private float applyMotion0(float stepHeight, Location3f pos, float motion, AABBf aabb, boolean enableStepping, int axis) {
         if (motion == 0) return motion;
+        if (axis < X || axis > Z) throw new IllegalArgumentException("Invalid axis: " + axis);
 
         var resultAABB = new AABBf(aabb);
         var resultPos = new Vector3f(pos);
