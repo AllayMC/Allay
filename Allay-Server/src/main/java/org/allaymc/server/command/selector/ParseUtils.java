@@ -1,17 +1,22 @@
 package org.allaymc.server.command.selector;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.server.Server;
 
 /**
- * 一些有关目标选择器解析的常用静态函数
+ * Some commonly used static functions about target selector parsing
  */
+@UtilityClass
 public class ParseUtils {
+
     /**
-     * 解析偏移int值
-     * @param value 文本
-     * @param base 基础值
-     * @return 偏移值
+     * Parse the offset int value
+     *
+     * @param value Text
+     * @param base  Base value
+     *
+     * @return Offset value
      */
     public static int parseOffsetInt(String value, int base) throws SelectorSyntaxException {
         try {
@@ -26,10 +31,12 @@ public class ParseUtils {
     }
 
     /**
-     * 解析偏移double值
-     * @param value 文本
-     * @param base 基础值
-     * @return 偏移值
+     * Parse the offset double value
+     *
+     * @param value Text
+     * @param base  Base value
+     *
+     * @return Offset value
      */
     public static float parseOffsetFloat(String value, float base) throws SelectorSyntaxException {
         try {
@@ -44,17 +51,20 @@ public class ParseUtils {
     }
 
     /**
-     * 检查参数是否反转
-     * @param value 给定字符串
-     * @return 是否反转
+     * Check if the parameter is reversed
+     *
+     * @param value Given string
+     *
+     * @return Whether it is reversed
      */
     public static boolean checkReversed(String value) {
         return value.startsWith("!");
     }
 
     /**
-     * 要求参数不能取反。若取反，则抛出{@link SelectorSyntaxException}
-     * @param value 给定字符串
+     * Require the parameter not to be reversed. If reversed, throw {@link SelectorSyntaxException}
+     *
+     * @param value Given string
      */
     public static void cannotReversed(String value) throws SelectorSyntaxException {
         if (checkReversed(value))
@@ -62,9 +72,10 @@ public class ParseUtils {
     }
 
     /**
-     * 要求参数不能多于1
-     * @param args 参数列表
-     * @param keyName 参数键名
+     * Require the parameter not to be more than 1
+     *
+     * @param args    Parameter list
+     * @param keyName Parameter key name
      */
     public static void singleArgument(String[] args, String keyName) throws SelectorSyntaxException {
         if (args.length > 1)
@@ -72,11 +83,13 @@ public class ParseUtils {
     }
 
     /**
-     * 检查给定值是否在给定的两个数之间
-     * @param bound1 边界1
-     * @param bound2 边界2
-     * @param value 之值
-     * @return 给定值是否在给定的两个数之间
+     * Check if the given value is between the given two numbers
+     *
+     * @param bound1 Boundary 1
+     * @param bound2 Boundary 2
+     * @param value  The value
+     *
+     * @return Whether the given value is between the given two numbers
      */
     public static boolean checkBetween(double bound1, double bound2, double value) {
         return bound1 < bound2 ?
@@ -85,10 +98,11 @@ public class ParseUtils {
     }
 
     /**
-     * 通过给定游戏模式字符串解析游戏模式数字<p/>
-     * 此方法可匹配参数与原版选择器参数m给定预定值相同
-     * @param token 字符串
-     * @return 游戏模式数字
+     * Parse the game mode number from the given game mode string<p/>This method matches the parameter with the predefined value of the original selector parameter m
+     *
+     * @param token String
+     *
+     * @return Game mode number
      */
     public static int parseGameMode(String token) throws SelectorSyntaxException {
         return switch (token) {

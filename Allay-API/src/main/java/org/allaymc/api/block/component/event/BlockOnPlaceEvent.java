@@ -1,5 +1,6 @@
 package org.allaymc.api.block.component.event;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
@@ -11,18 +12,8 @@ import org.allaymc.api.eventbus.event.Event;
  * @author daoge_cmd
  */
 @Getter
+@AllArgsConstructor
 public class BlockOnPlaceEvent extends Event {
     protected BlockStateWithPos currentBlockState;
     protected BlockState newBlockState;
-
-    /**
-     *
-     */
-    public BlockOnPlaceEvent(
-            BlockStateWithPos currentBlockState,
-            BlockState newBlockState
-    ) {
-        this.currentBlockState = currentBlockState;
-        this.newBlockState = newBlockState;
-    }
 }

@@ -1,16 +1,15 @@
 package org.allaymc.server.command.selector.args;
 
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.server.command.selector.ParseUtils;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.SelectorType;
 import org.allaymc.api.command.selector.args.SelectorArgument;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3f;
+import org.allaymc.server.command.selector.ParseUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
-
 
 public class RM implements SelectorArgument {
     @Override

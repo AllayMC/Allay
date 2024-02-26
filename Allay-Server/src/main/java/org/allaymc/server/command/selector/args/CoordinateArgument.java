@@ -5,8 +5,6 @@ import org.allaymc.api.command.selector.args.SelectorArgument;
 /**
  * args like x,y,z.
  */
-
-
 public abstract class CoordinateArgument implements SelectorArgument {
 
     @Override

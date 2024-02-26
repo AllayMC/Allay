@@ -9,8 +9,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public abstract class PlayerEvent extends Event {
     protected EntityPlayer player;
 }

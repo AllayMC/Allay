@@ -69,28 +69,27 @@ public final class AllayServer implements Server {
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
-    //TODO: skin update
+    // TODO: skin update
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
     private final PlayerStorage playerStorage =
             Server.SETTINGS.storageSettings().savePlayerData() ?
             new AllayNBTFilePlayerStorage(Path.of("players")) :
             AllayEmptyPlayerStorage.INSTANCE;
-    //执行CPU密集型任务的线程池
+    // Thread pool for executing CPU-intensive tasks
     @Getter
-    private final ThreadPoolExecutor computeThreadPool =
-            new ThreadPoolExecutor(
-                Runtime.getRuntime().availableProcessors(),
-                Runtime.getRuntime().availableProcessors(),
-                0,
-                TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(),
-                r -> {
-                    Thread thread = new Thread(r);
-                    thread.setName("computation-thread-" + thread.threadId());
-                    return thread;
+    private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(
+            Runtime.getRuntime().availableProcessors(),
+            Runtime.getRuntime().availableProcessors(),
+            0,
+            TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(),
+            r -> {
+                Thread thread = new Thread(r);
+                thread.setName("computation-thread-" + thread.threadId());
+                return thread;
             });
-    //执行IO密集型任务的线程池
+    // Thread pool for executing I/O-intensive tasks
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
     @Getter
@@ -109,22 +108,20 @@ public final class AllayServer implements Server {
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
     @Getter
     private long startTime;
-    private BanInfo banInfo =
-            ConfigManager.create(BanInfo.class, it -> {
-                it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
-                it.withBindFile("ban-info.yml"); // specify Path, File or pathname
-                it.withRemoveOrphans(true); // automatic removal of undeclared keys
-                it.saveDefaults(); // save file if it does not exist
-                it.load(true); // load and save to update comments/new fields
-            });
-    private Whitelist whitelist =
-            ConfigManager.create(Whitelist.class, it -> {
-                it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
-                it.withBindFile("whitelist.yml"); // specify Path, File or pathname
-                it.withRemoveOrphans(true); // automatic removal of undeclared keys
-                it.saveDefaults(); // save file if it does not exist
-                it.load(true); // load and save to update comments/new fields
-            });
+    private final BanInfo banInfo = ConfigManager.create(BanInfo.class, it -> {
+        it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
+        it.withBindFile("ban-info.yml"); // specify Path, File or pathname
+        it.withRemoveOrphans(true); // automatic removal of undeclared keys
+        it.saveDefaults(); // save file if it does not exist
+        it.load(true); // load and save to update comments/new fields
+    });
+    private final Whitelist whitelist = ConfigManager.create(Whitelist.class, it -> {
+        it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
+        it.withBindFile("whitelist.yml"); // specify Path, File or pathname
+        it.withRemoveOrphans(true); // automatic removal of undeclared keys
+        it.saveDefaults(); // save file if it does not exist
+        it.load(true); // load and save to update comments/new fields
+    });
 
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
@@ -175,7 +172,6 @@ public final class AllayServer implements Server {
         pluginManager = new AllayPluginManager();
         pluginManager.loadPlugins();
         pluginManager.enablePlugins();
-        // TODO: plugin
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         networkServer.start();
         startTime = System.currentTimeMillis();

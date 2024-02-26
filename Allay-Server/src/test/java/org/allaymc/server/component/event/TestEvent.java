@@ -1,5 +1,6 @@
 package org.allaymc.server.component.event;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.eventbus.event.Event;
@@ -11,10 +12,7 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @Getter
 @Setter
+@AllArgsConstructor
 public class TestEvent extends Event {
     private String message;
-
-    public TestEvent(String message) {
-        this.message = message;
-    }
 }

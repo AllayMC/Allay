@@ -1,10 +1,10 @@
 package org.allaymc.server.eventbus;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.EventException;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
 
@@ -24,22 +24,20 @@ public class AllayEventBus implements EventBus {
     protected final Map<Object, List<Handler>> listenerToHandlerMap = new Object2ObjectOpenHashMap<>();
     protected final ExecutorService asyncExecutorService;
 
-    public AllayEventBus(ExecutorService asyncExecutorService) {
-        this.asyncExecutorService = asyncExecutorService;
-    }
-
     public AllayEventBus() {
         this(Server.getInstance().getVirtualThreadPool());
+    }
+
+    public AllayEventBus(ExecutorService asyncExecutorService) {
+        this.asyncExecutorService = asyncExecutorService;
     }
 
     @Override
     public synchronized void registerListener(Object listener) {
         for (var method : ReflectionUtils.getAllMethods(listener.getClass())) {
             var annotation = method.getAnnotation(EventHandler.class);
-            if (annotation == null) {
-                continue;
-            }
-            if (!(method.getReturnType() == void.class)) {
+            if (annotation == null) continue;
+            if (method.getReturnType() != void.class) {
                 throw new EventException("Event handler method must return void: " + method.getName() + " in listener " + listener.getClass().getName());
             }
             if (method.getParameterCount() != 1) {

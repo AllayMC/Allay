@@ -20,7 +20,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
-import java.util.stream.Collectors;
 
 import static org.allaymc.api.command.selector.SelectorType.*;
 
@@ -30,8 +29,9 @@ import static org.allaymc.api.command.selector.SelectorType.*;
  * @author daoge_cmd
  */
 public class AllayEntitySelectorAPI implements EntitySelectorAPI {
+
     /**
-     * 对目标选择器文本的预解析缓存
+     * Pre-parsing cache for target selector text
      */
     private static final Cache<String, Map<String, List<String>>> ARGS_CACHE = Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();
     private static final Cache<String, Boolean> MATCHES_CACHE = Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();
@@ -63,58 +63,57 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         registerArgument(new RXM());
         registerArgument(new RY());
         registerArgument(new RYM());
-//        registerArgument(new Scores()); TODO
+        // registerArgument(new Scores()); TODO
     }
 
     @Override
     public List<Entity> matchEntities(CommandSender sender, String token) throws SelectorSyntaxException {
         var cachedMatches = MATCHES_CACHE.getIfPresent(token);
-        //先从缓存确认不是非法选择器
+        // First confirm from the cache that it is not an illegal selector
         if (cachedMatches != null && !cachedMatches)
             throw new SelectorSyntaxException("Malformed entity selector token");
         Matcher matcher = ENTITY_SELECTOR.matcher(token);
-        //非法目标选择器文本
+        // Illegal target selector text
         if (!matcher.matches()) {
-            //记录非法选择器到缓存
+            // Record the illegal selector to the cache
             MATCHES_CACHE.put(token, false);
             throw new SelectorSyntaxException("Malformed entity selector token");
         }
-        //查询是否存在预解析结果。若不存在则解析
+        // Query if there is a pre-parsing result. If not, parse
         Map<String, List<String>> arguments = ARGS_CACHE.getIfPresent(token);
         if (arguments == null) {
             arguments = parseArgumentMap(matcher.group(2));
             ARGS_CACHE.put(token, arguments);
         }
-        //获取克隆过的执行者位置信息
+        // Get the cloned location information of the executor
         var senderLocation = new Location3f(sender.getCmdExecuteLocation());
-        //获取选择器类型
+        // Get the selector type
         var selectorType = parseSelectorType(matcher.group(1));
-        //根据选择器类型先确定实体检测范围
+        // Determine the entity detection range according to the selector type first
         List<Entity> entities;
         if (selectorType != SELF) {
             entities = Lists.newArrayList(senderLocation.dimension().getEntities().values());
         } else {
             if (sender.isEntity())
                 entities = Lists.newArrayList(sender.asEntity());
-            //没有符合条件的实体
+                // There is no entity that meets the condition.
             else return Lists.newArrayList();
         }
-        //若是NPC触发选择器，则只处理触发NPC对话的玩家
+        // If the NPC triggers the selector, only the player who triggers the NPC dialogue is processed
         if (selectorType == NPC_INITIATOR) {
             if (sender instanceof NPCCommandSender npc)
                 entities = Lists.newArrayList(npc.getInitiator());
             else
                 return Lists.newArrayList();
         }
-        //对于确定的玩家类型选择器，排除掉不是玩家的实体
+        // For the player type selector that is determined, exclude entities that are not players
         switch (selectorType) {
-            case ALL_PLAYERS, NEAREST_PLAYER ->
-                entities.removeIf(e -> !(e instanceof EntityPlayer));
+            case ALL_PLAYERS, NEAREST_PLAYER -> entities.removeIf(e -> !(e instanceof EntityPlayer));
             default -> {}
         }
-        //没符合条件的实体了，return
+        // There is no entity that meets the condition, return
         if (entities.isEmpty()) return entities;
-        //参照坐标
+        // Refer to the coordinates
         for (var arg : orderedArgs) {
             try {
                 if (!arg.isFilter()) {
@@ -135,15 +134,15 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
             } catch (Throwable t) {
                 throw new SelectorSyntaxException("Error while parsing selector argument: " + arg.getKeyName(), t);
             }
-            //没符合条件的实体了，return
+            // There is no entity that meets the condition, return
             if (entities.isEmpty()) return entities;
         }
-        //随机选择一个
+        // Randomly select one
         if (selectorType == RANDOM_PLAYER && !entities.isEmpty()) {
             var index = ThreadLocalRandom.current().nextInt(entities.size()) + 1;
             Entity currentEntity = null;
             int i = 1;
-            for (var localCurrent : entities){
+            for (var localCurrent : entities) {
                 if (i == index) {
                     currentEntity = localCurrent;
                     break;
@@ -152,7 +151,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
             }
             return Lists.newArrayList(currentEntity);
         }
-        //选择最近玩家
+        // Select the closest player
         if (selectorType == NEAREST_PLAYER && entities.size() != 1) {
             Entity nearest = null;
             float min = Float.MAX_VALUE;
@@ -231,6 +230,6 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         if (start < inputArguments.length())
             result.add(inputArguments.substring(start));
 
-        return result.stream().filter(s -> !s.isEmpty()).collect(Collectors.toList());
+        return result.stream().filter(s -> !s.isEmpty()).toList();
     }
 }

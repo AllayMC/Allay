@@ -1,5 +1,6 @@
 package org.allaymc.api.block.component.event;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.data.BlockFace;
@@ -16,6 +17,7 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 @Getter
+@AllArgsConstructor
 public final class BlockOnInteractEvent extends Event {
     private final EntityPlayer player;
     private final ItemStack itemStack;
@@ -26,20 +28,4 @@ public final class BlockOnInteractEvent extends Event {
     private final BlockFace blockFace;
     @Setter
     private boolean success;
-
-    /**
-     *
-     */
-    public BlockOnInteractEvent(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos,
-                                Vector3ic placeBlockPos, Vector3fc clickPos,
-                                BlockFace blockFace, boolean success) {
-        this.player = player;
-        this.itemStack = itemStack;
-        this.dimension = dimension;
-        this.blockPos = blockPos;
-        this.placeBlockPos = placeBlockPos;
-        this.clickPos = clickPos;
-        this.blockFace = blockFace;
-        this.success = success;
-    }
 }

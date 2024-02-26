@@ -39,13 +39,8 @@ public class Handler {
     }
 
     public void invoke(Object event) {
-        if (!async) {
-            invoke0(event);
-        } else {
-            asyncExecutorService.submit(() -> {
-                invoke0(event);
-            });
-        }
+        if (!async) invoke0(event);
+        else asyncExecutorService.submit(() -> invoke0(event));
     }
 
     protected void invoke0(Object event) {
