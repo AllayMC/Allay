@@ -212,7 +212,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     public void setLocation(Location3fc location, boolean calculateFallDistance) {
-        // Calculate fall distance
         if (calculateFallDistance && !this.onGround) {
             if (this.fallDistance < 0) this.fallDistance = 0;
             this.fallDistance -= location.y() - this.location.y();
@@ -303,7 +302,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
         if (newChunk != null) ((AllayChunk) newChunk).addEntity(thisEntity);
         else {
-            // Moving into an unloaded chunk is not allowed. Because the entity is held by the chunk, moving to an unloaded chunk will result in the loss of the entity
+            // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
+            // moving to an unloaded chunk will result in the loss of the entity
             log.debug("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
         }
     }
@@ -324,7 +324,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (event.isCancelled()) return;
         target = event.getTo();
         if (this.location.dimension == target.dimension()) {
-            // Teleporting in the current same dimension, and we just need to move the entity to the new coordination
+            // Teleporting in the current same dimension,
+            // and we just need to move the entity to the new coordination
             teleportInDimension(target);
         } else {
             teleportOverDimension(target);
@@ -438,7 +439,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public void knockback(Vector3fc source, float kb) {
         Vector3f vec;
         if (getLocation().distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
-            // Random kb direction if distance <= 0.01m
+            // Random kb direction of distance <= 0.01m
             var rand = ThreadLocalRandom.current();
             var rx = rand.nextFloat(1) - 0.5f;
             var rz = rand.nextFloat(1) - 0.5f;
@@ -624,7 +625,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             location.setPitch(rot.y);
         }
         if (nbt.containsKey("Motion")) {
-            // 什么? mot!
+            // What? mot!
             var mot = readVector3f(nbt, "Motion", "dx", "dy", "dz");
             motion.set(mot);
         }
