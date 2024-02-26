@@ -37,6 +37,7 @@ import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
  */
 @Slf4j
 public class AllayChunkService implements ChunkService {
+
     private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.SETTINGS.genericSettings().maxClientCount());
@@ -67,7 +68,7 @@ public class AllayChunkService implements ChunkService {
     }
 
     private void tickChunkLoaders() {
-        //NOTICE: There is no need to use parallel stream here
+        // NOTICE: There is no need to use parallel stream here
         chunkLoaderManagers.values().forEach(ChunkLoaderManager::tick);
     }
 
@@ -119,14 +120,13 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
-
     public Chunk getChunk(long chunkHash) {
         return loadedChunks.get(chunkHash);
     }
 
     @SlowOperation
     @Override
-    public Chunk getChunkImmediately(int x, int z) {
+    public synchronized Chunk getChunkImmediately(int x, int z) {
         return getOrLoadChunk(x, z).join();
     }
 
@@ -177,11 +177,11 @@ public class AllayChunkService implements ChunkService {
                     log.error("Error while generating chunk (" + x + "," + z + ") !", t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
-                .thenApplyAsync(prepareChunk -> {
+                .thenApply(prepareChunk -> {
                     setChunk(x, z, prepareChunk);
                     loadingChunks.remove(hashXZ);
                     return prepareChunk;
-                }, Server.getInstance().getVirtualThreadPool())
+                })
         );
         if (presentValue == null) {
             return loadingChunks.get(hashXZ);
@@ -306,6 +306,7 @@ public class AllayChunkService implements ChunkService {
     }
 
     private final class ChunkLoaderManager {
+        private final ChunkLoader chunkLoader;
         private final LongComparator chunkDistanceComparator = new LongComparator() {
             @Override
             public int compare(long chunkHash1, long chunkHash2) {
@@ -323,7 +324,6 @@ public class AllayChunkService implements ChunkService {
                 );
             }
         };
-        private final ChunkLoader chunkLoader;
         // Save all chunk hash values that have been sent in the last tick
         private final LongOpenHashSet sentChunks = new LongOpenHashSet();
         // Save all chunk hash values that will be sent in this tick
@@ -382,15 +382,15 @@ public class AllayChunkService implements ChunkService {
 
         private void updateChunkSendingQueue() {
             chunkSendQueue.clear();
-            //已经发送的区块不再二次发送
+            // Blocks that have already been sent will not be resent
             Sets.SetView<Long> difference = Sets.difference(inRadiusChunks, sentChunks);
             difference.stream().sorted(chunkDistanceComparator).forEachOrdered(v -> chunkSendQueue.enqueue(v.longValue()));
         }
 
         private void loadAndSendQueuedChunks() {
-//            // Send ncp to client every tick to reduce the possibility of chunk disappearing.
-//            // This solution is same to what dragonfly does
-//            chunkLoader.publishClientChunkUpdate();
+            // Send ncp to a client every tick to reduce the possibility of chunk disappearing.
+            // This solution is similar to what dragonfly does
+            chunkLoader.publishClientChunkUpdate();
             if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int triedSendChunkCount = 0;
@@ -414,7 +414,7 @@ public class AllayChunkService implements ChunkService {
                 var chunkSendingStrategy = worldSettings.chunkSendingStrategy();
                 var useSubChunkSendingSystem = Server.SETTINGS.worldSettings().useSubChunkSendingSystem();
                 if (useSubChunkSendingSystem) {
-                    // Use SYNC mode if sub-chunk sending system is enabled
+                    // Use SYNC mode if a sub-chunk sending system is enabled
                     // Because the encoding of sub-chunk lcp is very quick
                     chunkSendingStrategy = SYNC;
                 }
@@ -436,7 +436,7 @@ public class AllayChunkService implements ChunkService {
                         lcpStream = chunkReadyToSend.values().stream();
                     }
                     lcps = lcpStream.map(chunk -> useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk()).toList();
-                    // 2. Send lcps to client
+                    // 2. Send lcps to a client
                     for (var lcp : lcps) {
                         chunkLoader.sendLevelChunkPacket(lcp);
                     }
