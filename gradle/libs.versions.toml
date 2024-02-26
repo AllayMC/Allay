@@ -1,5 +1,5 @@
 [versions]
-log4j = "2.22.1"
+log4j = "2.23.0"
 junit = "5.10.2"
 mockito = "5.10.0"
 graalvm = "23.1.2"
