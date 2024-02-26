@@ -38,14 +38,14 @@ public class GameModeCommand extends SimpleCommand {
                             players.add(player);
                         } else {
                             context.addInvalidExecutorError(SenderType.PLAYER);
-                            return context.failed();
+                            return context.fail();
                         }
                     } else {
                         // target arg is filled, check if the target is matched
                         players.addAll(context.getSecondResult());
                         if (players.isEmpty()) {
                             context.addNoTargetMatchError();
-                            return context.failed();
+                            return context.fail();
                         }
                     }
                     for (var player : players) {

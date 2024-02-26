@@ -123,8 +123,8 @@ public interface CommandContext {
         return new CommandResult(status, this);
     }
 
-    default CommandResult failed() {
-        return CommandResult.failed(this);
+    default CommandResult fail() {
+        return CommandResult.fail(this);
     }
 
     <T> T getResult(int index);

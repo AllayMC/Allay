@@ -1,0 +1,34 @@
+package org.allaymc.server.command.defaults;
+
+import org.allaymc.api.command.SimpleCommand;
+import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.server.Server;
+
+/**
+ * Allay Project 2024/2/26
+ *
+ * @author daoge_cmd
+ */
+public class BanIPCommand extends SimpleCommand {
+
+    public BanIPCommand() {
+        super("ban-ip", TrKeys.M_COMMANDS_BANIP_DESCRIPTION);
+    }
+
+    @Override
+    public void prepareCommandTree(CommandTree tree) {
+        tree.getRoot()
+                .str("ip")
+                .exec(context -> {
+                    String ip = context.getFirstResult();
+                    if (Server.getInstance().banIP(ip)) {
+                        context.addOutput(TrKeys.M_COMMANDS_BANIP_SUCCESS, ip);
+                        return context.success();
+                    } else {
+                        context.addError("IP " + ip + " is already banned!");
+                        return context.fail();
+                    }
+                });
+    }
+}

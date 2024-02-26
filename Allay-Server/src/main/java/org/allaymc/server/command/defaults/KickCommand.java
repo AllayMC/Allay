@@ -31,7 +31,7 @@ public class KickCommand extends SimpleCommand {
                         }
                     }
                     context.addError("Unknown player: " + name);
-                    return context.failed();
+                    return context.fail();
                 });
     }
 }

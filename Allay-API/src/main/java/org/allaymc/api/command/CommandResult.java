@@ -9,15 +9,15 @@ import org.allaymc.api.command.tree.CommandContext;
  */
 public record CommandResult(int status, CommandContext context) {
 
-    public static int FAILED_STATUS = 0;
+    public static int FAIL_STATUS = 0;
     public static int SUCCESS_STATUS = 1;
 
-    public static CommandResult failed(CommandContext context) {
-        return new CommandResult(FAILED_STATUS, context);
+    public static CommandResult fail(CommandContext context) {
+        return new CommandResult(FAIL_STATUS, context);
     }
 
-    public static CommandResult failed() {
-        return failed(null);
+    public static CommandResult fail() {
+        return fail(null);
     }
 
     public static CommandResult success(CommandContext context) {

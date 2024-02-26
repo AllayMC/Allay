@@ -13,7 +13,6 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.identifier.Identifier;
-import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
@@ -46,7 +45,7 @@ public class GameTestCommand extends SimpleCommand {
                     var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
                     if (blockState == null) {
                         context.addOutput(TextFormat.RED + "Unknown block state hash!");
-                        return context.failed();
+                        return context.fail();
                     }
                     player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
                     return context.success();
@@ -78,7 +77,7 @@ public class GameTestCommand extends SimpleCommand {
                         player.sendText(I18n.get().tr(langCode, key, args));
                     } catch (Throwable t) {
                         context.addOutput(TextFormat.RED + "Unknown key!");
-                        return context.failed();
+                        return context.fail();
                     }
                     return context.success();
                 }, SenderType.PLAYER)
@@ -102,7 +101,7 @@ public class GameTestCommand extends SimpleCommand {
                     int count = context.getResult(2);
                     if (entityType == null) {
                         context.addOutput(TextFormat.RED + "Unknown entity type!");
-                        return context.failed();
+                        return context.fail();
                     }
                     for (var i = 1; i <= count; i++) {
                         var dim = player.getLocation().dimension();
@@ -136,7 +135,7 @@ public class GameTestCommand extends SimpleCommand {
                         Files.deleteIfExists(Path.of("cmd_pk_allay.json"));
                     } catch (IOException e) {
                         context.addOutput(TextFormat.RED + "" + e);
-                        return context.failed();
+                        return context.fail();
                     }
                     JSONUtils.toFile("cmd_pk_allay.json", cmdPk, writer -> writer.setIndent("  "));
                     return context.success();

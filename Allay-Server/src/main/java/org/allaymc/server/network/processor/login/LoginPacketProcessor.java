@@ -6,6 +6,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.login.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ServerToClientHandshakePacket;
@@ -45,7 +46,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        if (server.isIPBanned(player.getClientSession().getSocketAddress().toString().substring(1))) {
+        if (server.isIPBanned(AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0])) {
             // TODO: I18n
             player.disconnect("Your IP is banned!");
             return;

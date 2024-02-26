@@ -59,14 +59,14 @@ public class AllayCommandTree implements CommandTree {
             if (context.haveUnhandledArg()) {
                 // TODO
                 context.addSyntaxError();
-                return context.failed();
+                return context.fail();
             }
             return node.applyExecutor(context);
         }
         var nextNode = node.nextNode(context);
         if (nextNode == null) {
             context.addSyntaxError();
-            return context.failed();
+            return context.fail();
         } else return parse0(nextNode, context);
     }
 }

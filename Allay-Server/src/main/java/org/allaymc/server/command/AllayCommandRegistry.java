@@ -48,6 +48,11 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new OpCommand());
         register(new TestforCommand());
         register(new TagCommand());
+        register(new BanCommand());
+        register(new BanIPCommand());
+        register(new UnbanCommand());
+        register(new UnbanIPCommand());
+        register(new WhitelistCommand());
     }
 
     @Override
@@ -63,11 +68,11 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         var command = this.findCommand(cmdName);
         if (command == null) {
             sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
-            return CommandResult.failed();
+            return CommandResult.fail();
         }
         if (!sender.hasPerm(command.getPermissions())) {
             sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
-            return CommandResult.failed();
+            return CommandResult.fail();
         }
         try {
             var result = command.execute(sender, spilt.toArray(Utils.EMPTY_STRING_ARRAY));
@@ -76,7 +81,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         } catch (Throwable t) {
             log.error("Error while execute command " + cmdName, t);
             sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
-            return CommandResult.failed();
+            return CommandResult.fail();
         }
     }
 

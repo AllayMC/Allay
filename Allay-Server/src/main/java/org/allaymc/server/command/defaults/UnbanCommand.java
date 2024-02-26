@@ -1,0 +1,34 @@
+package org.allaymc.server.command.defaults;
+
+import org.allaymc.api.command.SimpleCommand;
+import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.server.Server;
+
+/**
+ * Allay Project 2024/2/26
+ *
+ * @author daoge_cmd
+ */
+public class UnbanCommand extends SimpleCommand {
+
+    public UnbanCommand() {
+        super("unban", "Unban a player");
+    }
+
+    @Override
+    public void prepareCommandTree(CommandTree tree) {
+        tree.getRoot()
+                .str("nameOrUUID")
+                .exec(context -> {
+                    String nameOrUUID = context.getFirstResult();
+                    if (Server.getInstance().unban(nameOrUUID)) {
+                        context.addOutput(TrKeys.M_COMMANDS_UNBAN_SUCCESS, nameOrUUID);
+                        return context.success();
+                    } else {
+                        context.addError("%" + TrKeys.M_COMMANDS_UNBAN_FAILED, nameOrUUID);
+                        return context.fail();
+                    }
+                });
+    }
+}

@@ -47,7 +47,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
@@ -371,7 +370,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         cmdOutputPk.setCommandOriginData(sender.getCommandOriginData());
         for (var output : outputs) {
             cmdOutputPk.getMessages().add(new CommandOutputMessage(
-                    status != CommandResult.FAILED_STATUS, // Indicates if the output message was one of a successful command execution
+                    status != CommandResult.FAIL_STATUS, // Indicates if the output message was one of a successful command execution
                     I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()),
                     Utils.EMPTY_STRING_ARRAY));
         }

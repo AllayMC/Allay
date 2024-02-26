@@ -196,7 +196,7 @@ public abstract class BaseNode implements CommandNode {
                 return biExecutor.apply(context, (SENDER_TYPE) context.getSender());
             } else {
                 context.addInvalidExecutorError(senderType);
-                return context.failed();
+                return context.fail();
             }
         };
         return this;

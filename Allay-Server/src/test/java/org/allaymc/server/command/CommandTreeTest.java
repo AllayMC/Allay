@@ -41,7 +41,7 @@ public class CommandTreeTest {
                 .bool("bool")
                 .exec(context -> {
                     boolean bool = context.getResult(1);
-                    return bool ? context.success() : context.failed();
+                    return bool ? context.success() : context.fail();
                 })
                 .root()
                 .key("test_str")
@@ -56,7 +56,7 @@ public class CommandTreeTest {
                 .intNum("int")
                 .exec(context -> {
                     int i = context.getResult(1);
-                    return i == 1 ? context.success() : context.failed();
+                    return i == 1 ? context.success() : context.fail();
                 });
 
         var res = tree.parse(mockSender, new String[]{"test_bool", "true"});
@@ -75,7 +75,7 @@ public class CommandTreeTest {
         tree.getRoot()
                 .str("test_optional")
                 .optional()
-                .exec(context -> "".equals(context.getResult(0)) ? context.success() : context.failed());
+                .exec(context -> "".equals(context.getResult(0)) ? context.success() : context.fail());
         var res = tree.parse(mockSender, Utils.EMPTY_STRING_ARRAY);
         assertTrue(res.isSuccess());
     }
@@ -95,7 +95,7 @@ public class CommandTreeTest {
         tree.getRoot()
                 .intNum("test_optional")
                 .optional()
-                .exec(CommandContext::failed)
+                .exec(CommandContext::fail)
                 .root()
                 .bool("test_normal")
                 .exec(CommandContext::success);
@@ -122,7 +122,7 @@ public class CommandTreeTest {
                     if (r1.equals("d1") && r2.equals("d2")) {
                         return context.success();
                     }
-                    return context.failed();
+                    return context.fail();
                 });
         var res = tree.parse(mockSender, new String[]{"a", "d"});
         assertTrue(res.isSuccess());

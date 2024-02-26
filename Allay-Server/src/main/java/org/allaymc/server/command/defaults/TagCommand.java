@@ -30,7 +30,7 @@ public class TagCommand extends SimpleCommand {
                     List<Entity> entities = context.getFirstResult();
                     if (entities.isEmpty()) {
                         context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
-                        return context.failed();
+                        return context.fail();
                     }
                     String operation = context.getSecondResult();
                     String tag = context.getThirdResult();
@@ -43,7 +43,7 @@ public class TagCommand extends SimpleCommand {
                             }
                             if (successCount == 0) {
                                 context.addError("%" + TrKeys.M_COMMANDS_TAG_ADD_FAILED);
-                                return context.failed();
+                                return context.fail();
                             }
                             if (entities.size() == 1) {
                                 context.addOutput(TrKeys.M_COMMANDS_TAG_ADD_SUCCESS_SINGLE, tag, entities.getFirst().getDisplayName());
@@ -58,7 +58,7 @@ public class TagCommand extends SimpleCommand {
                             }
                             if (successCount == 0) {
                                 context.addError("%" + TrKeys.M_COMMANDS_TAG_REMOVE_FAILED);
-                                return context.failed();
+                                return context.fail();
                             }
                             if (entities.size() == 1) {
                                 context.addOutput(TrKeys.M_COMMANDS_TAG_REMOVE_SUCCESS_SINGLE, tag, entities.getFirst().getDisplayName());
@@ -75,7 +75,7 @@ public class TagCommand extends SimpleCommand {
                     List<Entity> entities = context.getFirstResult();
                     if (entities.isEmpty()) {
                         context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
-                        return context.failed();
+                        return context.fail();
                     }
                     Set<String> tagSet = new HashSet<>();
                     for (var entity : entities) {
@@ -88,7 +88,7 @@ public class TagCommand extends SimpleCommand {
                         } else {
                             context.addError("%" + TrKeys.M_COMMANDS_TAG_LIST_MULTIPLE_EMPTY, entities.size());
                         }
-                        return context.failed();
+                        return context.fail();
                     } else {
                         if (entities.size() == 1) {
                             context.addOutput(TrKeys.M_COMMANDS_TAG_LIST_SINGLE_SUCCESS, entities.getFirst().getCommandSenderName(), tagSet.size(), tagStr);

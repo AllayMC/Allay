@@ -26,6 +26,7 @@ import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.BanInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.Whitelist;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldPool;
@@ -366,7 +367,13 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean ban(String uuidOrName) {
-        return banInfo.bannedPlayers().add(uuidOrName);
+        if (!banInfo.bannedPlayers().add(uuidOrName)) return false;
+        for (var player : players.values()) {
+            if (player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName)) {
+                player.disconnect("You are banned!");
+            }
+        }
+        return true;
     }
 
     @Override
@@ -386,7 +393,13 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean banIP(String ip) {
-        return banInfo.bannedIps().add(ip);
+        if (!banInfo.bannedIps().add(ip)) return false;
+        for (var player : players.values()) {
+            if (AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0].equals(ip)) {
+                player.disconnect("Your IP is banned!");
+            }
+        }
+        return true;
     }
 
     @Override
@@ -405,13 +418,19 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public boolean addWhitelist(String uuidOrName) {
+    public boolean addToWhitelist(String uuidOrName) {
         return whitelist.whitelist().add(uuidOrName);
     }
 
     @Override
-    public boolean removeWhitelist(String uuidOrName) {
-        return whitelist.whitelist().remove(uuidOrName);
+    public boolean removeFromWhitelist(String uuidOrName) {
+        if (!whitelist.whitelist().remove(uuidOrName)) return false;
+        for (var player : players.values()) {
+            if (player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName)) {
+                player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED);
+            }
+        }
+        return true;
     }
 
     @Override

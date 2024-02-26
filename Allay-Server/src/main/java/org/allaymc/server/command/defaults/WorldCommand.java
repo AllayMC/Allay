@@ -47,12 +47,12 @@ public class WorldCommand extends SimpleCommand {
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
                         context.addOutput(TextFormat.RED + "Unknown world: " + worldName);
-                        return context.failed();
+                        return context.fail();
                     }
                     var dim = world.getDimension(dimId);
                     if (dim == null) {
                         context.addOutput(TextFormat.RED + "Unknown dimension: " + dimId);
-                        return context.failed();
+                        return context.fail();
                     }
                     player.teleport(new Location3f(0, 64, 0, dim));
                     context.addOutput("Teleported to " + worldName + ":" + dimId);

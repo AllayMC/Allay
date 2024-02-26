@@ -37,12 +37,12 @@ public class PluginCommand extends SimpleCommand {
                     String name = context.getSecondResult();
                     if (!manager.isPluginEnabled(name)) {
                         context.addError("Plugin " + name + " is not enabled!");
-                        return context.failed();
+                        return context.fail();
                     }
                     var plugin = manager.getPlugin(name).plugin();
                     if (!plugin.isReloadable()) {
                         context.addOutput("§cPlugin " + name + " is not reloadable!");
-                        return context.failed();
+                        return context.fail();
                     }
                     plugin.reload();
                     context.addOutput("§aPlugin " + name + " has been reloaded");

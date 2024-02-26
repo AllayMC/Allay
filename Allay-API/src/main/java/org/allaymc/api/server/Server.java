@@ -174,9 +174,9 @@ public interface Server extends TaskCreator, CommandSender {
 
     boolean isWhitelisted(String uuidOrName);
 
-    boolean addWhitelist(String uuidOrName);
+    boolean addToWhitelist(String uuidOrName);
 
-    boolean removeWhitelist(String uuidOrName);
+    boolean removeFromWhitelist(String uuidOrName);
 
     @UnmodifiableView
     Set<String> getWhitelistedPlayers();
