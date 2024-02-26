@@ -31,6 +31,18 @@ public class ExampleCommand extends SimpleCommand {
                             .onClose(() -> player.sendText("you closed the form"))
                             .sendTo(player);
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("test_simple_form")
+                .exec((context, player) -> {
+                    Forms.simple()
+                            .title("title of this simple form")
+                            .content("this is a test simple form c:")
+                            .button("first_button").onClick(button -> player.sendText("you clicked the first button"))
+                            .button("second_button").onClick(button -> player.sendText("you clicked the second button"))
+                            .button("third_button").onClick(button -> player.sendText("you clicked the third button"))
+                            .sendTo(player);
+                    return context.success();
                 }, SenderType.PLAYER);
     }
 }

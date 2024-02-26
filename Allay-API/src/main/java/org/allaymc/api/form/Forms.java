@@ -1,8 +1,8 @@
 package org.allaymc.api.form;
 
-import org.allaymc.api.form.type.Custom;
-import org.allaymc.api.form.type.Modal;
-import org.allaymc.api.form.type.Simple;
+import org.allaymc.api.form.type.CustomForm;
+import org.allaymc.api.form.type.ModalForm;
+import org.allaymc.api.form.type.SimpleForm;
 
 /**
  * Allay Project 2024/2/26
@@ -10,15 +10,15 @@ import org.allaymc.api.form.type.Simple;
  * @author daoge_cmd
  */
 public interface Forms {
-    static Simple simple() {
-        return new Simple();
+    static SimpleForm simple() {
+        return new SimpleForm();
     }
 
-    static Modal modal() {
-        return new Modal();
+    static ModalForm modal() {
+        return new ModalForm();
     }
 
-    static Custom custom() {
-        return new Custom();
+    static CustomForm custom() {
+        return new CustomForm();
     }
 }

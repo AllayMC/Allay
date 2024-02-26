@@ -2,6 +2,9 @@ package org.allaymc.api.form.element;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.form.type.SimpleForm;
+
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2024/2/26
@@ -14,6 +17,8 @@ public final class Button {
 
     private String text;
     private ButtonImageData image;
+    private transient Consumer<Button> onClick = button -> {};
+    private transient SimpleForm form;
 
     public Button(String text) {
         this.text = text;
@@ -22,5 +27,14 @@ public final class Button {
     public Button(String text, ButtonImageData image) {
         this.text = text;
         this.image = image;
+    }
+
+    public SimpleForm onClick(Consumer<Button> onClick) {
+        this.onClick = onClick;
+        return form;
+    }
+
+    public SimpleForm ignore() {
+        return form;
     }
 }

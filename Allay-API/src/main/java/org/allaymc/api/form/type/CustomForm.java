@@ -5,5 +5,5 @@ package org.allaymc.api.form.type;
  *
  * @author daoge_cmd
  */
-public final class Custom extends Form {
+public final class CustomForm extends Form {
 }
