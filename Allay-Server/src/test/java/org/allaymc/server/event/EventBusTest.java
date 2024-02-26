@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.Executors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2024/2/26
@@ -51,5 +50,14 @@ public class EventBusTest {
         TestCancellableEvent event = new TestCancellableEvent();
         eventBus.callEvent(event);
         assertTrue(event.isCancelled());
+    }
+
+    @Test
+    void testUnregister() {
+        eventBus.unregisterListener(this);
+        var event = new TestCancellableEvent();
+        eventBus.callEvent(event);
+        assertFalse(event.isCancelled());
+        eventBus.registerListener(this);
     }
 }
