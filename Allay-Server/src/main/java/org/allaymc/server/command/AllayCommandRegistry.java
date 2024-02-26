@@ -6,7 +6,7 @@ import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.event.server.command.CommandExecuteEvent;
+import org.allaymc.api.eventbus.server.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.registry.SimpleMappedRegistry;

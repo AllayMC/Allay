@@ -1,18 +1,16 @@
-package org.allaymc.api.event.server.player;
+package org.allaymc.api.eventbus.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.event.CancellableEvent;
-import org.allaymc.api.event.Event;
 
 /**
  * Allay Project 2024/2/26
  *
  * @author daoge_cmd
  */
-@Getter
 @AllArgsConstructor
-public class PlayerInitializedEvent extends Event implements CancellableEvent {
+@Getter
+public abstract class PlayerEvent extends Event {
     protected EntityPlayer player;
 }

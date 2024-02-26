@@ -11,6 +11,7 @@ import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderCompon
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.event.world.player.PlayerThrowItemEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
@@ -63,6 +64,11 @@ public interface EntityPlayer extends
 
     default void forceDropItem(Container container, int slot, int count) {
         var item = container.getItemStack(slot);
+        var event = new PlayerThrowItemEvent(this, item);
+        getWorld().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
         ItemStack droppedItemStack;
         if (item.getCount() > count) {
             item.setCount(item.getCount() - count);

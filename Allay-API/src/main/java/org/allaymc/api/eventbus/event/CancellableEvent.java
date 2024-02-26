@@ -1,4 +1,4 @@
-package org.allaymc.api.event;
+package org.allaymc.api.eventbus.event;
 
 /**
  * Allay Project 2024/2/26

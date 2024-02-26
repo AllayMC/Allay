@@ -9,7 +9,7 @@ import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.event.EventHandler;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.position.Position3i;
 

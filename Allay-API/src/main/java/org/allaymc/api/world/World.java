@@ -1,7 +1,7 @@
 package org.allaymc.api.world;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.event.EventBus;
+import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;

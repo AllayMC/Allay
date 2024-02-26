@@ -10,7 +10,7 @@ import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.event.EntityFallEvent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.event.EventHandler;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;

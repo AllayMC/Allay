@@ -1,7 +1,7 @@
-package org.allaymc.server.event;
+package org.allaymc.server.eventbus;
 
-import org.allaymc.api.event.CancellableEvent;
-import org.allaymc.api.event.Event;
+import org.allaymc.api.eventbus.event.CancellableEvent;
+import org.allaymc.api.eventbus.event.Event;
 
 /**
  * Allay Project 2024/2/26

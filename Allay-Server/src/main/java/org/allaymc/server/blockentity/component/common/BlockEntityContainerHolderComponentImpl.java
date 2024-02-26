@@ -11,7 +11,7 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.api.event.EventHandler;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 

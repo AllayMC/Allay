@@ -1,9 +1,9 @@
-package org.allaymc.api.event.server.misc;
+package org.allaymc.api.eventbus.event.server.misc;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.event.CancellableEvent;
-import org.allaymc.api.event.Event;
+import org.allaymc.api.eventbus.event.CancellableEvent;
+import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.world.World;
 
 /**

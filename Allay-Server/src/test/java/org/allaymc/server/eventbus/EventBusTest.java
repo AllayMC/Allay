@@ -1,7 +1,7 @@
-package org.allaymc.server.event;
+package org.allaymc.server.eventbus;
 
-import org.allaymc.api.event.EventBus;
-import org.allaymc.api.event.EventHandler;
+import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.EventHandler;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.Executors;

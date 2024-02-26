@@ -1,9 +1,8 @@
-package org.allaymc.api.event.world.entity;
+package org.allaymc.api.eventbus.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.event.Event;
 
 /**
  * Allay Project 2024/2/26

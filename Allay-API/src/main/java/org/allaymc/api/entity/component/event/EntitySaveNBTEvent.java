@@ -3,7 +3,7 @@ package org.allaymc.api.entity.component.event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.event.Event;
+import org.allaymc.api.eventbus.event.Event;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
 /**

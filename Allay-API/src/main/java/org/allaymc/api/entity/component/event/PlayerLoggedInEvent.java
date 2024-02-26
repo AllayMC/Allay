@@ -1,6 +1,6 @@
 package org.allaymc.api.entity.component.event;
 
-import org.allaymc.api.event.Event;
+import org.allaymc.api.eventbus.event.Event;
 
 /**
  * Allay Project 2023/10/14

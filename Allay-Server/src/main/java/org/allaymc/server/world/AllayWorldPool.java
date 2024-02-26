@@ -4,7 +4,7 @@ import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.event.server.misc.WorldLoadEvent;
+import org.allaymc.api.eventbus.server.misc.WorldLoadEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;

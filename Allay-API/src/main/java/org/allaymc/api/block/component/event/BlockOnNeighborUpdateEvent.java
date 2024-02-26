@@ -1,11 +1,9 @@
 package org.allaymc.api.block.component.event;
 
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.event.Event;
+import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
-
-import java.util.Objects;
 
 /**
  * Allay Project 2023/9/23

@@ -3,7 +3,6 @@ package org.allaymc.server.entity.component.common;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
@@ -24,7 +23,8 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.event.world.entity.EntityDieEvent;
+import org.allaymc.api.eventbus.event.server.entity.EntityTeleportEvent;
+import org.allaymc.api.eventbus.event.world.entity.EntityDieEvent;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.location.Location3f;
@@ -319,6 +319,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             log.warn("Trying to teleport an entity which is not spawned! Entity: {}", thisEntity);
             return;
         }
+        var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target));
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) return;
+        target = event.getTo();
         if (this.location.dimension == target.dimension()) {
             // Teleporting in the current same dimension, and we just need to move the entity to the new coordination
             teleportInDimension(target);
@@ -641,7 +645,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void onFall() {
-        var event = new org.allaymc.api.event.world.entity.EntityFallEvent(thisEntity, fallDistance);
+        var event = new org.allaymc.api.eventbus.event.world.entity.EntityFallEvent(thisEntity, fallDistance);
         getWorld().getEventBus().callEvent(event);
         if (event.isCancelled()) {
             this.fallDistance = 0;

@@ -10,7 +10,7 @@ import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.event.EntityLoadNBTEvent;
 import org.allaymc.api.entity.component.event.EntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
-import org.allaymc.api.event.EventHandler;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.identifier.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;

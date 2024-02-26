@@ -3,7 +3,7 @@ package org.allaymc.api.block.component.event;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.event.Event;
+import org.allaymc.api.eventbus.event.Event;
 
 /**
  * Allay Project 2023/9/15

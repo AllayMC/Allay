@@ -1,6 +1,7 @@
-package org.allaymc.api.event;
+package org.allaymc.api.eventbus;
 
 import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.eventbus.event.Event;
 
 /**
  * Allay Project 2024/2/26

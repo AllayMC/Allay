@@ -1,10 +1,10 @@
-package org.allaymc.server.event;
+package org.allaymc.server.eventbus;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.allaymc.api.event.Event;
-import org.allaymc.api.event.EventBus;
-import org.allaymc.api.event.EventException;
-import org.allaymc.api.event.EventHandler;
+import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.EventException;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
 

@@ -1,4 +1,6 @@
-package org.allaymc.api.event;
+package org.allaymc.api.eventbus.event;
+
+import org.allaymc.api.eventbus.EventException;
 
 /**
  * Allay Project 2024/2/26

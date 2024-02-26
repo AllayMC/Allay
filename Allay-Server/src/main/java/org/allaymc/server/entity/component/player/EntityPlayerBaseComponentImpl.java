@@ -22,7 +22,7 @@ import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.event.EventHandler;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
