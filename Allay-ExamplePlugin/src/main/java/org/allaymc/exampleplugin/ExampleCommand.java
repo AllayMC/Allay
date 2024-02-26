@@ -43,6 +43,28 @@ public class ExampleCommand extends SimpleCommand {
                             .button("third_button").onClick(button -> player.sendText("you clicked the third button"))
                             .sendTo(player);
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("test_custom_form")
+                .exec((context, player) -> {
+                    Forms.custom()
+                            .title("title of this custom form")
+                            .dropdown("a dropdown", "a", "b", "c")
+                            .input("an input", "a placeholder", "a default text")
+                            .label("a label")
+                            .slider("a slider", 0f, 100f)
+                            .stepSlider("a step slider", "a", "b", "c")
+                            .toggle("a toggle", false)
+                            .onResponse(responses -> {
+                                player.sendText("dropdown: " + responses.get(0));
+                                player.sendText("input: " + responses.get(1));
+                                player.sendText("label: " + responses.get(2));
+                                player.sendText("slider: " + responses.get(3));
+                                player.sendText("step slider: " + responses.get(4));
+                                player.sendText("toggle: " + responses.get(5));
+                            })
+                            .sendTo(player);
+                    return context.success();
                 }, SenderType.PLAYER);
     }
 }

@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 public final class Button {
 
     private String text;
-    private ButtonImageData image;
+    private ImageData image;
     private transient Consumer<Button> onClick = button -> {};
     private transient SimpleForm form;
 
@@ -24,7 +24,7 @@ public final class Button {
         this.text = text;
     }
 
-    public Button(String text, ButtonImageData image) {
+    public Button(String text, ImageData image) {
         this.text = text;
         this.image = image;
     }

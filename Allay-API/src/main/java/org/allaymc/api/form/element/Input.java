@@ -2,7 +2,6 @@ package org.allaymc.api.form.element;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Allay Project 2024/2/26
@@ -13,24 +12,13 @@ public final class Input extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "input";
-    @Setter
     @Getter
-    private String text;
+    private final String text;
     @Getter
-    @Setter
-    private String placeholder;
-    @Setter
+    private final String placeholder;
     @Getter
     @SerializedName("default")
-    private String defaultText;
-
-    public Input(String text) {
-        this(text, "");
-    }
-
-    public Input(String text, String placeholder) {
-        this(text, placeholder, "");
-    }
+    private final String defaultText;
 
     public Input(String text, String placeholder, String defaultText) {
         this.text = text;

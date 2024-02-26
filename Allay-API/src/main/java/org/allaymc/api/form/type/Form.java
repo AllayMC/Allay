@@ -17,10 +17,7 @@ public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
         player.showForm(this);
     }
 
-    // TODO: make it abstract
-    public void handleResponse(String data) {
-
-    }
+    public abstract void handleResponse(String data);
 
     public Form onClose(Runnable runnable) {
         this.onClose = runnable;

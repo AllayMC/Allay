@@ -3,7 +3,7 @@ package org.allaymc.api.form.type;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.form.element.Button;
-import org.allaymc.api.form.element.ButtonImageData;
+import org.allaymc.api.form.element.ImageData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +45,15 @@ public final class SimpleForm extends Form {
     }
 
     public Button button(String text, String imageType, String data) {
-        return button(new Button(text, new ButtonImageData(imageType, data)));
+        return button(new Button(text, new ImageData(imageType, data)));
     }
 
     public Button buttonWithPathImage(String text, String path) {
-        return button(new Button(text, new ButtonImageData(ButtonImageData.PATH_TYPE, path)));
+        return button(new Button(text, new ImageData(ImageData.PATH_TYPE, path)));
     }
 
     public Button buttonWithUrlImage(String text, String url) {
-        return button(new Button(text, new ButtonImageData(ButtonImageData.URL_TYPE, url)));
+        return button(new Button(text, new ImageData(ImageData.URL_TYPE, url)));
     }
 
     @Override

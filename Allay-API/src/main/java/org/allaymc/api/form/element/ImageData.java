@@ -11,7 +11,7 @@ import org.allaymc.api.form.FormException;
  */
 @Setter
 @Getter
-public final class ButtonImageData {
+public final class ImageData {
 
     public static final String PATH_TYPE = "path";
     public static final String URL_TYPE = "url";
@@ -19,7 +19,7 @@ public final class ButtonImageData {
     private String type;
     private String data;
 
-    public ButtonImageData(String type, String data) {
+    public ImageData(String type, String data) {
         if (!type.equals(URL_TYPE) && !type.equals(PATH_TYPE)) {
             throw new FormException("Invalid type of image data");
         }
