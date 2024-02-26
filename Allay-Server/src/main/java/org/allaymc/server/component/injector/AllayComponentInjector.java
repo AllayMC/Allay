@@ -12,6 +12,7 @@ import net.bytebuddy.implementation.MethodDelegation;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.*;
 import org.allaymc.api.component.interfaces.*;
+import org.allaymc.api.event.Event;
 import org.allaymc.api.event.EventBus;
 import org.allaymc.api.exception.ComponentInjectException;
 import org.allaymc.api.identifier.Identifier;
@@ -212,7 +213,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
 
         @Override
-        public <E> E callEvent(E event) {
+        public <E extends Event> E callEvent(E event) {
             return eventBus.callEvent(event);
         }
 

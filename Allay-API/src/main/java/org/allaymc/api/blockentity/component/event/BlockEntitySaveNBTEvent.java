@@ -3,6 +3,7 @@ package org.allaymc.api.blockentity.component.event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.event.Event;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
 /**
@@ -13,6 +14,6 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 @Getter
 @Setter
 @AllArgsConstructor
-public class BlockEntitySaveNBTEvent {
-    private NbtMapBuilder nbt;
+public class BlockEntitySaveNBTEvent extends Event {
+    protected NbtMapBuilder nbt;
 }

@@ -1,6 +1,15 @@
 package org.allaymc.api.entity.component.event;
 
-public record EntityFallEvent(
-        float fallDistance
-) {
+import lombok.Getter;
+import org.allaymc.api.event.Event;
+
+@Getter
+public class EntityFallEvent extends Event {
+    protected float fallDistance;
+
+    public EntityFallEvent(
+            float fallDistance
+    ) {
+        this.fallDistance = fallDistance;
+    }
 }

@@ -1,12 +1,14 @@
 package org.allaymc.api.component.interfaces;
 
+import org.allaymc.api.event.Event;
+
 /**
  * Allay Project 2023/5/6
  *
  * @author daoge_cmd
  */
 public interface ComponentManager<T> {
-    <E> E callEvent(E event);
+    <E extends Event> E callEvent(E event);
 
     T getComponentedObject();
 }

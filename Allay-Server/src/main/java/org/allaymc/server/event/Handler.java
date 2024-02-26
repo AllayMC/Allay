@@ -15,15 +15,15 @@ public class Handler {
     protected final FastMethod method;
     protected final Object instance;
     protected final boolean async;
+    protected final int priority;
+    protected final Class<?> eventClass;
 
-    protected Handler(Method method, Object instance, boolean async) {
+    public Handler(Method method, Object instance, boolean async, int priority, Class<?> eventClass) {
         this.method = FastMethod.create(method, true);
         this.instance = instance;
         this.async = async;
-    }
-
-    public static Handler wrap(Method method, Object instance, boolean async) {
-        return new Handler(method, instance, async);
+        this.priority = priority;
+        this.eventClass = eventClass;
     }
 
     public void invoke(Object event) {

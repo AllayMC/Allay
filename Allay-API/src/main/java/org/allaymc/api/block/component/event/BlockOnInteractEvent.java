@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.event.Event;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3fc;
@@ -18,8 +19,7 @@ import java.util.Objects;
  * @author daoge_cmd
  */
 @Getter
-@Accessors(fluent = true)
-public final class BlockOnInteractEvent {
+public final class BlockOnInteractEvent extends Event {
     private final EntityPlayer player;
     private final ItemStack itemStack;
     private final Dimension dimension;
@@ -45,36 +45,4 @@ public final class BlockOnInteractEvent {
         this.blockFace = blockFace;
         this.success = success;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (BlockOnInteractEvent) obj;
-        return Objects.equals(this.player, that.player) &&
-                Objects.equals(this.itemStack, that.itemStack) &&
-                Objects.equals(this.dimension, that.dimension) &&
-                Objects.equals(this.blockPos, that.blockPos) &&
-                Objects.equals(this.placeBlockPos, that.placeBlockPos) &&
-                Objects.equals(this.clickPos, that.clickPos) &&
-                Objects.equals(this.blockFace, that.blockFace);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(player, itemStack, dimension, blockPos, placeBlockPos, clickPos, blockFace);
-    }
-
-    @Override
-    public String toString() {
-        return "BlockOnInteractEvent[" +
-                "player=" + player + ", " +
-                "itemStack=" + itemStack + ", " +
-                "dimension=" + dimension + ", " +
-                "blockPos=" + blockPos + ", " +
-                "placeBlockPos=" + placeBlockPos + ", " +
-                "clickPos=" + clickPos + ", " +
-                "blockFace=" + blockFace + ']';
-    }
-
 }

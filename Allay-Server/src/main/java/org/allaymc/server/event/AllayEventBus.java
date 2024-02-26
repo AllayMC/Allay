@@ -1,6 +1,7 @@
 package org.allaymc.server.event;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import org.allaymc.api.event.Event;
 import org.allaymc.api.event.EventBus;
 import org.allaymc.api.event.EventException;
 import org.allaymc.api.event.EventHandler;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class AllayEventBus implements EventBus {
 
     protected Map<Class<?>, List<Handler>> handlerMap = new Object2ObjectOpenHashMap<>();
+    protected Map<Object, List<Handler>> listenerToHandlerMap = new Object2ObjectOpenHashMap<>();
 
     @Override
     public synchronized void registerListener(Object listener) {
@@ -33,15 +35,28 @@ public class AllayEventBus implements EventBus {
                 throw new EventException("Event handler method must have only one parameter: " + method.getName() + " in listener " + listener.getClass().getName());
             }
             var eventClass = method.getParameterTypes()[0];
-            if (!handlerMap.containsKey(eventClass)) {
-                handlerMap.put(eventClass, new ArrayList<>());
+            if (!Event.class.isAssignableFrom(eventClass)) {
+                throw new EventException("Event handler method parameter must be a subclass of Event: " + method.getName() + " in listener " + listener.getClass().getName());
             }
-            handlerMap.get(eventClass).add(Handler.wrap(method, listener, annotation.async()));
+            var handlers = handlerMap.computeIfAbsent(eventClass, k -> new ArrayList<>());
+            var handler = new Handler(method, listener, annotation.async(), annotation.priority(), eventClass);
+            handlers.add(handler);
+            handlers.sort((h1, h2) -> Integer.compare(h2.priority, h1.priority));
+            listenerToHandlerMap.computeIfAbsent(listener, k -> new ArrayList<>()).add(handler);
         }
     }
 
     @Override
-    public <E> E callEvent(E event) {
+    public synchronized void unregisterListener(Object listener) {
+        var handlers = listenerToHandlerMap.get(listener);
+        if (handlers == null) return;
+        for (var handler : handlers) {
+            handlerMap.get(handler.eventClass).remove(handler);
+        }
+    }
+
+    @Override
+    public <E extends Event> E callEvent(E event) {
         var handlers = handlerMap.get(event.getClass());
         if (handlers == null || handlers.isEmpty()) return event;
         for (var handler : handlers) {

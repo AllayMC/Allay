@@ -64,15 +64,15 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
 
     @EventHandler
     private void onInteract(BlockOnInteractEvent event) {
-        var player = event.player();
+        var player = event.getPlayer();
         if (player == null || player.isSneaking()) return;
         Objects.requireNonNull(container).addViewer(player);
-        event.success(true);
+        event.setSuccess(true);
     }
 
     @EventHandler
     private void onReplace(BlockOnReplaceEvent event) {
-        var pos = event.currentBlockState().pos();
+        var pos = event.getCurrentBlockState().pos();
         var dimension = pos.dimension();
         var rand = ThreadLocalRandom.current();
         for (var itemStack : container.getItemStacks()) {

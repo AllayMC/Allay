@@ -17,7 +17,9 @@ public interface EventBus {
 
     void registerListener(Object listener);
 
-    <E> E callEvent(E event);
+    void unregisterListener(Object listener);
+
+    <E extends Event> E callEvent(E event);
 
     interface EventBusFactory {
         EventBus create();

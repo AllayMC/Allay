@@ -79,6 +79,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public boolean onInteract(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
         var event = new BlockOnInteractEvent(player, itemStack, dimension, blockPos, placeBlockPos, clickPos, blockFace, false);
         manager.callEvent(event);
-        return event.success();
+        return event.isSuccess();
     }
 }
