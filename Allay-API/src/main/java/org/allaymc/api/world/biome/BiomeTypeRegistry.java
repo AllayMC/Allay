@@ -12,7 +12,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface BiomeTypeRegistry extends MappedRegistry<BiomeType, BiomeData, Map<BiomeType, BiomeData>> {
-    ApiInstanceHolder<BiomeTypeRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<BiomeTypeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static BiomeTypeRegistry getRegistry() {
         return REGISTRY.get();

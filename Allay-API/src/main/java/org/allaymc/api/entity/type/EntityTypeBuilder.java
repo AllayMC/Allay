@@ -21,7 +21,7 @@ import static org.allaymc.api.component.interfaces.ComponentProvider.toMap;
  * @author daoge_cmd
  */
 public interface EntityTypeBuilder<T extends Entity, C extends EntityComponent> {
-    ApiInstanceHolder<EntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
+    ApiInstanceHolder<EntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
 
     static <T extends Entity> EntityTypeBuilder<T, EntityComponent> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);

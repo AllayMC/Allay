@@ -9,7 +9,6 @@ import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FixedContainerId;
@@ -23,6 +22,7 @@ import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.event.EventHandler;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
@@ -96,7 +96,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         return new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f);
     }
 
-    @ComponentEventListener
+    @EventHandler
     protected void onPlayerLoggedIn(PlayerLoggedInEvent event) {
         var loginData = networkComponent.getLoginData();
         skin = loginData.getSkin();

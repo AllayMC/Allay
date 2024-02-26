@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface CommandTree {
 
-    ApiInstanceHolder<CommandTreeFactory> FACTORY = ApiInstanceHolder.of();
+    ApiInstanceHolder<CommandTreeFactory> FACTORY = ApiInstanceHolder.create();
 
     static CommandTree create(Command command) {
         return FACTORY.get().create(command);

@@ -53,7 +53,7 @@ public interface ComponentInjector<T> {
 
     interface ComponentInjectorFactory {
 
-        ApiInstanceHolder<ComponentInjectorFactory> FACTORY = ApiInstanceHolder.of();
+        ApiInstanceHolder<ComponentInjectorFactory> FACTORY = ApiInstanceHolder.create();
 
         <R> ComponentInjector<R> create();
     }

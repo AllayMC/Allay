@@ -13,7 +13,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface CreativeItemRegistry extends MappedRegistry<Integer, ItemStack, Map<Integer, ItemStack>> {
-    ApiInstanceHolder<CreativeItemRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<CreativeItemRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static CreativeItemRegistry getRegistry() {
         return REGISTRY.get();

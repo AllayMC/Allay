@@ -14,7 +14,7 @@ import java.util.function.Function;
  * @author daoge_cmd
  */
 public interface VanillaItemMetaBlockStateBiMap {
-    ApiInstanceHolder<VanillaItemMetaBlockStateBiMap> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<VanillaItemMetaBlockStateBiMap> REGISTRY = ApiInstanceHolder.create();
 
     static VanillaItemMetaBlockStateBiMap getRegistry() {
         return REGISTRY.get();

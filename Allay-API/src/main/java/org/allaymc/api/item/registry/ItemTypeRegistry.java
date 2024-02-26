@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface ItemTypeRegistry extends MappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> {
 
-    ApiInstanceHolder<ItemTypeRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<ItemTypeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static ItemTypeRegistry getRegistry() {
         return REGISTRY.get();

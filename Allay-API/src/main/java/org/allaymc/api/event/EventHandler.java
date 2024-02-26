@@ -1,4 +1,4 @@
-package org.allaymc.api.component.annotation;
+package org.allaymc.api.event;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,12 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Allay Project 2023/5/6
+ * Allay Project 2024/2/26
  *
  * @author daoge_cmd
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface ComponentEventListener {
-
+public @interface EventHandler {
+    boolean async() default false;
 }

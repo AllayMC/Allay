@@ -15,7 +15,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface BlockTypeRegistry extends MappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>> {
-    ApiInstanceHolder<BlockTypeRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<BlockTypeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static BlockTypeRegistry getRegistry() {
         return REGISTRY.get();

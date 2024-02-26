@@ -10,7 +10,7 @@ import org.allaymc.api.registry.DoubleKeyMappedRegistry;
  * @author daoge_cmd
  */
 public interface EffectRegistry extends DoubleKeyMappedRegistry<Integer, Identifier, EffectType> {
-    ApiInstanceHolder<EffectRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<EffectRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static EffectRegistry getRegistry() {
         return REGISTRY.get();

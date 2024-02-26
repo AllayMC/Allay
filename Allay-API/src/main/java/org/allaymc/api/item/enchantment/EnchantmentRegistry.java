@@ -10,7 +10,7 @@ import org.allaymc.api.registry.DoubleKeyMappedRegistry;
  * @author daoge_cmd
  */
 public interface EnchantmentRegistry extends DoubleKeyMappedRegistry<Short, Identifier, EnchantmentType> {
-    ApiInstanceHolder<EnchantmentRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<EnchantmentRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static EnchantmentRegistry getRegistry() {
         return REGISTRY.get();

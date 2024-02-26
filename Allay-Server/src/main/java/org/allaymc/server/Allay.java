@@ -17,6 +17,7 @@ import org.allaymc.api.datastruct.DynamicURLClassLoader;
 import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
+import org.allaymc.api.event.EventBus;
 import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.recipe.RecipeRegistry;
@@ -45,6 +46,7 @@ import org.allaymc.server.data.AllayVanillaItemMetaBlockStateBiMap;
 import org.allaymc.server.entity.effect.AllayEffectRegistry;
 import org.allaymc.server.entity.registry.AllayEntityTypeRegistry;
 import org.allaymc.server.entity.type.AllayEntityType;
+import org.allaymc.server.event.AllayEventBus;
 import org.allaymc.server.i18n.AllayI18N;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.attribute.AllayVanillaItemAttributeRegistry;
@@ -105,6 +107,7 @@ public final class Allay {
             if (asyncTaskExecutor == null) return new AllayScheduler();
             else return new AllayScheduler(asyncTaskExecutor);
         });
+        api.bind(EventBus.EventBusFactory.class, () -> AllayEventBus::new);
 
         // Item
         api.bind(EnchantmentRegistry.class, AllayEnchantmentRegistry::new, instance -> ((AllayEnchantmentRegistry) instance).init());

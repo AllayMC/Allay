@@ -13,7 +13,7 @@ import java.util.function.Function;
  * @author daoge_cmd
  */
 public interface WorldStorageFactory extends MappedRegistry<String, Function<Path, WorldStorage>, Map<String, Function<Path, WorldStorage>>> {
-    ApiInstanceHolder<WorldStorageFactory> FACTORY = ApiInstanceHolder.of();
+    ApiInstanceHolder<WorldStorageFactory> FACTORY = ApiInstanceHolder.create();
 
     static WorldStorageFactory getFactory() {
         return FACTORY.get();

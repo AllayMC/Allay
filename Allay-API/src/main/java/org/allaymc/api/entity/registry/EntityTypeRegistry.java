@@ -14,7 +14,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface EntityTypeRegistry extends MappedRegistry<Identifier, EntityType<?>, Map<Identifier, EntityType<?>>> {
-    ApiInstanceHolder<EntityTypeRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<EntityTypeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static EntityTypeRegistry getRegistry() {
         return REGISTRY.get();

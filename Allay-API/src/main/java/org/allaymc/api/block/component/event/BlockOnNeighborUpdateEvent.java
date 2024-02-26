@@ -1,7 +1,6 @@
 package org.allaymc.api.block.component.event;
 
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.component.interfaces.ComponentEvent;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
@@ -15,5 +14,5 @@ public record BlockOnNeighborUpdateEvent(
         Vector3ic neighbor,
         BlockFace face,
         Dimension dimension
-) implements ComponentEvent {
+) {
 }

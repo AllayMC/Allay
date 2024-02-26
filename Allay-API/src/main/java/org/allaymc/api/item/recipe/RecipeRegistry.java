@@ -13,7 +13,7 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface RecipeRegistry {
-    ApiInstanceHolder<RecipeRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<RecipeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static RecipeRegistry getRegistry() {
         return REGISTRY.get();

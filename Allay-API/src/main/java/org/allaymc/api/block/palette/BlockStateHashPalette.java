@@ -12,7 +12,7 @@ import java.util.Map;
  * @author Cool_Loong
  */
 public interface BlockStateHashPalette extends MappedRegistry<Integer, BlockState, Map<Integer, BlockState>> {
-    ApiInstanceHolder<BlockStateHashPalette> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<BlockStateHashPalette> REGISTRY = ApiInstanceHolder.create();
 
     static BlockStateHashPalette getRegistry() {
         return REGISTRY.get();

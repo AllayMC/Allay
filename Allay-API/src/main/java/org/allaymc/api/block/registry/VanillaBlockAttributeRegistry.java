@@ -13,7 +13,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface VanillaBlockAttributeRegistry extends MappedRegistry<VanillaBlockId, Map<Integer, BlockAttributes>, Map<VanillaBlockId, Map<Integer, BlockAttributes>>> {
-    ApiInstanceHolder<VanillaBlockAttributeRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<VanillaBlockAttributeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static VanillaBlockAttributeRegistry getRegistry() {
         return REGISTRY.get();

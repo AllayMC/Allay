@@ -24,7 +24,7 @@ import static org.allaymc.api.component.interfaces.ComponentProvider.findCompone
  */
 public interface BlockTypeBuilder<T extends BlockBehavior> {
 
-    ApiInstanceHolder<BlockTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
+    ApiInstanceHolder<BlockTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
 
     static <T extends BlockBehavior> BlockTypeBuilder<T> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);

@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 public interface PackRegistry extends MappedRegistry<UUID, Pack, Map<UUID, Pack>> {
 
-    ApiInstanceHolder<PackRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<PackRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static PackRegistry getRegistry() {
         return REGISTRY.get();

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface CommandNodeFactory {
 
-    ApiInstanceHolder<CommandNodeFactory> FACTORY = ApiInstanceHolder.of();
+    ApiInstanceHolder<CommandNodeFactory> FACTORY = ApiInstanceHolder.create();
 
     static CommandNodeFactory getFactory() {
         return FACTORY.get();

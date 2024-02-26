@@ -20,7 +20,7 @@ import static org.allaymc.api.perm.DefaultPermissions.*;
  */
 public interface PermTree {
 
-    ApiInstanceHolder<PermTreeFactory> FACTORY = ApiInstanceHolder.of();
+    ApiInstanceHolder<PermTreeFactory> FACTORY = ApiInstanceHolder.create();
 
     static PermTree create() {
         return FACTORY.get().create();

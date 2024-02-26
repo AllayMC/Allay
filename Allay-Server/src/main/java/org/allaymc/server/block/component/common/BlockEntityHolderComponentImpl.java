@@ -8,8 +8,8 @@ import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
 import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.event.EventHandler;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.position.Position3i;
 
@@ -29,7 +29,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
         this.blockEntityType = blockEntityType;
     }
 
-    @ComponentEventListener
+    @EventHandler
     private void onBlockPlace(BlockOnPlaceEvent event) {
         var pos = event.currentBlockState().pos();
         createBlockEntityAt(pos);
@@ -37,7 +37,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
         blockEntity.onPlace(event);
     }
 
-    @ComponentEventListener
+    @EventHandler
     private void onBlockRemove(BlockOnReplaceEvent event) {
         var pos = event.currentBlockState().pos();
         var blockEntity = getBlockEntity(pos);
@@ -49,14 +49,14 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
         removeBlockEntityAt(pos);
     }
 
-    @ComponentEventListener
+    @EventHandler
     private void onNeighborChanged(BlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.updated(), event.dimension());
         var blockEntity = getBlockEntity(pos);
         blockEntity.onNeighborUpdate(event);
     }
 
-    @ComponentEventListener
+    @EventHandler
     private void onInteract(BlockOnInteractEvent event) {
         var pos = event.blockPos();
         var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.dimension());

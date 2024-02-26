@@ -13,7 +13,7 @@ public interface I18n {
 
     LangCode FALLBACK_LANG = LangCode.en_US;
 
-    ApiInstanceHolder<I18n> I18N = ApiInstanceHolder.of();
+    ApiInstanceHolder<I18n> I18N = ApiInstanceHolder.create();
 
     static I18n get() {
         return I18N.get();

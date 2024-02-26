@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.component.interfaces.ComponentEvent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
@@ -20,7 +19,7 @@ import java.util.Objects;
  */
 @Getter
 @Accessors(fluent = true)
-public final class BlockOnInteractEvent implements ComponentEvent {
+public final class BlockOnInteractEvent {
     private final EntityPlayer player;
     private final ItemStack itemStack;
     private final Dimension dimension;

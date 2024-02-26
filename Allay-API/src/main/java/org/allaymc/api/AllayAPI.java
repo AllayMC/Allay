@@ -16,6 +16,7 @@ import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
+import org.allaymc.api.event.EventBus;
 import org.allaymc.api.exception.MissingImplementationException;
 import org.allaymc.api.exception.MissingRequirementException;
 import org.allaymc.api.i18n.I18n;
@@ -157,6 +158,7 @@ public final class AllayAPI {
         requireImpl(Server.class, Server.INSTANCE::set);
         requireImpl(ComponentInjector.ComponentInjectorFactory.class, ComponentInjector.ComponentInjectorFactory.FACTORY::set);
         requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
+        requireImpl(EventBus.EventBusFactory.class, EventBus.FACTORY::set);
 
         // Item
         requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);

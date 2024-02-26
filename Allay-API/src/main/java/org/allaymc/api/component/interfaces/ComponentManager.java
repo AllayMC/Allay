@@ -6,7 +6,7 @@ package org.allaymc.api.component.interfaces;
  * @author daoge_cmd
  */
 public interface ComponentManager<T> {
-    <E extends ComponentEvent> E callEvent(E event);
+    <E> E callEvent(E event);
 
     T getComponentedObject();
 }

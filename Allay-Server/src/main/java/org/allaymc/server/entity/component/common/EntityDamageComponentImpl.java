@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.component.common;
 
 import lombok.Getter;
-import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -11,6 +10,7 @@ import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.event.EntityFallEvent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.event.EventHandler;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
@@ -71,7 +71,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         return baseComponent.hasGravity();
     }
 
-    @ComponentEventListener
+    @EventHandler
     private void onEntityFall(EntityFallEvent event) {
         if (!hasFallDamage()) return;
         if (!((boolean) baseComponent.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;

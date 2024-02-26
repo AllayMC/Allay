@@ -1,8 +1,6 @@
 package org.allaymc.server.component.injector;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.SneakyThrows;
-import me.sunlan.fastreflection.FastMethod;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.description.type.TypeDescription;
@@ -14,9 +12,11 @@ import net.bytebuddy.implementation.MethodDelegation;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.*;
 import org.allaymc.api.component.interfaces.*;
+import org.allaymc.api.event.EventBus;
 import org.allaymc.api.exception.ComponentInjectException;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.server.event.AllayEventBus;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 
 import java.io.File;
@@ -204,7 +204,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     protected static class AllayComponentManager<T> implements ComponentManager<T> {
 
-        Map<Class<? extends ComponentEvent>, List<Listener>> listenerMap = new Object2ObjectOpenHashMap<>();
+        EventBus eventBus = new AllayEventBus();
         T componentedObject;
 
         public AllayComponentManager(T componentedObject) {
@@ -212,44 +212,13 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
 
         @Override
-        public <E extends ComponentEvent> E callEvent(E event) {
-            if (!listenerMap.containsKey(event.getClass()))
-                return event;
-            for (var listener : listenerMap.get(event.getClass()))
-                listener.access(event);
-            return event;
+        public <E> E callEvent(E event) {
+            return eventBus.callEvent(event);
         }
 
         @Override
         public T getComponentedObject() {
             return componentedObject;
-        }
-
-        private void registerListener(Class<? extends ComponentEvent> eventClass, Listener listener) {
-            listenerMap.computeIfAbsent(eventClass, k -> new ArrayList<>()).add(listener);
-        }
-
-        protected static class Listener {
-
-            private final FastMethod method;
-            private final Object instance;
-
-            Listener(Method method, Object instance) {
-                this.method = FastMethod.create(method, true);
-                this.instance = instance;
-            }
-
-            static Listener wrap(Method method, Object instance) {
-                return new Listener(method, instance);
-            }
-
-            void access(ComponentEvent event) {
-                try {
-                    method.invoke(instance, event);
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
     }
 
@@ -273,7 +242,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             List<? extends Component> components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
             injectComponentInstances(instance, components);
             var componentManager = new AllayComponentManager<>(instance);
-            injectComponentManagerAndSetUpListeners(componentManager, components);
+            injectComponentManagerAndSetUpEventHandlers(componentManager, components);
             injectComponentedObject(instance, components);
             components.forEach(component -> component.onInitFinish(initInfo));
         }
@@ -293,7 +262,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             }
         }
 
-        protected void injectComponentManagerAndSetUpListeners(AllayComponentManager<T> manager, List<? extends Component> components) {
+        protected void injectComponentManagerAndSetUpEventHandlers(AllayComponentManager<T> manager, List<? extends Component> components) {
             for (var component : components) {
                 for (var field : ReflectionUtils.getAllFields(component.getClass())) {
                     if (field.isAnnotationPresent(Manager.class)) {
@@ -305,16 +274,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                         }
                     }
                 }
-                for (var method : ReflectionUtils.getAllMethods(component.getClass())) {
-                    if (!method.isAnnotationPresent(ComponentEventListener.class))
-                        continue;
-                    if (!(method.getReturnType() == void.class))
-                        throw new ComponentInjectException("Component event listener method must be void: " + method.getName() + " in component: " + component.getClass().getName());
-                    if (method.getParameterCount() != 1 || !ComponentEvent.class.isAssignableFrom(method.getParameters()[0].getType()))
-                        throw new ComponentInjectException("Component event listener method must have one parameter and the parameter must be a subclass of ComponentEvent: " + method.getName() + " in component: " + component.getClass().getName());
-//                    method.setAccessible(true);
-                    manager.registerListener((Class<? extends ComponentEvent>) method.getParameters()[0].getType(), AllayComponentManager.Listener.wrap(method, component));
-                }
+                manager.eventBus.registerListener(component);
             }
         }
 

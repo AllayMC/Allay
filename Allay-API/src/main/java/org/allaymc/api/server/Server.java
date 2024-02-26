@@ -32,7 +32,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public interface Server extends TaskCreator, CommandSender {
 
-    ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.of();
+    ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.create();
 
     String SETTINGS_FILE_NAME = "server-settings.yml";
 

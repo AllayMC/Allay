@@ -5,14 +5,13 @@ import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
 import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
-import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
-import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.event.EventHandler;
 import org.allaymc.api.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
@@ -58,12 +57,12 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         this.container = container;
     }
 
-    @ComponentEventListener
+    @EventHandler
     private void onNBTLoaded(BlockEntityLoadNBTEvent event) {
         container.setBlockPos(baseComponent.getPosition());
     }
 
-    @ComponentEventListener
+    @EventHandler
     private void onInteract(BlockOnInteractEvent event) {
         var player = event.player();
         if (player == null || player.isSneaking()) return;
@@ -71,7 +70,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         event.success(true);
     }
 
-    @ComponentEventListener
+    @EventHandler
     private void onReplace(BlockOnReplaceEvent event) {
         var pos = event.currentBlockState().pos();
         var dimension = pos.dimension();

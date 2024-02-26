@@ -13,7 +13,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface VanillaItemAttributeRegistry extends MappedRegistry<VanillaItemId, ItemAttributes, Map<VanillaItemId, ItemAttributes>> {
-    ApiInstanceHolder<VanillaItemAttributeRegistry> REGISTRY = ApiInstanceHolder.of();
+    ApiInstanceHolder<VanillaItemAttributeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static VanillaItemAttributeRegistry getRegistry() {
         return REGISTRY.get();

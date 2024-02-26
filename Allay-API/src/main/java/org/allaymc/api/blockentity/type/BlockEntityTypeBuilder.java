@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  * @author daoge_cmd
  */
 public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEntityComponent> {
-    ApiInstanceHolder<BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
+    ApiInstanceHolder<BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
 
     static <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);

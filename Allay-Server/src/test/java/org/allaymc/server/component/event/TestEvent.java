@@ -2,7 +2,6 @@ package org.allaymc.server.component.event;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.component.interfaces.ComponentEvent;
 
 /**
  * Allay Project 2023/5/6
@@ -11,7 +10,7 @@ import org.allaymc.api.component.interfaces.ComponentEvent;
  */
 @Getter
 @Setter
-public class TestEvent implements ComponentEvent {
+public class TestEvent {
     private String message;
 
     public TestEvent(String message) {

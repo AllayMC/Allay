@@ -22,7 +22,7 @@ import static org.allaymc.api.component.interfaces.ComponentProvider.toMap;
  * @author daoge_cmd
  */
 public interface ItemTypeBuilder<T extends ItemStack, C extends ItemComponent> {
-    ApiInstanceHolder<ItemTypeBuilderFactory> FACTORY = ApiInstanceHolder.of();
+    ApiInstanceHolder<ItemTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
 
     static <T extends ItemStack> ItemTypeBuilder<T, ItemComponent> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);

@@ -1,7 +1,7 @@
 package org.allaymc.server.component.impl;
 
-import org.allaymc.api.component.annotation.ComponentEventListener;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.event.EventHandler;
 import org.allaymc.api.identifier.Identifier;
 import org.allaymc.server.component.event.TestEvent;
 import org.allaymc.server.component.interfaces.TestEventListenerComponent;
@@ -17,7 +17,7 @@ public class SimpleTestEventListenerComponent implements TestEventListenerCompon
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:test_event_listener_component");
 
-    @ComponentEventListener
+    @EventHandler
     protected void testListener(TestEvent event) {
         event.setMessage("testListener() accepted to the event!");
     }

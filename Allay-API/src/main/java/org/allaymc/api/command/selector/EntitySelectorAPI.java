@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public interface EntitySelectorAPI {
 
-    ApiInstanceHolder<EntitySelectorAPI> API = ApiInstanceHolder.of();
+    ApiInstanceHolder<EntitySelectorAPI> API = ApiInstanceHolder.create();
 
     static EntitySelectorAPI getAPI() {
         return API.get();

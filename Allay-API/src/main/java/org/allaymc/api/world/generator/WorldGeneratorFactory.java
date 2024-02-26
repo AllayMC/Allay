@@ -13,7 +13,7 @@ import java.util.function.Function;
  *
  */
 public interface WorldGeneratorFactory extends MappedRegistry<String, Function<String, WorldGenerator>, Map<String, Function<String, WorldGenerator>>> {
-    ApiInstanceHolder<WorldGeneratorFactory> FACTORY = ApiInstanceHolder.of();
+    ApiInstanceHolder<WorldGeneratorFactory> FACTORY = ApiInstanceHolder.create();
 
     static WorldGeneratorFactory getFactory() {
         return FACTORY.get();

@@ -46,7 +46,7 @@ public interface Scheduler {
 
     interface SchedulerFactory {
 
-        ApiInstanceHolder<SchedulerFactory> FACTORY = ApiInstanceHolder.of();
+        ApiInstanceHolder<SchedulerFactory> FACTORY = ApiInstanceHolder.create();
 
         Scheduler createScheduler(ExecutorService asyncTaskExecutor);
     }
