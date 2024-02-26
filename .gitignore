@@ -18,3 +18,5 @@
 /caches/
 /logs/
 /server-settings.yml
+/Allay-Server/ban-info.yml
+/Allay-Server/whitelist.yml

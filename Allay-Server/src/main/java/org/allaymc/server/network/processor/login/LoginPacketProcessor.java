@@ -3,6 +3,7 @@ package org.allaymc.server.network.processor.login;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.event.player.PlayerLoggedInEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.login.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;
@@ -71,6 +72,13 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         var otherDevice = server.getOnlinePlayers().get(loginData.getUuid());
         if (otherDevice != null) {
             otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
+        }
+
+        var event = new PlayerLoggedInEvent(player);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
+            return;
         }
 
         if (!Server.SETTINGS.networkSettings().enableNetworkEncryption()) {

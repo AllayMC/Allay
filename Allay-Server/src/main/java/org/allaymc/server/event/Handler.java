@@ -1,10 +1,13 @@
 package org.allaymc.server.event;
 
+import me.sunlan.fastreflection.FastMemberLoader;
 import me.sunlan.fastreflection.FastMethod;
 import org.allaymc.api.event.EventException;
 import org.allaymc.api.server.Server;
 
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -13,6 +16,7 @@ import java.util.concurrent.ExecutorService;
  * @author daoge_cmd
  */
 public class Handler {
+    protected static final Map<ClassLoader, FastMemberLoader> FAST_MEMBER_LOADERS = new ConcurrentHashMap<>();
     protected final FastMethod method;
     protected final Object instance;
     protected final boolean async;
@@ -21,7 +25,13 @@ public class Handler {
     protected final ExecutorService asyncExecutorService;
 
     public Handler(Method method, Object instance, boolean async, int priority, Class<?> eventClass, ExecutorService asyncExecutorService) {
-        this.method = FastMethod.create(method, true);
+        this.method = FastMethod.create(
+                method,
+                FAST_MEMBER_LOADERS.computeIfAbsent(
+                        instance.getClass().getClassLoader(),
+                        FastMemberLoader::new),
+                true
+        );
         this.instance = instance;
         this.async = async;
         this.priority = priority;

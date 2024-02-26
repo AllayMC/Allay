@@ -106,7 +106,7 @@ public final class AllayServer implements Server {
     private static volatile AllayServer instance;
     private long nextPlayerDataAutoSaveTime = 0;
     @Getter
-    private final EventBus eventBus = new AllayEventBus();
+    private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
     @Getter
     private long startTime;
     private BanInfo banInfo =
