@@ -21,7 +21,7 @@ public final class SimpleForm extends Form {
     private final String type = "form";
     private String title = "";
     private String content = "";
-    private List<Button> buttons = new ArrayList<>();
+    private final List<Button> buttons = new ArrayList<>();
     private transient Consumer<Button> onResponse = button -> {};
 
     public SimpleForm title(String title) {
@@ -54,6 +54,11 @@ public final class SimpleForm extends Form {
 
     public Button buttonWithUrlImage(String text, String url) {
         return button(new Button(text, new ImageData(ImageData.URL_TYPE, url)));
+    }
+
+    public SimpleForm onResponse(Consumer<Button> onResponse) {
+        this.onResponse = onResponse;
+        return this;
     }
 
     @Override

@@ -22,7 +22,7 @@ public final class CustomForm extends Form {
     private final String type = "custom_form";
     private String title = "";
     private ImageData icon;
-    private List<CustomFormElement> content = new ArrayList<>();
+    private final List<CustomFormElement> content = new ArrayList<>();
     private transient Consumer<List<String>> onResponse = responses -> {};
 
     public CustomForm title(String title) {
