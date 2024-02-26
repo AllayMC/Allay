@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.event.player.PlayerInitializedEvent;
+import org.allaymc.api.event.server.player.PlayerInitializedEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.login.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;

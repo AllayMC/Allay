@@ -4,8 +4,10 @@ import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.event.server.misc.WorldLoadEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldConfig;
@@ -71,11 +73,12 @@ public final class AllayWorldPool implements WorldPool {
             var theEnd = new AllayDimension(world, WorldGeneratorFactory.getFactory().createWorldGenerator(theEndSettings.generatorType(), theEndSettings.generatorPreset()), DimensionInfo.THE_END);
             world.setDimension(theEnd);
         }
-        addWorld(world);
-        log.info(I18n.get().tr(TrKeys.A_WORLD_LOADED, name));
-        if (!worldConfig.worlds().containsKey(name)) {
-            worldConfig.worlds().put(name, settings);
-            worldConfig.save();
+        if (addWorld(world)) {
+            log.info(I18n.get().tr(TrKeys.A_WORLD_LOADED, name));
+            if (!worldConfig.worlds().containsKey(name)) {
+                worldConfig.worlds().put(name, settings);
+                worldConfig.save();
+            }
         }
     }
 
@@ -99,9 +102,13 @@ public final class AllayWorldPool implements WorldPool {
         return Collections.unmodifiableMap(worlds);
     }
 
-    private void addWorld(World world) {
+    private boolean addWorld(World world) {
+        var event = new WorldLoadEvent(world);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) return false;
         worlds.put(world.getWorldData().getName(), world);
         world.startTick();
+        return true;
     }
 
     @Override

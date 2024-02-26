@@ -1,4 +1,4 @@
-package org.allaymc.api.event.player;
+package org.allaymc.api.event.server.player;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +13,6 @@ import org.allaymc.api.event.Event;
  */
 @Getter
 @AllArgsConstructor
-public class PlayerLoggedInEvent extends Event implements CancellableEvent {
+public class PlayerInitializedEvent extends Event implements CancellableEvent {
     protected EntityPlayer player;
 }
