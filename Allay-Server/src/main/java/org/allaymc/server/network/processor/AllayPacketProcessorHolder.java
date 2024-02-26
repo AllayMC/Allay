@@ -49,6 +49,7 @@ public class AllayPacketProcessorHolder implements PacketProcessorHolder {
         holder.registerProcessor(new TextPacketProcessor());
         holder.registerProcessor(new SettingsCommandPacketProcessor());
         holder.registerProcessor(new ModalFormResponsePacketProcessor());
+        holder.registerProcessor(new ServerSettingsRequestProcessor());
     }
 
     public PacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {

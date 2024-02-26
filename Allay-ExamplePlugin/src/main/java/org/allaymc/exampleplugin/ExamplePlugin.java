@@ -13,6 +13,7 @@ import org.allaymc.api.server.Server;
 public class ExamplePlugin extends Plugin {
 
     protected ServerEventListener serverEventListener = new ServerEventListener();
+    protected WorldEventListener worldEventListener = new WorldEventListener();
 
     @Override
     public void onLoad() {
@@ -23,6 +24,7 @@ public class ExamplePlugin extends Plugin {
     public void onEnable() {
         log.info("ExamplePlugin enabled!");
         Server.getInstance().getEventBus().registerListener(serverEventListener);
+        Server.getInstance().getEventBus().registerListener(worldEventListener);
         Server.getInstance().getCommandRegistry().register(new ExampleCommand());
     }
 
@@ -30,6 +32,7 @@ public class ExamplePlugin extends Plugin {
     public void onDisable() {
         log.info("ExamplePlugin disabled!");
         Server.getInstance().getEventBus().unregisterListener(serverEventListener);
+        Server.getInstance().getEventBus().unregisterListener(worldEventListener);
         Server.getInstance().getCommandRegistry().unregister("example-cmd");
     }
 }
