@@ -249,17 +249,17 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var aabb = entity.getOffsetAABB();
 
         // First move along the Y axis
-        var yResult = moveAlongYAxisAndStopWhenCollision(aabb, my, pos);
+        var yResult = moveAlongAxisAndStopWhenCollision(aabb, my, pos, Y);
         my = yResult.left();
         entity.setOnGround(yResult.right());
 
         if (abs(mx) >= abs(mz)) {
             // First handle the X axis, then handle the Z axis
-            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround());
-            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround());
+            mx = applyMotion0(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround(), X);
+            mz = applyMotion0(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround(), Z);
         } else {
-            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround());
-            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround());
+            mz = applyMotion0(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround(), Z);
+            mx = applyMotion0(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround(), X);
         }
 
         entity.setMotion(new Vector3f(mx, my, mz));
@@ -267,103 +267,84 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return updated && updateEntityLocation(entity, pos);
     }
 
-    protected float applyMotionZ(float stepHeight, Location3f pos, float mz, AABBf aabb, boolean enableStepping) {
-        if (mz != 0) {
-            var resultAABB = new AABBf(aabb);
-            var resultPos = new Vector3f(pos);
-            // The first time directly moves
-            var zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
-            if (Boolean.TRUE.equals(zResult.right())) {
-                // There is a collision, try to step over
-                // Calculate the remaining speed
-                mz = mz - (resultPos.z - pos.z);
-                if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, mz > 0, false)) {
-                    // Step over successfully
-                    zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
-                }
+    /**
+     * Applies motion to the object's position along the specified axis, considering potential collisions and intersections with other objects.
+     *
+     * @param stepHeight     The step height the object can overcome.
+     * @param pos            The current position of the object.
+     * @param motion         The component of the object's movement velocity along the specified axis (X or Z).
+     * @param aabb           The Axis-Aligned Bounding Box (AABB) of the object.
+     * @param enableStepping Flag indicating whether the object can step over obstacles.
+     * @param axis           The axis along which the motion is applied (X, Y, or Z).
+     *
+     * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections.
+     */
+    private float applyMotion0(float stepHeight, Location3f pos, float motion, AABBf aabb, boolean enableStepping, int axis) {
+        if (motion == 0) return motion;
+
+        var resultAABB = new AABBf(aabb);
+        var resultPos = new Vector3f(pos);
+
+        // The first time directly moves
+        var result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
+        motion = result.left();
+        if (Boolean.TRUE.equals(result.right())) {
+            // There is a collision, try to step over
+            // Calculate the remaining speed
+            motion -= resultPos.get(axis) - pos.get(axis);
+            if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, motion > 0, axis == X)) {
+                result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
             }
-            mz = zResult.left();
-            aabb.set(resultAABB);
-            pos.set(resultPos);
         }
-        return mz;
-    }
 
-    protected float applyMotionX(float stepHeight, Location3f pos, float mx, AABBf aabb, boolean enableStepping) {
-        if (mx != 0) {
-            var resultAABB = new AABBf(aabb);
-            var resultPos = new Vector3f(pos);
-            // The first time directly moves
-            var xResult = moveAlongXAxisAndStopWhenCollision(resultAABB, mx, resultPos);
-            if (Boolean.TRUE.equals(xResult.right())) {
-                // There is a collision, try to step over
-                // Calculate the remaining speed
-                mx = mx - (resultPos.x - pos.x);
-                if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, mx > 0, true)) {
-                    // Step over successfully
-                    xResult = moveAlongXAxisAndStopWhenCollision(resultAABB, mx, resultPos);
-                }
-            }
-            mx = xResult.left();
-            aabb.set(resultAABB);
-            pos.set(resultPos);
-        }
-        return mx;
-    }
+        motion = result.left();
 
-    protected Pair<Float, Boolean> moveAlongXAxisAndStopWhenCollision(AABBf aabb, float mx, Vector3f recorder) {
-        return moveAlongAxisAndStopWhenCollision(aabb, mx, recorder, X);
-    }
-
-    protected Pair<Float, Boolean> moveAlongYAxisAndStopWhenCollision(AABBf aabb, float my, Vector3f recorder) {
-        return moveAlongAxisAndStopWhenCollision(aabb, my, recorder, Y);
-    }
-
-    protected Pair<Float, Boolean> moveAlongZAxisAndStopWhenCollision(AABBf aabb, float mz, Vector3f recorder) {
-        return moveAlongAxisAndStopWhenCollision(aabb, mz, recorder, Z);
+        aabb.set(resultAABB);
+        pos.set(resultPos);
+        return motion;
     }
 
     /**
      * Moves an axis-aligned bounding box (AABB) along a specified axis direction and stops when a collision occurs.
      *
      * @param aabb     The axis-aligned bounding box to move.
-     * @param m        The distance to move along the specified axis.
+     * @param motion   The distance to move along the specified axis.
      * @param recorder The vector to record the movement along the axis.
      * @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis.
      *
      * @return A pair containing the remaining movement distance along the axis after collision detection (Float)
      * and a boolean indicating whether a collision occurred (Boolean).
-     * If no movement was specified (m = 0), an empty pair is returned.
+     * If no movement was specified (motion = 0), an empty pair is returned.
      *
      * @throws IllegalArgumentException if an invalid axis is provided.
      */
-    private Pair<Float, Boolean> moveAlongAxisAndStopWhenCollision(AABBf aabb, float m, Vector3f recorder, int axis) {
-        if (m == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
+    private Pair<Float, Boolean> moveAlongAxisAndStopWhenCollision(AABBf aabb, float motion, Vector3f recorder, int axis) {
+        if (motion == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
 
         var extendAxis = new AABBf(aabb);
         // Calculate the ray axis starting coordinate
         float coordinate;
 
-        // Move towards the negative(m < 0) or positive(m > 0) axis direction
-        var shouldTowardsNegative = m < 0;
+        // Move towards the negative(motion < 0) or positive(motion > 0) axis direction
+        var shouldTowardsNegative = motion < 0;
         switch (axis) {
             case X:
                 coordinate = shouldTowardsNegative ? aabb.minX : aabb.maxX;
                 var lengthX = extendAxis.lengthX();
-                extendAxis.minX += shouldTowardsNegative ? m : lengthX;
-                extendAxis.maxX += shouldTowardsNegative ? -lengthX : m;
+                extendAxis.minX += shouldTowardsNegative ? motion : lengthX;
+                extendAxis.maxX += shouldTowardsNegative ? -lengthX : motion;
                 break;
             case Y:
                 coordinate = shouldTowardsNegative ? aabb.minY : aabb.maxY;
                 var lengthY = extendAxis.lengthY();
-                extendAxis.minY += shouldTowardsNegative ? m : lengthY;
-                extendAxis.maxY += shouldTowardsNegative ? -lengthY : m;
+                extendAxis.minY += shouldTowardsNegative ? motion : lengthY;
+                extendAxis.maxY += shouldTowardsNegative ? -lengthY : motion;
                 break;
             case Z:
                 coordinate = shouldTowardsNegative ? aabb.minZ : aabb.maxZ;
                 var lengthZ = extendAxis.lengthZ();
-                extendAxis.minZ += shouldTowardsNegative ? m : lengthZ;
-                extendAxis.maxZ += shouldTowardsNegative ? -lengthZ : m;
+                extendAxis.minZ += shouldTowardsNegative ? motion : lengthZ;
+                extendAxis.maxZ += shouldTowardsNegative ? -lengthZ : motion;
                 break;
             default:
                 throw new IllegalArgumentException("Invalid axis provided");
@@ -371,7 +352,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         if (notValidEntityArea(extendAxis)) return EMPTY_FLOAT_BOOLEAN_PAIR;
 
-        var deltaAxis = m;
+        var deltaAxis = motion;
         var collision = false;
 
         var blocks = dimension.getCollidingBlocks(extendAxis);
@@ -390,7 +371,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 if (abs(deltaAxis) <= FAT_AABB_MARGIN) deltaAxis = 0;
             }
 
-            m = 0;
+            motion = 0;
         }
 
         // Move the collision box
@@ -400,7 +381,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         // Update the coordinates
         recorder.setComponent(axis, recorder.get(axis) + deltaAxis);
-        return new FloatBooleanImmutablePair(m, collision);
+        return new FloatBooleanImmutablePair(motion, collision);
     }
 
     // Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
@@ -414,8 +395,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
         var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBf());
         var recorder = new Vector3f();
-        moveAlongYAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder);
-        moveAlongYAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder);
+        moveAlongAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder, Y);
+        moveAlongAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder, Y);
         if (recorder.y == 0 || dimension.getCollidingBlocks(offsetAABB) != null) {
             return false;
         } else {
@@ -434,7 +415,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
                     BlockState blockState = sub2[oz];
                     if (blockState == null) continue;
-                    var current = 0f;
+                    float current;
                     var unionAABB = blockState.getBlockAttributes().voxelShape().unionAABB();
                     switch (axis) {
                         case X -> current = unionAABB.lengthX() + start + ox;
