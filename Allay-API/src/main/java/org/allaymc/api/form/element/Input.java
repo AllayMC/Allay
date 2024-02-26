@@ -16,6 +16,8 @@ public class Input extends CustomFormElement {
     @Setter
     @Getter
     private String text;
+    @Getter
+    @Setter
     private String placeholder;
     @Setter
     @Getter
@@ -34,13 +36,5 @@ public class Input extends CustomFormElement {
         this.text = text;
         this.placeholder = placeholder;
         this.defaultText = defaultText;
-    }
-
-    public String getPlaceHolder() {
-        return placeholder;
-    }
-
-    public void setPlaceHolder(String placeholder) {
-        this.placeholder = placeholder;
     }
 }

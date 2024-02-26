@@ -8,10 +8,10 @@ import lombok.Setter;
  *
  * @author daoge_cmd
  */
+@Setter
 @Getter
 public class Button {
 
-    @Setter
     private String text;
     private ButtonImageData image;
 
@@ -21,18 +21,6 @@ public class Button {
 
     public Button(String text, ButtonImageData image) {
         this.text = text;
-        if (canSetImage(image)) {
-            this.image = image;
-        }
-    }
-
-    public void addImage(ButtonImageData image) {
-        if (canSetImage(image)) {
-            this.image = image;
-        }
-    }
-
-    private boolean canSetImage(ButtonImageData image) {
-        return !image.getData().isEmpty() && !image.getType().isEmpty();
+        this.image = image;
     }
 }
