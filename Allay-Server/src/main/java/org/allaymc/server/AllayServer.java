@@ -1,5 +1,7 @@
 package org.allaymc.server;
 
+import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
@@ -21,7 +23,9 @@ import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.server.BanInfo;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.server.Whitelist;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldPool;
@@ -48,6 +52,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -56,21 +61,35 @@ import static org.allaymc.api.entity.type.EntityTypes.PLAYER_TYPE;
 
 @Slf4j
 public final class AllayServer implements Server {
-    private final boolean DEBUG;
-    private final Map<UUID, EntityPlayer> players;
+    private final boolean DEBUG = Server.SETTINGS.genericSettings().debug();
+    private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
     @Getter
-    private final WorldPool worldPool;
-    private final AtomicBoolean isRunning;
+    private final WorldPool worldPool = new AllayWorldPool();
+    private final AtomicBoolean isRunning = new AtomicBoolean(true);
     //TODO: skin update
-    private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap;
+    private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
-    private final PlayerStorage playerStorage;
+    private final PlayerStorage playerStorage =
+            Server.SETTINGS.storageSettings().savePlayerData() ?
+            new AllayNBTFilePlayerStorage(Path.of("players")) :
+            AllayEmptyPlayerStorage.INSTANCE;
     //执行CPU密集型任务的线程池
     @Getter
-    private final ThreadPoolExecutor computeThreadPool;
+    private final ThreadPoolExecutor computeThreadPool =
+            new ThreadPoolExecutor(
+                Runtime.getRuntime().availableProcessors(),
+                Runtime.getRuntime().availableProcessors(),
+                0,
+                TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>(),
+                r -> {
+                    Thread thread = new Thread(r);
+                    thread.setName("computation-thread-" + thread.threadId());
+                    return thread;
+            });
     //执行IO密集型任务的线程池
     @Getter
-    private final ExecutorService virtualThreadPool;
+    private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
     @Getter
     private CommandRegistry commandRegistry;
     @Getter
@@ -85,6 +104,22 @@ public final class AllayServer implements Server {
     private long nextPlayerDataAutoSaveTime = 0;
     @Getter
     private long startTime;
+    private BanInfo banInfo =
+            ConfigManager.create(BanInfo.class, it -> {
+                it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
+                it.withBindFile("ban-info.yml"); // specify Path, File or pathname
+                it.withRemoveOrphans(true); // automatic removal of undeclared keys
+                it.saveDefaults(); // save file if it does not exist
+                it.load(true); // load and save to update comments/new fields
+            });
+    private Whitelist whitelist =
+            ConfigManager.create(Whitelist.class, it -> {
+                it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
+                it.withBindFile("whitelist.yml"); // specify Path, File or pathname
+                it.withRemoveOrphans(true); // automatic removal of undeclared keys
+                it.saveDefaults(); // save file if it does not exist
+                it.load(true); // load and save to update comments/new fields
+            });
 
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
@@ -97,28 +132,7 @@ public final class AllayServer implements Server {
             })
             .build();
 
-    private AllayServer() {
-        DEBUG = Server.SETTINGS.genericSettings().debug();
-        players = new ConcurrentHashMap<>();
-        worldPool = new AllayWorldPool();
-        isRunning = new AtomicBoolean(true);
-        playerListEntryMap = new Object2ObjectOpenHashMap<>();
-        playerStorage = Server.SETTINGS.storageSettings().savePlayerData() ?
-                new AllayNBTFilePlayerStorage(Path.of("players")) :
-                AllayEmptyPlayerStorage.INSTANCE;
-        computeThreadPool = new ThreadPoolExecutor(
-                Runtime.getRuntime().availableProcessors(),
-                Runtime.getRuntime().availableProcessors(),
-                0,
-                TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(),
-                r -> {
-                    Thread thread = new Thread(r);
-                    thread.setName("computation-thread-" + thread.threadId());
-                    return thread;
-                });
-        virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
-    }
+    private AllayServer() {}
 
     public static AllayServer getInstance() {
         if (instance == null) {
@@ -204,6 +218,8 @@ public final class AllayServer implements Server {
         // Do not move this line down
         // Otherwise server-settings.yml will be blank after shutdown
         SETTINGS.save();
+        banInfo.save();
+        whitelist.save();
         // Start a thread to handle server shutdown
         Thread.ofPlatform().start(() -> {
             kickAllPlayersAndBlock();
@@ -344,6 +360,66 @@ public final class AllayServer implements Server {
     }
 
     @Override
+    public boolean isBanned(String uuidOrName) {
+        return banInfo.bannedPlayers().contains(uuidOrName);
+    }
+
+    @Override
+    public boolean ban(String uuidOrName) {
+        return banInfo.bannedPlayers().add(uuidOrName);
+    }
+
+    @Override
+    public boolean unban(String uuidOrName) {
+        return banInfo.bannedPlayers().remove(uuidOrName);
+    }
+
+    @Override
+    public Set<String> getBannedPlayers() {
+        return Collections.unmodifiableSet(banInfo.bannedPlayers());
+    }
+
+    @Override
+    public boolean isIPBanned(String ip) {
+        return banInfo.bannedIps().contains(ip);
+    }
+
+    @Override
+    public boolean banIP(String ip) {
+        return banInfo.bannedIps().add(ip);
+    }
+
+    @Override
+    public boolean unbanIP(String ip) {
+        return banInfo.bannedIps().remove(ip);
+    }
+
+    @Override
+    public Set<String> getBannedIPs() {
+        return Collections.unmodifiableSet(banInfo.bannedIps());
+    }
+
+    @Override
+    public boolean isWhitelisted(String uuidOrName) {
+        return whitelist.whitelist().contains(uuidOrName);
+    }
+
+    @Override
+    public boolean addWhitelist(String uuidOrName) {
+        return whitelist.whitelist().add(uuidOrName);
+    }
+
+    @Override
+    public boolean removeWhitelist(String uuidOrName) {
+        return whitelist.whitelist().remove(uuidOrName);
+    }
+
+    @Override
+    public @UnmodifiableView Set<String> getWhitelistedPlayers() {
+        return Collections.unmodifiableSet(whitelist.whitelist());
+    }
+
+    @Override
     public void sendText(String text) {
         log.info(text);
     }
@@ -357,7 +433,7 @@ public final class AllayServer implements Server {
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         for (var output : outputs) {
-            log.info("[" + sender.getName() + "] " + (status <= 0 ? "§c" : "") + I18n.get().tr(output.str(), output.args()));
+            log.info("[" + sender.getCommandSenderName() + "] " + (status <= 0 ? "§c" : "") + I18n.get().tr(output.str(), output.args()));
         }
     }
 
@@ -367,7 +443,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public String getName() {
+    public String getCommandSenderName() {
         return "Server";
     }
 

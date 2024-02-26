@@ -17,12 +17,12 @@ import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -80,7 +80,7 @@ public interface Server extends TaskCreator, CommandSender {
 
     default EntityPlayer findOnlinePlayerByName(String playerName) {
         for (var player : getOnlinePlayers().values()) {
-            if (player.getName().equals(playerName)) {
+            if (player.getCommandSenderName().equals(playerName)) {
                 return player;
             }
         }
@@ -153,4 +153,31 @@ public interface Server extends TaskCreator, CommandSender {
     default boolean hasPerm(String perm) {
         return true;
     }
+
+    boolean isBanned(String uuidOrName);
+
+    boolean ban(String uuidOrName);
+
+    boolean unban(String uuidOrName);
+
+    @UnmodifiableView
+    Set<String> getBannedPlayers();
+
+    boolean isIPBanned(String ip);
+
+    boolean banIP(String ip);
+
+    boolean unbanIP(String ip);
+
+    @UnmodifiableView
+    Set<String> getBannedIPs();
+
+    boolean isWhitelisted(String uuidOrName);
+
+    boolean addWhitelist(String uuidOrName);
+
+    boolean removeWhitelist(String uuidOrName);
+
+    @UnmodifiableView
+    Set<String> getWhitelistedPlayers();
 }

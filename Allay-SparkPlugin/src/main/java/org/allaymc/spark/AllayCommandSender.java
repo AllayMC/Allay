@@ -21,7 +21,7 @@ public class AllayCommandSender extends AbstractCommandSender<CommandSender> {
 
     @Override
     public String getName() {
-        return this.delegate.getName();
+        return this.delegate.getCommandSenderName();
     }
 
     @Override

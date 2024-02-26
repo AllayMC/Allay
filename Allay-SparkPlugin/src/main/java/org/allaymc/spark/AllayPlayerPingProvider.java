@@ -21,7 +21,7 @@ public class AllayPlayerPingProvider implements PlayerPingProvider {
     public Map<String, Integer> poll() {
         Map<String, Integer> result = new HashMap<>();
         for (var player : this.server.getOnlinePlayers().values())
-            result.put(player.getName(), player.getPing());
+            result.put(player.getCommandSenderName(), player.getPing());
         return result;
     }
 }

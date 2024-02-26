@@ -24,7 +24,7 @@ public class KickCommand extends SimpleCommand {
                 .exec(context -> {
                     String name = context.getSecondResult();
                     for (var player : Server.getInstance().getOnlinePlayers().values()) {
-                        if (player.getName().equals(name)) {
+                        if (player.getCommandSenderName().equals(name)) {
                             player.disconnect("You are kicked");
                             context.addOutput("Kicked " + name);
                             return context.success();

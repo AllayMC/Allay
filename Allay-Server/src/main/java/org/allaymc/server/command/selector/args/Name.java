@@ -23,7 +23,7 @@ public class Name extends CachedSimpleSelectorArgument {
                 dontHave.add(name);
             } else have.add(name);
         }
-        return entity -> have.stream().allMatch(name -> entity.getName().equals(name)) && dontHave.stream().noneMatch(name -> entity.getName().equals(name));
+        return entity -> have.stream().allMatch(name -> entity.getCommandSenderName().equals(name)) && dontHave.stream().noneMatch(name -> entity.getCommandSenderName().equals(name));
     }
 
     @Override

@@ -28,8 +28,8 @@ public class ServerSettings extends OkaeriConfig {
 
         private String motd = "An allay-powered server";
 
-        @Comment("Usually only visible on the LAN interface")
         @CustomKey("sub-motd")
+        @Comment("Usually only visible on the LAN interface")
         private String subMotd = "https://github.com/AllayMC/Allay";
 
         @CustomKey("max-client-count")
@@ -49,6 +49,9 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Open debug mode")
         @Comment("If debug mode is enabled, the console will outputs more detailed information")
         private boolean debug = false;
+
+        @CustomKey("is-whitelisted")
+        private boolean isWhitelisted = false;
     }
 
     @CustomKey("network-settings")

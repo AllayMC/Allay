@@ -91,7 +91,7 @@ public class TagCommand extends SimpleCommand {
                         return context.failed();
                     } else {
                         if (entities.size() == 1) {
-                            context.addOutput(TrKeys.M_COMMANDS_TAG_LIST_SINGLE_SUCCESS, entities.getFirst().getName(), tagSet.size(), tagStr);
+                            context.addOutput(TrKeys.M_COMMANDS_TAG_LIST_SINGLE_SUCCESS, entities.getFirst().getCommandSenderName(), tagSet.size(), tagStr);
                         } else {
                             context.addOutput(TrKeys.M_COMMANDS_TAG_LIST_MULTIPLE_SUCCESS, entities.size(), tagSet.size(), tagStr);
                         }

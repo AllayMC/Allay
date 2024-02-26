@@ -25,7 +25,7 @@ public class NPCCommandSender implements CommandSender {
     protected EntityPlayer initiator;
 
     @Override
-    public String getName() {
+    public String getCommandSenderName() {
         return npc.getDisplayName();
     }
 

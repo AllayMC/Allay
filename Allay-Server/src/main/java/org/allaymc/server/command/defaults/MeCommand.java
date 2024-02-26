@@ -23,7 +23,7 @@ public class MeCommand extends SimpleCommand {
         tree.getRoot()
                 .msg("message")
                 .exec(context -> {
-                    Server.getInstance().broadcastTr(TrKeys.M_CHAT_TYPE_EMOTE, context.getSender().getName(), context.getResult(0));
+                    Server.getInstance().broadcastTr(TrKeys.M_CHAT_TYPE_EMOTE, context.getSender().getCommandSenderName(), context.getResult(0));
                     return context.success();
                 });
     }

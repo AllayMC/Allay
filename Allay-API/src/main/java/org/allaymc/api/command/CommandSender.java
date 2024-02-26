@@ -17,7 +17,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
  */
 public interface CommandSender extends TextReceiver, Permissible {
 
-    String getName();
+    String getCommandSenderName();
 
     CommandOriginData getCommandOriginData();
 

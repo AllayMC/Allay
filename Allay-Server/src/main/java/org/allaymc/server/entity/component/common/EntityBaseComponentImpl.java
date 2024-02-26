@@ -708,7 +708,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public String getName() {
+    public String getCommandSenderName() {
         return getDisplayName();
     }
 

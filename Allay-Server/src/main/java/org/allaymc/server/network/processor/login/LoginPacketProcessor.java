@@ -32,6 +32,24 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     public void handle(EntityPlayer player, LoginPacket packet) {
         var loginData = LoginData.decode(packet);
         player.setLoginData(loginData);
+        var server = Server.getInstance();
+
+        if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.isWhitelisted(player.getOriginName())) {
+            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED);
+            return;
+        }
+
+        if (server.isBanned(player.getUUID().toString()) || server.isBanned(player.getOriginName())) {
+            // TODO: I18n
+            player.disconnect("You are banned!");
+            return;
+        }
+
+        if (server.isIPBanned(player.getClientSession().getSocketAddress().toString().substring(1))) {
+            // TODO: I18n
+            player.disconnect("Your IP is banned!");
+            return;
+        }
 
         if (!loginData.isXboxAuthenticated() && Server.SETTINGS.networkSettings().xboxAuth()) {
             player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTAUTHENTICATED);
@@ -49,7 +67,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        var otherDevice = Server.getInstance().getOnlinePlayers().get(loginData.getUuid());
+        var otherDevice = server.getOnlinePlayers().get(loginData.getUuid());
         if (otherDevice != null) {
             otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
         }

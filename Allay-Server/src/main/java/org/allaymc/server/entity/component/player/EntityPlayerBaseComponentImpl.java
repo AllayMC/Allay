@@ -524,7 +524,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public String getName() {
+    public String getCommandSenderName() {
         return thisEntity.getOriginName();
     }
 
