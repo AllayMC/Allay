@@ -61,7 +61,7 @@ public final class Modal extends Form {
 
     @Override
     public void handleResponse(String data) {
-        if (data.equals("null")) {
+        if (data == null) {
             onClose.run();
         } else {
             onResponse.accept(data);

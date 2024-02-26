@@ -25,7 +25,7 @@ public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormR
                 return;
             }
         }
-        form.handleResponse(packet.getFormData());
+        form.handleResponse(packet.getFormData() != null ? packet.getFormData().trim() : null);
     }
 
     @Override
