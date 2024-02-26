@@ -16,12 +16,16 @@ public class ServerSettingsRequestProcessor extends PacketProcessor<ServerSettin
 
     @Override
     public PacketSignal handleAsync(EntityPlayer player, ServerSettingsRequestPacket packet) {
-        player.getServerSettingForms().forEach((id, form) -> {
-            var pk = new ServerSettingsResponsePacket();
-            pk.setFormId(id);
-            pk.setFormData(form.toJson());
-            player.sendPacket(pk);
-        });
+        // Geyser: fixes https://bugs.mojang.com/browse/MCPE-94012 because of the delay
+        player.getWorld().getScheduler().scheduleDelayed(() -> {
+            player.getServerSettingForms().forEach((id, form) -> {
+                var pk = new ServerSettingsResponsePacket();
+                pk.setFormId(id);
+                pk.setFormData(form.toJson());
+                player.sendPacket(pk);
+            });
+            return true;
+        }, 20);
         return PacketSignal.HANDLED;
     }
 
