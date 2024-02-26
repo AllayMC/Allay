@@ -133,5 +133,11 @@ public final class CustomForm extends Form {
         }
         List<String> responses = GSON.fromJson(data, new TypeToken<List<String>>(){}.getType());
         onResponse.accept(responses);
+        response = responses;
+    }
+
+    @Override
+    public List<String> getResponse() {
+        return response != null ? (List<String>) response : null;
     }
 }

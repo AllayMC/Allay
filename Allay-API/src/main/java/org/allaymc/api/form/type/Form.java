@@ -1,6 +1,8 @@
 package org.allaymc.api.form.type;
 
 import com.google.gson.Gson;
+import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
@@ -12,6 +14,8 @@ public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
 
     protected static final Gson GSON = new Gson();
     protected transient Runnable onClose = () -> {};
+    @Getter
+    protected transient Object response;
 
     public void sendTo(EntityPlayer player) {
         player.showForm(this);

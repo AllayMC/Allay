@@ -61,6 +61,7 @@ public final class ModalForm extends Form {
 
     @Override
     public void handleResponse(String data) {
+        response = data;
         if (data == null) {
             onClose.run();
             return;
@@ -76,5 +77,10 @@ public final class ModalForm extends Form {
     @Override
     public ModalForm onClose(Runnable runnable) {
         return (ModalForm) super.onClose(runnable);
+    }
+
+    @Override
+    public String getResponse() {
+        return response != null ? (String) response : "null";
     }
 }

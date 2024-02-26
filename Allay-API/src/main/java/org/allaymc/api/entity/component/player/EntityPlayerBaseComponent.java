@@ -114,6 +114,8 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     @UnmodifiableView
     Map<Integer, Form> getServerSettingForms();
 
+    void addServerSettingForm(Form form);
+
     Form getServerSettingForm(int id);
 
     Form removeServerSettingForm(int id);

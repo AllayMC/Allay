@@ -580,6 +580,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         return forms.remove(id);
     }
 
+    @Override
+    public void addServerSettingForm(Form form) {
+        serverSettingForms.put(assignFormId(), form);
+    }
+
+    @Override
     public Map<Integer, Form> getServerSettingForms() {
         return Collections.unmodifiableMap(serverSettingForms);
     }

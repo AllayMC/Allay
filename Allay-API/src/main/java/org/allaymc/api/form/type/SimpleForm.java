@@ -64,6 +64,7 @@ public final class SimpleForm extends Form {
     @Override
     public void handleResponse(String data) {
         if (data == null) {
+            response = null;
             onClose.run();
             return;
         }
@@ -81,5 +82,11 @@ public final class SimpleForm extends Form {
         var button = this.buttons.get(buttonIndex);
         onResponse.accept(button);
         button.getOnClick().accept(button);
+        response = button;
+    }
+
+    @Override
+    public Button getResponse() {
+        return response != null ? (Button) response : null;
     }
 }
