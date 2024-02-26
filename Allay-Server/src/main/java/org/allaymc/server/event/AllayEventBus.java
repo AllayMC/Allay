@@ -5,11 +5,13 @@ import org.allaymc.api.event.Event;
 import org.allaymc.api.event.EventBus;
 import org.allaymc.api.event.EventException;
 import org.allaymc.api.event.EventHandler;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.ReflectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Allay Project 2024/2/26
@@ -18,8 +20,17 @@ import java.util.Map;
  */
 public class AllayEventBus implements EventBus {
 
-    protected Map<Class<?>, List<Handler>> handlerMap = new Object2ObjectOpenHashMap<>();
-    protected Map<Object, List<Handler>> listenerToHandlerMap = new Object2ObjectOpenHashMap<>();
+    protected final Map<Class<?>, List<Handler>> handlerMap = new Object2ObjectOpenHashMap<>();
+    protected final Map<Object, List<Handler>> listenerToHandlerMap = new Object2ObjectOpenHashMap<>();
+    protected final ExecutorService asyncExecutorService;
+
+    public AllayEventBus(ExecutorService asyncExecutorService) {
+        this.asyncExecutorService = asyncExecutorService;
+    }
+
+    public AllayEventBus() {
+        this(Server.getInstance().getVirtualThreadPool());
+    }
 
     @Override
     public synchronized void registerListener(Object listener) {
@@ -39,7 +50,7 @@ public class AllayEventBus implements EventBus {
                 throw new EventException("Event handler method parameter must be a subclass of Event: " + method.getName() + " in listener " + listener.getClass().getName());
             }
             var handlers = handlerMap.computeIfAbsent(eventClass, k -> new ArrayList<>());
-            var handler = new Handler(method, listener, annotation.async(), annotation.priority(), eventClass);
+            var handler = new Handler(method, listener, annotation.async(), annotation.priority(), eventClass, asyncExecutorService);
             handlers.add(handler);
             handlers.sort((h1, h2) -> Integer.compare(h2.priority, h1.priority));
             listenerToHandlerMap.computeIfAbsent(listener, k -> new ArrayList<>()).add(handler);

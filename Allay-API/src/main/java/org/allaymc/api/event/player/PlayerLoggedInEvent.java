@@ -14,5 +14,5 @@ import org.allaymc.api.event.Event;
 @Getter
 @AllArgsConstructor
 public class PlayerLoggedInEvent extends Event implements CancellableEvent {
-    private EntityPlayer player;
+    protected EntityPlayer player;
 }

@@ -5,6 +5,7 @@ import org.allaymc.api.event.EventException;
 import org.allaymc.api.server.Server;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Allay Project 2024/2/26
@@ -17,20 +18,22 @@ public class Handler {
     protected final boolean async;
     protected final int priority;
     protected final Class<?> eventClass;
+    protected final ExecutorService asyncExecutorService;
 
-    public Handler(Method method, Object instance, boolean async, int priority, Class<?> eventClass) {
+    public Handler(Method method, Object instance, boolean async, int priority, Class<?> eventClass, ExecutorService asyncExecutorService) {
         this.method = FastMethod.create(method, true);
         this.instance = instance;
         this.async = async;
         this.priority = priority;
         this.eventClass = eventClass;
+        this.asyncExecutorService = asyncExecutorService;
     }
 
     public void invoke(Object event) {
         if (!async) {
             invoke0(event);
         } else {
-            Server.getInstance().getVirtualThreadPool().submit(() -> {
+            asyncExecutorService.submit(() -> {
                 invoke0(event);
             });
         }
