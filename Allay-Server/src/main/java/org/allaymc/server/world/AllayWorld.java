@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.event.EventBus;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
@@ -14,6 +15,7 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.event.AllayEventBus;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
@@ -37,10 +39,12 @@ public class AllayWorld implements World {
     @Getter
     protected final WorldData worldData;
     @Getter
-    protected final Int2ObjectOpenHashMap<Dimension> dimensionMap;
+    protected final Int2ObjectOpenHashMap<Dimension> dimensionMap = new Int2ObjectOpenHashMap<>(3);
     @Getter
-    protected final Scheduler scheduler;
+    protected final Scheduler scheduler = new AllayScheduler();
     protected final GameLoop gameLoop;
+    @Getter
+    protected final EventBus eventBus = new AllayEventBus();
     @Getter
     protected final Thread thread;
     protected final Thread networkThread;
@@ -52,8 +56,6 @@ public class AllayWorld implements World {
         this.worldStorage = worldStorage;
         this.worldData = worldStorage.getWorldDataCache();
         this.worldData.setWorld(this);
-        this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
-        this.scheduler = new AllayScheduler();
         this.gameLoop = GameLoop.builder()
                 .onTick(gameLoop -> {
                     if (!Server.getInstance().isRunning()) {

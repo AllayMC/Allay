@@ -9,6 +9,7 @@ import org.allaymc.api.client.storage.PlayerStorage;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.event.EventBus;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.plugin.PluginManager;
@@ -180,4 +181,6 @@ public interface Server extends TaskCreator, CommandSender {
 
     @UnmodifiableView
     Set<String> getWhitelistedPlayers();
+
+    EventBus getEventBus();
 }
