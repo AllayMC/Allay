@@ -336,26 +336,21 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         if (motion == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
 
         var extendAxis = new AABBf(aabb);
-        // Calculate the ray axis starting coordinate
-        float coordinate;
 
         // Move towards the negative(motion < 0) or positive(motion > 0) axis direction
         var shouldTowardsNegative = motion < 0;
         switch (axis) {
             case X:
-                coordinate = shouldTowardsNegative ? aabb.minX : aabb.maxX;
                 var lengthX = extendAxis.lengthX();
                 extendAxis.minX += shouldTowardsNegative ? motion : lengthX;
                 extendAxis.maxX += shouldTowardsNegative ? -lengthX : motion;
                 break;
             case Y:
-                coordinate = shouldTowardsNegative ? aabb.minY : aabb.maxY;
                 var lengthY = extendAxis.lengthY();
                 extendAxis.minY += shouldTowardsNegative ? motion : lengthY;
                 extendAxis.maxY += shouldTowardsNegative ? -lengthY : motion;
                 break;
             case Z:
-                coordinate = shouldTowardsNegative ? aabb.minZ : aabb.maxZ;
                 var lengthZ = extendAxis.lengthZ();
                 extendAxis.minZ += shouldTowardsNegative ? motion : lengthZ;
                 extendAxis.maxZ += shouldTowardsNegative ? -lengthZ : motion;
@@ -376,6 +371,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             // There is a collision
             var minAxis = (float) floor(extendAxis.getMin(axis));
             var maxAxis = computeMax(minAxis, axis, blocks);
+            // Calculate the ray axis starting coordinate
+            var coordinate = shouldTowardsNegative ? aabb.getMin(axis) : aabb.getMax(axis);
             if (isInRange(minAxis, coordinate, maxAxis)) {
                 // Stuck into the block
                 deltaAxis = 0;
