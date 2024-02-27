@@ -439,7 +439,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public void knockback(Vector3fc source, float kb) {
         Vector3f vec;
         if (getLocation().distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
-            // Random kb direction of distance <= 0.01m
+            // Generate a random kb direction if distance <= 0.01m
             var rand = ThreadLocalRandom.current();
             var rx = rand.nextFloat(1) - 0.5f;
             var rz = rand.nextFloat(1) - 0.5f;

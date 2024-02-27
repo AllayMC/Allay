@@ -98,7 +98,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 updateMotion(entity);
             } else {
                 // 2. The entity is stuck in the block
-                // Do not calculate another motion exclude block collision motion
+                // Do not calculate other motion exclude block collision motion
                 if (entity.computeBlockCollisionMotion()) {
                     computeBlockCollisionMotion(entity, collidedBlocks);
                     entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
