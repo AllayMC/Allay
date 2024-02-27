@@ -235,7 +235,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         var newMx = (float) (momentumMx + acceleration * Math.sin(yaw));
         var newMz = (float) (momentumMz + acceleration * Math.cos(yaw));
-        // Skip Sprint jump boost because this service does not handle player
+        // Skip sprint jump boost because this service does not handle player
 
         var newMy = (motion.y() - (entity.hasGravity() ? entity.getGravity() : 0f)) * DRAG_FACTOR;
         entity.setMotion(checkMotionThreshold(new Vector3f(newMx, newMy, newMz)));
