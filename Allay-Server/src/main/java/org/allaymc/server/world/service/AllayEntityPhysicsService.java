@@ -39,13 +39,30 @@ import static org.allaymc.api.utils.MathUtils.isInRange;
 @Slf4j
 public class AllayEntityPhysicsService implements EntityPhysicsService {
 
-    public static float MOTION_THRESHOLD;
-    public static float STEPPING_OFFSET;
-    public static float FAT_AABB_MARGIN;
-    public static float BLOCK_COLLISION_MOTION;
     public static final FloatBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new FloatBooleanImmutablePair(0, false);
 
-    protected Dimension dimension;
+    public static final float MOTION_THRESHOLD;
+    public static final float STEPPING_OFFSET;
+    public static final float FAT_AABB_MARGIN;
+    public static final float BLOCK_COLLISION_MOTION;
+
+    private static final float MOMENTUM_FACTOR = 0.91f;
+    private static final float GROUND_VELOCITY_FACTOR = 0.1f;
+    private static final float AIR_VELOCITY_FACTOR = 0.02f;
+    private static final float DRAG_FACTOR = 0.98f;
+
+    private static final int X = 0;
+    private static final int Y = 1;
+    private static final int Z = 2;
+
+    static {
+        var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
+        MOTION_THRESHOLD = settings.motionThreshold();
+        STEPPING_OFFSET = settings.steppingOffset();
+        FAT_AABB_MARGIN = settings.fatAABBMargin();
+        BLOCK_COLLISION_MOTION = settings.blockCollisionMotion();
+    }
+
     protected Map<Long, Entity> entities = new Long2ObjectOpenHashMap<>();
     protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectOpenHashMap<>();
     protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectOpenHashMap<>();
@@ -53,14 +70,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * Regardless of the value of the entity's hasEntityCollision(), this aabb tree saves its collision result
      */
     protected AABBTree<Entity> entityAABBTree = new AABBTree<>();
+    protected Dimension dimension;
 
     public AllayEntityPhysicsService(Dimension dimension) {
         this.dimension = dimension;
-        var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
-        MOTION_THRESHOLD = settings.motionThreshold();
-        STEPPING_OFFSET = settings.steppingOffset();
-        FAT_AABB_MARGIN = settings.fatAABBMargin();
-        BLOCK_COLLISION_MOTION = settings.blockCollisionMotion();
     }
 
     @Override
@@ -72,20 +85,20 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             if (!entity.computeMovementServerSide()) return;
             if (!entity.isCurrentChunkLoaded()) return;
             if (entity.getLocation().y() < dimension.getDimensionInfo().minHeight()) return;
-            //TODO: liquid motion etc...
+            // TODO: liquid motion etc...
             var collidedBlocks = dimension.getCollidingBlocks(entity.getOffsetAABB());
             if (collidedBlocks == null) {
-                //1. The entity is not stuck in the block
+                // 1. The entity is not stuck in the block
                 if (entity.computeEntityCollisionMotion()) computeEntityCollisionMotion(entity);
                 entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
                 if (applyMotion(entity)) {
                     updatedEntities.put(entity.getUniqueId(), entity);
                 }
-                //Apply friction, gravity etc...
+                // Apply friction, gravity etc...
                 updateMotion(entity);
             } else {
-                //2. The entity is stuck in the block
-                //Do not calculate other motion exclude block collision motion
+                // 2. The entity is stuck in the block
+                // Do not calculate other motion exclude block collision motion
                 if (entity.computeBlockCollisionMotion()) {
                     computeBlockCollisionMotion(entity, collidedBlocks);
                     entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
@@ -108,7 +121,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected void computeBlockCollisionMotion(Entity entity, BlockState[][][] collidedBlocks) {
-        //1. Find out the block state which entity collided most
+        // 1. Find out the block state which entity collided most
         var aabb = entity.getOffsetAABB();
         int minX = (int) Math.floor(aabb.minX());
         int minY = (int) Math.floor(aabb.minY());
@@ -141,7 +154,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             }
         }
 
-        //2. Centered on the block pos we found (1), find out the best moving direction
+        // 2. Centered on the block pos we found (1), find out the best moving direction
         BlockFace movingDirection = null;
         var values = BlockFace.values();
         float distanceSqrt = Integer.MAX_VALUE;
@@ -159,7 +172,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         if (movingDirection == null) movingDirection = BlockFace.UP;
 
-        //3. Add motion to the entity
+        // 3. Add motion to the entity
         var directionOffset = movingDirection.getOffset();
         var mx = directionOffset.x();
         var my = directionOffset.y();
@@ -174,7 +187,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var loc = entity.getLocation();
         float r = entity.getPushSpeedReduction();
         for (var other : collidedEntities) {
-            //https://github.com/lovexyn0827/Discovering-Minecraft/blob/master/Minecraft%E5%AE%9E%E4%BD%93%E8%BF%90%E5%8A%A8%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%BA%94%E7%94%A8/5-Chapter-5.md
+            // https://github.com/lovexyn0827/Discovering-Minecraft/blob/master/Minecraft%E5%AE%9E%E4%BD%93%E8%BF%90%E5%8A%A8%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%BA%94%E7%94%A8/5-Chapter-5.md
             var ol = other.getLocation();
             var direction = new Vector3f(entity.getLocation()).sub(other.getLocation(), new Vector3f()).normalize();
             float distance = max(abs(ol.x() - loc.x()), abs(ol.z() - loc.z()));
@@ -191,31 +204,40 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         entity.addMotion(collisionMotion);
     }
 
+    /**
+     * See: <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
+     */
     protected void updateMotion(Entity entity) {
-        //https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas
-        //TODO: 效果乘数
-        float effectFactor = 1;
-        float movementFactor = entity.getMovementFactor();
+        var motion = entity.getMotion();
         var blockUnder = dimension.getBlockState((int) entity.getLocation().x(), (int) (entity.getLocation().y() - 0.5), (int) entity.getLocation().z());
-        float slipperyFactor = blockUnder != null ?
+
+        // 1. Multiplier factors
+        var movementFactor = entity.getMovementFactor();
+
+        // TODO: Effects Multiplier factor
+        var effectFactor = 1F;
+
+        var slipperinessMultiplier = blockUnder != null ?
                 blockUnder.getBlockType().getBlockBehavior().getBlockAttributes(blockUnder).friction() :
                 DEFAULT_FRICTION;
-        float mx = entity.getMotion().x();
-        float my = entity.getMotion().y();
-        float mz = entity.getMotion().z();
-        float newMx;
-        float newMz;
-        float approachMx = mx * slipperyFactor * 0.91f;
-        float approachMz = mz * slipperyFactor * 0.91f;
-        double yaw = entity.getLocation().yaw();
+
+        var momentumMx = motion.x() * slipperinessMultiplier * MOMENTUM_FACTOR;
+        var momentumMz = motion.z() * slipperinessMultiplier * MOMENTUM_FACTOR;
+
+        // 2. Complete Formulas
+        var velocityFactor = entity.isOnGround() ? GROUND_VELOCITY_FACTOR : AIR_VELOCITY_FACTOR;
+        var acceleration = velocityFactor * movementFactor;
         if (entity.isOnGround()) {
-            newMx = (float) (approachMx + 0.1f * movementFactor * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.sin(yaw));
-            newMz = (float) (approachMz + 0.1f * movementFactor * effectFactor * Math.pow(0.6 / slipperyFactor, 3) * Math.cos(yaw));
-        } else {
-            newMx = (float) (approachMx + 0.02f * movementFactor * Math.sin(yaw));
-            newMz = (float) (approachMz + 0.02f * movementFactor * Math.cos(yaw));
+            acceleration = (float) (movementFactor * effectFactor * Math.pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
         }
-        float newMy = (my - (entity.hasGravity() ? entity.getGravity() : 0f)) * 0.98f;
+
+        var yaw = entity.getLocation().yaw();
+
+        var newMx = (float) (momentumMx + acceleration * Math.sin(yaw));
+        var newMz = (float) (momentumMz + acceleration * Math.cos(yaw));
+        // Skip sprint jump boost because this service does not handle player
+
+        var newMy = (motion.y() - (entity.hasGravity() ? entity.getGravity() : 0f)) * DRAG_FACTOR;
         entity.setMotion(checkMotionThreshold(new Vector3f(newMx, newMy, newMz)));
     }
 
@@ -240,18 +262,18 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var mz = motion.z();
         var aabb = entity.getOffsetAABB();
 
-        //先沿着Y轴移动
-        var yResult = moveAlongYAxisAndStopWhenCollision(aabb, my, pos);
+        // First move along the Y axis
+        var yResult = moveAlongAxisAndStopWhenCollision(aabb, my, pos, Y);
         my = yResult.left();
         entity.setOnGround(yResult.right());
 
         if (abs(mx) >= abs(mz)) {
-            //先处理X轴, 然后处理Z轴
-            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround());
-            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround());
+            // First handle the X axis, then handle the Z axis
+            mx = applyMotion0(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround(), X);
+            mz = applyMotion0(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround(), Z);
         } else {
-            mz = applyMotionZ(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround());
-            mx = applyMotionX(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround());
+            mz = applyMotion0(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround(), Z);
+            mx = applyMotion0(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround(), X);
         }
 
         entity.setMotion(new Vector3f(mx, my, mz));
@@ -259,196 +281,133 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return updated && updateEntityLocation(entity, pos);
     }
 
-    protected float applyMotionZ(float stepHeight, Location3f pos, float mz, AABBf aabb, boolean enableStepping) {
-        if (mz != 0) {
-            var resultAABB = new AABBf(aabb);
-            var resultPos = new Vector3f(pos);
-            //第一次直接移动
-            var zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
-            if (zResult.right()) {
-                //有碰撞，尝试跨步
-                //计算剩余速度
-                mz = mz - (resultPos.z - pos.z);
-                if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, mz > 0, false)) {
-                    //跨步成功
-                    zResult = moveAlongZAxisAndStopWhenCollision(resultAABB, mz, resultPos);
-                }
+    /**
+     * Applies motion to the object's position along the specified axis, considering potential collisions and intersections with other objects.
+     *
+     * @param stepHeight     The step height the object can overcome.
+     * @param pos            The current position of the object.
+     * @param motion         The component of the object's movement velocity along the specified axis (X or Z).
+     * @param aabb           The Axis-Aligned Bounding Box (AABB) of the object.
+     * @param enableStepping Flag indicating whether the object can step over obstacles.
+     * @param axis           The axis along which the motion is applied (X or Z).
+     *
+     * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections.
+     */
+    private float applyMotion0(float stepHeight, Location3f pos, float motion, AABBf aabb, boolean enableStepping, int axis) {
+        if (motion == 0) return motion;
+        if (axis < X || axis > Z) throw new IllegalArgumentException("Invalid axis: " + axis);
+
+        var resultAABB = new AABBf(aabb);
+        var resultPos = new Vector3f(pos);
+
+        // The first time directly moves
+        var result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
+        if (Boolean.TRUE.equals(result.right())) {
+            // There is a collision, try to step over
+            // Calculate the remaining speed
+            motion -= resultPos.get(axis) - pos.get(axis);
+            if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, motion > 0, axis == X)) {
+                result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
             }
-            mz = zResult.left();
-            aabb.set(resultAABB);
-            pos.set(resultPos);
         }
-        return mz;
+
+        motion = result.left();
+
+        aabb.set(resultAABB);
+        pos.set(resultPos);
+        return motion;
     }
 
-    protected float applyMotionX(float stepHeight, Location3f pos, float mx, AABBf aabb, boolean enableStepping) {
-        if (mx != 0) {
-            var resultAABB = new AABBf(aabb);
-            var resultPos = new Vector3f(pos);
-            //第一次直接移动
-            var xResult = moveAlongXAxisAndStopWhenCollision(resultAABB, mx, resultPos);
-            if (xResult.right()) {
-                //有碰撞，尝试跨步
-                //计算剩余速度
-                mx = mx - (resultPos.x - pos.x);
-                if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, mx > 0, true)) {
-                    //跨步成功
-                    xResult = moveAlongXAxisAndStopWhenCollision(resultAABB, mx, resultPos);
-                }
-            }
-            mx = xResult.left();
-            aabb.set(resultAABB);
-            pos.set(resultPos);
-        }
-        return mx;
-    }
+    /**
+     * Moves an axis-aligned bounding box (AABB) along a specified axis direction and stops when a collision occurs.
+     *
+     * @param aabb     The axis-aligned bounding box to move.
+     * @param motion   The distance to move along the specified axis.
+     * @param recorder The vector to record the movement along the axis.
+     * @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis.
+     *
+     * @return A pair containing the remaining movement distance along the axis after collision detection (Float)
+     * and a boolean indicating whether a collision occurred (Boolean).
+     * If no movement was specified (motion = 0), an empty pair is returned.
+     *
+     * @throws IllegalArgumentException if an invalid axis is provided.
+     */
+    private Pair<Float, Boolean> moveAlongAxisAndStopWhenCollision(AABBf aabb, float motion, Vector3f recorder, int axis) {
+        if (motion == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
 
-    protected Pair<Float, Boolean> moveAlongXAxisAndStopWhenCollision(AABBf aabb, float mx, Vector3f recorder) {
-        if (mx == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var extendX = new AABBf(aabb);
-        //计算射线X轴起点坐标
-        float x;
-        if (mx < 0) {
-            //向X轴负方向移动
-            x = aabb.minX;
-            extendX.maxX -= extendX.lengthX();
-            extendX.minX += mx;
-        } else {
-            //向X轴正方向移动
-            x = aabb.maxX;
-            extendX.minX += extendX.lengthX();
-            extendX.maxX += mx;
+        var extendAxis = new AABBf(aabb);
+
+        // Move towards the negative(motion < 0) or positive(motion > 0) axis direction
+        var shouldTowardsNegative = motion < 0;
+        switch (axis) {
+            case X:
+                var lengthX = extendAxis.lengthX();
+                extendAxis.minX += shouldTowardsNegative ? motion : lengthX;
+                extendAxis.maxX += shouldTowardsNegative ? -lengthX : motion;
+                break;
+            case Y:
+                var lengthY = extendAxis.lengthY();
+                extendAxis.minY += shouldTowardsNegative ? motion : lengthY;
+                extendAxis.maxY += shouldTowardsNegative ? -lengthY : motion;
+                break;
+            case Z:
+                var lengthZ = extendAxis.lengthZ();
+                extendAxis.minZ += shouldTowardsNegative ? motion : lengthZ;
+                extendAxis.maxZ += shouldTowardsNegative ? -lengthZ : motion;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid axis provided");
         }
-        var deltaX = mx;
+
+        if (notValidEntityArea(extendAxis)) return EMPTY_FLOAT_BOOLEAN_PAIR;
+
+        var deltaAxis = motion;
         var collision = false;
-        if (notValidEntityArea(extendX)) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var blocks = dimension.getCollidingBlocks(extendX);
+
+        var blocks = dimension.getCollidingBlocks(extendAxis);
         if (blocks != null) {
-            collision = true;
-            //存在碰撞
-            var minX = (float) floor(extendX.minX);
-            var maxX = computeMax(minX, 0, blocks);
-            if (isInRange(minX, x, maxX)) {
-                //卡方块里面了
-                deltaX = 0;
+            collision = axis != Y || shouldTowardsNegative;
+
+            // There is a collision
+            var minAxis = (float) floor(extendAxis.getMin(axis));
+            var maxAxis = computeMax(minAxis, axis, blocks);
+            // Calculate the ray axis starting coordinate
+            var coordinate = shouldTowardsNegative ? aabb.getMin(axis) : aabb.getMax(axis);
+            if (isInRange(minAxis, coordinate, maxAxis)) {
+                // Stuck into the block
+                deltaAxis = 0;
             } else {
-                deltaX = min(abs(x - minX), abs(x - maxX));
-                if (mx < 0) deltaX = -deltaX;
-                if (abs(deltaX) <= FAT_AABB_MARGIN) deltaX = 0;
+                deltaAxis = min(abs(coordinate - minAxis), abs(coordinate - maxAxis));
+                if (shouldTowardsNegative) deltaAxis = -deltaAxis;
+                if (abs(deltaAxis) <= FAT_AABB_MARGIN) deltaAxis = 0;
             }
-            //x轴方向速度归零
-            mx = 0;
+
+            motion = 0;
         }
-        //移动碰撞箱
-        aabb.translate(deltaX, 0, 0);
-        //更新坐标
-        recorder.x += deltaX;
-        return new FloatBooleanImmutablePair(mx, collision);
+
+        // Move the collision box
+        if (axis == X) aabb.translate(deltaAxis, 0, 0);
+        else if (axis == Y) aabb.translate(0, deltaAxis, 0);
+        else aabb.translate(0, 0, deltaAxis);
+
+        // Update the coordinates
+        recorder.setComponent(axis, recorder.get(axis) + deltaAxis);
+        return new FloatBooleanImmutablePair(motion, collision);
     }
 
-    protected Pair<Float, Boolean> moveAlongZAxisAndStopWhenCollision(AABBf aabb, float mz, Vector3f recorder) {
-        if (mz == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var extendZ = new AABBf(aabb);
-        //计算射线Z轴起点坐标
-        float z;
-        if (mz < 0) {
-            //向Z轴负方向移动
-            z = aabb.minZ;
-            extendZ.maxZ -= extendZ.lengthZ();
-            extendZ.minZ += mz;
-        } else {
-            //向Z轴正方向移动
-            z = aabb.maxZ;
-            extendZ.minZ += extendZ.lengthZ();
-            extendZ.maxZ += mz;
-        }
-        var deltaZ = mz;
-        var collision = false;
-        if (notValidEntityArea(extendZ)) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var blocks = dimension.getCollidingBlocks(extendZ);
-        if (blocks != null) {
-            collision = true;
-            //存在碰撞
-            var minZ = (float) floor(extendZ.minZ);
-            var maxZ = computeMax(minZ, 2, blocks);
-            if (isInRange(minZ, z, maxZ)) {
-                //卡方块里面了
-                deltaZ = 0;
-            } else {
-                deltaZ = min(abs(z - minZ), abs(z - maxZ));
-                if (mz < 0) deltaZ = -deltaZ;
-                if (abs(deltaZ) <= FAT_AABB_MARGIN) deltaZ = 0;
-            }
-            //z轴方向速度归零
-            mz = 0;
-        }
-        //移动碰撞箱
-        aabb.translate(0, 0, deltaZ);
-        //更新坐标
-        recorder.z += deltaZ;
-        return new FloatBooleanImmutablePair(mz, collision);
-    }
-
-    protected Pair<Float, Boolean> moveAlongYAxisAndStopWhenCollision(AABBf aabb, float my, Vector3f recorder) {
-        if (my == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
-        AABBf extendY = new AABBf(aabb);
-        //计算射线Y轴起点坐标
-        float y;
-        boolean down = false;
-        //检查范围不包括实体aabb
-        if (my < 0) {
-            //向下移动
-            down = true;
-            y = aabb.minY;
-            extendY.maxY -= extendY.lengthY();
-            extendY.minY += my;
-        } else {
-            //向上移动
-            y = aabb.maxY;
-            extendY.minY += extendY.lengthY();
-            extendY.maxY += my;
-        }
-        var deltaY = my;
-        var onGround = false;
-        if (notValidEntityArea(extendY))
-            return EMPTY_FLOAT_BOOLEAN_PAIR;
-        var blocks = dimension.getCollidingBlocks(extendY);
-        if (blocks != null) {
-            //存在碰撞
-            if (down) onGround = true;
-            var minY = (float) floor(extendY.minY);
-            var maxY = computeMax(minY, 1, blocks);
-            if (isInRange(minY, y, maxY)) {
-                //卡方块里面了
-                deltaY = 0;
-            } else {
-                deltaY = min(abs(y - minY), abs(y - maxY));
-                if (my < 0) deltaY = -deltaY;
-                if (abs(deltaY) <= FAT_AABB_MARGIN) deltaY = 0;
-            }
-            //y轴方向速度归零
-            my = 0;
-        }
-        //移动碰撞箱
-        aabb.translate(0, deltaY, 0);
-        //更新坐标
-        recorder.y += deltaY;
-        return new FloatBooleanImmutablePair(my, onGround);
-    }
-
-    //Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
+    // Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
     protected boolean notValidEntityArea(AABBf extendAABB) {
-        return !(extendAABB.minY >= dimension.getDimensionInfo().minHeight()) &&
-               !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
-               !dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
+        return (extendAABB.minY < dimension.getDimensionInfo().minHeight()) &&
+                !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
+                !dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
     }
 
     protected boolean tryStepping(Vector3f pos, AABBf aabb, float stepHeight, boolean positive, boolean xAxis) {
         var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
         var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBf());
         var recorder = new Vector3f();
-        moveAlongYAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder);
-        moveAlongYAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder);
+        moveAlongAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder, Y);
+        moveAlongAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder, Y);
         if (recorder.y == 0 || dimension.getCollidingBlocks(offsetAABB) != null) {
             return false;
         } else {
@@ -458,7 +417,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
     }
 
-    protected float computeMax(float start, int xyzMode, BlockState[][][] blocks) {
+    protected float computeMax(float start, int axis, BlockState[][][] blocks) {
         float max = start;
         for (int ox = 0, blocksLength = blocks.length; ox < blocksLength; ox++) {
             BlockState[][] sub1 = blocks[ox];
@@ -467,20 +426,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
                     BlockState blockState = sub2[oz];
                     if (blockState == null) continue;
-                    var current = 0f;
-                    switch (xyzMode) {
-                        case 0 -> {
-                            //x
-                            current = blockState.getBlockAttributes().voxelShape().unionAABB().lengthX() + start + ox;
-                        }
-                        case 1 -> {
-                            //y
-                            current = blockState.getBlockAttributes().voxelShape().unionAABB().lengthY() + start + oy;
-                        }
-                        case 2 -> {
-                            //y
-                            current = blockState.getBlockAttributes().voxelShape().unionAABB().lengthZ() + start + oz;
-                        }
+                    float current;
+                    var unionAABB = blockState.getBlockAttributes().voxelShape().unionAABB();
+                    switch (axis) {
+                        case X -> current = unionAABB.lengthX() + start + ox;
+                        case Y -> current = unionAABB.lengthY() + start + oy;
+                        case Z -> current = unionAABB.lengthZ() + start + oz;
+                        default -> throw new IllegalArgumentException("Invalid axis provided");
                     }
                     if (current > max) max = current;
                 }
@@ -495,13 +447,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
                 var entity = scheduledMove.entity;
-                // 计算delta pos (motion)
+                // Calculate delta pos (motion)
                 var motion = scheduledMove.newLoc.sub(entity.getLocation(), new Vector3f());
                 entity.setMotion(motion);
                 if (updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc))
                     entityAABBTree.update(scheduledMove.entity);
-                // ScheduledMove不由服务端计算，但是我们需要计算onGround状态
-                // 若是服务端计算的移动，onGround状态会在applyMotion()中计算
+                // ScheduledMove is not calculated by the server, but we need to calculate the onGround status
+                // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
                 var aabb = scheduledMove.entity.getOffsetAABB();
                 aabb.minY -= FAT_AABB_MARGIN;
                 entity.setOnGround(entity.getDimension().getCollidingBlocks(aabb) != null);
@@ -527,8 +479,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     @Override
     @ApiStatus.Internal
     public void removeEntity(Entity entity) {
-        if (!entities.containsKey(entity.getUniqueId()))
-            return;
+        if (!entities.containsKey(entity.getUniqueId())) return;
         entities.remove(entity.getUniqueId());
         entityAABBTree.remove(entity);
         entityCollisionCache.remove(entity.getUniqueId());
@@ -545,8 +496,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             log.warn("Entity " + entity.getUniqueId() + " is not registered in physics service");
             return;
         }
-        if (entity.getLocation().equals(newLoc))
-            return;
+        if (entity.getLocation().equals(newLoc)) return;
         scheduledMoveQueue.computeIfAbsent(entity.getUniqueId(), k -> new ConcurrentLinkedQueue<>()).offer(new ScheduledMove(entity, newLoc));
     }
 
@@ -561,8 +511,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public List<Entity> computeCollidingEntities(VoxelShape voxelShape, boolean ignoreEntityHasCollision) {
         var result = new LinkedList<Entity>();
         entityAABBTree.detectOverlaps(voxelShape.unionAABB(), entity -> {
-            if (!ignoreEntityHasCollision && !entity.hasEntityCollision())
-                return false;
+            if (!ignoreEntityHasCollision && !entity.hasEntityCollision()) return false;
             return voxelShape.intersectsAABB(entity.getOffsetAABB());
         }, result);
         return result;
@@ -572,9 +521,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public List<Entity> getCachedEntityCollidingResult(Entity entity, boolean ignoreEntityHasCollision) {
         if (!entity.hasEntityCollision()) return Collections.emptyList();
         var result = entityCollisionCache.getOrDefault(entity.getUniqueId(), Collections.emptyList());
-        if (!ignoreEntityHasCollision) {
-            result.removeIf(e -> !e.hasEntityCollision());
-        }
+        if (!ignoreEntityHasCollision) result.removeIf(e -> !e.hasEntityCollision());
         return result;
     }
 

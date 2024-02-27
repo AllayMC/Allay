@@ -11,16 +11,13 @@ public interface EntityService {
     void tick();
 
     default void addEntity(Entity entity) {
-        addEntity(entity, () -> {
-        });
+        addEntity(entity, () -> {});
     }
-
 
     void addEntity(Entity entity, Runnable callback);
 
     default void removeEntity(Entity entity) {
-        removeEntity(entity, () -> {
-        });
+        removeEntity(entity, () -> {});
     }
 
     void removeEntity(Entity entity, Runnable callback);
