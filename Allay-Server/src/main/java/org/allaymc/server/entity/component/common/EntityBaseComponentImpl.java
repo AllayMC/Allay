@@ -415,7 +415,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
-        if (this.fallDistance > 0 || onGround) this.onFall();
+        if (onGround && this.fallDistance > 0) this.onFall();
     }
 
     @Override
