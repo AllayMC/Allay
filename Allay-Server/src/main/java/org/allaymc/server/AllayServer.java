@@ -69,7 +69,6 @@ public final class AllayServer implements Server {
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
-    // TODO: skin update
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
     private final PlayerStorage playerStorage =
@@ -316,6 +315,7 @@ public final class AllayServer implements Server {
         broadcastPacket(playerListPacket);
     }
 
+    @Override
     public void removeFromPlayerList(EntityPlayer player) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.REMOVE);
@@ -324,6 +324,7 @@ public final class AllayServer implements Server {
         playerListEntryMap.remove(player.getLoginData().getUuid());
     }
 
+    @Override
     public void removeFromPlayerList(UUID uuid) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.REMOVE);
@@ -332,8 +333,14 @@ public final class AllayServer implements Server {
         playerListEntryMap.remove(uuid);
     }
 
+    @Override
     public Map<UUID, PlayerListPacket.Entry> getPlayerListEntryMap() {
-        return this.playerListEntryMap;
+        return Collections.unmodifiableMap(this.playerListEntryMap);
+    }
+
+    @Override
+    public void onSkinUpdate(EntityPlayer player) {
+        this.playerListEntryMap.get(player.getUUID()).setSkin(player.getSkin().toNetwork());
     }
 
     @Override

@@ -110,7 +110,10 @@ public interface Server extends TaskCreator, CommandSender {
 
     void removeFromPlayerList(UUID uuid);
 
+    @UnmodifiableView
     Map<UUID, PlayerListPacket.Entry> getPlayerListEntryMap();
+
+    void onSkinUpdate(EntityPlayer player);
 
     default void sendFullPlayerListInfoTo(EntityPlayer player) {
         var playerListPacket = new PlayerListPacket();

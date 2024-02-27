@@ -72,7 +72,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Getter
     protected GameType gameType = GameType.CREATIVE;
     @Getter
-    @Setter
     protected Skin skin;
     @Getter
     protected AdventureSettings adventureSettings;
@@ -326,6 +325,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         mobEquipmentPacket.setHotbarSlot(handSlot);
 
         sendPacketToViewers(mobEquipmentPacket);
+    }
+
+    @Override
+    public void setSkin(Skin skin) {
+        this.skin = skin;
+        var pk = new PlayerSkinPacket();
+        pk.setUuid(networkComponent.getLoginData().getUuid());
+        pk.setSkin(skin.toNetwork());
+        pk.setNewSkinName(skin.getSkinId());
+        // It seems that old skin name is unused
+        pk.setOldSkinName("");
+        pk.setTrustedSkin(true);
+        var server = Server.getInstance();
+        server.broadcastPacket(pk);
+        server.onSkinUpdate(thisEntity);
     }
 
     @Override
