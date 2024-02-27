@@ -136,6 +136,18 @@ public final class CustomForm extends Form {
         response = responses;
     }
 
+    // Only used for server settings form
+    public void syncDefaultValueToResponse() {
+        if (response == null) {
+            log.warn("syncDefaultValueToResponse() called before receive response is called");
+            return;
+        }
+        for (var index = 0; index < content.size(); index++) {
+            var element = content.get(index);
+            element.syncDefaultValueToResponse(getResponse().get(index));
+        }
+    }
+
     @Override
     public List<String> getResponse() {
         return response != null ? (List<String>) response : null;

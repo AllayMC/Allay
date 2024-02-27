@@ -20,11 +20,16 @@ public final class StepSlider extends CustomFormElement {
     private final List<String> steps;
     @Getter
     @SerializedName("default")
-    private final int defaultStepIndex;
+    private int defaultStepIndex;
 
     public StepSlider(String text, List<String> steps, int defaultStep) {
         this.text = text;
         this.steps = steps;
         this.defaultStepIndex = defaultStep;
+    }
+
+    @Override
+    public void syncDefaultValueToResponse(String response) {
+        this.defaultStepIndex = Integer.parseInt(response);
     }
 }

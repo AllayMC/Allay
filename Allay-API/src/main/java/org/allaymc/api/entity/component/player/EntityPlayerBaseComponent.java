@@ -5,6 +5,7 @@ import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
+import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.world.chunk.ChunkLoader;
@@ -114,11 +115,11 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     @UnmodifiableView
     Map<Integer, Form> getServerSettingForms();
 
-    void addServerSettingForm(Form form);
+    void addServerSettingForm(CustomForm form);
 
-    Form getServerSettingForm(int id);
+    CustomForm getServerSettingForm(int id);
 
-    Form removeServerSettingForm(int id);
+    CustomForm removeServerSettingForm(int id);
 
     void showForm(Form form);
 }

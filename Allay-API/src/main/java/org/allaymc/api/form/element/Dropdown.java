@@ -2,6 +2,7 @@ package org.allaymc.api.form.element;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -20,11 +21,16 @@ public final class Dropdown extends CustomFormElement {
     private final List<String> options;
     @Getter
     @SerializedName("default")
-    private final int defaultOptionIndex;
+    private int defaultOptionIndex;
 
     public Dropdown(String text, List<String> options, int defaultOption) {
         this.text = text;
         this.options = options;
         this.defaultOptionIndex = defaultOption;
+    }
+
+    @Override
+    public void syncDefaultValueToResponse(String response) {
+        this.defaultOptionIndex = Integer.parseInt(response);
     }
 }

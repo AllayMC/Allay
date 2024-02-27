@@ -8,4 +8,6 @@ package org.allaymc.api.form.element;
 public abstract sealed class CustomFormElement permits
         Dropdown, Input, Label, Slider, StepSlider, Toggle {
 
+    // Only used for server settings form
+    public abstract void syncDefaultValueToResponse(String response);
 }

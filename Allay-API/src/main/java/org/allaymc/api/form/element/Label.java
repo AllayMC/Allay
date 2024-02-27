@@ -17,4 +17,9 @@ public final class Label extends CustomFormElement {
     public Label(String text) {
         this.text = text;
     }
+
+    @Override
+    public void syncDefaultValueToResponse(String response) {
+        // Do nothing
+    }
 }

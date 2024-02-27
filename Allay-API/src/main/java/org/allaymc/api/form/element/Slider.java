@@ -22,7 +22,7 @@ public final class Slider extends CustomFormElement {
     private final int step;
     @Getter
     @SerializedName("default")
-    private final float defaultValue;
+    private float defaultValue;
 
     public Slider(String text, float min, float max, int step, float defaultValue) {
         this.text = text;
@@ -30,5 +30,10 @@ public final class Slider extends CustomFormElement {
         this.max = Math.max(max, this.min);
         this.step = step;
         this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public void syncDefaultValueToResponse(String response) {
+        this.defaultValue = Float.parseFloat(response);
     }
 }

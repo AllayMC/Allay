@@ -18,11 +18,16 @@ public final class Input extends CustomFormElement {
     private final String placeholder;
     @Getter
     @SerializedName("default")
-    private final String defaultText;
+    private String defaultText;
 
     public Input(String text, String placeholder, String defaultText) {
         this.text = text;
         this.placeholder = placeholder;
         this.defaultText = defaultText;
+    }
+
+    @Override
+    public void syncDefaultValueToResponse(String response) {
+        this.defaultText = response;
     }
 }

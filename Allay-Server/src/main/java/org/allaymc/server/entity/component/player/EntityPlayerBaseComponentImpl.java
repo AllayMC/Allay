@@ -25,6 +25,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
@@ -91,7 +92,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected boolean needDimensionChangeACK;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
-    protected Map<Integer, Form> serverSettingForms = new Int2ObjectOpenHashMap<>();
+    protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info);
@@ -581,7 +582,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void addServerSettingForm(Form form) {
+    public void addServerSettingForm(CustomForm form) {
         serverSettingForms.put(assignFormId(), form);
     }
 
@@ -591,12 +592,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public Form getServerSettingForm(int id) {
+    public CustomForm getServerSettingForm(int id) {
         return serverSettingForms.get(id);
     }
 
     @Override
-    public Form removeServerSettingForm(int id) {
+    public CustomForm removeServerSettingForm(int id) {
         return serverSettingForms.remove(id);
     }
 

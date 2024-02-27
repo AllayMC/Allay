@@ -16,10 +16,15 @@ public final class Toggle extends CustomFormElement {
     private final String text;
     @Getter
     @SerializedName("default")
-    private final boolean defaultValue;
+    private boolean defaultValue;
 
     public Toggle(String text, boolean defaultValue) {
         this.text = text;
         this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public void syncDefaultValueToResponse(String response) {
+        this.defaultValue = Boolean.parseBoolean(response);
     }
 }
