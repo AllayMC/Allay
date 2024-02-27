@@ -302,7 +302,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         // The first time directly moves
         var result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
-        motion = result.left();
         if (Boolean.TRUE.equals(result.right())) {
             // There is a collision, try to step over
             // Calculate the remaining speed
