@@ -1,8 +1,13 @@
 package org.allaymc.exampleplugin;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.plugin.Plugin;
+import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.server.Server;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Allay Project 2024/2/8
@@ -10,10 +15,17 @@ import org.allaymc.api.server.Server;
  * @author daoge_cmd
  */
 @Slf4j
-public class ExamplePlugin extends Plugin {
+@Getter
+public final class ExamplePlugin extends Plugin {
 
-    protected ServerEventListener serverEventListener = new ServerEventListener();
-    protected WorldEventListener worldEventListener = new WorldEventListener();
+    public static ExamplePlugin INSTANCE;
+
+    private final ServerEventListener serverEventListener = new ServerEventListener();
+    private final WorldEventListener worldEventListener = new WorldEventListener();
+
+    public ExamplePlugin() {
+        INSTANCE = this;
+    }
 
     @Override
     public void onLoad() {
@@ -23,16 +35,18 @@ public class ExamplePlugin extends Plugin {
     @Override
     public void onEnable() {
         log.info("ExamplePlugin enabled!");
-        Server.getInstance().getEventBus().registerListener(serverEventListener);
-        Server.getInstance().getEventBus().registerListener(worldEventListener);
-        Server.getInstance().getCommandRegistry().register(new ExampleCommand());
+        var server = Server.getInstance();
+        server.getEventBus().registerListener(serverEventListener);
+        server.getEventBus().registerListener(worldEventListener);
+        server.getCommandRegistry().register(new ExampleCommand());
     }
 
     @Override
     public void onDisable() {
         log.info("ExamplePlugin disabled!");
-        Server.getInstance().getEventBus().unregisterListener(serverEventListener);
-        Server.getInstance().getEventBus().unregisterListener(worldEventListener);
-        Server.getInstance().getCommandRegistry().unregister("example-cmd");
+        var server = Server.getInstance();
+        server.getEventBus().unregisterListener(serverEventListener);
+        server.getEventBus().unregisterListener(worldEventListener);
+        server.getCommandRegistry().unregister("example-cmd");
     }
 }

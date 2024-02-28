@@ -43,4 +43,6 @@ public interface ScoreboardViewer {
      * @param line 目标行
      */
     void updateScore(ScoreboardLine line);
+
+    boolean isScoreboardViewerValid();
 }

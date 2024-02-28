@@ -42,6 +42,10 @@ public final class Scoreboard {
         }
     }
 
+    public Scoreboard(String objectiveName) {
+        this(objectiveName, objectiveName);
+    }
+
     public Scoreboard(String objectiveName, String displayName) {
         this(objectiveName, displayName, "dummy");
     }
@@ -93,9 +97,25 @@ public final class Scoreboard {
      * @return 是否添加成功
      */
     public boolean addViewer(ScoreboardViewer viewer, DisplaySlot slot) {
-        boolean added =  this.viewers.get(slot).add(viewer);
+        removeInvalidViewers();
+        boolean added = this.viewers.get(slot).add(viewer);
         if (added) viewer.displayScoreboard(this, slot);
         return added;
+    }
+
+    /**
+     * remove invalid viewers（eg: offline player）
+     */
+    private void removeInvalidViewers() {
+        this.viewers.forEach((slot, slotViewers) -> {
+            var invalid = new HashSet<ScoreboardViewer>();
+            slotViewers.forEach(viewer -> {
+                if (!viewer.isScoreboardViewerValid()) {
+                    invalid.add(viewer);
+                }
+            });
+            slotViewers.removeAll(invalid);
+        });
     }
 
     /**

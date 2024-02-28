@@ -726,4 +726,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             this.setAndSendEntityData(SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
         }
     }
+
+    @Override
+    public boolean isScoreboardViewerValid() {
+        return !networkComponent.isDisconnected();
+    }
 }

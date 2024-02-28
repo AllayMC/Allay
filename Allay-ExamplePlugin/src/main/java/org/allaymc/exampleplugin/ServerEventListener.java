@@ -3,6 +3,11 @@ package org.allaymc.exampleplugin;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
 import org.allaymc.api.form.Forms;
+import org.allaymc.api.scoreboard.Scoreboard;
+import org.allaymc.api.scoreboard.data.DisplaySlot;
+import org.allaymc.api.server.Server;
+
+import java.util.ArrayList;
 
 /**
  * Allay Project 2024/2/26
@@ -33,5 +38,20 @@ public class ServerEventListener {
                             player.sendText("toggle: " + responses.get(5));
                         })
         );
+        Scoreboard scoreboard = new Scoreboard("Dashboard");
+        scoreboard.addViewer(player, DisplaySlot.SIDEBAR);
+        Server.getInstance().getScheduler().scheduleRepeating(() -> {
+            if (player.isDisconnected()) return false;
+            var list = new ArrayList<String>();
+            list.add("Online: §a" + Server.getInstance().getOnlinePlayerCount() + "/" + Server.getInstance().getNetworkServer().getMaxPlayerCount());
+            list.add("Time: §a" + player.getWorld().getWorldData().getTime());
+            list.add("World: §a" + player.getWorld().getWorldData().getName());
+            list.add("DimId: §a" + player.getDimension().getDimensionInfo().dimensionId());
+            int cx = ((int)player.getLocation().x()) >> 4;
+            int cz = ((int)player.getLocation().z()) >> 4;
+            list.add("Chunk: §a" + cx + ", " + cz);
+            scoreboard.setLines(list);
+            return true;
+        }, 20);
     }
 }
