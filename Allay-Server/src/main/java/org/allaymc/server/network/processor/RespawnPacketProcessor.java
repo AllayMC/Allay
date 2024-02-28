@@ -14,7 +14,7 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
         if (packet.getState() != RespawnPacket.State.CLIENT_READY) return PacketSignal.HANDLED;
 
         var respawnPacket = new RespawnPacket();
-        respawnPacket.setRuntimeEntityId(player.getUniqueId());
+        respawnPacket.setRuntimeEntityId(player.getRuntimeId());
         var sp = player.getSpawnPoint();
         respawnPacket.setPosition(Vector3f.from(sp.x(), sp.y(), sp.z()));
         respawnPacket.setState(RespawnPacket.State.SERVER_READY);

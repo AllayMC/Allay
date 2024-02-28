@@ -35,7 +35,7 @@ public interface EntityPhysicsService {
     void offerScheduledMove(Entity entity, Location3fc newLoc);
 
     default List<Entity> computeCollidingEntities(Entity entity) {
-        return computeCollidingEntities(entity.getOffsetAABB(), other -> other.getUniqueId() != entity.getUniqueId());
+        return computeCollidingEntities(entity.getOffsetAABB(), other -> other.getRuntimeId() != entity.getRuntimeId());
     }
 
     default List<Entity> computeCollidingEntities(AABBfc aabb) {
@@ -43,7 +43,7 @@ public interface EntityPhysicsService {
     }
 
     default List<Entity> computeCollidingEntities(Entity entity, boolean ignoreEntityHasCollision) {
-        return computeCollidingEntities(entity.getOffsetAABB(), other -> other.getUniqueId() != entity.getUniqueId() && (ignoreEntityHasCollision || entity.hasEntityCollision()));
+        return computeCollidingEntities(entity.getOffsetAABB(), other -> other.getRuntimeId() != entity.getRuntimeId() && (ignoreEntityHasCollision || entity.hasEntityCollision()));
     }
 
     default List<Entity> computeCollidingEntities(AABBfc aabb, boolean ignoreEntityHasCollision) {

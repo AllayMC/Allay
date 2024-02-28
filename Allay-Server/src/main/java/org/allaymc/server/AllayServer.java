@@ -14,6 +14,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
@@ -24,6 +25,8 @@ import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.scoreboard.ScoreboardService;
+import org.allaymc.api.scoreboard.storage.JsonScoreboardStorage;
 import org.allaymc.api.server.BanInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.Whitelist;
@@ -105,6 +108,8 @@ public final class AllayServer implements Server {
     private long nextPlayerDataAutoSaveTime = 0;
     @Getter
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
+    @Getter
+    private final ScoreboardService scoreboardService = new ScoreboardService(this, new JsonScoreboardStorage());
     @Getter
     private long startTime;
     private final BanInfo banInfo = ConfigManager.create(BanInfo.class, it -> {
@@ -267,6 +272,8 @@ public final class AllayServer implements Server {
 
     @Override
     public void onDisconnect(EntityPlayer player, String reason) {
+        var event = new PlayerQuitEvent(player, reason);
+        eventBus.callEvent(event);
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
         if (player.isInitialized()) {
             broadcastTr("§e%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
@@ -288,7 +295,7 @@ public final class AllayServer implements Server {
     public void addToPlayerList(EntityPlayer player) {
         addToPlayerList(
                 player.getLoginData().getUuid(),
-                player.getUniqueId(),
+                player.getRuntimeId(),
                 player.getOriginName(),
                 player.getLoginData().getDeviceInfo(),
                 player.getLoginData().getXuid(),

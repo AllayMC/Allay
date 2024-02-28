@@ -13,11 +13,11 @@ public interface EntityOperate {
     void addEntity(Entity entity);
 
 
-    Entity removeEntity(Long uniqueId);
+    Entity removeEntity(Long runtimeId);
 
 
     default Entity removeEntity(Entity entity) {
-        return removeEntity(entity.getUniqueId());
+        return removeEntity(entity.getRuntimeId());
     }
 
     Map<Long, Entity> getEntities();

@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.libdeflate)
     implementation(libs.leveldbjni)
     implementation(libs.netty.epoll)
+    implementation(libs.netty.kqueue)
     implementation(libs.jegenerator)
     implementation(libs.fastreflect)
     implementation(libs.reflections)

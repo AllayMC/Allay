@@ -8,6 +8,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollDatagramChannel;
 import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.kqueue.KQueue;
+import io.netty.channel.kqueue.KQueueDatagramChannel;
+import io.netty.channel.kqueue.KQueueEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
@@ -52,14 +55,18 @@ public class AllayNetworkServer implements NetworkServer {
         this.pong = initPong(settings);
         this.bindAddress = new InetSocketAddress(settings.networkSettings().ip(), settings.networkSettings().port());
 
+        var threadFactory = new ThreadFactoryBuilder().setNameFormat("Netty Server IO #%d").setDaemon(true).build();
         Class<? extends DatagramChannel> oclass;
         EventLoopGroup eventloopgroup;
         if (Epoll.isAvailable()) {
             oclass = EpollDatagramChannel.class;
-            eventloopgroup = new EpollEventLoopGroup(nettyThreadNumber, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build());
+            eventloopgroup = new EpollEventLoopGroup(nettyThreadNumber, threadFactory);
+        } else if (KQueue.isAvailable()) {
+            oclass = KQueueDatagramChannel.class;
+            eventloopgroup = new KQueueEventLoopGroup(nettyThreadNumber, threadFactory);
         } else {
             oclass = NioDatagramChannel.class;
-            eventloopgroup = new NioEventLoopGroup(nettyThreadNumber, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build());
+            eventloopgroup = new NioEventLoopGroup(nettyThreadNumber, threadFactory);
         }
 
         this.channel = new ServerBootstrap()

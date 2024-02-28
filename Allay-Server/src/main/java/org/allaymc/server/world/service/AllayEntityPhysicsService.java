@@ -92,7 +92,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 if (entity.computeEntityCollisionMotion()) computeEntityCollisionMotion(entity);
                 entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
                 if (applyMotion(entity)) {
-                    updatedEntities.put(entity.getUniqueId(), entity);
+                    updatedEntities.put(entity.getRuntimeId(), entity);
                 }
                 // Apply friction, gravity etc...
                 updateMotion(entity);
@@ -103,7 +103,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                     computeBlockCollisionMotion(entity, collidedBlocks);
                     entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
                     forceApplyMotion(entity);
-                    updatedEntities.put(entity.getUniqueId(), entity);
+                    updatedEntities.put(entity.getRuntimeId(), entity);
                 }
             }
         });
@@ -115,7 +115,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         entities.values().forEach(entity -> {
             var collidedEntities = computeCollidingEntities(entity, true);
             if (collidedEntities.isEmpty()) return;
-            entityCollisionCache.put(entity.getUniqueId(), collidedEntities);
+            entityCollisionCache.put(entity.getRuntimeId(), collidedEntities);
             collidedEntities.forEach(entity::onCollideWith);
         });
     }
@@ -470,34 +470,34 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     @Override
     @ApiStatus.Internal
     public void addEntity(Entity entity) {
-        if (entities.containsKey(entity.getUniqueId()))
-            throw new IllegalArgumentException("Entity " + entity.getUniqueId() + " is already added!");
-        entities.put(entity.getUniqueId(), entity);
+        if (entities.containsKey(entity.getRuntimeId()))
+            throw new IllegalArgumentException("Entity " + entity.getRuntimeId() + " is already added!");
+        entities.put(entity.getRuntimeId(), entity);
         entityAABBTree.add(entity);
     }
 
     @Override
     @ApiStatus.Internal
     public void removeEntity(Entity entity) {
-        if (!entities.containsKey(entity.getUniqueId())) return;
-        entities.remove(entity.getUniqueId());
+        if (!entities.containsKey(entity.getRuntimeId())) return;
+        entities.remove(entity.getRuntimeId());
         entityAABBTree.remove(entity);
-        entityCollisionCache.remove(entity.getUniqueId());
+        entityCollisionCache.remove(entity.getRuntimeId());
     }
 
     @Override
     public boolean containEntity(Entity entity) {
-        return entities.containsKey(entity.getUniqueId());
+        return entities.containsKey(entity.getRuntimeId());
     }
 
     @Override
     public void offerScheduledMove(Entity entity, Location3fc newLoc) {
-        if (!entities.containsKey(entity.getUniqueId())) {
-            log.warn("Entity " + entity.getUniqueId() + " is not registered in physics service");
+        if (!entities.containsKey(entity.getRuntimeId())) {
+            log.warn("Entity " + entity.getRuntimeId() + " is not registered in physics service");
             return;
         }
         if (entity.getLocation().equals(newLoc)) return;
-        scheduledMoveQueue.computeIfAbsent(entity.getUniqueId(), k -> new ConcurrentLinkedQueue<>()).offer(new ScheduledMove(entity, newLoc));
+        scheduledMoveQueue.computeIfAbsent(entity.getRuntimeId(), k -> new ConcurrentLinkedQueue<>()).offer(new ScheduledMove(entity, newLoc));
     }
 
     @Override
@@ -520,7 +520,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     @Override
     public List<Entity> getCachedEntityCollidingResult(Entity entity, boolean ignoreEntityHasCollision) {
         if (!entity.hasEntityCollision()) return Collections.emptyList();
-        var result = entityCollisionCache.getOrDefault(entity.getUniqueId(), Collections.emptyList());
+        var result = entityCollisionCache.getOrDefault(entity.getRuntimeId(), Collections.emptyList());
         if (!ignoreEntityHasCollision) result.removeIf(e -> !e.hasEntityCollision());
         return result;
     }

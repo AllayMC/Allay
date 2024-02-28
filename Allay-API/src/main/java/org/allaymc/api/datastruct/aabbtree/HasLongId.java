@@ -6,5 +6,5 @@ package org.allaymc.api.datastruct.aabbtree;
  * @author daoge_cmd
  */
 public interface HasLongId {
-   long getUniqueId();
+   long getLongId();
 }

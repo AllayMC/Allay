@@ -198,7 +198,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         player.loadNBT(server.getPlayerStorage().readPlayerData(player).getPlayerNBT());
 
         var setEntityDataPacket = new SetEntityDataPacket();
-        setEntityDataPacket.setRuntimeEntityId(player.getUniqueId());
+        setEntityDataPacket.setRuntimeEntityId(player.getRuntimeId());
         setEntityDataPacket.getMetadata().putAll(player.getMetadata().getEntityDataMap());
         setEntityDataPacket.setTick(player.getWorld().getTick());
         sendPacket(setEntityDataPacket);
@@ -270,8 +270,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var spawnWorld = dimension.getWorld();
         var startGamePacket = new StartGamePacket();
         startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
-        startGamePacket.setUniqueEntityId(player.getUniqueId());
-        startGamePacket.setRuntimeEntityId(player.getUniqueId());
+        startGamePacket.setUniqueEntityId(player.getRuntimeId());
+        startGamePacket.setRuntimeEntityId(player.getRuntimeId());
         startGamePacket.setPlayerGameType(player.getGameType());
         var loc = player.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();

@@ -27,12 +27,12 @@ final class AABBTreeObject<E extends HasLongId> {
          return false;
       }
       AABBTreeObject<?> that = (AABBTreeObject<?>) o;
-      return Objects.equals(data.getUniqueId(), that.data.getUniqueId());
+      return Objects.equals(data.getLongId(), that.data.getLongId());
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(data.getUniqueId());
+      return Objects.hash(data.getLongId());
    }
 
    E getData() {

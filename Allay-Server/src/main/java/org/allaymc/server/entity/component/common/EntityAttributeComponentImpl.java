@@ -100,7 +100,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     public void sendAttributesToClient() {
         if (networkComponent == null) return;
         var updateAttributesPacket = new UpdateAttributesPacket();
-        updateAttributesPacket.setRuntimeEntityId(entity.getUniqueId());
+        updateAttributesPacket.setRuntimeEntityId(entity.getRuntimeId());
         for (Attribute attribute : attributes.values()) {
             updateAttributesPacket.getAttributes().add(attribute.toNetwork());
         }

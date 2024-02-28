@@ -21,4 +21,9 @@ public interface Entity extends
         dest.setMax(aabb.maxX(), aabb.maxY(), aabb.maxZ());
         return dest;
     }
+
+    @Override
+    default long getLongId() {
+        return getRuntimeId();
+    }
 }

@@ -244,4 +244,12 @@ public interface CommandNode {
     default CommandNode pos(String name, Vector3fc defaultValue) {
         return addLeaf(getFactory().pos(name, this, defaultValue));
     }
+
+    default CommandNode wildcardTarget(String name) {
+        return wildcardTarget(name, "");
+    }
+
+    default CommandNode wildcardTarget(String name, String defaultValue) {
+        return addLeaf(getFactory().wildcardTarget(name, this, defaultValue));
+    }
 }
