@@ -75,7 +75,6 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
             // noinspection ResultOfMethodCallIgnored
             levelDat.createNewFile();
             worldDataCache = WorldData.builder().build();
-            int size = Server.getInstance().getWorldPool().getWorlds().size();
             worldDataCache.setName(worldName);
             writeWorldData(worldDataCache);
             Files.copy(levelDat.toPath(), path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
