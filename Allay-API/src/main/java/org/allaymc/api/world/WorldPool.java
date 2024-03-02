@@ -26,6 +26,8 @@ public interface WorldPool {
 
     void loadWorld(String name, WorldConfig.WorldSettings worldSetting);
 
+    // TODO: unload world
+
     default Location3ic getGlobalSpawnPoint() {
         var vec = getDefaultWorld().getWorldData().getSpawnPoint();
         return new Location3i(vec.x(), vec.y(), vec.z(), getDefaultWorld().getOverWorld());
@@ -40,4 +42,8 @@ public interface WorldPool {
     void loadWorlds();
 
     void close();
+
+    void registerListenerForAllWorlds(Object listener);
+
+    void unregisterListenerForAllWorlds(Object listener);
 }

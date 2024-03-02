@@ -69,9 +69,9 @@ public interface Dimension {
         return getChunkService().getLoadedChunks().stream().mapToInt(chunk -> chunk.getEntities().size()).sum();
     }
 
-    default Entity getEntityByUniqueId(long uniqueId) {
+    default Entity getEntityByRuntimeId(long runtimeId) {
         for (var chunk : getChunkService().getLoadedChunks()) {
-            var entity = chunk.getEntities().get(uniqueId);
+            var entity = chunk.getEntities().get(runtimeId);
             if (entity != null) {
                 return entity;
             }

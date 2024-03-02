@@ -125,8 +125,8 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     public BedrockPacket createSpawnPacket() {
         AddItemEntityPacket addItemEntityPacket = new AddItemEntityPacket();
-        addItemEntityPacket.setRuntimeEntityId(uniqueId);
-        addItemEntityPacket.setUniqueEntityId(uniqueId);
+        addItemEntityPacket.setRuntimeEntityId(runtimeId);
+        addItemEntityPacket.setUniqueEntityId(runtimeId);
         addItemEntityPacket.setItemInHand(itemStack.toNetworkItemData());
         addItemEntityPacket.setPosition(MathUtils.JOMLVecToCBVec(location));
         addItemEntityPacket.setMotion(MathUtils.JOMLVecToCBVec(motion));

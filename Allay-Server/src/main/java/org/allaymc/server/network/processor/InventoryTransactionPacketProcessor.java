@@ -99,7 +99,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
             }
             case ITEM_USE_ON_ENTITY -> {
-                var target = player.getDimension().getEntityByUniqueId(packet.getRuntimeEntityId());
+                var target = player.getDimension().getEntityByRuntimeId(packet.getRuntimeEntityId());
                 Preconditions.checkNotNull(target, "Player " + player.getOriginName() + " try to attack a entity which doesn't exist! Entity id: " + packet.getRuntimeEntityId());
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {

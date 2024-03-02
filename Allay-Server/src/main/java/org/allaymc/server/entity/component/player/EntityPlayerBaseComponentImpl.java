@@ -33,6 +33,11 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.scoreboard.Scoreboard;
+import org.allaymc.api.scoreboard.ScoreboardLine;
+import org.allaymc.api.scoreboard.data.DisplaySlot;
+import org.allaymc.api.scoreboard.data.SortOrder;
+import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.Utils;
@@ -41,6 +46,7 @@ import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
@@ -56,6 +62,9 @@ import org.joml.primitives.AABBfc;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCORE;
 
 /**
  * Allay Project 2023/9/23
@@ -107,18 +116,28 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var loginData = networkComponent.getLoginData();
         skin = loginData.getSkin();
         setDisplayName(loginData.getDisplayName());
+        uniqueId = loginData.getUuid().getMostSignificantBits();
     }
 
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
         super.onInitFinish(initInfo);
         permTree = PermTree.create();
-        // TODO: OP system
         permTree.setOp(true);
         adventureSettings = new AdventureSettings(thisEntity);
         abilities = new Abilities(thisEntity);
         // Init adventure settings and abilities
         permTree.notifyAllPermListeners();
+    }
+
+    @Override
+    protected void saveUniqueId(NbtMapBuilder builder) {
+        // Do nothing
+    }
+
+    @Override
+    protected void loadUniqueId(NbtMap nbt) {
+        // Do nothing, as the uniqueId will be set in method onPlayerLoggedIn()
     }
 
     @Override
@@ -136,7 +155,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
         var pk = new UpdatePlayerGameTypePacket();
         pk.setGameType(gameType);
-        pk.setEntityId(uniqueId);
+        pk.setEntityId(runtimeId);
         networkComponent.sendPacket(pk);
         sendPacketToViewers(pk);
     }
@@ -177,8 +196,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             if (slot != -1) {
                 if (item.getCount() == 0) {
                     TakeItemEntityPacket takeItemEntityPacket = new TakeItemEntityPacket();
-                    takeItemEntityPacket.setRuntimeEntityId(uniqueId);
-                    takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getUniqueId());
+                    takeItemEntityPacket.setRuntimeEntityId(runtimeId);
+                    takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getRuntimeId());
                     Objects.requireNonNull(dimension.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
                     entityItem.setItemStack(null);
                     dimension.getEntityService().removeEntity(entityItem);
@@ -241,8 +260,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public BedrockPacket createSpawnPacket() {
         var addPlayerPacket = new AddPlayerPacket();
-        addPlayerPacket.setRuntimeEntityId(uniqueId);
-        addPlayerPacket.setUniqueEntityId(uniqueId);
+        addPlayerPacket.setRuntimeEntityId(runtimeId);
+        addPlayerPacket.setUniqueEntityId(runtimeId);
         addPlayerPacket.setUuid(networkComponent.getLoginData().getUuid());
         addPlayerPacket.setUsername(networkComponent.getOriginName());
         addPlayerPacket.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().getDeviceId());
@@ -319,7 +338,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var itemStack = inv.getItemStack(handSlot);
 
         var mobEquipmentPacket = new MobEquipmentPacket();
-        mobEquipmentPacket.setRuntimeEntityId(uniqueId);
+        mobEquipmentPacket.setRuntimeEntityId(runtimeId);
         mobEquipmentPacket.setItem(itemStack.toNetworkItemData());
         mobEquipmentPacket.setInventorySlot(handSlot);
         mobEquipmentPacket.setHotbarSlot(handSlot);
@@ -488,7 +507,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void sendDimensionChangeSuccess() {
         var ackPk = new PlayerActionPacket();
         ackPk.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
-        ackPk.setRuntimeEntityId(uniqueId);
+        ackPk.setRuntimeEntityId(runtimeId);
         ackPk.setBlockPosition(Vector3i.ZERO);
         ackPk.setResultPosition(Vector3i.ZERO);
         networkComponent.sendPacket(ackPk);
@@ -551,7 +570,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void applyEntityEvent(EntityEventType event, int data) {
         var pk = new EntityEventPacket();
-        pk.setRuntimeEntityId(getUniqueId());
+        pk.setRuntimeEntityId(getRuntimeId());
         pk.setType(event);
         pk.setData(data);
         sendPacketToViewers(pk);
@@ -562,7 +581,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void applyAnimation(AnimatePacket.Action action, float rowingTime) {
         var pk = new AnimatePacket();
-        pk.setRuntimeEntityId(getUniqueId());
+        pk.setRuntimeEntityId(getRuntimeId());
         pk.setAction(action);
         pk.setRowingTime(rowingTime);
         sendPacketToViewers(pk);
@@ -630,5 +649,86 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     protected int assignFormId() {
         return formIdCounter.getAndIncrement();
+    }
+
+    @Override
+    public void displayScoreboard(Scoreboard scoreboard, DisplaySlot slot) {
+        SetDisplayObjectivePacket pk1 = new SetDisplayObjectivePacket();
+        pk1.setDisplaySlot(slot.getSlotName());
+        pk1.setObjectiveId(scoreboard.getObjectiveName());
+        pk1.setDisplayName(scoreboard.getDisplayName());
+        pk1.setCriteria(scoreboard.getCriteriaName());
+        pk1.setSortOrder(scoreboard.getSortOrder().ordinal());
+        networkComponent.sendPacket(pk1);
+
+        //client won't storage the score of a scoreboard,so we should send the score to client
+        SetScorePacket pk2 = new SetScorePacket();
+        pk2.setInfos(scoreboard.getLines().values().stream().map(ScoreboardLine::toNetworkInfo).filter(Objects::nonNull).collect(Collectors.toList()));
+        pk2.setAction(SetScorePacket.Action.SET);
+        networkComponent.sendPacket(pk2);
+
+        var scorer = new PlayerScorer(thisEntity);
+        var line = scoreboard.getLine(scorer);
+        if (slot == DisplaySlot.BELOW_NAME && line != null) {
+            this.setAndSendEntityData(SCORE, line.getScore() + " " + scoreboard.getDisplayName());
+        }
+    }
+
+    @Override
+    public void hideScoreboardSlot(DisplaySlot slot) {
+        SetDisplayObjectivePacket pk = new SetDisplayObjectivePacket();
+        pk.setDisplaySlot(slot.getSlotName());
+        pk.setObjectiveId("");
+        pk.setDisplayName("");
+        pk.setCriteria("");
+        pk.setSortOrder(SortOrder.ASCENDING.ordinal());
+        networkComponent.sendPacket(pk);
+
+        if (slot == DisplaySlot.BELOW_NAME) {
+            this.setAndSendEntityData(SCORE, "");
+        }
+    }
+
+    @Override
+    public void removeScoreboard(Scoreboard scoreboard) {
+        RemoveObjectivePacket pk = new RemoveObjectivePacket();
+        pk.setObjectiveId(scoreboard.getObjectiveName());
+
+        networkComponent.sendPacket(pk);
+    }
+
+    @Override
+    public void removeScoreboardLine(ScoreboardLine line) {
+        SetScorePacket pk = new SetScorePacket();
+        pk.setAction(SetScorePacket.Action.REMOVE);
+        var networkInfo = line.toNetworkInfo();
+        if (networkInfo != null)
+            pk.getInfos().add(networkInfo);
+        networkComponent.sendPacket(pk);
+
+        var scorer = new PlayerScorer(thisEntity);
+        if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(thisEntity)) {
+            this.setAndSendEntityData(SCORE, "");
+        }
+    }
+
+    @Override
+    public void updateScore(ScoreboardLine line) {
+        SetScorePacket packet = new SetScorePacket();
+        packet.setAction(SetScorePacket.Action.SET);
+        var networkInfo = line.toNetworkInfo();
+        if (networkInfo != null)
+            packet.getInfos().add(networkInfo);
+        networkComponent.sendPacket(packet);
+
+        var scorer = new PlayerScorer(thisEntity);
+        if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
+            this.setAndSendEntityData(SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
+        }
+    }
+
+    @Override
+    public boolean isScoreboardViewerValid() {
+        return !networkComponent.isDisconnected();
     }
 }

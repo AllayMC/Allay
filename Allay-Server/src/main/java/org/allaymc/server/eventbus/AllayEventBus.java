@@ -34,6 +34,7 @@ public class AllayEventBus implements EventBus {
 
     @Override
     public synchronized void registerListener(Object listener) {
+        if (listenerToHandlerMap.containsKey(listener)) return;
         for (var method : ReflectionUtils.getAllMethods(listener.getClass())) {
             var annotation = method.getAnnotation(EventHandler.class);
             if (annotation == null) continue;

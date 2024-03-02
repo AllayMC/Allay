@@ -202,17 +202,17 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public void addEntity(Entity entity) {
         Preconditions.checkNotNull(entity);
-        entities.put(entity.getUniqueId(), entity);
+        entities.put(entity.getRuntimeId(), entity);
     }
 
 
-    public Entity removeEntity(long uniqueId) {
-        return entities.remove(uniqueId);
+    public Entity removeEntity(long runtimeId) {
+        return entities.remove(runtimeId);
     }
 
     @Override
-    public Entity getEntity(long uniqueId) {
-        return entities.get(uniqueId);
+    public Entity getEntity(long runtimeId) {
+        return entities.get(runtimeId);
     }
 
     @Override

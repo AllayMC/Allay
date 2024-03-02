@@ -92,6 +92,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     void teleport(Location3fc location);
 
+    long getRuntimeId();
+
     long getUniqueId();
 
     Metadata getMetadata();
@@ -301,7 +303,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     default void applyEntityEvent(EntityEventType event, int data) {
         var pk = new EntityEventPacket();
-        pk.setRuntimeEntityId(getUniqueId());
+        pk.setRuntimeEntityId(getRuntimeId());
         pk.setType(event);
         pk.setData(data);
         sendPacketToViewers(pk);
@@ -313,7 +315,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     default void applyAnimation(AnimatePacket.Action action, float rowingTime) {
         var pk = new AnimatePacket();
-        pk.setRuntimeEntityId(getUniqueId());
+        pk.setRuntimeEntityId(getRuntimeId());
         pk.setAction(action);
         pk.setRowingTime(rowingTime);
         sendPacketToViewers(pk);

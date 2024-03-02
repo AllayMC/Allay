@@ -1,4 +1,4 @@
-package org.allaymc.api.eventbus.event.server.entity;
+package org.allaymc.api.eventbus.event.world.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,5 +23,9 @@ public class EntityTeleportEvent extends EntityEvent implements CancellableEvent
         super(entity);
         this.from = from;
         this.to = to;
+    }
+
+    public boolean isTeleportBetweenWorlds() {
+        return from.dimension().getWorld() != to.dimension().getWorld();
     }
 }

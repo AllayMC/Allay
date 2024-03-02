@@ -43,7 +43,7 @@ public class TestEntity implements HasAABB, HasLongId {
    }
 
    @Override
-   public long getUniqueId() {
+   public long getLongId() {
       return id;
    }
 }

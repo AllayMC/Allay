@@ -135,7 +135,7 @@ public final class Abilities {
 
     private UpdateAbilitiesPacket createUpdateAbilitiesPacket() {
         UpdateAbilitiesPacket updateAbilitiesPacket = new UpdateAbilitiesPacket();
-        updateAbilitiesPacket.setUniqueEntityId(player.getUniqueId());
+        updateAbilitiesPacket.setUniqueEntityId(player.getRuntimeId());
         // 这边设置的命令权限其实没啥用，主要作用是让op能拥有快捷指令选项
         // 若此玩家没有指定命令的权限，命令描述压根就不会发到客户端
         updateAbilitiesPacket.setCommandPermission(player.isOp() ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);

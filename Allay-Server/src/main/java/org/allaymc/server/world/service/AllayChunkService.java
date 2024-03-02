@@ -274,7 +274,7 @@ public class AllayChunkService implements ChunkService {
         }
         loadedChunks.remove(chunkHash);
         chunk.save(worldStorage);
-        chunk.getEntities().forEach((uniqueId, entity) -> {
+        chunk.getEntities().forEach((runtimeId, entity) -> {
             entity.despawnFromAll();
             dimension.getEntityPhysicsService().removeEntity(entity);
         });

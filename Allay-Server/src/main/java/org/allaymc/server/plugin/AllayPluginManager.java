@@ -20,6 +20,7 @@ import java.util.*;
 @Slf4j
 public class AllayPluginManager implements PluginManager {
 
+    // TODO: check whether should we use concurrent collections
     protected Set<PluginSource> sources = new HashSet<>();
     protected Set<PluginLoader.PluginLoaderFactory> loaderFactories = new HashSet<>();
     protected Map<String, PluginContainer> plugins = new HashMap<>();
@@ -122,7 +123,9 @@ public class AllayPluginManager implements PluginManager {
             if (isPluginEnabled(pluginContainer.descriptor().getName())) return;
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
-                pluginContainer.plugin().onEnable();
+                var plugin = pluginContainer.plugin();
+                plugin.onEnable();
+                plugin.setEnabled(true);
             } catch (Exception e) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }
@@ -136,7 +139,9 @@ public class AllayPluginManager implements PluginManager {
             var pluginContainer = getPlugin(node.getObject());
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_DISABLING, pluginContainer.descriptor().getName()));
             try {
-                pluginContainer.plugin().onDisable();
+                var plugin = pluginContainer.plugin();
+                plugin.onDisable();
+                plugin.setEnabled(false);
             } catch (Exception e) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }

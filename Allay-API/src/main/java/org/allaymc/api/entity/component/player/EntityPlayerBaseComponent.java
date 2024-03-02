@@ -8,6 +8,7 @@ import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, ScoreboardViewer {
 
     boolean isSprinting();
 

@@ -35,7 +35,7 @@ public interface UnsafeChunk {
 
     int getZ();
 
-    Entity getEntity(long uniqueId);
+    Entity getEntity(long runtimeId);
 
     @UnmodifiableView
     Map<Long, Entity> getEntities();

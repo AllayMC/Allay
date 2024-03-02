@@ -15,6 +15,7 @@ import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
+import org.allaymc.api.scoreboard.ScoreboardService;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
@@ -186,4 +187,15 @@ public interface Server extends TaskCreator, CommandSender {
     Set<String> getWhitelistedPlayers();
 
     EventBus getEventBus();
+
+    ScoreboardService getScoreboardService();
+
+    default EntityPlayer getOnlinePlayerByName(String name) {
+        for (var player : getOnlinePlayers().values()) {
+            if (player.getOriginName().equals(name)) {
+                return player;
+            }
+        }
+        return null;
+    }
 }

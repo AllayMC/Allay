@@ -5,6 +5,7 @@ import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
@@ -14,6 +15,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
@@ -24,6 +26,8 @@ import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.scoreboard.ScoreboardService;
+import org.allaymc.api.scoreboard.storage.JsonScoreboardStorage;
 import org.allaymc.api.server.BanInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.Whitelist;
@@ -52,6 +56,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
@@ -106,6 +111,8 @@ public final class AllayServer implements Server {
     @Getter
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
     @Getter
+    private ScoreboardService scoreboardService;
+    @Getter
     private long startTime;
     private final BanInfo banInfo = ConfigManager.create(BanInfo.class, it -> {
         it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
@@ -146,6 +153,7 @@ public final class AllayServer implements Server {
         return instance;
     }
 
+    @SneakyThrows
     @Override
     public void start(long timeMillis) {
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
@@ -164,6 +172,9 @@ public final class AllayServer implements Server {
         });
         initTerminalConsole();
         worldPool.loadWorlds();
+        var cmdDataPath = Path.of("command_data");
+        if (!Files.exists(cmdDataPath)) Files.createDirectory(cmdDataPath);
+        scoreboardService = new ScoreboardService(this, new JsonScoreboardStorage(Path.of("command_data/scoreboards.json")));
         commandRegistry = new AllayCommandRegistry();
         commandRegistry.registerDefaultCommands();
         networkServer = new AllayNetworkServer(this);
@@ -220,6 +231,7 @@ public final class AllayServer implements Server {
         SETTINGS.save();
         banInfo.save();
         whitelist.save();
+        scoreboardService.save();
         // Start a thread to handle server shutdown
         Thread.ofPlatform().start(() -> {
             kickAllPlayersAndBlock();
@@ -267,6 +279,8 @@ public final class AllayServer implements Server {
 
     @Override
     public void onDisconnect(EntityPlayer player, String reason) {
+        var event = new PlayerQuitEvent(player, reason);
+        eventBus.callEvent(event);
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
         if (player.isInitialized()) {
             broadcastTr("§e%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
@@ -288,7 +302,7 @@ public final class AllayServer implements Server {
     public void addToPlayerList(EntityPlayer player) {
         addToPlayerList(
                 player.getLoginData().getUuid(),
-                player.getUniqueId(),
+                player.getRuntimeId(),
                 player.getOriginName(),
                 player.getLoginData().getDeviceInfo(),
                 player.getLoginData().getXuid(),

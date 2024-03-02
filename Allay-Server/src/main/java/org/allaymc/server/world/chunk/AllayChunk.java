@@ -462,8 +462,8 @@ public class AllayChunk implements Chunk {
 
 
     @ApiStatus.Internal
-    public Entity removeEntity(long uniqueId) {
-        return unsafeChunk.removeEntity(uniqueId);
+    public Entity removeEntity(long runtimeId) {
+        return unsafeChunk.removeEntity(runtimeId);
     }
 
     @Override
@@ -493,8 +493,8 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public Entity getEntity(long uniqueId) {
-        return unsafeChunk.getEntity(uniqueId);
+    public Entity getEntity(long runtimeId) {
+        return unsafeChunk.getEntity(runtimeId);
     }
 
     @Override

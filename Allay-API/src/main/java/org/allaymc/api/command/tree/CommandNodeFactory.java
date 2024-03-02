@@ -52,4 +52,6 @@ public interface CommandNodeFactory {
     CommandNode gameMode(String name, CommandNode parent, GameType defaultValue);
 
     CommandNode pos(String name, CommandNode parent, Vector3fc defaultValue);
+
+    CommandNode wildcardTarget(String name, CommandNode parent, String defaultValue);
 }

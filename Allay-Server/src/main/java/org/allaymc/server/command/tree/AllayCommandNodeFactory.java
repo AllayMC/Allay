@@ -95,4 +95,9 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     public CommandNode pos(String name, CommandNode parent, Vector3fc defaultValue) {
         return new PosNode(name, parent, defaultValue);
     }
+
+    @Override
+    public CommandNode wildcardTarget(String name, CommandNode parent, String defaultValue) {
+        return new WildcardTargetNode(name, parent, defaultValue);
+    }
 }

@@ -5,6 +5,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.type.BlockState;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.function.Supplier;
 
@@ -82,5 +84,25 @@ public class Utils {
             stringArray[i] = objectArray[i].toString();
         }
         return stringArray;
+    }
+
+    public static String readString(InputStream inputStream) throws IOException {
+        return readString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+    }
+
+    public static String readString(Reader reader) throws IOException {
+        try (BufferedReader br = new BufferedReader(reader)) {
+            String temp;
+            StringBuilder stringBuilder = new StringBuilder();
+            temp = br.readLine();
+            while (temp != null) {
+                if (!stringBuilder.isEmpty()) {
+                    stringBuilder.append("\n");
+                }
+                stringBuilder.append(temp);
+                temp = br.readLine();
+            }
+            return stringBuilder.toString();
+        }
     }
 }
