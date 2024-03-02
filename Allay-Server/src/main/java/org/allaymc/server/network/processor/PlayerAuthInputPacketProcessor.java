@@ -41,12 +41,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         for (var action : blockActions) {
             var pos = action.getBlockPosition();
             switch (action.getAction()) {
-                case START_BREAK -> world.sendLevelEventPacket(pos, LevelEvent.BLOCK_START_BREAK, 0);
+                case START_BREAK -> world.addLevelEvent(pos, LevelEvent.BLOCK_START_BREAK, 0);
                 case BLOCK_PREDICT_DESTROY -> {
                     var oldState = world.getBlockState(pos.getX(), pos.getY(), pos.getZ());
                     world.setBlockState(pos.getX(), pos.getY(), pos.getZ(), AIR_TYPE.getDefaultState());
-                    world.sendLevelEventPacket(pos, LevelEvent.BLOCK_STOP_BREAK, 0);
-                    world.sendLevelEventPacket(pos, LevelEvent.PARTICLE_DESTROY_BLOCK, oldState.blockStateHash());
+                    world.addLevelEvent(pos, LevelEvent.BLOCK_STOP_BREAK, 0);
+                    world.addLevelEvent(pos, LevelEvent.PARTICLE_DESTROY_BLOCK, oldState.blockStateHash());
                 }
             }
         }

@@ -13,7 +13,7 @@ import org.allaymc.server.blockentity.component.common.BlockEntityContainerHolde
  *
  * @author daoge_cmd
  */
-public interface BlockEntityBarrelTypeInitializer {
+public interface BlockEntityBarrelInitializer {
     static void init() {
         BlockEntityTypes.BARREL_TYPE = BlockEntityTypeBuilder
                 .builder(BlockEntityBarrel.class)

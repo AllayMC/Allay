@@ -65,6 +65,12 @@ public record FullContainerType<T extends Container>(
             .mapAllSlotToType(ContainerSlotType.BARREL)
             .build();
 
+    public static final FullContainerType<ChestContainer> CHEST = builder()
+            .id(ContainerType.CONTAINER)
+            .size(27)
+            .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
     public static final FullContainerType<CraftingGridContainer> CRAFTING_GRID = builder()
             .id(ContainerType.INVENTORY)
             .size(4)

@@ -1,5 +1,6 @@
 package org.allaymc.api.world;
 
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
@@ -15,11 +16,13 @@ import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityService;
+import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
+import org.cloudburstmc.protocol.bedrock.packet.PlaySoundPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -263,7 +266,7 @@ public interface Dimension {
         return notEmpty ? blockStates : null;
     }
 
-    default void sendLevelEventPacket(Vector3i pos, LevelEventType levelEventType, int data) {
+    default void addLevelEvent(Vector3i pos, LevelEventType levelEventType, int data) {
         var chunk = getChunkService().getChunk(pos.getX() >> 4, pos.getZ() >> 4);
         if (chunk == null) return;
         var levelEventPacket = new LevelEventPacket();
@@ -383,5 +386,22 @@ public interface Dimension {
         for (var player : getPlayers()) {
             player.sendPacket(packet);
         }
+    }
+
+    default void addSound(float x, float y, float z, String sound) {
+        addSound(x, y, z, sound, 1, 1);
+    }
+
+    default void addSound(float x, float y, float z, String sound, float volume, float pitch) {
+        Preconditions.checkArgument(volume >= 0 && volume <= 1, "Sound volume must be between 0 and 1");
+        Preconditions.checkArgument(pitch >= 0, "Sound pitch must be higher than 0");
+
+        PlaySoundPacket packet = new PlaySoundPacket();
+        packet.setSound(sound);
+        packet.setVolume(volume);
+        packet.setPitch(pitch);
+        packet.setPosition(Vector3f.from(x, y, z));
+
+        getChunkService().getChunkByLevelPos((int) x, (int) z).addChunkPacket(packet);
     }
 }

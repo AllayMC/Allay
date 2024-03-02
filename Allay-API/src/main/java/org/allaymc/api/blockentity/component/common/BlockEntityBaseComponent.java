@@ -12,6 +12,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.position.Position3ic;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
 
 import java.util.Objects;
@@ -52,11 +53,14 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
     }
 
     default void sendBlockEntityDataPacketToAll() {
+        sendPacketToViewers(createBlockEntityDataPacket());
+    }
+
+    default void sendPacketToViewers(BedrockPacket packet) {
         var pos = getPosition();
         var chunk = pos.dimension().getChunkService().getChunkByLevelPos(pos.x(), pos.z());
         Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
-        var pk = createBlockEntityDataPacket();
-        chunk.sendChunkPacket(pk);
+        chunk.sendChunkPacket(packet);
     }
 
     default void tick() {}

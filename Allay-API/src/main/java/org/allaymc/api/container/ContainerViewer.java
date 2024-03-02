@@ -27,12 +27,9 @@ public interface ContainerViewer {
 
     void onSlotChange(Container container, int slot);
 
-
     <T extends Container> T getOpenedContainer(FullContainerType<T> type);
 
-
     <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType);
-
 
     Container getOpenedContainer(byte id);
 
