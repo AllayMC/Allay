@@ -1,12 +1,8 @@
 package org.allaymc.api.scoreboard.scorer;
 
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
-
-import java.util.Objects;
 
 /**
  * Allay Project 2024/2/27

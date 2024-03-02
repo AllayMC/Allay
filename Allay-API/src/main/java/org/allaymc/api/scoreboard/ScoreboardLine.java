@@ -1,9 +1,15 @@
 package org.allaymc.api.scoreboard;
 
+import com.google.gson.*;
 import lombok.Getter;
+import org.allaymc.api.scoreboard.scorer.EntityScorer;
+import org.allaymc.api.scoreboard.scorer.FakeScorer;
+import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.scoreboard.scorer.Scorer;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
+import java.lang.reflect.Type;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**

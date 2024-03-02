@@ -5,6 +5,7 @@ import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
@@ -55,6 +56,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
@@ -109,7 +111,7 @@ public final class AllayServer implements Server {
     @Getter
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
     @Getter
-    private final ScoreboardService scoreboardService = new ScoreboardService(this, new JsonScoreboardStorage());
+    private ScoreboardService scoreboardService;
     @Getter
     private long startTime;
     private final BanInfo banInfo = ConfigManager.create(BanInfo.class, it -> {
@@ -151,6 +153,7 @@ public final class AllayServer implements Server {
         return instance;
     }
 
+    @SneakyThrows
     @Override
     public void start(long timeMillis) {
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
@@ -169,6 +172,9 @@ public final class AllayServer implements Server {
         });
         initTerminalConsole();
         worldPool.loadWorlds();
+        var cmdDataPath = Path.of("command_data");
+        if (!Files.exists(cmdDataPath)) Files.createDirectory(cmdDataPath);
+        scoreboardService = new ScoreboardService(this, new JsonScoreboardStorage(Path.of("command_data/scoreboards.json")));
         commandRegistry = new AllayCommandRegistry();
         commandRegistry.registerDefaultCommands();
         networkServer = new AllayNetworkServer(this);
@@ -225,6 +231,7 @@ public final class AllayServer implements Server {
         SETTINGS.save();
         banInfo.save();
         whitelist.save();
+        scoreboardService.save();
         // Start a thread to handle server shutdown
         Thread.ofPlatform().start(() -> {
             kickAllPlayersAndBlock();

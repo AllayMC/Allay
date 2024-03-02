@@ -11,6 +11,7 @@ import org.allaymc.api.eventbus.event.world.entity.EntityDespawnEvent;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.scorer.EntityScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
+import org.allaymc.api.scoreboard.scorer.Scorer;
 import org.allaymc.api.scoreboard.storage.ScoreboardStorage;
 import org.allaymc.api.server.Server;
 
@@ -105,9 +106,9 @@ public final class ScoreboardService {
     }
 
     public boolean addViewer(ScoreboardViewer viewer) {
-        var added =  this.viewers.add(viewer);
+        var added = this.viewers.add(viewer);
         if (added) this.display.forEach((slot, scoreboard) -> {
-            if (scoreboard != null) scoreboard.addViewer(viewer, slot);
+            scoreboard.addViewer(viewer, slot);
         });
         return added;
     }
@@ -115,13 +116,12 @@ public final class ScoreboardService {
     public boolean removeViewer(ScoreboardViewer viewer) {
         var removed = viewers.remove(viewer);
         if (removed) this.display.forEach((slot, scoreboard) -> {
-            if (scoreboard != null) scoreboard.removeViewer(viewer, slot);
+            scoreboard.removeViewer(viewer, slot);
         });
         return removed;
     }
 
     public void save() {
-        storage.removeAll();
         storage.save(scoreboards.values());
         storage.saveDisplay(display);
     }
@@ -140,17 +140,17 @@ public final class ScoreboardService {
         });
     }
 
+    public void removeScorerFromAllScoreboards(Scorer scorer) {
+        scoreboards.values().forEach(scoreboard -> scoreboard.removeLine(scorer));
+    }
+
     public class AllWorldEventListener {
         @EventHandler
-        public void onEntityDie(EntityDespawnEvent event) {
+        public void onEntityDespawn(EntityDespawnEvent event) {
             var entity = event.getEntity();
             // Do not handle player
             if (entity instanceof EntityPlayer) return;
-            var scorer = new EntityScorer(entity);
-            scoreboards.forEach((s, scoreboard) -> {
-                if (scoreboard.getLines().isEmpty()) return;
-                scoreboard.removeLine(scorer);
-            });
+            removeScorerFromAllScoreboards(new EntityScorer(entity));
         }
     }
 

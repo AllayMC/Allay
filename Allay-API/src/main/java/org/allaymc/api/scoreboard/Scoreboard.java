@@ -1,5 +1,6 @@
 package org.allaymc.api.scoreboard;
 
+import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -10,6 +11,7 @@ import org.allaymc.api.server.Server;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -27,8 +29,8 @@ public final class Scoreboard {
      * 此计分板的 “准则” (eg: dummy)
      */
     private final String criteriaName;
-    private final Map<DisplaySlot, Set<ScoreboardViewer>> viewers = new HashMap<>();
-    private final Map<Scorer, ScoreboardLine> lines = new HashMap<>();
+    private final Map<DisplaySlot, Set<ScoreboardViewer>> viewers = new ConcurrentHashMap<>();
+    private final Map<Scorer, ScoreboardLine> lines = new ConcurrentHashMap<>();
     /**
      * 此计分板的排序规则 <br>
      * 排序动作由客户端执行，所以说服务端不需要去处理排序
@@ -38,7 +40,7 @@ public final class Scoreboard {
 
     {
         for (var slot : DisplaySlot.values()) {
-            viewers.put(slot, new HashSet<>());
+            viewers.put(slot, Sets.newConcurrentHashSet());
         }
     }
 
@@ -182,6 +184,7 @@ public final class Scoreboard {
      * @return 是否删除成功
      */
     public boolean removeLine(Scorer scorer) {
+        if (lines.isEmpty()) return false;
         var removed = lines.get(scorer);
         if (removed == null) return false;
         if (wouldCallEvent()) {

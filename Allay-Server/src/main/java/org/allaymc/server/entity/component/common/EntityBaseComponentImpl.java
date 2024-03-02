@@ -23,7 +23,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.eventbus.event.server.entity.EntityTeleportEvent;
+import org.allaymc.api.eventbus.event.world.entity.EntityTeleportEvent;
 import org.allaymc.api.eventbus.event.world.entity.EntityDieEvent;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.identifier.Identifier;
@@ -290,16 +290,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     @ApiStatus.Internal
     public void setLocationAndCheckChunk(Location3fc newLoc) {
-        checkChunk(this.location, newLoc, this.location.dimension == null);
+        checkChunk(this.location, newLoc);
         setLocation(newLoc);
     }
 
-    protected void checkChunk(Location3fc oldLoc, Location3fc newLoc, boolean currentDimIsNull) {
+    protected void checkChunk(Location3fc oldLoc, Location3fc newLoc) {
         var oldChunkX = (int) oldLoc.x() >> 4;
         var oldChunkZ = (int) oldLoc.z() >> 4;
         var newChunkX = (int) newLoc.x() >> 4;
         var newChunkZ = (int) newLoc.z() >> 4;
-        if (!currentDimIsNull && (oldChunkX != newChunkX || oldChunkZ != newChunkZ)) {
+        if (this.location.dimension != null && (oldChunkX != newChunkX || oldChunkZ != newChunkZ)) {
             var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
             if (oldChunk != null) ((AllayChunk) oldChunk).removeEntity(runtimeId);
             else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
@@ -325,7 +325,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             return;
         }
         var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target));
-        Server.getInstance().getEventBus().callEvent(event);
+        var currentWorld = this.getWorld();
+        var targetWorld = target.dimension().getWorld();
+        currentWorld.getEventBus().callEvent(event);
+        if (event.isCancelled()) return;
+        if (targetWorld != currentWorld) targetWorld.getEventBus().callEvent(event);
         if (event.isCancelled()) return;
         target = event.getTo();
         if (this.location.dimension == target.dimension()) {
