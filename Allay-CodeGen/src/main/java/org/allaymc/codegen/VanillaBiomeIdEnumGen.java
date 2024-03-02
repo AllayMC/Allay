@@ -49,6 +49,7 @@ public class VanillaBiomeIdEnumGen {
     private static final Class<?> IDENTIFIER_CLASS = Identifier.class;
     private static final Class<?> INT_CLASS = int.class;
     private static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
+    private static final ClassName VANILLA_BIOME_ARRA_CLASS = ClassName.get("org.allaymc.api.data", "VanillaBiomeId[]");
     private static final String PACKAGE_NAME = "org.allaymc.api.data";
     private static final Path TARGET_PATH = Path.of("Allay-API/src/main/java/org/allaymc/api/data/VanillaBiomeId.java");
     private static final String JAVA_DOC = """
@@ -65,18 +66,22 @@ public class VanillaBiomeIdEnumGen {
                 .addAnnotation(GETTER_CLASS)
                 .addStaticBlock(
                         CodeBlock.builder()
-                                .add("MAP1 = $L;", "new Int2ObjectOpenHashMap<>()")
+                                .add("MAP1 = $L;", "new VanillaBiomeId[256]")
                                 .add("MAP2 = $L;", "new HashMap<>()")
                                 .add("""
                                                 
                                         for (var b : values()) {
-                                            MAP1.put(b.id, b);
+                                            MAP1[b.id] = b;
                                             MAP2.put(b.identifier, b);
                                         }""")
                                 .build()
                 )
                 .addField(FieldSpec
-                        .builder(Int2ObjectOpenHashMap.class, "MAP1", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
+                        .builder(VANILLA_BIOME_ARRA_CLASS, "VALUES", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        .initializer("values()")
+                        .build())
+                .addField(FieldSpec
+                        .builder(VANILLA_BIOME_ARRA_CLASS, "MAP1", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
                         .builder(HashMap.class, "MAP2", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
@@ -112,7 +117,7 @@ public class VanillaBiomeIdEnumGen {
                 .methodBuilder("fromId")
                 .addParameter(INT_CLASS, "id")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
-                .addCode("return MAP1.get(id);")
+                .addCode("return MAP1[id];")
                 .returns(BiomeType.class)
                 .build());
         codeBuilder.addMethod(MethodSpec
