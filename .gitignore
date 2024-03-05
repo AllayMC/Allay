@@ -1,5 +1,15 @@
 /.gradle/
-/.idea/
+
+.idea/**
+### Add the codestyle to the repo
+!/.idea/codeStyles
+!/.idea/codeStyles/*
+!/.idea/codeStyles/codeStyleConfig.xml
+!/.idea/codeStyles/Project.xml
+### Add the inspectionProfiles to the repo
+!/.idea/inspectionProfiles
+!/.idea/inspectionProfiles/Project_Default.xml
+
 **/build/
 **/bin/
 
