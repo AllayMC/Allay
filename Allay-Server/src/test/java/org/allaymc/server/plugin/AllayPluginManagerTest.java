@@ -1,6 +1,6 @@
 package org.allaymc.server.plugin;
 
-import org.allaymc.api.datastruct.dag.DAG;
+import org.allaymc.api.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.plugin.PluginException;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ public class AllayPluginManagerTest extends AllayPluginManager {
 
     @BeforeEach
     void cleanUp() {
-        dag = new DAG<>();
+        dag = new HashDirectedAcyclicGraph<>();
     }
 
     @Test
