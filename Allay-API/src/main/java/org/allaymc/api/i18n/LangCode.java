@@ -45,7 +45,7 @@ public enum LangCode {
     }
 
     public static LangCode byName(String name) {
-        return byName(name, false);
+        return byName(name, true);
     }
 
     public static LangCode byName(String name, boolean ignoreCase) {

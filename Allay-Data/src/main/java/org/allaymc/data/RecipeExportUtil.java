@@ -16,7 +16,7 @@ import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.JSONUtils;
-import org.allaymc.api.utils.NbtUtils;
+import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.Allay;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
@@ -256,7 +256,7 @@ public class RecipeExportUtil {
         String tag = null;
 
         if (itemData.getTag() != null) {
-            tag = NbtUtils.nbtToBase64(itemData.getTag());
+            tag = AllayNbtUtils.nbtToBase64(itemData.getTag());
         }
 
         if (damage != null && (damage == 0 || damage == -1)) {

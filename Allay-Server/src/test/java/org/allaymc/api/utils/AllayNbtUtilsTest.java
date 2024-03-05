@@ -11,20 +11,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author daoge_cmd
  */
-class NbtUtilsTest {
+class AllayNbtUtilsTest {
 
     static String NBT_BASE_64 = "CgAAAQgAdGVzdEZsYWcBAA==";
 
     @Test
     void nbtToBase64() {
         var nbtMap = NbtMap.builder().putBoolean("testFlag", true).build();
-        var nbtB64 = NbtUtils.nbtToBase64(nbtMap);
+        var nbtB64 = AllayNbtUtils.nbtToBase64(nbtMap);
         assertEquals("CgAAAQgAdGVzdEZsYWcBAA==", nbtB64);
     }
 
     @Test
     void base64ToNbt() {
-        var nbtMap = NbtUtils.base64ToNbt(NBT_BASE_64);
+        var nbtMap = AllayNbtUtils.base64ToNbt(NBT_BASE_64);
         assertTrue(nbtMap.getBoolean("testFlag"));
     }
 }

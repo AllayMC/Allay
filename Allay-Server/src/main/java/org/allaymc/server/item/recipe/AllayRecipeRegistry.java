@@ -16,7 +16,7 @@ import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
-import org.allaymc.api.utils.NbtUtils;
+import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.server.item.type.AllayItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
@@ -167,7 +167,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
         var count = jsonObject.get("count").getAsInt();
         var meta = jsonObject.has("damage") ? jsonObject.get("damage").getAsInt() : 0;
-        var nbtMap = jsonObject.has("nbt_b64") ? NbtUtils.base64ToNbt(jsonObject.get("nbt_b64").getAsString()) : NbtMap.EMPTY;
+        var nbtMap = jsonObject.has("nbt_b64") ? AllayNbtUtils.base64ToNbt(jsonObject.get("nbt_b64").getAsString()) : NbtMap.EMPTY;
         return itemType.createItemStack(
                 SimpleItemStackInitInfo
                         .builder()
