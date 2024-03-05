@@ -5,6 +5,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.jetbrains.annotations.ApiStatus;
@@ -60,6 +61,9 @@ public interface UnsafeChunk {
     @ApiStatus.Internal
     ChunkSection[] getSections();
 
+    @ApiStatus.Internal
+    default void init(Dimension dimension){}
+
     /**
      * Gets Chunk section , range -1 -> -4 , 0 -> 59
      * <p>
@@ -109,6 +113,7 @@ public interface UnsafeChunk {
 
     /**
      * 不同于getHeight(), 此方法返回的short[]数组中的所有值都大于等于0（可以理解为getHeight() - minHeight()）
+     *
      * @return 高度图
      */
     short[] getHeightArray();

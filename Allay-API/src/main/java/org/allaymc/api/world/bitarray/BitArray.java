@@ -14,8 +14,9 @@ public interface BitArray {
 
     int get(int index);
 
-    default void writeSizeToNetwork(ByteBuf buffer, int size) {
+    default boolean writeSizeToNetwork(ByteBuf buffer, int size) {
         VarInts.writeInt(buffer, size);
+        return true;
     }
 
     default int readSizeFromNetwork(ByteBuf buffer) {

@@ -178,6 +178,7 @@ public class AllayChunkService implements ChunkService {
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
                 .thenApply(prepareChunk -> {
+                    prepareChunk.init(dimension);
                     setChunk(x, z, prepareChunk);
                     loadingChunks.remove(hashXZ);
                     return prepareChunk;
