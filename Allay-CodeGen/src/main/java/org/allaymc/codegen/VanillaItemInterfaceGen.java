@@ -29,7 +29,6 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
     public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaItemId");
     public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemType");
     public static final ClassName ITEM_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemTypes");
-    public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemTypeBuilder");
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
     static {
@@ -55,13 +54,14 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         if (!Files.exists(initializerDir)) Files.createDirectories(initializerDir);
         var typesClass = TypeSpec.classBuilder(ITEM_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : VanillaItemId.values()) {
+            var itemClassFullName = generateClassFullName(id);
             typesClass.addField(
                     FieldSpec.builder(ParameterizedTypeName.get(ITEM_TYPE_CLASS_NAME, generateClassFullName(id)), id.name() + "_TYPE")
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                            .initializer("empty($T.class, $T.$N)", itemClassFullName, VANILLA_ITEM_ID_CLASS_NAME, id.name())
                             .build()
             );
             var itemClassSimpleName = generateClassSimpleName(id);
-            var itemClassFullName = generateClassFullName(id);
             var folderName = tryFindSpecifiedFolderName(itemClassSimpleName);
             var folderPath = folderName != null ? interfaceDir.resolve(folderName) : interfaceDir;
             var path = folderPath.resolve(itemClassSimpleName + ".java");
@@ -70,46 +70,23 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
                 if (!Files.exists(folderPath))
                     Files.createDirectories(folderPath);
                 generateClass(ITEM_STACK_CLASS_NAME, itemClassFullName, path);
-                generateItemTypeInitializer(id, itemClassFullName);
+                // generateItemTypeInitializer(id, itemClassFullName);
             }
         }
+
+        typesClass.addMethod(MethodSpec.methodBuilder("empty")
+                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                        .addTypeVariable(TypeVariableName.get("T", ClassName.get("org.allaymc.api.item", "ItemStack")))
+                        .returns(ParameterizedTypeName.get(ClassName.get("org.allaymc.api.item.type", "ItemType"), TypeVariableName.get("T")))
+                        .addParameter(ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get("java.lang", "Class"), TypeVariableName.get("T")), "type").build())
+                        .addParameter(ParameterSpec.builder(ClassName.get("org.allaymc.api.data", "VanillaItemId"), "itemId").build())
+                        .addStatement("return $T.builder($N).vanillaItem($N).build()",
+                                ClassName.get("org.allaymc.api.item.type", "ItemTypeBuilder"), "type", "itemId")
+                        .build())
+                .build();
         var javaFile = JavaFile.builder(ITEM_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
         System.out.println("Generating " + ITEM_TYPES_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/item/type/" + ITEM_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
-    }
-
-    @SneakyThrows
-    private static void generateItemTypeInitializer(VanillaItemId id, ClassName itemClassName) {
-        var folderName = tryFindSpecifiedFolderName(itemClassName.simpleName());
-        var packageName = "org.allaymc.server.item.initializer" + (folderName != null ? "." + folderName : "");
-        var className = ClassName.get(packageName, itemClassName.simpleName() + "Initializer");
-        var initializer = CodeBlock.builder();
-        initializer
-                .add("$T.$N = $T\n", ITEM_TYPES_CLASS_NAME, id.name() + "_TYPE", ITEM_TYPE_BUILDER_CLASS_NAME)
-                .add("        .builder($T.class)\n", itemClassName)
-                .add("        .vanillaItem($T.$N)\n", VANILLA_ITEM_ID_CLASS_NAME, id.name())
-                .add("        .build();");
-        var clazz = TypeSpec.interfaceBuilder(className)
-                .addModifiers(Modifier.PUBLIC)
-                .addJavadoc(
-                        "@author daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
-                .addMethod(
-                        MethodSpec.methodBuilder("init")
-                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addCode(initializer.build())
-                                .build()
-                )
-                .build();
-        var filePath = Path.of("Allay-Server/src/main/java/" + packageName.replace(".", "/") + "/" + className.simpleName() + ".java");
-        if (!Files.exists(filePath)) {
-            var folderPath = filePath.getParent();
-            if (!Files.exists(folderPath))
-                Files.createDirectories(folderPath);
-            var javaFile = JavaFile.builder(className.packageName(), clazz).build();
-            System.out.println("Generating " + className.simpleName() + ".java ...");
-            Files.writeString(filePath, javaFile.toString());
-        }
     }
 
     private static ClassName generateClassFullName(VanillaItemId id) {
@@ -121,7 +98,6 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
     private static String generateClassSimpleName(VanillaItemId id) {
         return id == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0Stack" : "Item" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_")) + "Stack";
     }
-
 
     private static String tryFindSpecifiedFolderName(String blockClassSimpleName) {
         for (var entry : SUB_PACKAGE_GROUPERS.entrySet()) {

@@ -7,15 +7,17 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.cauldron.ItemCauldronBaseComponentImpl;
 
 /**
- * @author daoge_cmd <br>
- * Allay Project <br>
+ * Allay Project 07/03/2024
+ *
+ * @author IWareQ
  */
 public interface ItemCauldronStackInitializer {
-  static void init() {
-    ItemTypes.CAULDRON_TYPE = ItemTypeBuilder
-            .builder(ItemCauldronStack.class)
-            .vanillaItem(VanillaItemId.CAULDRON)
-            .addComponent(ItemCauldronBaseComponentImpl::new, ItemCauldronBaseComponentImpl.class)
-            .build();
-  }
+
+    static void init() {
+        ItemTypes.CAULDRON_TYPE = ItemTypeBuilder
+                .builder(ItemCauldronStack.class)
+                .vanillaItem(VanillaItemId.CAULDRON)
+                .addComponent(ItemCauldronBaseComponentImpl::new, ItemCauldronBaseComponentImpl.class)
+                .build();
+    }
 }
