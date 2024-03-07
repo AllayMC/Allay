@@ -84,7 +84,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
                                 ClassName.get("org.allaymc.api.item.type", "ItemTypeBuilder"), "type", "itemId")
                         .build())
                 .build();
-        var javaFile = JavaFile.builder(ITEM_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
+        var javaFile = JavaFile.builder(ITEM_TYPES_CLASS_NAME.packageName(), typesClass.build()).indent("    ").build();
         System.out.println("Generating " + ITEM_TYPES_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/item/type/" + ITEM_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
