@@ -92,9 +92,8 @@ public class LevelDBChunkSerializer {
         for (int ySection = minSectionY; ySection <= dimensionInfo.maxSectionY(); ySection++) {
             byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection, dimensionInfo));
             if (bytes == null) continue;
-            ByteBuf byteBuf = null;
+            ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer(bytes.length);
             try {
-                byteBuf = ByteBufAllocator.DEFAULT.ioBuffer(bytes.length);
                 byteBuf.writeBytes(bytes);
                 byte subChunkVersion = byteBuf.readByte();
                 int layers = 2;
