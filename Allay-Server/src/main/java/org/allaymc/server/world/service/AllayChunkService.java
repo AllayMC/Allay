@@ -98,7 +98,7 @@ public class AllayChunkService implements ChunkService {
         }
     }
 
-    private Chunk generateChunk(Chunk chunk) {
+    private Chunk generateChunkIfNeed(Chunk chunk) {
         var unsafeChunk = chunk.toUnsafeChunk();
         if (unsafeChunk.getState() != FINISHED) {
             var chunkGenerateContext = new ChunkGenerateContext(unsafeChunk, dimension);
@@ -172,7 +172,7 @@ public class AllayChunkService implements ChunkService {
                     log.error("Error while reading chunk (" + x + "," + z + ") !", t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
-                .thenApplyAsync(this::generateChunk, Server.getInstance().getComputeThreadPool())
+                .thenApplyAsync(this::generateChunkIfNeed, Server.getInstance().getComputeThreadPool())
                 .exceptionally(t -> {
                     log.error("Error while generating chunk (" + x + "," + z + ") !", t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();

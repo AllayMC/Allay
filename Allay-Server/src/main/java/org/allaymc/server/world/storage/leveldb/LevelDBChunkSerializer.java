@@ -53,13 +53,13 @@ public class LevelDBChunkSerializer {
         serializeBlock(writeBatch, chunk);
         writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{UnsafeChunk.CHUNK_VERSION});
         serializeHeightAndBiome(writeBatch, chunk);
-        serializeTileAndEntity(writeBatch,chunk);
+        serializeEntityAndBlockEntity(writeBatch,chunk);
     }
 
     public void deserialize(DB db, AllayUnsafeChunk.Builder builder) {
         deserializeBlock(db, builder);
         deserializeHeightAndBiome(db, builder);
-        deserializeTileAndEntity(db,builder);
+        deserializeEntityAndBlockEntity(db,builder);
     }
 
     //serialize chunk section
@@ -208,7 +208,7 @@ public class LevelDBChunkSerializer {
         }
     }
 
-    private void deserializeTileAndEntity(DB db, AllayUnsafeChunk.Builder builder) {
+    private void deserializeEntityAndBlockEntity(DB db, AllayUnsafeChunk.Builder builder) {
         DimensionInfo dimensionInfo = builder.getDimensionInfo();
         byte[] tileBytes = db.get(LevelDBKeyUtils.BLOCK_ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo));
         if (tileBytes != null) {
@@ -233,7 +233,7 @@ public class LevelDBChunkSerializer {
         return tags;
     }
 
-    private void serializeTileAndEntity(WriteBatch writeBatch, UnsafeChunk chunk) {
+    private void serializeEntityAndBlockEntity(WriteBatch writeBatch, UnsafeChunk chunk) {
         //Write blockEntities
         Collection<BlockEntity> blockEntities = chunk.getBlockEntities().values();
         ByteBuf tileBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
