@@ -7,9 +7,14 @@ import lombok.SneakyThrows;
 import org.allaymc.api.i18n.LangCode;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 
@@ -150,7 +155,7 @@ public class LangBuilder {
             try {
                 Files.deleteIfExists(path);
                 Files.createFile(path);
-                Files.writeString(path, json);
+                Files.writeString(path, json, StandardCharsets.UTF_8);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
