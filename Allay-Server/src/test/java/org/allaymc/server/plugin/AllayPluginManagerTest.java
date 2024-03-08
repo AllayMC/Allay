@@ -2,14 +2,16 @@ package org.allaymc.server.plugin;
 
 import org.allaymc.api.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.api.plugin.PluginDependency;
-import org.allaymc.api.plugin.PluginException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Allay Project 2024/2/8
@@ -30,7 +32,8 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .dependOn("a")
                 .end()
                 .build();
-        assertThrows(PluginException.class, () -> checkCircularDependencies(descriptors));
+        checkCircularDependencies(descriptors);
+        assertFalse(this.pluginsSortedList.contains("a"));
     }
 
     @Test
@@ -46,7 +49,10 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .dependOn("a")
                 .end()
                 .build();
-        assertThrows(PluginException.class, () -> checkCircularDependencies(descriptors));
+        checkCircularDependencies(descriptors);
+        assertFalse(this.pluginsSortedList.contains("c"));
+        assertTrue(this.pluginsSortedList.contains("a"));
+        assertTrue(this.pluginsSortedList.contains("b"));
     }
 
     @Test
@@ -62,7 +68,10 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .softDependOn("a")
                 .end()
                 .build();
-        assertThrows(PluginException.class, () -> checkCircularDependencies(descriptors));
+        checkCircularDependencies(descriptors);
+        assertFalse(this.pluginsSortedList.contains("c"));
+        assertTrue(this.pluginsSortedList.contains("a"));
+        assertTrue(this.pluginsSortedList.contains("b"));
     }
 
     @Test
@@ -72,7 +81,8 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .softDependOn("a")
                 .end()
                 .build();
-        assertThrows(PluginException.class, () -> checkCircularDependencies(descriptors));
+        checkCircularDependencies(descriptors);
+        assertFalse(this.pluginsSortedList.contains("a"));
     }
 
     @Test
@@ -85,7 +95,10 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .softDependOn("c")
                 .end()
                 .build();
-        assertDoesNotThrow(() -> checkCircularDependencies(descriptors));
+        checkCircularDependencies(descriptors);
+        assertTrue(this.pluginsSortedList.contains("a"));
+        assertTrue(this.pluginsSortedList.contains("b"));
+        assertTrue(this.pluginsSortedList.contains("c"));
     }
 
     static DescriptorMapBuilder builder() {
