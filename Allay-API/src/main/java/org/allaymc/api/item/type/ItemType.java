@@ -34,13 +34,13 @@ public interface ItemType<T extends ItemStack> extends Identified {
 
     default Identifier getBlockIdentifier() {
         var blockType = getBlockType();
-        return blockType == null ? null : blockType.getName();
+        return blockType == null ? null : blockType.getIdentifier();
     }
 
     BlockType<?> getBlockType();
 
     default ItemDefinition toNetworkDefinition() {
-        return new SimpleItemDefinition(getName().toString(), getRuntimeId(), false);
+        return new SimpleItemDefinition(getIdentifier().toString(), getRuntimeId(), false);
     }
 
 

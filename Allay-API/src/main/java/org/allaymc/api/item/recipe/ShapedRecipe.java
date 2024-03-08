@@ -1,7 +1,6 @@
 package org.allaymc.api.item.recipe;
 
 import lombok.Builder;
-import lombok.Getter;
 import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
@@ -24,7 +23,6 @@ import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
  *
  * @author daoge_cmd
  */
-@Getter
 public class ShapedRecipe extends CraftingRecipe {
 
     public static final char EMPTY_KEY_CHAR = ' ';
@@ -177,6 +175,14 @@ public class ShapedRecipe extends CraftingRecipe {
             }
         }
         return false;
+    }
+
+    public char[][] getPattern() {
+        return pattern;
+    }
+
+    public Map<Character, ItemDescriptor> getKeys() {
+        return keys;
     }
 
     public interface PatternHelper {

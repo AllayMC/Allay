@@ -25,7 +25,7 @@ public class DefaultDescriptor implements ItemDescriptor {
 
     @Override
     public boolean match(ItemStack itemStack) {
-        return itemStack.getItemType().getName().equals(itemType.getName()) &&
+        return itemStack.getItemType().getIdentifier().equals(itemType.getIdentifier()) &&
                (meta == WILDCARD_META || itemStack.getMeta() == meta);
     }
 

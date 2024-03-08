@@ -38,7 +38,7 @@ public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueReci
 
 
     @Override
-    public Identifier getName() {
+    public Identifier getIdentifier() {
         return identifier;
     }
 
