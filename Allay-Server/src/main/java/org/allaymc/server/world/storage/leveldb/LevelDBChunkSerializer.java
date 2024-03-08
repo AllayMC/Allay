@@ -241,13 +241,13 @@ public class LevelDBChunkSerializer {
             byte[] key = LevelDBKeyUtils.BLOCK_ENTITIES.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
             if (blockEntities.isEmpty()) {
                 writeBatch.delete(key);
-                return;
+            } else {
+                for (BlockEntity blockEntity : blockEntities) {
+                    NBTOutputStream writerLE = NbtUtils.createWriterLE(bufStream);
+                    writerLE.writeTag(blockEntity.saveNBT());
+                }
+                writeBatch.put(key, Utils.convertByteBuf2Array(tileBuffer));
             }
-            for (BlockEntity blockEntity : blockEntities) {
-                NBTOutputStream writerLE = NbtUtils.createWriterLE(bufStream);
-                writerLE.writeTag(blockEntity.saveNBT());
-            }
-            writeBatch.put(key, Utils.convertByteBuf2Array(tileBuffer));
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
