@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
@@ -519,6 +520,11 @@ public class AllayChunk implements Chunk {
     @ApiStatus.Internal
     public ChunkSection[] getSections() {
         return unsafeChunk.getSections();
+    }
+
+    @Override
+    public void init(Dimension dimension) {
+        unsafeChunk.init(dimension);
     }
 
     @Override

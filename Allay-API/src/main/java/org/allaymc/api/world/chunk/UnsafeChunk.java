@@ -62,7 +62,7 @@ public interface UnsafeChunk {
     ChunkSection[] getSections();
 
     @ApiStatus.Internal
-    default void init(Dimension dimension){}
+    void init(Dimension dimension);
 
     /**
      * Gets Chunk section , range -1 -> -4 , 0 -> 59
