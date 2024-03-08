@@ -56,8 +56,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.allaymc.api.utils.NbtUtils.readVector3f;
-import static org.allaymc.api.utils.NbtUtils.writeVector3f;
+import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
+import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 
 /**
  * Allay Project 2023/10/14

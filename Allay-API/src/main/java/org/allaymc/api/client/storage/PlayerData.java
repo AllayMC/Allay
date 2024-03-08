@@ -8,7 +8,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
-import static org.allaymc.api.utils.NbtUtils.writeVector3f;
+import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 
 /**
  * Allay Project 2024/1/27

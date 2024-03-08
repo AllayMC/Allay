@@ -1,8 +1,8 @@
 package org.allaymc.server.plugin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.datastruct.dag.CycleFoundException;
-import org.allaymc.api.datastruct.dag.DAG;
+import org.allaymc.api.datastruct.dag.DAGCycleException;
+import org.allaymc.api.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.*;
@@ -24,8 +24,9 @@ public class AllayPluginManager implements PluginManager {
     protected Set<PluginSource> sources = new HashSet<>();
     protected Set<PluginLoader.PluginLoaderFactory> loaderFactories = new HashSet<>();
     protected Map<String, PluginContainer> plugins = new HashMap<>();
-    protected DAG<String> dag = new DAG<>();
+    protected HashDirectedAcyclicGraph<String> dag = new HashDirectedAcyclicGraph<>();
     protected Map<String, PluginContainer> enabledPlugins = new HashMap<>();
+    protected List<String> pluginsSortedList;
 
     public AllayPluginManager() {
         registerSource(new DefaultPluginSource());
@@ -71,41 +72,51 @@ public class AllayPluginManager implements PluginManager {
     }
 
     protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
-        dag.visit(node -> {
-            var descriptor = descriptors.get(node.getObject());
-            log.info(I18n.get().tr(TrKeys.A_PLUGIN_LOADING, descriptor.getName()));
-            var loader = loaders.get(node.getObject());
+        Iterator<String> iterator = pluginsSortedList.iterator();
+        start:
+        while (iterator.hasNext()) {
+            var s = iterator.next();
+            var descriptor = descriptors.get(s);
+            var loader = loaders.get(s);
+            for (var e : descriptor.getDependencies()) {
+                if (!plugins.containsKey(e.name())) {
+                    if (!e.optional()) {
+                        log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), e.name()));
+                        iterator.remove();
+                        continue start;
+                    }
+                }
+            }
             PluginContainer pluginContainer;
             try {
                 pluginContainer = loader.loadPlugin();
             } catch (Exception e) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName()), e);
-                return;
+                continue;
             }
             plugins.put(descriptor.getName(), pluginContainer);
             pluginContainer.plugin().onLoad();
-        });
+            log.info(I18n.get().tr(TrKeys.A_PLUGIN_LOADING, descriptor.getName()));
+        }
     }
 
     protected void checkCircularDependencies(Map<String, ? extends PluginDescriptor> descriptors) {
-        try {
-            // Add all plugin names to dag firstly
-            descriptors.keySet().forEach(dag::createNode);
-            for (var descriptor : descriptors.values()) {
-                for (var dependency : descriptor.getDependencies()) {
-                    var depNode = dag.getNode(dependency.name());
-                    if (depNode == null) {
-                        if (!dependency.optional())
-                            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
-                        else continue;
-                    }
-                    depNode.addChild(dag.getNode(descriptor.getName()));
+        // Add all plugin names to dag firstly
+        dag.addAll(descriptors.keySet());
+        for (var descriptor : descriptors.values()) {
+            for (var dependency : descriptor.getDependencies()) {
+                String name = dependency.name();
+                //add dependency plugin to DAG
+                dag.add(name);
+                try {
+                    dag.setBefore(name, descriptor.getName());//set ref
+                } catch (DAGCycleException e) {
+                    log.error("Circular dependencies appear in plugin {}: " + e.getMessage() + "The plugin will skip loading!", descriptor.getName());
+                    dag.remove(descriptor.getName());
                 }
             }
-            dag.update();
-        } catch (CycleFoundException cfe) {
-            throw new PluginException(cfe);
         }
+        pluginsSortedList = dag.getSortedList();
     }
 
     protected Set<Path> findPluginPaths() {
@@ -118,8 +129,8 @@ public class AllayPluginManager implements PluginManager {
 
     @Override
     public void enablePlugins() {
-        dag.visit(node -> {
-            var pluginContainer = getPlugin(node.getObject());
+        for (var s : pluginsSortedList) {
+            var pluginContainer = getPlugin(s);
             if (isPluginEnabled(pluginContainer.descriptor().getName())) return;
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
@@ -130,13 +141,13 @@ public class AllayPluginManager implements PluginManager {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }
             enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
-        });
+        }
     }
 
     @Override
     public void disablePlugins() {
-        dag.visit(node -> {
-            var pluginContainer = getPlugin(node.getObject());
+        for (var s : pluginsSortedList) {
+            var pluginContainer = getPlugin(s);
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_DISABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
@@ -145,7 +156,7 @@ public class AllayPluginManager implements PluginManager {
             } catch (Exception e) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }
-        });
+        }
     }
 
     @Override

@@ -1,25 +1,14 @@
 package org.allaymc.api.plugin;
 
+import org.allaymc.api.exception.FormativeException;
+
 /**
  * Allay Project 2024/2/8
  *
  * @author daoge_cmd
  */
-public class PluginException extends RuntimeException {
-
-    public PluginException(String message) {
-        super(message);
-    }
-
-    public PluginException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public PluginException(Throwable cause) {
-        super(cause);
-    }
-
-    public PluginException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+public class PluginException extends FormativeException {
+    public PluginException(String format, Object... arguments) {
+        super(format, arguments);
     }
 }

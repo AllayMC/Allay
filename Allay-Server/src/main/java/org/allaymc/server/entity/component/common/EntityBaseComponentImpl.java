@@ -61,8 +61,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
-import static org.allaymc.api.utils.NbtUtils.readVector2f;
-import static org.allaymc.api.utils.NbtUtils.readVector3f;
+import static org.allaymc.api.utils.AllayNbtUtils.readVector2f;
+import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**

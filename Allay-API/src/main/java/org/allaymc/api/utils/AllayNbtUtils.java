@@ -18,7 +18,7 @@ import java.util.Base64;
  *
  * @author daoge_cmd
  */
-public final class NbtUtils {
+public final class AllayNbtUtils {
     public static String nbtToBase64(NbtMap nbtMap) {
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream(); NBTOutputStream writer = org.cloudburstmc.nbt.NbtUtils.createWriterLE(stream)) {
             writer.writeTag(nbtMap);

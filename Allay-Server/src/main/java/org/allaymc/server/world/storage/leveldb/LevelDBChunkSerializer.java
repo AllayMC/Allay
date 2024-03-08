@@ -1,12 +1,21 @@
 package org.allaymc.server.world.storage.leveldb;
 
+import com.google.common.base.Predicates;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.data.VanillaBiomeId;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityHelper;
+import org.allaymc.api.entity.interfaces.EntityEnderCrystal;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
@@ -16,13 +25,22 @@ import org.allaymc.api.world.heightmap.HeightMap;
 import org.allaymc.api.world.palette.Palette;
 import org.allaymc.server.utils.LevelDBKeyUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
+import org.cloudburstmc.nbt.NBTOutputStream;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.WriteBatch;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
-import static org.allaymc.api.block.type.BlockTypes.UNKNOWN_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
  * Allay Project 8/23/2023
@@ -40,13 +58,13 @@ public class LevelDBChunkSerializer {
         serializeBlock(writeBatch, chunk);
         writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{UnsafeChunk.CHUNK_VERSION});
         serializeHeightAndBiome(writeBatch, chunk);
-        //todo Entity and Block Entity
+        serializeTileAndEntity(writeBatch,chunk);
     }
 
     public void deserialize(DB db, AllayUnsafeChunk.Builder builder) {
         deserializeBlock(db, builder);
         deserializeHeightAndBiome(db, builder);
-        //todo Entity and Block Entity
+        deserializeTileAndEntity(db,builder);
     }
 
     //serialize chunk section
@@ -132,14 +150,12 @@ public class LevelDBChunkSerializer {
             for (short height : chunk.getHeightArray()) {
                 heightAndBiomesBuffer.writeShortLE(height);
             }
-            Palette<BiomeType> last = null;
             Palette<BiomeType> biomePalette;
             for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
                 ChunkSection section = chunk.getSection(y);
                 if (section == null) continue;
                 biomePalette = section.biomes();
-                biomePalette.writeToStorageRuntime(heightAndBiomesBuffer, BiomeType::getId, last);
-                last = biomePalette;
+                biomePalette.writeToStorageRuntime(heightAndBiomesBuffer, BiomeType::getId);
             }
             writeBatch.put(LevelDBKeyUtils.DATA_3D.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), Utils.convertByteBuf2Array(heightAndBiomesBuffer));
         } finally {
@@ -151,7 +167,7 @@ public class LevelDBChunkSerializer {
     private void deserializeHeightAndBiome(DB db, AllayUnsafeChunk.Builder builder) {
         ByteBuf heightAndBiomesBuffer = null;
         try {
-            byte[] bytes = db.get(LevelDBKeyUtils.DATA_3D.getKey(builder.getChunkX(), builder.getChunkZ()));
+            byte[] bytes = db.get(LevelDBKeyUtils.DATA_3D.getKey(builder.getChunkX(), builder.getChunkZ(), builder.getDimensionInfo()));
             if (bytes != null) {
                 heightAndBiomesBuffer = Unpooled.wrappedBuffer(bytes);
                 short[] heights = new short[256];
@@ -159,21 +175,116 @@ public class LevelDBChunkSerializer {
                     heights[i] = heightAndBiomesBuffer.readShortLE();
                 }
                 builder.heightMap(new HeightMap(heights));
-                Palette<BiomeType> last = null;
                 Palette<BiomeType> biomePalette;
                 var minSectionY = builder.getDimensionInfo().minSectionY();
                 for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
                     ChunkSection section = builder.getSections()[y - minSectionY];
                     if (section == null) continue;
                     biomePalette = section.biomes();
-                    biomePalette.readFromStorageRuntime(heightAndBiomesBuffer, LevelDBChunkSerializer::getBiomeByIdNonNull, last);
-                    last = biomePalette;
+                    biomePalette.readFromStorageRuntime(heightAndBiomesBuffer, LevelDBChunkSerializer::getBiomeByIdNonNull);
+                }
+            } else {
+                byte[] bytes2D = db.get(LevelDBKeyUtils.DATA_2D.getKey(builder.getChunkX(), builder.getChunkZ(), builder.getDimensionInfo()));
+                if (bytes2D != null) {
+                    heightAndBiomesBuffer = Unpooled.wrappedBuffer(bytes2D);
+                    short[] heights = new short[256];
+                    for (int i = 0; i < 256; i++) {
+                        heights[i] = heightAndBiomesBuffer.readShortLE();
+                    }
+                    builder.heightMap(new HeightMap(heights));
+                    byte[] biomes = new byte[256];
+                    heightAndBiomesBuffer.readBytes(biomes);
+
+                    var minSectionY = builder.getDimensionInfo().minSectionY();
+                    for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
+                        ChunkSection section = builder.getSections()[y - minSectionY];
+                        if (section == null) continue;
+                        final Palette<BiomeType> biomePalette = section.biomes();
+                        for (int x = 0; x < 16; x++) {
+                            for (int z = 0; z < 16; z++) {
+                                for (int sy = 0; sy < 16; sy++) {
+                                    biomePalette.set(UnsafeChunk.index(x, sy, z), getBiomeByIdNonNull(biomes[x + 16 * z]));
+                                }
+                            }
+                        }
+                    }
                 }
             }
         } finally {
             if (heightAndBiomesBuffer != null) {
                 heightAndBiomesBuffer.release();
             }
+        }
+    }
+
+    private void deserializeTileAndEntity(DB db, AllayUnsafeChunk.Builder builder) {
+        DimensionInfo dimensionInfo = builder.getDimensionInfo();
+        byte[] tileBytes = db.get(LevelDBKeyUtils.BLOCK_ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo));
+        if (tileBytes != null) {
+            List<NbtMap> blockEntityTags = new ArrayList<>();
+            try (BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(tileBytes))) {
+                while (stream.available() > 0) {
+                    blockEntityTags.add((NbtMap) NbtUtils.createReaderLE(stream).readTag());
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            builder.blockEntities(blockEntityTags);
+        }
+
+        byte[] key = LevelDBKeyUtils.ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo);
+        byte[] entityBytes = db.get(key);
+        if (entityBytes == null) return;
+        List<NbtMap> entityTags = new ArrayList<>();
+        try (BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(entityBytes))) {
+            while (stream.available() > 0) {
+                entityTags.add((NbtMap) NbtUtils.createReaderLE(stream).readTag());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        builder.entities(entityTags);
+    }
+
+    private void serializeTileAndEntity(WriteBatch writeBatch, UnsafeChunk chunk) {
+        //Write blockEntities
+        Collection<BlockEntity> blockEntities = chunk.getBlockEntities().values();
+        ByteBuf tileBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
+        try (var bufStream = new ByteBufOutputStream(tileBuffer)) {
+            byte[] key = LevelDBKeyUtils.BLOCK_ENTITIES.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
+            if (blockEntities.isEmpty()) writeBatch.delete(key);
+            else {
+                for (BlockEntity blockEntity : blockEntities) {
+                    NBTOutputStream writerLE = NbtUtils.createWriterLE(bufStream);
+                    writerLE.writeTag(blockEntity.saveNBT());
+                }
+                writeBatch.put(key, Utils.convertByteBuf2Array(tileBuffer));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            tileBuffer.release();
+        }
+
+        Collection<Entity> entities = chunk.getEntities().values();
+        ByteBuf entityBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
+        try (var bufStream = new ByteBufOutputStream(entityBuffer)) {
+            byte[] key = LevelDBKeyUtils.ENTITIES.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
+            if (entities.isEmpty()) {
+                writeBatch.delete(key);
+            } else {
+                for (Entity e : entities) {
+                    if (!(e instanceof EntityPlayer)) {
+                        NBTOutputStream writerLE = NbtUtils.createWriterLE(bufStream);
+                        writerLE.writeTag(e.saveNBT());
+                    }
+                }
+                writeBatch.put(key, Utils.convertByteBuf2Array(entityBuffer));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            entityBuffer.release();
         }
     }
 

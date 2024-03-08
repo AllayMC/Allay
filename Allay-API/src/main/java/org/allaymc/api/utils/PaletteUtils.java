@@ -18,11 +18,10 @@ public class PaletteUtils {
     public static Pair<Integer, SemVersion> fastReadBlockHash(LittleEndianDataInputStream input, ByteBuf byteBuf) {
         try {
             byteBuf.markReaderIndex();
-            int start = byteBuf.readerIndex();
             int typeId = input.readUnsignedByte();
             NbtType<?> type = NbtType.byId(typeId);
             input.skipBytes(input.readUnsignedShort()); // Root tag name
-            return deserialize(input, byteBuf, type, 16, start);
+            return deserialize(input, byteBuf, type, 16);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -31,8 +30,7 @@ public class PaletteUtils {
     private static Pair<Integer, SemVersion> deserialize(LittleEndianDataInputStream input,
                                                          ByteBuf byteBuf,
                                                          NbtType<?> type,
-                                                         int maxDepth,
-                                                         int start
+                                                         int maxDepth
     ) throws IOException {
         if (maxDepth < 0) {
             throw new IllegalArgumentException("NBT compound is too deeply nested");
@@ -57,19 +55,21 @@ public class PaletteUtils {
                     if (name.equals("version")) {
                         int version = input.readInt();
                         byteBuf.resetReaderIndex();
-                        if (version != ProtocolInfo.BLOCK_STATE_VERSION) {
+                        if (version != ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION) {
                             return Pair.of(null, getSemVersion(version));
                         }
-                        byte[] result = new byte[end - start];
-                        byteBuf.readBytes(result);
+                        byte[] result = new byte[end - byteBuf.readerIndex()];
+                        input.readFully(result);
                         result[result.length - 1] = 0;//because an End Tag be put when at the end serialize tag
 
                         input.skipBytes(input.readUnsignedShort());//UTF
-                        deserialize(input, byteBuf, nbtType, maxDepth - 1, start);//Value
+                        deserialize(input, byteBuf, nbtType, maxDepth - 1);//Value
                         input.skipBytes(1);//end tag
-                        return Pair.of(HashUtils.fnv1a_32(result), null);
+                        int i = HashUtils.fnv1a_32(result);
+                        if (i == 147887818) i = -2;//minecraft:unknown
+                        return Pair.of(i, null);
                     }
-                    deserialize(input, byteBuf, nbtType, maxDepth - 1, start);
+                    deserialize(input, byteBuf, nbtType, maxDepth - 1);
                 }
             }
             case LIST -> {
@@ -77,7 +77,7 @@ public class PaletteUtils {
                 NbtType<?> listType = NbtType.byId(typeId);
                 int listLength = input.readInt();
                 for (int i = 0; i < listLength; i++) {
-                    deserialize(input, byteBuf, listType, maxDepth - 1, start);
+                    deserialize(input, byteBuf, listType, maxDepth - 1);
                 }
             }
             case INT_ARRAY -> input.skipBytes(input.readInt() * 4);

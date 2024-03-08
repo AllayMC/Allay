@@ -7,10 +7,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityHelper;
+import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.Chunk;
@@ -18,14 +23,12 @@ import org.allaymc.api.world.chunk.ChunkSection;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.heightmap.HeightMap;
+import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
@@ -34,18 +37,16 @@ import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AllayUnsafeChunk implements UnsafeChunk {
     private static final AtomicReferenceFieldUpdater<AllayUnsafeChunk, ChunkState> STATE_FIELD = AtomicReferenceFieldUpdater.newUpdater(AllayUnsafeChunk.class, ChunkState.class, "state");
-    @Getter
     protected volatile ChunkState state;
-    @Getter
     protected final int x;
-    @Getter
     protected final int z;
-    @Getter
     protected final DimensionInfo dimensionInfo;
     protected final ChunkSection[] sections;
     protected final HeightMap heightMap;
     protected final Map<Long, Entity> entities;
     protected final Map<Integer, BlockEntity> blockEntities;
+    protected List<NbtMap> entityNbtList;
+    protected List<NbtMap> blockEntityNbtList;
 
     private AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this.x = chunkX;
@@ -60,6 +61,26 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    @Override
+    public void init(Dimension dimension) {
+        if (entityNbtList != null && !entityNbtList.isEmpty()) {
+            for (var n : entityNbtList) {
+                Entity entity = EntityHelper.fromNBT(dimension, n);
+                this.entities.put(entity.getRuntimeId(), entity);
+            }
+            entityNbtList = null;
+        }
+        if (blockEntityNbtList != null && !blockEntityNbtList.isEmpty()) {
+            for (var n : blockEntityNbtList) {
+                BlockEntity entity = BlockEntityHelper.fromNBT(dimension, n);
+                Position3ic position = entity.getPosition();
+                var key = HashUtils.hashChunkXYZ(position.x() & 15, position.y(), position.z() & 15);
+                this.blockEntities.put(key, entity);
+            }
+            blockEntityNbtList = null;
+        }
     }
 
     @Override
@@ -102,7 +123,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         int offsetY = sectionY - minSectionY;
         for (int i = 0; i <= offsetY; i++) {
             if (sections[i] == null) {
-                sections[i] = new ChunkSection((byte)(i + minSectionY));
+                sections[i] = new ChunkSection((byte) (i + minSectionY));
             }
         }
         return sections[offsetY];
@@ -248,6 +269,22 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return new AllayChunk(this);
     }
 
+    public ChunkState getState() {
+        return state;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
+    public DimensionInfo getDimensionInfo() {
+        return dimensionInfo;
+    }
+
     @Getter
     public static class Builder {
         ChunkState state;
@@ -258,6 +295,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         HeightMap heightMap;
         Map<Long, Entity> entities;
         Map<Integer, BlockEntity> blockEntities;
+        List<NbtMap> entitiyList;
+        List<NbtMap> blockEntitiyList;
 
         public Builder chunkX(int chunkX) {
             this.chunkX = chunkX;
@@ -289,13 +328,13 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             return this;
         }
 
-        public Builder entities(Map<Long, Entity> entities) {
-            this.entities = entities;
+        public Builder entities(List<NbtMap> entities) {
+            this.entitiyList = entities;
             return this;
         }
 
-        public Builder blockEntities(Map<Integer, BlockEntity> blockEntities) {
-            this.blockEntities = blockEntities;
+        public Builder blockEntities(List<NbtMap> blockEntities) {
+            this.blockEntitiyList = blockEntities;
             return this;
         }
 
@@ -314,7 +353,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     sections,
                     heightMap,
                     entities,
-                    blockEntities
+                    blockEntities,
+                    entitiyList,
+                    blockEntitiyList
             );
         }
 

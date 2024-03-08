@@ -21,8 +21,8 @@ public record SingletonBitArray() implements BitArray {
     }
 
     @Override
-    public void writeSizeToNetwork(ByteBuf buffer, int size) {
-        throw new UnsupportedOperationException();
+    public boolean writeSizeToNetwork(ByteBuf buffer, int size) {
+        return false;
     }
 
     @Override
