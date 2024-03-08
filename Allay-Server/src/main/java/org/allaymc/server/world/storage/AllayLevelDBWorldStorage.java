@@ -1,4 +1,4 @@
-package org.allaymc.server.world.storage.leveldb;
+package org.allaymc.server.world.storage;
 
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,12 @@ import org.iq80.leveldb.Options;
 import org.iq80.leveldb.WriteBatch;
 import org.joml.Vector3i;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -121,12 +126,19 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         }, Server.getInstance().getVirtualThreadPool());
     }
 
+    private static final byte[] levelDatMagic = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
+
     @Override
-    public boolean containChunk(int x, int z) {
+    public boolean containChunk(int x, int z, DimensionInfo dimensionInfo) {
+        for (int ySection = dimensionInfo.minSectionY(); ySection <= dimensionInfo.maxSectionY(); ySection++) {
+            byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(x, z, ySection, dimensionInfo));
+            if (bytes != null) {
+                return true;
+            }
+        }
         return false;
     }
 
-    private static final byte[] levelDatMagic = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
 
     @Override
     public synchronized void writeWorldData(WorldData worldData) {

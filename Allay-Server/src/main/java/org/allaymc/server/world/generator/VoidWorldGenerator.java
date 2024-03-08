@@ -1,4 +1,4 @@
-package org.allaymc.server.world.generator.empty;
+package org.allaymc.server.world.generator;
 
 import org.allaymc.api.world.generator.ChunkGenerateContext;
 import org.allaymc.api.world.generator.WorldGenerator;

@@ -15,7 +15,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface WorldPool {
-    WorldConfig getWorldConfig();
+    WorldSettings getWorldConfig();
 
     World getWorld(String name);
 
@@ -24,7 +24,7 @@ public interface WorldPool {
 
     World getDefaultWorld();
 
-    void loadWorld(String name, WorldConfig.WorldSettings worldSetting);
+    void loadWorld(String name, WorldSettings.WorldEntry worldSetting);
 
     // TODO: unload world
 

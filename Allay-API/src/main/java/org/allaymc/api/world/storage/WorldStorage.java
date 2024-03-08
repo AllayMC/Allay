@@ -19,7 +19,7 @@ public interface WorldStorage {
 
     CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException;
 
-    boolean containChunk(int chunkX, int chunkZ);
+    boolean containChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
 
     void writeWorldData(WorldData worldData) throws WorldStorageException;
 

@@ -14,8 +14,12 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.chunk.*;
-import org.allaymc.api.world.palette.Palette;
+import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.chunk.ChunkLoader;
+import org.allaymc.api.world.chunk.ChunkSection;
+import org.allaymc.api.world.chunk.ChunkState;
+import org.allaymc.api.world.chunk.UnsafeChunk;
+import org.allaymc.api.world.chunk.UnsafeChunkOperate;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
@@ -24,7 +28,12 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Predicate;
 
@@ -402,10 +411,8 @@ public class AllayChunk implements Chunk {
             Objects.requireNonNull(getSection(i)).writeToNetwork(byteBuf);
         }
         // Write biomes
-        Palette<BiomeType> lastBiomes = null;
         for (var section : getSections()) {
-            section.biomes().writeToNetwork(byteBuf, BiomeType::getId, lastBiomes);
-            lastBiomes = section.biomes();
+            section.biomes().writeToNetwork(byteBuf, BiomeType::getId);
         }
         byteBuf.writeByte(0); // edu- border blocks
         // Write block entities

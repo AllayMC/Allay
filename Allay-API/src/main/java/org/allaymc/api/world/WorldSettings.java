@@ -19,17 +19,17 @@ import java.util.Map;
  */
 @Getter
 @Accessors(fluent = true)
-public class WorldConfig extends OkaeriConfig {
+public class WorldSettings extends OkaeriConfig {
 
     @Exclude
     public static final String DEFAULT_WORLD_NAME = "Bedrock Level";
     @Exclude
-    public static final WorldSettings DEFAULT = WorldSettings.builder()
+    public static final WorldEntry DEFAULT = WorldEntry.builder()
             .storageType("LEVELDB")
-            .overworld(new WorldSettings.DimensionSettings("FLAT", ""))
+            .overworld(new WorldEntry.DimensionSettings("FLAT", ""))
             .build();
 
-    private Map<String, WorldSettings> worlds = Map.of(DEFAULT_WORLD_NAME, DEFAULT);
+    private Map<String, WorldEntry> worlds = Map.of(DEFAULT_WORLD_NAME, DEFAULT);
 
     @CustomKey("default-world")
     @Setter
@@ -38,7 +38,10 @@ public class WorldConfig extends OkaeriConfig {
     @Builder
     @Getter
     @Accessors(fluent = true)
-    public static class WorldSettings extends OkaeriConfig {
+    public static class WorldEntry extends OkaeriConfig {
+        @CustomKey("enable")
+        @Builder.Default
+        private boolean enable = true;
         @CustomKey("storage-type")
         private String storageType;
         private DimensionSettings overworld;

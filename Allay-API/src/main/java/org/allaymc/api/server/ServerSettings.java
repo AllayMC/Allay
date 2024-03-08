@@ -86,11 +86,11 @@ public class ServerSettings extends OkaeriConfig {
     }
 
     @CustomKey("world-settings")
-    private WorldSettings worldSettings = new WorldSettings();
+    private WorldConfig worldSettings = new WorldConfig();
 
     @Getter
     @Accessors(fluent = true)
-    public static class WorldSettings extends OkaeriConfig {
+    public static class WorldConfig extends OkaeriConfig {
 
         @CustomKey("ticking-radius")
         private int tickingRadius = 8;
