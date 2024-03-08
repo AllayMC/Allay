@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// TODO: Need update
 public class TypeInterfaceUpdater {
     public static Path BLOCK = Path.of("Allay-API/src/main/java/org/allaymc/api/block/interfaces");
     public static Path ITEM = Path.of("Allay-API/src/main/java/org/allaymc/api/item/interfaces");
