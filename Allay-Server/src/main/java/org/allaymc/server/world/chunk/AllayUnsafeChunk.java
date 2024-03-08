@@ -68,7 +68,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         if (entityNbtList != null && !entityNbtList.isEmpty()) {
             for (var n : entityNbtList) {
                 Entity entity = EntityHelper.fromNBT(dimension, n);
-                this.entities.put(entity.getRuntimeId(), entity);
+                // entity将在下一个gt被生成，在此之前chunk已经加载完毕 (详见AllayChunkService)
+                // 所以说这个写法是合法的
+                dimension.getEntityService().addEntity(entity);
             }
             entityNbtList = null;
         }
