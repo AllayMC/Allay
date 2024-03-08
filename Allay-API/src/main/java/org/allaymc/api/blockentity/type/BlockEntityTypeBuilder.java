@@ -4,8 +4,8 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.component.interfaces.ComponentProvider;
-import org.allaymc.api.identifier.Identifier;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -25,7 +25,7 @@ public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEn
 
     BlockEntityType<T> build();
 
-    BlockEntityTypeBuilder<T, C> identifier(Identifier identifier);
+    BlockEntityTypeBuilder<T, C> name(String name);
 
     BlockEntityTypeBuilder<T, C> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
 
