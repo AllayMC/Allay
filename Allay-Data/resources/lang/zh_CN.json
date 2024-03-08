@@ -1,4 +1,5 @@
 {
+  "allay:cache.load": "成功加载组件缓存~",
   "allay:allay.starting": "正在启动allay...",
   "allay:api.implemented": "此服务器正在运行 §b%1§f, 实现Allay-API版本 §b%2",
   "allay:blockattr.loaded": "加载原版方块属性表完成",
