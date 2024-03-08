@@ -126,7 +126,9 @@ public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedA
     @Override
     public boolean remove(Object member) {
         if (contains((B) member)) {
-            return (nodeMap.remove((B) member) != null) & super.remove((B) member);
+            if ((nodeMap.remove((B) member) != null) & super.remove((B) member)) {
+                return this.nodePathSet.remove(member);
+            } else return false;
         }
 
         return false;
