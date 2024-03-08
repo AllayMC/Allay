@@ -1,6 +1,6 @@
 package org.allaymc.api.block.property.type;
 
-import org.allaymc.api.utils.Utils;
+import org.allaymc.api.common.utils.Utils;
 
 import java.util.Arrays;
 import java.util.EnumMap;

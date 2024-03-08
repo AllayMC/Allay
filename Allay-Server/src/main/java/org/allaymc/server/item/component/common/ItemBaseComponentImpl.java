@@ -10,7 +10,7 @@ import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.common.ItemAttributeComponent;
 import org.allaymc.api.item.component.common.ItemBaseComponent;

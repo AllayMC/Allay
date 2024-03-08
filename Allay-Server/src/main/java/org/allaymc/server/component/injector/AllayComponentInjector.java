@@ -9,14 +9,20 @@ import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
+import org.allaymc.api.common.data.Identifier;
+import org.allaymc.api.common.exception.ComponentInjectException;
+import org.allaymc.api.common.utils.ReflectionUtils;
 import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.*;
-import org.allaymc.api.component.interfaces.*;
-import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.component.annotation.DoNotInject;
+import org.allaymc.api.component.annotation.Manager;
+import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.component.interfaces.ComponentInjector;
+import org.allaymc.api.component.interfaces.ComponentManager;
+import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.eventbus.EventBus;
-import org.allaymc.api.exception.ComponentInjectException;
-import org.allaymc.api.identifier.Identifier;
-import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 
@@ -25,9 +31,18 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
-import static net.bytebuddy.matcher.ElementMatchers.*;
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static net.bytebuddy.matcher.ElementMatchers.isDefaultConstructor;
+import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
  * The default injector which use byte-buddy

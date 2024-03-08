@@ -4,6 +4,9 @@ import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.common.data.Identifier;
+import org.allaymc.api.common.utils.JSONUtils;
+import org.allaymc.api.common.utils.TextFormat;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
@@ -12,10 +15,7 @@ import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.JSONUtils;
-import org.allaymc.api.utils.TextFormat;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 
 import java.io.IOException;
@@ -114,7 +114,7 @@ public class GameTestCommand extends SimpleCommand {
                         );
                         dim.getEntityService().addEntity(entity);
                     }
-                    context.addOutput("§aSpawned " + count + " " + entityType.getIdentifier().toString());
+                    context.addOutput("§aSpawned " + count + " " + entityType.getName().toString());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()

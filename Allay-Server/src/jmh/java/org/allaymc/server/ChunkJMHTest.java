@@ -2,7 +2,7 @@ package org.allaymc.server;
 
 import org.allaymc.api.block.interfaces.BlockStoneBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockWoodBehavior;
-import org.allaymc.api.exception.MissingImplementationException;
+import org.allaymc.api.common.exception.MissingImplementationException;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.world.chunk.AllayChunk;

@@ -4,11 +4,11 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
+import org.allaymc.api.common.utils.TextFormat;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.gamerule.GameRule;
 
 import java.util.List;

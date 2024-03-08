@@ -3,7 +3,7 @@ package org.allaymc.spark;
 import me.lucko.spark.common.platform.world.AbstractChunkInfo;
 import me.lucko.spark.common.platform.world.CountMap;
 import me.lucko.spark.common.platform.world.WorldInfoProvider;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.Chunk;
@@ -71,8 +71,8 @@ public class AllayWorldInfoProvider implements WorldInfoProvider {
         protected AllayChunkInfo(Chunk chunk) {
             super(chunk.getX(), chunk.getZ());
 
-            chunk.getEntities().values().forEach(entity -> this.entityCounts.increment(entity.getEntityType().getIdentifier()));
-            chunk.getBlockEntities().values().forEach(entity -> this.entityCounts.increment(entity.getBlockEntityType().getIdentifier()));
+            chunk.getEntities().values().forEach(entity -> this.entityCounts.increment(entity.getEntityType().getName()));
+            chunk.getBlockEntities().values().forEach(entity -> this.entityCounts.increment(entity.getBlockEntityType().getName()));
         }
 
         @Override

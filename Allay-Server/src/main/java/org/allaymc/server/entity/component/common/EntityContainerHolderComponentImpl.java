@@ -1,11 +1,11 @@
 package org.allaymc.server.entity.component.common;
 
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.container.BaseContainerHolder;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
-import org.allaymc.api.identifier.Identifier;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;

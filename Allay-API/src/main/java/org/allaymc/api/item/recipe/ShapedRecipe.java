@@ -2,7 +2,7 @@ package org.allaymc.api.item.recipe;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingInput;

@@ -9,11 +9,12 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.GameLoop;
+import org.allaymc.api.common.utils.GameLoop;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.world.storage.NativeFileWorldStorage;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.scheduler.AllayScheduler;
@@ -31,7 +32,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 public class AllayWorld implements World {
-    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet) {}
+    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet) {
+    }
+
     protected final Queue<PacketQueueEntry> packetQueue = PlatformDependent.newMpscQueue();
     protected final AtomicBoolean networkLock = new AtomicBoolean(false);
     @Getter
@@ -56,6 +59,9 @@ public class AllayWorld implements World {
         this.worldStorage = worldStorage;
         this.worldData = worldStorage.getWorldDataCache();
         this.worldData.setWorld(this);
+        if (worldStorage instanceof NativeFileWorldStorage nativeFileWorldStorage) {
+            this.worldData.setName(nativeFileWorldStorage.getWorldFolderPath().toFile().getName());
+        }
         this.gameLoop = GameLoop.builder()
                 .onTick(gameLoop -> {
                     if (!Server.getInstance().isRunning()) {

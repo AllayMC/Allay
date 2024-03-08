@@ -1,7 +1,7 @@
 package org.allaymc.api.data;
 
 import lombok.Getter;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 

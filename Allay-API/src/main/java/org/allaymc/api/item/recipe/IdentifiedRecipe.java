@@ -1,6 +1,6 @@
 package org.allaymc.api.item.recipe;
 
-import org.allaymc.api.identifier.Identified;
+import org.allaymc.api.common.data.Identified;
 
 /**
  * Allay Project 2023/11/26

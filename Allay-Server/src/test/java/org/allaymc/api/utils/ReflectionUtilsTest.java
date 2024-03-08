@@ -1,6 +1,7 @@
 package org.allaymc.api.utils;
 
 import lombok.SneakyThrows;
+import org.allaymc.api.common.utils.ReflectionUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

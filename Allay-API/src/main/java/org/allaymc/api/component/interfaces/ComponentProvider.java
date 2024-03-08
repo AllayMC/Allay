@@ -3,8 +3,8 @@ package org.allaymc.api.component.interfaces;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.identifier.Identifier;
 
 import java.util.HashMap;
 import java.util.List;

@@ -10,8 +10,12 @@ group = "org.allaymc"
 description = "The next generation minecraft server software"
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
+    maven("https://www.jitpack.io/")
+    maven("https://repo.opencollab.dev/maven-releases/")
+    maven("https://repo.opencollab.dev/maven-snapshots/")
+    maven("https://storehouse.okaeri.eu/repository/maven-public/")
 }
 
 // Do not build this root project, this is only used as a control submodule

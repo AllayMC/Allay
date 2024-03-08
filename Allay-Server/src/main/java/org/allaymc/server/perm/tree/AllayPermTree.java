@@ -3,7 +3,7 @@ package org.allaymc.server.perm.tree;
 import lombok.Getter;
 import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;
-import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.api.common.utils.AllayStringUtils;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;

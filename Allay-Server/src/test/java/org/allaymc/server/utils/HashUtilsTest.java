@@ -1,9 +1,8 @@
 package org.allaymc.server.utils;
 
-import org.allaymc.api.block.interfaces.wood.BlockWoodBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.common.utils.HashUtils;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Assertions;
@@ -27,14 +26,14 @@ public class HashUtilsTest {
 
     @Test
     public void testComputeBlockStateHash1() {
-        var value = HashUtils.computeBlockStateHash(testBlockState.getBlockType().getIdentifier(), new ArrayList<>(testBlockState.getPropertyValues().values()));
+        var value = HashUtils.computeBlockStateHash(testBlockState.getBlockType().getName(), new ArrayList<>(testBlockState.getPropertyValues().values()));
         Assertions.assertEquals(testBlockStateHash, value);
     }
 
     @Test
     public void testComputeBlockStateHash2() {
         BlockPropertyType.BlockPropertyValue<?, ?, ?>[] array = testBlockState.getPropertyValues().values().toArray(BlockPropertyType.BlockPropertyValue<?, ?, ?>[]::new);
-        var value = HashUtils.computeBlockStateHash(testBlockState.getBlockType().getIdentifier(), array);
+        var value = HashUtils.computeBlockStateHash(testBlockState.getBlockType().getName(), array);
         Assertions.assertEquals(testBlockStateHash, value);
     }
 

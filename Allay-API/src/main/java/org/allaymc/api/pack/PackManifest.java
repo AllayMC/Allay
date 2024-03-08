@@ -1,11 +1,17 @@
 package org.allaymc.api.pack;
 
-import com.google.gson.*;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.common.utils.JSONUtils;
 import org.allaymc.api.datastruct.SemVersion;
-import org.allaymc.api.utils.JSONUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;

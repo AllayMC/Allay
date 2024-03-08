@@ -1,7 +1,7 @@
 package org.allaymc.api.item.recipe;
 
 import lombok.Getter;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
@@ -38,7 +38,7 @@ public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueReci
 
 
     @Override
-    public Identifier getIdentifier() {
+    public Identifier getName() {
         return identifier;
     }
 

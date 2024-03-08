@@ -3,6 +3,7 @@ package org.allaymc.server.entity.type;
 import lombok.SneakyThrows;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
@@ -13,7 +14,6 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
@@ -70,7 +70,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     }
 
     @Override
-    public Identifier getIdentifier() {
+    public Identifier getName() {
         return identifier;
     }
 

@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.api.common.utils.JSONUtils;
 import org.allaymc.server.Allay;
 import org.apache.commons.io.file.PathUtils;
 

@@ -131,7 +131,7 @@ class BlockAttributesTest {
             for (var state : type.getBlockStateHashMap().values()) {
                 var expected = attributeMap.get(state.blockStateHash());
                 if (expected == null) {
-                    log.error("Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
+                    log.error("Missing block attributes for state: " + state + ", Block: " + type.getName());
                     log.info("expected blockhash: " + state.blockStateHash());
                     error++;
                 }

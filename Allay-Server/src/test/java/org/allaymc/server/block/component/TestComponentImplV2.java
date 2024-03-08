@@ -4,7 +4,7 @@ import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 
 /**
  * Allay Project 2023/4/16

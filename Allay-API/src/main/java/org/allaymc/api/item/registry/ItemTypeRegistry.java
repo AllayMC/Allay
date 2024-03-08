@@ -1,7 +1,7 @@
 package org.allaymc.api.item.registry;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.MappedRegistry;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;

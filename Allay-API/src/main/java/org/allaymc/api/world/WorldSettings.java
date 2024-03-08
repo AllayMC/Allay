@@ -20,9 +20,8 @@ import java.util.Map;
 @Getter
 @Accessors(fluent = true)
 public class WorldSettings extends OkaeriConfig {
-
     @Exclude
-    public static final String DEFAULT_WORLD_NAME = "Bedrock Level";
+    public static final String DEFAULT_WORLD_NAME = "world";
     @Exclude
     public static final WorldEntry DEFAULT = WorldEntry.builder()
             .storageType("LEVELDB")

@@ -1,6 +1,6 @@
 package org.allaymc.api.item.recipe;
 
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
@@ -44,7 +44,7 @@ class RecipeTest {
                 .outputs(new ItemStack[]{diamond()})
                 .build();
 
-        assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getIdentifier());
+        assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getName());
         assertEquals(DIAMOND_TYPE, grassMagic1.getOutputs()[0].getItemType());
         assertEquals("test_tag", grassMagic1.getTag());
 

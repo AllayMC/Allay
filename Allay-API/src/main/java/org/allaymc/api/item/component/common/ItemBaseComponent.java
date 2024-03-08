@@ -94,7 +94,7 @@ public interface ItemBaseComponent extends ItemComponent {
         var builder = NbtMap.builder()
                 .putByte("Count", (byte) getCount())
                 .putShort("Damage", (short) getMeta())
-                .putString("Name", getItemType().getIdentifier().toString());
+                .putString("Name", getItemType().getName().toString());
         var extraTag = saveExtraTag();
         if (extraTag != null) {
             builder.putCompound("tag", extraTag);

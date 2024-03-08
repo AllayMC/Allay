@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.common.data.Identifier;
+import org.allaymc.api.common.utils.MathUtils;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -23,16 +25,14 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.eventbus.event.world.entity.EntityTeleportEvent;
 import org.allaymc.api.eventbus.event.world.entity.EntityDieEvent;
+import org.allaymc.api.eventbus.event.world.entity.EntityTeleportEvent;
 import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.server.world.chunk.AllayChunk;
@@ -47,7 +47,14 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.packet.AddEntityPacket;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.MobEffectPacket;
+import org.cloudburstmc.protocol.bedrock.packet.MoveEntityAbsolutePacket;
+import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
+import org.cloudburstmc.protocol.bedrock.packet.RemoveEntityPacket;
+import org.cloudburstmc.protocol.bedrock.packet.SetEntityDataPacket;
+import org.cloudburstmc.protocol.bedrock.packet.SetEntityMotionPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
@@ -55,15 +62,30 @@ import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
-import static org.allaymc.api.utils.AllayNbtUtils.readVector2f;
-import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
+import static org.allaymc.api.common.utils.AllayNbtUtils.readVector2f;
+import static org.allaymc.api.common.utils.AllayNbtUtils.readVector3f;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_HEAD_YAW;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_PITCH;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_X;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_Y;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_YAW;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_Z;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.ON_GROUND;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.TELEPORTING;
 
 /**
  * Allay Project 2023/5/26
@@ -113,7 +135,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.entityType = info.getEntityType();
         this.metadata = new Metadata();
-        setDisplayName(entityType.getIdentifier().toString());
+        setDisplayName(entityType.getName().toString());
     }
 
     @Override
@@ -484,7 +506,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var addEntityPacket = new AddEntityPacket();
         addEntityPacket.setRuntimeEntityId(runtimeId);
         addEntityPacket.setUniqueEntityId(runtimeId);
-        addEntityPacket.setIdentifier(entityType.getIdentifier().toString());
+        addEntityPacket.setIdentifier(entityType.getName().toString());
         addEntityPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
         addEntityPacket.setMotion(org.cloudburstmc.math.vector.Vector3f.from(motion.x(), motion.y(), motion.z()));
         addEntityPacket.setRotation(Vector2f.from(location.pitch(), location.yaw()));
@@ -590,7 +612,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
-        builder.putString("identifier", entityType.getIdentifier().toString())
+        builder.putString("identifier", entityType.getName().toString())
                 .putCompound("Pos",
                         NbtMap.builder()
                                 .putFloat("x", location.x())

@@ -1,7 +1,7 @@
 package org.allaymc.server.client.storage;
 
-import org.allaymc.api.client.storage.PlayerData;
-import org.allaymc.api.client.storage.PlayerStorage;
+import org.allaymc.api.common.storage.PlayerData;
+import org.allaymc.api.common.storage.PlayerStorage;
 
 import java.util.UUID;
 

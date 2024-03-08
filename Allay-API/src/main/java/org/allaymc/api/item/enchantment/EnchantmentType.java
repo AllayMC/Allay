@@ -1,6 +1,6 @@
 package org.allaymc.api.item.enchantment;
 
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 
 /**
  * Allay Project 2023/10/21

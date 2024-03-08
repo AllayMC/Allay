@@ -52,7 +52,7 @@ public interface BlockState {
             );
         }
         return new SimpleBlockDefinition(
-                getBlockType().getIdentifier().toString(),
+                getBlockType().getName().toString(),
                 blockStateHash(),
                 statesBuilder.build()
         );

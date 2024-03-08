@@ -31,7 +31,7 @@ public class TestforCommand extends SimpleCommand {
                     }
                     context.addOutput(TrKeys.M_COMMANDS_TESTFOR_SUCCESS, entities.stream().map(entity -> {
                         var name = entity.getDisplayName();
-                        if (name.isBlank()) name = entity.getEntityType().getIdentifier().toString();
+                        if (name.isBlank()) name = entity.getEntityType().getName().toString();
                         return name;
                     }).collect(Collectors.joining(", ")));
                     return context.success(entities.size());

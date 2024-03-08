@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.data.VanillaItemTags;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ComplexAliasDescriptor;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
@@ -16,7 +16,7 @@ import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
-import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.common.utils.AllayNbtUtils;
 import org.allaymc.server.item.type.AllayItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
@@ -186,7 +186,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     @Override
     public void registerShaped(ShapedRecipe recipe) {
         networkRecipes.put(recipe.getNetworkId(), recipe);
-        shapedRecipes.put(recipe.getIdentifier(), recipe);
+        shapedRecipes.put(recipe.getName(), recipe);
         recipes.add(recipe);
         shouldUpdateNetworkRecipeDataCache = true;
     }
@@ -199,7 +199,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     @Override
     public void registerShapeless(ShapelessRecipe recipe) {
         networkRecipes.put(recipe.getNetworkId(), recipe);
-        shapelessRecipes.put(recipe.getIdentifier(), recipe);
+        shapelessRecipes.put(recipe.getName(), recipe);
         recipes.add(recipe);
         shouldUpdateNetworkRecipeDataCache = true;
     }

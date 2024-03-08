@@ -5,10 +5,10 @@ import org.allaymc.api.block.component.common.BlockAttributes;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.datastruct.collections.nb.Int2ObjectNonBlockingMap;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 
 import java.util.HashMap;
@@ -67,7 +67,7 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent {
 
     public static BlockAttributeComponentImpl ofRedefinedAABB(Function<BlockState, VoxelShape> aabbRedefiner) {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
-            var vanillaId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
+            var vanillaId = VanillaBlockId.fromIdentifier(blockType.getName());
             Objects.requireNonNull(vanillaId);
             var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaId);
             Objects.requireNonNull(attributeMap);

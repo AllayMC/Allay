@@ -1,8 +1,8 @@
 package org.allaymc.api.entity;
 
+import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 

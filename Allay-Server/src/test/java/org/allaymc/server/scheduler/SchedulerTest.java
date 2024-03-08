@@ -3,7 +3,7 @@ package org.allaymc.server.scheduler;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.task.Task;
 import org.allaymc.api.scheduler.taskcreator.TaskCreator;
-import org.allaymc.api.utils.GameLoop;
+import org.allaymc.api.common.utils.GameLoop;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicLong;

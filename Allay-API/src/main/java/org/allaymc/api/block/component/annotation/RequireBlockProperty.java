@@ -1,9 +1,14 @@
 package org.allaymc.api.block.component.annotation;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.exception.BlockComponentInjectException;
+import org.allaymc.api.common.exception.BlockComponentInjectException;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Repeatable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * This is an annotation for validation, used on {@link org.allaymc.api.block.component.BlockComponent BlockComponent} and its subclasses,

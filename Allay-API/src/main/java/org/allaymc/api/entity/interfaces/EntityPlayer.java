@@ -1,5 +1,6 @@
 package org.allaymc.api.entity.interfaces;
 
+import org.allaymc.api.common.utils.MathUtils;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
@@ -13,7 +14,6 @@ import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.world.player.PlayerThrowItemEvent;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
 import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
