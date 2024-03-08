@@ -12,9 +12,9 @@
 
 **/build/
 **/bin/
-
+!.run/Allay.run.xml
 #runing output file
-/run/
+.run/**
 /Allay-Server/caches/
 /Allay-Server/logs/
 /Allay-Server/players/

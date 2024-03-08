@@ -1,14 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Allay" type="Application" factoryName="Application" activateToolWindowBeforeRun="false" nameIsGenerated="true">
+  <configuration default="false" name="Allay" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="org.allaymc.server.Allay" />
     <module name="Allay.Allay-Server.main" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
-    <extension name="coverage">
-      <pattern>
-        <option name="PATTERN" value="org.allaymc.api.utils.*" />
-        <option name="ENABLED" value="true" />
-      </pattern>
-    </extension>
+    <option name="VM_PARAMETERS" value="-Dfile.encoding=UTF-8" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.run" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
