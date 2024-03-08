@@ -234,12 +234,15 @@ public final class AllayServer implements Server {
         scoreboardService.save();
         // Start a thread to handle server shutdown
         Thread.ofPlatform().start(() -> {
-            kickAllPlayersAndBlock();
-            isRunning.compareAndSet(true, false);
-            worldPool.close();
-            playerStorage.close();
-            virtualThreadPool.shutdownNow();
-            computeThreadPool.shutdownNow();
+            try {
+                kickAllPlayersAndBlock();
+            } finally {
+                isRunning.compareAndSet(true, false);
+                worldPool.close();
+                playerStorage.close();
+                virtualThreadPool.shutdownNow();
+                computeThreadPool.shutdownNow();
+            }
             System.exit(0);
         });
     }
