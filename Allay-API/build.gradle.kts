@@ -14,7 +14,6 @@ dependencies {
     }
     api(libs.blockstateupdater) {
         exclude(group = "org.cloudburstmc", module = "nbt")
-//        exclude(group = "com.fasterxml.jackson.core", module = "jackson-databind")// use my latest version
     }
     api(libs.slf4j.api)
     api(libs.nbt)

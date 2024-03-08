@@ -22,7 +22,7 @@ tasks.forEach {
 idea {
     module {
         isDownloadSources = true
-        isDownloadJavadoc = true
+        isDownloadJavadoc = false
     }
 }
 
@@ -49,17 +49,9 @@ tasks.build {
 tasks.clean {
     group = "alpha build"
     enabled = true
-    delete(
-        "jegenerator",
-        "logs",
-        "caches",
-        "output",
-        "players",
-        "server-settings.yml",
-        "resource_packs",
-        "run",
-        "worlds"
-    )
+    File(".run").listFiles { f -> !f.name.equals("Allay.run.xml") }?.forEach {
+        delete(it)
+    }
 }
 
 subprojects {
@@ -115,17 +107,6 @@ subprojects {
     tasks.clean {
         group = "alpha build"
         enabled = true
-        delete(
-            "jegenerator",
-            "logs",
-            "caches",
-            "output",
-            "players",
-            "server-settings.yml",
-            "resource_packs",
-            "run",
-            "worlds"
-        )
     }
 
     // disable
@@ -135,6 +116,7 @@ subprojects {
 
     tasks.test {
         useJUnitPlatform()
+        workingDir = File("${rootProject.projectDir}/.run/")
     }
 
     tasks.withType<JavaCompile> {
@@ -149,8 +131,8 @@ subprojects {
         options.encoding = StandardCharsets.UTF_8.name()
         val javadocOptions = options as CoreJavadocOptions
         javadocOptions.addStringOption(
-            "source",
-            java.sourceCompatibility.toString()
+                "source",
+                java.sourceCompatibility.toString()
         )
         // Suppress some meaningless warnings
         javadocOptions.addStringOption("Xdoclint:none", "-quiet")
