@@ -70,42 +70,50 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
                 if (!Files.exists(folderPath))
                     Files.createDirectories(folderPath);
                 generateClass(ITEM_STACK_CLASS_NAME, itemClassFullName, path);
-                addItemTypeInitializer(id, itemClassFullName);
             }
+            addDefaultItemTypeInitializer(id, itemClassFullName);
         }
+        generateDefaultItemTypeInitializer();
         var javaFile = JavaFile.builder(ITEM_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
         System.out.println("Generating " + ITEM_TYPES_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/item/type/" + ITEM_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
 
-    public static final ClassName ITEM_TYPE_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.item.type", "ItemTypeInitializer");
-    public static final TypeSpec.Builder ITEM_TYPE_INITIALIZER_CLASS_BUILDER =
-            TypeSpec.classBuilder(ITEM_TYPE_INITIALIZER_CLASS_NAME)
+    public static final ClassName ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.item.type", "ItemTypeDefaultInitializer");
+    public static final TypeSpec.Builder ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
+            TypeSpec.classBuilder(ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
                     .addJavadoc(
                             "@author daoge_cmd <br>\n" +
                                     "Allay Project <br>\n")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
-    private static void addItemTypeInitializer(VanillaItemId id, ClassName itemClassName) {
+    private static void addDefaultItemTypeInitializer(VanillaItemId id, ClassName itemClassName) {
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T.$N = $T\n", ITEM_TYPES_CLASS_NAME, id.name() + "_TYPE", ITEM_TYPE_BUILDER_CLASS_NAME)
                 .add("        .builder($T.class)\n", itemClassName)
                 .add("        .vanillaItem($T.$N)\n", VANILLA_ITEM_ID_CLASS_NAME, id.name())
                 .add("        .build();");
-        ITEM_TYPE_INITIALIZER_CLASS_BUILDER
+        ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER
                 .addMethod(
                         MethodSpec.methodBuilder(generateInitializerMethodName(id))
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                .addStatement("if ($T.$N != null) return", ITEM_TYPES_CLASS_NAME, id.name() + "_TYPE")
                                 .addCode(initializer.build())
                                 .build()
                 );
     }
 
     @SneakyThrows
-    private static void generateItemTypeInitializer() {
-        var filePath = Path.of("Allay-Server/src/main/java/org/allaymc/server/item/type/ItemTypeInitializer.java");
-
+    private static void generateDefaultItemTypeInitializer() {
+        var filePath = Path.of("Allay-Server/src/main/java/org/allaymc/server/item/type/ItemTypeDefaultInitializer.java");
+        Files.deleteIfExists(filePath);
+        var folderPath = filePath.getParent();
+        if (!Files.exists(folderPath))
+            Files.createDirectories(folderPath);
+        var javaFile = JavaFile.builder(ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build()).build();
+        System.out.println("Generating " + ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.simpleName() + ".java ...");
+        Files.writeString(filePath, javaFile.toString());
     }
 
     @SneakyThrows

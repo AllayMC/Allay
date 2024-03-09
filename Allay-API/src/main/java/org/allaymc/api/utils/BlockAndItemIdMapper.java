@@ -1,6 +1,5 @@
 package org.allaymc.api.utils;
 
-import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;

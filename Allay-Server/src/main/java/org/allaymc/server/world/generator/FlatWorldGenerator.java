@@ -2,7 +2,7 @@ package org.allaymc.server.world.generator;
 
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.world.generator.ChunkGenerateContext;
 import org.allaymc.api.world.generator.WorldGenerator;

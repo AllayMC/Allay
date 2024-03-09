@@ -7,7 +7,7 @@ import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.common.CustomBlockComponent;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.data.VanillaBlockId;
 
 import java.util.HashMap;

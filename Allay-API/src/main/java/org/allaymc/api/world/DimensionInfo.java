@@ -1,7 +1,7 @@
 package org.allaymc.api.world;
 
 import com.google.common.base.Preconditions;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 
 /**
  * Allay Project 2023/5/31
