@@ -99,7 +99,7 @@ public class ServerSettings extends OkaeriConfig {
         private int viewDistance = 16;
 
         @CustomKey("chunk-try-send-count-per-tick")
-        private int chunkTrySendCountPerTick = 4;
+        private int chunkTrySendCountPerTick = 8;
 
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;
@@ -108,7 +108,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("This only works if sub-chunk sending system is not enabled")
         @Comment("And will be forced to SYNC if sub-chunk sending system is enabled")
         @CustomKey("chunk-sending-strategy")
-        private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.SYNC;
+        private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.ASYNC;
 
         @Comment("If the number of chunks to be sent in one batch is more than this value, the chunks will be sent in parallel")
         @CustomKey("chunk-min-parallel-sending-threshold")
