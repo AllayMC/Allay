@@ -119,7 +119,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @Comment("Determines how long a chunk without chunk loaders will remain loaded (gt)")
         @CustomKey("remove-unneeded-chunk-cycle")
-        private int removeUnneededChunkCycle = 6000;
+        private int removeUnneededChunkCycle = 1200;
 
         public enum ChunkSendingStrategy {
             ASYNC,
