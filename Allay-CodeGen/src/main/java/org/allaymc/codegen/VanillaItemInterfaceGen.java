@@ -116,40 +116,6 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         Files.writeString(filePath, javaFile.toString());
     }
 
-    @SneakyThrows
-    private static void generateItemTypeInitializer(VanillaItemId id, ClassName itemClassName) {
-        var folderName = tryFindSpecifiedFolderName(itemClassName.simpleName());
-        var packageName = "org.allaymc.server.item.initializer" + (folderName != null ? "." + folderName : "");
-        var className = ClassName.get(packageName, itemClassName.simpleName() + "Initializer");
-        var initializer = CodeBlock.builder();
-        initializer
-                .add("$T.$N = $T\n", ITEM_TYPES_CLASS_NAME, id.name() + "_TYPE", ITEM_TYPE_BUILDER_CLASS_NAME)
-                .add("        .builder($T.class)\n", itemClassName)
-                .add("        .vanillaItem($T.$N)\n", VANILLA_ITEM_ID_CLASS_NAME, id.name())
-                .add("        .build();");
-        var clazz = TypeSpec.interfaceBuilder(className)
-                .addModifiers(Modifier.PUBLIC)
-                .addJavadoc(
-                        "@author daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
-                .addMethod(
-                        MethodSpec.methodBuilder("init")
-                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addCode(initializer.build())
-                                .build()
-                )
-                .build();
-        var filePath = Path.of("Allay-Server/src/main/java/" + packageName.replace(".", "/") + "/" + className.simpleName() + ".java");
-        if (!Files.exists(filePath)) {
-            var folderPath = filePath.getParent();
-            if (!Files.exists(folderPath))
-                Files.createDirectories(folderPath);
-            var javaFile = JavaFile.builder(className.packageName(), clazz).build();
-            System.out.println("Generating " + className.simpleName() + ".java ...");
-            Files.writeString(filePath, javaFile.toString());
-        }
-    }
-
     private static ClassName generateClassFullName(VanillaItemId id) {
         var simpleName = generateClassSimpleName(id);
         var folderName = tryFindSpecifiedFolderName(simpleName);
