@@ -9,6 +9,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -41,6 +42,7 @@ public interface UnsafeChunk {
     @UnmodifiableView
     Map<Long, Entity> getEntities();
 
+    @ApiStatus.Internal
     static int index(int x, int y, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(y >= 0 && y <= 15);
@@ -49,9 +51,9 @@ public interface UnsafeChunk {
         return (x << 8) + (z << 4) + y;
     }
 
-    BlockEntity removeBlockEntity(int x, int y, int z);
+    BlockEntity removeBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
-    BlockEntity getBlockEntity(int x, int y, int z);
+    BlockEntity getBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     @UnmodifiableView
     Map<Integer, BlockEntity> getBlockEntities();
@@ -100,42 +102,55 @@ public interface UnsafeChunk {
     @UnmodifiableView
     Collection<BlockEntity> getSectionBlockEntities(int sectionY);
 
-    void setBlockState(int x, int y, int z, BlockState blockState, int layer);
+    void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer);
 
-    default void setBlockState(int x, int y, int z, BlockState blockState) {
+    default void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0);
     }
 
-    BlockState getBlockState(int x, int y, int z, int layer);
+    BlockState getBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer);
 
-    default BlockState getBlockState(int x, int y, int z) {
+    default BlockState getBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z) {
         return getBlockState(x, y, z, 0);
     }
 
-    void setHeight(int x, int z, int height);
+    /**
+     * Set height.
+     *
+     * @param x      the x
+     * @param z      the z
+     * @param height the height -64~319
+     */
+    void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height);
 
     /**
-     * 不同于getHeight(), 此方法返回的short[]数组中的所有值都大于等于0（可以理解为getHeight() - minHeight()）
-     *
-     * @return 高度图
+     * Different from getHeight(), all values in the short[] array returned by this method are
+     * greater than or equal to 0 (can be understood as getHeight() - minHeight())
      */
     short[] getHeightArray();
 
-    int getHeight(int x, int z);
+    /**
+     * get height.
+     *
+     * @param x the x
+     * @param z the z
+     * @return the height  -64~319
+     */
+    int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
 
-    void setBiome(int x, int y, int z, BiomeType biomeType);
+    void setBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BiomeType biomeType);
 
-    BiomeType getBiome(int x, int y, int z);
+    BiomeType getBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
-    void setSkyLight(int x, int y, int z, int light);
+    void setSkyLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int light);
 
-    int getSkyLight(int x, int y, int z);
+    int getSkyLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
-    void setBlockLight(int x, int y, int z, int light);
+    void setBlockLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int light);
 
     default long computeChunkHash() {
         return HashUtils.hashXZ(getX(), getZ());
     }
 
-    int getBlockLight(int x, int y, int z);
+    int getBlockLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 }
