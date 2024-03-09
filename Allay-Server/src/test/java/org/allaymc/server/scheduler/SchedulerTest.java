@@ -1,7 +1,6 @@
 package org.allaymc.server.scheduler;
 
 import org.allaymc.api.scheduler.Scheduler;
-import org.allaymc.api.scheduler.Task;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.utils.GameLoop;
 import org.junit.jupiter.api.Test;
@@ -24,17 +23,9 @@ class SchedulerTest {
     void testAsync() {
         AtomicLong total = new AtomicLong(0);
         for (int i = 0; i < 1000; i++) {
-            scheduler.scheduleDelayed(new Task() {
-                @Override
-                public boolean onRun() {
-                    total.incrementAndGet();
-                    return false;
-                }
-
-                @Override
-                public TaskCreator getTaskCreator() {
-                    return MOCK_TASK_CREATOR;
-                }
+            scheduler.scheduleDelayed(MOCK_TASK_CREATOR, () -> {
+                total.incrementAndGet();
+                return false;
             }, 1, true);
         }
         GameLoop.builder()
@@ -52,17 +43,9 @@ class SchedulerTest {
     void testSync() {
         AtomicLong total = new AtomicLong();
         for (int i = 0; i < 1000; i++) {
-            scheduler.scheduleDelayed(new Task() {
-                @Override
-                public boolean onRun() {
-                    total.incrementAndGet();
-                    return false;
-                }
-
-                @Override
-                public TaskCreator getTaskCreator() {
-                    return MOCK_TASK_CREATOR;
-                }
+            scheduler.scheduleDelayed(MOCK_TASK_CREATOR, () -> {
+                total.incrementAndGet();
+                return false;
             }, 1);
         }
         GameLoop.builder()
@@ -79,17 +62,7 @@ class SchedulerTest {
     @Test
     void testRepeating() {
         AtomicLong total = new AtomicLong();
-        scheduler.scheduleRepeating(new Task() {
-            @Override
-            public boolean onRun() {
-                return total.incrementAndGet() != 1000;
-            }
-
-            @Override
-            public TaskCreator getTaskCreator() {
-                return MOCK_TASK_CREATOR;
-            }
-        }, 1);
+        scheduler.scheduleRepeating(MOCK_TASK_CREATOR, () -> total.incrementAndGet() != 1000, 1);
         GameLoop.builder()
                 .loopCountPerSec(1000)
                 .onTick(loop -> {

@@ -3,7 +3,6 @@ package org.allaymc.spark;
 import lombok.AllArgsConstructor;
 import me.lucko.spark.common.tick.AbstractTickHook;
 import me.lucko.spark.common.tick.TickHook;
-import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.Task;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,7 +17,7 @@ public class AllayTickHook extends AbstractTickHook implements TickHook, Task {
 
     private final AtomicBoolean isEnabled = new AtomicBoolean(true);
 
-    private final Scheduler scheduler;
+    private final AllaySparkPlugin plugin;
 
     @Override
     public boolean onRun() {
@@ -28,7 +27,7 @@ public class AllayTickHook extends AbstractTickHook implements TickHook, Task {
 
     @Override
     public void start() {
-        this.scheduler.scheduleRepeating(this, 1);
+        this.plugin.getServerScheduler().scheduleRepeating(this.plugin, this, 1);
     }
 
     @Override

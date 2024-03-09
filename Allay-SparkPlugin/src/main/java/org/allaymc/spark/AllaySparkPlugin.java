@@ -65,7 +65,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
 
     @Override
     public void executeAsync(Runnable task) {
-        this.getServerScheduler().scheduleRepeating(() -> {
+        this.getServerScheduler().scheduleRepeating(this, () -> {
             task.run();
             return false;
         }, 1, true);
@@ -73,7 +73,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
 
     @Override
     public void executeSync(Runnable task) {
-        this.getServerScheduler().scheduleRepeating(() -> {
+        this.getServerScheduler().scheduleRepeating(this, () -> {
             task.run();
             return false;
         }, 1);
@@ -95,7 +95,7 @@ public class AllaySparkPlugin extends Plugin implements SparkPlugin {
 
     @Override
     public TickHook createTickHook() {
-        return new AllayTickHook(this.getServerScheduler());
+        return new AllayTickHook(this);
     }
 
     @Override

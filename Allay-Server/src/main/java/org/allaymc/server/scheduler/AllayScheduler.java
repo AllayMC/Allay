@@ -2,6 +2,7 @@ package org.allaymc.server.scheduler;
 
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.Task;
+import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.server.Server;
 
 import java.util.Comparator;
@@ -37,9 +38,8 @@ public class AllayScheduler implements Scheduler {
         tickCounter++;
         while (!queue.isEmpty() && queue.peek().getNextRunTick() <= tickCounter) {
             var taskInfo = queue.poll();
-            var task = taskInfo.getTask();
             // 1. Confirm validity
-            if (taskInfo.isCancelled() || !task.getTaskCreator().isValid()) {
+            if (taskInfo.isCancelled() || !taskInfo.getCreator().isValid()) {
                 cancelTask(taskInfo);
                 continue;
             }
@@ -51,15 +51,13 @@ public class AllayScheduler implements Scheduler {
     }
 
     @Override
-    public void scheduleDelayed(Task task, int delay, boolean async) {
-        var taskInfo = new RunningTaskInfo(task, delay, 0, async);
-        addTask(taskInfo);
+    public void scheduleDelayed(TaskCreator creator, Task task, int delay, boolean async) {
+        addTask(new RunningTaskInfo(creator, task, delay, 0, async));
     }
 
     @Override
-    public void scheduleRepeating(Task task, int period, boolean async) {
-        var taskInfo = new RunningTaskInfo(task, 0, period, async);
-        addTask(taskInfo);
+    public void scheduleRepeating(TaskCreator creator, Task task, int period, boolean async) {
+        addTask(new RunningTaskInfo(creator, task, 0, period, async));
     }
 
     @Override
@@ -83,8 +81,8 @@ public class AllayScheduler implements Scheduler {
         try {
             info.setRunning(true);
             if (!task.onRun()) cancelTask(info);
-        } catch (Throwable error) {
-            task.onError(error);
+        } catch (Exception exception) {
+            task.onError(exception);
             cancelTask(info);
         } finally {
             info.setRunning(false);

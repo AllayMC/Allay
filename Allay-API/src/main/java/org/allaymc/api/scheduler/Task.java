@@ -1,6 +1,5 @@
 package org.allaymc.api.scheduler;
 
-import org.allaymc.api.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +20,7 @@ public interface Task {
     /**
      * Called when the task is canceled
      */
-    default void onCancel() {
-
-    }
+    default void onCancel() {}
 
     /**
      * Called when an error occurs while running the task
@@ -32,9 +29,5 @@ public interface Task {
      */
     default void onError(Throwable error) {
         LOGGER.error("Exception while running task!", error);
-    }
-
-    default TaskCreator getTaskCreator() {
-        return Server.getInstance();
     }
 }

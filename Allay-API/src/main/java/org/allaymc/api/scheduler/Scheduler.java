@@ -25,17 +25,17 @@ public interface Scheduler {
 
     void stop();
 
-    default void scheduleDelayed(Task task, int delay) {
-        scheduleDelayed(task, delay, false);
+    default void scheduleDelayed(TaskCreator creator, Task task, int delay) {
+        scheduleDelayed(creator, task, delay, false);
     }
 
-    void scheduleDelayed(Task task, int delay, boolean async);
+    void scheduleDelayed(TaskCreator creator, Task task, int delay, boolean async);
 
-    default void scheduleRepeating(Task task, int period) {
-        scheduleRepeating(task, period, false);
+    default void scheduleRepeating(TaskCreator creator, Task task, int period) {
+        scheduleRepeating(creator, task, period, false);
     }
 
-    void scheduleRepeating(Task task, int period, boolean async);
+    void scheduleRepeating(TaskCreator creator, Task task, int period, boolean async);
 
     //TODO: delayed repeating
 
