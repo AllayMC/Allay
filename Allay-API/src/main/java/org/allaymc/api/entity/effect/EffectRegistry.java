@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.effect;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.registry.DoubleKeyMappedRegistry;
 
 /**

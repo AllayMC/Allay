@@ -1,13 +1,13 @@
-package org.allaymc.server.world.storage.nonpersistent;
+package org.allaymc.server.world.storage;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityHelper;
-import org.allaymc.api.exception.WorldStorageException;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.exception.WorldStorageException;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldData;
@@ -80,7 +80,7 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
     }
 
     @Override
-    public boolean containChunk(int x, int z) {
+    public boolean containChunk(int x, int z, DimensionInfo dimensionInfo) {
         return chunks.containsKey(HashUtils.hashXZ(x, z));
     }
 

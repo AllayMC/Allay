@@ -5,7 +5,7 @@ import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.server.player.PlayerLoggedInEvent;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.network.processor.login.ILoginPacketProcessor;
+import org.allaymc.api.network.processor.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;

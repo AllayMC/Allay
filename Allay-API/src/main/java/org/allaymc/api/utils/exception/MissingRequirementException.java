@@ -1,4 +1,4 @@
-package org.allaymc.api.exception;
+package org.allaymc.api.utils.exception;
 
 import org.allaymc.api.AllayAPI;
 

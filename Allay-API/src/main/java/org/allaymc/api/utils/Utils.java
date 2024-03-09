@@ -5,7 +5,11 @@ import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.type.BlockState;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.function.Supplier;

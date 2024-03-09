@@ -3,6 +3,7 @@ package org.allaymc.server.utils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.server.Allay;
 import org.apache.commons.io.file.PathUtils;
@@ -42,7 +43,7 @@ public final class ComponentClassCacheUtils {
     }
 
     /**
-     * Check cache valid.
+     * Check cache valid,Every time the git commit number changes, the cache will become invalid.
      */
     public static void checkCacheValid() {
         Path cacheValid = CACHE_ROOT_PATH.resolve("cache.valid");
@@ -53,6 +54,7 @@ public final class ComponentClassCacheUtils {
                     Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev")) &&
                     CACHE_ROOT_PATH.resolve("mapping.json").toFile().exists()
             ) {
+                log.info(I18n.get().tr("allay:cache.load"));
                 return;
             }
             var cn = CACHE_ROOT_PATH.resolve("cn");
@@ -77,7 +79,9 @@ public final class ComponentClassCacheUtils {
 
     public static void saveCacheMapping() {
         try {
-            Files.writeString(CACHE_ROOT_PATH.resolve("mapping.json"), JSONUtils.to(CACHE_MAP), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+            Path resolve = CACHE_ROOT_PATH.resolve("mapping.json");
+            Files.deleteIfExists(resolve);
+            Files.writeString(resolve, JSONUtils.to(CACHE_MAP), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -96,12 +100,14 @@ public final class ComponentClassCacheUtils {
     }
 
     public static <T> Class<T> getCacheClass(Class<T> interfaceClass) {
+        String s = CACHE_MAP.get(interfaceClass.getSimpleName());
         try {
-            String s = CACHE_MAP.get(interfaceClass.getSimpleName());
-            if (s == null) return null;
+            if (s == null) {
+                return null;
+            }
             return (Class<T>) Allay.EXTRA_RESOURCE_CLASS_LOADER.loadClass(s);
-        } catch (ClassNotFoundException e) {
-            log.error(e.getLocalizedMessage());
+        } catch (ClassNotFoundException ignore) {
+            CACHE_MAP.remove(s);//remove old cache entry
             return null;
         }
     }

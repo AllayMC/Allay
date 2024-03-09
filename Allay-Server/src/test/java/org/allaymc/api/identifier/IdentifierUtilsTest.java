@@ -1,10 +1,12 @@
 package org.allaymc.api.identifier;
 
-import org.allaymc.api.exception.InvalidIdentifierException;
 import org.allaymc.api.utils.IdentifierUtils;
+import org.allaymc.api.utils.exception.InvalidIdentifierException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Allay Project 2023/3/4

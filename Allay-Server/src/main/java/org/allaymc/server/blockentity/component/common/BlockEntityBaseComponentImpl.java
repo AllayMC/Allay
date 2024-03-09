@@ -10,11 +10,11 @@ import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
 import org.allaymc.api.blockentity.component.event.BlockEntitySaveNBTEvent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.cloudburstmc.nbt.NbtMap;
@@ -58,7 +58,7 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder()
-                .putString("id", blockEntityType.getIdentifier().toString())
+                .putString("id", blockEntityType.getName())
                 .putInt("x", position.x())
                 .putInt("y", position.y())
                 .putInt("z", position.z())

@@ -1,4 +1,4 @@
-package org.allaymc.server.world.generator.jegen;
+package org.allaymc.server.world.generator;
 
 import io.papermc.paperclip.Paperclip;
 import org.allaymc.api.utils.Utils;

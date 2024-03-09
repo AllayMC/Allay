@@ -1,7 +1,11 @@
 package org.allaymc.codegen;
 
-import com.squareup.javapoet.*;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.BiomeType;
 import org.allaymc.dependence.Identifier;
@@ -131,7 +135,7 @@ public class VanillaBiomeIdEnumGen {
         var javaFile = JavaFile.builder(PACKAGE_NAME, builtCode).build();
         String result = javaFile.toString()
                 .replace("org.allaymc.dependence.BiomeType", "org.allaymc.api.world.biome.BiomeType")
-                .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.identifier.Identifier")
+                .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.common.data.Identifier")
                 .replace(" Int2ObjectOpenHashMap ", " Int2ObjectOpenHashMap<VanillaBiomeId> ")
                 .replace(" HashMap ", " HashMap<Identifier, VanillaBiomeId> ");
         Files.writeString(TARGET_PATH, result);

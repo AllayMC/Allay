@@ -1,6 +1,5 @@
 package org.allaymc.server.utils;
 
-import org.allaymc.api.block.interfaces.wood.BlockWoodBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.utils.HashUtils;

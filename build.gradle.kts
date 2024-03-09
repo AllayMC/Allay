@@ -10,8 +10,12 @@ group = "org.allaymc"
 description = "The next generation minecraft server software"
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
+    maven("https://www.jitpack.io/")
+    maven("https://repo.opencollab.dev/maven-releases/")
+    maven("https://repo.opencollab.dev/maven-snapshots/")
+    maven("https://storehouse.okaeri.eu/repository/maven-public/")
 }
 
 // Do not build this root project, this is only used as a control submodule
@@ -22,7 +26,7 @@ tasks.forEach {
 idea {
     module {
         isDownloadSources = true
-        isDownloadJavadoc = true
+        isDownloadJavadoc = false
     }
 }
 
@@ -49,17 +53,9 @@ tasks.build {
 tasks.clean {
     group = "alpha build"
     enabled = true
-    delete(
-        "jegenerator",
-        "logs",
-        "caches",
-        "output",
-        "players",
-        "server-settings.yml",
-        "resource_packs",
-        "run",
-        "worlds"
-    )
+    File(".run").listFiles { f -> !f.name.equals("Allay.run.xml") }?.forEach {
+        delete(it)
+    }
 }
 
 subprojects {
@@ -115,17 +111,6 @@ subprojects {
     tasks.clean {
         group = "alpha build"
         enabled = true
-        delete(
-            "jegenerator",
-            "logs",
-            "caches",
-            "output",
-            "players",
-            "server-settings.yml",
-            "resource_packs",
-            "run",
-            "worlds"
-        )
     }
 
     // disable
@@ -135,6 +120,7 @@ subprojects {
 
     tasks.test {
         useJUnitPlatform()
+        workingDir = File("${rootProject.projectDir}/.run/")
     }
 
     tasks.withType<JavaCompile> {
@@ -149,8 +135,8 @@ subprojects {
         options.encoding = StandardCharsets.UTF_8.name()
         val javadocOptions = options as CoreJavadocOptions
         javadocOptions.addStringOption(
-            "source",
-            java.sourceCompatibility.toString()
+                "source",
+                java.sourceCompatibility.toString()
         )
         // Suppress some meaningless warnings
         javadocOptions.addStringOption("Xdoclint:none", "-quiet")

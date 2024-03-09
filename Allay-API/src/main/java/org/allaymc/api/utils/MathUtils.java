@@ -1,11 +1,19 @@
 package org.allaymc.api.utils;
 
 import lombok.experimental.UtilityClass;
-import org.joml.*;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
-import java.lang.Math;
-
-import static java.lang.StrictMath.*;
+import static java.lang.StrictMath.asin;
+import static java.lang.StrictMath.cos;
+import static java.lang.StrictMath.sin;
+import static java.lang.StrictMath.sqrt;
+import static java.lang.StrictMath.toDegrees;
+import static java.lang.StrictMath.toRadians;
 
 /**
  * Allay Project 7/31/2023

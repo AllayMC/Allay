@@ -1,6 +1,6 @@
-package org.allaymc.api.identifier;
+package org.allaymc.api.client.data;
 
-import org.allaymc.api.exception.InvalidIdentifierException;
+import org.allaymc.api.utils.exception.InvalidIdentifierException;
 
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 import static org.allaymc.api.utils.IdentifierUtils.isNamespaceValid;

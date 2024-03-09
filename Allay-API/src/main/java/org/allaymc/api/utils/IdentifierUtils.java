@@ -1,9 +1,7 @@
 package org.allaymc.api.utils;
 
-import org.allaymc.api.exception.InvalidIdentifierException;
-import org.allaymc.api.identifier.Identifier;
-
-import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
+import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.exception.InvalidIdentifierException;
 
 /**
  * Some helper for {@link Identifier}
@@ -14,7 +12,7 @@ import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
  */
 public final class IdentifierUtils {
     public static Identifier splitOn(String id, String delimiter) {
-        return new Identifier(fastTwoPartSplit(id, delimiter, Identifier.DEFAULT_NAMESPACE));
+        return new Identifier(AllayStringUtils.fastTwoPartSplit(id, delimiter, Identifier.DEFAULT_NAMESPACE));
     }
 
 
@@ -36,7 +34,7 @@ public final class IdentifierUtils {
     }
 
     public static boolean isValid(String id) {
-        String[] strings = fastTwoPartSplit(id, Identifier.NAMESPACE_SEPARATOR, Identifier.DEFAULT_NAMESPACE);
+        String[] strings = AllayStringUtils.fastTwoPartSplit(id, Identifier.NAMESPACE_SEPARATOR, Identifier.DEFAULT_NAMESPACE);
         return isNamespaceValid(strings[0].isEmpty() ? Identifier.DEFAULT_NAMESPACE : strings[0]) && isPathValid(strings[1]);
     }
 
@@ -45,7 +43,7 @@ public final class IdentifierUtils {
     }
 
     public static void assertValid(String id) {
-        String[] strings = fastTwoPartSplit(id, Identifier.NAMESPACE_SEPARATOR, Identifier.DEFAULT_NAMESPACE);
+        String[] strings = AllayStringUtils.fastTwoPartSplit(id, Identifier.NAMESPACE_SEPARATOR, Identifier.DEFAULT_NAMESPACE);
         var namespace = strings[0].isEmpty() ? Identifier.DEFAULT_NAMESPACE : strings[0];
         var path = strings[1];
         if (!isNamespaceValid(namespace)) {

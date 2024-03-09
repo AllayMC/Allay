@@ -1,6 +1,6 @@
 package org.allaymc.api.item.recipe;
 
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
@@ -15,8 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 
-import static org.allaymc.api.item.type.ItemTypes.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.DIAMOND_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.GRASS_TYPE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Allay Project 2023/11/25

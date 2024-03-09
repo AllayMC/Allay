@@ -6,15 +6,19 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.data.VanillaItemTags;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ComplexAliasDescriptor;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.recipe.*;
+import org.allaymc.api.item.recipe.NetworkRecipe;
+import org.allaymc.api.item.recipe.Recipe;
+import org.allaymc.api.item.recipe.RecipeRegistry;
+import org.allaymc.api.item.recipe.ShapedRecipe;
+import org.allaymc.api.item.recipe.ShapelessRecipe;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.server.item.type.AllayItemType;
@@ -24,7 +28,15 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeDa
 import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Allay Project 2023/11/25

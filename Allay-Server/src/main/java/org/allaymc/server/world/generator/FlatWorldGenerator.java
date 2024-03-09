@@ -1,8 +1,8 @@
-package org.allaymc.server.world.generator.flat;
+package org.allaymc.server.world.generator;
 
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.world.generator.ChunkGenerateContext;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -10,7 +10,9 @@ import org.allaymc.api.world.generator.WorldGeneratorType;
 
 import java.util.ArrayList;
 
-import static org.allaymc.api.block.type.BlockTypes.*;
+import static org.allaymc.api.block.type.BlockTypes.BEDROCK_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.DIRT_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.GRASS_TYPE;
 
 /**
  * Allay Project 2023/7/8

@@ -1,6 +1,6 @@
 package org.allaymc.api.item;
 
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.cloudburstmc.nbt.NbtMap;

@@ -1,6 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.palette.BlockStateHashPalette;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
@@ -12,7 +13,6 @@ import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;

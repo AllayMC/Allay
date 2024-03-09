@@ -13,7 +13,6 @@ import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityHelper;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
@@ -28,7 +27,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;

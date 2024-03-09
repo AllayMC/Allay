@@ -4,7 +4,7 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.container.impl.ChestContainer;
-import org.allaymc.api.identifier.Identifier;
+import org.allaymc.api.data.VanillaBlockEntityId;
 import org.allaymc.server.blockentity.component.chest.BlockEntityChestBaseComponentImpl;
 import org.allaymc.server.blockentity.component.common.BlockEntityContainerHolderComponentImpl;
 
@@ -17,7 +17,7 @@ public interface BlockEntityChestInitializer {
     static void init() {
         BlockEntityTypes.CHEST_TYPE = BlockEntityTypeBuilder
                 .builder(BlockEntityChest.class)
-                .identifier(new Identifier("minecraft:chest"))
+                .name(VanillaBlockEntityId.CHEST)
                 .addComponent(BlockEntityChestBaseComponentImpl::new, BlockEntityChestBaseComponentImpl.class)
                 .addComponent(() -> new BlockEntityContainerHolderComponentImpl(ChestContainer::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();

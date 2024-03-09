@@ -1,7 +1,6 @@
-package org.allaymc.api.network.processor.login;
+package org.allaymc.api.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 

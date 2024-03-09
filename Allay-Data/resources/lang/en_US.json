@@ -1,4 +1,5 @@
 {
+  "allay:cache.load": "Successfully loaded component cache~",
   "allay:allay.starting": "Starting up allay...",
   "allay:api.implemented": "This server is running §b%1§f, implement Allay-API version §b%2",
   "allay:blockattr.loaded": "Vanilla block attribute data is loaded",

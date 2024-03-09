@@ -4,7 +4,12 @@ import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.utils.Utils;
-import org.cloudburstmc.protocol.bedrock.data.skin.*;
+import org.cloudburstmc.protocol.bedrock.data.skin.AnimatedTextureType;
+import org.cloudburstmc.protocol.bedrock.data.skin.AnimationData;
+import org.cloudburstmc.protocol.bedrock.data.skin.ImageData;
+import org.cloudburstmc.protocol.bedrock.data.skin.PersonaPieceData;
+import org.cloudburstmc.protocol.bedrock.data.skin.PersonaPieceTintData;
+import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.json.internal.json_simple.JSONValue;
 

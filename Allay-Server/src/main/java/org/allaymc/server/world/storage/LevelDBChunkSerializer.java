@@ -1,4 +1,4 @@
-package org.allaymc.server.world.storage.leveldb;
+package org.allaymc.server.world.storage;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -53,13 +53,13 @@ public class LevelDBChunkSerializer {
         serializeBlock(writeBatch, chunk);
         writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{UnsafeChunk.CHUNK_VERSION});
         serializeHeightAndBiome(writeBatch, chunk);
-        serializeEntityAndBlockEntity(writeBatch,chunk);
+        serializeEntityAndBlockEntity(writeBatch, chunk);
     }
 
     public void deserialize(DB db, AllayUnsafeChunk.Builder builder) {
         deserializeBlock(db, builder);
         deserializeHeightAndBiome(db, builder);
-        deserializeEntityAndBlockEntity(db,builder);
+        deserializeEntityAndBlockEntity(db, builder);
     }
 
     //serialize chunk section
@@ -142,12 +142,12 @@ public class LevelDBChunkSerializer {
             for (short height : chunk.getHeightArray()) {
                 heightAndBiomesBuffer.writeShortLE(height);
             }
-            Palette<BiomeType> biomePalette;
+            Palette<BiomeType> lastPalette = null;
             for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
                 ChunkSection section = chunk.getSection(y);
                 if (section == null) continue;
-                biomePalette = section.biomes();
-                biomePalette.writeToStorageRuntime(heightAndBiomesBuffer, BiomeType::getId);
+                section.biomes().writeToStorageRuntime(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
+                lastPalette = section.biomes();
             }
             writeBatch.put(LevelDBKeyUtils.DATA_3D.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), Utils.convertByteBuf2Array(heightAndBiomesBuffer));
         } finally {
@@ -167,13 +167,13 @@ public class LevelDBChunkSerializer {
                     heights[i] = heightAndBiomesBuffer.readShortLE();
                 }
                 builder.heightMap(new HeightMap(heights));
-                Palette<BiomeType> biomePalette;
+                Palette<BiomeType> lastPalette = null;
                 var minSectionY = builder.getDimensionInfo().minSectionY();
                 for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
                     ChunkSection section = builder.getSections()[y - minSectionY];
                     if (section == null) continue;
-                    biomePalette = section.biomes();
-                    biomePalette.readFromStorageRuntime(heightAndBiomesBuffer, this::getBiomeByIdNonNull);
+                    section.biomes().readFromStorageRuntime(heightAndBiomesBuffer, this::getBiomeByIdNonNull, lastPalette);
+                    lastPalette = section.biomes();
                 }
                 return;
             }

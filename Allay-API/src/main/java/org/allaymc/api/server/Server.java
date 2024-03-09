@@ -14,7 +14,7 @@ import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
-import org.allaymc.api.scheduler.taskcreator.TaskCreator;
+import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.scoreboard.ScoreboardService;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;

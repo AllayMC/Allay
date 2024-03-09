@@ -4,10 +4,10 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.identifier.Identifier;
 import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
 import org.allaymc.api.utils.ReflectionUtils;
 

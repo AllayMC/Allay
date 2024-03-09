@@ -15,13 +15,21 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.server.command.selector.args.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 
-import static org.allaymc.api.command.selector.SelectorType.*;
+import static org.allaymc.api.command.selector.SelectorType.NEAREST_PLAYER;
+import static org.allaymc.api.command.selector.SelectorType.NPC_INITIATOR;
+import static org.allaymc.api.command.selector.SelectorType.RANDOM_PLAYER;
+import static org.allaymc.api.command.selector.SelectorType.SELF;
+import static org.allaymc.api.command.selector.SelectorType.parseSelectorType;
 
 /**
  * Allay Project 2024/2/25

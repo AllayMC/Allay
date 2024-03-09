@@ -1,4 +1,4 @@
-package org.allaymc.api.scheduler.taskcreator;
+package org.allaymc.api.scheduler;
 
 /**
  * Describes a task creator (eg: plugin) <br/>

@@ -1,6 +1,5 @@
-package org.allaymc.api.scheduler.task;
+package org.allaymc.api.scheduler;
 
-import org.allaymc.api.scheduler.taskcreator.TaskCreator;
 import org.allaymc.api.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
