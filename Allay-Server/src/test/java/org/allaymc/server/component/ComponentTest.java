@@ -1,7 +1,7 @@
 package org.allaymc.server.component;
 
 import lombok.SneakyThrows;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;

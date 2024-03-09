@@ -1,8 +1,8 @@
 package org.allaymc.api.item.type;
 
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.client.data.Identified;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identified;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;

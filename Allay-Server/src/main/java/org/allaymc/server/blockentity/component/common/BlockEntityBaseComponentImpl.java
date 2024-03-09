@@ -10,7 +10,7 @@ import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
 import org.allaymc.api.blockentity.component.event.BlockEntitySaveNBTEvent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;

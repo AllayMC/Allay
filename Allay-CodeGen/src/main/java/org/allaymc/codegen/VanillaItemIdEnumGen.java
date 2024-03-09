@@ -18,7 +18,7 @@ import static org.allaymc.codegen.VanillaItemInterfaceGen.MAPPED_ITEM_DATA;
  */
 public class VanillaItemIdEnumGen {
     private static final ClassName VANILLA_ITEM_ID_CLASS = ClassName.get("org.allaymc.api.data", "VanillaItemId");
-    private static final ClassName IDENTIFIER_CLASS = ClassName.get("org.allaymc.api.identifier", "Identifier");
+    private static final ClassName IDENTIFIER_CLASS = ClassName.get("org.allaymc.utils.identifier", "Identifier");
     private static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
     private static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
     private static final String JAVA_DOC = """
@@ -74,7 +74,7 @@ public class VanillaItemIdEnumGen {
         var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build()).build();
         String result = javaFile.toString()
                 .replace("public ItemType", "public ItemType<?>")
-                .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.identifier.Identifier")
+                .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.utils.identifier.Identifier")
                 .replace("org.allaymc.dependence.VanillaItemId", "org.allaymc.api.data.VanillaItemId");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/data/VanillaItemId.java"), result);
     }

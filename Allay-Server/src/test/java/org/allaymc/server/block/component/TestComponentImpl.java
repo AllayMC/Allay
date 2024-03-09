@@ -3,7 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 
 /**

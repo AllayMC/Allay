@@ -4,15 +4,19 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.server.item.type.ItemTypeDefaultInitializer;
+import org.allaymc.server.item.type.ItemTypeInitializer;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,20 +36,30 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
     @SneakyThrows
     public void init() {
         log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADING));
-        var classes = ReflectionUtils.getAllClasses("org.allaymc.server.item.initializer");
+        var defaultInitializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(ItemTypeDefaultInitializer.class);
+        var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(ItemTypeInitializer.class);
         try (var progressBar = ProgressBar
                 .builder()
-                .setInitialMax(classes.size())
+                .setInitialMax(defaultInitializers.size())
                 .setTaskName("Loading Item Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .build()) {
-            for (var itemClassName : classes) {
-                Class.forName(itemClassName).getMethod("init").invoke(null);
-                progressBar.step();
-            }
+            initializers.forEach(method -> callInitializer(method, null));
+            defaultInitializers.forEach(method -> callInitializer(method, progressBar));
         }
         rebuildDefinitionList();
-        log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADED, classes.size()));
+        log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADED, defaultInitializers.size()));
+    }
+
+    private static void callInitializer(Method method, ProgressBar progressBar) {
+        try {
+            method.invoke(null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (progressBar != null)
+                progressBar.step();
+        }
     }
 
     private final List<ItemDefinition> itemDefinitions = new ArrayList<>();

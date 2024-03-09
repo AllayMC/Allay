@@ -3,7 +3,6 @@ package org.allaymc.codegen;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.VanillaBlockId;
-import org.jetbrains.annotations.NotNull;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
@@ -63,19 +62,24 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
                 if (!Files.exists(folderPath))
                     Files.createDirectories(folderPath);
                 generateClass(BLOCK_BEHAVIOR_CLASS_NAME, blockClassFullName, path);
-                generateBlockTypeInitializer(id, blockClassFullName);
             }
+            addDefaultBlockTypeInitializer(id, blockClassFullName);
         }
+        generateDefaultBlockTypeInitializer();
         var javaFile = JavaFile.builder(BLOCK_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
         System.out.println("Generating " + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/block/type/" + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
 
-    @SneakyThrows
-    private static void generateBlockTypeInitializer(VanillaBlockId id, ClassName blockClassName) {
-        var folderName = tryFindSpecifiedFolderName(blockClassName.simpleName());
-        var packageName = "org.allaymc.server.block.initializer" + (folderName != null ? "." + folderName : "");
-        var className = ClassName.get(packageName, blockClassName.simpleName() + "Initializer");
+    public static final ClassName BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.block.type", "BlockTypeDefaultInitializer");
+    public static final TypeSpec.Builder BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
+            TypeSpec.classBuilder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
+                    .addJavadoc(
+                            "@author daoge_cmd <br>\n" +
+                                    "Allay Project <br>\n")
+                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+
+    private static void addDefaultBlockTypeInitializer(VanillaBlockId id, ClassName blockClassName) {
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T.$N = $T\n", BLOCK_TYPES_CLASS_NAME, id.name() + "_TYPE", BLOCK_TYPE_BUILDER_CLASS_NAME)
@@ -94,27 +98,26 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
             initializer.add(")\n");
         }
         initializer.add("        .build();");
-        var clazz = TypeSpec.interfaceBuilder(className)
-                .addModifiers(Modifier.PUBLIC)
-                .addJavadoc(
-                        "@author daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
+        BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER
                 .addMethod(
-                        MethodSpec.methodBuilder("init")
+                        MethodSpec.methodBuilder(generateInitializerMethodName(id))
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                .addStatement("if ($T.$N != null) return", BLOCK_TYPES_CLASS_NAME, id.name() + "_TYPE")
                                 .addCode(initializer.build())
                                 .build()
-                )
-                .build();
-        var filePath = Path.of("Allay-Server/src/main/java/" + packageName.replace(".", "/") + "/" + className.simpleName() + ".java");
-        if (!Files.exists(filePath)) {
-            var folderPath = filePath.getParent();
-            if (!Files.exists(folderPath))
-                Files.createDirectories(folderPath);
-            var javaFile = JavaFile.builder(className.packageName(), clazz).build();
-            System.out.println("Generating " + className.simpleName() + ".java ...");
-            Files.writeString(filePath, javaFile.toString());
-        }
+                );
+    }
+
+    @SneakyThrows
+    private static void generateDefaultBlockTypeInitializer() {
+        var filePath = Path.of("Allay-Server/src/main/java/org/allaymc/server/block/type/BlockTypeDefaultInitializer.java");
+        Files.deleteIfExists(filePath);
+        var folderPath = filePath.getParent();
+        if (!Files.exists(folderPath))
+            Files.createDirectories(folderPath);
+        var javaFile = JavaFile.builder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build()).build();
+        System.out.println("Generating " + BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.simpleName() + ".java ...");
+        Files.writeString(filePath, javaFile.toString());
     }
 
     private static ClassName generateClassFullName(VanillaBlockId id) {
@@ -123,9 +126,12 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         return ClassName.get("org.allaymc.api.block.interfaces" + (folderName != null ? "." + folderName : ""), simpleName);
     }
 
-    @NotNull
     private static String generateClassSimpleName(VanillaBlockId id) {
         return "Block" + Utils.convertToPascalCase(id.getIdentifier().path()) + "Behavior";
+    }
+
+    private static String generateInitializerMethodName(VanillaBlockId id) {
+        return "init" + Utils.convertToPascalCase(id.getIdentifier().path());
     }
 
     private static String tryFindSpecifiedFolderName(String blockClassSimpleName) {

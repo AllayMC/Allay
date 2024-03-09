@@ -1,6 +1,6 @@
 package org.allaymc.api.item.recipe;
 
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;

@@ -135,7 +135,7 @@ public class VanillaBiomeIdEnumGen {
         var javaFile = JavaFile.builder(PACKAGE_NAME, builtCode).build();
         String result = javaFile.toString()
                 .replace("org.allaymc.dependence.BiomeType", "org.allaymc.api.world.biome.BiomeType")
-                .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.common.data.Identifier")
+                .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.utils.Identifier")
                 .replace(" Int2ObjectOpenHashMap ", " Int2ObjectOpenHashMap<VanillaBiomeId> ")
                 .replace(" HashMap ", " HashMap<Identifier, VanillaBiomeId> ");
         Files.writeString(TARGET_PATH, result);

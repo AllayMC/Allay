@@ -33,7 +33,7 @@ public class VanillaEntityIdEnumGen {
         }
     }
 
-    public static final ClassName API_IDENTIFIER_CLASS = ClassName.get("org.allaymc.api.identifier", "Identifier");
+    public static final ClassName API_IDENTIFIER_CLASS = ClassName.get("org.allaymc.api.utils", "Identifier");
     public static final ClassName DEP_IDENTIFIER_CLASS = ClassName.get("org.allaymc.dependence", "Identifier");
     public static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
     public static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");

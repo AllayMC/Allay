@@ -1,6 +1,6 @@
 package org.allaymc.server.component.impl;
 
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.server.component.interfaces.NameComponent;
 

@@ -3,7 +3,6 @@ package org.allaymc.api.utils;
 import com.google.common.base.Preconditions;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.data.VanillaBlockId;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;

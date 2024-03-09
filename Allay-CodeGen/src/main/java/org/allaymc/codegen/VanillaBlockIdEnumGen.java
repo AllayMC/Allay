@@ -69,7 +69,7 @@ public class VanillaBlockIdEnumGen {
 
     @SneakyThrows
     public static void generateToAPIModule() {
-        var identifierClass = ClassName.get("org.allaymc.api.identifier", "Identifier");
+        var identifierClass = ClassName.get("org.allaymc.api.utils", "Identifier");
         var blockTypeRegistryClass = ClassName.get("org.allaymc.api.block.registry", "BlockTypeRegistry");
         var blockTypeClass = ClassName.get("org.allaymc.api.block.type", "BlockType");
         TypeSpec.Builder codeBuilder = commonBuilder(identifierClass)
@@ -95,7 +95,7 @@ public class VanillaBlockIdEnumGen {
         var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build()).build();
         String result = javaFile.toString()
                 .replace("public BlockType", "public BlockType<?>")
-                .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.identifier.Identifier")
+                .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.utils.Identifier")
                 .replace("org.allaymc.dependence.VanillaBlockId", "org.allaymc.api.data.VanillaBlockId");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/data/VanillaBlockId.java"), result);
     }

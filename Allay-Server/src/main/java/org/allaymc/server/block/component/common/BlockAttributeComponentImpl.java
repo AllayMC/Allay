@@ -5,7 +5,7 @@ import org.allaymc.api.block.component.common.BlockAttributes;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.datastruct.collections.nb.Int2ObjectNonBlockingMap;

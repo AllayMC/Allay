@@ -1,6 +1,6 @@
 package org.allaymc.api.world.biome;
 
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 
 /**
  * Allay Project 2023/6/3

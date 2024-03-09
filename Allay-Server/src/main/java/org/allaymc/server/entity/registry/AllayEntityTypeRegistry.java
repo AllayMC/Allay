@@ -4,17 +4,21 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.server.entity.type.EntityTypeDefaultInitializer;
+import org.allaymc.server.entity.type.EntityTypeInitializer;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,19 +41,29 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
     @SneakyThrows
     public void init() {
         log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADING));
-        var classes = ReflectionUtils.getAllClasses("org.allaymc.server.entity.initializer");
+        var defaultInitializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(EntityTypeDefaultInitializer.class);
+        var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(EntityTypeInitializer.class);
         try (var progressBar = ProgressBar
                 .builder()
-                .setInitialMax(classes.size())
+                .setInitialMax(defaultInitializers.size())
                 .setTaskName("Loading Entity Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .build()) {
-            for (var entityClassName : classes) {
-                Class.forName(entityClassName).getMethod("init").invoke(null);
-                progressBar.step();
-            }
+            initializers.forEach(method -> callInitializer(method, null));
+            defaultInitializers.forEach(method -> callInitializer(method, progressBar));
         }
-        log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADED, classes.size()));
+        log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADED, defaultInitializers.size()));
+    }
+
+    private static void callInitializer(Method method, ProgressBar progressBar) {
+        try {
+            method.invoke(null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (progressBar != null)
+                progressBar.step();
+        }
     }
 
     @SneakyThrows

@@ -1,6 +1,6 @@
 package org.allaymc.server.block.component;
 
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.server.block.component.common.CustomBlockComponentImpl;
 

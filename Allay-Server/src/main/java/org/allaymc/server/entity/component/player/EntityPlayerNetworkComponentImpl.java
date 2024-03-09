@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -196,7 +196,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // Disconnection will be handled in handleDisconnect() method
         disconnectReason = I18n.get().tr(player.getLangCode(), reason);
         // Send disconnect packet to client
-        player.getClientSession().disconnect(disconnectReason, hideDisconnectReason);
+        try {
+            player.getClientSession().disconnect(disconnectReason, hideDisconnectReason);
+        } catch (Exception e) {
+            log.error("Error while disconnecting the session", e);
+        }
         hideDisconnectReason = hideReason;
     }
 

@@ -19,7 +19,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaBlockId;

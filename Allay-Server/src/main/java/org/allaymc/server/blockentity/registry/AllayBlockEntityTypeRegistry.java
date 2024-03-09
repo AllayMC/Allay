@@ -10,7 +10,10 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.server.blockentity.type.BlockEntityTypeInitializer;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,18 +31,26 @@ public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<String, B
     @SneakyThrows
     public void init() {
         log.info(I18n.get().tr(TrKeys.A_BLOCKENTITYTYPE_LOADING));
-        var classes = ReflectionUtils.getAllClasses("org.allaymc.server.blockentity.initializer");
+        var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockEntityTypeInitializer.class);
         try (var progressBar = ProgressBar
                 .builder()
-                .setInitialMax(classes.size())
+                .setInitialMax(initializers.size())
                 .setTaskName("Loading Block Entity Types")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .build()) {
-            for (var entityClassName : classes) {
-                Class.forName(entityClassName).getMethod("init").invoke(null);
-                progressBar.step();
-            }
+            initializers.forEach(method -> callInitializer(method, progressBar));
         }
-        log.info(I18n.get().tr(TrKeys.A_BLOCKENTITYTYPE_LOADED, classes.size()));
+        log.info(I18n.get().tr(TrKeys.A_BLOCKENTITYTYPE_LOADED, initializers.size()));
+    }
+
+    private static void callInitializer(Method method, ProgressBar progressBar) {
+        try {
+            method.invoke(null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (progressBar != null)
+                progressBar.step();
+        }
     }
 }

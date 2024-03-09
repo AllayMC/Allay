@@ -1,6 +1,6 @@
 package org.allaymc.api.item.enchantment.type;
 
-import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 

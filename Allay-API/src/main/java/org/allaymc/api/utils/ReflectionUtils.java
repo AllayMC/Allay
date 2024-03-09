@@ -5,13 +5,16 @@ import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 2023/8/4
@@ -59,6 +62,16 @@ public class ReflectionUtils {
 
     public String buildMethodSignature(Method method) {
         return method.getName() + Arrays.toString(method.getParameterTypes());
+    }
+
+    public List<Method> getAllStaticVoidParameterlessMethods(Class<?> clazz) {
+        return Arrays.stream(clazz.getMethods()).filter(method -> {
+            // return if not a static method
+            if (!Modifier.isStatic(method.getModifiers())) return false;
+            // return if not a void method
+            if (method.getReturnType() != void.class) return false;
+            return method.getParameterCount() == 0;
+        }).collect(Collectors.toList());
     }
 }
 
