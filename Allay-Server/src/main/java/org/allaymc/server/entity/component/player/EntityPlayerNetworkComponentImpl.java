@@ -196,7 +196,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // Disconnection will be handled in handleDisconnect() method
         disconnectReason = I18n.get().tr(player.getLangCode(), reason);
         // Send disconnect packet to client
-        player.getClientSession().disconnect(disconnectReason, hideDisconnectReason);
+        try {
+            player.getClientSession().disconnect(disconnectReason, hideDisconnectReason);
+        } catch (Exception e) {
+            log.error("Error while disconnecting the session", e);
+        }
         hideDisconnectReason = hideReason;
     }
 

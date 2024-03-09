@@ -300,9 +300,9 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                     .worldPolicies(WorldData.WorldPolicies.builder().build())
                     .build();
         } catch (FileNotFoundException e) {
-            log.error("The level.dat file does not exist!");
+            log.error("level.dat file does not exist!");
         } catch (IOException e) {
-            log.error("The level.dat file is broken!");
+            log.error("level.dat file is broken!");
             return null;
         }
         throw new RuntimeException("level.dat is null!");

@@ -74,7 +74,7 @@ public class VanillaItemIdEnumGen {
         var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build()).build();
         String result = javaFile.toString()
                 .replace("public ItemType", "public ItemType<?>")
-                .replace("org.allaymc.dependence.Identifier", "org.allaymc.utils.identifier.Identifier")
+                .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.utils.identifier.Identifier")
                 .replace("org.allaymc.dependence.VanillaItemId", "org.allaymc.api.data.VanillaItemId");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/data/VanillaItemId.java"), result);
     }
