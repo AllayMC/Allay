@@ -2,12 +2,12 @@ package org.allaymc.server.item.attribute;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.common.utils.AllayStringUtils;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.component.common.ItemAttributes;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;

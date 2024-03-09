@@ -1,6 +1,5 @@
 package org.allaymc.api.utils;
 
-import org.allaymc.api.common.utils.Utils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

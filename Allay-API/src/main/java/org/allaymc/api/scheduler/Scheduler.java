@@ -1,7 +1,6 @@
 package org.allaymc.api.scheduler;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.scheduler.task.Task;
 
 import java.util.concurrent.ExecutorService;
 

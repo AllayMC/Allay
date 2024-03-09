@@ -2,7 +2,7 @@ package org.allaymc.server.utils;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.common.utils.HashUtils;
+import org.allaymc.api.utils.HashUtils;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Assertions;

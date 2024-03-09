@@ -1,7 +1,6 @@
 package org.allaymc.api.utils;
 
 import com.google.common.base.Preconditions;
-import org.allaymc.api.common.utils.GameLoop;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

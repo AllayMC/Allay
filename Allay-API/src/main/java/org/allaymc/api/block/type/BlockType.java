@@ -5,8 +5,8 @@ import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.common.data.Identified;
-import org.allaymc.api.common.data.Identifier;
+import org.allaymc.api.client.data.Identified;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.item.type.ItemType;
 import org.jetbrains.annotations.UnmodifiableView;
 

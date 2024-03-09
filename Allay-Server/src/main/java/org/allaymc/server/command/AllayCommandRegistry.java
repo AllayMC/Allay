@@ -5,21 +5,21 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.common.utils.TextFormat;
-import org.allaymc.api.common.utils.Utils;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.server.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.allaymc.api.common.utils.AllayStringUtils.spiltCommandArgs;
+import static org.allaymc.api.utils.AllayStringUtils.spiltCommandArgs;
 
 /**
  * Allay Project 2023/12/29

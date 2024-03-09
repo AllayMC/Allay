@@ -1,7 +1,7 @@
 package org.allaymc.server.world.generator;
 
 import io.papermc.paperclip.Paperclip;
-import org.allaymc.api.common.utils.Utils;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.Allay;

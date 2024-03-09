@@ -2,7 +2,7 @@ package org.allaymc.api.block.registry;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.common.data.Identifier;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.registry.MappedRegistry;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 

@@ -1,6 +1,6 @@
 package org.allaymc.api.plugin;
 
-import org.allaymc.api.common.exception.FormativeException;
+import org.allaymc.api.utils.exception.FormativeException;
 
 /**
  * Allay Project 2024/2/8

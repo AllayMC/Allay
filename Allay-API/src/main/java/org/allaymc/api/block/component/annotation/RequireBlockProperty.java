@@ -1,7 +1,7 @@
 package org.allaymc.api.block.component.annotation;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.common.exception.BlockComponentInjectException;
+import org.allaymc.api.utils.exception.BlockComponentInjectException;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

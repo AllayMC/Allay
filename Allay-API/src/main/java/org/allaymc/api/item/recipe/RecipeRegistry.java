@@ -1,7 +1,7 @@
 package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.common.data.Identifier;
+import org.allaymc.api.client.data.Identifier;
 import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 

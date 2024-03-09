@@ -1,7 +1,7 @@
 package org.allaymc.api.item.type;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.common.data.Identifier;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;

@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.common.utils.TextFormat;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.Dimension;
 import oshi.SystemInfo;
 import oshi.driver.windows.wmi.Win32ComputerSystem;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static org.allaymc.api.common.utils.MathUtils.round;
+import static org.allaymc.api.utils.MathUtils.round;
 
 /**
  * Allay Project 2024/2/13

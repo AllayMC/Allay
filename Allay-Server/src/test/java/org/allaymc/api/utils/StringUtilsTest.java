@@ -1,6 +1,5 @@
 package org.allaymc.api.utils;
 
-import org.allaymc.api.common.utils.AllayStringUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

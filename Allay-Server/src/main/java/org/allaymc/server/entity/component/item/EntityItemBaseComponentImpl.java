@@ -1,12 +1,12 @@
 package org.allaymc.server.entity.component.item;
 
-import org.allaymc.api.common.utils.MathUtils;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.utils.MathUtils;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;

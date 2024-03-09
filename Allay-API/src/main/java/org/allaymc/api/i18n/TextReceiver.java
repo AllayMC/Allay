@@ -1,7 +1,7 @@
 package org.allaymc.api.i18n;
 
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.common.utils.Utils;
+import org.allaymc.api.utils.Utils;
 
 /**
  * Allay Project 2023/12/15

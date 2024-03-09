@@ -1,8 +1,8 @@
 package org.allaymc.server.client.storage;
 
 import lombok.AllArgsConstructor;
-import org.allaymc.api.common.storage.PlayerData;
-import org.allaymc.api.common.storage.PlayerStorage;
+import org.allaymc.api.client.storage.PlayerData;
+import org.allaymc.api.client.storage.PlayerStorage;
 
 import java.util.Map;
 import java.util.UUID;

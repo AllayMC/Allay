@@ -6,7 +6,7 @@ import org.allaymc.api.plugin.PluginContainer;
 import org.allaymc.api.plugin.PluginDescriptor;
 import org.allaymc.api.plugin.PluginException;
 import org.allaymc.api.plugin.PluginLoader;
-import org.allaymc.api.common.utils.JSONUtils;
+import org.allaymc.api.utils.JSONUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

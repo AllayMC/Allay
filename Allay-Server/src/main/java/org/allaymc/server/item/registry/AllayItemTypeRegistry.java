@@ -4,13 +4,13 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.common.data.Identifier;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.common.utils.ReflectionUtils;
+import org.allaymc.api.utils.ReflectionUtils;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
 import java.util.ArrayList;

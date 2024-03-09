@@ -1,6 +1,6 @@
 package org.allaymc.api.entity.effect;
 
-import org.allaymc.api.common.data.Identifier;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.entity.Entity;
 
 import java.awt.*;

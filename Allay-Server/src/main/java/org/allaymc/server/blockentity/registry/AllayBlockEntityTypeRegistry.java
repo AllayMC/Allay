@@ -6,10 +6,10 @@ import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.common.utils.ReflectionUtils;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.utils.ReflectionUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

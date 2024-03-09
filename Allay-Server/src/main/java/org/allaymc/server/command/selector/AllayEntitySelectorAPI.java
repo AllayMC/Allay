@@ -9,10 +9,10 @@ import org.allaymc.api.command.NPCCommandSender;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.args.SelectorArgument;
-import org.allaymc.api.common.utils.AllayStringUtils;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.server.command.selector.args.*;
 
 import java.util.ArrayList;

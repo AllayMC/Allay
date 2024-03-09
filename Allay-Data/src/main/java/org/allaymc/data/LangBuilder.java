@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.allaymc.api.common.utils.AllayStringUtils.fastTwoPartSplit;
+import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 
 /**
  * Allay Project 2023/12/15

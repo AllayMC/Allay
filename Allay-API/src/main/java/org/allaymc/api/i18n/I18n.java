@@ -2,7 +2,7 @@ package org.allaymc.api.i18n;
 
 import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.common.utils.Utils;
+import org.allaymc.api.utils.Utils;
 
 /**
  * Allay Project 2023/12/15

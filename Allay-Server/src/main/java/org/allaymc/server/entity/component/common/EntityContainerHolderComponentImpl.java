@@ -1,6 +1,6 @@
 package org.allaymc.server.entity.component.common;
 
-import org.allaymc.api.common.data.Identifier;
+import org.allaymc.api.client.data.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.container.BaseContainerHolder;
 import org.allaymc.api.container.Container;

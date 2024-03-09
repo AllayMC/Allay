@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.allaymc.api.common.utils.JSONUtils;
+import org.allaymc.api.utils.JSONUtils;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**

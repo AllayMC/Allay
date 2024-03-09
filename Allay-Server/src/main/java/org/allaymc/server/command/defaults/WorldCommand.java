@@ -3,9 +3,9 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.common.utils.TextFormat;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.TextFormat;
 
 import java.util.stream.Collectors;
 

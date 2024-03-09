@@ -1,7 +1,7 @@
 package org.allaymc.server.scheduler;
 
 import org.allaymc.api.scheduler.Scheduler;
-import org.allaymc.api.scheduler.task.Task;
+import org.allaymc.api.scheduler.Task;
 import org.allaymc.api.server.Server;
 
 import java.util.Comparator;

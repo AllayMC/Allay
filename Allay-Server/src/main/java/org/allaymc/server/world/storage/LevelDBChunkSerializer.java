@@ -11,7 +11,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.common.utils.Utils;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.ChunkSection;

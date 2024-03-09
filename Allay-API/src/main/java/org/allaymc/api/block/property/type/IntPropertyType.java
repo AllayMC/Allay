@@ -1,7 +1,7 @@
 package org.allaymc.api.block.property.type;
 
 import lombok.Getter;
-import org.allaymc.api.common.utils.Utils;
+import org.allaymc.api.utils.Utils;
 
 import java.util.stream.IntStream;
 

@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.common.data.Identifier;
-import org.allaymc.api.common.data.LoginData;
-import org.allaymc.api.common.storage.PlayerData;
+import org.allaymc.api.client.data.Identifier;
+import org.allaymc.api.client.data.LoginData;
+import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -63,8 +63,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.allaymc.api.common.utils.AllayNbtUtils.readVector3f;
-import static org.allaymc.api.common.utils.AllayNbtUtils.writeVector3f;
+import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
+import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 
 /**
  * Allay Project 2023/10/14

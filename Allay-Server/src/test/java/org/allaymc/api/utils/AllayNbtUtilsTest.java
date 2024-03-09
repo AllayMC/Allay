@@ -1,6 +1,5 @@
 package org.allaymc.api.utils;
 
-import org.allaymc.api.common.utils.AllayNbtUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
 

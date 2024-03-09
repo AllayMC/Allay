@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.scheduler.Scheduler;
-import org.allaymc.api.scheduler.taskcreator.TaskCreator;
+import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.server.Server;
 
 /**

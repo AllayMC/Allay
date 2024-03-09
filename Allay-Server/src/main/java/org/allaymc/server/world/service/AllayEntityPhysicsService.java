@@ -14,7 +14,7 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.common.utils.MathUtils;
+import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.jetbrains.annotations.ApiStatus;
@@ -22,13 +22,20 @@ import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.floor;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRICTION;
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
-import static org.allaymc.api.common.utils.MathUtils.isInRange;
+import static org.allaymc.api.utils.MathUtils.isInRange;
 
 /**
  * Allay Project 2023/8/5 <br>

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import me.lucko.spark.common.tick.AbstractTickHook;
 import me.lucko.spark.common.tick.TickHook;
 import org.allaymc.api.scheduler.Scheduler;
-import org.allaymc.api.scheduler.task.Task;
+import org.allaymc.api.scheduler.Task;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

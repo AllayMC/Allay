@@ -1,7 +1,6 @@
 package org.allaymc.api.scoreboard.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.common.utils.config.Config;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -10,6 +9,7 @@ import org.allaymc.api.scoreboard.scorer.EntityScorer;
 import org.allaymc.api.scoreboard.scorer.FakeScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.scoreboard.scorer.Scorer;
+import org.allaymc.api.utils.config.Config;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 import java.io.IOException;

@@ -3,8 +3,8 @@ package org.allaymc.server.client.storage;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.common.storage.NativeFilePlayerStorage;
-import org.allaymc.api.common.storage.PlayerData;
+import org.allaymc.api.client.storage.NativeFilePlayerStorage;
+import org.allaymc.api.client.storage.PlayerData;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
