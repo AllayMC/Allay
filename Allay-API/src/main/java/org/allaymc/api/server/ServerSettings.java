@@ -93,18 +93,18 @@ public class ServerSettings extends OkaeriConfig {
     public static class WorldConfig extends OkaeriConfig {
 
         @CustomKey("ticking-radius")
-        private int tickingRadius = 8;
+        private int tickingRadius = 16;
 
         @CustomKey("view-distance")
         private int viewDistance = 16;
 
         @CustomKey("chunk-try-send-count-per-tick")
-        private int chunkTrySendCountPerTick = 8;
+        private int chunkTrySendCountPerTick = 16;
 
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;
 
-        @Comment("Possible values: ASYNC, SYNC, PARALLEL")
+        @Comment("Possible values: ASYNC, SYNC")
         @Comment("This only works if sub-chunk sending system is not enabled")
         @Comment("And will be forced to SYNC if sub-chunk sending system is enabled")
         @CustomKey("chunk-sending-strategy")
@@ -119,7 +119,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @Comment("Determines how long a chunk without chunk loaders will remain loaded (gt)")
         @CustomKey("remove-unneeded-chunk-cycle")
-        private int removeUnneededChunkCycle = 600;
+        private int removeUnneededChunkCycle = 6000;
 
         public enum ChunkSendingStrategy {
             ASYNC,

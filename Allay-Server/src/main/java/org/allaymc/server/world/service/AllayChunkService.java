@@ -21,10 +21,10 @@ import org.allaymc.api.world.generator.ChunkGenerateContext;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.ASYNC;
-import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.PARALLEL;
 import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.SYNC;
 import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
 
@@ -432,27 +431,21 @@ public class AllayChunkService implements ChunkService {
                     chunkSendingStrategy = SYNC;
                 }
                 if (chunkSendingStrategy == ASYNC) {
-                    // Create virtual thread for each chunk
+                    List<CompletableFuture<Void>> completableFutureList = new ArrayList<>();
                     chunkReadyToSend.values().forEach(chunk -> {
-                        Server.getInstance().getVirtualThreadPool().submit(() -> {
+                        completableFutureList.add(CompletableFuture.runAsync(() -> {
                             chunkLoader.sendLevelChunkPacket(chunk.createFullLevelChunkPacketChunk());
                             chunkLoader.onChunkInRangeSent(chunk);
-                        });
+                        }, Server.getInstance().getVirtualThreadPool()));
                     });
+                    if (!completableFutureList.isEmpty()) {
+                        CompletableFuture.allOf(completableFutureList.toArray(CompletableFuture<?>[]::new)).join();
+                    }
                 } else {
-                    // 1. Encode all lcps
-                    List<LevelChunkPacket> lcps;
-                    Stream<Chunk> lcpStream;
-                    if (chunkSendingStrategy == PARALLEL && chunkReadyToSend.size() >= worldSettings.chunkMinParallelSendingThreshold()) {
-                        lcpStream = chunkReadyToSend.values().parallelStream();
-                    } else {
-                        lcpStream = chunkReadyToSend.values().stream();
-                    }
-                    lcps = lcpStream.map(chunk -> useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk()).toList();
-                    // 2. Send lcps to a client
-                    for (var lcp : lcps) {
-                        chunkLoader.sendLevelChunkPacket(lcp);
-                    }
+                    Stream<Chunk> lcpStream = chunkReadyToSend.values().stream();
+                    lcpStream.map(chunk -> useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk()).forEachOrdered(
+                            chunkLoader::sendLevelChunkPacket
+                    );
                     // 3. Call onChunkInRangeSent()
                     chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeSent);
                 }
