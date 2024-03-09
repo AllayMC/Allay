@@ -67,7 +67,7 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent {
 
     public static BlockAttributeComponentImpl ofRedefinedAABB(Function<BlockState, VoxelShape> aabbRedefiner) {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
-            var vanillaId = VanillaBlockId.fromIdentifier(blockType.getName());
+            var vanillaId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
             Objects.requireNonNull(vanillaId);
             var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaId);
             Objects.requireNonNull(attributeMap);

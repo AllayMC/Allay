@@ -135,7 +135,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.entityType = info.getEntityType();
         this.metadata = new Metadata();
-        setDisplayName(entityType.getName().toString());
+        setDisplayName(entityType.getIdentifier().toString());
     }
 
     @Override
@@ -506,7 +506,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var addEntityPacket = new AddEntityPacket();
         addEntityPacket.setRuntimeEntityId(runtimeId);
         addEntityPacket.setUniqueEntityId(runtimeId);
-        addEntityPacket.setIdentifier(entityType.getName().toString());
+        addEntityPacket.setIdentifier(entityType.getIdentifier().toString());
         addEntityPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
         addEntityPacket.setMotion(org.cloudburstmc.math.vector.Vector3f.from(motion.x(), motion.y(), motion.z()));
         addEntityPacket.setRotation(Vector2f.from(location.pitch(), location.yaw()));
@@ -612,7 +612,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
-        builder.putString("identifier", entityType.getName().toString())
+        builder.putString("identifier", entityType.getIdentifier().toString())
                 .putCompound("Pos",
                         NbtMap.builder()
                                 .putFloat("x", location.x())

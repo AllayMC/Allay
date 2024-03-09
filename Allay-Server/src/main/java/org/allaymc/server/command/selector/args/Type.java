@@ -44,6 +44,6 @@ public class Type extends CachedSimpleSelectorArgument {
     }
 
     protected boolean checkType(Entity entity, String type) {
-        return entity.getEntityType().getName().toString().equals(type);
+        return entity.getEntityType().getIdentifier().toString().equals(type);
     }
 }

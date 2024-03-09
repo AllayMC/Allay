@@ -15,8 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 
-import static org.allaymc.api.item.type.ItemTypes.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.DIAMOND_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.GRASS_TYPE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Allay Project 2023/11/25
@@ -44,7 +48,7 @@ class RecipeTest {
                 .outputs(new ItemStack[]{diamond()})
                 .build();
 
-        assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getName());
+        assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getIdentifier());
         assertEquals(DIAMOND_TYPE, grassMagic1.getOutputs()[0].getItemType());
         assertEquals("test_tag", grassMagic1.getTag());
 

@@ -1,9 +1,9 @@
 package org.allaymc.server;
 
-import org.allaymc.api.block.interfaces.wood.BlockWoodBehavior;
 import org.allaymc.api.block.property.enums.PillarAxis;
 import org.allaymc.api.block.property.enums.WoodType;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.common.exception.MissingImplementationException;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.openjdk.jmh.annotations.*;
@@ -27,7 +27,7 @@ public class BlockStateUpdateJMHTest {
     @Setup
     public void init() throws MissingImplementationException {
         Allay.initAllayAPI();
-        wood = BlockWoodBehavior.WOOD_TYPE.getDefaultState();
+        wood = BlockTypes.WOOD_TYPE.getDefaultState();
     }
 
     @Benchmark

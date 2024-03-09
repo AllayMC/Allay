@@ -43,6 +43,7 @@ import static org.allaymc.api.block.type.BlockTypes.WOOD_TYPE;
 @ExtendWith({AllayTestExtension.class, MockitoExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LevelDBWorldStorageTest {
+    static Path levelDat = Path.of("").toAbsolutePath().getParent();//this is root path,relative to the `.run` directory
     static Server server = Mockito.mock(Server.class);
     static World mockWorld = Mockito.mock(World.class);
     static AllayLevelDBWorldStorage levelDBWorldStorage;
@@ -50,11 +51,11 @@ class LevelDBWorldStorageTest {
     @BeforeAll
     static void mockServerSettings() {
         try {
-            Files.copy(Path.of("src/test/resources/beworld/level.dat"), Path.of("src/test/resources/beworld/copy/level.dat"), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(levelDat.resolve("Allay-Server/src/test/resources/beworld/level.dat"), levelDat.resolve("Allay-Server/src/test/resources/beworld/copy/level.dat"), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        levelDBWorldStorage = new AllayLevelDBWorldStorage(Path.of("src/test/resources/beworld"));
+        levelDBWorldStorage = new AllayLevelDBWorldStorage(levelDat.resolve("Allay-Server/src/test/resources/beworld"));
         @SuppressWarnings("resource") MockedStatic<Server> serve = Mockito.mockStatic(Server.class);
         serve.when(Server::getInstance).thenReturn(server);
         Mockito.when(server.getVirtualThreadPool()).thenReturn(Executors.newVirtualThreadPerTaskExecutor());
@@ -118,8 +119,8 @@ class LevelDBWorldStorageTest {
     static void end() {
         try {
             levelDBWorldStorage.close();
-            Files.copy(Path.of("src/test/resources/beworld/copy/level.dat"), Path.of("src/test/resources/beworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
-            FileUtils.deleteDirectory(Path.of("src/test/resources/beworld/db").toFile());
+            Files.copy(levelDat.resolve("Allay-Server/src/test/resources/beworld/copy/level.dat"), levelDat.resolve("Allay-Server/src/test/resources/beworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
+            FileUtils.deleteDirectory(levelDat.resolve("db").toFile());
             Server.getInstance().shutdown();
         } catch (IOException e) {
             throw new RuntimeException(e);

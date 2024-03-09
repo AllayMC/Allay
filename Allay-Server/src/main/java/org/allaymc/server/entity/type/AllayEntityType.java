@@ -70,7 +70,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     }
 
     @Override
-    public Identifier getName() {
+    public Identifier getIdentifier() {
         return identifier;
     }
 

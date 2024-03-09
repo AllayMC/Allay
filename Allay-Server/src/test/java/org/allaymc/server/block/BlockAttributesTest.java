@@ -10,9 +10,12 @@ import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.awt.Color;
+import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Allay Project 2023/3/25
@@ -131,7 +134,7 @@ class BlockAttributesTest {
             for (var state : type.getBlockStateHashMap().values()) {
                 var expected = attributeMap.get(state.blockStateHash());
                 if (expected == null) {
-                    log.error("Missing block attributes for state: " + state + ", Block: " + type.getName());
+                    log.error("Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
                     log.info("expected blockhash: " + state.blockStateHash());
                     error++;
                 }

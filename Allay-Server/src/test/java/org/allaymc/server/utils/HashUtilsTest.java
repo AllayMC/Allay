@@ -26,14 +26,14 @@ public class HashUtilsTest {
 
     @Test
     public void testComputeBlockStateHash1() {
-        var value = HashUtils.computeBlockStateHash(testBlockState.getBlockType().getName(), new ArrayList<>(testBlockState.getPropertyValues().values()));
+        var value = HashUtils.computeBlockStateHash(testBlockState.getBlockType().getIdentifier(), new ArrayList<>(testBlockState.getPropertyValues().values()));
         Assertions.assertEquals(testBlockStateHash, value);
     }
 
     @Test
     public void testComputeBlockStateHash2() {
         BlockPropertyType.BlockPropertyValue<?, ?, ?>[] array = testBlockState.getPropertyValues().values().toArray(BlockPropertyType.BlockPropertyValue<?, ?, ?>[]::new);
-        var value = HashUtils.computeBlockStateHash(testBlockState.getBlockType().getName(), array);
+        var value = HashUtils.computeBlockStateHash(testBlockState.getBlockType().getIdentifier(), array);
         Assertions.assertEquals(testBlockStateHash, value);
     }
 

@@ -65,14 +65,11 @@ public class AllayWorldInfoProvider implements WorldInfoProvider {
     }
 
     public static class AllayChunkInfo extends AbstractChunkInfo<Identifier> {
-
         private final CountMap<Identifier> entityCounts = new CountMap.Simple<>(new HashMap<>());
 
         protected AllayChunkInfo(Chunk chunk) {
             super(chunk.getX(), chunk.getZ());
-
-            chunk.getEntities().values().forEach(entity -> this.entityCounts.increment(entity.getEntityType().getName()));
-            chunk.getBlockEntities().values().forEach(entity -> this.entityCounts.increment(entity.getBlockEntityType().getName()));
+            chunk.getEntities().values().forEach(entity -> this.entityCounts.increment(entity.getEntityType().getIdentifier()));
         }
 
         @Override

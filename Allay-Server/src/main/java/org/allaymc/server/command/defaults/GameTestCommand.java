@@ -114,7 +114,7 @@ public class GameTestCommand extends SimpleCommand {
                         );
                         dim.getEntityService().addEntity(entity);
                     }
-                    context.addOutput("§aSpawned " + count + " " + entityType.getName().toString());
+                    context.addOutput("§aSpawned " + count + " " + entityType.getIdentifier().toString());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
