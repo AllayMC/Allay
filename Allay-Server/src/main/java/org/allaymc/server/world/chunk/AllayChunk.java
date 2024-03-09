@@ -530,8 +530,13 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void init(Dimension dimension) {
-        unsafeChunk.init(dimension);
+    public void beforeSetChunk(Dimension dimension) {
+        unsafeChunk.beforeSetChunk(dimension);
+    }
+
+    @Override
+    public void afterSetChunk(Dimension dimension) {
+        unsafeChunk.afterSetChunk(dimension);
     }
 
     @Override
