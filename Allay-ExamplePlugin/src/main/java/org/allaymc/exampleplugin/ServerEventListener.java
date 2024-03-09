@@ -47,9 +47,11 @@ public class ServerEventListener {
             list.add("Time: §a" + player.getWorld().getWorldData().getTime());
             list.add("World: §a" + player.getWorld().getWorldData().getName());
             list.add("DimId: §a" + player.getDimension().getDimensionInfo().dimensionId());
-            int cx = ((int)player.getLocation().x()) >> 4;
-            int cz = ((int)player.getLocation().z()) >> 4;
+            var loc = player.getLocation();
+            int cx = ((int)loc.x()) >> 4;
+            int cz = ((int)loc.z()) >> 4;
             list.add("Chunk: §a" + cx + ", " + cz);
+            list.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x(), (int) loc.y(), (int) loc.z()));
             scoreboard.setLines(list);
             return true;
         }, 20);
