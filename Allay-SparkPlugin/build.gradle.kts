@@ -45,7 +45,7 @@ tasks.processResources {
 
 tasks.shadowJar {
     archiveFileName = "spark-${project.version}-allay.jar"
-    destinationDirectory = File("${rootProject.projectDir}/run/plugins")
+    destinationDirectory = File("${rootProject.projectDir}/.run/plugins")
 
     relocate("net.kyori.adventure", "org.allaymc.spark.lib.adventure")
     relocate("net.kyori.examinatio", "org.allaymc.spark.lib.adventure.examination")

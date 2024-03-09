@@ -11,5 +11,5 @@ dependencies {
 }
 
 tasks.shadowJar {
-    destinationDirectory = File("${rootProject.projectDir}/run/plugins")
+    destinationDirectory = File("${rootProject.projectDir}/.run/plugins")
 }
