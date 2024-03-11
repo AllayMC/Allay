@@ -37,10 +37,11 @@ jobs:
         with:
           gradle-version: wrapper
           cache-overwrite-existing: true
+          cache-read-only: false
           build-scan-publish: true
           build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-service-agree: "yes"
-          arguments: buildForGithubAction --scan
+          arguments: buildForGithubAction -p Allay-Server --scan
       - name: Upload Allay-API
         uses: actions/upload-artifact@v4
         if: success() && contains(github.ref_name, 'master')

@@ -34,10 +34,6 @@ dependencies {
     }
 }
 
-tasks.buildForGithubAction {
-    enabled = false
-}
-
 tasks.processResources {
     filesMatching("plugin.json") {
         expand(

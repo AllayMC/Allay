@@ -10,10 +10,6 @@ dependencies {
     compileOnly(project(":Allay-API"))
 }
 
-tasks.buildForGithubAction {
-    enabled = false
-}
-
 tasks.shadowJar {
     destinationDirectory = File("${rootProject.projectDir}/.run/plugins")
 }

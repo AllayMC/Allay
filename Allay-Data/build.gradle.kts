@@ -6,10 +6,6 @@ dependencies {
     implementation(project(":Allay-Server"))
 }
 
-tasks.buildForGithubAction {
-    enabled = false
-}
-
 tasks.processResources {
     from("${rootProject.projectDir}/Allay-Data/resources")
     include("unpacked/**")
