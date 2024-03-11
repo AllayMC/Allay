@@ -9,3 +9,7 @@ dependencies {
     implementation(libs.fastutil)
     implementation(libs.annotations)
 }
+
+tasks.buildForGithubAction {
+    enabled = false
+}
