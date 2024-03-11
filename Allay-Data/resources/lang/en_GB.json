@@ -1698,7 +1698,7 @@
   "minecraft:dr.prompt.do_not_show_again": "Don't show this again",
   "minecraft:dr.prompt.switching_to_persona_detail": "You are switching over to the character creator in this slot. Character creator allows you to build a character in Minecraft item by item. Your classic skin will be saved as a backup in this slot if you want to switch back later.",
   "minecraft:dr.prompt.switching_to_persona_title": "Switch to Character Creator",
-  "minecraft:dr.prompt.switching_to_skin_detail": "You are switching over to a classic skin in this slot. Classic skins are applied to the full character and cannot be customised. Your character creator look will be saved as a backup in this slot if you want to switch back later.",
+  "minecraft:dr.prompt.switching_to_skin_detail": "You are switching over to a classic skin in this slot. Classic skins are applied to the full character and cannot be customised. Your character creator look will be saved as a backup in this slot if you want to switch back later.",
   "minecraft:dr.prompt.switching_to_skin_title": "Switch to Classic Skins",
   "minecraft:dr.rarity": "Rarity",
   "minecraft:dr.rarity.common": "Common",

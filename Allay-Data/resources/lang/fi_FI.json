@@ -1698,7 +1698,7 @@
   "minecraft:dr.prompt.do_not_show_again": "Älä näytä tätä uudelleen",
   "minecraft:dr.prompt.switching_to_persona_detail": "Olet siirtymässä hahmonluontiin tässä paikassa. Hahmonluonnissa voit luoda Minecraft-hahmon osa kerrallaan. Klassinen olemuksesi tallennetaan tähän paikkaan siltä varalta, että haluat siirtyä siihen myöhemmin takaisin.",
   "minecraft:dr.prompt.switching_to_persona_title": "Vaihda hahmonluontiin",
-  "minecraft:dr.prompt.switching_to_skin_detail": "Olet vaihtamassa klassiseen olemukseen tässä paikassa. Klassiset olemukset kohdistuvat koko hahmoon, eikä niitä voi muokata. Hahmonluonnissa luomasi ulkoasu tallennetaan tähän paikkaan siltä varalta, että haluat siirtyä siihen myöhemmin takaisin.",
+  "minecraft:dr.prompt.switching_to_skin_detail": "Olet vaihtamassa klassiseen olemukseen tässä paikassa. Klassiset olemukset kohdistuvat koko hahmoon, eikä niitä voi muokata. Hahmonluonnissa luomasi ulkoasu tallennetaan tähän paikkaan siltä varalta, että haluat siirtyä siihen myöhemmin takaisin.",
   "minecraft:dr.prompt.switching_to_skin_title": "Vaihda klassisiin olemuksiin",
   "minecraft:dr.rarity": "Harvinaisuus",
   "minecraft:dr.rarity.common": "Yleinen",

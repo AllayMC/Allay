@@ -4888,7 +4888,7 @@
   "minecraft:translation.test.complex": "Prefix, %s%2$s again %s and %1$s lastly %s and also %1$s again!",
   "minecraft:translation.test.escape": "%%s %%%s %%%%s %%%%%s",
   "minecraft:translation.test.invalid": "hi %",
-  "minecraft:translation.test.invalid2": "hi %  s",
+  "minecraft:translation.test.invalid2": "hi %  s",
   "minecraft:translation.test.none": "Hello, world!",
   "minecraft:translation.test.world": "world",
   "minecraft:trim_material.amethyst.name": "アメジストの材料",

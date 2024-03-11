@@ -1227,7 +1227,7 @@
   "minecraft:content.import.failed.subtitle_malformed_zip": "Ogiltigt zip-arkiv",
   "minecraft:content.import.failed.subtitle_premiumcontent": "Innehållet stöds inte av Minecraft Education.",
   "minecraft:content.import.failed.title_premiumcontent": "Innehållet stöds inte",
-  "minecraft:content.import.started": "Importeringen har startat …",
+  "minecraft:content.import.started": "Importeringen har startat …",
   "minecraft:content.import.succeeded": "\"%s\" har importerats",
   "minecraft:content.import.succeeded_with_warnings": "\"%s\" har importerats med varningar",
   "minecraft:content.import.succeeded_with_warnings.subtitle": "Klicka här för mer information",

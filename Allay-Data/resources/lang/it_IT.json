@@ -90,7 +90,7 @@
   "minecraft:action.hint.exit.console.raft": "Premi :_input_key.jump: per scendere dalla zattera",
   "minecraft:action.hint.exit.console.skeleton_horse": "Premi :_input_key.sneak: per scendere",
   "minecraft:action.hint.exit.console.strider": "Premi :_input_key.sneak: per scendere",
-  "minecraft:action.hint.exit.console.trader_llama": "Premi :_input_key.sneak: per scendere",
+  "minecraft:action.hint.exit.console.trader_llama": "Premi :_input_key.sneak: per scendere",
   "minecraft:action.hint.exit.donkey": "Tocca il movimento furtivo per scendere",
   "minecraft:action.hint.exit.horse": "Tocca il movimento furtivo per scendere",
   "minecraft:action.hint.exit.llama": "Tocca il movimento furtivo per scendere",

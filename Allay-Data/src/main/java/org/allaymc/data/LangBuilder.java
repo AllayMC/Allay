@@ -153,6 +153,7 @@ public class LangBuilder {
                 }
             }
             try {
+                json = json.replace(" ", " ");
                 Files.deleteIfExists(path);
                 Files.createFile(path);
                 Files.writeString(path, json, StandardCharsets.UTF_8);
@@ -173,7 +174,7 @@ public class LangBuilder {
                 line = fastTwoPartSplit(line, "#", "")[0];
             }
             var split = fastTwoPartSplit(line, "=", "");
-            if (split[0].contains(":")){
+            if (split[0].contains(":")) {
                 // 目前有几个形如“attribute.name.minecraft:attack_damage”, 不符合命名空间标识符格式
                 // 懒得搞了，直接删除
                 return;

@@ -1352,7 +1352,7 @@
   "minecraft:deathScreen.title": "Meghaltál!",
   "minecraft:deathScreen.title.hardcore": "Játék vége",
   "minecraft:deathScreen.titleScreen": "Főképernyő",
-  "minecraft:difficulty.lock.question": "Biztosan zárolod ennek a világnak a nehézségét? Így a nehézség mindig %1$s lesz, amit többé nem módosíthatsz.",
+  "minecraft:difficulty.lock.question": "Biztosan zárolod ennek a világnak a nehézségét? Így a nehézség mindig %1$s lesz, amit többé nem módosíthatsz.",
   "minecraft:difficulty.lock.title": "Világ nehézségének zárolása",
   "minecraft:dimension.dimensionName0": "Felvilág",
   "minecraft:dimension.dimensionName1": "Alvilág",

@@ -1166,7 +1166,7 @@
   "minecraft:commands.xp.success.levels": "Gav %1$d nivåer til %2$s",
   "minecraft:commands.xp.success.negative.levels": "Tok %1$d nivåer fra %2$s",
   "minecraft:comment.comment": "%d kommentar",
-  "minecraft:comment.commentplaceholder": "Kommenter ...",
+  "minecraft:comment.commentplaceholder": "Kommenter ...",
   "minecraft:comment.comments": "%d kommentarer",
   "minecraft:comment.like": "%d likertrykk",
   "minecraft:comment.likes": "%d likertrykk",

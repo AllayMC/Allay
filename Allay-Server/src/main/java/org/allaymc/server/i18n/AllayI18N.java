@@ -1,5 +1,6 @@
 package org.allaymc.server.i18n;
 
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.I18nLoader;
 import org.allaymc.api.i18n.LangCode;
@@ -16,6 +17,7 @@ import static org.allaymc.api.i18n.I18n.isValidKeyCharacter;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class AllayI18N implements I18n {
 
     protected EnumMap<LangCode, Map<String, String>> langMap = new EnumMap<>(LangCode.class);
@@ -27,7 +29,12 @@ public class AllayI18N implements I18n {
         this.defaultLangCode = defaultLangCode;
         setDefaultLangCode(defaultLangCode);
         for (var langCode : LangCode.values()) {
-            langMap.put(langCode, i18NLoader.getLangMap(langCode));
+            try {
+                langMap.put(langCode, i18NLoader.getLangMap(langCode));
+            } catch (Exception e) {
+                log.error("Error in parse {}", langCode.name());
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -57,7 +64,7 @@ public class AllayI18N implements I18n {
             var arg = args[argIndex];
             while (orderedParamIndex != -1) {
                 lang = new StringBuilder(lang).replace(orderedParamIndex, orderedParamIndex + 2, arg).toString();
-                orderedParamIndex = findOrderedParamIndex(lang,  order);
+                orderedParamIndex = findOrderedParamIndex(lang, order);
             }
             argIndex++;
             order++;
