@@ -46,6 +46,10 @@ tasks.register<DefaultTask>("buildFast") {
     group = "alpha build"
 }
 
+tasks.register<DefaultTask>("buildForGithubAction") {
+    group = "alpha build"
+}
+
 tasks.build {
     group = "alpha build"
 }
@@ -101,6 +105,13 @@ subprojects {
         tasks["testClasses"].enabled = false
         tasks["test"].enabled = false
         tasks["check"].enabled = false
+    }
+
+    tasks.register<DefaultTask>("buildForGithubAction") {
+        dependsOn(tasks.build)
+        group = "alpha build"
+        tasks["javadoc"].enabled = false
+        tasks["javadocJar"].enabled = false
     }
 
     tasks.build {

@@ -2,21 +2,34 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "action" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "action" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # support for ipv6
+      - name: Set up WARP
+        uses: fscarmen/warp-on-actions@v1.1
+        with:
+          stack: dual
       - uses: actions/checkout@v4
+      - run: chmod +x gradlew
       - uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'graalvm'
-          cache: 'gradle'
-      - run: gradle build
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: wrapper
+          cache-overwrite-existing: true
+          build-scan-publish: true
+          build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-service-agree: "yes"
+          arguments: build --scan
       - name: Upload Allay-API
         uses: actions/upload-artifact@v4
         if: success()
