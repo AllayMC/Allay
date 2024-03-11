@@ -2,6 +2,13 @@ name: Java CI with Gradle
 
 on:
   push:
+    branches: ["master"]
+    paths:
+      - .github/workflows/build.yml
+      - Allay-API/src/**
+      - Allay-Server/src/**
+      - Allay-Data/**
+  pull_request:
     paths:
       - .github/workflows/build.yml
       - Allay-API/src/**
