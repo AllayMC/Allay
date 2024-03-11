@@ -33,7 +33,7 @@ idea {
 // Enable gradle wrapper update task
 tasks.wrapper {
     enabled = true
-    gradleVersion = GradleVersion.current().version
+    gradleVersion = "8.6"
 }
 
 tasks.prepareKotlinBuildScriptModel {
