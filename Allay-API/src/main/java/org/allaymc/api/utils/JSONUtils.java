@@ -211,6 +211,12 @@ public class JSONUtils {
         return GSON.fromJson(reader, type);
     }
 
+    public static <V> V fromLenient(InputStream inputStream, TypeToken<V> type) {
+        JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
+        reader.setLenient(true);
+        return GSON.fromJson(reader, type);
+    }
+
     /**
      * 宽松JSON反序列化（List）
      */

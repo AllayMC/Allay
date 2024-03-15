@@ -33,7 +33,7 @@ idea {
 // Enable gradle wrapper update task
 tasks.wrapper {
     enabled = true
-    gradleVersion = GradleVersion.current().version
+    gradleVersion = "8.6"
 }
 
 tasks.prepareKotlinBuildScriptModel {
@@ -43,6 +43,10 @@ tasks.prepareKotlinBuildScriptModel {
 // The build of the root module does not need to write logic,
 // and the build of the same name of all submodules will be automatically called
 tasks.register<DefaultTask>("buildFast") {
+    group = "alpha build"
+}
+
+tasks.register<DefaultTask>("buildForGithubAction") {
     group = "alpha build"
 }
 
@@ -101,6 +105,13 @@ subprojects {
         tasks["testClasses"].enabled = false
         tasks["test"].enabled = false
         tasks["check"].enabled = false
+    }
+
+    tasks.register<DefaultTask>("buildForGithubAction") {
+        dependsOn(tasks.build)
+        group = "alpha build"
+        tasks["javadoc"].enabled = false
+        tasks["javadocJar"].enabled = false
     }
 
     tasks.build {

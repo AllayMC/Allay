@@ -2,30 +2,55 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
+    paths:
+      - .github/workflows/build.yml
+      - Allay-API/src/**
+      - Allay-Server/src/**
+      - Allay-Data/**
   pull_request:
-    branches: [ "master" ]
+    paths:
+      - .github/workflows/build.yml
+      - Allay-API/src/**
+      - Allay-Server/src/**
+      - Allay-Data/**
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # support for ipv6
+      - name: Set up WARP
+        uses: fscarmen/warp-on-actions@v1.1
+        if: contains(github.ref_name, 'master')
+        with:
+          stack: dual
       - uses: actions/checkout@v4
+      - run: chmod +x gradlew
       - uses: actions/setup-java@v4
         with:
           java-version: '21'
-          distribution: 'graalvm'
-          cache: 'gradle'
-      - run: gradle build
+          distribution: 'zulu'
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: wrapper
+          cache-overwrite-existing: true
+          cache-read-only: false
+          build-scan-publish: true
+          build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-service-agree: "yes"
+          arguments: buildForGithubAction -p Allay-Server --scan
       - name: Upload Allay-API
         uses: actions/upload-artifact@v4
-        if: success()
+        if: success() && contains(github.ref_name, 'master')
         with:
           name: Allay-API
           path: Allay-API/build/libs/Allay-API.jar
       - name: Upload Allay-Server
         uses: actions/upload-artifact@v4
-        if: success()
+        if: success() && contains(github.ref_name, 'master')
         with:
           name: Allay-Server
           path: Allay-Server/build/libs/Allay-Server-all.jar

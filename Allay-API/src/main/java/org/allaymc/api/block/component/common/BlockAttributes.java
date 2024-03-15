@@ -17,9 +17,11 @@ import org.joml.primitives.AABBf;
 import java.awt.*;
 
 /**
+ * BlockAttributes store some of the metadata of the block
+ * <p>
  * Allay Project 2023/5/1
  *
- * @author daoge_cmd
+ * @author daoge_cmd | CoolLoong
  */
 @Getter
 @Accessors(fluent = true)
