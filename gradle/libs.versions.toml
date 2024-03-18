@@ -13,7 +13,7 @@ network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", ve
 blockstateupdater = { group = "org.cloudburstmc", name = "block-state-updater", version = "1.20.60-SNAPSHOT" }
 # Collections
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.13" }
-guava = { group = "com.google.guava", name = "guava", version = "33.0.0-jre" }
+guava = { group = "com.google.guava", name = "guava", version = "33.1.0-jre" }
 # Serialization
 gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.2" }
