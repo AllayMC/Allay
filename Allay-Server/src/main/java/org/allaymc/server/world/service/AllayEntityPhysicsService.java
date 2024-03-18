@@ -198,12 +198,12 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var ol = other.getLocation();
             var direction = new Vector3f(entity.getLocation()).sub(other.getLocation(), new Vector3f()).normalize();
             float distance = max(abs(ol.x() - loc.x()), abs(ol.z() - loc.z()));
-            float k;
+            float k = 0.05f * r;
             if (distance <= 0.01) continue;
             if (distance <= 1) {
-                k = (0.05f * r) * MathUtils.fastFloatInverseSqrt(distance);
+                k *= MathUtils.fastFloatInverseSqrt(distance);
             } else {
-                k = (0.05f * r) / distance;
+                k /= distance;
             }
             collisionMotion.add(direction.mul(k));
         }
@@ -235,7 +235,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var velocityFactor = entity.isOnGround() ? GROUND_VELOCITY_FACTOR : AIR_VELOCITY_FACTOR;
         var acceleration = velocityFactor * movementFactor;
         if (entity.isOnGround()) {
-            acceleration = (float) (movementFactor * effectFactor * Math.pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
+            acceleration *= (float) (effectFactor * Math.pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
         }
 
         var yaw = entity.getLocation().yaw();
