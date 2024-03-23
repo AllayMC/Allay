@@ -32,6 +32,11 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     }
 
     @Override
+    public CommandNode longNum(String name, CommandNode parent, long defaultValue) {
+        return new LongNode(name, parent, defaultValue);
+    }
+
+    @Override
     public CommandNode floatNum(String name, CommandNode parent, float defaultValue) {
         return new FloatNode(name, parent, defaultValue);
     }

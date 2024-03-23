@@ -75,11 +75,14 @@ public interface World {
         }
     }
 
-    @ApiStatus.Internal
-    void sendTime(EntityPlayer player);
+    void setTime(long time);
+
+    default void addTime(long amount) {
+        setTime(getWorldData().getTime() + amount);
+    }
 
     @ApiStatus.Internal
-    void tickTime(long tickNumber);
+    void sendTime(EntityPlayer player);
 
     void setDimension(Dimension dimension);
 

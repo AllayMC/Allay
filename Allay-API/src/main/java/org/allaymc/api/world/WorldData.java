@@ -207,15 +207,32 @@ public class WorldData {
 
     public synchronized void setTime(long time) {
         this.time = time;
+        rollbackTime();
     }
 
     public synchronized void addTime() {
         this.time++;
+        rollbackTime();
     }
 
-    public synchronized void addTime(int value) {
+    public synchronized void addTime(long value) {
         this.time += value;
+        rollbackTime();
     }
+
+    protected void rollbackTime() {
+        if (this.time > TIME_FULL) {
+            this.time = 0;
+        }
+    }
+
+    public static final long TIME_DAY = 0;
+    public static final long TIME_NOON = 6000;
+    public static final long TIME_SUNSET = 12000;
+    public static final long TIME_NIGHT = 14000;
+    public static final long TIME_MIDNIGHT = 18000;
+    public static final long TIME_SUNRISE = 23000;
+    public static final long TIME_FULL = 24000;
 
     public synchronized void setCurrentTick(long currentTick) {
         this.currentTick = currentTick;

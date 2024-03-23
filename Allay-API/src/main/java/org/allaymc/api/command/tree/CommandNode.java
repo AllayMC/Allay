@@ -139,6 +139,14 @@ public interface CommandNode {
         return intNum(name, 0);
     }
 
+    default CommandNode longNum(String name, long defaultValue) {
+        return addLeaf(getFactory().longNum(name, this, defaultValue));
+    }
+
+    default CommandNode longNum(String name) {
+        return longNum(name, 0);
+    }
+
     default CommandNode floatNum(String name, float defaultValue) {
         return addLeaf(getFactory().floatNum(name, this, defaultValue));
     }

@@ -27,6 +27,8 @@ public interface CommandNodeFactory {
 
     CommandNode intNum(String name, CommandNode parent, int defaultValue);
 
+    CommandNode longNum(String name, CommandNode parent, long defaultValue);
+
     CommandNode floatNum(String name, CommandNode parent, float defaultValue);
 
     CommandNode doubleNum(String name, CommandNode parent, double defaultValue);

@@ -56,7 +56,7 @@ public class AllayWorld implements World {
     protected final Thread thread;
     protected final Thread networkThread;
     protected long nextTimeSendTick;
-    public static final int TIME_SENDING_INTERVAL = 12 * 20;
+    public static final long TIME_SENDING_INTERVAL = 12 * 20;
     public static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
 
     public AllayWorld(WorldStorage worldStorage) {
@@ -183,8 +183,7 @@ public class AllayWorld implements World {
         }
     }
 
-    @Override
-    public void tickTime(long tickNumber) {
+    protected void tickTime(long tickNumber) {
         if (worldData.getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) {
             if (tickNumber >= nextTimeSendTick) {
                 worldData.addTime(TIME_SENDING_INTERVAL);
@@ -192,6 +191,12 @@ public class AllayWorld implements World {
                 nextTimeSendTick = tickNumber + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
             }
         }
+    }
+
+    @Override
+    public void setTime(long time) {
+        worldData.setTime(time);
+        sendTime(getPlayers());
     }
 
     @Override

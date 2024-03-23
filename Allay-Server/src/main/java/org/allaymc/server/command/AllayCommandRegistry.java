@@ -56,6 +56,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new UnbanIPCommand());
         register(new WhitelistCommand());
         register(new ScoreboardCommand());
+        register(new TimeCommand());
     }
 
     @Override
