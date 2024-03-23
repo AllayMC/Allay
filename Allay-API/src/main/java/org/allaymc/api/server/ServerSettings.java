@@ -110,10 +110,6 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("chunk-sending-strategy")
         private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.ASYNC;
 
-        @Comment("If the number of chunks to be sent in one batch is more than this value, the chunks will be sent in parallel")
-        @CustomKey("chunk-min-parallel-sending-threshold")
-        private int chunkMinParallelSendingThreshold = 4;
-
         @CustomKey("do-first-spawn-chunk-threshold")
         private int doFirstSpawnChunkThreshold = 56;
 
