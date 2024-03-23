@@ -51,7 +51,7 @@ public class ServerEventListener {
             int cx = ((int)loc.x()) >> 4;
             int cz = ((int)loc.z()) >> 4;
             list.add("Chunk: §a" + cx + ", " + cz);
-            list.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x() % 16, (int) loc.y(), (int) loc.z() % 16));
+            list.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x() & 15, (int) loc.y(), (int) loc.z() & 15));
             scoreboard.setLines(list);
             return true;
         }, 20);

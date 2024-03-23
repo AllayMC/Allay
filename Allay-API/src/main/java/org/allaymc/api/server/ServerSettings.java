@@ -123,8 +123,7 @@ public class ServerSettings extends OkaeriConfig {
 
         public enum ChunkSendingStrategy {
             ASYNC,
-            SYNC,
-            PARALLEL
+            SYNC
         }
     }
 
