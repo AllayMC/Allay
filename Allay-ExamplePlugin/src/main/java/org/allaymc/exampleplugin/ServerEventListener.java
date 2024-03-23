@@ -48,8 +48,10 @@ public class ServerEventListener {
             list.add("World: §a" + player.getWorld().getWorldData().getName());
             list.add("DimId: §a" + player.getDimension().getDimensionInfo().dimensionId());
             var loc = player.getLocation();
-            int cx = ((int)loc.x()) >> 4;
-            int cz = ((int)loc.z()) >> 4;
+            var chunk = player.getCurrentChunk();
+            if (chunk == null) return true;
+            int cx = chunk.getX();
+            int cz = chunk.getZ();
             list.add("Chunk: §a" + cx + ", " + cz);
             list.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x() & 15, (int) loc.y(), (int) loc.z() & 15));
             scoreboard.setLines(list);
