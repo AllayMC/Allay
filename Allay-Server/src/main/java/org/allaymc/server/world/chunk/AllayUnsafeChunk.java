@@ -71,6 +71,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         if (blockEntityNbtList != null && !blockEntityNbtList.isEmpty()) {
             for (var n : blockEntityNbtList) {
                 BlockEntity entity = BlockEntityHelper.fromNBT(dimension, n);
+                if (entity == null) continue;
                 Position3ic position = entity.getPosition();
                 var key = HashUtils.hashChunkXYZ(position.x() & 15, position.y(), position.z() & 15);
                 this.blockEntities.put(key, entity);
@@ -84,6 +85,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         if (entityNbtList != null && !entityNbtList.isEmpty()) {
             for (var n : entityNbtList) {
                 Entity entity = EntityHelper.fromNBT(dimension, n);
+                if (entity == null) continue;
                 dimension.getEntityService().addEntity(entity);
             }
             entityNbtList = null;
