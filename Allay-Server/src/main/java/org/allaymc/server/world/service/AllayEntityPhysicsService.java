@@ -454,6 +454,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
                 var entity = scheduledMove.entity;
+                // The entity may have been removed
+                if (!entities.containsKey(entity.getRuntimeId())) {
+                    continue;
+                }
                 // Calculate delta pos (motion)
                 var motion = scheduledMove.newLoc.sub(entity.getLocation(), new Vector3f());
                 entity.setMotion(motion);
@@ -497,10 +501,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return entities.containsKey(entity.getRuntimeId());
     }
 
+    /**
+     * Please note that this method usually been called asynchronously <p/>
+     * See {@link org.allaymc.server.network.processor.PlayerAuthInputPacketProcessor#handleAsync}
+     */
     @Override
     public void offerScheduledMove(Entity entity, Location3fc newLoc) {
         if (!entities.containsKey(entity.getRuntimeId())) {
-            log.warn("Entity " + entity.getRuntimeId() + " is not registered in physics service");
             return;
         }
         if (entity.getLocation().equals(newLoc)) return;

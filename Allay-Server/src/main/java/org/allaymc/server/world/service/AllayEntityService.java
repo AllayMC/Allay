@@ -44,8 +44,8 @@ public class AllayEntityService implements EntityService {
         var chunk = (AllayChunk) entity.getCurrentChunk();
         if (chunk == null)
             throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
-        entityPhysicsService.removeEntity(entity);
         chunk.removeEntity(entity.getRuntimeId());
+        entityPhysicsService.removeEntity(entity);
         entity.despawnFromAll();
         entity.setWillBeDespawnedNextTick(false);
         entity.setSpawned(false);

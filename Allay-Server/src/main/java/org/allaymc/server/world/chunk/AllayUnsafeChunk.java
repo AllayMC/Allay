@@ -99,9 +99,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         } while (!STATE_FIELD.compareAndSet(this, curr, next));
     }
 
-    private static void checkXYZ(int x, int y, int z) {
+    private void checkXYZ(int x, int y, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
-        Preconditions.checkArgument(y >= -512 && y <= 511);
+        Preconditions.checkArgument(y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight());
         Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 

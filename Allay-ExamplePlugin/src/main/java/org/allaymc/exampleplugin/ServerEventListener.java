@@ -47,9 +47,9 @@ public class ServerEventListener {
             list.add("Time: §a" + player.getWorld().getWorldData().getTime());
             list.add("World: §a" + player.getWorld().getWorldData().getName());
             list.add("DimId: §a" + player.getDimension().getDimensionInfo().dimensionId());
+            if (!player.isInWorld()) return true;
             var loc = player.getLocation();
             var chunk = player.getCurrentChunk();
-            if (chunk == null) return true;
             int cx = chunk.getX();
             int cz = chunk.getZ();
             list.add("Chunk: §a" + cx + ", " + cz);
