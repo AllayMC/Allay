@@ -69,12 +69,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public void beforeSetChunk(Dimension dimension) {
         if (blockEntityNbtList != null && !blockEntityNbtList.isEmpty()) {
-            for (var n : blockEntityNbtList) {
-                BlockEntity entity = BlockEntityHelper.fromNBT(dimension, n);
-                if (entity == null) continue;
-                Position3ic position = entity.getPosition();
+            for (var nbt : blockEntityNbtList) {
+                BlockEntity blockEntity = BlockEntityHelper.fromNBT(dimension, nbt);
+                if (blockEntity == null) continue;
+                Position3ic position = blockEntity.getPosition();
                 var key = HashUtils.hashChunkXYZ(position.x() & 15, position.y(), position.z() & 15);
-                this.blockEntities.put(key, entity);
+                this.blockEntities.put(key, blockEntity);
             }
             blockEntityNbtList = null;
         }
@@ -83,8 +83,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public void afterSetChunk(Dimension dimension) {
         if (entityNbtList != null && !entityNbtList.isEmpty()) {
-            for (var n : entityNbtList) {
-                Entity entity = EntityHelper.fromNBT(dimension, n);
+            for (var nbt : entityNbtList) {
+                Entity entity = EntityHelper.fromNBT(dimension, nbt);
                 if (entity == null) continue;
                 dimension.getEntityService().addEntity(entity);
             }
