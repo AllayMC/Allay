@@ -21,9 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, BiomeData, Map<BiomeType, BiomeData>> implements BiomeTypeRegistry {
 
-    // TODO: 暂时不知道为什么MutableNbtMap存储的信息转换回NbtMap后部分群系客户端不认
-    // 此vanillaBiomeDefinition仅用于发包，并将在解决上述问题后被移除
-    private NbtMap vanillaBiomeDefinition;
     private MutableNbtMap biomeDefinition;
 
     public AllayBiomeTypeRegistry() {
@@ -35,8 +32,7 @@ public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, Biom
     private void loadVanillaBiomeDefinition() {
         try (InputStream stream = AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions.nbt")) {
             assert stream != null;
-            vanillaBiomeDefinition = (NbtMap) NbtUtils.createGZIPReader(stream).readTag();
-            biomeDefinition = MutableNbtMap.from(vanillaBiomeDefinition);
+            biomeDefinition = MutableNbtMap.from((NbtMap) NbtUtils.createGZIPReader(stream).readTag());
             int i = 0;
             for (var biome : biomeDefinition.entrySet()) {
                 var type = VanillaBiomeId.values()[i];
@@ -56,7 +52,6 @@ public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, Biom
 
     @Override
     public NbtMap getBiomeDefinition() {
-//        return vanillaBiomeDefinition;
         return biomeDefinition.build();
     }
 }
