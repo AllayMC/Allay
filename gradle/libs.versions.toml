@@ -20,7 +20,7 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.2" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.14.0" }
 # Support Annotation
-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.30" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.32" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "24.1.0" }
 # zlib
 libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0.0.2-PNX" }
