@@ -194,6 +194,7 @@ accessibility.text.equals=Rovná sa	#
 accessibility.text.unsupported=Neznámy znak	#
 
 accessibility.toast=Oznámenie		### This is the name of the popup that appears when a player gets a notification for a game invite or achievement unlocked
+accessibility.gametip=Tip		### This is the name of the popup that appears when a player is shown a game tip
 
 accessibility.worldTemplates.help=Pomocník	#
 
@@ -926,6 +927,15 @@ commands.gamerule.type.nocheatsenabled=Pravidlo hry %1$s možno použiť, iba ak
 commands.gamerule.nopermission=Pravidlo %1$s môžu zmeniť iba majitelia servera	#
 commands.gamerule.norule=Nie je k dispozícii žiadne pravidlo hry s názvom %1$s	#
 commands.gamerule.success=Pravidlo hry %1$s sa aktualizovalo na %2$s	#
+commands.gametips.description=Povoliť alebo zakázať herné tipy v tomto zariadení	#
+commands.gametips.enabled=Herné tipy sú teraz povolené	#
+commands.gametips.disabled=Herné tipy sú teraz zakázané	#
+commands.gametips-off.description=Zakázať herné tipy v tomto zariadení	#
+commands.gametips-off.success=Herné tipy sú teraz zakázané	#
+commands.gametips-on.description=Povoliť herné tipy v tomto zariadení	#
+commands.gametips-on.success=Herné tipy sú teraz povolené	#
+commands.gametips-reset.description=Obnoviť herné tipy v tomto zariadení	#
+commands.gametips-reset.success=Herné tipy sú teraz obnovené	#
 commands.generic.async.initiated=Spustil sa príkaz %1$s (asynchrónny krok %2$d)	#
 commands.generic.boolean.invalid=%1$s nemá hodnotu true ani false	#
 commands.generic.chunk.notFound=Zadaný blok údajov sa nenašiel	#
@@ -948,12 +958,15 @@ commands.generic.exception=Pri pokuse o vykonanie tohto príkazu sa vyskytla nez
 commands.generic.invalidAgentType=Argument typu uplatnený na volič iba pre agenta	#
 commands.generic.invalidcontext=Neplatný kontext poskytnutý pre daný typ príkazu	#
 commands.generic.invalidDevice=Zadaný príkaz %s v tomto zariadení nie je podporovaný	#
+commands.generic.invalidMessage=Neplatná dĺžka správy	#
 commands.generic.invalidPlayerType=Argument typu uplatnený na volič iba pre hráča	#
 commands.generic.invalidType=Argument neznámeho typu	#
 commands.generic.levelError=Max. úroveň musí byť väčšia ako min. úroveň	#
 commands.generic.malformed.body=Telo chýba alebo je poškodené	#
 commands.generic.malformed.type=Neplatný typ požiadavky	#
 commands.generic.notimplemented=Neimplementované	#
+commands.generic.sourceNotLoaded=Hlasitosť zdroja nie je načítaná	#
+commands.generic.destinationNotLoaded=Hlasitosť cieľa nie je načítaná	#
 commands.generic.num.invalid=%1$s nie je platné číslo	#
 commands.generic.num.tooBig=Zadané číslo (%1$d) je príliš veľké. Najväčšia hodnota môže byť %2$d	#
 commands.generic.num.tooSmall=Zadané číslo (%1$d) je príliš malé. Najmenšia hodnota môže byť %2$d	#
@@ -1005,6 +1018,8 @@ commands.help.description=Poskytne pomoc/zoznam príkazov.	#
 commands.help.footer=Tip: Pri zadávaní príkazu použite kláves <tab> na automatické dokončenie príkazu alebo argumentov	#
 commands.help.header=--- Zobrazuje sa stránka Pomocníka %1$d z %2$d (/help <stránka>) ---	#
 commands.help.command.aliases=%s (aj %s):	#
+commands.hud.description=Mení viditeľnosť prvkov na priehľadovom displeji.	#
+commands.hud.success=Príkaz priehľadového displeja sa úspešne vykonal	#
 commands.immutableworld.description=Nastaví nemenný stav sveta.	#
 commands.immutableworld.info=immutableworld = %s	#
 commands.inputpermission.description=Nastavuje, či vstup hráča môže alebo nemôže ovplyvniť jeho postavu.	#
@@ -1148,7 +1163,9 @@ commands.recipes.playerDoesNotHaveRecipe=%1$s nemá recept: %2$s	#
 commands.recipes.notFound=Recept sa nepodarilo nájsť.	#
 commands.recipes.notUnlockable=Recept nie je možné odomknúť v knihe receptov.	#
 commands.reload.description=Znova načíta všetky súbory funkcií a skriptov zo všetkých balíkov správania.	#
+commands.reload.editor.description=Znova načíta všetky súbory funkcií a skriptov zo všetkých balíkov správania alebo voliteľne reštartuje klienta a znova načíta všetky zdroje.	#
 commands.reload.success=Súbory funkcií a skriptov sa načítali znova.	#
+commands.reload.error=Vyskytla sa neočakávaná chyba.	#
 commands.replaceitem.description=Nahradí položky v inventároch.	#
 commands.replaceitem.failed=%s miesto %d sa nepodarilo nahradiť položkou %d * %s	#
 commands.replaceitem.keepFailed=Už existuje položka zaberajúca %s slot %d.	#
@@ -1312,6 +1329,8 @@ commands.spawnpoint.description=Nastaví miesto objavenia sa hráča.	#
 commands.spawnpoint.success.multiple.specific=Miesto objavenia sa hráča %1$s sa nastavilo na (%2$d, %3$d, %4$d)	#
 commands.spawnpoint.success.multiple.generic=Miesto objavenia sa hráča %1$s sa nastavilo	#
 commands.spawnpoint.wrongDimension=Miesto objavenia sa nemožno nastaviť v tejto dimenzii	#
+commands.clearrealmevents.description=Vymažú sa všetky udalosti Realm uložené v údajoch sveta.	#
+commands.clearrealmevents.start=Vymazávajú sa všetky udalosti Realm	#
 commands.clearspawnpoint.success.single=Odstránilo sa miesto objavenia sa hráča %1$s	#
 commands.clearspawnpoint.description=Odstráni sa miesto objavenia sa hráča.	#
 commands.clearspawnpoint.success.multiple=Odstránili sa miesta objavenia sa hráča %1$s	#
@@ -1877,6 +1896,8 @@ createWorldScreen.experimentalUpdateAnnounced2023=Aktualizácia 1.21	#
 createWorldScreen.experimentalUpdateAnnounced2023Description=Nové funkcie a obsah pre Minecraft verzie 1.21	#
 createWorldScreen.experimentalVillagerTradesRebalance=Úprava obchodovania s dedinčanmi	#
 createWorldScreen.experimentalVillagerTradesRebalanceDescription=Obsahuje aktualizované ponuky dedinčanov na účely obnovenia rovnováhy	#
+createWorldScreen.experimentalArmadillo=Pásavec a vlčie brnenie	#
+createWorldScreen.experimentalArmadilloDescription=Spoznajte pásavca a vystrojte svojho vlka novým vlčím brnením!	#
 createWorldScreen.worldPreferences=Predvoľby sveta	#
 createWorldScreen.startWithMap=Počiatočná mapa	#
 createWorldScreen.defaultName=Môj svet	#
@@ -2083,7 +2104,7 @@ realmsCreateScreen.offerNotAvailable.content=Zariadenie stratilo spojenie s obch
 realmsCreateScreen.extendRealms.content=Predplatné služby Realms ste predĺžili na maximálny čas. Momentálne nemôžete pridať tento dodatočný čas. Skúste to znova neskôr.	#
 realmsCreateScreen.twoUsers=2 hráči	#
 realmsCreateScreen.tenUsers=10 hráčov	#
-realmsCreateScreen.viewTOS=Ak chcete zobraziť podmienky a požiadavky služby Minecraft Realms, navštívte lokalitu https://aka.ms/minecraftrealmsterms v ľubovoľnom webovom prehliadači.	#
+realmsCreateScreen.viewTOS=Ak chcete zobraziť podmienky a požiadavky služby Minecraft Realms, navštívte lokalitu https://www.minecraft.net/eula v ľubovoľnom webovom prehliadači.	#
 realmsCreateScreen.viewPrivacyPolicyText=Ak chcete zobraziť zásady ochrany osobných údajov v službe Minecraft Realms, navštívte lokalitu https://aka.ms/mcprivacy v ľubovoľnom webovom prehliadači.	#
 realmsCreateScreen.waitingPurchase=Nákup prebieha. Nemalo by to trvať dlho.	#
 realmsCreateScreen.paymentFailed.title=Platobná služba	#
@@ -2151,6 +2172,11 @@ realmsPlusUpgradeNotice.title=Víta vás služba Realms Plus.	#
 realmsPlusUpgradeNotice.body=Vaše predplatné Realms sa inovovalo na Realms Plus. Bez ďalších výdavkov máte prístup k viac ako 150 balíkom obsahu z Trhoviska. Naraz môže hrať až 10 hráčov a všetci zadarmo získajú prístup k celému obsahu pre predplatiteľov na vašom serveri Realm.	#
 realmsPlusUpgradeNotice.continue=Pokračovať	#
 realmsPlusUpgradeNotice.viewpacks=Zobraziť balíky Realms Plus	#
+
+csbCreateScreen.popupTitle=Marketplace Pass		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.viewTOS=Ak chcete zobraziť podmienky a požiadavky predplatného Marketplace Pass, navštívte lokalitu https://aka.ms/MinecraftEULA v ľubovoľnom webovom prehliadači.		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.viewPrivacyPolicyText=Ak chcete zobraziť zásady ochrany osobných údajov predplatného Marketplace Pass, navštívte lokalitu https://aka.ms/mcprivacy v ľubovoľnom webovom prehliadači.		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.goBack=Naspäť	#
 
 csbCreateScreen.termsAndConditionsAgree=Súhlasím	#
 csbCreateScreen.termsAndConditionsHeader=Podmienky a požiadavky	#
@@ -2340,7 +2366,7 @@ realmsSettingsScreen.xboxOneStoreDisplayName=Obchod Xbox	#
 realmsSettingsScreen.amazonStoreDisplayName=Amazon Appstore	#
 realmsSettingsScreen.oculusStoreDisplayName=Oculus Store	#
 realmsSettingsScreen.berwickStoreDisplayName=„PlayStation Store“	#
-realmsSettingsScreen.PS4StoreDisplayName=„PlayStation Store“		#### CertRequirement: ["PlayStation Store"]
+realmsSettingsScreen.SonyStoreDisplayName=„PlayStation Store“		#### CertRequirement: ["PlayStation Store"]
 realmsSettingsScreen.unknownStoreDisplayName=neznámy obchod	#
 realmsSettingsScreen.extendingRealm=Predlžuje sa trvanie ríše...	#
 realmsSettingsScreen.offerError.title=Nákup sa spracúva	#
@@ -2431,6 +2457,28 @@ date.short_november=nov.	#
 date.short_december=dec.	#
 date.formatted=%d. %s %d	#
 date.formatted_alt=%d %s %d	#
+date.full_january=Január	#
+date.full_february=Február	#
+date.full_march=Marec	#
+date.full_april=Apríl	#
+date.full_may=máj	#
+date.full_june=Jún	#
+date.full_july=Júl	#
+date.full_august=August	#
+date.full_september=September	#
+date.full_october=Október	#
+date.full_november=November	#
+date.full_december=December	#
+
+date.daysAbbreviated3Char=%sd		### It needs to be abbreviated with no more than 3 characters
+date.hoursAbbreviated3Char=%sh		### It needs to be abbreviated with no more than 3 characters
+date.minutesAbbreviated3Char=%sm		### It needs to be abbreviated with no more than 3 characters
+date.secondsAbbreviated3Char=%ss		### It needs to be abbreviated with no more than 3 characters
+date.daysAbbreviated1Char=%sd		### It needs to be abbreviated with no more than 1 characters
+date.hoursAbbreviated1Char=%s h		### It needs to be abbreviated with no more than 1 characters
+date.minutesAbbreviated1Char=%s min		### It needs to be abbreviated with no more than 1 characters
+date.secondsAbbreviated1Char=%s s		### It needs to be abbreviated with no more than 1 characters
+date.timeLeft=Zostáva: %s	#
 
 dayOneExperience.carousel.title=Víta vás nová hra Minecraft!	#
 dayOneExperience.carousel.welcome_text=V tejto novej verzii hry Minecraft sa nachádza veľa nových, vzrušujúcich vecí! Pozrite si ich na Trhovisku, vytvorte ríšu a hrajte online s priateľmi z rôznych platforiem.	#
@@ -2533,6 +2581,7 @@ deathScreen.quit=Hlavná ponuka	#
 deathScreen.quit.confirm=Naozaj chcete skončiť?	#
 deathScreen.quit.confirmToMainMenuWarning=Naozaj chcete skončiť hru a prejsť do hlavnej ponuky?	#
 deathScreen.quit.confirmToMainMenuTitleWarning=Skončiť a prejsť do hlavnej ponuky?	#
+deathScreen.quit.eduCloud.confirmLeaveWarning=Naozaj chcete uložiť a opustiť hru?%sVáš svet nahráme aj na cloudové úložisko!	#
 deathScreen.quit.secondaryClient=Uložiť a opustiť	#
 deathScreen.quit.secondaryClient.confirmLeaveWarning=Naozaj chcete uložiť a opustiť hru?	#
 deathScreen.quit.secondaryClient.confirmLeaveTitleWarning=Uložiť a opustiť	#
@@ -2915,6 +2964,7 @@ exports.share.file=Zdieľať %s	#
 exports.suspendWarning.client.content=Upozornenie: Ak budete pokračovať, budete odpojení od tejto relácie hry pre viacerých hráčov.	#
 exports.suspendWarning.host.content=Upozornenie: Ak budete pokračovať, relácia hry pre viacerých hráčov sa ukončí pre všetkých hráčov.	#
 exports.suspendWarning.title=Upozornenie	#
+exports.eduCloud.suspendWarning.host.content=Naozaj chcete uložiť a opustiť hru?%1Upozornenie: Ak to urobíte, pre všetkých hráčov sa skončí hra pre viacerých hráčov.%1Váš svet nahráme aj na cloudové úložisko!	#
 exports.fileError.title=Nepodarilo sa uložiť súbor	#
 exports.fileError.body=Disk môže byť plný alebo chránený proti zápisu, alebo sa súbor môže používať. Uistite sa, že súbor nie je otvorený, a skúste to znova.	#
 
@@ -2960,6 +3010,14 @@ feed.daysAgo=Pred %d d	#
 feed.hoursAgo=Pred %d h	#
 feed.minutesAgo=Pred %d min	#
 feed.now=Práve teraz	#
+feed.narrationDayAgo=Uverejnené pred 1 dňom		#### This social media post was posted one day ago
+feed.narrationDaysAgo=Uverejnené pred %d dňami		#### This social media post was posted x days ago
+feed.narrationHourAgo=Uverejnené pred 1 hodinou		#### This social media post was posted one hour ago
+feed.narrationHoursAgo=Uverejnené pred %d hodinami		#### This social media post was posted x hours ago
+feed.narrationMinuteAgo=Uverejnené pred 1 minútou		#### This social media post was posted one minute ago
+feed.narrationMinutesAgo=Uverejnené pred %d minútami		#### This social media post was posted x minutes ago
+feed.narrationNow=Uverejnené práve teraz		#### This social media post was posted just now
+feed.narrationDate=Uverejnené %d. %s %d		#### This social media post was posted on 'month day, year' ex. Posted on March 12, 2023
 feed.whatup=Čo robíte?	#
 feed.upload=Snímka obrazovky sa odovzdáva...	#
 feed.manage=Spravovať informačný kanál	#
@@ -3012,11 +3070,11 @@ gameMode.hardcore=Drsný režim!	#
 gameMode.spectator=Režim diváka	#
 gameMode.survival=Režim prežitia	#
 
-gameTip.cameraMovement.mouse=Rozhliadnite sa po okolí. Pomocou myši sa otáčajte	#
+gameTip.cameraMovement.mouse=Rozhliadnutie sa po okolí[LINEBREAK]Pomocou myši sa otáčajte		#### {StrContains='LINEBREAK'}
 gameTip.cameraMovement.touch=Dotknutím sa obrazovky a potiahnutím sa rozhliadnete po okolí	#
 gameTip.cameraMovement.controller=Posúvaním :tip_right_stick: sa rozhliadnete po okolí	#
 
-gameTip.playerMovement.mouse=Posúvajte sa pomocou klávesov :_input_key.forward:, :_input_key.left:, :_input_key.back:, :_input_key.right:. Skáčte pomocou medzerníka	#
+gameTip.playerMovement.mouse=Pohybujte sa pomocou klávesov :_input_key.forward:, :_input_key.left:, :_input_key.back:, :_input_key.right:	#
 gameTip.playerMovement.touch=Pohybujte sa pomocou joysticku	#
 gameTip.playerMovement.touch.classic=Pohybujte sa pomocou joysticku	#
 gameTip.playerMovement.controller=Posúvaním :tip_left_stick: sa presuniete po okolí	#
@@ -3029,20 +3087,27 @@ gameTip.breakBlock.mouse=Podržaním ľavého tlačidla rozbíjajte bloky	#
 gameTip.breakBlock.touch=Ťuknutím a podržaním rozbijete bloky	#
 gameTip.breakBlock.touch.classic=Ťuknutím a podržaním rozbijete bloky	#
 gameTip.breakBlock.controller=Ťuknutím a podržaním rozbijete bloky	#
+gameTip.breakBlock.touch.crosshair=Ťuknutím a podržaním :tip_virtual_button_action_attack_or_destroy:[LINEBREAK]rozbijete bloky 	#### {StrContains='LINEBREAK'}
 
-gameTip.placeBlock.mouse=Kliknutím umiestnite blok	#
+gameTip.placeBlock.mouse=Kliknutím pravým tlačidlom umiestnite blok	#
 gameTip.placeBlock.touch=Ťuknutím umiestnite blok	#
 gameTip.placeBlock.controller=Kliknutím na zem umiestnite blok	#
+gameTip.placeBlock.touch.crosshair=Ťuknutím na :tip_virtual_button_action_build_or_use: umiestnite blok	#
 
-gameTip.openInventory.mouse=Otvorte svoj inventár. Stlačte tlačidlo :_input_key.inventory:	#
-gameTip.openInventory.touch=Otvorte inventár, aby ste videli recepty na výrobu predmetov	#
-gameTip.openInventory.controller=Stlačením tlačidla :_input_key.inventory: otvoríte inventár	#
+gameTip.openInventorySurvival.mouse=Otvorenie inventára[LINEBREAK]Stlačte :_input_key.inventory:		#### {StrContains='LINEBREAK'}
+gameTip.openInventorySurvival.touch=Otvorte inventár, aby ste videli recepty na výrobu predmetov	#
+gameTip.openInventorySurvival.controller=Stlačením tlačidla :_input_key.inventory: otvoríte inventár	#
+
+gameTip.openInventoryCreative.mouse=Otvorenie inventára[LINEBREAK]Stlačte :_input_key.inventory:		#### {StrContains='LINEBREAK'}
+gameTip.openInventoryCreative.touch=Otvorte inventár, aby ste videli stavebné bloky	#
+gameTip.openInventoryCreative.controller=Stlačením tlačidla :_input_key.inventory: otvoríte inventár	#
+
 
 gameTip.sneak.mouse=Zakrádate sa! Teraz nemôžete spadnúť z okrajov	#
 gameTip.sneak.touch=Zakrádate sa, takže nemôžete spadnúť z okrajov	#
 gameTip.sneak.controller=Zakrádate sa, takže nemôžete spadnúť z okrajov	#
 
-gameTip.placeCraftingTable.mouse=Umiestnite pracovný stôl. Podržte ho a kliknutím umiestnite	#
+gameTip.placeCraftingTable.mouse=Umiestnenie pracovného stola[LINEBREAK]Podržte ho a kliknutím umiestnite		#### {StrContains='LINEBREAK'}
 gameTip.placeCraftingTable.touch=Umiestnite pracovný stôl ťuknutím na zem	#
 gameTip.placeCraftingTable.controller=Umiestnite pracovný stôl, podržte a potom ťuknite na zem	#
 
@@ -3153,6 +3218,8 @@ gui.editor.copyProject.failedMessage=Nepodarilo sa vytvoriť kópiu tohto projek
 
 gui.edu.exitGameWarningCaption=Minecraft Education	### Use Minecraft 教育版 in zh_CN translation
 gui.edu.exitGameWarningMessage=Ukončite Minecraft Education?		### Use 离开 Minecraft 教育版? in zh_CN translation
+gui.edu.exitGameWarningCaptionPreview=Ukážka hry Minecraft Education	#
+gui.edu.exitGameWarningMessagePreview=Ukončiť ukážku hry Minecraft Education?	#
 
 updateScreen.update=Aktualizovať	#
 updateScreen.updateRequired=Požaduje sa aktualizácia	#
@@ -3256,7 +3323,7 @@ howtoplay.beacons=Lúče	#
 howtoplay.beacons.text.1=Aktívne lúče vysielajú na oblohu jasný kužeľ svetla.	#
 howtoplay.beacons.text.2=Vyrábajú sa zo skla, obsidiánu a netheritových hviezd (ktoré získate porazením withera).	#
 howtoplay.beacons.header.1=Výstavba	#
-howtoplay.beacons.text.3=Lúče sa musia umiestniť tak, aby medzi nimi a oblohou neboli žiadne prekážky. Musia stáť na pyramídach zo železných, zlatých, smaragdových alebo diamantových blokov.	#
+howtoplay.beacons.text.3=Lúče musia byť na vrchole pyramídy zo železných, zlatých, smaragdových, diamantových alebo netheritových blokov umiestnené tak, aby medzi nimi a oblohou neboli žiadne prekážky.	#
 howtoplay.beacons.text.4=Materiál, na ktorom je lúč umiestnený, nemá na silu lúča žiadny účinok.	#
 howtoplay.beacons.header.2=Použitie	#
 howtoplay.beacons.text.5=V ponuke lúča môžete pre lúč vybrať jednu primárnu silu. Čím viac poschodí má vaša pyramída, tým viac síl môžete mať.	#
@@ -3343,8 +3410,8 @@ howtoplay.commandBlocks.text.5.1=§eImpulz§f – uložený príkaz vykoná iba 
 howtoplay.commandBlocks.text.5.2=§eReťaz§f – uložený príkaz vykoná v prípade, že príkazový blok za ním vykonal alebo nevykonal svoj príkaz. 	#
 howtoplay.commandBlocks.text.5.3=§eOpakovanie§f – po aktivovaní bude tento príkazový blok pokračovať vo vykonávaní uloženého príkazu, kým bude existovať.	#
 howtoplay.commandBlocks.text.6=§ePodmienka§f – správanie príkazového bloku ovplyvňujú dve podmienky:	#
-howtoplay.commandBlocks.text.6.1=§eNepodmienená§f – uložený príkaz vykoná dokonca aj v prípade, že príkazový blok za ním nevykonal svoj príkaz.	#
-howtoplay.commandBlocks.text.6.2=§ePodmienená§f – uložený príkaz vykoná iba v prípade, že príkazový blok za ním úspešne vykonal svoj príkaz.	#
+howtoplay.commandBlocks.text.6.1=§eNepodmienený§f – uložený príkaz vykoná dokonca aj v prípade, že príkazový blok za ním nevykonal svoj príkaz.	#
+howtoplay.commandBlocks.text.6.2=§ePodmienený§f – uložený príkaz vykoná iba v prípade, že príkazový blok za ním úspešne vykonal svoj príkaz.	#
 howtoplay.commandBlocks.text.7=§eRudit§f – správanie príkazového bloku ovplyvňujú dve nastavenia ruditu:	#
 howtoplay.commandBlocks.text.7.1=§ePotrebuje rudit§f – na aktivovanie požaduje ruditový signál.	#
 howtoplay.commandBlocks.text.7.2=§eVždy aktívny§f – na aktivovanie nepožaduje ruditový signál.	#
@@ -3355,7 +3422,7 @@ howtoplay.commands.text.1=Príkazy možno vykonávať z chatu. Pred zadávaním 
 howtoplay.commands.text.2=K dispozícii je množstvo príkazov, ktoré vám umožnia robiť úžasné veci. Existuje veľa externých zdrojov, ktoré vám poskytnú všetky informácie, aké kedy budete potrebovať.	#
 
 howtoplay.conduits=Žiariče	#
-howtoplay.conduits.text.1=Aktívny žiarič vám poskytne schopnosti pod vodou.	#
+howtoplay.conduits.text.1=Aktívny žiarič vám dáva silu, keď ste pod vodou a keď prší.	#
 howtoplay.conduits.text.2=Žiarič sa vyrába z ulít lodeniek a srdca mora. Žiarič čerpá energiu z prizmarínu a morských lampášov.	#
 howtoplay.conduits.header.1=Konštrukcia	#
 howtoplay.conduits.text.3=Aktivovaný žiarič poskytne energiu zo žiariča hocičomu v blízkosti.	#
@@ -3369,6 +3436,7 @@ howtoplay.craftingATool.text.2.gamepad=Ak chcete vyrobiť nástroj, otvorte svoj
 howtoplay.craftingATool.text.2.touch=Ak chcete vyrobiť nástroj, otvorte svoj §epracovný stôl§f:crafting_table: tak, že sa k nemu priblížite a kliknete naň. Môžete vyrobiť základnú verziu väčšiny nástrojov pomocou dvoch palíc a niekoľkých dosiek – vaša §ekniha receptov§f vám povie, ako na to!	#
 
 howtoplay.worldBuilder=Staviteľ sveta	#
+howtoplay.worldBuilder.title=Pravidlá hry: staviteľ sveta	#
 howtoplay.worldBuilder.text.1=Ak chce hráč umiestňovať alebo používať určité bloky alebo predmety z vydania Minecraft Education, musí mať špeciálnu schopnosť nazývanú Staviteľ sveta.	#
 howtoplay.worldBuilder.text.2=Po aktivovaní podvádzania môže hostiteľ povoliť alebo zakázať schopnosť Staviteľ sveta ľubovoľným hráčom vo svete.	#
 howtoplay.worldBuilder.text.3=Schopnosť Staviteľ sveta možno udeliť všetkým hráčom vo svete spustením nasledujúceho príkazu:	#
@@ -3380,6 +3448,7 @@ howtoplay.worldBuilder.text.8=Ak chcete vytvoriť dopyt po svojej schopnosti Sta
 howtoplay.worldBuilder.text.9=/ability @p worldbuilder	#
 
 howtoplay.permissionBlocks=Bloky s povolením	#
+howtoplay.permissionBlocks.title=Pravidlá hry: bloky s povolením	#
 howtoplay.permissionBlocks.text.1=Minecraft Education obsahuje niekoľko špeciálnych blokov, ktoré učiteľom uľahčujú vytváranie a používanie lekcií. Umiestňovať a ničiť tieto bloky môžu len hráči so schopnosťou Staviteľ sveta. Obmedzeniam týchto blokov podliehajú len hráči bez schopnosti Staviteľ sveta.	#
 howtoplay.permissionBlocks.title.1=Povoliť/Zakázať	#
 howtoplay.permissionBlocks.text.2=Bloky Povoliť a Zakázať určujú, kde vo svete môžu hráči budovať.	#
@@ -3396,7 +3465,7 @@ howtoplay.playingTogether.header.1=Hra pre viacerých hráčov online	#
 howtoplay.playingTogether.text.2=Každý nový svet, ktorý vytvoríte, začne s povolenou hrou pre viacerých hráčov. Ak ho chcete urobiť §esúkromným§f, prejdite do nastavení sveta a vypnite hru pre viacerých hráčov.	#
 howtoplay.playingTogether.header.2=Pripojenie k hre online	#
 howtoplay.playingTogether.text.3=Ak chcete hrať s ostatnými, prejdite na §ekartu Priatelia§f, aby ste videli všetky dostupné služby Realms, Priateľov a LAN hry. Len vyberte akúkoľvek hru, aby ste sa k nej mohli pripojiť.	#
-howtoplay.playingTogether.text.4=Keď začnete hrať alebo sa pripojiť k hre online, vaši priatelia to uvidia v ich karte Priatelia. Ak sa pripoja, bude viditeľná aj pre ich priateľov.	#
+howtoplay.playingTogether.text.4=Keď začnete hrať alebo sa pripojíte k hre online, vaši priatelia to uvidia v ich karte Priatelia. Ak sa pripoja, bude viditeľná aj pre ich priateľov.	#
 howtoplay.playingTogether.text.5=Musíte byť prihlásení do §eMicrosoft Account§f s funkčným internetovým pripojením pre hranie hry pre viacerých hráčov.	#
 howtoplay.playingTogether.header.3=Realms – najlepší spôsob hrania spolu	#
 howtoplay.playingTogether.text.6=Hranie s priateľmi je vďaka §eRealms§f veľmi jednoduché.	#
@@ -3409,19 +3478,23 @@ howtoplay.playingTogether.realms=Vyskúšať Realms	#
 howtoplay.playingTogether.signIn=Prihláste sa, aby ste vyskúšali Realms	#
 
 howtoplay.chalkboard=Tabule	#
+howtoplay.chalkboard.title=Pravidlá hry: tabule	#
 howtoplay.chalkboard.text.1=Tabule slúžia na zobrazenie textu vo svete. Zobrazujú viac textu než značky, po umiestnení ich možno upravovať a k dispozícii sú v troch veľkostiach: tabuľka, plagát a tabuľa. Prepínač uzamknutia umožňuje zabrániť hráčom, ktorí nie sú staviteľmi sveta, v ničení alebo úpravách tabúľ. Ak chcete upraviť existujúcu tabuľu, stlačte na nej tlačidlo :_input_key.use:.	#
 howtoplay.chalkboard.text.1.touch=Tabule slúžia na zobrazenie textu vo svete. Zobrazujú viac textu než značky, po umiestnení ich možno upravovať a k dispozícii sú v troch veľkostiach: tabuľka, plagát a tabuľa. Prepínač uzamknutia umožňuje zabrániť hráčom, ktorí nie sú staviteľmi sveta, v ničení alebo úpravách tabúľ. Ak chcete upraviť existujúcu tabuľu, ťuknite na ňu.	#
 
 howtoplay.chemistry=Chémia	#
+howtoplay.chemistry.title=Pravidlá hry: chémia	#
 howtoplay.chemistry.text.1=Študenti môžu simulovať reálny svet chémie pomocou blokov Chemické vybavenie. Pomocou jazdcov v Konštruktérovi prvkov vytvorte ktorýkoľvek zo 118 rôznych prvkov alebo umiestnením prvkov do Konštruktéra prvkov zobrazte ich zloženie. Spájaním prvkov v Konštruktérovi zlúčenín vytvárajte chemické zlúčeniny. Položením prvkov a zlúčenín na Laboratórny stôl vytvárajte predmety pre Minecraft. Pomocou Rozkladača materiálov redukujte bloky na prvky, z ktorých pozostávajú.	#
 howtoplay.chemistry.text.2=Prevzatím chemického zápisníka z webovej lokality vydania Minecraft Education získate komplexného sprievodcu chémiou v Minecrafte.	#
 
 howtoplay.npc=Iné postavy ako hráči	#
+howtoplay.npc.title=Pravidlá hry: iné postavy ako hráči	#
 howtoplay.npc.text.1=Iné postavy ako hráči (NPC) môžu poskytovať ďalšie informácie o lekciách, tipy alebo pokyny.	#
 howtoplay.npc.text.2=Postavy NPC môžu umiestňovať, odstraňovať, pomenovávať alebo upravovať iba stavitelia sveta. Postavy NPC môžu vykonávať príkazy a zabezpečovať prepojenie na webové lokality. Príkazy možno priradiť tlačidlám v okne dialógu s postavou NPC. Prepojenia na webové lokality vždy budú mať tlačidlo.	#
 howtoplay.npc.text.3=Postavy NPC majú rôzne vzhľady, z ktorých možno vyberať, a nepohybujú sa.	#
 
 howtoplay.camera=Fotoaparát	#
+howtoplay.camera.title=Pravidlá hry: fotoaparát	#
 howtoplay.camera.text.1=Fotoaparát umožňuje hráčom fotografovať vo svete.	#
 howtoplay.camera.text.2=Ak chcete snímať zo svojho pohľadu, stlačte tlačidlo :_input_key.use:.	#
 howtoplay.camera.text.2.touch=Ak chcete snímať zo svojho pohľadu, ťuknite a podržte a potom uvoľnite.	#
@@ -3430,14 +3503,17 @@ howtoplay.camera.text.3.touch=Ak chcete zhotoviť autoportrét, umiestnite fotoa
 howtoplay.camera.text.4=Obrázky možno zobraziť v portfóliu alebo vložiť do okna Kniha a brko.	#
 
 howtoplay.portfolio=Portfólio	#
+howtoplay.portfolio.title=Pravidlá hry: portfólio	#
 howtoplay.portfolio.text.1=Nasnímané obrázky sa zobrazia v portfóliu. Portfólio zobrazte stlačením tlačidla :_input_key.use:. Pri prezeraní portfólia môžete pridávať opisy k obrázkom, odstraňovať obrázky a exportovať obrázky ako PDF.	#
 howtoplay.portfolio.text.1.touch=Nasnímané obrázky sa zobrazia v portfóliu. Portfólio zobrazte ťuknutím a podržaním. Pri prezeraní portfólia môžete pridávať opisy k obrázkom, odstraňovať obrázky a exportovať obrázky ako PDF.	#
 
 howtoplay.classroomMode=Režim triedy	#
+howtoplay.classroomMode.title=Pravidlá hry: režim triedy	#
 howtoplay.classroomMode.text.1=Režim triedy je externá aplikácia, ktorá poskytuje pedagógom funkcie navrhnuté na uľahčenie interakcie so študentmi. Režim triedy môžete prevziať z webovej lokality vydania Minecraft Education.	#
 howtoplay.classroomMode.text.2=Ako hostiteľ sveta použite príkaz /classroommode na spustenie aplikácie Režim triedy a jej pripojenie k vydaniu Minecraft Education.	#
 
 howtoplay.codeBuilder=Zostavovač kódu	#
+howtoplay.codeBuilder.title=Pravidlá hry: zostavovač kódu	#
 howtoplay.codeBuilder.text.1=Zostavovač kódu umožňuje hráčom skúmať, tvoriť a hrať sa v Minecrafte písaním kódu pomocou známych platforiem, ktoré učia programovať.	#
 howtoplay.codeBuilder.text.2=Zostavovač kódu spustite stlačením tlačidla :_input_key.codeBuilder: alebo pomocou príkazu /code.	#
 howtoplay.codeBuilder.text.2.touch=Zostavovač kódu spustite ťuknutím na tlačidlo :code_builder_button: alebo pomocou príkazu /code.	#
@@ -3577,7 +3653,7 @@ howtoplay.fishing.text.3=Počkajte, kým neuvidíte, že sa k návnade začína 
 howtoplay.fishing.text.4.notTouch=Keď sa bubliny dotknú návnady, bude poskakovať nahor a nadol. Stlačením tlačidla :_input_key.use: naviňte návnadu. Dávajte pozor, aby vám ryba neodplávala.	#
 howtoplay.fishing.text.4.touch=Keď sa bubliny dotknú návnady, bude poskakovať nahor a nadol. Opätovným ťuknutím na tlačidlo Chytať ryby naviňte návnadu. Dávajte pozor, aby vám ryba neodplávala.	#
 
-howtoplay.food=Potrava	#
+howtoplay.food=Jedlo	#
 howtoplay.food.title=Pokyny na hranie: jedlo	#
 howtoplay.food.text.1=Počas dobrodružstiev budete postupne cítiť hlad – našťastie je Nadzemie plné jedla! Môžete obrať jablká zo stromov, mäso zo zvierat alebo prečo nevypestujte vlastné plodiny pomocou motyky?	#
 howtoplay.food.text.2.keyboard=Ak chcete zjesť jedlo, vyberte si ho na rýchlom paneli, potom kliknite a podržte pravé tlačidlo myši. Držte svoj §eukazovateľ hladu§f:shank: plný, aby sa vám pri poškodení vrátilo zdravie.	#
@@ -3676,7 +3752,7 @@ howtoplay.mounts=Vysadnutie na zviera	#
 howtoplay.mounts.text.1=Hráč môže jazdiť na dospelom §ekoňovi§f, §esomárovi§f, §emulici§f alebo §eťave§f. Iba kone môžu byť obrnené.	#
 howtoplay.mounts.text.2=Mulice a somáre možno vybaviť kapsami (na prepravu predmetov), a to pripojením truhlice. Tieto kapsy sú potom prístupné počas jazdy alebo zakrádania.	#
 howtoplay.mounts.header.1=Krotenie	#
-howtoplay.mounts.text.3.notTouch=Kone, somáre a mulice musíte najskôr §eskrotiť§f a až potom ich môžete používať. Hráč môže skrotiť koňa tak, že naň vysadne a udrží sa v sedle, kým sa ho kôň snaží zhodiť. Ak sa chcete pokúsiť skrotiť kone, somáre a mulice, stlačte tlačidlo :_input_key.use: prázdnou rukou.	#
+howtoplay.mounts.text.3.notTouch=Kone, somáre a mulice musíte najskôr §eskrotiť§f a až potom ich môžete využívať. Hráč môže skrotiť koňa tak, že naň vysadne a udrží sa v sedle, kým sa ho kôň snaží zhodiť. Ak sa chcete pokúsiť skrotiť kone, somáre a mulice, nemajte nič v ruke a stlačte tlačidlo :_input_key.use:.	#
 howtoplay.mounts.text.3.touch=Kone, somáre a mulice musíte §eskrotiť§f a až potom ich budete môcť používať. Hráč môže skrotiť koňa tak, že naň vysadne a udrží sa v sedle, kým sa ho kôň snaží zhodiť. Ak sa chcete pokúsiť skrotiť kone, somáre a mulice, ťuknite v ich blízkosti na tlačidlo Vysadnúť .	#
 howtoplay.mounts.text.4=Keď sa okolo koňa objavia srdcia, je skrotený a už sa nepokúsi hráča zhodiť.	#
 howtoplay.mounts.header.2=Jazda na zvieratách	#
@@ -3724,14 +3800,15 @@ howtoplay.movingAround.text.3b.windowsmr_controller=Stlačením tlačidla :windo
 howtoplay.gatheringResources=Zhromažďovanie zdrojov	#
 howtoplay.gatheringResources.title=Pokyny na hranie: zhromažďovanie zdrojov	#
 howtoplay.gatheringResources.text.1=Svet je plný zdrojov vrátane §estavebných blokov§f, §evýrobných materiálov§f a §ejedla§f.	#
-howtoplay.gatheringResources.text.2.nottouch=Väčšinu zdrojov, ako je hlina, drevo a tekvice, možno zbierať holými rukami. Namierte zameriavací krížik, ktorý je uprostred obrazovky na blok, a potom podržte tlačidlo :_input_key.attack:, kým nevypadne predmet – toto nazývame §erozbíjanie blokov§f.	#
-howtoplay.gatheringResources.text.2.touch=Väčšinu zdrojov, ako je hlina, drevo a tekvice, možno zbierať holými rukami. Jednoducho prejdite k nim, potom sa dotknite a podržte obrazovku, až kým nepustia predmet. Voláme to §erozbíjanie blokov§f.	#
-howtoplay.gatheringResources.text.2.touch.joystick_crosshair=Väčšinu zdrojov, ako je hlina, drevo a tekvice, možno zbierať holými rukami. Namierte zameriavací krížik, ktorý je uprostred obrazovky na blok, a potom stlačte a podržte tlačidlo útoku/ničenia :tip_virtual_button_action_attack_or_destroy:, kým nevypadne predmet – toto nazývame §erozbíjanie blokov§f.	#
+howtoplay.gatheringResources.text.2.nottouch=Môžete §erozbíjať bloky§f holými rukami a získavať tak zdroje ako hlinu a drevo. Namierte na blok, potom §estlačte a podržte§f :_input_key.attack:, až kým sa nerozbije a nevypadnú z neho zdroje. 	#
+howtoplay.gatheringResources.text.2.touch=Môžete §erozbíjať bloky§f holými rukami a získavať tak zdroje ako hlinu a drevo. §eŤuknite na blok a podržte§f, až kým sa nerozbije a nevypadnú z neho zdroje.	#
+howtoplay.gatheringResources.text.2.touch.joystick_crosshair=Môžete §erozbíjať bloky§f holými rukami a získavať tak zdroje ako hlinu a drevo. Namierte na blok, potom §eťuknite na a podržte§f :tip_virtual_button_action_attack_or_destroy:, až kým sa nerozbije a nevypadnú z neho zdroje. 	#
+howtoplay.gatheringResources.text.2.pc=Môžete §erozbíjať bloky§f holými rukami a získavať tak zdroje ako hlinu a drevo. Namierte na blok, potom §ekliknite na a podržte§f :_input_key.attack:, až kým sa nerozbije a nevypadnú z neho zdroje. 	#
 howtoplay.gatheringResources.text.3=Pozbierajte všetky vypustené zdroje tým, že prejdete cez lietajúce ikony.	#
 
 howtoplay.selectingItems=Výber predmetov	#
 howtoplay.selectingItems.title=Pokyny na hranie: výber predmetov	#
-howtoplay.selectingItems.text.1=Zdroje, ktoré si vyberiete, sa zobrazia vo vašom §erýchlom paneli§f, ktorý nájdete na spodku obrazovky.	#
+howtoplay.selectingItems.text.1=Zdroje, ktoré pozbierate, sa zobrazia vo vašom §erýchlom paneli§f, ktorý nájdete dole na obrazovke.	#
 howtoplay.selectingItems.text.2.keyboard=Ak chcete predmet držať vo svojej ruke, posuňte sa kolieskom myši, aby ste si vybrali predmet. Môžete tiež použiť číselné klávesy: 1 je prvé miesto na rýchlom paneli a 9 je posledné. 	#
 howtoplay.selectingItems.text.2.gamepad=Ak chcete predmet držať v ruke, použite :_input_key.cycleItemLeft: a :_input_key.cycleItemRight: na výber predmetu.	#
 howtoplay.selectingItems.text.2.touch=Ak chcete predmet držať v ruke, ťuknite naň v rýchlom paneli.	#
@@ -3739,7 +3816,7 @@ howtoplay.selectingItems.text.2.rift=Ak chcete predmet držať v  ruke, použite
 howtoplay.selectingItems.text.2.windowsmr=Ak chcete predmet držať v ruke, použite :windowsmr_left_touchpad_horizontal: na výber predmetu.	#
 howtoplay.selectingItems.text.3.nottouch=Niektoré predmety, napríklad vedrá, udice a luky, možno použiť ťuknutím na tlačidlo budovania/používania :_input_key.use:.	#
 howtoplay.selectingItems.text.3.touch=Niektoré predmety, napríklad vedrá, udice a luky, možno použiť dotknutím a podržaním kdekoľvek na obrazovke.	#
-howtoplay.selectingItems.text.3.touch.joystick_crosshair=Niektoré predmety, napríklad vedrá, udice a luky, možno použiť stlačením tlačidla na budovania/používanie :tip_virtual_button_action_buil_or_use:.	#
+howtoplay.selectingItems.text.3.touch.joystick_crosshair=Niektoré predmety, napríklad vedrá, udice a luky, možno použiť ťuknutím na tlačidlo budovania/používania :tip_virtual_button_action_buil_or_use:.	#
 howtoplay.selectingItems.header.1=1. Rýchly panel	#
 
 howtoplay.placingBlocks=Umiestnenie blokov	#
@@ -3748,7 +3825,7 @@ howtoplay.placingBlocks.text.1=Každý blok, ktorý ste zdvihli, sa môže vrát
 howtoplay.placingBlocks.text.2.nottouch=Vyberte blok v rýchlom paneli a potom stlačte :_input_key.use: na jeho umiestnenie.	#
 howtoplay.placingBlocks.text.2.touch=Ťuknutím na blok v rýchlom paneli ho vyberiete a následným ťuknutím niekde vo svete ho umiestnite.	#
 howtoplay.placingBlocks.text.2.touch.joystick_crosshair=Ťuknutím na blok v rýchlom paneli ho vyberiete, potom ťuknite na :tip_virtual_button_action_build_or_use : na jeho umiestnenie.	#
-howtoplay.placingBlocks.text.3=Nebojte sa, ak umiestnite niečo na chybnom mieste – jednoducho ho rozbite a znovu ho zdvihnite!	#
+howtoplay.placingBlocks.text.3=Nebojte sa, ak niečo dáte na nesprávne miesto – jednoducho to rozbite a znovu to zdvihnite!	#
 
 howtoplay.navigation=Navigácia	#
 howtoplay.navigation.text.1=Navigácia je dôležitá zručnosť, ktorú sa treba naučiť v hre Minecraft, pretože nájsť cestu domov nie je vždy ľahké.	#
@@ -3956,7 +4033,7 @@ howtoplay.weapons.header.5=Očarované zbrane	#
 howtoplay.weapons.text.7=Pre meč, luk, kušu a trojzubec existujú konkrétne očarovania, ktoré môžete získať z čarodejného stola alebo nákovy. Tieto očarovania zlepšia poškodenie, trvácnosť a dokonca podpália tvory.	#
 
 howtoplay.yourFirstCraft=Váš prvý výrobok	#
-howtoplay.yourFirstCraft.title=Pokyny na hranie: vaše prvé vyrábanie	#
+howtoplay.yourFirstCraft.title=Pokyny na hranie: váš prvý výrobok	#
 howtoplay.yourFirstCraft.header.1=1. Výrobná mriežka	#
 howtoplay.yourFirstCraft.text.1=Množstvo blokov ako drevo sa dá premeniť na užitočné predmety pomocou výroby. Ak chcete začať, jednoduchú §evýrobnú mriežku§f nájdete na pravej strane obrazovky inventára.	#
 howtoplay.yourFirstCraft.text.2=Napríklad vložte jedno poleno dreva kdekoľvek do výrobnej mriežky a vo §evýstupnom otvore§f sa objaví niekoľko dosiek.	#
@@ -3965,7 +4042,7 @@ howtoplay.yourFirstCraft.text.3.keyboard=Jednoducho presuňte svoje nové dosky 
 howtoplay.yourFirstCraft.text.3.gamepad=Jednoducho vyberte svoje nové dosky a objavia sa na vašom rýchlom paneli. A teraz ich môžete umiestniť vo svete!	#
 howtoplay.yourFirstCraft.header.2=2. Recept na výrobu predmetov	#
 howtoplay.yourFirstCraft.text.4=Niektoré predmety vyžadujú, aby ste svoje stavebné prísady umiestnili do určitého tvaru – tiež sa to nazýva §erecept§f.	#
-howtoplay.yourFirstCraft.text.5=Skúste dať dve dosky nad seba. Vznikne tak palica, ktorá sa hodí na výrobu najrôznejších vecí!	#
+howtoplay.yourFirstCraft.text.5=Skúste dať dve dosky nad seba, aby ste vytvorili palice. Sú užitočné na rôzne veci!	#
 
 immersive_reader.book_page_header=Strana %1 z %2	#
 immersive_reader.portfolio_page_header= Strana %1	#
@@ -3987,6 +4064,8 @@ level.editor.import.success=Importovanie projektu sa úspešne dokončilo	#
 level.editor.export.failed=Exportovanie projektu zlyhalo	#
 level.editor.import.failed=Importovanie projektu zlyhalo	#
 level.editor.import.failed.incompatibleEdition=Importovanie projektu zlyhalo: nepodporovaný formát súboru	#
+
+inbox.invite.title=Pozvánka do služby Realms	#
 
 invite.clear=Vymazať výber	#
 invite.send=Odoslať pozvánky (%d)	#
@@ -4797,6 +4876,7 @@ item.cake.name=Torta	#
 item.camera.name=Fotoaparát	#
 item.canBreak=Môže vyťažiť:	#
 item.canPlace=Možno umiestniť na:	#
+item.customProperties=Má vlastné funkcie	#
 item.itemLock.cantDrop=:hollow_star: Nepustiteľné veci nemôžu byť:	#
 item.itemLock.cantMove=:solid_star: Nepresúvateľné veci nemôžu byť:	#
 item.itemLock.hoverText.cantBe.moved=presunuté	#
@@ -4992,84 +5072,84 @@ item.hopper_minecart.name=Banský vozík s násypníkom	#
 item.tnt_minecart.name=Banský vozík s TNT	#
 item.pitcher_pod.name=Tobolka mäsožravej rastliny	#
 item.torchflower_seeds.name=Semená zázvoru	#
-item.spawn_egg.entity.agent.name=Narodenie agenta	#
-item.spawn_egg.entity.axolotl.name=Narodenie axolotla	#
-item.spawn_egg.entity.bee.name=Narodenie včely	#
-item.spawn_egg.entity.hoglin.name=Narodenie hoglina	#
-item.spawn_egg.entity.cat.name=Narodenie mačky	#
-item.spawn_egg.entity.chicken.name=Narodenie sliepky	#
-item.spawn_egg.entity.cow.name=Narodenie kravy	#
-item.spawn_egg.entity.cod.name=Narodenie tresky	#
-item.spawn_egg.entity.ender_dragon.name=Narodenie draka z konca sveta	#
-item.spawn_egg.entity.goat.name=Narodenie kozy	#
-item.spawn_egg.entity.pufferfish.name=Narodenie štvorzubca	#
-item.spawn_egg.entity.salmon.name=Narodenie lososa	#
-item.spawn_egg.entity.tropicalfish.name=Narodenie tropickej ryby	#
-item.spawn_egg.entity.pig.name=Narodenie prasaťa	#
-item.spawn_egg.entity.sheep.name=Narodenie ovce	#
-item.spawn_egg.entity.npc.name=Narodenie NPC	#
+item.spawn_egg.entity.agent.name=Vajce narodenia agenta	#
+item.spawn_egg.entity.axolotl.name=Vajce narodenia axolotla	#
+item.spawn_egg.entity.bee.name=Vajce narodenia včely	#
+item.spawn_egg.entity.hoglin.name=Vajce narodenia hoglina	#
+item.spawn_egg.entity.cat.name=Vajce narodenia mačky	#
+item.spawn_egg.entity.chicken.name=Vajce narodenia sliepky	#
+item.spawn_egg.entity.cow.name=Vajce narodenia kravy	#
+item.spawn_egg.entity.cod.name=Vajce narodenia tresky	#
+item.spawn_egg.entity.ender_dragon.name=Vajce narodenia draka z konca sveta	#
+item.spawn_egg.entity.goat.name=Vajce narodenia kozy	#
+item.spawn_egg.entity.pufferfish.name=Vajce narodenia štvorzubca	#
+item.spawn_egg.entity.salmon.name=Vajce narodenia lososa	#
+item.spawn_egg.entity.tropicalfish.name=Vajce narodenia tropickej ryby	#
+item.spawn_egg.entity.pig.name=Vajce narodenia prasaťa	#
+item.spawn_egg.entity.sheep.name=Vajce narodenia ovce	#
+item.spawn_egg.entity.npc.name=Vajce narodenia NPC	#
 item.spawn_egg.entity.npc.failed=Na zrodenie postavy NPC potrebujete tvorivý režim + povolenia operátora	#
-item.spawn_egg.entity.wolf.name=Narodenie vlka	#
-item.spawn_egg.entity.villager.name=Narodenie dedinčana	#
-item.spawn_egg.entity.villager_v2.name=Narodenie dedinčana	#
-item.spawn_egg.entity.vindicator.name=Narodenie pomstiteľa	#
-item.spawn_egg.entity.mooshroom.name=Narodenie mooshrooma	#
-item.spawn_egg.entity.squid.name=Narodenie kalmára	#
-item.spawn_egg.entity.glow_squid.name=Narodenie žiarivého kalmára	#
-item.spawn_egg.entity.rabbit.name=Narodenie králika	#
-item.spawn_egg.entity.bat.name=Narodenie netopiera	#
-item.spawn_egg.entity.ravager.name=Narodenie ničiteľa	#
-item.spawn_egg.entity.iron_golem.name=Narodenie železného golema	#
-item.spawn_egg.entity.snow_golem.name=Narodenie snežného golema	#
-item.spawn_egg.entity.ocelot.name=Narodenie ocelota	#
-item.spawn_egg.entity.parrot.name=Narodenie papagája	#
-item.spawn_egg.entity.horse.name=Narodenie koňa	#
-item.spawn_egg.entity.llama.name=Narodenie lamy	#
-item.spawn_egg.entity.trader_llama.name=Narodenie lamy obchodníka	#
-item.spawn_egg.entity.polar_bear.name=Narodenie medveďa bieleho	#
-item.spawn_egg.entity.donkey.name=Narodenie somára	#
-item.spawn_egg.entity.mule.name=Narodenie mulice	#
-item.spawn_egg.entity.skeleton_horse.name=Narodenie kostlivcového koňa	#
-item.spawn_egg.entity.zombie_horse.name=Narodenie zombie koňa	#
-item.spawn_egg.entity.zombie.name=Narodenie zombieho	#
-item.spawn_egg.entity.drowned.name=Narodenie utopenca	#
-item.spawn_egg.entity.creeper.name=Narodenie creepera	#
-item.spawn_egg.entity.skeleton.name=Narodenie kostlivca	#
-item.spawn_egg.entity.spider.name=Narodenie pavúka	#
-item.spawn_egg.entity.zombie_pigman.name=Narodenie zombie piglina	#
-item.spawn_egg.entity.strider.name=Narodenie kráčadla	#
-item.spawn_egg.entity.slime.name=Narodenie slizu	#
-item.spawn_egg.entity.enderman.name=Narodenie endermana	#
-item.spawn_egg.entity.silverfish.name=Narodenie rybenky	#
-item.spawn_egg.entity.cave_spider.name=Narodenie jaskynného pavúka	#
-item.spawn_egg.entity.ghast.name=Narodenie ghasta	#
-item.spawn_egg.entity.magma_cube.name=Narodenie magmovej kocky	#
-item.spawn_egg.entity.blaze.name=Narodenie žiarivca	#
-item.spawn_egg.entity.zombie_villager.name=Narodenie zombie dedinčana	#
-item.spawn_egg.entity.zombie_villager_v2.name=Narodenie zombie dedinčana	#
-item.spawn_egg.entity.witch.name=Narodenie strigy	#
-item.spawn_egg.entity.stray.name=Narodenie túlavého kostlivca	#
-item.spawn_egg.entity.husk.name=Narodenie huska	#
-item.spawn_egg.entity.wither_skeleton.name=Narodenie wither kostlivca	#
-item.spawn_egg.entity.guardian.name=Narodenie strážcu	#
-item.spawn_egg.entity.elder_guardian.name=Narodenie staršieho strážcu	#
-item.spawn_egg.entity.shulker.name=Narodenie shulkera	#
-item.spawn_egg.entity.endermite.name=Narodenie endermita	#
-item.spawn_egg.entity.evocation_illager.name=Narodenie privolávača	#
-item.spawn_egg.entity.vex.name=Narodenie vexa	#
-item.spawn_egg.entity.turtle.name=Narodenie morskej korytnačky	#
-item.spawn_egg.entity.dolphin.name=Narodenie delfína	#
-item.spawn_egg.entity.phantom.name=Narodenie prízraku	#
-item.spawn_egg.entity.panda.name=Narodenie pandy	#
-item.spawn_egg.entity.pillager.name=Narodenie plieniteľa	#
-item.spawn_egg.entity.piglin_brute.name=Narodenie násilného piglina	#
-item.spawn_egg.entity.piglin.name=Narodenie piglina	#
-item.spawn_egg.entity.fox.name=Narodenie líšky	#
-item.spawn_egg.entity.unknown.name=Narodenie	#
-item.spawn_egg.entity.wandering_trader.name=Narodenie potulného obchodníka	#
-item.spawn_egg.entity.wither.name=Narodenie withera	#
-item.spawn_egg.entity.zoglin.name=Narodenie zoglina	#
-item.spawn_egg.entity.sniffer.name=Narodenie čuchača	#
+item.spawn_egg.entity.wolf.name=Vajce narodenia vlka	#
+item.spawn_egg.entity.villager.name=Vajce narodenia dedinčana	#
+item.spawn_egg.entity.villager_v2.name=Vajce narodenia dedinčana	#
+item.spawn_egg.entity.vindicator.name=Vajce narodenia pomstiteľa	#
+item.spawn_egg.entity.mooshroom.name=Vajce narodenia mooshrooma	#
+item.spawn_egg.entity.squid.name=Vajce narodenia kalmára	#
+item.spawn_egg.entity.glow_squid.name=Vajce narodenia žiarivého kalmára	#
+item.spawn_egg.entity.rabbit.name=Vajce narodenia králika	#
+item.spawn_egg.entity.bat.name=Vajce narodenia netopiera	#
+item.spawn_egg.entity.ravager.name=Vajce narodenia ničiteľa	#
+item.spawn_egg.entity.iron_golem.name=Vajce narodenia železného golema	#
+item.spawn_egg.entity.snow_golem.name=Vajce narodenia snežného golema	#
+item.spawn_egg.entity.ocelot.name=Vajce narodenia ocelota	#
+item.spawn_egg.entity.parrot.name=Vajce narodenia papagája	#
+item.spawn_egg.entity.horse.name=Vajce narodenia koňa	#
+item.spawn_egg.entity.llama.name=Vajce narodenia lamy	#
+item.spawn_egg.entity.trader_llama.name=Vajce narodenia obchodníckej lamy	#
+item.spawn_egg.entity.polar_bear.name=Vajce narodenia ľadového medveďa	#
+item.spawn_egg.entity.donkey.name=Vajce narodenia somára	#
+item.spawn_egg.entity.mule.name=Vajce narodenia mulice	#
+item.spawn_egg.entity.skeleton_horse.name=Vajce narodenia kostlivcového koňa	#
+item.spawn_egg.entity.zombie_horse.name=Vajce narodenia zombie koňa	#
+item.spawn_egg.entity.zombie.name=Vajce narodenia zombie	#
+item.spawn_egg.entity.drowned.name=Vajce narodenia utopenca	#
+item.spawn_egg.entity.creeper.name=Vajce narodenia creepera	#
+item.spawn_egg.entity.skeleton.name=Vajce narodenia kostlivca	#
+item.spawn_egg.entity.spider.name=Vajce narodenia pavúka	#
+item.spawn_egg.entity.zombie_pigman.name=Vajce narodenia zombie piglina	#
+item.spawn_egg.entity.strider.name=Vajce narodenia kráčadla	#
+item.spawn_egg.entity.slime.name=Vajce narodenia slizu	#
+item.spawn_egg.entity.enderman.name=Vajce narodenia endermana	#
+item.spawn_egg.entity.silverfish.name=Vajce narodenia rybenky	#
+item.spawn_egg.entity.cave_spider.name=Vajce narodenia jaskynného pavúka	#
+item.spawn_egg.entity.ghast.name=Vajce narodenia ghasta	#
+item.spawn_egg.entity.magma_cube.name=Vajce narodenia magmovej kocky	#
+item.spawn_egg.entity.blaze.name=Vajce narodenia žiarivca	#
+item.spawn_egg.entity.zombie_villager.name=Vajce narodenia zombie dedinčana	#
+item.spawn_egg.entity.zombie_villager_v2.name=Vajce narodenia zombie dedinčana	#
+item.spawn_egg.entity.witch.name=Vajce narodenia strigy	#
+item.spawn_egg.entity.stray.name=Vajce narodenia túlavého kostlivca	#
+item.spawn_egg.entity.husk.name=Vajce narodenia huska	#
+item.spawn_egg.entity.wither_skeleton.name=Vajce narodenia wither kostlivca	#
+item.spawn_egg.entity.guardian.name=Vajce narodenia strážcu	#
+item.spawn_egg.entity.elder_guardian.name=Vajce narodenia staršieho strážcu	#
+item.spawn_egg.entity.shulker.name=Vajce narodenia shulkera	#
+item.spawn_egg.entity.endermite.name=Vajce narodenia endermita	#
+item.spawn_egg.entity.evocation_illager.name=Vajce narodenia privolávača	#
+item.spawn_egg.entity.vex.name=Vajce narodenia vexa	#
+item.spawn_egg.entity.turtle.name=Vajce narodenia morskej korytnačky	#
+item.spawn_egg.entity.dolphin.name=Vajce narodenia delfína	#
+item.spawn_egg.entity.phantom.name=Vajce narodenia prízraku	#
+item.spawn_egg.entity.panda.name=Vajce narodenia pandy	#
+item.spawn_egg.entity.pillager.name=Vajce narodenia plieniteľa	#
+item.spawn_egg.entity.piglin_brute.name=Vajce narodenia násilného piglina	#
+item.spawn_egg.entity.piglin.name=Vajce narodenia piglina	#
+item.spawn_egg.entity.fox.name=Vajce narodenia líšky	#
+item.spawn_egg.entity.unknown.name=Vajce narodenia	#
+item.spawn_egg.entity.wandering_trader.name=Vajce narodenia potulného obchodníka	#
+item.spawn_egg.entity.wither.name=Vajce narodenia withera	#
+item.spawn_egg.entity.zoglin.name=Vajce narodenia zoglina	#
+item.spawn_egg.entity.sniffer.name=Vajce narodenia čuchača	#
 item.trident.name=Trojzubec	#
 item.mushroom_stew.name=Hubová polievka	#
 item.muttonCooked.name=Varená baranina	#
@@ -5169,7 +5249,7 @@ item.glowstone_dust.name=Prach zo žiarivého kameňa	#
 item.shulker_shell.name=Shulkrova ulita	#
 item.totem.name=Totem neumierajúceho	#
 item.turtle_helmet.name=Pancier korytnačky	#
-item.turtle_shell_piece.name=Šupina	#
+item.turtle_shell_piece.name=Korytnačia šupina	#
 item.phantom_membrane.name=Blana z prízraku	#
 item.sweet_berries.name=Sladké bobule	#
 item.suspicious_stew.name=Podozrivý guláš	#
@@ -5829,7 +5909,7 @@ options.control_alt_keybinds_section=Nasledujúce klávesy sa používajú s „
 options.credits=Autori	#
 options.crouch=Zakrádať sa	#
 options.csbExpired=Platnosť uplynula %s	#
-options.csbHeading=MARKETPLACE PASS	#
+options.csbHeading=MARKETPLACE PASS			#### {StrContains="MARKETPLACE PASS"}
 options.csbInfoLine01=Katalóg viac ako 150 balíkov a predmetov z Trhoviska	#
 options.csbInfoLine02=Mesačne sa obnovujúci obsah	#
 options.csbSubheading=Obsah na Trhovisku	#
@@ -5851,13 +5931,15 @@ options.delete_account.confirm.button=Odstrániť	#
 options.dev_game_tip=Tipy na hranie hry	#
 options.dev_ad_show_debug_panel=Zobraziť znak EDU na paneli ladenia	#
 options.dev_ad_token_refresh_threshold=Značka EDU v prahu obnovenia tokenu (v sekundách)	#
-options.dev_ad_edu_max_token_refresh=Obnovenie maximálneho tokenu EDU (minúty)	#
+options.dev_ad_edu_max_signin_token_refresh=Obnovenie tokenu maximálneho prihlásenia EDU (minúty)	#
+options.dev_ad_edu_max_graph_token_refresh=Obnovenie tokenu maximálneho grafu EDU (minúty)	#
 options.dev_side_by_side_comparison_rate=Porovnávacia miera bok po boku	#
 options.dev_playfab_token_refresh_threshold=Čas obnovenia prahu tokenu Playfab v minútach	#
 options.dev_assertions_debug_break=Prerušenie kontrolných výrazov v ladiacom nástroji	#
 options.dev_assertions_show_dialog=Zobrazenie kontrolných výrazov v modálnom dialógovom okne	#
 options.dev_force_trial_mode=Vynútiť skúšobný režim	#
 options.dev_eduDemo=Ukážka Edu (vyžaduje opätovné prihlásenie)	#
+options.dev_eduCloudDownload=Preberanie do cloudu	#
 options.remote_imgui_toggle=Diaľkové rozhranie ImGui je povolené	#
 options.dev_enableDebugUI=Povoliť používateľské rozhranie ladenia	#
 options.dev_createRealmWithoutPurchase=Vytvoriť ríšu bez nákupu	#
@@ -5968,7 +6050,7 @@ options.dev_realmsEndpoint=Koncový bod služby Realms	#
 options.dev_realmsEndpointPayment=Platba za koncový bod služby Realms	#
 options.dev_realmsRelyingParty=Dôveryhodná strana služby Realms	#
 options.dev_realmsRelyingPartyPayment=Platba za dôveryhodnú stranu služby Realms	#
-options.dev_realms_stories=Povolenie príbehov z ríše (vyžaduje reštart)	#
+options.dev_realms_stories=Povoliť príbehy Realms	#
 options.dev_overrideXboxEnvironmentWindows=Prepísať Xbox Sandbox (v systéme Windows ovládané operačným systémom)	#
 options.dev_overrideXboxEnvironment=Prepísať Xbox Sandbox (požaduje sa reštartovanie)	#
 options.dev_xboxEnvironment=Prostredie Xbox Sandbox (požaduje sa reštartovanie)	#
@@ -6084,6 +6166,8 @@ options.fov.toggle=Zorné pole možno zmeniť pri hraní	#
 options.licenses=Licencie	#
 options.licensed_content=Licencovaný obsah	#
 options.networkSettings=Nastavenia siete	#
+options.ecoMode=Experimentálne funkcie šetrenia energie		#### {MaxLength='40'}
+options.enableEcoMode=Nižšia snímková frekvencia, keď je ovládač odpojený		#### {MaxLength='55'}
 options.font_license=Licencia na písmo	#
 options.font_license_body=%1	#
 options.livingRoomFOV=Zorné pole obývacej izby	#
@@ -6173,6 +6257,7 @@ options.sneakOption.toggle=Pre zakrádanie raz ťuknite na tlačidlo	#
 options.sneakOption.hold=Pre zakrádanie držte tlačidlo stlačené	#
 options.splitscreenInterfaceOpacity=Nepriehľadnosť priehľadového displeja počas rozdelenej obrazovky	#
 options.textBackgroundOpacity=Nepriehľadnosť pozadia textu	#
+options.actionBarTextBackgroundOpacity=Nepriehľadnosť pozadia panela akcií	#
 options.hidepaperdoll=Skryť papierovú bábiku	#
 options.showautosaveicon=Zobraziť ikonu automatického ukladania	#
 options.hold=Podržať	#
@@ -6365,7 +6450,6 @@ options.betaNewDeathScreenToggle=Nová obrazovka „Zomreli ste“ (experimentá
 options.betaNewDeathScreenToggle.disabled=Toto nastavenie nemôžete zmeniť počas hrania vo svete	#
 options.usetouchpad=Rozdelené ovládacie prvky	#
 options.viewSubscriptions=Predplatné	#
-options.viewSubscriptions.button.csbBuy=%s	#
 options.viewSubscriptions.button.info=Informácie	#
 options.viewSubscriptions.button.price=%s	#
 options.viewSubscriptions.button.pricePerMonth=%s mesačne	#
@@ -6423,6 +6507,9 @@ options.deferred.upscaling=Zvýšenie rozlíšenia	#
 options.terrainShadowsEnable=Tiene terénu	#
 options.superFancyWaterEnable=Veľmi efektná voda	#
 options.onlyTrustedSkinsAllowed=Povoliť iba dôveryhodné vzhľady	#
+options.restartTutorial=Reštartovať tutoriál	#
+options.tutorial=Kurz	#
+options.tutorialHint=Tipy, ako začať so základmi hry Minecraft	#
 
 options.autoUpdateEnabled=Automaticky aktualizovať odomknuté balíky	#
 options.autoUpdateMode=Automaticky aktualizovať odomknuté balíky	#
@@ -6525,6 +6612,9 @@ options.shadowQuality.low=Nízka	#
 options.shadowQuality.medium=Stredná	#
 options.shadowQuality.high=Vysoká	#
 options.shadowQuality.ultra=Ultra	#
+options.pointLightShadowEnabled=Zapnuté tiene bodového svetla	#
+options.pointLightShadowDisabled=Vypnuté tiene bodového svetla	#
+options.pointLightShadow.tooltip=Tiene vrhané fakľami, lampášmi a inými malými svetelnými zdrojmi; zapnuté len pri nastavení vyššej kvality tieňa na niektorých zariadeniach.	#
 options.pointLightLODingQuality=Kvalita bodového svetla	#
 options.pointLightLODingQuality.low=Nízka	#
 options.pointLightLODingQuality.medium=Stredná	#
@@ -6681,6 +6771,8 @@ hudScreen.controlCustomization.hintDeselect=Kliknutím mimo zrušte výber	#
 hudScreen.controlCustomization.hintSaved=Uložené	#
 hudScreen.controlCustomization.tooltip=Načítať svet na prispôsobenie ovládacích prvkov	#
 hudScreen.controlCustomization.tooltip.notouch=Použiť dotykové zariadenie na prispôsobenie ovládacích prvkov	#
+hudScreen.controlCustomization.tooltip.alreadycustomizing=Už je otvorená obrazovka prispôsobenia dotykového ovládania	#
+hudScreen.controlCustomization.tooltip.alive=Hráč musí byť nažive, aby si mohol prispôsobiť ovládacie prvky.	#
 
 playscreen.fileSize.MB=MB	#
 playscreen.fileSize.GB=GB	#
@@ -6939,6 +7031,7 @@ profileScreen.create_persona_classic_skin_details=Textúra celotelového vzhľad
 
 profileScreen.create_persona_title=Vyberte typ	#
 
+persona.csb.see.subscription=Súčasť predplatného	#
 persona.slim.title=úzky	#
 persona.wide.title=široké	#
 persona.smaller.title=menšia	#
@@ -6949,6 +7042,7 @@ persona.realms.redeem=Uplatniť	#
 persona.realms.see.subscription=V službe Realms Plus	#
 persona.realms.time.remaining=%s na uplatnenie	#
 persona.realms.savings=Ušetrite %s minecoins s predplatným Realms Plus!	#
+persona.csb.savings=S predplatným Marketplace Pass ušetríte %s mincí minecoins.	#
 persona.preview.emote=Prehrať emóciu	#
 
 progressScreen.cantConnect=Nepodarilo sa pripojiť k svetu. Skontrolujte pripojenie na internet a skúste to znova.	#
@@ -6966,6 +7060,7 @@ progressScreen.title.connectingRealms=Pripája sa k ríši	#
 progressScreen.title.copyingWorld=Kópia sveta	#
 progressScreen.title.deleteStorageAreaContent=Vymazať vyrovnávaciu pamäť úložiska	#
 progressScreen.title.loadingSplitScreenAppearances=Načítavajú sa vzhľady rozdelenej obrazovky	#
+progressScreen.title.modifiedWorldWarning=Modifikovaný svet	#
 progressScreen.message.appearanceLoaded=Vzhľad sa načítal	#
 progressScreen.message.appearanceLoadWaitTimeMet=Načítanie vzhľadu trvá dlho. Pokračuje sa vo vytváraní sveta...	#
 progressScreen.message.deleteStorageAreaContent=Môže to trvať niekoľko minút.	#
@@ -6987,6 +7082,8 @@ progressScreen.message.storageProviderSyncError=Používateľské údaje sa nepo
 progressScreen.message.waitingForStoreProducts=Môže to chvíľu trvať	#
 progressScreen.message.allDone=Všetko dokončené!	#
 progressScreen.message.letsGo=Poďme na to!	#
+progressScreen.message.letsGoCreative=Vytvoriť	#
+progressScreen.message.letsGoSurvival=Prežite	#
 progressScreen.message.failed=Chyba	#
 progressScreen.message.failedNoNetwork=Chyba: Žiadne sieťové pripojenie	#
 progressScreen.message.downloadingWorld=Preberá sa svet	#
@@ -7012,6 +7109,7 @@ progressScreen.message.directoryDepthError=Tento svet sa nedá otvoriť kvôli p
 progressScreen.message.forbiddenContent=Nevlastníte niektorý z použitých balíkov	#
 progressScreen.message.loadingSplitScreenAppearances=Načítavajú sa vzhľady rozdelenej obrazovky...	#
 progressScreen.message.finishedLoadingSplitScreenAppearances=Dokončilo sa načítanie vzhľadov rozdelenej obrazovky.	#
+progressScreen.message.modifiedWorldWarning=Tento svet nemusí vyzerať alebo sa správať rovnako ako neupravené svety a nebudete môcť dosahovať výsledky.	#
 progressScreen.dialog.title.resourcePack=Prevziať balíky zdrojov?	#
 progressScreen.dialog.title.behaviorAndResourcePack=Prevziať balíky správania a zdrojov vo svete?	#
 progressScreen.dialog.title.onlyBehavior=Prevziať balíky správania vo svete?	#
@@ -7063,6 +7161,8 @@ raid.expiry=Platnosť nájazdu sa skončila	#
 raid.victory=Víťazstvo	#
 raid.defeat=Porážka	#
 
+realmsStories.realmEvents.outOfGameMessage=Uskutočnila sa udalosť ríše. Pozrite si informačný kanál príbehov v hre Minecraft a zistite, čo sa stalo.	#
+
 recipeBook.setting.full=Úplné	#
 recipeBook.setting.discover=Objaviť	#
 recipeBook.setting.off=Vyp.	#
@@ -7098,6 +7198,7 @@ resourcePack.selected.title.behaviorPacks=Aktívne balíky správania	#
 resourcePack.selected.title.packs=Aktívne	#
 resourcePack.selected.remove=Inaktivovať	#
 resourcePack.realmsPlus.title.packs=Balíky Realms Plus	#
+resourcePack.realmsPlus.title.packs.contentSub=Balíčky Marketplace Pass	#
 resourcePack.realmsPlus.expired=Po uplynutí platnosti	#
 resourcePack.errors=Chyby:	#
 resourcePack.error.ingame.packs=Balíky zdrojov nemôžete zmeniť počas hrania vo svete.	#
@@ -7120,9 +7221,11 @@ resourcePack.header.behavior=Aktívne balíky správania sa vzťahujú na všetk
 resourcePack.header.level=Vyžadovať prijatie balíkov zdrojov inými hráčmi	#
 resourcePack.crashRecovery.title=Obnovenie globálnych zdrojov	#
 resourcePack.crashRecovery.message=Zdroje sa predtým nepodarilo načítať.	#
-resourcePack.warnings=Varovania: 	#
-resourcePack.warning.title=Je to nebezpečné!	#
-resourcePack.warning.body=Pridanie alebo odstránenie balíkov správania po hraní vo svete môže zničiť svet a spôsobiť stratu vytvoreného obsahu. Stlačením tlačidla „OK“ balík dezaktivujete a stlačením tlačidla „Zrušiť“ ho ponecháte v aktívnom stave.	#
+resourcePack.warnings=Varovania:	#
+resourcePack.warning.add.title=Aktualizovať svet?	#
+resourcePack.warning.add.body=Tento svet nemusí vyzerať alebo sa správať rovnako ako neupravené svety a nebudete môcť dosahovať výsledky. Pred pokračovaním by ste si možno mali uložiť kópiu svojho sveta. Ak chcete aktivovať balík, stlačte „OK“, ak ho nechcete aktivovať, stlačte „Zrušiť“.	#
+resourcePack.warning.remove.title=Je to nebezpečné!	#
+resourcePack.warning.remove.body=Ak sa po dohraní sveta odstránia balíky správania, svet sa môže pokaziť a to, čo ste vytvorili, sa môže stratiť. Pred pokračovaním by ste si možno mali uložiť kópiu svojho sveta. Ak chcete deaktivovať balík, stlačte „OK“, ak ho chcete ponechať v aktivovanom stave, stlačte „Zrušiť“.	#
 resourcePack.requiredDependency.title=Požadovaná závislosť	#
 resourcePack.requiredDependency.body=Tento balík je požadovaná závislosť iného balíka, ktorý sa momentálne používa.	#
 resourcePack.missingDependency.title=Chýbajúce závislosti	#
@@ -7229,14 +7332,14 @@ itemGroup.name.sculk=Skalkit	#
 effect.darkness=Temnota	#
 entity.frog.name=Žaba	#
 entity.tadpole.name=Žubrienka	#
-item.spawn_egg.entity.warden.name=Narodenie dozorcu	#
+item.spawn_egg.entity.warden.name=Vajce narodenia wardena	#
 entity.warden.name=Dozorca	#
 entity.allay.name=Pomocník	#
-item.spawn_egg.entity.allay.name=Narodenie pomocníka	#
+item.spawn_egg.entity.allay.name=Vajce narodenia pomocníka	#
 action.interact.allay=Dať pomocníkovi predmet	#
 item.bucketTadpole.name=Vedro so žubrienkou	#
-item.spawn_egg.entity.frog.name=Narodenie žaby	#
-item.spawn_egg.entity.tadpole.name=Narodenie žubrienky	#
+item.spawn_egg.entity.frog.name=Vajce narodenia žaby	#
+item.spawn_egg.entity.tadpole.name=Vajce narodenia žubrienky	#
 tile.frog_spawn.name=Žabí poter	#
 tile.pearlescent_froglight.name=Perleťové žabie svetlo	#
 tile.verdant_froglight.name=Zelenkavé žabie svetlo	#
@@ -7361,7 +7464,7 @@ item.smithing_template.name=Kováčska šablóna	#
 item.smithing_template.netherite_upgrade.applies_to=Diamantové vybavenie	#
 item.smithing_template.netherite_upgrade.ingredients=Netheritový ingot	#
 item.snort_pottery_sherd.name=Keramický črep – fučanie	#
-item.spawn_egg.entity.camel.name=Narodenie ťavy	#
+item.spawn_egg.entity.camel.name=Vajce narodenia ťavy	#
 item.spruce_hanging_sign.name=Smreková závesná značka	#
 item.warped_hanging_sign.name=Zoschnutá závesná značka	#
 itemGroup.name.hanging_sign=Závesné značky	#
@@ -7669,6 +7772,7 @@ selectTemplate.delete.confirm=Odstrániť šablónu sveta?	#
 selectTemplate.delete=Odstrániť	#
 selectTemplate.myTemplates=Moje šablóny svetov	#
 selectTemplate.realmsPlus=Odporúčané šablóny Realms Plus	#
+selectTemplate.marketplacePass=Odporúčané šablóny predplatného Marketplace Pass			#### {StrContains="Marketplace Pass"}
 selectTemplate.importedTemplates=Importované šablóny	#
 selectTemplate.download=Prevziať	#
 selectTemplate.noTemplates=V tomto zariadení nie sú žiadne šablóny svetov.	#
@@ -7853,32 +7957,37 @@ store.realmsPlus.buyNow.viewPrivacyPolicy=ZÁSADY OCHRANY OSOBNÝCH ÚDAJOV	#
 
 store.realmsPlus.buyNow.title=Začať predplatné Realms Plus	#
 store.realmsPlus.startTrial.description=Váš server Realm a viac ako 150 balíkov z Trhoviska budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup ku svetom na vašom serveri Realm. Prvý mesiac bude zadarmo. Následne vám bude účtovaný poplatok %s mesačne. Predplatné môžete kedykoľvek zrušiť.	#
-store.realmsPlus.noTrial.description=Váš server Realm a viac ako 150 balíkov z Trhoviska budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup ku svetom na vašom serveri Realm. Predplatné bude 30 dní k dispozícii za cenu %s :minecoin:.	#
+store.realmsPlus.startTrial.description.contentSub=Váš server Realm a viac ako 150 balíkov z Trhoviska, ktoré sú súčasťou predplatného Marketplace Pass, budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup k svetom na vašom serveri Realm. Prvý mesiac bude zadarmo a následne vám bude účtovaný poplatok %s/mesačne. Predplatné môžete kedykoľvek zrušiť.	#
+store.realmsPlus.noTrial.description=Váš server Realm a viac ako 150 balíkov z Trhoviska budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup k svetom na vašom serveri Realm. Predplatné bude 30 dní k dispozícii za cenu :minecoin:%s.	#
+store.realmsPlus.noTrial.description.contentSub=Váš server Realm a viac ako 150 balíkov z Trhoviska, ktoré sú súčasťou predplatného Marketplace Pass, budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup k svetom na vašom serveri Realm. Predplatné bude k dispozícii 30 dní za cenu %s:minecoin:.	#
 store.realmsPlus.noTrial.description.iap=Váš server Realm a viac ako 150 balíkov z Trhoviska budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup ku svetom na vašom serveri Realm. Bude vám účtovaný poplatok %s mesačne. Predplatné a tým aj budúce poplatky môžete zrušiť v nastaveniach predplatného.	#
+store.realmsPlus.noTrial.description.iap.contentSub=Váš server Realm a viac ako 150 balíkov z Trhoviska, ktoré sú súčasťou predplatného Marketplace Pass, budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup k svetom na vašom serveri Realm. Bude vám účtovaný poplatok %s/mesačne. Predplatné a tým aj budúce poplatky môžete zrušiť v nastaveniach predplatného.	#
 store.realmsPlus.realmName.placeholder=Ríša hráča %s	#The string passed in here is the gamertag of the player to indicate the name of the player's world.	#
 
 store.realmsPlus.recurring.offerTrial=Realms Plus je pokračujúce predplatné s opakujúcim sa poplatkom za predplatné, ktoré sa účtuje automaticky každý mesiac až do zrušenia predplatného.%sVáš server Realm a viac ako 150 balíkov z Trhoviska budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí získajú bezplatný prístup ku svetom na vašom serveri Realm. Prvých 30 dní bude zadarmo a potom vám bude účtovaný mesačný poplatok %s. Predplatné a tým aj budúce poplatky môžete zrušiť v nastaveniach predplatného.	#
+store.realmsPlus.recurring.offerTrial.contentSub=Realms Plus je pokračujúce predplatné s opakujúcim sa poplatkom za predplatné, ktoré sa účtuje automaticky každý mesiac až do zrušenia predplatného.%sVáš server Realm a viac ako 150 balíkov z Trhoviska, ktoré sú súčasťou predplatného Marketplace Pass, budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí získajú bezplatný prístup k svetom na vašom serveri Realm! Prvých 30 dní bude zadarmo a potom vám bude účtovaný poplatok %s/mesačne. Predplatné a tým aj budúce poplatky môžete zrušiť v nastaveniach predplatného.	#
 store.realmsPlus.recurring.withoutTrial=Realms Plus je pokračujúce predplatné s opakujúcim sa poplatkom za predplatné, ktoré sa účtuje automaticky každý mesiac až do zrušenia predplatného.%sVáš server Realm a viac ako 150 balíkov z Trhoviska budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí získajú bezplatný prístup ku svetom na vašom serveri Realm. Bude vám účtovaný mesačný poplatok %s. Predplatné a tým aj budúce poplatky môžete zrušiť v nastaveniach predplatného.	#
+store.realmsPlus.recurring.withoutTrial.contentSub=Realms Plus je pokračujúce predplatné s opakujúcim sa poplatkom za predplatné, ktoré sa účtuje automaticky každý mesiac až do zrušenia predplatného.%sVáš server Realm a viac ako 150 balíkov z Trhoviska, ktoré sú súčasťou predplatného Marketplace Pass, budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí získajú bezplatný prístup k svetom na vašom serveri Realm! Bude vám účtovaný poplatok %s/mesačne. Predplatné a tým aj budúce poplatky môžete zrušiť v nastaveniach predplatného.	#
 store.realmsPlus.consumable.offerTrial=Váš server Realm a viac ako 150 balíkov z Trhoviska budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup ku svetom na vašom serveri Realm. Prvých 30 dní bude zadarmo a potom si môžete predplatné obnoviť za cenu %s.	#
+store.realmsPlus.consumable.offerTrial.contentSub=Váš server Realm a viac ako 150 balíkov z Trhoviska, ktoré sú súčasťou predplatného Marketplace Pass, budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup k svetom na vašom serveri Realm! Prvých 30 dní bude zadarmo a potom si môžete predplatné obnoviť na ďalších 30 dní za cenu %s.	#
 store.realmsPlus.consumable.withoutTrial=Váš server Realm a viac ako 150 balíkov z Trhoviska budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup ku svetom na vašom serveri Realm. Predplatné bude 30 dní k dispozícii za cenu %s.	#
+store.realmsPlus.consumable.withoutTrial.contentSub=Váš server Realm a viac ako 150 balíkov z Trhoviska, ktoré sú súčasťou predplatného Marketplace Pass, budú okamžite k dispozícii. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup k svetom na vašom serveri Realm! Predplatné bude dostupné 30 dní za cenu %s.	#
 
 store.realmsPlus.landing.header=Predplatné obsahuje:	#
 store.realmsPlus.landing.headerTrial=Bezplatná 30-dňová skúšobná verzia, potom %s mesačne	#
 
-store.realmsPlus.landing.info1.line1=Vlastný osobný server Realm – trvalý svet, ktorý je pre vás a vašich priateľov vždy online.	#
+store.realmsPlus.landing.info1.line1=Váš vlastný osobný server Realm – trvalý svet, ktorý je pre vás a vašich priateľov vždy online!	#
 store.realmsPlus.landing.info1.line2=Priatelia hrajú na vašom serveri Realm zadarmo	#
-store.realmsPlus.landing.info1.line3=Prechádzajte z konzoly do mobilného zariadenia alebo počítača – ľubovoľného zariadenia s Trhoviskom Minecraft	#
-
-store.realmsPlus.landing.info2.line1=Bezplatný prístup ku katalógu s viac ako 150 balíkmi z Trhoviska	#
-store.realmsPlus.landing.info2.line2=Svety na serveri Realm zahŕňajú bezpečné zálohovanie	#
-store.realmsPlus.landing.info2.line3=Prvých 30 dní bude zadarmo	#
-store.realmsPlus.landing.info2.line4=Predplaťte si za %s mesačne	#
+store.realmsPlus.landing.info1.line3=Prechádzajte z konzoly na mobilné zariadenie alebo počítač – hrajte na svojom serveri Realm na akomkoľvek zariadení s Trhoviskom Minecraft	#
 
 store.realmsPlus.landing.info2.catalog=Bezplatný prístup ku katalógu s viac ako 150 balíkmi z Trhoviska	#
-store.realmsPlus.landing.info2.backups=Svety na serveri Realm zahŕňajú bezpečné zálohovanie	#
-store.realmsPlus.landing.info2.trial=Prvých 30 dní bude zadarmo	#
+store.realmsPlus.landing.info2.contentSub=Zahŕňa predplatné Marketplace Pass	#
+store.realmsPlus.landing.info2.backups=Svety na vašom serveri Realm zahŕňajú bezplatné bezpečné zálohovanie	#
+store.realmsPlus.landing.info2.renews=Predplatné sa obnovuje automaticky každý mesiac, kým ho nezrušíte	#
+store.realmsPlus.landing.info2.cancel=Zrušiť ho môžete na stránke Predplatné v nastaveniach hry Minecraft	#
 store.realmsPlus.landing.info2.subscribe=Predplaťte si za %s mesačne	#
-store.realmsPlus.landing.info2.persona=Položky zadarmo pre Tvorcu postavy – Uplatnite si novú súpravu každý mesiac!	#
+store.realmsPlus.landing.info2.recentlyAdded=Nedávno pridané	#
+store.realmsPlus.landing.info2.persona=Bezplatné položky pre Tvorcu postavy – získajte novú súpravu každý mesiac!	#
 
 store.realmsPlus.landing.beta=Beta	#
 store.realmsPlus.landing.preview=Ukážka	#
@@ -7899,6 +8008,7 @@ store.realmsPlus.faq.question4=Ktoré zariadenia podporujú službu Realms Plus 
 store.realmsPlus.faq.answer4=Realms Plus je v súčasnosti k dispozícii na akejkoľvek platforme, na ktorej si môžete nainštalovať Minecraft Bedrock Edition. Ak ste prihlásení do konta Microsoft, môžete hrať Realms a používať akýkoľvek obsah z Realms Plus na ktoromkoľvek z týchto zariadení.	###disable_3rd_party_console_resource_pack_check
 store.realmsPlus.faq.question5=Koľko stojí predplatné Realms Plus?	#
 store.realmsPlus.faq.answer5=%s mesačne za server pre 10 hráčov a prístup k viac ako 150 balíkom z Trhoviska.	#
+store.realmsPlus.faq.answer5.contentSub=%s mesačne. Pridajte nekonečné množstvo členov a hrajte online s ďalšími 10 hráčmi súčasne. Okrem toho si môžete zadarmo užiť viac ako 150 kusov obsahu z Trhoviska z katalógu Marketplace Pass.	#
 store.realmsPlus.faq.question6=Ako často sa do služby Realms Plus pridávajú nové balíky?	#
 store.realmsPlus.faq.answer6=Nové balíky sa do služby Realms Plus pridávajú každý mesiac.	#
 store.realmsPlus.faq.question7=Ako dlho mám prístup k balíkom v rámci služby Realms Plus?	#
@@ -7907,38 +8017,44 @@ store.realmsPlus.faq.question8=Kde môžem používať balíky Realms Plus?	#
 store.realmsPlus.faq.answer8=Svety a balíky obsiahnuté v predplatnom možno hrať online, na osobnom serveri Realm alebo na lokálnom zariadení. Hrať online musíte raz za 30 dní, aby ste overili, že je vaše predplatné naďalej aktívne.	#
 store.realmsPlus.faq.question9=Čo sa stane so službou Realms a svetmi po skončení môjho predplatného?	#
 store.realmsPlus.faq.answer9=Ak sa vaše predplatné skončí, vy ani vaši priatelia už nebudete môcť hrať spoločne online v službe Realms. Takisto stratíte prístup k balíkom Realms Plus. Môžete si prevziať akýkoľvek svet uložený na vašom serveri Realm (do 18 mesiacov od skončenia predplatného). Ak ste používali svety, balíčky textúr alebo mash-up balíky služby Realms Plus, na hranie týchto šablón svetov si budete musieť tieto balíky zakúpiť v obchode alebo si ich opätovne predplatiť, ak sú ešte v službe Realms Plus.	#
+store.realmsPlus.faq.question10=Potrebujem službu Realms Plus a Marketplace Pass?	#
+store.realmsPlus.faq.answer10=Nie. Marketplace Pass je katalóg, ktorý obsahuje viac ako 150 balíkov pre vaše potešenie. Realms Plus je Realm pre 10 hráčov, ktorý zahŕňa predplatné Marketplace Pass. Navrhujeme, aby ste si predplatili ten, ktorý je pre vás ten pravý.	#
 
+store.realmsPlus.content.marketplacePass=Realms Plus zahŕňa predplatné Marketplace Pass!	#
 store.realmsPlus.content.skinDescription=Zmeňte svoju vizáž pomocou vzhľadov!	#
 store.realmsPlus.content.skinDescriptionPersona=Nahoďte sa so vzhľadmi!	#
+store.realmsPlus.content.skinDescriptionPersona.contentSub=Doplňte si šatník novými vzhľadmi!	#
 store.realmsPlus.content.worldDescription=Preskúmajte obľúbené balíky obsahu.	#
+store.realmsPlus.content.worldDescription.contentSub=Hrajte minihry, objavujte tematické svety a ďalšie! 	#
 store.realmsPlus.content.textureDescription=Nové grafické prvky pre vaše svety.	#
+store.realmsPlus.content.textureDescription.contentSub=Použite vo svojom svete nové vizuály! 	#
 store.realmsPlus.content.mashupDescription=Vyskúšajte zo všetkého trochu v mash-up balíkoch.	#
 store.realmsPlus.content.personaDescription=Prispôsobte svoj vzhľad s položkami pre Tvorcu postavy!	#
+store.realmsPlus.content.personaDescription.contentSub=Každý mesiac získajte nové položky do šatne!	#
+store.realmsPlus.content.recentlyAdded=Nedávno pridané	#
 store.realmsPlus.content.friendsGetAccess=Vaši priatelia získajú bezplatný prístup k obsahu používanému na vašom serveri Realm	#
 
 store.realmsPlus.content.popularPacks=Obľúbené balíky v službe Realms Plus:	#
 store.realmsPlus.content.viewAllPacks=ZOBRAZIŤ VŠETKY BALÍČKY	#
 store.realmsPlus.content.contentDescription=Využite zdroj úžasného obsahu pre Minecraft. So službou Realms Plus získate okamžitý prístup k viac ako 150 položkám z Trhoviska, ako sú mash-up balíky, svety, balíčky vzhľadov a epické dobrodružstvá – s novými doplnkami každý mesiac. Váš obsah je uložený na vlastnom osobnom serveri a sprístupnený pre ľubovoľnú platformu, na ktorej používate službu Realms aj Trhovisko Minecraft. Naraz môže hrať až 10 hráčov, ktorí zadarmo získajú prístup ku svetom na vašom serveri Realm.	#
 
-
 store.realmsPlus.freeTrial=SPUSTIŤ BEZPLATNÚ SKÚŠOBNÚ VERZIU	#
 
 store.realmsPlus.purchase.warningDialog.title=Oznámenie	#
-store.realmsPlus.purchase.warningDialog.body=Služba Realms Plus zahŕňa obsah predplatného Marketplace Pass. Odporúčame vám, aby ste sa po registrácii odhlásili z odberu predplatného Marketplace Pass.	#
+store.realmsPlus.purchase.warningDialog.body=Realms Plus zahŕňa obsah Marketplace Pass. Odporúčame vám zrušiť predplatné Marketplace Pass po registrácii v službe Realms Plus.		#### {StrContains="Marketplace Pass"}
 store.realmsPlus.purchase.warningDialog.checkbox=Rozumiem	#
 store.realmsPlus.purchase.warningDialog.button.back=Naspäť	#
-store.realmsPlus.purchase.warningDialog.button.continue=Pokračovať	#
+store.realmsPlus.purchase.warningDialog.button.continue=Nákup	#
 
-store.csb.brand.1=MARKETPLACE	#
-store.csb.brand.2=PASS	#
+store.csb.brand.1=MARKETPLACE		#### {StrContains="MARKETPLACE"}
+store.csb.brand.2=PASS		#### {StrContains="PASS"}
 
-store.csb=Marketplace Pass	#
-store.csb.pass=Pass	#
+store.csb=Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.content=Obsah	#
 store.csb.faq=FAQ	#
 store.csb.buyNow=PREDPLATIŤ	### Maximum 13 characters
 store.csb.buyNowPerMonth=Nakúpte za %s mesačne	#
-store.csb.signInToSubscribe=Prihlásením sa prihláste na odber predplatného Marketplace Pass	#
+store.csb.signInToSubscribe=Prihlásením sa prihláste na odber predplatného Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.buyNowTrialPerMonth=Spustiť skúšobnú verziu 	### Maximum 25 characters
 store.csb.errorNoOffer=CHYBA – PONUKA SA NENAŠLA	#
 store.csb.manageSubscription=SPRAVOVAŤ PREDPLATNÉ	#
@@ -7948,47 +8064,49 @@ store.csb.buyNow.buttonText=KÚPIŤ ZA %s	#
 store.csb.buyNow.viewTerms=PODMIENKY A POŽIADAVKY	#
 store.csb.buyNow.viewPrivacyPolicy=ZÁSADY OCHRANY OSOBNÝCH ÚDAJOV	#
 
-store.csb.buyNow.title=Aktivujte si predplatné Marketplace Pass	#
+store.csb.buyNow.title=Aktivujte si predplatné Marketplace Pass		#### {StrContains="Marketplace Pass"}
 
-store.csb.subscription=Po prihlásení budete mať k dispozícii viac ako 150 položiek vzrušujúceho obsahu z Trhoviska Minecraft. Stiahnite si a hrajte dobrodružné mapy, noste vzhľady, pohrúžte sa do balíkov textúr a každý mesiac získajte súpravu položiek pre Tvorcu postavy, ktoré vám zostanú. Vďaka pravidelne dopĺňanému katalógu budete mať s predplatným Marketplace Pass vždy čo objavovať. Bude vám účtovaná suma %s mesačne a obnovovanie predplatného môžete kedykoľvek zrušiť.  	#
+store.csb.subscription=Po prihlásení budete mať k dispozícii viac ako 150 položiek vzrušujúceho obsahu z Trhoviska Minecraft. Stiahnite si a hrajte dobrodružné mapy, noste vzhľady, pohrúžte sa do balíkov textúr a každý mesiac získajte súpravu položiek pre Tvorcu postavy, ktoré vám zostanú. Vďaka pravidelne dopĺňanému katalógu budete mať s predplatným Marketplace Pass vždy čo objavovať. Bude vám účtovaná suma %s mesačne a obnovovanie predplatného môžete kedykoľvek zrušiť.		#### {StrContains="Marketplace Pass"}
 
-store.csb.recurring.offerTrial=Marketplace Pass je pokračujúce predplatné s opakujúcim sa poplatkom za predplatné, ktorý sa účtuje automaticky každý mesiac až do zrušenia predplatného.%sViac ako 150 balíčkov z Trhoviska bude okamžite k dispozícii. Predplatné, a tým aj budúce poplatky, môžete zrušiť v nastaveniach predplatného.	#
-store.csb.recurring.withoutTrial=Marketplace Pass je pokračujúce predplatné s opakujúcim sa poplatkom za predplatné, ktorý sa účtuje automaticky každý mesiac až do zrušenia predplatného.%sViac ako 150 balíčkov z Trhoviska bude okamžite k dispozícii. Bude vám účtovaný mesačný poplatok %s. Predplatné, a tým aj budúce poplatky, môžete zrušiť v nastaveniach predplatného.	#
+store.csb.recurring.offerTrial=Marketplace Pass je pokračujúce predplatné s opakujúcim sa poplatkom za predplatné, ktorý sa účtuje automaticky každý mesiac až do zrušenia predplatného.%sViac ako 150 balíkov z Trhoviska bude okamžite k dispozícii. Predplatné, a tým aj budúce poplatky, môžete zrušiť v nastaveniach predplatného.		#### {StrContains="Marketplace Pass"}
+store.csb.recurring.withoutTrial=Marketplace Pass je pokračujúce predplatné s opakujúcim sa poplatkom za predplatné, ktorý sa účtuje automaticky každý mesiac až do zrušenia predplatného.%sViac ako 150 balíkov z Trhoviska bude okamžite k dispozícii. Bude vám účtovaný mesačný poplatok %s. Predplatné, a tým aj budúce poplatky, môžete zrušiť v nastaveniach predplatného.		#### {StrContains="Marketplace Pass"}
 store.csb.consumable.offerTrial=Viac ako 150 balíčkov z Trhoviska bude okamžite k dispozícii. Prvých 30 dní bude zadarmo a potom si môžete predplatné obnoviť za cenu %s.	#
 store.csb.consumable.withoutTrial=Viac ako 150 balíčkov z Trhoviska bude okamžite k dispozícii. Predplatné bude 30 dní k dispozícii za cenu %s.	#
 
-store.csb.landing.header=Aktivujte si predplatné Marketplace Pass	#
+store.csb.landing.header=Aktivujte si predplatné Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.landing.headerTrial=Bezplatná 30-dňová skúšobná verzia, potom %s mesačne	#
 
-store.csb.landing.info=Marketplace Pass je mesačné predplatné, s ktorým získate prístup k viac ako 150 položkám obsahu z Trhoviska Minecraft za %s. Predplatné vám umožní:	#
+store.csb.landing.info=Marketplace Pass je mesačné predplatné, s ktorým získate prístup k viac ako 150 položkám obsahu z Trhoviska Minecraft za %s. Predplatné vám umožní:		#### {StrContains="Marketplace Pass"}
 store.csb.landing.info.line1=Vydávať sa na dobrodružstvá plné príbehov stiahnutím a hraním jedného z mnohých tematických svetov a minihier	#
 store.csb.landing.info.line2=Meniť vzhľad blokov, biómov a dokonca aj vašich obľúbených tvorov z Minecraftu	#
 store.csb.landing.info.line3=Rozširovať si šatník v hre	#
 store.csb.landing.info.line4=Získať každý mesiac novú súpravu časovo obmedzených položiek pre Tvorcu postavy, ktoré vám zostanú navždy	#
+store.csb.landing.info.line5=Predplatné sa obnovuje automaticky každý mesiac, kým ho nezrušíte	#
+store.csb.landing.info.line6=Zrušiť ho môžete na stránke Predplatné v nastaveniach hry Minecraft	#
+store.csb.landing.info.line7=Predplaťte si za %s mesačne	#
 
 store.csb.landing.beta=Beta	#
 store.csb.landing.preview=Ukážka	#
 
 store.csb.faq.header=NAJČASTEJŠIE OTÁZKY	#
-store.csb.faq.question1=Čo je Marketplace Pass?	#
-store.csb.faq.answer1=Marketplace Pass je predplatné, s ktorým získate prístup k viac ako 150 položkám obsahu z Trhoviska minecraft za %s mesačne.	#
-store.csb.faq.question2=Ako často sa aktualizuje obsah v rámci predplatného Marketplace Pass?	#
+store.csb.faq.question1=Čo je Marketplace Pass?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer1=Marketplace Pass je predplatné, s ktorým získate prístup k viac ako 150 položkám obsahu z Trhoviska Minecraft za %s mesačne.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question2=Ako často sa aktualizuje obsah v rámci predplatného Marketplace Pass?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer2=Vybraný obsah sa aktualizuje každý mesiac, takže máte vždy čo objavovať.	#
-store.csb.faq.question3=Čo potrebujem na to, aby som si mohol/-a užívať Marketplace Pass?	#
-store.csb.faq.answer3=Prístup k Marketplace Pass vyžaduje aktívne predplatné a kompatibilnú verziu hry minecraft: Bedrock Edition s Trhoviskom minecraft. Vyžaduje prihlásenie s kontom Microsoft.	#
-store.csb.faq.question4=Čo sa stane s mojím obsahom po opustení Marketplace Pass?	#
+store.csb.faq.question3=Čo potrebujem na to, aby som si mohol/-a užívať Marketplace Pass?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer3=Prístup k Marketplace Pass vyžaduje aktívne predplatné a kompatibilnú verziu hry Minecraft: Bedrock Edition s Trhoviskom Minecraft. Vyžaduje prihlásenie s kontom Microsoft.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question4=Čo sa stane s mojím obsahom po opustení Marketplace Pass?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer4=Keď svet, balíček textúr, balíček vzhľadov alebo mash-up opustí katalóg, na pokračovanie v hre si budete musieť kúpiť položku z Trhoviska. Balíčky sa z vášho lokálneho úložiska neodstránia, kým ich sami neodstránite. Mesačné položky pre Tvorcu postavy, ktoré ste si prevzali, si môžete ponechať.	#
 store.csb.faq.question5=Čo sa stane, keď skončí moje predplatné?	#
 store.csb.faq.answer5=Počas 18 mesiacov od skončenia predplatného si budete môcť kúpiť a prevziať akékoľvek šablóny sveta uložené na vašom cloudovom úložisku, ak ich ešte hra Minecraft ponúka. Mesačné položky tvorcu postavy, ktoré ste si prevzali, si môžete ponechať.	#
 store.csb.faq.question6=Aký je rozdiel medzi týmto predplatným a predplatným Realms Plus?	#
-store.csb.faq.answer6=Rozdiel medzi týmito dvoma predplatnými je v tom, že Realms Plus obsahuje osobný server, na ktorom môžete hrať naraz až s desiatimi priateľmi. Obsah katalógu, ku ktorému máte prístup s predplatným Marketplace Pass, je rovnaký katalóg, ktorý je dostupný s predplatným Realms Plus.	#
-store.csb.faq.question7=Môžem si predplatiť službu Marketplace Pass aj Realms Plus?	#
-store.csb.faq.answer7=Predplatné Realms Plus zahŕňa predplatné Marketplace Pass. Ak máte predplatné Marketplace Pass a chcete preskúmať Realms Plus, odporúčame vám, aby ste sa najskôr odhlásili z odberu Marketplace Pass. Aktívni predplatitelia Realms Plus sa nemôžu prihlásiť na odber Marketplace Pass.	#
-store.csb.faq.question8=Môžem používať obsah Marketplace Pass na akomkoľvek zariadení?	#
-store.csb.faq.answer8=Ak si kúpite predplatné Marketplace Pass, získate prístup ku všetkým balíčkom z akéhokoľvek zariadenia s kompatibilnou verziou hry Minecraft: Bedrock Edition s Trhoviskom Minecraft (predáva sa samostatne) v prípade prihlásenia sa do svojho účtu Minecraft. Nepodporuje Amazon Kindle Fire ani Minecraft Java Edition.	#
-store.csb.faq.question9=Môžem hrať obsah z Marketplace Pass, ak som sa pripojil/-a k Minecraft Beta v systéme Windows alebo na konzole XBOX?	#
-store.csb.faq.answer9=Ak už ste prihlásení na odber, obsah budete môcť vidieť v rámci svojho odberu. Nebudete sa však môcť prihlásiť na odber Marketplace Pass zo zostavy Ukážka/BETA.	#
-store.csb.faq.bottom1=NENAŠLI STE, ČO HĽADÁTE?	#
+store.csb.faq.answer6=Rozdiel medzi týmito dvoma predplatnými je v tom, že Realms Plus obsahuje osobný server, na ktorom môžete hrať naraz až s desiatimi priateľmi. Obsah katalógu, ku ktorému máte prístup s predplatným Marketplace Pass, je rovnaký katalóg, ktorý je dostupný s predplatným Realms Plus.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question7=Môžem si predplatiť službu Marketplace Pass aj Realms Plus?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer7=Predplatné Realms Plus zahŕňa predplatné Marketplace Pass. Ak máte predplatné Marketplace Pass a chcete preskúmať Realms Plus, odporúčame vám, aby ste sa najskôr odhlásili z odberu Marketplace Pass. Aktívni predplatitelia Realms Plus sa nemôžu prihlásiť na odber Marketplace Pass.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question8=Môžem používať obsah Marketplace Pass na akomkoľvek zariadení?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer8=Ak si kúpite predplatné Marketplace Pass, získate prístup ku všetkým balíčkom z akéhokoľvek zariadenia s kompatibilnou verziou hry Minecraft: Bedrock Edition s Trhoviskom Minecraft (predáva sa samostatne) v prípade prihlásenia sa do svojho účtu Minecraft. Nepodporuje Amazon Kindle Fire ani Minecraft Java Edition.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question9=Môžem hrať obsah z Marketplace Pass, ak som sa pripojil/-a k Minecraft Beta v systéme Windows alebo na konzole XBOX?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer9=Ak už ste prihlásení na odber, obsah budete môcť vidieť v rámci svojho odberu. Nebudete sa však môcť prihlásiť na odber Marketplace Pass zo zostavy Ukážka/BETA.		#### {StrContains="Marketplace Pass"}
 store.csb.faq.bottom2=Navštívte našu stránku pomoci	#
 
 store.csb.contentPacks.worldDescription=Hrajte minihry, objavujte tematické svety a ďalšie!	#
@@ -7997,20 +8115,20 @@ store.csb.contentPacks.personaDescription=Každý mesiac získajte nové položk
 store.csb.contentPacks.skinDescription=Doplňte si šatník novými vzhľadmi! 	#
 store.csb.contentPacks.mashupDescription=Vyskúšajte zo všetkého trochu s mash-up balíkmi!	#
 
-store.csb.content.popularPacks=Objavte predplatné Marketplace Pass	#
+store.csb.content.popularPacks=Objavte predplatné Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.content.viewAllPacks=ZOBRAZIŤ VŠETKY BALÍČKY	#
 store.csb.content.viewCharacterCreatorItems=ZOBRAZIŤ POLOŽKY PRE TVORCU POSTAVY	#
-store.csb.content.contentDescription=Využite zdroj úžasného obsahu pre hru minecraft! S predplatným Marketplace Pass získate okamžitý prístup k viac ako 150 položkám z Trhoviska, ako sú mash-up balíčky, svety, balíčky vzhľadov a epické dobrodružstvá – s novými doplnkami každý mesiac.	#
+store.csb.content.contentDescription=Využite zdroj úžasného obsahu pre Minecraft! S predplatným Marketplace Pass získate okamžitý prístup k viac ako 150 položkám z Trhoviska, ako sú mash-up balíčky, svety, balíčky vzhľadov a impozantné dobrodružstvá – s novými doplnkami každý mesiac.		#### {StrContains="Marketplace Pass"}
 
 store.csb.freeTrial=SPUSTIŤ BEZPLATNÚ SKÚŠOBNÚ VERZIU	#
 
-store.csb.welcomeDialog.title=Víta vás predplatné Marketplace Pass!	#
+store.csb.welcomeDialog.title=Víta vás predplatné Marketplace Pass!		#### {StrContains="Marketplace Pass"}
 store.csb.welcomeDialog.body=Začnite si užívať viac ako 150 dobrodružstiev, minihier, balíčkov vzhľadov, textúr a ďalšieho obsahu!	#
 store.csb.welcomeDialog.continue=Začať prehľadávať	#
 
 store.csb.purchase.warningDialog.title=Oznámenie	#
-store.csb.purchase.warningDialog.body.line1=Predplatné Marketplace Pass je súčasťou vášho predplatného Realms Plus.	#
-store.csb.purchase.warningDialog.body.line2=Zrušte svoje aktívne predplatné Realms Plus, počkajte do konca fakturačného cyklu a potom skúste uskutočniť nákup.	#
+store.csb.purchase.warningDialog.body.line1=Predplatné Marketplace Pass je súčasťou vášho predplatného Realms Plus.		#### {StrContains="Marketplace Pass"}
+store.csb.purchase.warningDialog.body.line2=Zrušte svoje aktívne predplatné Realms Plus a potom skúste uskutočniť nákup.	#
 store.csb.purchase.warningDialog.button.back=Naspäť	#
 
 store.csb.upsell.bestValue=NAJLEPŠIA HODNOTA	#
@@ -8021,11 +8139,11 @@ store.csb.upsell.leftBullet.3=Časovo obmedzené položky pre Tvorcu postavy ka�
 
 store.csb.upsell.rightBullet.1=Osobný server pre 10 priateľov	#
 store.csb.upsell.rightBullet.2=Priatelia hrajú zadarmo	#
-store.csb.upsell.rightBullet.3=Obsah			### Precedes the term Marketplace Pass in a different font
+store.csb.upsell.rightBullet.3=Obsahuje	### Precedes the term Marketplace Pass in a different font
 
 store.csb.upsell.learnMore=Ďalšie informácie	#
 store.csb.upsell.price=%s mesačne	#
-store.csb.upsell.firstPeriodFree=Bezplatná 30-dňová skúšobná verzia!*	#
+store.csb.upsell.firstPeriodFree=Bezplatná 30-dňová skúšobná verzia!	#
 
 store.csb.upsell.realmsPlus=§dREALMS PLUS	#
 
@@ -8036,11 +8154,14 @@ store.csb.purchaseErrorDialog.errorCode=Kód chyby: %s	#
 store.csb.purchaseErrorDialog.correlationId=Identifikátor korelácie: %s	#
 
 store.csb.purchase.amazonDeviceWarning.title=Oznámenie	#
-store.csb.purchase.amazonDeviceWarning.body.line1=Ľutujeme, ale predplatné Marketplace Pass momentálne nie je možné zakúpiť na zariadeniach Amazon. 	#
+store.csb.purchase.amazonDeviceWarning.body.line1=Ľutujeme, ale predplatné Marketplace Pass momentálne nie je možné zakúpiť na zariadeniach Amazon.		#### {StrContains="Marketplace Pass"}
 store.csb.purchase.amazonDeviceWarning.body.line2=V prípade akýchkoľvek otázok navštívte lokalitu support.minecraft.net.	#
 store.csb.purchase.amazonDeviceWarning.button.back=Naspäť	#
 
-store.csb.alreadySubscribed.toolTip=Už máte predplatné Marketplace Pass.	#
+store.csb.alreadySubscribed.toolTip=Už máte predplatné Marketplace Pass.		#### {StrContains="Marketplace Pass"}
+
+store.csb.banner.offer=Začnite 30-dňovú bezplatnú skúšobnú verziu!	#
+store.csb.banner.learnMore=Ďalšie informácie	#
 
 store.inventory.button=Môj obsah	#
 store.inventory.title=Môj obsah	#
@@ -8145,12 +8266,6 @@ store.createdBy=Autor: %s	#
 store.seeMoreBy=Zobraziť ďalšie od autora: %s	#
 store.seeMoreBy.multiCreatorBundle=Zobraziť viac od autorov zväzku	#
 store.fetchingItem=Pripája sa k Trhovisku...	#
- 
-store.timer.daysAbbreviated=%sd		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.hoursAbbreviated=%sh		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.minutesAbbreviated=%sm		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.secondsAbbreviated=%ss		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.left=Zostáva: %s	#
 
 store.startMenu.sale=Výpredaj!	#
 
@@ -8171,6 +8286,13 @@ store.mashup.count.texturePack=1 balíček textúr	#
 store.mashup.count.texturePacks=Balíčky textúr (%s)	#number of texture packs	#
 store.mashup.count.world=1 svet 	#
 store.mashup.count.worlds=Svety (%s)	#number of worlds	#
+store.mashup.count.addonPack=1 doplnok	#
+store.mashup.count.addonPacks=Doplnky: %s	#number of addons	#
+
+store.addon.activateAddonPack=Aktivujte doplnok!	#
+store.addon.choseWorldPopupTitle=Kam ho chcete pridať?	#
+store.addon.choseWorldPopupExisting=Existujúce	#
+store.addon.choseWorldPopupNew=Nové	#
 
 store.mashup.bundle=Zväzok	#
 store.mashup.bundle.multipleCreators=Viacerí autori	#
@@ -8231,7 +8353,7 @@ store.ratings.signIn.description1=Povedzte autorovi a komunite o svojich skúsen
 store.ratings.signIn.description2=Skôr ako budete môcť ohodnotiť položku, musíte sa prihlásiť pomocou konta Microsoft.	#
 
 store.purchase.success.realMoney1=Práve ste odomkli: %s za %s 	#
-store.purchase.success.realMoney2=+%s:minecoin:	#
+store.purchase.success.realMoney2=+:minecoin:%s	#
 store.purchase.signIn=Rozšírte svoju hru pomocou množstva skvelého obsahu.	#
 store.purchase.signInPart2=Ak chcete začať používať Trhovisko, prihláste sa pomocou konta Microsoft.	#
 store.purchase.realmoney.disclaimer=* Umožňuje kúpiť %s mincí za %s a získať tento balík za %s mincí, pričom vám zostane %s.	#
@@ -8383,7 +8505,7 @@ store.search.filter.offer_type=Typy akcii	#
 store.search.filter.offer_type.selectedCount=Typy akcii %d	#
 store.search.filter.offer_type.bundles=Balíky	#
 store.search.filter.offer_type.realmsplus=Realms Plus	#
-store.search.filter.offer_type.csb=Marketplace Pass	#
+store.search.filter.offer_type.csb=Marketplace Pass		#### {StrContains="Marketplace Pass"}
 
 store.search.filter.clear.pack_type=Vymazať filtre typov balíkov	#
 store.search.filter.mashupPacks=Mash-up balíky	#
@@ -8400,6 +8522,7 @@ store.search.filter.skinPacks=Vzhľady	#
 store.search.filter.texturePacks=Textúry	#
 store.search.filter.title=Filtre	#
 store.search.filter.worldTemplates=Svety	#
+store.search.filter.addOns=Doplnky	#
 store.search.filter.installed_state=Stav inštalácie	#
 store.search.filter.installed=Nainštalované	#
 store.search.filter.notInstalled=Nenainštalované	#
@@ -8436,7 +8559,7 @@ store.uploadContentToRealmsFail.message=Obsah sa nepodarilo odovzdať do vybrate
 store.uploadContentToRealmsFail.forbidden.message=Nevlastníte niektorú časť z použitého obsahu.	#
 store.applyToRealm=Vytvoriť v službe Realms	#
 store.inRealmsPlus=V službe Realms Plus	#
-store.inCsb=V rámci predplatného Marketplace Pass	#
+store.inCsb=V rámci predplatného Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.uploadWorldTitle=Nahradiť svet?	#
 store.uploadPackTitle=Nahradiť balík?	#
 store.uploadWorldMessage=Tým sa váš aktuálny svet odstráni z aktívneho slotu servera Realm a budete ho môcť nahradiť novým. Vaši členovia na serveri Realm budú mať prístup k novému svetu. Ak chcete zabrániť strate údajov, vyberte možnosť Zrušiť a prevezmite kópiu aktuálneho sveta. Ak chcete pokračovať a nahradiť svoj svet, vyberte možnosť Potvrdiť.	#
@@ -8519,7 +8642,7 @@ tile.beehive.name=Úľ	#
 tile.bee_nest.name=Včelie hniezdo	#
 tile.target.name=Terč	#
 tile.bed.name=Posteľ	#
-tile.bed.noSleep=Spať môžete len v noci	#
+tile.bed.noSleep=Spať môžete len v noci a počas búrky	#
 tile.bed.notSafe=Teraz nemôžete odpočívať, v blízkosti sú príšery	#
 tile.bed.notValid=Vaša domáca posteľ chýbala alebo bola zatarasená	#
 tile.bed.occupied=Táto posteľ je obsadená	#
@@ -9597,7 +9720,7 @@ trial.tabbed_upsell.store.description=Získajte prístup k Trhovisku Minecraft, 
 trial.tabbed_upsell.creative.title=TVORIVÝ REŽIM	#
 trial.tabbed_upsell.creative.description=Kúpte si Minecraft a získajte tvorivý režim! Budete mať prístup k celému inventáru – jediným obmedzením pri budovaní bude vaša predstavivosť. Lietajte po svete, postavte si dom snov z hocičoho alebo vyhoďte do vzduchu horu pomocou neobmedzeného množstva TNT. 	#
 trial.tabbed_upsell.addon.title=DOPLNKY	#
-trial.tabbed_upsell.addon.description=Chcete, aby sa vlci správali ako zajačiky? Alebo premeniť všetky stromy na cukrovú vatu? Všetko môžete zmeniť v plnej hre Minecraft s doplnkami. Okrem toho získate prístup k hre pre viacerých hráčov, tvorivému režimu, dosiahnutým výsledkom a ďalším funkciám. Kúpte si Minecraft, aby ste mali plný prístup.	#
+trial.tabbed_upsell.addon.description=Chcete, aby sa vlci správali ako zajačiky? Alebo premeniť všetky stromy na cukrovú vatu? Pomocou doplnkov môžete zmeniť v plnej hre Minecraft úplne všetko. Okrem toho získate prístup k hre pre viacerých hráčov, tvorivému režimu, dosiahnutým výsledkom a ďalším funkciám. Kúpte si Minecraft, aby ste mali úplný prístup.	#
 trial.tabbed_upsell.seeds.title=POČIATOČNÉ HODNOTY	#
 trial.tabbed_upsell.seeds.description=Odomknite plnú hru Minecraft a získajte prístup k počiatočným hodnotám. Počiatočné hodnoty pomáhajú objavovať nové biómy – prežite na ľadových pláňach, vystúpte na extrémne kopce alebo putujte cez púšte. Začnite s unikátnymi šablónami alebo preskúmajte náhodné nové svety. Kúpte si Minecraft už dnes a získajte prístup k počiatočným hodnotám, tvorivému režimu, hre pre viacerých hráčov a ďalším funkciám.	#
 
@@ -9609,12 +9732,12 @@ trial.thanks_for_testing.minecraft.description=Ďakujeme, že ste si stiahli sk�
 trial.thanks_for_testing.xbl.title=KONTO MICROSOFT	#
 trial.thanks_for_testing.xbl.description=S plnou hrou Minecraft získate tvorivý režim, dosiahnuté výsledky a ďalšie funkcie. S kontom Microsoft sa navyše môžete stretávať s ostatnými členmi komunity Minecraft. Budete sa môcť pripojiť k svetom svojich priateľov, stretávať nových priateľov na serveroch a synchronizovať nákupy na Trhovisku so všetkými zariadeniami, kde hráte Minecraft.	#
 trial.thanks_for_testing.xbl.description.line2=* (vo verziách s Trhoviskom)	#
-trial.thanks_for_testing.achievements.description=Plná hra Minecraft vám okrem tvorivého režimu, hry pre viacerých hráčov a ďalších funkcií odomkne dosahovanie výsledkov a skóre hráča. Vďaka nim si môžete pozrieť svoj postup v hre a priatelia prepojení s vaším kontom Microsoft budú vidieť vaše výsledky.	#
+trial.thanks_for_testing.achievements.description=Plná hra Minecraft vám okrem tvorivého režimu, hry pre viacerých hráčov a ďalších funkcií odomkne dosahovanie výsledkov a skóre hráča. Vďaka nim si môžete pozrieť svoj postup v hre a priatelia s kontom Microsoft budú vidieť vaše výsledky.	#
 trial.thanks_for_testing.multiplayer.description=Plná hra Minecraft umožňuje používať tvorivý režim, dosahovať výsledky a hrať hru pre viacerých hráčov s priateľmi na rôznych zariadeniach s hrou Minecraft. Hrajte s priateľmi na konzole, počítači alebo mobile a spoločne tvorte, skúmajte a prežívajte.	#
 trial.thanks_for_testing.server.description=Jednou z funkcií dostupných v plnej verzii hry Minecraft sú servery, ktoré predstavujú najkreatívnejšie spôsoby, ako sa môžete zabaviť s hrou Minecraft. Hrajte skvelé minihry, stretávajte sa s komunitou Minecraftu a nájdite si nových priateľov.	#
 trial.thanks_for_testing.store.description=Plná hra vám odomkne prístup k Trhovisku Minecraft, nášmu obchodu v hre. Vyberte si inú vizáž pomocou nových vzhľadov, zmeňte svet alebo preskúmajte neuveriteľné nové mapy od najlepších autorov z komunity!	#
 trial.thanks_for_testing.creative.description=Obľúbená súčasť plnej hry Minecraft: tvorivý režim! Získajte prístup k celému inventáru – jediným obmedzením pri budovaní bude vaša predstavivosť. Lietajte po svete, postavte si dom snov z hocičoho alebo vyhoďte do vzduchu horu pomocou neobmedzeného množstva TNT.	#
-trial.thanks_for_testing.addon.description=Chcete, aby sa vlci správali ako zajačiky? Alebo premeniť všetky stromy na cukrovú vatu? V plnej hre Minecraft môžete všetko meniť pomocou doplnkov. Okrem toho získate prístup k hre pre viacerých hráčov, tvorivému režimu, dosiahnutým výsledkom a ďalším funkciám!	#
+trial.thanks_for_testing.addon.description=Chcete, aby sa vlci správali ako zajačiky? Alebo premeniť všetky stromy na cukrovú vatu? V plnej hre Minecraft môžete všetko meniť pomocou doplnkov. Okrem toho získate prístup k hre pre viacerých hráčov, tvorivému režimu, úspechom a ďalším funkciám!	#
 trial.thanks_for_testing.seeds.description=V plnej hre Minecraft budete mať prístup k počiatočným hodnotám. Počiatočné hodnoty pomáhajú objavovať nové biómy – prežite na ľadových pláňach, vystúpte na extrémne kopce alebo putujte cez púšte. Začnite s unikátnymi šablónami alebo preskúmajte náhodné nové svety!	#
 
 trial.tabbed_upsell.navleft=Prejsť na kartu vľavo	#
@@ -9711,10 +9834,6 @@ xbox.signinquestion=Prihlásiť sa?	#
 xbox.notnow=Teraz nie	#
 xbox.signingin=Prihlasuje sa pomocou konta Microsoft...	#
 xbox.signingin.offline=Prihlasuje sa	#
-xbox.firstsignin.line1=Víta vás Minecraft! Pomocou konta Microsoft sa začnite spájať s komunitou hry Minecraft, kde môžu hrať spoločne počítače, konzoly, telefóny aj tablety. A čo je na tom najlepšie?	#
-xbox.firstsignin.line2=Je ZADARMO!	#
-xbox.firstsignin.line3=Nemáte konto? Vytvorte si ho, aby ste mohli dosahovať výsledky a pripájať sa k službe Realms a na servery.	#
-xbox.firstsignin.line3.norealmsOrServers=Nemáte konto? Vytvorte si ho, aby ste mohli dosahovať výsledky a hrať s priateľmi z rôznych platforiem.	#
 xbox.failedsignin.body=Nepodarilo sa nám prihlásiť do vášho konta Microsoft. Prístup k službe Realms, profilom a položkám v Trhovisku bude obmedzený. Skúste to znova neskôr.	#
 xbox.failedsignin.error=Kód chyby:	#
 xbox.failedsignin.moreInfo=Ďalšie informácie	#
@@ -9743,6 +9862,8 @@ xbox.genericsignin.line3=Môžete ho použiť kdekoľvek Minecraft hráte.	#
 xbox.disconectionscreen.notSignedIn=Ak chcete hrať s priateľmi, prihláste sa pomocou konta Microsoft.	#
 xbox.disconectionscreen.multiplayerNotAllowed=Toto konto Microsoft nemá povolenie na pripájanie k hrám pre viacerých hráčov.	#
 xbox.disconectionscreen.accessDenied=Ak sa chcete pripojiť, musíte byť priateľom s niekým v tejto hre.	#
+
+xbox.addfriendsscreen.shareProfile=Pridajte si ma ako priateľa v hre Minecraft!	#
 
 xbox.friendfinder.enterGamertag=Zadajte menovku hráča	#
 xbox.friendfinder.findFriends=Hľadať priateľov pomocou menovky hráča	#
@@ -9817,13 +9938,15 @@ xbox.report.quittingEarly=Predčasné ukončenie	#
 xbox.report.unsportingBehavior=Nečestné správanie	#
 xbox.report.voiceCommunication=Hlasová komunikácia	#
 
+xbox.statistics.timePlayed=Odohraný čas	#
+xbox.statistics.blocksBroken=Rozbité bloky	#
+xbox.statistics.distanceTravelled=Precestovaná vzdialenosť	#
+xbox.statistics.mobsDefeated=Porazené tvory	#
+
 ## Player safety toast messages
 safety.muted.title=V chate ste boli dočasne stlmený.	#
 safety.muted.message=Nezabudnite dodržiavať normy komunity Minecraft.	#
 
-safety.reportCap=Zdá sa, že ste venovali veľa času nahlasovaniu iných hráčov. Ďakujeme, že ste nám pomohli urobiť z Minecraftu bezpečné a príjemné miesto. Pamätajte, že nepravdivé nahlasovanie je v rozpore s našimi komunitnými štandardmi.	#
-safety.reportFriend=%s je váš priateľ. Naozaj ho chcete nahlásiť? Podávanie nepravdivých hlásení je v rozpore s našimi komunitnými štandardmi.	#
-safety.reportFriend.title=Nahlásiť hráča %s	#
 safety.bannedSkin.title=Vzhľad nie je povolený v hre pre viacerých hráčov	#
 safety.bannedSkin.button=Ďalšie informácie	#
 safety.bannedSkin.continue=Pokračovať s predvoleným vzhľadom	#
@@ -9933,6 +10056,7 @@ content.import.succeeded=Súbor %s sa úspešne importoval	#
 content.import.succeeded_with_warnings=Súbor %s sa úspešne importoval s upozorneniami	#
 content.import.succeeded_with_warnings.subtitle=Kliknutím sem získajte ďalšie informácie	#
 content.import.started=Import sa začal...	#
+content.import.importedWorldPrefix=importované	#
 
 ## World Templates
 worldTemplate.festivemashup2016.name=Sviatočný balík mash-up 2016	#
@@ -10017,85 +10141,6 @@ tips.edu.28=Chcete používať Zostavovač kódu? Uistite sa, že je zapnuté po
 tips.edu.29=Stlačením klávesu F5 zmeňte perspektívu hráča.	#
 tips.edu.30=Pomocou príkazu /spawnpoint zmeňte miesto objavenia sa. Je to rovnaké, ako keby ste spali v posteli.	#
 
-tips.game.1=Pomocou morskej trávy lákajte a rozmnožujte morské korytnačky.	#
-tips.game.2=Malé korytnačky chráňte pred nepriateľskými tvormi.	#
-tips.game.3=Keď malé korytnačky narastú, zhodia doštičky, z ktorých si môžete vyrobiť korytnačie panciere.	#
-tips.game.4=Pomocou postele nastavte miesto svojho znovuzrodenia počas dňa.	#
-tips.game.5=Na prieskum pod vodou uvarte elixíry na dýchanie vo vode.	#
-tips.game.6=Delfíny vás môžu doviesť k vrakom lodí a ruinám pod vodou. Nakŕmte ich treskou a sledujte ich stopu!	#
-tips.game.7=Tekvicu vyrežte pomocou nožníc.	#
-tips.game.8=Krovky opravte pomocou blán z prízraku.	#
-tips.game.9=Existuje 3587 druhov tropických rýb.	#
-tips.game.10=Holotúrie možno roztaviť na žltozelené farbivo.	#
-tips.game.11=Pomocou balíkov sena rozmnožujte lamy.	#
-tips.game.12=Kompas ukazuje na miesto objavenia sa vo svete – vyrobte ho, aby ste našli cestu späť.	#
-tips.game.13=Obchodujte s dedinčanmi, aby ste získali jedlo, nástroje a dokonca aj mapy k pokladu.	#
-tips.game.14=Vedeli ste, že mapu môžete držať v druhej ruke?	#
-tips.game.15=Remienky možno používať na člny.	#
-tips.game.16=Zakrádajte sa alebo noste topánky mrazivého chodca, aby ste bezpečne prešli po magmových blokoch.	#
-tips.game.17=Pavučiny môžete zbierať pomocou nožníc.	#
-tips.game.18=Potrebujete diamanty? Vo väčšej hĺbke sa vyskytujú bežnejšie.	#
-tips.game.19=Skôr ako začnete ťažiť diamanty, rudit alebo zlato, uistite sa, že používate železný, diamantový alebo netheritový krompáč. Inak ruda nevypadne.	#
-tips.game.20=Potrebujete uhlie do faklí alebo ako palivo? Skúste roztavením drevených polien v peci vyrobiť drevné uhlie.	#
-tips.game.21=Zlato sa hojnejšie vyskytuje v biómoch pustatiny!	#
-tips.game.22=Krovky možno používať na plachtenie. Nájdete ich v lodiach v meste na konci sveta.	#
-tips.game.23=Zapnite možnosť Experimenty a vyskúšajte nové funkcie.	#
-tips.game.24=Trojzubce po sebe zanechávajú utopenci a dajú sa držať alebo hádzať.	#
-tips.game.25=Hoglinov môžete rozmnožovať pomocou karmínovej huby, ale je to nebezpečné!	#
-tips.game.26=Pomocou bloku sušených morských rias ako paliva môžete v peci roztaviť 20 predmetov.	#
-tips.game.27=Z creeperov zabitých pomocou šípov kostlivcov môžu vypadnúť hudobné disky.	#
-tips.game.28=Obsah na Trhovisku vytvárajú ľudia ako VY.	#
-tips.game.29=Vedeli ste, že niekoľko autorov z komunity si na živobytie zarába predajom obsahu na Trhovisku?	#
-tips.game.30=Môžete vyhľadávať vzhľady na prispôsobenie zážitku v hre alebo na vybraných platformách používať vlastné.	#
-tips.game.31=Balíčky textúr menia vzhľad blokov, predmetov a dokonca aj ponúk v hre. Vyskúšajte ich!	#
-tips.game.32=Na Trhovisku nájdete nové svety a dobrodružstvá.	#
-tips.game.33=Uchádzajte sa o pozíciu autora na Trhovisku.	#
-tips.game.34=Mash-up balíky sa dodávajú so svetom na preskúmanie, vzhľadmi, textúrami a dokonca aj novou hudbou.	#
-tips.game.35=Vedeli ste, že na Trhovisku je viac ako 500 balíkov vytvorených komunitou a každý týždeň pribúdajú ďalšie?	#
-tips.game.36=Zapojte sa do diskusie na lokalite discord.gg/Minecraft	#
-tips.game.37=Smaragdové rudy sú najvzácnejšie rudy v Minecrafte. Možno ich nájsť len v horách a na lúkach.	#
-tips.game.38=Skrotenie konského kostlivca nevyžaduje sedlo.	#
-tips.game.39=Oceloty ukážu creeperom, kto je tu šéf.	#
-tips.game.40=Diorit – buď ho milujete, alebo nenávidíte.	#
-tips.game.41=Prízraky sú nebezpečné tvory, ktoré sa zjavujú v noci. Nezabudnite pravidelne spávať!	#
-tips.game.42=Ak sa zombie ponoria pod vodu, premenia sa na utopencov.	#
-tips.game.43=Minecraft Live sa koná každý rok. Striehnite na ten budúci!	#
-tips.game.44=Používanie ohňostroja zvyšuje rýchlosť kroviek v strednej výške. Len sa uistite, že nevybuchnú, inak to bude STRAŠNE bolieť.	#
-tips.game.45=Zlato sa najčastejšie vyskytuje v biómoch Netheru a pustatiny.	#
-tips.game.46=Číta to vôbec niekto?	#
-tips.game.47=Nekonečné zázraky, nekonečné možnosti.	#
-tips.game.48=NENECHÁVAJTE STROMY VZNÁŠAŤ SA!	#
-tips.game.49=Ak chcete plávať vo vode, bežte.	#
-tips.game.50=Kúzlo Búrlivý príliv vás bude poháňať vzduchom v daždi.	#
-tips.game.51=Minecraft Live je celosvetové interaktívne podujatie so živými prenosmi. Schmatnite predmety a pripojte sa k párty!	#
-tips.game.52=Buďte milí k zvieratám.	#
-tips.game.53=Lúč je výkonný predmet, ktorý možno vyrobiť len pomocou netheritovej hviezdy z withera.	#
-tips.game.54=Nezabíjajte delfíny, vy príšera!	#
-tips.game.55=Vedeli ste, že netheritové hviezdy nemožno zničiť pomocou výbuchov?	#
-tips.game.56=Pri kopaní priamo nahor si k nohám položte fakľu, ktorá zničí piesok alebo štrk, ktorý by na vás mohol spadnúť.	#
-tips.game.57=Môžete obchodovať s piglinmi.	#
-tips.game.58=Ostrihaním úľa alebo hniezda získate včelí plást. Použitím fľaše získate med.	#
-tips.game.59=Umiestnite táborák pod úľ alebo hniezdo, aby ste med pozbierali pokojne. Včely sa vám poďakujú.	#
-tips.game.60=Znovuzrodenie v Netheri si vyžaduje nabitú kotvu znovuzrodenia.	#
-tips.game.61=Kotvu znovuzrodenia môžete nabiť pomocou žiarivého kameňa.	#
-tips.game.62=Máte nápad? Navštívte stránku feedback.minecraft.net	#
-tips.game.63=Pomocníkov možno nájsť v základniach plieniteľov a lesných kaštieľoch.	#
-tips.game.64=Pomocník rád zbiera predmety. Ak mu dáte určitý predmet, pokúsi sa ich zhromaždiť viac.	#
-tips.game.65=Pomocníci milujú hudbu, a preto interagujú s blokmi s notami.	#
-tips.game.66=Pod horskými pásmami sa nachádzajú starobylé mestá.	#
-tips.game.67=Pri putovaní v hlbokej temnote je kľúčové ticho.	#
-tips.game.68=Použitím fľaše s vodou na blok hliny získate blato.	#
-tips.game.69=Žaby jedia malé tvory z blokov.	#
-tips.game.70=Variant žaby závisí od teploty biómu, v ktorom rastie žubrienka.	#
-tips.game.71=Žubrienky môžete zbierať do vedier.	#
-tips.game.72=Preskúmajte stavby v celom svete hry Minecraft a nájdite kováčske šablóny na ozdobenie svojich kúskov brnenia.	#
-tips.game.73=Potrebujete viac kováčskych šablón? Pokúste sa ich skopírovať.	#
-tips.game.74=Zdá sa, že ňuchačove vajce obľubuje machové bloky.	#
-tips.game.75=Hlavy tvora vydávajú zvuky. Vyskúšajte ich na notových blokoch!	#
-tips.game.76=Niektorý piesok môže vyzerať podozrivo. Použite naň štetec a nájdite pár dobrých vecí!	#
-tips.game.77=Na ťave môžu jazdiť dvaja hráči spoločne.	#
-tips.game.78=Ťavy skáču… vodorovne!	#
-
 beginnerTips.1=Väčšina príšer vychádza len v noci. Cez deň ste v bezpečí... pravdepodobne.	#
 beginnerTips.2=Rozbíjajte bloky a zbierajte zdroje. Použite výrobnú mriežku na vytvorenie užitočných predmetov. Teraz už niečo vyrábate!	#
 beginnerTips.3=Máte nekonečné životy, ale po vašej smrti spadnú vaše predmety na zem. Ponáhľajte sa, aby ste ich zodvihli!	#
@@ -10108,6 +10153,7 @@ beginnerTips.9=Postele sú skvelé! Vyrobte si posteľ, aby vám rýchlejšie up
 beginnerTips.10=Počas plávania buďte opatrní. Ak zostanete pod vodou príliš dlho, minie sa vám vzduch.	#
 beginnerTips.11=Režim prežitia má 4 rôzne úrovne náročnosti: pokojnú, jednoduchú, normálnu a ťažkú. Alebo sa zahrajte v tvorivom režime a získajte nekonečné zdroje!	#
 beginnerTips.12=Svet hry Minecraft obsahuje nekonečné množstvo prekvapení. Nájdete v ňom veľa rôznych zvierat, rastlín a dokonca aj §f§k§a§b§r §f§k§a§b§r		### please leave "§f§k§a§b§r" unchanged
+
 
 midgameTips.1=Železní golemovia budú za vás bojovať!	#
 midgameTips.2=Nakŕmte vlka kosťou, aby ste ho skrotili. Potom mu môžete dať príkaz, aby si sadol alebo vás sprevádzal.	#
@@ -10127,7 +10173,7 @@ midgameTips.15=Nástroj, na ktorý hrá blok s notami, závisí od materiálu po
 midgameTips.16=Útok na vlka spôsobí, že sa všetci vlci okolo vás sa stanú nepriateľskými a napadnú vás. 	#
 midgameTips.17=Vlci a železní golemovia nezaútočia na creeperov.	#
 midgameTips.18=Sliepky znesú vajce každých 5 až 10 minút.	#
-midgameTips.19=Obsidián možno vyťažiť iba pomocou diamantového krompáča.	#
+midgameTips.19=Obsidián možno ťažiť pomocou diamantového krompáča.	#
 midgameTips.20=Creeperi sú najjednoduchším spôsobom získania pušného prachu.	#
 midgameTips.21=Skrotení vlci ukazujú svoje zdravie polohou chvosta. Kŕmte ich mäsom, aby ste ich vyliečili.	#
 midgameTips.22=Rôzne sfarbené farbivá možno vyrobiť z rôznych materiálov. Uvarením kaktusu v peci získate zelené farbivo!	#
@@ -10179,7 +10225,7 @@ midgameTips.67=Nekonečné zázraky, nekonečné možnosti.	#
 midgameTips.68=Zasaďte sadenice a vyrastú z nich stromy.	#
 midgameTips.69=Pomocou motyky pripravte zem na výsadbu.	#
 
-lategameTips.1=Zombie piglini na vás neútočia, ak máte zlaté brnenie. Teda ak ich nenahneváte.	#
+lategameTips.1=Zombie piglini na vás nezaútočia – pokiaľ ich nenahneváte.	#
 lategameTips.2=Hoďte tie ohnivé gule späť na ghasta!	#
 lategameTips.3=Stavebný kameň je odolný voči ohnivým guliam ghastov. Zíde sa preto pri ochrane portálov.	#
 lategameTips.4=Našu hudbu zložili C418, Lena Raine a Kumi Tanioka.	#
@@ -10209,6 +10255,12 @@ lategameTips.27=Diorit – buď ho milujete, alebo nenávidíte.	#
 
 tips.realms.1=Pomocou ponuky hry urobte snímku obrazovky.	#
 tips.realms.2=Realm je vždy online, takže vy aj vaši priatelia môžete hrať kedykoľvek.	#
+tips.realms.3=Majte prehľad o tom, čo sa deje vo vašej ríši, sledovaním informačného kanála príbehov v Príbehoch Realms.	#
+tips.realms.4=Podeľte sa o svoje skvelé chvíle s ostatnými hráčmi v tejto ríši pridaním príbehu do informačného kanála príbehov.	#
+tips.realms.5=Pozrite si časovú os v Príbehoch Realms a zistite, kedy hrajú ostatní.	#
+tips.realms.6=Získajte prístup k Príbehom Realms počas hrania v ríši.	#
+tips.realms.7=Spoznajte komunitu svojej ríše na karte Členovia v Príbehoch Realms.	#
+tips.realms.8=Pomocou Príbehov Realms sa môžete dostať na sociálne siete, držať tempo s pokrokom svojich priateľov a organizovať hrací čas.	#
 
 splitscreen.joinPrompt=Pridať sa ako hráč %s	#
 splitscreen.unavailable.toastHeader=Rozdelená obrazovka nie je k dispozícii	#
@@ -10303,7 +10355,7 @@ map.lock=Zamknúť mapu	#
 
 contentlog.history.title=História denníka obsahu	#
 contentlog.history.copyToClipboard=Kopírovať do schránky	#
-contentlog.history.clear=Jasné	#
+contentlog.history.clear=Vyčistiť	#
 contentlog.logLocationSectionName=Umiestnenie denníka obsahu:	#
 contentlog.settingsSectionName=Nastavenia denníka obsahu	#
 contentlog.clear_files=Zmazať staré denníky	#
@@ -10517,7 +10569,7 @@ dr.marketplace.get_more_skins=Získajte viac vzhľadov	#
 dr.classic_skins.show_more=Zobraziť viac	#
 
 onlinePlay.notRated=Hra online nie je hodnotená	#
-onlinePlay.message=Počas hry online môžete byť vystavení chatovým správam alebo iným typom obsahu vytvoreného používateľmi, ktorý nebol hodnotený a nemusí byť vhodný pre všetky vekové kategórie.	#
+onlinePlay.message=Počas online hrania môžete vidieť chatové správy alebo iný obsah generovaný používateľmi, ktorý nemusí byť vhodný pre všetky vekové kategórie.	#
 onlinePlay.editor.notRated=Editovanie online nie je hodnotené	#
 onlinePlay.editor.message=Počas editovania online môžete byť vystavení chatovým správam alebo iným typom obsahu vytvoreného používateľmi, ktoré neboli hodnotené a nemusia byť vhodné pre všetky vekové kategórie.	#
 onlinePlay.doNotShowAgain=Nabudúce túto obrazovku nezobrazovať	#

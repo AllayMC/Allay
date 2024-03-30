@@ -194,6 +194,7 @@ accessibility.text.equals=Lig med	#
 accessibility.text.unsupported=Ukendt figur	#
 
 accessibility.toast=Meddelelse		### This is the name of the popup that appears when a player gets a notification for a game invite or achievement unlocked
+accessibility.gametip=Tip:		### This is the name of the popup that appears when a player is shown a game tip
 
 accessibility.worldTemplates.help=Hjælp	#
 
@@ -926,6 +927,15 @@ commands.gamerule.type.nocheatsenabled=Spilreglen "%1$s" kan kun bruges i verden
 commands.gamerule.nopermission=Kun serverejere kan ændre '%1$s'	#
 commands.gamerule.norule=Spilreglen '%1$s' findes ikke	#
 commands.gamerule.success=Spilreglen %1$s er blevet opdateret til %2$s	#
+commands.gametips.description=Aktivér eller deaktivér spiltips på denne enhed	#
+commands.gametips.enabled=Spiltips er nu aktiveret	#
+commands.gametips.disabled=Spiltips er nu deaktiveret	#
+commands.gametips-off.description=Deaktivér spiltips på denne enhed	#
+commands.gametips-off.success=Spiltips er nu deaktiveret	#
+commands.gametips-on.description=Aktivér spiltips på denne enhed	#
+commands.gametips-on.success=Spiltips er nu aktiveret	#
+commands.gametips-reset.description=Nulstil spiltips på denne enhed	#
+commands.gametips-reset.success=Spiltips er nu nulstillet	#
 commands.generic.async.initiated=Kommandoen '%1$s' er startet (asynkront trin %2$d)	#
 commands.generic.boolean.invalid='%1$s' er hverken sand eller falsk	#
 commands.generic.chunk.notFound=Det angivne segment blev ikke fundet	#
@@ -948,12 +958,15 @@ commands.generic.exception=Der opstod en ukendt fejl under forsøget på at udf�
 commands.generic.invalidAgentType=Der anvendes et typeargument til Agentafgrænsning	#
 commands.generic.invalidcontext=Ugyldig kontekst til den givne kommandotype	#
 commands.generic.invalidDevice=Kommandoen %s, som du angav, understøttes ikke på denne enhed	#
+commands.generic.invalidMessage=Ugyldig meddelelseslængde	#
 commands.generic.invalidPlayerType=Der blev anvendt et typeargument til spillerafgrænsning	#
 commands.generic.invalidType=Ukendt typeargument	#
 commands.generic.levelError=Det maksimale niveau skal være større end det minimale niveau	#
 commands.generic.malformed.body=Kroppen mangler eller er deform	#
 commands.generic.malformed.type=Ugyldig forespørgselstype	#
 commands.generic.notimplemented=Ikke implementeret	#
+commands.generic.sourceNotLoaded=Kildevolumen er ikke indlæst	#
+commands.generic.destinationNotLoaded=Destinationsvolumen er ikke indlæst	#
 commands.generic.num.invalid='%1$s' er ikke et gyldigt tal	#
 commands.generic.num.tooBig=Det indtastede tal (%1$) er for højt. Det må højst være %2$d	#
 commands.generic.num.tooSmall=Det indtastede tal (%1$d) er for lavt. Det skal mindst være %2$d	#
@@ -1005,6 +1018,8 @@ commands.help.description=Hjælper/viser en liste over kommandoer.	#
 commands.help.footer=Tip: Hvis du trykker på tasten <tab>, når du skriver en kommando, fuldføres kommandoen eller dens argumenter automatisk	#
 commands.help.header=--- Viser hjælpeside %1$d af %2$d (/help <side>) ---	#
 commands.help.command.aliases=%s (også %s):	#
+commands.hud.description=Ændrer synligheden af HUD-elementer.	#
+commands.hud.success=HUD-kommandoen er udført	#
 commands.immutableworld.description=Indstiller verdenens uforanderlige tilstand.	#
 commands.immutableworld.info=immutableworld = %s	#
 commands.inputpermission.description=Indstiller, om en spillers input kan påvirke deres figur eller ej.	#
@@ -1148,7 +1163,9 @@ commands.recipes.playerDoesNotHaveRecipe=%1$s har ikke opskriften: %2$s	#
 commands.recipes.notFound=Opskriften kunne ikke findes.	#
 commands.recipes.notUnlockable=Opskriften kan ikke låses op i opskriftsbogen.	#
 commands.reload.description=Genindlæser alle funktions- og scriptfiler fra alle adfærdspakker.	#
+commands.reload.editor.description=Genindlæser alle funktions- og scriptfiler fra alle adfærdspakker eller genstarter klienten for at genindlæse alle ressourcer.	#
 commands.reload.success=Funktions- og scriptfilerne er blevet genindlæst.	#
+commands.reload.error=Der opstod en uventet fejl.	#
 commands.replaceitem.description=Erstatter genstande på lagre.	#
 commands.replaceitem.failed=%s-pladsen %d kunne ikke erstattes med %d * %s	#
 commands.replaceitem.keepFailed=Der er allerede en genstand på %s plads %d.	#
@@ -1312,6 +1329,8 @@ commands.spawnpoint.description=Indstiller en spillers spawningspunkt.	#
 commands.spawnpoint.success.multiple.specific=Spawningspunktet for %1$s er sat til (%2$d, %3$d, %4$d)	#
 commands.spawnpoint.success.multiple.generic=Spawningspunktet for %1$s er sat	#
 commands.spawnpoint.wrongDimension=Spawningspunktet kan ikke indstilles i denne dimension	#
+commands.clearrealmevents.description=Rydder alle Realm-events gemt i verdensdataene.	#
+commands.clearrealmevents.start=Rydder alle Realm-events	#
 commands.clearspawnpoint.success.single=Spawningspunktet for %1$s er fjernet	#
 commands.clearspawnpoint.description=Fjerner en spillers spawningspunkt.	#
 commands.clearspawnpoint.success.multiple=Spawningspunkterne for %1$s er fjernet	#
@@ -1877,6 +1896,8 @@ createWorldScreen.experimentalUpdateAnnounced2023=Opdatering 1.21	#
 createWorldScreen.experimentalUpdateAnnounced2023Description=Nye funktioner og indhold til Minecraft 1.21	#
 createWorldScreen.experimentalVillagerTradesRebalance=Landsbyboerhandel-afbalancering	#
 createWorldScreen.experimentalVillagerTradesRebalanceDescription=Indeholder opdaterede handler til landsbyboere med det formål at afbalancere	#
+createWorldScreen.experimentalArmadillo=Bæltedyr og ulverustning	#
+createWorldScreen.experimentalArmadilloDescription=Lær bæltedyret at kende, og gør din ulv klar med den nye ulverustning!	#
 createWorldScreen.worldPreferences=Indstillinger for verden	#
 createWorldScreen.startWithMap=Startkort	#
 createWorldScreen.defaultName=Min verden	#
@@ -2083,7 +2104,7 @@ realmsCreateScreen.offerNotAvailable.content=Din enhed har mistet forbindelsen t
 realmsCreateScreen.extendRealms.content=Du har forlænget dit Realms-abonnement til den maksimale længde. Du kan ikke tilføje yderligere tid lige nu. Prøv igen senere.	#
 realmsCreateScreen.twoUsers=2 spillere	#
 realmsCreateScreen.tenUsers=10 spillere	#
-realmsCreateScreen.viewTOS=Du kan se de gældende vilkår og betingelser for Minecraft Realms på https://aka.ms/minecraftrealmsterms i alle webbrowsere.	#
+realmsCreateScreen.viewTOS=Du kan se de gældende vilkår og betingelser for Minecraft Realms på https://www.minecraft.net/eula i alle webbrowsere.	#
 realmsCreateScreen.viewPrivacyPolicyText=Du kan se erklæringen om beskyttelse af personlige oplysninger for Minecraft Realms på https://aka.ms/mcprivacy i alle webbrowsere.	#
 realmsCreateScreen.waitingPurchase=Købet behandles! Det skulle gerne gå hurtigt.	#
 realmsCreateScreen.paymentFailed.title=Betalingstjeneste	#
@@ -2151,6 +2172,11 @@ realmsPlusUpgradeNotice.title=Velkommen til Realms Plus!	#
 realmsPlusUpgradeNotice.body=Dit abonnement på Realms er blevet opgraderet til Realms Plus. Du har nu adgang til over 150 indholdspakker fra markedspladsen uden yderligere omkostninger. Op til 10 spillere kan spille samtidig, og de får alle adgang til alt abonnementsindholdet i dit realm – gratis!	#
 realmsPlusUpgradeNotice.continue=Fortsæt	#
 realmsPlusUpgradeNotice.viewpacks=Se pakker i Realms Plus	#
+
+csbCreateScreen.popupTitle=Marketplace Pass		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.viewTOS=Du kan se de gældende vilkår og betingelser for Marketplace Pass på https://aka.ms/MinecraftEULA i alle webbrowsere.		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.viewPrivacyPolicyText=Du kan se erklæringen om beskyttelse af personlige oplysninger for Marketplace Pass på https://aka.ms/mcprivacy i alle webbrowsere.		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.goBack=Gå tilbage	#
 
 csbCreateScreen.termsAndConditionsAgree=Jeg accepterer	#
 csbCreateScreen.termsAndConditionsHeader=Vilkår og betingelser	#
@@ -2340,7 +2366,7 @@ realmsSettingsScreen.xboxOneStoreDisplayName=Xbox Store	#
 realmsSettingsScreen.amazonStoreDisplayName=Amazon Appstore	#
 realmsSettingsScreen.oculusStoreDisplayName=Oculus Store	#
 realmsSettingsScreen.berwickStoreDisplayName="PlayStation Store"	#
-realmsSettingsScreen.PS4StoreDisplayName="PlayStation Store"		#### CertRequirement: ["PlayStation Store"]
+realmsSettingsScreen.SonyStoreDisplayName=''PlayStation Store''	 	#### CertRequirement: ["PlayStation Store"]
 realmsSettingsScreen.unknownStoreDisplayName=en ukendt butik	#
 realmsSettingsScreen.extendingRealm=Forlænger realm ...	#
 realmsSettingsScreen.offerError.title=Afventende køb	#
@@ -2431,6 +2457,28 @@ date.short_november=nov.	#
 date.short_december=dec.	#
 date.formatted=%s %d %d	#
 date.formatted_alt=%d %s %d	#
+date.full_january=Januar	#
+date.full_february=Februar	#
+date.full_march=Marts	#
+date.full_april=April	#
+date.full_may=maj	#
+date.full_june=Juni	#
+date.full_july=Juli	#
+date.full_august=August	#
+date.full_september=September	#
+date.full_october=Oktober	#
+date.full_november=November	#
+date.full_december=December	#
+
+date.daysAbbreviated3Char=%sd		### It needs to be abbreviated with no more than 3 characters
+date.hoursAbbreviated3Char=%st		### It needs to be abbreviated with no more than 3 characters
+date.minutesAbbreviated3Char=%sm		### It needs to be abbreviated with no more than 3 characters
+date.secondsAbbreviated3Char=%ss		### It needs to be abbreviated with no more than 3 characters
+date.daysAbbreviated1Char=%sd		### It needs to be abbreviated with no more than 1 characters
+date.hoursAbbreviated1Char=%st		### It needs to be abbreviated with no more than 1 characters
+date.minutesAbbreviated1Char=%sm		### It needs to be abbreviated with no more than 1 characters
+date.secondsAbbreviated1Char=%ss		### It needs to be abbreviated with no more than 1 characters
+date.timeLeft=%s resterende	#
 
 dayOneExperience.carousel.title=Velkommen til det nye Minecraft!	#
 dayOneExperience.carousel.welcome_text=Denne nye version af Minecraft er fyldt med spændende ting. Gå en tur på markedspladsen, opret et realm, og spil online med dine venner på tværs af platforme!	#
@@ -2533,6 +2581,7 @@ deathScreen.quit=Hovedmenu	#
 deathScreen.quit.confirm=Er du sikker på, at du vil afslutte?	#
 deathScreen.quit.confirmToMainMenuWarning=Er du sikker på, at du vil afslutte spillet og gå til hovedmenuen?	#
 deathScreen.quit.confirmToMainMenuTitleWarning=Afslut, og gå til hovedmenuen?	#
+deathScreen.quit.eduCloud.confirmLeaveWarning=Er du sikker på, at du vil gemme og forlade spillet?%sVi uploader også din verden til skyen!	#
 deathScreen.quit.secondaryClient=Gem og afslut	#
 deathScreen.quit.secondaryClient.confirmLeaveWarning=Er du sikker på, at du vil gemme og afslutte spillet?	#
 deathScreen.quit.secondaryClient.confirmLeaveTitleWarning=Gem og afslut	#
@@ -2915,6 +2964,7 @@ exports.share.file=Del %s	#
 exports.suspendWarning.client.content=Advarsel: Hvis du fortsætter, afbrydes du fra denne multiplayer-session.	#
 exports.suspendWarning.host.content=Advarsel: Hvis du fortsætter, afbryder dette multiplayer-sessionen for alle spillere.	#
 exports.suspendWarning.title=Advarsel	#
+exports.eduCloud.suspendWarning.host.content=Er du sikker på, at du vil gemme og forlade spillet?%1Advarsel: Hvis du gør det, afbryder dette multiplayer-sessionen for alle spillere.%1Vi uploader også din verden til skyen!	#
 exports.fileError.title=Kunne ikke gemme din fil	#
 exports.fileError.body=Disken kan være fuld eller skrivebeskyttet, eller filen kan være i brug. Sørg for, at filen ikke er åben, og prøv igen.	#
 
@@ -2960,6 +3010,14 @@ feed.daysAgo=%dd siden	#
 feed.hoursAgo=%dt siden	#
 feed.minutesAgo=%dm siden	#
 feed.now=Lige nu	#
+feed.narrationDayAgo=Oprettet for en dag siden		#### This social media post was posted one day ago
+feed.narrationDaysAgo=Oprettet for %d dage siden		#### This social media post was posted x days ago
+feed.narrationHourAgo=Oprettet for en time siden		#### This social media post was posted one hour ago
+feed.narrationHoursAgo=Oprettet for %d timer siden		#### This social media post was posted x hours ago
+feed.narrationMinuteAgo=Oprettet for et minut siden		#### This social media post was posted one minute ago
+feed.narrationMinutesAgo=Oprettet for %d minutter siden		#### This social media post was posted x minutes ago
+feed.narrationNow=Oprettet lige nu		#### This social media post was posted just now
+feed.narrationDate=Oprettet på %s %d, %d		#### This social media post was posted on 'month day, year' ex. Posted on March 12, 2023
 feed.whatup=Hvad så?	#
 feed.upload=Dit skærmbillede uploades ...	#
 feed.manage=Administrer feed	#
@@ -3012,11 +3070,11 @@ gameMode.hardcore=Hardcore!	#
 gameMode.spectator=Tilskuer-tilstand	#
 gameMode.survival=Overlevelse	#
 
-gameTip.cameraMovement.mouse=Se dig omkring. Brug musen til at dreje	#
+gameTip.cameraMovement.mouse=Se dig omkring[LINEBREAK]Brug musen til at dreje		#### {StrContains='LINEBREAK'}
 gameTip.cameraMovement.touch=Tryk på skærmen træk for at kigge dig omkring	#
 gameTip.cameraMovement.controller=Brug :tip_right_stick: til at kigge dig omkring	#
 
-gameTip.playerMovement.mouse=Bevæg dig med :_input_key.forward:, :_input_key.left:, :_input_key.back:, :_input_key.right:. Hop med mellemrumstasten	#
+gameTip.playerMovement.mouse=Bevæg dig med :_input_key.forward:, :_input_key.left:, :_input_key.back:, :_input_key.right:	#
 gameTip.playerMovement.touch=Bevæg dig ved hjælp af joysticket	#
 gameTip.playerMovement.touch.classic=Bevæg dig ved hjælp af joysticket	#
 gameTip.playerMovement.controller=Brug :tip_left_stick: til at bevæge dig	#
@@ -3029,20 +3087,27 @@ gameTip.breakBlock.mouse=Hold venstre museknap nede for at bryde blokke	#
 gameTip.breakBlock.touch=Tryk og hold nede for at bryde blokke	#
 gameTip.breakBlock.touch.classic=Tryk og hold nede for at bryde blokke	#
 gameTip.breakBlock.controller=Tryk og hold nede for at bryde blokke	#
+gameTip.breakBlock.touch.crosshair=Tryk og hold :tip_virtual_button_action_attack_or_destroy:[LINEBREAK]nede for at bryde blokke 	#### {StrContains='LINEBREAK'}
 
-gameTip.placeBlock.mouse=Klik for at placere blok	#
+gameTip.placeBlock.mouse=Højreklik for at placere blok	#
 gameTip.placeBlock.touch=Tryk for at placere blok	#
 gameTip.placeBlock.controller=Klik på jorden for at placere blok	#
+gameTip.placeBlock.touch.crosshair=Tryk på :tip_virtual_button_action_build_or_use: for at placere blok	#
 
-gameTip.openInventory.mouse=Åbn dit lager. Tryk på :_input_key.inventory:	#
-gameTip.openInventory.touch=Åbn lager for at se fremstillingsopskrifter	#
-gameTip.openInventory.controller=Tryk på :_input_key.inventory: for at åbne dit lager	#
+gameTip.openInventorySurvival.mouse=Åbn dit lager[LINEBREAK]Tryk på :_input_key.inventory:		#### {StrContains='LINEBREAK'}
+gameTip.openInventorySurvival.touch=Åbn lager for at se fremstillingsopskrifter	#
+gameTip.openInventorySurvival.controller=Tryk på :_input_key.inventory: for at åbne dit lager	#
+
+gameTip.openInventoryCreative.mouse=Åbn dit lager[LINEBREAK]Tryk på :_input_key.inventory:		#### {StrContains='LINEBREAK'}
+gameTip.openInventoryCreative.touch=Åbn lager for at se byggeblokke	#
+gameTip.openInventoryCreative.controller=Tryk på :_input_key.inventory: for at åbne dit lager	#
+
 
 gameTip.sneak.mouse=Du sniger! Du kan ikke falde ned fra kanter nu	#
 gameTip.sneak.touch=Du sniger, så du kan ikke falde ned fra kanter	#
 gameTip.sneak.controller=Du sniger, så du kan ikke falde ned fra kanter	#
 
-gameTip.placeCraftingTable.mouse=Placér dit arbejdsbord. Hold det nede, og klik for at placere	#
+gameTip.placeCraftingTable.mouse=Placér dit arbejdsbord[LINEBREAK]Hold det nede, og klik for at placere		#### {StrContains='LINEBREAK'}
 gameTip.placeCraftingTable.touch=Placér dit arbejdsbord ved at trykke på jorden	#
 gameTip.placeCraftingTable.controller=Placér dit arbejdsbord, hold det nede, og tryk så på jorden	#
 
@@ -3153,6 +3218,8 @@ gui.editor.copyProject.failedMessage=Vi kunne ikke oprette en kopi af dette proj
 
 gui.edu.exitGameWarningCaption=Minecraft Education	### Use Minecraft 教育版 in zh_CN translation
 gui.edu.exitGameWarningMessage=Afslut Minecraft Education?		### Use 离开 Minecraft 教育版? in zh_CN translation
+gui.edu.exitGameWarningCaptionPreview=Minecraft Education-smugkig	#
+gui.edu.exitGameWarningMessagePreview=Vil du afslutte Minecraft Education-smugkig?	#
 
 updateScreen.update=Opdater	#
 updateScreen.updateRequired=Opdatering påkrævet	#
@@ -3256,7 +3323,7 @@ howtoplay.beacons=Signallys	#
 howtoplay.beacons.text.1=Aktive signallys sender en skarp lysstråle op i himmelen.	#
 howtoplay.beacons.text.2=De fremstilles af glas, obsidian og Nether-stjerner (der opnås ved at besejre Wither).	#
 howtoplay.beacons.header.1=Konstruktion	#
-howtoplay.beacons.text.3=Signallys skal placeres ovenpå pyramider af jern-, guld-, smaragd- eller diamantblokke og have uhindret adgang til himmelen.	#
+howtoplay.beacons.text.3=Signallys skal være oven på en pyramide af jern-, guld-, smaragd-, diamant- eller netheritblokke med en uhindret udsigt til himlen.	#
 howtoplay.beacons.text.4=Signallysets kraft afhænger ikke af, hvilket materiale det placeres på.	#
 howtoplay.beacons.header.2=Anvendelse	#
 howtoplay.beacons.text.5=Du kan vælge en primær kraft til dit signallys i Signallys-menuen. Jo flere niveauer din pyramide har, jo flere kræfter kan du give dit signallys.	#
@@ -3355,7 +3422,7 @@ howtoplay.commands.text.1=Kommandoer kan eksekveres via chatten. Skriv en /, ind
 howtoplay.commands.text.2=Der er oceaner af kommandoer, og de giver dig mulighed for at gøre fantastiske ting. Hvis du har brug for at vide mere, findes der en lang række kilder, der kan give dig yderligere oplysninger.	#
 
 howtoplay.conduits=Konduktorer	#
-howtoplay.conduits.text.1=En aktiv konduktor giver dig energi, når du er under vand.	#
+howtoplay.conduits.text.1=En aktiv konduktor giver dig kræfter, når du er under vandet, og når det regner.	#
 howtoplay.conduits.text.2=En konduktor fremstilles af konkylier og et Havets hjerte. Konduktoren henter sin energi fra prismarine og havlanterner.	#
 howtoplay.conduits.header.1=Konstruktion	#
 howtoplay.conduits.text.3=Når en konduktor er aktiveret, fordeler den konduktorenergi til alt i nærheden.	#
@@ -3369,6 +3436,7 @@ howtoplay.craftingATool.text.2.gamepad=Hvis du vil fremstille et værktøj, skal
 howtoplay.craftingATool.text.2.touch=Hvis du vil fremstille et værktøj, skal du åbne dit §earbejdsbord§f:crafting_table: ved at gå op til det og klikke på det. Du kan fremstille en basal version af de fleste værktøjer ved hjælp af to pinde og et par planker. Din §eopskriftsbog§f fortæller dig, hvordan du gør!	#
 
 howtoplay.worldBuilder=Verdensbygger	#
+howtoplay.worldBuilder.title=Sådan spiller du: Verdensbygger	#
 howtoplay.worldBuilder.text.1=Du kan kun placere og bruge visse blokke og genstande fra Minecraft Education, hvis du har den særlige egenskab "Verdensbygger".	#
 howtoplay.worldBuilder.text.2=Når snydekoder er aktiveret, kan værten aktivere og deaktivere Verdensbygger-evnen hos alle verdenens spillere.	#
 howtoplay.worldBuilder.text.3=Du gør alle spillere i en verden til Verdensbyggere med følgende kommando:	#
@@ -3380,6 +3448,7 @@ howtoplay.worldBuilder.text.8=Du kan se, om du er Verdensbygger med følgende ko
 howtoplay.worldBuilder.text.9=/ability @p worldbuilder	#
 
 howtoplay.permissionBlocks=Tilladelsesblokke	#
+howtoplay.permissionBlocks.title=Sådan spiller du: Tilladelsesblokke	#
 howtoplay.permissionBlocks.text.1=Minecraft Education indeholder en række blokke, der gør det lettere for lærere at oprette og afholde lektioner. Kun Verdensbyggere kan placere og ødelægge disse blokke. Blokkenes restriktioner gælder udelukkende for spillere, der ikke er Verdensbyggere.	#
 howtoplay.permissionBlocks.title.1=Tillad/afvis	#
 howtoplay.permissionBlocks.text.2=Tillad- og afvis-blokke definerer, hvor spillere kan bygge i en verden.	#
@@ -3409,19 +3478,23 @@ howtoplay.playingTogether.realms=Prøv Realms	#
 howtoplay.playingTogether.signIn=Log på for at prøve Realms	#
 
 howtoplay.chalkboard=Tavler	#
+howtoplay.chalkboard.title=Sådan spiller du: Tavler	#
 howtoplay.chalkboard.text.1=Tavler bruges til at vise tekst i verden. Tavler kan vise mere tekst end skilte, og de kan ændres uden at gå i stykker. De findes i tre størrelser: lille, mellem og stor. Du kan låse dine tavler, så ikke-Verdensbyggere hverken kan ødelægge eller redigere dem. Tryk på :_input_key.use: på en eksisterende tavle for at redigere teksten.	#
 howtoplay.chalkboard.text.1.touch=Tavler bruges til at vise tekst i verden. Tavler kan vise mere tekst end skilte, og de kan ændres uden at gå i stykker. De findes i tre størrelser: lille, mellem og stor. Du kan låse dine tavler, så ikke-Verdensbyggere hverken kan ødelægge eller redigere dem. Tryk på en eksisterende tavle for at redigere teksten.	#
 
 howtoplay.chemistry=Kemi	#
+howtoplay.chemistry.title=Sådan spiller du: Kemi	#
 howtoplay.chemistry.text.1=Elever kan simulere kemi fra den virkelige verden ved at bruge kemiudstyr-blokke. De kan bygge og se opbygningen af alle 118 grundstoffer i grundstofopbyggeren. De kan producere kemiske forbindelser ved at kombinere grundstoffer i forbindelsesskaberen, og de kan fremstille Minecraft-genstande ved at samle grundstoffer og forbindelser på laboratoriebordet. Endelig kan de opdele blokke i deres grundstoffer med materialeopdeleren.	#
 howtoplay.chemistry.text.2=Du kan downloade en omfattende manual til kemi i Minecraft fra Minecraft Education-websitet.	#
 
 howtoplay.npc=Non-player characters	#
+howtoplay.npc.title=Sådan spiller du: Non-player characters	#
 howtoplay.npc.text.1=En "NPC" er en non-player character – altså en karakter, der ikke styres af en spiller – der kan levere viden, tips og instruktioner.	#
 howtoplay.npc.text.2=Kun en Verdensbygger kan placere, slette, navngive og redigere en NPC. En NPC kan udløse kommandoer og linke til websites. Kommandoer kan udløses via knapper i NPC'ens dialogvindue. Weblinks har altid en knap.	#
 howtoplay.npc.text.3=NPC'ere kan have mange forskellige skins, men de kan ikke bevæge sig.	#
 
 howtoplay.camera=Kamera	#
+howtoplay.camera.title=Sådan spiller du: Kamera	#
 howtoplay.camera.text.1=Kameraet giver spillere mulighed for at tage billeder i verdenen.	#
 howtoplay.camera.text.2=Du tager et billede fra din synsvinkel ved at trykke på :_input_key.use:.	#
 howtoplay.camera.text.2.touch=Du tager et billede fra din synsvinkel ved at holde nede og slippe.	#
@@ -3430,14 +3503,17 @@ howtoplay.camera.text.3.touch=Du tager en selfie ved at placere et kamera og try
 howtoplay.camera.text.4=Billeder kan ses i din portfolio og indsættes i bog og fjerpen.	#
 
 howtoplay.portfolio=Portfolio	#
+howtoplay.portfolio.title=Sådan spiller du: Portfolio	#
 howtoplay.portfolio.text.1=Når du tager billeder, ender de i din portfolio. Tryk på :_input_key.use: for at se portfolioen. Når din portfolio er åben, kan du skrive billedtekster, slette billeder og eksportere billeder som PDF.	#
 howtoplay.portfolio.text.1.touch=Når du tager billeder, ender de i din portfolio. Hold portfolioen nede for at se portfolioen. Når din portfolio er åben, kan du skrive billedtekster, slette billeder og eksportere billeder som PDF.	#
 
 howtoplay.classroomMode=Klassetilstand	#
+howtoplay.classroomMode.title=Sådan spiller du: Klassetilstand	#
 howtoplay.classroomMode.text.1=Klassetilstand er en ekstern udvidelse, der giver undervisere adgang til en række funktioner specielt udviklet til interaktion med elever. Du kan downloade Klassetilstand fra Minecraft Education-websitet.	#
 howtoplay.classroomMode.text.2=Som vært for en verden kan du åbne Klassetilstand-appen og forbinde den til Minecraft Education ved at bruge kommandoen /classroommode.	#
 
 howtoplay.codeBuilder=Code Builder	#
+howtoplay.codeBuilder.title=Sådan spiller du: Code Builder	#
 howtoplay.codeBuilder.text.1=Code Builder giver spillere mulighed for at udforske, oprette og spille i Minecraft ved at skrive kode med velkendte lær-at-kode-platforme.	#
 howtoplay.codeBuilder.text.2=Åbn Code Builder ved at trykke på :_input_key.codeBuilder: eller med kommandoen /code.	#
 howtoplay.codeBuilder.text.2.touch=Åbn Code Builder ved at trykke på :code_builder_button: eller med kommandoen /code.	#
@@ -3724,9 +3800,10 @@ howtoplay.movingAround.text.3b.windowsmr_controller=Tryk på :windowsmr_right_to
 howtoplay.gatheringResources=Indsamling af ressourcer	#
 howtoplay.gatheringResources.title=Sådan spiller du: Indsamling af ressourcer	#
 howtoplay.gatheringResources.text.1=Verdenen er fuld af ressourcer, inklusive §ebyggeblokke§f, §efremstillingsmaterialer§f og §emad§f.	#
-howtoplay.gatheringResources.text.2.nottouch=De fleste ressourcer, f.eks. jord, træ og græskar, kan indsamles med dine egne hænder. Sigt med sigtekornet i midten af skærmen på blokken, og hold :_input_key.attack: nede, indtil de dropper. Vi kalder dette at §ebryde blokke§f.	#
-howtoplay.gatheringResources.text.2.touch=De fleste ressourcer, f.eks. jord, træ og græskar, kan indsamles med dine egne hænder. Du skal blot gå op til dem, og så røre og holde nede på på skærmen, indtil de dropper – vi kalder dette for §ebrydning af blokke§f.	#
-howtoplay.gatheringResources.text.2.touch.joystick_crosshair=De fleste ressourcer, f.eks. jord, træ og græskar, kan indsamles med dine egne hænder. Sigt med sigtekornet i midten af skærmen på blokken, og tryk på og hold angreb/ødelæg-knappen :tip_virtual_button_action_attack_or_destroy: nede, indtil de dropper. Vi kalder dette at §ebryde blokke§f.	#
+howtoplay.gatheringResources.text.2.nottouch=Du kan §ebryde blokke§f med dine bare næver for at samle ressourcer som jord og træ. Sigt på en blok, og §etryk på og hold§f :_input_key.attack: nede, indtil den bryder, og ressourcerne dropper. 	#
+howtoplay.gatheringResources.text.2.touch=Du kan §ebryde blokke§f med dine bare næver for at samle ressourcer som jord og træ. §eTryk på og hold§f nede på blokken, indtil den bryder, og ressourcerne dropper.	#
+howtoplay.gatheringResources.text.2.touch.joystick_crosshair=Du kan §ebryde blokke§f med dine bare næver for at samle ressourcer som jord og træ. Sigt på en blok, og §etryk og hold§f :tip_virtual_button_action_attack_or_destroy: nede, indtil den bryder, og ressourcerne dropper. 	#
+howtoplay.gatheringResources.text.2.pc=Du kan §ebryde blokke§f med dine bare næver for at samle ressourcer som jord og træ. Sigt på en blok, og §eklik og hold§f :_input_key.attack: nede, indtil den bryder, og ressourcerne dropper. 	#
 howtoplay.gatheringResources.text.3=Saml de droppede ressourcer op ved at gå hen over de svævende ikoner.	#
 
 howtoplay.selectingItems=Valg af genstande	#
@@ -3965,7 +4042,7 @@ howtoplay.yourFirstCraft.text.3.keyboard=Træk blot dine flotte nye planker til 
 howtoplay.yourFirstCraft.text.3.gamepad=Vælg blot dine flotte nye planker, og de vises i din hotbjælke. Du er nu klar til at placere dem i verdenen!	#
 howtoplay.yourFirstCraft.header.2=2. Fremstillingsopskrift	#
 howtoplay.yourFirstCraft.text.4=Nogle genstande kræver, at du placerer dine fremstillingsingredienser i en bestemt form – også kaldet en §eopskrift§f.	#
-howtoplay.yourFirstCraft.text.5=Prøv at placere to planker oven over hinanden for at skabe en pind. Sådan en kan bruges til alt muligt!	#
+howtoplay.yourFirstCraft.text.5=Prøv at placere to planker oven over hinanden for at skabe nogle pinde. De kan bruges til alt muligt!	#
 
 immersive_reader.book_page_header=Side %1 af %2	#
 immersive_reader.portfolio_page_header= Side %1	#
@@ -3987,6 +4064,8 @@ level.editor.import.success=Projektet er importeret	#
 level.editor.export.failed=Projekteksport mislykkedes	#
 level.editor.import.failed=Import af projekt mislykkedes	#
 level.editor.import.failed.incompatibleEdition=Projektimport mislykkedes: Filformatet understøttes ikke	#
+
+inbox.invite.title=Realms-invitation	#
 
 invite.clear=Ryd valg	#
 invite.send=Send %d invitationer	#
@@ -4797,6 +4876,7 @@ item.cake.name=Kage	#
 item.camera.name=Kamera	#
 item.canBreak=Kan ødelægge:	#
 item.canPlace=Kan placeres på:	#
+item.customProperties=Har brugerdefinerede egenskaber	#
 item.itemLock.cantDrop=:hollow_star: Kan ikke smides-genstande kan ikke:	#
 item.itemLock.cantMove=:solid_star: Kan ikke flyttes-genstande kan ikke:	#
 item.itemLock.hoverText.cantBe.moved=flyttes	#
@@ -4992,84 +5072,84 @@ item.hopper_minecart.name=Minevogn med tragt	#
 item.tnt_minecart.name=Minevogn med TNT	#
 item.pitcher_pod.name=Kandebærer-bælg	#
 item.torchflower_seeds.name=Fakkelblomstfrø	#
-item.spawn_egg.entity.agent.name=Spawn Agent	#
-item.spawn_egg.entity.axolotl.name=Spawn axolotl	#
-item.spawn_egg.entity.bee.name=Spawn bi	#
-item.spawn_egg.entity.hoglin.name=Spawn hoglin	#
-item.spawn_egg.entity.cat.name=Spawn kat	#
-item.spawn_egg.entity.chicken.name=Spawn kylling	#
-item.spawn_egg.entity.cow.name=Spawn ko	#
-item.spawn_egg.entity.cod.name=Spawn torsk	#
-item.spawn_egg.entity.ender_dragon.name=Spawn ender-drage	#
-item.spawn_egg.entity.goat.name=Spawn ged	#
-item.spawn_egg.entity.pufferfish.name=Spawn kuglefisk	#
-item.spawn_egg.entity.salmon.name=Spawn laks	#
-item.spawn_egg.entity.tropicalfish.name=Spawn tropefisk	#
-item.spawn_egg.entity.pig.name=Spawn gris	#
-item.spawn_egg.entity.sheep.name=Spawn får	#
-item.spawn_egg.entity.npc.name=Spawn NPC	#
+item.spawn_egg.entity.agent.name=Agent-spawnæg	#
+item.spawn_egg.entity.axolotl.name=Axolotl-spawnæg	#
+item.spawn_egg.entity.bee.name=Bi-spawnæg	#
+item.spawn_egg.entity.hoglin.name=Hoglin-spawnæg	#
+item.spawn_egg.entity.cat.name=Katte-spawnæg	#
+item.spawn_egg.entity.chicken.name=Kyllinge-spawnæg	#
+item.spawn_egg.entity.cow.name=Ko-spawnæg	#
+item.spawn_egg.entity.cod.name=Torske-spawnæg	#
+item.spawn_egg.entity.ender_dragon.name=Enderdrage-spawnæg	#
+item.spawn_egg.entity.goat.name=Gede-spawnæg	#
+item.spawn_egg.entity.pufferfish.name=Kuglefisk-spawnæg	#
+item.spawn_egg.entity.salmon.name=Lakse-spawnæg	#
+item.spawn_egg.entity.tropicalfish.name=Tropefisk-spawnæg	#
+item.spawn_egg.entity.pig.name=Grise-spawnæg	#
+item.spawn_egg.entity.sheep.name=Fåre-spawnæg	#
+item.spawn_egg.entity.npc.name=NPC-spawnæg	#
 item.spawn_egg.entity.npc.failed=Du skal bruge Kreativ + Operatør for at spawne en NPC	#
-item.spawn_egg.entity.wolf.name=Spawn ulv	#
-item.spawn_egg.entity.villager.name=Spawn landsbyboer	#
-item.spawn_egg.entity.villager_v2.name=Spawn landsbyboer	#
-item.spawn_egg.entity.vindicator.name=Spawn hævner	#
-item.spawn_egg.entity.mooshroom.name=Spawn mooshroom	#
-item.spawn_egg.entity.squid.name=Spawn blæksprutte	#
-item.spawn_egg.entity.glow_squid.name=Spawn selvlysende blæksprutte	#
-item.spawn_egg.entity.rabbit.name=Spawn kanin	#
-item.spawn_egg.entity.bat.name=Spawn flagermus	#
-item.spawn_egg.entity.ravager.name=Spawn ravager	#
-item.spawn_egg.entity.iron_golem.name=Spawn jerngolem	#
-item.spawn_egg.entity.snow_golem.name=Spawn snegolem	#
-item.spawn_egg.entity.ocelot.name=Spawn ozelot	#
-item.spawn_egg.entity.parrot.name=Spawn papegøje	#
-item.spawn_egg.entity.horse.name=Spawn hest	#
-item.spawn_egg.entity.llama.name=Spawn lama	#
-item.spawn_egg.entity.trader_llama.name=Spawn Trader Lama	#
-item.spawn_egg.entity.polar_bear.name=Spawn isbjørn	#
-item.spawn_egg.entity.donkey.name=Spawn æsel	#
-item.spawn_egg.entity.mule.name=Spawn muldyr	#
-item.spawn_egg.entity.skeleton_horse.name=Spawn skelethest	#
-item.spawn_egg.entity.zombie_horse.name=Spawn zombiehest	#
-item.spawn_egg.entity.zombie.name=Spawn zombie	#
-item.spawn_egg.entity.drowned.name=Spawn draug	#
-item.spawn_egg.entity.creeper.name=Spawn creeper	#
-item.spawn_egg.entity.skeleton.name=Spawn skelet	#
-item.spawn_egg.entity.spider.name=Spawn edderkop	#
-item.spawn_egg.entity.zombie_pigman.name=Spawn zombificeret piglin	#
-item.spawn_egg.entity.strider.name=Spawn strider	#
-item.spawn_egg.entity.slime.name=Spawn slim	#
-item.spawn_egg.entity.enderman.name=Spawn enderman	#
-item.spawn_egg.entity.silverfish.name=Spawn sølvfisk	#
-item.spawn_egg.entity.cave_spider.name=Spawn huleedderkop	#
-item.spawn_egg.entity.ghast.name=Spawn ghast	#
-item.spawn_egg.entity.magma_cube.name=Spawn magmakube	#
-item.spawn_egg.entity.blaze.name=Spawn blaze	#
-item.spawn_egg.entity.zombie_villager.name=Spawn zombielandsbyboer	#
-item.spawn_egg.entity.zombie_villager_v2.name=Spawn zombielandsbyboer	#
-item.spawn_egg.entity.witch.name=Spawn heks	#
-item.spawn_egg.entity.stray.name=Spawn strejfer	#
-item.spawn_egg.entity.husk.name=Spawn husk	#
-item.spawn_egg.entity.wither_skeleton.name=Spawn wither-skelet	#
-item.spawn_egg.entity.guardian.name=Spawn vogter	#
-item.spawn_egg.entity.elder_guardian.name=Spawn ældre vogter	#
-item.spawn_egg.entity.shulker.name=Spawn shulker	#
-item.spawn_egg.entity.endermite.name=Spawn endermite	#
-item.spawn_egg.entity.evocation_illager.name=Spawn troldkarl	#
-item.spawn_egg.entity.vex.name=Spawn vex	#
-item.spawn_egg.entity.turtle.name=Spawn havskildpadde	#
-item.spawn_egg.entity.dolphin.name=Spawn delfin	#
-item.spawn_egg.entity.phantom.name=Spawn fantom	#
-item.spawn_egg.entity.panda.name=Spawn panda	#
-item.spawn_egg.entity.pillager.name=Spawn røver	#
-item.spawn_egg.entity.piglin_brute.name=Spawn brutal piglin	#
-item.spawn_egg.entity.piglin.name=Spawn piglin	#
-item.spawn_egg.entity.fox.name=Spawn ræv	#
-item.spawn_egg.entity.unknown.name=Spawn	#
-item.spawn_egg.entity.wandering_trader.name=Spawn handelsrejsende	#
-item.spawn_egg.entity.wither.name=Spawn wither	#
-item.spawn_egg.entity.zoglin.name=Spawn zoglin	#
-item.spawn_egg.entity.sniffer.name=Spawn sniffer	#
+item.spawn_egg.entity.wolf.name=Ulve-spawnæg	#
+item.spawn_egg.entity.villager.name=Landsbyboer-spawnæg	#
+item.spawn_egg.entity.villager_v2.name=Landsbyboer-spawnæg	#
+item.spawn_egg.entity.vindicator.name=Hævner-spawnæg	#
+item.spawn_egg.entity.mooshroom.name=Mooshroom-spawnæg	#
+item.spawn_egg.entity.squid.name=Blæksprutte-spawnæg	#
+item.spawn_egg.entity.glow_squid.name=Selvlysende blæksprutte-spawnæg	#
+item.spawn_egg.entity.rabbit.name=Kanin-spawnæg	#
+item.spawn_egg.entity.bat.name=Flagermuse-spawnæg	#
+item.spawn_egg.entity.ravager.name=Ravager-spawnæg	#
+item.spawn_egg.entity.iron_golem.name=Jerngolem-spawnæg	#
+item.spawn_egg.entity.snow_golem.name=Snegolem-spawnæg	#
+item.spawn_egg.entity.ocelot.name=Ozelot-spawnæg	#
+item.spawn_egg.entity.parrot.name=Papegøje-spawnæg	#
+item.spawn_egg.entity.horse.name=Heste-spawnæg	#
+item.spawn_egg.entity.llama.name=Lama-spawnæg	#
+item.spawn_egg.entity.trader_llama.name=Trader lama-spawnæg	#
+item.spawn_egg.entity.polar_bear.name=Isbjørne-spawnæg	#
+item.spawn_egg.entity.donkey.name=Æsel-spawnæg	#
+item.spawn_egg.entity.mule.name=Muldyr-spawnæg	#
+item.spawn_egg.entity.skeleton_horse.name=Skelethest-spawnæg	#
+item.spawn_egg.entity.zombie_horse.name=Zombiehest-spawnæg	#
+item.spawn_egg.entity.zombie.name=Zombie-spawnæg	#
+item.spawn_egg.entity.drowned.name=Draug-spawnæg	#
+item.spawn_egg.entity.creeper.name=Creeper-spawnæg	#
+item.spawn_egg.entity.skeleton.name=Skelet-spawnæg	#
+item.spawn_egg.entity.spider.name=Edderkoppe-spawnæg	#
+item.spawn_egg.entity.zombie_pigman.name=Zombificeret piglin-spawnæg	#
+item.spawn_egg.entity.strider.name=Lavavandrer-spawnæg	#
+item.spawn_egg.entity.slime.name=Slim-spawnæg	#
+item.spawn_egg.entity.enderman.name=Enderman-spawnæg	#
+item.spawn_egg.entity.silverfish.name=Sølvfisk-spawnæg	#
+item.spawn_egg.entity.cave_spider.name=Huleedderkoppe-spawnæg	#
+item.spawn_egg.entity.ghast.name=Ghast-spawnæg	#
+item.spawn_egg.entity.magma_cube.name=Magmakube-spawnæg	#
+item.spawn_egg.entity.blaze.name=Blaze-spawnæg	#
+item.spawn_egg.entity.zombie_villager.name=Zombielandsbyboer-spawnæg	#
+item.spawn_egg.entity.zombie_villager_v2.name=Zombielandsbyboer-spawnæg	#
+item.spawn_egg.entity.witch.name=Hekse-spawnæg	#
+item.spawn_egg.entity.stray.name=Strejfer-spawnæg	#
+item.spawn_egg.entity.husk.name=Husk-spawnæg	#
+item.spawn_egg.entity.wither_skeleton.name=Witherskelet-spawnæg	#
+item.spawn_egg.entity.guardian.name=Vogter-spawnæg	#
+item.spawn_egg.entity.elder_guardian.name=Ældre vogter-spawnæg	#
+item.spawn_egg.entity.shulker.name=Shulker-spawnæg	#
+item.spawn_egg.entity.endermite.name=Endermite-spawnæg	#
+item.spawn_egg.entity.evocation_illager.name=Troldkarle-spawnæg	#
+item.spawn_egg.entity.vex.name=Vex-spawnæg	#
+item.spawn_egg.entity.turtle.name=Havskildpadde-spawnæg	#
+item.spawn_egg.entity.dolphin.name=Delfin-spawnæg	#
+item.spawn_egg.entity.phantom.name=Fantom-spawnæg	#
+item.spawn_egg.entity.panda.name=Panda-spawnæg	#
+item.spawn_egg.entity.pillager.name=Røver-spawnæg	#
+item.spawn_egg.entity.piglin_brute.name=Brutal piglin-spawnæg	#
+item.spawn_egg.entity.piglin.name=Piglin-spawnæg	#
+item.spawn_egg.entity.fox.name=Ræve-spawnæg	#
+item.spawn_egg.entity.unknown.name=Spawnæg	#
+item.spawn_egg.entity.wandering_trader.name=Handelsrejsende-spawnæg	#
+item.spawn_egg.entity.wither.name=Wither-spawnæg	#
+item.spawn_egg.entity.zoglin.name=Zoglin-spawnæg	#
+item.spawn_egg.entity.sniffer.name=Sniffer-spawnæg	#
 item.trident.name=Trefork	#
 item.mushroom_stew.name=Svampestuvning	#
 item.muttonCooked.name=Tilberedt fårekød	#
@@ -5169,7 +5249,7 @@ item.glowstone_dust.name=Glødestenspulver	#
 item.shulker_shell.name=Shulkerskal	#
 item.totem.name=Udødelighedstotem	#
 item.turtle_helmet.name=Skildpaddeskjold	#
-item.turtle_shell_piece.name=Skæl	#
+item.turtle_shell_piece.name=Skildpaddeskæl	#
 item.phantom_membrane.name=Fantommembran	#
 item.sweet_berries.name=Mirakelbær	#
 item.suspicious_stew.name=Skummel stuvning	#
@@ -5829,7 +5909,7 @@ options.control_alt_keybinds_section=Følgende taster bruges med CTRL + ALT	#
 options.credits=Credits	#
 options.crouch=Gå på hug	#
 options.csbExpired=Udløbet siden %s	#
-options.csbHeading=MARKETPLACE PASS	#
+options.csbHeading=MARKETPLACE PASS			#### {StrContains="MARKETPLACE PASS"}
 options.csbInfoLine01=Katalog med over 150 pakker og varer fra markedspladsen	#
 options.csbInfoLine02=Indhold opdateret månedligt	#
 options.csbSubheading=Indhold på markedspladsen	#
@@ -5851,13 +5931,15 @@ options.delete_account.confirm.button=Slet	#
 options.dev_game_tip=Spiltips	#
 options.dev_ad_show_debug_panel=Vis EDU-tegn i Debug-panel	#
 options.dev_ad_token_refresh_threshold=Opdateringsgrænse i sekunder for login-token i EDU	#
-options.dev_ad_edu_max_token_refresh=Opdatering af EDU Max Token (minutter)	#
+options.dev_ad_edu_max_signin_token_refresh=Opdatering af EDU Max login-Token (minutter)	#
+options.dev_ad_edu_max_graph_token_refresh=Opdatering af EDU Max graf-Token (minutter)	#
 options.dev_side_by_side_comparison_rate=Sammenligningsrate	#
 options.dev_playfab_token_refresh_threshold=Opdateringsgrænse i minutter for Playfab-token	#
 options.dev_assertions_debug_break=Assertionsnedbrud i fejlfinderen	#
 options.dev_assertions_show_dialog=Assertions viser en modal dialogboks	#
 options.dev_force_trial_mode=Tving til at aktivere prøvetilstand	#
 options.dev_eduDemo=Edu demo (kræver nyt login)	#
+options.dev_eduCloudDownload=Skydownload	#
 options.remote_imgui_toggle=Ekstern IMGUI aktiveret	#
 options.dev_enableDebugUI=Aktivér fejlfindingsbrugerflade	#
 options.dev_createRealmWithoutPurchase=Opret realm uden køb	#
@@ -5968,7 +6050,7 @@ options.dev_realmsEndpoint=Realms-slutpunkt	#
 options.dev_realmsEndpointPayment=Realms-slutpunktsbetaling	#
 options.dev_realmsRelyingParty=Realms-afhængig part	#
 options.dev_realmsRelyingPartyPayment=Realms-afhængig partsbetaling	#
-options.dev_realms_stories=Aktivér Realms Stories (kræver genstart)	#
+options.dev_realms_stories=Aktivér Realms Stories	#
 options.dev_overrideXboxEnvironmentWindows=Tilsidesæt Xbox Sandbox (OS styres i Windows)	#
 options.dev_overrideXboxEnvironment=Tilsidesæt Xbox Sandbox (kræver genstart)	#
 options.dev_xboxEnvironment=Xbox Sandbox Environment (kræver genstart)	#
@@ -6084,6 +6166,8 @@ options.fov.toggle=Synsfeltet kan ændres af handlinger i spillet	#
 options.licenses=Licenser	#
 options.licensed_content=Licenseret indhold	#
 options.networkSettings=Netværksindstillinger	#
+options.ecoMode=Eksperimentel energibesparelse		#### {MaxLength='40'}
+options.enableEcoMode=Lavere billedhastighed, når controlleren frakobles		#### {MaxLength='55'}
 options.font_license=Skrifttypelicens	#
 options.font_license_body=%1	#
 options.livingRoomFOV=Dagligstue-synsfelt	#
@@ -6173,6 +6257,7 @@ options.sneakOption.toggle=Tryk på knappen én gang for at snige	#
 options.sneakOption.hold=Hold knappen nede for at snige	#
 options.splitscreenInterfaceOpacity=HUD-gennemsigtighed, delt skærm	#
 options.textBackgroundOpacity=Tekstbaggrundens opacitet	#
+options.actionBarTextBackgroundOpacity=Handlingsbjælkens baggrundsopacitet	#
 options.hidepaperdoll=Skjul papirdukke	#
 options.showautosaveicon=Vis ikon for Autogem	#
 options.hold=Hold	#
@@ -6365,7 +6450,6 @@ options.betaNewDeathScreenToggle=Nyt "Du døde"-skærmbillede (eksperimentel)	#
 options.betaNewDeathScreenToggle.disabled=Du kan ikke ændre denne indstilling, mens du spiller i en verden	#
 options.usetouchpad=Opdel styring	#
 options.viewSubscriptions=Abonnementer	#
-options.viewSubscriptions.button.csbBuy=%s	#
 options.viewSubscriptions.button.info=Info	#
 options.viewSubscriptions.button.price=%s	#
 options.viewSubscriptions.button.pricePerMonth=%s/måned	#
@@ -6423,6 +6507,9 @@ options.deferred.upscaling=Opskalering	#
 options.terrainShadowsEnable=Terrænskygger	#
 options.superFancyWaterEnable=Superdekorativt vand	#
 options.onlyTrustedSkinsAllowed=Tillad kun sikre skins	#
+options.restartTutorial=Genstart vejledning	#
+options.tutorial=Introduktion	#
+options.tutorialHint=Tips til at komme i gang med det grundlæggende i Minecraft	#
 
 options.autoUpdateEnabled=Opdater oplåste pakker automatisk	#
 options.autoUpdateMode=Opdater oplåste pakker automatisk	#
@@ -6525,6 +6612,9 @@ options.shadowQuality.low=Lav	#
 options.shadowQuality.medium=Medium	#
 options.shadowQuality.high=Høj	#
 options.shadowQuality.ultra=Ultra	#
+options.pointLightShadowEnabled=Punktlysskygger aktiveret	#
+options.pointLightShadowDisabled=Punktlysskygger deaktiveret	#
+options.pointLightShadow.tooltip=Skygger kastet af fakler, lanterner og andre små lyskilder: kun aktiveret ved højere skyggekvalitetsindstillinger på nogle enheder.	#
 options.pointLightLODingQuality=Kvalitet af punktlys	#
 options.pointLightLODingQuality.low=Lav	#
 options.pointLightLODingQuality.medium=Medium	#
@@ -6681,6 +6771,8 @@ hudScreen.controlCustomization.hintDeselect=Klik udenfor for at fravælge	#
 hudScreen.controlCustomization.hintSaved=Gemt	#
 hudScreen.controlCustomization.tooltip=Indlæs en verden for at tilpasse styringen	#
 hudScreen.controlCustomization.tooltip.notouch=Brug en berøringsenhed til at tilpasse styringen	#
+hudScreen.controlCustomization.tooltip.alreadycustomizing=Der er allerede en skærm med tilpasning af berøringsstyring åben	#
+hudScreen.controlCustomization.tooltip.alive=Spilleren skal være i live for at tilpasse kontrollerne.	#
 
 playscreen.fileSize.MB=MB	#
 playscreen.fileSize.GB=GB	#
@@ -6939,6 +7031,7 @@ profileScreen.create_persona_classic_skin_details=Du vælger en komplet skinteks
 
 profileScreen.create_persona_title=Vælg type	#
 
+persona.csb.see.subscription=I Pass	#
 persona.slim.title=smal	#
 persona.wide.title=bred	#
 persona.smaller.title=mindre	#
@@ -6949,6 +7042,7 @@ persona.realms.redeem=Indløs	#
 persona.realms.see.subscription=I Realms Plus	#
 persona.realms.time.remaining=%s for at indløse	#
 persona.realms.savings=Du sparer %s minecoins med dit Realms Plus-abonnement!	#
+persona.csb.savings=Du sparer %s minecoins med dit Marketplace Pass-abonnement!	#
 persona.preview.emote=Afspil emote	#
 
 progressScreen.cantConnect=Vi kunne ikke oprette forbindelse til verdenen. Tjek din internetforbindelse, og prøv igen.	#
@@ -6966,6 +7060,7 @@ progressScreen.title.connectingRealms=Opretter forbindelse til realm	#
 progressScreen.title.copyingWorld=Verdenskopi	#
 progressScreen.title.deleteStorageAreaContent=Ryd lagercache	#
 progressScreen.title.loadingSplitScreenAppearances=Indlæser udseender på delt skærm	#
+progressScreen.title.modifiedWorldWarning=Modificeret verden	#
 progressScreen.message.appearanceLoaded=Udseende indlæst	#
 progressScreen.message.appearanceLoadWaitTimeMet=Udseendet tager lang tid at indlæse. Fortsætter med verdensgeneration ...	#
 progressScreen.message.deleteStorageAreaContent=Det tager lige et øjeblik.	#
@@ -6987,6 +7082,8 @@ progressScreen.message.storageProviderSyncError=Kunne ikke synkronisere brugerda
 progressScreen.message.waitingForStoreProducts=Det tager lige et øjeblik	#
 progressScreen.message.allDone=Det var det!	#
 progressScreen.message.letsGo=Lad os komme i gang!	#
+progressScreen.message.letsGoCreative=Opret	#
+progressScreen.message.letsGoSurvival=Overlev	#
 progressScreen.message.failed=Fejl	#
 progressScreen.message.failedNoNetwork=Fejl: Ingen internetforbindelse	#
 progressScreen.message.downloadingWorld=Downloader verden	#
@@ -7012,6 +7109,7 @@ progressScreen.message.directoryDepthError=Denne verden kan ikke åbnes pga. et 
 progressScreen.message.forbiddenContent=Du mangler en eller flere af de anvendte pakker	#
 progressScreen.message.loadingSplitScreenAppearances=Indlæser udseender på delt skærm ...	#
 progressScreen.message.finishedLoadingSplitScreenAppearances=Indlæsning af udseender på delt skærm afsluttet.	#
+progressScreen.message.modifiedWorldWarning=Denne verden ser muligvis ikke ud eller opfører sig ikke på samme måde som ikke-modificerede verdener, og du kan ikke opnå gennemførelser.	#
 progressScreen.dialog.title.resourcePack=Download ressourcepakker?	#
 progressScreen.dialog.title.behaviorAndResourcePack=Download verdenens ressource- og adfærdspakker?	#
 progressScreen.dialog.title.onlyBehavior=Download verdenens adfærdspakker?	#
@@ -7063,6 +7161,8 @@ raid.expiry=Et plyndringstogt er udløbet	#
 raid.victory=Sejr	#
 raid.defeat=Nederlag	#
 
+realmsStories.realmEvents.outOfGameMessage=Der var et Realm-event. Tjek fortællingsfeedet i Minecraft for at se, hvad der skete.	#
+
 recipeBook.setting.full=Fuld	#
 recipeBook.setting.discover=Find	#
 recipeBook.setting.off=Fra	#
@@ -7098,6 +7198,7 @@ resourcePack.selected.title.behaviorPacks=Aktive adfærdspakker	#
 resourcePack.selected.title.packs=Aktiv	#
 resourcePack.selected.remove=Deaktiver	#
 resourcePack.realmsPlus.title.packs=Pakker i Realms Plus	#
+resourcePack.realmsPlus.title.packs.contentSub=Marketplace Pass-pakker	#
 resourcePack.realmsPlus.expired=Udløbet	#
 resourcePack.errors=Fejl: 	#
 resourcePack.error.ingame.packs=Du kan ikke ændre ressourcepakker, mens du spiller i en verden.	#
@@ -7120,9 +7221,11 @@ resourcePack.header.behavior=Adfærdspakker gælder for alle spillere.	#
 resourcePack.header.level=Kræv accept af ressourcepakker inden deltagelse	#
 resourcePack.crashRecovery.title=Nulstilling pga. globale ressourcer	#
 resourcePack.crashRecovery.message=Ressourcerne blev ikke indlæst.	#
-resourcePack.warnings=Advarsler: 	#
-resourcePack.warning.title=Det her er farligt!	#
-resourcePack.warning.body=Hvis du tilføjer eller fjerner adfærdspakker, efter du er begyndt på en verden, risikerer du at ødelægge verdenen og miste alt, hvad du har skabt. Tryk på "OK" for at deaktivere pakken eller "Annuller" for at bevare den, som den er.	#
+resourcePack.warnings=Advarsler:	#
+resourcePack.warning.add.title=Vil du opdatere verdenen?	#
+resourcePack.warning.add.body=Denne verden ser muligvis ikke ud eller opfører sig på samme måde som ikke-modificerede verdener, og du vil ikke kunne opnå gennemførelser. Det kan være en god idé at gemme en kopi af din verden, inden du fortsætter. Tryk på ''OK'' for at aktivere pakken, eller ''Annuller'' for at holde den deaktiveret.	#
+resourcePack.warning.remove.title=Det her er farligt!	#
+resourcePack.warning.remove.body=Hvis du fjerner adfærdspakker, efter du er begyndt på en verden, risikerer du at ødelægge verdenen og miste alt, hvad du har skabt. Det kan være en god idé a gemme en kopi af din verden, inden du fortsætter. Tryk på ''OK'' for at deaktivere pakken eller ''Annuller'' for at bevare den, som den er.	#
 resourcePack.requiredDependency.title=Obligatorisk afhængighed	#
 resourcePack.requiredDependency.body=Denne pakke er afhængig af en af de andre pakker, der anvendes i øjeblikket.	#
 resourcePack.missingDependency.title=Manglende afhængigheder	#
@@ -7229,14 +7332,14 @@ itemGroup.name.sculk=Sculk	#
 effect.darkness=Mørke	#
 entity.frog.name=Frø	#
 entity.tadpole.name=Haletudse	#
-item.spawn_egg.entity.warden.name=Spawn warden	#
+item.spawn_egg.entity.warden.name=Warden-spawnæg	#
 entity.warden.name=Warden	#
 entity.allay.name=Allay	#
-item.spawn_egg.entity.allay.name=Spawn allay	#
+item.spawn_egg.entity.allay.name=Allay-spawnæg	#
 action.interact.allay=Giv genstand til allay	#
 item.bucketTadpole.name=Spand haletudser	#
-item.spawn_egg.entity.frog.name=Spawn frø	#
-item.spawn_egg.entity.tadpole.name=Spawn haletudse	#
+item.spawn_egg.entity.frog.name=Frø-spawnæg	#
+item.spawn_egg.entity.tadpole.name=Haletudse-spawnæg	#
 tile.frog_spawn.name=Frøæg	#
 tile.pearlescent_froglight.name=Lilla frølys	#
 tile.verdant_froglight.name=Grønt frølys	#
@@ -7361,7 +7464,7 @@ item.smithing_template.name=Smedeskabelon	#
 item.smithing_template.netherite_upgrade.applies_to=Diamantudstyr	#
 item.smithing_template.netherite_upgrade.ingredients=Netheritbarre	#
 item.snort_pottery_sherd.name=Fnyse-potteskår	#
-item.spawn_egg.entity.camel.name=Spawn kamel	#
+item.spawn_egg.entity.camel.name=Kamel-spawnæg	#
 item.spruce_hanging_sign.name=Gran hængende skilt	#
 item.warped_hanging_sign.name=Skævt hængende skilt	#
 itemGroup.name.hanging_sign=Hængende skilte	#
@@ -7669,6 +7772,7 @@ selectTemplate.delete.confirm=Vil du slette verdensskabelonen?	#
 selectTemplate.delete=Slet	#
 selectTemplate.myTemplates=Skabeloner til Min verden	#
 selectTemplate.realmsPlus=Udvalgte Realms Plus-skabeloner	#
+selectTemplate.marketplacePass=Udvalgte Marketplace Pass-skabeloner			#### {StrContains="Marketplace Pass"}
 selectTemplate.importedTemplates=Importerede skabeloner	#
 selectTemplate.download=Download	#
 selectTemplate.noTemplates=Der er ingen verdensskabeloner på enheden.	#
@@ -7853,31 +7957,36 @@ store.realmsPlus.buyNow.viewPrivacyPolicy=ERKLÆRING OM BESKYTTELSE AF PERSONLIG
 
 store.realmsPlus.buyNow.title=Start dit abonnement på Realms Plus	#
 store.realmsPlus.startTrial.description=Du får adgang til dit realm og over 150 pakker fra markedspladsen med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Din første måned er gratis, hvorefter prisen er %s/måned. Abonnementet kan opsiges, når du vil.	#
-store.realmsPlus.noTrial.description=Du får adgang til dit realm og over 150 pakker fra markedspladsen med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Du får abonnementet i 30 dage for %s:minecoin:.	#
+store.realmsPlus.startTrial.description.contentSub=Du får adgang til dit realm og de over 150 pakker inkluderet i Marketplace Pass med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Din første måned er gratis, hvorefter prisen er %s/måned. Abonnementet kan opsiges, når du vil.	#
+store.realmsPlus.noTrial.description=Du får adgang til dit realm og over 150 pakker fra markedspladsen med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Du får abonnementet i 30 dage for :minecoin:%s.	#
+store.realmsPlus.noTrial.description.contentSub=Du får adgang til dit realm og de over 150 pakker inkluderet i Marketplace Pass med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Du får abonnementet i 30 dage for %s:minecoin:.	#
 store.realmsPlus.noTrial.description.iap=Du får adgang til dit realm og over 150 pakker fra markedspladsen med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Prisen er %s/måned, og du kan opsige dit abonnement i abonnementsindstillingerne, når du ikke længere vil betale.	#
+store.realmsPlus.noTrial.description.iap.contentSub=Du får adgang til dit realm og de over 150 pakker fra markedspladsen inkluderet i pakken fra markedspladsen med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Prisen er %s/måned, og du kan opsige dit abonnement i abonnementsindstillingerne, så du ikke længere afkræves betaling.	#
 store.realmsPlus.realmName.placeholder=%ss Realm		#The string passed in here is the gamertag of the player to indicate the name of the player's world.	#
 
 store.realmsPlus.recurring.offerTrial=Realms Plus er et løbende abonnement med et tilbagevendende abonnementsgebyr, som opkræves automatisk hver måned, indtil abonnementet opsiges.%sDu får adgang til dit realm og over 150 pakker fra markedspladsen med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Dine første 30 dage er gratis. Herefter koster det %s/måned, men du kan opsige dit abonnement i abonnementsindstillingerne, når du ikke længere vil betale.	#
+store.realmsPlus.recurring.offerTrial.contentSub=Realms Plus er et løbende abonnement med et tilbagevendende abonnementsgebyr, som opkræves automatisk hver måned, indtil abonnementet opsiges.%sDu får adgang til dit realm og de over 150 pakker inkluderet i Marketplace Pass med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Dine første 30 dage er gratis. Herefter koster det %s/måned, men du kan opsige dit abonnement i abonnementsindstillingerne, så du ikke længere afkræves betaling.	#
 store.realmsPlus.recurring.withoutTrial=Realms Plus er et løbende abonnement med et tilbagevendende abonnementsgebyr, som opkræves automatisk hver måned, indtil abonnementet opsiges.%sDu får adgang til dit realm og over 150 pakker fra markedspladsen med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Det koster %s/måned, og du kan opsige dit abonnement i abonnementsindstillingerne, når du ikke længere vil betale.	#
+store.realmsPlus.recurring.withoutTrial.contentSub=Realms Plus er et løbende abonnement med et tilbagevendende abonnementsgebyr, som opkræves automatisk hver måned, indtil abonnementet opsiges.%sDu får adgang til dit realm og de over 150 pakker inkluderet i Marketplace Pass med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Det koster %s/måned, og du kan opsige dit abonnement i abonnementsindstillingerne, så du ikke længere afkræves betaling.	#
 store.realmsPlus.consumable.offerTrial=Du får adgang til dit realm og over 150 pakker fra markedspladsen med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Dine første 30 dage er gratis, hvorefter du kan forlænge med yderligere 30 dage for %s.	#
+store.realmsPlus.consumable.offerTrial.contentSub=Du får adgang til dit realm og de over 150 pakker inkluderet i Marketplace Pass med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Dine første 30 dage er gratis, hvorefter du kan forlænge med yderligere 30 dage for %s.	#
 store.realmsPlus.consumable.withoutTrial=Du får adgang til dit realm og over 150 pakker fra markedspladsen med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Du får abonnementet i 30 dage for %s.	#
+store.realmsPlus.consumable.withoutTrial.contentSub=Du får adgang til dit realm og de over 150 pakker inkluderet i Marketplace Pass med det samme. Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit realm gratis! Du får abonnementet i 30 dage for %s.	#
 
 store.realmsPlus.landing.header=Abonnement omfatter:	#
 store.realmsPlus.landing.headerTrial=Gratis 30-dages prøveperiode, derefter %s/måned	#
 
-store.realmsPlus.landing.info1.line1=Din egen personlige Realm-server – en vedvarende verden, der altid er online for dig og dine venner!	#
-store.realmsPlus.landing.info1.line2=Venner spiller gratis i dit Realm	#
-store.realmsPlus.landing.info1.line3=Hop fra konsol til mobil til pc – alle enheder med Minecraft-markedsplads	#
-
-store.realmsPlus.landing.info2.line1=Fri adgang til over 150 pakker fra markedspladsen	#
-store.realmsPlus.landing.info2.line2=Sikkerhedskopier af alle verdener i dit Realm	#
-store.realmsPlus.landing.info2.line3=Dine første 30 dage gratis	#
-store.realmsPlus.landing.info2.line4=Abonner nu for %s/måned	#
+store.realmsPlus.landing.info1.line1=Din egen personlige Realm-server: en vedvarende verden, der altid er online for dig og dine venner!	#
+store.realmsPlus.landing.info1.line2=Venner spiller gratis i dit realm	#
+store.realmsPlus.landing.info1.line3=Hop fra konsol til mobil til PC – Spil dit realm på alle enheder med Minecraft Markedsplads	#
 
 store.realmsPlus.landing.info2.catalog=Fri adgang til over 150 pakker fra markedspladsen	#
-store.realmsPlus.landing.info2.backups=Sikkerhedskopier af alle verdener i dit Realm	#
-store.realmsPlus.landing.info2.trial=Dine første 30 dage gratis	#
-store.realmsPlus.landing.info2.subscribe=Abonner nu for %s/måned	#
+store.realmsPlus.landing.info2.contentSub=Inkluderer Marketplace Pass	#
+store.realmsPlus.landing.info2.backups=Verdener på dit realm inkluderer gratis sikkerhedskopier	#
+store.realmsPlus.landing.info2.renews=Abonnementet fornyes automatisk hver måned, indtil det opsiges	#
+store.realmsPlus.landing.info2.cancel=Annullér på siden Abonnementer i Minecraft-indstillinger	#
+store.realmsPlus.landing.info2.subscribe=Abonnér nu for %s/måned	#
+store.realmsPlus.landing.info2.recentlyAdded=Tilføjet for nylig	#
 store.realmsPlus.landing.info2.persona=Gratis karakterudvikler-genstande – indløs et nyt sæt hver måned!	#
 
 store.realmsPlus.landing.beta=Beta	#
@@ -7899,6 +8008,7 @@ store.realmsPlus.faq.question4=Hvilke enheder understøtter Realms Plus til Mine
 store.realmsPlus.faq.answer4=Realms Plus er i øjeblikket tilgængelig på alle platforme, hvor du også kan installere Minecraft Bedrock Edition. Du kan spille Realms og bruge alt indhold fra Realms Plus på alle de respektive enheder, så længe du er logget på din Microsoft-konto.	###disable_3rd_party_console_resource_pack_check
 store.realmsPlus.faq.question5=Hvor meget koster et abonnement på Realms Plus?	#
 store.realmsPlus.faq.answer5=%s pr. måned for en server til 10 spillere og adgang til mere end 150 pakker fra markedspladsen.	#
+store.realmsPlus.faq.answer5.contentSub=%s pr. måned. Tilføj et uendeligt antal medlemmer, spil online med 10 andre spillere på samme tid. Derudover kan du få over 150 typer markedspladsindhold fra Marketplace Pass-kataloget gratis.	#
 store.realmsPlus.faq.question6=Hvor tit kommer der nye pakker i Realms Plus?	#
 store.realmsPlus.faq.answer6=Der kommer nye pakker i Realms Plus hver måned.	#
 store.realmsPlus.faq.question7=Hvor længe har jeg adgang til pakkerne i Realms Plus?	#
@@ -7907,38 +8017,44 @@ store.realmsPlus.faq.question8=Hvor kan jeg bruge Realms Plus-pakker?	#
 store.realmsPlus.faq.answer8=Verdener og pakker fra abonnementet kan både benyttes online, i dit personlige Realm og på lokale enheder. Du skal bare spille online mindst én gang hver 30. dag for at validere, at dit abonnement er aktivt.	#
 store.realmsPlus.faq.question9=Hvad sker der med mine realms og verdener, når mit abonnement udløber?	#
 store.realmsPlus.faq.answer9=Hvis dit abonnement udløber, kan du og dine venner ikke længere spille online sammen i Realms, og du vil ikke længere have adgang til pakkerne i Realms Plus. Du kan downloade alle verdener, der er gemt i dit Realm, inden for 18 måneder efter udløbet af dit abonnement. Hvis du har brugt verdener, teksturpakker eller mashups fra Realms Plus, kan du købe de pågældende pakker i butikken. Hvis pakkerne stadig indgår i Realms Plus, kan du selvfølgelig også tegne et nyt abonnement.	#
+store.realmsPlus.faq.question10=Har jeg brug for Realms Plus og Marketplace Pass?	#
+store.realmsPlus.faq.answer10=Nej. Marketplace Pass er et katalog med over 150 pakker, som du kan bruge. Realms Plus er et realm for 10 spillere med Marketplace Pass inkluderet. Vi foreslår, at du abonnerer på det, der passer til dig.	#
 
+store.realmsPlus.content.marketplacePass=Realms Plus inkluderer Marketplace Pass!	#
 store.realmsPlus.content.skinDescription=Skift dit udseende med skins!	#
 store.realmsPlus.content.skinDescriptionPersona=Klæd dig ud med skins!	#
+store.realmsPlus.content.skinDescriptionPersona.contentSub=Udvid din garderobe med skins!	#
 store.realmsPlus.content.worldDescription=Se de mest populære indholdspakker	#
+store.realmsPlus.content.worldDescription.contentSub=Spil minispil, temaverdener og meget mere! 	#
 store.realmsPlus.content.textureDescription=Nyt udseende til dine verdener!	#
+store.realmsPlus.content.textureDescription.contentSub=Anvend ny grafik i din verden! 	#
 store.realmsPlus.content.mashupDescription=Prøv lidt af det hele i mashups!	#
 store.realmsPlus.content.personaDescription=Tilpas dit look med karakterudvikler-genstande!	#
+store.realmsPlus.content.personaDescription.contentSub=Saml månedlige genstande i omklædningsrummet!	#
+store.realmsPlus.content.recentlyAdded=Tilføjet for nylig	#
 store.realmsPlus.content.friendsGetAccess=Dine venner får adgang til alt indhold i dit realm gratis	#
 
 store.realmsPlus.content.popularPacks=Populære pakker i Realms Plus:	#
 store.realmsPlus.content.viewAllPacks=VIS ALLE PAKKER	#
 store.realmsPlus.content.contentDescription=Stik sugerøret direkte i kilden til forrygende Minecraft-indhold! Med Realms Plus får du øjeblikkelig adgang til over 150 mashups, verdener, skinpakker og episke eventyr fra markedspladsen – og der kommer nye til hver eneste måned. Dit indhold gemmes på din personlige server og kan benyttes på alle platforme med Realms og Minecraft-markedsplads! Op til 10 spillere kan spille samtidig, og de får adgang til verdenerne i dit Realm gratis!	#
 
-
 store.realmsPlus.freeTrial=START GRATIS PRØVEPERIODE	#
 
 store.realmsPlus.purchase.warningDialog.title=Meddelelse	#
-store.realmsPlus.purchase.warningDialog.body=Realms Plus indeholder Marketplace Pass-indhold. Vi anbefaler, at du afmelder dit abonnement på Marketplace Pass, efter du tilmelder dig.	#
+store.realmsPlus.purchase.warningDialog.body=Realms Plus indeholder Marketplace Pass-indhold. Vi anbefaler, at du opsiger dit abonnement på Marketplace Pass, når du har tilmeldt dig Realms Plus.		#### {StrContains="Marketplace Pass"}
 store.realmsPlus.purchase.warningDialog.checkbox=Jeg forstår	#
 store.realmsPlus.purchase.warningDialog.button.back=Gå tilbage	#
-store.realmsPlus.purchase.warningDialog.button.continue=Fortsæt	#
+store.realmsPlus.purchase.warningDialog.button.continue=Køb	#
 
-store.csb.brand.1=MARKEDSPLADS	#
-store.csb.brand.2=PASS	#
+store.csb.brand.1=MARKETPLACE		#### {StrContains="MARKETPLACE"}
+store.csb.brand.2=PASS		#### {StrContains="PASS"}
 
-store.csb=Marketplace Pass	#
-store.csb.pass=Overhaling	#
+store.csb=Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.content=Indhold	#
 store.csb.faq=FAQ	#
 store.csb.buyNow=ABONNER NU 	### Maximum 13 characters
 store.csb.buyNowPerMonth=Køb for %s/måned	#
-store.csb.signInToSubscribe=Log på for at abonnere på Marketplace Pass	#
+store.csb.signInToSubscribe=Log på for at abonnere på Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.buyNowTrialPerMonth=Start prøveperiode 	### Maximum 25 characters
 store.csb.errorNoOffer=FEJL INTET TILBUD BLEV FUNDET	#
 store.csb.manageSubscription=ADMINISTRER ABONNEMENT	#
@@ -7948,47 +8064,49 @@ store.csb.buyNow.buttonText=KØB FOR %s	#
 store.csb.buyNow.viewTerms=VILKÅR OG BETINGELSER	#
 store.csb.buyNow.viewPrivacyPolicy=ERKLÆRING OM BESKYTTELSE AF PERSONLIGE OPLYSNINGER	#
 
-store.csb.buyNow.title=Start dit Marketplace Pass-abonnement	#
+store.csb.buyNow.title=Start dit Marketplace Pass-abonnement		#### {StrContains="Marketplace Pass"}
 
-store.csb.subscription=Når du har tilmeldt dig, får du adgang til over 150 slags spændende Minecraft Markedsplads-indhold. Download og spil eventyrkort, ifør dig skins, dyk ned i teksturpakker, og få endda et sæt karakterudviklergenstande hver måned, du kan beholde. Med et katalog, der regelmæssigt opdateres, er der altid noget nyt at opdage med Marketplace Pass. Det koster %s/måned og kan opsiges når som helst, så du ikke længere afkræves betaling.  	#
+store.csb.subscription=Når du har tilmeldt dig, får du adgang til over 150 slags spændende Minecraft Markedsplads-indhold. Download og spil eventyrkort, ifør dig skins, dyk ned i teksturpakker, og få endda et sæt karakterudviklergenstande hver måned, du kan beholde. Med et katalog, der regelmæssigt opdateres, er der altid noget nyt at opdage med Marketplace Pass. Det koster %s/måned og kan opsiges når som helst, så du ikke længere afkræves betaling.		#### {StrContains="Marketplace Pass"}
 
-store.csb.recurring.offerTrial=Marketplace Pass er et løbende abonnement med et tilbagevendende abonnementsgebyr, som opkræves automatisk hver måned, indtil abonnementet opsiges.%sDu får adgang til over 150 pakker fra markedspladsen med det samme. Du kan opsige dit abonnement i abonnementsindstillingerne, når du ikke længere vil betale.	#
-store.csb.recurring.withoutTrial=Marketplace Pass er et løbende abonnement med et tilbagevendende abonnementsgebyr, som opkræves automatisk hver måned, indtil abonnementet opsiges.%sDu får adgang til over 150 pakker fra markedspladsen med det samme. Det koster %s/måned, og du kan opsige dit abonnement i abonnementsindstillingerne, når du ikke længere vil betale.	#
+store.csb.recurring.offerTrial=Marketplace Pass er et løbende abonnement med et tilbagevendende abonnementsgebyr, som opkræves automatisk hver måned, indtil abonnementet opsiges.%sDu får adgang til over 150 pakker fra markedspladsen med det samme. Du kan opsige dit abonnement i abonnementsindstillingerne, så du ikke længere afkræves betaling.		#### {StrContains="Marketplace Pass"}
+store.csb.recurring.withoutTrial=Marketplace Pass er et løbende abonnement med et tilbagevendende abonnementsgebyr, som opkræves automatisk hver måned, indtil abonnementet opsiges.%sDu får adgang til over 150 pakker fra markedspladsen med det samme. Det koster %s/måned, og du kan opsige dit abonnement i abonnementsindstillingerne, så du ikke længere afkræves betaling.		#### {StrContains="Marketplace Pass"}
 store.csb.consumable.offerTrial=Du får adgang til over 150 pakker fra markedspladsen med det samme. Dine første 30 dage er gratis, hvorefter du kan forlænge med yderligere 30 dage for %s.	#
 store.csb.consumable.withoutTrial=Du får adgang til over 150 pakker fra markedspladsen med det samme. Du får abonnementet i 30 dage for %s.	#
 
-store.csb.landing.header=Start dit Marketplace Pass-abonnement	#
+store.csb.landing.header=Start dit Marketplace Pass-abonnement		#### {StrContains="Marketplace Pass"}
 store.csb.landing.headerTrial=Gratis 30-dages prøveperiode, derefter %s/måned	#
 
-store.csb.landing.info=Markedsplads Pass er en månedlig abonnementstjeneste, der giver dig adgang til over 150 slags indhold fra Minecraft Markedsplads for %s. Dit abonnement giver dig mulighed for at:	#
+store.csb.landing.info=Marketplace Pass er en månedlig abonnementstjeneste, der giver dig adgang til over 150 slags indhold fra Minecraft Markedsplads for %s. Dit abonnement giver dig mulighed for at:		#### {StrContains="Marketplace Pass"}
 store.csb.landing.info.line1=Dykke ned i historiedrevne eventyr ved at downloade og spille en af de mange temaverdener og minispil	#
 store.csb.landing.info.line2=Skifte udseende på blokke, biomer og endda dine foretrukne Minecraft-mobs	#
 store.csb.landing.info.line3=Udvide din garderobe i spillet	#
 store.csb.landing.info.line4=Indløse et nyt sæt tidsbegrænsede karakterudviklergenstande hver måned, som du kan beholde for altid	#
+store.csb.landing.info.line5=Abonnementet fornyes automatisk hver måned, indtil det opsiges	#
+store.csb.landing.info.line6=Annullér på siden Abonnementer i Minecraft-indstillinger	#
+store.csb.landing.info.line7=Abonnér nu for %s/måned	#
 
 store.csb.landing.beta=Beta	#
 store.csb.landing.preview=Forhåndsvisning	#
 
 store.csb.faq.header=OFTE STILLEDE SPØRGSMÅL	#
-store.csb.faq.question1=Hvad er Marketplace Pass?	#
-store.csb.faq.answer1=Marketplace Pass er en abonnementstjeneste, der giver dig adgang til over 150 typer indhold fra Minecraft Markedsplads for %s/måned.	#
-store.csb.faq.question2=Hvor tit opdateres indholdet i Marketplace Pass?	#
+store.csb.faq.question1=Hvad er Marketplace Pass?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer1=Marketplace Pass er en abonnementstjeneste, der giver dig adgang til over 150 typer indhold fra Minecraft Markedsplads for %s/måned.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question2=Hvor tit opdateres indholdet i Marketplace Pass?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer2=Udvalgt indhold opdateres hver måned, så der er altid noget nyt at udforske.	#
-store.csb.faq.question3=Hvad skal jeg gøre for at kunne få Marketplace Pass?	#
-store.csb.faq.answer3=Adgang til Marketplace Pass kræver et aktivt abonnement og en kompatibel version af Minecraft: Bedrock Edition med Minecraft Markedsplads. Kræver login med Microsoft-konto.	#
-store.csb.faq.question4=Hvad sker der med mit indhold, når det forlader Marketplace Pass?	#
+store.csb.faq.question3=Hvad skal jeg gøre for at få Marketplace Pass?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer3=Adgang til Marketplace Pass kræver et aktivt abonnement og en kompatibel version af Minecraft: Bedrock Edition med Minecraft Markedsplads. Kræver login med Microsoft-konto.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question4=Hvad sker der med mit indhold, når det forlader Marketplace Pass?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer4=Når en verden, teksturpakke, skinpakke eller mashup forlader kataloget, er du nødt til at købe genstanden fra markedspladsen for at fortsætte spillet. Pakker vil ikke blive slettet fra dit lokale lager, før du sletter dem. Månedens karakterudviklergenstande, som du har indløst, kan du beholde.	#
 store.csb.faq.question5=Hvad sker der, når mit abonnement udløber?	#
 store.csb.faq.answer5=Du vil kunne købe og downloade alle verdensskabeloner, der er gemt i din skylagring, inden for 18 måneder efter du har opsagt dit abonnement, medmindre de ikke længere tilbydes af Minecraft. Månedens karakterudviklergenstande, som du har indløst, kan du beholde.	#
 store.csb.faq.question6=Hvad er forskellen på dette og Realms Plus?	#
-store.csb.faq.answer6=Forskellen mellem de to abonnementer er, at Realms Plus inkluderer en personlig server, hvor du kan spille med op til ti venner ad gangen. Indholdskataloget, som du har adgang til med dit Marketplace Pass, er det samme katalog, der er tilgængeligt med et abonnement på Realms Plus.	#
-store.csb.faq.question7=Kan jeg abonnere på både Marketplace Pass og Realms Plus?	#
-store.csb.faq.answer7=Et Realms Plus-abonnement indeholder Marketplace Pass. Hvis du abonnerer på Marketplace Pass og ønsker at udforske Realms Plus, anbefaler vi, at du opsiger dit abonnement på Marketplace Pass først. Aktive Realms Plus-abonnenter kan ikke abonnere på Marketplace Pass.	#
-store.csb.faq.question8=Kan jeg bruge mit Marketplace Pass-indhold på alle enheder?	#
-store.csb.faq.answer8=Hvis du køber Marketplace Pass, har du adgang til alle pakkerne fra enhver enhed med en kompatibel version af Minecraft: Bedrock Edition med Minecraft Markedsplads (sælges separat), hvis du er logget på din Minecraft-konto. Understøttes ikke på Amazon Kindle Fire eller Minecraft Java Edition.	#
-store.csb.faq.question9=Kan jeg spille Marketplace Pass-indhold, hvis jeg har tilmeldt mig Minecraft Beta på Windows eller XBOX?	#
-store.csb.faq.answer9=Du kan se indhold i dit abonnement, hvis du allerede er abonnent, men du vil ikke kunne abonnere på Marketplace Pass fra Preview/BETA-byggeri.	#
-store.csb.faq.bottom1=KAN DU IKKE FINDE DET, DU LEDER EFTER?	#
+store.csb.faq.answer6=Forskellen mellem de to abonnementer er, at Realms Plus inkluderer en personlig server, hvor du kan spille med op til ti venner ad gangen. Indholdskataloget, som du har adgang til med dit Marketplace Pass, er det samme katalog, der er tilgængeligt med et abonnement på Realms Plus.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question7=Kan jeg abonnere på både Marketplace Pass og Realms Plus?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer7=Et Realms Plus-abonnement indeholder Marketplace Pass. Hvis du abonnerer på Marketplace Pass og ønsker at udforske Realms Plus, anbefaler vi, at du opsiger dit abonnement på Marketplace Pass først. Aktive Realms Plus-abonnenter kan ikke abonnere på Marketplace Pass.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question8=Kan jeg bruge mit Marketplace Pass-indhold på alle enheder?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer8=Hvis du køber Marketplace Pass, har du adgang til alle pakkerne fra enhver enhed med en kompatibel version af Minecraft: Bedrock Edition med Minecraft Markedsplads (sælges separat), hvis du er logget på din Minecraft-konto. Understøttes ikke på Amazon Kindle Fire eller Minecraft Java Edition.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question9=Kan jeg spille Marketplace Pass-indhold, hvis jeg har tilmeldt mig Minecraft Beta på Windows eller XBOX?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer9=Du kan se indhold i dit abonnement, hvis du allerede er abonnent, men du vil ikke kunne abonnere på Marketplace Pass fra Preview/BETA-byggeri.		#### {StrContains="Marketplace Pass"}
 store.csb.faq.bottom2=Besøg vores hjælpeside	#
 
 store.csb.contentPacks.worldDescription=Spil minispil, temaverdener og meget mere!	#
@@ -7997,20 +8115,20 @@ store.csb.contentPacks.personaDescription=Saml månedlige genstande i omklædnin
 store.csb.contentPacks.skinDescription=Udvid din garderobe med skins! 	#
 store.csb.contentPacks.mashupDescription=Prøv lidt af det hele med mashups!	#
 
-store.csb.content.popularPacks=Opdag Marketplace Pass	#
+store.csb.content.popularPacks=Udforsk Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.content.viewAllPacks=VIS ALLE PAKKER	#
 store.csb.content.viewCharacterCreatorItems=SE KARAKTERUDVIKLER-GENSTANDE	#
-store.csb.content.contentDescription=Stik sugerøret direkte i kilden til forrygende Minecraft-indhold! Med Marketplace Pass får du øjeblikkelig adgang til over 150 mashups, verdener, skinpakker og episke eventyr fra markedspladsen – og der kommer nye til hver eneste måned.	#
+store.csb.content.contentDescription=Stik sugerøret direkte i kilden til forrygende Minecraft-indhold! Med Marketplace Pass får du øjeblikkelig adgang til over 150 mashups, verdener, skinpakker og episke eventyr fra markedspladsen – og der kommer nye til hver eneste måned.		#### {StrContains="Marketplace Pass"}
 
 store.csb.freeTrial=START GRATIS PRØVEPERIODE	#
 
-store.csb.welcomeDialog.title=Velkommen til Marketplace Pass!	#
+store.csb.welcomeDialog.title=Velkommen til Marketplace Pass!		#### {StrContains="Marketplace Pass"}
 store.csb.welcomeDialog.body=Start med at nyde over 150 eventyr, minispil, skinpakker, teksturer og meget mere nu!	#
 store.csb.welcomeDialog.continue=Gå på udkig	#
 
 store.csb.purchase.warningDialog.title=Meddelelse	#
-store.csb.purchase.warningDialog.body.line1=Marketplace Pass er inkluderet i dit Realms Plus-abonnement.	#
-store.csb.purchase.warningDialog.body.line2=Afmeld dit aktive Realms Plus-abonnement, vent til afslutningen af din faktureringsperiode, og prøv så at købe.	#
+store.csb.purchase.warningDialog.body.line1=Marketplace Pass er inkluderet i dit Realms Plus-abonnement.		#### {StrContains="Marketplace Pass"}
+store.csb.purchase.warningDialog.body.line2=Afmeld dit aktive Realms Plus-abonnement, og prøv så at købe.	#
 store.csb.purchase.warningDialog.button.back=Gå tilbage	#
 
 store.csb.upsell.bestValue=BEDSTE VÆRDI	#
@@ -8025,7 +8143,7 @@ store.csb.upsell.rightBullet.3=Inkluderer			### Precedes the term Marketplace Pa
 
 store.csb.upsell.learnMore=Læs mere	#
 store.csb.upsell.price=%s/måned	#
-store.csb.upsell.firstPeriodFree=30 dages gratis prøveversion*	#
+store.csb.upsell.firstPeriodFree=30 dages gratis prøveversion!	#
 
 store.csb.upsell.realmsPlus=§dREALMS PLUS	#
 
@@ -8036,11 +8154,14 @@ store.csb.purchaseErrorDialog.errorCode=Fejlkode: %s	#
 store.csb.purchaseErrorDialog.correlationId=Korrelations-id: %s	#
 
 store.csb.purchase.amazonDeviceWarning.title=Meddelelse	#
-store.csb.purchase.amazonDeviceWarning.body.line1=Beklager! Marketplace Pass kan ikke købes på Amazon-enheder i øjeblikket. 	#
+store.csb.purchase.amazonDeviceWarning.body.line1=Beklager! Marketplace Pass kan ikke købes på Amazon-enheder i øjeblikket.		#### {StrContains="Marketplace Pass"}
 store.csb.purchase.amazonDeviceWarning.body.line2=Besøg support.minecraft.net, hvis du har spørgsmål.	#
 store.csb.purchase.amazonDeviceWarning.button.back=Gå tilbage	#
 
-store.csb.alreadySubscribed.toolTip=Du har allerede et abonnement på Marketplace Pass.	#
+store.csb.alreadySubscribed.toolTip=Du har allerede et abonnement på Marketplace Pass.		#### {StrContains="Marketplace Pass"}
+
+store.csb.banner.offer=Start din gratis 30-dages prøveperiode nu!	#
+store.csb.banner.learnMore=Læs mere	#
 
 store.inventory.button=Mit indhold	#
 store.inventory.title=Mit indhold	#
@@ -8145,12 +8266,6 @@ store.createdBy=Af %s	#
 store.seeMoreBy=Se mere fra %s	#
 store.seeMoreBy.multiCreatorBundle=Se mere fra flere udviklere	#
 store.fetchingItem=Opretter forbindelse til markedspladsen ...	#
- 
-store.timer.daysAbbreviated=%sd		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.hoursAbbreviated=%st		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.minutesAbbreviated=%sm		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.secondsAbbreviated=%ss		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.left=%s resterende	#
 
 store.startMenu.sale=Udsalg!	#
 
@@ -8171,6 +8286,13 @@ store.mashup.count.texturePack=1 teksturpakke	#
 store.mashup.count.texturePacks=%s teksturpakker	#number of texture packs	#
 store.mashup.count.world=1 verden	#
 store.mashup.count.worlds=%s verdener	#number of worlds	#
+store.mashup.count.addonPack=1 udvidelse	#
+store.mashup.count.addonPacks=%s udvidelser	#number of addons	#
+
+store.addon.activateAddonPack=Aktivér tilføjelse!	#
+store.addon.choseWorldPopupTitle=Hvor kan man tilføje?	#
+store.addon.choseWorldPopupExisting=Eksisterende	#
+store.addon.choseWorldPopupNew=Nyt	#
 
 store.mashup.bundle=Samling	#
 store.mashup.bundle.multipleCreators=Flere udviklere	#
@@ -8231,7 +8353,7 @@ store.ratings.signIn.description1=Fortæl udvikleren og vores community om dine 
 store.ratings.signIn.description2=Du skal logge på med en Microsoft-konto, inden du kan give din bedømmelse.	#
 
 store.purchase.success.realMoney1=Du har lige låst op for %s for %s 	#
-store.purchase.success.realMoney2=+%s:minecoin:	#
+store.purchase.success.realMoney2=+:minecoin:%s	#
 store.purchase.signIn=Udvid dit spil med en masse fantastisk indhold.	#
 store.purchase.signInPart2=Du skal logge på med en Microsoft-konto, inden du kan gå på markedspladsen.	#
 store.purchase.realmoney.disclaimer=*Giver dig %s Minecoins for %s og indløser pakken for %s Minecoins, så der er %s tilbage.	#
@@ -8383,7 +8505,7 @@ store.search.filter.offer_type=Tilbudstyper	#
 store.search.filter.offer_type.selectedCount=%d -tilbudstyper	#
 store.search.filter.offer_type.bundles=Sampakker	#
 store.search.filter.offer_type.realmsplus=Realms Plus	#
-store.search.filter.offer_type.csb=Marketplace Pass	#
+store.search.filter.offer_type.csb=Marketplace Pass		#### {StrContains="Marketplace Pass"}
 
 store.search.filter.clear.pack_type=Ryd pakketypefiltre	#
 store.search.filter.mashupPacks=Mashups	#
@@ -8400,6 +8522,7 @@ store.search.filter.skinPacks=Skins	#
 store.search.filter.texturePacks=Teksturer	#
 store.search.filter.title=Filtre	#
 store.search.filter.worldTemplates=Verdener	#
+store.search.filter.addOns=Udvidelser	#
 store.search.filter.installed_state=Installationstilstand	#
 store.search.filter.installed=Installeret	#
 store.search.filter.notInstalled=Ikke installeret	#
@@ -8436,7 +8559,7 @@ store.uploadContentToRealmsFail.message=Indholdet kunne ikke uploades til det va
 store.uploadContentToRealmsFail.forbidden.message=Du mangler noget af de anvendte indhold!	#
 store.applyToRealm=Opret i realm	#
 store.inRealmsPlus=I Realms Plus	#
-store.inCsb=Med Marketplace Pass	#
+store.inCsb=Med Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.uploadWorldTitle=Erstat verden?	#
 store.uploadPackTitle=Erstat pakke?	#
 store.uploadWorldMessage=Dette fjerner den aktuelle verden fra dit Realms aktive plads, så du kan erstatte den med en ny. Medlemmerne af dit Realm vil have adgang til din nye verden. Vælg "Annuller", hvis du vil downloade en kopi af din aktuelle verden, så du ikke mister data, eller "Bekræft" for at fortsætte og erstatte din verden.	#
@@ -8519,7 +8642,7 @@ tile.beehive.name=Bistade	#
 tile.bee_nest.name=Bikube	#
 tile.target.name=Målskive	#
 tile.bed.name=Seng	#
-tile.bed.noSleep=Du kan kun sove om natten	#
+tile.bed.noSleep=Du kan kun sove om natten og under tordenvejr	#
 tile.bed.notSafe=Du kan ikke hvile nu, der er monstre i nærheden	#
 tile.bed.notValid=Din seng var væk eller blokeret	#
 tile.bed.occupied=Sengen er optaget	#
@@ -9584,10 +9707,10 @@ trial.tabbed_upsell.buttonAlternate=Lås op for det komplette Minecraft-spil	#
 trial.tabbed_upsell.minecraft.title=MINECRAFT 	#
 trial.tabbed_upsell.minecraft.description=Udforsk de uendelige vidder i dine egne unikke verdener, og byg alt, hvad du har lyst til – fra ydmyge hytter til storslåede borge. Spil i Kreativ, hvor du har ubegrænsede ressourcer, eller grav dybt i Overlevelse, hvor du er nødt til at fremstille dine egne våben og rustninger, hvis du vil overleve natten. Du kan også spille online med dine venner. Lås op for hele spillet i dag!	#
 trial.tabbed_upsell.xbl.title=MICROSOFT-KONTO	#
-trial.tabbed_upsell.xbl.description=Det komplette Minecraft giver dig mulighed for at spille Kreativ, gennemføre bedrifter og meget mere. Hvis du har en Microsoft-konto, kan du møde andre i Minecraft-fælleskabet! Spil i dine venners verdener, få nye venner på servere, og synkroniser dine køb på markedspladsen til alle de enheder, du spiller Minecraft på.	#
+trial.tabbed_upsell.xbl.description=Det komplette Minecraft giver dig mulighed for at spille Kreativ, opnå gennemførelser og meget mere. Hvis du har en Microsoft-konto, kan du møde andre i Minecraft-fælleskabet! Spil i dine venners verdener, få nye venner på servere, og synkronisér dine køb på markedspladsen til alle de enheder, du spiller Minecraft på.	#
 trial.tabbed_upsell.xbl.description.line2=*(i versioner med markedsplads)	#
 trial.tabbed_upsell.achievements.title=GENNEMFØRELSER	#
-trial.tabbed_upsell.achievements.description=Udover det komplette Minecraft med Kreativ, multiplayer og meget mere får du mulighed for at gennemføre bedrifter. Gennemførelser og gamerscore illustrerer dine fremskridt i Minecraft og viser dine Microsoft konto-venner, hvad du har opnået. Hent det komplette spil, og vis, hvad du kan!	#
+trial.tabbed_upsell.achievements.description=Udover det komplette Minecraft med Kreativ, multiplayer og meget mere opnår du gennemførelser og gamerscore for at markere dine fremskridt i Minecraft og viser dine Microsoft konto-venner, hvad du har opnået. Hent det komplette spil, og vis, hvad du kan!	#
 trial.tabbed_upsell.multiplayer.title=MULTIPLAYER	#
 trial.tabbed_upsell.multiplayer.description=Det komplette Minecraft giver dig Kreativ tilstand, gennemførelser og multiplayer på tværs af Minecraft-enheder! Byg, udforsk og overlev i fællesskab med dine venner på konsol, PC og mobil. Lås op for det komplette Minecraft i dag!	#
 trial.tabbed_upsell.server.title=SERVERE	#
@@ -9597,7 +9720,7 @@ trial.tabbed_upsell.store.description=Få adgang til Minecraft-markedspladsen, v
 trial.tabbed_upsell.creative.title=KREATIV	#
 trial.tabbed_upsell.creative.description=Køb Minecraft, og bliv Kreativ. Adgang til hele lageret – du kan bygge alt, du overhovedet kan forestille dig! Flyv omkring i verden, opfør din drømmebolig, ud af lige hvad du vil, eller spræng et bjerg i luften med TNT ad libitum! 	#
 trial.tabbed_upsell.addon.title=UDVIDELSER	#
-trial.tabbed_upsell.addon.description=Hvad hvis ulve opførte sig som kaniner? Eller træer så ud som candyfloss? I den komplette udgave af Minecraft kan du ændre alt med udvidelser! Plus, du får adgang til multiplayer, Kreativ, gennemførelser og meget mere. Køb Minecraft nu, og få fuld adgang!	#
+trial.tabbed_upsell.addon.description=Hvad hvis ulve opførte sig som kaniner? Eller træer så ud som candyfloss? I den komplette udgave af Minecraft kan du ændre alt med udvidelser! Oven i det får du adgang til multiplayer, Kreativ, gennemførelser og meget mere. Køb Minecraft nu, og få fuld adgang!	#
 trial.tabbed_upsell.seeds.title=FRØ	#
 trial.tabbed_upsell.seeds.description=Lås op for det komplette Minecraft, og få adgang til frø. Frø åbner op for helt nye biomer, så du kan kæmpe mod elementerne på øde issletter, nå toppen af ekstreme bakker og finde vej igennem sandede ørkener. Start med unikke skabeloner, eller udforsk tilfældige nye verdener. Få adgang til frø, Kreativ, multiplayer og meget mere ved at købe Minecraft i dag!	#
 
@@ -9607,9 +9730,9 @@ trial.thanks_for_testing.button=Send mig til FAQ!	#
 trial.thanks_for_testing.minecraft.title=MINECRAFT-PRØVEVERSION	#
 trial.thanks_for_testing.minecraft.description=Tak, fordi du downloadede Minecraft-prøveversionen til Chromebook! Din spiltest vil give os uvurderlige data, så vi kan udføre fejlrettelser og teknisk fejlfinding. Har du opdaget en fejl? Anmeld den på bugs.mojang.com! Andre spørgsmål? Se vores FAQ.	#
 trial.thanks_for_testing.xbl.title=MICROSOFT-KONTO	#
-trial.thanks_for_testing.xbl.description=Det komplette Minecraft giver dig mulighed for at spille Kreativ, gennemføre bedrifter og meget mere. Hvis du har en Microsoft-konto, kan du møde andre i Minecraft-fælleskabet! Du kan spille i dine venners verdener, få nye venner på servere og synkronisere dine køb på markedspladsen til alle de enheder, du spiller Minecraft på.	#
+trial.thanks_for_testing.xbl.description=Det komplette Minecraft giver dig mulighed for at spille Kreativ, opnå gennemførelser og meget mere. Hvis du har en Microsoft-konto, kan du møde andre i Minecraft-fælleskabet! Du kan spille i dine venners verdener, få nye venner på servere og synkronisere dine køb på markedspladsen til alle de enheder, du spiller Minecraft på.	#
 trial.thanks_for_testing.xbl.description.line2=*(i versioner med markedsplads)	#
-trial.thanks_for_testing.achievements.description=Udover det komplette Minecraft med Kreativ tilstand, multiplayer og meget mere får du mulighed for at gennemføre bedrifter. Gennemførelser og gamerscore illustrerer dine fremskridt i Minecraft og viser dine Microsoft konto-venner, hvad du har opnået.	#
+trial.thanks_for_testing.achievements.description=Udover det komplette Minecraft med Kreativ tilstand, multiplayer og meget mere får du mulighed for at opnå gennemførelser. Gennemførelser og gamerscore illustrerer dine fremskridt i Minecraft og viser dine Microsoft konto-venner, hvad du har opnået.	#
 trial.thanks_for_testing.multiplayer.description=Det komplette Minecraft giver dig Kreativ tilstand, gennemførelser og multiplayer på tværs af Minecraft-enheder! Byg, udforsk og overlev i fællesskab med dine venner på konsol, PC og mobil.	#
 trial.thanks_for_testing.server.description=Som en del af den komplette Minecraft-oplevelse giver servere dig nogle af de mest kreative måder at spille Minecraft på! Spil herlige minispil, mød Minecraft-fællesskabet, og få nye venner.	#
 trial.thanks_for_testing.store.description=Det komplette spil giver adgang til Minecrafts markedsplads, vores butik i spillet. Giv dig selv en ansigtsløftning med nye skins, giv din verden en makeover, og gå på opdagelse på fantastiske nye kort fra de bedste udviklere i vores fællesskab!	#
@@ -9711,10 +9834,6 @@ xbox.signinquestion=Vil du logge på?	#
 xbox.notnow=Ikke nu	#
 xbox.signingin=Logger på med din Microsoft-konto ...	#
 xbox.signingin.offline=Logger på	#
-xbox.firstsignin.line1=Velkommen til Minecraft! Brug en Microsoft-konto til at oprette forbindelse til Minecraft-communityet, hvor pc'er, konsoller, telefoner og tablets alle kan spille sammen. Og det bedste af det hele?	#
-xbox.firstsignin.line2=Det er GRATIS!	#
-xbox.firstsignin.line3=Hvis du ikke har en konto, kan du oprette en med det samme, så du kan opnå gennemførelser, spille på servere og være med i realms!	#
-xbox.firstsignin.line3.norealmsOrServers=Har du ikke nogen konto? Opret en med det samme, så du kan opnå gennemførelser og spille med dine venner på tværs af platforme!	#
 xbox.failedsignin.body=Vi kunne ikke logge dig på din Microsoft-konto. Adgangen til Realms, profiler og varer fra markedspladsen vil være begrænset. Prøv igen senere.	#
 xbox.failedsignin.error=Fejlkode:	#
 xbox.failedsignin.moreInfo=Mere info	#
@@ -9743,6 +9862,8 @@ xbox.genericsignin.line3=Du kan bruge det, alle steder du spiller Minecraft.	#
 xbox.disconectionscreen.notSignedIn=Log på med din Microsoft-konto for at spille med dine venner.	#
 xbox.disconectionscreen.multiplayerNotAllowed=Microsoft-kontoen har ikke tilladelse til at deltage i multiplayerspil.	#
 xbox.disconectionscreen.accessDenied=Du skal være venner med nogen i spillet for at kunne deltage.	#
+
+xbox.addfriendsscreen.shareProfile=Tilføj mig som ven i Minecraft!	#
 
 xbox.friendfinder.enterGamertag=Angiv gamertag	#
 xbox.friendfinder.findFriends=Find venner efter gamertag	#
@@ -9817,13 +9938,15 @@ xbox.report.quittingEarly=Tidlig afslutning	#
 xbox.report.unsportingBehavior=Usportslig optræden	#
 xbox.report.voiceCommunication=Talekommunikation	#
 
+xbox.statistics.timePlayed=Spilletid	#
+xbox.statistics.blocksBroken=Blokke brudt	#
+xbox.statistics.distanceTravelled=Afstand tilbagelagt	#
+xbox.statistics.mobsDefeated=Mobs besejret	#
+
 ## Player safety toast messages
 safety.muted.title=Du er blevet midlertidigt slået fra i chatten.	#
 safety.muted.message=Husk at følge Minecraft fællesskabsregler.	#
 
-safety.reportCap=Det ser ud til, at du har haft travlt med at anmelde andre spillere. Tak, fordi du hjælper os med at gøre Minecraft til et sikkert og imødekommende sted at være. Husk, at indsendelse af falske anmeldelser er imod vores fællesskabsregler.	#
-safety.reportFriend=%s er en af dine venner. Er du sikker på, at du vil indberette dem? Indgivelse af falske indberettelser er i strid med vores fællesskabsregler.	#
-safety.reportFriend.title=Indberet %s	#
 safety.bannedSkin.title=Skin ikke tilladt i multiplayer	#
 safety.bannedSkin.button=Få flere oplysninger	#
 safety.bannedSkin.continue=Fortsæt med standardskin	#
@@ -9933,6 +10056,7 @@ content.import.succeeded='%s' er importeret	#
 content.import.succeeded_with_warnings='%s' er importeret med advarsler	#
 content.import.succeeded_with_warnings.subtitle=Klik her for at få flere oplysninger	#
 content.import.started=Importen er i gang ...	#
+content.import.importedWorldPrefix=importeret	#
 
 ## World Templates
 worldTemplate.festivemashup2016.name=Mashuppen Jul 2016	#
@@ -10017,85 +10141,6 @@ tips.edu.28=Vil du bruge Code Builder? Sørg for at aktivere snydekoder.	#
 tips.edu.29=Tryk på F5 for at ændre spillerperspektivet.	#
 tips.edu.30=Brug "/spawnpoint" til at ændre dit spawningspunkt. Det er, lige som hvis du sov i en seng!	#
 
-tips.game.1=Brug havgræs til at tiltrække og avle på havskildpadder.	#
-tips.game.2=Beskyt babyskildpadder mod sultne rovdyr!	#
-tips.game.3=Babyskildpadder dropper skæl, når de vokser – skæl kan bruges til at fremstille skildpaddeskjold.	#
-tips.game.4=Brug en seng til at angive dit respawn-punkt i løbet af dagen.	#
-tips.game.5=Bryg gælleeliksirer, så du kan gå på opdagelse under vandet!	#
-tips.game.6=Delfiner kan føre dig til skibsvrag og ruiner under vandet – forkæl dem med lidt torsk, og følg deres spor!	#
-tips.game.7=Brug en saks til at skære græskar ud.	#
-tips.game.8=Brug membraner fra fantomer til at reparere din elytra.	#
-tips.game.9=Der er 3.587 slags tropefisk!	#
-tips.game.10=Søpølser kan smeltes til limegrøn farve.	#
-tips.game.11=Brug høballer til at avle på lamaer!	#
-tips.game.12=Et kompas peger altid mod verdens spawnpunkt – fremstil et, så du kan finde hjem!	#
-tips.game.13=Få fingrene i mad, værktøj og måske endda skattekort ved at handle med landsbyboere.	#
-tips.game.14=Du kan holde et kort i din ikkeforetrukne hånd.	#
-tips.game.15=Liner kan bruges til både.	#
-tips.game.16=Du kan gå hen over magmablokke uden at brænde dig, hvis du sniger eller har frostvandrerstøvler på.	#
-tips.game.17=Du kan indsamle spindelvæv med en saks.	#
-tips.game.18=Mængden af diamanter stiger, jo længere ned du kommer.	#
-tips.game.19=Hvis du vil udvinde diamanter, redstone eller guld, skal du bruge en hakke af jern, diamant eller netherit for at få malmen ud.	#
-tips.game.20=Har du brug for kul til fakler eller brændsel? Træstammer bliver til trækul, hvis du bager dem i en ovn!	#
-tips.game.21=Der er masser af guld i badlandsbiomer!	#
-tips.game.22=Elytra kan bruges til at svæve. Find dem i skibe fra End-byer!	#
-tips.game.23=Test vores nyeste funktioner ved at aktivere Eksperimenter!	#
-tips.game.24=Drauger dropper treforker. De kan både kastes og bruges til nærkamp.	#
-tips.game.25=Du kan avle hoglins med blodrøde svampe, men det er farligt!	#
-tips.game.26=Du kan smelte op til 20 genstande i en ovn ved at bruge en blok tørret tang som brændsel.	#
-tips.game.27=Creepere, der dræbes af pile fra skeletter, dropper af og til musikplader.	#
-tips.game.28=Det er spillere som DIG, der udvikler indholdet på markedspladsen!	#
-tips.game.29=En lang række udviklere fra vores community tjener til dagen og vejen ved at skabe indhold til markedspladsen.	#
-tips.game.30=Du kan finde skins, der kan give dig en unik oplevelse i spillet – på visse platforme kan du endda bruge dine egne!	#
-tips.game.31=Teksturpakker ændrer udseendet på blokke, genstande og endda menuer i spillet. Prøv det!	#
-tips.game.32=Gå en tur på markedspladsen, og find helt nye verdener og eventyr.	#
-tips.game.33=Ansøg om at blive udvikler til markedspladsen!	#
-tips.game.34=Mashup-pakker giver dig en ny verden, nye skins, nye teksturer og endda ny musik.	#
-tips.game.35=Der er allerede over 500 pakker fra vores community på markedspladsen, og der kommer flere hele tiden.	#
-tips.game.36=Giv din mening til kende på discord.gg/Minecraft	#
-tips.game.37=Smaragdmalm er den sjældneste i Minecraft! Den findes udelukkende i bjerge og enge!	#
-tips.game.38=Du har ikke brug for en sadel for at tæmme en skelethest.	#
-tips.game.39=Ozelotter viser creepere, hvem der bestemmer!	#
-tips.game.40=Diorit – du enten elsker eller hader det.	#
-tips.game.41=Fantomer er farlige væsener, der kun viser sig om natten. Husk at få din nattesøvn!	#
-tips.game.42=Zombier bliver til drauger, hvis de synker ned under vandet.	#
-tips.game.43=Der afholdes Minecraft Live en gang om året! Hold udkig efter det næste!	#
-tips.game.44=Brug fyrværkeri til at sætte farten op på din elytra, mens du er i luften ... bare pas på, det hele ikke eksploderer – det gør ONDT!	#
-tips.game.45=Guld er mest almindeligt i Nether og badlandsbiomer.	#
-tips.game.46=Er der egentlig nogen, der læser det her?	#
-tips.game.47=Uendelige vidundere, ubegrænsede muligheder.	#
-tips.game.48=TRÆER KAN IKKE SVÆVE!	#
-tips.game.49=Du svømmer ved at spurte i vandet!	#
-tips.game.50=Hvis du bruger fortryllelsen Understrøm, når det regner, bliver du kastet fremad.	#
-tips.game.51=Minecraft Live er en global interaktiv livestreaming-event. Snup dine ting, og kom med til festen!	#
-tips.game.52=Vær god ved dyrene!	#
-tips.game.53=Signallyset er en kraftfuld genstand, der kun kan fremstilles med en Nether-stjerne fra Wither!	#
-tips.game.54=Lad være med at dræbe delfiner, dit monster!	#
-tips.game.55=Nether-stjerner bliver ikke ødelagt af eksplosioner.	#
-tips.game.56=Placér en fakkel ved dine fødder, når du graver direkte opad, så du ødelægger sand og grus, hvis det falder ned på dig.	#
-tips.game.57=Du kan handle med piglins.	#
-tips.game.58=Du kan klippe bikager ud af bistader og bikuber eller hælde honningen på flasker.	#
-tips.game.59=Placer et lejrbål under bistadet eller bikuben for at berolige bierne, når du høster honning.	#
-tips.game.60=Respawning i Nether kræver et opladet respawn-anker.	#
-tips.game.61=Du kan oplade et respawn-anker med glødesten.	#
-tips.game.62=Har du en idé? Besøg feedback.minecraft.net!	#
-tips.game.63=Allayer findes i røverforter og skovpalæer.	#
-tips.game.64=Allayen er en samler! Hvis du giver den en ting, forsøger den at samle flere af samme slags.	#
-tips.game.65=Allayer elsker musik og interagerer derfor med nodeblokke!	#
-tips.game.66=Du finder oldtidsbyer under bjergkæderne.	#
-tips.game.67=Stilhed er nøglen, når du vandrer omkring i det dybe mørke.	#
-tips.game.68=Brug en vandflaske på en jordblok for at få mudder!	#
-tips.game.69=Frøer spiser små og blokkede mobs.	#
-tips.game.70=Frøer varierer efter temperaturen i det biom, haletudsen et vokset op i.	#
-tips.game.71=Du kan samle haletudser i spande.	#
-tips.game.72=Udforsk strukturer i hele Minecraft-verdenen for at finde smedeskabeloner til at beskære dine rustningsstykker.	#
-tips.game.73=Har du brug for flere smedeskabeloner? Prøv at kopiere dem.	#
-tips.game.74=Snifferægget ser ud til at kunne lide mosblokke.	#
-tips.game.75=Mobhoveder laver lyde, prøv dem på nodeblokke!	#
-tips.game.76=Noget sand kan være mistænkeligt. Brug din pensel på den til at finde nogle gode ting!	#
-tips.game.77=To spillere kan ride sammen på en kamel.	#
-tips.game.78=Kamelerne hopper ... vandret!	#
-
 beginnerTips.1=De fleste monstre kommer kun frem om natten. I løbet af dagen er du sikker ... vistnok.	#
 beginnerTips.2=Bryd blokke, saml ressourcer. Brug fremstillingsgitteret til at lave nyttige genstande. Sådan fremstiller du!	#
 beginnerTips.3=Du har endeløse liv, men dine genstande dropper til jorden, når du dør. Skynd dig tilbage for at samle dem op!	#
@@ -10108,6 +10153,7 @@ beginnerTips.9=Senge er fantastiske! Fremstil en for hurtigt at komme igennem na
 beginnerTips.10=Vær forsigtig, når du svømmer. Hvid du bliver for længe under vandet, løber du tør for luft.	#
 beginnerTips.11=Overlevelsestilstand har 4 forskellige sværhedsgrader: fredfyldt, let, normal og svær. Eller spil i kreativ tilstand, og få endeløse ressourcer!	#
 beginnerTips.12=Minecrafts verden er uendeligt overraskende. Du finder masser af forskellige dyr, planter og endda §f§k§a§b§r §f§k§a§b§r		### please leave "§f§k§a§b§r" unchanged
+
 
 midgameTips.1=Jerngolemmer vil kæmpe for dig!	#
 midgameTips.2=Giv en knogle til en ulv for at tæmme den. Du kan derefter få den til at sitte eller følge dig.	#
@@ -10127,7 +10173,7 @@ midgameTips.15=Instrumentet, der afspilles af en nodeblok, afhænger af material
 midgameTips.16=Angriber du en ulv, vil det gøre ulve i nærheden fjendtlige, så de angriber dig. 	#
 midgameTips.17=Ulve og jerngolemmer angriber ikke creepere.	#
 midgameTips.18=Kyllinger lægger et æg hvert 5. til 10. minut.	#
-midgameTips.19=Obsidian kan kun udvindes med en diamanthakke.	#
+midgameTips.19=Obsidian kan udvindes med en diamanthakke.	#
 midgameTips.20=Creepere er den kilde til krudt, der er nemmest at få fat på.	#
 midgameTips.21=Tamme ulve viser deres helbred med positionen på deres hale. Giv dem kød for at helbrede dem.	#
 midgameTips.22=Forskellige farver kan fremstilles af en række materialer, kog kaktusser i en ovn for at få grøn farve!	#
@@ -10179,7 +10225,7 @@ midgameTips.67=Uendelige vidundere, ubegrænsede muligheder.	#
 midgameTips.68=Hvis du planter nogle stiklinger, vokser de op og bliver til træer.	#
 midgameTips.69=Brug et lugejern til at forberede jordområder til plantning.	#
 
-lategameTips.1=Zombificerede pigliner angriber dig ikke, hvis du har gylden rustning – medmindre du gør dem vrede.	#
+lategameTips.1=Zombificerede pigliner angriber dig ikke – medmindre du gør dem vrede.	#
 lategameTips.2=Slå ildkuglerne tilbage mod ghast!	#
 lategameTips.3=Brosten er modstandsdygtigt over for Ghast-ildkugler, hvilket gør dem nyttige til at vogte portaler.	#
 lategameTips.4=Vores musik er af C418, Lena Raine og Kumi Tanioka.	#
@@ -10209,6 +10255,12 @@ lategameTips.27=Diorit – du enten elsker eller hader det.	#
 
 tips.realms.1=Tag et skærmbillede ved hjælp af spilmenuen.	#
 tips.realms.2=Et realm er altid online, så du og dine venner kan spille her, når som helst I vil.	#
+tips.realms.3=Hold dig opdateret med det, der foregår i dit realm ved at tjekke fortællingsfeedet i Realms Stories.	#
+tips.realms.4=Del dine store øjeblikke med de andre spillere i dette realm ved at tilføje en historie til fortællingsfeed.	#
+tips.realms.5=Tjek tidslinjen i Realms Stories for at finde ud af, hvornår andre spiller.	#
+tips.realms.6=Få adgang til Realms Stories fra spilmenuen, mens du spiller på realmet.	#
+tips.realms.7=Lær dit Realms-fællesskab at kende på fanen Medlemmer i Realms Stories.	#
+tips.realms.8=Brug Realms Stories til at være social, holde trit med dine venners fremskridt og planlægge spilletid.	#
 
 splitscreen.joinPrompt=Deltag som spiller %s	#
 splitscreen.unavailable.toastHeader=Delt skærm kan ikke anvendes	#
@@ -10417,8 +10469,8 @@ dr.header.featured_skins=Udvalgte skins	#
 dr.header.previewAppearance=Se udseende	#
 dr.header.colorPicker=Farvevælger	#
 dr.achievement.achievement_locked.not_signed_in=Låses op med en gennemførelse.	#
-dr.achievement.achievement_locked.signed_in=Låses op ved at gennemføre %s.	#
-dr.achievement.achievement_unlocked=Låst op ved at gennemføre %s.	#
+dr.achievement.achievement_locked.signed_in=Den genstand låses op ved at opnå %s-gennemførelsen.	#
+dr.achievement.achievement_unlocked=Denne genstand blev låst op ved at opnå %s-gennemførelsen.	#
 dr.achievement.challenge_locked=Låses op ved at klare en udfordring i Minecraft Earth.	#
 dr.achievement.challenge_unlocked=Låst op ved at klare en udfordring i Minecraft Earth.	#
 dr.arm_size_label_text=Armstørrelse	#
@@ -10517,7 +10569,7 @@ dr.marketplace.get_more_skins=Hent flere skins	#
 dr.classic_skins.show_more=Vis mere	#
 
 onlinePlay.notRated=Onlinespil er ikke klassificeret	#
-onlinePlay.message=Under onlinespil kan du blive udsat for chatbeskeder eller andre typer brugergenereret indhold, der ikke er blevet klassificeret, og som ikke nødvendigvis er egnet for alle.	#
+onlinePlay.message=Under onlinespil kan du muligvis se chatbeskeder eller andre former for brugergenereret indhold, der ikke nødvendigvis er egnet for alle aldre.	#
 onlinePlay.editor.notRated=Onlineredigering er ikke klassificeret	#
 onlinePlay.editor.message=Mens du redigerer online, vil du kunne se chatbeskeder og anden slags brugergenereret indhold, der ikke er blevet klassificeret, og som ikke nødvendigvis er egnet for alle.	#
 onlinePlay.doNotShowAgain=Vis ikke igen	#

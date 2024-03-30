@@ -194,6 +194,7 @@ accessibility.text.equals=Ίσον	#
 accessibility.text.unsupported=Άγνωστος χαρακτήρας	#
 
 accessibility.toast=Ειδοποίηση		### This is the name of the popup that appears when a player gets a notification for a game invite or achievement unlocked
+accessibility.gametip=Συμβουλή		### This is the name of the popup that appears when a player is shown a game tip
 
 accessibility.worldTemplates.help=Βοήθεια	#
 
@@ -255,7 +256,7 @@ accounts.manage=Διαχείριση λογαριασμού	#
 accounts.signOut.fail.title=Η έξοδος απέτυχε	#
 accounts.signOut.fail.body.line1=Δεν ήταν δυνατή η έξοδός σου αυτή τη στιγμή. Δοκίμασε ξανά αργότερα. Αυτό δεν θα σε εμποδίσει να πραγματοποιήσεις είσοδο με άλλο λογαριασμό.	#
 accounts.signOut.fail.body.line2=Κωδικός σφάλματος: %s	#
-accounts.signOut.fail.hyperLink.text=Μάθετε περισσότερα	#
+accounts.signOut.fail.hyperLink.text=Μάθε περισσότερα	#
 accounts.signOut.fail.hyperLink.uri=https://aka.ms/mcedu-login	#
 
 achievement.alternativeFuel=Εναλλακτικό καύσιμο	#
@@ -926,6 +927,15 @@ commands.gamerule.type.nocheatsenabled=Ο κανόνας παιχνιδιού "%
 commands.gamerule.nopermission=Μόνο οι κάτοχοι διακομιστή μπορούν να αλλάξουν το στοιχείο '%1$s'	#
 commands.gamerule.norule=Δεν υπάρχει διαθέσιμος κανόνας παιχνιδιού με το όνομα '%1$s'	#
 commands.gamerule.success=Ο κανόνας παιχνιδιού %1$s ενημερώθηκε σε %2$s	#
+commands.gametips.description=Ενεργοποίηση ή απενεργοποίηση των συμβουλών παιχνιδιού σε αυτήν τη συσκευή	#
+commands.gametips.enabled=Οι συμβουλές παιχνιδιού είναι πλέον ενεργοποιημένες	#
+commands.gametips.disabled=Οι συμβουλές παιχνιδιού είναι πλέον απενεργοποιημένες	#
+commands.gametips-off.description=Απενεργοποίηση συμβουλών παιχνιδιού σε αυτήν τη συσκευή	#
+commands.gametips-off.success=Οι συμβουλές παιχνιδιού είναι πλέον απενεργοποιημένες	#
+commands.gametips-on.description=Ενεργοποίηση συμβουλών παιχνιδιού σε αυτήν τη συσκευή	#
+commands.gametips-on.success=Οι συμβουλές παιχνιδιού είναι πλέον ενεργοποιημένες	#
+commands.gametips-reset.description=Επαναφορά συμβουλών παιχνιδιού σε αυτήν τη συσκευή	#
+commands.gametips-reset.success=Οι συμβουλές παιχνιδιού έχουν πλέον επαναφερθεί	#
 commands.generic.async.initiated=Εκκινήθηκε η εντολή '%1$s' (ασύγχρονο βήμα %2$d)	#
 commands.generic.boolean.invalid=Το στοιχείο '%1$s' δεν έχει τιμή true ή false	#
 commands.generic.chunk.notFound=Δεν βρέθηκε το καθορισμένο τμήμα	#
@@ -948,12 +958,15 @@ commands.generic.exception=Παρουσιάστηκε άγνωστο σφάλμ�
 commands.generic.invalidAgentType=Εφαρμόστηκε όρισμα τύπου στον επιλογέα αποκλειστικά για Agent	#
 commands.generic.invalidcontext=Δεν δόθηκε έγκυρο περιβάλλον για τον συγκεκριμένο τύπο εντολής	#
 commands.generic.invalidDevice=Η εντολή, %s, που πληκτρολόγησες δεν υποστηρίζεται σε αυτήν τη συσκευή	#
+commands.generic.invalidMessage=Μη έγκυρο μήκος μηνύματος	#
 commands.generic.invalidPlayerType=Εφαρμογή ορίσματος τύπου σε επιλογέα "μόνο για παίκτη"	#
 commands.generic.invalidType=Άγνωστο όρισμα τύπου	#
 commands.generic.levelError=Το μέγιστο επίπεδο πρέπει να είναι μεγαλύτερο από το ελάχιστο επίπεδο	#
 commands.generic.malformed.body=Το σώμα λείπει ή είναι ακατάλληλο	#
 commands.generic.malformed.type=Μη έγκυρος τύπος αιτήματος	#
 commands.generic.notimplemented=Δεν εφαρμόστηκε	#
+commands.generic.sourceNotLoaded=Δεν έχει φορτωθεί ο όγκος-πηγή.	#
+commands.generic.destinationNotLoaded=Δεν έχει φορτωθεί ο όγκος-στόχος.	#
 commands.generic.num.invalid=Το '%1$s' δεν είναι έγκυρος αριθμός	#
 commands.generic.num.tooBig=Ο αριθμός που εισήγαγες (%1$d) είναι υπερβολικά μεγάλος. Η μέγιστη τιμή που μπορεί να έχει είναι %2$d	#
 commands.generic.num.tooSmall=Ο αριθμός που εισήγαγες (%1$d) είναι υπερβολικά μικρός. Η ελάχιστη τιμή που μπορεί να έχει είναι %2$d	#
@@ -1005,6 +1018,8 @@ commands.help.description=Παρέχει βοήθεια/λίστα εντολώ�
 commands.help.footer=Συμβουλή: Χρησιμοποίησε το πλήκτρο <tab> κατά την πληκτρολόγηση μιας εντολής για να γίνεται αυτόματη συμπλήρωση της εντολής ή των ορισμάτων της	#
 commands.help.header=--- Εμφάνιση σελίδας βοήθειας %1$d από %2$d (/help <page>) ---	#
 commands.help.command.aliases=%s (επίσης %s):	#
+commands.hud.description=Αλλάζει την ορατότητα των στοιχείων του Hud.	#
+commands.hud.success=Η εντολή Hud εκτελέστηκε με επιτυχία	#
 commands.immutableworld.description=Ορίζει την αμετάβλητη κατάσταση του κόσμου.	#
 commands.immutableworld.info=immutableworld = %s	#
 commands.inputpermission.description=Ορίζει εάν η συμβολή ενός παίκτη μπορεί να επηρεάσει τον χαρακτήρα του ή όχι.	#
@@ -1148,7 +1163,9 @@ commands.recipes.playerDoesNotHaveRecipe=Ο παίκτης %1$s δεν έχει 
 commands.recipes.notFound=Η συνταγή δεν βρέθηκε.	#
 commands.recipes.notUnlockable=Η συνταγή δεν ξεκλειδώνεται στο βιβλίο συνταγών.	#
 commands.reload.description=Πραγματοποιεί νέα φόρτωση όλων των αρχείων συναρτήσεων και δεσμών ενεργειών από όλα τα πακέτα συμπεριφοράς.	#
+commands.reload.editor.description=Επαναφορτώνει όλα τα αρχεία λειτουργιών και σεναρίων από όλα τα πακέτα συμπεριφορών ή, προαιρετικά, επανεκκινεί τον πελάτη για να επαναφορτώσει όλους τους πόρους.	#
 commands.reload.success=Τα αρχεία συναρτήσεων και δεσμών ενεργειών φορτώθηκαν εκ νέου.	#
+commands.reload.error=Παρουσιάστηκε μη αναμενόμενο σφάλμα.	#
 commands.replaceitem.description=Αντικαθιστά αντικείμενα στα αποθέματα.	#
 commands.replaceitem.failed=Δεν είναι δυνατή η αντικατάσταση της υποδοχής %s %d με %d * %s	#
 commands.replaceitem.keepFailed=Υπάρχει ήδη ένα αντικείμενο που καταλαμβάνει την υποδοχή %s %d.	#
@@ -1312,6 +1329,8 @@ commands.spawnpoint.description=Ορίζει το σημείο γένεσης ε
 commands.spawnpoint.success.multiple.specific=Ορισμός σημείου γένεσης παίκτη %1$s σε (%2$d, %3$d, %4$d)	#
 commands.spawnpoint.success.multiple.generic=Ορισμός σημείου γένεσης παίκτη %1$s	#
 commands.spawnpoint.wrongDimension=Το σημείο γένεσης δεν μπορεί να οριστεί σε αυτή τη διάσταση	#
+commands.clearrealmevents.description=Διαγράφει όλα τα Συμβάντα Realm που είναι αποθηκευμένα στα δεδομένα του κόσμου.	#
+commands.clearrealmevents.start=Εκκαθάριση όλων των Συμβάντων Realm	#
 commands.clearspawnpoint.success.single=Καταργήθηκε το σημείο γένεσης του παίκτη %1$s	#
 commands.clearspawnpoint.description=Καταργεί το σημείο γένεσης για έναν παίκτη.	#
 commands.clearspawnpoint.success.multiple=Καταργήθηκαν τα σημεία γένεσης για: %1$s	#
@@ -1877,6 +1896,8 @@ createWorldScreen.experimentalUpdateAnnounced2023=Ενημέρωση 1.21	#
 createWorldScreen.experimentalUpdateAnnounced2023Description=Νέες λειτουργίες και περιεχόμενο για το Minecraft 1.21	#
 createWorldScreen.experimentalVillagerTradesRebalance=Εξισορρόπηση Ανταλλαγών Χωρικών	#
 createWorldScreen.experimentalVillagerTradesRebalanceDescription=Περιέχει ενημερωμένες ανταλλαγές για τους Χωρικούς με σκοπό την εξισορρόπηση	#
+createWorldScreen.experimentalArmadillo=Πανοπλία Αρμαντίλου και Λύκου	#
+createWorldScreen.experimentalArmadilloDescription=Γνώρισε το Αρμαντίλο και εξόπλισε τον Λύκο σου με τη νέα Πανοπλία Λύκου!	#
 createWorldScreen.worldPreferences=Προτιμήσεις κόσμου	#
 createWorldScreen.startWithMap=Χάρτης έναρξης	#
 createWorldScreen.defaultName=Ο κόσμος μου	#
@@ -2083,7 +2104,7 @@ realmsCreateScreen.offerNotAvailable.content=Η σύνδεση της συσκε
 realmsCreateScreen.extendRealms.content=Έχεις επεκτείνει τη συνδρομή σου στο Realms για όσο περισσότερο γίνεται. Δεν μπορείς να προσθέσεις αυτόν τον επιπλέον χρόνο τώρα. Δοκίμασε ξανά αργότερα.	#
 realmsCreateScreen.twoUsers=2 παίκτες	#
 realmsCreateScreen.tenUsers=10 παίκτες	#
-realmsCreateScreen.viewTOS=Για να δεις τους όρους και τις προϋποθέσεις για τα Minecraft Realm, επισκέψου την τοποθεσία https://aka.ms/minecraftrealmsterms με οποιοδήποτε πρόγραμμα περιήγησης Web.	#
+realmsCreateScreen.viewTOS=Για να δεις τους όρους και τις προϋποθέσεις για τα Minecraft Realm, επισκέψου την τοποθεσία https://www.minecraft.net/eula με οποιοδήποτε πρόγραμμα περιήγησης στο web.	#
 realmsCreateScreen.viewPrivacyPolicyText=Για να δεις την πολιτική προστασίας προσωπικών δεδομένων για τα Minecraft Realm, επισκέψου την τοποθεσία https://aka.ms/mcprivacy με οποιοδήποτε πρόγραμμα περιήγησης Web.	#
 realmsCreateScreen.waitingPurchase=Εκτελείται αγορά. Δεν πρόκειται να καθυστερήσει.	#
 realmsCreateScreen.paymentFailed.title=Υπηρεσία πληρωμής	#
@@ -2151,6 +2172,11 @@ realmsPlusUpgradeNotice.title=Καλώς όρισες στο Realms Plus!	#
 realmsPlusUpgradeNotice.body=Η συνδρομή του Realms αναβαθμίστηκε σε Realms Plus. Τώρα έχεις πρόσβαση σε 150+ πακέτα περιεχομένου από το Marketplace χωρίς επιπλέον κόστος. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση σε όλο το περιεχόμενο συνδρομής του Realm σου – δωρεάν!	#
 realmsPlusUpgradeNotice.continue=Συνέχεια	#
 realmsPlusUpgradeNotice.viewpacks=Προβολή πακέτων Realms Plus	#
+
+csbCreateScreen.popupTitle=Marketplace Pass		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.viewTOS=Για να δεις τους όρους και τις προϋποθέσεις για το Marketplace Pass, επισκέψου την τοποθεσία https://aka.ms/MinecraftEULA με οποιοδήποτε πρόγραμμα περιήγησης Web.		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.viewPrivacyPolicyText=Για να δεις την πολιτική προστασίας προσωπικών δεδομένων για το Marketplace Pass, επισκέψου την τοποθεσία https://aka.ms/mcprivacy με οποιοδήποτε πρόγραμμα περιήγησης Web.		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.goBack=Επιστροφή	#
 
 csbCreateScreen.termsAndConditionsAgree=Συμφωνώ	#
 csbCreateScreen.termsAndConditionsHeader=Όροι και προϋποθέσεις	#
@@ -2340,7 +2366,7 @@ realmsSettingsScreen.xboxOneStoreDisplayName=Xbox Store	#
 realmsSettingsScreen.amazonStoreDisplayName=Amazon Appstore	#
 realmsSettingsScreen.oculusStoreDisplayName=Oculus Store	#
 realmsSettingsScreen.berwickStoreDisplayName="PlayStation Store"	#
-realmsSettingsScreen.PS4StoreDisplayName="PlayStation Store"	 	#### CertRequirement: ["PlayStation Store"]
+realmsSettingsScreen.SonyStoreDisplayName=''PlayStation Store''	 	#### CertRequirement: ["PlayStation Store"]
 realmsSettingsScreen.unknownStoreDisplayName=άγνωστο κατάστημα	#
 realmsSettingsScreen.extendingRealm=Επέκταση realm...	#
 realmsSettingsScreen.offerError.title=Εκκρεμεί αγορά	#
@@ -2431,6 +2457,28 @@ date.short_november=Νοέμ.	#
 date.short_december=Δεκ.	#
 date.formatted=%s %d %d	#
 date.formatted_alt=%d %s %d	#
+date.full_january=Ιανουάριος	#
+date.full_february=Φεβρουάριος	#
+date.full_march=Μάρτιος	#
+date.full_april=Απρίλιος	#
+date.full_may=Μάιος	#
+date.full_june=Ιούνιος	#
+date.full_july=Ιούλιος	#
+date.full_august=Αύγουστος	#
+date.full_september=Σεπτέμβριος	#
+date.full_october=Οκτώβριος	#
+date.full_november=Νοέμβριος	#
+date.full_december=Δεκέμβριος	#
+
+date.daysAbbreviated3Char=%s ημ.		### It needs to be abbreviated with no more than 3 characters
+date.hoursAbbreviated3Char=%s ώρ.		### It needs to be abbreviated with no more than 3 characters
+date.minutesAbbreviated3Char=%s λεπ.		### It needs to be abbreviated with no more than 3 characters
+date.secondsAbbreviated3Char=%s δευτ.		### It needs to be abbreviated with no more than 3 characters
+date.daysAbbreviated1Char=%s ημ.		### It needs to be abbreviated with no more than 1 characters
+date.hoursAbbreviated1Char=%sώ		### It needs to be abbreviated with no more than 1 characters
+date.minutesAbbreviated1Char=%sλ		### It needs to be abbreviated with no more than 1 characters
+date.secondsAbbreviated1Char=%sδ		### It needs to be abbreviated with no more than 1 characters
+date.timeLeft=Απομένουν %s	#
 
 dayOneExperience.carousel.title=Καλώς όρισες στο νέο Minecraft!	#
 dayOneExperience.carousel.welcome_text=Υπάρχουν πολλές συναρπαστικές νέες δυνατότητες σε αυτή τη νέα έκδοση του Minecraft! Ρίξε μια ματιά στο Marketplace, δημιούργησε ένα Realm και παίξε online με φίλους μεταξύ πλατφορμών!	#
@@ -2533,6 +2581,7 @@ deathScreen.quit=Κύριο μενού	#
 deathScreen.quit.confirm=Είσαι βέβαιος ότι επιθυμείς έξοδο;	#
 deathScreen.quit.confirmToMainMenuWarning=Θέλεις σίγουρα να βγεις από το παιχνίδι και να επιστρέψεις στο κύριο μενού;	#
 deathScreen.quit.confirmToMainMenuTitleWarning=Έξοδος στο κύριο μενού;	#
+deathScreen.quit.eduCloud.confirmLeaveWarning=Σίγουρα θέλεις να κάνεις αποθήκευση και να βγεις από το παιχνίδι;%sΘα ανεβάσουμε τον κόσμο σου και στο cloud!	#
 deathScreen.quit.secondaryClient=Αποθήκευση και έξοδος	#
 deathScreen.quit.secondaryClient.confirmLeaveWarning=Είσαι βέβαιος ότι θέλεις να κάνεις αποθήκευση και να βγεις από το παιχνίδι;	#
 deathScreen.quit.secondaryClient.confirmLeaveTitleWarning=Αποθήκευση και έξοδος	#
@@ -2915,6 +2964,7 @@ exports.share.file=Κοινή χρήση: %s	#
 exports.suspendWarning.client.content=Προειδοποίηση: Αν συνεχίσεις, θα αποσυνδεθείς από αυτήν την περίοδο λειτουργίας παιχνιδιού για πολλούς παίκτες.	#
 exports.suspendWarning.host.content=Προειδοποίηση: Αν συνεχίσεις, θα τερματιστεί η περίοδος λειτουργίας παιχνιδιού για πολλούς παίκτες για όλους τους παίκτες.	#
 exports.suspendWarning.title=Προειδοποίηση	#
+exports.eduCloud.suspendWarning.host.content=Σίγουρα θέλεις να κάνεις αποθήκευση και να βγεις από το παιχνίδι;%1 Προειδοποίηση: Αν το κάνεις, θα τερματιστεί η περίοδος λειτουργίας παιχνιδιού πολλών παικτών για όλους τους παίκτες.%1Θα ανεβάσουμε τον κόσμο σου και στο cloud!	#
 exports.fileError.title=Αδυναμία αποθήκευσης του αρχείου σου	#
 exports.fileError.body=Ο δίσκος μπορεί να είναι γεμάτος ή να διαθέτει προστασία εγγραφής, ή μπορεί να χρησιμοποιείται το αρχείο. Βεβαιώσου ότι το αρχείο δεν είναι ανοιχτό και δοκίμασε ξανά.	#
 
@@ -2960,6 +3010,14 @@ feed.daysAgo=Πριν από %d ημέρες	#
 feed.hoursAgo=Πριν από %d ώρες	#
 feed.minutesAgo=Πριν από %d λεπτά	#
 feed.now=Μόλις τώρα	#
+feed.narrationDayAgo=Δημοσιεύτηκε πριν από μία ημέρα		#### This social media post was posted one day ago
+feed.narrationDaysAgo=Δημοσιεύτηκε πριν από %d ημέρες		#### This social media post was posted x days ago
+feed.narrationHourAgo=Δημοσιεύτηκε πριν από μία ώρα		#### This social media post was posted one hour ago
+feed.narrationHoursAgo=Δημοσιεύτηκε πριν από %d ώρες		#### This social media post was posted x hours ago
+feed.narrationMinuteAgo=Δημοσιεύτηκε πριν από ένα λεπτό		#### This social media post was posted one minute ago
+feed.narrationMinutesAgo=Δημοσιεύτηκε πριν από %d λεπτά		#### This social media post was posted x minutes ago
+feed.narrationNow=Δημοσιεύτηκε μόλις τώρα		#### This social media post was posted just now
+feed.narrationDate=Δημοσιεύτηκε %s %d, %d		#### This social media post was posted on 'month day, year' ex. Posted on March 12, 2023
 feed.whatup=Τι κάνεις;	#
 feed.upload=Γίνεται αποστολή του στιγμιότυπου οθόνης...	#
 feed.manage=Διαχείριση τροφοδοσίας	#
@@ -3012,11 +3070,11 @@ gameMode.hardcore=Σκληροπυρηνική λειτουργία!	#
 gameMode.spectator=Λειτουργία θεατή	#
 gameMode.survival=Λειτουργία επιβίωσης	#
 
-gameTip.cameraMovement.mouse=Κοίταξε γύρω σου. Χρησιμοποίησε το ποντίκι σου για να γυρίσεις	#
+gameTip.cameraMovement.mouse=Κοίταξε γύρω σου[LINEBREAK]Χρησιμοποίησε το ποντίκι σου για να γυρίσεις		#### {StrContains='LINEBREAK'}
 gameTip.cameraMovement.touch=Άγγιξε την οθόνη και σύρε το δάχτυλό σου για να κοιτάξεις γύρω σου	#
 gameTip.cameraMovement.controller=Μετακίνησε το :tip_right_stick: για να κοιτάξεις γύρω σου	#
 
-gameTip.playerMovement.mouse=Μετακινήσου με :_input_key.forward:, :_input_key.left:, :_input_key.back:, :_input_key.right:. Κάνε άλμα με το space	#
+gameTip.playerMovement.mouse=Μετακινήσου με :_input_key.forward:, :_input_key.left:, :_input_key.back:, :_input_key.right:	#
 gameTip.playerMovement.touch=Μετακίνηση χρησιμοποιώντας το joystick	#
 gameTip.playerMovement.touch.classic=Μετακίνηση χρησιμοποιώντας το joystick	#
 gameTip.playerMovement.controller=Μετακίνησε το :tip_left_stick: για να μετακινηθείς προς οποιαδήποτε κατεύθυνση	#
@@ -3029,20 +3087,27 @@ gameTip.breakBlock.mouse=Κράτησε πατημένο το αριστερό �
 gameTip.breakBlock.touch=Πάτησε παρατεταμένα για να σπάσεις κύβους	#
 gameTip.breakBlock.touch.classic=Πάτησε παρατεταμένα για να σπάσεις κύβους	#
 gameTip.breakBlock.controller=Πάτησε παρατεταμένα για να σπάσεις κύβους	#
+gameTip.breakBlock.touch.crosshair=Πάτησε παρατεταμένα :tip_virtual_button_action_attack_or_destroy:[LINEBREAK]για να σπάσεις κύβους 	#### {StrContains='LINEBREAK'}
 
-gameTip.placeBlock.mouse=Κάνε κλικ για να τοποθετήσεις έναν κύβο	#
+gameTip.placeBlock.mouse=Κάνε δεξί κλικ για να τοποθετήσεις κύβο	#
 gameTip.placeBlock.touch=Πάτησε για να τοποθετήσεις έναν κύβο	#
 gameTip.placeBlock.controller=Κάνε κλικ στο έδαφος για να τοποθετήσεις κύβο	#
+gameTip.placeBlock.touch.crosshair=Πάτησε :tip_virtual_button_action_build_or_use: για να τοποθετήσεις κύβο	#
 
-gameTip.openInventory.mouse=Άνοιξε τα Αποθέματά σου. Πάτησε :_input_key.inventory :	#
-gameTip.openInventory.touch=Άνοιξε τα Αποθέματά σου για να δεις τις συνταγές κατασκευής	#
-gameTip.openInventory.controller=Πάτησε :_input_key.inventory: για να ανοίξεις τα αποθέματά σου	#
+gameTip.openInventorySurvival.mouse=Άνοιξε τα αποθέματά σου[LINEBREAK]Πάτησε :_input_key.inventory:		#### {StrContains='LINEBREAK'}
+gameTip.openInventorySurvival.touch=Άνοιξε τα Αποθέματά σου για να δεις τις συνταγές κατασκευής	#
+gameTip.openInventorySurvival.controller=Πάτησε :_input_key.inventory: για να ανοίξεις τα αποθέματά σου	#
+
+gameTip.openInventoryCreative.mouse=Άνοιξε τα αποθέματά σου[LINEBREAK]Πάτησε :_input_key.inventory:		#### {StrContains='LINEBREAK'}
+gameTip.openInventoryCreative.touch=Άνοιξε τα αποθέματά σου για να δεις κύβους κατασκευής	#
+gameTip.openInventoryCreative.controller=Πάτησε :_input_key.inventory: για να ανοίξεις τα αποθέματά σου	#
+
 
 gameTip.sneak.mouse=Κινείσαι στα κρυφά! Δεν μπορείς να πέσεις από άκρες τώρα	#
 gameTip.sneak.touch=Κινείσαι στα κρυφά, οπότε δεν μπορείς να πέσεις από άκρες	#
 gameTip.sneak.controller=Κινείσαι στα κρυφά, οπότε δεν μπορείς να πέσεις από άκρες	#
 
-gameTip.placeCraftingTable.mouse=Τοποθέτησε το τραπέζι κατασκευών σου. Κράτησε το πατημένο και κάνε κλικ για να το τοποθετήσεις	#
+gameTip.placeCraftingTable.mouse=Τοποθέτησε το τραπέζι κατασκευών σου[LINEBREAK]Κράτησέ το πατημένο και κάνε κλικ για να το τοποθετήσεις		#### {StrContains='LINEBREAK'}
 gameTip.placeCraftingTable.touch=Τοποθέτησε το τραπέζι κατασκευών πατώντας το έδαφος	#
 gameTip.placeCraftingTable.controller=Τοποθέτησε το τραπέζι κατασκευών σου, κράτησέ το, και στη συνέχεια πάτα στιγμιαία στο έδαφος	#
 
@@ -3153,6 +3218,8 @@ gui.editor.copyProject.failedMessage=Δεν καταφέραμε να δημιο
 
 gui.edu.exitGameWarningCaption=Minecraft Education	### Use Minecraft 教育版 in zh_CN translation
 gui.edu.exitGameWarningMessage=Έξοδος από το Minecraft Education;		### Use 离开 Minecraft 教育版? in zh_CN translation
+gui.edu.exitGameWarningCaptionPreview=Προεπισκόπηση του Minecraft Education	#
+gui.edu.exitGameWarningMessagePreview=Να γίνει έξοδος από την Προεπισκόπηση Minecraft Education;	#
 
 updateScreen.update=Ενημέρωση	#
 updateScreen.updateRequired=Απαιτείται ενημέρωση	#
@@ -3256,7 +3323,7 @@ howtoplay.beacons=Φάροι	#
 howtoplay.beacons.text.1=Οι ενεργοί Φάροι εκπέμπουν μια δέσμη δυνατού φωτός στον ουρανό.	#
 howtoplay.beacons.text.2=Κατασκευάζονται με Γυαλί, Οψιδιανό και Άστρα των Εγκάτων (τα οποία μπορούν να αποκτηθούν νικώντας τον Μαρασμό).	#
 howtoplay.beacons.header.1=Κατασκευή	#
-howtoplay.beacons.text.3=Οι Φάροι πρέπει να τοποθετούνται έτσι ώστε να έχουν ανεμπόδιστη θέα του ουρανού και πρέπει να τοποθετούνται σε Πυραμίδες κύβων από Σίδηρο, Χρυσό, Σμαράγδι ή Διαμάντι.	#
+howtoplay.beacons.text.3=Οι Φάροι πρέπει να είναι στην κορυφή μιας Πυραμίδας από κύβους Σιδήρου, Χρυσού, Σμαραγδιού, Διαμαντιού ή Εγκατίτη με ανεμπόδιστη θέα στον ουρανό.	#
 howtoplay.beacons.text.4=Το υλικό στο οποίο τοποθετείται ο Φάρος δεν επηρεάζει τη δύναμή του.	#
 howtoplay.beacons.header.2=Χρήση	#
 howtoplay.beacons.text.5=Στο μενού Φάρου μπορείς να επιλέξεις μια κύρια δύναμη για τον Φάρο σου. Όσες περισσότερες βαθμίδες έχει η πυραμίδα σου, τόσες περισσότερες είναι οι δυνάμεις από τις οποίες μπορείς να επιλέξεις.	#
@@ -3355,7 +3422,7 @@ howtoplay.commands.text.1=Οι εντολές μπορούν να εκτελεσ
 howtoplay.commands.text.2=Υπάρχουν πάρα πολλές εντολές που θα σου επιτρέψουν να κάνεις απίστευτα πράγματα. Υπάρχουν πολλοί πόροι εκεί έξω που θα σου προσφέρουν όλες τις πληροφορίες που πρόκειται να χρειαστείς.	#
 
 howtoplay.conduits=Αγωγοί	#
-howtoplay.conduits.text.1=Ένας ενεργός Αγωγός σου δίνει δυνάμεις, όταν είσαι κάτω από το νερό.	#
+howtoplay.conduits.text.1=Ένας ενεργός Αγωγός σού δίνει δυνάμεις όταν είσαι κάτω από το νερό και όταν βρέχει.	#
 howtoplay.conduits.text.2=Ένας Αγωγός κατασκευάζεται από Όστρακα ναυτίλου και μια Καρδιά της θάλασσας. Ο Αγωγός αντλεί ισχύ από Θαλάσσια φανάρια και από Πρισμαρίνα.	#
 howtoplay.conduits.header.1=Κατασκευή	#
 howtoplay.conduits.text.3=Μόλις ενεργοποιηθεί, ο Αγωγός θα χαρίσει τη Δύναμη αγωγού σε οτιδήποτε βρίσκεται κοντά.	#
@@ -3369,6 +3436,7 @@ howtoplay.craftingATool.text.2.gamepad=Για να κατασκευάσεις έ
 howtoplay.craftingATool.text.2.touch=Για να κατασκευάσεις ένα εργαλείο, άνοιξε το §eτραπέζι κατασκευών§f:crafting_table: περπατώντας προς αυτό και πατώντας πάνω του. Μπορείς να κατασκευάσεις μια βασική εκδοχή των περισσότερων εργαλείων χρησιμοποιώντας δύο ραβδιά και μερικές σανίδες. Το §eβιβλίο συνταγών§f σου θα σου πει πώς!	#
 
 howtoplay.worldBuilder=Κατασκευαστής κόσμου	#
+howtoplay.worldBuilder.title=Οδηγίες παιχνιδιού: Κατασκευαστής κόσμου	#
 howtoplay.worldBuilder.text.1=Ο παίκτης πρέπει να διαθέτει την ειδική ικανότητα που ονομάζεται "Κατασκευαστής κόσμου" για να τοποθετήσει ή να χρησιμοποιήσει ορισμένους κύβους ή αντικείμενα του Minecraft Education.	#
 howtoplay.worldBuilder.text.2=Με ενεργοποιημένα τα cheat, ο οικοδεσπότης μπορεί να ενεργοποιεί ή να απενεργοποιεί την ικανότητα του Κατασκευαστή κόσμου για κάθε παίκτη στον κόσμο.	#
 howtoplay.worldBuilder.text.3=Για να εκχωρήσεις την ικανότητα του Κατασκευαστή κόσμου σε όλους τους παίκτες στον κόσμο, εκτέλεσε την εξής εντολή:	#
@@ -3380,6 +3448,7 @@ howtoplay.worldBuilder.text.8=Για να υποβάλεις ερώτημα γι
 howtoplay.worldBuilder.text.9=/ability @p worldbuilder	#
 
 howtoplay.permissionBlocks=Κύβοι δικαιωμάτων	#
+howtoplay.permissionBlocks.title=Οδηγίες παιχνιδιού: Κύβοι δικαιωμάτων	#
 howtoplay.permissionBlocks.text.1=Το Minecraft Education διαθέτει αρκετούς ειδικούς κύβους για να διευκολύνει τους καθηγητές να δημιουργήσουν και να υλοποιήσουν μαθήματα. Μόνο οι παίκτες με την ικανότητα του Κατασκευαστή κόσμου μπορούν να τοποθετούν και να καταστρέφουν αυτούς τους κύβους. Μόνο οι παίκτες χωρίς την ικανότητα του Κατασκευαστή κόσμου υπόκεινται στους περιορισμούς αυτών των κύβων.	#
 howtoplay.permissionBlocks.title.1=Έγκριση/Απαγόρευση	#
 howtoplay.permissionBlocks.text.2=Οι Κύβοι έγκρισης και απαγόρευσης ελέγχουν τα σημεία όπου μπορούν να χτίσουν οι παίκτες σε έναν κόσμο.	#
@@ -3409,19 +3478,23 @@ howtoplay.playingTogether.realms=Δοκίμασε το Realms	#
 howtoplay.playingTogether.signIn=Συνδέσου για να δοκιμάσεις το Realms	#
 
 howtoplay.chalkboard=Πίνακες	#
+howtoplay.chalkboard.title=Οδηγίες παιχνιδιού: Πίνακες	#
 howtoplay.chalkboard.text.1=Οι Πίνακες χρησιμοποιούνται για την εμφάνιση κειμένου στον κόσμο. Οι Πίνακες εμφανίζουν περισσότερο κείμενο από τις Επιγραφές, μπορείς να τους επεξεργαστείς αφού τους τοποθετήσεις και διατίθενται σε τρία μεγέθη: Πινακίδιο, Αφίσα και Πίνακας. Η εναλλαγή κλειδώματος σού επιτρέπει να εμποδίζεις τους παίκτες που δεν διαθέτουν την ικανότητα του Κατασκευαστή κόσμου να καταστρέφουν ή να επεξεργάζονται τους πίνακές σου. Πάτησε :_input_key.use: σε έναν υπάρχοντα πίνακα για να τον επεξεργαστείς.	#
 howtoplay.chalkboard.text.1.touch=Οι Πίνακες χρησιμοποιούνται για την εμφάνιση κειμένου στον κόσμο. Οι Πίνακες εμφανίζουν περισσότερο κείμενο από τις Επιγραφές, μπορείς να τους επεξεργαστείς αφού τους τοποθετήσεις και διατίθενται σε τρία μεγέθη: Πινακίδιο, Αφίσα και Πίνακας. Η εναλλαγή κλειδώματος σού επιτρέπει να εμποδίζεις τους παίκτες που δεν διαθέτουν την ικανότητα του Κατασκευαστή κόσμου να καταστρέφουν ή να επεξεργάζονται τους πίνακές σου. Πάτησε έναν υπάρχοντα πίνακα για να τον επεξεργαστείς.	#
 
 howtoplay.chemistry=Χημεία	#
+howtoplay.chemistry.title=Οδηγίες παιχνιδιού: Χημεία	#
 howtoplay.chemistry.text.1=Οι μαθητές μπορούν να προσομοιώσουν πραγματική χημεία χρησιμοποιώντας τους Κύβους εξοπλισμού χημείας. Δημιούργησε οποιοδήποτε από τα 118 διαφορετικά στοιχεία, προσαρμόζοντας τα ρυθμιστικά στον Δημιουργό στοιχείων ή πρόβαλε τη σύνθεση των στοιχείων τοποθετώντας τα στον Δημιουργό στοιχείων. Συνδύασε στοιχεία στον Δημιουργό ενώσεων για να δημιουργήσεις χημικές ενώσεις. Τοποθέτησε στοιχεία και ενώσεις στο Τραπέζι εργαστηρίου για να δημιουργήσεις αντικείμενα του Minecraft. Διαχώρισε τους κύβους στα συστατικά τους στοιχεία με τον Διαχωριστή υλικών.	#
 howtoplay.chemistry.text.2=Κατέβασε το Εγχειρίδιο χημείας από την τοποθεσία του Minecraft Education στο Web, για να αποκτήσεις έναν ολοκληρωμένο οδηγό χημείας στο Minecraft.	#
 
 howtoplay.npc=Χαρακτήρες που δεν είναι παίκτες	#
+howtoplay.npc.title=Οδηγίες παιχνιδιού: Χαρακτήρες που δεν είναι παίκτες	#
 howtoplay.npc.text.1=Οι NPC είναι χαρακτήρες που δεν είναι παίκτες, οι οποίοι παρέχουν πρόσθετες πληροφορίες μαθημάτων, συμβουλές ή οδηγίες.	#
 howtoplay.npc.text.2=Μόνο οι Κατασκευαστές κόσμου μπορούν να τοποθετούν, να διαγράφουν, να ονομάζουν ή να επεξεργάζονται NPC. Οι NPC μπορούν να εκτελούν εντολές και συνδέσεις σε τοποθεσίες Web. Οι εντολές μπορούν να αντιστοιχιστούν σε κουμπιά στο παράθυρο διαλόγου των NPC. Οι συνδέσεις σε τοποθεσίες Web θα έχουν πάντα ένα κουμπί.	#
 howtoplay.npc.text.3=Οι NPC διαθέτουν μια ποικιλία εμφανίσεων για να επιλέξεις και παραμένουν ακίνητοι.	#
 
 howtoplay.camera=Κάμερα	#
+howtoplay.camera.title=Οδηγίες παιχνιδιού: Κάμερα	#
 howtoplay.camera.text.1=Η Κάμερα επιτρέπει στους παίκτες να βγάζουν φωτογραφίες στον κόσμο.	#
 howtoplay.camera.text.2=Για να βγάλεις φωτογραφία από τη δική σου οπτική γωνία, πάτησε :_input_key.use:.	#
 howtoplay.camera.text.2.touch=Για να βγάλεις φωτογραφία από τη δική σου οπτική γωνία, πάτησε παρατεταμένα και, στη συνέχεια, άφησε την οθόνη.	#
@@ -3430,14 +3503,17 @@ howtoplay.camera.text.3.touch=Για να βγάλεις selfie, τοποθέτ�
 howtoplay.camera.text.4=Μπορείς να δεις τις φωτογραφίες στο Χαρτοφυλάκιο ή να τις τοποθετήσεις στο "Βιβλίο και πένα".	#
 
 howtoplay.portfolio=Χαρτοφυλάκιο	#
+howtoplay.portfolio.title=Οδηγίες παιχνιδιού: Χαρτοφυλάκιο	#
 howtoplay.portfolio.text.1=Οι φωτογραφίες που έχεις βγάλει εμφανίζονται στο Χαρτοφυλάκιο. Πάτησε :_input_key.use: για να προβάλεις το Χαρτοφυλάκιο. Όταν προβάλεις το Χαρτοφυλάκιο, μπορείς να προσθέσεις λεζάντες σε φωτογραφίες, να διαγράψεις φωτογραφίες και να εξαγάγεις φωτογραφίες ως PDF.	#
 howtoplay.portfolio.text.1.touch=Οι φωτογραφίες που έχεις βγάλει εμφανίζονται στο Χαρτοφυλάκιο. Πάτησε παρατεταμένα για να προβάλεις το Χαρτοφυλάκιο. Όταν προβάλεις το Χαρτοφυλάκιο, μπορείς να προσθέσεις λεζάντες σε φωτογραφίες, να διαγράψεις φωτογραφίες και να εξαγάγεις φωτογραφίες ως PDF.	#
 
 howtoplay.classroomMode=Λειτουργία τάξης	#
+howtoplay.classroomMode.title=Οδηγίες παιχνιδιού: Λειτουργία τάξης	#
 howtoplay.classroomMode.text.1=Η Λειτουργία τάξης είναι μια εξωτερική εφαρμογή που παρέχει στους εκπαιδευτικούς δυνατότητες που έχουν σχεδιαστεί για να διευκολύνουν την αλληλεπίδραση με τους μαθητές. Μπορείς να κατεβάσεις τη Λειτουργία τάξης από την τοποθεσία του Minecraft Education στο Web.	#
 howtoplay.classroomMode.text.2=Ως οικοδεσπότης ενός κόσμου, χρησιμοποίησε την εντολή /classroommode για να εκκινήσεις την εφαρμογή Λειτουργία τάξης και να τη συνδέσεις στο Minecraft Education.	#
 
 howtoplay.codeBuilder=Code Builder	#
+howtoplay.codeBuilder.title=Οδηγίες παιχνιδιού: Code Builder	#
 howtoplay.codeBuilder.text.1=Η εφαρμογή Code Builder επιτρέπει στους παίκτες να εξερευνούν, να δημιουργούν και να παίζουν στο Minecraft γράφοντας κώδικα με γνωστές πλατφόρμες εκμάθησης προγραμματισμού.	#
 howtoplay.codeBuilder.text.2=Εκκίνησε την εφαρμογή Code Builder πατώντας :_input_key.codeBuilder: ή χρησιμοποιώντας την εντολή /code.	#
 howtoplay.codeBuilder.text.2.touch=Εκκίνησε την εφαρμογή Code Builder πατώντας :code_builder_button: ή χρησιμοποιώντας την εντολή /code.	#
@@ -3456,7 +3532,7 @@ howtoplay.creativeMode.header.2=Πτήση	#
 howtoplay.creativeMode.text.4.keyboard=Για να πετάξεις, όταν βρίσκεσαι στη Δημιουργική λειτουργία, πάτα :_input_key.jump: δύο φορές γρήγορα. Για να σταματήσεις να πετάς, επανάλαβε την ενέργεια. Για να πετάξεις πιο γρήγορα, πάτα :_input_key.forward: δύο φορές διαδοχικά και γρήγορα ή πάτα :_input_key.sprint: ενώ πετάς. Στη λειτουργία πτήσης, μπορείς να κρατάς παρατεταμένα πατημένο το :_input_key.jump: για να κινηθείς πάνω και το :_input_key.sneak: για να κινηθείς κάτω.	#
 howtoplay.creativeMode.text.4.gamepad=Για να πετάξεις, όταν βρίσκεσαι στη Δημιουργική λειτουργία, πάτα :_input_key.jump: δύο φορές γρήγορα. Για να σταματήσεις να πετάς, επανάλαβε την ενέργεια. Για να πετάξεις πιο γρήγορα, πάτα :_gamepad_stick_left: δύο φορές διαδοχικά και γρήγορα ενώ πετάς. Στη λειτουργία πτήσης, μπορείς να κρατάς παρατεταμένα πατημένο το :_input_key.jump: για να κινηθείς πάνω και το :_input_key.sneak: για να κινηθείς κάτω.	#
 howtoplay.creativeMode.text.4a.touch.joystick_tap_and_crosshair=Για να πετάξεις, πάτησε το :tip_virtual_button_jump: δύο φορές γρήγορα και, για να σταματήσεις να πετάς, πάτησε το :tip_virtual_button_fly_down: δύο φορές γρήγορα.	#
-howtoplay.creativeMode.text.4b.touch.joystick_tap_and_crosshair=Πάτησε το :tip_virtual_button_sprint: για να πετάξεις πιο γρήγορα. Για να πετάξεις προς τα πάνω, πα΄τησε παρατεταμένα το :tip_virtual_button_fly_up: και, για να πετάξεις προς τα κάτω, πάτησε παρατεταμένα το :tip_virtual_button_fly_down:.	#
+howtoplay.creativeMode.text.4b.touch.joystick_tap_and_crosshair=Πάτησε το :tip_virtual_button_sprint: για να πετάξεις πιο γρήγορα. Για να πετάξεις προς τα πάνω, πάτησε παρατεταμένα το :tip_virtual_button_fly_up: και, για να πετάξεις προς τα κάτω, πάτησε παρατεταμένα το :tip_virtual_button_fly_down:.	#
 howtoplay.creativeMode.text.4a.touch.classic_dpad=Για να πετάξεις, πάτησε το :touch_jump: δύο φορές γρήγορα και, για να σταματήσεις να πετάς, πάτησε το :touch_stop_flying: δύο φορές γρήγορα.	#
 howtoplay.creativeMode.text.4b.touch.classic_dpad=Πάτησε το :touch_forward: δύο φορές γρήγορα για να πετάξεις πιο γρήγορα. Για να πετάξεις προς τα πάνω, πάτησε παρατεταμένα το :touch_fly_up:, και, για να πετάξεις προς τα κάτω, πάτησε παρατεταμένα το :touch_fly_down:.	#
 
@@ -3724,9 +3800,10 @@ howtoplay.movingAround.text.3b.windowsmr_controller=Πάτησε το :windowsmr
 howtoplay.gatheringResources=Συγκέντρωση πόρων	#
 howtoplay.gatheringResources.title=Οδηγίες παιχνιδιού: Συγκέντρωση πόρων	#
 howtoplay.gatheringResources.text.1=Ο κόσμος είναι γεμάτος πόρους, συμπεριλαμβανομένων §eκατασκευαστικών κύβων§f, §eκατασκευαστικών υλικών§f, και §eτροφής§f.	#
-howtoplay.gatheringResources.text.2.nottouch=Τους περισσότερους πόρους, όπως χώμα, ξύλο και κολοκύθες, μπορείς να τους συγκεντρώσεις με γυμνά χέρια. Βάλε το στόχαστρο στη μέση της οθόνης στον κύβο και μετά πάτησε παρατεταμένα το :_input_key.attack: μέχρι να πέσουν. Αυτό το λέμε §eσπάσιμο κύβων§f.	#
-howtoplay.gatheringResources.text.2.touch=Οι περισσότεροι πόροι, όπως το χώμα, το ξύλο και οι κολοκύθες, μπορούν να συγκεντρωθούν με γυμνά χέρια. Απλώς πλησίασέ τα και άγγιξε παρατεταμένα την οθόνη μέχρι να πέσουν. Αυτό το λέμε §eσπάσιμο κύβων§f.	#
-howtoplay.gatheringResources.text.2.touch.joystick_crosshair=Τους περισσότερους πόρους, όπως χώμα, ξύλο και κολοκύθες, μπορείς να τους συγκεντρώσεις με γυμνά χέρια. Βάλε το στόχαστρο στη μέση της οθόνης στον κύβο και μετά άγγιξε και πάτησε παρατεταμένα το κουμπί «Επίθεση/Καταστροφή» :tip_virtual_button_action_attack_or_destroy: μέχρι να πέσουν. Αυτό το λέμε §eσπάσιμο κύβων§f.	#
+howtoplay.gatheringResources.text.2.nottouch=Μπορείς να §eσπάσεις κύβους§f με τα γυμνά σου χέρια για να συγκεντρώσεις πόρους όπως χώμα και ξύλο. Στόχευσε έναν κύβο και, στη συνέχεια, §eπάτησε παρατεταμένα§f :_input_key.attack: μέχρι να σπάσεις και να πέσουν οι πόροι. 	#
+howtoplay.gatheringResources.text.2.touch=Μπορείς να §eσπάσεις κύβους§f με τα γυμνά σου χέρια για να συγκεντρώσεις πόρους όπως χώμα και ξύλο. §eΆγγιξε παρατεταμένα§f τον κύβο μέχρι να σπάσει και να πέσουν οι πόροι.	#
+howtoplay.gatheringResources.text.2.touch.joystick_crosshair=Μπορείς να §eσπάσεις κύβους§f με τα γυμνά σου χέρια για να συγκεντρώσεις πόρους όπως χώμα και ξύλο. Στόχευσε έναν κύβο, στη συνέχεια §eάγγιξε παρατεταμένα§f :tip_virtual_button_action_attack_or_destroy: μέχρι να σπάσει και να πέσουν οι πόροι. 	#
+howtoplay.gatheringResources.text.2.pc=Μπορείς να §eσπάσεις κύβους§f με τα γυμνά σου χέρια για να συγκεντρώσεις πόρους όπως χώμα και ξύλο. Στόχευσε έναν κύβο και, στη συνέχεια, §eκάνε κλικ παρατεταμένα§f :_input_key.attack: μέχρι να σπάσει και να πέσουν οι πόροι. 	#
 howtoplay.gatheringResources.text.3=Μάζεψε όσους πόρους έχουν πέσει περπατώντας πάνω από τα αιωρούμενα εικονίδια.	#
 
 howtoplay.selectingItems=Επιλογή αντικειμένων	#
@@ -3965,7 +4042,7 @@ howtoplay.yourFirstCraft.text.3.keyboard=Απλά σύρε τις λαμπερέ
 howtoplay.yourFirstCraft.text.3.gamepad=Απλά επίλεξε τις λαμπερές καινούριες σανίδες σου στην μπάρα συντομεύσεών σου. Τώρα είσαι έτοιμος να τις τοποθετήσεις στον κόσμο!	#
 howtoplay.yourFirstCraft.header.2=2. Συνταγή κατασκευής	#
 howtoplay.yourFirstCraft.text.4=Μερικά αντικείμενα απαιτούν να τοποθετήσεις τα συστατικά κατασκευής σου σε μια συγκεκριμένη μορφή, που ονομάζεται επίσης §eσυνταγή§f.	#
-howtoplay.yourFirstCraft.text.5=Δοκίμασε να τοποθετείς δύο σανίδες τη μία πάνω από την άλλη, για να δημιουργήσεις ένα ραβδί. Χρήσιμο για ένα σωρό πράγματα!	#
+howtoplay.yourFirstCraft.text.5=Δοκίμασε να τοποθετήσεις δύο σανίδες τη μία πάνω από την άλλη, για να δημιουργήσεις μερικά ραβδιά. Χρήσιμο για ένα σωρό πράγματα!	#
 
 immersive_reader.book_page_header=Σελίδα %1 από %2	#
 immersive_reader.portfolio_page_header= Σελίδα %1	#
@@ -3987,6 +4064,8 @@ level.editor.import.success=Η εισαγωγή έργου ολοκληρώθη�
 level.editor.export.failed=Η εξαγωγή του έργου απέτυχε	#
 level.editor.import.failed=Η εισαγωγή του έργου απέτυχε	#
 level.editor.import.failed.incompatibleEdition=Η εισαγωγή έργου απέτυχε: Μη υποστηριζόμενη μορφή αρχείου	#
+
+inbox.invite.title=Πρόσκληση Realms	#
 
 invite.clear=Εκκαθάριση επιλογής	#
 invite.send=Αποστολή %d προσκλήσεων	#
@@ -4797,6 +4876,7 @@ item.cake.name=Τούρτα	#
 item.camera.name=Φωτογραφική μηχανή	#
 item.canBreak=Μπορεί να σπάσει:	#
 item.canPlace=Μπορεί να τοποθετηθεί επάνω σε:	#
+item.customProperties=Έχει προσαρμοσμένες ιδιότητες	#
 item.itemLock.cantDrop=:hollow_star: Αδυναμία απόθεσης αντικειμένων - Δεν είναι δυνατή η:	#
 item.itemLock.cantMove=:solid_star: Αδυναμία μετακίνησης αντικειμένων - Δεν είναι δυνατή η:	#
 item.itemLock.hoverText.cantBe.moved=μετακίνηση	#
@@ -4992,84 +5072,84 @@ item.hopper_minecart.name=Βαγονέτο με χωνί	#
 item.tnt_minecart.name=Βαγονέτο με δυναμίτη	#
 item.pitcher_pod.name=Σπόρος Νηπενθούς	#
 item.torchflower_seeds.name=Σπόροι Πυρσολούλουδου	#
-item.spawn_egg.entity.agent.name=Γένεση Agent	#
-item.spawn_egg.entity.axolotl.name=Γένεση Αξολότλ	#
-item.spawn_egg.entity.bee.name=Γένεση μέλισσας	#
-item.spawn_egg.entity.hoglin.name=Γένεση Χόγκλιν	#
-item.spawn_egg.entity.cat.name=Γένεση γάτας	#
-item.spawn_egg.entity.chicken.name=Γένεση κοτόπουλου	#
-item.spawn_egg.entity.cow.name=Γένεση αγελάδας	#
-item.spawn_egg.entity.cod.name=Γένεση μπακαλιάρου	#
-item.spawn_egg.entity.ender_dragon.name=Γένεση Δράκαινας Τελειωτή	#
-item.spawn_egg.entity.goat.name=Γένεση κατσίκας	#
-item.spawn_egg.entity.pufferfish.name=Γένεση μπαλονόψαρου	#
-item.spawn_egg.entity.salmon.name=Γένεση σολομού	#
-item.spawn_egg.entity.tropicalfish.name=Γένεση τροπικού ψαριού	#
-item.spawn_egg.entity.pig.name=Γένεση γουρουνιού	#
-item.spawn_egg.entity.sheep.name=Γένεση προβάτου	#
-item.spawn_egg.entity.npc.name=Γένεση NPC	#
+item.spawn_egg.entity.agent.name=Αυγό Γένεσης Agent	#
+item.spawn_egg.entity.axolotl.name=Αυγό Γένεσης Αξολότλ	#
+item.spawn_egg.entity.bee.name=Αυγό Γένεσης Μέλισσας	#
+item.spawn_egg.entity.hoglin.name=Αυγό Γένεσης Χόγκλιν	#
+item.spawn_egg.entity.cat.name=Αυγό Γένεσης Γάτας	#
+item.spawn_egg.entity.chicken.name=Αυγό Γένεσης Νεοσσού	#
+item.spawn_egg.entity.cow.name=Αυγό Γένεσης Αγελάδας	#
+item.spawn_egg.entity.cod.name=Αυγό Γένεσης Μπακαλιάρου	#
+item.spawn_egg.entity.ender_dragon.name=Αυγό Γένεσης Δράκαινας Τελειωτή	#
+item.spawn_egg.entity.goat.name=Αυγό Γένεσης Κατσίκας	#
+item.spawn_egg.entity.pufferfish.name=Αυγό Γένεσης Μπαλονόψαρου	#
+item.spawn_egg.entity.salmon.name=Αυγό Γένεσης Σολομού	#
+item.spawn_egg.entity.tropicalfish.name=Αυγό Γένεσης Τροπικού ψαριού	#
+item.spawn_egg.entity.pig.name=Αυγό Γένεσης Γουρουνιού	#
+item.spawn_egg.entity.sheep.name=Αυγό Γένεσης Προβάτου	#
+item.spawn_egg.entity.npc.name=Αυγό Γένεσης NPC	#
 item.spawn_egg.entity.npc.failed=Χρειάζεσαι Δημιουργική λειτουργία + Χειριστή για να δημιουργήσεις έναν NPC	#
-item.spawn_egg.entity.wolf.name=Γένεση λύκου	#
-item.spawn_egg.entity.villager.name=Γένεση χωρικού	#
-item.spawn_egg.entity.villager_v2.name=Γένεση Χωρικού	#
-item.spawn_egg.entity.vindicator.name=Γένεση Εκδικητή	#
-item.spawn_egg.entity.mooshroom.name=Γένεση αμανιτογελάδας	#
-item.spawn_egg.entity.squid.name=Γένεση καλαμαριού	#
-item.spawn_egg.entity.glow_squid.name=Γένεση Φωσφοριζέ καλαμαριού	#
-item.spawn_egg.entity.rabbit.name=Γένεση λαγού	#
-item.spawn_egg.entity.bat.name=Γένεση νυχτερίδας	#
-item.spawn_egg.entity.ravager.name=Γένεση Ολέθρου	#
-item.spawn_egg.entity.iron_golem.name=Γένεση Σιδερένιου γκόλεμ	#
-item.spawn_egg.entity.snow_golem.name=Γένεση Γκόλεμ του χιονιού	#
-item.spawn_egg.entity.ocelot.name=Γένεση Οσελότου	#
-item.spawn_egg.entity.parrot.name=Γένεση Παπαγάλου	#
-item.spawn_egg.entity.horse.name=Γένεση αλόγου	#
-item.spawn_egg.entity.llama.name=Γένεση λάμα	#
-item.spawn_egg.entity.trader_llama.name=Γένεση εμπόρου λάμα	#
-item.spawn_egg.entity.polar_bear.name=Γένεση πολικής αρκούδας	#
-item.spawn_egg.entity.donkey.name=Γένεση γάιδαρου	#
-item.spawn_egg.entity.mule.name=Γένεση μουλαριού	#
-item.spawn_egg.entity.skeleton_horse.name=Γένεση αλόγου σκελετού	#
-item.spawn_egg.entity.zombie_horse.name=Γένεση αλόγου ζόμπι	#
-item.spawn_egg.entity.zombie.name=Γένεση ζόμπι	#
-item.spawn_egg.entity.drowned.name=Γένεση Πνιγμένου	#
-item.spawn_egg.entity.creeper.name=Γένεση Creeper	#
-item.spawn_egg.entity.skeleton.name=Γένεση σκελετού	#
-item.spawn_egg.entity.spider.name=Γένεση αράχνης	#
-item.spawn_egg.entity.zombie_pigman.name=Γένεση Πίγκλιν Ζόμπι	#
-item.spawn_egg.entity.strider.name=Γένεση Δρασκελιστή	#
-item.spawn_egg.entity.slime.name=Γένεση γλίτσας	#
-item.spawn_egg.entity.enderman.name=Γένεση Ανθρώπου του Τελειωτή	#
-item.spawn_egg.entity.silverfish.name=Γένεση εντόμου «ψαράκι»	#
-item.spawn_egg.entity.cave_spider.name=Γένεση αράχνης των σπηλαίων	#
-item.spawn_egg.entity.ghast.name=Γένεση Ghast	#
-item.spawn_egg.entity.magma_cube.name=Γένεση κύβου μάγματος	#
-item.spawn_egg.entity.blaze.name=Γένεση φλόγας	#
-item.spawn_egg.entity.zombie_villager.name=Γένεση χωρικού ζόμπι	#
-item.spawn_egg.entity.zombie_villager_v2.name=Γένεση Χωρικού-ζόμπι	#
-item.spawn_egg.entity.witch.name=Γένεση μάγισσας	#
-item.spawn_egg.entity.stray.name=Γένεση αδέσποτου	#
-item.spawn_egg.entity.husk.name=Γένεση κουφαριού	#
-item.spawn_egg.entity.wither_skeleton.name=Γένεση σκελετού μαρασμού	#
-item.spawn_egg.entity.guardian.name=Γένεση Φύλακα	#
-item.spawn_egg.entity.elder_guardian.name=Γένεση Πρεσβύτερου φύλακα	#
-item.spawn_egg.entity.shulker.name=Γένεση Shulker	#
-item.spawn_egg.entity.endermite.name=Γένεση Εντόμου του Τελειωτή	#
-item.spawn_egg.entity.evocation_illager.name=Γένεση Επικαλεστή	#
-item.spawn_egg.entity.vex.name=Γένεση Βεξ	#
-item.spawn_egg.entity.turtle.name=Γένεση θαλάσσιας χελώνας	#
-item.spawn_egg.entity.dolphin.name=Γένεση δελφινιού	#
-item.spawn_egg.entity.phantom.name=Γένεση στοιχειού	#
-item.spawn_egg.entity.panda.name=Γένεση πάντα	#
-item.spawn_egg.entity.pillager.name=Γένεση Άρπαγα	#
-item.spawn_egg.entity.piglin_brute.name=Γένεση Άγριου Πίγκλιν	#
-item.spawn_egg.entity.piglin.name=Γένεση Πίγκλιν	#
-item.spawn_egg.entity.fox.name=Γένεση Αλεπούς	#
-item.spawn_egg.entity.unknown.name=Γένεση	#
-item.spawn_egg.entity.wandering_trader.name=Γένεση γυρολόγου	#
-item.spawn_egg.entity.wither.name=Γένεση Μαρασμού	#
-item.spawn_egg.entity.zoglin.name=Γένεση Ζόγκλιν	#
-item.spawn_egg.entity.sniffer.name=Γένεση Οσφρητή	#
+item.spawn_egg.entity.wolf.name=Αυγό Γένεσης Λύκου	#
+item.spawn_egg.entity.villager.name=Αυγό Γένεσης Χωρικού	#
+item.spawn_egg.entity.villager_v2.name=Αυγό Γένεσης Χωρικού	#
+item.spawn_egg.entity.vindicator.name=Αυγό Γένεσης Εκδικητή	#
+item.spawn_egg.entity.mooshroom.name=Αυγό Γένεσης Αμανιτογελάδας	#
+item.spawn_egg.entity.squid.name=Αυγό Γένεσης Καλαμαριού	#
+item.spawn_egg.entity.glow_squid.name=Αυγό Γένεσης Φωσφοριζέ καλαμαριού	#
+item.spawn_egg.entity.rabbit.name=Αυγό Γένεσης Λαγού	#
+item.spawn_egg.entity.bat.name=Αυγό Γένεσης Νυχτερίδας	#
+item.spawn_egg.entity.ravager.name=Αυγό Γένεσης Όλεθρου	#
+item.spawn_egg.entity.iron_golem.name=Αυγό Γένεσης Σιδερένιου Γκόλεμ	#
+item.spawn_egg.entity.snow_golem.name=Αυγό Γένεσης Γκόλεμ του Χιονιού	#
+item.spawn_egg.entity.ocelot.name=Αυγό Γένεσης Οσελότου	#
+item.spawn_egg.entity.parrot.name=Αυγό Γένεσης Παπαγάλου	#
+item.spawn_egg.entity.horse.name=Αυγό Γένεσης Αλόγου	#
+item.spawn_egg.entity.llama.name=Αυγό Γένεσης Λάμα	#
+item.spawn_egg.entity.trader_llama.name=Αυγό Γένεσης Λάμα Εμπόρου	#
+item.spawn_egg.entity.polar_bear.name=Αυγό Γένεσης Πολικής Αρκούδας	#
+item.spawn_egg.entity.donkey.name=Αυγό Γένεσης Γαϊδάρου	#
+item.spawn_egg.entity.mule.name=Αυγό Γένεσης Μουλαριού	#
+item.spawn_egg.entity.skeleton_horse.name=Αυγό Γένεσης Αλόγου Σκελετού	#
+item.spawn_egg.entity.zombie_horse.name=Αυγό Γένεσης Αλόγου Ζόμπι	#
+item.spawn_egg.entity.zombie.name=Αυγό Γένεσης Ζόμπι	#
+item.spawn_egg.entity.drowned.name=Αυγό Γένεσης Πνιγμένου	#
+item.spawn_egg.entity.creeper.name=Αυγό Γένεσης Creeper	#
+item.spawn_egg.entity.skeleton.name=Αυγό Γένεσης Σκελετού	#
+item.spawn_egg.entity.spider.name=Αυγό Γένεσης Αράχνης	#
+item.spawn_egg.entity.zombie_pigman.name=Αυγό Γένεσης Πίγκλιν Ζόμπι	#
+item.spawn_egg.entity.strider.name=Αυγό Γένεσης Δρασκελιστή	#
+item.spawn_egg.entity.slime.name=Αυγό Γένεσης Γλίτσας	#
+item.spawn_egg.entity.enderman.name=Αυγό Γένεσης Ανθρώπου του Τελειωτή	#
+item.spawn_egg.entity.silverfish.name=Αυγό Γένεσης Εντόμου «Ψαράκι»	#
+item.spawn_egg.entity.cave_spider.name=Αυγό Γένεσης Αράχνης των Σπηλαίων	#
+item.spawn_egg.entity.ghast.name=Αυγό Γένεσης Ghast	#
+item.spawn_egg.entity.magma_cube.name=Αυγό Γένεσης Κύβου Μάγματος	#
+item.spawn_egg.entity.blaze.name=Αυγό Γένεσης Φλόγας	#
+item.spawn_egg.entity.zombie_villager.name=Αυγό Γένεσης Χωρικού Ζόμπι	#
+item.spawn_egg.entity.zombie_villager_v2.name=Αυγό Γένεσης Χωρικού Ζόμπι	#
+item.spawn_egg.entity.witch.name=Αυγό Γένεσης Μάγισσας	#
+item.spawn_egg.entity.stray.name=Αυγό Γένεσης Αδέσποτου	#
+item.spawn_egg.entity.husk.name=Αυγό Γένεσης Κουφαριού	#
+item.spawn_egg.entity.wither_skeleton.name=Αυγό Γένεσης Σκελετού Μαρασμού	#
+item.spawn_egg.entity.guardian.name=Αυγό Γένεσης Φύλακα	#
+item.spawn_egg.entity.elder_guardian.name=Αυγό Γένεσης Πρεσβύτερου Φύλακα	#
+item.spawn_egg.entity.shulker.name=Αυγό Γένεσης Shulker	#
+item.spawn_egg.entity.endermite.name=Αυγό Γένεσης Εντόμου του Τελειωτή	#
+item.spawn_egg.entity.evocation_illager.name=Αυγό Γένεσης Επικαλεστή	#
+item.spawn_egg.entity.vex.name=Αυγό Γένεσης Βεξ	#
+item.spawn_egg.entity.turtle.name=Αυγό Γένεσης Θαλάσσιας Χελώνας	#
+item.spawn_egg.entity.dolphin.name=Αυγό Γένεσης Δελφινιού	#
+item.spawn_egg.entity.phantom.name=Αυγό Γένεσης Στοιχειού	#
+item.spawn_egg.entity.panda.name=Αυγό Γένεσης Πάντα	#
+item.spawn_egg.entity.pillager.name=Αυγό Γένεσης Άρπαγα	#
+item.spawn_egg.entity.piglin_brute.name=Αυγό Γένεσης Άγριου Πίγκλιν	#
+item.spawn_egg.entity.piglin.name=Αυγό Γένεσης Πίγκλιν	#
+item.spawn_egg.entity.fox.name=Αυγό Γένεσης Αλεπούς	#
+item.spawn_egg.entity.unknown.name=Αυγό Γένεσης	#
+item.spawn_egg.entity.wandering_trader.name=Αυγό Γένεσης Γυρολόγου	#
+item.spawn_egg.entity.wither.name=Αυγό Γένεσης Μαρασμού	#
+item.spawn_egg.entity.zoglin.name=Αυγό Γένεσης Ζόγκλιν	#
+item.spawn_egg.entity.sniffer.name=Αυγό Γένεσης Οσφρηστή	#
 item.trident.name=Τρίαινα	#
 item.mushroom_stew.name=Μανιτάρια στιφάδο	#
 item.muttonCooked.name=Μαγειρεμένο πρόβειο κρέας	#
@@ -5169,7 +5249,7 @@ item.glowstone_dust.name=Σκόνη φεγγόλιθου	#
 item.shulker_shell.name=Κέλυφος Shulker	#
 item.totem.name=Τοτέμ της Αθανασίας	#
 item.turtle_helmet.name=Καβούκι χελώνας	#
-item.turtle_shell_piece.name=Φολίδα	#
+item.turtle_shell_piece.name=Φολίδα Χελώνας	#
 item.phantom_membrane.name=Μεμβράνη στοιχειού	#
 item.sweet_berries.name=Γλυκά βατόμουρα	#
 item.suspicious_stew.name=Ύποπτη σούπα	#
@@ -5829,7 +5909,7 @@ options.control_alt_keybinds_section=Τα ακόλουθα πλήκτρα χρη
 options.credits=Συντελεστές	#
 options.crouch=Μετακίνηση στα κρυφά	#
 options.csbExpired=Έχει λήξει από %s	#
-options.csbHeading=MARKETPLACE PASS	#
+options.csbHeading=MARKETPLACE PASS			#### {StrContains="MARKETPLACE PASS"}
 options.csbInfoLine01=Λίστα 150+ πακέτων και αντικειμένων από το Marketplace	#
 options.csbInfoLine02=Το περιεχόμενο ανανεώνεται κάθε μήνα	#
 options.csbSubheading=Περιεχόμενο Marketplace	#
@@ -5851,13 +5931,15 @@ options.delete_account.confirm.button=Διαγραφή	#
 options.dev_game_tip=Συμβουλές παιχνιδιού	#
 options.dev_ad_show_debug_panel=Εμφάνιση πίνακα εντοπισμού σφαλμάτων με την είσοδο σε EDU	#
 options.dev_ad_token_refresh_threshold=Δευτερόλεπτα ορίου ανανέωσης διακριτικού εισόδου σε EDU	#
-options.dev_ad_edu_max_token_refresh=Ανανέωση μέγιστου διακριτικού EDU (λεπτά)	#
+options.dev_ad_edu_max_signin_token_refresh=Ανανέωση μέγιστου διακριτικού εισόδου σε EDU (λεπτά)	#
+options.dev_ad_edu_max_graph_token_refresh=Ανανέωση μέγιστου διακριτικού γραφικού σε EDU (λεπτά)	#
 options.dev_side_by_side_comparison_rate=Ποσοστό σύγκρισης	#
 options.dev_playfab_token_refresh_threshold=Λεπτά ορίου ανανέωσης διακριτικού Playfab	#
 options.dev_assertions_debug_break=Διακοπή διεκδικήσεων στο πρόγραμμα εντοπισμού σφαλμάτων	#
 options.dev_assertions_show_dialog=Οι διεκδικήσεις εμφανίζουν αποκλειστικό παράθυρο διαλόγου	#
 options.dev_force_trial_mode=Επιβολή ενεργοποίησης Λειτουργίας δοκιμαστικής έκδοσης	#
 options.dev_eduDemo=Edu Demo (Απαιτεί νέα είσοδο)	#
+options.dev_eduCloudDownload=Λήψη Cloud	#
 options.remote_imgui_toggle=Το απομακρυσμένο Imgui ενεργοποιήθηκε	#
 options.dev_enableDebugUI=Ενεργοποίηση περιβάλλοντος εντοπισμού σφαλμάτων	#
 options.dev_createRealmWithoutPurchase=Δημιουργία realm χωρίς αγορά	#
@@ -5968,7 +6050,7 @@ options.dev_realmsEndpoint=Τελικό σημείο Realms	#
 options.dev_realmsEndpointPayment=Πληρωμή τελικού σημείου Realms	#
 options.dev_realmsRelyingParty=Μέρος που εξαρτάται από τα Realms	#
 options.dev_realmsRelyingPartyPayment=Πληρωμή μέρους που εξαρτάται από τα Realms	#
-options.dev_realms_stories=Ενεργοποίηση Ιστοριών των Realms (απαιτεί επανεκκίνηση)	#
+options.dev_realms_stories=Ενεργοποίηση Ιστοριών των Realms	#
 options.dev_overrideXboxEnvironmentWindows=Παράκαμψη Xbox Sandbox (ο έλεγχος του λειτουργικού συστήματος γίνεται στα Windows)	#
 options.dev_overrideXboxEnvironment=Παράκαμψη Xbox Sandbox (απαιτεί επανεκκίνηση)	#
 options.dev_xboxEnvironment=Περιβάλλον Xbox Sandbox (απαιτεί επανεκκίνηση)	#
@@ -6084,6 +6166,8 @@ options.fov.toggle=Η αλλαγή του οπτικού πεδίου είναι
 options.licenses=Άδειες χρήσης	#
 options.licensed_content=Περιεχόμενο με άδεια χρήσης	#
 options.networkSettings=Ρυθμίσεις δικτύου	#
+options.ecoMode=Λειτουργία Eco		#### {MaxLength='40'}
+options.enableEcoMode=Χαμηλότερη ταχύτητα καρέ αν αποσυνδεθεί το χειριστήριο		#### {MaxLength='55'}
 options.font_license=Άδεια χρήσης γραμματοσειράς	#
 options.font_license_body=%1	#
 options.livingRoomFOV=Οπτικό πεδίου σαλονιού	#
@@ -6173,6 +6257,7 @@ options.sneakOption.toggle=Πάτησε το κουμπί μία φορά για
 options.sneakOption.hold=Πάτησε παρατεταμένα το κουμπί για να κινηθείς κρυβά	#
 options.splitscreenInterfaceOpacity=Αδιαφάνεια HUD σε διαιρεμένη οθόνη	#
 options.textBackgroundOpacity=Αδιαφάνεια φόντου κειμένου	#
+options.actionBarTextBackgroundOpacity=Αδιαφάνεια φόντου γραμμής ενεργειών	#
 options.hidepaperdoll=Απόκρυψη Paper Doll	#
 options.showautosaveicon=Εμφάνιση εικονιδίου αυτόματης αποθήκευσης	#
 options.hold=Κράτημα	#
@@ -6365,7 +6450,6 @@ options.betaNewDeathScreenToggle=Νέα οθόνη «Πέθανες» (Πειρ�
 options.betaNewDeathScreenToggle.disabled=Δεν μπορείς να αλλάξεις αυτή τη ρύθμιση ενώ παίζεις σε έναν κόσμο	#
 options.usetouchpad=Διαχωρισμένα χειριστήρια	#
 options.viewSubscriptions=Συνδρομές	#
-options.viewSubscriptions.button.csbBuy=%s	#
 options.viewSubscriptions.button.info=Πληροφορίες	#
 options.viewSubscriptions.button.price=%s	#
 options.viewSubscriptions.button.pricePerMonth=%s/μήνα	#
@@ -6423,6 +6507,9 @@ options.deferred.upscaling=Αύξηση κλιμάκωσης εικόνας	#
 options.terrainShadowsEnable=Σκιές εδάφους	#
 options.superFancyWaterEnable=Σούπερ φανταχτερό νερό	#
 options.onlyTrustedSkinsAllowed=Να επιτρέπονται μόνο αξιόπιστες εμφανίσεις	#
+options.restartTutorial=Επανεκκίνηση εκμάθησης	#
+options.tutorial=Πρόγραμμα εκμάθησης	#
+options.tutorialHint=Συμβουλές για να ξεκινήσεις με τα βασικά του Minecraft	#
 
 options.autoUpdateEnabled=Αυτόματη ενημέρωση ξεκλειδωμένων πακέτων	#
 options.autoUpdateMode=Αυτόματη ενημέρωση ξεκλειδωμένων πακέτων	#
@@ -6435,7 +6522,7 @@ options.cellularDataWarningLabel=Το παιχνίδι με δεδομένα κ�
 options.openFeedbackPage=Μετάβαση στην τοποθεσία σχολίων	#
 options.openFeedbackPage.message=Το προεπιλεγμένο πρόγραμμα περιήγησης θα ανοίξει για να εμφανιστεί η τοποθεσία σχολίων Minecraft.	#
 options.openFeedbackPage.continue=Συνέχεια στην τοποθεσία σχολίων	#
-options.turnOffAchievements=Απενεργοποίηση επιτευγμάτων;	#
+options.turnOffAchievements=Να απενεργοποιηθούν τα επιτεύγματα;	#
 options.turnOffAchievements.message=Τα επιτεύγματα είναι διαθέσιμα μόνο σε κόσμους που έχουν ρυθμιστεί σε λειτουργία επιβίωσης με απενεργοποιημένα τα cheat. Εάν συνεχίσεις, δεν θα κερδίζει κανείς επιτεύγματα παίζοντας σε αυτόν τον κόσμο ποτέ ξανά, ακόμη κι αν αλλάξεις πάλι τη ρύθμιση πριν από το παιχνίδι.	#
 options.achievementsDisabled=Δεν μπορούν να αποκτηθούν επιτεύγματα σε αυτό τον κόσμο.	#
 options.achievementsDisabled.onLoad=Εάν αρχίσεις να παίζεις με αυτές τις ρυθμίσεις δεν θα είναι πλέον δυνατή η απόκτηση επιτευγμάτων σε αυτόν τον κόσμο.	#
@@ -6525,6 +6612,9 @@ options.shadowQuality.low=Χαμηλή	#
 options.shadowQuality.medium=Μεσαία	#
 options.shadowQuality.high=Υψηλή	#
 options.shadowQuality.ultra=Εξαιρετικά	#
+options.pointLightShadowEnabled=Σκιές σημειακού φωτός ενεργοποιημένες	#
+options.pointLightShadowDisabled=Σκιές σημειακού φωτός απενεργοποιημένες	#
+options.pointLightShadow.tooltip=Σκιές που δημιουργούνται από πυρσούς, φανάρια και άλλες μικρές πηγές φωτός, ενεργοποιούνται μόνο με υψηλότερες ρυθμίσεις ποιότητας σκιάς σε ορισμένες συσκευές.	#
 options.pointLightLODingQuality=Ποιότητα σημειακού φωτός	#
 options.pointLightLODingQuality.low=Χαμηλή	#
 options.pointLightLODingQuality.medium=Μεσαία	#
@@ -6681,6 +6771,8 @@ hudScreen.controlCustomization.hintDeselect=Κάνε κλικ αλλού για 
 hudScreen.controlCustomization.hintSaved=Αποθηκευμένο	#
 hudScreen.controlCustomization.tooltip=Φόρτωση κόσμου για την προσαρμογή των ρυθμίσεων χειρισμού	#
 hudScreen.controlCustomization.tooltip.notouch=Χρησιμοποίησε μια συσκευή αφής για να προσαρμόσεις τα στοιχεία ελέγχου	#
+hudScreen.controlCustomization.tooltip.alreadycustomizing=Υπάρχει ήδη μια ανοικτή οθόνη προσαρμογής του ελέγχου μέσω αφής	#
+hudScreen.controlCustomization.tooltip.alive=Ο παίκτης πρέπει να είναι ζωντανός για να προσαρμόσεις τα στοιχεία ελέγχου.	#
 
 playscreen.fileSize.MB=MB	#
 playscreen.fileSize.GB=GB	#
@@ -6697,7 +6789,7 @@ playscreen.new=Νέο	#
 playscreen.remoteWorld=Απομακρυσμένος κόσμος σε:	#
 playscreen.realmsTrialWorld=Δοκίμασε το Realms Plus δωρεάν για 30 ημέρες	#
 playscreen.freePreviewRealmAvailable=Διαθέσιμη δωρεάν προεπισκόπηση Realm	#
-playscreen.freeBetaRealmAvailable=Διαθέσιμο δωρεα΄ν beta Realm	#
+playscreen.freeBetaRealmAvailable=Διαθέσιμο δωρεάν beta Realm	#
 playscreen.withYourPaidRealms=Με την πληρωμένη συνδρομή Realm σου	#
 playscreen.realmsCreateFirstWorld=Δημιούργησε το πρώτο σου βασίλειο	#
 playscreen.realmsCombo=Παίξε με φίλους, απόλαυσε 150+ πακέτα	#
@@ -6939,6 +7031,7 @@ profileScreen.create_persona_classic_skin_details=Μια υφή ολόσωμης
 
 profileScreen.create_persona_title=Επίλεξε τον τύπο	#
 
+persona.csb.see.subscription=Στο Pass	#
 persona.slim.title=στενό	#
 persona.wide.title=φαρδύ	#
 persona.smaller.title=μικρότερο	#
@@ -6949,6 +7042,7 @@ persona.realms.redeem=Εξαργύρωση	#
 persona.realms.see.subscription=Στο Realms Plus	#
 persona.realms.time.remaining=%s για να εξαργυρώσεις	#
 persona.realms.savings=Εξοικονομείς %s minecoin με τη συνδρομή σου στο Realms Plus!	#
+persona.csb.savings=Εξοικονομείς %s minecoin με τη συνδρομή σου στο Marketplace Pass!	#
 persona.preview.emote=Αναπαραγωγή emote	#
 
 progressScreen.cantConnect=Δεν είναι δυνατή η σύνδεση στον κόσμο. Έλεγξε τη σύνδεσή σου στο Internet και προσπάθησε ξανά.	#
@@ -6966,6 +7060,7 @@ progressScreen.title.connectingRealms=Σύνδεση σε Realm	#
 progressScreen.title.copyingWorld=Αντιγραφή κόσμου	#
 progressScreen.title.deleteStorageAreaContent=Εκκαθάριση προσωρινής μνήμης αποθήκευσης	#
 progressScreen.title.loadingSplitScreenAppearances=Φόρτωση Εμφανίσεων Διαιρεμένης Οθόνης	#
+progressScreen.title.modifiedWorldWarning=Τροποποιημένος Κόσμος	#
 progressScreen.message.appearanceLoaded=Εμφάνιση Φορτώθηκε	#
 progressScreen.message.appearanceLoadWaitTimeMet=Η εμφάνιση χρειάζεται πολύ χρόνο για να φορτωθεί. Συνεχίζουμε με τη δημιουργία κόσμου…	#
 progressScreen.message.deleteStorageAreaContent=Αυτό ίσως διαρκέσει λίγα λεπτά.	#
@@ -6987,6 +7082,8 @@ progressScreen.message.storageProviderSyncError=Ο συγχρονισμός δε
 progressScreen.message.waitingForStoreProducts=Μπορεί να χρειαστεί λίγος χρόνος	#
 progressScreen.message.allDone=Έγινε!	#
 progressScreen.message.letsGo=Πάμε!	#
+progressScreen.message.letsGoCreative=Δημιουργία	#
+progressScreen.message.letsGoSurvival=Επιβίωσε	#
 progressScreen.message.failed=Αποτυχία	#
 progressScreen.message.failedNoNetwork=Αποτυχία: Δεν υπάρχει σύνδεση δικτύου	#
 progressScreen.message.downloadingWorld=Γίνεται λήψη κόσμου	#
@@ -7012,6 +7109,7 @@ progressScreen.message.directoryDepthError=Δεν είναι δυνατό το �
 progressScreen.message.forbiddenContent=Ένα ή περισσότερα από τα εφαρμοσμένα πακέτα δεν σου ανήκουν	#
 progressScreen.message.loadingSplitScreenAppearances=Φόρτωση Εμφανίσεων Διαιρεμένης Οθόνης...	#
 progressScreen.message.finishedLoadingSplitScreenAppearances=Ολοκληρώθηκε η φόρτωση εμφανίσεων διαιρεμένης οθόνης.	#
+progressScreen.message.modifiedWorldWarning=Αυτός ο κόσμος μπορεί να μην έχει την ίδια εμφάνιση ή συμπεριφορά με τους μη τροποποιημένους κόσμους και δεν μπορείς να κερδίσεις επιτεύγματα.	#
 progressScreen.dialog.title.resourcePack=Να γίνει λήψη των πακέτων πόρων;	#
 progressScreen.dialog.title.behaviorAndResourcePack=Λήψη πακέτων συμπεριφοράς και πόρων κόσμου;	#
 progressScreen.dialog.title.onlyBehavior=Λήψη πακέτων συμπεριφοράς κόσμου;	#
@@ -7063,6 +7161,8 @@ raid.expiry=Μια επιδρομή έληξε	#
 raid.victory=Νίκη	#
 raid.defeat=Ήττα	#
 
+realmsStories.realmEvents.outOfGameMessage=Παρουσιάστηκε μια Εκδήλωση Realm. Ρίξε μια ματιά στη Ροή Ιστορίας στο Minecraft, για να δεις τι συνέβη.	#
+
 recipeBook.setting.full=Πλήρες	#
 recipeBook.setting.discover=Ανακάλυψη	#
 recipeBook.setting.off=Ανενεργό	#
@@ -7098,6 +7198,7 @@ resourcePack.selected.title.behaviorPacks=Ενεργά πακέτα συμπερ
 resourcePack.selected.title.packs=Ενεργό	#
 resourcePack.selected.remove=Απενεργοποίηση	#
 resourcePack.realmsPlus.title.packs=Πακέτα Realms Plus	#
+resourcePack.realmsPlus.title.packs.contentSub=Πακέτα Marketplace Pass	#
 resourcePack.realmsPlus.expired=Έληξαν	#
 resourcePack.errors=Σφάλματα: 	#
 resourcePack.error.ingame.packs=Δεν μπορείς να αλλάξεις πακέτα πόρων ενώ παίζεις σε ένα κόσμο.	#
@@ -7120,9 +7221,11 @@ resourcePack.header.behavior=Τα ενεργά πακέτα συμπεριφορ
 resourcePack.header.level=Απαίτηση από τους παίκτες να αποδέχονται τα πακέτα πόρων για να συμμετάσχουν	#
 resourcePack.crashRecovery.title=Επαναφορά καθολικών πόρων	#
 resourcePack.crashRecovery.message=Η προηγούμενη φόρτωση πόρων απέτυχε.	#
-resourcePack.warnings=Προειδοποιήσεις: 	#
-resourcePack.warning.title=Αυτό είναι επικίνδυνο!	#
-resourcePack.warning.body=Η προσθήκη ή κατάργηση πακέτων συμπεριφορών μετά το παιχνίδι σε έναν κόσμο μπορεί να καταστρέψει τον κόσμο και να έχει ως αποτέλεσμα να χάσεις όλα όσα έχεις δημιουργήσει. Πάτησε "OK" για να απενεργοποιήσεις το πακέτο ή "Άκυρο" για να παραμείνει ενεργό.	#
+resourcePack.warnings=Προειδοποιήσεις:	#
+resourcePack.warning.add.title=Να γίνει ενημέρωση κόσμου;	#
+resourcePack.warning.add.body=Αυτός ο κόσμος μπορεί να μην έχει την ίδια εμφάνιση ή συμπεριφορά με τους μη τροποποιημένους κόσμους και δεν μπορείς να κερδίσεις επιτεύγματα. Ίσως θα ήθελες να αποθηκεύσεις ένα αντίγραφο του κόσμου σου πριν συνεχίσεις. Πάτησε «OK» για να ενεργοποιήσεις το πακέτο ή «Ακύρωση» για να το κρατήσεις απενεργοποιημένο.	#
+resourcePack.warning.remove.title=Αυτό είναι επικίνδυνο!	#
+resourcePack.warning.remove.body=Η προσθήκη ή κατάργηση πακέτων συμπεριφορών μετά το παιχνίδι σε έναν κόσμο μπορεί να καταστρέψει τον κόσμο και να έχει ως αποτέλεσμα να χάσεις όλα όσα έχεις δημιουργήσει. Ίσως θα ήθελες να αποθηκεύσεις ένα αντίγραφο του κόσμου σου πριν συνεχίσεις. Πάτησε «OK» για να απενεργοποιήσεις το πακέτο ή «Άκυρο» για να παραμείνει ενεργό.	#
 resourcePack.requiredDependency.title=Απαιτούμενη εξάρτηση	#
 resourcePack.requiredDependency.body=Αυτό το πακέτο αποτελεί απαιτούμενη εξάρτηση άλλου πακέτου που εφαρμόζεται αυτή τη στιγμή.	#
 resourcePack.missingDependency.title=Εξαρτήσεις που λείπουν	#
@@ -7229,14 +7332,14 @@ itemGroup.name.sculk=Σκαλκ	#
 effect.darkness=Σκοτάδι	#
 entity.frog.name=Βάτραχος	#
 entity.tadpole.name=Γυρίνος	#
-item.spawn_egg.entity.warden.name=Γένεση Δεσμοφύλακα	#
+item.spawn_egg.entity.warden.name=Αυγό Γένεσης Δεσμοφύλακα	#
 entity.warden.name=Δεσμοφύλακας	#
 entity.allay.name=Βοηθός	#
-item.spawn_egg.entity.allay.name=Γένεση βοηθού	#
+item.spawn_egg.entity.allay.name=Αυγό Γένεσης Βοηθού	#
 action.interact.allay=Δώσε το αντικείμενο στον Βοηθό	#
 item.bucketTadpole.name=Κουβάς με γυρίνο	#
-item.spawn_egg.entity.frog.name=Γένεση βατράχου	#
-item.spawn_egg.entity.tadpole.name=Γένεση γυρίνου	#
+item.spawn_egg.entity.frog.name=Αυγό Γένεσης Βατράχου	#
+item.spawn_egg.entity.tadpole.name=Αυγό Γένεσης Γυρίνου	#
 tile.frog_spawn.name=Βατραχοαυγό	#
 tile.pearlescent_froglight.name=Περλέ βατραχοφώς	#
 tile.verdant_froglight.name=Πράσινο βατραχοφώς	#
@@ -7361,7 +7464,7 @@ item.smithing_template.name=Πρότυπο μεταλλουργίας	#
 item.smithing_template.netherite_upgrade.applies_to=Εξοπλισμός Διαμαντιού	#
 item.smithing_template.netherite_upgrade.ingredients=Ράβδος Εγκατίτη	#
 item.snort_pottery_sherd.name=Κεραμικό Θραύσμα Ξεφύσημα	#
-item.spawn_egg.entity.camel.name=Γένεση Καμήλας	#
+item.spawn_egg.entity.camel.name=Αυγό Γένεσης Καμήλας	#
 item.spruce_hanging_sign.name=Κρεμαστή επιγραφή από έλατο	#
 item.warped_hanging_sign.name=Αλλόκοτη κρεμαστή επιγραφή	#
 itemGroup.name.hanging_sign=Κρεμαστές επιγραφές	#
@@ -7669,6 +7772,7 @@ selectTemplate.delete.confirm=Διαγραφή προτύπου κόσμου;	#
 selectTemplate.delete=Διαγραφή	#
 selectTemplate.myTemplates=Τα πρότυπα των κόσμων μου	#
 selectTemplate.realmsPlus=Προτάσεις προτύπων Realms Plus	#
+selectTemplate.marketplacePass=Προτεινόμενα πρότυπα Marketplace Pass			#### {StrContains="Marketplace Pass"}
 selectTemplate.importedTemplates=Εισαχθέντα πρότυπα	#
 selectTemplate.download=Λήψη	#
 selectTemplate.noTemplates=Δεν υπάρχουν πρότυπα κόσμου σε αυτήν τη συσκευή.	#
@@ -7853,31 +7957,36 @@ store.realmsPlus.buyNow.viewPrivacyPolicy=ΠΟΛΙΤΙΚΗ ΠΡΟΣΤΑΣΙΑΣ 
 
 store.realmsPlus.buyNow.title=Ξεκίνησε τη συνδρομή σου Realms Plus	#
 store.realmsPlus.startTrial.description=Το Realm σου και 150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Ο πρώτος μήνας σου θα είναι δωρεάν και κατόπιν θα χρεώνεσαι %s/μήνα. Μπορείς να ακυρώσεις τη συνδρομή σου ανά πάσα στιγμή.	#
-store.realmsPlus.noTrial.description=Το Realm σου και 150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Η συνδρομή σου θα είναι διαθέσιμη για 30 ημέρες στην τιμή των %s:minecoin:.	#
+store.realmsPlus.startTrial.description.contentSub=Το Realm σου και 150+ πακέτα από το Marketplace που περιλαμβάνονται στο Marketplace Pass θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Ο πρώτος μήνας σου θα είναι δωρεάν και κατόπιν θα χρεώνεσαι %s/μήνα. Μπορείς να ακυρώσεις τη συνδρομή σου ανά πάσα στιγμή.	#
+store.realmsPlus.noTrial.description=Το Realm σου και 150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Η συνδρομή σου θα είναι διαθέσιμη για 30 ημέρες στην τιμή των :minecoin:%s.	#
+store.realmsPlus.noTrial.description.contentSub=Το Realm σου και 150+ πακέτα από το Marketplace που περιλαμβάνονται στο Marketplace Pass  θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Η συνδρομή σου θα είναι διαθέσιμη για 30 ημέρες στην τιμή των %s:minecoin:.	#
 store.realmsPlus.noTrial.description.iap=Το Realm σου και 150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Θα χρεώνεσαι %s/μήνα και μπορείς να ακυρώσεις τη συνδρομή σου για να σταματήσεις τις μελλοντικές χρεώσεις από τις ρυθμίσεις της συνδρομής.	#
+store.realmsPlus.noTrial.description.iap.contentSub=Το Realm σου και 150+ πακέτα από το Marketplace που περιλαμβάνονται στο Marketplace Pass θα γίνουν αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Θα χρεώνεσαι %s/μήνα και μπορείς να ακυρώσεις τη συνδρομή σου από τις ρυθμίσεις της συνδρομής για να σταματήσεις τις μελλοντικές χρεώσεις.	#
 store.realmsPlus.realmName.placeholder=Το Realm του παίκτη %s		#The string passed in here is the gamertag of the player to indicate the name of the player's world.	#
 
 store.realmsPlus.recurring.offerTrial=Το Realms Plus είναι μια συνδρομή σε εξέλιξη με επαναλαμβανόμενη χρέωση συνδρομής η οποία επιβάλλεται αυτόματα κάθε μήνα έως ότου ακυρωθεί η συνδρομή.%sΤο δικό σου Realm και 150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Έως και 10 παίκτες μπορούν να παίξουν ταυτόχρονα και έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Οι πρώτες 30 ημέρες θα είναι δωρεάν και, στη συνέχεια, θα χρεώνεσαι %s/μήνα. Μπορείς να ακυρώσεις τη συνδρομή σου για να σταματήσεις μελλοντικές χρεώσεις από τις ρυθμίσεις της συνδρομής.	#
+store.realmsPlus.recurring.offerTrial.contentSub=Το Realms Plus είναι μια συνδρομή σε εξέλιξη με επαναλαμβανόμενη χρέωση συνδρομής, η οποία επιβάλλεται αυτόματα κάθε μήνα έως ότου ακυρωθεί η συνδρομή.%sΤο δικό σου Realm και 150+ πακέτα από το Marketplace, που περιλαμβάνονται στο Marketplace Pass, θα είναι αμέσως διαθέσιμα. Έως και 10 παίκτες μπορούν να παίξουν ταυτόχρονα και έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Οι πρώτες 30 ημέρες θα είναι δωρεάν και, στη συνέχεια, θα χρεώνεσαι %s/μήνα. Μπορείς να ακυρώσεις τη συνδρομή σου για να σταματήσεις μελλοντικές χρεώσεις από τις ρυθμίσεις της συνδρομής.	#
 store.realmsPlus.recurring.withoutTrial=Το Realms Plus είναι μια συνδρομή σε εξέλιξη με επαναλαμβανόμενη χρέωση συνδρομής η οποία επιβάλλεται αυτόματα κάθε μήνα έως ότου ακυρωθεί η συνδρομή.%sΤο δικό σου Realm και 150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Έως και 10 παίκτες μπορούν να παίξουν ταυτόχρονα και έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Θα χρεώνεσαι %s/μήνα και μπορείς να ακυρώσεις τη συνδρομή σου για να σταματήσεις μελλοντικές χρεώσεις από τις ρυθμίσεις της συνδρομής.	#
+store.realmsPlus.recurring.withoutTrial.contentSub=Το Realms Plus είναι μια συνδρομή σε εξέλιξη με επαναλαμβανόμενη χρέωση συνδρομής, η οποία επιβάλλεται αυτόματα κάθε μήνα έως ότου ακυρωθεί η συνδρομή.%sΤο Realm σου και 150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Έως και 10 παίκτες μπορούν να παίξουν ταυτόχρονα και έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Θα χρεώνεσαι %s/μήνα και μπορείς να ακυρώσεις τη συνδρομή σου για να σταματήσεις μελλοντικές χρεώσεις από τις ρυθμίσεις της συνδρομής.	#
 store.realmsPlus.consumable.offerTrial=Το Realm σου και 150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Οι πρώτες 30 ημέρες είναι δωρεάν και μπορείς, στη συνέχεια, να πραγματοποιήσεις ανανέωση για 30 ημέρες στην τιμή των %s.	#
+store.realmsPlus.consumable.offerTrial.contentSub=Το Realm σου και 150+ πακέτα από το Marketplace που περιλαμβάνονται στο Marketplace Pass θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Οι πρώτες 30 ημέρες είναι δωρεάν και μπορείς, στη συνέχεια, να πραγματοποιήσεις ανανέωση για 30 ημέρες στην τιμή των %s.	#
 store.realmsPlus.consumable.withoutTrial=Το Realm σου και 150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Η συνδρομή σου θα είναι διαθέσιμη για 30 ημέρες στην τιμή των %s.	#
+store.realmsPlus.consumable.withoutTrial.contentSub=Το Realm σου και 150+ πακέτα από το Marketplace που περιλαμβάνονται στο Marketplace Pass θα είναι αμέσως διαθέσιμα. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν! Η συνδρομή σου θα είναι διαθέσιμη για 30 ημέρες στην τιμή των %s.	#
 
 store.realmsPlus.landing.header=Η συνδρομή περιλαμβάνει:	#
 store.realmsPlus.landing.headerTrial=Δωρεάν δοκιμή 30 ημερών, στη συνέχεια, %s/μήνα	#
 
-store.realmsPlus.landing.info1.line1=Ο προσωπικός σου διακομιστής Realm – Ένας μόνιμος κόσμος που είναι πάντα online για εσένα και τους φίλους σου!	#
+store.realmsPlus.landing.info1.line1=Ο δικός σου διακομιστής Realm: ένας μόνιμος κόσμος πάντα online για εσένα και τους φίλους σου!	#
 store.realmsPlus.landing.info1.line2=Οι φίλοι παίζουν δωρεάν στο Realm σου	#
-store.realmsPlus.landing.info1.line3=Μπορείς να μεταβείς από την κονσόλα στο κινητό στον υπολογιστή - Σε οποιαδήποτε συσκευή διαθέτει το Minecraft Marketplace	#
-
-store.realmsPlus.landing.info2.line1=Δωρεάν πρόσβαση σε κατάλογο 150+ πακέτων από το Marketplace	#
-store.realmsPlus.landing.info2.line2=Οι κόσμοι στο Realm σου περιλαμβάνουν δημιουργία αντιγράφων ασφαλείας	#
-store.realmsPlus.landing.info2.line3=Οι πρώτες 30 ημέρες θα είναι δωρεάν	#
-store.realmsPlus.landing.info2.line4=Κάνε εγγραφή τώρα για %s/μήνα	#
+store.realmsPlus.landing.info1.line3=Μεταπήδηση από κονσόλα σε κινητό και σε υπολογιστή - παίξε στο Realm σου σε οποιαδήποτε συσκευή με το Minecraft Marketplace	#
 
 store.realmsPlus.landing.info2.catalog=Δωρεάν πρόσβαση σε κατάλογο 150+ πακέτων από το Marketplace	#
-store.realmsPlus.landing.info2.backups=Οι κόσμοι στο Realm σου περιλαμβάνουν δημιουργία αντιγράφων ασφαλείας	#
-store.realmsPlus.landing.info2.trial=Οι πρώτες 30 ημέρες θα είναι δωρεάν	#
+store.realmsPlus.landing.info2.contentSub=Περιλαμβάνει το Marketplace Pass	#
+store.realmsPlus.landing.info2.backups=Οι κόσμοι στο Realm σου περιλαμβάνουν δημιουργία δωρεάν ασφαλών αντιγράφων ασφαλείας	#
+store.realmsPlus.landing.info2.renews=Η συνδρομή ανανεώνεται αυτόματα κάθε μήνα μέχρι να ακυρωθεί	#
+store.realmsPlus.landing.info2.cancel=Ακύρωση στη σελίδα Συνδρομών των Ρυθμίσεων Minecraft	#
 store.realmsPlus.landing.info2.subscribe=Κάνε εγγραφή τώρα για %s/μήνα	#
+store.realmsPlus.landing.info2.recentlyAdded=Προστέθηκαν πρόσφατα	#
 store.realmsPlus.landing.info2.persona=Δωρεάν αντικείμενα δημιουργίας χαρακτήρα - Εξαργύρωσε ένα νέο σετ κάθε μήνα!	#
 
 store.realmsPlus.landing.beta=Beta	#
@@ -7899,6 +8008,7 @@ store.realmsPlus.faq.question4=Ποιες συσκευές υποστηρίζο�
 store.realmsPlus.faq.answer4=Προς το παρόν, το Realms Plus είναι διαθέσιμο σε οποιαδήποτε πλατφόρμα μπορείτε να εγκαταστήσετε το Minecraft Bedrock Edition. Μπορείτε να παίξετε Realms και να χρησιμοποιήσετε οποιοδήποτε περιεχόμενο από το Realms Plus σε οποιαδήποτε από αυτές τις συσκευές, αν είστε συνδεδεμένοι στον λογαριασμό Microsoft που διαθέτετε.	###disable_3rd_party_console_resource_pack_check
 store.realmsPlus.faq.question5=Πόσο κοστίζει μια συνδρομή Realms Plus;	#
 store.realmsPlus.faq.answer5=%s τον μήνα για έναν διακομιστή 10 παικτών και πρόσβαση σε 150+ πακέτα από το Marketplace.	#
+store.realmsPlus.faq.answer5.contentSub=%s τον μήνα. Πρόσθεσε απεριόριστο αριθμό μελών, παίξε online με 10 άλλους παίκτες ταυτόχρονα. Επίσης, απόλαυσε πάνω από 150 κομμάτια περιεχομένου του Marketplace από τον κατάλογο του Marketplace Pass δωρεάν.	#
 store.realmsPlus.faq.question6=Πόσο συχνά προστίθενται νέα πακέτα στο Realms Plus;	#
 store.realmsPlus.faq.answer6=Νέα πακέτα προστίθενται στο Realms Plus κάθε μήνα.	#
 store.realmsPlus.faq.question7=Πόσο καιρό θα έχω πρόσβαση στα πακέτα στο Realms Plus;	#
@@ -7907,38 +8017,44 @@ store.realmsPlus.faq.question8=Πού μπορώ να χρησιμοποιήσω
 store.realmsPlus.faq.answer8=Μπορείς να παίξεις με τους κόσμους και τα πακέτα που περιλαμβάνονται στη συνδρομή σε σύνδεση, στο προσωπικό σου Realm ή σε τοπική συσκευή. Πρέπει απλώς να παίζεις στο Internet μία φορά κάθε 30 ημέρες για να επικυρώνεις ότι η συνδρομή σου είναι ενεργή.	#
 store.realmsPlus.faq.question9=Τι θα συμβεί στα Realms και στους κόσμους μου όταν λήξει η συνδρομή μου;	#
 store.realmsPlus.faq.answer9=Αν η συνδρομή σου λήξει, εσύ και οι φίλοι σου δεν θα μπορείτε να παίξετε μαζί στο Realms σε σύνδεση και δεν θα έχεις πια πρόσβαση στα πακέτα του Realms Plus. Μπορείς να κατεβάσεις κάθε κόσμο που είναι αποθηκευμένος στο Realm σου (μέσα σε 18 μήνες από τη λήξη της συνδρομής). Αν χρησιμοποιούσες κόσμους, πακέτα υφών ή συνδυαστικά πακέτα στο Realms Plus, θα χρειαστεί να αγοράσεις αυτά τα πακέτα στο κατάστημα ή, αν τα εν λόγω πακέτα περιλαμβάνονται ακόμα στο Realms Plus, να κάνεις νέα συνδρομή για να παίξεις με αυτά τα πρότυπα κόσμου.	#
+store.realmsPlus.faq.question10=Χρειάζομαι το Realms Plus και το Marketplace Pass;	#
+store.realmsPlus.faq.answer10=Όχι. Το Marketplace Pass είναι ένας κατάλογος με περισσότερα από 150+ πακέτα για να απολαύσεις. Το Realms Plus είναι ένα Realm 10 παικτών που περιέχει το Marketplace Pass. Προτείνουμε να κάνεις συνδρομή σ' αυτό που είναι κατάλληλο για σένα.	#
 
+store.realmsPlus.content.marketplacePass=Το Realms Plus περιλαμβάνει το Marketplace Pass!	#
 store.realmsPlus.content.skinDescription=Άλλαξε το στυλ σου με εμφανίσεις!	#
 store.realmsPlus.content.skinDescriptionPersona=Απόκτησε νέες εμφανίσεις!	#
+store.realmsPlus.content.skinDescriptionPersona.contentSub=Επέκτεινε την γκαρνταρόμπα σου με εμφανίσεις!	#
 store.realmsPlus.content.worldDescription=Εξερεύνησε δημοφιλή πακέτα περιεχομένου!	#
+store.realmsPlus.content.worldDescription.contentSub=Παίξε μίνι παιχνίδια, θεματικούς κόσμους και πολλά άλλα! 	#
 store.realmsPlus.content.textureDescription=Νέες εμφανίσεις για τους κόσμους σου!	#
+store.realmsPlus.content.textureDescription.contentSub=Εφάρμοσε νέες εμφανίσεις στον κόσμο σου! 	#
 store.realmsPlus.content.mashupDescription=Δοκίμασε λίγο από όλα με συνδυαστικά πακέτα!	#
 store.realmsPlus.content.personaDescription=Προσάρμοσε την εμφάνισή σου με αντικείμενα δημιουργίας χαρακτήρα!	#
+store.realmsPlus.content.personaDescription.contentSub=Σύλλεξε μηνιαία αντικείμενα στην γκαρνταρόμπα σου!	#
+store.realmsPlus.content.recentlyAdded=Προστέθηκαν πρόσφατα	#
 store.realmsPlus.content.friendsGetAccess=Οι φίλοι σου έχουν πρόσβαση στο περιεχόμενο που χρησιμοποιείται στο δικό σου Realm δωρεάν	#
 
 store.realmsPlus.content.popularPacks=Δημοφιλή πακέτα στο Realms Plus:	#
 store.realmsPlus.content.viewAllPacks=ΔΕΣ ΟΛΑ ΤΑ ΠΑΚΕΤΑ	#
 store.realmsPlus.content.contentDescription=Αξιοποίησε την πηγή του εκπληκτικού περιεχομένου στο Minecraft! Με το Realms Plus, αποκτάς άμεση πρόσβαση σε 150+ αντικείμενα του Marketplace, όπως συνδυαστικά πακέτα, κόσμους, πακέτα εμφανίσεων και επικές περιπέτειες – με νέες προσθήκες κάθε μήνα. Το περιεχόμενό σου αποθηκεύεται στον προσωπικό σου διακομιστή και είναι διαθέσιμο σε οποιαδήποτε πλατφόρμα απολαμβάνεις το Realms και το Minecraft Marketplace. Μπορούν να παίζουν ταυτόχρονα έως και 10 παίκτες, οι οποίοι έχουν πρόσβαση στους κόσμους στο Realm σου δωρεάν!	#
 
-
 store.realmsPlus.freeTrial=ΕΝΑΡΞΗ ΔΩΡΕΑΝ ΔΟΚΙΜΗΣ	#
 
 store.realmsPlus.purchase.warningDialog.title=Ειδοποίηση	#
-store.realmsPlus.purchase.warningDialog.body=Το Realms Plus περιλαμβάνει το περιεχόμενο του Marketplace Pass. Προτείνουμε να απεγγραφείς από τη συνδρομή σου στο Marketplace Pass μετά την εγγραφή.	#
+store.realmsPlus.purchase.warningDialog.body=Το Realms Plus περιλαμβάνει περιεχόμενο του Marketplace Pass. Προτείνουμε να ακυρώσεις τη συνδρομή σου στο Marketplace Pass αφού εγγραφείς στο Realms Plus.		#### {StrContains="Marketplace Pass"}
 store.realmsPlus.purchase.warningDialog.checkbox=Κατανοώ	#
 store.realmsPlus.purchase.warningDialog.button.back=Επιστροφή	#
-store.realmsPlus.purchase.warningDialog.button.continue=Συνέχεια	#
+store.realmsPlus.purchase.warningDialog.button.continue=Αγορά	#
 
-store.csb.brand.1=ΑΓΟΡΑ	#
-store.csb.brand.2=PASS	#
+store.csb.brand.1=MARKETPLACE		#### {StrContains="MARKETPLACE"}
+store.csb.brand.2=PASS		#### {StrContains="PASS"}
 
-store.csb=Marketplace Pass	#
-store.csb.pass=Προσπέραση	#
+store.csb=Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.content=Περιεχόμενο	#
 store.csb.faq=Συνήθεις ερωτήσεις	#
 store.csb.buyNow=ΚΑΝΕ ΕΓΓΡΑΦΗ	### Maximum 13 characters
 store.csb.buyNowPerMonth=Αγορά για %s/μήνα	#
-store.csb.signInToSubscribe=Πραγματοποίησε είσοδο για εγγραφή στο Marketplace Pass	#
+store.csb.signInToSubscribe=Πραγματοποίησε είσοδο για εγγραφή στο Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.buyNowTrialPerMonth=Έναρξη δοκιμής	### Maximum 25 characters
 store.csb.errorNoOffer=ΣΦΑΛΜΑ - ΔΕΝ ΒΡΕΘΗΚΕ ΠΡΟΣΦΟΡΑ	#
 store.csb.manageSubscription=ΔΙΑΧΕΙΡΙΣΗ ΣΥΝΔΡΟΜΗΣ	#
@@ -7948,47 +8064,49 @@ store.csb.buyNow.buttonText=ΑΓΟΡΑ ΓΙΑ %s	#
 store.csb.buyNow.viewTerms=ΟΡΟΙ ΚΑΙ ΠΡΟΫΠΟΘΕΣΕΙΣ	#
 store.csb.buyNow.viewPrivacyPolicy=ΠΟΛΙΤΙΚΗ ΠΡΟΣΤΑΣΙΑΣ ΠΡΟΣΩΠΙΚΩΝ ΔΕΔΟΜΕΝΩΝ	#
 
-store.csb.buyNow.title=Έναρξη συνδρομής στο Marketplace Pass	#
+store.csb.buyNow.title=Έναρξη συνδρομής στο Marketplace Pass		#### {StrContains="Marketplace Pass"}
 
-store.csb.subscription=Μετά την εγγραφή, 150+ κομμάτια συναρπαστικού περιεχομένου του Minecraft Marketplace θα είναι διαθέσιμα για σένα. Κατέβασε και παίξε χάρτες περιπέτειας, φόρεσε εμφανίσεις, βούτηξε σε πακέτα υφών και διεκδίκησε μια σειρά από αντικείμενα Δημιουργίας Χαρακτήρα που θα διατηρείς κάθε μήνα. Με έναν κατάλογο που ανανεώνεται τακτικά, υπάρχει πάντα κάτι νέο για να ανακαλύψεις με το Marketplace Pass. Θα χρεώνεσαι %s/μήνα και μπορείς να ακυρώσεις ανά πάσα στιγμή για να αποτρέψεις μελλοντικές χρεώσεις.  	#
+store.csb.subscription=Μετά την εγγραφή, 150+ κομμάτια συναρπαστικού περιεχομένου του Minecraft Marketplace θα είναι διαθέσιμα για σένα. Κατέβασε και παίξε χάρτες περιπέτειας, φόρεσε εμφανίσεις, βούτηξε σε πακέτα υφών και διεκδίκησε μια σειρά από αντικείμενα Δημιουργίας Χαρακτήρα που θα διατηρείς κάθε μήνα. Με έναν κατάλογο που ανανεώνεται τακτικά, υπάρχει πάντα κάτι νέο για να ανακαλύψεις με το Marketplace Pass. Θα χρεώνεσαι %s/μήνα και μπορείς να ακυρώσεις ανά πάσα στιγμή για να αποτρέψεις μελλοντικές χρεώσεις.		#### {StrContains="Marketplace Pass"}
 
-store.csb.recurring.offerTrial=Το Marketplace Pass είναι μια συνεχόμενη συνδρομή με επαναλαμβανόμενη χρέωση συνδρομής η οποία επιβάλλεται αυτόματα κάθε μήνα έως ότου ακυρωθεί η συνδρομή.%s150+ πακέτα από το Marketplace θα είναι άμεσα διαθέσιμα. Μπορείς να ακυρώσεις τη συνδρομή σου για να σταματήσεις μελλοντικές χρεώσεις από τις ρυθμίσεις της συνδρομής.	#
-store.csb.recurring.withoutTrial=Το Marketplace Plus είναι μια συνδρομή σε εξέλιξη με επαναλαμβανόμενη χρέωση συνδρομής η οποία επιβάλλεται αυτόματα κάθε μήνα έως ότου ακυρωθεί η συνδρομή.%s150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Θα χρεώνεσαι %s/μήνα και μπορείς να ακυρώσεις τη συνδρομή σου για να σταματήσεις μελλοντικές χρεώσεις από τις ρυθμίσεις της συνδρομής.	#
+store.csb.recurring.offerTrial=Το Marketplace Pass είναι μια συνεχόμενη συνδρομή με επαναλαμβανόμενη χρέωση συνδρομής η οποία επιβάλλεται αυτόματα κάθε μήνα έως ότου ακυρωθεί η συνδρομή.%s150+ πακέτα από το Marketplace θα είναι άμεσα διαθέσιμα. Μπορείς να ακυρώσεις τη συνδρομή σου για να σταματήσεις μελλοντικές χρεώσεις από τις ρυθμίσεις της συνδρομής.		#### {StrContains="Marketplace Pass"}
+store.csb.recurring.withoutTrial=Το Marketplace Pass είναι μια συνδρομή σε εξέλιξη με επαναλαμβανόμενη χρέωση συνδρομής η οποία επιβάλλεται αυτόματα κάθε μήνα έως ότου ακυρωθεί η συνδρομή.%s150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Θα χρεώνεσαι %s/μήνα και μπορείς να ακυρώσεις τη συνδρομή σου για να σταματήσεις μελλοντικές χρεώσεις από τις ρυθμίσεις της συνδρομής.		#### {StrContains="Marketplace Pass"}
 store.csb.consumable.offerTrial=150+ πακέτα από το Marketplace θα είναι άμεσα διαθέσιμα. Οι πρώτες 30 ημέρες είναι δωρεάν και μπορείς, στη συνέχεια, να πραγματοποιήσεις ανανέωση για 30 ημέρες στην τιμή των %s.	#
 store.csb.consumable.withoutTrial=150+ πακέτα από το Marketplace θα είναι αμέσως διαθέσιμα. Η συνδρομή σου θα είναι διαθέσιμη για 30 ημέρες στην τιμή των %s.	#
 
-store.csb.landing.header=Έναρξη συνδρομής στο Marketplace Pass	#
+store.csb.landing.header=Έναρξη συνδρομής στο Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.landing.headerTrial=Δωρεάν δοκιμή 30 ημερών, στη συνέχεια, %s/μήνα	#
 
-store.csb.landing.info=Το Marketplace Pass είναι μια μηνιαία συνδρομητική υπηρεσία που σου δίνει πρόσβαση σε 150+ κομμάτια περιεχομένου από το Minecraft Marketplace για %s. Η συνδρομή σου σού επιτρέπει:	#
+store.csb.landing.info=Το Marketplace Pass είναι μια μηνιαία συνδρομητική υπηρεσία που σου δίνει πρόσβαση σε 150+ κομμάτια περιεχομένου από το Minecraft Marketplace για %s. Η συνδρομή σού σου επιτρέπει:		#### {StrContains="Marketplace Pass"}
 store.csb.landing.info.line1=Να βουτήξεις σε περιπέτειες που βασίζονται σε μια ιστορία κατεβάζοντας και παίζοντας έναν από τους πολλούς θεματικούς κόσμους και μίνι παιχνίδια	#
 store.csb.landing.info.line2=Να αλλάξεις την εμφάνιση κύβων, διαπλάσεων, ακόμα και των αγαπημένων σου πλασμάτων στο Minecraft	#
 store.csb.landing.info.line3=Να επεκτείνεις την γκαρνταρόμπα σου στο παιχνίδι	#
 store.csb.landing.info.line4=Να διεκδικήσεις ένα νέο σετ αντικειμένων Δημιουργίας Χαρακτήρα για περιορισμένο χρόνο κάθε μήνα, που θα είναι δικά σου για πάντα	#
+store.csb.landing.info.line5=Η συνδρομή ανανεώνεται αυτόματα κάθε μήνα μέχρι να ακυρωθεί	#
+store.csb.landing.info.line6=Ακύρωση στη σελίδα Συνδρομών των Ρυθμίσεων Minecraft	#
+store.csb.landing.info.line7=Κάνε εγγραφή τώρα για %s/μήνα	#
 
 store.csb.landing.beta=Beta	#
 store.csb.landing.preview=Προεπισκόπηση	#
 
 store.csb.faq.header=ΣΥΝΗΘΕΙΣ ΕΡΩΤΗΣΕΙΣ	#
-store.csb.faq.question1=Τι είναι το Marketplace Pass;	#
-store.csb.faq.answer1=Η υπηρεσία συνδρομής Marketplace είναι η υπηρεσία συνδρομής που σου δίνει πρόσβαση σε 150+ κομμάτια περιεχομένου από το Minecraft Marketplace για %s/μήνα.	#
-store.csb.faq.question2=Πόσο συχνά ενημερώνεται το περιεχόμενο στο Marketplace Pass;	#
+store.csb.faq.question1=Τι είναι το Marketplace Pass;		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer1=Το Marketplace Pass είναι η υπηρεσία συνδρομής που σου δίνει πρόσβαση σε 150+ κομμάτια περιεχομένου από το Minecraft Marketplace για %s/μήνα.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question2=Πόσο συχνά ενημερώνεται το περιεχόμενο στο Marketplace Pass;		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer2=Επιλεγμένο περιεχόμενο ανανεώνεται κάθε μήνα, οπότε υπάρχει πάντα κάτι νέο για να εξερευνήσεις.	#
-store.csb.faq.question3=Τι χρειάζομαι για να απολαύσω το Marketplace Pass;	#
-store.csb.faq.answer3=Η πρόσβαση στο Marketplace Pass απαιτεί μια ενεργή συνδρομή και μια συμβατή έκδοση του Minecraft: Bedrock Edition με το Minecraft Marketplace. Απαιτεί είσοδο σε λογαριασμό Microsoft.	#
-store.csb.faq.question4=Τι θα συμβεί στο περιεχόμενό μου αφού βγει από το Marketplace Pass;	#
+store.csb.faq.question3=Τι χρειάζομαι για να απολαύσω το Marketplace Pass;		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer3=Η πρόσβαση στο Marketplace Pass απαιτεί μια ενεργή συνδρομή και μια συμβατή έκδοση του Minecraft: Bedrock Edition με το Minecraft Marketplace. Απαιτεί είσοδο σε λογαριασμό Microsoft.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question4=Τι θα συμβεί στο περιεχόμενό μου αφού βγει από το Marketplace Pass;		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer4=Μόλις ένας κόσμος, ένα πακέτο υφών, ένα πακέτο εμφανίσεων ή ένα συνδυαστικό πακέτο βγει από τον κατάλογο, θα πρέπει να αγοράσεις το αντικείμενο από το Marketplace για να συνεχίσεις να παίζεις. Τα πακέτα δεν θα διαγραφούν από τον τοπικό αποθηκευτικό σου χώρο μέχρι να τα διαγράψεις. Τα μηνιαία αντικείμενα δημιουργίας χαρακτήρα που έχεις εξαργυρώσει είναι δικά σου για να τα κρατήσεις.	#
 store.csb.faq.question5=Τι θα συμβεί όταν λήξει η συνδρομή μου;	#
 store.csb.faq.answer5=Θα μπορείς να αγοράσεις και να κατεβάσεις οποιαδήποτε πρότυπα κόσμου που αποθηκεύτηκαν στον αποθηκευτικό χώρο του cloud σου εντός 18 μηνών μετά τη λήξη της συνδρομής σου, εκτός αν δεν προσφέρονται πλέον από το Minecraft. Τα μηνιαία αντικείμενα δημιουργίας χαρακτήρα που έχεις εξαργυρώσει είναι δικά σου για να τα κρατήσεις.	#
 store.csb.faq.question6=Ποια είναι η διαφορά μεταξύ αυτού και του Realms Plus;	#
-store.csb.faq.answer6=Η διαφορά μεταξύ των δύο συνδρομών είναι ότι το Realms Plus περιλαμβάνει έναν προσωπικό διακομιστή όπου μπορείς να παίξεις με έως και δέκα φίλους τη φορά. Ο κατάλογος περιεχομένου στον οποίο έχεις πρόσβαση με τη συνδρομή σου στο Marketplace Pass είναι ο ίδιος κατάλογος που είναι διαθέσιμος με τη συνδρομή Realms Plus.	#
-store.csb.faq.question7=Μπορώ να κάνω συνδρομή και στο Marketplace Pass και στο Realms Plus;	#
-store.csb.faq.answer7=Η συνδρομή Realms Plus περιλαμβάνει το Marketplace Pass. Εάν είσαι συνδρομητής στο Marketplace Pass και θέλεις να εξερευνήσεις το Realms Plus, προτείνουμε να καταργήσεις τη συνδρομή σου από το Marketplace Pass πρώτα. Οι ενεργοί συνδρομητές Realms Plus δεν μπορούν να κάνουν συνδρομή στο Marketplace Pass.	#
-store.csb.faq.question8=Μπορώ να χρησιμοποιήσω το περιεχόμενο Marketplace Pass μου σε οποιαδήποτε συσκευή;	#
-store.csb.faq.answer8=Αν αγοράσεις το Marketplace Pass, μπορείς να αποκτήσεις πρόσβαση σε όλα τα πακέτα από οποιαδήποτε συσκευή με μια συμβατή έκδοση του Minecraft: Bedrock Edition με το Minecraft Marketplace (πωλείται ξεχωριστά) αν έχεις πραγματοποιήσει είσοδο με τον λογαριασμό Minecraft σου. Δεν υποστηρίζεται στην έκδοση Amazon Kindle Fire ή Minecraft Java.	#
-store.csb.faq.question9=Μπορώ να παίξω το περιεχόμενο Marketplace Pass αν έχω εγγραφεί στο Minecraft Beta στα Windows ή στο XBOX;	#
-store.csb.faq.answer9=Θα μπορείς να δεις περιεχόμενο στη συνδρομή σου αν έχεις ήδη κάνει συνδρομή, αλλά δεν θα μπορείς να κάνεις συνδρομή στο Marketplace Pass από την κατασκευή Προεπισκόπησης/BETA.	#
-store.csb.faq.bottom1=ΔΕΝ ΜΠΟΡΕΙΣ ΝΑ ΒΡΕΙΣ ΑΥΤΟ ΠΟΥ ΨΑΧΝΕΙΣ;	#
+store.csb.faq.answer6=Η διαφορά μεταξύ των δύο συνδρομών είναι ότι το Realms Plus περιλαμβάνει έναν προσωπικό διακομιστή όπου μπορείς να παίξεις με έως και δέκα φίλους τη φορά. Ο κατάλογος περιεχομένου στον οποίο έχεις πρόσβαση με τη συνδρομή σου στο Marketplace Pass είναι ο ίδιος κατάλογος που είναι διαθέσιμος με τη συνδρομή Realms Plus.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question7=Μπορώ να κάνω συνδρομή και στο Marketplace Pass και στο Realms Plus;		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer7=Η συνδρομή Realms Plus περιλαμβάνει το Marketplace Pass. Εάν είσαι συνδρομητής στο Marketplace Pass και θέλεις να εξερευνήσεις το Realms Plus, προτείνουμε να καταργήσεις τη συνδρομή σου από το Marketplace Pass πρώτα. Οι ενεργοί συνδρομητές Realms Plus δεν μπορούν να κάνουν συνδρομή στο Marketplace Pass.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question8=Μπορώ να χρησιμοποιήσω το περιεχόμενο Marketplace Pass μου σε οποιαδήποτε συσκευή;		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer8=Αν αγοράσεις το Marketplace Pass, μπορείς να αποκτήσεις πρόσβαση σε όλα τα πακέτα από οποιαδήποτε συσκευή με μια συμβατή έκδοση του Minecraft: Bedrock Edition με το Minecraft Marketplace (πωλείται ξεχωριστά) αν έχεις πραγματοποιήσει είσοδο με τον λογαριασμό Minecraft σου. Δεν υποστηρίζεται στην έκδοση Amazon Kindle Fire ή Minecraft Java.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question9=Μπορώ να παίξω το περιεχόμενο Marketplace Pass αν έχω εγγραφεί στο Minecraft Beta στα Windows ή στο XBOX;		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer9=Θα μπορείς να δεις περιεχόμενο στη συνδρομή σου αν έχεις ήδη κάνει συνδρομή, αλλά δεν θα μπορείς να κάνεις συνδρομή στο Marketplace Pass από την έκδοση Προεπισκόπησης/BETA.		#### {StrContains="Marketplace Pass"}
 store.csb.faq.bottom2=Επισκέψου την ιστοσελίδα βοήθειάς μας	#
 
 store.csb.contentPacks.worldDescription=Παίξε μίνι παιχνίδια, θεματικούς κόσμους και πολλά άλλα!	#
@@ -7997,19 +8115,19 @@ store.csb.contentPacks.personaDescription=Σύλλεξε μηνιαία αντι
 store.csb.contentPacks.skinDescription=Επέκτεινε την γκαρνταρόμπα σου με εμφανίσεις! 	#
 store.csb.contentPacks.mashupDescription=Δοκίμασε λίγο από όλα με τα συνδυαστικά πακέτα!	#
 
-store.csb.content.popularPacks=Ανακάλυψε το Marketplace Pass	#
+store.csb.content.popularPacks=Ανακάλυψε το Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.content.viewAllPacks=ΔΕΣ ΟΛΑ ΤΑ ΠΑΚΕΤΑ	#
 store.csb.content.viewCharacterCreatorItems=ΠΡΟΒΟΛΗ ΑΝΤΙΚΕΙΜΕΝΩΝ ΔΗΜΙΟΥΡΓΙΑΣ ΧΑΡΑΚΤΗΡΑ	#
-store.csb.content.contentDescription=Αξιοποίησε το εκπληκτικό περιεχόμενο Minecraft! Με το Marketplace Plus, αποκτάς άμεση πρόσβαση σε 150+ αντικείμενα του Marketplace, όπως συνδυαστικά πακέτα, κόσμους, πακέτα εμφανίσεων και επικές περιπέτειες. Με νέες προσθήκες κάθε μήνα.	#
+store.csb.content.contentDescription=Αξιοποίησε το εκπληκτικό περιεχόμενο Minecraft! Με το Marketplace Pass, αποκτάς άμεση πρόσβαση σε 150+ αντικείμενα του Marketplace, όπως συνδυαστικά πακέτα, κόσμους, πακέτα εμφανίσεων και επικές περιπέτειες. Με νέες προσθήκες κάθε μήνα.		#### {StrContains="Marketplace Pass"}
 
 store.csb.freeTrial=ΕΝΑΡΞΗ ΔΩΡΕΑΝ ΔΟΚΙΜΗΣ	#
 
-store.csb.welcomeDialog.title=Καλώς όρισες στο Marketplace Pass!	#
+store.csb.welcomeDialog.title=Καλώς όρισες στο Marketplace Pass!		#### {StrContains="Marketplace Pass"}
 store.csb.welcomeDialog.body=Ξεκίνησε να απολαμβάνεις 150+ περιπέτειες, μίνι παιχνίδια, πακέτα εμφανίσεων, υφές και περισσότερα τώρα!	#
 store.csb.welcomeDialog.continue=Ξεκίνα την περιήγηση	#
 
 store.csb.purchase.warningDialog.title=Ειδοποίηση	#
-store.csb.purchase.warningDialog.body.line1=Το Marketplace Pass περιλαμβάνεται στη συνδρομή σου στο Realms Plus.	#
+store.csb.purchase.warningDialog.body.line1=Το Marketplace Pass περιλαμβάνεται στη συνδρομή σου στο Realms Plus.		#### {StrContains="Marketplace Pass"}
 store.csb.purchase.warningDialog.body.line2=Ακύρωσε την ενεργή συνδρομή σου στο Realms Plus και περίμενε μέχρι το τέλος του κύκλου χρέωσής σου και, στη συνέχεια, προσπάθησε να αγοράσεις.	#
 store.csb.purchase.warningDialog.button.back=Επιστροφή	#
 
@@ -8023,9 +8141,9 @@ store.csb.upsell.rightBullet.1=Προσωπικός διακομιστής γι�
 store.csb.upsell.rightBullet.2=Οι φίλοι παίζουν δωρεάν	#
 store.csb.upsell.rightBullet.3=Περιλαμβάνει			### Precedes the term Marketplace Pass in a different font
 
-store.csb.upsell.learnMore=Μάθετε περισσότερα	#
+store.csb.upsell.learnMore=Μάθε περισσότερα	#
 store.csb.upsell.price=%s/Μήνα	#
-store.csb.upsell.firstPeriodFree=Δωρεάν δοκιμή 30 ημερών!*	#
+store.csb.upsell.firstPeriodFree=Δωρεάν δοκιμή 30 ημερών!	#
 
 store.csb.upsell.realmsPlus=§dREALMS PLUS	#
 
@@ -8036,11 +8154,14 @@ store.csb.purchaseErrorDialog.errorCode=Κωδικός σφάλματος: %s	#
 store.csb.purchaseErrorDialog.correlationId=Αναγνωριστικό αντιστοιχίας: %s	#
 
 store.csb.purchase.amazonDeviceWarning.title=Ειδοποίηση	#
-store.csb.purchase.amazonDeviceWarning.body.line1=Λυπούμαστε! Το Marketplace Pass δεν είναι διαθέσιμο για αγορά σε συσκευές Amazon αυτήν τη στιγμή. 	#
+store.csb.purchase.amazonDeviceWarning.body.line1=Λυπούμαστε! Το Marketplace Pass δεν είναι διαθέσιμο για αγορά σε συσκευές Amazon αυτήν τη στιγμή.		#### {StrContains="Marketplace Pass"}
 store.csb.purchase.amazonDeviceWarning.body.line2=Για οποιαδήποτε ερώτηση, επισκέψου το support.minecraft.net	#
 store.csb.purchase.amazonDeviceWarning.button.back=Επιστροφή	#
 
-store.csb.alreadySubscribed.toolTip=Έχεις ήδη συνδρομή στο Marketplace Pass.	#
+store.csb.alreadySubscribed.toolTip=Έχεις ήδη συνδρομή στο Marketplace Pass.		#### {StrContains="Marketplace Pass"}
+
+store.csb.banner.offer=Ξεκίνησε τώρα τη δωρεάν δοκιμαστική έκδοση 30 ημερών!	#
+store.csb.banner.learnMore=Μάθε περισσότερα	#
 
 store.inventory.button=Το περιεχόμενό μου	#
 store.inventory.title=Το περιεχόμενό μου	#
@@ -8145,12 +8266,6 @@ store.createdBy=Από %s	#
 store.seeMoreBy=Εμφάνιση περισσότερων από %s	#
 store.seeMoreBy.multiCreatorBundle=Δες περισσότερα από δημιουργούς συλλογών	#
 store.fetchingItem=Σύνδεση στο Marketplace...	#
- 
-store.timer.daysAbbreviated=%s ημ.		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.hoursAbbreviated=%s ώρ.		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.minutesAbbreviated=%s λεπ.		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.secondsAbbreviated=%s δευτ.		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.left=Απομένουν %s	#
 
 store.startMenu.sale=Εκπτώσεις!	#
 
@@ -8171,6 +8286,13 @@ store.mashup.count.texturePack=1 Πακέτο υφών	#
 store.mashup.count.texturePacks=%s Πακέτα υφών	#number of texture packs	#
 store.mashup.count.world=1 Κόσμος 	#
 store.mashup.count.worlds=%s Κόσμοι	#number of worlds	#
+store.mashup.count.addonPack=1 πρόσθετο	#
+store.mashup.count.addonPacks=%s πρόσθετα	#number of addons	#
+
+store.addon.activateAddonPack=Ενεργοποίηση πρόσθετου!	#
+store.addon.choseWorldPopupTitle=Πού να προσθέσεις;	#
+store.addon.choseWorldPopupExisting=Υπάρχων	#
+store.addon.choseWorldPopupNew=Νέο	#
 
 store.mashup.bundle=Συλλογή	#
 store.mashup.bundle.multipleCreators=Πολλοί δημιουργοί	#
@@ -8231,7 +8353,7 @@ store.ratings.signIn.description1=Ενημέρωσε το δημιουργό κ�
 store.ratings.signIn.description2=Πριν σου επιτρέψουμε να αξιολογήσεις ένα αντικείμενο, θα πρέπει να πραγματοποιήσεις είσοδο με λογαριασμό Microsoft.	#
 
 store.purchase.success.realMoney1=Μόλις ξεκλείδωσες: %s για %s 	#
-store.purchase.success.realMoney2=+%s:minecoin:	#
+store.purchase.success.realMoney2=+:minecoin:%s	#
 store.purchase.signIn=Διεύρυνε το παιχνίδι σου με σπουδαίο περιεχόμενο.	#
 store.purchase.signInPart2=Πραγματοποίησε είσοδο με λογαριασμό Microsoft για να ξεκινήσεις να χρησιμοποιείς το Marketplace!	#
 store.purchase.realmoney.disclaimer=*Αγοράζει %s νομίσματα για %s και εξαργυρώνει αυτό το πακέτο για %s νομίσματα, αφήνοντας %s υπόλοιπο.	#
@@ -8383,7 +8505,7 @@ store.search.filter.offer_type=Τύποι προσφορών	#
 store.search.filter.offer_type.selectedCount=%d τύποι προσφορών	#
 store.search.filter.offer_type.bundles=Συλλογές	#
 store.search.filter.offer_type.realmsplus=Realms Plus	#
-store.search.filter.offer_type.csb=Marketplace Pass	#
+store.search.filter.offer_type.csb=Marketplace Pass		#### {StrContains="Marketplace Pass"}
 
 store.search.filter.clear.pack_type=Απαλοιφή φίλτρων τύπου πακέτου	#
 store.search.filter.mashupPacks=Συνδυαστικά πακέτα	#
@@ -8400,6 +8522,7 @@ store.search.filter.skinPacks=Εμφανίσεις	#
 store.search.filter.texturePacks=Υφές	#
 store.search.filter.title=Φίλτρα	#
 store.search.filter.worldTemplates=Κόσμοι	#
+store.search.filter.addOns=Πρόσθετα	#
 store.search.filter.installed_state=Κατάσταση εγκατάστασης	#
 store.search.filter.installed=Εγκαταστάθηκε	#
 store.search.filter.notInstalled=Δεν έχει εγκατασταθεί	#
@@ -8436,7 +8559,7 @@ store.uploadContentToRealmsFail.message=Η αποστολή περιεχομέν
 store.uploadContentToRealmsFail.forbidden.message=Κάποιο από το εφαρμοσμένο περιεχόμενο δεν σου ανήκει!	#
 store.applyToRealm=Δημιουργία στο Realm	#
 store.inRealmsPlus=Στο Realms Plus	#
-store.inCsb=Στο Marketplace Pass	#
+store.inCsb=Στο Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.uploadWorldTitle=Αντικατάσταση κόσμου;	#
 store.uploadPackTitle=Αντικατάσταση πακέτου;	#
 store.uploadWorldMessage=Με αυτή την ενέργεια θα καταργηθεί ο τρέχων κόσμος σου από την ενεργή υποδοχή του Realm και θα μπορέσεις να τον αντικαταστήσεις με έναν καινούργιο. Τα μέλη του Realm θα έχουν πρόσβαση στον νέο κόσμο σου. Επίλεξε "Ακύρωση" για μετάβαση και λήψη ενός αντιγράφου του τρέχοντος κόσμου προκειμένου να αποφύγεις την απώλεια δεδομένων ή επίλεξε "Επιβεβαίωση" για συνέχεια και αντικατάσταση του κόσμου σου.	#
@@ -8519,7 +8642,7 @@ tile.beehive.name=Κυψέλη	#
 tile.bee_nest.name=Φωλιά μελισσών	#
 tile.target.name=Στόχος	#
 tile.bed.name=Κρεβάτι	#
-tile.bed.noSleep=Μπορείς να κοιμάσαι μόνο τη νύχτα	#
+tile.bed.noSleep=Μπορείς να κοιμηθείς μόνο τη νύχτα και κατά τη διάρκεια θυελλών	#
 tile.bed.notSafe=Δεν μπορείς να αναπαυθείς τώρα. Υπάρχουν τέρατα δίπλα	#
 tile.bed.notValid=Το κρεβάτι του σπιτιού σου λείπει ή δεν μπορείς να το φτάσεις	#
 tile.bed.occupied=Αυτό το κρεβάτι είναι κατειλημμένο	#
@@ -9584,12 +9707,12 @@ trial.tabbed_upsell.buttonAlternate=Ξεκλείδωμα πλήρους παιχ
 trial.tabbed_upsell.minecraft.title=MINECRAFT 	#
 trial.tabbed_upsell.minecraft.description=Εξερεύνησε αδιάκοπα τους δικούς σου μοναδικούς κόσμους και κατασκεύασε οτιδήποτε μπορείς να φανταστείς, από τα πιο απλά σπίτια έως τα πιο μεγαλειώδη κάστρα! Παίξε στη Δημιουργική λειτουργία, για να χτίσεις θαυμαστά οικοδομήματα με απεριόριστους πόρους. Ή εξόρυξε στη Λειτουργία επιβίωσης, κατασκευάζοντας όπλα και πανοπλίες για να αμυνθείς απέναντι σε επικίνδυνα πλάσματα και να επιβιώσεις τις νύχτες. Επιπλέον, μπορείς να παίξεις με τους φίλους σου online! Ξεκλείδωσε σήμερα το πλήρες παιχνίδι!	#
 trial.tabbed_upsell.xbl.title=ΛΟΓΑΡΙΑΣΜΟΣ MICROSOFT	#
-trial.tabbed_upsell.xbl.description=Με την πλήρη εμπειρία του Minecraft αποκτάς τη Δημιουργική λειτουργία, Επιτεύγματα και άλλα. Επίσης, με λογαριασμό Microsoft μπορείς να γνωρίσεις άλλα άτομα στην κοινότητα του Minecraft! Συνδέσου στους κόσμους των φίλων σου, κάνε νέους φίλους στους Διακομιστές και συγχρόνισε τις αγορές σου στο Marketplace σε οποιαδήποτε συσκευή παίζεις Minecraft.	#
+trial.tabbed_upsell.xbl.description=Με την πλήρη εμπειρία του Minecraft αποκτάς τη Δημιουργική λειτουργία, επιτεύγματα και άλλα. Επίσης, με λογαριασμό Microsoft μπορείς να γνωρίσεις άλλα άτομα στην κοινότητα του Minecraft! Θα μπορείς να συνδεθείς στους κόσμους των φίλων σου, να κάνεις νέους φίλους στους διακομιστές και να συγχρονίσεις τις αγορές σου στο Marketplace σε οποιαδήποτε συσκευή παίζεις Minecraft.	#
 trial.tabbed_upsell.xbl.description.line2=*(σε εκδόσεις με Marketplace)	#
 trial.tabbed_upsell.achievements.title=ΕΠΙΤΕΥΓΜΑΤΑ	#
-trial.tabbed_upsell.achievements.description=Εκτός από την πλήρη εμπειρία του Minecraft με τη Δημιουργική λειτουργία, το Παιχνίδι για πολλούς παίκτες και άλλα, θα κερδίζεις Επιτεύγματα και μια Βαθμολογία παίκτη που σηματοδοτούν την πρόοδό σου στο Minecraft και δείχνουν όλα όσα έχεις καταφέρει στους φίλους σου με λογαριασμό Microsoft. Απόκτησε το πλήρες παιχνίδι για να ξεκινήσεις να τα κερδίζεις!	#
+trial.tabbed_upsell.achievements.description=Εκτός από την πλήρη εμπειρία του Minecraft με τη Δημιουργική λειτουργία, το παιχνίδι για πολλούς παίκτες και άλλα, θα κερδίζεις επιτεύγματα και μια Βαθμολογία παίκτη για να σημειώνεις την πρόοδό σου στο Minecraft και να δείχνεις όλα όσα έχεις καταφέρει στους φίλους σου με λογαριασμό Microsoft. Απόκτησε το πλήρες παιχνίδι για να ξεκινήσεις να τα κερδίζεις!	#
 trial.tabbed_upsell.multiplayer.title=ΠΑΙΧΝΙΔΙ ΓΙΑ ΠΟΛΛΟΥΣ ΠΑΙΚΤΕΣ	#
-trial.tabbed_upsell.multiplayer.description=Με την πλήρη εμπειρία του Minecraft θα μπορείς να απολαύσεις τη Δημιουργική λειτουργία, τα Επιτεύγματα και το Παιχνίδι για πολλούς παίκτες με τους φίλους σου σε συσκευές με Minecraft! Παίξε με φίλους σε κονσόλες, υπολογιστές και κινητές συσκευές, για να δημιουργήσετε, να εξερευνήσετε και να επιβιώσετε μαζί. Ξεκλείδωσε την πλήρη εμπειρία του Minecraft σήμερα!	#
+trial.tabbed_upsell.multiplayer.description=Με την πλήρη εμπειρία του Minecraft θα μπορείς να απολαύσεις τη Δημιουργική λειτουργία, τα επιτεύγματα και το παιχνίδι για πολλούς παίκτες με τους φίλους σου σε συσκευές με Minecraft! Παίξε με φίλους σε κονσόλες, υπολογιστές και κινητές συσκευές, για να δημιουργήσετε, να εξερευνήσετε και να επιβιώσετε μαζί. Ξεκλείδωσε την πλήρη εμπειρία του Minecraft σήμερα!	#
 trial.tabbed_upsell.server.title=ΔΙΑΚΟΜΙΣΤΕΣ	#
 trial.tabbed_upsell.server.description=Οι διακομιστές προσφέρουν μερικούς από τους πιο δημιουργικούς τρόπους για να απολαύσεις το Minecraft! Παίξε σπουδαία μίνι παιχνίδια, γνώρισε την κοινότητα του Minecraft και κάνε νέους φίλους. Ξεκλείδωσε την πλήρη εμπειρία του Minecraft για να δοκιμάσεις τους Διακομιστές σήμερα!	#
 trial.tabbed_upsell.store.title=ΚΑΤΑΣΤΗΜΑ	#
@@ -9597,7 +9720,7 @@ trial.tabbed_upsell.store.description=Απόκτησε πρόσβαση στο M
 trial.tabbed_upsell.creative.title=ΔΗΜΙΟΥΡΓΙΚΗ ΛΕΙΤΟΥΡΓΙΑ	#
 trial.tabbed_upsell.creative.description=Αγόρασε το Minecraft και απόλαυσε τη Δημιουργική λειτουργία! Απόκτησε πρόσβαση σε όλα τα αποθέματα. Το μοναδικό όριο σε όσα μπορείς να χτίσεις είναι η φαντασία σου! Πέταξε στους ουρανούς πάνω από τον κόσμο σου, δημιούργησε το σπίτι των ονείρων σου χρησιμοποιώντας ό,τι υλικό μπορείς να φανταστείς ή απλώς ανατίναξε ένα βουνό με ατελείωτο Δυναμίτη! 	#
 trial.tabbed_upsell.addon.title=ΠΡΟΣΘΕΤΑ	#
-trial.tabbed_upsell.addon.description=Θέλεις οι λύκοι να συμπεριφέρονται σαν λαγουδάκια; Θέλεις να μετατρέψεις όλα τα δέντρα σε μαλλί της γριάς; Μπορείς να αλλάξεις τα πάντα με την πλήρη εμπειρία του Minecraft χρησιμοποιώντας πρόσθετα! Επίσης, απόκτησε πρόσβαση στο Παιχνίδι για πολλούς παίκτες, στη Δημιουργική λειτουργία, στα Επιτεύγματα και σε πολλά άλλα! Αγόρασε τώρα το Minecraft για να αποκτήσεις πλήρη πρόσβαση!	#
+trial.tabbed_upsell.addon.description=Θέλεις οι λύκοι να συμπεριφέρονται σαν λαγουδάκια; Θέλεις να μετατρέψεις όλα τα δέντρα σε μαλλί της γριάς; Μπορείς να αλλάξεις τα πάντα με την πλήρη εμπειρία του Minecraft χρησιμοποιώντας πρόσθετα! Επίσης, απόκτησε πρόσβαση στο παιχνίδι για πολλούς παίκτες, στη Δημιουργική λειτουργία, στα επιτεύγματα και σε πολλά άλλα! Αγόρασε τώρα το Minecraft για να αποκτήσεις πλήρη πρόσβαση!	#
 trial.tabbed_upsell.seeds.title=ΦΥΤΡΑ	#
 trial.tabbed_upsell.seeds.description=Ξεκλείδωσε την ολοκληρωμένη εμπειρία του Minecraft και απόκτησε πρόσβαση στα Φύτρα! Τα Φύτρα σε βοηθούν να ανακαλύπτεις νέες διαπλάσεις, να επιβιώνεις σε παγωμένες πεδιάδες, να σκαρφαλώνεις σε απότομους γκρεμούς ή να διασχίζεις καυτές ερήμους. Ξεκίνησε με μοναδικά πρότυπα ή εξερεύνησε τυχαίους νέους κόσμους! Απόκτησε πρόσβαση στα Φύτρα, στη Δημιουργική λειτουργία, στο Παιχνίδι για πολλούς παίκτες και σε άλλα πολλά, αγοράζοντας σήμερα το Minecraft!	#
 
@@ -9607,10 +9730,10 @@ trial.thanks_for_testing.button=Πήγαινέ με στις Συχνές Ερω
 trial.thanks_for_testing.minecraft.title=ΔΟΚΙΜΑΣΤΙΚΗ ΕΚΔΟΣΗ MINECRAFT	#
 trial.thanks_for_testing.minecraft.description=Σε ευχαριστούμε που κατέβασες τη δοκιμαστική έκδοση Minecraft για το Chromebook! Οι δοκιμές σου του παιχνιδιού θα παρέχουν ανεκτίμητα δεδομένα για διορθώσεις σφαλμάτων και τεχνική αντιμετώπιση προβλημάτων. Ανακάλυψες κάποιο σφάλμα; Ανάφερέ το στο bugs.mojang.com! Άλλες ερωτήσεις; Ρίξε μια ματιά στις Συχνές Ερωτήσεις.	#
 trial.thanks_for_testing.xbl.title=ΛΟΓΑΡΙΑΣΜΟΣ MICROSOFT	#
-trial.thanks_for_testing.xbl.description=Με την πλήρη εμπειρία του Minecraft αποκτάς τη Δημιουργική λειτουργία, Επιτεύγματα και άλλα. Επίσης, με λογαριασμό Microsoft μπορείς να γνωρίσεις άλλα άτομα στην κοινότητα του Minecraft! Θα μπορείς να συνδεθείς στους κόσμους των φίλων σου, να κάνεις νέους φίλους στους Διακομιστές και να συγχρονίσεις τις αγορές σου στο Marketplace σε οποιαδήποτε συσκευή παίζεις Minecraft.	#
+trial.thanks_for_testing.xbl.description=Με την πλήρη εμπειρία του Minecraft αποκτάς τη Δημιουργική λειτουργία, επιτεύγματα και άλλα. Επίσης, με λογαριασμό Microsoft μπορείς να γνωρίσεις άλλα άτομα στην κοινότητα του Minecraft! Θα μπορείς να συνδεθείς στους κόσμους των φίλων σου, να κάνεις νέους φίλους στους διακομιστές και να συγχρονίσεις τις αγορές σου στο Marketplace σε οποιαδήποτε συσκευή παίζεις Minecraft.	#
 trial.thanks_for_testing.xbl.description.line2=*(σε εκδόσεις με Marketplace)	#
-trial.thanks_for_testing.achievements.description=Εκτός από την πλήρη εμπειρία Minecraft με Δημιουργική λειτουργία, Παιχνίδι για πολλούς παίκτες και άλλα, θα κερδίζεις Επιτεύγματα και Βαθμολογία παίκτη, που σηματοδοτούν την πρόοδό σου στο Minecraft και δείχνουν όλα όσα έχεις καταφέρει στους φίλους σου στον λογαριασμού Microsoft σου.	#
-trial.thanks_for_testing.multiplayer.description=Με την πλήρη εμπειρία του Minecraft θα μπορείς να απολαύσεις τη Δημιουργική λειτουργία, τα Επιτεύγματα και το Παιχνίδι για πολλούς παίκτες με τους φίλους σου σε συσκευές με Minecraft! Παίξε με φίλους σε κονσόλες, υπολογιστές και κινητές συσκευές, για να δημιουργήσετε, να εξερευνήσετε και να επιβιώσετε μαζί.	#
+trial.thanks_for_testing.achievements.description=Εκτός από την πλήρη εμπειρία Minecraft με Δημιουργική λειτουργία, παιχνίδι για πολλούς παίκτες και άλλα, θα κερδίζεις επιτεύγματα και Βαθμολογία παίκτη για να σημειώνεις την πρόοδό σου στο Minecraft και να δείχνεις όλα όσα έχεις καταφέρει στους φίλους σου στον λογαριασμό Microsoft σου.	#
+trial.thanks_for_testing.multiplayer.description=Με την πλήρη εμπειρία του Minecraft θα μπορείς να απολαύσεις τη Δημιουργική λειτουργία, τα επιτεύγματα και το παιχνίδι για πολλούς παίκτες με τους φίλους σου σε συσκευές με Minecraft! Παίξε με φίλους σε κονσόλες, υπολογιστές και κινητές συσκευές, για να δημιουργήσετε, να εξερευνήσετε και να επιβιώσετε μαζί.	#
 trial.thanks_for_testing.server.description=Ως τμήμα της πλήρους εμπειρίας του Minecraft, οι διακομιστές προσφέρουν μερικούς από τους πιο δημιουργικούς τρόπους για να απολαύσεις το Minecraft! Παίξε σπουδαία μίνι παιχνίδια, γνώρισε την κοινότητα του Minecraft και κάνε νέους φίλους.	#
 trial.thanks_for_testing.store.description=Το πλήρες παιχνίδι σου δίνει πρόσβαση στο Minecraft Marketplace, το κατάστημά μας μέσα στο παιχνίδι. Δώσε νέα πνοή στο στυλ σου με καινούργιες εμφανίσεις, άλλαξε τον κόσμο σου ή εξερεύνησε απίστευτους νέους χάρτες από τους καλύτερους δημιουργούς της κοινότητας!	#
 trial.thanks_for_testing.creative.description=Ένα αγαπημένο κομμάτι της πλήρους εμπειρίας Minecraft: η Δημιουργική λειτουργία! Απόκτησε πρόσβαση σε όλα τα αποθέματα. Το μοναδικό όριο σε όσα μπορείς να χτίσεις είναι η φαντασία σου! Πέταξε στους ουρανούς πάνω από τον κόσμο σου, δημιούργησε το σπίτι των ονείρων σου χρησιμοποιώντας ό,τι υλικό μπορείς να φανταστείς ή απλώς ανατίναξε ένα βουνό με ατελείωτο Δυναμίτη!	#
@@ -9711,10 +9834,6 @@ xbox.signinquestion=Σύνδεση;	#
 xbox.notnow=Όχι τώρα	#
 xbox.signingin=Γίνεται είσοδος με τον λογαριασμό Microsoft...	#
 xbox.signingin.offline=Γίνεται είσοδος	#
-xbox.firstsignin.line1=Καλώς όρισες στο Minecraft! Χρησιμοποίησε λογαριασμό Microsoft για να συνδεθείς με την κοινότητα του Minecraft, όπου υπολογιστές, κονσόλες, τηλέφωνα και tablet μπορούν να παίζουν μαζί. Και το καλύτερο;	#
-xbox.firstsignin.line2=Είναι ΔΩΡΕΑΝ!	#
-xbox.firstsignin.line3=Δεν έχεις λογαριασμό; Δημιούργησε τώρα έναν για να κερδίσεις επιτεύγματα και να συμμετάσχεις σε Realm και διακομιστές!	#
-xbox.firstsignin.line3.norealmsOrServers=Δεν έχεις λογαριασμό; Δημιούργησε έναν τώρα για να κερδίσεις επιτεύγματα και να παίξεις με τους φίλους σου μεταξύ πλατφορμών!	#
 xbox.failedsignin.body=Δεν ήταν δυνατή η σύνδεσή σου με τον λογαριασμό Microsoft. Η πρόσβαση στα Realms, τα Προφίλ και τα αντικείμενα του Marketplace θα είναι περιορισμένη. Προσπάθησε ξανά αργότερα.	#
 xbox.failedsignin.error=Κωδικός σφάλματος:	#
 xbox.failedsignin.moreInfo=Περισσότερες πληροφορίες	#
@@ -9743,6 +9862,8 @@ xbox.genericsignin.line3=Μπορείς να τον χρησιμοποιήσει
 xbox.disconectionscreen.notSignedIn=Πραγματοποίησε είσοδο με τον λογαριασμό Microsoft για να παίξεις με φίλους.	#
 xbox.disconectionscreen.multiplayerNotAllowed=Αυτός ο λογαριασμός Microsoft δεν διαθέτει δικαίωμα συμμετοχής σε παιχνίδια για πολλούς παίκτες.	#
 xbox.disconectionscreen.accessDenied=Θα πρέπει να είσαι φίλος με κάποιον σε αυτό το παιχνίδι προκειμένου να συμμετάσχεις.	#
+
+xbox.addfriendsscreen.shareProfile=Πρόσθεσέ με ως φίλο στο Minecraft!	#
 
 xbox.friendfinder.enterGamertag=Καταχώρησε ετικέτα παίκτη	#
 xbox.friendfinder.findFriends=Εύρεση φίλων βάσει ετικέτας παίκτη	#
@@ -9817,13 +9938,15 @@ xbox.report.quittingEarly=Πρόωρη έξοδος	#
 xbox.report.unsportingBehavior=Αντιαθλητική συμπεριφορά	#
 xbox.report.voiceCommunication=Φωνητική επικοινωνία	#
 
+xbox.statistics.timePlayed=Χρόνος παιχνιδιού	#
+xbox.statistics.blocksBroken=Σπασμένοι κύβοι	#
+xbox.statistics.distanceTravelled=Απόσταση που έχει διανυθεί	#
+xbox.statistics.mobsDefeated=Πλάσματα που ηττήθηκαν	#
+
 ## Player safety toast messages
 safety.muted.title=Ήσουν προσωρινά σε σίγαση στη συνομιλία.	#
 safety.muted.message=Θυμήσου να ακολουθείς τα Πρότυπα της κοινότητας του Minecraft.	#
 
-safety.reportCap=Φαίνεται ότι έκανες αναφορά για άλλους παίκτες. Σ' ευχαριστούμε που μας βοήθησες να κάνουμε το Minecraft ένα ασφαλές και φιλόξενο μέρος. Να θυμάσαι ότι η υποβολή ψευδών αναφορών παραβιάζει τους Όρους της Κοινότητας.	#
-safety.reportFriend=Ο/Η %s είναι φίλος/η σου. Θέλεις σίγουρα να τον/την αναφέρεις; Η υποβολή ψευδών αναφορών παραβιάζει τους Όρους της Κοινότητας.	#
-safety.reportFriend.title=Αναφορά του παίκτη %s	#
 safety.bannedSkin.title=Η εμφάνιση δεν επιτρέπεται σε παιχνίδι για πολλούς παίκτες	#
 safety.bannedSkin.button=Μάθε περισσότερα	#
 safety.bannedSkin.continue=Συνέχισε με την προεπιλεγμένη εμφάνιση	#
@@ -9933,6 +10056,7 @@ content.import.succeeded=Επιτυχής εισαγωγή '%s'	#
 content.import.succeeded_with_warnings=Επιτυχής εισαγωγή του στοιχείου '%s' χωρίς προειδοποιήσεις	#
 content.import.succeeded_with_warnings.subtitle=Κάνε κλικ εδώ για περισσότερες πληροφορίες	#
 content.import.started=Η εισαγωγή ξεκίνησε...	#
+content.import.importedWorldPrefix=έγινε εισαγωγή	#
 
 ## World Templates
 worldTemplate.festivemashup2016.name=Εορταστικό πακέτο-μείγμα 2016	#
@@ -10017,85 +10141,6 @@ tips.edu.28=Θέλεις να χρησιμοποιήσεις το Code Builder; 
 tips.edu.29=Πάτησε το πλήκτρο F5 για να αλλάξεις την προοπτική παίκτη.	#
 tips.edu.30=Χρησιμοποίησε την εντολή "/spawnpoint" για να αλλάξεις το σημείο γένεσης. Είναι σαν να κοιμήθηκες σε κρεβάτι!	#
 
-tips.game.1=Χρησιμοποίησε θαλάσσια βλάστηση για να προσελκύσεις και να ζευγαρώσεις θαλάσσιες χελώνες.	#
-tips.game.2=Προστάτεψε χελωνάκια από εχθρικά πλάσματα!	#
-tips.game.3=Τα χελωνάκια ρίχνουν φολίδες όταν μεγαλώνουν. Με τις φολίδες μπορείς να κατασκευάσεις καβούκια χελώνας.	#
-tips.game.4=Χρησιμοποίησε ένα κρεβάτι για να ορίσεις το σημείο επαναγένεσης κατά τη διάρκεια της ημέρας.	#
-tips.game.5=Παρασκεύασε μερικά φίλτρα αναπνοής στο νερό για υποβρύχια εξερεύνηση!	#
-tips.game.6=Τα δελφίνια μπορούν να σε οδηγήσουν σε ναυάγια και υποβρύχια ερείπια, τάισέ τα μπακαλιάρο και ακολούθησε τα ίχνη τους!	#
-tips.game.7=Χρησιμοποίησε ψαλίδα για να σκαλίσεις μια κολοκύθα.	#
-tips.game.8=Χρησιμοποίησε μεμβράνες στοιχειού για να επισκευάσεις τα έλυτρά σου.	#
-tips.game.9=Υπάρχουν 3587 είδη τροπικών ψαριών!	#
-tips.game.10=Μπορείς να λιώσεις θαλάσσιες πίκλες σε πρασινοκίτρινη βαφή.	#
-tips.game.11=Χρησιμοποίησε δέματα σανού για να ζευγαρώσεις Λάμα!	#
-tips.game.12=Οι πυξίδες δείχνουν προς το σημείο γένεσης κόσμου. Κατασκεύασε μια πυξίδα για να βρίσκεις τον δρόμο της επιστροφής!	#
-tips.game.13=Κάνε ανταλλαγές με τους χωρικούς για να αποκτήσεις τρόφιμα, εργαλεία ακόμα και χάρτες θησαυρού!	#
-tips.game.14=Ήξερες ότι μπορείς να κρατήσεις έναν χάρτη με το δευτερεύον χέρι;	#
-tips.game.15=Τα λουριά μπορούν να χρησιμοποιηθούν σε βάρκες.	#
-tips.game.16=Χρησιμοποίησε κρυφή κίνηση ή μπότες του Περπατητή πάγου για να περπατήσεις με ασφάλεια πάνω σε κύβους μάγματος.	#
-tips.game.17=Μπορείς να μαζέψεις ιστούς αράχνης χρησιμοποιώντας ψαλίδα.	#
-tips.game.18=Χρειάζεσαι διαμάντια; Τα βρίσκεις συχνότερα καθώς πηγαίνεις βαθύτερα.	#
-tips.game.19=Πριν εξορύξεις διαμάντια, ερυθρόλιθο ή χρυσό, βεβαιώσου ότι χρησιμοποιείς σιδερένια ή διαμαντένια αξίνα, ή αξίνα από εγκατίτη. Διαφορετικά, δεν θα πέσουν τα ορυκτά.	#
-tips.game.20=Χρειάζεσαι κάρβουνο για πυρσούς ή καύσιμο; Δοκίμασε να λιώσεις κούτσουρα σε καμίνι για να δημιουργήσεις ξυλοκάρβουνο!	#
-tips.game.21=Ο χρυσός είναι άφθονος στις διαπλάσεις Ερημιάς!	#
-tips.game.22=Μπορείς να χρησιμοποιήσεις τα έλυτρα για να αιωρηθείς. Βρες τα έλυτρα σε πλοία της Πόλης του Τέλους!	#
-tips.game.23=Δοκίμασε μερικές νέες δυνατότητες ενεργοποιώντας την επιλογή «Πειράματα»!	#
-tips.game.24=Οι τρίαινες πέφτουν από τους Πνιγμένους, και μπορείς να τις κραδαίνεις ή να τις εκτοξεύεις.	#
-tips.game.25=Μπορείς να ζευγαρώσεις Χόγκλιν με Πορφυρό μύκητα, αλλά είναι επικίνδυνο!	#
-tips.game.26=Μπορείς να λιώσεις 20 αντικείμενα σε ένα καμίνι, χρησιμοποιώντας για καύσιμο έναν κύβο από αποξηραμένο φύκι.	#
-tips.game.27=Τα creeper που σκοτώνονται από βέλη σκελετών μπορεί να ρίξουν μουσικούς δίσκους.	#
-tips.game.28=Άνθρωποι όπως ΕΣΥ δημιουργούν περιεχόμενο στο Marketplace!	#
-tips.game.29=Ήξερες ότι πολλοί από τους δημιουργούς της κοινότητας βγάζουν τα προς το ζην με περιεχόμενο στο Marketplace;	#
-tips.game.30=Μπορείς να βρεις εμφανίσεις για να προσαρμόσεις την εμπειρία σου στο παιχνίδι ή να χρησιμοποιήσεις τις δικές σου σε επιλεγμένες πλατφόρμες!	#
-tips.game.31=Τα πακέτα υφών αλλάζουν την εμφάνιση των κύβων, των αντικειμένων, ακόμα και των μενού στο παιχνίδι. Δοκίμασέ τα!	#
-tips.game.32=Ρίξε μια ματιά στο Marketplace για να βρεις νέους κόσμους και περιπέτειες.	#
-tips.game.33=Κάνε αίτηση για να γίνεις Δημιουργός του Marketplace!	#
-tips.game.34=Τα Συνδυαστικά πακέτα περιλαμβάνουν κόσμους για να εξερευνήσεις, εμφανίσεις, υφές, ακόμα και νέα μουσική.	#
-tips.game.35=Γνώριζες ότι υπάρχουν πάνω από 500 πακέτα στο Marketplace που δημιουργήθηκαν από την κοινότητα και ότι προστίθενται περισσότερα κάθε εβδομάδα;	#
-tips.game.36=Πάρε μέρος στη συζήτηση στην τοποθεσία discord.gg/Minecraft	#
-tips.game.37=Τα ορυκτά σμαράγδια είναι τα σπανιότερα ορυκτά στο Minecraft! Μπορείς να τα βρεις μόνο σε βουνά και λιβάδια!	#
-tips.game.38=Δεν χρειάζεσαι σέλα για να εξημερώσεις ένα άλογο-σκελετό.	#
-tips.game.39=Οι οσελότοι κάνουν τα creeper με τα κρεμμυδάκια!	#
-tips.game.40=Διορίτης: είτε τον λατρεύεις είτε τον μισείς.	#
-tips.game.41=Τα στοιχειά είναι επικίνδυνα πλάσματα που εμφανίζονται τη νύχτα. Μην ξεχνάς να κοιμάσαι τακτικά!	#
-tips.game.42=Τα ζόμπι μετατρέπονται σε Πνιγμένους αν βουλιάξουν στο νερό.	#
-tips.game.43=Το Minecraft Live διεξάγεται κάθε χρόνο! Μην χάσεις το επόμενο!	#
-tips.game.44=Η χρήση πυροτεχνημάτων αυξάνει την ταχύτητα των ελύτρων στον αέρα. Πρόσεχε μόνο μην εκραγούν, διαφορετικά θα πονέσεις...ΠΟΛΥ!	#
-tips.game.45=Ο χρυσός βρίσκεται πιο συχνά στις διαπλάσεις των Εγκάτων και της Ερημιάς.	#
-tips.game.46=Τα διαβάζει κανείς αυτά;	#
-tips.game.47=Άπειρα θαύματα, απεριόριστες δυνατότητες.	#
-tips.game.48=ΜΗΝ ΑΦΗΝΕΙΣ ΤΑ ΔΕΝΤΡΑ ΝΑ ΕΠΙΠΛΕΟΥΝ!	#
-tips.game.49=Κάνε σπριντάρισμα στο νερό για να κολυμπήσεις!	#
-tips.game.50=Η μαγική ιδιότητα Παλίρροια θα σε εκτοξεύσει στον αέρα στη βροχή.	#
-tips.game.51=Το Minecraft Live είναι μια παγκόσμια διαδραστική διοργάνωση ζωντανής ροής. Άρπαξε τα αντικείμενά σου και πάρε μέρος στο πάρτι!	#
-tips.game.52=Να είσαι καλός με τα ζώα!	#
-tips.game.53=Ο Φάρος είναι ένα πανίσχυρο αντικείμενο που μπορείς να κατασκευάσεις μόνο με ένα άστρο των εγκάτων από τον Μαρασμό!	#
-tips.game.54=Μην σκοτώνεις δελφίνια, τέρας!	#
-tips.game.55=Ήξερες ότι τα άστρα των εγκάτων δεν καταστρέφονται από εκρήξεις;	#
-tips.game.56=Όταν σκάβεις ευθεία προς τα πάνω, τοποθέτησε έναν πυρσό στα πόδια σου για να σπάσεις τυχόν άμμο ή χαλίκια που θα μπορούσαν να πέσουν πάνω σου.	#
-tips.game.57=Μπορείς να κάνεις ανταλλαγές με τα Πίγκλιν.	#
-tips.game.58=Κούρεψε μια Κυψέλη ή φωλιά μελισσών για να αποκτήσεις Κηρήθρα, χρησιμοποίησε ένα Μπουκάλι για να αποκτήσεις μέλι.	#
-tips.game.59=Τοποθέτησε μια Φωτιά κατασκήνωσης κάτω από μια Κυψέλη ή φωλιά μελισσών για να μαζέψεις μέλι δίχως βία. Οι μέλισσες θα σε ευγνωμονούν.	#
-tips.game.60=Η επαναγένεση στα Έγκατα χρειάζεται μια φορτισμένη Άγκυρα επαναγένεσης.	#
-tips.game.61=Μπορείς να φορτίσεις μια Άγκυρα επαναγένεσης με έναν Φεγγόλιθο.	#
-tips.game.62=Έχεις κάποια ιδέα; Επισκέψου την τοποθεσία feedback.minecraft.net!	#
-tips.game.63=Μπορείς να βρεις Βοηθούς σε Οχυρά με Άρπαγες και Επαύλεις στο δάσος.	#
-tips.game.64=Στον Βοηθό αρέσει να συλλέγει αντικείμενα! Αν του δώσεις ένα αντικείμενο, θα προσπαθήσει να συγκεντρώσει και άλλα από το συγκεκριμένο.	#
-tips.game.65=Στους Βοηθούς αρέσει η μουσική, γι' αυτό αλληλεπιδρούν με Κύβους νότες!	#
-tips.game.66=Μπορείς να βρεις αρχαίες πόλεις κάτω από οροσειρές.	#
-tips.game.67=Όταν περιπλανιέσαι στο Βαθύ σκοτάδι, η ησυχία είναι σημαντική.	#
-tips.game.68=Χρησιμοποίησε ένα μπουκάλι με νερό πάνω σε έναν κύβο χώματος για να πάρεις λάσπη!	#
-tips.game.69=Οι βάτραχοι τρώνε μικρά κυβoπλάσματα.	#
-tips.game.70=Οι βάτραχοι παίρνουν μια παραλλαγή με βάση τη θερμοκρασία της διάπλασης όπου μεγάλωσε ο γυρίνος.	#
-tips.game.71=Μπορείς να συλλέξεις γυρίνους σε κουβάδες.	#
-tips.game.72=Εξερεύνησε οικοδομήματα σε όλο τον κόσμο του Minecraft για να βρεις πρότυπα μεταλλουργίας και να επενδύσεις τα μέρη της πανοπλίας σου.	#
-tips.game.73=Χρειάζεσαι περισσότερα πρότυπα μεταλλουργίας; Προσπάθησε να τα αντιγράψεις.	#
-tips.game.74=Στο αυγό sniffer φαίνεται να αρέσουν οι χορταριασμένοι κύβοι.	#
-tips.game.75=Τα κεφάλια πλασμάτων κάνουν ήχους, δοκίμασέ τα σε κύβους νότας!	#
-tips.game.76=Κάποια άμμος μπορεί να είναι ύποπτη. Χρησιμοποίησε το πινέλο σου πάνω της για να βρεις μερικά καλά πράγματα!	#
-tips.game.77=Δύο παίκτες μπορούν να καβαλήσουν μαζί μια καμήλα.	#
-tips.game.78=Οι καμήλες πηδούν... οριζόντια!	#
-
 beginnerTips.1=Τα περισσότερα τέρατα βγαίνουν μόνο τη νύχτα. Κατά τη διάρκεια της ημέρας είσαι ασφαλής... μάλλον.	#
 beginnerTips.2=Σπάσε κύβους, διάλεξε πόρους. Χρησιμοποίησε το πλέγμα κατασκευής για να φτιάξεις χρήσιμα αντικείμενα. Τώρα κατασκευάζεις!	#
 beginnerTips.3=Έχεις απεριόριστες ζωές, αλλά τα αντικείμενά σου πέφτουν στο έδαφος όταν πεθαίνεις. Βιάσου για να τα μαζέψεις!	#
@@ -10108,6 +10153,7 @@ beginnerTips.9=Τα κρεβάτια είναι φοβερά! Κατασκεύα
 beginnerTips.10=Να προσέχεις όταν κολυμπάς. Αν μείνεις κάτω από το νερό για πολύ ώρα  θα ξεμείνεις από αέρα.	#
 beginnerTips.11=Η λειτουργία επιβίωσης έχει 4 διαφορετικά επίπεδα δυσκολίας - Φιλειρηνική, Εύκολη, Κανονική και Δύσκολη. Ή παίξε Δημιουργική λειτουργία και απόλαυσε ατελείωτους πόρους!	#
 beginnerTips.12=Ο κόσμος του Minecraft προσφέρει ατελείωτες εκπλήξεις. Θα βρεις πολλά διαφορετικά ζώα, φυτά, ακόμα και §f§k§a§b§r §f§k§a§b§r		### please leave "§f§k§a§b§r" unchanged
+
 
 midgameTips.1=Τα Σιδερένια Γκόλεμ θα πολεμήσουν για σένα!	#
 midgameTips.2=Δώσε ένα κόκαλο σε έναν λύκο για να τον εξημερώσεις. Μπορείς, στη συνέχεια, να τον κάνεις να κάτσει ή να σε ακολουθήσει.	#
@@ -10124,10 +10170,10 @@ midgameTips.12=Οι κύβοι που μπορούν να χρησιμοποιη
 midgameTips.13=Πρόσεχε όταν χτίζεις οικοδομήματα κατασκευασμένα από μαλλί στο ύπαιθρο, γιατί οι κεραυνοί από θύελλες μπορούν να βάλουν φωτιά στο μαλλί.	#
 midgameTips.14=Ένας κουβάς λάβας μπορεί να χρησιμοποιηθεί σε ένα καμίνι για να λιώσεις 100 κύβους.	#
 midgameTips.15=Το όργανο που παίχτηκε από έναν κύβο νότας εξαρτάται από το υλικό που βρίσκεται κάτω από αυτό.	#
-midgameTips.16=Αν επιτεθείς σε έναν λύκο θα κάνεις τους κοντινούς λύκους να γίνουν εχθρικοί και να σου επιτεθούν. 	#
+midgameTips.16=Η επίθεση σε έναν λύκο θα κάνει τους κοντινούς λύκους να γίνουν εχθρικοί και να σου επιτεθούν. 	#
 midgameTips.17=Οι λύκοι και τα σιδερένια γκόλεμ δεν θα επιτεθούν σε Creeper.	#
 midgameTips.18=Τα κοτόπουλα κάνουν ένα αυγό κάθε 5 με 10 λεπτά.	#
-midgameTips.19=Ο Οψιδιανός μπορεί να εξορυχθεί μόνο με μια διαμαντένια αξίνα.	#
+midgameTips.19=Ο Οψιδιανός μπορεί να εξορυχθεί με μια διαμαντένια αξίνα.	#
 midgameTips.20=Τα Creeper αποτελούν την ευκολότερη πηγή συγκέντρωσης πυρίτιδας.	#
 midgameTips.21=Οι εξημερωμένοι λύκοι δείχνουν την υγεία τους με τη θέση της ουράς τους. Τάισέ τους κρέας για να τους θεραπεύσεις.	#
 midgameTips.22=Μπορείς να φτιάξεις διαφορετικές χρωματιστές βαφές από μια ποικιλία υλικών, μαγείρεψε κάκτους σε ένα καμίνι για να αποκτήσεις πράσινη βαφή!	#
@@ -10179,7 +10225,7 @@ midgameTips.67=Άπειρα θαύματα, απεριόριστες δυνατ�
 midgameTips.68=Φύτεψε μερικά δενδρύλλια και θα γίνουν δέντρα.	#
 midgameTips.69=Χρησιμοποίησε μια τσάπα για να προετοιμάσεις περιοχές εδάφους για φύτευση.	#
 
-lategameTips.1=Τα Πίγκλιν Ζόμπι δεν θα σου επιτεθούν αν έχεις χρυσή πανοπλία, εκτός αν τα νευριάσεις.	#
+lategameTips.1=Τα Πίγκλιν Ζόμπι δεν θα σου επιτεθούν, εκτός αν τα νευριάσεις.	#
 lategameTips.2=Ρίξε τις πύρινες μπάλες πίσω στο Ghast!	#
 lategameTips.3=Ο κυβόλιθος είναι ανθεκτικός στις πύρινες μπάλες των Ghast, καθιστώντας τον χρήσιμο για τη φύλαξη πυλών.	#
 lategameTips.4=Η μουσική μας είναι από τους C418, Λένα Ράινε και Κούμι Τανιόκα.	#
@@ -10209,6 +10255,12 @@ lategameTips.27=Διορίτης: είτε τον λατρεύεις είτε τ
 
 tips.realms.1=Βγάλε ένα στιγμιότυπο οθόνης χρησιμοποιώντας το Μενού Παιχνιδιού.	#
 tips.realms.2=Ένα Realm είναι πάντα online, εσύ και οι φίλοι σου μπορείτε να παίξετε εδώ όποτε θέλετε.	#
+tips.realms.3=Μείνε ενημερωμένος σχετικά με το τι συμβαίνει στο Realm σου ελέγχοντας τη Ροή Ιστορίας στις Ιστορίες των Realms.	#
+tips.realms.4=Μοιράσου τις σπουδαίες στιγμές σου με τους άλλους παίκτες σε αυτό το Realm προσθέτοντας μια ιστορία στη Ροή Ιστορίας.	#
+tips.realms.5=Ρίξε μια ματιά στο χρονολόγιο στις Ιστορίες των Realms για να μάθεις πότε παίζουν οι άλλοι.	#
+tips.realms.6=Απόκτησε πρόσβαση στις Ιστορίες των Realms από το μενού παιχνιδιού ενώ παίζεις στο Realm.	#
+tips.realms.7=Γνώρισε την κοινότητα του Realm σου στην καρτέλα Μέλη στις Ιστορίες των Realms.	#
+tips.realms.8=Χρησιμοποίησε τις Ιστορίες των Realms για να γίνεις κοινωνικός, να παρακολουθείς την πρόοδο των φίλων σου και να οργανώνεις το παιχνίδι σου.	#
 
 splitscreen.joinPrompt=Συμμετοχή ως παίκτης %s;	#
 splitscreen.unavailable.toastHeader=Η λειτουργία διαιρεμένης οθόνης δεν είναι διαθέσιμη	#
@@ -10418,7 +10470,7 @@ dr.header.previewAppearance=Προεπισκόπηση εμφάνισης	#
 dr.header.colorPicker=Επιλογέας χρώματος	#
 dr.achievement.achievement_locked.not_signed_in=Αυτό το αντικείμενο ξεκλειδώνεται με την ολοκλήρωση ενός επιτεύγματος.	#
 dr.achievement.achievement_locked.signed_in=Αυτό το αντικείμενο ξεκλειδώνεται με την ολοκλήρωση του επιτεύγματος %s.	#
-dr.achievement.achievement_unlocked=Αυτό το στοιχείο ξεκλειδώθηκε με την ολοκλήρωση του επιτεύγματος %s.	#
+dr.achievement.achievement_unlocked=Αυτό το αντικείμενο ξεκλειδώθηκε με την ολοκλήρωση του επιτεύγματος %s.	#
 dr.achievement.challenge_locked=Αυτό το στοιχείο ξεκλειδώνεται με την ολοκλήρωση μιας πρόκλησης από το Minecraft Earth.	#
 dr.achievement.challenge_unlocked=Αυτό το στοιχείο ξεκλειδώθηκε με την ολοκλήρωση μιας πρόκλησης από το Minecraft Earth.	#
 dr.arm_size_label_text=Μέγεθος χεριού	#
@@ -10517,7 +10569,7 @@ dr.marketplace.get_more_skins=Λήψη περισσότερων εμφανίσε
 dr.classic_skins.show_more=Εμφάνιση περισσότερων	#
 
 onlinePlay.notRated=Το παιχνίδι σε σύνδεση δεν έχει αξιολογηθεί	#
-onlinePlay.message=Κατά τη διάρκεια του παιχνιδιού σε σύνδεση μπορεί να εκτεθείς σε μηνύματα συνομιλίας ή άλλους τύπους περιεχομένου χωρίς αξιολόγηση που μπορεί να μην είναι κατάλληλα για όλες τις ηλικίες.	#
+onlinePlay.message=Κατά τη διάρκεια του online παιχνιδιού, μπορεί να δεις μηνύματα συνομιλίας ή περιεχόμενο που προέρχεται από άλλους χρήστες, το οποίο μπορεί να μην είναι κατάλληλο για όλες τις ηλικίες.	#
 onlinePlay.editor.notRated=Το παιχνίδι σε σύνδεση δεν έχει αξιολογηθεί	#
 onlinePlay.editor.message=Κατά τη διάρκεια της επεξεργασίας σε σύνδεση μπορεί να εκτεθείς σε μηνύματα συνομιλίας ή άλλους τύπους περιεχομένου που προέρχεται από χρήστες, τα οποία δεν έχουν αξιολογηθεί και μπορεί να μην είναι κατάλληλα για όλες τις ηλικίες.	#
 onlinePlay.doNotShowAgain=Να μην εμφανιστεί αυτή η οθόνη ξανά	#

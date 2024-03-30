@@ -194,6 +194,7 @@ accessibility.text.equals=Egyenlőségjel	#
 accessibility.text.unsupported=Ismeretlen karakter	#
 
 accessibility.toast=Értesítés		### This is the name of the popup that appears when a player gets a notification for a game invite or achievement unlocked
+accessibility.gametip=Tipp:		### This is the name of the popup that appears when a player is shown a game tip
 
 accessibility.worldTemplates.help=Súgó	#
 
@@ -926,6 +927,15 @@ commands.gamerule.type.nocheatsenabled=A(z) „%1$s” játékszabály csak akko
 commands.gamerule.nopermission=Csak a kiszolgáló tulajdonosa módosíthatja ezt: „%1$s”	#
 commands.gamerule.norule=Nem található a(z) „%1$s” játékszabály	#
 commands.gamerule.success=A(z) %1$s játékszabályt erre frissítetted: %2$s	#
+commands.gametips.description=A játéktippek engedélyezése vagy letiltása ezen az eszközön	#
+commands.gametips.enabled=A játéktippek mostantól engedélyezve vannak	#
+commands.gametips.disabled=A játéktippek mostantól le vannak tiltva	#
+commands.gametips-off.description=A játéktippek letiltása ezen az eszközön	#
+commands.gametips-off.success=A játéktippek mostantól le vannak tiltva	#
+commands.gametips-on.description=A játéktippek engedélyezése ezen az eszközön	#
+commands.gametips-on.success=A játéktippek mostantól engedélyezve vannak	#
+commands.gametips-reset.description=A játéktippek visszaállítása ezen az eszközön	#
+commands.gametips-reset.success=A játéktippek vissza lettek állítva	#
 commands.generic.async.initiated=Elindítottad a(z) „%1$s” parancsot (%2$d. aszinkron lépés)	#
 commands.generic.boolean.invalid=„%1$s” nem igaz vagy hamis	#
 commands.generic.chunk.notFound=A megadott darabka nem található	#
@@ -948,12 +958,15 @@ commands.generic.exception=Ismeretlen hiba lépett fel a parancs végrehajtása 
 commands.generic.invalidAgentType=Típusargumentum alkalmazva a csak Agent kiválasztóra	#
 commands.generic.invalidcontext=A megadott parancstípus környezete érvénytelen	#
 commands.generic.invalidDevice=A megadott parancsot (%s) ez az eszköz nem támogatja	#
+commands.generic.invalidMessage=Érvénytelen üzenethossz	#
 commands.generic.invalidPlayerType=Típusargumentumot alkalmaztál csak játékosra érvényes kiválasztóra	#
 commands.generic.invalidType=Ismeretlen típusargumentum	#
 commands.generic.levelError=A maximális szintnek magasabbnak kell lennie a minimálisnál	#
 commands.generic.malformed.body=A törzs hiányzik vagy helytelenül formázott	#
 commands.generic.malformed.type=Érvénytelen kéréstípus	#
 commands.generic.notimplemented=Nincs implementálva	#
+commands.generic.sourceNotLoaded=A forráskötet nincs betöltve	#
+commands.generic.destinationNotLoaded=A célkötet nincs betöltve	#
 commands.generic.num.invalid=A(z) „%1$s” nem érvényes szám	#
 commands.generic.num.tooBig=A megadott szám (%1$d) túl nagy, legfeljebb %2$d lehet	#
 commands.generic.num.tooSmall=A megadott szám (%1$d) túl kicsi, legalább ennyinek kell lennie: %2$d	#
@@ -1005,6 +1018,8 @@ commands.help.description=Megjeleníti a súgót vagy a parancsok listáját.	#
 commands.help.footer=Tipp: Parancsok begépelésekor használd a <tab> billentyűt a parancsok vagy az argumentumok automatikus kiegészítéséhez	#
 commands.help.header=--- %1$d/%2$d. súgóoldal mutatása (/help <oldalszám>) ---	#
 commands.help.command.aliases=%s (másképp %s):	#
+commands.hud.description=Módosítja a HUD elemeinek láthatóságát.	#
+commands.hud.success=HUD-parancs sikeresen végrehajtva	#
 commands.immutableworld.description=Beállítja a világ nem módosítható állapotát.	#
 commands.immutableworld.info=immutableworld = %s	#
 commands.inputpermission.description=Beállítja, hogy a játékos adatbevitele befolyásolhatja-e a karakterét.	#
@@ -1148,7 +1163,9 @@ commands.recipes.playerDoesNotHaveRecipe=%1$s még nem rendelkezik a(z) %2$s rec
 commands.recipes.notFound=A recept nem található.	#
 commands.recipes.notUnlockable=A recept nem oldható fel a receptkönyvben.	#
 commands.reload.description=Újra betölti az összes függvény- és szkriptfájlt az összes viselkedéscsomagból.	#
+commands.reload.editor.description=Újra betölti az összes függvény- és szkriptfájlt az összes viselkedéscsomagból, de az is beállítható, hogy újraindítsa a klienst az összes erőforrás újbóli betöltéséhez.	#
 commands.reload.success=A rendszer újra betöltötte a függvény- és szkriptfájlokat.	#
+commands.reload.error=Váratlan hiba történt.	#
 commands.replaceitem.description=Készletekben lévő tárgyak lecserélése.	#
 commands.replaceitem.failed=Nem sikerült a(z) %s helyen található %d tárgyat ezzel helyettesíteni: %d * %s	#
 commands.replaceitem.keepFailed=A(z) %s. %d helyet már elfoglalja egy tárgy.	#
@@ -1312,6 +1329,8 @@ commands.spawnpoint.description=Beállítja egy játékos létrehozási pontját
 commands.spawnpoint.success.multiple.specific=%1$s létrehozási pontját erre állítottad: %2$d, %3$d, %4$d	#
 commands.spawnpoint.success.multiple.generic=Beállítottad %1$s létrehozási pontját	#
 commands.spawnpoint.wrongDimension=A teremtődési pontot nem lehet beállítani ebben a dimenzióban	#
+commands.clearrealmevents.description=Törli a világadatok között tárolt összes Realm-eseményt.	#
+commands.clearrealmevents.start=Az összes Realm-esemény törlése	#
 commands.clearspawnpoint.success.single=Eltávolítottad %1$s teremtődési pontját	#
 commands.clearspawnpoint.description=Eltávolítja egy játékos teremtődési pontját.	#
 commands.clearspawnpoint.success.multiple=Eltávolítottad a következő személy teremtődési pontját: %1$s	#
@@ -1877,6 +1896,8 @@ createWorldScreen.experimentalUpdateAnnounced2023=1.21-es frissítés	#
 createWorldScreen.experimentalUpdateAnnounced2023Description=Új funkciók és tartalmak a Minecraft 1.21-es verziójában	#
 createWorldScreen.experimentalVillagerTradesRebalance=A falusiakkal való kereskedés egyensúlyának állítása	#
 createWorldScreen.experimentalVillagerTradesRebalanceDescription=Frissített kereskedés falusiaknak az egyensúly helyreállítása céljából	#
+createWorldScreen.experimentalArmadillo=Tatu és Farkaspáncél	#
+createWorldScreen.experimentalArmadilloDescription=Ismerd meg a Tatut, és szereld fel a farkasod az új Farkaspáncéllal!	#
 createWorldScreen.worldPreferences=Világ beállításai	#
 createWorldScreen.startWithMap=Kezdő térkép	#
 createWorldScreen.defaultName=Saját világ	#
@@ -2083,7 +2104,7 @@ realmsCreateScreen.offerNotAvailable.content=Eszközöd elveszítette a kapcsola
 realmsCreateScreen.extendRealms.content=A maximális ideig hosszabbítottad meg a Realm előfizetését, ezért most nem lehet hozzáadni ezt az időt. Próbáld újra később.	#
 realmsCreateScreen.twoUsers=2 játékos	#
 realmsCreateScreen.tenUsers=10 játékos	#
-realmsCreateScreen.viewTOS=A Minecraft Realms használati feltételeinek megtekintéséhez látogass el a https://aka.ms/minecraftrealmsterms oldalra bármilyen webböngészőben.	#
+realmsCreateScreen.viewTOS=A Minecraft Realms használati feltételeinek megtekintéséhez látogass el a https://www.minecraft.net/eula oldalra bármilyen webböngészőben.	#
 realmsCreateScreen.viewPrivacyPolicyText=A Minecraft Realms adatvédelmi nyilatkozatának megtekintéséhez keresd fel a https://aka.ms/mcprivacy oldalt bármelyik böngészőben.	#
 realmsCreateScreen.waitingPurchase=A vásárlás folyamatban van, kis türelmet...	#
 realmsCreateScreen.paymentFailed.title=Fizetési szolgáltatás	#
@@ -2151,6 +2172,11 @@ realmsPlusUpgradeNotice.title=Üdvözlünk a Realms Plusban!	#
 realmsPlusUpgradeNotice.body=Realms-előfizetésedet Realms Plus-előfizetésre frissítettük. Mostantól több mint 150 tartalomcsomaghoz férsz hozzá a Piactéren további költségek nélkül. Akár 10 játékos is játszhat egyszerre, és mindannyian hozzáférhetnek Realmed előfizetői tartalmaihoz – ingyenesen!	#
 realmsPlusUpgradeNotice.continue=Folytatás	#
 realmsPlusUpgradeNotice.viewpacks=Realms Plus csomagjaid	#
+
+csbCreateScreen.popupTitle=Marketplace Pass		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.viewTOS=A Marketplace Pass használati feltételeinek megtekintéséhez látogass el a https://aka.ms/MinecraftEULA oldalra bármilyen webböngészőben.		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.viewPrivacyPolicyText=A Marketplace Pass adatvédelmi nyilatkozatának megtekintéséhez keresd fel a https://aka.ms/mcprivacy oldalt bármilyen webböngészőben.		#### {StrContains="Marketplace Pass"}
+csbCreateScreen.goBack=Visszalépés	#
 
 csbCreateScreen.termsAndConditionsAgree=Elfogad	#
 csbCreateScreen.termsAndConditionsHeader=Használati feltételek	#
@@ -2340,7 +2366,7 @@ realmsSettingsScreen.xboxOneStoreDisplayName=Xbox Áruház	#
 realmsSettingsScreen.amazonStoreDisplayName=Amazon Appstore	#
 realmsSettingsScreen.oculusStoreDisplayName=Oculus Store	#
 realmsSettingsScreen.berwickStoreDisplayName=„PlayStation Store”	#
-realmsSettingsScreen.PS4StoreDisplayName=„PlayStation Store”		#### CertRequirement: ["PlayStation Store"]
+realmsSettingsScreen.SonyStoreDisplayName=„PlayStation Store”		#### CertRequirement: ["PlayStation Store"]
 realmsSettingsScreen.unknownStoreDisplayName=ismeretlen áruház	#
 realmsSettingsScreen.extendingRealm=Realm meghosszabbítása...	#
 realmsSettingsScreen.offerError.title=A vásárlás folyamatban van	#
@@ -2431,6 +2457,28 @@ date.short_november=nov	#
 date.short_december=dec	#
 date.formatted=%s. %d. %d.	#
 date.formatted_alt=%d %s %d	#
+date.full_january=Január	#
+date.full_february=Február	#
+date.full_march=Március	#
+date.full_april=Április	#
+date.full_may=máj	#
+date.full_june=Június	#
+date.full_july=Július	#
+date.full_august=Augusztus	#
+date.full_september=Szeptember	#
+date.full_october=Október	#
+date.full_november=November	#
+date.full_december=December	#
+
+date.daysAbbreviated3Char=%s n		### It needs to be abbreviated with no more than 3 characters
+date.hoursAbbreviated3Char=%s ó		### It needs to be abbreviated with no more than 3 characters
+date.minutesAbbreviated3Char=%s p		### It needs to be abbreviated with no more than 3 characters
+date.secondsAbbreviated3Char=%s mp		### It needs to be abbreviated with no more than 3 characters
+date.daysAbbreviated1Char=%s n		### It needs to be abbreviated with no more than 1 characters
+date.hoursAbbreviated1Char=%s ó		### It needs to be abbreviated with no more than 1 characters
+date.minutesAbbreviated1Char=%s p		### It needs to be abbreviated with no more than 1 characters
+date.secondsAbbreviated1Char=%s mp		### It needs to be abbreviated with no more than 1 characters
+date.timeLeft=%s van hátra	#
 
 dayOneExperience.carousel.title=Üdvözöl az új Minecraft!	#
 dayOneExperience.carousel.welcome_text=A Minecraft új verziójával számos nagyszerű új tartalom érkezik! Ugorj be a Piactérre, hozz létre egy realmet, és játssz keresztplatformos barátaiddal!	#
@@ -2533,6 +2581,7 @@ deathScreen.quit=Főmenü	#
 deathScreen.quit.confirm=Biztosan kilépsz?	#
 deathScreen.quit.confirmToMainMenuWarning=Biztosan kilépsz a játékból a főmenübe?	#
 deathScreen.quit.confirmToMainMenuTitleWarning=Kilépsz a főmenübe?	#
+deathScreen.quit.eduCloud.confirmLeaveWarning=Biztosan elmented a játékot és kilépsz?%sA világod a felhőbe is fel lesz töltve!	#
 deathScreen.quit.secondaryClient=Ment és kilép	#
 deathScreen.quit.secondaryClient.confirmLeaveWarning=Biztosan mented a játékot, majd kilépsz?	#
 deathScreen.quit.secondaryClient.confirmLeaveTitleWarning=Ment és kilép	#
@@ -2915,6 +2964,7 @@ exports.share.file=%s megosztása	#
 exports.suspendWarning.client.content=Figyelem: Ha folytatod, lekapcsolódsz erről a többjátékos játékról.	#
 exports.suspendWarning.host.content=Figyelem: Ha folytatod, minden játékos számára véget ér ez a többjátékos játék.	#
 exports.suspendWarning.title=Figyelmeztetés	#
+exports.eduCloud.suspendWarning.host.content=Biztosan elmented a játékot és kilépsz? %1Figyelem: ha kilépsz, akkor a többjátékos játék az összes játékos számára véget ér. %1A világod a felhőbe is fel lesz töltve!	#
 exports.fileError.title=A fájl elmentése sikertelen	#
 exports.fileError.body=A merevlemez írásvédett vagy nincs elegendő szabad hely, esetleg a fájl épp használatban van. Bizonyosodj meg róla, hogy a fájl nincs megnyitva, majd próbáld meg ismét.	#
 
@@ -2960,6 +3010,14 @@ feed.daysAgo=%d napja	#
 feed.hoursAgo=%d órája	#
 feed.minutesAgo=%d perce	#
 feed.now=Most	#
+feed.narrationDayAgo=Közzétéve egy napja		#### This social media post was posted one day ago
+feed.narrationDaysAgo=Közzétéve %d napja		#### This social media post was posted x days ago
+feed.narrationHourAgo=Közzétéve egy órája		#### This social media post was posted one hour ago
+feed.narrationHoursAgo=Közzétéve %d órája		#### This social media post was posted x hours ago
+feed.narrationMinuteAgo=Közzétéve egy perce		#### This social media post was posted one minute ago
+feed.narrationMinutesAgo=Közzétéve %d perce		#### This social media post was posted x minutes ago
+feed.narrationNow=Közzétéve az előbb		#### This social media post was posted just now
+feed.narrationDate=Közzétéve ekkor: %s %d, %d		#### This social media post was posted on 'month day, year' ex. Posted on March 12, 2023
 feed.whatup=Mi újság?	#
 feed.upload=A képernyőkép feltöltése folyamatban van...	#
 feed.manage=Hírcsatorna kezelése	#
@@ -3012,11 +3070,11 @@ gameMode.hardcore=Hardcore mód!	#
 gameMode.spectator=Nézői mód	#
 gameMode.survival=Túlélő mód	#
 
-gameTip.cameraMovement.mouse=Nézz körül az egér használatával	#
+gameTip.cameraMovement.mouse=Nézz körül[LINEBREAK]Forgáshoz használd az egeret		#### {StrContains='LINEBREAK'}
 gameTip.cameraMovement.touch=Érintsd meg és húzd el a képernyőt a körülnézéshez	#
 gameTip.cameraMovement.controller=A(z) :tip_right_stick: segítségével nézhetsz körül	#
 
-gameTip.playerMovement.mouse=Az :_input_key.forward:, :_input_key.left:, :_input_key.back:, :_input_key.right: billentyűkkel mozoghatsz, a szóközzel pedig ugorhatsz	#
+gameTip.playerMovement.mouse=A(z) :_input_key.forward:, :_input_key.left:, :_input_key.back:, :_input_key.right: billentyűkkel mozoghatsz	#
 gameTip.playerMovement.touch=Mozogj a joystick használatával	#
 gameTip.playerMovement.touch.classic=Mozogj a joystick használatával	#
 gameTip.playerMovement.controller=A(z) :tip_left_stick: segítségével mozoghatsz	#
@@ -3029,20 +3087,27 @@ gameTip.breakBlock.mouse=A blokkok összetöréséhez kattints a bal egérgombba
 gameTip.breakBlock.touch=Koppints, és tartsd lenyomva a blokkok összetöréséhez	#
 gameTip.breakBlock.touch.classic=Koppints, és tartsd lenyomva a blokkok összetöréséhez	#
 gameTip.breakBlock.controller=Koppints, és tartsd lenyomva a blokkok összetöréséhez	#
+gameTip.breakBlock.touch.crosshair=Koppints, és tartsd lenyomva a :tip_virtual_button_action_attack_or_destroy:[LINEBREAK]gombot a blokkok összetöréséhez 	#### {StrContains='LINEBREAK'}
 
-gameTip.placeBlock.mouse=Kattints a blokk elhelyezéséhez	#
+gameTip.placeBlock.mouse=Kattints a jobb gombbal a blokk elhelyezéséhez	#
 gameTip.placeBlock.touch=Koppints a blokk elhelyezéséhez	#
 gameTip.placeBlock.controller=Kattints a talajra a blokk elhelyezéséhez	#
+gameTip.placeBlock.touch.crosshair=Koppints a :tip_virtual_button_action_build_or_use: gombra a blokk elhelyezéséhez	#
 
-gameTip.openInventory.mouse=Nyisd meg a leltáradat. Nyomd meg a(z) :_input_key.inventory: billentyűt	#
-gameTip.openInventory.touch=Nyisd meg a leltáradat a barkácsolási receptek megtekintéséhez	#
-gameTip.openInventory.controller=A leltár kinyitásához nyomd meg a(z) :_input_key.inventory: billentyűt	#
+gameTip.openInventorySurvival.mouse=Nyisd meg a leltáradat[LINEBREAK]Nyomd meg a(z) :_input_key.inventory: billentyűt		#### {StrContains='LINEBREAK'}
+gameTip.openInventorySurvival.touch=Nyisd meg a leltáradat a barkácsolási receptek megtekintéséhez	#
+gameTip.openInventorySurvival.controller=A leltár kinyitásához nyomd meg a(z) :_input_key.inventory: billentyűt	#
+
+gameTip.openInventoryCreative.mouse=Nyisd meg a leltáradat[LINEBREAK]Nyomd meg a(z) :_input_key.inventory: billentyűt		#### {StrContains='LINEBREAK'}
+gameTip.openInventoryCreative.touch=Nyisd meg a leltáradat az építőblokkok megtekintéséhez	#
+gameTip.openInventoryCreative.controller=A leltár kinyitásához nyomd meg a(z) :_input_key.inventory: billentyűt	#
+
 
 gameTip.sneak.mouse=Most lopakodsz! Ilyenkor nem tudsz leesni	#
 gameTip.sneak.touch=Most lopakodsz, tehát nem zuhanhatsz le	#
 gameTip.sneak.controller=Most lopakodsz, tehát nem zuhanhatsz le	#
 
-gameTip.placeCraftingTable.mouse=Helyezd el a barkácsasztalod. Tartsd meg, és kattints az elhelyezéshez	#
+gameTip.placeCraftingTable.mouse=Helyezd el a barkácsasztalod[LINEBREAK]Tartsd meg, és kattints az elhelyezéshez		#### {StrContains='LINEBREAK'}
 gameTip.placeCraftingTable.touch=A barkácsasztal elhelyezéséhez koppints a talajra	#
 gameTip.placeCraftingTable.controller=A barkácsasztal elhelyezéséhez tartsd lenyomva, majd koppints a talajra	#
 
@@ -3153,6 +3218,8 @@ gui.editor.copyProject.failedMessage=Nem tudtunk másolatot készíteni erről a
 
 gui.edu.exitGameWarningCaption=Minecraft Education	### Use Minecraft 教育版 in zh_CN translation
 gui.edu.exitGameWarningMessage=Kilépés a Minecraft Education?		### Use 离开 Minecraft 教育版? in zh_CN translation
+gui.edu.exitGameWarningCaptionPreview=Minecraft Education előzetes verzió	#
+gui.edu.exitGameWarningMessagePreview=Kilépsz a Minecraft Education előzetes verziójából?	#
 
 updateScreen.update=Frissítés	#
 updateScreen.updateRequired=Frissítés szükséges	#
@@ -3256,7 +3323,7 @@ howtoplay.beacons=Jelzőfények	#
 howtoplay.beacons.text.1=Az aktív jelzőfények erős fénysugarat vetítenek az égbe.	#
 howtoplay.beacons.text.2=Üvegből, obszidiánból és alvilági csillagokból barkácsolhatod őket (alvilági csillagra a Sorvasztó legyőzésével tehetsz szert).	#
 howtoplay.beacons.header.1=Építkezés	#
-howtoplay.beacons.text.3=A jelzőfényeket úgy kell elhelyezni, hogy akadálymentesen vetíthessenek fényt az égre, és vas, arany, smaragd vagy gyémánt blokkokból álló piramison kell lenniük.	#
+howtoplay.beacons.text.3=A jelzőfényeknek vas-, arany-, smaragd-, gyémánt- vagy alvilágércblokkokból álló piramison kell lenniük úgy, hogy akadálymentesen vetíthessenek fényt az égre.	#
 howtoplay.beacons.text.4=A jelzőfény erejére nincs hatással, hogy a jelzőfény milyen anyagon áll.	#
 howtoplay.beacons.header.2=Használat	#
 howtoplay.beacons.text.5=A Jelzőfény menüben kiválaszthatsz egy elsődleges képességet a jelzőfény számára. Minél több rétegből áll a piramis, annál több képességgel rendelkezhet a jelzőfény.	#
@@ -3355,7 +3422,7 @@ howtoplay.commands.text.1=A parancsok a Csevegőből hajthatók végre. Írd be 
 howtoplay.commands.text.2=Rengeteg parancs van, és nagyszerű dolgokat vihetsz véghez velük. Számos forrás segíti, hogy mindent megtudj, amire szükséged van.	#
 
 howtoplay.conduits=Vízenergiablokkok	#
-howtoplay.conduits.text.1=Egy aktív vízenergiablokk áramot szolgáltat, ha víz alatt tartózkodsz.	#
+howtoplay.conduits.text.1=Az aktív vízenergiablokk erővel ruház fel, ha víz alatt tartózkodsz, valamint amikor esik.	#
 howtoplay.conduits.text.2=A vízenergiablokk elkészítéséhez nautilusz csigaházak és egy A tenger szíve tárgy szükséges. A vízenergiablokk prizmarinból és tengeri lámpásokból meríthet áramot.	#
 howtoplay.conduits.header.1=Építkezés	#
 howtoplay.conduits.text.3=Aktiválás után a vízenergiablokk vízenergiablokk-energiát biztosít minden tárgynak a környezetében.	#
@@ -3369,6 +3436,7 @@ howtoplay.craftingATool.text.2.gamepad=Szerszám készítéséhez nyisd meg a §
 howtoplay.craftingATool.text.2.touch=Szerszám készítéséhez nyisd meg a §ebarkácsasztalt§f:crafting_table: úgy, hogy odasétálsz hozzá, és rákoppintasz. A legtöbb szerszám egyszerű változatát elkészítheted két rúd és néhány deszka használatával a §ereceptkönyv§f utasításai alapján.	#
 
 howtoplay.worldBuilder=Világépítő	#
+howtoplay.worldBuilder.title=Útmutató: Világépítő	#
 howtoplay.worldBuilder.text.1=Egyes Minecraft Education blokkok vagy tárgyak elhelyezéséhez vagy használatához a játékosnak rendelkeznie kell a „Világépítő” különleges képességgel.	#
 howtoplay.worldBuilder.text.2=Aktivált csalásokkal a játékgazda engedélyezheti vagy letilthatja a Világépítő képességet bármelyik játékosnál a világán.	#
 howtoplay.worldBuilder.text.3=Ha Világépítő képességet akarsz adni minden játékosnak a világon, futtasd az alábbi parancsot:	#
@@ -3380,6 +3448,7 @@ howtoplay.worldBuilder.text.8=Saját Világépítő képességed lekérdezéséh
 howtoplay.worldBuilder.text.9=/ability @p worldbuilder	#
 
 howtoplay.permissionBlocks=Engedélyblokk	#
+howtoplay.permissionBlocks.title=Útmutató: Engedélyblokkok	#
 howtoplay.permissionBlocks.text.1=A Minecraft Education számos különleges blokkot vonultat fel, amelyek megkönnyítik az oktatóknak leckék alkotását és alkalmazását. Csak Világépítő képességgel rendelkező játékosok tehetik le vagy semmisíthetik meg ezeket a blokkokat. Csak Világépítő képességgel nem rendelkező játékosokra vonatkozik ezeknek a blokkoknak a korlátozása.	#
 howtoplay.permissionBlocks.title.1=Engedély/tiltás	#
 howtoplay.permissionBlocks.text.2=Az engedély- és tiltásblokkok szabályozzák, hol építhetnek a játékosok a világban.	#
@@ -3409,19 +3478,23 @@ howtoplay.playingTogether.realms=Próbáld ki a Realmset	#
 howtoplay.playingTogether.signIn=Jelentkezz be a Realms kipróbálásához	#
 
 howtoplay.chalkboard=Palatáblák	#
+howtoplay.chalkboard.title=Útmutató: Táblák	#
 howtoplay.chalkboard.text.1=A táblák szövegek megjelenítésére használatosak a világban. A táblák több szöveget jelenítenek meg, mint a jelzőtáblák, lehelyezésük után szerkeszthetők, és három méretben érhetőek el: kis lap, közepes plakát és nagy tábla. A lezárás lehetővé teszi, hogy megakadályozd a nem Világépítők számára, hogy megsemmisítsék vagy szerkesszék a táblákat. Nyomd meg az :_input_key.use: gombot egy létező táblán annak szerkesztéséhez.	#
 howtoplay.chalkboard.text.1.touch=A táblák szövegek megjelenítésére használatosak a világban. A táblák több szöveget jelenítenek meg, mint a jelzőtáblák, lehelyezésük után szerkeszthetők, és három méretben érhetőek el: kis lap, közepes plakát és nagy tábla. A lezárás lehetővé teszi, hogy megakadályozd a nem Világépítők számára, hogy megsemmisítsék vagy szerkesszék a táblákat. Koppints egy létező táblára a szerkesztéséhez.	#
 
 howtoplay.chemistry=Vegyészet	#
+howtoplay.chemistry.title=Útmutató: Vegyészet	#
 howtoplay.chemistry.text.1=A tanulók szimulálhatják a valódi kémiát a Vegyészet felszerelésblokkok használatával. Építsd meg a 118 különböző elem bármelyikét a csúszkák beállításával az Elemszerkesztőben, vagy vizsgáld meg az elemek felépítését az Elemszerkesztőbe helyezve őket. Vegyítsd az elemeket a Vegyületszerkesztőben, hogy kémiai vegyületeket kapj. Tegyél elemeket és vegyületeket a Laborasztalra, hogy Minecraft tárgyakat hozz létre. Bontsd szét a blokkokat alkotóelemeikre az Anyagbontóval.	#
 howtoplay.chemistry.text.2=Töltsd le a Kémiai hírmondót a Minecraft Education weboldalról átfogó útmutatóért a Minecraftban kipróbálható vegyészethez.	#
 
 howtoplay.npc=Nem játékos karakterek	#
+howtoplay.npc.title=Útmutató: Nem játékos karakterek	#
 howtoplay.npc.text.1=Az „NJK”-k nem-játékos karakterek, akik további információt, tippeket vagy utasításokat nyújthatnak a leckéhez.	#
 howtoplay.npc.text.2=NJK-kat csak Világépítők helyezhetnek el, törölhetnek, szerkeszthetnek vagy nevezhetnek át. Az NJK-k végrehajthatnak parancsokat és weboldalakra mutató hivatkozásokat. A parancsokat az NJK párbeszédablakában lehet gombokhoz rendelni; a weboldalak hivatkozásának mindig van gombja.	#
 howtoplay.npc.text.3=Az NJK-knak különféle választható felületei vannak, és nem képesek mozogni.	#
 
 howtoplay.camera=Kamera	#
+howtoplay.camera.title=Útmutató: Kamera	#
 howtoplay.camera.text.1=A kamera lehetővé teszi a játékosoknak, hogy képeket készítsenek a világban.	#
 howtoplay.camera.text.2=Fénykép készítéséhez a nézőpontodból nyomd meg a(z) :_input_key.use: gombot.	#
 howtoplay.camera.text.2.touch=Fénykép készítéséhez a nézőpontodból koppints hosszan, majd engedd fel.	#
@@ -3430,14 +3503,17 @@ howtoplay.camera.text.3.touch=Szelfi készítéséhez tedd le a kamerát, és ny
 howtoplay.camera.text.4=A képeket megnézheted a Portfólióban, vagy beteheted a Könyv és tollba.	#
 
 howtoplay.portfolio=Portfólió	#
+howtoplay.portfolio.title=Útmutató: Portfólió	#
 howtoplay.portfolio.text.1=Az általad készített fényképek a Portfólióban jelennek meg. Nyomd meg a :_input_key.use: gombot a Portfólió megtekintéséhez. A Portfólió megnyitásakor képaláírást adhatsz a fényképeidhez, törölheted azokat, vagy exportálhatod őket képsorozatként.	#
 howtoplay.portfolio.text.1.touch=Az általad készített fényképek a Portfólióban jelennek meg. Koppints rá és tartsd nyomva a Portfólió megtekintéséhez. A Portfólió megnyitásakor képaláírást adhatsz a fényképeidhez, törölheted azokat, vagy exportálhatod őket PDF-fájlba.	#
 
 howtoplay.classroomMode=Oktatási mód	#
+howtoplay.classroomMode.title=Útmutató: Oktatási mód	#
 howtoplay.classroomMode.text.1=Az Oktatási mód egy külső alkalmazás, amely olyan funkciókat kínál az oktatók számára, amelyekkel interakcióba léphetnek a diákokkal. Az Oktatási módot a Minecraft Education weboldalról töltheted le.	#
 howtoplay.classroomMode.text.2=Egy világ játékgazdájaként a /classroommode paranccsal indítsd el az Oktatási mód alkalmazást, és kapcsold össze a Minecraft Educationnel.	#
 
 howtoplay.codeBuilder=Code Builder	#
+howtoplay.codeBuilder.title=Útmutató: Code Builder	#
 howtoplay.codeBuilder.text.1=A Code Builder lehetővé teszi, hogy a játékosok kód írásával felfedezzenek, alkossanak és játsszanak Minecraftban, a megszokott learn-to-code platformokon.	#
 howtoplay.codeBuilder.text.2=Indítsd el a Code Buildert a(z) :_input_key.codeBuilder: gomb megnyomásával vagy a /code parancs használatával.	#
 howtoplay.codeBuilder.text.2.touch=Indítsd el a Code Buildert a(z) :code_builder_button: gombra koppintva vagy a /code parancs használatával.	#
@@ -3724,9 +3800,10 @@ howtoplay.movingAround.text.3b.windowsmr_controller=Nyomd meg a(z) :windowsmr_ri
 howtoplay.gatheringResources=Erőforrások összegyűjtése	#
 howtoplay.gatheringResources.title=Útmutató a játékhoz: Erőforrások összegyűjtése	#
 howtoplay.gatheringResources.text.1=A világ tele van erőforrásokkal, például §eépítőblokkokkal§f, §ebarkácsoláshoz való anyagokkal§f és §eétellel§f.	#
-howtoplay.gatheringResources.text.2.nottouch=A legtöbb erőforrást, például a földet, a fát vagy a tököket kézzel is begyűjtheted. Célozz a képernyő közepén lévő célkereszttel a blokkra, majd tartsd nyomva a(z) :_input_key.attack: billentyűt, amíg a blokk szét nem esik – ezt nevezzük §eblokktörésnek§f.	#
-howtoplay.gatheringResources.text.2.touch=A legtöbb erőforrást, például a földet, a fát vagy a tököket kézzel is begyűjtheted. Egyszerűen csak menj oda hozzájuk, majd koppints a képernyőre, és tartsd nyomva, amíg szét nem esnek – ezt nevezzük §eblokktörésnek§f.	#
-howtoplay.gatheringResources.text.2.touch.joystick_crosshair=A legtöbb erőforrást, például a földet, a fát vagy a tököket kézzel is begyűjtheted. Célozz a képernyő közepén lévő célkereszttel a blokkra, majd érintsd meg a támadás/megsemmisítés gombot :tip_virtual_button_action_attack_or_destroy:, és tartsd rajta az ujjadat, amíg a blokk szét nem esik – ezt nevezzük §eblokktörésnek§f.	#
+howtoplay.gatheringResources.text.2.nottouch=Puszta kézzel §eszéttörheted a blokkokat§f, hogy olyan erőforrásokhoz juthass, mint a föld vagy a fa. Célozz meg egy blokkot, majd §enyomd meg és tartsd nyomva§f a következőt: :_input_key.attack:, hogy a blokk széttörjön, és hozzájuthass az erőforrásokhoz. 	#
+howtoplay.gatheringResources.text.2.touch=Puszta kézzel §eszéttörheted a blokkokat§f, hogy olyan erőforrásokhoz juthass, mint a föld vagy a fa. §eÉrintsd meg és tartsd nyomva§f a blokkot, hogy széttörjön, és hozzájuthass az erőforrásokhoz.	#
+howtoplay.gatheringResources.text.2.touch.joystick_crosshair=Puszta kézzel §eszéttörheted a blokkokat§f, hogy olyan erőforrásokhoz juthass, mint a föld vagy a fa. Célozz meg egy blokkot, majd §eérintsd meg és tartsd nyomva§f a következőt: :tip_virtual_button_action_attack_or_destroy:, hogy a blokk széttörjön, és hozzájuthass az erőforrásokhoz. 	#
+howtoplay.gatheringResources.text.2.pc=Puszta kézzel §eszéttörheted a blokkokat§f, hogy olyan erőforrásokhoz juthass, mint a föld vagy a fa. Célozz meg egy blokkot, majd §ekattintás után tartsd nyomva§f a következőt: :_input_key.attack:, hogy a blokk széttörjön, és hozzájuthass az erőforrásokhoz. 	#
 howtoplay.gatheringResources.text.3=A kieső erőforrások összegyűjtéséhez haladj át a lebegő ikonokon.	#
 
 howtoplay.selectingItems=Tárgyak kiválasztása	#
@@ -3965,7 +4042,7 @@ howtoplay.yourFirstCraft.text.3.keyboard=Csak húzd át a szép új deszkáidat 
 howtoplay.yourFirstCraft.text.3.gamepad=Csak válaszd ki a szép új deszkáidat, és átkerülnek az eszköztáradra. Most már elhelyezheted őket a világban!	#
 howtoplay.yourFirstCraft.header.2=2. Barkácsrecept	#
 howtoplay.yourFirstCraft.text.4=Egyes tárgyak elkészítéséhez a megfelelő alakzatban kell elhelyezned a hozzávalókat – ezt nevezzük §ereceptnek§f.	#
-howtoplay.yourFirstCraft.text.5=Helyezz el két deszkát egymás fölé, hogy létrehozz egy rudat. Sok hasznát veheted egy rúdnak!	#
+howtoplay.yourFirstCraft.text.5=Helyezz el két deszkát egymás fölé, hogy rudat hozz létre. Sok hasznát veheted egy rúdnak!	#
 
 immersive_reader.book_page_header=%1 / %2. oldal	#
 immersive_reader.portfolio_page_header= %1. oldal	#
@@ -3987,6 +4064,8 @@ level.editor.import.success=A világ importálása sikeresen befejeződött	#
 level.editor.export.failed=A projekt exportálása nem sikerült	#
 level.editor.import.failed=A projekt importálása nem sikerült	#
 level.editor.import.failed.incompatibleEdition=A világ importálása sikertelen: Nem támogatott fájlformátum	#
+
+inbox.invite.title=Realms-meghívó	#
 
 invite.clear=Kijelölés törlése	#
 invite.send=%d meghívó elküldése	#
@@ -4797,6 +4876,7 @@ item.cake.name=Torta	#
 item.camera.name=Kamera	#
 item.canBreak=Eltörhet:	#
 item.canPlace=Letehető erre:	#
+item.customProperties=Egyedi tulajdonságokkal rendelkezik	#
 item.itemLock.cantDrop=:hollow_star: A nem eldobható tárgyakat nem lehet:	#
 item.itemLock.cantMove=:solid_star: A nem áthelyezhető tárgyakat nem lehet:	#
 item.itemLock.hoverText.cantBe.moved=áthelyezve	#
@@ -4992,84 +5072,84 @@ item.hopper_minecart.name=Tölcséres csille	#
 item.tnt_minecart.name=Csille dinamittal	#
 item.pitcher_pod.name=Kancsókapszula	#
 item.torchflower_seeds.name=Tűzvirágmagok	#
-item.spawn_egg.entity.agent.name=Agent újrateremtése	#
-item.spawn_egg.entity.axolotl.name=Axolotl idézése	#
-item.spawn_egg.entity.bee.name=Méh idézése	#
-item.spawn_egg.entity.hoglin.name=Hoglin idézése	#
-item.spawn_egg.entity.cat.name=Macska idézése	#
-item.spawn_egg.entity.chicken.name=Csirke idézése	#
-item.spawn_egg.entity.cow.name=Tehén idézése	#
-item.spawn_egg.entity.cod.name=Tőkehal idézése	#
-item.spawn_egg.entity.ender_dragon.name=Végzetsárkány idézése	#
-item.spawn_egg.entity.goat.name=Kecske idézése	#
-item.spawn_egg.entity.pufferfish.name=Gömbhal idézése	#
-item.spawn_egg.entity.salmon.name=Lazac idézése	#
-item.spawn_egg.entity.tropicalfish.name=Trópusi hal idézése	#
-item.spawn_egg.entity.pig.name=Malac idézése	#
-item.spawn_egg.entity.sheep.name=Juh idézése	#
-item.spawn_egg.entity.npc.name=NPC idézése	#
+item.spawn_egg.entity.agent.name=Agent-idéző tojás	#
+item.spawn_egg.entity.axolotl.name=Axolotlidéző tojás	#
+item.spawn_egg.entity.bee.name=Méhidéző tojás	#
+item.spawn_egg.entity.hoglin.name=Hoglinidéző tojás	#
+item.spawn_egg.entity.cat.name=Macskaidéző tojás	#
+item.spawn_egg.entity.chicken.name=Csirkeidéző tojás	#
+item.spawn_egg.entity.cow.name=Tehénidéző tojás	#
+item.spawn_egg.entity.cod.name=Tőkehalidéző tojás	#
+item.spawn_egg.entity.ender_dragon.name=Végzetsárkány-idéző tojás	#
+item.spawn_egg.entity.goat.name=Kecskeidéző tojás	#
+item.spawn_egg.entity.pufferfish.name=Gömbhalidéző tojás	#
+item.spawn_egg.entity.salmon.name=Lazacidéző tojás	#
+item.spawn_egg.entity.tropicalfish.name=Trópusihal-idéző tojás	#
+item.spawn_egg.entity.pig.name=Malacidéző tojás	#
+item.spawn_egg.entity.sheep.name=Juhidéző tojás	#
+item.spawn_egg.entity.npc.name=NJK-idéző tojás	#
 item.spawn_egg.entity.npc.failed=Egy NJK idézéséhez Kreatív + Operátor szükséges	#
-item.spawn_egg.entity.wolf.name=Farkas idézése	#
-item.spawn_egg.entity.villager.name=Falusi idézése	#
-item.spawn_egg.entity.villager_v2.name=Falusi idézése	#
-item.spawn_egg.entity.vindicator.name=Bosszúálló idézése	#
-item.spawn_egg.entity.mooshroom.name=Múúmba idézése	#
-item.spawn_egg.entity.squid.name=Tintahal idézése	#
-item.spawn_egg.entity.glow_squid.name=Világító tintahal idézése	#
-item.spawn_egg.entity.rabbit.name=Nyúl idézése	#
-item.spawn_egg.entity.bat.name=Denevér idézése	#
-item.spawn_egg.entity.ravager.name=Romboló idézése	#
-item.spawn_egg.entity.iron_golem.name=Vasgólem idézése	#
-item.spawn_egg.entity.snow_golem.name=Hógólem idézése	#
-item.spawn_egg.entity.ocelot.name=Ocelot idézése	#
-item.spawn_egg.entity.parrot.name=Papagáj idézése	#
-item.spawn_egg.entity.horse.name=Ló idézése	#
-item.spawn_egg.entity.llama.name=Láma idézése	#
-item.spawn_egg.entity.trader_llama.name=Kereskedőláma idézése	#
-item.spawn_egg.entity.polar_bear.name=Jegesmedve idézése	#
-item.spawn_egg.entity.donkey.name=Szamár idézése	#
-item.spawn_egg.entity.mule.name=Öszvér idézése	#
-item.spawn_egg.entity.skeleton_horse.name=Csontváz ló idézése	#
-item.spawn_egg.entity.zombie_horse.name=Zombi ló idézése	#
-item.spawn_egg.entity.zombie.name=Zombi idézése	#
-item.spawn_egg.entity.drowned.name=Tengeri zombi idézése	#
-item.spawn_egg.entity.creeper.name=Creeper idézése	#
-item.spawn_egg.entity.skeleton.name=Csontváz idézése	#
-item.spawn_egg.entity.spider.name=Pók idézése	#
-item.spawn_egg.entity.zombie_pigman.name=Zombifikálódott piglin idézése	#
-item.spawn_egg.entity.strider.name=Lépegető idézése	#
-item.spawn_egg.entity.slime.name=Nyálka idézése	#
-item.spawn_egg.entity.enderman.name=Bevégző idézése	#
-item.spawn_egg.entity.silverfish.name=Ezüstmoly idézése	#
-item.spawn_egg.entity.cave_spider.name=Barlangi pók idézése	#
-item.spawn_egg.entity.ghast.name=Szellem idézése	#
-item.spawn_egg.entity.magma_cube.name=Magmakocka idézése	#
-item.spawn_egg.entity.blaze.name=Őrláng idézése	#
-item.spawn_egg.entity.zombie_villager.name=Zombi falusi idézése	#
-item.spawn_egg.entity.zombie_villager_v2.name=Zombi falusi idézése	#
-item.spawn_egg.entity.witch.name=Boszorkány idézése	#
-item.spawn_egg.entity.stray.name=Stray idézése	#
-item.spawn_egg.entity.husk.name=Husk idézése	#
-item.spawn_egg.entity.wither_skeleton.name=Sorvasztó csontváz idézése	#
-item.spawn_egg.entity.guardian.name=Őrszem idézése	#
-item.spawn_egg.entity.elder_guardian.name=Nagy őrszem idézése	#
-item.spawn_egg.entity.shulker.name=Shulker idézése	#
-item.spawn_egg.entity.endermite.name=Végbogár idézése	#
-item.spawn_egg.entity.evocation_illager.name=Idéző idézése	#
-item.spawn_egg.entity.vex.name=Bosszantó idézése	#
-item.spawn_egg.entity.turtle.name=Tengeri teknős idézése	#
-item.spawn_egg.entity.dolphin.name=Delfin idézése	#
-item.spawn_egg.entity.phantom.name=Fantom idézése	#
-item.spawn_egg.entity.panda.name=Panda idézése	#
-item.spawn_egg.entity.pillager.name=Fosztogató idézése	#
-item.spawn_egg.entity.piglin_brute.name=Piglin verőember idézése	#
-item.spawn_egg.entity.piglin.name=Piglin idézése	#
-item.spawn_egg.entity.fox.name=Róka idézése	#
-item.spawn_egg.entity.unknown.name=Idézés	#
-item.spawn_egg.entity.wandering_trader.name=Vándorkereskedő idézése	#
-item.spawn_egg.entity.wither.name=Sorvasztó idézése	#
-item.spawn_egg.entity.zoglin.name=Zoglin idézése	#
-item.spawn_egg.entity.sniffer.name=Szimatoló idézése	#
+item.spawn_egg.entity.wolf.name=Farkasidéző tojás	#
+item.spawn_egg.entity.villager.name=Falusiidéző tojás	#
+item.spawn_egg.entity.villager_v2.name=Falusiidéző tojás	#
+item.spawn_egg.entity.vindicator.name=Bosszúálló-idéző tojás	#
+item.spawn_egg.entity.mooshroom.name=Múúmbaidéző tojás	#
+item.spawn_egg.entity.squid.name=Tintahalidéző tojás	#
+item.spawn_egg.entity.glow_squid.name=Világító tintahalat idéző tojás	#
+item.spawn_egg.entity.rabbit.name=Nyúlidéző tojás	#
+item.spawn_egg.entity.bat.name=Denevéridéző tojás	#
+item.spawn_egg.entity.ravager.name=Rombolóidéző tojás	#
+item.spawn_egg.entity.iron_golem.name=Vasgólemidéző tojás	#
+item.spawn_egg.entity.snow_golem.name=Hógólemidéző tojás	#
+item.spawn_egg.entity.ocelot.name=Ocelotidéző tojás	#
+item.spawn_egg.entity.parrot.name=Papagájidéző tojás	#
+item.spawn_egg.entity.horse.name=Lóidéző tojás	#
+item.spawn_egg.entity.llama.name=Lámaidéző tojás	#
+item.spawn_egg.entity.trader_llama.name=Kereskedőláma-idéző tojás	#
+item.spawn_egg.entity.polar_bear.name=Jegesmedve-idéző tojás	#
+item.spawn_egg.entity.donkey.name=Szamáridéző tojás	#
+item.spawn_egg.entity.mule.name=Öszvéridéző tojás	#
+item.spawn_egg.entity.skeleton_horse.name=Csontvázlóidéző tojás	#
+item.spawn_egg.entity.zombie_horse.name=Zombilóidéző tojás	#
+item.spawn_egg.entity.zombie.name=Zombiidéző tojás	#
+item.spawn_egg.entity.drowned.name=Tengerizombi-idéző tojás	#
+item.spawn_egg.entity.creeper.name=Creeperidéző tojás	#
+item.spawn_egg.entity.skeleton.name=Csontvázidéző tojás	#
+item.spawn_egg.entity.spider.name=Pókidéző tojás	#
+item.spawn_egg.entity.zombie_pigman.name=Zombifikálódott piglint idéző tojás	#
+item.spawn_egg.entity.strider.name=Lépegetőidéző tojás	#
+item.spawn_egg.entity.slime.name=Nyálkaidéző tojás	#
+item.spawn_egg.entity.enderman.name=Bevégzőidéző tojás	#
+item.spawn_egg.entity.silverfish.name=Ezüstmolyidéző tojás	#
+item.spawn_egg.entity.cave_spider.name=Barlangipók-idéző tojás	#
+item.spawn_egg.entity.ghast.name=Szellemidéző tojás	#
+item.spawn_egg.entity.magma_cube.name=Magmakocka-idéző tojás	#
+item.spawn_egg.entity.blaze.name=Őrlángidéző tojás	#
+item.spawn_egg.entity.zombie_villager.name=Zombifalusi-idéző tojás	#
+item.spawn_egg.entity.zombie_villager_v2.name=Zombifalusi-idéző tojás	#
+item.spawn_egg.entity.witch.name=Boszorkányidéző tojás	#
+item.spawn_egg.entity.stray.name=Strayidéző tojás	#
+item.spawn_egg.entity.husk.name=Huskidéző tojás	#
+item.spawn_egg.entity.wither_skeleton.name=Sorvasztócsontváz-idéző tojás	#
+item.spawn_egg.entity.guardian.name=Őrszemidéző tojás	#
+item.spawn_egg.entity.elder_guardian.name=Nagyőrszem-idéző tojás	#
+item.spawn_egg.entity.shulker.name=Shulkeridéző tojás	#
+item.spawn_egg.entity.endermite.name=Végbogáridéző tojás	#
+item.spawn_egg.entity.evocation_illager.name=Idézőt idéző tojás	#
+item.spawn_egg.entity.vex.name=Bosszantóidéző tojás	#
+item.spawn_egg.entity.turtle.name=Tengeriteknős-idéző tojás	#
+item.spawn_egg.entity.dolphin.name=Delfinidéző tojás	#
+item.spawn_egg.entity.phantom.name=Fantomidéző tojás	#
+item.spawn_egg.entity.panda.name=Pandaidéző tojás	#
+item.spawn_egg.entity.pillager.name=Fosztogatóidéző tojás	#
+item.spawn_egg.entity.piglin_brute.name=Malacka verőembert idéző tojás	#
+item.spawn_egg.entity.piglin.name=Piglinidéző tojás	#
+item.spawn_egg.entity.fox.name=Rókaidéző tojás	#
+item.spawn_egg.entity.unknown.name=Idézőtojás	#
+item.spawn_egg.entity.wandering_trader.name=Vándorkereskedő-idéző tojás	#
+item.spawn_egg.entity.wither.name=Sorvasztóidéző tojás	#
+item.spawn_egg.entity.zoglin.name=Zertéskeidéző tojás	#
+item.spawn_egg.entity.sniffer.name=Szimatolóidéző tojás	#
 item.trident.name=Szigony	#
 item.mushroom_stew.name=Gombaragu	#
 item.muttonCooked.name=Sült birkahús	#
@@ -5169,7 +5249,7 @@ item.glowstone_dust.name=Izzókőpor	#
 item.shulker_shell.name=Shulker-váz	#
 item.totem.name=Halhatatlanság toteme	#
 item.turtle_helmet.name=Teknőspáncél	#
-item.turtle_shell_piece.name=Szarulemez	#
+item.turtle_shell_piece.name=Teknőspáncél	#
 item.phantom_membrane.name=Fantomhártya	#
 item.sweet_berries.name=Édes bogyók	#
 item.suspicious_stew.name=Gyanús pörkölt	#
@@ -5829,7 +5909,7 @@ options.control_alt_keybinds_section=A következő billentyűket használhatod a
 options.credits=Készítők	#
 options.crouch=Lopakodás	#
 options.csbExpired=Lejárt: %s	#
-options.csbHeading=PIACTÉR-BÉRLET	#
+options.csbHeading=MARKETPLACE PASS			#### {StrContains="MARKETPLACE PASS"}
 options.csbInfoLine01=Több mint 150 piactéri csomagot és tárgyat tartalmazó katalógus	#
 options.csbInfoLine02=Havonta frissülő tartalmak	#
 options.csbSubheading=Piactéri tartalom	#
@@ -5851,13 +5931,15 @@ options.delete_account.confirm.button=Törlés	#
 options.dev_game_tip=Játéktippek	#
 options.dev_ad_show_debug_panel=EDU bejelentkezés mutatása a hibakereső panelen	#
 options.dev_ad_token_refresh_threshold=OKTATÁSI bejelentkezési token frissítési küszöb másodpercben	#
-options.dev_ad_edu_max_token_refresh=OKTATÁSI Max tokenfrissítés (perc)	#
+options.dev_ad_edu_max_signin_token_refresh=OKTATÁSI Bejelentkezési tokenek max. frissítése (perc)	#
+options.dev_ad_edu_max_graph_token_refresh=OKTATÁSI Grafikus tokenek max. frissítése (perc)	#
 options.dev_side_by_side_comparison_rate=Egymás melletti összehasonlítási arány	#
 options.dev_playfab_token_refresh_threshold=Playfab tokenfrissítési küszöb percben	#
 options.dev_assertions_debug_break=Az állítás megszakításhoz vezetett a hibakeresőben	#
 options.dev_assertions_show_dialog=Az állítások párbeszédablakot jelenítettek meg	#
 options.dev_force_trial_mode=Próbaverzió mód engedélyezésének kényszerítése	#
 options.dev_eduDemo=Oktatási demó (újbóli bejelentkezés szükséges)	#
+options.dev_eduCloudDownload=Letöltés a felhőből	#
 options.remote_imgui_toggle=Távoli ImGui engedélyezve	#
 options.dev_enableDebugUI=Hibakeresési felület bekapcsolása	#
 options.dev_createRealmWithoutPurchase=Realm létrehozása előfizetés nélkül	#
@@ -5968,17 +6050,17 @@ options.dev_realmsEndpoint=Realms-végpont	#
 options.dev_realmsEndpointPayment=Realms-végpont előfizetése	#
 options.dev_realmsRelyingParty=Realms függő entitása	#
 options.dev_realmsRelyingPartyPayment=Realms függő entitásának előfizetése	#
-options.dev_realms_stories=Realms-történetek engedélyezése (újraindítást igényel)	#
+options.dev_realms_stories=Realms-történetek engedélyezése	#
 options.dev_overrideXboxEnvironmentWindows=Xbox Sandbox felülbírálása (operációs rendszer vezérli Windows alatt)	#
 options.dev_overrideXboxEnvironment=Xbox Sandbox felülbírálása (újraindítást igényel)	#
 options.dev_xboxEnvironment=Xbox Sandbox környezetet (újraindítást igényel)	#
 options.dev_xbox_environment.retail=Kereskedelmi	#
 options.dev_xbox_environment.dev=Fejlesztői	#
-options.dev_xbox_environment.dev_achievement=Fejlesztői eredmény	#
+options.dev_xbox_environment.dev_achievement=Fejlesztői mérföldkő	#
 options.dev_experimentalTreatment=Kísérleti kezelések felülbírálata	#
 options.dev_sandboxRetail=Xforge Sandbox: Kereskedelmi	#
 options.dev_sandboxDev=Xforge Sandbox: Dev	#
-options.dev_sandboxDevAchievement=Xforge Sandbox: Fejlesztői eredmény	#
+options.dev_sandboxDevAchievement=Xforge Sandbox: Fejlesztői mérföldkő	#
 options.dev_displayTreatmentsPanel=Kezelések megjelenítése	#
 options.dev_currentTreatmentsTitle=Aktuális kezelések	#
 options.dev_unusedTreatmentsTitle=Fel nem használt kezelések	#
@@ -6084,6 +6166,8 @@ options.fov.toggle=A látótér játék közben módosulhat	#
 options.licenses=Licencek	#
 options.licensed_content=Licencelt tartalom	#
 options.networkSettings=Hálózati beállítások	#
+options.ecoMode=Kísérleti energiatakarékossági funkciók		#### {MaxLength='40'}
+options.enableEcoMode=Alacsonyabb képkockasebesség, ha nincs kontroller		#### {MaxLength='55'}
 options.font_license=Betűtípus licence	#
 options.font_license_body=%1	#
 options.livingRoomFOV=Nappali látótere	#
@@ -6173,6 +6257,7 @@ options.sneakOption.toggle=Lopakodás a gombra való egyszeri koppintással	#
 options.sneakOption.hold=Lopakodás a gomb nyomva tartásával	#
 options.splitscreenInterfaceOpacity=HUD áttetszősége osztott képernyőn	#
 options.textBackgroundOpacity=Szöveg hátterének átlátszósága	#
+options.actionBarTextBackgroundOpacity=Műveletsáv hátterének átlátszósága	#
 options.hidepaperdoll=Papírbaba elrejtése	#
 options.showautosaveicon=Automatikus mentés ikon megjelenítése	#
 options.hold=Tartás	#
@@ -6365,7 +6450,6 @@ options.betaNewDeathScreenToggle=Új „Meghaltál” képernyő (kísérleti)	#
 options.betaNewDeathScreenToggle.disabled=Ez a beállítás nem módosítható, amikor egy világban játszol	#
 options.usetouchpad=Osztott kezelőszervek	#
 options.viewSubscriptions=Előfizetések	#
-options.viewSubscriptions.button.csbBuy=%s	#
 options.viewSubscriptions.button.info=Infó	#
 options.viewSubscriptions.button.price=%s	#
 options.viewSubscriptions.button.pricePerMonth=%s/hónap	#
@@ -6423,6 +6507,9 @@ options.deferred.upscaling=Felskálázás	#
 options.terrainShadowsEnable=Tereptárgyak árnyékai	#
 options.superFancyWaterEnable=Nagyon csicsás víz	#
 options.onlyTrustedSkinsAllowed=Csak megbízható felületek engedélyezése	#
+options.restartTutorial=Oktatás újraindítása	#
+options.tutorial=Oktatóanyag	#
+options.tutorialHint=Tippek a Minecraft alapjaihoz	#
 
 options.autoUpdateEnabled=Feloldott csomagok automatikus frissítése	#
 options.autoUpdateMode=Feloldott csomagok automatikus frissítése	#
@@ -6525,6 +6612,9 @@ options.shadowQuality.low=Alacsony	#
 options.shadowQuality.medium=Közepes	#
 options.shadowQuality.high=Magas	#
 options.shadowQuality.ultra=Ultra	#
+options.pointLightShadowEnabled=Pontfényárnyékok engedélyezve	#
+options.pointLightShadowDisabled=Pontfényárnyékok letiltva	#
+options.pointLightShadow.tooltip=A fáklyák, lámpások és más kisebb fényforrások által vetett árnyékok; némely eszközön csak magasabb árnyékminőségi beállítások esetén engedélyezett.	#
 options.pointLightLODingQuality=Pontfény minősége	#
 options.pointLightLODingQuality.low=Alacsony	#
 options.pointLightLODingQuality.medium=Közepes	#
@@ -6681,6 +6771,8 @@ hudScreen.controlCustomization.hintDeselect=Kattints ki belőle a kijelölés me
 hudScreen.controlCustomization.hintSaved=Mentve	#
 hudScreen.controlCustomization.tooltip=Tölts be egy világot a vezérlők testreszabásához	#
 hudScreen.controlCustomization.tooltip.notouch=Érintőképernyős készülék használata a vezérlők testreszabásához	#
+hudScreen.controlCustomization.tooltip.alreadycustomizing=Már meg van nyitva egy érintésvezérlés testre szabására szolgáló képernyő	#
+hudScreen.controlCustomization.tooltip.alive=A vezérlés testreszabásához a játékosnak életben kell lennie.	#
 
 playscreen.fileSize.MB=MB	#
 playscreen.fileSize.GB=GB	#
@@ -6939,6 +7031,7 @@ profileScreen.create_persona_classic_skin_details=Egy teljes testet borító fel
 
 profileScreen.create_persona_title=Válassz típust	#
 
+persona.csb.see.subscription=Bérletben	#
 persona.slim.title=keskeny	#
 persona.wide.title=széles	#
 persona.smaller.title=kisebb	#
@@ -6949,6 +7042,7 @@ persona.realms.redeem=Beváltás	#
 persona.realms.see.subscription=A Realms Plusban	#
 persona.realms.time.remaining=%s a beváltásig	#
 persona.realms.savings=%s Minecoint takarítasz meg a Realms Plus-előfizetéssel!	#
+persona.csb.savings=%s Minecoint takarítasz meg a Marketplace Pass-előfizetéssel!	#
 persona.preview.emote=Hangulatjel lejátszása	#
 
 progressScreen.cantConnect=Nem sikerült csatlakozni a világhoz. Ellenőrizd az internetkapcsolatot, majd próbáld újra.	#
@@ -6966,6 +7060,7 @@ progressScreen.title.connectingRealms=Csatlakozás a Realmhez	#
 progressScreen.title.copyingWorld=Világ másolása	#
 progressScreen.title.deleteStorageAreaContent=Tároló gyorsítótárának ürítése	#
 progressScreen.title.loadingSplitScreenAppearances=Osztott képernyős megjelenítés betöltése	#
+progressScreen.title.modifiedWorldWarning=Módosított világ	#
 progressScreen.message.appearanceLoaded=Megjelenítés betöltve	#
 progressScreen.message.appearanceLoadWaitTimeMet=A megjelenítés betöltése a vártnál több időt vesz igénybe. Folytatjuk a világ létrehozását...	#
 progressScreen.message.deleteStorageAreaContent=Ez eltarthat egy kis ideig.	#
@@ -6987,6 +7082,8 @@ progressScreen.message.storageProviderSyncError=Nem sikerült szinkronizálni a 
 progressScreen.message.waitingForStoreProducts=Ez eltarthat egy kis ideig	#
 progressScreen.message.allDone=Minden kész!	#
 progressScreen.message.letsGo=Gyerünk!	#
+progressScreen.message.letsGoCreative=Létrehozás	#
+progressScreen.message.letsGoSurvival=Túlélés	#
 progressScreen.message.failed=Nem sikerült	#
 progressScreen.message.failedNoNetwork=Nem sikerült: nincs hálózati kapcsolat	#
 progressScreen.message.downloadingWorld=Világ letöltése	#
@@ -7012,6 +7109,7 @@ progressScreen.message.directoryDepthError=Ezt a világot nem lehet megnyitni a 
 progressScreen.message.forbiddenContent=Az alkalmazott csomagok közül egy vagy több nincs a birtokodban	#
 progressScreen.message.loadingSplitScreenAppearances=Osztott képernyős megjelenítés betöltése...	#
 progressScreen.message.finishedLoadingSplitScreenAppearances=Az osztott képernyős megjelenítés betöltése kész.	#
+progressScreen.message.modifiedWorldWarning=Előfordulhat, hogy ez a világ nem olyan lesz vagy nem úgy működik majd, mint a nem módosított világok, és nem tudsz mérföldköveket elérni.	#
 progressScreen.dialog.title.resourcePack=Letöltöd az erőforráscsomagot?	#
 progressScreen.dialog.title.behaviorAndResourcePack=Letöltöd a világ viselkedés- és erőforráscsomagjait?	#
 progressScreen.dialog.title.onlyBehavior=Letöltöd a világ viselkedéscsomagjait?	#
@@ -7063,6 +7161,8 @@ raid.expiry=A rajtaütés lejárt	#
 raid.victory=Győzelem	#
 raid.defeat=Vereség	#
 
+realmsStories.realmEvents.outOfGameMessage=Befejeződött egy Realm-esemény. Nézd meg a Történetek hírcsatornáját a Minecraftban, hogy megtudd, mi történt.	#
+
 recipeBook.setting.full=Tele	#
 recipeBook.setting.discover=Felfedezés	#
 recipeBook.setting.off=Ki	#
@@ -7098,6 +7198,7 @@ resourcePack.selected.title.behaviorPacks=Aktív viselkedéscsomagok	#
 resourcePack.selected.title.packs=Aktív	#
 resourcePack.selected.remove=Deaktiválás	#
 resourcePack.realmsPlus.title.packs=Realms Plus csomagok	#
+resourcePack.realmsPlus.title.packs.contentSub=Marketplace Pass-csomagok	#
 resourcePack.realmsPlus.expired=Lejárt	#
 resourcePack.errors=Hibák: 	#
 resourcePack.error.ingame.packs=Az erőforráscsomagokat a világban való játszás közben nem lehet módosítani.	#
@@ -7120,9 +7221,11 @@ resourcePack.header.behavior=Az aktív viselkedéscsomagok minden játékosra é
 resourcePack.header.level=A játékosok kötelezése az erőforráscsomagok elfogadására a csatlakozáshoz	#
 resourcePack.crashRecovery.title=Globális erőforrások visszaállítása	#
 resourcePack.crashRecovery.message=A források korábban nem töltődtek be.	#
-resourcePack.warnings=Figyelmeztetések: 	#
-resourcePack.warning.title=Ez veszélyes!	#
-resourcePack.warning.body=Ha egy olyan világhoz adsz hozzá vagy távolítasz el viselkedéscsomagokat, amellyel már játszottál, akkor előfordulhat, hogy a világ megsérül, az alkotásaid pedig elvesznek. A csomag deaktiválásához nyomd meg az „OK” gombot, ha pedig szeretnéd aktívan tartani, válaszd a „Mégse” lehetőséget.	#
+resourcePack.warnings=Figyelmeztetések:	#
+resourcePack.warning.add.title=Frissíted a világot?	#
+resourcePack.warning.add.body=Előfordulhat, hogy ez a világ nem olyan lesz vagy nem úgy működik majd, mint a nem módosított világok, és nem tudsz majd mérföldköveket elérni. A folytatás előtt érdemes menteni a világodból egy példányt. Nyomd meg az „OK” gombot a csomag aktiválásához, vagy a „Mégse” gombot az aktiválás kihagyásához.	#
+resourcePack.warning.remove.title=Ez veszélyes!	#
+resourcePack.warning.remove.body=Ha eltávolítasz egy viselkedéscsomagot, miután játszottál egy világgal, akkor előfordulhat, hogy a világ megsérül, az alkotásaid pedig elvesznek. A folytatás előtt érdemes menteni a világodból egy példányt. A csomag inaktiválásához nyomd meg az „OK” gombot, ha pedig szeretnéd aktívan tartani, válaszd a „Mégse” lehetőséget.	#
 resourcePack.requiredDependency.title=Kötelező függőség	#
 resourcePack.requiredDependency.body=Ez a csomag egy másik csomagtól függ, amelyet jelenleg alkalmazol.	#
 resourcePack.missingDependency.title=Hiányzó függőség	#
@@ -7229,14 +7332,14 @@ itemGroup.name.sculk=Sculk	#
 effect.darkness=Sötétség	#
 entity.frog.name=Béka	#
 entity.tadpole.name=Ebihal	#
-item.spawn_egg.entity.warden.name=Őrző idézése	#
+item.spawn_egg.entity.warden.name=Őrzőidéző tojás	#
 entity.warden.name=Őrző	#
 entity.allay.name=Munkás	#
-item.spawn_egg.entity.allay.name=Munkás idézése	#
+item.spawn_egg.entity.allay.name=Munkásidéző tojás	#
 action.interact.allay=Tárgy átadása egy munkásnak	#
 item.bucketTadpole.name=Vödörnyi ebihal	#
-item.spawn_egg.entity.frog.name=Béka idézése	#
-item.spawn_egg.entity.tadpole.name=Ebihal idézése	#
+item.spawn_egg.entity.frog.name=Békaidéző tojás	#
+item.spawn_egg.entity.tadpole.name=Ebihalidéző tojás	#
 tile.frog_spawn.name=Békatojások	#
 tile.pearlescent_froglight.name=Gyöngyházfényű békafény	#
 tile.verdant_froglight.name=Zöldellő békafény	#
@@ -7361,7 +7464,7 @@ item.smithing_template.name=Kovácssablon	#
 item.smithing_template.netherite_upgrade.applies_to=Gyémántfelszerelés	#
 item.smithing_template.netherite_upgrade.ingredients=Alvilágérc rúd	#
 item.snort_pottery_sherd.name=Szimat edényszilánk	#
-item.spawn_egg.entity.camel.name=Teve idézése	#
+item.spawn_egg.entity.camel.name=Teveidéző tojás	#
 item.spruce_hanging_sign.name=Fenyőfa lógó tábla	#
 item.warped_hanging_sign.name=Deformált lógó tábla	#
 itemGroup.name.hanging_sign=Lógó táblák	#
@@ -7669,6 +7772,7 @@ selectTemplate.delete.confirm=Törlöd a világsablont?	#
 selectTemplate.delete=Törlés	#
 selectTemplate.myTemplates=Saját világsablonok	#
 selectTemplate.realmsPlus=Kiemelt Realms Plus sablonok	#
+selectTemplate.marketplacePass=Kiemelt sablonok a Marketplace Pass kínálatából			#### {StrContains="Marketplace Pass"}
 selectTemplate.importedTemplates=Importált sablonok	#
 selectTemplate.download=Letöltés	#
 selectTemplate.noTemplates=Ezen az eszközön nincsenek világsablonok.	#
@@ -7853,32 +7957,37 @@ store.realmsPlus.buyNow.viewPrivacyPolicy=ADATVÉDELMI IRÁNYELVEK	#
 
 store.realmsPlus.buyNow.title=Realms Plus-előfizetés indítása	#
 store.realmsPlus.startTrial.description=Realmedhez és a több mint 150 piactéri csomaghoz azonnal hozzáférhetsz. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyen hozzáférhetnek a Realmed világaihoz! Az első hónapod ingyenes lesz, azt követően pedig havi %s összeget kell fizetned, és bármikor lemondható.	#
+store.realmsPlus.startTrial.description.contentSub=A Realm és a Piactéri bérlettel elérhető több mint 150 piactéri csomag azonnal hozzáférhetővé válik. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyenesen hozzáférhetnek a Realmedben található világokhoz! Az első hónap ingyenes, utána %s havidíjat számítunk fel. Az előfizetést bármikor lemondhatod.	#
 store.realmsPlus.noTrial.description=Realmedhez és a több mint 150 piactéri csomaghoz azonnal hozzáférhetsz. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyen hozzáférhetnek a Realmed világaihoz! Az előfizetés 30 napig lesz elérhető %s:minecoin: díj ellenében.	#
+store.realmsPlus.noTrial.description.contentSub=A Realm és a Piactéri bérlettel elérhető több mint 150 piactéri csomag azonnal hozzáférhetővé válik. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyenesen hozzáférhetnek a Realmedben található világokhoz! Az előfizetés 30 napig érhető el, az ára %s:minecoin:.	#
 store.realmsPlus.noTrial.description.iap=Realmedhez és a több mint 150 piactéri csomaghoz azonnal hozzáférhetsz. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyen hozzáférhetnek a Realmed világaihoz! Havonta %s kerül számlázásra. Az előfizetést az előfizetési beállításokban bármikor lemondhatod, ezt követően nem vonjuk le tőled a havi díjat.	#
+store.realmsPlus.noTrial.description.iap.contentSub=A Realm és a Piactéri bérlettel elérhető több mint 150 piactéri csomag azonnal hozzáférhetővé válik. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyenesen hozzáférhetnek a Realmedben található világokhoz! %s havidíjat számlázunk ki. Az előfizetési beállításokban bármikor lemondhatod az előfizetést; ezt követően nem vonjuk le tőled a havi díjat.	#
 store.realmsPlus.realmName.placeholder=%s Realmje		#The string passed in here is the gamertag of the player to indicate the name of the player's world.	#
 
 store.realmsPlus.recurring.offerTrial=A Realms Plus egy előfizetési lehetőség, amelynek ismétlődő előfizetési díját az előfizetés visszavonásáig minden hónapban automatikusan terheljük.%sA Realmed és több mint 150 piactéri csomag azonnal elérhetővé válik. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyen hozzáférhetnek a Realmed világaihoz! Az első 30 nap ingyenes, utána pedig havonta %s kerül számlázásra. Az előfizetést az előfizetési beállításokban bármikor lemondhatod, ezt követően nem vonjuk le tőled a havi díjat.	#
+store.realmsPlus.recurring.offerTrial.contentSub=A Realms Plus egy előfizetési modell, amelynek rendszeres előfizetési díját minden hónapban automatikusan levonjuk, amíg le nem mondod az előfizetést.%sA Realm és a Piactéri bérlettel elérhető több mint 150 piactéri csomag azonnal hozzáférhetővé válik. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyenesen hozzáférhetnek a Realmedben található világokhoz! Az első 30 nap ingyenes, utána %s havidíjat számítunk fel. Az előfizetési beállításokban bármikor lemondhatod az előfizetést; ezt követően nem vonjuk le tőled a havi díjat.	#
 store.realmsPlus.recurring.withoutTrial=A Realms Plus egy előfizetési lehetőség, amelynek ismétlődő előfizetési díját az előfizetés visszavonásáig minden hónapban automatikusan terheljük.%sA Realmed és több mint 150 piactéri csomag azonnal elérhetővé válik. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyen hozzáférhetnek a Realmed világaihoz! Havonta %s kerül számlázásra. Az előfizetést az előfizetési beállításokban bármikor lemondhatod, ezt követően nem vonjuk le tőled a havi díjat.	#
+store.realmsPlus.recurring.withoutTrial.contentSub=A Realms Plus egy előfizetési modell, amelynek rendszeres előfizetési díját minden hónapban automatikusan levonjuk, amíg le nem mondod az előfizetést.%sA Realm és a Piactéri bérlettel elérhető több mint 150 piactéri csomag azonnal hozzáférhetővé válik. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyenesen hozzáférhetnek a Realmedben található világokhoz! %s havidíjat számítunk fel. Az előfizetést az előfizetési beállításokban bármikor lemondhatod; ezt követően nem vonjuk le tőled a havi díjat.	#
 store.realmsPlus.consumable.offerTrial=Realmedhez és a több mint 150 piactéri csomaghoz azonnal hozzáférhetsz. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyen hozzáférhetnek a Realmed világaihoz! Az első 30 napod ingyenes lesz, azt követően pedig 30 naponta %s összegért újítható meg.	#
+store.realmsPlus.consumable.offerTrial.contentSub=A Realm és a Piactéri bérlettel elérhető több mint 150 piactéri csomag azonnal hozzáférhetővé válik. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyenesen hozzáférhetnek a Realmedben található világokhoz! Az első 30 nap ingyenes, utána pedig meghosszabbíthatod az előfizetést további 30 napra; ennek ára %s.	#
 store.realmsPlus.consumable.withoutTrial=Realmedhez és a több mint 150 piactéri csomaghoz azonnal hozzáférhetsz. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyen hozzáférhetnek a Realmed világaihoz! Az előfizetés 30 napig lesz elérhető %s díj ellenében.	#
+store.realmsPlus.consumable.withoutTrial.contentSub=A Realm és a Piactéri bérlettel elérhető több mint 150 piactéri csomag azonnal hozzáférhetővé válik. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyenesen hozzáférhetnek a Realmedben található világokhoz! Az előfizetés 30 napig érhető el, az ára %s.	#
 
 store.realmsPlus.landing.header=Az előfizetés tartalma:	#
 store.realmsPlus.landing.headerTrial=Ingyenes 30 napos próbaverzió, majd %s/hó	#
 
-store.realmsPlus.landing.info1.line1=Saját, külön bejáratú Realm-kiszolgálód – Perzisztens világ, amely mindig elérhető, csak neked és a barátaidnak!	#
+store.realmsPlus.landing.info1.line1=A saját, külön bejáratú Realm-kiszolgálód: egy állandó világ, amely mindig elérhető neked és a barátaidnak!	#
 store.realmsPlus.landing.info1.line2=A barátaid ingyen játszhatnak a Realmeden	#
-store.realmsPlus.landing.info1.line3=Ugrás konzolról mobilra, majd PC-re, bármilyen eszközön a Minecraft Piactéren	#
-
-store.realmsPlus.landing.info2.line1=Ingyenes hozzáférés több mint 150 piactéri csomaghoz	#
-store.realmsPlus.landing.info2.line2=Biztonsági mentés a Realmedben futó világokhoz	#
-store.realmsPlus.landing.info2.line3=Az első 30 nap ingyenes	#
-store.realmsPlus.landing.info2.line4=Most %s/hó díjért előfizethetsz	#
+store.realmsPlus.landing.info1.line3=Váltás konzolról mobilra, majd PC-re – bármilyen eszközön játszhatsz a Realmmel a Minecraft Piactér révén	#
 
 store.realmsPlus.landing.info2.catalog=Ingyenes hozzáférés több mint 150 piactéri csomaghoz	#
-store.realmsPlus.landing.info2.backups=Biztonsági mentés a Realmedben futó világokhoz	#
-store.realmsPlus.landing.info2.trial=Az első 30 nap ingyenes	#
-store.realmsPlus.landing.info2.subscribe=Most %s/hó díjért előfizethetsz	#
-store.realmsPlus.landing.info2.persona=Ingyenes Karakteralkotó tárgyak – Válts be egy új készletet minden hónapban!	#
+store.realmsPlus.landing.info2.contentSub=Tartalmazza a Piactéri bérletet	#
+store.realmsPlus.landing.info2.backups=A Realmeden futó világokhoz ingyenes biztonsági mentések érhetőek el	#
+store.realmsPlus.landing.info2.renews=Az előfizetés havonta automatikusan megújul, amíg le nem mondod	#
+store.realmsPlus.landing.info2.cancel=A lemondáshoz lépj a Minecraft-beállítások Előfizetések lapjára	#
+store.realmsPlus.landing.info2.subscribe=Fizess elő most %s/hó összegért	#
+store.realmsPlus.landing.info2.recentlyAdded=Legutóbb hozzáadva	#
+store.realmsPlus.landing.info2.persona=Ingyenes karakteralkotói tárgyak – válts be egy új készletet minden hónapban!	#
 
 store.realmsPlus.landing.beta=Béta	#
 store.realmsPlus.landing.preview=Előzetes verzió	#
@@ -7899,6 +8008,7 @@ store.realmsPlus.faq.question4=Milyen eszközökön játszható a Minecraft Real
 store.realmsPlus.faq.answer4=A Realms Plus jelenleg minden olyan platformon elérhető, ahol telepíteni tudod a Minecraft Bedrock Editiont. Jelentkezz be a Microsoft-fiókodba, és ezen eszközök bármelyikén játszhatsz a Realms szolgáltatásban, és a Realms Plus tartalmait is használhatod.	###disable_3rd_party_console_resource_pack_check
 store.realmsPlus.faq.question5=Mennyibe kerül a Realms Plus előfizetés?	#
 store.realmsPlus.faq.answer5=%s/hó egy 10 játékost támogató kiszolgálóért és a több mint 150 piactéri csomagért.	#
+store.realmsPlus.faq.answer5.contentSub=%s havonta. Végtelen számú tagot adhatsz meg, és egyszerre 10 másik játékossal játszhatsz online. Emellett a Piactér több mint 150 tartalmát használhatod ingyenesen, amelyek fel vannak tüntetve a Piactéri bérlet katalógusában.	#
 store.realmsPlus.faq.question6=Milyen gyakran bővül új csomagokkal a Realms Plus?	#
 store.realmsPlus.faq.answer6=Nagyjából havonta jelentkezünk új Realms Plus csomagokkal.	#
 store.realmsPlus.faq.question7=Mennyi ideig férek hozzá a Realms Plus csomagjaihoz?	#
@@ -7907,38 +8017,44 @@ store.realmsPlus.faq.question8=Hol használhatom a Realms Plus keretében elérh
 store.realmsPlus.faq.answer8=Az előfizetésedhez kapott világokkal és csomagokkal játszhatsz online a saját Realmeden vagy bármely helyi eszközön. 30 naponként csak egyszer kell fellépned a hálóra, hogy lássuk, az előfizetésed még aktív.	#
 store.realmsPlus.faq.question9=Mi történik a Realmemmel és a világokkal, ha lejár az előfizetésem?	#
 store.realmsPlus.faq.answer9=Ha lejár az előfizetésed, te és barátaid nem játszhattok tovább online a Realms tartalmakkal, és a csomagokat, és a Realms Plus-csomagokhoz való hozzáférést is elveszíted. A Realmedre mentett világokat az előfizetésed megszűnésétől számított 18 hónapon belül letöltheted. Ha Realms Plus-világokat, -textúracsomagokat vagy -mixeket használtál, ezeket a csomagokat meg kell vásárolnod az Áruházban, vagy ha a Realms Plusban még elérhetők, újra elő kell fizetned a világsablonok használatához.	#
+store.realmsPlus.faq.question10=Szükségem van a Realms Plusra és a Piactéri bérletre?	#
+store.realmsPlus.faq.answer10=Nem. A Piactéri bérlet egy katalógus, amelynek több mint 150 csomagjából szabadon válogathatsz. A Realms Plus egy 10 játékosos Realm, amely mellé jár a Piactéri bérlet is. Azt javasoljuk, hogy arra fizess elő, amelyik a leginkább megfelelő számodra.	#
 
+store.realmsPlus.content.marketplacePass=A Realms Plus tartalmazza a Piactéri bérletet!	#
 store.realmsPlus.content.skinDescription=Változtasd meg a külsőd felületekkel!	#
 store.realmsPlus.content.skinDescriptionPersona=Módosítsd a kinézetedet felületekkel!	#
+store.realmsPlus.content.skinDescriptionPersona.contentSub=Bővítsd a ruhatáradat felületekkel!	#
 store.realmsPlus.content.worldDescription=Játssz népszerű tartalomcsomagokkal!	#
+store.realmsPlus.content.worldDescription.contentSub=Játssz a minijátékokkal, tematikus világokkal és még sok mással! 	#
 store.realmsPlus.content.textureDescription=Tedd még látványosabbá világaidat!	#
+store.realmsPlus.content.textureDescription.contentSub=Kölcsönözz új látványt a világaidnak! 	#
 store.realmsPlus.content.mashupDescription=A mixekkel kipróbálhatsz mindenből egy kicsit!	#
 store.realmsPlus.content.personaDescription=Szabd testre a megjelenésedet Karakteralkotó tárgyakkal!	#
+store.realmsPlus.content.personaDescription.contentSub=Gyűjtsd be a havi tárgyakat az öltözőben!	#
+store.realmsPlus.content.recentlyAdded=Legutóbb hozzáadva	#
 store.realmsPlus.content.friendsGetAccess=A barátaid ingyen hozzáférnek a Realmedben használt tartalmakhoz	#
 
 store.realmsPlus.content.popularPacks=Népszerű csomagok a Realms Plus részeként:	#
 store.realmsPlus.content.viewAllPacks=AZ ÖSSZES CSOMAG MEGTEKINTÉSE	#
 store.realmsPlus.content.contentDescription=Szerezz be lenyűgöző Minecraft-tartalmakat! A Realms Plus azonnali hozzáférést biztosít több mint 150 piactéri tartalomhoz: mixekhez, világokhoz, felületcsomagokhoz, epikus kalandokhoz – és a kínálat havonta bővül. Tartalmaidat a személyes kiszolgálódon tároljuk, és bármely Minecraft Piactérrel és Realmekkel kompatibilis platformról eléred őket. Akár 10 játékos is játszhat egyszerre, és mindannyian ingyen hozzáférhetnek a Realmed világaihoz!	#
 
-
 store.realmsPlus.freeTrial=INGYENES PRÓBAVERZIÓ INDÍTÁSA	#
 
 store.realmsPlus.purchase.warningDialog.title=Értesítés	#
-store.realmsPlus.purchase.warningDialog.body=A Realms Plusnak részét képezi a Piactér-bérlet tartalma. Javasoljuk, hogy a regisztrációt követően mondd le a Piactér-bérlet előfizetésed.	#
+store.realmsPlus.purchase.warningDialog.body=A Realms Plusnak a Marketplace Pass is a részét képezi. Javasoljuk, hogy mondd le a Marketplace Pass előfizetését, miután regisztráltál a Realms Plusra.		#### {StrContains="Marketplace Pass"}
 store.realmsPlus.purchase.warningDialog.checkbox=Értem	#
 store.realmsPlus.purchase.warningDialog.button.back=Vissza	#
-store.realmsPlus.purchase.warningDialog.button.continue=Folytatás	#
+store.realmsPlus.purchase.warningDialog.button.continue=Vásárlás	#
 
-store.csb.brand.1=PIACTÉR	#
-store.csb.brand.2=BÉRLET	#
+store.csb.brand.1=MARKETPLACE		#### {StrContains="MARKETPLACE"}
+store.csb.brand.2=PASS		#### {StrContains="PASS"}
 
-store.csb=Piactér-bérlet	#
-store.csb.pass=Elsuhanás	#
+store.csb=Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.content=Tartalom	#
 store.csb.faq=GYIK	#
 store.csb.buyNow=ELŐFIZETEK	### Maximum 13 characters
 store.csb.buyNowPerMonth=Megvásárlás %s/hó összegért	#
-store.csb.signInToSubscribe=Jelentkezz be, hogy előfizethess a Piactér-bérletre	#
+store.csb.signInToSubscribe=Jelentkezz be, hogy előfizethess a Marketplace Passra		#### {StrContains="Marketplace Pass"}
 store.csb.buyNowTrialPerMonth=Próbaverzió indítása	### Maximum 25 characters
 store.csb.errorNoOffer=HIBA: NEM TALÁLTUNK AJÁNLATOT	#
 store.csb.manageSubscription=ELŐFIZETÉS KEZELÉSE	#
@@ -7948,47 +8064,49 @@ store.csb.buyNow.buttonText=MEGVÁSÁRLÁS ENNYIÉRT: %s	#
 store.csb.buyNow.viewTerms=FELHASZNÁLÁSI FELTÉTELEK	#
 store.csb.buyNow.viewPrivacyPolicy=ADATVÉDELMI IRÁNYELVEK	#
 
-store.csb.buyNow.title=A Piactér-bérlet előfizetés indítása	#
+store.csb.buyNow.title=A Marketplace Pass-előfizetés indítása		#### {StrContains="Marketplace Pass"}
 
-store.csb.subscription=A regisztráció után több mint 150 izgalmas Minecraft Piactér-tartalomhoz férhetsz hozzá. Töltsd le és játszd végig a kalandtérképeket, öltsd magadra a felületeket, vesd bele magad a textúracsomagokba, és havonta kérd le a Karakteralkotóban használható tárgyakat, amelyeket örökre megtarthatsz. A Piactér-bérlet rendszeresen frissülő katalógusában mindig találsz valami új felfedeznivalót. Az előfizetés díja %s/hó, és bármikor lemondható.  	#
+store.csb.subscription=A regisztráció után több mint 150 izgalmas Minecraft Piactér-tartalomhoz férhetsz hozzá. Töltsd le és játszd végig a kalandtérképeket, öltsd magadra a felületeket, vesd bele magad a textúracsomagokba, és havonta kérd le a Karakteralkotóban használható tárgyakat, amelyeket örökre megtarthatsz. A Marketplace Pass rendszeresen frissülő katalógusában mindig találsz valami új felfedeznivalót. Az előfizetés díja %s/hó, és bármikor lemondható.		#### {StrContains="Marketplace Pass"}
 
-store.csb.recurring.offerTrial=A Piactér-bérlet egy előfizetési lehetőség, amelynek ismétlődő előfizetési díját az előfizetés visszavonásáig minden hónapban automatikusan levonjuk.%sA használatával több mint 150 piactéri csomag azonnal elérhetővé válik. Az előfizetést az előfizetési beállításokban bármikor lemondhatod, ezt követően nem vonjuk le tőled a havi díjat.	#
-store.csb.recurring.withoutTrial=A Piactér-bérlet egy előfizetési lehetőség, amelynek ismétlődő előfizetési díját az előfizetés visszavonásáig minden hónapban automatikusan levonjuk.%sTöbb mint 150 piactéri csomag azonnal elérhetővé válik. Az előfizetés díja havonta %s. Az előfizetést az előfizetési beállításokban bármikor lemondhatod, ezt követően nem vonjuk le tőled a havi díjat.	#
+store.csb.recurring.offerTrial=A Marketplace Pass egy előfizetési lehetőség, amelynek ismétlődő előfizetési díját az előfizetés visszavonásáig minden hónapban automatikusan levonjuk.%sA használatával több mint 150 piactéri csomag azonnal elérhetővé válik. Az előfizetést az előfizetési beállításokban bármikor lemondhatod, ezt követően nem vonjuk le tőled a havi díjat.		#### {StrContains="Marketplace Pass"}
+store.csb.recurring.withoutTrial=A Marketplace Pass egy előfizetési lehetőség, amelynek ismétlődő előfizetési díját az előfizetés visszavonásáig minden hónapban automatikusan levonjuk.%sTöbb mint 150 piactéri csomag azonnal elérhetővé válik. Az előfizetés díja havonta %s. Az előfizetést az előfizetési beállításokban bármikor lemondhatod, ezt követően nem vonjuk le tőled a havi díjat.		#### {StrContains="Marketplace Pass"}
 store.csb.consumable.offerTrial=Több mint 150 piactéri csomaghoz azonnal hozzáférhetsz. Az első 30 nap ingyenes, azt követően az előfizetés 30 naponta %s összegért újítható meg.	#
 store.csb.consumable.withoutTrial=Több mint 150 piactéri csomaghoz azonnal hozzáférhetsz. Az előfizetés 30 napig lesz elérhető %s díj ellenében.	#
 
-store.csb.landing.header=A Piactér-bérlet előfizetés indítása	#
+store.csb.landing.header=A Marketplace Pass-előfizetés indítása		#### {StrContains="Marketplace Pass"}
 store.csb.landing.headerTrial=Ingyenes 30 napos próbaverzió, majd %s/hó	#
 
-store.csb.landing.info=A Piactér-bérlet egy olyan előfizetés, amellyel a Minecraft Piactéren havi %s díjért több mint 150 tartalmat érhetsz el. Az előfizetésed a következőket kínálja:	#
+store.csb.landing.info=A Marketplace Pass egy olyan előfizetés, amellyel a Minecraft Piactéren havi %s díjért több mint 150 tartalmat érhetsz el. Az előfizetésed a következőket kínálja:		#### {StrContains="Marketplace Pass"}
 store.csb.landing.info.line1=Elmerülhetsz a történetekre épülő kalandokban a különféle témájú világok és minijátékok letöltésével és végigjátszásával	#
 store.csb.landing.info.line2=Megváltoztathatod a blokkok, a biomok vagy akár a kedvenc Minecraft-mobjaid megjelenését	#
 store.csb.landing.info.line3=Bővítheted a játékbeli ruhatáradat	#
 store.csb.landing.info.line4=Minden hónapban elérheted a Karakteralkotó tárgyak új, időkorlátos csomagját, amelyet örökre meg is tarthatsz	#
+store.csb.landing.info.line5=Az előfizetés havonta automatikusan megújul, amíg le nem mondod	#
+store.csb.landing.info.line6=A lemondáshoz lépj a Minecraft-beállítások Előfizetések lapjára	#
+store.csb.landing.info.line7=Fizess elő most %s/hó összegért	#
 
 store.csb.landing.beta=Béta	#
 store.csb.landing.preview=Előzetes verzió	#
 
 store.csb.faq.header=GYAKRAN ISMÉTELT KÉRDÉSEK	#
-store.csb.faq.question1=Mi az a Piactér-bérlet?	#
-store.csb.faq.answer1=A Piactér-bérlet egy olyan előfizetés, amellyel a Minecraft Piactéren %s/hó összegért több mint 150 tartalmat érhetsz el.	#
-store.csb.faq.question2=Milyen gyakran frissül a Piactér-bérlettel elérhető tartalom?	#
+store.csb.faq.question1=Mi az a Marketplace Pass?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer1=A Marketplace Pass egy olyan előfizetés, amellyel a Minecraft Piactéren %s/hó összegért több mint 150 tartalmat érhetsz el.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question2=Milyen gyakran frissül a Marketplace Pass keretében elérhető tartalom?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer2=A tartalomválálaszték minden hónapban frissül, így mindig találsz felfedeznivalót.	#
-store.csb.faq.question3=Mire van szükség a Piactér-bérlet használatához?	#
-store.csb.faq.answer3=A Piactér-bérlethez aktív előfizetés, valamint a Minecraft: Bedrock Edition kompatibilis verziója szükséges, Minecraft Piactérrel. A bejelentkezéshez Microsoft-fiók szükséges.	#
-store.csb.faq.question4=Mi történik a nálam lévő tartalommal, ha már nem érhető el a Piactér-bérlettel?	#
+store.csb.faq.question3=Mire van szükség a Marketplace Pass használatához?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer3=A Marketplace Pass használatához aktív előfizetés, valamint a Minecraft: Bedrock Edition kompatibilis verziója szükséges, Minecraft Piactérrel. A bejelentkezéshez Microsoft-fiók szükséges.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question4=Mi történik a nálam lévő tartalommal, ha már nem érhető el a Marketplace Pass részeként?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer4=Amikor egy világ, textúracsomag, felületcsomag vagy mix kikerül a katalógusból, meg kell vásárolnod a Piactéren, ha továbbra is használni szeretnéd. A csomagok nem törlődnek a helyi tárhelyedről, amíg nem törlöd őket. A beszerzett karakteralkotói tárgyakat megtarthatod.	#
 store.csb.faq.question5=Mi történik, ha lemondom az előfizetésemet?	#
 store.csb.faq.answer5=A felhőtárhelyedre mentett világsablonokat az előfizetésed megszűnésétől számított 18 hónapon belül megvásárolhatod és letöltheted, ha ki nem kerülnek a Minecraft kínálatából. A beszerzett karakteralkotói tárgyakat megtarthatod.	#
 store.csb.faq.question6=Mi a különbség e között és a Realms Plus között?	#
-store.csb.faq.answer6=A két előfizetés közötti az a különbség, hogy a Realms Plus egy személyes kiszolgálót tartalmaz, ahol egyszerre tíz barátoddal játszhatsz. A Piactér-bérlet előfizetéssel elérhető tartalomkatalógus ugyanaz, mint a Realms Plus előfizetéssel elérhető katalógus.	#
-store.csb.faq.question7=Előfizethetek egyszerre a Piactér-bérletre és a Realms Plusra is?	#
-store.csb.faq.answer7=A Realms Plus előfizetés tartalmazza a Piactér-bérletet is. Ha jelenleg Piactér-bérletre fizetsz elő, és fel szeretnéd fedezni a Realms Plus előfizetést, akkor azt javasoljuk, először mondd le a Piactér-bérletet. Az aktív Piactér-bérlettel rendelkezők nem fizethetnek elő a Realms Plusra.	#
-store.csb.faq.question8=Bármilyen eszközön használhatom a Piactér-bérlettel elérhető tartalmakat?	#
-store.csb.faq.answer8=A Piactér-bérlet megvásárlásával az összes csomagot elérheted bármelyik eszközön, ahol a Minecraft Piactérrel rendelkező Minecraft: Bedrock Edition kompatibilis verziója fut (külön vásárolható meg), és ahol a bejelentkezel a Minecraft-fiókodba. Az Amazonon Kindle Fire és a Minecraft Java Edition nem támogatott.	#
-store.csb.faq.question9=Használhatom a Piactér-bérlettel elérhető tartalmakat, ha Windowson vagy XBOX-on csatlakozok a Minecraft bétaprogramjához?	#
-store.csb.faq.answer9=Ha már korábban előfizettél, akkor látni fogod az előfizetésed tartalmát, de nem fogsz tudni előfizetni a Piactér-bérletre az előzetes/bétaverzióból.	#
-store.csb.faq.bottom1=NEM TALÁLOD, AMIT KERESEL?	#
+store.csb.faq.answer6=A két előfizetés között az a különbség, hogy a Realms Plus egy személyes kiszolgálót tartalmaz, ahol egyszerre tíz barátoddal játszhatsz. A Marketplace Pass-előfizetéssel elérhető tartalomkatalógus ugyanaz, mint a Realms Plus előfizetéssel elérhető katalógus.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question7=Előfizethetek egyszerre a Marketplace Passra és a Realms Plusra is?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer7=A Realms Plus előfizetés a Marketplace Passt is tartalmazza. Ha jelenleg Marketplace Passra fizetsz elő, és elő szeretnél fizetni a Realms Plusra, akkor azt javasoljuk, először mondd le a Marketplace Passt. Az aktív Realms Plus-bérlettel rendelkezők nem fizethetnek elő külön a Marketplace Passra.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question8=Bármilyen eszközön használhatom a Marketplace Pass keretében elérhető tartalmakat?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer8=A Marketplace Pass megvásárlásával az összes csomagot elérheted bármelyik eszközön, amelyen a Minecraft Piactérrel rendelkező Minecraft: Bedrock Edition kompatibilis verziója fut (ez külön vásárolható meg), és amelyen bejelentkezel a Minecraft-fiókodba. A Marketplace Pass használata az Amazon Kindle Fire eszközökön és a Minecraft Java Editionben nem támogatott.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.question9=Használhatom a Marketplace Pass keretében elérhető tartalmakat, ha Windowson vagy XBOX-on csatlakoztam a Minecraft bétaprogramjához?		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer9=Ha már korábban előfizettél, akkor látni fogod az előfizetésed tartalmát, de nem fogsz tudni előfizetni a Marketplace Passra az előzetes/bétaverzióból.		#### {StrContains="Marketplace Pass"}
 store.csb.faq.bottom2=Nézd meg a súgónkat	#
 
 store.csb.contentPacks.worldDescription=Játssz a minijátékokkal, tematikus világokkal és még sok mással!	#
@@ -7997,20 +8115,20 @@ store.csb.contentPacks.personaDescription=Gyűjtsd be a havi tárgyakat az ölt�
 store.csb.contentPacks.skinDescription=Bővítsd a ruhatáradat felületekkel! 	#
 store.csb.contentPacks.mashupDescription=A mixekkel mindenből kipróbálhatsz egy kicsit!	#
 
-store.csb.content.popularPacks=Fedezd fel Piactér-bérletet	#
+store.csb.content.popularPacks=Fedezd fel a Marketplace Passt		#### {StrContains="Marketplace Pass"}
 store.csb.content.viewAllPacks=AZ ÖSSZES CSOMAG MEGTEKINTÉSE	#
 store.csb.content.viewCharacterCreatorItems=KARAKTERALKOTÓ TÁRGYAK MEGTEKINTÉSE	#
-store.csb.content.contentDescription=Szerezz be lenyűgöző Minecraft-tartalmakat! A Piactér-bérlet azonnali hozzáférést biztosít több mint 150 piactéri tartalomhoz: mixekhez, világokhoz, felületcsomagokhoz, epikus kalandokhoz – és a kínálat havonta bővül.	#
+store.csb.content.contentDescription=Szerezz be csodás Minecraft-tartalmakat! A Marketplace Pass azonnali hozzáférést biztosít több mint 150 piactéri tartalomhoz: mixekhez, világokhoz, felületcsomagokhoz és epikus kalandokhoz. A kínálat havonta bővül!		#### {StrContains="Marketplace Pass"}
 
 store.csb.freeTrial=INGYENES PRÓBAVERZIÓ INDÍTÁSA	#
 
-store.csb.welcomeDialog.title=Üdvözöl a Piactér-bérlet!	#
+store.csb.welcomeDialog.title=Üdvözöl a Marketplace Pass!		#### {StrContains="Marketplace Pass"}
 store.csb.welcomeDialog.body=Próbáld ki most a több mint 150 kalandot, minijátékot, felületcsomagot, textúrát és még sok minden mást!	#
 store.csb.welcomeDialog.continue=Böngészés indítása	#
 
 store.csb.purchase.warningDialog.title=Értesítés	#
-store.csb.purchase.warningDialog.body.line1=A Realms Plus-előfizetésed tartalmazza a Piactér-bérletet.	#
-store.csb.purchase.warningDialog.body.line2=Mondd le az aktív Realms Plus-előfizetésed, és várd meg a számlázási ciklus végét, majd azután próbálkozz a vásárlással.	#
+store.csb.purchase.warningDialog.body.line1=A Realms Plus-előfizetésed tartalmazza a Marketplace Passt.		#### {StrContains="Marketplace Pass"}
+store.csb.purchase.warningDialog.body.line2=Mondd le az aktív Realms Plus-előfizetésed, majd ezután próbálkozz a vásárlással.	#
 store.csb.purchase.warningDialog.button.back=Vissza	#
 
 store.csb.upsell.bestValue=LEGJOBB ÁR-ÉRTÉK	#
@@ -8025,7 +8143,7 @@ store.csb.upsell.rightBullet.3=Tartalma:			### Precedes the term Marketplace Pas
 
 store.csb.upsell.learnMore=További részletek	#
 store.csb.upsell.price=%s/hó	#
-store.csb.upsell.firstPeriodFree=Ingyenes 30 napos próbaidőszak!*	#
+store.csb.upsell.firstPeriodFree=Ingyenes 30 napos próbaidőszak!	#
 
 store.csb.upsell.realmsPlus=§dREALMS PLUS	#
 
@@ -8036,11 +8154,14 @@ store.csb.purchaseErrorDialog.errorCode=Hibakód: %s	#
 store.csb.purchaseErrorDialog.correlationId=Korrelációs azonosító: %s	#
 
 store.csb.purchase.amazonDeviceWarning.title=Értesítés	#
-store.csb.purchase.amazonDeviceWarning.body.line1=Sajnáljuk, de a Piactér-bérlet jelenleg nem vásárolható meg Amazon-eszközökön. 	#
+store.csb.purchase.amazonDeviceWarning.body.line1=Sajnáljuk, de a Marketplace Pass jelenleg nem vásárolható meg Amazon-eszközökön.		#### {StrContains="Marketplace Pass"}
 store.csb.purchase.amazonDeviceWarning.body.line2=Ha kérdésed van, látogass el a support.minecraft.net webhelyre.	#
 store.csb.purchase.amazonDeviceWarning.button.back=Vissza	#
 
-store.csb.alreadySubscribed.toolTip=Már rendelkezel Piactér-bérlet előfizetéssel.	#
+store.csb.alreadySubscribed.toolTip=Már előfizettél egy Marketplace Passra.		#### {StrContains="Marketplace Pass"}
+
+store.csb.banner.offer=Kezdd el használni most a 30 napos ingyenes próbaverziót!	#
+store.csb.banner.learnMore=További részletek	#
 
 store.inventory.button=Saját tartalom	#
 store.inventory.title=Saját tartalom	#
@@ -8051,7 +8172,7 @@ store.inventory.button.subscriptions=Előfizetések	#
 
 store.free=Ingyen	#
 store.redeem=Beszerzés	#
-store.view_achievement=Eredmény megtekintése	#
+store.view_achievement=Mérföldkő megtekintése	#
 store.incompatible=Inkompatibilis	#
 store.incompatibleOnDevice=Nem kompatibilis az eszközön	#
 store.itemIsIncompatible=Ez az elem nem kompatibilis az eszközöddel.	#
@@ -8145,12 +8266,6 @@ store.createdBy=Alkotó: %s	#
 store.seeMoreBy=%s további alkotásainak megtekintése	#
 store.seeMoreBy.multiCreatorBundle=További csomaggyűjtemény-alkotók	#
 store.fetchingItem=Csatlakozás a Piactérhez…	#
- 
-store.timer.daysAbbreviated=%s n		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.hoursAbbreviated=%s ó		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.minutesAbbreviated=%s p		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.secondsAbbreviated=%s mp		### This is to let player know how many days are left in a sale. It needs to be abbreviated with no more than 3 characters
-store.timer.left=%s van hátra	#
 
 store.startMenu.sale=Akció!	#
 
@@ -8171,6 +8286,13 @@ store.mashup.count.texturePack=1 textúracsomag	#
 store.mashup.count.texturePacks=%s textúracsomag	#number of texture packs	#
 store.mashup.count.world=1 világ	#
 store.mashup.count.worlds=%s világ	#number of worlds	#
+store.mashup.count.addonPack=1 bővítmény	#
+store.mashup.count.addonPacks=%s bővítmény	#number of addons	#
+
+store.addon.activateAddonPack=Aktiváld a bővítményt!	#
+store.addon.choseWorldPopupTitle=Mihez szeretnéd hozzáadni?	#
+store.addon.choseWorldPopupExisting=Meglévő	#
+store.addon.choseWorldPopupNew=Új	#
 
 store.mashup.bundle=Csomaggyűjtemény	#
 store.mashup.bundle.multipleCreators=Több alkotó	#
@@ -8383,7 +8505,7 @@ store.search.filter.offer_type=Ajánlatok típusai	#
 store.search.filter.offer_type.selectedCount=%d ajánlattípus	#
 store.search.filter.offer_type.bundles=Csomaggyűjtemények	#
 store.search.filter.offer_type.realmsplus=Realms Plus	#
-store.search.filter.offer_type.csb=Piactér-bérlet	#
+store.search.filter.offer_type.csb=Marketplace Pass		#### {StrContains="Marketplace Pass"}
 
 store.search.filter.clear.pack_type=Csomagtípus szűrőinek törlése	#
 store.search.filter.mashupPacks=Mixek	#
@@ -8400,6 +8522,7 @@ store.search.filter.skinPacks=Felületek	#
 store.search.filter.texturePacks=Textúrák	#
 store.search.filter.title=Szűrők	#
 store.search.filter.worldTemplates=Világok	#
+store.search.filter.addOns=Bővítmények	#
 store.search.filter.installed_state=Telepített állapot	#
 store.search.filter.installed=Telepítve	#
 store.search.filter.notInstalled=Nincs telepítve	#
@@ -8436,7 +8559,7 @@ store.uploadContentToRealmsFail.message=A tartalom feltöltése sikertelen a kiv
 store.uploadContentToRealmsFail.forbidden.message=Az alkalmazott tartalmak közül egy vagy több nincs a birtokodban!	#
 store.applyToRealm=Létrehozás a Realmen	#
 store.inRealmsPlus=A Realms Plusban	#
-store.inCsb=A Piactér-bérlet része	#
+store.inCsb=A Marketplace Pass része		#### {StrContains="Marketplace Pass"}
 store.uploadWorldTitle=Lecseréled a világot?	#
 store.uploadPackTitle=Lecseréled a csomagot?	#
 store.uploadWorldMessage=Ez a művelet eltávolítja az aktuális világot, így lehetőséged nyílik lecserélni a Realm aktív helyén lévő világot. A Realms-tagjaid az új világhoz is hozzáférést kapnak. Az adatvesztés elkerülése érdekében válaszd a „Mégse” lehetőséget, és készíts másolatot az aktuális világról, vagy a „Megerősítés” gombra kattintva folytasd a műveletet és cseréld le a világot.	#
@@ -8519,7 +8642,7 @@ tile.beehive.name=Kaptár	#
 tile.bee_nest.name=Méhkas	#
 tile.target.name=Célpont	#
 tile.bed.name=Ágy	#
-tile.bed.noSleep=Csak éjszaka lehet aludni	#
+tile.bed.noSleep=Csak éjszaka és viharok zajában tudsz aludni	#
 tile.bed.notSafe=Most nem pihenhetsz, szörnyek vannak a közelben	#
 tile.bed.notValid=Az otthoni ágy hiányzik vagy valami blokkolja	#
 tile.bed.occupied=Az ágy foglalt	#
@@ -9584,12 +9707,12 @@ trial.tabbed_upsell.buttonAlternate=A teljes Minecraft-játék feloldása	#
 trial.tabbed_upsell.minecraft.title=MINECRAFT 	#
 trial.tabbed_upsell.minecraft.description=Fedezd fel korlátok nélkül saját egyedi világaidat, építs meg bármit, amerre képzeleted elrepít – a legegyszerűbb otthontól a legnagyszerűbb kastélyokig! Játssz Kreatív módban, hogy korlátlan nyersanyagokkal építhess csodákat. Esetleg bányássz Túlélő módban, készíts fegyvereket és páncélt, hogy visszaverd a veszélyes mobokat, és megérd a másnapot. És persze játssz a barátaiddal online! Oldd fel a teljes játékot még ma!	#
 trial.tabbed_upsell.xbl.title=MICROSOFT-FIÓK	#
-trial.tabbed_upsell.xbl.description=A teljes Minecraft-élmény része a kreatív mód és az eredmények, továbbá Microsoft-fiók birtokában találkozhatsz a Minecraft-közösség tagjaival is! Csatlakozz barátaid világaihoz, szerezz új barátokat a kiszolgálókon, és szinkronizáld piactéri vásárlásaidat minden eszközön, ahol a Minecrafttal játszol.	#
+trial.tabbed_upsell.xbl.description=A teljes Minecraft-élmény részét képezi a Kreatív mód és a mérföldkövek, és Microsoft-fiók birtokában a Minecraft-közösség tagjaival is találkozhatsz! Csatlakozhatsz barátaid világaihoz, új barátokat szerezhetsz a kiszolgálókon, és szinkronizálhatod piactéri vásárlásaidat minden eszközön, ahol a Minecrafttal játszol.	#
 trial.tabbed_upsell.xbl.description.line2=*(Piactérrel rendelkező változatokban)	#
 trial.tabbed_upsell.achievements.title=EREDMÉNYEK	#
-trial.tabbed_upsell.achievements.description=A teljes, Kreatív és többjátékos módot és egyebeket is tartalmazó Minecraft-élmény mellett eredményeket és játékospontokat szerezhetsz. Ezek jelölik fejlődésed útját a Minecraftban, megmutatva Microsoft-fiókkal rendelkező barátaidnak játékbeli teljesítményedet. Szerezd meg a teljes játékot, hogy elkezdhesd gyűjteni őket!	#
+trial.tabbed_upsell.achievements.description=A Minecraft Kreatív és Többjátékos módot és egyebeket is tartalmazó teljes verziójában mérföldköveket is elérhetsz, és játékospontokat is szerezhetsz. Ezek jelölik fejlődésed útját a Minecraftban, megmutatva Microsoft-fiókkal rendelkező barátaidnak, hogy állsz a játékon belül. Szerezd be a teljes játékot, hogy elkezdhesd gyűjteni őket!	#
 trial.tabbed_upsell.multiplayer.title=TÖBBJÁTÉKOS MÓD	#
-trial.tabbed_upsell.multiplayer.description=A teljes Minecraft-élménnyel a barátaiddal együtt élvezheted a Kreatív módot, a mérföldköveket és a többjátékosos módot a Minecraft-eszközökön! Játssz a barátaiddal konzolon, PC-n és mobilon a közös alkotáshoz, felfedezéshez és túléléshez. Oldd fel a teljes Minecraft-élményt még ma!	#
+trial.tabbed_upsell.multiplayer.description=Ha beszerzed a Minecraft teljes verzióját, a barátaiddal együtt kihasználhatod a Kreatív mód, a mérföldkövek és a Többjátékos mód előnyeit több eszközön is, amelyeken Minecraftot játszol! Játszhatsz a barátaiddal konzolon, PC-n és mobilon is, hogy együtt tudjatok alkotni, világokat felfedezni és túlélőkalandokra indulni. Juss hozzá a teljes Minecraft-élményhez még ma!	#
 trial.tabbed_upsell.server.title=KISZOLGÁLÓK	#
 trial.tabbed_upsell.server.description=A kiszolgálók kínálják talán a legkreatívabb élményeket a Minecraftban! Játssz remek minijátékokat, találkozz a Minecraft-közösséggel, és szerezz új barátokat! Oldd fel a teljes Minecraft-élményt a kiszolgálók kipróbálásához!	#
 trial.tabbed_upsell.store.title=ÁRUHÁZ	#
@@ -9597,7 +9720,7 @@ trial.tabbed_upsell.store.description=Szerezz hozzáférést a Minecraft Piacté
 trial.tabbed_upsell.creative.title=KREATIVITÁS	#
 trial.tabbed_upsell.creative.description=Vásárold meg a Minecraftot, és megkapod a Kreatív módot! Férj hozzá a teljes leltárhoz – csak a képzeleted szabja meg, mit építhetsz! Repüld körbe a világot, alkosd meg álmaid otthonát bármiből, vagy robbants fel egy egész hegyet egy vagon dinamittal! 	#
 trial.tabbed_upsell.addon.title=BŐVÍTMÉNYEK	#
-trial.tabbed_upsell.addon.description=Szeretnéd, ha a farkasok úgy viselkednének, mint a nyuszik? Átalakítanál minden fát vattacukorrá? Mindent megváltoztathatsz a teljes Minecraft-élményben a bővítményekkel! Plusz hozzáférést kapsz a Többjátékos és Kreatív módhoz, az eredményekhez és még sok máshoz! Vásárold meg a Minecraftot most a teljes hozzáféréshez!	#
+trial.tabbed_upsell.addon.description=Szeretnéd, ha a farkasok úgy viselkednének, mint a nyuszik? Vagy mondjuk átalakítanál minden fát vattacukorrá? A bővítményekkel a Minecraft-élmény minden elemét megváltoztathatod! Plusz hozzáférést kapsz a Többjátékos és Kreatív módhoz, a mérföldkövekhez és még sok máshoz! Vásárold meg a Minecraftot most a teljes hozzáféréshez!	#
 trial.tabbed_upsell.seeds.title=MAGOK	#
 trial.tabbed_upsell.seeds.description=Oldd fel a teljes Minecraft-élményt, és hozzáférést kapsz a kezdőértékekhez! A kezdőértékek segítenek az új biomok felfedezésében – túlélhetsz a jégmezőkön, hatalmas dombokat mászhatsz meg vagy átkelhetsz a sivatagokon. Indítsd a játékot egyedi sablonokkal, vagy fedezz fel új, véletlenszerű világokat! Vásárold meg a Minecraftot még ma, hogy hozzáférj a kezdőértékekhez, a Kreatív módhoz, a többjátékosos módhoz és még sok máshoz!	#
 
@@ -9607,14 +9730,14 @@ trial.thanks_for_testing.button=Ugrás a GYIK oldalra!	#
 trial.thanks_for_testing.minecraft.title=MINECRAFT PRÓBAVERZIÓ	#
 trial.thanks_for_testing.minecraft.description=Köszönjük, hogy letöltötted a Minecraft Chromebookhoz készült próbaverzióját! A játéktesztelés értékes adatokkal fog szolgálni a hibajavításhoz és a műszaki hibaelhárításhoz. Hibát találtál? Jelentsd a bugs.mojang.com webhelyen! Egyéb kérdéseid vannak? Látogass el a GYIK oldalunkra.	#
 trial.thanks_for_testing.xbl.title=MICROSOFT-FIÓK	#
-trial.thanks_for_testing.xbl.description=A Kreatív mód és a mérföldkövek a teljes Minecraft-élmény részei, ráadásul Microsoft-fiók birtokában találkozhatsz a Minecraft-közösség tagjaival is! Csatlakozz a barátaid világaihoz, szerezz új barátokat a kiszolgálókon, és szinkronizáld piactéri vásárlásaidat minden eszközön, ahol a Minecrafttal játszol.	#
+trial.thanks_for_testing.xbl.description=A teljes Minecraft-élmény részét képezi a Kreatív mód és a mérföldkövek, és Microsoft-fiók birtokában a Minecraft-közösség tagjaival is találkozhatsz! Csatlakozhatsz barátaid világaihoz, új barátokat szerezhetsz a kiszolgálókon, és szinkronizálhatod piactéri vásárlásaidat minden eszközön, ahol a Minecrafttal játszol.	#
 trial.thanks_for_testing.xbl.description.line2=*(Piactérrel rendelkező változatokban)	#
-trial.thanks_for_testing.achievements.description=A teljes Minecraft-élményben a Kreatív és a többjátékosos mód mellett mérföldköveket és játékospontokat is szerezhetsz. Ezek jelölik a fejlődésed útját a Minecraftban, és megmutatják a Microsoft-fiókkal rendelkező barátaidnak a játékbeli teljesítményedet.	#
-trial.thanks_for_testing.multiplayer.description=A teljes Minecraft-élménnyel a barátaiddal együtt élvezheted a Kreatív módot, a mérföldköveket és a többjátékosos módot a Minecraft-eszközökön! Játssz a barátaiddal konzolon, PC-n és mobilon a közös alkotáshoz, felfedezéshez és túléléshez.	#
+trial.thanks_for_testing.achievements.description=A Minecraft Kreatív és Többjátékos módot és egyebeket is tartalmazó teljes verziójában mérföldköveket is elérhetsz, és játékospontokat is szerezhetsz. Ezek jelölik fejlődésed útját a Minecraftban, megmutatva Microsoft-fiókkal rendelkező barátaidnak, hogy állsz a játékon belül.	#
+trial.thanks_for_testing.multiplayer.description=Ha beszerzed a Minecraft teljes verzióját, a barátaiddal együtt kihasználhatod a Kreatív mód, a mérföldkövek és a Többjátékos mód előnyeit több eszközön is, amelyeken Minecraftot játszol! Játszhatsz a barátaiddal konzolon, PC-n és mobilon is, hogy együtt tudjatok alkotni, világokat felfedezni és túlélőkalandokra indulni.	#
 trial.thanks_for_testing.server.description=A teljes Minecraft-élményen belül a kiszolgálók kínálják talán a legkreatívabb élményeket a Minecraftban! Játssz remek minijátékokkal, találkozz a Minecraft-közösséggel, és szerezz új barátokat!	#
 trial.thanks_for_testing.store.description=A teljes játékkal hozzáférhetsz a Minecraft Piactérhez, a játékon belüli boltunkhoz. Turbózd fel a külsőd új felületekkel, változtasd meg a világod, vagy fedezz fel elképesztő új térképeket a legjobb közösségi tartalomfejlesztők jóvoltából!	#
 trial.thanks_for_testing.creative.description=A Kreatív mód a teljes Minecraft-élmény egyik népszerű eleme. Férj hozzá a teljes leltárhoz – csak a képzeleted szabja meg, mit építhetsz! Repüld körbe a világot, alkosd meg álmaid otthonát bármiből, vagy robbants fel egy egész hegyet egy vagon dinamittal!	#
-trial.thanks_for_testing.addon.description=Szeretnéd, ha a farkasok úgy viselkednének, mint a nyuszik? Átalakítanál minden fát vattacukorrá? A teljes Minecraft-élményben mindent megváltoztathatsz a bővítményekkel! Emellett hozzáférést kapsz a többjátékosos és a Kreatív módhoz, a mérföldkövekhez és még sok máshoz!	#
+trial.thanks_for_testing.addon.description=Szeretnéd, ha a farkasok úgy viselkednének, mint a nyuszik? Vagy mondjuk átalakítanál minden fát vattacukorrá? A bővítményekkel a Minecraft-élmény minden elemét megváltoztathatod! Plusz hozzáférést kapsz a Többjátékos és Kreatív módhoz, a mérföldkövekhez és még sok máshoz!	#
 trial.thanks_for_testing.seeds.description=A teljes Minecraft-élménnyel hozzáférést kapsz a kezdőértékekhez! A kezdőértékek segítenek az új biomok felfedezésében – túlélhetsz a jégmezőkön, hatalmas dombokat mászhatsz meg vagy átkelhetsz a sivatagokon. Indítsd a játékot egyedi sablonokkal, vagy fedezz fel új, véletlenszerű világokat!	#
 
 trial.tabbed_upsell.navleft=Fülváltás balra	#
@@ -9711,10 +9834,6 @@ xbox.signinquestion=Bejelentkezel?	#
 xbox.notnow=Most nem	#
 xbox.signingin=Bejelentkezés Microsoft-fiókkal...	#
 xbox.signingin.offline=Bejelentkezés	#
-xbox.firstsignin.line1=Üdvözöl a Minecraft! Jelentkezz be a Microsoft-fiókoddal a Minecraft közösségéhez való csatlakozáshoz, ahol a számítógépet, konzolt, telefont és táblagépet használók együtt játszhatnak. És ami a legjobb:	#
-xbox.firstsignin.line2=INGYEN van!	#
-xbox.firstsignin.line3=Még nincs fiókod? Hozz létre egyet most a mérföldkövek eléréséhez, illetve a Realmekhez és kiszolgálókhoz való csatlakozáshoz!	#
-xbox.firstsignin.line3.norealmsOrServers=Még nincs fiókod? Hozz létre egyet most, hogy eredményeket szerezz és együtt játszhass más platformot használó barátaiddal!	#
 xbox.failedsignin.body=Nem tudtunk beléptetni a Microsoft-fiókodba. Így csak korlátozott mértékben férsz hozzá a Realmshez, a profilokhoz és a Piactéren vásárolt elemekhez. Próbálkozz újra később.	#
 xbox.failedsignin.error=Hibakód:	#
 xbox.failedsignin.moreInfo=További információk	#
@@ -9743,6 +9862,8 @@ xbox.genericsignin.line3=Bárhol használhatod a Minecrafthoz.	#
 xbox.disconectionscreen.notSignedIn=A barátokkal való játékhoz jelentkezz be Microsoft-fiókkal.	#
 xbox.disconectionscreen.multiplayerNotAllowed=Ennek a Microsoft-fióknak nincs engedélye a többjátékos módhoz csatlakozni.	#
 xbox.disconectionscreen.accessDenied=A csatlakozáshoz egy barátodnak kell ebben a játékban játszania.	#
+
+xbox.addfriendsscreen.shareProfile=Vegyél fel a barátaid közé a Minecraftban!	#
 
 xbox.friendfinder.enterGamertag=Becenév megadása	#
 xbox.friendfinder.findFriends=Barátok keresése becenév alapján	#
@@ -9817,13 +9938,15 @@ xbox.report.quittingEarly=Korai kilépés	#
 xbox.report.unsportingBehavior=Sportszerűtlen magatartás	#
 xbox.report.voiceCommunication=Szóbeli kommunikáció	#
 
+xbox.statistics.timePlayed=Játékidő	#
+xbox.statistics.blocksBroken=Széttört blokkok	#
+xbox.statistics.distanceTravelled=Megtett távolság	#
+xbox.statistics.mobsDefeated=Legyőzött mobok	#
+
 ## Player safety toast messages
 safety.muted.title=Ideiglenesen elnémítottak a csevegésben.	#
 safety.muted.message=Mindenképpen tartsd be a Minecraft közösségi normáit.	#
 
-safety.reportCap=Úgy tűnik, sok más játékost jelentettél. Köszönjük, hogy segítesz abban, hogy a Minecraft egy biztonságos és befogadó hely lehessen. Ne feledd, hogy a valótlan jelentések sértik a közösségi alapelveinket.	#
-safety.reportFriend=%s a barátod. Biztosan jelenteni akarod? A valótlan jelentések sértik a közösségi alapelveinket.	#
-safety.reportFriend.title=%s jelentése	#
 safety.bannedSkin.title=A felület nem engedélyezett többjátékos módban	#
 safety.bannedSkin.button=További információk	#
 safety.bannedSkin.continue=Folytatás az alapértelmezett felülettel	#
@@ -9933,6 +10056,7 @@ content.import.succeeded=Sikeresen importáltad ezt: „%s”	#
 content.import.succeeded_with_warnings=Sikeresen, de figyelmeztetésekkel importáltad ezt: „%s”	#
 content.import.succeeded_with_warnings.subtitle=További információkért kattints ide	#
 content.import.started=Importálás elindítva...	#
+content.import.importedWorldPrefix=importálva	#
 
 ## World Templates
 worldTemplate.festivemashup2016.name=Ünnepi mix 2016	#
@@ -10017,85 +10141,6 @@ tips.edu.28=Szeretnéd használni a Code Buildert? Bizonyosodj meg róla, hogy a
 tips.edu.29=Nyomd meg az F5 billentyűt a játékos perspektívájának megváltoztatásához.	#
 tips.edu.30=Használd a „/spawnpoint” parancsot az újraéledési pontod megváltoztatásához. Pont olyan, mintha egy ágyban aludtál volna!	#
 
-tips.game.1=Használj tengerifüvet tengeri teknősök odacsalogatásához és tenyésztéséhez.	#
-tips.game.2=Védd meg a bébiteknősöket az ellenséges moboktól!	#
-tips.game.3=A bébiteknősök szarulemezeket vedlenek, ahogy nőnek, amelyekből teknőspáncélt készíthetsz.	#
-tips.game.4=Használd az ágyat az újjászületési pontod beállításához a nap folyamán.	#
-tips.game.5=Főzz néhány víz alatti légzés bájitalt a víz alatti felfedezéshez!	#
-tips.game.6=A delfinek elvezethetnek hajóroncsokhoz és víz alatti romokhoz, adj nekik enni egy kis tőkehalat, majd kövesd őket!	#
-tips.game.7=Használj ollót a tök kifaragásához!	#
-tips.game.8=Használj fantomhártyát az elytra megjavításához!	#
-tips.game.9=3587 fajta trópusi hal van!	#
-tips.game.10=A tengeri uborkát beolvaszthatod limezöld festéknek.	#
-tips.game.11=Használd a szénabálákat lámák tenyésztéséhez!	#
-tips.game.12=Az iránytűk mindig a világ teremtőpontjára mutatnak – készíts egyet, hogy odatalálj!	#
-tips.game.13=Kereskedj a falusiakkal, hogy élelemre, eszközökre, sőt akár kincstérképekre tehess szert!	#
-tips.game.14=Tudtad, hogy a bal kezedben is tarthatod a térképet?	#
-tips.game.15=Az ólmot használhatod a csónakokon.	#
-tips.game.16=Lopakodj vagy viselj fagyjáró cipőt, hogy biztonságban mozogj a magmablokkokon.	#
-tips.game.17=Ollóval gyűjthetsz pókhálót.	#
-tips.game.18=Gyémántra van szükséged? Minél mélyebbre ásol, annál gyakoribbak!	#
-tips.game.19=A gyémánt, vöröskő vagy arany bányászatához használj vas-, gyémánt- vagy alvilágérc csákányt, különben nem fogod tudni kifejteni az ércet.	#
-tips.game.20=Szükséged van szénre a fáklyákhoz vagy tüzelőanyagnak? Próbálj hasábfákat hevíteni a kemencében, hogy faszenet készíts!	#
-tips.game.21=Az arany jóval gyakrabban fordul elő a Köves puszta biomokban!	#
-tips.game.22=Az elytra segítségével lehet sárkányrepülni, keresd őket a Vég-város hajókban!	#
-tips.game.23=Próbálj ki néhány új funkciót a Kísérletek bekapcsolásával!	#
-tips.game.24=Szigonyokat a tengeri zombiktól szerezhetsz. A szigonyt forgathatod vagy hajíthatod.	#
-tips.game.25=Szaporíthatod a Hoglinokat Karmazsin gombával, de ez veszélyes!	#
-tips.game.26=Felhevíthetsz 20 tárgyat a kemencében egy kiszáradt hínár blokkot használva a felfűtéshez.	#
-tips.game.27=Azok a creeperek, amelyeket csontvázak nyila öl meg, hanglemezeket hagyhatnak hátra.	#
-tips.game.28=Olyan emberek, mint TE, készítik a Piactéren a tartalmat!	#
-tips.game.29=Tudtad, hogy számos közösségi alkotó megél a Piactéren kínált tartalomból?	#
-tips.game.30=Találsz felületeket, amikkel testre szabhatod a játékon belüli élményt, vagy bizonyos platformokon használhatod a sajátodat is!	#
-tips.game.31=A textúracsomagok megváltoztathatják a blokkok, tárgyak, sőt még a menük kinézetét is a játékban. Próbáld ki őket!	#
-tips.game.32=Nézz körül a Piactéren, hogy új világokat és kalandokat találj.	#
-tips.game.33=Jelentkezz, és legyél te is alkotó a Piactéren!	#
-tips.game.34=A mixcsomagokban találsz felfedezésre váró világot, felületeket, textúrákat, sőt új zenét is.	#
-tips.game.35=Tudtad, hogy több mint 500, a közösség által készített, Piactéren elérhető csomag van, és hogy a számuk hetente növekszik ?	#
-tips.game.36=Csatlakozz a társalgáshoz: discord.gg/Minecraft	#
-tips.game.37=A smaragdérc a legritkább érc a Minecraftban! Csak hegyvidékeken és réteken lelhetők fel!	#
-tips.game.38=A csontváz ló megszelídítéséhez nem kell nyereg.	#
-tips.game.39=Az ocelotok megmutatják a creepereknek, ki a főnök!	#
-tips.game.40=Diorit; szereted vagy utálod.	#
-tips.game.41=A fantomok veszélyes mobok, amelyek éjszaka jelennek meg. Ügyelj a megfelelő mennyiségű alvásra!	#
-tips.game.42=A zombik tengeri zombivá alakulnak, ha víz alá süllyednek.	#
-tips.game.43=A Minecraft Live-ra minden évben sor kerül! Készülj te is a következőre!	#
-tips.game.44=Tűzijáték használatával megnövelheted az elytra sebességét a levegőben. Csak... vigyázz, fel ne robbanjon, különben NAGYON fájni fog!	#
-tips.game.45=Aranyat leggyakrabban az Alvilágban és a Köves puszta biomokban találhatsz.	#
-tips.game.46=Az emberek egyáltalán olvassák ezeket?	#
-tips.game.47=Végtelen csodák, vég nélküli lehetőségek.	#
-tips.game.48=NE HAGYD A FÁKAT LEBEGNI!	#
-tips.game.49=Sprintelj a vízben az úszáshoz!	#
-tips.game.50=Az elrugaszkodás bűvölés átrepít a levegőben, ha esik az eső.	#
-tips.game.51=A Minecraft Live egy világméretű, interaktív, élőben közvetített esemény. Kapd fel a cuccod, és csatlakozz a bulihoz!	#
-tips.game.52=Legyél kedves az állatokkal!	#
-tips.game.53=A jelzőfény nagy tudású tárgy, amelyet csak a sorvasztóból nyert alvilági csillaggal lehet elkészíteni!	#
-tips.game.54=Ne öld meg a delfineket, te szörnyeteg!	#
-tips.game.55=Tudtad, hogy az alvilági csillagokat nem semmisíti meg a robbanás?	#
-tips.game.56=Amikor egyenesen felfelé ásol, helyezz egy fáklyát a lábadhoz, ez majd megakadályozza, hogy homok vagy kavics hulljon a nyakadba.	#
-tips.game.57=Csereberélhetsz a piglinekkel.	#
-tips.game.58=Nyírj meg egy kaptárt vagy fészket, hogy méhsejthez juss, egy palackkal pedig mézet szerezhetsz.	#
-tips.game.59=Építs tábortüzet egy kaptár vagy fészek alá, hogy békésen takaríthasd be a mézet. A méhek hálásak lesznek.	#
-tips.game.60=Az alvilágban való feltámadáshoz feltöltött újjászületési pont szükséges.	#
-tips.game.61=Újjászületési pontot izzókővel tölthetsz fel.	#
-tips.game.62=Megosztanál velünk valamit? Látogass el a feedback.minecraft.net weboldalra!	#
-tips.game.63=Munkásokat a Fosztogatótáborokban és az Erdei kastélyokban találsz.	#
-tips.game.64=A Munkások örömmel gyűjtik a tárgyakat! Ha adsz neki egyet egy bizonyos tárgyból, megpróbál többet összegyűjteni belőle.	#
-tips.game.65=A Munkások szeretik a zenét, ezért interakcióba lépnek a Hangblokkokkal!	#
-tips.game.66=A hegyvonulatok alatt ősi városok bújnak meg.	#
-tips.game.67=Amikor a Mélysötétben bolyongsz, a csend a kulcs.	#
-tips.game.68=Használd a vizesüveget egy földblokkon, és sarat kapsz!	#
-tips.game.69=A békák kicsi és blokkszerű mobokat esznek.	#
-tips.game.70=A békák az alapján választanak változatot, hogy milyen biomban cseperedett fel az ebihal.	#
-tips.game.71=Az ebihalakat vödrökbe gyűjtheted.	#
-tips.game.72=Fedezz fel szerkezeteket szerte a Minecraft-világban, és keress kovácssablonokat a páncéldarabjaid díszítéséhez.	#
-tips.game.73=Több kovácssablonra van szükséged? Próbáld meg lemásolni őket.	#
-tips.game.74=Úgy tűnik, a szimatolótojás szereti a mohablokkokat.	#
-tips.game.75=A mobfejek hangokat adnak ki, próbáld ki őket hangblokkokon!	#
-tips.game.76=Egyes homokblokkok gyanúsan nézhetnek ki. Használd rajtuk az ecsetedet, hogy jó cuccokra lelj!	#
-tips.game.77=Két játékos egyszerre ülhet egy tevén.	#
-tips.game.78=A tevék... vízszintesen ugranak!	#
-
 beginnerTips.1=A legtöbb szörny csak éjszaka jön elő. Napközben biztonságban vagy... valószínűleg.	#
 beginnerTips.2=Törd össze a blokkokat, és gyűjtsd be az erőforrásokat. A barkácshálón hasznos tárgyakat készíthetsz. És most irány barkácsolni!	#
 beginnerTips.3=Végtelen számú életed van, de a tárgyak a talajra esnek, amikor meghalsz. Siess vissza, hogy felvedd őket!	#
@@ -10108,6 +10153,7 @@ beginnerTips.9=Az ágyak nagyszerű dolgok! Barkácsolj egyet, hogy gyorsan elte
 beginnerTips.10=Légy óvatos úszás közben. Ha túl sokáig maradsz a víz alatt, elfogy a levegőd.	#
 beginnerTips.11=A Túlélő módban 4 különböző nehézségi szintből választhatsz: Békés, Könnyű, Normál és Nehéz. De akár Kreatív módban is játszhatsz, ilyenkor végtelen erőforrást kapsz!	#
 beginnerTips.12=A Minecraft világa mindig tartogat meglepetéseket: várnak rád a különböző állatok, növények és még §f§k§a§b§r §f§k§a§b§r		### please leave "§f§k§a§b§r" unchanged
+
 
 midgameTips.1=A vasgólemek érted küzdenek!	#
 midgameTips.2=Adj egy csontot a farkasnak, hogy megszelídítsd. Ezután szólhatsz neki, hogy leüljön vagy akár kövessen téged.	#
@@ -10127,7 +10173,7 @@ midgameTips.15=A hangblokkok más-más hangszer hangján szólalnak meg attól f
 midgameTips.16=Ha megtámadsz egy farkast, a közelben lévő farkasok ellenségessé válnak, és megtámadnak. 	#
 midgameTips.17=A farkasok és a vasgólemek nem támadják a creepereket.	#
 midgameTips.18=A csirkék 5–10 percenként raknak egy tojást.	#
-midgameTips.19=Az obszidián csak gyémántcsákánnyal bányászható.	#
+midgameTips.19=Az obszidián gyémántcsákánnyal bányászható.	#
 midgameTips.20=A creeperekből szerezhetsz a legegyszerűbben puskaport.	#
 midgameTips.21=A megszelídített farkasok farkának állása mutatja, hogy mennyire egészségesek. Etesd őket hússal, hogy egészségesebbek legyenek.	#
 midgameTips.22=Különböző színű festékeket készíthetsz a különféle anyagokból, Főzd meg a kaktuszt a kemencében, hogy zöld festéket szerezz!	#
@@ -10179,7 +10225,7 @@ midgameTips.67=Végtelen csodák, vég nélküli lehetőségek.	#
 midgameTips.68=Ültess néhány facsemetét, és fává fognak cseperedni.	#
 midgameTips.69=Kapával készítheted elő az ültetésre váró földterületeket.	#
 
-lategameTips.1=A zombipiglinek nem támadnak meg, ha aranypáncél van rajtad – kivéve, ha felbőszíted őket.	#
+lategameTips.1=A zombifikálódott piglinek nem támadnak meg – kivéve, ha felbőszíted őket.	#
 lategameTips.2=Üsd vissza a tűzgolyókat a szellemre!	#
 lategameTips.3=A zúzottkő ellenáll a szellemek tűzgolyóinak, így használt veszed a portálok védelméhez.	#
 lategameTips.4=A zenét szerezte: C418, Lena Raine és Kumi Tanioka.	#
@@ -10209,6 +10255,12 @@ lategameTips.27=Diorit; szereted vagy utálod.	#
 
 tips.realms.1=Készíts egy képernyőképet a Játék menü használatával.	#
 tips.realms.2=A Realm mindig online állapotú, így te és a barátaid akkor játszhattok, amikor csak szeretnétek.	#
+tips.realms.3=Kövesd nyomon a Történetek hírcsatornáját a Realms-történetekben, hogy mindig tudd, mi zajlik éppen a Realmedben.	#
+tips.realms.4=Oszd meg a legjobb pillanataidat a Realm többi játékosával a Történetek hírcsatornában.	#
+tips.realms.5=Nézd meg a Realm-történetek Idővonalát, hogy megtudd, mikor játszanak a többiek.	#
+tips.realms.6=A Realm-történeteket a játékmenüből érheted el, amikor a Realmben játszol.	#
+tips.realms.7=A Realm-történetek Tagok lapján megtudhatod, kik a Realm közösségének tagjai.	#
+tips.realms.8=A Realms-történetekkel lépést tarthatsz másokkal a barátaiddal, figyelemmel követheted az előrehaladásukat, és megszervezhetitek, mikor tudtok közösen játszani.	#
 
 splitscreen.joinPrompt=Csatlakozás a(z) %s. játékosként	#
 splitscreen.unavailable.toastHeader=Felosztott kép nem haszn.	#
@@ -10417,8 +10469,8 @@ dr.header.featured_skins=Kiemelt felületek	#
 dr.header.previewAppearance=Megjelenési előnézet	#
 dr.header.colorPicker=Színválasztó	#
 dr.achievement.achievement_locked.not_signed_in=A tárgy egy mérföldkő teljesítésével oldható fel.	#
-dr.achievement.achievement_locked.signed_in=A tárgy a(z) %s mérföldkő teljesítésével oldható fel.	#
-dr.achievement.achievement_unlocked=A tárgy a(z) %s mérföldkő teljesítésével került feloldásra.	#
+dr.achievement.achievement_locked.signed_in=A tárgyhoz a(z) %s mérföldkő teljesítésével juthatsz hozzá.	#
+dr.achievement.achievement_unlocked=A tárgyhoz a(z) %s mérföldkő teljesítésével jutottál hozzá.	#
 dr.achievement.challenge_locked=A tárgy egy Minecraft Earth-kihívás teljesítésével oldható fel.	#
 dr.achievement.challenge_unlocked=A tárgy egy Minecraft Earth-kihívás teljesítésével került feloldásra.	#
 dr.arm_size_label_text=Karméret	#
@@ -10517,7 +10569,7 @@ dr.marketplace.get_more_skins=Több felület beszerzése	#
 dr.classic_skins.show_more=Több megjelenítése	#
 
 onlinePlay.notRated=Az online játék korkategóriája nincs meghatározva	#
-onlinePlay.message=Online játék során találkozhatsz olyan csevegőüzenekkel vagy egyéb felhasználók által létrehozott tartalommal, amely nem ellenőrzött, így nem garantálható, hogy minden korosztálynak megfelel.	#
+onlinePlay.message=Online játék során láthatsz olyan csevegőüzeneket vagy más felhasználók által létrehozott tartalmat, amely nem biztos, hogy minden korosztálynak megfelel.	#
 onlinePlay.editor.notRated=Az online szerkesztés korkategóriája nincs meghatározva	#
 onlinePlay.editor.message=Az online szerkesztés során találkozhatsz olyan csevegőüzenekkel vagy egyéb, felhasználók által létrehozott tartalmakkal, amelyek nem ellenőrzöttek, így nem garantálható, hogy minden korosztálynak megfelelnek.	#
 onlinePlay.doNotShowAgain=Képernyő végleges elrejtése	#
