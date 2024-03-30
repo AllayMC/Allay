@@ -36,7 +36,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @ComponentIdentifier
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_viewer_component");
 
-    protected byte idCounter = 0;
+    protected byte idCounter = 1;
     @Dependency
     protected EntityPlayerBaseComponent baseComponent;
     @Dependency
@@ -51,7 +51,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @Override
     public byte assignInventoryId() {
         if (idCounter + 1 >= 100) {
-            idCounter = 0;
+            idCounter = 1;
         }
         return idCounter++;
     }
