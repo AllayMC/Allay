@@ -5,16 +5,12 @@ package org.allaymc.api.block.property.enums;
  * Allay Project <p>
  * @author daoge_cmd
  */
-public enum WoodType {
-  ACACIA,
+public enum VaultState {
+  ACTIVE,
 
-  BIRCH,
+  EJECTING,
 
-  DARK_OAK,
+  INACTIVE,
 
-  JUNGLE,
-
-  OAK,
-
-  SPRUCE
+  UNLOCKING
 }

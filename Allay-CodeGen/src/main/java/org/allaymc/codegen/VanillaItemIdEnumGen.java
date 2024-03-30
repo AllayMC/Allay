@@ -18,7 +18,7 @@ import static org.allaymc.codegen.VanillaItemInterfaceGen.MAPPED_ITEM_DATA;
  */
 public class VanillaItemIdEnumGen {
     private static final ClassName VANILLA_ITEM_ID_CLASS = ClassName.get("org.allaymc.api.data", "VanillaItemId");
-    private static final ClassName IDENTIFIER_CLASS = ClassName.get("org.allaymc.utils.identifier", "Identifier");
+    private static final ClassName IDENTIFIER_CLASS = ClassName.get("org.allaymc.api.utils", "Identifier");
     private static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
     private static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
     private static final String JAVA_DOC = """
@@ -49,10 +49,9 @@ public class VanillaItemIdEnumGen {
 
     @SneakyThrows
     public static void generateToAPIModule() {
-        var identifierClass = ClassName.get("org.allaymc.api.identifier", "Identifier");
         var itemTypeRegistryClass = ClassName.get("org.allaymc.api.item.registry", "ItemTypeRegistry");
         var itemTypeClass = ClassName.get("org.allaymc.api.item.type", "ItemType");
-        TypeSpec.Builder codeBuilder = commonBuilder(identifierClass).addMethod(MethodSpec.methodBuilder("getItemType")
+        TypeSpec.Builder codeBuilder = commonBuilder(IDENTIFIER_CLASS).addMethod(MethodSpec.methodBuilder("getItemType")
                 .addModifiers(Modifier.PUBLIC)
                 .addStatement("return $T.getRegistry().get(this.getIdentifier())", itemTypeRegistryClass)
                 .returns(itemTypeClass)

@@ -14,12 +14,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public class BiomeTest {
     @Test
     void readBiome() {
+        // TODO: This test would break possibly after a protocol update, which is not good
         BiomeData biomeData = BiomeTypeRegistry.getRegistry().get(VanillaBiomeId.BASALT_DELTAS);
         NbtList<String> list = new NbtList<>(NbtType.STRING,
                 "nether",
                 "soulsand_valley",
-                "spawn_endermen",
-                "spawn_ghast");
+                "spawn_ghast",
+                "spawn_endermen");
         Assertions.assertEquals(new BiomeData(0.05f, 0f, 0.1f, 0f,
                         0.2f, "soulsand_valley", (byte) 0, 0,
                         list, 2, 0.65f, 0.34117648f, 0.34901962f,

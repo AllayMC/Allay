@@ -6,5 +6,5 @@ import org.allaymc.api.block.BlockBehavior;
  * @author daoge_cmd <br>
  * Allay Project <br>
  */
-public interface BlockWoodBehavior extends BlockBehavior {
+public interface BlockStrippedJungleWoodBehavior extends BlockBehavior {
 }

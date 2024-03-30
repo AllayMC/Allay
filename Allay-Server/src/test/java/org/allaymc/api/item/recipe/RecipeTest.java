@@ -1,5 +1,6 @@
 package org.allaymc.api.item.recipe;
 
+import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
@@ -7,7 +8,6 @@ import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
-import org.allaymc.api.item.interfaces.ItemGrassStack;
 import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 import static org.allaymc.api.item.type.ItemTypes.DIAMOND_TYPE;
-import static org.allaymc.api.item.type.ItemTypes.GRASS_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.GRASS_BLOCK_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(AllayTestExtension.class)
 class RecipeTest {
 
-    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(GRASS_TYPE));
+    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(GRASS_BLOCK_TYPE));
 
     @Test
     void testShapedRecipe() {
@@ -198,9 +198,9 @@ class RecipeTest {
                 .identifier(new Identifier("minecraft:grass_magic_1"))
                 .ingredients(
                         new ItemDescriptor[]{
-                                new DefaultDescriptor(GRASS_TYPE),
-                                new DefaultDescriptor(GRASS_TYPE),
-                                new DefaultDescriptor(GRASS_TYPE)
+                                new DefaultDescriptor(GRASS_BLOCK_TYPE),
+                                new DefaultDescriptor(GRASS_BLOCK_TYPE),
+                                new DefaultDescriptor(GRASS_BLOCK_TYPE)
                         }
                 )
                 .outputs(new ItemStack[]{diamond()})
@@ -228,8 +228,8 @@ class RecipeTest {
     }
 
 
-    private ItemGrassStack grass() {
-        return GRASS_TYPE.createItemStack(
+    private ItemGrassBlockStack grass() {
+        return GRASS_BLOCK_TYPE.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()
         );
     }

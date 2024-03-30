@@ -1,11 +1,7 @@
 package org.allaymc.server.world;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.interfaces.BlockAirBehavior;
-import org.allaymc.api.block.interfaces.liquid.BlockWaterBehavior;
-import org.allaymc.api.block.interfaces.wood.BlockWoodBehavior;
 import org.allaymc.api.blockentity.init.SimpleBlockEntityInitInfo;
-import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.Chunk;
@@ -31,9 +27,9 @@ class AllayChunkTest {
 
     @Test
     void testUpdateBlockState() {
-        chunk.setBlockState(0, 0, 0, WOOD_TYPE.getDefaultState(), 0);
+        chunk.setBlockState(0, 0, 0, OAK_WOOD_TYPE.getDefaultState(), 0);
         chunk.setBlockState(0, 0, 0, WATER_TYPE.getDefaultState(), 1);
-        assertEquals(WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 0));
+        assertEquals(OAK_WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 0));
         assertEquals(WATER_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 1));
     }
 

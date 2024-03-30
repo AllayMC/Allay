@@ -263,8 +263,8 @@ import org.allaymc.api.item.interfaces.ItemGoldenRailStack;
 import org.allaymc.api.item.interfaces.ItemGoldenShovelStack;
 import org.allaymc.api.item.interfaces.ItemGoldenSwordStack;
 import org.allaymc.api.item.interfaces.ItemGraniteStack;
+import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
 import org.allaymc.api.item.interfaces.ItemGrassPathStack;
-import org.allaymc.api.item.interfaces.ItemGrassStack;
 import org.allaymc.api.item.interfaces.ItemGravelStack;
 import org.allaymc.api.item.interfaces.ItemGrayDyeStack;
 import org.allaymc.api.item.interfaces.ItemGreenDyeStack;
@@ -587,6 +587,7 @@ import org.allaymc.api.item.interfaces.ItemUnknownStack;
 import org.allaymc.api.item.interfaces.ItemUnlitRedstoneTorchStack;
 import org.allaymc.api.item.interfaces.ItemUnpoweredComparatorStack;
 import org.allaymc.api.item.interfaces.ItemUnpoweredRepeaterStack;
+import org.allaymc.api.item.interfaces.ItemVaultStack;
 import org.allaymc.api.item.interfaces.ItemVerdantFroglightStack;
 import org.allaymc.api.item.interfaces.ItemVexArmorTrimSmithingTemplateStack;
 import org.allaymc.api.item.interfaces.ItemVineStack;
@@ -618,6 +619,7 @@ import org.allaymc.api.item.interfaces.ItemWheatSeedsStack;
 import org.allaymc.api.item.interfaces.ItemWheatStack;
 import org.allaymc.api.item.interfaces.ItemWhiteDyeStack;
 import org.allaymc.api.item.interfaces.ItemWildArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemWindChargeStack;
 import org.allaymc.api.item.interfaces.ItemWitherRoseStack;
 import org.allaymc.api.item.interfaces.ItemWolfArmorStack;
 import org.allaymc.api.item.interfaces.ItemWoodenAxeStack;
@@ -858,6 +860,7 @@ import org.allaymc.api.item.interfaces.egg.ItemAxolotlSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemBatSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemBeeSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemBlazeSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemBoggedSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemBreezeSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemCamelSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemCatSpawnEggStack;
@@ -1104,12 +1107,18 @@ import org.allaymc.api.item.interfaces.helmet.ItemIronHelmetStack;
 import org.allaymc.api.item.interfaces.helmet.ItemLeatherHelmetStack;
 import org.allaymc.api.item.interfaces.helmet.ItemNetheriteHelmetStack;
 import org.allaymc.api.item.interfaces.helmet.ItemTurtleHelmetStack;
+import org.allaymc.api.item.interfaces.leaves.ItemAcaciaLeavesStack;
 import org.allaymc.api.item.interfaces.leaves.ItemAzaleaLeavesFloweredStack;
 import org.allaymc.api.item.interfaces.leaves.ItemAzaleaLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemBirchLeavesStack;
 import org.allaymc.api.item.interfaces.leaves.ItemCherryLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemDarkOakLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemJungleLeavesStack;
 import org.allaymc.api.item.interfaces.leaves.ItemLeaves2Stack;
 import org.allaymc.api.item.interfaces.leaves.ItemLeavesStack;
 import org.allaymc.api.item.interfaces.leaves.ItemMangroveLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemOakLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemSpruceLeavesStack;
 import org.allaymc.api.item.interfaces.leggings.ItemChainmailLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemDiamondLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemGoldenLeggingsStack;
@@ -1207,10 +1216,14 @@ import org.allaymc.api.item.interfaces.sign.ItemMangroveSignStack;
 import org.allaymc.api.item.interfaces.sign.ItemOakSignStack;
 import org.allaymc.api.item.interfaces.sign.ItemSpruceSignStack;
 import org.allaymc.api.item.interfaces.sign.ItemWarpedSignStack;
+import org.allaymc.api.item.interfaces.slab.ItemAcaciaDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemAcaciaSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBambooDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBambooMosaicDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBambooMosaicSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBambooSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBirchDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBirchSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBlackstoneDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBlackstoneSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCherryDoubleSlabStack;
@@ -1220,6 +1233,8 @@ import org.allaymc.api.item.interfaces.slab.ItemCobbledDeepslateSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCrimsonDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCrimsonSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDarkOakDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDarkOakSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemDeepslateBrickDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemDeepslateBrickSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemDeepslateTileDoubleSlabStack;
@@ -1229,13 +1244,16 @@ import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlab2Stack;
 import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlab3Stack;
 import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlab4Stack;
 import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlabStack;
-import org.allaymc.api.item.interfaces.slab.ItemDoubleWoodenSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemExposedCutCopperSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemExposedDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemJungleDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemJungleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMangroveDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMangroveSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMudBrickDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMudBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemOakDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemOakSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemOxidizedCutCopperSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemOxidizedDoubleCutCopperSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedBlackstoneBrickDoubleSlabStack;
@@ -1246,6 +1264,8 @@ import org.allaymc.api.item.interfaces.slab.ItemPolishedDeepslateDoubleSlabStack
 import org.allaymc.api.item.interfaces.slab.ItemPolishedDeepslateSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedTuffDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedTuffSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSpruceDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSpruceSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab2Stack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab3Stack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab4Stack;
@@ -1477,10 +1497,22 @@ import org.allaymc.api.item.interfaces.wallsign.ItemMangroveWallSignStack;
 import org.allaymc.api.item.interfaces.wallsign.ItemSpruceWallSignStack;
 import org.allaymc.api.item.interfaces.wallsign.ItemWallSignStack;
 import org.allaymc.api.item.interfaces.wallsign.ItemWarpedWallSignStack;
+import org.allaymc.api.item.interfaces.wood.ItemAcaciaWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemBirchWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemCherryWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemDarkOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemJungleWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemMangroveWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemSpruceWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedAcaciaWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedBirchWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemStrippedCherryWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedDarkOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedJungleWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemStrippedMangroveWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedSpruceWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemWoodStack;
 import org.allaymc.api.item.interfaces.wool.ItemBlackWoolStack;
 import org.allaymc.api.item.interfaces.wool.ItemBlueWoolStack;
@@ -1509,11 +1541,15 @@ public final class ItemTypes {
 
   public static ItemType<ItemAcaciaDoorStack> ACACIA_DOOR_TYPE;
 
+  public static ItemType<ItemAcaciaDoubleSlabStack> ACACIA_DOUBLE_SLAB_TYPE;
+
   public static ItemType<ItemAcaciaFenceStack> ACACIA_FENCE_TYPE;
 
   public static ItemType<ItemAcaciaFenceGateStack> ACACIA_FENCE_GATE_TYPE;
 
   public static ItemType<ItemAcaciaHangingSignStack> ACACIA_HANGING_SIGN_TYPE;
+
+  public static ItemType<ItemAcaciaLeavesStack> ACACIA_LEAVES_TYPE;
 
   public static ItemType<ItemAcaciaLogStack> ACACIA_LOG_TYPE;
 
@@ -1523,6 +1559,8 @@ public final class ItemTypes {
 
   public static ItemType<ItemAcaciaSignStack> ACACIA_SIGN_TYPE;
 
+  public static ItemType<ItemAcaciaSlabStack> ACACIA_SLAB_TYPE;
+
   public static ItemType<ItemAcaciaStairsStack> ACACIA_STAIRS_TYPE;
 
   public static ItemType<ItemAcaciaStandingSignStack> ACACIA_STANDING_SIGN_TYPE;
@@ -1530,6 +1568,8 @@ public final class ItemTypes {
   public static ItemType<ItemAcaciaTrapdoorStack> ACACIA_TRAPDOOR_TYPE;
 
   public static ItemType<ItemAcaciaWallSignStack> ACACIA_WALL_SIGN_TYPE;
+
+  public static ItemType<ItemAcaciaWoodStack> ACACIA_WOOD_TYPE;
 
   public static ItemType<ItemActivatorRailStack> ACTIVATOR_RAIL_TYPE;
 
@@ -1675,11 +1715,15 @@ public final class ItemTypes {
 
   public static ItemType<ItemBirchDoorStack> BIRCH_DOOR_TYPE;
 
+  public static ItemType<ItemBirchDoubleSlabStack> BIRCH_DOUBLE_SLAB_TYPE;
+
   public static ItemType<ItemBirchFenceStack> BIRCH_FENCE_TYPE;
 
   public static ItemType<ItemBirchFenceGateStack> BIRCH_FENCE_GATE_TYPE;
 
   public static ItemType<ItemBirchHangingSignStack> BIRCH_HANGING_SIGN_TYPE;
+
+  public static ItemType<ItemBirchLeavesStack> BIRCH_LEAVES_TYPE;
 
   public static ItemType<ItemBirchLogStack> BIRCH_LOG_TYPE;
 
@@ -1689,6 +1733,8 @@ public final class ItemTypes {
 
   public static ItemType<ItemBirchSignStack> BIRCH_SIGN_TYPE;
 
+  public static ItemType<ItemBirchSlabStack> BIRCH_SLAB_TYPE;
+
   public static ItemType<ItemBirchStairsStack> BIRCH_STAIRS_TYPE;
 
   public static ItemType<ItemBirchStandingSignStack> BIRCH_STANDING_SIGN_TYPE;
@@ -1696,6 +1742,8 @@ public final class ItemTypes {
   public static ItemType<ItemBirchTrapdoorStack> BIRCH_TRAPDOOR_TYPE;
 
   public static ItemType<ItemBirchWallSignStack> BIRCH_WALL_SIGN_TYPE;
+
+  public static ItemType<ItemBirchWoodStack> BIRCH_WOOD_TYPE;
 
   public static ItemType<ItemBlackCandleStack> BLACK_CANDLE_TYPE;
 
@@ -1770,6 +1818,8 @@ public final class ItemTypes {
   public static ItemType<ItemBlueWoolStack> BLUE_WOOL_TYPE;
 
   public static ItemType<ItemBoatStack> BOAT_TYPE;
+
+  public static ItemType<ItemBoggedSpawnEggStack> BOGGED_SPAWN_EGG_TYPE;
 
   public static ItemType<ItemBoneStack> BONE_TYPE;
 
@@ -2181,11 +2231,15 @@ public final class ItemTypes {
 
   public static ItemType<ItemDarkOakDoorStack> DARK_OAK_DOOR_TYPE;
 
+  public static ItemType<ItemDarkOakDoubleSlabStack> DARK_OAK_DOUBLE_SLAB_TYPE;
+
   public static ItemType<ItemDarkOakFenceStack> DARK_OAK_FENCE_TYPE;
 
   public static ItemType<ItemDarkOakFenceGateStack> DARK_OAK_FENCE_GATE_TYPE;
 
   public static ItemType<ItemDarkOakHangingSignStack> DARK_OAK_HANGING_SIGN_TYPE;
+
+  public static ItemType<ItemDarkOakLeavesStack> DARK_OAK_LEAVES_TYPE;
 
   public static ItemType<ItemDarkOakLogStack> DARK_OAK_LOG_TYPE;
 
@@ -2195,9 +2249,13 @@ public final class ItemTypes {
 
   public static ItemType<ItemDarkOakSignStack> DARK_OAK_SIGN_TYPE;
 
+  public static ItemType<ItemDarkOakSlabStack> DARK_OAK_SLAB_TYPE;
+
   public static ItemType<ItemDarkOakStairsStack> DARK_OAK_STAIRS_TYPE;
 
   public static ItemType<ItemDarkOakTrapdoorStack> DARK_OAK_TRAPDOOR_TYPE;
+
+  public static ItemType<ItemDarkOakWoodStack> DARK_OAK_WOOD_TYPE;
 
   public static ItemType<ItemDarkPrismarineStairsStack> DARK_PRISMARINE_STAIRS_TYPE;
 
@@ -2318,8 +2376,6 @@ public final class ItemTypes {
   public static ItemType<ItemDoubleStoneBlockSlab3Stack> DOUBLE_STONE_BLOCK_SLAB3_TYPE;
 
   public static ItemType<ItemDoubleStoneBlockSlab4Stack> DOUBLE_STONE_BLOCK_SLAB4_TYPE;
-
-  public static ItemType<ItemDoubleWoodenSlabStack> DOUBLE_WOODEN_SLAB_TYPE;
 
   public static ItemType<ItemDragonBreathStack> DRAGON_BREATH_TYPE;
 
@@ -2787,7 +2843,7 @@ public final class ItemTypes {
 
   public static ItemType<ItemGraniteStairsStack> GRANITE_STAIRS_TYPE;
 
-  public static ItemType<ItemGrassStack> GRASS_TYPE;
+  public static ItemType<ItemGrassBlockStack> GRASS_BLOCK_TYPE;
 
   public static ItemType<ItemGrassPathStack> GRASS_PATH_TYPE;
 
@@ -3077,11 +3133,15 @@ public final class ItemTypes {
 
   public static ItemType<ItemJungleDoorStack> JUNGLE_DOOR_TYPE;
 
+  public static ItemType<ItemJungleDoubleSlabStack> JUNGLE_DOUBLE_SLAB_TYPE;
+
   public static ItemType<ItemJungleFenceStack> JUNGLE_FENCE_TYPE;
 
   public static ItemType<ItemJungleFenceGateStack> JUNGLE_FENCE_GATE_TYPE;
 
   public static ItemType<ItemJungleHangingSignStack> JUNGLE_HANGING_SIGN_TYPE;
+
+  public static ItemType<ItemJungleLeavesStack> JUNGLE_LEAVES_TYPE;
 
   public static ItemType<ItemJungleLogStack> JUNGLE_LOG_TYPE;
 
@@ -3091,6 +3151,8 @@ public final class ItemTypes {
 
   public static ItemType<ItemJungleSignStack> JUNGLE_SIGN_TYPE;
 
+  public static ItemType<ItemJungleSlabStack> JUNGLE_SLAB_TYPE;
+
   public static ItemType<ItemJungleStairsStack> JUNGLE_STAIRS_TYPE;
 
   public static ItemType<ItemJungleStandingSignStack> JUNGLE_STANDING_SIGN_TYPE;
@@ -3098,6 +3160,8 @@ public final class ItemTypes {
   public static ItemType<ItemJungleTrapdoorStack> JUNGLE_TRAPDOOR_TYPE;
 
   public static ItemType<ItemJungleWallSignStack> JUNGLE_WALL_SIGN_TYPE;
+
+  public static ItemType<ItemJungleWoodStack> JUNGLE_WOOD_TYPE;
 
   public static ItemType<ItemKelpStack> KELP_TYPE;
 
@@ -3471,9 +3535,13 @@ public final class ItemTypes {
 
   public static ItemType<ItemOakChestBoatStack> OAK_CHEST_BOAT_TYPE;
 
+  public static ItemType<ItemOakDoubleSlabStack> OAK_DOUBLE_SLAB_TYPE;
+
   public static ItemType<ItemOakFenceStack> OAK_FENCE_TYPE;
 
   public static ItemType<ItemOakHangingSignStack> OAK_HANGING_SIGN_TYPE;
+
+  public static ItemType<ItemOakLeavesStack> OAK_LEAVES_TYPE;
 
   public static ItemType<ItemOakLogStack> OAK_LOG_TYPE;
 
@@ -3481,7 +3549,11 @@ public final class ItemTypes {
 
   public static ItemType<ItemOakSignStack> OAK_SIGN_TYPE;
 
+  public static ItemType<ItemOakSlabStack> OAK_SLAB_TYPE;
+
   public static ItemType<ItemOakStairsStack> OAK_STAIRS_TYPE;
+
+  public static ItemType<ItemOakWoodStack> OAK_WOOD_TYPE;
 
   public static ItemType<ItemObserverStack> OBSERVER_TYPE;
 
@@ -3997,11 +4069,15 @@ public final class ItemTypes {
 
   public static ItemType<ItemSpruceDoorStack> SPRUCE_DOOR_TYPE;
 
+  public static ItemType<ItemSpruceDoubleSlabStack> SPRUCE_DOUBLE_SLAB_TYPE;
+
   public static ItemType<ItemSpruceFenceStack> SPRUCE_FENCE_TYPE;
 
   public static ItemType<ItemSpruceFenceGateStack> SPRUCE_FENCE_GATE_TYPE;
 
   public static ItemType<ItemSpruceHangingSignStack> SPRUCE_HANGING_SIGN_TYPE;
+
+  public static ItemType<ItemSpruceLeavesStack> SPRUCE_LEAVES_TYPE;
 
   public static ItemType<ItemSpruceLogStack> SPRUCE_LOG_TYPE;
 
@@ -4011,6 +4087,8 @@ public final class ItemTypes {
 
   public static ItemType<ItemSpruceSignStack> SPRUCE_SIGN_TYPE;
 
+  public static ItemType<ItemSpruceSlabStack> SPRUCE_SLAB_TYPE;
+
   public static ItemType<ItemSpruceStairsStack> SPRUCE_STAIRS_TYPE;
 
   public static ItemType<ItemSpruceStandingSignStack> SPRUCE_STANDING_SIGN_TYPE;
@@ -4018,6 +4096,8 @@ public final class ItemTypes {
   public static ItemType<ItemSpruceTrapdoorStack> SPRUCE_TRAPDOOR_TYPE;
 
   public static ItemType<ItemSpruceWallSignStack> SPRUCE_WALL_SIGN_TYPE;
+
+  public static ItemType<ItemSpruceWoodStack> SPRUCE_WOOD_TYPE;
 
   public static ItemType<ItemSpyglassStack> SPYGLASS_TYPE;
 
@@ -4081,9 +4161,13 @@ public final class ItemTypes {
 
   public static ItemType<ItemStrippedAcaciaLogStack> STRIPPED_ACACIA_LOG_TYPE;
 
+  public static ItemType<ItemStrippedAcaciaWoodStack> STRIPPED_ACACIA_WOOD_TYPE;
+
   public static ItemType<ItemStrippedBambooBlockStack> STRIPPED_BAMBOO_BLOCK_TYPE;
 
   public static ItemType<ItemStrippedBirchLogStack> STRIPPED_BIRCH_LOG_TYPE;
+
+  public static ItemType<ItemStrippedBirchWoodStack> STRIPPED_BIRCH_WOOD_TYPE;
 
   public static ItemType<ItemStrippedCherryLogStack> STRIPPED_CHERRY_LOG_TYPE;
 
@@ -4095,7 +4179,11 @@ public final class ItemTypes {
 
   public static ItemType<ItemStrippedDarkOakLogStack> STRIPPED_DARK_OAK_LOG_TYPE;
 
+  public static ItemType<ItemStrippedDarkOakWoodStack> STRIPPED_DARK_OAK_WOOD_TYPE;
+
   public static ItemType<ItemStrippedJungleLogStack> STRIPPED_JUNGLE_LOG_TYPE;
+
+  public static ItemType<ItemStrippedJungleWoodStack> STRIPPED_JUNGLE_WOOD_TYPE;
 
   public static ItemType<ItemStrippedMangroveLogStack> STRIPPED_MANGROVE_LOG_TYPE;
 
@@ -4103,7 +4191,11 @@ public final class ItemTypes {
 
   public static ItemType<ItemStrippedOakLogStack> STRIPPED_OAK_LOG_TYPE;
 
+  public static ItemType<ItemStrippedOakWoodStack> STRIPPED_OAK_WOOD_TYPE;
+
   public static ItemType<ItemStrippedSpruceLogStack> STRIPPED_SPRUCE_LOG_TYPE;
+
+  public static ItemType<ItemStrippedSpruceWoodStack> STRIPPED_SPRUCE_WOOD_TYPE;
 
   public static ItemType<ItemStrippedWarpedHyphaeStack> STRIPPED_WARPED_HYPHAE_TYPE;
 
@@ -4218,6 +4310,8 @@ public final class ItemTypes {
   public static ItemType<ItemUnpoweredComparatorStack> UNPOWERED_COMPARATOR_TYPE;
 
   public static ItemType<ItemUnpoweredRepeaterStack> UNPOWERED_REPEATER_TYPE;
+
+  public static ItemType<ItemVaultStack> VAULT_TYPE;
 
   public static ItemType<ItemVerdantFroglightStack> VERDANT_FROGLIGHT_TYPE;
 
@@ -4424,6 +4518,8 @@ public final class ItemTypes {
   public static ItemType<ItemWhiteWoolStack> WHITE_WOOL_TYPE;
 
   public static ItemType<ItemWildArmorTrimSmithingTemplateStack> WILD_ARMOR_TRIM_SMITHING_TEMPLATE_TYPE;
+
+  public static ItemType<ItemWindChargeStack> WIND_CHARGE_TYPE;
 
   public static ItemType<ItemWitchSpawnEggStack> WITCH_SPAWN_EGG_TYPE;
 

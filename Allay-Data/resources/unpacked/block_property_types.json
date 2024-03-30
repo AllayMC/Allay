@@ -976,30 +976,12 @@
                 63
             ]
         },
-        "new_leaf_type": {
-            "serializationName": "new_leaf_type",
-            "valueType": "ENUM",
-            "values": [
-                "acacia",
-                "dark_oak"
-            ]
-        },
         "occupied_bit": {
             "serializationName": "occupied_bit",
             "valueType": "BOOLEAN",
             "values": [
                 false,
                 true
-            ]
-        },
-        "old_leaf_type": {
-            "serializationName": "old_leaf_type",
-            "valueType": "ENUM",
-            "values": [
-                "birch",
-                "jungle",
-                "oak",
-                "spruce"
             ]
         },
         "open_bit": {
@@ -1481,6 +1463,16 @@
                 true
             ]
         },
+        "vault_state": {
+            "serializationName": "vault_state",
+            "valueType": "ENUM",
+            "values": [
+                "active",
+                "ejecting",
+                "inactive",
+                "unlocking"
+            ]
+        },
         "vine_direction_bits": {
             "serializationName": "vine_direction_bits",
             "valueType": "INTEGER",
@@ -1607,18 +1599,6 @@
                 1,
                 2,
                 3
-            ]
-        },
-        "wood_type": {
-            "serializationName": "wood_type",
-            "valueType": "ENUM",
-            "values": [
-                "acacia",
-                "birch",
-                "dark_oak",
-                "jungle",
-                "oak",
-                "spruce"
             ]
         }
     },

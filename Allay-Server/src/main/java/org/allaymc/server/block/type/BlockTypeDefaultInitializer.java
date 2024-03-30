@@ -145,7 +145,7 @@ import org.allaymc.api.block.interfaces.BlockGoldBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockGoldOreBehavior;
 import org.allaymc.api.block.interfaces.BlockGoldenRailBehavior;
 import org.allaymc.api.block.interfaces.BlockGraniteBehavior;
-import org.allaymc.api.block.interfaces.BlockGrassBehavior;
+import org.allaymc.api.block.interfaces.BlockGrassBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockGrassPathBehavior;
 import org.allaymc.api.block.interfaces.BlockGravelBehavior;
 import org.allaymc.api.block.interfaces.BlockGrindstoneBehavior;
@@ -318,6 +318,7 @@ import org.allaymc.api.block.interfaces.BlockTwistingVinesBehavior;
 import org.allaymc.api.block.interfaces.BlockUnknownBehavior;
 import org.allaymc.api.block.interfaces.BlockUnpoweredComparatorBehavior;
 import org.allaymc.api.block.interfaces.BlockUnpoweredRepeaterBehavior;
+import org.allaymc.api.block.interfaces.BlockVaultBehavior;
 import org.allaymc.api.block.interfaces.BlockVerdantFroglightBehavior;
 import org.allaymc.api.block.interfaces.BlockVineBehavior;
 import org.allaymc.api.block.interfaces.BlockWallBannerBehavior;
@@ -671,12 +672,16 @@ import org.allaymc.api.block.interfaces.hangingsign.BlockMangroveHangingSignBeha
 import org.allaymc.api.block.interfaces.hangingsign.BlockOakHangingSignBehavior;
 import org.allaymc.api.block.interfaces.hangingsign.BlockSpruceHangingSignBehavior;
 import org.allaymc.api.block.interfaces.hangingsign.BlockWarpedHangingSignBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockAcaciaLeavesBehavior;
 import org.allaymc.api.block.interfaces.leaves.BlockAzaleaLeavesBehavior;
 import org.allaymc.api.block.interfaces.leaves.BlockAzaleaLeavesFloweredBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockBirchLeavesBehavior;
 import org.allaymc.api.block.interfaces.leaves.BlockCherryLeavesBehavior;
-import org.allaymc.api.block.interfaces.leaves.BlockLeaves2Behavior;
-import org.allaymc.api.block.interfaces.leaves.BlockLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockDarkOakLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockJungleLeavesBehavior;
 import org.allaymc.api.block.interfaces.leaves.BlockMangroveLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockOakLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockSpruceLeavesBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockFlowingLavaBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockFlowingWaterBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockLavaBehavior;
@@ -732,10 +737,14 @@ import org.allaymc.api.block.interfaces.shulkerbox.BlockRedShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockUndyedShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockWhiteShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockYellowShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockAcaciaDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockAcaciaSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBambooDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBambooMosaicDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBambooMosaicSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBambooSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBirchDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBirchSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBlackstoneDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBlackstoneSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockCherryDoubleSlabBehavior;
@@ -745,6 +754,8 @@ import org.allaymc.api.block.interfaces.slab.BlockCobbledDeepslateSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockCrimsonDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockCrimsonSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDarkOakDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDarkOakSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockDeepslateBrickDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockDeepslateBrickSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockDeepslateTileDoubleSlabBehavior;
@@ -754,13 +765,16 @@ import org.allaymc.api.block.interfaces.slab.BlockDoubleStoneBlockSlab2Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockDoubleStoneBlockSlab3Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockDoubleStoneBlockSlab4Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockDoubleStoneBlockSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDoubleWoodenSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockExposedCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockExposedDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockJungleDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockJungleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockMangroveDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockMangroveSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockMudBrickDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockMudBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockOakDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockOakSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockOxidizedCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockOxidizedDoubleCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneBrickDoubleSlabBehavior;
@@ -771,6 +785,8 @@ import org.allaymc.api.block.interfaces.slab.BlockPolishedDeepslateDoubleSlabBeh
 import org.allaymc.api.block.interfaces.slab.BlockPolishedDeepslateSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockPolishedTuffDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockPolishedTuffSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSpruceDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSpruceSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockStoneBlockSlab2Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockStoneBlockSlab3Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockStoneBlockSlab4Behavior;
@@ -791,7 +807,6 @@ import org.allaymc.api.block.interfaces.slab.BlockWaxedWeatheredCutCopperSlabBeh
 import org.allaymc.api.block.interfaces.slab.BlockWaxedWeatheredDoubleCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockWeatheredCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockWeatheredDoubleCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWoodenSlabBehavior;
 import org.allaymc.api.block.interfaces.stainedglass.BlockBlackStainedGlassBehavior;
 import org.allaymc.api.block.interfaces.stainedglass.BlockBlueStainedGlassBehavior;
 import org.allaymc.api.block.interfaces.stainedglass.BlockBrownStainedGlassBehavior;
@@ -1007,11 +1022,22 @@ import org.allaymc.api.block.interfaces.wallsign.BlockMangroveWallSignBehavior;
 import org.allaymc.api.block.interfaces.wallsign.BlockSpruceWallSignBehavior;
 import org.allaymc.api.block.interfaces.wallsign.BlockWallSignBehavior;
 import org.allaymc.api.block.interfaces.wallsign.BlockWarpedWallSignBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockAcaciaWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockBirchWoodBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockCherryWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockDarkOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockJungleWoodBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockMangroveWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockSpruceWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedAcaciaWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedBirchWoodBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockStrippedCherryWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedDarkOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedJungleWoodBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockStrippedMangroveWoodBehavior;
-import org.allaymc.api.block.interfaces.wood.BlockWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedSpruceWoodBehavior;
 import org.allaymc.api.block.interfaces.wool.BlockBlackWoolBehavior;
 import org.allaymc.api.block.interfaces.wool.BlockBlueWoolBehavior;
 import org.allaymc.api.block.interfaces.wool.BlockBrownWoolBehavior;
@@ -1056,6 +1082,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initAcaciaDoubleSlab() {
+    if (BlockTypes.ACACIA_DOUBLE_SLAB_TYPE != null) return;
+    BlockTypes.ACACIA_DOUBLE_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockAcaciaDoubleSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.ACACIA_DOUBLE_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+            .build();
+  }
+
   public static void initAcaciaFence() {
     if (BlockTypes.ACACIA_FENCE_TYPE != null) return;
     BlockTypes.ACACIA_FENCE_TYPE = BlockTypeBuilder
@@ -1082,6 +1117,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initAcaciaLeaves() {
+    if (BlockTypes.ACACIA_LEAVES_TYPE != null) return;
+    BlockTypes.ACACIA_LEAVES_TYPE = BlockTypeBuilder
+            .builder(BlockAcaciaLeavesBehavior.class)
+            .vanillaBlock(VanillaBlockId.ACACIA_LEAVES)
+            .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+            .build();
+  }
+
   public static void initAcaciaLog() {
     if (BlockTypes.ACACIA_LOG_TYPE != null) return;
     BlockTypes.ACACIA_LOG_TYPE = BlockTypeBuilder
@@ -1105,6 +1149,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockAcaciaPressurePlateBehavior.class)
             .vanillaBlock(VanillaBlockId.ACACIA_PRESSURE_PLATE)
             .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .build();
+  }
+
+  public static void initAcaciaSlab() {
+    if (BlockTypes.ACACIA_SLAB_TYPE != null) return;
+    BlockTypes.ACACIA_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockAcaciaSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.ACACIA_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
   }
 
@@ -1141,6 +1194,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockAcaciaWallSignBehavior.class)
             .vanillaBlock(VanillaBlockId.ACACIA_WALL_SIGN)
             .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .build();
+  }
+
+  public static void initAcaciaWood() {
+    if (BlockTypes.ACACIA_WOOD_TYPE != null) return;
+    BlockTypes.ACACIA_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockAcaciaWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.ACACIA_WOOD)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .build();
   }
 
@@ -1538,6 +1600,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initBirchDoubleSlab() {
+    if (BlockTypes.BIRCH_DOUBLE_SLAB_TYPE != null) return;
+    BlockTypes.BIRCH_DOUBLE_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockBirchDoubleSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.BIRCH_DOUBLE_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+            .build();
+  }
+
   public static void initBirchFence() {
     if (BlockTypes.BIRCH_FENCE_TYPE != null) return;
     BlockTypes.BIRCH_FENCE_TYPE = BlockTypeBuilder
@@ -1564,6 +1635,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initBirchLeaves() {
+    if (BlockTypes.BIRCH_LEAVES_TYPE != null) return;
+    BlockTypes.BIRCH_LEAVES_TYPE = BlockTypeBuilder
+            .builder(BlockBirchLeavesBehavior.class)
+            .vanillaBlock(VanillaBlockId.BIRCH_LEAVES)
+            .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+            .build();
+  }
+
   public static void initBirchLog() {
     if (BlockTypes.BIRCH_LOG_TYPE != null) return;
     BlockTypes.BIRCH_LOG_TYPE = BlockTypeBuilder
@@ -1587,6 +1667,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockBirchPressurePlateBehavior.class)
             .vanillaBlock(VanillaBlockId.BIRCH_PRESSURE_PLATE)
             .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .build();
+  }
+
+  public static void initBirchSlab() {
+    if (BlockTypes.BIRCH_SLAB_TYPE != null) return;
+    BlockTypes.BIRCH_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockBirchSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.BIRCH_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
   }
 
@@ -1623,6 +1712,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockBirchWallSignBehavior.class)
             .vanillaBlock(VanillaBlockId.BIRCH_WALL_SIGN)
             .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .build();
+  }
+
+  public static void initBirchWood() {
+    if (BlockTypes.BIRCH_WOOD_TYPE != null) return;
+    BlockTypes.BIRCH_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockBirchWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.BIRCH_WOOD)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .build();
   }
 
@@ -3063,6 +3161,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDarkOakDoubleSlab() {
+    if (BlockTypes.DARK_OAK_DOUBLE_SLAB_TYPE != null) return;
+    BlockTypes.DARK_OAK_DOUBLE_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockDarkOakDoubleSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.DARK_OAK_DOUBLE_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+            .build();
+  }
+
   public static void initDarkOakFence() {
     if (BlockTypes.DARK_OAK_FENCE_TYPE != null) return;
     BlockTypes.DARK_OAK_FENCE_TYPE = BlockTypeBuilder
@@ -3086,6 +3193,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockDarkOakHangingSignBehavior.class)
             .vanillaBlock(VanillaBlockId.DARK_OAK_HANGING_SIGN)
             .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+            .build();
+  }
+
+  public static void initDarkOakLeaves() {
+    if (BlockTypes.DARK_OAK_LEAVES_TYPE != null) return;
+    BlockTypes.DARK_OAK_LEAVES_TYPE = BlockTypeBuilder
+            .builder(BlockDarkOakLeavesBehavior.class)
+            .vanillaBlock(VanillaBlockId.DARK_OAK_LEAVES)
+            .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
             .build();
   }
 
@@ -3115,6 +3231,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDarkOakSlab() {
+    if (BlockTypes.DARK_OAK_SLAB_TYPE != null) return;
+    BlockTypes.DARK_OAK_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockDarkOakSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.DARK_OAK_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+            .build();
+  }
+
   public static void initDarkOakStairs() {
     if (BlockTypes.DARK_OAK_STAIRS_TYPE != null) return;
     BlockTypes.DARK_OAK_STAIRS_TYPE = BlockTypeBuilder
@@ -3130,6 +3255,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockDarkOakTrapdoorBehavior.class)
             .vanillaBlock(VanillaBlockId.DARK_OAK_TRAPDOOR)
             .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT)
+            .build();
+  }
+
+  public static void initDarkOakWood() {
+    if (BlockTypes.DARK_OAK_WOOD_TYPE != null) return;
+    BlockTypes.DARK_OAK_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockDarkOakWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.DARK_OAK_WOOD)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .build();
   }
 
@@ -3523,15 +3657,6 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockDoubleStoneBlockSlab4Behavior.class)
             .vanillaBlock(VanillaBlockId.DOUBLE_STONE_BLOCK_SLAB4)
             .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF, VanillaBlockPropertyTypes.STONE_SLAB_TYPE_4)
-            .build();
-  }
-
-  public static void initDoubleWoodenSlab() {
-    if (BlockTypes.DOUBLE_WOODEN_SLAB_TYPE != null) return;
-    BlockTypes.DOUBLE_WOODEN_SLAB_TYPE = BlockTypeBuilder
-            .builder(BlockDoubleWoodenSlabBehavior.class)
-            .vanillaBlock(VanillaBlockId.DOUBLE_WOODEN_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF, VanillaBlockPropertyTypes.WOOD_TYPE)
             .build();
   }
 
@@ -4911,11 +5036,11 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
-  public static void initGrass() {
-    if (BlockTypes.GRASS_TYPE != null) return;
-    BlockTypes.GRASS_TYPE = BlockTypeBuilder
-            .builder(BlockGrassBehavior.class)
-            .vanillaBlock(VanillaBlockId.GRASS)
+  public static void initGrassBlock() {
+    if (BlockTypes.GRASS_BLOCK_TYPE != null) return;
+    BlockTypes.GRASS_BLOCK_TYPE = BlockTypeBuilder
+            .builder(BlockGrassBlockBehavior.class)
+            .vanillaBlock(VanillaBlockId.GRASS_BLOCK)
             .build();
   }
 
@@ -5583,6 +5708,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initJungleDoubleSlab() {
+    if (BlockTypes.JUNGLE_DOUBLE_SLAB_TYPE != null) return;
+    BlockTypes.JUNGLE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockJungleDoubleSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.JUNGLE_DOUBLE_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+            .build();
+  }
+
   public static void initJungleFence() {
     if (BlockTypes.JUNGLE_FENCE_TYPE != null) return;
     BlockTypes.JUNGLE_FENCE_TYPE = BlockTypeBuilder
@@ -5609,6 +5743,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initJungleLeaves() {
+    if (BlockTypes.JUNGLE_LEAVES_TYPE != null) return;
+    BlockTypes.JUNGLE_LEAVES_TYPE = BlockTypeBuilder
+            .builder(BlockJungleLeavesBehavior.class)
+            .vanillaBlock(VanillaBlockId.JUNGLE_LEAVES)
+            .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+            .build();
+  }
+
   public static void initJungleLog() {
     if (BlockTypes.JUNGLE_LOG_TYPE != null) return;
     BlockTypes.JUNGLE_LOG_TYPE = BlockTypeBuilder
@@ -5632,6 +5775,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockJunglePressurePlateBehavior.class)
             .vanillaBlock(VanillaBlockId.JUNGLE_PRESSURE_PLATE)
             .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .build();
+  }
+
+  public static void initJungleSlab() {
+    if (BlockTypes.JUNGLE_SLAB_TYPE != null) return;
+    BlockTypes.JUNGLE_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockJungleSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.JUNGLE_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
   }
 
@@ -5668,6 +5820,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockJungleWallSignBehavior.class)
             .vanillaBlock(VanillaBlockId.JUNGLE_WALL_SIGN)
             .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .build();
+  }
+
+  public static void initJungleWood() {
+    if (BlockTypes.JUNGLE_WOOD_TYPE != null) return;
+    BlockTypes.JUNGLE_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockJungleWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.JUNGLE_WOOD)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .build();
   }
 
@@ -5729,24 +5890,6 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockLavaBehavior.class)
             .vanillaBlock(VanillaBlockId.LAVA)
             .setProperties(VanillaBlockPropertyTypes.LIQUID_DEPTH)
-            .build();
-  }
-
-  public static void initLeaves() {
-    if (BlockTypes.LEAVES_TYPE != null) return;
-    BlockTypes.LEAVES_TYPE = BlockTypeBuilder
-            .builder(BlockLeavesBehavior.class)
-            .vanillaBlock(VanillaBlockId.LEAVES)
-            .setProperties(VanillaBlockPropertyTypes.OLD_LEAF_TYPE, VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
-            .build();
-  }
-
-  public static void initLeaves2() {
-    if (BlockTypes.LEAVES2_TYPE != null) return;
-    BlockTypes.LEAVES2_TYPE = BlockTypeBuilder
-            .builder(BlockLeaves2Behavior.class)
-            .vanillaBlock(VanillaBlockId.LEAVES2)
-            .setProperties(VanillaBlockPropertyTypes.NEW_LEAF_TYPE, VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
             .build();
   }
 
@@ -6655,6 +6798,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOakDoubleSlab() {
+    if (BlockTypes.OAK_DOUBLE_SLAB_TYPE != null) return;
+    BlockTypes.OAK_DOUBLE_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockOakDoubleSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.OAK_DOUBLE_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+            .build();
+  }
+
   public static void initOakFence() {
     if (BlockTypes.OAK_FENCE_TYPE != null) return;
     BlockTypes.OAK_FENCE_TYPE = BlockTypeBuilder
@@ -6669,6 +6821,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockOakHangingSignBehavior.class)
             .vanillaBlock(VanillaBlockId.OAK_HANGING_SIGN)
             .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+            .build();
+  }
+
+  public static void initOakLeaves() {
+    if (BlockTypes.OAK_LEAVES_TYPE != null) return;
+    BlockTypes.OAK_LEAVES_TYPE = BlockTypeBuilder
+            .builder(BlockOakLeavesBehavior.class)
+            .vanillaBlock(VanillaBlockId.OAK_LEAVES)
+            .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
             .build();
   }
 
@@ -6689,12 +6850,30 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOakSlab() {
+    if (BlockTypes.OAK_SLAB_TYPE != null) return;
+    BlockTypes.OAK_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockOakSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.OAK_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+            .build();
+  }
+
   public static void initOakStairs() {
     if (BlockTypes.OAK_STAIRS_TYPE != null) return;
     BlockTypes.OAK_STAIRS_TYPE = BlockTypeBuilder
             .builder(BlockOakStairsBehavior.class)
             .vanillaBlock(VanillaBlockId.OAK_STAIRS)
             .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
+            .build();
+  }
+
+  public static void initOakWood() {
+    if (BlockTypes.OAK_WOOD_TYPE != null) return;
+    BlockTypes.OAK_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockOakWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.OAK_WOOD)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .build();
   }
 
@@ -8175,6 +8354,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initSpruceDoubleSlab() {
+    if (BlockTypes.SPRUCE_DOUBLE_SLAB_TYPE != null) return;
+    BlockTypes.SPRUCE_DOUBLE_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockSpruceDoubleSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.SPRUCE_DOUBLE_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+            .build();
+  }
+
   public static void initSpruceFence() {
     if (BlockTypes.SPRUCE_FENCE_TYPE != null) return;
     BlockTypes.SPRUCE_FENCE_TYPE = BlockTypeBuilder
@@ -8201,6 +8389,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initSpruceLeaves() {
+    if (BlockTypes.SPRUCE_LEAVES_TYPE != null) return;
+    BlockTypes.SPRUCE_LEAVES_TYPE = BlockTypeBuilder
+            .builder(BlockSpruceLeavesBehavior.class)
+            .vanillaBlock(VanillaBlockId.SPRUCE_LEAVES)
+            .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+            .build();
+  }
+
   public static void initSpruceLog() {
     if (BlockTypes.SPRUCE_LOG_TYPE != null) return;
     BlockTypes.SPRUCE_LOG_TYPE = BlockTypeBuilder
@@ -8224,6 +8421,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockSprucePressurePlateBehavior.class)
             .vanillaBlock(VanillaBlockId.SPRUCE_PRESSURE_PLATE)
             .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .build();
+  }
+
+  public static void initSpruceSlab() {
+    if (BlockTypes.SPRUCE_SLAB_TYPE != null) return;
+    BlockTypes.SPRUCE_SLAB_TYPE = BlockTypeBuilder
+            .builder(BlockSpruceSlabBehavior.class)
+            .vanillaBlock(VanillaBlockId.SPRUCE_SLAB)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
             .build();
   }
 
@@ -8260,6 +8466,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockSpruceWallSignBehavior.class)
             .vanillaBlock(VanillaBlockId.SPRUCE_WALL_SIGN)
             .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .build();
+  }
+
+  public static void initSpruceWood() {
+    if (BlockTypes.SPRUCE_WOOD_TYPE != null) return;
+    BlockTypes.SPRUCE_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockSpruceWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.SPRUCE_WOOD)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .build();
   }
 
@@ -8414,6 +8629,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initStrippedAcaciaWood() {
+    if (BlockTypes.STRIPPED_ACACIA_WOOD_TYPE != null) return;
+    BlockTypes.STRIPPED_ACACIA_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockStrippedAcaciaWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.STRIPPED_ACACIA_WOOD)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .build();
+  }
+
   public static void initStrippedBambooBlock() {
     if (BlockTypes.STRIPPED_BAMBOO_BLOCK_TYPE != null) return;
     BlockTypes.STRIPPED_BAMBOO_BLOCK_TYPE = BlockTypeBuilder
@@ -8428,6 +8652,15 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.STRIPPED_BIRCH_LOG_TYPE = BlockTypeBuilder
             .builder(BlockStrippedBirchLogBehavior.class)
             .vanillaBlock(VanillaBlockId.STRIPPED_BIRCH_LOG)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .build();
+  }
+
+  public static void initStrippedBirchWood() {
+    if (BlockTypes.STRIPPED_BIRCH_WOOD_TYPE != null) return;
+    BlockTypes.STRIPPED_BIRCH_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockStrippedBirchWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.STRIPPED_BIRCH_WOOD)
             .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .build();
   }
@@ -8477,11 +8710,29 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initStrippedDarkOakWood() {
+    if (BlockTypes.STRIPPED_DARK_OAK_WOOD_TYPE != null) return;
+    BlockTypes.STRIPPED_DARK_OAK_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockStrippedDarkOakWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.STRIPPED_DARK_OAK_WOOD)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .build();
+  }
+
   public static void initStrippedJungleLog() {
     if (BlockTypes.STRIPPED_JUNGLE_LOG_TYPE != null) return;
     BlockTypes.STRIPPED_JUNGLE_LOG_TYPE = BlockTypeBuilder
             .builder(BlockStrippedJungleLogBehavior.class)
             .vanillaBlock(VanillaBlockId.STRIPPED_JUNGLE_LOG)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .build();
+  }
+
+  public static void initStrippedJungleWood() {
+    if (BlockTypes.STRIPPED_JUNGLE_WOOD_TYPE != null) return;
+    BlockTypes.STRIPPED_JUNGLE_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockStrippedJungleWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.STRIPPED_JUNGLE_WOOD)
             .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .build();
   }
@@ -8513,11 +8764,29 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initStrippedOakWood() {
+    if (BlockTypes.STRIPPED_OAK_WOOD_TYPE != null) return;
+    BlockTypes.STRIPPED_OAK_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockStrippedOakWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.STRIPPED_OAK_WOOD)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .build();
+  }
+
   public static void initStrippedSpruceLog() {
     if (BlockTypes.STRIPPED_SPRUCE_LOG_TYPE != null) return;
     BlockTypes.STRIPPED_SPRUCE_LOG_TYPE = BlockTypeBuilder
             .builder(BlockStrippedSpruceLogBehavior.class)
             .vanillaBlock(VanillaBlockId.STRIPPED_SPRUCE_LOG)
+            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+            .build();
+  }
+
+  public static void initStrippedSpruceWood() {
+    if (BlockTypes.STRIPPED_SPRUCE_WOOD_TYPE != null) return;
+    BlockTypes.STRIPPED_SPRUCE_WOOD_TYPE = BlockTypeBuilder
+            .builder(BlockStrippedSpruceWoodBehavior.class)
+            .vanillaBlock(VanillaBlockId.STRIPPED_SPRUCE_WOOD)
             .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
             .build();
   }
@@ -8853,6 +9122,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockUnpoweredRepeaterBehavior.class)
             .vanillaBlock(VanillaBlockId.UNPOWERED_REPEATER)
             .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.REPEATER_DELAY)
+            .build();
+  }
+
+  public static void initVault() {
+    if (BlockTypes.VAULT_TYPE != null) return;
+    BlockTypes.VAULT_TYPE = BlockTypeBuilder
+            .builder(BlockVaultBehavior.class)
+            .vanillaBlock(VanillaBlockId.VAULT)
+            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, VanillaBlockPropertyTypes.VAULT_STATE)
             .build();
   }
 
@@ -9629,15 +9907,6 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
-  public static void initWood() {
-    if (BlockTypes.WOOD_TYPE != null) return;
-    BlockTypes.WOOD_TYPE = BlockTypeBuilder
-            .builder(BlockWoodBehavior.class)
-            .vanillaBlock(VanillaBlockId.WOOD)
-            .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS, VanillaBlockPropertyTypes.STRIPPED_BIT, VanillaBlockPropertyTypes.WOOD_TYPE)
-            .build();
-  }
-
   public static void initWoodenButton() {
     if (BlockTypes.WOODEN_BUTTON_TYPE != null) return;
     BlockTypes.WOODEN_BUTTON_TYPE = BlockTypeBuilder
@@ -9662,15 +9931,6 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockWoodenPressurePlateBehavior.class)
             .vanillaBlock(VanillaBlockId.WOODEN_PRESSURE_PLATE)
             .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
-            .build();
-  }
-
-  public static void initWoodenSlab() {
-    if (BlockTypes.WOODEN_SLAB_TYPE != null) return;
-    BlockTypes.WOODEN_SLAB_TYPE = BlockTypeBuilder
-            .builder(BlockWoodenSlabBehavior.class)
-            .vanillaBlock(VanillaBlockId.WOODEN_SLAB)
-            .setProperties(VanillaBlockPropertyTypes.MINECRAFT_VERTICAL_HALF, VanillaBlockPropertyTypes.WOOD_TYPE)
             .build();
   }
 

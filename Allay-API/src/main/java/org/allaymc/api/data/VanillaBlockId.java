@@ -16,17 +16,23 @@ public enum VanillaBlockId {
 
   ACACIA_DOOR("minecraft:acacia_door"),
 
+  ACACIA_DOUBLE_SLAB("minecraft:acacia_double_slab"),
+
   ACACIA_FENCE("minecraft:acacia_fence"),
 
   ACACIA_FENCE_GATE("minecraft:acacia_fence_gate"),
 
   ACACIA_HANGING_SIGN("minecraft:acacia_hanging_sign"),
 
+  ACACIA_LEAVES("minecraft:acacia_leaves"),
+
   ACACIA_LOG("minecraft:acacia_log"),
 
   ACACIA_PLANKS("minecraft:acacia_planks"),
 
   ACACIA_PRESSURE_PLATE("minecraft:acacia_pressure_plate"),
+
+  ACACIA_SLAB("minecraft:acacia_slab"),
 
   ACACIA_STAIRS("minecraft:acacia_stairs"),
 
@@ -35,6 +41,8 @@ public enum VanillaBlockId {
   ACACIA_TRAPDOOR("minecraft:acacia_trapdoor"),
 
   ACACIA_WALL_SIGN("minecraft:acacia_wall_sign"),
+
+  ACACIA_WOOD("minecraft:acacia_wood"),
 
   ACTIVATOR_RAIL("minecraft:activator_rail"),
 
@@ -126,17 +134,23 @@ public enum VanillaBlockId {
 
   BIRCH_DOOR("minecraft:birch_door"),
 
+  BIRCH_DOUBLE_SLAB("minecraft:birch_double_slab"),
+
   BIRCH_FENCE("minecraft:birch_fence"),
 
   BIRCH_FENCE_GATE("minecraft:birch_fence_gate"),
 
   BIRCH_HANGING_SIGN("minecraft:birch_hanging_sign"),
 
+  BIRCH_LEAVES("minecraft:birch_leaves"),
+
   BIRCH_LOG("minecraft:birch_log"),
 
   BIRCH_PLANKS("minecraft:birch_planks"),
 
   BIRCH_PRESSURE_PLATE("minecraft:birch_pressure_plate"),
+
+  BIRCH_SLAB("minecraft:birch_slab"),
 
   BIRCH_STAIRS("minecraft:birch_stairs"),
 
@@ -145,6 +159,8 @@ public enum VanillaBlockId {
   BIRCH_TRAPDOOR("minecraft:birch_trapdoor"),
 
   BIRCH_WALL_SIGN("minecraft:birch_wall_sign"),
+
+  BIRCH_WOOD("minecraft:birch_wood"),
 
   BLACK_CANDLE("minecraft:black_candle"),
 
@@ -482,11 +498,15 @@ public enum VanillaBlockId {
 
   DARK_OAK_DOOR("minecraft:dark_oak_door"),
 
+  DARK_OAK_DOUBLE_SLAB("minecraft:dark_oak_double_slab"),
+
   DARK_OAK_FENCE("minecraft:dark_oak_fence"),
 
   DARK_OAK_FENCE_GATE("minecraft:dark_oak_fence_gate"),
 
   DARK_OAK_HANGING_SIGN("minecraft:dark_oak_hanging_sign"),
+
+  DARK_OAK_LEAVES("minecraft:dark_oak_leaves"),
 
   DARK_OAK_LOG("minecraft:dark_oak_log"),
 
@@ -494,9 +514,13 @@ public enum VanillaBlockId {
 
   DARK_OAK_PRESSURE_PLATE("minecraft:dark_oak_pressure_plate"),
 
+  DARK_OAK_SLAB("minecraft:dark_oak_slab"),
+
   DARK_OAK_STAIRS("minecraft:dark_oak_stairs"),
 
   DARK_OAK_TRAPDOOR("minecraft:dark_oak_trapdoor"),
+
+  DARK_OAK_WOOD("minecraft:dark_oak_wood"),
 
   DARK_PRISMARINE_STAIRS("minecraft:dark_prismarine_stairs"),
 
@@ -589,8 +613,6 @@ public enum VanillaBlockId {
   DOUBLE_STONE_BLOCK_SLAB3("minecraft:double_stone_block_slab3"),
 
   DOUBLE_STONE_BLOCK_SLAB4("minecraft:double_stone_block_slab4"),
-
-  DOUBLE_WOODEN_SLAB("minecraft:double_wooden_slab"),
 
   DRAGON_EGG("minecraft:dragon_egg"),
 
@@ -930,7 +952,7 @@ public enum VanillaBlockId {
 
   GRANITE_STAIRS("minecraft:granite_stairs"),
 
-  GRASS("minecraft:grass"),
+  GRASS_BLOCK("minecraft:grass_block"),
 
   GRASS_PATH("minecraft:grass_path"),
 
@@ -1094,17 +1116,23 @@ public enum VanillaBlockId {
 
   JUNGLE_DOOR("minecraft:jungle_door"),
 
+  JUNGLE_DOUBLE_SLAB("minecraft:jungle_double_slab"),
+
   JUNGLE_FENCE("minecraft:jungle_fence"),
 
   JUNGLE_FENCE_GATE("minecraft:jungle_fence_gate"),
 
   JUNGLE_HANGING_SIGN("minecraft:jungle_hanging_sign"),
 
+  JUNGLE_LEAVES("minecraft:jungle_leaves"),
+
   JUNGLE_LOG("minecraft:jungle_log"),
 
   JUNGLE_PLANKS("minecraft:jungle_planks"),
 
   JUNGLE_PRESSURE_PLATE("minecraft:jungle_pressure_plate"),
+
+  JUNGLE_SLAB("minecraft:jungle_slab"),
 
   JUNGLE_STAIRS("minecraft:jungle_stairs"),
 
@@ -1113,6 +1141,8 @@ public enum VanillaBlockId {
   JUNGLE_TRAPDOOR("minecraft:jungle_trapdoor"),
 
   JUNGLE_WALL_SIGN("minecraft:jungle_wall_sign"),
+
+  JUNGLE_WOOD("minecraft:jungle_wood"),
 
   KELP("minecraft:kelp"),
 
@@ -1127,10 +1157,6 @@ public enum VanillaBlockId {
   LARGE_AMETHYST_BUD("minecraft:large_amethyst_bud"),
 
   LAVA("minecraft:lava"),
-
-  LEAVES("minecraft:leaves"),
-
-  LEAVES2("minecraft:leaves2"),
 
   LECTERN("minecraft:lectern"),
 
@@ -1346,15 +1372,23 @@ public enum VanillaBlockId {
 
   NOTEBLOCK("minecraft:noteblock"),
 
+  OAK_DOUBLE_SLAB("minecraft:oak_double_slab"),
+
   OAK_FENCE("minecraft:oak_fence"),
 
   OAK_HANGING_SIGN("minecraft:oak_hanging_sign"),
+
+  OAK_LEAVES("minecraft:oak_leaves"),
 
   OAK_LOG("minecraft:oak_log"),
 
   OAK_PLANKS("minecraft:oak_planks"),
 
+  OAK_SLAB("minecraft:oak_slab"),
+
   OAK_STAIRS("minecraft:oak_stairs"),
+
+  OAK_WOOD("minecraft:oak_wood"),
 
   OBSERVER("minecraft:observer"),
 
@@ -1700,17 +1734,23 @@ public enum VanillaBlockId {
 
   SPRUCE_DOOR("minecraft:spruce_door"),
 
+  SPRUCE_DOUBLE_SLAB("minecraft:spruce_double_slab"),
+
   SPRUCE_FENCE("minecraft:spruce_fence"),
 
   SPRUCE_FENCE_GATE("minecraft:spruce_fence_gate"),
 
   SPRUCE_HANGING_SIGN("minecraft:spruce_hanging_sign"),
 
+  SPRUCE_LEAVES("minecraft:spruce_leaves"),
+
   SPRUCE_LOG("minecraft:spruce_log"),
 
   SPRUCE_PLANKS("minecraft:spruce_planks"),
 
   SPRUCE_PRESSURE_PLATE("minecraft:spruce_pressure_plate"),
+
+  SPRUCE_SLAB("minecraft:spruce_slab"),
 
   SPRUCE_STAIRS("minecraft:spruce_stairs"),
 
@@ -1719,6 +1759,8 @@ public enum VanillaBlockId {
   SPRUCE_TRAPDOOR("minecraft:spruce_trapdoor"),
 
   SPRUCE_WALL_SIGN("minecraft:spruce_wall_sign"),
+
+  SPRUCE_WOOD("minecraft:spruce_wood"),
 
   STANDING_BANNER("minecraft:standing_banner"),
 
@@ -1754,9 +1796,13 @@ public enum VanillaBlockId {
 
   STRIPPED_ACACIA_LOG("minecraft:stripped_acacia_log"),
 
+  STRIPPED_ACACIA_WOOD("minecraft:stripped_acacia_wood"),
+
   STRIPPED_BAMBOO_BLOCK("minecraft:stripped_bamboo_block"),
 
   STRIPPED_BIRCH_LOG("minecraft:stripped_birch_log"),
+
+  STRIPPED_BIRCH_WOOD("minecraft:stripped_birch_wood"),
 
   STRIPPED_CHERRY_LOG("minecraft:stripped_cherry_log"),
 
@@ -1768,7 +1814,11 @@ public enum VanillaBlockId {
 
   STRIPPED_DARK_OAK_LOG("minecraft:stripped_dark_oak_log"),
 
+  STRIPPED_DARK_OAK_WOOD("minecraft:stripped_dark_oak_wood"),
+
   STRIPPED_JUNGLE_LOG("minecraft:stripped_jungle_log"),
+
+  STRIPPED_JUNGLE_WOOD("minecraft:stripped_jungle_wood"),
 
   STRIPPED_MANGROVE_LOG("minecraft:stripped_mangrove_log"),
 
@@ -1776,7 +1826,11 @@ public enum VanillaBlockId {
 
   STRIPPED_OAK_LOG("minecraft:stripped_oak_log"),
 
+  STRIPPED_OAK_WOOD("minecraft:stripped_oak_wood"),
+
   STRIPPED_SPRUCE_LOG("minecraft:stripped_spruce_log"),
+
+  STRIPPED_SPRUCE_WOOD("minecraft:stripped_spruce_wood"),
 
   STRIPPED_WARPED_HYPHAE("minecraft:stripped_warped_hyphae"),
 
@@ -1853,6 +1907,8 @@ public enum VanillaBlockId {
   UNPOWERED_COMPARATOR("minecraft:unpowered_comparator"),
 
   UNPOWERED_REPEATER("minecraft:unpowered_repeater"),
+
+  VAULT("minecraft:vault"),
 
   VERDANT_FROGLIGHT("minecraft:verdant_froglight"),
 
@@ -2034,15 +2090,11 @@ public enum VanillaBlockId {
 
   WITHER_ROSE("minecraft:wither_rose"),
 
-  WOOD("minecraft:wood"),
-
   WOODEN_BUTTON("minecraft:wooden_button"),
 
   WOODEN_DOOR("minecraft:wooden_door"),
 
   WOODEN_PRESSURE_PLATE("minecraft:wooden_pressure_plate"),
-
-  WOODEN_SLAB("minecraft:wooden_slab"),
 
   YELLOW_CANDLE("minecraft:yellow_candle"),
 

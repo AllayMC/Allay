@@ -145,7 +145,7 @@ import org.allaymc.api.block.interfaces.BlockGoldBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockGoldOreBehavior;
 import org.allaymc.api.block.interfaces.BlockGoldenRailBehavior;
 import org.allaymc.api.block.interfaces.BlockGraniteBehavior;
-import org.allaymc.api.block.interfaces.BlockGrassBehavior;
+import org.allaymc.api.block.interfaces.BlockGrassBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockGrassPathBehavior;
 import org.allaymc.api.block.interfaces.BlockGravelBehavior;
 import org.allaymc.api.block.interfaces.BlockGrindstoneBehavior;
@@ -318,6 +318,7 @@ import org.allaymc.api.block.interfaces.BlockTwistingVinesBehavior;
 import org.allaymc.api.block.interfaces.BlockUnknownBehavior;
 import org.allaymc.api.block.interfaces.BlockUnpoweredComparatorBehavior;
 import org.allaymc.api.block.interfaces.BlockUnpoweredRepeaterBehavior;
+import org.allaymc.api.block.interfaces.BlockVaultBehavior;
 import org.allaymc.api.block.interfaces.BlockVerdantFroglightBehavior;
 import org.allaymc.api.block.interfaces.BlockVineBehavior;
 import org.allaymc.api.block.interfaces.BlockWallBannerBehavior;
@@ -671,12 +672,16 @@ import org.allaymc.api.block.interfaces.hangingsign.BlockMangroveHangingSignBeha
 import org.allaymc.api.block.interfaces.hangingsign.BlockOakHangingSignBehavior;
 import org.allaymc.api.block.interfaces.hangingsign.BlockSpruceHangingSignBehavior;
 import org.allaymc.api.block.interfaces.hangingsign.BlockWarpedHangingSignBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockAcaciaLeavesBehavior;
 import org.allaymc.api.block.interfaces.leaves.BlockAzaleaLeavesBehavior;
 import org.allaymc.api.block.interfaces.leaves.BlockAzaleaLeavesFloweredBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockBirchLeavesBehavior;
 import org.allaymc.api.block.interfaces.leaves.BlockCherryLeavesBehavior;
-import org.allaymc.api.block.interfaces.leaves.BlockLeaves2Behavior;
-import org.allaymc.api.block.interfaces.leaves.BlockLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockDarkOakLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockJungleLeavesBehavior;
 import org.allaymc.api.block.interfaces.leaves.BlockMangroveLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockOakLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockSpruceLeavesBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockFlowingLavaBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockFlowingWaterBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockLavaBehavior;
@@ -732,10 +737,14 @@ import org.allaymc.api.block.interfaces.shulkerbox.BlockRedShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockUndyedShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockWhiteShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockYellowShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockAcaciaDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockAcaciaSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBambooDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBambooMosaicDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBambooMosaicSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBambooSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBirchDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBirchSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBlackstoneDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockBlackstoneSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockCherryDoubleSlabBehavior;
@@ -745,6 +754,8 @@ import org.allaymc.api.block.interfaces.slab.BlockCobbledDeepslateSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockCrimsonDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockCrimsonSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDarkOakDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDarkOakSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockDeepslateBrickDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockDeepslateBrickSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockDeepslateTileDoubleSlabBehavior;
@@ -754,13 +765,16 @@ import org.allaymc.api.block.interfaces.slab.BlockDoubleStoneBlockSlab2Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockDoubleStoneBlockSlab3Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockDoubleStoneBlockSlab4Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockDoubleStoneBlockSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDoubleWoodenSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockExposedCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockExposedDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockJungleDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockJungleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockMangroveDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockMangroveSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockMudBrickDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockMudBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockOakDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockOakSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockOxidizedCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockOxidizedDoubleCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneBrickDoubleSlabBehavior;
@@ -771,6 +785,8 @@ import org.allaymc.api.block.interfaces.slab.BlockPolishedDeepslateDoubleSlabBeh
 import org.allaymc.api.block.interfaces.slab.BlockPolishedDeepslateSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockPolishedTuffDoubleSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockPolishedTuffSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSpruceDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSpruceSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockStoneBlockSlab2Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockStoneBlockSlab3Behavior;
 import org.allaymc.api.block.interfaces.slab.BlockStoneBlockSlab4Behavior;
@@ -791,7 +807,6 @@ import org.allaymc.api.block.interfaces.slab.BlockWaxedWeatheredCutCopperSlabBeh
 import org.allaymc.api.block.interfaces.slab.BlockWaxedWeatheredDoubleCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockWeatheredCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.slab.BlockWeatheredDoubleCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWoodenSlabBehavior;
 import org.allaymc.api.block.interfaces.stainedglass.BlockBlackStainedGlassBehavior;
 import org.allaymc.api.block.interfaces.stainedglass.BlockBlueStainedGlassBehavior;
 import org.allaymc.api.block.interfaces.stainedglass.BlockBrownStainedGlassBehavior;
@@ -1007,11 +1022,22 @@ import org.allaymc.api.block.interfaces.wallsign.BlockMangroveWallSignBehavior;
 import org.allaymc.api.block.interfaces.wallsign.BlockSpruceWallSignBehavior;
 import org.allaymc.api.block.interfaces.wallsign.BlockWallSignBehavior;
 import org.allaymc.api.block.interfaces.wallsign.BlockWarpedWallSignBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockAcaciaWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockBirchWoodBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockCherryWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockDarkOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockJungleWoodBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockMangroveWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockSpruceWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedAcaciaWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedBirchWoodBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockStrippedCherryWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedDarkOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedJungleWoodBehavior;
 import org.allaymc.api.block.interfaces.wood.BlockStrippedMangroveWoodBehavior;
-import org.allaymc.api.block.interfaces.wood.BlockWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedSpruceWoodBehavior;
 import org.allaymc.api.block.interfaces.wool.BlockBlackWoolBehavior;
 import org.allaymc.api.block.interfaces.wool.BlockBlueWoolBehavior;
 import org.allaymc.api.block.interfaces.wool.BlockBrownWoolBehavior;
@@ -1034,17 +1060,23 @@ public final class BlockTypes {
 
   public static BlockType<BlockAcaciaDoorBehavior> ACACIA_DOOR_TYPE;
 
+  public static BlockType<BlockAcaciaDoubleSlabBehavior> ACACIA_DOUBLE_SLAB_TYPE;
+
   public static BlockType<BlockAcaciaFenceBehavior> ACACIA_FENCE_TYPE;
 
   public static BlockType<BlockAcaciaFenceGateBehavior> ACACIA_FENCE_GATE_TYPE;
 
   public static BlockType<BlockAcaciaHangingSignBehavior> ACACIA_HANGING_SIGN_TYPE;
 
+  public static BlockType<BlockAcaciaLeavesBehavior> ACACIA_LEAVES_TYPE;
+
   public static BlockType<BlockAcaciaLogBehavior> ACACIA_LOG_TYPE;
 
   public static BlockType<BlockAcaciaPlanksBehavior> ACACIA_PLANKS_TYPE;
 
   public static BlockType<BlockAcaciaPressurePlateBehavior> ACACIA_PRESSURE_PLATE_TYPE;
+
+  public static BlockType<BlockAcaciaSlabBehavior> ACACIA_SLAB_TYPE;
 
   public static BlockType<BlockAcaciaStairsBehavior> ACACIA_STAIRS_TYPE;
 
@@ -1053,6 +1085,8 @@ public final class BlockTypes {
   public static BlockType<BlockAcaciaTrapdoorBehavior> ACACIA_TRAPDOOR_TYPE;
 
   public static BlockType<BlockAcaciaWallSignBehavior> ACACIA_WALL_SIGN_TYPE;
+
+  public static BlockType<BlockAcaciaWoodBehavior> ACACIA_WOOD_TYPE;
 
   public static BlockType<BlockActivatorRailBehavior> ACTIVATOR_RAIL_TYPE;
 
@@ -1144,17 +1178,23 @@ public final class BlockTypes {
 
   public static BlockType<BlockBirchDoorBehavior> BIRCH_DOOR_TYPE;
 
+  public static BlockType<BlockBirchDoubleSlabBehavior> BIRCH_DOUBLE_SLAB_TYPE;
+
   public static BlockType<BlockBirchFenceBehavior> BIRCH_FENCE_TYPE;
 
   public static BlockType<BlockBirchFenceGateBehavior> BIRCH_FENCE_GATE_TYPE;
 
   public static BlockType<BlockBirchHangingSignBehavior> BIRCH_HANGING_SIGN_TYPE;
 
+  public static BlockType<BlockBirchLeavesBehavior> BIRCH_LEAVES_TYPE;
+
   public static BlockType<BlockBirchLogBehavior> BIRCH_LOG_TYPE;
 
   public static BlockType<BlockBirchPlanksBehavior> BIRCH_PLANKS_TYPE;
 
   public static BlockType<BlockBirchPressurePlateBehavior> BIRCH_PRESSURE_PLATE_TYPE;
+
+  public static BlockType<BlockBirchSlabBehavior> BIRCH_SLAB_TYPE;
 
   public static BlockType<BlockBirchStairsBehavior> BIRCH_STAIRS_TYPE;
 
@@ -1163,6 +1203,8 @@ public final class BlockTypes {
   public static BlockType<BlockBirchTrapdoorBehavior> BIRCH_TRAPDOOR_TYPE;
 
   public static BlockType<BlockBirchWallSignBehavior> BIRCH_WALL_SIGN_TYPE;
+
+  public static BlockType<BlockBirchWoodBehavior> BIRCH_WOOD_TYPE;
 
   public static BlockType<BlockBlackCandleBehavior> BLACK_CANDLE_TYPE;
 
@@ -1500,11 +1542,15 @@ public final class BlockTypes {
 
   public static BlockType<BlockDarkOakDoorBehavior> DARK_OAK_DOOR_TYPE;
 
+  public static BlockType<BlockDarkOakDoubleSlabBehavior> DARK_OAK_DOUBLE_SLAB_TYPE;
+
   public static BlockType<BlockDarkOakFenceBehavior> DARK_OAK_FENCE_TYPE;
 
   public static BlockType<BlockDarkOakFenceGateBehavior> DARK_OAK_FENCE_GATE_TYPE;
 
   public static BlockType<BlockDarkOakHangingSignBehavior> DARK_OAK_HANGING_SIGN_TYPE;
+
+  public static BlockType<BlockDarkOakLeavesBehavior> DARK_OAK_LEAVES_TYPE;
 
   public static BlockType<BlockDarkOakLogBehavior> DARK_OAK_LOG_TYPE;
 
@@ -1512,9 +1558,13 @@ public final class BlockTypes {
 
   public static BlockType<BlockDarkOakPressurePlateBehavior> DARK_OAK_PRESSURE_PLATE_TYPE;
 
+  public static BlockType<BlockDarkOakSlabBehavior> DARK_OAK_SLAB_TYPE;
+
   public static BlockType<BlockDarkOakStairsBehavior> DARK_OAK_STAIRS_TYPE;
 
   public static BlockType<BlockDarkOakTrapdoorBehavior> DARK_OAK_TRAPDOOR_TYPE;
+
+  public static BlockType<BlockDarkOakWoodBehavior> DARK_OAK_WOOD_TYPE;
 
   public static BlockType<BlockDarkPrismarineStairsBehavior> DARK_PRISMARINE_STAIRS_TYPE;
 
@@ -1607,8 +1657,6 @@ public final class BlockTypes {
   public static BlockType<BlockDoubleStoneBlockSlab3Behavior> DOUBLE_STONE_BLOCK_SLAB3_TYPE;
 
   public static BlockType<BlockDoubleStoneBlockSlab4Behavior> DOUBLE_STONE_BLOCK_SLAB4_TYPE;
-
-  public static BlockType<BlockDoubleWoodenSlabBehavior> DOUBLE_WOODEN_SLAB_TYPE;
 
   public static BlockType<BlockDragonEggBehavior> DRAGON_EGG_TYPE;
 
@@ -1948,7 +1996,7 @@ public final class BlockTypes {
 
   public static BlockType<BlockGraniteStairsBehavior> GRANITE_STAIRS_TYPE;
 
-  public static BlockType<BlockGrassBehavior> GRASS_TYPE;
+  public static BlockType<BlockGrassBlockBehavior> GRASS_BLOCK_TYPE;
 
   public static BlockType<BlockGrassPathBehavior> GRASS_PATH_TYPE;
 
@@ -2112,17 +2160,23 @@ public final class BlockTypes {
 
   public static BlockType<BlockJungleDoorBehavior> JUNGLE_DOOR_TYPE;
 
+  public static BlockType<BlockJungleDoubleSlabBehavior> JUNGLE_DOUBLE_SLAB_TYPE;
+
   public static BlockType<BlockJungleFenceBehavior> JUNGLE_FENCE_TYPE;
 
   public static BlockType<BlockJungleFenceGateBehavior> JUNGLE_FENCE_GATE_TYPE;
 
   public static BlockType<BlockJungleHangingSignBehavior> JUNGLE_HANGING_SIGN_TYPE;
 
+  public static BlockType<BlockJungleLeavesBehavior> JUNGLE_LEAVES_TYPE;
+
   public static BlockType<BlockJungleLogBehavior> JUNGLE_LOG_TYPE;
 
   public static BlockType<BlockJunglePlanksBehavior> JUNGLE_PLANKS_TYPE;
 
   public static BlockType<BlockJunglePressurePlateBehavior> JUNGLE_PRESSURE_PLATE_TYPE;
+
+  public static BlockType<BlockJungleSlabBehavior> JUNGLE_SLAB_TYPE;
 
   public static BlockType<BlockJungleStairsBehavior> JUNGLE_STAIRS_TYPE;
 
@@ -2131,6 +2185,8 @@ public final class BlockTypes {
   public static BlockType<BlockJungleTrapdoorBehavior> JUNGLE_TRAPDOOR_TYPE;
 
   public static BlockType<BlockJungleWallSignBehavior> JUNGLE_WALL_SIGN_TYPE;
+
+  public static BlockType<BlockJungleWoodBehavior> JUNGLE_WOOD_TYPE;
 
   public static BlockType<BlockKelpBehavior> KELP_TYPE;
 
@@ -2145,10 +2201,6 @@ public final class BlockTypes {
   public static BlockType<BlockLargeAmethystBudBehavior> LARGE_AMETHYST_BUD_TYPE;
 
   public static BlockType<BlockLavaBehavior> LAVA_TYPE;
-
-  public static BlockType<BlockLeavesBehavior> LEAVES_TYPE;
-
-  public static BlockType<BlockLeaves2Behavior> LEAVES2_TYPE;
 
   public static BlockType<BlockLecternBehavior> LECTERN_TYPE;
 
@@ -2364,15 +2416,23 @@ public final class BlockTypes {
 
   public static BlockType<BlockNoteblockBehavior> NOTEBLOCK_TYPE;
 
+  public static BlockType<BlockOakDoubleSlabBehavior> OAK_DOUBLE_SLAB_TYPE;
+
   public static BlockType<BlockOakFenceBehavior> OAK_FENCE_TYPE;
 
   public static BlockType<BlockOakHangingSignBehavior> OAK_HANGING_SIGN_TYPE;
+
+  public static BlockType<BlockOakLeavesBehavior> OAK_LEAVES_TYPE;
 
   public static BlockType<BlockOakLogBehavior> OAK_LOG_TYPE;
 
   public static BlockType<BlockOakPlanksBehavior> OAK_PLANKS_TYPE;
 
+  public static BlockType<BlockOakSlabBehavior> OAK_SLAB_TYPE;
+
   public static BlockType<BlockOakStairsBehavior> OAK_STAIRS_TYPE;
+
+  public static BlockType<BlockOakWoodBehavior> OAK_WOOD_TYPE;
 
   public static BlockType<BlockObserverBehavior> OBSERVER_TYPE;
 
@@ -2718,17 +2778,23 @@ public final class BlockTypes {
 
   public static BlockType<BlockSpruceDoorBehavior> SPRUCE_DOOR_TYPE;
 
+  public static BlockType<BlockSpruceDoubleSlabBehavior> SPRUCE_DOUBLE_SLAB_TYPE;
+
   public static BlockType<BlockSpruceFenceBehavior> SPRUCE_FENCE_TYPE;
 
   public static BlockType<BlockSpruceFenceGateBehavior> SPRUCE_FENCE_GATE_TYPE;
 
   public static BlockType<BlockSpruceHangingSignBehavior> SPRUCE_HANGING_SIGN_TYPE;
 
+  public static BlockType<BlockSpruceLeavesBehavior> SPRUCE_LEAVES_TYPE;
+
   public static BlockType<BlockSpruceLogBehavior> SPRUCE_LOG_TYPE;
 
   public static BlockType<BlockSprucePlanksBehavior> SPRUCE_PLANKS_TYPE;
 
   public static BlockType<BlockSprucePressurePlateBehavior> SPRUCE_PRESSURE_PLATE_TYPE;
+
+  public static BlockType<BlockSpruceSlabBehavior> SPRUCE_SLAB_TYPE;
 
   public static BlockType<BlockSpruceStairsBehavior> SPRUCE_STAIRS_TYPE;
 
@@ -2737,6 +2803,8 @@ public final class BlockTypes {
   public static BlockType<BlockSpruceTrapdoorBehavior> SPRUCE_TRAPDOOR_TYPE;
 
   public static BlockType<BlockSpruceWallSignBehavior> SPRUCE_WALL_SIGN_TYPE;
+
+  public static BlockType<BlockSpruceWoodBehavior> SPRUCE_WOOD_TYPE;
 
   public static BlockType<BlockStandingBannerBehavior> STANDING_BANNER_TYPE;
 
@@ -2772,9 +2840,13 @@ public final class BlockTypes {
 
   public static BlockType<BlockStrippedAcaciaLogBehavior> STRIPPED_ACACIA_LOG_TYPE;
 
+  public static BlockType<BlockStrippedAcaciaWoodBehavior> STRIPPED_ACACIA_WOOD_TYPE;
+
   public static BlockType<BlockStrippedBambooBlockBehavior> STRIPPED_BAMBOO_BLOCK_TYPE;
 
   public static BlockType<BlockStrippedBirchLogBehavior> STRIPPED_BIRCH_LOG_TYPE;
+
+  public static BlockType<BlockStrippedBirchWoodBehavior> STRIPPED_BIRCH_WOOD_TYPE;
 
   public static BlockType<BlockStrippedCherryLogBehavior> STRIPPED_CHERRY_LOG_TYPE;
 
@@ -2786,7 +2858,11 @@ public final class BlockTypes {
 
   public static BlockType<BlockStrippedDarkOakLogBehavior> STRIPPED_DARK_OAK_LOG_TYPE;
 
+  public static BlockType<BlockStrippedDarkOakWoodBehavior> STRIPPED_DARK_OAK_WOOD_TYPE;
+
   public static BlockType<BlockStrippedJungleLogBehavior> STRIPPED_JUNGLE_LOG_TYPE;
+
+  public static BlockType<BlockStrippedJungleWoodBehavior> STRIPPED_JUNGLE_WOOD_TYPE;
 
   public static BlockType<BlockStrippedMangroveLogBehavior> STRIPPED_MANGROVE_LOG_TYPE;
 
@@ -2794,7 +2870,11 @@ public final class BlockTypes {
 
   public static BlockType<BlockStrippedOakLogBehavior> STRIPPED_OAK_LOG_TYPE;
 
+  public static BlockType<BlockStrippedOakWoodBehavior> STRIPPED_OAK_WOOD_TYPE;
+
   public static BlockType<BlockStrippedSpruceLogBehavior> STRIPPED_SPRUCE_LOG_TYPE;
+
+  public static BlockType<BlockStrippedSpruceWoodBehavior> STRIPPED_SPRUCE_WOOD_TYPE;
 
   public static BlockType<BlockStrippedWarpedHyphaeBehavior> STRIPPED_WARPED_HYPHAE_TYPE;
 
@@ -2871,6 +2951,8 @@ public final class BlockTypes {
   public static BlockType<BlockUnpoweredComparatorBehavior> UNPOWERED_COMPARATOR_TYPE;
 
   public static BlockType<BlockUnpoweredRepeaterBehavior> UNPOWERED_REPEATER_TYPE;
+
+  public static BlockType<BlockVaultBehavior> VAULT_TYPE;
 
   public static BlockType<BlockVerdantFroglightBehavior> VERDANT_FROGLIGHT_TYPE;
 
@@ -3052,15 +3134,11 @@ public final class BlockTypes {
 
   public static BlockType<BlockWitherRoseBehavior> WITHER_ROSE_TYPE;
 
-  public static BlockType<BlockWoodBehavior> WOOD_TYPE;
-
   public static BlockType<BlockWoodenButtonBehavior> WOODEN_BUTTON_TYPE;
 
   public static BlockType<BlockWoodenDoorBehavior> WOODEN_DOOR_TYPE;
 
   public static BlockType<BlockWoodenPressurePlateBehavior> WOODEN_PRESSURE_PLATE_TYPE;
-
-  public static BlockType<BlockWoodenSlabBehavior> WOODEN_SLAB_TYPE;
 
   public static BlockType<BlockYellowCandleBehavior> YELLOW_CANDLE_TYPE;
 

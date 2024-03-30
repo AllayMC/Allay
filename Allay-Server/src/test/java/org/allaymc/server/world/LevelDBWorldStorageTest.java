@@ -33,7 +33,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-import static org.allaymc.api.block.type.BlockTypes.WOOD_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD_TYPE;
 
 /**
  * Allay Project 2023/5/31
@@ -95,7 +95,7 @@ class LevelDBWorldStorageTest {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {
-                    allayUnsafeChunk.setBlockState(i, k, j, WOOD_TYPE.getDefaultState());
+                    allayUnsafeChunk.setBlockState(i, k, j, OAK_WOOD_TYPE.getDefaultState());
                     allayUnsafeChunk.setBiome(i, k, j, VanillaBiomeId.FOREST);
                 }
                 allayUnsafeChunk.setHeight(i, j, 319);
@@ -110,7 +110,7 @@ class LevelDBWorldStorageTest {
     @Order(4)
     void testReadChunk() {
         Chunk chunk = levelDBWorldStorage.readChunk(0, 0, DimensionInfo.OVERWORLD).join();
-        Assertions.assertEquals(WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 55, 0));
+        Assertions.assertEquals(OAK_WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 55, 0));
         Assertions.assertEquals(VanillaBiomeId.FOREST, chunk.getBiome(0, 55, 0));
         Assertions.assertEquals(319, chunk.getHeight(0, 0));
     }

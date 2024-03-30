@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static org.allaymc.api.block.type.BlockTypes.BEDROCK_TYPE;
 import static org.allaymc.api.block.type.BlockTypes.DIRT_TYPE;
-import static org.allaymc.api.block.type.BlockTypes.GRASS_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.GRASS_BLOCK_TYPE;
 
 /**
  * Allay Project 2023/7/8
@@ -32,7 +32,7 @@ public class FlatWorldGenerator extends WorldGenerator {
         var list = new ArrayList<BlockState>();
         if (preset.isBlank()) {
             var bedrock = BEDROCK_TYPE.getDefaultState();
-            var grass = GRASS_TYPE.getDefaultState();
+            var grass = GRASS_BLOCK_TYPE.getDefaultState();
             var dirt = DIRT_TYPE.getDefaultState();
             list.add(bedrock);
             list.add(dirt);

@@ -6,5 +6,5 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd <br>
  * Allay Project <br>
  */
-public interface ItemGrassStack extends ItemStack {
+public interface ItemWindChargeStack extends ItemStack {
 }

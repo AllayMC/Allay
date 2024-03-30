@@ -264,8 +264,8 @@ import org.allaymc.api.item.interfaces.ItemGoldenRailStack;
 import org.allaymc.api.item.interfaces.ItemGoldenShovelStack;
 import org.allaymc.api.item.interfaces.ItemGoldenSwordStack;
 import org.allaymc.api.item.interfaces.ItemGraniteStack;
+import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
 import org.allaymc.api.item.interfaces.ItemGrassPathStack;
-import org.allaymc.api.item.interfaces.ItemGrassStack;
 import org.allaymc.api.item.interfaces.ItemGravelStack;
 import org.allaymc.api.item.interfaces.ItemGrayDyeStack;
 import org.allaymc.api.item.interfaces.ItemGreenDyeStack;
@@ -588,6 +588,7 @@ import org.allaymc.api.item.interfaces.ItemUnknownStack;
 import org.allaymc.api.item.interfaces.ItemUnlitRedstoneTorchStack;
 import org.allaymc.api.item.interfaces.ItemUnpoweredComparatorStack;
 import org.allaymc.api.item.interfaces.ItemUnpoweredRepeaterStack;
+import org.allaymc.api.item.interfaces.ItemVaultStack;
 import org.allaymc.api.item.interfaces.ItemVerdantFroglightStack;
 import org.allaymc.api.item.interfaces.ItemVexArmorTrimSmithingTemplateStack;
 import org.allaymc.api.item.interfaces.ItemVineStack;
@@ -619,6 +620,7 @@ import org.allaymc.api.item.interfaces.ItemWheatSeedsStack;
 import org.allaymc.api.item.interfaces.ItemWheatStack;
 import org.allaymc.api.item.interfaces.ItemWhiteDyeStack;
 import org.allaymc.api.item.interfaces.ItemWildArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemWindChargeStack;
 import org.allaymc.api.item.interfaces.ItemWitherRoseStack;
 import org.allaymc.api.item.interfaces.ItemWolfArmorStack;
 import org.allaymc.api.item.interfaces.ItemWoodenAxeStack;
@@ -859,6 +861,7 @@ import org.allaymc.api.item.interfaces.egg.ItemAxolotlSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemBatSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemBeeSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemBlazeSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemBoggedSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemBreezeSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemCamelSpawnEggStack;
 import org.allaymc.api.item.interfaces.egg.ItemCatSpawnEggStack;
@@ -1105,12 +1108,18 @@ import org.allaymc.api.item.interfaces.helmet.ItemIronHelmetStack;
 import org.allaymc.api.item.interfaces.helmet.ItemLeatherHelmetStack;
 import org.allaymc.api.item.interfaces.helmet.ItemNetheriteHelmetStack;
 import org.allaymc.api.item.interfaces.helmet.ItemTurtleHelmetStack;
+import org.allaymc.api.item.interfaces.leaves.ItemAcaciaLeavesStack;
 import org.allaymc.api.item.interfaces.leaves.ItemAzaleaLeavesFloweredStack;
 import org.allaymc.api.item.interfaces.leaves.ItemAzaleaLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemBirchLeavesStack;
 import org.allaymc.api.item.interfaces.leaves.ItemCherryLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemDarkOakLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemJungleLeavesStack;
 import org.allaymc.api.item.interfaces.leaves.ItemLeaves2Stack;
 import org.allaymc.api.item.interfaces.leaves.ItemLeavesStack;
 import org.allaymc.api.item.interfaces.leaves.ItemMangroveLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemOakLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemSpruceLeavesStack;
 import org.allaymc.api.item.interfaces.leggings.ItemChainmailLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemDiamondLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemGoldenLeggingsStack;
@@ -1208,10 +1217,14 @@ import org.allaymc.api.item.interfaces.sign.ItemMangroveSignStack;
 import org.allaymc.api.item.interfaces.sign.ItemOakSignStack;
 import org.allaymc.api.item.interfaces.sign.ItemSpruceSignStack;
 import org.allaymc.api.item.interfaces.sign.ItemWarpedSignStack;
+import org.allaymc.api.item.interfaces.slab.ItemAcaciaDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemAcaciaSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBambooDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBambooMosaicDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBambooMosaicSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBambooSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBirchDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBirchSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBlackstoneDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBlackstoneSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCherryDoubleSlabStack;
@@ -1221,6 +1234,8 @@ import org.allaymc.api.item.interfaces.slab.ItemCobbledDeepslateSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCrimsonDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCrimsonSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDarkOakDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDarkOakSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemDeepslateBrickDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemDeepslateBrickSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemDeepslateTileDoubleSlabStack;
@@ -1230,13 +1245,16 @@ import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlab2Stack;
 import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlab3Stack;
 import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlab4Stack;
 import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlabStack;
-import org.allaymc.api.item.interfaces.slab.ItemDoubleWoodenSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemExposedCutCopperSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemExposedDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemJungleDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemJungleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMangroveDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMangroveSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMudBrickDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMudBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemOakDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemOakSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemOxidizedCutCopperSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemOxidizedDoubleCutCopperSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedBlackstoneBrickDoubleSlabStack;
@@ -1247,6 +1265,8 @@ import org.allaymc.api.item.interfaces.slab.ItemPolishedDeepslateDoubleSlabStack
 import org.allaymc.api.item.interfaces.slab.ItemPolishedDeepslateSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedTuffDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedTuffSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSpruceDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSpruceSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab2Stack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab3Stack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab4Stack;
@@ -1478,10 +1498,22 @@ import org.allaymc.api.item.interfaces.wallsign.ItemMangroveWallSignStack;
 import org.allaymc.api.item.interfaces.wallsign.ItemSpruceWallSignStack;
 import org.allaymc.api.item.interfaces.wallsign.ItemWallSignStack;
 import org.allaymc.api.item.interfaces.wallsign.ItemWarpedWallSignStack;
+import org.allaymc.api.item.interfaces.wood.ItemAcaciaWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemBirchWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemCherryWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemDarkOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemJungleWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemMangroveWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemSpruceWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedAcaciaWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedBirchWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemStrippedCherryWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedDarkOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedJungleWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemStrippedMangroveWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedSpruceWoodStack;
 import org.allaymc.api.item.interfaces.wood.ItemWoodStack;
 import org.allaymc.api.item.interfaces.wool.ItemBlackWoolStack;
 import org.allaymc.api.item.interfaces.wool.ItemBlueWoolStack;
@@ -1540,6 +1572,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initAcaciaDoubleSlab() {
+    if (ItemTypes.ACACIA_DOUBLE_SLAB_TYPE != null) return;
+    ItemTypes.ACACIA_DOUBLE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemAcaciaDoubleSlabStack.class)
+            .vanillaItem(VanillaItemId.ACACIA_DOUBLE_SLAB)
+            .build();
+  }
+
   public static void initAcaciaFence() {
     if (ItemTypes.ACACIA_FENCE_TYPE != null) return;
     ItemTypes.ACACIA_FENCE_TYPE = ItemTypeBuilder
@@ -1561,6 +1601,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.ACACIA_HANGING_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemAcaciaHangingSignStack.class)
             .vanillaItem(VanillaItemId.ACACIA_HANGING_SIGN)
+            .build();
+  }
+
+  public static void initAcaciaLeaves() {
+    if (ItemTypes.ACACIA_LEAVES_TYPE != null) return;
+    ItemTypes.ACACIA_LEAVES_TYPE = ItemTypeBuilder
+            .builder(ItemAcaciaLeavesStack.class)
+            .vanillaItem(VanillaItemId.ACACIA_LEAVES)
             .build();
   }
 
@@ -1596,6 +1644,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initAcaciaSlab() {
+    if (ItemTypes.ACACIA_SLAB_TYPE != null) return;
+    ItemTypes.ACACIA_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemAcaciaSlabStack.class)
+            .vanillaItem(VanillaItemId.ACACIA_SLAB)
+            .build();
+  }
+
   public static void initAcaciaStairs() {
     if (ItemTypes.ACACIA_STAIRS_TYPE != null) return;
     ItemTypes.ACACIA_STAIRS_TYPE = ItemTypeBuilder
@@ -1625,6 +1681,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.ACACIA_WALL_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemAcaciaWallSignStack.class)
             .vanillaItem(VanillaItemId.ACACIA_WALL_SIGN)
+            .build();
+  }
+
+  public static void initAcaciaWood() {
+    if (ItemTypes.ACACIA_WOOD_TYPE != null) return;
+    ItemTypes.ACACIA_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemAcaciaWoodStack.class)
+            .vanillaItem(VanillaItemId.ACACIA_WOOD)
             .build();
   }
 
@@ -2204,6 +2268,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initBirchDoubleSlab() {
+    if (ItemTypes.BIRCH_DOUBLE_SLAB_TYPE != null) return;
+    ItemTypes.BIRCH_DOUBLE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemBirchDoubleSlabStack.class)
+            .vanillaItem(VanillaItemId.BIRCH_DOUBLE_SLAB)
+            .build();
+  }
+
   public static void initBirchFence() {
     if (ItemTypes.BIRCH_FENCE_TYPE != null) return;
     ItemTypes.BIRCH_FENCE_TYPE = ItemTypeBuilder
@@ -2225,6 +2297,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.BIRCH_HANGING_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemBirchHangingSignStack.class)
             .vanillaItem(VanillaItemId.BIRCH_HANGING_SIGN)
+            .build();
+  }
+
+  public static void initBirchLeaves() {
+    if (ItemTypes.BIRCH_LEAVES_TYPE != null) return;
+    ItemTypes.BIRCH_LEAVES_TYPE = ItemTypeBuilder
+            .builder(ItemBirchLeavesStack.class)
+            .vanillaItem(VanillaItemId.BIRCH_LEAVES)
             .build();
   }
 
@@ -2260,6 +2340,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initBirchSlab() {
+    if (ItemTypes.BIRCH_SLAB_TYPE != null) return;
+    ItemTypes.BIRCH_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemBirchSlabStack.class)
+            .vanillaItem(VanillaItemId.BIRCH_SLAB)
+            .build();
+  }
+
   public static void initBirchStairs() {
     if (ItemTypes.BIRCH_STAIRS_TYPE != null) return;
     ItemTypes.BIRCH_STAIRS_TYPE = ItemTypeBuilder
@@ -2289,6 +2377,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.BIRCH_WALL_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemBirchWallSignStack.class)
             .vanillaItem(VanillaItemId.BIRCH_WALL_SIGN)
+            .build();
+  }
+
+  public static void initBirchWood() {
+    if (ItemTypes.BIRCH_WOOD_TYPE != null) return;
+    ItemTypes.BIRCH_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemBirchWoodStack.class)
+            .vanillaItem(VanillaItemId.BIRCH_WOOD)
             .build();
   }
 
@@ -2585,6 +2681,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.BOAT_TYPE = ItemTypeBuilder
             .builder(ItemBoatStack.class)
             .vanillaItem(VanillaItemId.BOAT)
+            .build();
+  }
+
+  public static void initBoggedSpawnEgg() {
+    if (ItemTypes.BOGGED_SPAWN_EGG_TYPE != null) return;
+    ItemTypes.BOGGED_SPAWN_EGG_TYPE = ItemTypeBuilder
+            .builder(ItemBoggedSpawnEggStack.class)
+            .vanillaItem(VanillaItemId.BOGGED_SPAWN_EGG)
             .build();
   }
 
@@ -4228,6 +4332,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDarkOakDoubleSlab() {
+    if (ItemTypes.DARK_OAK_DOUBLE_SLAB_TYPE != null) return;
+    ItemTypes.DARK_OAK_DOUBLE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemDarkOakDoubleSlabStack.class)
+            .vanillaItem(VanillaItemId.DARK_OAK_DOUBLE_SLAB)
+            .build();
+  }
+
   public static void initDarkOakFence() {
     if (ItemTypes.DARK_OAK_FENCE_TYPE != null) return;
     ItemTypes.DARK_OAK_FENCE_TYPE = ItemTypeBuilder
@@ -4249,6 +4361,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.DARK_OAK_HANGING_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemDarkOakHangingSignStack.class)
             .vanillaItem(VanillaItemId.DARK_OAK_HANGING_SIGN)
+            .build();
+  }
+
+  public static void initDarkOakLeaves() {
+    if (ItemTypes.DARK_OAK_LEAVES_TYPE != null) return;
+    ItemTypes.DARK_OAK_LEAVES_TYPE = ItemTypeBuilder
+            .builder(ItemDarkOakLeavesStack.class)
+            .vanillaItem(VanillaItemId.DARK_OAK_LEAVES)
             .build();
   }
 
@@ -4284,6 +4404,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDarkOakSlab() {
+    if (ItemTypes.DARK_OAK_SLAB_TYPE != null) return;
+    ItemTypes.DARK_OAK_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemDarkOakSlabStack.class)
+            .vanillaItem(VanillaItemId.DARK_OAK_SLAB)
+            .build();
+  }
+
   public static void initDarkOakStairs() {
     if (ItemTypes.DARK_OAK_STAIRS_TYPE != null) return;
     ItemTypes.DARK_OAK_STAIRS_TYPE = ItemTypeBuilder
@@ -4297,6 +4425,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.DARK_OAK_TRAPDOOR_TYPE = ItemTypeBuilder
             .builder(ItemDarkOakTrapdoorStack.class)
             .vanillaItem(VanillaItemId.DARK_OAK_TRAPDOOR)
+            .build();
+  }
+
+  public static void initDarkOakWood() {
+    if (ItemTypes.DARK_OAK_WOOD_TYPE != null) return;
+    ItemTypes.DARK_OAK_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemDarkOakWoodStack.class)
+            .vanillaItem(VanillaItemId.DARK_OAK_WOOD)
             .build();
   }
 
@@ -4777,14 +4913,6 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.DOUBLE_STONE_BLOCK_SLAB4_TYPE = ItemTypeBuilder
             .builder(ItemDoubleStoneBlockSlab4Stack.class)
             .vanillaItem(VanillaItemId.DOUBLE_STONE_BLOCK_SLAB4)
-            .build();
-  }
-
-  public static void initDoubleWoodenSlab() {
-    if (ItemTypes.DOUBLE_WOODEN_SLAB_TYPE != null) return;
-    ItemTypes.DOUBLE_WOODEN_SLAB_TYPE = ItemTypeBuilder
-            .builder(ItemDoubleWoodenSlabStack.class)
-            .vanillaItem(VanillaItemId.DOUBLE_WOODEN_SLAB)
             .build();
   }
 
@@ -6652,11 +6780,11 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
-  public static void initGrass() {
-    if (ItemTypes.GRASS_TYPE != null) return;
-    ItemTypes.GRASS_TYPE = ItemTypeBuilder
-            .builder(ItemGrassStack.class)
-            .vanillaItem(VanillaItemId.GRASS)
+  public static void initGrassBlock() {
+    if (ItemTypes.GRASS_BLOCK_TYPE != null) return;
+    ItemTypes.GRASS_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemGrassBlockStack.class)
+            .vanillaItem(VanillaItemId.GRASS_BLOCK)
             .build();
   }
 
@@ -7812,6 +7940,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initJungleDoubleSlab() {
+    if (ItemTypes.JUNGLE_DOUBLE_SLAB_TYPE != null) return;
+    ItemTypes.JUNGLE_DOUBLE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemJungleDoubleSlabStack.class)
+            .vanillaItem(VanillaItemId.JUNGLE_DOUBLE_SLAB)
+            .build();
+  }
+
   public static void initJungleFence() {
     if (ItemTypes.JUNGLE_FENCE_TYPE != null) return;
     ItemTypes.JUNGLE_FENCE_TYPE = ItemTypeBuilder
@@ -7833,6 +7969,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.JUNGLE_HANGING_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemJungleHangingSignStack.class)
             .vanillaItem(VanillaItemId.JUNGLE_HANGING_SIGN)
+            .build();
+  }
+
+  public static void initJungleLeaves() {
+    if (ItemTypes.JUNGLE_LEAVES_TYPE != null) return;
+    ItemTypes.JUNGLE_LEAVES_TYPE = ItemTypeBuilder
+            .builder(ItemJungleLeavesStack.class)
+            .vanillaItem(VanillaItemId.JUNGLE_LEAVES)
             .build();
   }
 
@@ -7868,6 +8012,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initJungleSlab() {
+    if (ItemTypes.JUNGLE_SLAB_TYPE != null) return;
+    ItemTypes.JUNGLE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemJungleSlabStack.class)
+            .vanillaItem(VanillaItemId.JUNGLE_SLAB)
+            .build();
+  }
+
   public static void initJungleStairs() {
     if (ItemTypes.JUNGLE_STAIRS_TYPE != null) return;
     ItemTypes.JUNGLE_STAIRS_TYPE = ItemTypeBuilder
@@ -7897,6 +8049,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.JUNGLE_WALL_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemJungleWallSignStack.class)
             .vanillaItem(VanillaItemId.JUNGLE_WALL_SIGN)
+            .build();
+  }
+
+  public static void initJungleWood() {
+    if (ItemTypes.JUNGLE_WOOD_TYPE != null) return;
+    ItemTypes.JUNGLE_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemJungleWoodStack.class)
+            .vanillaItem(VanillaItemId.JUNGLE_WOOD)
             .build();
   }
 
@@ -9388,6 +9548,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOakDoubleSlab() {
+    if (ItemTypes.OAK_DOUBLE_SLAB_TYPE != null) return;
+    ItemTypes.OAK_DOUBLE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemOakDoubleSlabStack.class)
+            .vanillaItem(VanillaItemId.OAK_DOUBLE_SLAB)
+            .build();
+  }
+
   public static void initOakFence() {
     if (ItemTypes.OAK_FENCE_TYPE != null) return;
     ItemTypes.OAK_FENCE_TYPE = ItemTypeBuilder
@@ -9401,6 +9569,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.OAK_HANGING_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemOakHangingSignStack.class)
             .vanillaItem(VanillaItemId.OAK_HANGING_SIGN)
+            .build();
+  }
+
+  public static void initOakLeaves() {
+    if (ItemTypes.OAK_LEAVES_TYPE != null) return;
+    ItemTypes.OAK_LEAVES_TYPE = ItemTypeBuilder
+            .builder(ItemOakLeavesStack.class)
+            .vanillaItem(VanillaItemId.OAK_LEAVES)
             .build();
   }
 
@@ -9428,11 +9604,27 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOakSlab() {
+    if (ItemTypes.OAK_SLAB_TYPE != null) return;
+    ItemTypes.OAK_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemOakSlabStack.class)
+            .vanillaItem(VanillaItemId.OAK_SLAB)
+            .build();
+  }
+
   public static void initOakStairs() {
     if (ItemTypes.OAK_STAIRS_TYPE != null) return;
     ItemTypes.OAK_STAIRS_TYPE = ItemTypeBuilder
             .builder(ItemOakStairsStack.class)
             .vanillaItem(VanillaItemId.OAK_STAIRS)
+            .build();
+  }
+
+  public static void initOakWood() {
+    if (ItemTypes.OAK_WOOD_TYPE != null) return;
+    ItemTypes.OAK_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemOakWoodStack.class)
+            .vanillaItem(VanillaItemId.OAK_WOOD)
             .build();
   }
 
@@ -11492,6 +11684,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initSpruceDoubleSlab() {
+    if (ItemTypes.SPRUCE_DOUBLE_SLAB_TYPE != null) return;
+    ItemTypes.SPRUCE_DOUBLE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemSpruceDoubleSlabStack.class)
+            .vanillaItem(VanillaItemId.SPRUCE_DOUBLE_SLAB)
+            .build();
+  }
+
   public static void initSpruceFence() {
     if (ItemTypes.SPRUCE_FENCE_TYPE != null) return;
     ItemTypes.SPRUCE_FENCE_TYPE = ItemTypeBuilder
@@ -11513,6 +11713,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.SPRUCE_HANGING_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemSpruceHangingSignStack.class)
             .vanillaItem(VanillaItemId.SPRUCE_HANGING_SIGN)
+            .build();
+  }
+
+  public static void initSpruceLeaves() {
+    if (ItemTypes.SPRUCE_LEAVES_TYPE != null) return;
+    ItemTypes.SPRUCE_LEAVES_TYPE = ItemTypeBuilder
+            .builder(ItemSpruceLeavesStack.class)
+            .vanillaItem(VanillaItemId.SPRUCE_LEAVES)
             .build();
   }
 
@@ -11548,6 +11756,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initSpruceSlab() {
+    if (ItemTypes.SPRUCE_SLAB_TYPE != null) return;
+    ItemTypes.SPRUCE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemSpruceSlabStack.class)
+            .vanillaItem(VanillaItemId.SPRUCE_SLAB)
+            .build();
+  }
+
   public static void initSpruceStairs() {
     if (ItemTypes.SPRUCE_STAIRS_TYPE != null) return;
     ItemTypes.SPRUCE_STAIRS_TYPE = ItemTypeBuilder
@@ -11577,6 +11793,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.SPRUCE_WALL_SIGN_TYPE = ItemTypeBuilder
             .builder(ItemSpruceWallSignStack.class)
             .vanillaItem(VanillaItemId.SPRUCE_WALL_SIGN)
+            .build();
+  }
+
+  public static void initSpruceWood() {
+    if (ItemTypes.SPRUCE_WOOD_TYPE != null) return;
+    ItemTypes.SPRUCE_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemSpruceWoodStack.class)
+            .vanillaItem(VanillaItemId.SPRUCE_WOOD)
             .build();
   }
 
@@ -11828,6 +12052,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initStrippedAcaciaWood() {
+    if (ItemTypes.STRIPPED_ACACIA_WOOD_TYPE != null) return;
+    ItemTypes.STRIPPED_ACACIA_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemStrippedAcaciaWoodStack.class)
+            .vanillaItem(VanillaItemId.STRIPPED_ACACIA_WOOD)
+            .build();
+  }
+
   public static void initStrippedBambooBlock() {
     if (ItemTypes.STRIPPED_BAMBOO_BLOCK_TYPE != null) return;
     ItemTypes.STRIPPED_BAMBOO_BLOCK_TYPE = ItemTypeBuilder
@@ -11841,6 +12073,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.STRIPPED_BIRCH_LOG_TYPE = ItemTypeBuilder
             .builder(ItemStrippedBirchLogStack.class)
             .vanillaItem(VanillaItemId.STRIPPED_BIRCH_LOG)
+            .build();
+  }
+
+  public static void initStrippedBirchWood() {
+    if (ItemTypes.STRIPPED_BIRCH_WOOD_TYPE != null) return;
+    ItemTypes.STRIPPED_BIRCH_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemStrippedBirchWoodStack.class)
+            .vanillaItem(VanillaItemId.STRIPPED_BIRCH_WOOD)
             .build();
   }
 
@@ -11884,11 +12124,27 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initStrippedDarkOakWood() {
+    if (ItemTypes.STRIPPED_DARK_OAK_WOOD_TYPE != null) return;
+    ItemTypes.STRIPPED_DARK_OAK_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemStrippedDarkOakWoodStack.class)
+            .vanillaItem(VanillaItemId.STRIPPED_DARK_OAK_WOOD)
+            .build();
+  }
+
   public static void initStrippedJungleLog() {
     if (ItemTypes.STRIPPED_JUNGLE_LOG_TYPE != null) return;
     ItemTypes.STRIPPED_JUNGLE_LOG_TYPE = ItemTypeBuilder
             .builder(ItemStrippedJungleLogStack.class)
             .vanillaItem(VanillaItemId.STRIPPED_JUNGLE_LOG)
+            .build();
+  }
+
+  public static void initStrippedJungleWood() {
+    if (ItemTypes.STRIPPED_JUNGLE_WOOD_TYPE != null) return;
+    ItemTypes.STRIPPED_JUNGLE_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemStrippedJungleWoodStack.class)
+            .vanillaItem(VanillaItemId.STRIPPED_JUNGLE_WOOD)
             .build();
   }
 
@@ -11916,11 +12172,27 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initStrippedOakWood() {
+    if (ItemTypes.STRIPPED_OAK_WOOD_TYPE != null) return;
+    ItemTypes.STRIPPED_OAK_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemStrippedOakWoodStack.class)
+            .vanillaItem(VanillaItemId.STRIPPED_OAK_WOOD)
+            .build();
+  }
+
   public static void initStrippedSpruceLog() {
     if (ItemTypes.STRIPPED_SPRUCE_LOG_TYPE != null) return;
     ItemTypes.STRIPPED_SPRUCE_LOG_TYPE = ItemTypeBuilder
             .builder(ItemStrippedSpruceLogStack.class)
             .vanillaItem(VanillaItemId.STRIPPED_SPRUCE_LOG)
+            .build();
+  }
+
+  public static void initStrippedSpruceWood() {
+    if (ItemTypes.STRIPPED_SPRUCE_WOOD_TYPE != null) return;
+    ItemTypes.STRIPPED_SPRUCE_WOOD_TYPE = ItemTypeBuilder
+            .builder(ItemStrippedSpruceWoodStack.class)
+            .vanillaItem(VanillaItemId.STRIPPED_SPRUCE_WOOD)
             .build();
   }
 
@@ -12377,6 +12649,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.UNPOWERED_REPEATER_TYPE = ItemTypeBuilder
             .builder(ItemUnpoweredRepeaterStack.class)
             .vanillaItem(VanillaItemId.UNPOWERED_REPEATER)
+            .build();
+  }
+
+  public static void initVault() {
+    if (ItemTypes.VAULT_TYPE != null) return;
+    ItemTypes.VAULT_TYPE = ItemTypeBuilder
+            .builder(ItemVaultStack.class)
+            .vanillaItem(VanillaItemId.VAULT)
             .build();
   }
 
@@ -13201,6 +13481,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.WILD_ARMOR_TRIM_SMITHING_TEMPLATE_TYPE = ItemTypeBuilder
             .builder(ItemWildArmorTrimSmithingTemplateStack.class)
             .vanillaItem(VanillaItemId.WILD_ARMOR_TRIM_SMITHING_TEMPLATE)
+            .build();
+  }
+
+  public static void initWindCharge() {
+    if (ItemTypes.WIND_CHARGE_TYPE != null) return;
+    ItemTypes.WIND_CHARGE_TYPE = ItemTypeBuilder
+            .builder(ItemWindChargeStack.class)
+            .vanillaItem(VanillaItemId.WIND_CHARGE)
             .build();
   }
 
