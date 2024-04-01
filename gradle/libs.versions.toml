@@ -29,7 +29,7 @@ disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.16.0" }
 # bytecode
-bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.12" }
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.13" }
 # MC Region Loader
 hephaistos = { group = "io.github.jglrxavpok.hephaistos", name = "common", version = "2.6.1" }
 # Cache
