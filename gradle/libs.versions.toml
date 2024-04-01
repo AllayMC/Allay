@@ -41,7 +41,7 @@ slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.12" }
 log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j" }
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
 # CLI dependencie
-progressbar = { group = "me.tongfei", name = "progressbar", version = "0.10.0" }
+progressbar = { group = "me.tongfei", name = "progressbar", version = "0.10.1" }
 picocli = { group = "info.picocli", name = "picocli", version = "4.7.5" }
 mcterminal = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 # Testing dependencies
