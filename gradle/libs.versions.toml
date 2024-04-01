@@ -27,7 +27,7 @@ libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0
 # concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.15.1" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.16.0" }
 # bytecode
 bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.12" }
 # MC Region Loader
