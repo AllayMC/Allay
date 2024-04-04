@@ -176,15 +176,16 @@ public class AllayChunkService implements ChunkService {
         if (isChunkLoaded(hashXZ)) {
             throw new IllegalStateException("Chunk is already loaded");
         }
+        CompletableFuture<Chunk> future;
         // Prevent multiple threads from putting the same chunk into loadingChunks at the same time and wasting computing resources
-        var presentValue = loadingChunks.putIfAbsent(hashXZ, worldStorage.readChunk(x, z, DimensionInfo.OVERWORLD)
+        var presentValue = loadingChunks.putIfAbsent(hashXZ, future = worldStorage.readChunk(x, z, DimensionInfo.OVERWORLD)
                 .exceptionally(t -> {
-                    log.error("Error while reading chunk (" + x + "," + z + ") !", t);
+                    log.error("Error while reading chunk ({},{}) !", x, z, t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
                 .thenApplyAsync(this::generateChunkIfNeed, Server.getInstance().getComputeThreadPool())
                 .exceptionally(t -> {
-                    log.error("Error while generating chunk (" + x + "," + z + ") !", t);
+                    log.error("Error while generating chunk ({},{}) !", x, z, t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
                 .thenApply(prepareChunk -> {
@@ -196,7 +197,7 @@ public class AllayChunkService implements ChunkService {
                 })
         );
         if (presentValue == null) {
-            return loadingChunks.get(hashXZ);
+            return future;
         } else {
             return presentValue;
         }
