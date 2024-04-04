@@ -3,7 +3,7 @@
 <div align="center">
 
 <a href="https://github.com/AllayMC/Allay">
-    <img src="Logo/allay-chan-640x.png" alt="Logo" width="180" height="180">
+    <img src="Logo/allay-chan-640x.png" alt="Logo" width="200" height="200">
 </a>
 <h3 align="center">Allay</h3>
 
@@ -15,6 +15,8 @@
 <img src="https://img.shields.io/badge/protocol-662-blue">
 
 </div>
+
+[English](README.md) | 简体中文
 
 ## 介绍
 
