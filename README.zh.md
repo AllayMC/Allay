@@ -84,6 +84,10 @@ Allay支持运行以Java/JVM或JavaScript语言编写的插件，你可以查看
 
 其他内容请加入我们的Discord群组讨论。
 
+## 星星！
+
+[![Stargazers over time](https://starchart.cc/AllayMC/Allay.svg)](https://starchart.cc/AllayMC/Allay)
+
 ## 许可证
 
 版权所有 **© 2023-2024 AllayMC**，保留所有权利。

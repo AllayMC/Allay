@@ -84,6 +84,10 @@ Your feedback can make this project better. If you find a problem/have a new ide
 
 For anything else, please join our Discord group to discuss.
 
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/AllayMC/Allay.svg)](https://starchart.cc/AllayMC/Allay)
+
 ## License
 
 Copyright **© 2023-2024 AllayMC**, all rights reserved.
