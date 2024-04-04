@@ -25,7 +25,7 @@ dependencies {
     implementation("com.github.jvm-profiling-tools:async-profiler:v2.8.3")
     implementation("org.ow2.asm:asm:9.7")
     implementation("net.bytebuddy:byte-buddy-agent:1.14.13")
-    implementation("com.google.protobuf:protobuf-javalite:4.26.0")
+    implementation("com.google.protobuf:protobuf-javalite:4.26.1")
     implementation("me.lucko:bytesocks-java-client:1.0-20230828.145440-5") {
         exclude(module = "slf4j-api")
     }
