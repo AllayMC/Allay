@@ -77,9 +77,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before
 
 This project exists thanks to the participation of the following developers:
 
-<a href="https://github.com/AllayMC/Allay/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=AllayMC/Allay" />
-</a>
+<img src="https://contrib.rocks/image?repo=AllayMC/Allay" alt="contributors"/>
 
 ## Feedback
 
