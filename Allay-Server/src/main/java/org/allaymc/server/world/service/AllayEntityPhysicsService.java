@@ -103,15 +103,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 }
                 // Apply friction, gravity etc...
                 updateMotion(entity);
-            } else {
+            } else if (entity.computeBlockCollisionMotion()) {
                 // 2. The entity is stuck in the block
                 // Do not calculate other motion exclude block collision motion
-                if (entity.computeBlockCollisionMotion()) {
-                    computeBlockCollisionMotion(entity, collidedBlocks);
-                    entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
-                    forceApplyMotion(entity);
-                    updatedEntities.put(entity.getRuntimeId(), entity);
-                }
+                computeBlockCollisionMotion(entity, collidedBlocks);
+                entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
+                forceApplyMotion(entity);
+                updatedEntities.put(entity.getRuntimeId(), entity);
             }
         });
         updatedEntities.values().forEach(entityAABBTree::update);
