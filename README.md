@@ -30,16 +30,20 @@ For more information, check out our [Q&A](QA.md).
 
 ## Features
 
-- **Cross-platform**: Allay is based on JVM, so it can run on most platforms that can run JVM.
-- **High Performance**: Allay is based on JVM, so it can run on most platforms that can run JVM.
-    - We fully understand the problems of Nukkit server under high load, Allay outperforms Nukkit in certain aspects (eg: entity physics) by a factor of 100 under the same load.
-    - In addition, thanks to a redesigned threading model, Allay takes full advantage of multicore CPUs, which means you don't need to intentionally use high CPU frequencies.
+- **Cross-platform** Allay is based on the JVM, so it can run on most platforms that can run the JVM.
+- High Performance
+    - We fully understand the problems of Nukkit server under high load, Allay outperforms Nukkit in certain aspects (eg: entity physics) by a factor of 100 under the same load. In addition, thanks to the redesigned threading model, Allay can fully utilize multiple threads.
+    - In addition, thanks to a redesigned threading model, Allay takes full advantage of multi-core CPUs, which means you don't need to intentionally use high CPU frequencies.
     - Allay is based on the latest Java21, which theoretically gives it better performance.
-- **Starter-friendly**
+- **Easy to get started
     - You can write plugins for Allay in Java/JVM.
     - We introduced GraalVM and JavaScript support, which means you can write plugins in JavaScript/TypeScript and
       get the same performance as Java and the ability to interoperate seamlessly.
-- **Large amount of new features** Unlike the Nukkit server, Allay uses a large number of new protocol features that have been introduced by BDS, including but not limited to the server-side authority item bar, and sub-block packetization.
+- **Highly Customizable** Allay offers a large number of interfaces that BDS does not. On top of that, you can even control the sending of packets directly for maximum customization.
+- **Security
+    - Allay has more checks on client packets than BDS, and theoretically does not have many of the pernicious vulnerabilities that BDS has.
+    - Allay has network encryption enabled by default. In addition, Allay has a built-in resource packet encryption function that automatically encrypts resource packets sent to the client, preventing your data from leaking to a certain extent.
+- **Lots of new features** Unlike the Nukkit server, Allay uses a lot of new protocol features that have been introduced by BDS, including, but not limited to, the server-side authoritative item bar, and sub-block packet sending.
 - **Code Quality** We pay a lot of attention to code quality and keep the project stable with the help of extensive unit testing and refactoring.
 
 ## Getting Started
