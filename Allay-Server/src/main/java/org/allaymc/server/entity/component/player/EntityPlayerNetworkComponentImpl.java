@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
+import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.storage.PlayerData;
@@ -126,8 +127,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             // Especially for cheater, the BedrockPacketHandler::onDisconnect() method may won't be called
             // If we call server.onDisconnect() in BedrockPacketHandler::onDisconnect(),
             // cheaters will be able to create a lot of fake clients and make the server OOM
+            onDisconnect();
             server.onDisconnect(player, disconnectReason);
         }
+    }
+
+    protected void onDisconnect() {
+        player.closeAllContainers();
     }
 
     @Override

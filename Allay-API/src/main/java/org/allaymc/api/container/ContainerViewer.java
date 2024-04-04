@@ -38,4 +38,8 @@ public interface ContainerViewer {
 
     @UnmodifiableView
     BiMap<FullContainerType<?>, Container> getTypeToContainer();
+
+    default void closeAllContainers() {
+        getIdToContainer().forEach(this::onClose);
+    }
 }
