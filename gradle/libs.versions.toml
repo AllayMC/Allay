@@ -27,9 +27,9 @@ libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0
 # concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.15.1" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.16.0" }
 # bytecode
-bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.12" }
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.13" }
 # MC Region Loader
 hephaistos = { group = "io.github.jglrxavpok.hephaistos", name = "common", version = "2.6.1" }
 # Cache
@@ -41,7 +41,7 @@ slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.12" }
 log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j" }
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
 # CLI dependencie
-progressbar = { group = "me.tongfei", name = "progressbar", version = "0.10.0" }
+progressbar = { group = "me.tongfei", name = "progressbar", version = "0.10.1" }
 picocli = { group = "info.picocli", name = "picocli", version = "4.7.5" }
 mcterminal = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 # Testing dependencies
@@ -58,7 +58,7 @@ fastreflect = { group = "com.github.daniellansun", name = "fast-reflection", ver
 joml = { group = "org.joml", name = "joml", version = "1.10.5" }
 joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.10.0" }
 # Netty epoll
-netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.107.Final" }
+netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.108.Final" }
 # Netty kqueue
 netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version = "4.1.108.Final" }
 # Configulation lib
