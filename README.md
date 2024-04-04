@@ -81,7 +81,7 @@ This project exists thanks to the participation of the following developers:
 
 ## Feedback
 
-Your feedback can make this project better. If you find a problem/have a new idea, feel free to raise it in the [issues interface](https://github.com/AllayMC/Allay/issues).
+Your feedback can make this project better. If you find a problem/have a new idea, feel free to raise it in the [issues page](https://github.com/AllayMC/Allay/issues).
 
 For anything else, please join our Discord group to discuss.
 
