@@ -22,7 +22,7 @@
 
 [//]: # (Allay is the cutest software in the world!)
 
-Allay是使用Java编写的Minecraft: Bedrock Edition第三方服务端软件，目标通过精心设计的架构来在保持高性能的同时保持高扩展性。有关更多信息，请查看我们的[Q&A](QA.md)
+Allay是使用Java编写的Minecraft: Bedrock Edition第三方服务端软件，目标通过精心设计的架构来在保持高性能的同时保持高扩展性。有关更多信息，请查看我们的[Q&A](Documents/zh_CN/QA.md)
 
 > [!IMPORTANT]
 > 请注意，此项目仍处于非常早期的阶段且还未释放正式版，大量接口可能会在没有预先通知的情况下增加或删除。请不要在生产环境使用Allay。
