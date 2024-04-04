@@ -76,7 +76,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before
 
 This project exists thanks to the participation of the following developers:
 
-! [contributors](https://contrib.rocks/image?repo=AllayMC/Allay)
+![contributors](https://contrib.rocks/image?repo=AllayMC/Allay)
 
 ## Feedback
 
