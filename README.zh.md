@@ -77,7 +77,7 @@ Allay支持运行以Java/JVM或JavaScript语言编写的插件，你可以查看
 
 这个项目的存在得益于以下开发者的参与：
 
-![contributor](https://contrib.rocks/image?repo=AllayMC/Allay)
+![contributors](https://contrib.rocks/image?repo=AllayMC/Allay)
 
 ## 反馈
 
