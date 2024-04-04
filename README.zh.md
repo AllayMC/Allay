@@ -14,9 +14,9 @@
 <a href="https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs"><img src="https://img.shields.io/badge/minecraft-v1.20.72%20(Bedrock)-green" /></a>
 <img src="https://img.shields.io/badge/protocol-662-blue">
 
+[English](README.md) | 简体中文
 </div>
 
-[English](README.md) | 简体中文
 
 ## 介绍
 
