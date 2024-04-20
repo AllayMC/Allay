@@ -30,6 +30,12 @@ Allay是使用Java编写的Minecraft: Bedrock Edition第三方服务端软件，
 >
 > 你可以查看我们的RoadMap来获取开发进度。
 
+## 名称
+
+如你所见，我们项目的名字叫做Allay，这是Minecraft中的一个生物的名字。
+
+我们希望这个项目能像Allay一样简洁，可靠，高效。
+
 ## 特性
 
 - **跨平台:** Allay基于JVM，故可以在大多数能运行JVM的平台上运行。

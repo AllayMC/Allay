@@ -30,6 +30,12 @@ For more information, check out our [Q&A](Documents/zh_CN/QA.md) (need to be tra
 >
 > You can check our roadmap for development progress.
 
+## Name
+
+As you can see，our project is called Allay，the name of an entity in Minecraft
+
+We wish this project to be as concise, reliable, and efficient as Allay.
+
 ## Features
 
 - **Cross-platform:** Allay is based on the JVM, so it can run on most platforms that can run the JVM.
