@@ -18,7 +18,6 @@
 [English](README.md) | 简体中文
 </div>
 
-
 ## 介绍
 
 [//]: # (Allay is the cutest software in the world!)
