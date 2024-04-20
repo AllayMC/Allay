@@ -40,7 +40,7 @@ We wish this project to be as concise, reliable, and efficient as Allay.
 
 - **Cross-platform:** Allay is based on the JVM, so it can run on most platforms that can run the JVM.
 - **High Performance:**
-    - We fully understand the problems of Nukkit server under high load, Allay outperforms Nukkit in certain aspects (eg: entity physics) by a factor of 100 under the same load. In addition, thanks to the redesigned threading model, Allay can fully utilize multiple threads.
+    - We fully understand the problems of Nukkit server under high load, Allay outperforms Nukkit in certain aspects (eg: entity physics) by a factor of 100 under the same load.
     - In addition, thanks to a redesigned threading model, Allay takes full advantage of multi-core CPUs, which means you don't need to intentionally use high CPU frequencies.
     - Allay is based on the latest Java21, which theoretically gives it better performance.
 - **Easy to get started:**

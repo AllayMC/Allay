@@ -27,7 +27,7 @@ libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0
 # concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.16.0" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.16.1" }
 # bytecode
 bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.13" }
 # MC Region Loader
@@ -37,7 +37,7 @@ caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version
 # K-V DataBase
 leveldbjni = { group = "net.daporkchop", name = "leveldb-mcpe-jni", version = "0.0.10-SNAPSHOT" }
 # Logging dependencies
-slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.12" }
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.13" }
 log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j" }
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
 # CLI dependencie
@@ -72,7 +72,7 @@ sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graalvm" }
 chromeinspector-tool = { group = "org.graalvm.tools", name = "chromeinspector-tool", version.ref = "graalvm" }
 profiler-tool = { group = "org.graalvm.tools", name = "profiler-tool", version.ref = "graalvm" }
 # Native Operating System and Hardware Information
-oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.5.0" }
+oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.6.0" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
