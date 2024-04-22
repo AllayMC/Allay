@@ -2,7 +2,7 @@
 log4j = "2.23.1"
 junit = "5.10.2"
 mockito = "5.11.0"
-graalvm = "24.0.0"
+graalvm = "24.0.1"
 
 [libraries]
 # NBT
