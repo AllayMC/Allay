@@ -8,7 +8,7 @@ graalvm = "24.0.0"
 # NBT
 nbt = { group = "org.allaymc", name = "NBT", version = "3.0.8" }
 # MC network protocol
-network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta1-SNAPSHOT" }
+network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta2-SNAPSHOT" }
 # block-state-updater
 blockstateupdater = { group = "org.cloudburstmc", name = "block-state-updater", version = "1.20.70-SNAPSHOT" }
 # Collections
