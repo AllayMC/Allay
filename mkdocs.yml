@@ -1,0 +1,114 @@
+site_name: AllayMC
+site_url: https://allaymc.readthedocs.io/
+site_author: daoge_cmd
+
+repo_name: AllayMC/Allay
+repo_url: https://github.com/AllayMC/Allay
+
+copyright: Copyright &copy; 2023 - 2024 daoge_cmd
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/AllayMC
+  version:
+    provider: mike
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          name: English
+          build: true
+          default: true
+        - locale: zh
+          name: 中文（简体）
+          build: true
+          nav_translations: {
+            Home: 主页,
+            Q&A: 问&答,
+            Plugin Development: 插件开发,
+              I18n: 多语言,
+                Lang File Format: 语言文件格式,
+              Permission: 权限,
+                Permission Tree: 权限树,
+            Core & Architecture: 核心与架构,
+              Threading Model: 线程模型,
+              Server Auth Inventory: 服务端权威物品栏,
+                About Inventory Stack Packet: 关于物品堆栈数据包,
+                About Network Stack Id: 关于堆栈网络Id,
+                Crafting: 合成
+          }
+  - git-revision-date-localized:
+      enabled: !ENV [CI, false]
+      enable_creation_date: true
+  - git-committers:
+      enabled: !ENV [ CI, false ]
+      repository: AllayMC/Allay
+      branch: master
+
+nav:
+  - Home: index.md
+  - Q&A: Q&A.md
+  - Plugin Development:
+    - I18n:
+      - Lang File Format: plugin_development/i18n/lang_file_format.md
+    - Permission:
+      - Permission Tree: plugin_development/permission/permission_tree.md
+  - Core & Architecture:
+    - Threading Model: core_and_architecture/architecture/threading_model.md
+    - Server Auth Inventory:
+      - About Inventory Stack Packet: core_and_architecture/server_auth_inventory/about_inventory_stack_packet.md
+      - About Network Stack Id: core_and_architecture/server_auth_inventory/about_network_stack_id.md
+      - Crafting: core_and_architecture/server_auth_inventory/crafting.md
+
+theme:
+  name: 'material'
+  language: en
+  custom_dir: docs/overrides
+  logo: assets/logo/allay-chan-480x.png
+  favicon: assets/logo/allay-chan-480x.png
+  features:
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tabs.link
+    - navigation.footer
+    - navigation.indexes
+    # - navigation.instant
+    # - navigation.instant.prefetch
+    # - navigation.instant.progress
+    # - navigation.prune
+    - navigation.sections
+    - navigation.tabs
+    # - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
