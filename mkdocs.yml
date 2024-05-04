@@ -31,7 +31,6 @@ plugins:
           default: true
         - locale: zh
           name: 中文（简体）
-          link: /latest/zh/
           build: true
           nav_translations: {
             Home: 主页,
