@@ -70,6 +70,7 @@ nav:
 
 theme:
   name: 'material'
+  language: en
   custom_dir: docs/overrides
   logo: assets/logo/allay-chan-480x.png
   favicon: assets/logo/allay-chan-480x.png
