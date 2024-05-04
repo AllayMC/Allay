@@ -3,7 +3,7 @@
 <div align="center">
 
 <a href="https://github.com/AllayMC/Allay">
-    <img src="Logo/allay-chan-640x.png" alt="Logo" width="200" height="200">
+    <img src="logo/allay-chan-640x.png" alt="Logo" width="200" height="200">
 </a>
 <h3 align="center">Allay</h3>
 
@@ -23,7 +23,7 @@ English | [简体中文](README.zh.md)
 [//]: # (Allay is the cutest software in the world!)
 
 Allay is a third-party server software for Minecraft: Bedrock Edition written in Java with the goal of maintaining high scalability while maintaining high performance through a well-designed architecture. 
-For more information, check out our [Q&A](Documents/zh_CN/QA.md) (need to be translated).
+For more information, check out our [Q&A](docs/zh_CN/QA.md) (need to be translated).
 
 > [!IMPORTANT]
 > Please note that this project is still at a very early stage and has not yet been released officially, and a large number of interfaces may be added or removed without notice. Please do not use Allay in a production environment.
