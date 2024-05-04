@@ -10,7 +10,7 @@
 下一代的 Minecraft: Bedrock Edition 服务端软件
 
 <a href="https://github.com/AllayMC/Allay/actions"><img src="https://github.com/AllayMC/Allay/actions/workflows/gradle.yml/badge.svg" alt="Build"/></a>
-<a href="https://allaymc.readthedocs.io"><img src="https://readthedocs.org/projects/allaymc/badge/?version=latest" alt="Documentation Status"></a>
+<a href="https://docs.allaymc.org/zh"><img src="https://readthedocs.org/projects/allaymc/badge/?version=latest" alt="Documentation Status"></a>
 <a href="https://app.codacy.com/gh/AllayMC/Allay/dashboard"><img src="https://app.codacy.com/project/badge/Grade/30e264923da2425a8b777a84b4028334"></a>
 <a href="https://discord.com/invite/wyN2rVJt"><img src="https://img.shields.io/discord/373199722573201408?label=discord&color=7289DA&logo=discord" alt="Discord" /></a>
 <a href="https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs"><img src="https://img.shields.io/badge/minecraft-v1.20.72%20(Bedrock)-green" /></a>
@@ -77,7 +77,7 @@ Allay支持运行以Java/JVM或JavaScript语言编写的插件，你可以查看
 
 **JavaScript示例**: [@Allay-ExamplePlugin-JS](@Allay-ExamplePlugin-JS)
 
-有关更多信息，请访问我们的[文档站](https://allaymc.readthedocs.io/zh/)
+有关更多信息，请访问我们的[文档站](https://docs.allaymc.org/zh/)
 
 ## 贡献
 
