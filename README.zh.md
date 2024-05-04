@@ -77,6 +77,8 @@ Allay支持运行以Java/JVM或JavaScript语言编写的插件，你可以查看
 
 **JavaScript示例**: [@Allay-ExamplePlugin-JS](@Allay-ExamplePlugin-JS)
 
+有关更多信息，请访问我们的[文档站](https://allaymc.readthedocs.io/zh/)
+
 ## 贡献
 
 欢迎参与！在提交PR之前，请先阅读[CONTRIBUTING.md](CONTRIBUTING.md)

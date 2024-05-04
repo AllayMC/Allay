@@ -78,6 +78,8 @@ Allay supports running plugins written in Java/JVM or JavaScript languages, you 
 
 **JavaScript example**: [@Allay-ExamplePlugin-JS](@Allay-ExamplePlugin-JS)
 
+For more information, you can check our [documentation site](https://allaymc.readthedocs.io)
+
 ## Contribute
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting a PR!
