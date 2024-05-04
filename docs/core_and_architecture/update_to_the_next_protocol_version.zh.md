@@ -17,6 +17,7 @@ DataExtractor有很多容易踩的坑，后面会详细说明一下
 如未特别说明，默认根目录为Allay-Data/resources
 
 **第一步，直接更新以下文件:**
+
 - biome_definitions.nbt
 - block_attributes.nbt
 - creative_items.nbt
@@ -25,6 +26,7 @@ DataExtractor有很多容易踩的坑，后面会详细说明一下
 - item_tags.json
 
 **第二步，更新unpacked目录下的文件**。这些文件虽然说不会被打包进jar内，但是会在代码生成阶段被使用：
+
 - block_palette.nbt
 - block_property_types.json
 - biome_id_and_type.json（这个文件不经常变动）
@@ -53,12 +55,14 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 **第四步，检查`block_property_types.json`里面是否存在变动**。若存在，运行`VanillaBlockPropertyTypeGen`。
 
 **第五步，运行VanillaBlockInterfaceGen**。此步需要较多人工操作：
+
 - 你需要手动删除旧的方块，若存在方块属性变动，你需要手动修改以适配。你可以查看[BlockStateUpdater](https://github.com/CloudburstMC/BlockStateUpdater)来了解方块更改情况。
   通过查看`Allay-Server/src/main/java/org/allaymc/server/block/type/BlockTypeInitializer.java`内是否存在报错，你可以快速确定哪些方块属性发生了变动， 
   **方块属性适配不仅仅是修改setProperties()的传参，你同样需要适配方块的代码逻辑**，这点很重要！
 - 若存在一批相似的方块，你需要在`VanillaBlockInterfaceGen`的`registerSubPackages()`方法中注册新的子包避免方块类群过于冗杂。
 
 **第六步，运行`VanillaItemInterfaceGen`**。与方块类似，此步同样需要一定量的人工操作，不过工作量少于前者：
+
 - 你需要手动删除旧的物品。如果只是物品改了个名称，你需要从旧的物品迁移代码逻辑到新物品。
 - 即使不存在物品增删，已实现物品的逻辑在原版中也有可能发生改变，为了尊重原版，Allay需要同步更改。当然，如果只讨论协议更新的话，这点可以暂缓。
 - 若存在一批相似的物品，你需要在`VanillaItemInterfaceGen`的`registerSubPackages()`方法中注册新的子包避免物品类群过于冗杂。
