@@ -1,17 +1,5 @@
-# Welcome to MkDocs
+![Allay](https://socialify.git.ci/AllayMC/Allay/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Dark)
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Allay is a third-party server software for Minecraft: Bedrock Edition written in Java with the goal of maintaining high scalability while maintaining high performance through a well-designed architecture. 
 
-## Commands
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## Getting started!
