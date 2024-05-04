@@ -3,6 +3,7 @@ package org.allaymc.server.block.type;
 import org.allaymc.api.block.interfaces.BlockAcaciaPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockActivatorRailBehavior;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
+import org.allaymc.api.block.interfaces.BlockAlliumBehavior;
 import org.allaymc.api.block.interfaces.BlockAllowBehavior;
 import org.allaymc.api.block.interfaces.BlockAmethystBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockAmethystClusterBehavior;
@@ -10,6 +11,7 @@ import org.allaymc.api.block.interfaces.BlockAncientDebrisBehavior;
 import org.allaymc.api.block.interfaces.BlockAndesiteBehavior;
 import org.allaymc.api.block.interfaces.BlockAnvilBehavior;
 import org.allaymc.api.block.interfaces.BlockAzaleaBehavior;
+import org.allaymc.api.block.interfaces.BlockAzureBluetBehavior;
 import org.allaymc.api.block.interfaces.BlockBambooBehavior;
 import org.allaymc.api.block.interfaces.BlockBambooBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockBambooMosaicBehavior;
@@ -29,6 +31,7 @@ import org.allaymc.api.block.interfaces.BlockBirchPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockBlackstoneBehavior;
 import org.allaymc.api.block.interfaces.BlockBlastFurnaceBehavior;
 import org.allaymc.api.block.interfaces.BlockBlueIceBehavior;
+import org.allaymc.api.block.interfaces.BlockBlueOrchidBehavior;
 import org.allaymc.api.block.interfaces.BlockBoneBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockBookshelfBehavior;
 import org.allaymc.api.block.interfaces.BlockBorderBlockBehavior;
@@ -78,6 +81,7 @@ import org.allaymc.api.block.interfaces.BlockCopperBulbBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperOreBehavior;
 import org.allaymc.api.block.interfaces.BlockCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockCornflowerBehavior;
 import org.allaymc.api.block.interfaces.BlockCrackedDeepslateTilesBehavior;
 import org.allaymc.api.block.interfaces.BlockCrafterBehavior;
 import org.allaymc.api.block.interfaces.BlockCraftingTableBehavior;
@@ -152,6 +156,7 @@ import org.allaymc.api.block.interfaces.BlockGrindstoneBehavior;
 import org.allaymc.api.block.interfaces.BlockHangingRootsBehavior;
 import org.allaymc.api.block.interfaces.BlockHardenedClayBehavior;
 import org.allaymc.api.block.interfaces.BlockHayBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockHeavyCoreBehavior;
 import org.allaymc.api.block.interfaces.BlockHeavyWeightedPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockHoneyBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockHoneycombBlockBehavior;
@@ -177,6 +182,7 @@ import org.allaymc.api.block.interfaces.BlockLeverBehavior;
 import org.allaymc.api.block.interfaces.BlockLightBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockLightWeightedPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockLightningRodBehavior;
+import org.allaymc.api.block.interfaces.BlockLilyOfTheValleyBehavior;
 import org.allaymc.api.block.interfaces.BlockLitBlastFurnaceBehavior;
 import org.allaymc.api.block.interfaces.BlockLitDeepslateRedstoneOreBehavior;
 import org.allaymc.api.block.interfaces.BlockLitFurnaceBehavior;
@@ -212,12 +218,15 @@ import org.allaymc.api.block.interfaces.BlockNoteblockBehavior;
 import org.allaymc.api.block.interfaces.BlockObserverBehavior;
 import org.allaymc.api.block.interfaces.BlockObsidianBehavior;
 import org.allaymc.api.block.interfaces.BlockOchreFroglightBehavior;
+import org.allaymc.api.block.interfaces.BlockOrangeTulipBehavior;
+import org.allaymc.api.block.interfaces.BlockOxeyeDaisyBehavior;
 import org.allaymc.api.block.interfaces.BlockOxidizedCopperBulbBehavior;
 import org.allaymc.api.block.interfaces.BlockOxidizedCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockPackedIceBehavior;
 import org.allaymc.api.block.interfaces.BlockPackedMudBehavior;
 import org.allaymc.api.block.interfaces.BlockPearlescentFroglightBehavior;
 import org.allaymc.api.block.interfaces.BlockPinkPetalsBehavior;
+import org.allaymc.api.block.interfaces.BlockPinkTulipBehavior;
 import org.allaymc.api.block.interfaces.BlockPitcherCropBehavior;
 import org.allaymc.api.block.interfaces.BlockPitcherPlantBehavior;
 import org.allaymc.api.block.interfaces.BlockPodzolBehavior;
@@ -230,6 +239,7 @@ import org.allaymc.api.block.interfaces.BlockPolishedDeepslateBehavior;
 import org.allaymc.api.block.interfaces.BlockPolishedDioriteBehavior;
 import org.allaymc.api.block.interfaces.BlockPolishedGraniteBehavior;
 import org.allaymc.api.block.interfaces.BlockPolishedTuffBehavior;
+import org.allaymc.api.block.interfaces.BlockPoppyBehavior;
 import org.allaymc.api.block.interfaces.BlockPortalBehavior;
 import org.allaymc.api.block.interfaces.BlockPotatoesBehavior;
 import org.allaymc.api.block.interfaces.BlockPowderSnowBehavior;
@@ -245,11 +255,11 @@ import org.allaymc.api.block.interfaces.BlockRailBehavior;
 import org.allaymc.api.block.interfaces.BlockRawCopperBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockRawGoldBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockRawIronBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRedFlowerBehavior;
 import org.allaymc.api.block.interfaces.BlockRedMushroomBehavior;
 import org.allaymc.api.block.interfaces.BlockRedMushroomBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockRedNetherBrickBehavior;
 import org.allaymc.api.block.interfaces.BlockRedSandstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockRedTulipBehavior;
 import org.allaymc.api.block.interfaces.BlockRedstoneBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockRedstoneLampBehavior;
 import org.allaymc.api.block.interfaces.BlockRedstoneOreBehavior;
@@ -343,6 +353,7 @@ import org.allaymc.api.block.interfaces.BlockWeatheredCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockWebBehavior;
 import org.allaymc.api.block.interfaces.BlockWeepingVinesBehavior;
 import org.allaymc.api.block.interfaces.BlockWheatBehavior;
+import org.allaymc.api.block.interfaces.BlockWhiteTulipBehavior;
 import org.allaymc.api.block.interfaces.BlockWitherRoseBehavior;
 import org.allaymc.api.block.interfaces.BlockWoodenPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockYellowFlowerBehavior;
@@ -489,11 +500,19 @@ import org.allaymc.api.block.interfaces.coral.BlockDeadTubeCoralBehavior;
 import org.allaymc.api.block.interfaces.coral.BlockFireCoralBehavior;
 import org.allaymc.api.block.interfaces.coral.BlockHornCoralBehavior;
 import org.allaymc.api.block.interfaces.coral.BlockTubeCoralBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanDeadBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockBrainCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockBubbleCoralFanBehavior;
 import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanHang2Behavior;
 import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanHang3Behavior;
 import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanHangBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadBrainCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadBubbleCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadFireCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadHornCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadTubeCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockFireCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockHornCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockTubeCoralFanBehavior;
 import org.allaymc.api.block.interfaces.door.BlockAcaciaDoorBehavior;
 import org.allaymc.api.block.interfaces.door.BlockBambooDoorBehavior;
 import org.allaymc.api.block.interfaces.door.BlockBirchDoorBehavior;
@@ -717,9 +736,14 @@ import org.allaymc.api.block.interfaces.planks.BlockMangrovePlanksBehavior;
 import org.allaymc.api.block.interfaces.planks.BlockOakPlanksBehavior;
 import org.allaymc.api.block.interfaces.planks.BlockSprucePlanksBehavior;
 import org.allaymc.api.block.interfaces.planks.BlockWarpedPlanksBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockAcaciaSaplingBehavior;
 import org.allaymc.api.block.interfaces.sapling.BlockBambooSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockBirchSaplingBehavior;
 import org.allaymc.api.block.interfaces.sapling.BlockCherrySaplingBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockDarkOakSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockJungleSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockOakSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockSpruceSaplingBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockBlackShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockBlueShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockBrownShulkerBoxBehavior;
@@ -1152,6 +1176,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initAcaciaSapling() {
+    if (BlockTypes.ACACIA_SAPLING_TYPE != null) return;
+    BlockTypes.ACACIA_SAPLING_TYPE = BlockTypeBuilder
+            .builder(BlockAcaciaSaplingBehavior.class)
+            .vanillaBlock(VanillaBlockId.ACACIA_SAPLING)
+            .setProperties(VanillaBlockPropertyTypes.AGE_BIT)
+            .build();
+  }
+
   public static void initAcaciaSlab() {
     if (BlockTypes.ACACIA_SLAB_TYPE != null) return;
     BlockTypes.ACACIA_SLAB_TYPE = BlockTypeBuilder
@@ -1220,6 +1253,14 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.AIR_TYPE = BlockTypeBuilder
             .builder(BlockAirBehavior.class)
             .vanillaBlock(VanillaBlockId.AIR)
+            .build();
+  }
+
+  public static void initAllium() {
+    if (BlockTypes.ALLIUM_TYPE != null) return;
+    BlockTypes.ALLIUM_TYPE = BlockTypeBuilder
+            .builder(BlockAlliumBehavior.class)
+            .vanillaBlock(VanillaBlockId.ALLIUM)
             .build();
   }
 
@@ -1305,6 +1346,14 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockAzaleaLeavesFloweredBehavior.class)
             .vanillaBlock(VanillaBlockId.AZALEA_LEAVES_FLOWERED)
             .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+            .build();
+  }
+
+  public static void initAzureBluet() {
+    if (BlockTypes.AZURE_BLUET_TYPE != null) return;
+    BlockTypes.AZURE_BLUET_TYPE = BlockTypeBuilder
+            .builder(BlockAzureBluetBehavior.class)
+            .vanillaBlock(VanillaBlockId.AZURE_BLUET)
             .build();
   }
 
@@ -1436,7 +1485,7 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.BAMBOO_SAPLING_TYPE = BlockTypeBuilder
             .builder(BlockBambooSaplingBehavior.class)
             .vanillaBlock(VanillaBlockId.BAMBOO_SAPLING)
-            .setProperties(VanillaBlockPropertyTypes.AGE_BIT, VanillaBlockPropertyTypes.SAPLING_TYPE)
+            .setProperties(VanillaBlockPropertyTypes.AGE_BIT)
             .build();
   }
 
@@ -1667,6 +1716,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockBirchPressurePlateBehavior.class)
             .vanillaBlock(VanillaBlockId.BIRCH_PRESSURE_PLATE)
             .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .build();
+  }
+
+  public static void initBirchSapling() {
+    if (BlockTypes.BIRCH_SAPLING_TYPE != null) return;
+    BlockTypes.BIRCH_SAPLING_TYPE = BlockTypeBuilder
+            .builder(BlockBirchSaplingBehavior.class)
+            .vanillaBlock(VanillaBlockId.BIRCH_SAPLING)
+            .setProperties(VanillaBlockPropertyTypes.AGE_BIT)
             .build();
   }
 
@@ -1927,6 +1985,14 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initBlueOrchid() {
+    if (BlockTypes.BLUE_ORCHID_TYPE != null) return;
+    BlockTypes.BLUE_ORCHID_TYPE = BlockTypeBuilder
+            .builder(BlockBlueOrchidBehavior.class)
+            .vanillaBlock(VanillaBlockId.BLUE_ORCHID)
+            .build();
+  }
+
   public static void initBlueShulkerBox() {
     if (BlockTypes.BLUE_SHULKER_BOX_TYPE != null) return;
     BlockTypes.BLUE_SHULKER_BOX_TYPE = BlockTypeBuilder
@@ -1998,6 +2064,15 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.BRAIN_CORAL_TYPE = BlockTypeBuilder
             .builder(BlockBrainCoralBehavior.class)
             .vanillaBlock(VanillaBlockId.BRAIN_CORAL)
+            .build();
+  }
+
+  public static void initBrainCoralFan() {
+    if (BlockTypes.BRAIN_CORAL_FAN_TYPE != null) return;
+    BlockTypes.BRAIN_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockBrainCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.BRAIN_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
             .build();
   }
 
@@ -2149,6 +2224,15 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.BUBBLE_CORAL_TYPE = BlockTypeBuilder
             .builder(BlockBubbleCoralBehavior.class)
             .vanillaBlock(VanillaBlockId.BUBBLE_CORAL)
+            .build();
+  }
+
+  public static void initBubbleCoralFan() {
+    if (BlockTypes.BUBBLE_CORAL_FAN_TYPE != null) return;
+    BlockTypes.BUBBLE_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockBubbleCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.BUBBLE_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
             .build();
   }
 
@@ -2767,24 +2851,6 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
-  public static void initCoralFan() {
-    if (BlockTypes.CORAL_FAN_TYPE != null) return;
-    BlockTypes.CORAL_FAN_TYPE = BlockTypeBuilder
-            .builder(BlockCoralFanBehavior.class)
-            .vanillaBlock(VanillaBlockId.CORAL_FAN)
-            .setProperties(VanillaBlockPropertyTypes.CORAL_COLOR, VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
-            .build();
-  }
-
-  public static void initCoralFanDead() {
-    if (BlockTypes.CORAL_FAN_DEAD_TYPE != null) return;
-    BlockTypes.CORAL_FAN_DEAD_TYPE = BlockTypeBuilder
-            .builder(BlockCoralFanDeadBehavior.class)
-            .vanillaBlock(VanillaBlockId.CORAL_FAN_DEAD)
-            .setProperties(VanillaBlockPropertyTypes.CORAL_COLOR, VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
-            .build();
-  }
-
   public static void initCoralFanHang() {
     if (BlockTypes.CORAL_FAN_HANG_TYPE != null) return;
     BlockTypes.CORAL_FAN_HANG_TYPE = BlockTypeBuilder
@@ -2809,6 +2875,14 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockCoralFanHang3Behavior.class)
             .vanillaBlock(VanillaBlockId.CORAL_FAN_HANG3)
             .setProperties(VanillaBlockPropertyTypes.CORAL_DIRECTION, VanillaBlockPropertyTypes.CORAL_HANG_TYPE_BIT, VanillaBlockPropertyTypes.DEAD_BIT)
+            .build();
+  }
+
+  public static void initCornflower() {
+    if (BlockTypes.CORNFLOWER_TYPE != null) return;
+    BlockTypes.CORNFLOWER_TYPE = BlockTypeBuilder
+            .builder(BlockCornflowerBehavior.class)
+            .vanillaBlock(VanillaBlockId.CORNFLOWER)
             .build();
   }
 
@@ -3231,6 +3305,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDarkOakSapling() {
+    if (BlockTypes.DARK_OAK_SAPLING_TYPE != null) return;
+    BlockTypes.DARK_OAK_SAPLING_TYPE = BlockTypeBuilder
+            .builder(BlockDarkOakSaplingBehavior.class)
+            .vanillaBlock(VanillaBlockId.DARK_OAK_SAPLING)
+            .setProperties(VanillaBlockPropertyTypes.AGE_BIT)
+            .build();
+  }
+
   public static void initDarkOakSlab() {
     if (BlockTypes.DARK_OAK_SLAB_TYPE != null) return;
     BlockTypes.DARK_OAK_SLAB_TYPE = BlockTypeBuilder
@@ -3320,11 +3403,29 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDeadBrainCoralFan() {
+    if (BlockTypes.DEAD_BRAIN_CORAL_FAN_TYPE != null) return;
+    BlockTypes.DEAD_BRAIN_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockDeadBrainCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.DEAD_BRAIN_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
+            .build();
+  }
+
   public static void initDeadBubbleCoral() {
     if (BlockTypes.DEAD_BUBBLE_CORAL_TYPE != null) return;
     BlockTypes.DEAD_BUBBLE_CORAL_TYPE = BlockTypeBuilder
             .builder(BlockDeadBubbleCoralBehavior.class)
             .vanillaBlock(VanillaBlockId.DEAD_BUBBLE_CORAL)
+            .build();
+  }
+
+  public static void initDeadBubbleCoralFan() {
+    if (BlockTypes.DEAD_BUBBLE_CORAL_FAN_TYPE != null) return;
+    BlockTypes.DEAD_BUBBLE_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockDeadBubbleCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.DEAD_BUBBLE_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
             .build();
   }
 
@@ -3336,6 +3437,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDeadFireCoralFan() {
+    if (BlockTypes.DEAD_FIRE_CORAL_FAN_TYPE != null) return;
+    BlockTypes.DEAD_FIRE_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockDeadFireCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.DEAD_FIRE_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
+            .build();
+  }
+
   public static void initDeadHornCoral() {
     if (BlockTypes.DEAD_HORN_CORAL_TYPE != null) return;
     BlockTypes.DEAD_HORN_CORAL_TYPE = BlockTypeBuilder
@@ -3344,11 +3454,29 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDeadHornCoralFan() {
+    if (BlockTypes.DEAD_HORN_CORAL_FAN_TYPE != null) return;
+    BlockTypes.DEAD_HORN_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockDeadHornCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.DEAD_HORN_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
+            .build();
+  }
+
   public static void initDeadTubeCoral() {
     if (BlockTypes.DEAD_TUBE_CORAL_TYPE != null) return;
     BlockTypes.DEAD_TUBE_CORAL_TYPE = BlockTypeBuilder
             .builder(BlockDeadTubeCoralBehavior.class)
             .vanillaBlock(VanillaBlockId.DEAD_TUBE_CORAL)
+            .build();
+  }
+
+  public static void initDeadTubeCoralFan() {
+    if (BlockTypes.DEAD_TUBE_CORAL_FAN_TYPE != null) return;
+    BlockTypes.DEAD_TUBE_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockDeadTubeCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.DEAD_TUBE_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
             .build();
   }
 
@@ -4858,6 +4986,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initFireCoralFan() {
+    if (BlockTypes.FIRE_CORAL_FAN_TYPE != null) return;
+    BlockTypes.FIRE_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockFireCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.FIRE_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
+            .build();
+  }
+
   public static void initFletchingTable() {
     if (BlockTypes.FLETCHING_TABLE_TYPE != null) return;
     BlockTypes.FLETCHING_TABLE_TYPE = BlockTypeBuilder
@@ -5548,6 +5685,14 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initHeavyCore() {
+    if (BlockTypes.HEAVY_CORE_TYPE != null) return;
+    BlockTypes.HEAVY_CORE_TYPE = BlockTypeBuilder
+            .builder(BlockHeavyCoreBehavior.class)
+            .vanillaBlock(VanillaBlockId.HEAVY_CORE)
+            .build();
+  }
+
   public static void initHeavyWeightedPressurePlate() {
     if (BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE_TYPE != null) return;
     BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE_TYPE = BlockTypeBuilder
@@ -5587,6 +5732,15 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.HORN_CORAL_TYPE = BlockTypeBuilder
             .builder(BlockHornCoralBehavior.class)
             .vanillaBlock(VanillaBlockId.HORN_CORAL)
+            .build();
+  }
+
+  public static void initHornCoralFan() {
+    if (BlockTypes.HORN_CORAL_FAN_TYPE != null) return;
+    BlockTypes.HORN_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockHornCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.HORN_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
             .build();
   }
 
@@ -5775,6 +5929,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockJunglePressurePlateBehavior.class)
             .vanillaBlock(VanillaBlockId.JUNGLE_PRESSURE_PLATE)
             .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .build();
+  }
+
+  public static void initJungleSapling() {
+    if (BlockTypes.JUNGLE_SAPLING_TYPE != null) return;
+    BlockTypes.JUNGLE_SAPLING_TYPE = BlockTypeBuilder
+            .builder(BlockJungleSaplingBehavior.class)
+            .vanillaBlock(VanillaBlockId.JUNGLE_SAPLING)
+            .setProperties(VanillaBlockPropertyTypes.AGE_BIT)
             .build();
   }
 
@@ -6108,6 +6271,14 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockLightningRodBehavior.class)
             .vanillaBlock(VanillaBlockId.LIGHTNING_ROD)
             .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+            .build();
+  }
+
+  public static void initLilyOfTheValley() {
+    if (BlockTypes.LILY_OF_THE_VALLEY_TYPE != null) return;
+    BlockTypes.LILY_OF_THE_VALLEY_TYPE = BlockTypeBuilder
+            .builder(BlockLilyOfTheValleyBehavior.class)
+            .vanillaBlock(VanillaBlockId.LILY_OF_THE_VALLEY)
             .build();
   }
 
@@ -6850,6 +7021,15 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOakSapling() {
+    if (BlockTypes.OAK_SAPLING_TYPE != null) return;
+    BlockTypes.OAK_SAPLING_TYPE = BlockTypeBuilder
+            .builder(BlockOakSaplingBehavior.class)
+            .vanillaBlock(VanillaBlockId.OAK_SAPLING)
+            .setProperties(VanillaBlockPropertyTypes.AGE_BIT)
+            .build();
+  }
+
   public static void initOakSlab() {
     if (BlockTypes.OAK_SLAB_TYPE != null) return;
     BlockTypes.OAK_SLAB_TYPE = BlockTypeBuilder
@@ -6986,11 +7166,27 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOrangeTulip() {
+    if (BlockTypes.ORANGE_TULIP_TYPE != null) return;
+    BlockTypes.ORANGE_TULIP_TYPE = BlockTypeBuilder
+            .builder(BlockOrangeTulipBehavior.class)
+            .vanillaBlock(VanillaBlockId.ORANGE_TULIP)
+            .build();
+  }
+
   public static void initOrangeWool() {
     if (BlockTypes.ORANGE_WOOL_TYPE != null) return;
     BlockTypes.ORANGE_WOOL_TYPE = BlockTypeBuilder
             .builder(BlockOrangeWoolBehavior.class)
             .vanillaBlock(VanillaBlockId.ORANGE_WOOL)
+            .build();
+  }
+
+  public static void initOxeyeDaisy() {
+    if (BlockTypes.OXEYE_DAISY_TYPE != null) return;
+    BlockTypes.OXEYE_DAISY_TYPE = BlockTypeBuilder
+            .builder(BlockOxeyeDaisyBehavior.class)
+            .vanillaBlock(VanillaBlockId.OXEYE_DAISY)
             .build();
   }
 
@@ -7194,6 +7390,14 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.PINK_TERRACOTTA_TYPE = BlockTypeBuilder
             .builder(BlockPinkTerracottaBehavior.class)
             .vanillaBlock(VanillaBlockId.PINK_TERRACOTTA)
+            .build();
+  }
+
+  public static void initPinkTulip() {
+    if (BlockTypes.PINK_TULIP_TYPE != null) return;
+    BlockTypes.PINK_TULIP_TYPE = BlockTypeBuilder
+            .builder(BlockPinkTulipBehavior.class)
+            .vanillaBlock(VanillaBlockId.PINK_TULIP)
             .build();
   }
 
@@ -7512,6 +7716,14 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
+  public static void initPoppy() {
+    if (BlockTypes.POPPY_TYPE != null) return;
+    BlockTypes.POPPY_TYPE = BlockTypeBuilder
+            .builder(BlockPoppyBehavior.class)
+            .vanillaBlock(VanillaBlockId.POPPY)
+            .build();
+  }
+
   public static void initPortal() {
     if (BlockTypes.PORTAL_TYPE != null) return;
     BlockTypes.PORTAL_TYPE = BlockTypeBuilder
@@ -7819,15 +8031,6 @@ public final class BlockTypeDefaultInitializer {
             .build();
   }
 
-  public static void initRedFlower() {
-    if (BlockTypes.RED_FLOWER_TYPE != null) return;
-    BlockTypes.RED_FLOWER_TYPE = BlockTypeBuilder
-            .builder(BlockRedFlowerBehavior.class)
-            .vanillaBlock(VanillaBlockId.RED_FLOWER)
-            .setProperties(VanillaBlockPropertyTypes.FLOWER_TYPE)
-            .build();
-  }
-
   public static void initRedGlazedTerracotta() {
     if (BlockTypes.RED_GLAZED_TERRACOTTA_TYPE != null) return;
     BlockTypes.RED_GLAZED_TERRACOTTA_TYPE = BlockTypeBuilder
@@ -7918,6 +8121,14 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.RED_TERRACOTTA_TYPE = BlockTypeBuilder
             .builder(BlockRedTerracottaBehavior.class)
             .vanillaBlock(VanillaBlockId.RED_TERRACOTTA)
+            .build();
+  }
+
+  public static void initRedTulip() {
+    if (BlockTypes.RED_TULIP_TYPE != null) return;
+    BlockTypes.RED_TULIP_TYPE = BlockTypeBuilder
+            .builder(BlockRedTulipBehavior.class)
+            .vanillaBlock(VanillaBlockId.RED_TULIP)
             .build();
   }
 
@@ -8038,15 +8249,6 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockSandstoneStairsBehavior.class)
             .vanillaBlock(VanillaBlockId.SANDSTONE_STAIRS)
             .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-            .build();
-  }
-
-  public static void initSapling() {
-    if (BlockTypes.SAPLING_TYPE != null) return;
-    BlockTypes.SAPLING_TYPE = BlockTypeBuilder
-            .builder(BlockSaplingBehavior.class)
-            .vanillaBlock(VanillaBlockId.SAPLING)
-            .setProperties(VanillaBlockPropertyTypes.AGE_BIT, VanillaBlockPropertyTypes.SAPLING_TYPE)
             .build();
   }
 
@@ -8421,6 +8623,15 @@ public final class BlockTypeDefaultInitializer {
             .builder(BlockSprucePressurePlateBehavior.class)
             .vanillaBlock(VanillaBlockId.SPRUCE_PRESSURE_PLATE)
             .setProperties(VanillaBlockPropertyTypes.REDSTONE_SIGNAL)
+            .build();
+  }
+
+  public static void initSpruceSapling() {
+    if (BlockTypes.SPRUCE_SAPLING_TYPE != null) return;
+    BlockTypes.SPRUCE_SAPLING_TYPE = BlockTypeBuilder
+            .builder(BlockSpruceSaplingBehavior.class)
+            .vanillaBlock(VanillaBlockId.SPRUCE_SAPLING)
+            .setProperties(VanillaBlockPropertyTypes.AGE_BIT)
             .build();
   }
 
@@ -8964,6 +9175,15 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.TUBE_CORAL_TYPE = BlockTypeBuilder
             .builder(BlockTubeCoralBehavior.class)
             .vanillaBlock(VanillaBlockId.TUBE_CORAL)
+            .build();
+  }
+
+  public static void initTubeCoralFan() {
+    if (BlockTypes.TUBE_CORAL_FAN_TYPE != null) return;
+    BlockTypes.TUBE_CORAL_FAN_TYPE = BlockTypeBuilder
+            .builder(BlockTubeCoralFanBehavior.class)
+            .vanillaBlock(VanillaBlockId.TUBE_CORAL_FAN)
+            .setProperties(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION)
             .build();
   }
 
@@ -9888,6 +10108,14 @@ public final class BlockTypeDefaultInitializer {
     BlockTypes.WHITE_TERRACOTTA_TYPE = BlockTypeBuilder
             .builder(BlockWhiteTerracottaBehavior.class)
             .vanillaBlock(VanillaBlockId.WHITE_TERRACOTTA)
+            .build();
+  }
+
+  public static void initWhiteTulip() {
+    if (BlockTypes.WHITE_TULIP_TYPE != null) return;
+    BlockTypes.WHITE_TULIP_TYPE = BlockTypeBuilder
+            .builder(BlockWhiteTulipBehavior.class)
+            .vanillaBlock(VanillaBlockId.WHITE_TULIP)
             .build();
   }
 

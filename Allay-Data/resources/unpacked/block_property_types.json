@@ -581,23 +581,6 @@
                 6
             ]
         },
-        "flower_type": {
-            "serializationName": "flower_type",
-            "valueType": "ENUM",
-            "values": [
-                "allium",
-                "cornflower",
-                "houstonia",
-                "lily_of_the_valley",
-                "orchid",
-                "oxeye",
-                "poppy",
-                "tulip_orange",
-                "tulip_pink",
-                "tulip_red",
-                "tulip_white"
-            ]
-        },
         "ground_sign_direction": {
             "serializationName": "ground_sign_direction",
             "valueType": "INTEGER",
@@ -1185,18 +1168,6 @@
             "values": [
                 "normal",
                 "red"
-            ]
-        },
-        "sapling_type": {
-            "serializationName": "sapling_type",
-            "valueType": "ENUM",
-            "values": [
-                "acacia",
-                "birch",
-                "dark_oak",
-                "jungle",
-                "oak",
-                "spruce"
             ]
         },
         "sculk_sensor_phase": {

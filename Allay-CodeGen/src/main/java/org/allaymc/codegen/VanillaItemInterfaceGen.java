@@ -155,7 +155,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*WallStack"), "wall");
         registerSubPackage(Pattern.compile("ItemElement.*"), "element");
         registerSubPackage(Pattern.compile(".*CoralStack"), "coral");
-        registerSubPackage(Pattern.compile("ItemCoralFan.*"), "coralfan");
+        registerSubPackage(Pattern.compile(".*CoralFan.*"), "coralfan");
         registerSubPackage(Pattern.compile(".*BricksStack"), "bricks");
         registerSubPackage(Pattern.compile(".*WoolStack"), "wool");
         registerSubPackage(Pattern.compile(".*ButtonStack"), "button");

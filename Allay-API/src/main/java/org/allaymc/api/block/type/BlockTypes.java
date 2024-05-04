@@ -3,6 +3,7 @@ package org.allaymc.api.block.type;
 import org.allaymc.api.block.interfaces.BlockAcaciaPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockActivatorRailBehavior;
 import org.allaymc.api.block.interfaces.BlockAirBehavior;
+import org.allaymc.api.block.interfaces.BlockAlliumBehavior;
 import org.allaymc.api.block.interfaces.BlockAllowBehavior;
 import org.allaymc.api.block.interfaces.BlockAmethystBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockAmethystClusterBehavior;
@@ -10,6 +11,7 @@ import org.allaymc.api.block.interfaces.BlockAncientDebrisBehavior;
 import org.allaymc.api.block.interfaces.BlockAndesiteBehavior;
 import org.allaymc.api.block.interfaces.BlockAnvilBehavior;
 import org.allaymc.api.block.interfaces.BlockAzaleaBehavior;
+import org.allaymc.api.block.interfaces.BlockAzureBluetBehavior;
 import org.allaymc.api.block.interfaces.BlockBambooBehavior;
 import org.allaymc.api.block.interfaces.BlockBambooBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockBambooMosaicBehavior;
@@ -29,6 +31,7 @@ import org.allaymc.api.block.interfaces.BlockBirchPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockBlackstoneBehavior;
 import org.allaymc.api.block.interfaces.BlockBlastFurnaceBehavior;
 import org.allaymc.api.block.interfaces.BlockBlueIceBehavior;
+import org.allaymc.api.block.interfaces.BlockBlueOrchidBehavior;
 import org.allaymc.api.block.interfaces.BlockBoneBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockBookshelfBehavior;
 import org.allaymc.api.block.interfaces.BlockBorderBlockBehavior;
@@ -78,6 +81,7 @@ import org.allaymc.api.block.interfaces.BlockCopperBulbBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperOreBehavior;
 import org.allaymc.api.block.interfaces.BlockCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockCornflowerBehavior;
 import org.allaymc.api.block.interfaces.BlockCrackedDeepslateTilesBehavior;
 import org.allaymc.api.block.interfaces.BlockCrafterBehavior;
 import org.allaymc.api.block.interfaces.BlockCraftingTableBehavior;
@@ -152,6 +156,7 @@ import org.allaymc.api.block.interfaces.BlockGrindstoneBehavior;
 import org.allaymc.api.block.interfaces.BlockHangingRootsBehavior;
 import org.allaymc.api.block.interfaces.BlockHardenedClayBehavior;
 import org.allaymc.api.block.interfaces.BlockHayBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockHeavyCoreBehavior;
 import org.allaymc.api.block.interfaces.BlockHeavyWeightedPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockHoneyBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockHoneycombBlockBehavior;
@@ -177,6 +182,7 @@ import org.allaymc.api.block.interfaces.BlockLeverBehavior;
 import org.allaymc.api.block.interfaces.BlockLightBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockLightWeightedPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockLightningRodBehavior;
+import org.allaymc.api.block.interfaces.BlockLilyOfTheValleyBehavior;
 import org.allaymc.api.block.interfaces.BlockLitBlastFurnaceBehavior;
 import org.allaymc.api.block.interfaces.BlockLitDeepslateRedstoneOreBehavior;
 import org.allaymc.api.block.interfaces.BlockLitFurnaceBehavior;
@@ -212,12 +218,15 @@ import org.allaymc.api.block.interfaces.BlockNoteblockBehavior;
 import org.allaymc.api.block.interfaces.BlockObserverBehavior;
 import org.allaymc.api.block.interfaces.BlockObsidianBehavior;
 import org.allaymc.api.block.interfaces.BlockOchreFroglightBehavior;
+import org.allaymc.api.block.interfaces.BlockOrangeTulipBehavior;
+import org.allaymc.api.block.interfaces.BlockOxeyeDaisyBehavior;
 import org.allaymc.api.block.interfaces.BlockOxidizedCopperBulbBehavior;
 import org.allaymc.api.block.interfaces.BlockOxidizedCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockPackedIceBehavior;
 import org.allaymc.api.block.interfaces.BlockPackedMudBehavior;
 import org.allaymc.api.block.interfaces.BlockPearlescentFroglightBehavior;
 import org.allaymc.api.block.interfaces.BlockPinkPetalsBehavior;
+import org.allaymc.api.block.interfaces.BlockPinkTulipBehavior;
 import org.allaymc.api.block.interfaces.BlockPitcherCropBehavior;
 import org.allaymc.api.block.interfaces.BlockPitcherPlantBehavior;
 import org.allaymc.api.block.interfaces.BlockPodzolBehavior;
@@ -230,6 +239,7 @@ import org.allaymc.api.block.interfaces.BlockPolishedDeepslateBehavior;
 import org.allaymc.api.block.interfaces.BlockPolishedDioriteBehavior;
 import org.allaymc.api.block.interfaces.BlockPolishedGraniteBehavior;
 import org.allaymc.api.block.interfaces.BlockPolishedTuffBehavior;
+import org.allaymc.api.block.interfaces.BlockPoppyBehavior;
 import org.allaymc.api.block.interfaces.BlockPortalBehavior;
 import org.allaymc.api.block.interfaces.BlockPotatoesBehavior;
 import org.allaymc.api.block.interfaces.BlockPowderSnowBehavior;
@@ -245,11 +255,11 @@ import org.allaymc.api.block.interfaces.BlockRailBehavior;
 import org.allaymc.api.block.interfaces.BlockRawCopperBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockRawGoldBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockRawIronBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRedFlowerBehavior;
 import org.allaymc.api.block.interfaces.BlockRedMushroomBehavior;
 import org.allaymc.api.block.interfaces.BlockRedMushroomBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockRedNetherBrickBehavior;
 import org.allaymc.api.block.interfaces.BlockRedSandstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockRedTulipBehavior;
 import org.allaymc.api.block.interfaces.BlockRedstoneBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockRedstoneLampBehavior;
 import org.allaymc.api.block.interfaces.BlockRedstoneOreBehavior;
@@ -343,6 +353,7 @@ import org.allaymc.api.block.interfaces.BlockWeatheredCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockWebBehavior;
 import org.allaymc.api.block.interfaces.BlockWeepingVinesBehavior;
 import org.allaymc.api.block.interfaces.BlockWheatBehavior;
+import org.allaymc.api.block.interfaces.BlockWhiteTulipBehavior;
 import org.allaymc.api.block.interfaces.BlockWitherRoseBehavior;
 import org.allaymc.api.block.interfaces.BlockWoodenPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockYellowFlowerBehavior;
@@ -489,11 +500,19 @@ import org.allaymc.api.block.interfaces.coral.BlockDeadTubeCoralBehavior;
 import org.allaymc.api.block.interfaces.coral.BlockFireCoralBehavior;
 import org.allaymc.api.block.interfaces.coral.BlockHornCoralBehavior;
 import org.allaymc.api.block.interfaces.coral.BlockTubeCoralBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanDeadBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockBrainCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockBubbleCoralFanBehavior;
 import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanHang2Behavior;
 import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanHang3Behavior;
 import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanHangBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadBrainCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadBubbleCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadFireCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadHornCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadTubeCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockFireCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockHornCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockTubeCoralFanBehavior;
 import org.allaymc.api.block.interfaces.door.BlockAcaciaDoorBehavior;
 import org.allaymc.api.block.interfaces.door.BlockBambooDoorBehavior;
 import org.allaymc.api.block.interfaces.door.BlockBirchDoorBehavior;
@@ -717,9 +736,14 @@ import org.allaymc.api.block.interfaces.planks.BlockMangrovePlanksBehavior;
 import org.allaymc.api.block.interfaces.planks.BlockOakPlanksBehavior;
 import org.allaymc.api.block.interfaces.planks.BlockSprucePlanksBehavior;
 import org.allaymc.api.block.interfaces.planks.BlockWarpedPlanksBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockAcaciaSaplingBehavior;
 import org.allaymc.api.block.interfaces.sapling.BlockBambooSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockBirchSaplingBehavior;
 import org.allaymc.api.block.interfaces.sapling.BlockCherrySaplingBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockDarkOakSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockJungleSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockOakSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockSpruceSaplingBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockBlackShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockBlueShulkerBoxBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.BlockBrownShulkerBoxBehavior;
@@ -1076,6 +1100,8 @@ public final class BlockTypes {
 
   public static BlockType<BlockAcaciaPressurePlateBehavior> ACACIA_PRESSURE_PLATE_TYPE;
 
+  public static BlockType<BlockAcaciaSaplingBehavior> ACACIA_SAPLING_TYPE;
+
   public static BlockType<BlockAcaciaSlabBehavior> ACACIA_SLAB_TYPE;
 
   public static BlockType<BlockAcaciaStairsBehavior> ACACIA_STAIRS_TYPE;
@@ -1091,6 +1117,8 @@ public final class BlockTypes {
   public static BlockType<BlockActivatorRailBehavior> ACTIVATOR_RAIL_TYPE;
 
   public static BlockType<BlockAirBehavior> AIR_TYPE;
+
+  public static BlockType<BlockAlliumBehavior> ALLIUM_TYPE;
 
   public static BlockType<BlockAllowBehavior> ALLOW_TYPE;
 
@@ -1111,6 +1139,8 @@ public final class BlockTypes {
   public static BlockType<BlockAzaleaLeavesBehavior> AZALEA_LEAVES_TYPE;
 
   public static BlockType<BlockAzaleaLeavesFloweredBehavior> AZALEA_LEAVES_FLOWERED_TYPE;
+
+  public static BlockType<BlockAzureBluetBehavior> AZURE_BLUET_TYPE;
 
   public static BlockType<BlockBambooBehavior> BAMBOO_TYPE;
 
@@ -1194,6 +1224,8 @@ public final class BlockTypes {
 
   public static BlockType<BlockBirchPressurePlateBehavior> BIRCH_PRESSURE_PLATE_TYPE;
 
+  public static BlockType<BlockBirchSaplingBehavior> BIRCH_SAPLING_TYPE;
+
   public static BlockType<BlockBirchSlabBehavior> BIRCH_SLAB_TYPE;
 
   public static BlockType<BlockBirchStairsBehavior> BIRCH_STAIRS_TYPE;
@@ -1254,6 +1286,8 @@ public final class BlockTypes {
 
   public static BlockType<BlockBlueIceBehavior> BLUE_ICE_TYPE;
 
+  public static BlockType<BlockBlueOrchidBehavior> BLUE_ORCHID_TYPE;
+
   public static BlockType<BlockBlueShulkerBoxBehavior> BLUE_SHULKER_BOX_TYPE;
 
   public static BlockType<BlockBlueStainedGlassBehavior> BLUE_STAINED_GLASS_TYPE;
@@ -1271,6 +1305,8 @@ public final class BlockTypes {
   public static BlockType<BlockBorderBlockBehavior> BORDER_BLOCK_TYPE;
 
   public static BlockType<BlockBrainCoralBehavior> BRAIN_CORAL_TYPE;
+
+  public static BlockType<BlockBrainCoralFanBehavior> BRAIN_CORAL_FAN_TYPE;
 
   public static BlockType<BlockBrewingStandBehavior> BREWING_STAND_TYPE;
 
@@ -1307,6 +1343,8 @@ public final class BlockTypes {
   public static BlockType<BlockBubbleColumnBehavior> BUBBLE_COLUMN_TYPE;
 
   public static BlockType<BlockBubbleCoralBehavior> BUBBLE_CORAL_TYPE;
+
+  public static BlockType<BlockBubbleCoralFanBehavior> BUBBLE_CORAL_FAN_TYPE;
 
   public static BlockType<BlockBuddingAmethystBehavior> BUDDING_AMETHYST_TYPE;
 
@@ -1450,15 +1488,13 @@ public final class BlockTypes {
 
   public static BlockType<BlockCoralBlockBehavior> CORAL_BLOCK_TYPE;
 
-  public static BlockType<BlockCoralFanBehavior> CORAL_FAN_TYPE;
-
-  public static BlockType<BlockCoralFanDeadBehavior> CORAL_FAN_DEAD_TYPE;
-
   public static BlockType<BlockCoralFanHangBehavior> CORAL_FAN_HANG_TYPE;
 
   public static BlockType<BlockCoralFanHang2Behavior> CORAL_FAN_HANG2_TYPE;
 
   public static BlockType<BlockCoralFanHang3Behavior> CORAL_FAN_HANG3_TYPE;
+
+  public static BlockType<BlockCornflowerBehavior> CORNFLOWER_TYPE;
 
   public static BlockType<BlockCrackedDeepslateBricksBehavior> CRACKED_DEEPSLATE_BRICKS_TYPE;
 
@@ -1558,6 +1594,8 @@ public final class BlockTypes {
 
   public static BlockType<BlockDarkOakPressurePlateBehavior> DARK_OAK_PRESSURE_PLATE_TYPE;
 
+  public static BlockType<BlockDarkOakSaplingBehavior> DARK_OAK_SAPLING_TYPE;
+
   public static BlockType<BlockDarkOakSlabBehavior> DARK_OAK_SLAB_TYPE;
 
   public static BlockType<BlockDarkOakStairsBehavior> DARK_OAK_STAIRS_TYPE;
@@ -1578,13 +1616,23 @@ public final class BlockTypes {
 
   public static BlockType<BlockDeadBrainCoralBehavior> DEAD_BRAIN_CORAL_TYPE;
 
+  public static BlockType<BlockDeadBrainCoralFanBehavior> DEAD_BRAIN_CORAL_FAN_TYPE;
+
   public static BlockType<BlockDeadBubbleCoralBehavior> DEAD_BUBBLE_CORAL_TYPE;
+
+  public static BlockType<BlockDeadBubbleCoralFanBehavior> DEAD_BUBBLE_CORAL_FAN_TYPE;
 
   public static BlockType<BlockDeadFireCoralBehavior> DEAD_FIRE_CORAL_TYPE;
 
+  public static BlockType<BlockDeadFireCoralFanBehavior> DEAD_FIRE_CORAL_FAN_TYPE;
+
   public static BlockType<BlockDeadHornCoralBehavior> DEAD_HORN_CORAL_TYPE;
 
+  public static BlockType<BlockDeadHornCoralFanBehavior> DEAD_HORN_CORAL_FAN_TYPE;
+
   public static BlockType<BlockDeadTubeCoralBehavior> DEAD_TUBE_CORAL_TYPE;
+
+  public static BlockType<BlockDeadTubeCoralFanBehavior> DEAD_TUBE_CORAL_FAN_TYPE;
 
   public static BlockType<BlockDeadbushBehavior> DEADBUSH_TYPE;
 
@@ -1954,6 +2002,8 @@ public final class BlockTypes {
 
   public static BlockType<BlockFireCoralBehavior> FIRE_CORAL_TYPE;
 
+  public static BlockType<BlockFireCoralFanBehavior> FIRE_CORAL_FAN_TYPE;
+
   public static BlockType<BlockFletchingTableBehavior> FLETCHING_TABLE_TYPE;
 
   public static BlockType<BlockFlowerPotBehavior> FLOWER_POT_TYPE;
@@ -2122,6 +2172,8 @@ public final class BlockTypes {
 
   public static BlockType<BlockHayBlockBehavior> HAY_BLOCK_TYPE;
 
+  public static BlockType<BlockHeavyCoreBehavior> HEAVY_CORE_TYPE;
+
   public static BlockType<BlockHeavyWeightedPressurePlateBehavior> HEAVY_WEIGHTED_PRESSURE_PLATE_TYPE;
 
   public static BlockType<BlockHoneyBlockBehavior> HONEY_BLOCK_TYPE;
@@ -2131,6 +2183,8 @@ public final class BlockTypes {
   public static BlockType<BlockHopperBehavior> HOPPER_TYPE;
 
   public static BlockType<BlockHornCoralBehavior> HORN_CORAL_TYPE;
+
+  public static BlockType<BlockHornCoralFanBehavior> HORN_CORAL_FAN_TYPE;
 
   public static BlockType<BlockIceBehavior> ICE_TYPE;
 
@@ -2175,6 +2229,8 @@ public final class BlockTypes {
   public static BlockType<BlockJunglePlanksBehavior> JUNGLE_PLANKS_TYPE;
 
   public static BlockType<BlockJunglePressurePlateBehavior> JUNGLE_PRESSURE_PLATE_TYPE;
+
+  public static BlockType<BlockJungleSaplingBehavior> JUNGLE_SAPLING_TYPE;
 
   public static BlockType<BlockJungleSlabBehavior> JUNGLE_SLAB_TYPE;
 
@@ -2253,6 +2309,8 @@ public final class BlockTypes {
   public static BlockType<BlockLightWeightedPressurePlateBehavior> LIGHT_WEIGHTED_PRESSURE_PLATE_TYPE;
 
   public static BlockType<BlockLightningRodBehavior> LIGHTNING_ROD_TYPE;
+
+  public static BlockType<BlockLilyOfTheValleyBehavior> LILY_OF_THE_VALLEY_TYPE;
 
   public static BlockType<BlockLimeCandleBehavior> LIME_CANDLE_TYPE;
 
@@ -2428,6 +2486,8 @@ public final class BlockTypes {
 
   public static BlockType<BlockOakPlanksBehavior> OAK_PLANKS_TYPE;
 
+  public static BlockType<BlockOakSaplingBehavior> OAK_SAPLING_TYPE;
+
   public static BlockType<BlockOakSlabBehavior> OAK_SLAB_TYPE;
 
   public static BlockType<BlockOakStairsBehavior> OAK_STAIRS_TYPE;
@@ -2460,7 +2520,11 @@ public final class BlockTypes {
 
   public static BlockType<BlockOrangeTerracottaBehavior> ORANGE_TERRACOTTA_TYPE;
 
+  public static BlockType<BlockOrangeTulipBehavior> ORANGE_TULIP_TYPE;
+
   public static BlockType<BlockOrangeWoolBehavior> ORANGE_WOOL_TYPE;
+
+  public static BlockType<BlockOxeyeDaisyBehavior> OXEYE_DAISY_TYPE;
 
   public static BlockType<BlockOxidizedChiseledCopperBehavior> OXIDIZED_CHISELED_COPPER_TYPE;
 
@@ -2509,6 +2573,8 @@ public final class BlockTypes {
   public static BlockType<BlockPinkStainedGlassPaneBehavior> PINK_STAINED_GLASS_PANE_TYPE;
 
   public static BlockType<BlockPinkTerracottaBehavior> PINK_TERRACOTTA_TYPE;
+
+  public static BlockType<BlockPinkTulipBehavior> PINK_TULIP_TYPE;
 
   public static BlockType<BlockPinkWoolBehavior> PINK_WOOL_TYPE;
 
@@ -2582,6 +2648,8 @@ public final class BlockTypes {
 
   public static BlockType<BlockPolishedTuffWallBehavior> POLISHED_TUFF_WALL_TYPE;
 
+  public static BlockType<BlockPoppyBehavior> POPPY_TYPE;
+
   public static BlockType<BlockPortalBehavior> PORTAL_TYPE;
 
   public static BlockType<BlockPotatoesBehavior> POTATOES_TYPE;
@@ -2654,8 +2722,6 @@ public final class BlockTypes {
 
   public static BlockType<BlockRedConcretePowderBehavior> RED_CONCRETE_POWDER_TYPE;
 
-  public static BlockType<BlockRedFlowerBehavior> RED_FLOWER_TYPE;
-
   public static BlockType<BlockRedGlazedTerracottaBehavior> RED_GLAZED_TERRACOTTA_TYPE;
 
   public static BlockType<BlockRedMushroomBehavior> RED_MUSHROOM_TYPE;
@@ -2677,6 +2743,8 @@ public final class BlockTypes {
   public static BlockType<BlockRedStainedGlassPaneBehavior> RED_STAINED_GLASS_PANE_TYPE;
 
   public static BlockType<BlockRedTerracottaBehavior> RED_TERRACOTTA_TYPE;
+
+  public static BlockType<BlockRedTulipBehavior> RED_TULIP_TYPE;
 
   public static BlockType<BlockRedWoolBehavior> RED_WOOL_TYPE;
 
@@ -2705,8 +2773,6 @@ public final class BlockTypes {
   public static BlockType<BlockSandstoneBehavior> SANDSTONE_TYPE;
 
   public static BlockType<BlockSandstoneStairsBehavior> SANDSTONE_STAIRS_TYPE;
-
-  public static BlockType<BlockSaplingBehavior> SAPLING_TYPE;
 
   public static BlockType<BlockScaffoldingBehavior> SCAFFOLDING_TYPE;
 
@@ -2793,6 +2859,8 @@ public final class BlockTypes {
   public static BlockType<BlockSprucePlanksBehavior> SPRUCE_PLANKS_TYPE;
 
   public static BlockType<BlockSprucePressurePlateBehavior> SPRUCE_PRESSURE_PLATE_TYPE;
+
+  public static BlockType<BlockSpruceSaplingBehavior> SPRUCE_SAPLING_TYPE;
 
   public static BlockType<BlockSpruceSlabBehavior> SPRUCE_SLAB_TYPE;
 
@@ -2915,6 +2983,8 @@ public final class BlockTypes {
   public static BlockType<BlockTripwireHookBehavior> TRIPWIRE_HOOK_TYPE;
 
   public static BlockType<BlockTubeCoralBehavior> TUBE_CORAL_TYPE;
+
+  public static BlockType<BlockTubeCoralFanBehavior> TUBE_CORAL_FAN_TYPE;
 
   public static BlockType<BlockTuffBehavior> TUFF_TYPE;
 
@@ -3129,6 +3199,8 @@ public final class BlockTypes {
   public static BlockType<BlockWhiteStainedGlassPaneBehavior> WHITE_STAINED_GLASS_PANE_TYPE;
 
   public static BlockType<BlockWhiteTerracottaBehavior> WHITE_TERRACOTTA_TYPE;
+
+  public static BlockType<BlockWhiteTulipBehavior> WHITE_TULIP_TYPE;
 
   public static BlockType<BlockWhiteWoolBehavior> WHITE_WOOL_TYPE;
 

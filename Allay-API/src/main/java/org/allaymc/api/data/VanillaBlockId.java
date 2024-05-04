@@ -32,6 +32,8 @@ public enum VanillaBlockId {
 
   ACACIA_PRESSURE_PLATE("minecraft:acacia_pressure_plate"),
 
+  ACACIA_SAPLING("minecraft:acacia_sapling"),
+
   ACACIA_SLAB("minecraft:acacia_slab"),
 
   ACACIA_STAIRS("minecraft:acacia_stairs"),
@@ -47,6 +49,8 @@ public enum VanillaBlockId {
   ACTIVATOR_RAIL("minecraft:activator_rail"),
 
   AIR("minecraft:air"),
+
+  ALLIUM("minecraft:allium"),
 
   ALLOW("minecraft:allow"),
 
@@ -67,6 +71,8 @@ public enum VanillaBlockId {
   AZALEA_LEAVES("minecraft:azalea_leaves"),
 
   AZALEA_LEAVES_FLOWERED("minecraft:azalea_leaves_flowered"),
+
+  AZURE_BLUET("minecraft:azure_bluet"),
 
   BAMBOO("minecraft:bamboo"),
 
@@ -150,6 +156,8 @@ public enum VanillaBlockId {
 
   BIRCH_PRESSURE_PLATE("minecraft:birch_pressure_plate"),
 
+  BIRCH_SAPLING("minecraft:birch_sapling"),
+
   BIRCH_SLAB("minecraft:birch_slab"),
 
   BIRCH_STAIRS("minecraft:birch_stairs"),
@@ -210,6 +218,8 @@ public enum VanillaBlockId {
 
   BLUE_ICE("minecraft:blue_ice"),
 
+  BLUE_ORCHID("minecraft:blue_orchid"),
+
   BLUE_SHULKER_BOX("minecraft:blue_shulker_box"),
 
   BLUE_STAINED_GLASS("minecraft:blue_stained_glass"),
@@ -227,6 +237,8 @@ public enum VanillaBlockId {
   BORDER_BLOCK("minecraft:border_block"),
 
   BRAIN_CORAL("minecraft:brain_coral"),
+
+  BRAIN_CORAL_FAN("minecraft:brain_coral_fan"),
 
   BREWING_STAND("minecraft:brewing_stand"),
 
@@ -263,6 +275,8 @@ public enum VanillaBlockId {
   BUBBLE_COLUMN("minecraft:bubble_column"),
 
   BUBBLE_CORAL("minecraft:bubble_coral"),
+
+  BUBBLE_CORAL_FAN("minecraft:bubble_coral_fan"),
 
   BUDDING_AMETHYST("minecraft:budding_amethyst"),
 
@@ -406,15 +420,13 @@ public enum VanillaBlockId {
 
   CORAL_BLOCK("minecraft:coral_block"),
 
-  CORAL_FAN("minecraft:coral_fan"),
-
-  CORAL_FAN_DEAD("minecraft:coral_fan_dead"),
-
   CORAL_FAN_HANG("minecraft:coral_fan_hang"),
 
   CORAL_FAN_HANG2("minecraft:coral_fan_hang2"),
 
   CORAL_FAN_HANG3("minecraft:coral_fan_hang3"),
+
+  CORNFLOWER("minecraft:cornflower"),
 
   CRACKED_DEEPSLATE_BRICKS("minecraft:cracked_deepslate_bricks"),
 
@@ -514,6 +526,8 @@ public enum VanillaBlockId {
 
   DARK_OAK_PRESSURE_PLATE("minecraft:dark_oak_pressure_plate"),
 
+  DARK_OAK_SAPLING("minecraft:dark_oak_sapling"),
+
   DARK_OAK_SLAB("minecraft:dark_oak_slab"),
 
   DARK_OAK_STAIRS("minecraft:dark_oak_stairs"),
@@ -534,13 +548,23 @@ public enum VanillaBlockId {
 
   DEAD_BRAIN_CORAL("minecraft:dead_brain_coral"),
 
+  DEAD_BRAIN_CORAL_FAN("minecraft:dead_brain_coral_fan"),
+
   DEAD_BUBBLE_CORAL("minecraft:dead_bubble_coral"),
+
+  DEAD_BUBBLE_CORAL_FAN("minecraft:dead_bubble_coral_fan"),
 
   DEAD_FIRE_CORAL("minecraft:dead_fire_coral"),
 
+  DEAD_FIRE_CORAL_FAN("minecraft:dead_fire_coral_fan"),
+
   DEAD_HORN_CORAL("minecraft:dead_horn_coral"),
 
+  DEAD_HORN_CORAL_FAN("minecraft:dead_horn_coral_fan"),
+
   DEAD_TUBE_CORAL("minecraft:dead_tube_coral"),
+
+  DEAD_TUBE_CORAL_FAN("minecraft:dead_tube_coral_fan"),
 
   DEADBUSH("minecraft:deadbush"),
 
@@ -910,6 +934,8 @@ public enum VanillaBlockId {
 
   FIRE_CORAL("minecraft:fire_coral"),
 
+  FIRE_CORAL_FAN("minecraft:fire_coral_fan"),
+
   FLETCHING_TABLE("minecraft:fletching_table"),
 
   FLOWER_POT("minecraft:flower_pot"),
@@ -1078,6 +1104,8 @@ public enum VanillaBlockId {
 
   HAY_BLOCK("minecraft:hay_block"),
 
+  HEAVY_CORE("minecraft:heavy_core"),
+
   HEAVY_WEIGHTED_PRESSURE_PLATE("minecraft:heavy_weighted_pressure_plate"),
 
   HONEY_BLOCK("minecraft:honey_block"),
@@ -1087,6 +1115,8 @@ public enum VanillaBlockId {
   HOPPER("minecraft:hopper"),
 
   HORN_CORAL("minecraft:horn_coral"),
+
+  HORN_CORAL_FAN("minecraft:horn_coral_fan"),
 
   ICE("minecraft:ice"),
 
@@ -1131,6 +1161,8 @@ public enum VanillaBlockId {
   JUNGLE_PLANKS("minecraft:jungle_planks"),
 
   JUNGLE_PRESSURE_PLATE("minecraft:jungle_pressure_plate"),
+
+  JUNGLE_SAPLING("minecraft:jungle_sapling"),
 
   JUNGLE_SLAB("minecraft:jungle_slab"),
 
@@ -1209,6 +1241,8 @@ public enum VanillaBlockId {
   LIGHT_WEIGHTED_PRESSURE_PLATE("minecraft:light_weighted_pressure_plate"),
 
   LIGHTNING_ROD("minecraft:lightning_rod"),
+
+  LILY_OF_THE_VALLEY("minecraft:lily_of_the_valley"),
 
   LIME_CANDLE("minecraft:lime_candle"),
 
@@ -1384,6 +1418,8 @@ public enum VanillaBlockId {
 
   OAK_PLANKS("minecraft:oak_planks"),
 
+  OAK_SAPLING("minecraft:oak_sapling"),
+
   OAK_SLAB("minecraft:oak_slab"),
 
   OAK_STAIRS("minecraft:oak_stairs"),
@@ -1416,7 +1452,11 @@ public enum VanillaBlockId {
 
   ORANGE_TERRACOTTA("minecraft:orange_terracotta"),
 
+  ORANGE_TULIP("minecraft:orange_tulip"),
+
   ORANGE_WOOL("minecraft:orange_wool"),
+
+  OXEYE_DAISY("minecraft:oxeye_daisy"),
 
   OXIDIZED_CHISELED_COPPER("minecraft:oxidized_chiseled_copper"),
 
@@ -1465,6 +1505,8 @@ public enum VanillaBlockId {
   PINK_STAINED_GLASS_PANE("minecraft:pink_stained_glass_pane"),
 
   PINK_TERRACOTTA("minecraft:pink_terracotta"),
+
+  PINK_TULIP("minecraft:pink_tulip"),
 
   PINK_WOOL("minecraft:pink_wool"),
 
@@ -1538,6 +1580,8 @@ public enum VanillaBlockId {
 
   POLISHED_TUFF_WALL("minecraft:polished_tuff_wall"),
 
+  POPPY("minecraft:poppy"),
+
   PORTAL("minecraft:portal"),
 
   POTATOES("minecraft:potatoes"),
@@ -1610,8 +1654,6 @@ public enum VanillaBlockId {
 
   RED_CONCRETE_POWDER("minecraft:red_concrete_powder"),
 
-  RED_FLOWER("minecraft:red_flower"),
-
   RED_GLAZED_TERRACOTTA("minecraft:red_glazed_terracotta"),
 
   RED_MUSHROOM("minecraft:red_mushroom"),
@@ -1633,6 +1675,8 @@ public enum VanillaBlockId {
   RED_STAINED_GLASS_PANE("minecraft:red_stained_glass_pane"),
 
   RED_TERRACOTTA("minecraft:red_terracotta"),
+
+  RED_TULIP("minecraft:red_tulip"),
 
   RED_WOOL("minecraft:red_wool"),
 
@@ -1661,8 +1705,6 @@ public enum VanillaBlockId {
   SANDSTONE("minecraft:sandstone"),
 
   SANDSTONE_STAIRS("minecraft:sandstone_stairs"),
-
-  SAPLING("minecraft:sapling"),
 
   SCAFFOLDING("minecraft:scaffolding"),
 
@@ -1749,6 +1791,8 @@ public enum VanillaBlockId {
   SPRUCE_PLANKS("minecraft:spruce_planks"),
 
   SPRUCE_PRESSURE_PLATE("minecraft:spruce_pressure_plate"),
+
+  SPRUCE_SAPLING("minecraft:spruce_sapling"),
 
   SPRUCE_SLAB("minecraft:spruce_slab"),
 
@@ -1871,6 +1915,8 @@ public enum VanillaBlockId {
   TRIPWIRE_HOOK("minecraft:tripwire_hook"),
 
   TUBE_CORAL("minecraft:tube_coral"),
+
+  TUBE_CORAL_FAN("minecraft:tube_coral_fan"),
 
   TUFF("minecraft:tuff"),
 
@@ -2085,6 +2131,8 @@ public enum VanillaBlockId {
   WHITE_STAINED_GLASS_PANE("minecraft:white_stained_glass_pane"),
 
   WHITE_TERRACOTTA("minecraft:white_terracotta"),
+
+  WHITE_TULIP("minecraft:white_tulip"),
 
   WHITE_WOOL("minecraft:white_wool"),
 

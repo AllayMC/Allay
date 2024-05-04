@@ -6,5 +6,5 @@ import org.allaymc.api.block.BlockBehavior;
  * @author daoge_cmd <br>
  * Allay Project <br>
  */
-public interface BlockSaplingBehavior extends BlockBehavior {
+public interface BlockBirchSaplingBehavior extends BlockBehavior {
 }

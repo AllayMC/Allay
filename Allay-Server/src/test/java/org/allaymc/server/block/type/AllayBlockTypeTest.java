@@ -150,11 +150,6 @@ class AllayBlockTypeTest {
         b2 = b2.setProperty(VanillaBlockPropertyTypes.CANDLES, 2);
         b2 = b2.setProperty(VanillaBlockPropertyTypes.LIT, false);
         assertEquals(4220034033L, b2.unsignedBlockStateHash());
-
-        var b3 = CORAL_FAN_TYPE.getDefaultState();
-        b3 = b3.setProperty(VanillaBlockPropertyTypes.CORAL_COLOR, CoralColor.BLUE);
-        b3 = b3.setProperty(VanillaBlockPropertyTypes.CORAL_FAN_DIRECTION, 0);
-        assertEquals(781710940, b3.unsignedBlockStateHash());
     }
 
     @Test

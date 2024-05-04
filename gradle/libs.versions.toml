@@ -6,11 +6,11 @@ graalvm = "24.0.1"
 
 [libraries]
 # NBT
-nbt = { group = "org.allaymc", name = "NBT", version = "3.0.8" }
-# MC network protocol
-network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta1-SNAPSHOT" }
-# block-state-updater
-blockstateupdater = { group = "org.cloudburstmc", name = "block-state-updater", version = "1.20.70-SNAPSHOT" }
+nbt = { group = "org.allaymc", name = "NBT", version = "3.0.9" }
+# Network protocol
+network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta2-SNAPSHOT" }
+# Block State Updater
+blockstateupdater = { group = "org.cloudburstmc", name = "block-state-updater", version = "1.20.80-SNAPSHOT" }
 # Collections
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.13" }
 guava = { group = "com.google.guava", name = "guava", version = "33.1.0-jre" }
@@ -22,9 +22,9 @@ commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version =
 # Support Annotation
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.32" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "24.1.0" }
-# zlib
+# Zlib
 libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0.0.2-PNX" }
-# concurrency
+# Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.16.1" }

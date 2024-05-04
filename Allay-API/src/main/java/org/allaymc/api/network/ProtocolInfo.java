@@ -2,13 +2,13 @@ package org.allaymc.api.network;
 
 import org.allaymc.api.datastruct.SemVersion;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v662.Bedrock_v662;
+import org.cloudburstmc.protocol.bedrock.codec.v671.Bedrock_v671;
 
 public final class ProtocolInfo {
 
-    public static final BedrockCodec PACKET_CODEC = Bedrock_v662.CODEC;
+    public static final BedrockCodec PACKET_CODEC = Bedrock_v671.CODEC;
 
-    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 20, 71, 1, 0);
+    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 20, 80, 3, 0);
 
     public static final int BLOCK_STATE_VERSION_NO_REVISION = (MINECRAFT_VERSION.major() << 24) | //major
                                                                (MINECRAFT_VERSION.minor() << 16) | //minor

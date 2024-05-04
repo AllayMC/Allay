@@ -4,6 +4,7 @@ import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.interfaces.ItemAcaciaPressurePlateStack;
 import org.allaymc.api.item.interfaces.ItemActivatorRailStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.item.interfaces.ItemAlliumStack;
 import org.allaymc.api.item.interfaces.ItemAllowStack;
 import org.allaymc.api.item.interfaces.ItemAmethystBlockStack;
 import org.allaymc.api.item.interfaces.ItemAmethystClusterStack;
@@ -19,6 +20,7 @@ import org.allaymc.api.item.interfaces.ItemArmorStandStack;
 import org.allaymc.api.item.interfaces.ItemArmsUpPotterySherdStack;
 import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.item.interfaces.ItemAzaleaStack;
+import org.allaymc.api.item.interfaces.ItemAzureBluetStack;
 import org.allaymc.api.item.interfaces.ItemBakedPotatoStack;
 import org.allaymc.api.item.interfaces.ItemBalloonStack;
 import org.allaymc.api.item.interfaces.ItemBambooBlockStack;
@@ -53,6 +55,8 @@ import org.allaymc.api.item.interfaces.ItemBlazeRodStack;
 import org.allaymc.api.item.interfaces.ItemBleachStack;
 import org.allaymc.api.item.interfaces.ItemBlueDyeStack;
 import org.allaymc.api.item.interfaces.ItemBlueIceStack;
+import org.allaymc.api.item.interfaces.ItemBlueOrchidStack;
+import org.allaymc.api.item.interfaces.ItemBoltArmorTrimSmithingTemplateStack;
 import org.allaymc.api.item.interfaces.ItemBoneBlockStack;
 import org.allaymc.api.item.interfaces.ItemBoneMealStack;
 import org.allaymc.api.item.interfaces.ItemBoneStack;
@@ -63,6 +67,7 @@ import org.allaymc.api.item.interfaces.ItemBordureIndentedBannerPatternStack;
 import org.allaymc.api.item.interfaces.ItemBowStack;
 import org.allaymc.api.item.interfaces.ItemBowlStack;
 import org.allaymc.api.item.interfaces.ItemBreadStack;
+import org.allaymc.api.item.interfaces.ItemBreezeRodStack;
 import org.allaymc.api.item.interfaces.ItemBrewerPotterySherdStack;
 import org.allaymc.api.item.interfaces.ItemBrewingStandStack;
 import org.allaymc.api.item.interfaces.ItemBrickBlockStack;
@@ -139,6 +144,7 @@ import org.allaymc.api.item.interfaces.ItemCopperGrateStack;
 import org.allaymc.api.item.interfaces.ItemCopperIngotStack;
 import org.allaymc.api.item.interfaces.ItemCopperOreStack;
 import org.allaymc.api.item.interfaces.ItemCoralBlockStack;
+import org.allaymc.api.item.interfaces.ItemCornflowerStack;
 import org.allaymc.api.item.interfaces.ItemCrackedDeepslateTilesStack;
 import org.allaymc.api.item.interfaces.ItemCrafterStack;
 import org.allaymc.api.item.interfaces.ItemCraftingTableStack;
@@ -228,6 +234,9 @@ import org.allaymc.api.item.interfaces.ItemFishingRodStack;
 import org.allaymc.api.item.interfaces.ItemFletchingTableStack;
 import org.allaymc.api.item.interfaces.ItemFlintAndSteelStack;
 import org.allaymc.api.item.interfaces.ItemFlintStack;
+import org.allaymc.api.item.interfaces.ItemFlowArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemFlowBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemFlowPotterySherdStack;
 import org.allaymc.api.item.interfaces.ItemFlowerBannerPatternStack;
 import org.allaymc.api.item.interfaces.ItemFlowerPotStack;
 import org.allaymc.api.item.interfaces.ItemFloweringAzaleaStack;
@@ -271,12 +280,15 @@ import org.allaymc.api.item.interfaces.ItemGrayDyeStack;
 import org.allaymc.api.item.interfaces.ItemGreenDyeStack;
 import org.allaymc.api.item.interfaces.ItemGrindstoneStack;
 import org.allaymc.api.item.interfaces.ItemGunpowderStack;
+import org.allaymc.api.item.interfaces.ItemGusterBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemGusterPotterySherdStack;
 import org.allaymc.api.item.interfaces.ItemHangingRootsStack;
 import org.allaymc.api.item.interfaces.ItemHardenedClayStack;
 import org.allaymc.api.item.interfaces.ItemHayBlockStack;
 import org.allaymc.api.item.interfaces.ItemHeartOfTheSeaStack;
 import org.allaymc.api.item.interfaces.ItemHeartPotterySherdStack;
 import org.allaymc.api.item.interfaces.ItemHeartbreakPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemHeavyCoreStack;
 import org.allaymc.api.item.interfaces.ItemHeavyWeightedPressurePlateStack;
 import org.allaymc.api.item.interfaces.ItemHoneyBlockStack;
 import org.allaymc.api.item.interfaces.ItemHoneyBottleStack;
@@ -342,6 +354,7 @@ import org.allaymc.api.item.interfaces.ItemLightBlueDyeStack;
 import org.allaymc.api.item.interfaces.ItemLightGrayDyeStack;
 import org.allaymc.api.item.interfaces.ItemLightWeightedPressurePlateStack;
 import org.allaymc.api.item.interfaces.ItemLightningRodStack;
+import org.allaymc.api.item.interfaces.ItemLilyOfTheValleyStack;
 import org.allaymc.api.item.interfaces.ItemLimeDyeStack;
 import org.allaymc.api.item.interfaces.ItemLingeringPotionStack;
 import org.allaymc.api.item.interfaces.ItemLitBlastFurnaceStack;
@@ -354,6 +367,7 @@ import org.allaymc.api.item.interfaces.ItemLitSmokerStack;
 import org.allaymc.api.item.interfaces.ItemLodestoneCompassStack;
 import org.allaymc.api.item.interfaces.ItemLodestoneStack;
 import org.allaymc.api.item.interfaces.ItemLoomStack;
+import org.allaymc.api.item.interfaces.ItemMaceStack;
 import org.allaymc.api.item.interfaces.ItemMagentaDyeStack;
 import org.allaymc.api.item.interfaces.ItemMagmaCreamStack;
 import org.allaymc.api.item.interfaces.ItemMagmaStack;
@@ -403,6 +417,8 @@ import org.allaymc.api.item.interfaces.ItemObserverStack;
 import org.allaymc.api.item.interfaces.ItemObsidianStack;
 import org.allaymc.api.item.interfaces.ItemOchreFroglightStack;
 import org.allaymc.api.item.interfaces.ItemOrangeDyeStack;
+import org.allaymc.api.item.interfaces.ItemOrangeTulipStack;
+import org.allaymc.api.item.interfaces.ItemOxeyeDaisyStack;
 import org.allaymc.api.item.interfaces.ItemOxidizedCopperBulbStack;
 import org.allaymc.api.item.interfaces.ItemOxidizedCopperGrateStack;
 import org.allaymc.api.item.interfaces.ItemPackedIceStack;
@@ -414,6 +430,7 @@ import org.allaymc.api.item.interfaces.ItemPhantomMembraneStack;
 import org.allaymc.api.item.interfaces.ItemPiglinBannerPatternStack;
 import org.allaymc.api.item.interfaces.ItemPinkDyeStack;
 import org.allaymc.api.item.interfaces.ItemPinkPetalsStack;
+import org.allaymc.api.item.interfaces.ItemPinkTulipStack;
 import org.allaymc.api.item.interfaces.ItemPitcherCropStack;
 import org.allaymc.api.item.interfaces.ItemPitcherPlantStack;
 import org.allaymc.api.item.interfaces.ItemPitcherPodStack;
@@ -430,6 +447,7 @@ import org.allaymc.api.item.interfaces.ItemPolishedDioriteStack;
 import org.allaymc.api.item.interfaces.ItemPolishedGraniteStack;
 import org.allaymc.api.item.interfaces.ItemPolishedTuffStack;
 import org.allaymc.api.item.interfaces.ItemPoppedChorusFruitStack;
+import org.allaymc.api.item.interfaces.ItemPoppyStack;
 import org.allaymc.api.item.interfaces.ItemPorkchopStack;
 import org.allaymc.api.item.interfaces.ItemPortalStack;
 import org.allaymc.api.item.interfaces.ItemPotatoStack;
@@ -471,6 +489,7 @@ import org.allaymc.api.item.interfaces.ItemRedMushroomBlockStack;
 import org.allaymc.api.item.interfaces.ItemRedMushroomStack;
 import org.allaymc.api.item.interfaces.ItemRedNetherBrickStack;
 import org.allaymc.api.item.interfaces.ItemRedSandstoneStack;
+import org.allaymc.api.item.interfaces.ItemRedTulipStack;
 import org.allaymc.api.item.interfaces.ItemRedstoneBlockStack;
 import org.allaymc.api.item.interfaces.ItemRedstoneLampStack;
 import org.allaymc.api.item.interfaces.ItemRedstoneOreStack;
@@ -489,6 +508,7 @@ import org.allaymc.api.item.interfaces.ItemSalmonStack;
 import org.allaymc.api.item.interfaces.ItemSandStack;
 import org.allaymc.api.item.interfaces.ItemSandstoneStack;
 import org.allaymc.api.item.interfaces.ItemScaffoldingStack;
+import org.allaymc.api.item.interfaces.ItemScrapePotterySherdStack;
 import org.allaymc.api.item.interfaces.ItemSculkCatalystStack;
 import org.allaymc.api.item.interfaces.ItemSculkSensorStack;
 import org.allaymc.api.item.interfaces.ItemSculkShriekerStack;
@@ -619,6 +639,7 @@ import org.allaymc.api.item.interfaces.ItemWeepingVinesStack;
 import org.allaymc.api.item.interfaces.ItemWheatSeedsStack;
 import org.allaymc.api.item.interfaces.ItemWheatStack;
 import org.allaymc.api.item.interfaces.ItemWhiteDyeStack;
+import org.allaymc.api.item.interfaces.ItemWhiteTulipStack;
 import org.allaymc.api.item.interfaces.ItemWildArmorTrimSmithingTemplateStack;
 import org.allaymc.api.item.interfaces.ItemWindChargeStack;
 import org.allaymc.api.item.interfaces.ItemWitherRoseStack;
@@ -819,11 +840,21 @@ import org.allaymc.api.item.interfaces.coral.ItemDeadTubeCoralStack;
 import org.allaymc.api.item.interfaces.coral.ItemFireCoralStack;
 import org.allaymc.api.item.interfaces.coral.ItemHornCoralStack;
 import org.allaymc.api.item.interfaces.coral.ItemTubeCoralStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemBrainCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemBubbleCoralFanStack;
 import org.allaymc.api.item.interfaces.coralfan.ItemCoralFanDeadStack;
 import org.allaymc.api.item.interfaces.coralfan.ItemCoralFanHang2Stack;
 import org.allaymc.api.item.interfaces.coralfan.ItemCoralFanHang3Stack;
 import org.allaymc.api.item.interfaces.coralfan.ItemCoralFanHangStack;
 import org.allaymc.api.item.interfaces.coralfan.ItemCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadBrainCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadBubbleCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadFireCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadHornCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadTubeCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemFireCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemHornCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemTubeCoralFanStack;
 import org.allaymc.api.item.interfaces.door.ItemAcaciaDoorStack;
 import org.allaymc.api.item.interfaces.door.ItemBambooDoorStack;
 import org.allaymc.api.item.interfaces.door.ItemBirchDoorStack;
@@ -1185,9 +1216,15 @@ import org.allaymc.api.item.interfaces.planks.ItemOakPlanksStack;
 import org.allaymc.api.item.interfaces.planks.ItemPlanksStack;
 import org.allaymc.api.item.interfaces.planks.ItemSprucePlanksStack;
 import org.allaymc.api.item.interfaces.planks.ItemWarpedPlanksStack;
+import org.allaymc.api.item.interfaces.sapling.ItemAcaciaSaplingStack;
 import org.allaymc.api.item.interfaces.sapling.ItemBambooSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemBirchSaplingStack;
 import org.allaymc.api.item.interfaces.sapling.ItemCherrySaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemDarkOakSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemJungleSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemOakSaplingStack;
 import org.allaymc.api.item.interfaces.sapling.ItemSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemSpruceSaplingStack;
 import org.allaymc.api.item.interfaces.shulkerbox.ItemBlackShulkerBoxStack;
 import org.allaymc.api.item.interfaces.shulkerbox.ItemBlueShulkerBoxStack;
 import org.allaymc.api.item.interfaces.shulkerbox.ItemBrownShulkerBoxStack;
@@ -1636,6 +1673,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initAcaciaSapling() {
+    if (ItemTypes.ACACIA_SAPLING_TYPE != null) return;
+    ItemTypes.ACACIA_SAPLING_TYPE = ItemTypeBuilder
+            .builder(ItemAcaciaSaplingStack.class)
+            .vanillaItem(VanillaItemId.ACACIA_SAPLING)
+            .build();
+  }
+
   public static void initAcaciaSign() {
     if (ItemTypes.ACACIA_SIGN_TYPE != null) return;
     ItemTypes.ACACIA_SIGN_TYPE = ItemTypeBuilder
@@ -1721,6 +1766,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.ALLAY_SPAWN_EGG_TYPE = ItemTypeBuilder
             .builder(ItemAllaySpawnEggStack.class)
             .vanillaItem(VanillaItemId.ALLAY_SPAWN_EGG)
+            .build();
+  }
+
+  public static void initAllium() {
+    if (ItemTypes.ALLIUM_TYPE != null) return;
+    ItemTypes.ALLIUM_TYPE = ItemTypeBuilder
+            .builder(ItemAlliumStack.class)
+            .vanillaItem(VanillaItemId.ALLIUM)
             .build();
   }
 
@@ -1889,6 +1942,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.AZALEA_LEAVES_FLOWERED_TYPE = ItemTypeBuilder
             .builder(ItemAzaleaLeavesFloweredStack.class)
             .vanillaItem(VanillaItemId.AZALEA_LEAVES_FLOWERED)
+            .build();
+  }
+
+  public static void initAzureBluet() {
+    if (ItemTypes.AZURE_BLUET_TYPE != null) return;
+    ItemTypes.AZURE_BLUET_TYPE = ItemTypeBuilder
+            .builder(ItemAzureBluetStack.class)
+            .vanillaItem(VanillaItemId.AZURE_BLUET)
             .build();
   }
 
@@ -2332,6 +2393,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initBirchSapling() {
+    if (ItemTypes.BIRCH_SAPLING_TYPE != null) return;
+    ItemTypes.BIRCH_SAPLING_TYPE = ItemTypeBuilder
+            .builder(ItemBirchSaplingStack.class)
+            .vanillaItem(VanillaItemId.BIRCH_SAPLING)
+            .build();
+  }
+
   public static void initBirchSign() {
     if (ItemTypes.BIRCH_SIGN_TYPE != null) return;
     ItemTypes.BIRCH_SIGN_TYPE = ItemTypeBuilder
@@ -2636,6 +2705,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initBlueOrchid() {
+    if (ItemTypes.BLUE_ORCHID_TYPE != null) return;
+    ItemTypes.BLUE_ORCHID_TYPE = ItemTypeBuilder
+            .builder(ItemBlueOrchidStack.class)
+            .vanillaItem(VanillaItemId.BLUE_ORCHID)
+            .build();
+  }
+
   public static void initBlueShulkerBox() {
     if (ItemTypes.BLUE_SHULKER_BOX_TYPE != null) return;
     ItemTypes.BLUE_SHULKER_BOX_TYPE = ItemTypeBuilder
@@ -2689,6 +2766,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.BOGGED_SPAWN_EGG_TYPE = ItemTypeBuilder
             .builder(ItemBoggedSpawnEggStack.class)
             .vanillaItem(VanillaItemId.BOGGED_SPAWN_EGG)
+            .build();
+  }
+
+  public static void initBoltArmorTrimSmithingTemplate() {
+    if (ItemTypes.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE_TYPE != null) return;
+    ItemTypes.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE_TYPE = ItemTypeBuilder
+            .builder(ItemBoltArmorTrimSmithingTemplateStack.class)
+            .vanillaItem(VanillaItemId.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE)
             .build();
   }
 
@@ -2772,11 +2857,27 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initBrainCoralFan() {
+    if (ItemTypes.BRAIN_CORAL_FAN_TYPE != null) return;
+    ItemTypes.BRAIN_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemBrainCoralFanStack.class)
+            .vanillaItem(VanillaItemId.BRAIN_CORAL_FAN)
+            .build();
+  }
+
   public static void initBread() {
     if (ItemTypes.BREAD_TYPE != null) return;
     ItemTypes.BREAD_TYPE = ItemTypeBuilder
             .builder(ItemBreadStack.class)
             .vanillaItem(VanillaItemId.BREAD)
+            .build();
+  }
+
+  public static void initBreezeRod() {
+    if (ItemTypes.BREEZE_ROD_TYPE != null) return;
+    ItemTypes.BREEZE_ROD_TYPE = ItemTypeBuilder
+            .builder(ItemBreezeRodStack.class)
+            .vanillaItem(VanillaItemId.BREEZE_ROD)
             .build();
   }
 
@@ -2961,6 +3062,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.BUBBLE_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemBubbleCoralStack.class)
             .vanillaItem(VanillaItemId.BUBBLE_CORAL)
+            .build();
+  }
+
+  public static void initBubbleCoralFan() {
+    if (ItemTypes.BUBBLE_CORAL_FAN_TYPE != null) return;
+    ItemTypes.BUBBLE_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemBubbleCoralFanStack.class)
+            .vanillaItem(VanillaItemId.BUBBLE_CORAL_FAN)
             .build();
   }
 
@@ -3932,6 +4041,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initCornflower() {
+    if (ItemTypes.CORNFLOWER_TYPE != null) return;
+    ItemTypes.CORNFLOWER_TYPE = ItemTypeBuilder
+            .builder(ItemCornflowerStack.class)
+            .vanillaItem(VanillaItemId.CORNFLOWER)
+            .build();
+  }
+
   public static void initCowSpawnEgg() {
     if (ItemTypes.COW_SPAWN_EGG_TYPE != null) return;
     ItemTypes.COW_SPAWN_EGG_TYPE = ItemTypeBuilder
@@ -4396,6 +4513,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDarkOakSapling() {
+    if (ItemTypes.DARK_OAK_SAPLING_TYPE != null) return;
+    ItemTypes.DARK_OAK_SAPLING_TYPE = ItemTypeBuilder
+            .builder(ItemDarkOakSaplingStack.class)
+            .vanillaItem(VanillaItemId.DARK_OAK_SAPLING)
+            .build();
+  }
+
   public static void initDarkOakSign() {
     if (ItemTypes.DARK_OAK_SIGN_TYPE != null) return;
     ItemTypes.DARK_OAK_SIGN_TYPE = ItemTypeBuilder
@@ -4484,11 +4609,27 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDeadBrainCoralFan() {
+    if (ItemTypes.DEAD_BRAIN_CORAL_FAN_TYPE != null) return;
+    ItemTypes.DEAD_BRAIN_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemDeadBrainCoralFanStack.class)
+            .vanillaItem(VanillaItemId.DEAD_BRAIN_CORAL_FAN)
+            .build();
+  }
+
   public static void initDeadBubbleCoral() {
     if (ItemTypes.DEAD_BUBBLE_CORAL_TYPE != null) return;
     ItemTypes.DEAD_BUBBLE_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemDeadBubbleCoralStack.class)
             .vanillaItem(VanillaItemId.DEAD_BUBBLE_CORAL)
+            .build();
+  }
+
+  public static void initDeadBubbleCoralFan() {
+    if (ItemTypes.DEAD_BUBBLE_CORAL_FAN_TYPE != null) return;
+    ItemTypes.DEAD_BUBBLE_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemDeadBubbleCoralFanStack.class)
+            .vanillaItem(VanillaItemId.DEAD_BUBBLE_CORAL_FAN)
             .build();
   }
 
@@ -4500,6 +4641,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDeadFireCoralFan() {
+    if (ItemTypes.DEAD_FIRE_CORAL_FAN_TYPE != null) return;
+    ItemTypes.DEAD_FIRE_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemDeadFireCoralFanStack.class)
+            .vanillaItem(VanillaItemId.DEAD_FIRE_CORAL_FAN)
+            .build();
+  }
+
   public static void initDeadHornCoral() {
     if (ItemTypes.DEAD_HORN_CORAL_TYPE != null) return;
     ItemTypes.DEAD_HORN_CORAL_TYPE = ItemTypeBuilder
@@ -4508,11 +4657,27 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDeadHornCoralFan() {
+    if (ItemTypes.DEAD_HORN_CORAL_FAN_TYPE != null) return;
+    ItemTypes.DEAD_HORN_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemDeadHornCoralFanStack.class)
+            .vanillaItem(VanillaItemId.DEAD_HORN_CORAL_FAN)
+            .build();
+  }
+
   public static void initDeadTubeCoral() {
     if (ItemTypes.DEAD_TUBE_CORAL_TYPE != null) return;
     ItemTypes.DEAD_TUBE_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemDeadTubeCoralStack.class)
             .vanillaItem(VanillaItemId.DEAD_TUBE_CORAL)
+            .build();
+  }
+
+  public static void initDeadTubeCoralFan() {
+    if (ItemTypes.DEAD_TUBE_CORAL_FAN_TYPE != null) return;
+    ItemTypes.DEAD_TUBE_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemDeadTubeCoralFanStack.class)
+            .vanillaItem(VanillaItemId.DEAD_TUBE_CORAL_FAN)
             .build();
   }
 
@@ -6332,6 +6497,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initFireCoralFan() {
+    if (ItemTypes.FIRE_CORAL_FAN_TYPE != null) return;
+    ItemTypes.FIRE_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemFireCoralFanStack.class)
+            .vanillaItem(VanillaItemId.FIRE_CORAL_FAN)
+            .build();
+  }
+
   public static void initFireworkRocket() {
     if (ItemTypes.FIREWORK_ROCKET_TYPE != null) return;
     ItemTypes.FIREWORK_ROCKET_TYPE = ItemTypeBuilder
@@ -6377,6 +6550,30 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.FLINT_AND_STEEL_TYPE = ItemTypeBuilder
             .builder(ItemFlintAndSteelStack.class)
             .vanillaItem(VanillaItemId.FLINT_AND_STEEL)
+            .build();
+  }
+
+  public static void initFlowArmorTrimSmithingTemplate() {
+    if (ItemTypes.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE_TYPE != null) return;
+    ItemTypes.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE_TYPE = ItemTypeBuilder
+            .builder(ItemFlowArmorTrimSmithingTemplateStack.class)
+            .vanillaItem(VanillaItemId.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE)
+            .build();
+  }
+
+  public static void initFlowBannerPattern() {
+    if (ItemTypes.FLOW_BANNER_PATTERN_TYPE != null) return;
+    ItemTypes.FLOW_BANNER_PATTERN_TYPE = ItemTypeBuilder
+            .builder(ItemFlowBannerPatternStack.class)
+            .vanillaItem(VanillaItemId.FLOW_BANNER_PATTERN)
+            .build();
+  }
+
+  public static void initFlowPotterySherd() {
+    if (ItemTypes.FLOW_POTTERY_SHERD_TYPE != null) return;
+    ItemTypes.FLOW_POTTERY_SHERD_TYPE = ItemTypeBuilder
+            .builder(ItemFlowPotterySherdStack.class)
+            .vanillaItem(VanillaItemId.FLOW_POTTERY_SHERD)
             .build();
   }
 
@@ -7020,6 +7217,22 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initGusterBannerPattern() {
+    if (ItemTypes.GUSTER_BANNER_PATTERN_TYPE != null) return;
+    ItemTypes.GUSTER_BANNER_PATTERN_TYPE = ItemTypeBuilder
+            .builder(ItemGusterBannerPatternStack.class)
+            .vanillaItem(VanillaItemId.GUSTER_BANNER_PATTERN)
+            .build();
+  }
+
+  public static void initGusterPotterySherd() {
+    if (ItemTypes.GUSTER_POTTERY_SHERD_TYPE != null) return;
+    ItemTypes.GUSTER_POTTERY_SHERD_TYPE = ItemTypeBuilder
+            .builder(ItemGusterPotterySherdStack.class)
+            .vanillaItem(VanillaItemId.GUSTER_POTTERY_SHERD)
+            .build();
+  }
+
   public static void initHangingRoots() {
     if (ItemTypes.HANGING_ROOTS_TYPE != null) return;
     ItemTypes.HANGING_ROOTS_TYPE = ItemTypeBuilder
@@ -7356,6 +7569,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initHeavyCore() {
+    if (ItemTypes.HEAVY_CORE_TYPE != null) return;
+    ItemTypes.HEAVY_CORE_TYPE = ItemTypeBuilder
+            .builder(ItemHeavyCoreStack.class)
+            .vanillaItem(VanillaItemId.HEAVY_CORE)
+            .build();
+  }
+
   public static void initHeavyWeightedPressurePlate() {
     if (ItemTypes.HEAVY_WEIGHTED_PRESSURE_PLATE_TYPE != null) return;
     ItemTypes.HEAVY_WEIGHTED_PRESSURE_PLATE_TYPE = ItemTypeBuilder
@@ -7425,6 +7646,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.HORN_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemHornCoralStack.class)
             .vanillaItem(VanillaItemId.HORN_CORAL)
+            .build();
+  }
+
+  public static void initHornCoralFan() {
+    if (ItemTypes.HORN_CORAL_FAN_TYPE != null) return;
+    ItemTypes.HORN_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemHornCoralFanStack.class)
+            .vanillaItem(VanillaItemId.HORN_CORAL_FAN)
             .build();
   }
 
@@ -8004,6 +8233,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initJungleSapling() {
+    if (ItemTypes.JUNGLE_SAPLING_TYPE != null) return;
+    ItemTypes.JUNGLE_SAPLING_TYPE = ItemTypeBuilder
+            .builder(ItemJungleSaplingStack.class)
+            .vanillaItem(VanillaItemId.JUNGLE_SAPLING)
+            .build();
+  }
+
   public static void initJungleSign() {
     if (ItemTypes.JUNGLE_SIGN_TYPE != null) return;
     ItemTypes.JUNGLE_SIGN_TYPE = ItemTypeBuilder
@@ -8428,6 +8665,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initLilyOfTheValley() {
+    if (ItemTypes.LILY_OF_THE_VALLEY_TYPE != null) return;
+    ItemTypes.LILY_OF_THE_VALLEY_TYPE = ItemTypeBuilder
+            .builder(ItemLilyOfTheValleyStack.class)
+            .vanillaItem(VanillaItemId.LILY_OF_THE_VALLEY)
+            .build();
+  }
+
   public static void initLimeCandle() {
     if (ItemTypes.LIME_CANDLE_TYPE != null) return;
     ItemTypes.LIME_CANDLE_TYPE = ItemTypeBuilder
@@ -8633,6 +8878,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.LOOM_TYPE = ItemTypeBuilder
             .builder(ItemLoomStack.class)
             .vanillaItem(VanillaItemId.LOOM)
+            .build();
+  }
+
+  public static void initMace() {
+    if (ItemTypes.MACE_TYPE != null) return;
+    ItemTypes.MACE_TYPE = ItemTypeBuilder
+            .builder(ItemMaceStack.class)
+            .vanillaItem(VanillaItemId.MACE)
             .build();
   }
 
@@ -9596,6 +9849,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOakSapling() {
+    if (ItemTypes.OAK_SAPLING_TYPE != null) return;
+    ItemTypes.OAK_SAPLING_TYPE = ItemTypeBuilder
+            .builder(ItemOakSaplingStack.class)
+            .vanillaItem(VanillaItemId.OAK_SAPLING)
+            .build();
+  }
+
   public static void initOakSign() {
     if (ItemTypes.OAK_SIGN_TYPE != null) return;
     ItemTypes.OAK_SIGN_TYPE = ItemTypeBuilder
@@ -9748,11 +10009,27 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOrangeTulip() {
+    if (ItemTypes.ORANGE_TULIP_TYPE != null) return;
+    ItemTypes.ORANGE_TULIP_TYPE = ItemTypeBuilder
+            .builder(ItemOrangeTulipStack.class)
+            .vanillaItem(VanillaItemId.ORANGE_TULIP)
+            .build();
+  }
+
   public static void initOrangeWool() {
     if (ItemTypes.ORANGE_WOOL_TYPE != null) return;
     ItemTypes.ORANGE_WOOL_TYPE = ItemTypeBuilder
             .builder(ItemOrangeWoolStack.class)
             .vanillaItem(VanillaItemId.ORANGE_WOOL)
+            .build();
+  }
+
+  public static void initOxeyeDaisy() {
+    if (ItemTypes.OXEYE_DAISY_TYPE != null) return;
+    ItemTypes.OXEYE_DAISY_TYPE = ItemTypeBuilder
+            .builder(ItemOxeyeDaisyStack.class)
+            .vanillaItem(VanillaItemId.OXEYE_DAISY)
             .build();
   }
 
@@ -10041,6 +10318,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.PINK_TERRACOTTA_TYPE = ItemTypeBuilder
             .builder(ItemPinkTerracottaStack.class)
             .vanillaItem(VanillaItemId.PINK_TERRACOTTA)
+            .build();
+  }
+
+  public static void initPinkTulip() {
+    if (ItemTypes.PINK_TULIP_TYPE != null) return;
+    ItemTypes.PINK_TULIP_TYPE = ItemTypeBuilder
+            .builder(ItemPinkTulipStack.class)
+            .vanillaItem(VanillaItemId.PINK_TULIP)
             .build();
   }
 
@@ -10377,6 +10662,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.POPPED_CHORUS_FRUIT_TYPE = ItemTypeBuilder
             .builder(ItemPoppedChorusFruitStack.class)
             .vanillaItem(VanillaItemId.POPPED_CHORUS_FRUIT)
+            .build();
+  }
+
+  public static void initPoppy() {
+    if (ItemTypes.POPPY_TYPE != null) return;
+    ItemTypes.POPPY_TYPE = ItemTypeBuilder
+            .builder(ItemPoppyStack.class)
+            .vanillaItem(VanillaItemId.POPPY)
             .build();
   }
 
@@ -10980,6 +11273,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initRedTulip() {
+    if (ItemTypes.RED_TULIP_TYPE != null) return;
+    ItemTypes.RED_TULIP_TYPE = ItemTypeBuilder
+            .builder(ItemRedTulipStack.class)
+            .vanillaItem(VanillaItemId.RED_TULIP)
+            .build();
+  }
+
   public static void initRedWool() {
     if (ItemTypes.RED_WOOL_TYPE != null) return;
     ItemTypes.RED_WOOL_TYPE = ItemTypeBuilder
@@ -11161,6 +11462,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.SCAFFOLDING_TYPE = ItemTypeBuilder
             .builder(ItemScaffoldingStack.class)
             .vanillaItem(VanillaItemId.SCAFFOLDING)
+            .build();
+  }
+
+  public static void initScrapePotterySherd() {
+    if (ItemTypes.SCRAPE_POTTERY_SHERD_TYPE != null) return;
+    ItemTypes.SCRAPE_POTTERY_SHERD_TYPE = ItemTypeBuilder
+            .builder(ItemScrapePotterySherdStack.class)
+            .vanillaItem(VanillaItemId.SCRAPE_POTTERY_SHERD)
             .build();
   }
 
@@ -11745,6 +12054,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.SPRUCE_PRESSURE_PLATE_TYPE = ItemTypeBuilder
             .builder(ItemSprucePressurePlateStack.class)
             .vanillaItem(VanillaItemId.SPRUCE_PRESSURE_PLATE)
+            .build();
+  }
+
+  public static void initSpruceSapling() {
+    if (ItemTypes.SPRUCE_SAPLING_TYPE != null) return;
+    ItemTypes.SPRUCE_SAPLING_TYPE = ItemTypeBuilder
+            .builder(ItemSpruceSaplingStack.class)
+            .vanillaItem(VanillaItemId.SPRUCE_SAPLING)
             .build();
   }
 
@@ -12481,6 +12798,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.TUBE_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemTubeCoralStack.class)
             .vanillaItem(VanillaItemId.TUBE_CORAL)
+            .build();
+  }
+
+  public static void initTubeCoralFan() {
+    if (ItemTypes.TUBE_CORAL_FAN_TYPE != null) return;
+    ItemTypes.TUBE_CORAL_FAN_TYPE = ItemTypeBuilder
+            .builder(ItemTubeCoralFanStack.class)
+            .vanillaItem(VanillaItemId.TUBE_CORAL_FAN)
             .build();
   }
 
@@ -13465,6 +13790,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.WHITE_TERRACOTTA_TYPE = ItemTypeBuilder
             .builder(ItemWhiteTerracottaStack.class)
             .vanillaItem(VanillaItemId.WHITE_TERRACOTTA)
+            .build();
+  }
+
+  public static void initWhiteTulip() {
+    if (ItemTypes.WHITE_TULIP_TYPE != null) return;
+    ItemTypes.WHITE_TULIP_TYPE = ItemTypeBuilder
+            .builder(ItemWhiteTulipStack.class)
+            .vanillaItem(VanillaItemId.WHITE_TULIP)
             .build();
   }
 
