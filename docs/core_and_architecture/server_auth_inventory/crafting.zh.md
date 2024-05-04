@@ -1,4 +1,4 @@
-## Crafting a cookie:
+## 合成一个曲奇:
 
 ### C -> S:
 
@@ -55,7 +55,7 @@ ItemStackResponsePacket(
 )
 ```
 
-## Crafting a cake:
+## 合成一个蛋糕:
 
 ### C -> S:
 
