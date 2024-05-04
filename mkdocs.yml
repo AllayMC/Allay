@@ -35,14 +35,17 @@ plugins:
           nav_translations: {
             Home: 主页,
             Q&A: 问&答,
-            Architecture: 架构,
-            Permission: 权限,
-            I18n: 多语言,
-              Lang File Format: 语言文件格式,
-            Server Auth Inventory: 服务端权威物品栏,
-              About Inventory Stack Packet: 关于物品堆栈数据包,
-              About Network Stack Id: 关于堆栈网络Id,
-              Crafting: 合成
+            Plugin Development: 插件开发,
+              I18n: 多语言,
+                Lang File Format: 语言文件格式,
+              Permission: 权限,
+                Permission Tree: 权限树,
+            Core & Architecture: 核心与架构,
+              Threading Model: 线程模型,
+              Server Auth Inventory: 服务端权威物品栏,
+                About Inventory Stack Packet: 关于物品堆栈数据包,
+                About Network Stack Id: 关于堆栈网络Id,
+                Crafting: 合成
           }
   - git-revision-date-localized:
       enabled: !ENV [CI, false]
@@ -55,15 +58,17 @@ plugins:
 nav:
   - Home: index.md
   - Q&A: Q&A.md
-  - Architecture:
-      - Threading Model: architecture/threading_model.md
-  - I18n:
-      - Lang File Format: i18n/lang_file_format.md
-  - Permission: permission_tree.md
-  - Server Auth Inventory:
-      - About Inventory Stack Packet: server_auth_inventory/about_inventory_stack_packet.md
-      - About Network Stack Id: server_auth_inventory/about_network_stack_id.md
-      - Crafting: server_auth_inventory/crafting.md
+  - Plugin Development:
+    - I18n:
+      - Lang File Format: plugin_development/i18n/lang_file_format.md
+    - Permission:
+      - Permission Tree: plugin_development/permission/permission_tree.md
+  - Core & Architecture:
+    - Threading Model: core_and_architecture/architecture/threading_model.md
+    - Server Auth Inventory:
+      - About Inventory Stack Packet: core_and_architecture/server_auth_inventory/about_inventory_stack_packet.md
+      - About Network Stack Id: core_and_architecture/server_auth_inventory/about_network_stack_id.md
+      - Crafting: core_and_architecture/server_auth_inventory/crafting.md
 
 theme:
   name: 'material'
