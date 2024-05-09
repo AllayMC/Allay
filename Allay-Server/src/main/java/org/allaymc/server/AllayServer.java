@@ -62,18 +62,17 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.allaymc.api.entity.type.EntityTypes.PLAYER_TYPE;
 
 @Slf4j
 public final class AllayServer implements Server {
+    private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
+
+    private static volatile AllayServer instance;
+
     private final boolean DEBUG = Server.SETTINGS.genericSettings().debug();
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
     @Getter
@@ -83,8 +82,8 @@ public final class AllayServer implements Server {
     @Getter
     private final PlayerStorage playerStorage =
             Server.SETTINGS.storageSettings().savePlayerData() ?
-            new AllayNBTFilePlayerStorage(Path.of("players")) :
-            AllayEmptyPlayerStorage.INSTANCE;
+                    new AllayNBTFilePlayerStorage(Path.of("players")) :
+                    AllayEmptyPlayerStorage.INSTANCE;
     // Thread pool for executing CPU-intensive tasks
     @Getter
     private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(
@@ -102,23 +101,7 @@ public final class AllayServer implements Server {
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
     @Getter
-    private CommandRegistry commandRegistry;
-    @Getter
-    private PluginManager pluginManager;
-    @Getter
-    private Scheduler scheduler;
-    @Getter
-    private NetworkServer networkServer;
-    private Thread terminalConsoleThread;
-    private AllayTerminalConsole terminalConsole;
-    private static volatile AllayServer instance;
-    private long nextPlayerDataAutoSaveTime = 0;
-    @Getter
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
-    @Getter
-    private ScoreboardService scoreboardService;
-    @Getter
-    private long startTime;
     private final BanInfo banInfo = ConfigManager.create(BanInfo.class, it -> {
         it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
         it.withBindFile("ban-info.yml"); // specify Path, File or pathname
@@ -133,7 +116,17 @@ public final class AllayServer implements Server {
         it.saveDefaults(); // save file if it does not exist
         it.load(true); // load and save to update comments/new fields
     });
-
+    @Getter
+    private CommandRegistry commandRegistry;
+    @Getter
+    private PluginManager pluginManager;
+    @Getter
+    private Scheduler scheduler;
+    @Getter
+    private NetworkServer networkServer;
+    private Thread terminalConsoleThread;
+    private AllayTerminalConsole terminalConsole;
+    private long nextPlayerDataAutoSaveTime = 0;
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
             .onTick(gameLoop -> {
@@ -144,6 +137,10 @@ public final class AllayServer implements Server {
                 }
             })
             .build();
+    @Getter
+    private ScoreboardService scoreboardService;
+    @Getter
+    private long startTime;
 
     private AllayServer() {}
 
@@ -161,9 +158,9 @@ public final class AllayServer implements Server {
     @SneakyThrows
     @Override
     public void start(long timeMillis) {
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration log4jConfig = ctx.getConfiguration();
-        LoggerConfig loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
+        var ctx = (LoggerContext) LogManager.getContext(false);
+        var log4jConfig = ctx.getConfiguration();
+        var loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
         if (DEBUG && Level.TRACE.isLessSpecificThan(loggerConfig.getLevel())) {
             loggerConfig.setLevel(Level.TRACE);
             ctx.updateLoggers();
@@ -481,7 +478,7 @@ public final class AllayServer implements Server {
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         for (var output : outputs) {
-            log.info("[" + sender.getCommandSenderName() + "] " + (status <= 0 ? "§c" : "") + I18n.get().tr(output.str(), output.args()));
+            log.info("[{}] {}{}", sender.getCommandSenderName(), status <= 0 ? "§c" : "", I18n.get().tr(output.str(), output.args()));
         }
     }
 
@@ -494,8 +491,6 @@ public final class AllayServer implements Server {
     public String getCommandSenderName() {
         return "Server";
     }
-
-    private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
 
     @Override
     public CommandOriginData getCommandOriginData() {

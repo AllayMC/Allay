@@ -1,7 +1,9 @@
 package org.allaymc.server.blockentity.type;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.ToString;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -10,10 +12,10 @@ import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
@@ -33,14 +35,19 @@ import java.util.function.Function;
  *
  * @author daoge_cmd
  */
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityType<T> {
 
     protected final FastConstructor<T> constructor;
+    @EqualsAndHashCode.Include
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
     @Getter
+    @EqualsAndHashCode.Include
     protected List<ComponentProvider<? extends BlockEntityComponent>> componentProviders;
     @Getter
+    @EqualsAndHashCode.Include
     protected String name;
 
     @SneakyThrows

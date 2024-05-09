@@ -2,17 +2,15 @@ package org.allaymc.server.world.generator;
 
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.generator.ChunkGenerateContext;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorType;
 
 import java.util.ArrayList;
 
-import static org.allaymc.api.block.type.BlockTypes.BEDROCK_TYPE;
-import static org.allaymc.api.block.type.BlockTypes.DIRT_TYPE;
-import static org.allaymc.api.block.type.BlockTypes.GRASS_BLOCK_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
  * Allay Project 2023/7/8
@@ -31,14 +29,12 @@ public class FlatWorldGenerator extends WorldGenerator {
     protected void parsePreset() {
         var list = new ArrayList<BlockState>();
         if (preset.isBlank()) {
-            var bedrock = BEDROCK_TYPE.getDefaultState();
-            var grass = GRASS_BLOCK_TYPE.getDefaultState();
+            list.add(BEDROCK_TYPE.getDefaultState());
             var dirt = DIRT_TYPE.getDefaultState();
-            list.add(bedrock);
             list.add(dirt);
             list.add(dirt);
             list.add(dirt);
-            list.add(grass);
+            list.add(GRASS_BLOCK_TYPE.getDefaultState());
         } else {
             for (var layer : AllayStringUtils.fastSplit(preset, ";")) {
                 var entry = AllayStringUtils.fastTwoPartSplit(layer, "x", "");

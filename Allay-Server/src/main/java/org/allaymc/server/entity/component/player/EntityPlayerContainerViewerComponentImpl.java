@@ -4,7 +4,8 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.allaymc.api.utils.Identifier;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
@@ -14,6 +15,7 @@ import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.common.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
@@ -30,7 +32,9 @@ import java.util.Map;
  * Allay Project 2023/9/23
  *
  * @author daoge_cmd
- */ //<editor-fold desc="EntityPlayerContainerViewerComponentImpl">
+ */
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class EntityPlayerContainerViewerComponentImpl implements EntityContainerViewerComponent {
 
     @ComponentIdentifier
@@ -38,6 +42,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     protected byte idCounter = 1;
     @Dependency
+    @EqualsAndHashCode.Include
     protected EntityPlayerBaseComponent baseComponent;
     @Dependency
     protected EntityPlayerNetworkComponent networkComponent;
@@ -107,7 +112,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         typeToContainer.put(container.getContainerType(), container);
         container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.put(slotType, container.getContainerType()));
 
-        //We should send the container's contents to client if the container is not held by the entity
+        // We should send the container's contents to client if the container is not held by the entity
         if (containerHolderComponent.getContainer(containerType) == null) {
             sendContents(container);
         }
@@ -143,7 +148,6 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-
     public Container getOpenedContainer(byte id) {
         return idToContainer.get(id);
     }

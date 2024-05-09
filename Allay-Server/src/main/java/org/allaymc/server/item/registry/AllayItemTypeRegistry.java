@@ -1,15 +1,16 @@
 package org.allaymc.server.item.registry;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
 import org.allaymc.server.item.type.ItemTypeDefaultInitializer;
 import org.allaymc.server.item.type.ItemTypeInitializer;
@@ -29,8 +30,22 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> implements ItemTypeRegistry {
+    @Getter
+    private final List<ItemDefinition> itemDefinitions = new ArrayList<>();
+
     public AllayItemTypeRegistry() {
         super(null, input -> new ConcurrentHashMap<>());
+    }
+
+    private static void callInitializer(Method method, ProgressBar progressBar) {
+        try {
+            method.invoke(null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (progressBar != null)
+                progressBar.step();
+        }
     }
 
     @SneakyThrows
@@ -49,24 +64,6 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
         }
         rebuildDefinitionList();
         log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADED, defaultInitializers.size()));
-    }
-
-    private static void callInitializer(Method method, ProgressBar progressBar) {
-        try {
-            method.invoke(null);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (progressBar != null)
-                progressBar.step();
-        }
-    }
-
-    private final List<ItemDefinition> itemDefinitions = new ArrayList<>();
-
-    @Override
-    public List<ItemDefinition> getItemDefinitions() {
-        return itemDefinitions;
     }
 
     @Override

@@ -44,7 +44,7 @@ public class JsPlugin extends Plugin {
                 .allowExperimentalOptions(true)
                 .option("js.esm-eval-returns-exports", "true");
         if (chromeDebugPort > 0) {
-            logger.info("Debug mode for js plugin " + pluginContainer.descriptor().getName() + " is enabled. Port: " + chromeDebugPort);
+            logger.info("Debug mode for js plugin {} is enabled. Port: {}", pluginContainer.descriptor().getName(), chromeDebugPort);
             // Debug mode is enabled
             cbd.option("inspect", String.valueOf(chromeDebugPort))
                     .option("inspect.Path", pluginContainer.descriptor().getName())

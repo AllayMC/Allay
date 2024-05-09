@@ -13,13 +13,17 @@ public interface I18n {
 
     LangCode FALLBACK_LANG = LangCode.en_US;
 
+    String VANILLA_LANG_NAMESPACE = "minecraft";
+
     ApiInstanceHolder<I18n> I18N = ApiInstanceHolder.create();
 
     static I18n get() {
         return I18N.get();
     }
 
-    String VANILLA_LANG_NAMESPACE = "minecraft";
+    static boolean isValidKeyCharacter(char character) {
+        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '.' || character == ':';
+    }
 
     String tr(LangCode langCode, @MayContainTrKey String tr, String... args);
 
@@ -41,13 +45,9 @@ public interface I18n {
         return tr(getDefaultLangCode(), tr);
     }
 
-    void setDefaultLangCode(LangCode langCode);
-
     LangCode getDefaultLangCode();
 
-    record KeyInfo(int startIndex, int endIndex, int colonIndex, String key, boolean hasStarter) {
-        public static final KeyInfo EMPTY = new KeyInfo(-1, -1, -1, null, false);
-    }
+    void setDefaultLangCode(LangCode langCode);
 
     KeyInfo findI18nKey(@MayContainTrKey String str);
 
@@ -73,7 +73,7 @@ public interface I18n {
         if (VANILLA_LANG_NAMESPACE.equals(namespace)) {
             String left;
             if (keyInfo.hasStarter) {
-                // 保留 '%'
+                // Keep '%'
                 left = tr.substring(0, keyInfo.startIndex + 1);
             } else {
                 left = "";
@@ -85,7 +85,7 @@ public interface I18n {
 
     }
 
-    static boolean isValidKeyCharacter(char character) {
-        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '.' || character == ':';
+    record KeyInfo(int startIndex, int endIndex, int colonIndex, String key, boolean hasStarter) {
+        public static final KeyInfo EMPTY = new KeyInfo(-1, -1, -1, null, false);
     }
 }

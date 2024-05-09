@@ -80,7 +80,7 @@ public class ItemAttributes {
         return JSONUtils.from(json, ItemAttributes.class);
     }
 
-    //TODO: test
+    // TODO: test
     public static ItemAttributes fromNBT(NbtMap nbt) {
         return ItemAttributes
                 .builder()

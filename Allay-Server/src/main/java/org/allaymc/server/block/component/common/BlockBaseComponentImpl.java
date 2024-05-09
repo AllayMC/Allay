@@ -1,5 +1,8 @@
 package org.allaymc.server.block.component.common;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
@@ -11,12 +14,12 @@ import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.function.Place;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
@@ -26,6 +29,8 @@ import org.joml.Vector3ic;
  *
  * @author daoge_cmd
  */
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @ComponentIdentifier
@@ -34,15 +39,12 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Manager
     protected ComponentManager<?> manager;
 
+    @Getter
+    @EqualsAndHashCode.Include
     protected BlockType<? extends BlockBehavior> blockType;
 
     public BlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         this.blockType = blockType;
-    }
-
-    @Override
-    public BlockType<? extends BlockBehavior> getBlockType() {
-        return blockType;
     }
 
     @Override
@@ -51,12 +53,10 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos blockState) {
-    }
+    public void onRandomUpdate(BlockStateWithPos blockState) {}
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos blockState) {
-    }
+    public void onScheduledUpdate(BlockStateWithPos blockState) {}
 
     @Override
     public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {

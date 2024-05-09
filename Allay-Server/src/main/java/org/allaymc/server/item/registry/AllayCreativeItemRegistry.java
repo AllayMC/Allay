@@ -2,7 +2,6 @@ package org.allaymc.server.item.registry;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
@@ -11,6 +10,7 @@ import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;

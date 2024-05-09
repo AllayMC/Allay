@@ -1,11 +1,11 @@
 package org.allaymc.server.entity.component.player;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -30,6 +30,7 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.server.network.processor.AllayPacketProcessorHolder;
@@ -73,10 +74,16 @@ import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
  * @author daoge_cmd
  */
 @Slf4j
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
+
+    protected final Server server = Server.getInstance();
+    @Getter
+    protected final PacketProcessorHolder packetProcessorHolder = new AllayPacketProcessorHolder();
 
     @Getter
     protected boolean loggedIn = false;
@@ -93,17 +100,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected String disconnectReason = null;
     protected boolean hideDisconnectReason = false;
     protected AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
-
-    protected final Server server = Server.getInstance();
-    @Getter
-    protected final PacketProcessorHolder packetProcessorHolder = new AllayPacketProcessorHolder();
-
     @Manager
     protected ComponentManager<EntityPlayer> manager;
     @ComponentedObject
     protected EntityPlayer player;
     @Getter
     @Setter
+    @EqualsAndHashCode.Include
     protected LoginData loginData;
     @Getter
     @Setter
@@ -160,7 +163,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             public PacketSignal handlePacket(BedrockPacket packet) {
                 var processor = packetProcessorHolder.getProcessor(packet);
                 if (processor == null) {
-                    log.warn("Received a packet without packet handler: " + packet);
+                    log.warn("Received a packet without packet handler: {}", packet);
                     return PacketSignal.HANDLED;
                 }
                 if (processor.handleAsync(player, packet) != PacketSignal.HANDLED) {
@@ -364,8 +367,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         Location3ic spawnPoint;
         var spawnWorld = server.getWorldPool().getWorld(playerData.getSpawnPointWorldName());
         if (spawnWorld == null) {
-            // 出生点所在的世界不存在
-            // 使用全局出生点替代
+            // The world where the point of respawn is located does not exist
+            // The world with a universal point of respawn does not exist
             spawnPoint = server.getWorldPool().getGlobalSpawnPoint();
             playerData.setSpawnPoint(spawnPoint);
             playerData.setSpawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName());

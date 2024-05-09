@@ -18,11 +18,13 @@ import static org.allaymc.api.world.chunk.UnsafeChunk.index;
  * @author Cool_Loong
  */
 @NotThreadSafe
-public record ChunkSection(byte sectionY,
-                           Palette<BlockState>[] blockLayer,
-                           Palette<BiomeType> biomes,
-                           NibbleArray blockLights,
-                           NibbleArray skyLights) {
+public record ChunkSection(
+        byte sectionY,
+        Palette<BlockState>[] blockLayer,
+        Palette<BiomeType> biomes,
+        NibbleArray blockLights,
+        NibbleArray skyLights
+) {
     public static final int LAYER_COUNT = 2;
     public static final int VERSION = 9;
 
@@ -79,7 +81,7 @@ public record ChunkSection(byte sectionY,
 
     public void writeToNetwork(ByteBuf byteBuf) {
         byteBuf.writeByte(VERSION);
-        //block layer count
+        // block layer count
         byteBuf.writeByte(LAYER_COUNT);
         byteBuf.writeByte(sectionY & 0xFF);
 

@@ -1,5 +1,9 @@
 package org.allaymc.server.entity.component.item;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
@@ -22,9 +26,14 @@ import static org.allaymc.api.item.ItemHelper.fromNBT;
  *
  * @author daoge_cmd
  */
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
 public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityItem> implements EntityItemBaseComponent {
 
     public static final int MAX_AGE = 6000;
+
     protected ItemStack itemStack;
     protected int pickupDelay = 10;
     protected int age;
@@ -88,38 +97,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        if (nbt.containsKey("Item"))
-            itemStack = fromNBT(nbt.getCompound("Item"));
-    }
-
-    @Override
-    public ItemStack getItemStack() {
-        return itemStack;
-    }
-
-    @Override
-    public void setItemStack(ItemStack itemStack) {
-        this.itemStack = itemStack;
-    }
-
-    @Override
-    public int getPickupDelay() {
-        return pickupDelay;
-    }
-
-    @Override
-    public void setPickupDelay(int delay) {
-        this.pickupDelay = delay;
-    }
-
-    @Override
-    public int getAge() {
-        return age;
-    }
-
-    @Override
-    public void setAge(int age) {
-        this.age = age;
+        nbt.listenForCompound("Item", item -> itemStack = fromNBT(item));
     }
 
     @Override

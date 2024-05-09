@@ -1,9 +1,9 @@
 package org.allaymc.server.entity.type;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
@@ -14,6 +14,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
@@ -34,7 +35,9 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     protected final FastConstructor<T> constructor;
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
+    @Getter
     protected List<ComponentProvider<? extends EntityComponent>> componentProviders;
+    @Getter
     protected Identifier identifier;
 
     @SneakyThrows
@@ -57,9 +60,8 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class), fastMemberLoader, false);
     }
 
-    @Override
-    public List<ComponentProvider<? extends EntityComponent>> getComponentProviders() {
-        return componentProviders;
+    public static <T extends Entity> EntityTypeBuilder<T, EntityComponent> builder(Class<T> interfaceClass) {
+        return new Builder<>(interfaceClass);
     }
 
     @SneakyThrows
@@ -67,15 +69,6 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     public T createEntity(EntityInitInfo<T> info) {
         info.setEntityType(this);
         return (T) constructor.invoke(info);
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return identifier;
-    }
-
-    public static <T extends Entity> EntityTypeBuilder<T, EntityComponent> builder(Class<T> interfaceClass) {
-        return new Builder<>(interfaceClass);
     }
 
     public static class Builder<T extends Entity> implements EntityTypeBuilder<T, EntityComponent> {

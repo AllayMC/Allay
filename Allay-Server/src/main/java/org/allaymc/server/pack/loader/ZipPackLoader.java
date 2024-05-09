@@ -69,7 +69,6 @@ public class ZipPackLoader implements PackLoader {
         var entries = this.zipFile.entries();
         while (entries.hasMoreElements()) {
             var entry = entries.nextElement();
-
             var entryPath = Path.of(entry.getName());
             if (entryPath.getParent().equals(path)) consumer.accept(entryPath);
             if (entry.isDirectory()) this.forEachIn(entryPath, consumer, true);

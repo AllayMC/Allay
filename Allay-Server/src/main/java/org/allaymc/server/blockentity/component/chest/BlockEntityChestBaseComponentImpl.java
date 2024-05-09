@@ -1,5 +1,7 @@
 package org.allaymc.server.blockentity.component.chest;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
@@ -13,13 +15,13 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
-import java.util.Objects;
-
 /**
  * Allay Project 2023/12/6
  *
  * @author daoge_cmd
  */
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentImpl<BlockEntityChest> {
     @Dependency
     private BlockEntityContainerHolderComponent containerHolderComponent;
@@ -77,8 +79,9 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        if (nbt.containsKey("Items"))
-            Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.CHEST)).loadNBT(nbt.getList("Items", NbtType.COMPOUND));
+        nbt.listenForList("Items", NbtType.COMPOUND, items ->
+                containerHolderComponent.getContainer(FullContainerType.CHEST).loadNBT(nbt.getList("Items", NbtType.COMPOUND))
+        );
     }
 
     @Override
@@ -86,7 +89,7 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
         return super.saveNBT().toBuilder().putList(
                 "Items",
                 NbtType.COMPOUND,
-                Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.CHEST)).saveNBT()
+                containerHolderComponent.getContainer(FullContainerType.CHEST).saveNBT()
         ).build();
     }
 }

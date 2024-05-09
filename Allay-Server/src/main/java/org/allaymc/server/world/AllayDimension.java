@@ -86,6 +86,9 @@ public class AllayDimension implements Dimension {
 
     @Override
     public String toString() {
-        return "world=" + this.world.getWorldData().getName() + " dimId=" + this.dimensionInfo.dimensionId();
+        return "AllayDimension{" +
+                "world=" + world.getWorldData().getName() +
+                ", dimensionInfo=" + dimensionInfo.dimensionId() +
+                '}';
     }
 }

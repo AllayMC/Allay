@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
@@ -19,7 +21,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaBlockId;
@@ -32,6 +33,7 @@ import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.BlockComponentInjectException;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
@@ -53,29 +55,19 @@ import static org.allaymc.api.component.interfaces.ComponentProvider.findCompone
  *
  * @author daoge_cmd | Cool_Loong
  */
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class AllayBlockType<T extends BlockBehavior> implements BlockType<T> {
-    public static long computeSpecialValue(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-        byte specialValueBits = 0;
-        for (var value : propertyValues) specialValueBits += value.getPropertyType().getBitSize();
-        return computeSpecialValue(specialValueBits, propertyValues);
-    }
-
-    public static long computeSpecialValue(byte specialValueBits, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-        long specialValue = 0;
-        for (var value : propertyValues) {
-            specialValue |= ((long) value.getIndex()) << (specialValueBits - value.getPropertyType().getBitSize());
-            specialValueBits -= value.getPropertyType().getBitSize();
-        }
-        return specialValue;
-    }
-
     @Getter
+    @EqualsAndHashCode.Include
     private final Class<T> interfaceClass;
     @Getter
     private final List<BlockComponent> components;
     @Getter
+    @EqualsAndHashCode.Include
     private final Map<String, BlockPropertyType<?>> properties;
     @Getter
+    @EqualsAndHashCode.Include
     private final Identifier identifier;
     @Getter
     private final Map<Integer, BlockState> blockStateHashMap;
@@ -84,20 +76,22 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private final Map<Long, BlockState> specialValueMap;
     @Getter
     private final byte specialValueBits;
-
+    @EqualsAndHashCode.Include
+    private final ItemType<?> blockItemType;
     private Class<T> injectedClass;
     @Getter
     private BlockState defaultState;
-    private ItemType<?> blockItemType;
     private Map<Integer, Integer> hashToMeta;
     @Getter
     private T blockBehavior;
 
-    private AllayBlockType(Class<T> interfaceClass,
-                           List<BlockComponent> components,
-                           Map<String, BlockPropertyType<?>> properties,
-                           Identifier identifier,
-                           ItemType<?> blockItemType) {
+    private AllayBlockType(
+            Class<T> interfaceClass,
+            List<BlockComponent> components,
+            Map<String, BlockPropertyType<?>> properties,
+            Identifier identifier,
+            ItemType<?> blockItemType
+    ) {
         this.interfaceClass = interfaceClass;
         this.components = components;
         this.properties = Collections.unmodifiableMap(properties);
@@ -119,6 +113,21 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
     }
 
+    public static long computeSpecialValue(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
+        byte specialValueBits = 0;
+        for (var value : propertyValues) specialValueBits += value.getPropertyType().getBitSize();
+        return computeSpecialValue(specialValueBits, propertyValues);
+    }
+
+    public static long computeSpecialValue(byte specialValueBits, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
+        long specialValue = 0;
+        for (var value : propertyValues) {
+            specialValue |= ((long) value.getIndex()) << (specialValueBits - value.getPropertyType().getBitSize());
+            specialValueBits -= value.getPropertyType().getBitSize();
+        }
+        return specialValue;
+    }
+
     public static <T extends BlockBehavior> BlockTypeBuilder<T> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
@@ -136,7 +145,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     @Override
     @UnmodifiableView
     public Collection<BlockState> getAllStates() {
-        //blockStateHashMap is unmodifiableMap,so values is unmodifiableCollection
+        // blockStateHashMap is unmodifiableMap, so values is unmodifiableCollection
         return blockStateHashMap.values();
     }
 
@@ -149,8 +158,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
         var blockStates = new Int2ObjectOpenHashMap<BlockState>();
 
-        // to keep track of next element in each of
-        // the n arrays
+        // to keep track of next element in each of the n arrays
         int[] indices = new int[size];
 
         // initialize with first element's index
@@ -174,12 +182,10 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 next--;
             }
 
-            // no such array is found so no more
-            // combinations left
+            // no such array is found so no more combinations left
             if (next < 0) break;
 
-            // if found move to next element in that
-            // array
+            // if found move to next element in that array
             indices[next]++;
 
             // for all arrays to the right of this
@@ -189,10 +195,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 indices[i] = 0;
             }
         }
-        int defaultStateHash = HashUtils.computeBlockStateHash(this.identifier, properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList()));
-        for (var s : blockStates.values()) {
-            if (s.blockStateHash() == defaultStateHash) {
-                this.defaultState = s;
+        int defaultStateHash = HashUtils.computeBlockStateHash(this.identifier, properties.values().stream()
+                .map(p -> p.tryCreateValue(p.getDefaultValue()))
+                .collect(Collectors.toList()));
+        for (var blockState : blockStates.values()) {
+            if (blockState.blockStateHash() == defaultStateHash) {
+                this.defaultState = blockState;
                 break;
             }
         }
@@ -200,19 +208,28 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     }
 
     /**
-     * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateHashPalette AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
+     * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateHashPalette AllayBlockPaletteRegistry},
+     * which means you can directly use == to compare whether two Block States are equal
      */
-    record AllayBlockState(BlockType<?> blockType,
-                           BlockPropertyType.BlockPropertyValue<?, ?, ?>[] blockPropertyValues,
-                           NbtMap blockStateTag,
-                           int blockStateHash,
-                           long specialValue) implements BlockState {
+    record AllayBlockState(
+            BlockType<?> blockType,
+            BlockPropertyType.BlockPropertyValue<?, ?, ?>[] blockPropertyValues,
+            NbtMap blockStateTag,
+            int blockStateHash,
+            long specialValue
+    ) implements BlockState {
         public AllayBlockState(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues, int blockStateHash) {
-            this(blockType,
+            this(
+                    blockType,
                     propertyValues,
                     buildBlockStateTag(blockType, propertyValues),
                     blockStateHash,
-                    AllayBlockType.computeSpecialValue(propertyValues));
+                    AllayBlockType.computeSpecialValue(propertyValues)
+            );
+        }
+
+        public AllayBlockState(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
+            this(blockType, propertyValues, HashUtils.computeBlockStateHash(blockType.getIdentifier(), Arrays.stream(propertyValues).toList()));
         }
 
         private static NbtMap buildBlockStateTag(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
@@ -222,17 +239,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 states.put(value.getPropertyType().getName(), value.getSerializedValue());
             }
 
-            var tag = NbtMap.builder()
+            return NbtMap.builder()
                     .putString("name", blockType.getIdentifier().toString())
                     .putCompound("states", NbtMap.fromMap(states))
                     .putInt("version", ProtocolInfo.BLOCK_STATE_VERSION)
                     .build();
-
-            return tag;
-        }
-
-        public AllayBlockState(BlockType<?> blockType, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-            this(blockType, propertyValues, HashUtils.computeBlockStateHash(blockType.getIdentifier(), Arrays.stream(propertyValues).toList()));
         }
 
         @Override
@@ -437,9 +448,10 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 listComponents.add(BlockAttributeComponentImpl.ofDefault());
             List<ComponentProvider<? extends Component>> componentProviders = listComponents.stream().map(singleton -> {
                 var currentClass = singleton.getClass();
-                //For anonymous class, we give it's super class to component provider
-                //So that injector can work with anonymous class
-                //Because anonymous class classes cannot be used directly as field types during the dynamic class generation phase
+                // For anonymous class, we give it's super class to component provider
+                // So that injector can work with anonymous class
+                // Because anonymous class classes cannot be used directly
+                // as field types during the dynamic class generation phase
                 return ComponentProvider.of(initInfo -> singleton, currentClass.isAnonymousClass() ? currentClass.getSuperclass() : currentClass);
             }).collect(Collectors.toList());
             try {
@@ -462,16 +474,17 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             var itemId = BlockAndItemIdMapper.blockIdToActualBlockItemId(identifier);
             itemType = ItemTypeRegistry.getRegistry().get(itemId);
             if (itemType == null) {
-                // 没有显式注册对应的方块物品，自动注册一个进去
+                // No corresponding block item explicitly registered, automatically registering one
                 itemType = ItemTypeBuilder
                         .builder(ItemStack.class)
                         .identifier(itemId)
                         .build();
                 hardItemType = itemType;
             } else {
-                // 已提前注册了额外的方块物品，添加"item."前缀
+                // Additional block items have already been pre-registered, adding the 'item' prefix
                 var hardItemId = new Identifier(itemId.namespace(), BlockAndItemIdMapper.NAMING_CONFLICT_PATH_PREFIX + itemId.path());
-                // allay会提前注册好原版中具有"item."前缀的方块物品，所以说我们再确认一下有没有这个id的物品
+                // allay will pre-register block items with the prefix 'item'
+                // in the original version, so let's double-check if there is an item with this ID
                 hardItemType = ItemTypeRegistry.getRegistry().get(hardItemId);
                 if (hardItemType == null) {
                     hardItemType = ItemTypeBuilder

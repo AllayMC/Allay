@@ -4,11 +4,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
 
 import java.util.concurrent.ConcurrentHashMap;

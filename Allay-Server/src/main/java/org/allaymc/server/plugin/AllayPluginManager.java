@@ -5,12 +5,22 @@ import org.allaymc.api.datastruct.dag.DAGCycleException;
 import org.allaymc.api.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.plugin.*;
+import org.allaymc.api.plugin.PluginContainer;
+import org.allaymc.api.plugin.PluginDescriptor;
+import org.allaymc.api.plugin.PluginLoader;
+import org.allaymc.api.plugin.PluginManager;
+import org.allaymc.api.plugin.PluginSource;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
 import org.allaymc.server.plugin.js.JsPluginLoader;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Allay Project 2024/2/8
@@ -111,7 +121,7 @@ public class AllayPluginManager implements PluginManager {
                 try {
                     dag.setBefore(name, descriptor.getName());//set ref
                 } catch (DAGCycleException e) {
-                    log.error("Circular dependencies appear in plugin {}: " + e.getMessage() + "The plugin will skip loading!", descriptor.getName());
+                    log.error("Circular dependencies appear in plugin {}: {} The plugin will skip loading!", descriptor.getName(), e.getMessage());
                     dag.remove(descriptor.getName());
                 }
             }

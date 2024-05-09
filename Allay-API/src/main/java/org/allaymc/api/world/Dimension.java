@@ -16,6 +16,7 @@ import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityService;
+import org.apache.commons.lang3.ArrayUtils;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
@@ -42,6 +43,15 @@ import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
  * @author Cool_Loong
  */
 public interface Dimension {
+
+    static UpdateBlockPacket createBlockUpdatePacket(BlockState blockState, int x, int y, int z, int layer) {
+        var updateBlockPacket = new UpdateBlockPacket();
+        updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
+        updateBlockPacket.setDefinition(blockState.toNetworkBlockDefinitionRuntime());
+        updateBlockPacket.setDataLayer(layer);
+        updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
+        return updateBlockPacket;
+    }
 
     void tick(long currentTick);
 
@@ -83,28 +93,21 @@ public interface Dimension {
     }
 
     default void addPlayer(EntityPlayer player) {
-        addPlayer(player, () -> {});
+        addPlayer(player, () -> {
+        });
     }
 
     void addPlayer(EntityPlayer player, Runnable runnable);
 
     default void removePlayer(EntityPlayer player) {
-        removePlayer(player, () -> {});
+        removePlayer(player, () -> {
+        });
     }
 
     void removePlayer(EntityPlayer player, Runnable runnable);
 
     @UnmodifiableView
     Set<EntityPlayer> getPlayers();
-
-    static UpdateBlockPacket createBlockUpdatePacket(BlockState blockState, int x, int y, int z, int layer) {
-        var updateBlockPacket = new UpdateBlockPacket();
-        updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
-        updateBlockPacket.setDefinition(blockState.toNetworkBlockDefinitionRuntime());
-        updateBlockPacket.setDataLayer(layer);
-        updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
-        return updateBlockPacket;
-    }
 
     default void setBlockState(int x, int y, int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0, true, true);
@@ -229,7 +232,6 @@ public interface Dimension {
         return blockStates;
     }
 
-
     default BlockState[][][] getCollidingBlocks(AABBfc aabb) {
         return getCollidingBlocks(aabb, 0);
     }
@@ -248,7 +250,7 @@ public interface Dimension {
         var blockStates = getBlockStates(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ, layer);
         boolean notEmpty = false;
         if (!ignoreCollision) {
-            //过滤掉没有碰撞的方块
+            // Filter out the blocks that are not colliding
             for (int x = 0; x < blockStates.length; x++) {
                 for (int y = 0; y < blockStates[x].length; y++) {
                     for (int z = 0; z < blockStates[x][y].length; z++) {
@@ -282,18 +284,7 @@ public interface Dimension {
 
     default void updateAroundIgnoreFace(Vector3ic pos, BlockFace... ignoreFaces) {
         for (var face : BlockFace.values()) {
-            if (ignoreFaces != null && ignoreFaces.length > 0) {
-                var ignore = false;
-                for (var ignoreFace : ignoreFaces) {
-                    if (ignoreFace == face) {
-                        ignore = true;
-                        break;
-                    }
-                }
-                if (ignore) {
-                    continue;
-                }
-            }
+            if (ArrayUtils.contains(ignoreFaces, face)) continue;
             updateAtFace(pos, face);
         }
     }
@@ -320,10 +311,11 @@ public interface Dimension {
     }
 
     /**
-     * Traverse all the blockstate around a pos,In the order of <br>DOWN->UP>NORTH->SOUTH->WEST->EAST
+     * Traverse all the BlockState around a pos,In the order of <br>DOWN->UP>NORTH->SOUTH->WEST->EAST
      *
      * @param pos The specified pos
-     * @return An array of neighbour blockstate
+     *
+     * @return An array of neighbour BlockState
      */
     default BlockStateWithPos[] getNeighboursBlockState(Vector3ic pos) {
         return getNeighboursBlockState(pos.x(), pos.y(), pos.z());

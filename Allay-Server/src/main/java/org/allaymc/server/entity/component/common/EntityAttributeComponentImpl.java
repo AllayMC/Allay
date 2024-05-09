@@ -1,6 +1,7 @@
 package org.allaymc.server.entity.component.common;
 
-import org.allaymc.api.utils.Identifier;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -12,7 +13,7 @@ import org.allaymc.api.entity.component.event.EntityLoadNBTEvent;
 import org.allaymc.api.entity.component.event.EntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.eventbus.EventHandler;
-import org.cloudburstmc.nbt.NbtMap;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
@@ -30,6 +31,8 @@ import static java.lang.Math.min;
  *
  * @author daoge_cmd
  */
+@ToString
+@EqualsAndHashCode
 public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @ComponentIdentifier
@@ -49,13 +52,13 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     @EventHandler
     private void onLoadNBT(EntityLoadNBTEvent event) {
         var nbt = event.getNbt();
-        if (nbt.containsKey("Attributes")) {
-            for (NbtMap compound : nbt.getList("Attributes", NbtType.COMPOUND)) {
+        nbt.listenForList("Attributes", NbtType.COMPOUND, attributesNbt -> {
+            attributesNbt.forEach(compound -> {
                 var attribute = Attribute.fromNBT(compound);
                 attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
-            }
+            });
             sendAttributesToClient();
-        }
+        });
     }
 
     @EventHandler
@@ -105,9 +108,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         if (networkComponent == null) return;
         var updateAttributesPacket = new UpdateAttributesPacket();
         updateAttributesPacket.setRuntimeEntityId(entity.getRuntimeId());
-        for (Attribute attribute : attributes.values()) {
-            updateAttributesPacket.getAttributes().add(attribute.toNetwork());
-        }
+        attributes.values().forEach(attribute -> updateAttributesPacket.getAttributes().add(attribute.toNetwork()));
         updateAttributesPacket.setTick(entity.getWorld().getTick());
         networkComponent.sendPacket(updateAttributesPacket);
     }

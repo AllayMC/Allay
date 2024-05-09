@@ -59,10 +59,10 @@ public class AllayVanillaItemAttributeRegistry extends SimpleMappedRegistry<Vani
                     VanillaItemId type;
                     try {
                         var typeName = AllayStringUtils.fastTwoPartSplit(dataEntry.getString("name"), ":", "")[1]
-                                .replace(".","_").toUpperCase();
+                                .replace(".", "_").toUpperCase();
                         type = VanillaItemId.valueOf(typeName);
                     } catch (IllegalArgumentException ignore) {
-                        log.error("Unknown item name: " + dataEntry.getString("name"));
+                        log.error("Unknown item name: {}", dataEntry.getString("name"));
                         continue;
                     }
                     var itemAttributes = ItemAttributes.fromNBT(dataEntry);

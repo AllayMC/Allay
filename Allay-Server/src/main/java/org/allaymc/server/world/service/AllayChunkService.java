@@ -1,11 +1,7 @@
 package org.allaymc.server.world.service;
 
 import com.google.common.collect.Sets;
-import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
-import it.unimi.dsi.fastutil.longs.LongComparator;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.annotation.SlowOperation;
@@ -24,13 +20,7 @@ import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -100,7 +90,7 @@ public class AllayChunkService implements ChunkService {
 
         // Add unused chunk to the clear countdown map
         for (var entry : loadedChunks.entrySet()) {
-            Long chunkHash = entry.getKey();
+            var chunkHash = entry.getKey();
             var loadedChunk = entry.getValue();
             if (loadedChunk.getChunkLoaderCount() == 0 && !keepLoadingChunks.contains(chunkHash) && !unusedChunkClearCountDown.containsKey(chunkHash)) {
                 unusedChunkClearCountDown.put(chunkHash, Server.SETTINGS.worldSettings().removeUnneededChunkCycle());
@@ -151,13 +141,11 @@ public class AllayChunkService implements ChunkService {
 
     @Override
     public CompletableFuture<Set<Chunk>> getOrLoadRangedChunk(int x, int z, int range) {
-        // The set used to store CompletableFutures
         Set<CompletableFuture<Chunk>> futureSet = new HashSet<>();
 
         for (int dx = -range; dx <= range; dx++) {
             for (int dz = -range; dz <= range; dz++) {
                 if (dx * dx + dz * dz <= range * range) {
-                    // Get or load each chunk and add the returned CompletableFuture to the set
                     futureSet.add(getOrLoadChunk(x + dx, z + dz));
                 }
             }
@@ -196,11 +184,7 @@ public class AllayChunkService implements ChunkService {
                     return prepareChunk;
                 })
         );
-        if (presentValue == null) {
-            return future;
-        } else {
-            return presentValue;
-        }
+        return presentValue == null ? future : presentValue;
     }
 
     @Override
@@ -282,9 +266,7 @@ public class AllayChunkService implements ChunkService {
 
     public void unloadChunk(long chunkHash) {
         var chunk = getChunk(chunkHash);
-        if (chunk == null) {
-            return;
-        }
+        if (chunk == null) return;
         loadedChunks.remove(chunkHash);
         chunk.save(worldStorage);
         chunk.getEntities().forEach((runtimeId, entity) -> {
@@ -325,10 +307,11 @@ public class AllayChunkService implements ChunkService {
             public int compare(long chunkHash1, long chunkHash2) {
                 Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
                 var loaderChunkX = floor.x >> 4;
-                var loaderChunkZ = floor.z >> 4;
                 var chunkDX1 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash1);
-                var chunkDZ1 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash1);
                 var chunkDX2 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash2);
+
+                var loaderChunkZ = floor.z >> 4;
+                var chunkDZ1 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash1);
                 var chunkDZ2 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash2);
                 // Compare distance to loader
                 return Integer.compare(
@@ -359,7 +342,7 @@ public class AllayChunkService implements ChunkService {
         public void tick() {
             if (!chunkLoader.isLoaderActive()) return;
             long currentLoaderChunkPosHashed;
-            Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
+            var floor = MathUtils.floor(chunkLoader.getLocation());
             if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
                 lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
                 updateInRadiusChunks(floor);
@@ -386,7 +369,7 @@ public class AllayChunkService implements ChunkService {
         }
 
         private void removeOutOfRadiusChunks() {
-            Sets.SetView<Long> difference = Sets.difference(sentChunks, inRadiusChunks);
+            var difference = Sets.difference(sentChunks, inRadiusChunks);
             // Unload chunks out of range
             chunkLoader.onChunkOutOfRange(difference);
             // The intersection of sentChunks and inRadiusChunks

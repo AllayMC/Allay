@@ -61,35 +61,37 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         ItemStack resultSourItem;
         ItemStack resultDestItem;
         if (sourItem.getCount() == count) {
-            //第一种：全部拿走
+            // Scenario 1: Take all items
             resultSourItem = Container.EMPTY_SLOT_PLACE_HOLDER;
             source.setItemStack(sourceSlot, resultSourItem);
             if (destItem.getItemType() != AIR_TYPE) {
                 resultDestItem = destItem;
-                //目标物品不为空，直接添加数量，目标物品网络堆栈id不变
+                // If the target item is not empty, simply add the quantity. The target item's network stack id remains unchanged
                 resultDestItem.setCount(destItem.getCount() + count);
                 destination.onSlotChange(destinationSlot);
             } else {
-                //目标物品为空，直接移动原有堆栈到新位置，网络堆栈id使用源物品的网络堆栈id（相当于换个位置）
+                // If the target item is empty, move the existing stack to the new position.
+                // The network stack id of the target item remains the same as
+                // the source item's network stack id (essentially shifting positions).
                 if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
-                    //HACK: 若是从CREATED_OUTPUT拿出的，需要服务端自行新建个网络堆栈id
+                    // HACK: If taken from CREATED_OUTPUT, the server needs to create a new network stack id.
                     sourItem = sourItem.copy(true);
                 }
                 resultDestItem = sourItem;
                 destination.setItemStack(destinationSlot, resultDestItem);
             }
         } else {
-            //第二种：拿走一部分
+            // Scenario 2: Take a portion
             resultSourItem = sourItem;
             resultSourItem.setCount(resultSourItem.getCount() - count);
             source.onSlotChange(sourceSlot);
             if (destItem.getItemType() != AIR_TYPE) {
-                //目标物品不为空
+                // If the target item is not empty
                 resultDestItem = destItem;
                 resultDestItem.setCount(destItem.getCount() + count);
                 destination.onSlotChange(destinationSlot);
             } else {
-                //目标物品为空，为分出来的子物品堆栈新建网络堆栈id
+                // If the target item is empty, create a new network stack id for the split-off sub-item stack
                 resultDestItem = sourItem.copy(true);
                 resultDestItem.setCount(count);
                 destination.setItemStack(destinationSlot, resultDestItem);
@@ -109,7 +111,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                 )
                         )
                 );
-        //CREATED_OUTPUT不需要发响应（mjの奇妙hack）
+        // No response is needed for CREATED_OUTPUT (mj's strange hack).
         if (source.getContainerType() != FullContainerType.CREATED_OUTPUT) {
             return new ActionResponse(
                     true,

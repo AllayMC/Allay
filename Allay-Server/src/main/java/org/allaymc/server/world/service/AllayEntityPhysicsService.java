@@ -22,17 +22,10 @@ import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.floor;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRICTION;
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 import static org.allaymc.api.utils.MathUtils.isInRange;

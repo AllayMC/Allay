@@ -1,5 +1,8 @@
 package org.allaymc.api.entity.attribute;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +11,8 @@ import java.util.Map;
  *
  * @author JukeboxMC | daoge_cmd
  */
+@Getter
+@AllArgsConstructor
 public enum AttributeType {
 
     //Base Entity
@@ -46,18 +51,11 @@ public enum AttributeType {
     private final float maxValue;
     private final float defaultValue;
 
-    AttributeType(String key, float minValue, float maxValue, float defaultValue) {
-        this.key = key;
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        this.defaultValue = defaultValue;
+    public static AttributeType byKey(String key) {
+        return KEY_LOOK_UP.get(key);
     }
 
     public Attribute newAttributeInstance() {
         return new Attribute(this.key, this.minValue, this.maxValue, this.defaultValue, this.defaultValue);
-    }
-
-    public static AttributeType byKey(String key) {
-        return KEY_LOOK_UP.get(key);
     }
 }

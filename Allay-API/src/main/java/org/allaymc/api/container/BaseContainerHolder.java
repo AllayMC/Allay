@@ -1,5 +1,6 @@
 package org.allaymc.api.container;
 
+import lombok.NoArgsConstructor;
 import org.allaymc.api.utils.exception.ContainerException;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -13,15 +14,13 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
+@NoArgsConstructor
 public class BaseContainerHolder implements ContainerHolder {
     protected final Map<FullContainerType<?>, Container> typeToContainer = new HashMap<>();
     protected final Map<ContainerSlotType, FullContainerType<?>> slotTypeToFullType = new HashMap<>();
 
-    public BaseContainerHolder() {
-    }
-
     public BaseContainerHolder(Container... containers) {
-        for (Container container : containers) {
+        for (var container : containers) {
             this.addContainer(container);
         }
     }

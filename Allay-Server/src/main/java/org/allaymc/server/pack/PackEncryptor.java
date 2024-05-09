@@ -27,7 +27,7 @@ import java.util.zip.ZipOutputStream;
  * Allay Project 2024/2/7
  *
  * @author daoge_cmd
- *
+ * <p>
  * An util for encrypting pack
  */
 @Slf4j
@@ -37,9 +37,12 @@ public final class PackEncryptor {
             .serializeNulls() // NOTICE: Null should be serialized!
             .setLenient()
             .create();
+
     private static final int KEY_LENGTH = 32;
+
     private static final byte[] VERSION = new byte[]{(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00};
     private static final byte[] MAGIC = new byte[]{(byte) 0xFC, (byte) 0xB9, (byte) 0xCF, (byte) 0x9B};
+
     private static final List<String> EXCLUDED_FILES = List.of("manifest.json", "pack_icon.png", "bug_pack_icon.png");
 
     public static String encrypt(Path inputPath, Path outputPath) {
@@ -203,7 +206,9 @@ public final class PackEncryptor {
         outputStream.closeEntry();
     }
 
-    public record Content(List<ContentEntry> content) {}
+    public record Content(List<ContentEntry> content) {
+    }
 
-    public record ContentEntry(String path, String key) {}
+    public record ContentEntry(String path, String key) {
+    }
 }

@@ -1,6 +1,7 @@
 package org.allaymc.server.world.service;
 
 import io.netty.util.internal.PlatformDependent;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.world.entity.EntityDespawnEvent;
@@ -17,13 +18,10 @@ import java.util.Queue;
  * @author Cool_Loong
  */
 @Slf4j
+@RequiredArgsConstructor
 public class AllayEntityService implements EntityService {
     protected final EntityPhysicsService entityPhysicsService;
     protected final Queue<EntityUpdateOperation> entityUpdateOperationQueue = PlatformDependent.newMpscQueue();
-
-    public AllayEntityService(EntityPhysicsService entityPhysicsService) {
-        this.entityPhysicsService = entityPhysicsService;
-    }
 
     @Override
     public void tick() {
@@ -67,7 +65,7 @@ public class AllayEntityService implements EntityService {
     @Override
     public void addEntity(Entity entity, Runnable callback) {
         if (!entity.canBeSpawned()) {
-            log.warn("Trying to add an entity twice! Entity: " + entity);
+            log.warn("Trying to add an entity twice! Entity: {}", entity);
             return;
         }
         entity.setWillBeSpawnedNextTick(true);
@@ -81,7 +79,7 @@ public class AllayEntityService implements EntityService {
     @Override
     public void removeEntity(Entity entity, Runnable callback) {
         if (entity.willBeDespawnedNextTick()) {
-            log.warn("Trying to remove an entity twice! Entity: " + entity);
+            log.warn("Trying to remove an entity twice! Entity: {}", entity);
             return;
         }
         entity.setWillBeDespawnedNextTick(true);
@@ -97,6 +95,5 @@ public class AllayEntityService implements EntityService {
         REMOVE
     }
 
-    protected record EntityUpdateOperation(Entity entity, EntityUpdateType type, Runnable callback) {
-    }
+    protected record EntityUpdateOperation(Entity entity, EntityUpdateType type, Runnable callback) {}
 }

@@ -1,11 +1,14 @@
 package org.allaymc.server.blockentity.component.common;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
 import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
@@ -13,6 +16,7 @@ import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
 import java.util.Objects;
@@ -25,12 +29,16 @@ import java.util.function.Supplier;
  *
  * @author daoge_cmd
  */
+@ToString
+@EqualsAndHashCode
 public class BlockEntityContainerHolderComponentImpl implements BlockEntityContainerHolderComponent {
     @ComponentIdentifier
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_inventory_holder_component");
+    @Setter
     protected Container container;
 
     @Dependency
+    @EqualsAndHashCode.Exclude
     protected BlockEntityBaseComponent baseComponent;
 
     public BlockEntityContainerHolderComponentImpl(Supplier<Container> containerSupplier) {
@@ -50,11 +58,6 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @Override
     public <T extends Container> T getContainer() {
         return (T) container;
-    }
-
-    @Override
-    public void setContainer(Container container) {
-        this.container = container;
     }
 
     @EventHandler
