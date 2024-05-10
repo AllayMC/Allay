@@ -1,3 +1,7 @@
+---
+comments: true
+---
+
 ## Crafting a cookie:
 
 ### C -> S:

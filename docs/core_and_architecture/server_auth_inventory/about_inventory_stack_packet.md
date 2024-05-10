@@ -1,4 +1,8 @@
-1.20.31
+---
+comments: true
+---
+
+Game version: 1.20.31
 
 ### Moving wooden planks from the crafting grid to the first slot of the hotbar:
 

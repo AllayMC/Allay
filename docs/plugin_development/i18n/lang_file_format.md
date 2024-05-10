@@ -1,3 +1,7 @@
+---
+comments: true
+---
+
 Consider the following multi-language keys:
 
 ### Example 1

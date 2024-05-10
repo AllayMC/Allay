@@ -1,3 +1,7 @@
+---
+comments: true
+---
+
 In Allay, permissions are represented as a tree structure.
 
 ### Representation of a Permission Node

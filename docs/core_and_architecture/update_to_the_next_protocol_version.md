@@ -1,3 +1,7 @@
+---
+comments: true
+---
+
 # Update to the Next Protocol Version
 
 This tutorial will detail the general process for completing a protocol version update in Allay. There may be many

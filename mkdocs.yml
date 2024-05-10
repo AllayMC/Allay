@@ -11,8 +11,6 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/AllayMC
-  version:
-    provider: mike
 
 extra_css:
   - stylesheets/extra.css

@@ -1,3 +1,7 @@
+---
+comments: true
+---
+
 ## 问 & 答
 
 NOTICE: 以下内容回答者均为@daoge，不代表其他人意见
