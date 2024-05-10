@@ -15,10 +15,10 @@ import java.util.zip.Inflater;
 public final class JavaZibThreadLocal implements ZlibProvider {
     private static final ThreadLocal<FastByteArrayOutputStream> FBAO = ThreadLocal.withInitial(() -> new FastByteArrayOutputStream(1024));
     private static final ThreadLocal<byte[]> BUFFER = ThreadLocal.withInitial(() -> new byte[8192]);
-    private int level;
-    private CompressionType type;
     private final ThreadLocal<Inflater> INFLATER = ThreadLocal.withInitial(Inflater::new);
+    private int level;
     private final ThreadLocal<Deflater> DEFLATER = ThreadLocal.withInitial(() -> new Deflater(level));
+    private CompressionType type;
 
     JavaZibThreadLocal(CompressionType type, int level) {
         this.type = type;

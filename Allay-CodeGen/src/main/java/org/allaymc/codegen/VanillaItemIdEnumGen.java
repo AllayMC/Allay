@@ -1,8 +1,8 @@
 package org.allaymc.codegen;
 
-import org.allaymc.dependence.StringUtils;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
+import org.allaymc.dependence.StringUtils;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;

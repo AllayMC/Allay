@@ -4,8 +4,8 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.ComponentProvider;
+import org.allaymc.api.utils.Identifier;
 
 import java.util.Map;
 import java.util.function.Function;

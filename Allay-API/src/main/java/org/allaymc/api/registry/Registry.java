@@ -31,6 +31,7 @@ import java.util.function.Consumer;
  * Allay Project 2023/3/18
  *
  * @param <CONTENT> the type of the value which is being held by the registry
+ *
  * @author GeyserMC | daoge_cmd
  */
 public interface Registry<CONTENT> {

@@ -9,6 +9,7 @@ package org.allaymc.api.registry;
  *
  * @param <I> the input to load the registry from
  * @param <O> the output of the registry
+ *
  * @author GeyserMC | daoge_cmd
  */
 @FunctionalInterface
@@ -18,6 +19,7 @@ public interface RegistryLoader<I, O> {
      * Loads an output from the given input.
      *
      * @param input the input
+     *
      * @return the output
      */
     O load(I input);

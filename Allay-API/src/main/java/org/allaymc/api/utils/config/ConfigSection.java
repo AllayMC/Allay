@@ -1,17 +1,12 @@
 package org.allaymc.api.utils.config;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Allay Project 2024/3/2
  *
  * @author fromgate | daoge_cmd
- *
+ * <p>
  * TODO: refactor
  */
 public class ConfigSection extends LinkedHashMap<String, Object> {

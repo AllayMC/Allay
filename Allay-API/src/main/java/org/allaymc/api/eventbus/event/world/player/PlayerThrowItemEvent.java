@@ -14,6 +14,7 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 public class PlayerThrowItemEvent extends PlayerEvent implements CancellableEvent {
     protected ItemStack itemStack;
+
     public PlayerThrowItemEvent(EntityPlayer player, ItemStack itemStack) {
         super(player);
         this.itemStack = itemStack;

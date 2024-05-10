@@ -1,8 +1,8 @@
 package org.allaymc.api.item;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Objects;

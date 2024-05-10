@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * Allay Project 2024/2/13
  *
  * @author daoge_cmd | Nukkit
- *
+ * <p>
  * All supported formatting values for chat and console.
  */
 public enum TextFormat {
@@ -176,6 +176,7 @@ public enum TextFormat {
      * Gets the TextFormat represented by the specified format code.
      *
      * @param intCode Code to check
+     *
      * @return Associative {@link TextFormat} with the given code,
      * or null if it doesn't exist
      */
@@ -187,6 +188,7 @@ public enum TextFormat {
      * Gets the TextFormat represented by the specified format code.
      *
      * @param code Code to check
+     *
      * @return Associative {@link TextFormat} with the given code,
      * or null if it doesn't exist
      */
@@ -198,6 +200,7 @@ public enum TextFormat {
      * Gets the TextFormat represented by the specified format code.
      *
      * @param code Code to check
+     *
      * @return Associative {@link TextFormat} with the given code,
      * or null if it doesn't exist
      */
@@ -213,6 +216,7 @@ public enum TextFormat {
      * Cleans the given message of all format codes.
      *
      * @param input String to clean.
+     *
      * @return A copy of the input string, without any formatting.
      */
     public static String clean(final String input) {
@@ -240,6 +244,7 @@ public enum TextFormat {
      *
      * @param altFormatChar   The alternate format code character to replace. Ex: &amp;
      * @param textToTranslate Text containing the alternate format code character.
+     *
      * @return Text containing the TextFormat.ESCAPE format code character.
      */
     public static String colorize(char altFormatChar, String textToTranslate) {
@@ -260,6 +265,7 @@ public enum TextFormat {
      * it is immediately followed by 0-9, A-G, a-g, K-O, k-o, R or r.
      *
      * @param textToTranslate Text containing the alternate format code character.
+     *
      * @return Text containing the TextFormat. ESCAPE format code character.
      */
     public static String colorize(String textToTranslate) {
@@ -270,6 +276,7 @@ public enum TextFormat {
      * Gets the chat color used at the end of the given input string.
      *
      * @param input Input string to retrieve the colors from.
+     *
      * @return Any remaining chat color to pass onto the next line.
      */
     public static String getLastColors(String input) {
@@ -284,7 +291,7 @@ public enum TextFormat {
                 TextFormat color = getByChar(c);
 
                 if (color != null) {
-                    result.insert(0, color.toString());
+                    result.insert(0, color);
 
                     // Once we find a color or reset we can stop searching
                     if (color.isColor() || color.equals(RESET)) {

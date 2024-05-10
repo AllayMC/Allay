@@ -1,8 +1,8 @@
 package org.allaymc.api.item.enchantment.type;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
+import org.allaymc.api.utils.Identifier;
 
 /**
  * @author daoge_cmd <br>
@@ -10,7 +10,8 @@ import org.allaymc.api.item.enchantment.Rarity;
  */
 public class EnchantmentSharpnessType extends AbstractEnchantmentType {
     public static final EnchantmentSharpnessType SHARPNESS_TYPE = new EnchantmentSharpnessType();
-  private EnchantmentSharpnessType() {
-    super(new Identifier("minecraft:sharpness"), 9, 5, Rarity.COMMON);
-  }
+
+    private EnchantmentSharpnessType() {
+        super(new Identifier("minecraft:sharpness"), 9, 5, Rarity.COMMON);
+    }
 }

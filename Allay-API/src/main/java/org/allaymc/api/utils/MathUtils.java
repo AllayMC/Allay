@@ -1,19 +1,11 @@
 package org.allaymc.api.utils;
 
 import lombok.experimental.UtilityClass;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
-import org.joml.Vector3i;
-import org.joml.Vector3ic;
+import org.joml.*;
 
-import static java.lang.StrictMath.asin;
-import static java.lang.StrictMath.cos;
-import static java.lang.StrictMath.sin;
-import static java.lang.StrictMath.sqrt;
-import static java.lang.StrictMath.toDegrees;
-import static java.lang.StrictMath.toRadians;
+import static java.lang.StrictMath.*;
+
+import java.lang.Math;
 
 /**
  * Allay Project 7/31/2023
@@ -95,6 +87,7 @@ public class MathUtils {
      *
      * @param yaw   yaw
      * @param pitch pitch
+     *
      * @return Vector3方向向量
      */
     public Vector3f getDirectionVector(double yaw, double pitch) {
@@ -112,6 +105,7 @@ public class MathUtils {
      * Calculate yaw from the direction vector
      *
      * @param vector 方向向量
+     *
      * @return yaw
      */
     public double getYawFromVector(Vector3fc vector) {
@@ -130,13 +124,14 @@ public class MathUtils {
      * Calculate the pitch by the direction vector
      *
      * @param vector 方向向量
+     *
      * @return pitch
      */
     public double getPitchFromVector(Vector3fc vector) {
         double length =
                 vector.x() * vector.x() +
-                vector.z() * vector.z() +
-                vector.y() * vector.y();
+                        vector.z() * vector.z() +
+                        vector.y() * vector.y();
         // 避免NAN
         if (length == 0) {
             return 0;

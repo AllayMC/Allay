@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.effect.type;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.entity.effect.AbstractEffectType;
+import org.allaymc.api.utils.Identifier;
 
 import java.awt.*;
 
@@ -12,6 +12,7 @@ import java.awt.*;
  */
 public class EffectWeaknessType extends AbstractEffectType {
     public static final EffectWeaknessType WEAKNESS_TYPE = new EffectWeaknessType();
+
     private EffectWeaknessType() {
         super(18, new Identifier("minecraft:weakness"), new Color(72, 77, 72), true);
     }

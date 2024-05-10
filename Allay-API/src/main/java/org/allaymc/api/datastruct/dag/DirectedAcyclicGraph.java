@@ -44,6 +44,7 @@ public interface DirectedAcyclicGraph<B> extends Set<B> {
      *
      * @param before the before node
      * @param after  the after node
+     *
      * @throws DAGCycleException if a cycle occurs, this exception will be thrown
      */
     void setBefore(B before, B after) throws DAGCycleException;
@@ -52,6 +53,7 @@ public interface DirectedAcyclicGraph<B> extends Set<B> {
      * If the node specified in the parameter is not in the graph, it will throw an {@link IllegalArgumentException}
      *
      * @param member a node
+     *
      * @return all parent nodes of this node. Note that if this node is not in the graph, an {@link NullPointerException} will be thrown.
      */
     Set<B> getBefore(B member);
@@ -61,6 +63,7 @@ public interface DirectedAcyclicGraph<B> extends Set<B> {
      *
      * @param before the before node
      * @param after  the after node
+     *
      * @return Whether the "before" node is a parent node of the "after" node.
      */
     boolean isBefore(B before, B after);

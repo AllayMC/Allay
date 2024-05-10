@@ -21,6 +21,9 @@ import java.util.UUID;
 public interface EntityPlayerNetworkComponent extends EntityComponent {
     LoginData getLoginData();
 
+    @ApiStatus.Internal
+    void setLoginData(LoginData loginData);
+
     PacketProcessorHolder getPacketProcessorHolder();
 
     default String getXUID() {
@@ -88,10 +91,10 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
     @ApiStatus.Internal
     void handleDataPacket(BedrockPacket packet);
 
+    BedrockServerSession getClientSession();
+
     @ApiStatus.Internal
     void setClientSession(BedrockServerSession session);
-
-    BedrockServerSession getClientSession();
 
     @ApiStatus.Internal
     void onChunkInRangeSent();
@@ -101,9 +104,6 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     @ApiStatus.Internal
     void completeLogin();
-
-    @ApiStatus.Internal
-    void setLoginData(LoginData loginData);
 
     @ApiStatus.Internal
     int getPing();

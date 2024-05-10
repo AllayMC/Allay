@@ -9,9 +9,9 @@ public interface CancellableEvent {
 
     boolean isCancelled();
 
+    void setCancelled(boolean value);
+
     default void setCancelled() {
         setCancelled(true);
     }
-
-    void setCancelled(boolean value);
 }

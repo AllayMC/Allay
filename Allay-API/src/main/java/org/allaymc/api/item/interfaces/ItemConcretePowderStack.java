@@ -10,8 +10,8 @@ import org.allaymc.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemConcretePowderStack extends ItemStack {
-  ItemType<ItemConcretePowderStack> CONCRETE_POWDER_TYPE = ItemTypeBuilder
-          .builder(ItemConcretePowderStack.class)
-          .vanillaItem(VanillaItemId.CONCRETE_POWDER)
-          .build();
+    ItemType<ItemConcretePowderStack> CONCRETE_POWDER_TYPE = ItemTypeBuilder
+            .builder(ItemConcretePowderStack.class)
+            .vanillaItem(VanillaItemId.CONCRETE_POWDER)
+            .build();
 }

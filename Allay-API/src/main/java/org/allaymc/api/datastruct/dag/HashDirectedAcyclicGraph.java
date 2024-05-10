@@ -29,14 +29,7 @@ package org.allaymc.api.datastruct.dag;
 
 import com.google.common.base.Preconditions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -125,8 +118,8 @@ public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedA
 
     @Override
     public boolean remove(Object member) {
-        if (contains((B) member)) {
-            if ((nodeMap.remove((B) member) != null) & super.remove((B) member)) {
+        if (contains(member)) {
+            if ((nodeMap.remove(member) != null) & super.remove(member)) {
                 return this.nodePathSet.remove(member);
             } else return false;
         }
@@ -269,12 +262,12 @@ public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedA
 
         @Override
         public Node get(Object key) {
-            return super.get((B) key);
+            return super.get(key);
         }
 
         @Override
         public Node remove(Object key) {
-            Node member = get((B) key);
+            Node member = get(key);
 
             // remove any references to this key
             // remove it from afterSet of antecedents
@@ -287,7 +280,7 @@ public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedA
                 get(after).removeBefore((B) key);
             }
 
-            return super.remove((B) key);
+            return super.remove(key);
         }
     }
 

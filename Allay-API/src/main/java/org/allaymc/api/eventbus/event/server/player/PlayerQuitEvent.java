@@ -12,6 +12,7 @@ import org.allaymc.api.eventbus.event.PlayerEvent;
 @Getter
 public class PlayerQuitEvent extends PlayerEvent {
     protected String reason;
+
     public PlayerQuitEvent(EntityPlayer player, String reason) {
         super(player);
         this.reason = reason;

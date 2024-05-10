@@ -2,8 +2,8 @@ package org.allaymc.api.block.registry;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 
 import java.util.List;

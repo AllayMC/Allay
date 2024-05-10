@@ -6,8 +6,6 @@ import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 
-import java.util.Objects;
-
 /**
  * Allay Project 2023/9/23
  *

@@ -1,11 +1,11 @@
 package org.allaymc.api.item.recipe;
 
 import lombok.Builder;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.allaymc.api.item.recipe.input.Input;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapedRecipeData;
@@ -26,6 +26,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 public class ShapedRecipe extends CraftingRecipe {
 
     public static final char EMPTY_KEY_CHAR = ' ';
+    protected static final ItemStack[][] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0][0];
     protected char[][] pattern;
     protected Map<Character, ItemDescriptor> keys;
 
@@ -106,15 +107,15 @@ public class ShapedRecipe extends CraftingRecipe {
         return true;
     }
 
-    protected static final ItemStack[][] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0][0];
-
     /**
      * Remove useless row and column
+     *
      * @param inputs [o, o, x]    [x, o, o]
      *               [o, o, x] or [x, o, o] or etc...
      *               [x, x, x]    [x, x, x]
+     *
      * @return [o, o]
-     *         [o, o]
+     * [o, o]
      */
     protected ItemStack[][] removeUselessRowAndColumn(ItemStack[][] inputs) {
         int startRow = 0, endRow = inputs.length - 1;

@@ -1,8 +1,8 @@
 package org.allaymc.codegen;
 
-import org.allaymc.dependence.VanillaEntityId;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
+import org.allaymc.dependence.VanillaEntityId;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
@@ -17,16 +17,23 @@ import java.nio.file.Path;
  */
 public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
 
-    public static void main(String[] args) {
-        VanillaEntityIdEnumGen.generate();
-        generate();
-    }
-
     public static final ClassName ENTITY_CLASS_NAME = ClassName.get("org.allaymc.api.entity", "Entity");
     public static final ClassName VANILLA_ENTITY_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaEntityId");
     public static final ClassName ENTITY_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityType");
     public static final ClassName ENTITY_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityTypes");
     public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityTypeBuilder");
+    public static final ClassName ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.entity.type", "EntityTypeDefaultInitializer");
+    public static final TypeSpec.Builder ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
+            TypeSpec.classBuilder(ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
+                    .addJavadoc(
+                            "@author daoge_cmd <br>\n" +
+                                    "Allay Project <br>\n")
+                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+
+    public static void main(String[] args) {
+        VanillaEntityIdEnumGen.generate();
+        generate();
+    }
 
     @SneakyThrows
     public static void generate() {
@@ -55,14 +62,6 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
         System.out.println("Generating " + ENTITY_TYPES_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/entity/type/" + ENTITY_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
-
-    public static final ClassName ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.entity.type", "EntityTypeDefaultInitializer");
-    public static final TypeSpec.Builder ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
-            TypeSpec.classBuilder(ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
-                    .addJavadoc(
-                            "@author daoge_cmd <br>\n" +
-                                    "Allay Project <br>\n")
-                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
     private static void addDefaultEntityTypeInitializer(VanillaEntityId id, ClassName entityClassName) {
         var initializer = CodeBlock.builder();
@@ -106,7 +105,7 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addJavadoc(
                         "@author daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
+                                "Allay Project <br>\n")
                 .addMethod(
                         MethodSpec.methodBuilder("init")
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

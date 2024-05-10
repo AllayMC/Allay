@@ -1,13 +1,13 @@
 package org.allaymc.api.item.type;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
+import org.allaymc.api.utils.Identifier;
 
 import java.util.List;
 import java.util.Map;

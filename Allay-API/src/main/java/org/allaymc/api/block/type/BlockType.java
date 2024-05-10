@@ -5,9 +5,9 @@ import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.Identified;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.item.type.ItemType;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;

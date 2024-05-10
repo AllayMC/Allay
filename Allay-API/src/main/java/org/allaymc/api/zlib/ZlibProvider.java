@@ -13,7 +13,9 @@ public interface ZlibProvider {
      * Compress the specified byte array
      *
      * @param data the array to compress
+     *
      * @return compressed byte array
+     *
      * @throws IOException compress Exception
      */
     byte[] deflate(byte[] data) throws IOException;
@@ -23,7 +25,9 @@ public interface ZlibProvider {
      *
      * @param data    the array to be decompressed
      * @param maxSize The maximum length of the estimated result byte array
+     *
      * @return decompressed byte array
+     *
      * @throws IOException Decompress Exception
      */
     byte[] inflate(byte[] data, int maxSize) throws IOException;

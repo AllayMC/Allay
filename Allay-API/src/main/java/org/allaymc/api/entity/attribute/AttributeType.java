@@ -53,11 +53,11 @@ public enum AttributeType {
         this.defaultValue = defaultValue;
     }
 
-    public Attribute newAttributeInstance() {
-        return new Attribute(this.key, this.minValue, this.maxValue, this.defaultValue, this.defaultValue);
-    }
-
     public static AttributeType byKey(String key) {
         return KEY_LOOK_UP.get(key);
+    }
+
+    public Attribute newAttributeInstance() {
+        return new Attribute(this.key, this.minValue, this.maxValue, this.defaultValue, this.defaultValue);
     }
 }

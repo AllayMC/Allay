@@ -10,16 +10,16 @@ import static org.allaymc.api.datastruct.aabbtree.AABBUtils.getArea;
  * @author daoge_cmd
  */
 public class AreaAABBHeuristicFunction<T extends HasAABB> implements AABBTreeHeuristicFunction<T> {
-   private final AABBf temp;
+    private final AABBf temp;
 
-   public AreaAABBHeuristicFunction() {
-      temp = new AABBf();
-   }
+    public AreaAABBHeuristicFunction() {
+        temp = new AABBf();
+    }
 
-   @Override
-   public HeuristicResult getInsertionHeuristic(AABBf left, AABBf right, T object, AABBf objectAABB) {
-      float diffA = getArea(left.union(objectAABB, temp)) - getArea(left);
-      float diffB = getArea(right.union(objectAABB, temp)) - getArea(right);
-      return diffA < diffB ? HeuristicResult.LEFT : HeuristicResult.RIGHT;
-   }
+    @Override
+    public HeuristicResult getInsertionHeuristic(AABBf left, AABBf right, T object, AABBf objectAABB) {
+        float diffA = getArea(left.union(objectAABB, temp)) - getArea(left);
+        float diffB = getArea(right.union(objectAABB, temp)) - getArea(right);
+        return diffA < diffB ? HeuristicResult.LEFT : HeuristicResult.RIGHT;
+    }
 }

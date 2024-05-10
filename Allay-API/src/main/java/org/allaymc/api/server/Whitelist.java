@@ -17,5 +17,5 @@ import java.util.Set;
 @Accessors(fluent = true)
 public class Whitelist extends OkaeriConfig {
     @Comment("Whitelisted player list. The value can be player's name or uuid")
-    private Set<String> whitelist = Sets.newConcurrentHashSet();
+    private final Set<String> whitelist = Sets.newConcurrentHashSet();
 }

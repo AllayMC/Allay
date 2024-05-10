@@ -6,7 +6,7 @@ import lombok.Getter;
  * Allay Project 2024/2/27
  *
  * @author daoge_cmd
- *
+ * <p>
  * 计分板显示槽位枚举
  */
 public enum DisplaySlot {

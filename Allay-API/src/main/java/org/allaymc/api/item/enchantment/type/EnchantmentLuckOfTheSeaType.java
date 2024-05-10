@@ -1,8 +1,8 @@
 package org.allaymc.api.item.enchantment.type;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
+import org.allaymc.api.utils.Identifier;
 
 /**
  * @author daoge_cmd <br>
@@ -10,7 +10,8 @@ import org.allaymc.api.item.enchantment.Rarity;
  */
 public class EnchantmentLuckOfTheSeaType extends AbstractEnchantmentType {
     public static final EnchantmentLuckOfTheSeaType LUCK_OF_THE_SEA_TYPE = new EnchantmentLuckOfTheSeaType();
-  private EnchantmentLuckOfTheSeaType() {
-    super(new Identifier("minecraft:luck_of_the_sea"), 23, 3, Rarity.RARE);
-  }
+
+    private EnchantmentLuckOfTheSeaType() {
+        super(new Identifier("minecraft:luck_of_the_sea"), 23, 3, Rarity.RARE);
+    }
 }

@@ -26,6 +26,15 @@ public interface UnsafeChunk {
     int SECTION_SIZE = 16 * 16 * 16;
     int CHUNK_VERSION = 40;
 
+    @ApiStatus.Internal
+    static int index(int x, int y, int z) {
+        Preconditions.checkArgument(x >= 0 && x <= 15);
+        Preconditions.checkArgument(y >= 0 && y <= 15);
+        Preconditions.checkArgument(z >= 0 && z <= 15);
+        //The bedrock chunk order is xzy,the chunk order of java version is yzx
+        return (x << 8) + (z << 4) + y;
+    }
+
     ChunkState getState();
 
     @ApiStatus.Internal
@@ -41,15 +50,6 @@ public interface UnsafeChunk {
 
     @UnmodifiableView
     Map<Long, Entity> getEntities();
-
-    @ApiStatus.Internal
-    static int index(int x, int y, int z) {
-        Preconditions.checkArgument(x >= 0 && x <= 15);
-        Preconditions.checkArgument(y >= 0 && y <= 15);
-        Preconditions.checkArgument(z >= 0 && z <= 15);
-        //The bedrock chunk order is xzy,the chunk order of java version is yzx
-        return (x << 8) + (z << 4) + y;
-    }
 
     BlockEntity removeBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
@@ -75,6 +75,7 @@ public interface UnsafeChunk {
      * Since the array index starts at 0, the maximum value is 59
      *
      * @param sectionY the sectionY
+     *
      * @return the section
      */
     @ApiStatus.Internal
@@ -86,6 +87,7 @@ public interface UnsafeChunk {
      * Since the array index starts at 0, the maximum value is 59
      *
      * @param sectionY the y
+     *
      * @return the section
      */
     @ApiStatus.Internal
@@ -97,6 +99,7 @@ public interface UnsafeChunk {
      * Since the array index starts at 0, the maximum value is 59
      *
      * @param sectionY the y
+     *
      * @return the section
      */
     @UnmodifiableView
@@ -134,6 +137,7 @@ public interface UnsafeChunk {
      *
      * @param x the x
      * @param z the z
+     *
      * @return the height  -64~319
      */
     int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);

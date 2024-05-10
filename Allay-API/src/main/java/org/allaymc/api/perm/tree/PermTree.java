@@ -48,11 +48,6 @@ public interface PermTree {
 
     boolean containsSubSet(PermTree other);
 
-    enum PermChangeType {
-        ADD,
-        REMOVE
-    }
-
     PermNode getRoot();
 
     PermTree addPerm(String perm, boolean callListener);
@@ -121,6 +116,11 @@ public interface PermTree {
         for (var perm : nbt.getList("Perms", NbtType.STRING))
             addPerm(perm, callListener);
         copyFrom(DefaultPermissions.byName(nbt.getString("PermLevel")));
+    }
+
+    enum PermChangeType {
+        ADD,
+        REMOVE
     }
 
     interface PermTreeFactory {

@@ -2,7 +2,6 @@ package org.allaymc.api.form.type;
 
 import com.google.gson.Gson;
 import lombok.Getter;
-import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**

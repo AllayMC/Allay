@@ -30,6 +30,16 @@ public class Attribute implements Cloneable {
         this.defaultValue = defaultValue;
     }
 
+    public static Attribute fromNBT(NbtMap nbt) {
+        return new Attribute(
+                nbt.getString("Name"),
+                nbt.getFloat("Min"),
+                nbt.getFloat("Max"),
+                nbt.getFloat("Current"),
+                nbt.getFloat("Base")
+        );
+    }
+
     public void reset() {
         this.currentValue = this.defaultValue;
     }
@@ -46,16 +56,6 @@ public class Attribute implements Cloneable {
                 .putFloat("Current", this.currentValue)
                 .putFloat("Base", this.defaultValue)
                 .build();
-    }
-
-    public static Attribute fromNBT(NbtMap nbt) {
-        return new Attribute(
-                nbt.getString("Name"),
-                nbt.getFloat("Min"),
-                nbt.getFloat("Max"),
-                nbt.getFloat("Current"),
-                nbt.getFloat("Base")
-        );
     }
 
     @Override

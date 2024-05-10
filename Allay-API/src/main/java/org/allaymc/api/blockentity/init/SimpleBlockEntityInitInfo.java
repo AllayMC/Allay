@@ -25,6 +25,10 @@ public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEn
         this.nbt = nbt;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public Dimension dimension() {
         return dimension;
@@ -35,13 +39,9 @@ public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEn
         return nbt;
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static class Builder {
-        private Dimension dimension;
         private final NbtMapBuilder nbtBuilder = NbtMap.builder();
+        private Dimension dimension;
 
         public Builder dimension(Dimension dimension) {
             this.dimension = dimension;

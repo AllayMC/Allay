@@ -8,11 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.allaymc.api.client.skin.Image;
-import org.allaymc.api.client.skin.PersonaPiece;
-import org.allaymc.api.client.skin.PersonaPieceTint;
-import org.allaymc.api.client.skin.Skin;
-import org.allaymc.api.client.skin.SkinAnimation;
+import org.allaymc.api.client.skin.*;
 import org.allaymc.api.i18n.LangCode;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
@@ -79,7 +75,7 @@ public class LoginData {
 
         JsonObject skinMap = decodeToken(skinData);
         if (skinMap.has("DeviceModel") && skinMap.has("DeviceId") &&
-            skinMap.has("ClientRandomId") && skinMap.has("DeviceOS") && skinMap.has("GuiScale")) {
+                skinMap.has("ClientRandomId") && skinMap.has("DeviceOS") && skinMap.has("GuiScale")) {
             String deviceModel = skinMap.get("DeviceModel").getAsString();
             String deviceId = skinMap.get("DeviceId").getAsString();
             long clientId = skinMap.get("ClientRandomId").getAsLong();

@@ -12,8 +12,8 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeDa
  */
 public interface Recipe {
     /**
-     *
      * @param input 输入
+     *
      * @return 输入是否匹配配方
      */
     boolean match(Input input);

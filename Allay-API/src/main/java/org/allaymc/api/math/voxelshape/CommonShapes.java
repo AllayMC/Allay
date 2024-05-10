@@ -18,21 +18,18 @@ public abstract class CommonShapes {
 
     //Stair
 
+    public static final Map<BlockFace, VoxelShape> UPWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
+    public static final Map<BlockFace, VoxelShape> DOWNWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
     private static final VoxelShape UPWARDS_STAIR_SHAPE = VoxelShape
             .builder()
             .solid(0, 0, 0, 1, 1, 1)
             .vacancy(0, 0.5f, 0, 0.5f, 1, 1)
             .build();
-
     private static final VoxelShape DOWNWARDS_STAIR_SHAPE = VoxelShape
             .builder()
             .solid(0, 0, 0, 1, 1, 1)
             .vacancy(0, 0, 0, 0.5f, 0.5f, 1)
             .build();
-
-    public static final Map<BlockFace, VoxelShape> UPWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
-
-    public static final Map<BlockFace, VoxelShape> DOWNWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
 
     static {
         for (var face : BlockFace.getHorizontal()) {

@@ -8,8 +8,6 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface DoubleKeyMappedRegistry<K1, K2, VALUE> extends Registry<DoubleKeyMappedRegistry.MapPair<K1, K2, VALUE>> {
-    record MapPair<K1, K2, VALUE>(Map<K1, VALUE> m1, Map<K2, VALUE> m2) {}
-
     default VALUE getByK1(K1 k1) {
         return getContent().m1.get(k1);
     }
@@ -31,4 +29,6 @@ public interface DoubleKeyMappedRegistry<K1, K2, VALUE> extends Registry<DoubleK
         content.m1.put(k1, value);
         content.m2.put(k2, value);
     }
+
+    record MapPair<K1, K2, VALUE>(Map<K1, VALUE> m1, Map<K2, VALUE> m2) {}
 }

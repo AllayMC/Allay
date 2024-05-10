@@ -10,8 +10,8 @@ import org.allaymc.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemTintedGlassStack extends ItemStack {
-  ItemType<ItemTintedGlassStack> TINTED_GLASS_TYPE = ItemTypeBuilder
-          .builder(ItemTintedGlassStack.class)
-          .vanillaItem(VanillaItemId.TINTED_GLASS)
-          .build();
+    ItemType<ItemTintedGlassStack> TINTED_GLASS_TYPE = ItemTypeBuilder
+            .builder(ItemTintedGlassStack.class)
+            .vanillaItem(VanillaItemId.TINTED_GLASS)
+            .build();
 }

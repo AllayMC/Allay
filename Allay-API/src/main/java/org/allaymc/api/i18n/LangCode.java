@@ -31,17 +31,11 @@ public enum LangCode {
     tr_TR("Türkçe (Türkiye)"),
     uk_UA("Українська (Україна)");
 
-    private final String string;
-
     private static final LangCode[] VALUES = values();
+    private final String string;
 
     LangCode(String string) {
         this.string = string;
-    }
-
-    @Override
-    public String toString() {
-        return this.string;
     }
 
     public static LangCode byName(String name) {
@@ -58,5 +52,10 @@ public enum LangCode {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return this.string;
     }
 }

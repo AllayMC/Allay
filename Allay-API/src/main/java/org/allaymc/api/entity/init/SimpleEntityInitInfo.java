@@ -27,24 +27,23 @@ public class SimpleEntityInitInfo<T extends Entity> implements EntityInitInfo<T>
         this.nbt = nbt;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public Dimension dimension() {
         return dimension;
     }
-
 
     @Override
     public NbtMap nbt() {
         return nbt;
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static class Builder {
-        protected Dimension dimension;
         protected final NbtMapBuilder nbtBuilder = NbtMap.builder();
+        protected Dimension dimension;
 
         public Builder dimension(Dimension dimension) {
             this.dimension = dimension;

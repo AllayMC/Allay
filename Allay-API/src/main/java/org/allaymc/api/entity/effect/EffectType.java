@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.effect;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.utils.Identifier;
 
 import java.awt.*;
 

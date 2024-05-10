@@ -19,7 +19,7 @@ public record Pow2BitArray(BitArrayVersion version, int size, int[] words) imple
         int expectedWordsLength = GenericMath.ceil((float) size / version.entriesPerWord);
         if (words.length != expectedWordsLength) {
             throw new IllegalArgumentException("Invalid length given for storage, got: " + words.length +
-                                               " but expected: " + expectedWordsLength);
+                    " but expected: " + expectedWordsLength);
         }
     }
 

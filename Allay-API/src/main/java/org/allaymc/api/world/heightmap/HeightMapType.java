@@ -6,5 +6,5 @@ package org.allaymc.api.world.heightmap;
  * @author Cool_Loong
  */
 public enum HeightMapType {
-    WORLD_SURFACE;
+    WORLD_SURFACE
 }

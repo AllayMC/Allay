@@ -17,19 +17,55 @@ import static java.lang.Math.min;
  */
 public enum BlockFace {
 
-    DOWN( -1, new Vector3i( 0, -1, 0 ) ),
-    UP( -1, new Vector3i( 0, 1, 0 ) ),
-    NORTH( 2, new Vector3i( 0, 0, -1 ) ),
-    SOUTH( 0, new Vector3i( 0, 0, 1 ) ),
-    WEST( 1, new Vector3i( -1, 0, 0 ) ),
-    EAST( 3, new Vector3i( 1, 0, 0 ) );
+    DOWN(-1, new Vector3i(0, -1, 0)),
+    UP(-1, new Vector3i(0, 1, 0)),
+    NORTH(2, new Vector3i(0, 0, -1)),
+    SOUTH(0, new Vector3i(0, 0, 1)),
+    WEST(1, new Vector3i(-1, 0, 0)),
+    EAST(3, new Vector3i(1, 0, 0));
 
+    public static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE =
+            new BlockFace[]{
+                    BlockFace.EAST, BlockFace.WEST,
+                    BlockFace.SOUTH, BlockFace.NORTH};
     private final int horizontalIndex;
     private final Vector3ic offset;
 
-    BlockFace( int horizontalIndex, Vector3ic offset ) {
+    BlockFace(int horizontalIndex, Vector3ic offset) {
         this.horizontalIndex = horizontalIndex;
         this.offset = offset;
+    }
+
+    public static BlockFace fromId(int value) {
+        return switch (value) {
+            case 0 -> BlockFace.DOWN;
+            case 1 -> BlockFace.UP;
+            case 2 -> BlockFace.NORTH;
+            case 3 -> BlockFace.SOUTH;
+            case 4 -> BlockFace.WEST;
+            case 5 -> BlockFace.EAST;
+            default -> null;
+        };
+    }
+
+    public static BlockFace[] getHorizontal() {
+        return new BlockFace[]{
+                NORTH,
+                EAST,
+                SOUTH,
+                WEST
+        };
+    }
+
+    public static BlockFace[] getVertical() {
+        return new BlockFace[]{
+                UP,
+                DOWN
+        };
+    }
+
+    public static BlockFace getBlockFaceByStairDirectionValue(int value) {
+        return STAIR_DIRECTION_VALUE_TO_BLOCK_FACE[value];
     }
 
     public Vector3ic getOffset() {
@@ -107,7 +143,7 @@ public enum BlockFace {
     }
 
     public BlockFace opposite() {
-        return switch ( this ) {
+        return switch (this) {
             case DOWN -> UP;
             case UP -> DOWN;
             case NORTH -> SOUTH;
@@ -117,45 +153,8 @@ public enum BlockFace {
         };
     }
 
-    public static BlockFace fromId( int value ) {
-        return switch ( value ) {
-            case 0 -> BlockFace.DOWN;
-            case 1 -> BlockFace.UP;
-            case 2 -> BlockFace.NORTH;
-            case 3 -> BlockFace.SOUTH;
-            case 4 -> BlockFace.WEST;
-            case 5 -> BlockFace.EAST;
-            default -> null;
-        };
-    }
-
-    public static BlockFace[] getHorizontal() {
-        return new BlockFace[] {
-                NORTH,
-                EAST,
-                SOUTH,
-                WEST
-        };
-    }
-
-    public static BlockFace[] getVertical() {
-        return new BlockFace[] {
-                UP,
-                DOWN
-        };
-    }
-
     public boolean isHorizontal() {
         return this == NORTH || this == EAST || this == SOUTH || this == WEST;
-    }
-
-    public static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE =
-            new BlockFace[] {
-                    BlockFace.EAST, BlockFace.WEST,
-                    BlockFace.SOUTH, BlockFace.NORTH};
-
-    public static BlockFace getBlockFaceByStairDirectionValue(int value) {
-        return STAIR_DIRECTION_VALUE_TO_BLOCK_FACE[value];
     }
 
     public int toStairDirectionValue() {

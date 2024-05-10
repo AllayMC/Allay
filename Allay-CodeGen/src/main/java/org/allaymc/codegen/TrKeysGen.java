@@ -31,7 +31,7 @@ public class TrKeysGen {
         var codeBuilder = TypeSpec.interfaceBuilder(CLASS_NAME)
                 .addModifiers(Modifier.PUBLIC)
                 .addJavadoc("@author daoge_cmd <br>\n" +
-                            "Allay Project <br>\n");
+                        "Allay Project <br>\n");
         for (var key : keys) {
             var identifier = new Identifier(key);
             var namespace = handleNamespace(identifier.namespace());

@@ -33,14 +33,14 @@ public interface NetworkServer {
 
     void setPlayerCount(int count, boolean update);
 
-    default void setMaxPlayerCount(int maxPlayerCount) {
-        setMaxPlayerCount(maxPlayerCount, true);
-    }
-
     void setMaxPlayerCount(int maxPlayerCount, boolean update);
 
     default int getMaxPlayerCount() {
         return getPong().maximumPlayerCount();
+    }
+
+    default void setMaxPlayerCount(int maxPlayerCount) {
+        setMaxPlayerCount(maxPlayerCount, true);
     }
 
     BedrockCodec getCodec();

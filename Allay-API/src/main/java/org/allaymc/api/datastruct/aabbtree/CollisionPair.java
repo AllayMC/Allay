@@ -9,21 +9,21 @@ import java.util.Objects;
  */
 public record CollisionPair<T extends HasAABB & HasLongId>(T objectA, T objectB) {
 
-   @Override
-   public boolean equals(Object o) {
-      if (this == o) {
-         return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-         return false;
-      }
-      CollisionPair<?> that = (CollisionPair<?>) o;
-      return (Objects.equals(objectA.getLongId(), that.objectA.getLongId()) || Objects.equals(objectA.getLongId(), that.objectB.getLongId())) &&
-             (Objects.equals(objectB.getLongId(), that.objectB.getLongId()) || Objects.equals(objectB.getLongId(), that.objectA.getLongId()));
-   }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        CollisionPair<?> that = (CollisionPair<?>) o;
+        return (Objects.equals(objectA.getLongId(), that.objectA.getLongId()) || Objects.equals(objectA.getLongId(), that.objectB.getLongId())) &&
+                (Objects.equals(objectB.getLongId(), that.objectB.getLongId()) || Objects.equals(objectB.getLongId(), that.objectA.getLongId()));
+    }
 
-   @Override
-   public int hashCode() {
-      return Objects.hash(objectA.getLongId(), objectB.getLongId()) ^ Objects.hash(objectB.getLongId(), objectA.getLongId());
-   }
+    @Override
+    public int hashCode() {
+        return Objects.hash(objectA.getLongId(), objectB.getLongId()) ^ Objects.hash(objectB.getLongId(), objectA.getLongId());
+    }
 }

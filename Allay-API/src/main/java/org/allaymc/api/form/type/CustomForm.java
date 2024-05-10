@@ -20,9 +20,9 @@ import java.util.function.Consumer;
 public final class CustomForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "custom_form";
+    private final List<CustomFormElement> content = new ArrayList<>();
     private String title = "";
     private ImageData icon;
-    private final List<CustomFormElement> content = new ArrayList<>();
     private transient Consumer<List<String>> onResponse = responses -> {};
 
     public CustomForm title(String title) {
@@ -131,7 +131,7 @@ public final class CustomForm extends Form {
             onClose.run();
             return;
         }
-        List<String> responses = GSON.fromJson(data, new TypeToken<List<String>>(){}.getType());
+        List<String> responses = GSON.fromJson(data, new TypeToken<List<String>>() {}.getType());
         onResponse.accept(responses);
         response = responses;
     }

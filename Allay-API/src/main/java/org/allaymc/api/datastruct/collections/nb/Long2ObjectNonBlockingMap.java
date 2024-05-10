@@ -78,6 +78,7 @@ import java.util.function.Function;
  * Allay Project
  *
  * @param <TypeV> the type of mapped values
+ *
  * @author SuperIceCN
  * @since 1.5
  */
@@ -265,7 +266,9 @@ public class Long2ObjectNonBlockingMap<TypeV>
      * introduction of the Java Collections framework.
      *
      * @param val a value to search for
+     *
      * @return <tt>true</tt> if this map maps one or more keys to the specified value
+     *
      * @throws NullPointerException if the specified value is null
      */
     public boolean contains(Object val) {
@@ -279,8 +282,10 @@ public class Long2ObjectNonBlockingMap<TypeV>
      *
      * @param key key with which the specified value is to be associated
      * @param val value to be associated with the specified key
+     *
      * @return the previous value associated with <tt>key</tt>, or
      * <tt>null</tt> if there was no mapping for <tt>key</tt>
+     *
      * @throws NullPointerException if the specified value is null
      */
     public TypeV put(long key, TypeV val) {
@@ -294,6 +299,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
      *
      * @return the previous value associated with the specified key,
      * or <tt>null</tt> if there was no mapping for the key
+     *
      * @throws NullPointerException if the specified is value is null
      */
     public TypeV putIfAbsent(long key, TypeV val) {
@@ -347,9 +353,9 @@ public class Long2ObjectNonBlockingMap<TypeV>
         if (key == NO_KEY) {
             Object curVal = _val_1;
             if (oldVal == NO_MATCH_OLD || // Do we care about expected-Value at all?
-                curVal == oldVal ||       // No instant match already?
-                (oldVal == MATCH_ANY && curVal != TOMBSTONE) ||
-                oldVal.equals(curVal)) { // Expensive equals check
+                    curVal == oldVal ||       // No instant match already?
+                    (oldVal == MATCH_ANY && curVal != TOMBSTONE) ||
+                    oldVal.equals(curVal)) { // Expensive equals check
                 if (!CAS(_val_1_handler, curVal, newVal)) // One shot CAS update attempt
                     curVal = _val_1;                      // Failed; get failing witness
             }
@@ -382,7 +388,9 @@ public class Long2ObjectNonBlockingMap<TypeV>
      * hash table and is much slower than {@link #containsKey}.
      *
      * @param val value whose presence in this map is to be tested
+     *
      * @return <tt>true</tt> if this Map maps one or more keys to the specified value
+     *
      * @throws NullPointerException if the specified value is null
      */
     public boolean containsValue(Object val) {
@@ -494,6 +502,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
      * Returns an enumeration of the values in this table.
      *
      * @return an enumeration of the values in this table
+     *
      * @see #values()
      */
     public Enumeration<TypeV> elements() {
@@ -540,6 +549,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
      * <strong>Warning:</strong> this version will auto-box all returned keys.
      *
      * @return an enumeration of the auto-boxed keys in this table
+     *
      * @see #keySet()
      */
     public Enumeration<Long> keys() {
@@ -1014,9 +1024,9 @@ public class Long2ObjectNonBlockingMap<TypeV>
                 // counts).  We only check on the initial set of a Value from null to
                 // not-null (i.e., once per key-insert).
                 if ((V == null && tableFull(reprobe_cnt, len)) ||
-                    // Or we found a Prime: resize is already in progress.  The resize
-                    // call below will do a CAS on _newchm forcing the read.
-                    V instanceof Prime) {
+                        // Or we found a Prime: resize is already in progress.  The resize
+                        // call below will do a CAS on _newchm forcing the read.
+                        V instanceof Prime) {
                     resize();               // Force the new table copy to start
                     return copy_slot_and_check(idx, expVal).putIfMatch(key, putval, expVal);
                 }
@@ -1031,10 +1041,10 @@ public class Long2ObjectNonBlockingMap<TypeV>
                 // copy_slot.
 
                 if (expVal != NO_MATCH_OLD && // Do we care about expected-Value at all?
-                    V != expVal &&            // No instant match already?
-                    (expVal != MATCH_ANY || V == TOMBSTONE || V == null) &&
-                    !(V == null && expVal == TOMBSTONE) &&    // Match on null/TOMBSTONE combo
-                    (expVal == null || !expVal.equals(V))) // Expensive equals check at the last
+                        V != expVal &&            // No instant match already?
+                        (expVal != MATCH_ANY || V == TOMBSTONE || V == null) &&
+                        !(V == null && expVal == TOMBSTONE) &&    // Match on null/TOMBSTONE combo
+                        (expVal == null || !expVal.equals(V))) // Expensive equals check at the last
                     return (V == null) ? TOMBSTONE : V;         // Do not update!
 
                 // Actually change the Value in the Key,Value pair
@@ -1090,9 +1100,9 @@ public class Long2ObjectNonBlockingMap<TypeV>
             return
                     // Do the cheap check first: we allow some number of reprobes always
                     reprobe_cnt >= REPROBE_LIMIT &&
-                    (reprobe_cnt >= reprobe_limit(len) ||
-                     // More expensive check: see if the table is > 1/2 full.
-                     _slots.estimate_get() >= (len >> 1));
+                            (reprobe_cnt >= reprobe_limit(len) ||
+                                    // More expensive check: see if the table is > 1/2 full.
+                                    _slots.estimate_get() >= (len >> 1));
         }
 
         // --- resize ------------------------------------------------------------
@@ -1134,7 +1144,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
             // operations to clean out the dead keys.
             long tm = System.currentTimeMillis();
             if (newsz <= oldlen &&    // New table would shrink or hold steady?
-                tm <= _nbhml._last_resize_milli + 10000)  // Recent resize (less than 10 sec ago)
+                    tm <= _nbhml._last_resize_milli + 10000)  // Recent resize (less than 10 sec ago)
                 newsz = oldlen << 1;      // Double the existing size
 
             // Do not shrink, ever.  If we hit this size once, assume we
@@ -1228,7 +1238,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
                 if (panic_start == -1) { // No panic?
                     copyidx = (int) _copyIdx;
                     while (copyidx < (oldlen << 1) && // 'panic' check
-                           !_copyIdxUpdater.compareAndSet(this, copyidx, copyidx + MIN_COPY_WORK))
+                            !_copyIdxUpdater.compareAndSet(this, copyidx, copyidx + MIN_COPY_WORK))
                         copyidx = (int) _copyIdx;     // Re-read
                     if (!(copyidx < (oldlen << 1))) // Panic!
                         panic_start = copyidx;       // Record where we started to panic-copy
@@ -1298,9 +1308,9 @@ public class Long2ObjectNonBlockingMap<TypeV>
             // nested in-progress copies and manage to finish a nested copy before
             // finishing the top-level copy.  We only promote top-level copies.
             if (nowDone == oldlen &&   // Ready to promote this table?
-                _nbhml._chm == this && // Looking at the top-level table?
-                // Attempt to promote
-                _nbhml.CAS(_chm_handler, this, _newchm)) {
+                    _nbhml._chm == this && // Looking at the top-level table?
+                    // Attempt to promote
+                    _nbhml.CAS(_chm_handler, this, _newchm)) {
                 _nbhml._last_resize_milli = System.currentTimeMillis();  // Record resize time for next check
             }
         }
@@ -1429,7 +1439,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
             while (_idx < length()) {  // Scan array
                 _nextK = key(_idx++); // Get a key that definitely is in the set (for the moment!)
                 if (_nextK != NO_KEY && // Found something?
-                    (_nextV = get(_nextK)) != null)
+                        (_nextV = get(_nextK)) != null)
                     break;                // Got it!  _nextK is a valid Key
             }                         // Else keep scanning
             return _prevV;            // Return current value.

@@ -30,6 +30,13 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockTypes");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockTypeBuilder");
+    public static final ClassName BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.block.type", "BlockTypeDefaultInitializer");
+    public static final TypeSpec.Builder BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
+            TypeSpec.classBuilder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
+                    .addJavadoc(
+                            "@author daoge_cmd <br>\n" +
+                                    "Allay Project <br>\n")
+                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
@@ -70,14 +77,6 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         System.out.println("Generating " + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/block/type/" + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
-
-    public static final ClassName BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.block.type", "BlockTypeDefaultInitializer");
-    public static final TypeSpec.Builder BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
-            TypeSpec.classBuilder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
-                    .addJavadoc(
-                            "@author daoge_cmd <br>\n" +
-                                    "Allay Project <br>\n")
-                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
     private static void addDefaultBlockTypeInitializer(VanillaBlockId id, ClassName blockClassName) {
         var initializer = CodeBlock.builder();
@@ -186,7 +185,7 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*GlassBehavior"), "glass");
         registerSubPackage(Pattern.compile(".*GlassPaneBehavior"), "glasspane");
         registerSubPackage(Pattern.compile(".*AmethystBudBehavior"), "amethystbud");
-        registerSubPackage(Pattern.compile(".*Torch.*Behavior"),"torch");
-        registerSubPackage(Pattern.compile(".*Torchflower.*Behavior"),"torchflower");
+        registerSubPackage(Pattern.compile(".*Torch.*Behavior"), "torch");
+        registerSubPackage(Pattern.compile(".*Torchflower.*Behavior"), "torchflower");
     }
 }

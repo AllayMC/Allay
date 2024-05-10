@@ -114,9 +114,9 @@ public record FullContainerType<T extends Container>(
 
     public static class FullContainerTypeBuilder {
         private final Set<ContainerSlotType> heldSlotTypes = EnumSet.noneOf(ContainerSlotType.class);
+        BiMap<Integer, Integer> networkSlotIndexMapper = HashBiMap.create();
         private int id = UNKNOWN_NETWORK_ID;
         private ContainerSlotType[] slotTypeTable;
-        BiMap<Integer, Integer> networkSlotIndexMapper = HashBiMap.create();
 
         public FullContainerTypeBuilder id(int id) {
             this.id = id;

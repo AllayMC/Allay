@@ -1,22 +1,16 @@
 package org.allaymc.api.scoreboard;
 
-import com.google.gson.*;
 import lombok.Getter;
-import org.allaymc.api.scoreboard.scorer.EntityScorer;
-import org.allaymc.api.scoreboard.scorer.FakeScorer;
-import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.scoreboard.scorer.Scorer;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
-import java.lang.reflect.Type;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Allay Project 2024/2/27
  *
  * @author daoge_cmd
- *
+ * <p>
  * 计分板上的单个行 <br>
  * 由{@link Scorer}和分数组成
  */
@@ -70,7 +64,9 @@ public final class ScoreboardLine {
 
     /**
      * 增加分数
+     *
      * @param addition 增加量
+     *
      * @return 是否成功（事件被撤回就会false）
      */
     public boolean addScore(int addition) {
@@ -79,7 +75,9 @@ public final class ScoreboardLine {
 
     /**
      * 减少分数
+     *
      * @param reduction 减少量
+     *
      * @return 是否成功（事件被撤回就会false）
      */
     public boolean removeScore(int reduction) {
@@ -88,6 +86,7 @@ public final class ScoreboardLine {
 
     /**
      * 转换到network信息
+     *
      * @return network信息
      */
     public ScoreInfo toNetworkInfo() {

@@ -14,6 +14,13 @@ import org.joml.Vector3ic;
 @Getter
 @Builder
 public class WorldData {
+    public static final long TIME_DAY = 0;
+    public static final long TIME_NOON = 6000;
+    public static final long TIME_SUNSET = 12000;
+    public static final long TIME_NIGHT = 14000;
+    public static final long TIME_MIDNIGHT = 18000;
+    public static final long TIME_SUNRISE = 23000;
+    public static final long TIME_FULL = 24000;
     @Builder.Default
     String biomeOverride = "";
     @Builder.Default
@@ -174,15 +181,14 @@ public class WorldData {
     long worldStartCount = 0L;
     @Builder.Default
     WorldPolicies worldPolicies = new WorldPolicies();
-
     World world;
-
-    public synchronized void setGameType(GameType gameType) {
-        this.gameType = gameType;
-    }
 
     public synchronized GameType getGameType() {
         return gameType;
+    }
+
+    public synchronized void setGameType(GameType gameType) {
+        this.gameType = gameType;
     }
 
     public synchronized String getName() {
@@ -225,14 +231,6 @@ public class WorldData {
             this.time = 0;
         }
     }
-
-    public static final long TIME_DAY = 0;
-    public static final long TIME_NOON = 6000;
-    public static final long TIME_SUNSET = 12000;
-    public static final long TIME_NIGHT = 14000;
-    public static final long TIME_MIDNIGHT = 18000;
-    public static final long TIME_SUNRISE = 23000;
-    public static final long TIME_FULL = 24000;
 
     public synchronized void setCurrentTick(long currentTick) {
         this.currentTick = currentTick;

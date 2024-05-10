@@ -1,9 +1,9 @@
 package org.allaymc.api.entity.registry;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Map;

@@ -46,6 +46,7 @@ public abstract class CachedSimpleSelectorArgument implements SelectorArgument {
     /**
      * 初始化缓存时调用此方法<p/>
      * 若需要自己的缓存实现，则可覆写此方法
+     *
      * @return {@code Cache<Set<String>, Predicate<Entity>>}
      */
     protected Cache<Set<String>, Predicate<Entity>> provideCacheService() {

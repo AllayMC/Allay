@@ -86,6 +86,7 @@ public class HashUtils {
      *
      * @param x the int x
      * @param z the int z
+     *
      * @return the long
      */
     public long hashXZ(int x, int z) {
@@ -133,6 +134,7 @@ public class HashUtils {
      * x occupies the highest 4 bits.
      *
      * @param encoded Encoded int containing x, y, and z.
+     *
      * @return The value of x.
      */
     public int getXFromHashChunkXYZ(int encoded) {
@@ -144,6 +146,7 @@ public class HashUtils {
      * y occupies the middle 24 bits.
      *
      * @param encoded Encoded int containing x, y, and z.
+     *
      * @return The value of y.
      */
     public int getYFromHashChunkXYZ(int encoded) {
@@ -155,6 +158,7 @@ public class HashUtils {
      * z occupies the lowest 4 bits.
      *
      * @param encoded Encoded int containing x, y, and z.
+     *
      * @return The value of z.
      */
     public static int getZFromHashChunkXYZ(int encoded) {

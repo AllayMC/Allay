@@ -13,6 +13,7 @@ import java.util.function.Supplier;
  * @param <KEY>     the key
  * @param <VALUE>   the value
  * @param <MAPPING> the map
+ *
  * @author GeyserMC | daoge_cmd
  */
 public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> implements MappedRegistry<KEY, VALUE, MAPPING> {
@@ -33,6 +34,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * @param <KEY>          the map key
      * @param <VALUE>        the map value
      * @param <MAPPING>      the returned mappings type, a map in this case
+     *
      * @return a new registry with the given RegistryLoader
      */
     public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(RegistryLoader<INPUT, MAPPING> registryLoader) {
@@ -48,6 +50,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * @param <KEY>          the map key
      * @param <VALUE>        the map value
      * @param <MAPPING>      the returned mappings type, a map in this case
+     *
      * @return a new registry with the given RegistryLoader
      */
     public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {
@@ -64,6 +67,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * @param <KEY>          the map key
      * @param <VALUE>        the map value
      * @param <MAPPING>      the returned mappings type, a map in this case
+     *
      * @return a new registry with the given RegistryLoader supplier
      */
     public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {
@@ -78,6 +82,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * @param <KEY>          the map key
      * @param <VALUE>        the map value
      * @param <MAPPING>      the returned mappings type, a map in this case
+     *
      * @return a new registry with the given RegistryLoader supplier
      */
     public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(INPUT input, Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {

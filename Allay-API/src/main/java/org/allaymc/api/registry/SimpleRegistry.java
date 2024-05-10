@@ -10,6 +10,7 @@ import java.util.function.Supplier;
  * Allay Project 2023/3/18
  *
  * @param <CONTENT> the value being held by the registry
+ *
  * @author GeyserMC | daoge_cmd
  */
 public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
@@ -28,6 +29,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      * @param registryLoader the registry loader supplier
      * @param <INPUT>        the input type
      * @param <CONTENT>      the returned mappings type
+     *
      * @return a new registry with the given RegistryLoader supplier
      */
     public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
@@ -42,6 +44,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      * @param registryLoader the registry loader supplier
      * @param <INPUT>        the input type
      * @param <CONTENT>      the returned mappings type
+     *
      * @return a new registry with the given RegistryLoader supplier
      */
     public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(INPUT input, Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
@@ -56,6 +59,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      * @param registryLoader the registry loader
      * @param <INPUT>        the input type
      * @param <CONTENT>      the returned mappings type
+     *
      * @return a new registry with the given RegistryLoader supplier
      */
     public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(RegistryLoader<INPUT, CONTENT> registryLoader) {
@@ -69,6 +73,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      * @param registryLoader the registry loader
      * @param <INPUT>        the input type
      * @param <CONTENT>      the returned mappings type
+     *
      * @return a new registry with the given RegistryLoader supplier
      */
     public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {

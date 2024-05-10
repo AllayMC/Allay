@@ -74,6 +74,7 @@ public final class Scoreboard {
 
     /**
      * @param slot 目标槽位
+     *
      * @return 此计分板目标槽位的观察者
      */
     public Set<ScoreboardViewer> getViewers(DisplaySlot slot) {
@@ -82,8 +83,10 @@ public final class Scoreboard {
 
     /**
      * 删除此计分板目标槽位中的某个观察者
+     *
      * @param viewer 目标观察者
-     * @param slot 目标槽位
+     * @param slot   目标槽位
+     *
      * @return 是否删除成功
      */
     public boolean removeViewer(ScoreboardViewer viewer, DisplaySlot slot) {
@@ -94,8 +97,10 @@ public final class Scoreboard {
 
     /**
      * 向此计分板目标槽位中添加一个观察者
+     *
      * @param viewer 目标观察者
-     * @param slot 目标槽位
+     * @param slot   目标槽位
+     *
      * @return 是否添加成功
      */
     public boolean addViewer(ScoreboardViewer viewer, DisplaySlot slot) {
@@ -122,8 +127,10 @@ public final class Scoreboard {
 
     /**
      * 检查此计分板目标槽位中是否有特定观察者
+     *
      * @param viewer 目标观察者
-     * @param slot 目标槽位
+     * @param slot   目标槽位
+     *
      * @return 是否存在
      */
     public boolean containViewer(ScoreboardViewer viewer, DisplaySlot slot) {
@@ -132,7 +139,9 @@ public final class Scoreboard {
 
     /**
      * 获取追踪对象在此计分板上对应的行（如果存在）
+     *
      * @param scorer 追踪对象
+     *
      * @return 对应行
      */
     public @Nullable ScoreboardLine getLine(Scorer scorer) {
@@ -141,7 +150,9 @@ public final class Scoreboard {
 
     /**
      * 为此计分板添加一个行
+     *
      * @param line 目标行
+     *
      * @return 是否添加成功
      */
     public boolean addLine(ScoreboardLine line) {
@@ -159,8 +170,10 @@ public final class Scoreboard {
 
     /**
      * 为此计分板添加一个行
+     *
      * @param scorer 追踪对象
-     * @param score 分数
+     * @param score  分数
+     *
      * @return 是否添加成功
      */
     public boolean addLine(Scorer scorer, int score) {
@@ -169,8 +182,10 @@ public final class Scoreboard {
 
     /**
      * 为插件提供的便捷的计分板显示接口
-     * @param text FakeScorer的名称
+     *
+     * @param text  FakeScorer的名称
      * @param score 分数
+     *
      * @return 是否添加成功
      */
     public boolean addLine(String text, int score) {
@@ -180,7 +195,9 @@ public final class Scoreboard {
 
     /**
      * 删除追踪对象在此计分板上对应的行（如果存在）
+     *
      * @param scorer 目标追踪对象
+     *
      * @return 是否删除成功
      */
     public boolean removeLine(Scorer scorer) {
@@ -200,7 +217,9 @@ public final class Scoreboard {
 
     /**
      * 删除计分板所有行
+     *
      * @param send 是否发送到观察者
+     *
      * @return 是否删除成功
      */
     public boolean removeAllLines(boolean send) {
@@ -221,7 +240,9 @@ public final class Scoreboard {
 
     /**
      * 检查追踪对象在此计分板上是否有记录
+     *
      * @param scorer 目标追踪对象
+     *
      * @return 是否存在
      */
     public boolean containLine(Scorer scorer) {
@@ -230,6 +251,7 @@ public final class Scoreboard {
 
     /**
      * 向所有观察者发送新的分数 <br>
+     *
      * @param update 需要更新的行
      */
     public void updateScore(ScoreboardLine update) {
@@ -255,6 +277,7 @@ public final class Scoreboard {
      * 为插件提供的快捷接口 <br>
      * 按照List顺序设置计分板的内容 (使用FakeScorer作为追踪对象) <br>
      * 会覆盖之前的所有行 <br>
+     *
      * @param lines 需要设置的字符串内容
      */
     public void setLines(List<String> lines) {
@@ -270,6 +293,7 @@ public final class Scoreboard {
     /**
      * 按照List顺序设置计分板的内容 <br>
      * 会覆盖之前的所有行 <br>
+     *
      * @param lines 需要设置的行内容
      */
     public void setLines(Collection<ScoreboardLine> lines) {

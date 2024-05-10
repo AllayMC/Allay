@@ -58,6 +58,7 @@ public class AllayStringUtils {
      * 解析给定文本，从中分割命令参数
      *
      * @param cmdLine the cmd line
+     *
      * @return 命令参数数组
      */
     public static LinkedList<String> spiltCommandArgs(String cmdLine) {

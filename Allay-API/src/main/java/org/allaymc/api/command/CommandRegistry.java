@@ -22,7 +22,8 @@ public interface CommandRegistry extends MappedRegistry<String, Command, Map<Str
 
     /**
      * @param sender 命令发送者
-     * @param cmd 命令，不包含斜杠
+     * @param cmd    命令，不包含斜杠
+     *
      * @return 命令执行结果
      */
     CommandResult execute(CommandSender sender, String cmd);

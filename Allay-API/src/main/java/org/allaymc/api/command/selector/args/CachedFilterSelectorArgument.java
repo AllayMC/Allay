@@ -16,6 +16,7 @@ import java.util.function.Function;
 
 /**
  * 与{@link CachedSimpleSelectorArgument}类似，但是适用于过滤器模式。此处不做过多解释<p/>
+ *
  * @see CachedSimpleSelectorArgument
  */
 
@@ -51,6 +52,7 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
     /**
      * 初始化缓存时调用此方法<p/>
      * 若需要自己的缓存实现，则可覆写此方法
+     *
      * @return {@code Cache<Set<String>, Function<List<Entity>, List<Entity>>>}
      */
     protected Cache<Set<String>, Function<List<Entity>, List<Entity>>> provideCacheService() {

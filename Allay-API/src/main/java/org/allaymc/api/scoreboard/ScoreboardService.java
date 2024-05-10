@@ -15,24 +15,26 @@ import org.allaymc.api.scoreboard.scorer.Scorer;
 import org.allaymc.api.scoreboard.storage.ScoreboardStorage;
 import org.allaymc.api.server.Server;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 2024/2/28
  *
  * @author daoge_cmd
- *
+ * <p>
  * 管理，储存一批计分板 <br>
  * 此接口面向/scoreboard命令，若只是想要显示信息，请直接操作scoreboard对象
  */
 @Getter
 public final class ScoreboardService {
 
-    private Map<String, Scoreboard> scoreboards = new ConcurrentHashMap<>();
     private final Map<DisplaySlot, Scoreboard> display = new ConcurrentHashMap<>();
     private final Set<ScoreboardViewer> viewers = Sets.newConcurrentHashSet();
     private final ScoreboardStorage storage;
+    private Map<String, Scoreboard> scoreboards = new ConcurrentHashMap<>();
 
     public ScoreboardService(Server server, ScoreboardStorage storage) {
         this.storage = storage;

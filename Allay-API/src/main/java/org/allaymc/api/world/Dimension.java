@@ -43,6 +43,15 @@ import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
  */
 public interface Dimension {
 
+    static UpdateBlockPacket createBlockUpdatePacket(BlockState blockState, int x, int y, int z, int layer) {
+        var updateBlockPacket = new UpdateBlockPacket();
+        updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
+        updateBlockPacket.setDefinition(blockState.toNetworkBlockDefinitionRuntime());
+        updateBlockPacket.setDataLayer(layer);
+        updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
+        return updateBlockPacket;
+    }
+
     void tick(long currentTick);
 
     void close();
@@ -96,15 +105,6 @@ public interface Dimension {
 
     @UnmodifiableView
     Set<EntityPlayer> getPlayers();
-
-    static UpdateBlockPacket createBlockUpdatePacket(BlockState blockState, int x, int y, int z, int layer) {
-        var updateBlockPacket = new UpdateBlockPacket();
-        updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
-        updateBlockPacket.setDefinition(blockState.toNetworkBlockDefinitionRuntime());
-        updateBlockPacket.setDataLayer(layer);
-        updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
-        return updateBlockPacket;
-    }
 
     default void setBlockState(int x, int y, int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0, true, true);
@@ -323,6 +323,7 @@ public interface Dimension {
      * Traverse all the blockstate around a pos,In the order of <br>DOWN->UP>NORTH->SOUTH->WEST->EAST
      *
      * @param pos The specified pos
+     *
      * @return An array of neighbour blockstate
      */
     default BlockStateWithPos[] getNeighboursBlockState(Vector3ic pos) {

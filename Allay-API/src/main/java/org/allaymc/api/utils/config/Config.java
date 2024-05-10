@@ -16,20 +16,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
  * Allay Project 2024/3/2
  *
  * @author MagicDroidX (Nukkit) | daoge_cmd
- *
+ * <p>
  * TODO: refactor
  */
 @Slf4j
@@ -44,14 +38,6 @@ public class Config {
     //public static final int SERIALIZED = 4; // .sl
     public static final int ENUM = 5; // .txt, .list, .enum
     public static final int ENUMERATION = Config.ENUM;
-
-    //private LinkedHashMap<String, Object> config = new LinkedHashMap<>();
-    private ConfigSection config = new ConfigSection();
-    private File file;
-    @Getter
-    private boolean correct = false;
-    private int type = Config.DETECT;
-
     public static final Map<String, Integer> format = new TreeMap<>();
 
     static {
@@ -62,6 +48,13 @@ public class Config {
         format.put("list", Config.ENUM);
         format.put("enum", Config.ENUM);
     }
+
+    //private LinkedHashMap<String, Object> config = new LinkedHashMap<>();
+    private ConfigSection config = new ConfigSection();
+    private File file;
+    @Getter
+    private boolean correct = false;
+    private int type = Config.DETECT;
 
     /**
      * Constructor for Config instance with undefined file object
@@ -410,14 +403,6 @@ public class Config {
         return config.getMapList(key);
     }
 
-    public void setAll(LinkedHashMap<String, Object> map) {
-        this.config = new ConfigSection(map);
-    }
-
-    public void setAll(ConfigSection section) {
-        this.config = section;
-    }
-
     public boolean exists(String key) {
         return config.exists(key);
     }
@@ -432,6 +417,14 @@ public class Config {
 
     public Map<String, Object> getAll() {
         return this.config.getAllMap();
+    }
+
+    public void setAll(LinkedHashMap<String, Object> map) {
+        this.config = new ConfigSection(map);
+    }
+
+    public void setAll(ConfigSection section) {
+        this.config = section;
     }
 
     /**

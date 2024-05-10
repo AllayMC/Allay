@@ -3,8 +3,8 @@ package org.allaymc.api.component.interfaces;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.utils.Identifier;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,10 +43,6 @@ public interface ComponentProvider<T extends Component> {
         return map;
     }
 
-    T provide(ComponentInitInfo info);
-
-    Class<?> getComponentClass();
-
     @SneakyThrows
 
     static Identifier findComponentIdentifier(Class<?> clazz) {
@@ -70,6 +66,10 @@ public interface ComponentProvider<T extends Component> {
         }
         return null;
     }
+
+    T provide(ComponentInitInfo info);
+
+    Class<?> getComponentClass();
 
     @SneakyThrows
 

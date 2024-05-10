@@ -11,7 +11,7 @@ import java.util.Map;
  * Allay Project 2024/2/27
  *
  * @author daoge_cmd
- *
+ * <p>
  * 计分板存储器接口
  */
 public interface ScoreboardStorage {

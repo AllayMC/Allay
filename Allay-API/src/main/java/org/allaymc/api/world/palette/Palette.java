@@ -51,6 +51,22 @@ public final class Palette<V> {
         this.palette.add(first);
     }
 
+    private static boolean hasCopyLastFlag(short header) {
+        return (header >> 1) == 0x7F;
+    }
+
+    private static int getPaletteHeader(BitArrayVersion version, boolean runtime) {
+        return (version.bits << 1) | (runtime ? 1 : 0);
+    }
+
+    private static BitArrayVersion getVersionFromPaletteHeader(short header) {
+        return BitArrayVersion.get(header >> 1, true);
+    }
+
+    private static boolean isPersistent(short header) {
+        return (header & 1) == 0;
+    }
+
     public V get(int index) {
         return this.palette.get(this.bitArray.get(index));
     }
@@ -198,10 +214,6 @@ public final class Palette<V> {
         palette.palette.addAll(this.palette);
     }
 
-    private static boolean hasCopyLastFlag(short header) {
-        return (header >> 1) == 0x7F;
-    }
-
     private boolean writeLast(ByteBuf byteBuf, Palette<V> last) {
         if (last != null && last.palette.equals(this.palette)) {
             byteBuf.writeByte(COPY_LAST_FLAG_HEADER);
@@ -228,7 +240,6 @@ public final class Palette<V> {
         }
     }
 
-
     private BitArrayVersion readBitArrayVersion(ByteBuf byteBuf) {
         short header = byteBuf.readUnsignedByte();
         return Palette.getVersionFromPaletteHeader(header);
@@ -249,18 +260,6 @@ public final class Palette<V> {
             newBitArray.set(i, this.bitArray.get(i));
 
         this.bitArray = newBitArray;
-    }
-
-    private static int getPaletteHeader(BitArrayVersion version, boolean runtime) {
-        return (version.bits << 1) | (runtime ? 1 : 0);
-    }
-
-    private static BitArrayVersion getVersionFromPaletteHeader(short header) {
-        return BitArrayVersion.get(header >> 1, true);
-    }
-
-    private static boolean isPersistent(short header) {
-        return (header & 1) == 0;
     }
 
     @Override

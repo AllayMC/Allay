@@ -18,9 +18,9 @@ import static org.allaymc.api.item.component.common.ItemBaseComponent.EMPTY_STAC
 public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackInitInfo<T> {
     protected final int count;
     protected final int meta;
-    protected NbtMap extraTag;
     protected final int stackNetworkId;
     protected final boolean autoAssignStackNetworkId;
+    protected NbtMap extraTag;
     @Getter
     @Setter
     protected ItemType<T> itemType;
@@ -31,6 +31,10 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
         this.extraTag = extraTag;
         this.stackNetworkId = stackNetworkId;
         this.autoAssignStackNetworkId = autoAssignStackNetworkId;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -56,10 +60,6 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
     @Override
     public boolean autoAssignStackNetworkId() {
         return autoAssignStackNetworkId;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

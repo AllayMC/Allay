@@ -26,6 +26,7 @@ public interface ComponentInjector<T> {
      * Defines the parent class for this injector
      *
      * @param interfaceClass the interface class
+     *
      * @return the injector
      */
     ComponentInjector<T> interfaceClass(Class<T> interfaceClass);
@@ -37,6 +38,7 @@ public interface ComponentInjector<T> {
      * and the return value is the return value of the last executed method
      *
      * @param providers component providers
+     *
      * @return the injector
      */
     ComponentInjector<T> component(List<ComponentProvider<? extends Component>> providers);

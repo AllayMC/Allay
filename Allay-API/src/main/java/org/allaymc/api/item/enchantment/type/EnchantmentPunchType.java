@@ -1,8 +1,8 @@
 package org.allaymc.api.item.enchantment.type;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
+import org.allaymc.api.utils.Identifier;
 
 /**
  * @author daoge_cmd <br>
@@ -10,7 +10,8 @@ import org.allaymc.api.item.enchantment.Rarity;
  */
 public class EnchantmentPunchType extends AbstractEnchantmentType {
     public static final EnchantmentPunchType PUNCH_TYPE = new EnchantmentPunchType();
-  private EnchantmentPunchType() {
-    super(new Identifier("minecraft:punch"), 20, 2, Rarity.RARE);
-  }
+
+    private EnchantmentPunchType() {
+        super(new Identifier("minecraft:punch"), 20, 2, Rarity.RARE);
+    }
 }

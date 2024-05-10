@@ -10,7 +10,6 @@ import java.util.function.Function;
  * Allay Project 2024/2/3
  *
  * @author daoge_cmd
- *
  */
 public interface WorldGeneratorFactory extends MappedRegistry<String, Function<String, WorldGenerator>, Map<String, Function<String, WorldGenerator>>> {
     ApiInstanceHolder<WorldGeneratorFactory> FACTORY = ApiInstanceHolder.create();

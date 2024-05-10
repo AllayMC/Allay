@@ -21,6 +21,8 @@ import java.util.List;
  */
 public interface ItemBaseComponent extends ItemComponent {
 
+    int EMPTY_STACK_NETWORK_ID = 0;
+
     ItemType<? extends ItemStack> getItemType();
 
     int getCount();
@@ -41,13 +43,11 @@ public interface ItemBaseComponent extends ItemComponent {
 
     List<String> getLore();
 
-    void setLore(List<String>  lore);
+    void setLore(List<String> lore);
 
     BlockState toBlockState();
 
     ItemData toNetworkItemData();
-
-    int EMPTY_STACK_NETWORK_ID = 0;
 
     default boolean hasStackNetworkId() {
         return getStackNetworkId() != EMPTY_STACK_NETWORK_ID;

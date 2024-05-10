@@ -44,7 +44,9 @@ public final class BlockAndItemIdMapper {
 
     /**
      * 需要调用方保证传入的itemId是方块物品，且方块与方块物品的命名规则合法。否则不存在id为返回值的方块
+     *
      * @param itemId 物品id
+     *
      * @return 可能的方块id
      */
     public static Identifier itemIdToPossibleBlockId(Identifier itemId) {
@@ -61,7 +63,9 @@ public final class BlockAndItemIdMapper {
 
     /**
      * 我们无法仅凭方块id判断其是否有额外的方块物品，不过我们可以推断出其实际方块物品
+     *
      * @param blockId 方块id
+     *
      * @return 实际方块物品id
      */
     public static Identifier blockIdToActualBlockItemId(Identifier blockId) {

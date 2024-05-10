@@ -19,9 +19,9 @@ import java.util.function.Consumer;
 public final class SimpleForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "form";
+    private final List<Button> buttons = new ArrayList<>();
     private String title = "";
     private String content = "";
-    private final List<Button> buttons = new ArrayList<>();
     private transient Consumer<Button> onResponse = button -> {};
 
     public SimpleForm title(String title) {

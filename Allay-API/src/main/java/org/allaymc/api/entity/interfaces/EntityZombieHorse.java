@@ -7,5 +7,5 @@ import org.allaymc.api.entity.Entity;
  * Allay Project <br>
  */
 public interface EntityZombieHorse extends Entity {
-  
+
 }

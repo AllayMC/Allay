@@ -21,9 +21,9 @@ public interface ChunkLoader {
 
     int getChunkLoadingRadius();
 
-    int getChunkTrySendCountPerTick();
-
     void setChunkLoadingRadius(int radius);
+
+    int getChunkTrySendCountPerTick();
 
     void publishClientChunkUpdate();
 

@@ -1,8 +1,8 @@
 package org.allaymc.api.item.enchantment;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.registry.DoubleKeyMappedRegistry;
+import org.allaymc.api.utils.Identifier;
 
 /**
  * Allay Project 2023/10/21

@@ -3,11 +3,7 @@ package org.allaymc.exampleplugin;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.plugin.Plugin;
-import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.server.Server;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Allay Project 2024/2/8

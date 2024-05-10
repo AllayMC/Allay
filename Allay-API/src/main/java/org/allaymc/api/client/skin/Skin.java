@@ -4,12 +4,7 @@ import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.utils.Utils;
-import org.cloudburstmc.protocol.bedrock.data.skin.AnimatedTextureType;
-import org.cloudburstmc.protocol.bedrock.data.skin.AnimationData;
-import org.cloudburstmc.protocol.bedrock.data.skin.ImageData;
-import org.cloudburstmc.protocol.bedrock.data.skin.PersonaPieceData;
-import org.cloudburstmc.protocol.bedrock.data.skin.PersonaPieceTintData;
-import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
+import org.cloudburstmc.protocol.bedrock.data.skin.*;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.json.internal.json_simple.JSONValue;
 
@@ -237,8 +232,8 @@ public class Skin {
 
     private boolean isValidSkin() {
         return skinId != null && !skinId.trim().isEmpty() &&
-               skinData != null && skinData.width() >= 64 && skinData.height() >= 32 &&
-               skinData.data().length >= SINGLE_SKIN_SIZE;
+                skinData != null && skinData.width() >= 64 && skinData.height() >= 32 &&
+                skinData.data().length >= SINGLE_SKIN_SIZE;
     }
 
     private boolean isValidResourcePatch() {

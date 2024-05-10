@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.effect.type;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.entity.effect.AbstractEffectType;
+import org.allaymc.api.utils.Identifier;
 
 import java.awt.*;
 
@@ -12,6 +12,7 @@ import java.awt.*;
  */
 public class EffectSpeedType extends AbstractEffectType {
     public static final EffectSpeedType SPEED_TYPE = new EffectSpeedType();
+
     private EffectSpeedType() {
         super(1, new Identifier("minecraft:speed"), new Color(124, 175, 198));
     }

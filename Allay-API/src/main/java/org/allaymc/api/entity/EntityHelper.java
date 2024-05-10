@@ -1,13 +1,11 @@
 package org.allaymc.api.entity;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
-
-import java.util.Objects;
 
 /**
  * Allay Project 2023/9/23

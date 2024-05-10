@@ -13,6 +13,7 @@ import java.util.function.Function;
  * @param <VALUE>   the value
  * @param <MAPPING> the map
  *                  <p>
+ *
  * @author daoge_cmd <br>
  * Date: 2023/3/18 <br>
  * Allay Project <br>
@@ -22,6 +23,7 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
      * Returns the value registered by the given key.
      *
      * @param key the key
+     *
      * @return the value registered by the given key.
      */
 
@@ -35,6 +37,7 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
      * @param key    the key
      * @param mapper the mapper
      * @param <U>    the type
+     *
      * @return the mapped value from the given key if present
      */
     default <U> Optional<U> map(KEY key, Function<? super VALUE, ? extends U> mapper) {
@@ -52,6 +55,7 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
      *
      * @param key          the key
      * @param defaultValue the default value
+     *
      * @return the value registered by the given key or the default value
      * specified if null.
      */
@@ -64,6 +68,7 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
      *
      * @param key   the key
      * @param value the value
+     *
      * @return a new value into this registry with the given key.
      */
     default VALUE register(KEY key, VALUE value) {

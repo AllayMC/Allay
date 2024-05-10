@@ -145,6 +145,7 @@ public final class AllayAPI {
      * If the interface has not been implemented, it will throw an exception <br>
      *
      * @param api the interface
+     *
      * @return the implementation instance of the specific interface
      */
     public <T> T getAPIInstance(Class<T> api) {

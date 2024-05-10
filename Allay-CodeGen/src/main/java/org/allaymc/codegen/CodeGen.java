@@ -2,16 +2,6 @@ package org.allaymc.codegen;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.cloudburstmc.nbt.NBTInputStream;
-import org.cloudburstmc.nbt.NbtMap;
-
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 /**
  * Allay Project 2023/4/8

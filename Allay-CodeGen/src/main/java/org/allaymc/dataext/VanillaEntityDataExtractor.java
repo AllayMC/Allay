@@ -1,9 +1,9 @@
 package org.allaymc.dataext;
 
-import org.allaymc.dependence.VanillaEntityId;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
+import org.allaymc.dependence.VanillaEntityId;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -58,9 +58,9 @@ public class VanillaEntityDataExtractor {
             var maxHealth = healthObj != null ?
                     healthObj.has("max") ?
                             healthObj.get("max").getAsInt() :
-                                    healthObj.get("value").isJsonObject() ?
-                                            healthObj.getAsJsonObject("value").get("range_max").getAsInt() :
-                                            healthObj.get("value").getAsInt() : Integer.MAX_VALUE;
+                            healthObj.get("value").isJsonObject() ?
+                                    healthObj.getAsJsonObject("value").get("range_max").getAsInt() :
+                                    healthObj.get("value").getAsInt() : Integer.MAX_VALUE;
 
             var dataEntry = new EntityDataEntry(aabb, hasCollision, maxHealth);
             datas.put(entityId.getIdentifier().toString(), dataEntry);
