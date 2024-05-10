@@ -95,7 +95,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
             sender.handleResult(result);
             return result;
         } catch (Throwable t) {
-            log.error("Error while execute command {}", cmdName, t);
+            log.error("Error while execute command " + cmdName, t);
             sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.fail();
         }

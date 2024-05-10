@@ -34,12 +34,24 @@ public record Identifier(String namespace, String path) implements Cloneable {
             throw new InvalidIdentifierException("Non [A-Za-z0-9/._-] character in path of location: " + this.namespace + NAMESPACE_SEPARATOR + this.path);
     }
 
-    @Override
     public String toString() {
         return this.namespace + NAMESPACE_SEPARATOR + this.path;
     }
 
-    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof Identifier lv) {
+            return this.namespace.equals(lv.namespace) && this.path.equals(lv.path);
+        }
+        return false;
+    }
+
+    public int hashCode() {
+        return 31 * this.namespace.hashCode() + this.path.hashCode();
+    }
+
     @Override
     public Identifier clone() {
         return new Identifier(namespace, path);

@@ -23,6 +23,11 @@ import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 @Slf4j
 public class DestroyActionProcessor implements ContainerActionProcessor<DestroyAction> {
     @Override
+    public ItemStackRequestActionType getType() {
+        return ItemStackRequestActionType.DESTROY;
+    }
+
+    @Override
     public ActionResponse handle(DestroyAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         if (player.getGameType() != GameType.CREATIVE) {
             log.warn("only creative mode can destroy item");
@@ -69,10 +74,5 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
                         )
                 )
         );
-    }
-
-    @Override
-    public ItemStackRequestActionType getType() {
-        return ItemStackRequestActionType.DESTROY;
     }
 }

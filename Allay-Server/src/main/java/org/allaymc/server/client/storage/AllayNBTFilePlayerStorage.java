@@ -37,7 +37,7 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
         try (var reader = NbtUtils.createGZIPReader(Files.newInputStream(path))) {
             return PlayerData.fromNBT((NbtMap) reader.readTag());
         } catch (IOException e) {
-            log.error("Error while reading player data {}", uuid, e);
+            log.error("Error while reading player data " + uuid, e);
             return PlayerData.createEmpty();
         }
     }
@@ -49,7 +49,7 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
         var oldPath = path.resolveSibling(uuid + "_old.nbt");
         if (Files.exists(oldPath)) {
             // The old file
-            log.warn("Undeleted tmp player data file is found, which may caused by incorrect shutdown. File: {}", oldPath);
+            log.warn("Undeleted tmp player data file is found, which may caused by incorrect shutdown. File: " + oldPath);
             Files.delete(oldPath);
         }
         if (Files.exists(path)) {
@@ -61,7 +61,7 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
         } catch (IOException e) {
             // error, rename uuid_old.nbt file to uuid.nbt
             Files.move(oldPath, path);
-            log.error("Error while writing player data {}", uuid, e);
+            log.error("Error while writing player data " + uuid, e);
         }
         // delete uuid_old.nbt file
         Files.deleteIfExists(oldPath);

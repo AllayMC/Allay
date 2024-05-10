@@ -14,7 +14,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
  */
 public class ItemAirBaseComponentImpl extends ItemBaseComponentImpl<ItemAirStack> {
 
-    private static final SimpleItemStackInitInfo<ItemAirStack> AIR_TYPE_INIT_INFO =
+    static SimpleItemStackInitInfo<ItemAirStack> AIR_TYPE_INIT_INFO =
             SimpleItemStackInitInfo
                     .builder()
                     .autoAssignStackNetworkId(false)

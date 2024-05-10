@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
@@ -57,7 +57,7 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
         if (map != null) {
             return map::get;
         } else {
-            return $ -> itemType.getBlockType().getDefaultState();
+            return unused -> itemType.getBlockType().getDefaultState();
         }
     }
 
@@ -67,7 +67,7 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
         if (map != null) {
             return map::get;
         } else {
-            return $ -> 0;
+            return unused -> 0;
         }
     }
 }

@@ -1,12 +1,10 @@
 package org.allaymc.server.item.component.common;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -23,7 +21,6 @@ import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -44,8 +41,6 @@ import java.util.Map;
  * @author daoge_cmd
  */
 @Slf4j
-@ToString
-//@EqualsAndHashCode // TODO: need fix because this break shift + click
 public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseComponent {
 
     @ComponentIdentifier
@@ -53,30 +48,24 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     private static int STACK_NETWORK_ID_COUNTER = 1;
 
+    public static int getCurrentStackNetworkIdCounter() {
+        return STACK_NETWORK_ID_COUNTER;
+    }
+
     @Dependency
     protected ItemAttributeComponent attributeComponent;
     @ComponentedObject
     protected T thisItemStack;
+
     protected ItemType<T> itemType;
-    @Getter
     protected int count;
-    @Getter
     protected int meta;
-    @Getter
     protected int durability;
-    @Setter
-    @Getter
     protected String customName = "";
-    @Setter
-    @Getter
     protected List<String> lore = new ArrayList<>();
     protected Map<EnchantmentType, EnchantmentInstance> enchantments = new HashMap<>();
     //TODO: item lock type
-    @Setter
-    @Getter
     protected NbtMap customNBTContent = NbtMap.EMPTY;
-    @Setter
-    @Getter
     protected int stackNetworkId;
 
     public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
@@ -93,10 +82,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         }
     }
 
-    public static int getCurrentStackNetworkIdCounter() {
-        return STACK_NETWORK_ID_COUNTER;
-    }
-
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
         loadExtraTag(((ItemStackInitInfo<?>) initInfo).extraTag());
@@ -110,10 +95,12 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             this.customName = displayTag.getString("Name");
             this.lore = extraTag.getList("Lore", NbtType.STRING);
         }
-        extraTag.listenForList("ench", NbtType.COMPOUND, tags -> tags.forEach(tag -> {
-            var enchantment = EnchantmentHelper.fromNBT(tag);
-            this.enchantments.put(enchantment.getType(), enchantment);
-        }));
+        if (extraTag.containsKey("ench")) {
+            extraTag.getList("ench", NbtType.COMPOUND).forEach(tag -> {
+                var enchantment = EnchantmentHelper.fromNBT(tag);
+                this.enchantments.put(enchantment.getType(), enchantment);
+            });
+        }
     }
 
     @Override
@@ -122,9 +109,19 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
+    public int getCount() {
+        return count;
+    }
+
+    @Override
     public void setCount(int count) {
         if (count < 0) throw new IllegalArgumentException("count cannot be negative");
         this.count = count;
+    }
+
+    @Override
+    public int getMeta() {
+        return meta;
     }
 
     @Override
@@ -135,10 +132,35 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
+    public int getDurability() {
+        return durability;
+    }
+
+    @Override
     public void setDurability(int durability) {
         if (durability < 0)
             throw new IllegalArgumentException("Durability must bigger than zero!");
         this.durability = durability;
+    }
+
+    @Override
+    public String getCustomName() {
+        return customName;
+    }
+
+    @Override
+    public void setCustomName(String customName) {
+        this.customName = customName;
+    }
+
+    @Override
+    public List<String> getLore() {
+        return lore;
+    }
+
+    @Override
+    public void setLore(List<String> lore) {
+        this.lore = lore;
     }
 
     @Override
@@ -168,6 +190,16 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
+    public int getStackNetworkId() {
+        return stackNetworkId;
+    }
+
+    @Override
+    public void setStackNetworkId(int newStackNetworkId) {
+        this.stackNetworkId = newStackNetworkId;
+    }
+
+    @Override
     public int assignNewStackNetworkId() {
         stackNetworkId = STACK_NETWORK_ID_COUNTER++;
         return stackNetworkId;
@@ -189,6 +221,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
+
     public NbtMap saveExtraTag() {
         NbtMapBuilder nbtBuilder = NbtMap.builder();
         if (durability != 0) {
@@ -212,12 +245,22 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             }
             nbtBuilder.putList("ench", NbtType.COMPOUND, enchantmentNBT);
         }
-
         //TODO: item lock type
 
         // Custom NBT content
         nbtBuilder.putAll(customNBTContent);
+
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
+    }
+
+    @Override
+    public NbtMap getCustomNBTContent() {
+        return customNBTContent;
+    }
+
+    @Override
+    public void setCustomNBTContent(NbtMap customNBTContent) {
+        this.customNBTContent = customNBTContent;
     }
 
     @Override
@@ -251,11 +294,12 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {
-        var block_aabb = blockState.getBehavior().getBlockAttributes(blockState).computeOffsetVoxelShape(
-                placePos.x(),
-                placePos.y(),
-                placePos.z()
-        );
+        var block_aabb = blockState.getBehavior().getBlockAttributes(blockState)
+                .computeOffsetVoxelShape(
+                        placePos.x(),
+                        placePos.y(),
+                        placePos.z()
+                );
         return !dimension.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty();
     }
 

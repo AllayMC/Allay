@@ -1,12 +1,10 @@
 package org.allaymc.api.component.interfaces;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.ToString;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.component.annotation.ComponentIdentifier;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +43,12 @@ public interface ComponentProvider<T extends Component> {
         return map;
     }
 
+    T provide(ComponentInitInfo info);
+
+    Class<?> getComponentClass();
+
+    @SneakyThrows
+
     static Identifier findComponentIdentifier(Class<?> clazz) {
         Identifier identifier = null;
         while (identifier == null) {
@@ -56,6 +60,7 @@ public interface ComponentProvider<T extends Component> {
     }
 
     @SneakyThrows
+
     static Identifier findComponentIdentifierInCertainClass(Class<?> clazz) {
         for (var field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(ComponentIdentifier.class) && Identifier.class == field.getType() && isStatic(field.getModifiers())) {
@@ -66,16 +71,12 @@ public interface ComponentProvider<T extends Component> {
         return null;
     }
 
-    T provide(ComponentInitInfo info);
-
-    Class<?> getComponentClass();
+    @SneakyThrows
 
     default Identifier findComponentIdentifier() {
         return findComponentIdentifier(getComponentClass());
     }
 
-    @ToString
-    @EqualsAndHashCode
     @AllArgsConstructor
     class SimpleComponentProvider<T extends Component, I extends ComponentInitInfo> implements ComponentProvider<T> {
         private Function<I, T> provider;

@@ -12,14 +12,14 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public class CraftResultDeprecatedActionProcessor implements ContainerActionProcessor<CraftResultsDeprecatedAction> {
-    @Override
-    public ActionResponse handle(CraftResultsDeprecatedAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        return null;
-    }
-
+public class CraftResultDeprecatedActionProcessor implements ContainerActionProcessor<CraftResultsDeprecatedAction>{
     @Override
     public ItemStackRequestActionType getType() {
         return ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED;
+    }
+
+    @Override
+    public ActionResponse handle(CraftResultsDeprecatedAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+        return null;
     }
 }

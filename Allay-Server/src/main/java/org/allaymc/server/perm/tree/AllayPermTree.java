@@ -1,8 +1,6 @@
 package org.allaymc.server.perm.tree;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -26,13 +24,16 @@ import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;
  * @author daoge_cmd
  */
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class AllayPermTree implements PermTree {
-    protected final String name;
     @Getter
     protected PermTree parent;
     protected PermNode root = new AllayRootPermNode("ROOT");
     protected Map<String, Consumer<PermChangeType>> listeners = new HashMap<>();
+    protected final String name;
+
+    protected AllayPermTree(String name) {
+        this.name = name;
+    }
 
     public static PermTree create(String name) {
         return new AllayPermTree(name);
@@ -71,13 +72,17 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public boolean hasPerm(String perm) {
-        if (parent != null && parent.hasPerm(perm)) return true;
+        if (parent != null && parent.hasPerm(perm)) {
+            return true;
+        }
         var spilt = new LinkedList<>(AllayStringUtils.fastSplit(perm, "."));
         var node = root;
         while (!spilt.isEmpty()) {
             var nodeName = spilt.pop();
             var hasMatch = false;
-            if (node.getLeaves().isEmpty()) return false;
+            if (node.getLeaves().isEmpty()) {
+                return false;
+            }
             for (var leaf : node.getLeaves()) {
                 if (leaf.canMatch(nodeName)) {
                     node = leaf;
@@ -85,14 +90,18 @@ public class AllayPermTree implements PermTree {
                     break;
                 }
             }
-            if (!hasMatch) return false;
+            if (!hasMatch) {
+                return false;
+            }
         }
         return true;
     }
 
     @Override
     public PermTree addPerm(String perm, boolean callListener) {
-        if (parent != null && parent.hasPerm(perm)) return this;
+        if (parent != null && parent.hasPerm(perm)) {
+            return this;
+        }
         var spilt = new LinkedList<>(AllayStringUtils.fastSplit(perm, "."));
         var node = root;
         while (!spilt.isEmpty()) {
@@ -141,7 +150,9 @@ public class AllayPermTree implements PermTree {
                     }
                 }
             }
-            if (!hasMatch) return this;
+            if (!hasMatch) {
+                return this;
+            }
         }
         return this;
     }

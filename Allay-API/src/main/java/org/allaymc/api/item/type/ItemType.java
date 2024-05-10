@@ -1,14 +1,14 @@
 package org.allaymc.api.item.type;
 
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.utils.Identified;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
-import org.allaymc.api.utils.Identified;
-import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.jetbrains.annotations.Unmodifiable;
@@ -42,6 +42,7 @@ public interface ItemType<T extends ItemStack> extends Identified {
     default ItemDefinition toNetworkDefinition() {
         return new SimpleItemDefinition(getIdentifier().toString(), getRuntimeId(), false);
     }
+
 
     @Unmodifiable
     Set<ItemTag> getItemTags();

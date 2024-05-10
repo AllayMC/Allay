@@ -79,4 +79,5 @@ public class AllayCachedPlayerStorage implements PlayerStorage {
         long createTick;
         PlayerData playerData;
     }
+
 }

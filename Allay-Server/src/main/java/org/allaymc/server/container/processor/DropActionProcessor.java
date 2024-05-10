@@ -22,6 +22,11 @@ import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
 @Slf4j
 public class DropActionProcessor implements ContainerActionProcessor<DropAction> {
     @Override
+    public ItemStackRequestActionType getType() {
+        return ItemStackRequestActionType.DROP;
+    }
+
+    @Override
     public ActionResponse handle(DropAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         Container container = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var count = action.getCount();
@@ -43,26 +48,21 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
         item = container.getItemStack(slot);
         return new ActionResponse(
                 true,
-                Collections.singletonList(
-                        new ItemStackResponseContainer(
-                                container.getSlotType(slot),
-                                Collections.singletonList(
-                                        new ItemStackResponseSlot(
-                                                container.toNetworkSlotIndex(slot),
-                                                container.toNetworkSlotIndex(slot),
-                                                item.getCount(),
-                                                item.getStackNetworkId(),
-                                                item.getCustomName(),
-                                                item.getDurability()
+                        Collections.singletonList(
+                                new ItemStackResponseContainer(
+                                        container.getSlotType(slot),
+                                        Collections.singletonList(
+                                                new ItemStackResponseSlot(
+                                                        container.toNetworkSlotIndex(slot),
+                                                        container.toNetworkSlotIndex(slot),
+                                                        item.getCount(),
+                                                        item.getStackNetworkId(),
+                                                        item.getCustomName(),
+                                                        item.getDurability()
+                                                )
                                         )
                                 )
                         )
-                )
         );
-    }
-
-    @Override
-    public ItemStackRequestActionType getType() {
-        return ItemStackRequestActionType.DROP;
     }
 }

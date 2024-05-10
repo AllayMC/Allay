@@ -18,6 +18,11 @@ import java.util.Map;
 @Slf4j
 public class CraftCreativeActionProcessor implements ContainerActionProcessor<CraftCreativeAction> {
     @Override
+    public ItemStackRequestActionType getType() {
+        return ItemStackRequestActionType.CRAFT_CREATIVE;
+    }
+
+    @Override
     public ActionResponse handle(CraftCreativeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         var item = CreativeItemRegistry.getRegistry().get(action.getCreativeItemNetworkId() - 1);
         if (item == null) {
@@ -27,12 +32,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
         item = item.copy(true);
         item.setCount(item.getItemAttributes().maxStackSize());
         player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, item);
-        // No response is needed when taking items from the creative inventory.
+        //从创造物品栏拿东西不需要响应
         return null;
-    }
-
-    @Override
-    public ItemStackRequestActionType getType() {
-        return ItemStackRequestActionType.CRAFT_CREATIVE;
     }
 }

@@ -21,6 +21,11 @@ import java.util.Map;
 @Slf4j
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
     @Override
+    public ItemStackRequestActionType getType() {
+        return ItemStackRequestActionType.SWAP;
+    }
+
+    @Override
     public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         Container sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
         Container destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
@@ -69,10 +74,5 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                         )
                 )
         );
-    }
-
-    @Override
-    public ItemStackRequestActionType getType() {
-        return ItemStackRequestActionType.SWAP;
     }
 }

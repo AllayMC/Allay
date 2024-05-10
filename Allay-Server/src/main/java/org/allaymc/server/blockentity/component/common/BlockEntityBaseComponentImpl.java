@@ -1,8 +1,5 @@
 package org.allaymc.server.blockentity.component.common;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
 import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
@@ -13,13 +10,13 @@ import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
 import org.allaymc.api.blockentity.component.event.BlockEntitySaveNBTEvent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -27,18 +24,14 @@ import org.cloudburstmc.nbt.NbtMap;
  *
  * @author daoge_cmd
  */
-@ToString
-@EqualsAndHashCode
 public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements BlockEntityBaseComponent {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
 
     @Manager
-    @EqualsAndHashCode.Exclude
     protected ComponentManager<T> manager;
 
     protected BlockEntityType<T> blockEntityType;
-    @Getter
     protected Position3ic position;
     protected String customName = "";
 
@@ -58,6 +51,11 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     }
 
     @Override
+    public Position3ic getPosition() {
+        return position;
+    }
+
+    @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder()
                 .putString("id", blockEntityType.getName())
@@ -73,7 +71,9 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
 
     @Override
     public void loadNBT(NbtMap nbt) {
-        nbt.listenForString("CustomName", customName -> this.customName = customName);
+        if (nbt.containsKey("CustomName")) {
+            this.customName = nbt.getString("CustomName");
+        }
         var pos = new Position3i(position);
         pos.x = nbt.getInt("x", position.x());
         pos.y = nbt.getInt("y", position.y());

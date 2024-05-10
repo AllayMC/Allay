@@ -22,7 +22,11 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -32,9 +36,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 public class AllayWorld implements World {
-    public static final long TIME_SENDING_INTERVAL = 12 * 20;
-
-    public static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
+    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet) {
+    }
 
     protected final Queue<PacketQueueEntry> packetQueue = PlatformDependent.newMpscQueue();
     protected final AtomicBoolean networkLock = new AtomicBoolean(false);
@@ -53,6 +56,8 @@ public class AllayWorld implements World {
     protected final Thread thread;
     protected final Thread networkThread;
     protected long nextTimeSendTick;
+    public static final long TIME_SENDING_INTERVAL = 12 * 20;
+    public static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
@@ -61,24 +66,25 @@ public class AllayWorld implements World {
         if (worldStorage instanceof NativeFileWorldStorage nativeFileWorldStorage) {
             this.worldData.setName(nativeFileWorldStorage.getWorldFolderPath().toFile().getName());
         }
-        this.gameLoop = GameLoop.builder().onTick(gameLoop -> {
-            if (!Server.getInstance().isRunning()) {
-                gameLoop.stop();
-                return;
-            }
-            //noinspection StatementWithEmptyBody
-            while (!networkLock.compareAndSet(false, true)) {
-                // Spin
-                // We don't use Thread.yield() here, because we don't want to block the world main thread
-            }
-            try {
-                tick(gameLoop.getTick());
-            } catch (Throwable throwable) {
-                log.error("Error while ticking level {}", this.getWorldData().getName(), throwable);
-            } finally {
-                networkLock.set(false);
-            }
-        }).build();
+        this.gameLoop = GameLoop.builder()
+                .onTick(gameLoop -> {
+                    if (!Server.getInstance().isRunning()) {
+                        gameLoop.stop();
+                        return;
+                    }
+                    while (!networkLock.compareAndSet(false, true)) {
+                        // Spin
+                        // We don't use Thread.yield() here, because we don't want to block the world main thread
+                    }
+                    try {
+                        tick(gameLoop.getTick());
+                    } catch (Throwable throwable) {
+                        log.error("Error while ticking level " + this.getWorldData().getName(), throwable);
+                    } finally {
+                        networkLock.set(false);
+                    }
+                })
+                .build();
         this.thread = Thread.ofPlatform()
                 .name("World Thread - " + this.getWorldData().getName())
                 .unstarted(gameLoop::startLoop);
@@ -109,7 +115,7 @@ public class AllayWorld implements World {
                 // So we handle disconnect after we handled all other packets
                 handlePlayersDisconnect();
             } catch (Throwable throwable) {
-                log.error("Error while handling sync packet in world {}", this.getWorldData().getName(), throwable);
+                log.error("Error while handling sync packet in world " + this.getWorldData().getName(), throwable);
             } finally {
                 networkLock.set(false);
             }
@@ -240,6 +246,4 @@ public class AllayWorld implements World {
         saveWorldData();
         getWorldStorage().close();
     }
-
-    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet) {}
 }

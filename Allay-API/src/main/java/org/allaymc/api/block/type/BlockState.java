@@ -42,7 +42,7 @@ public interface BlockState {
 
     ItemStack toItemStack();
 
-    // TODO: Confirm if only need to implement BlockDefinition::getRuntimeId(), the existing implementation is quite complex and inefficient
+    //TODO: 确认是否只需要实现BlockDefinition::getRuntimeId(), 现有实现较为复杂且低效
     default SimpleBlockDefinition toNetworkBlockDefinition() {
         var statesBuilder = NbtMap.builder();
         for (var propertyValue : getPropertyValues().values()) {

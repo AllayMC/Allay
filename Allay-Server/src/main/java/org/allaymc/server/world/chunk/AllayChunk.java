@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -15,7 +14,12 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.chunk.*;
+import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.chunk.ChunkLoader;
+import org.allaymc.api.world.chunk.ChunkSection;
+import org.allaymc.api.world.chunk.ChunkState;
+import org.allaymc.api.world.chunk.UnsafeChunk;
+import org.allaymc.api.world.chunk.UnsafeChunkOperate;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
@@ -24,7 +28,12 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Predicate;
 
@@ -35,15 +44,23 @@ import java.util.function.Predicate;
  */
 @ThreadSafe
 @Slf4j
-@RequiredArgsConstructor
 public class AllayChunk implements Chunk {
     protected final AllayUnsafeChunk unsafeChunk;
-    protected final StampedLock blockLock = new StampedLock();
-    protected final StampedLock heightAndBiomeLock = new StampedLock();
-    protected final StampedLock lightLock = new StampedLock();
-    // No need to use concurrent-safe set as addChunkLoader() & removeChunkLoader() are only used in AllayChunkService which is single-thread
-    protected final Set<ChunkLoader> chunkLoaders = new ObjectOpenHashSet<>();
-    protected final Queue<ChunkPacketEntry> chunkPacketQueue = PlatformDependent.newMpscQueue();
+    protected final StampedLock blockLock;
+    protected final StampedLock heightAndBiomeLock;
+    protected final StampedLock lightLock;
+    protected final Set<ChunkLoader> chunkLoaders;
+    protected final Queue<ChunkPacketEntry> chunkPacketQueue;
+
+    public AllayChunk(AllayUnsafeChunk unsafeChunk) {
+        this.unsafeChunk = unsafeChunk;
+        this.blockLock = new StampedLock();
+        this.heightAndBiomeLock = new StampedLock();
+        this.lightLock = new StampedLock();
+        this.chunkPacketQueue = PlatformDependent.newMpscQueue();
+        // No need to use concurrent-safe set as addChunkLoader() & removeChunkLoader() are only used in AllayChunkService which is single-thread
+        this.chunkLoaders = new ObjectOpenHashSet<>();
+    }
 
     private static void checkXZ(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
@@ -366,7 +383,7 @@ public class AllayChunk implements Chunk {
         try {
             for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
                 if (unsafeChunk.getSection(i) == null) {
-                    unsafeChunk.getSections()[i - getDimensionInfo().minSectionY()] = new ChunkSection((byte) i);
+                    unsafeChunk.getSections()[i - getDimensionInfo().minSectionY()] = new ChunkSection((byte)i);
                 }
             }
         } finally {
@@ -380,7 +397,7 @@ public class AllayChunk implements Chunk {
             writeToNetwork0(byteBuf);
             return byteBuf;
         } catch (Throwable t) {
-            log.error("Error while encoding chunk(x={}, z={})!", getX(), getZ(), t);
+            log.error("Error while encoding chunk(x=" + getX() + ", z=" + getZ() + ")!", t);
             byteBuf.release();
             throw t;
         }
@@ -406,7 +423,7 @@ public class AllayChunk implements Chunk {
                     writer.writeTag(blockEntity.saveNBT());
                 }
             } catch (IOException e) {
-                log.error("Error while encoding block entities in chunk(x={}, z={})!", getX(), getZ(), e);
+                log.error("Error while encoding block entities in chunk(x=" + getX() + ", z=" + getZ() + ")!", e);
             }
         }
     }

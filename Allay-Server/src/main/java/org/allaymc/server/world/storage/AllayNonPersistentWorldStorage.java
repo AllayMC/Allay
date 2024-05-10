@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * Allay Project 2023/7/1
  *
  * @author daoge_cmd
- * <p>
+ *
  * TODO: optimize it for better memory footprint
  */
 @NotThreadSafe
@@ -43,23 +43,23 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) {
-        var dimension = Server.getInstance().getWorldPool().getWorld(worldData.getName()).getDimension(dimensionInfo.dimensionId());
-        var hash = HashUtils.hashXZ(x, z);
-        var chunk = chunks.get(hash);
+        Dimension dimension = Server.getInstance().getWorldPool().getWorld(worldData.getName()).getDimension(dimensionInfo.dimensionId());
+        long l = HashUtils.hashXZ(x, z);
+        var chunk = chunks.get(l);
         if (chunk == null) {
             chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimensionInfo).toSafeChunk();
         }
-        readEntities(hash).stream().map(nbt -> EntityHelper.fromNBT(dimension, nbt)).forEach(e -> dimension.getEntityService().addEntity(e));
-        readBlockEntities(hash).stream().map(nbt -> BlockEntityHelper.fromNBT(dimension, nbt)).forEach(chunk::addBlockEntity);
+        readEntities(l).stream().map(nbt -> EntityHelper.fromNBT(dimension, nbt)).forEach(e -> dimension.getEntityService().addEntity(e));
+        readBlockEntities(l).stream().map(nbt -> BlockEntityHelper.fromNBT(dimension, nbt)).forEach(chunk::addBlockEntity);
         return CompletableFuture.completedFuture(chunk);
     }
 
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) {
-        var hashXZ = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
-        chunks.put(hashXZ, chunk);
-        writeEntities(hashXZ, chunk.getEntities().values());
-        writeBlockEntities(hashXZ, chunk.getBlockEntities().values());
+        long l = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
+        chunks.put(l, chunk);
+        writeEntities(l, chunk.getEntities().values());
+        writeBlockEntities(l, chunk.getBlockEntities().values());
         return CompletableFuture.completedFuture(null);
     }
 

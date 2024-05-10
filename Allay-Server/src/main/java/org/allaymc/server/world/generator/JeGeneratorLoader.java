@@ -16,18 +16,17 @@ import java.time.temporal.ChronoUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class JeGeneratorLoader {
-    public static final String WORK_PATH = "jegenerator";
-
     private static final AtomicBoolean loaded = new AtomicBoolean(false);
-
+    public static final String WORK_PATH = "jegenerator";
     private static MethodHandle OVERWORLD;
     private static MethodHandle NETHER;
     private static MethodHandle THE_END;
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void setup() {
         File file = Path.of(WORK_PATH).toFile();
-        if (!file.exists()) file.mkdirs();
+        if (!file.exists()) {
+            file.mkdirs();
+        }
         Paperclip.setup(Allay.EXTRA_RESOURCE_CLASS_LOADER, new String[]{WORK_PATH, "--noconsole", "--nogui", "--universe=jegenerator"});
         try {
             final Class<?> JeGeneratorMain = Class.forName("org.allaymc.jegenerator.JeGeneratorMain", true, Allay.EXTRA_RESOURCE_CLASS_LOADER);
@@ -47,10 +46,7 @@ public final class JeGeneratorLoader {
     }
 
     public static void waitStart() {
-        Utils.spinUntil(
-                () -> !System.getProperties().getOrDefault("complete_start", false).equals("true"),
-                Duration.of(20, ChronoUnit.MILLIS)
-        );
+        Utils.spinUntil(() -> !System.getProperties().getOrDefault("complete_start", false).equals("true"), Duration.of(20, ChronoUnit.MILLIS));
     }
 
     public static WorldGenerator getJeGenerator(DimensionInfo info) {

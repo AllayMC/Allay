@@ -11,6 +11,13 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface ContainerActionProcessorHolder {
+    <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type);
+
+    void registerProcessor(ContainerActionProcessor<?> processor);
+
+    @UnmodifiableView
+    Map<ItemStackRequestActionType, ContainerActionProcessor<?>> getProcessors();
+
     static void registerDefaultContainerActionProcessors(ContainerActionProcessorHolder holder) {
         holder.registerProcessor(new CraftCreativeActionProcessor());
         holder.registerProcessor(new PlaceActionProcessor());
@@ -23,11 +30,4 @@ public interface ContainerActionProcessorHolder {
         holder.registerProcessor(new CreateActionProcessor());
         holder.registerProcessor(new CraftResultDeprecatedActionProcessor());
     }
-
-    <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type);
-
-    void registerProcessor(ContainerActionProcessor<?> processor);
-
-    @UnmodifiableView
-    Map<ItemStackRequestActionType, ContainerActionProcessor<?>> getProcessors();
 }

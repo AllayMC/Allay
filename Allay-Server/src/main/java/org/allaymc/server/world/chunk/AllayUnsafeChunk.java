@@ -27,7 +27,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
@@ -36,22 +40,14 @@ import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AllayUnsafeChunk implements UnsafeChunk {
     private static final AtomicReferenceFieldUpdater<AllayUnsafeChunk, ChunkState> STATE_FIELD = AtomicReferenceFieldUpdater.newUpdater(AllayUnsafeChunk.class, ChunkState.class, "state");
-
-    @Getter
+    protected volatile ChunkState state;
     protected final int x;
-    @Getter
     protected final int z;
-
-    @Getter
     protected final DimensionInfo dimensionInfo;
     protected final ChunkSection[] sections;
     protected final HeightMap heightMap;
     protected final Map<Long, Entity> entities;
     protected final Map<Integer, BlockEntity> blockEntities;
-
-    @Getter
-    protected volatile ChunkState state;
-
     protected List<NbtMap> entityNbtList;
     protected List<NbtMap> blockEntityNbtList;
 
@@ -68,11 +64,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    private static void checkXZ(int x, int z) {
-        Preconditions.checkArgument(x >= 0 && x <= 15);
-        Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
     @Override
@@ -101,9 +92,23 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
     }
 
+    @Override
+    public void setState(ChunkState next) {
+        ChunkState curr;
+        do {
+            curr = STATE_FIELD.get(this);
+            Preconditions.checkState(curr.ordinal() <= next.ordinal(), "invalid state transition: %s => %s", curr, next);
+        } while (!STATE_FIELD.compareAndSet(this, curr, next));
+    }
+
     private void checkXYZ(int x, int y, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight());
+        Preconditions.checkArgument(z >= 0 && z <= 15);
+    }
+
+    private static void checkXZ(int x, int z) {
+        Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
@@ -114,6 +119,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @ApiStatus.Internal
+
     public ChunkSection getSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
         return sections[sectionY - this.getDimensionInfo().minSectionY()];
@@ -132,6 +138,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return sections[offsetY];
     }
 
+    //基岩版3d-data保存heightMap是以0为索引保存的，所以这里需要减去/加上世界最小值，详情查看
+    //Bedrock Edition 3d-data saves the height map start from index of 0, so need to subtract/add the world minimum height here, see for details:
+    //https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
+
     @UnmodifiableView
     @Override
     public Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
@@ -146,11 +156,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return Collections.unmodifiableCollection(sectionBlockEntities);
     }
 
-    /**
-     * Bedrock Edition 3d-data saves the height map start from index of 0, so need to subtract/add the world minimum height here
-     * <p>
-     * <a href="https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115">More details</a>
-     */
     public int getHeight(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
@@ -230,6 +235,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         entities.put(entity.getRuntimeId(), entity);
     }
 
+
     public Entity removeEntity(long runtimeId) {
         return entities.remove(runtimeId);
     }
@@ -272,27 +278,34 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return new AllayChunk(this);
     }
 
-    @Override
-    public void setState(ChunkState next) {
-        ChunkState curr;
-        do {
-            curr = STATE_FIELD.get(this);
-            Preconditions.checkState(curr.ordinal() <= next.ordinal(), "invalid state transition: %s => %s", curr, next);
-        } while (!STATE_FIELD.compareAndSet(this, curr, next));
+    public ChunkState getState() {
+        return state;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
+    public DimensionInfo getDimensionInfo() {
+        return dimensionInfo;
     }
 
     @Getter
     public static class Builder {
-        private ChunkState state;
-        private int chunkZ;
-        private int chunkX;
-        private DimensionInfo dimensionInfo;
-        private ChunkSection[] sections;
-        private HeightMap heightMap;
-        private Map<Long, Entity> entities;
-        private Map<Integer, BlockEntity> blockEntities;
-        private List<NbtMap> entitiyList;
-        private List<NbtMap> blockEntitiyList;
+        ChunkState state;
+        int chunkZ;
+        int chunkX;
+        DimensionInfo dimensionInfo;
+        ChunkSection[] sections;
+        HeightMap heightMap;
+        Map<Long, Entity> entities;
+        Map<Integer, BlockEntity> blockEntities;
+        List<NbtMap> entitiyList;
+        List<NbtMap> blockEntitiyList;
 
         public Builder chunkX(int chunkX) {
             this.chunkX = chunkX;
@@ -342,6 +355,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             if (entities == null) entities = new Long2ObjectNonBlockingMap<>();
             if (blockEntities == null) blockEntities = new Int2ObjectNonBlockingMap<>();
             return new AllayUnsafeChunk(
+                    state,
                     chunkX,
                     chunkZ,
                     dimensionInfo,
@@ -349,7 +363,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     heightMap,
                     entities,
                     blockEntities,
-                    state,
                     entitiyList,
                     blockEntitiyList
             );

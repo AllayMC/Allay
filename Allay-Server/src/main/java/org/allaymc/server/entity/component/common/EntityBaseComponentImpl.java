@@ -1,11 +1,9 @@
 package org.allaymc.server.entity.component.common;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
@@ -34,7 +32,6 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -96,8 +93,6 @@ import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Fla
  * @author daoge_cmd
  */
 @Slf4j
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComponent {
 
     @ComponentIdentifier
@@ -107,19 +102,14 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(0);
 
-    private static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
-
-    @Getter
     protected final Location3f location;
     protected final Location3f locLastSent = new Location3f(0, 0, 0, null);
     @Getter
     protected final long runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
-    @Getter
-    protected final Metadata metadata;
     // Will be reset in method loadUniqueId()
     @Getter
-    @EqualsAndHashCode.Include
     protected long uniqueId = Long.MAX_VALUE;
+    protected final Metadata metadata;
     @Manager
     protected ComponentManager<T> manager;
     @ComponentedObject
@@ -129,21 +119,15 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected EntityType<T> entityType;
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
     protected Map<EffectType, EffectInstance> effects = new HashMap<>();
-    @Getter
     protected Vector3f motion = new Vector3f();
-    @Getter
     protected boolean onGround = true;
     protected boolean willBeDespawnedNextTick = false;
     protected boolean willBeSpawnedNextTick = false;
-    @Getter
     protected boolean spawned;
-    @Getter
     protected boolean dead;
     protected int deadTimer;
-    @Getter
     protected float fallDistance = 0f;
     @Getter
-    @Setter
     protected String displayName;
     protected Set<String> tags = new HashSet<>();
 
@@ -240,6 +224,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return entityType;
     }
 
+    @Override
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    @Override
+    public Location3fc getLocation() {
+        return location;
+    }
+
     public void setLocation(Location3fc location) {
         setLocation(location, true);
     }
@@ -267,6 +261,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public boolean isDead() {
+        return dead;
+    }
+
+    @Override
     public void despawn() {
         getDimension().getEntityService().removeEntity(thisEntity);
     }
@@ -283,6 +282,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public boolean isSpawned() {
+        return spawned;
+    }
+
+    @Override
     @ApiStatus.Internal
     public void setSpawned(boolean spawned) {
         this.spawned = spawned;
@@ -291,7 +295,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public boolean canBeSpawned() {
         return location.x != Integer.MAX_VALUE && location.y != Integer.MAX_VALUE && location.z != Integer.MAX_VALUE &&
-                location.dimension != null && !spawned && !willBeSpawnedNextTick;
+               location.dimension != null && !spawned && !willBeSpawnedNextTick;
     }
 
     @Override
@@ -374,6 +378,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public Metadata getMetadata() {
+        return metadata;
+    }
+
+    @Override
     public void sendEntityData(EntityDataType<?>... dataTypes) {
         if (viewers.isEmpty()) return;
         var pk = new SetEntityDataPacket();
@@ -415,8 +424,18 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public Vector3fc getMotion() {
+        return motion;
+    }
+
+    @Override
     public void setMotion(Vector3fc motion) {
         this.motion = new Vector3f(motion);
+    }
+
+    @Override
+    public boolean isOnGround() {
+        return onGround;
     }
 
     @Override
@@ -433,7 +452,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void knockback(Vector3fc source) {
-        var resistance = AttributeType.KNOCKBACK_RESISTANCE.getDefaultValue();
+        var resistance = 0.6f;
         if (attributeComponent != null) {
             resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
         }
@@ -637,12 +656,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             location.setPitch(rot.y);
         }
         if (nbt.containsKey("Motion")) {
+            // What? mot!
             var mot = readVector3f(nbt, "Motion", "dx", "dy", "dz");
             motion.set(mot);
         }
-        nbt.listenForBoolean("OnGround", onGround -> this.onGround = onGround);
-        nbt.listenForList("Tags", NbtType.STRING, tags -> this.tags.addAll(tags));
-
+        if (nbt.containsKey("OnGround")) {
+            onGround = nbt.getBoolean("OnGround");
+        }
+        if (nbt.containsKey("Tags")) {
+            tags.addAll(nbt.getList("Tags", NbtType.STRING));
+        }
         loadUniqueId(nbt);
         var event = new EntityLoadNBTEvent(nbt);
         manager.callEvent(event);
@@ -654,6 +677,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             return;
         }
         uniqueId = UUID.randomUUID().getMostSignificantBits();
+    }
+
+    @Override
+    public float getFallDistance() {
+        return fallDistance;
     }
 
     @Override
@@ -735,8 +763,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return getDisplayName();
     }
 
+    private static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
+
     @Override
-    public CommandOriginData getCommandOriginData() {
+    public CommandOriginData getCommandOriginData(){
         return ENTITY_COMMAND_ORIGIN_DATA;
     }
 

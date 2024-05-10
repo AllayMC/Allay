@@ -10,8 +10,8 @@ import org.cloudburstmc.nbt.MutableNbtMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
+import java.io.InputStream;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,8 +30,8 @@ public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, Biom
 
     @SneakyThrows
     private void loadVanillaBiomeDefinition() {
-        try (var stream = AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions.nbt")) {
-            Objects.requireNonNull(stream);
+        try (InputStream stream = AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions.nbt")) {
+            assert stream != null;
             biomeDefinition = MutableNbtMap.from((NbtMap) NbtUtils.createGZIPReader(stream).readTag());
             int i = 0;
             for (var biome : biomeDefinition.entrySet()) {

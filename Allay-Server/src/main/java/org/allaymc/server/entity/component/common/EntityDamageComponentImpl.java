@@ -1,8 +1,7 @@
 package org.allaymc.server.entity.component.common;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -13,7 +12,6 @@ import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.event.EntityFallEvent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
@@ -23,8 +21,6 @@ import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
  *
  * @author daoge_cmd
  */
-@ToString
-@EqualsAndHashCode
 public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @ComponentIdentifier

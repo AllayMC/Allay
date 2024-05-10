@@ -1,8 +1,5 @@
 package org.allaymc.server.block.component.common;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.BlockEntityHolderComponent;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
@@ -11,10 +8,10 @@ import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
 import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.Identifier;
 
 /**
  * Allay Project 2023/9/15
@@ -22,13 +19,10 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 @Slf4j
-@ToString
-@EqualsAndHashCode
 public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements BlockEntityHolderComponent<T> {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_holder_component");
 
-    @Getter
     protected final BlockEntityType<T> blockEntityType;
 
     public BlockEntityHolderComponentImpl(BlockEntityType<T> blockEntityType) {
@@ -67,5 +61,10 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
         var pos = event.getBlockPos();
         var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension());
         blockEntity.onInteract(event);
+    }
+
+    @Override
+    public BlockEntityType<?> getBlockEntityType() {
+        return blockEntityType;
     }
 }

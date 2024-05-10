@@ -29,8 +29,12 @@ public class AllayPermNode implements PermNode {
     }
 
     protected String getFullName0(PermNode node, String str) {
-        if (node.isRoot()) return str;
-        if (!str.isEmpty()) str = "." + str;
+        if (node.isRoot()) {
+            return str;
+        }
+        if (!str.isEmpty()) {
+            str = "." + str;
+        }
         str = node.getName() + str;
         return getFullName0(node.getParent(), str);
     }

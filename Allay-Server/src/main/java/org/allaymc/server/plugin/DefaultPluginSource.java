@@ -18,12 +18,6 @@ public class DefaultPluginSource implements PluginSource {
     public static final Path DEFAULT_PLUGIN_FOLDER = Path.of("plugins");
 
     @SneakyThrows
-    public DefaultPluginSource() {
-        if (!Files.exists(DEFAULT_PLUGIN_FOLDER))
-            Files.createDirectory(DEFAULT_PLUGIN_FOLDER);
-    }
-
-    @SneakyThrows
     public static Path getOrCreateDataFolder(String pluginName) {
         var dataFolder = DEFAULT_PLUGIN_FOLDER.resolve(pluginName);
         if (!Files.exists(dataFolder)) {
@@ -33,9 +27,15 @@ public class DefaultPluginSource implements PluginSource {
     }
 
     @SneakyThrows
+    public DefaultPluginSource() {
+        if (!Files.exists(DEFAULT_PLUGIN_FOLDER))
+            Files.createDirectory(DEFAULT_PLUGIN_FOLDER);
+    }
+
+    @SneakyThrows
     @Override
     public Set<Path> find() {
-        try (var stream = Files.list(DEFAULT_PLUGIN_FOLDER)) {
+        try(var stream = Files.list(DEFAULT_PLUGIN_FOLDER)) {
             return stream.collect(Collectors.toSet());
         }
     }

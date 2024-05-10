@@ -1,7 +1,5 @@
 package org.allaymc.server.entity.component.player;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
@@ -13,8 +11,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
  *
  * @author daoge_cmd
  */
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
     @Dependency
     protected EntityPlayerBaseComponent baseComponent;

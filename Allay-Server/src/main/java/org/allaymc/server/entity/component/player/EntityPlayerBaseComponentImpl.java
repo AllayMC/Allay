@@ -2,10 +2,8 @@ package org.allaymc.server.entity.component.player;
 
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
@@ -77,7 +75,6 @@ import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCOR
  * @author daoge_cmd
  */
 @Slf4j
-@ToString(callSuper = true)
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
 
     @Dependency
@@ -639,7 +636,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void showForm(Form form) {
         if (this.forms.size() > 100) {
             networkComponent.disconnect("Possible DoS vulnerability: More Than 100 FormWindow sent to client already.");
-            return;
         }
         var packet = new ModalFormRequestPacket();
         var id = assignFormId();
@@ -704,7 +700,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         SetScorePacket pk = new SetScorePacket();
         pk.setAction(SetScorePacket.Action.REMOVE);
         var networkInfo = line.toNetworkInfo();
-        if (networkInfo != null) pk.getInfos().add(networkInfo);
+        if (networkInfo != null)
+            pk.getInfos().add(networkInfo);
         networkComponent.sendPacket(pk);
 
         var scorer = new PlayerScorer(thisEntity);

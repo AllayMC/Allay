@@ -101,11 +101,13 @@ public final class ComponentClassCacheUtils {
 
     public static <T> Class<T> getCacheClass(Class<T> interfaceClass) {
         String s = CACHE_MAP.get(interfaceClass.getSimpleName());
-        if (s == null) return null;
         try {
+            if (s == null) {
+                return null;
+            }
             return (Class<T>) Allay.EXTRA_RESOURCE_CLASS_LOADER.loadClass(s);
         } catch (ClassNotFoundException ignore) {
-            CACHE_MAP.remove(s); // remove old cache entry
+            CACHE_MAP.remove(s);//remove old cache entry
             return null;
         }
     }
