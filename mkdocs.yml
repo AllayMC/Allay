@@ -32,6 +32,8 @@ plugins:
             Home: 主页,
             Q&A: 问&答,
             Plugin Development: 插件开发,
+              How Plugin Works: 插件如何工作,
+              About Plugin Reloading: 关于插件重载,
               I18n: 多语言,
                 Lang File Format: 语言文件格式,
               Permission: 权限,
@@ -56,6 +58,8 @@ nav:
   - Home: index.md
   - Q&A: Q&A.md
   - Plugin Development:
+    - How Plugin Works: plugin_development/how_plugin_works.md
+    - About Plugin Reloading: plugin_development/about_plugin_reloading.md
     - I18n:
       - Lang File Format: plugin_development/i18n/lang_file_format.md
     - Permission:
