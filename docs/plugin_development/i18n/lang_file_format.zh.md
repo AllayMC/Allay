@@ -4,7 +4,7 @@ comments: true
 
 考虑以下这些多语言key:
 
-### 例1
+## 例1
 
 ```
 translation.test.complex=前缀，%s%2$s，然后是 %s 和 %1$s，最后是 %s，还有 %1$s！
@@ -18,7 +18,7 @@ translation.test.complex=前缀，%s%2$s，然后是 %s 和 %1$s，最后是 %s�
 
 参数类型可以被声明为```s```（字符串）或```d```（数字），实际上这个类型不重要，甚至字符串参数可以替换数字占位符
 
-### 例2
+## 例2
 
 ```
 world_recovery.error.insufficient_space=空间不足，无法进行回复。需要：%1。可用：%2。	#
@@ -28,7 +28,7 @@ world_recovery.error.insufficient_space=空间不足，无法进行回复。需�
 
 即占位符可不声明类型
 
-### 关于'%'的使用
+## 关于'%'的使用
 
 百分号'%'用于指示多语言key的开头
 

@@ -2,11 +2,9 @@
 comments: true
 ---
 
-# 更新到下一个协议版本
-
 此教程将详细介绍Allay完成一次协议版本更新的大体流程。实际可能遇到很多特殊情况，不能完全依赖于此文档。
 
-### 1.更新导出器
+## 1.更新导出器
 
 Allay借助LeviLamina从BDS导出所需的海量数据。故在更新Allay之前，我们需要先更新Allay的导出器DataExtractor。
 
@@ -14,7 +12,7 @@ Allay借助LeviLamina从BDS导出所需的海量数据。故在更新Allay之前
 
 DataExtractor有很多容易踩的坑，后面会详细说明一下
 
-### 2.更新第一批资源文件
+## 2.更新第一批资源文件
 
 资源文件更新存在先后顺序。Allay的所有资源文件都存放在Allay-Data/resources目录下。
 
@@ -46,7 +44,7 @@ DataExtractor有很多容易踩的坑，后面会详细说明一下
 
 **第四步，运行`Allay-Data`下的`ItemMetaToBlockStateMappingsGenerator`**，此脚本会基于creative_items.nbt生成item_meta_block_state_bimap.nbt。运行前记得要删除旧的文件！
 
-### 3.代码生成
+## 3.代码生成
 
 Allay通过代码生成完成大部分重复工作。接下来我们将注意力转移到`Allay-CodeGen`
 
@@ -71,20 +69,20 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 - 即使不存在物品增删，已实现物品的逻辑在原版中也有可能发生改变，为了尊重原版，Allay需要同步更改。当然，如果只讨论协议更新的话，这点可以暂缓。
 - 若存在一批相似的物品，你需要在`VanillaItemInterfaceGen`的`registerSubPackages()`方法中注册新的子包避免物品类群过于冗杂。
 
-### 4.更新依赖
+## 4.更新依赖
 
 更新Allay使用的协议库`Cloudburst/Protocol`以及方块状态更新器`CloudburstMC/BlockStateUpdater`到最新
 
-### 5.更新`Allay-API/src/main/java/org/allaymc/api/network/ProtocolInfo.java`
+## 5.更新`Allay-API/src/main/java/org/allaymc/api/network/ProtocolInfo.java`
 
 你需要更新`ProtocolInfo`里的`PACKET_CODEC`以及`MINECRAFT_VERSION`，`MINECRAFT_VERSION`的更新参考pmmp。确保在此之前依赖库已更新！
 
-### 6.生成recipes.json（配方文件）
+## 6.生成recipes.json（配方文件）
 
 **复制`crafting_data_packet.bin`到`Allay-Data/resources`下，运行`RecipeExportUtil`**。在此之前你需要确保你已经正确完成方块和物品的更新！运行前记得要删除旧的文件！
 
 若不出意外，`Allay-Data/resources/recipes.json`会被更新。自此资源文件已经全部更新完毕，删除先前复制的`crafting_data_packet.bin`。
 
-### 7.测试，完成更新
+## 7.测试，完成更新
 
 运行`gradle test`确保没有东西被破坏，然后更新客户端，进服测试（这很重要！）。更新完毕。

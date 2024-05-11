@@ -4,7 +4,7 @@ comments: true
 
 Consider the following multi-language keys:
 
-### Example 1
+## Example 1
 
 ```properties
 translation.test.complex=Prefix, %s%2$s, then %s and %1$s, finally %s, also %1$s!
@@ -20,7 +20,7 @@ In the example above, there are two `%1$s` placeholders, both of which become 4 
 Parameter types can be declared as `s` (string) or `d` (number); in reality, this type is not important,
 and even string parameters can replace number placeholders.
 
-### Example 2
+## Example 2
 
 ```properties
 world_recovery.error.insufficient_space=Insufficient space, unable to recover. Needed: %1. Available: %2.	#
@@ -30,7 +30,7 @@ If the parameters are [1,2], the output will be `Insufficient space, unable to r
 
 Thus, placeholders can be declared without a type.
 
-### Regarding the Use of '%'
+## Regarding the Use of '%'
 
 The percent sign `%` indicates the beginning of a multi-language key.
 
