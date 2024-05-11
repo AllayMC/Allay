@@ -28,7 +28,8 @@ public class WorldSettings extends OkaeriConfig {
             .overworld(new WorldEntry.DimensionSettings("FLAT", ""))
             .build();
 
-    private final Map<String, WorldEntry> worlds = Map.of(DEFAULT_WORLD_NAME, DEFAULT);
+    @CustomKey("worlds")
+    private Map<String, WorldEntry> worlds = Map.of(DEFAULT_WORLD_NAME, DEFAULT);
 
     @CustomKey("default-world")
     @Setter

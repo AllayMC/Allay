@@ -19,9 +19,9 @@ import java.util.Set;
 public class BanInfo extends OkaeriConfig {
     @CustomKey("banned-players")
     @Comment("Banned player list. The value can be player's name or uuid")
-    private final Set<String> bannedPlayers = Sets.newConcurrentHashSet();
+    private Set<String> bannedPlayers = Sets.newConcurrentHashSet();
 
     @CustomKey("banned-ips")
     @Comment("Banned ip list")
-    private final Set<String> bannedIps = Sets.newConcurrentHashSet();
+    private Set<String> bannedIps = Sets.newConcurrentHashSet();
 }
