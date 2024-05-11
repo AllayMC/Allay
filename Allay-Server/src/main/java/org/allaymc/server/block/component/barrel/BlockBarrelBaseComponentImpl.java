@@ -22,6 +22,7 @@ import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
  * @author daoge_cmd
  */
 @RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "facing_direction")
+@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "open_bit")
 public class BlockBarrelBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockBarrelBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

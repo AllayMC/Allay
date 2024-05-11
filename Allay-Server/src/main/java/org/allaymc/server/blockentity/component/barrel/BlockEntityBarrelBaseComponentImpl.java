@@ -1,10 +1,15 @@
 package org.allaymc.server.blockentity.component.barrel;
 
+import org.allaymc.api.block.interfaces.BlockBarrelBehavior;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.impl.BarrelContainer;
+import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -22,6 +27,36 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
 
     public BlockEntityBarrelBaseComponentImpl(BlockEntityInitInfo<BlockEntityBarrel> info) {
         super(info);
+    }
+
+    @Override
+    public void onInitFinish(ComponentInitInfo initInfo) {
+        super.onInitFinish(initInfo);
+        var container = containerHolderComponent.<BarrelContainer>getContainer();
+        container.addOnOpenListener(viewer -> {
+            if (container.getViewers().size() == 1) {
+                BlockTypes.BARREL_TYPE.getBlockBehavior().updateBlockProperty(
+                        VanillaBlockPropertyTypes.OPEN_BIT,
+                        true,
+                        position.x(),
+                        position.y(),
+                        position.z(),
+                        position.dimension()
+                );
+            }
+        });
+        container.addOnCloseListener(viewer -> {
+            if (container.getViewers().isEmpty()) {
+                BlockTypes.BARREL_TYPE.getBlockBehavior().updateBlockProperty(
+                        VanillaBlockPropertyTypes.OPEN_BIT,
+                        false,
+                        position.x(),
+                        position.y(),
+                        position.z(),
+                        position.dimension()
+                );
+            }
+        });
     }
 
     @Override
