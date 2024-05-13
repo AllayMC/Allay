@@ -20,7 +20,7 @@ dependencies {
 
     implementation("me.lucko:spark-api:0.1-SNAPSHOT")
     implementation(files("libs/spark-common-1.10-SNAPSHOT.jar"))
-    implementation("net.kyori:adventure-text-serializer-legacy:4.16.0")
+    implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
 
     implementation("com.github.jvm-profiling-tools:async-profiler:v2.8.3")
     implementation("org.ow2.asm:asm:9.7")
