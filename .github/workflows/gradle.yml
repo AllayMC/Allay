@@ -20,10 +20,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
       # support for ipv6
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
@@ -36,7 +32,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'zulu'
-      - name: Setup Gradle
+      - name: Build
         uses: gradle/gradle-build-action@v3
         with:
           gradle-version: wrapper
@@ -46,6 +42,10 @@ jobs:
           build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-service-agree: "yes"
           arguments: buildForGithubAction -p Allay-Server --scan
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: Upload Allay-API
         uses: actions/upload-artifact@v4
         if: success() && contains(github.ref_name, 'master')
