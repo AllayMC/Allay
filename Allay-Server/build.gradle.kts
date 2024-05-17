@@ -2,6 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCach
 
 plugins {
     `java-library`
+    jacoco
     application
     id("me.champeau.jmh") version "0.7.2"
     id("com.gorylenko.gradle-git-properties") version "2.4.2"
@@ -101,4 +102,22 @@ tasks.jar {
 
 tasks.shadowJar {
     transform(Log4j2PluginsCacheFileTransformer())
+}
+
+tasks.test {
+    finalizedBy("jacocoTestReport")
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = false
+    }
+    dependsOn("test")
+    additionalClassDirs(file("${rootProject.projectDir}/Allay-API/build/classes/java/main"))
+    additionalSourceDirs(file("${rootProject.projectDir}/Allay-API/src/main/java"))
+}
+
+jacoco {
+    reportsDirectory = layout.buildDirectory.dir("${rootProject.projectDir}/.jacoco")
 }

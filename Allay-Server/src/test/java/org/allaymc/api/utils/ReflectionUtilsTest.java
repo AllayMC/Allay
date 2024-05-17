@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Allay Project 2023/8/4
@@ -43,7 +44,9 @@ class ReflectionUtilsTest {
     @SneakyThrows
     void testGetAllMethods() {
         var methods = ReflectionUtils.getAllMethods(B.class);
-        assertEquals(14, methods.size());
+        // NOTICE: Will have an extra jacoco method if jacoco is enabled
+        // So both 14 and 15 are correct
+        assertTrue(methods.size() == 14 || methods.size() == 15);
         var b = new B();
         for (var method : methods) {
             if (method.getName().equals("methodA")) assertEquals("override", method.invoke(b));
