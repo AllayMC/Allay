@@ -11,6 +11,7 @@
 
 <a href="https://github.com/AllayMC/Allay/actions"><img src="https://github.com/AllayMC/Allay/actions/workflows/gradle.yml/badge.svg" alt="Build"/></a>
 <a href="https://docs.allaymc.org/zh"><img src="https://readthedocs.org/projects/allaymc/badge/?version=latest" alt="Documentation Status"></a>
+[![codecov](https://codecov.io/gh/AllayMC/Allay/graph/badge.svg?token=EI8EDEKI51)](https://codecov.io/gh/AllayMC/Allay)
 <a href="https://app.codacy.com/gh/AllayMC/Allay/dashboard"><img src="https://app.codacy.com/project/badge/Grade/30e264923da2425a8b777a84b4028334"></a>
 <a href="https://discord.com/invite/wyN2rVJt"><img src="https://img.shields.io/discord/373199722573201408?label=discord&color=7289DA&logo=discord" alt="Discord" /></a>
 <a href="https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs"><img src="https://img.shields.io/badge/minecraft-v1.20.72%20(Bedrock)-green" /></a>
@@ -86,6 +87,12 @@ Allay支持运行以Java/JVM或JavaScript语言编写的插件，你可以查看
 这个项目的存在得益于以下开发者的参与：
 
 ![contributors](https://contrib.rocks/image?repo=AllayMC/Allay)
+
+## 代码覆盖率
+
+欢迎帮助我们完善单元测试！单元测试有助于这个项目的发展
+
+![Codecov Graph](https://codecov.io/gh/AllayMC/Allay/graphs/sunburst.svg?token=EI8EDEKI51)
 
 ## 反馈
 
