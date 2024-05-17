@@ -2,6 +2,7 @@ import java.nio.charset.StandardCharsets
 
 plugins {
     java
+    jacoco
     idea
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
