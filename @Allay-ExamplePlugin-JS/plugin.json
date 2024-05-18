@@ -3,6 +3,6 @@
   "name": "ExamplePlugin-JS",
   "authors": ["daoge_cmd"],
   "version": "1.0.0",
-  "order": "START_UP"/*,
+  "order": "POST_WORLD"/*,
   "debugPort": 9229*/
 }
