@@ -4,7 +4,7 @@ plugins {
 
 group = "org.allaymc"
 description = "api"
-version = "0.0.1"
+version = "1.0.0"
 
 dependencies {
     api(libs.network) {

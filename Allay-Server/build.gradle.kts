@@ -10,7 +10,7 @@ plugins {
 
 group = "org.allaymc"
 description = "server"
-version = "0.0.1"
+version = "1.0.0"
 
 application {
     mainClass.set("org.allaymc.server.Allay")
@@ -75,14 +75,6 @@ tasks.distZip {
 
 tasks.sourcesJar {
     dependsOn("generateGitProperties")
-}
-
-tasks.jmh {
-    // Add the executed test case
-    includes.add("AABBTreeJMHTest")
-    // includes.add("BlockStateUpdateJMHTest")
-    // includes.add("ChunkJMHTest")
-    // includes.add("ThroughList2Array")
 }
 
 tasks.runShadow {

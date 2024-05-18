@@ -18,16 +18,16 @@ repositories {
     maven("https://storehouse.okaeri.eu/repository/maven-public/")
 }
 
-// Do not build this root project, this is only used as a control submodule
-tasks.forEach {
-    it.enabled = false
-}
-
 idea {
     module {
         isDownloadSources = true
         isDownloadJavadoc = false
     }
+}
+
+// Do not build this root project, this is only used as a control submodule
+tasks.forEach {
+    it.enabled = false
 }
 
 // Enable gradle wrapper update task
@@ -40,6 +40,10 @@ tasks.prepareKotlinBuildScriptModel {
     enabled = true
 }
 
+tasks.build {
+    group = "alpha build"
+}
+
 // The build of the root module does not need to write logic,
 // and the build of the same name of all submodules will be automatically called
 tasks.register<DefaultTask>("fastBuild") {
@@ -47,10 +51,6 @@ tasks.register<DefaultTask>("fastBuild") {
 }
 
 tasks.register<DefaultTask>("buildForGithubAction") {
-    group = "alpha build"
-}
-
-tasks.build {
     group = "alpha build"
 }
 
@@ -94,6 +94,11 @@ subprojects {
         withSourcesJar()
     }
 
+    tasks.build {
+        group = "alpha build"
+        dependsOn("shadowJar")
+    }
+
     tasks.register<DefaultTask>("fastBuild") {
         dependsOn(tasks.build)
         group = "alpha build"
@@ -112,11 +117,6 @@ subprojects {
         group = "alpha build"
         tasks["javadoc"].enabled = false
         tasks["javadocJar"].enabled = false
-    }
-
-    tasks.build {
-        group = "alpha build"
-        dependsOn("shadowJar")
     }
 
     tasks.clean {

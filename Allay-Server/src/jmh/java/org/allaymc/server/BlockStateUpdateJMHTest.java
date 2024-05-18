@@ -1,7 +1,6 @@
 package org.allaymc.server;
 
-import org.allaymc.api.block.property.enums.PillarAxis;
-import org.allaymc.api.block.property.enums.WoodType;
+import org.allaymc.api.block.property.enums.MinecraftFacingDirection;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
@@ -22,23 +21,22 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class BlockStateUpdateJMHTest {
-    private BlockState wood;
+    private BlockState observer;
 
     @Setup
     public void init() throws MissingImplementationException {
         Allay.initAllayAPI();
-        wood = BlockTypes.WOOD_TYPE.getDefaultState();
+        observer = BlockTypes.OBSERVER_TYPE.getDefaultState();
     }
 
     @Benchmark
     public void test1() {
-        wood = wood.setProperty(VanillaBlockPropertyTypes.PILLAR_AXIS, PillarAxis.Z);
+        observer = observer.setProperty(VanillaBlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
     }
 
     @Benchmark
     public void test2() {
-        wood = wood.setProperty(VanillaBlockPropertyTypes.PILLAR_AXIS, PillarAxis.Z);
-        wood = wood.setProperty(VanillaBlockPropertyTypes.STRIPPED_BIT, true);
-        wood = wood.setProperty(VanillaBlockPropertyTypes.WOOD_TYPE, WoodType.DARK_OAK);
+        observer = observer.setProperty(VanillaBlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
+        observer = observer.setProperty(VanillaBlockPropertyTypes.POWERED_BIT, true);
     }
 }

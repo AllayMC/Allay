@@ -4,7 +4,7 @@ plugins {
 
 group = "org.allaymc"
 description = "example-plugin"
-version = "0.0.1"
+version = "1.0.0"
 
 dependencies {
     compileOnly(project(":Allay-API"))

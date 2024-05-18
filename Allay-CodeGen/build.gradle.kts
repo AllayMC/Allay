@@ -1,6 +1,6 @@
 group = "org.allaymc"
 description = "codegen"
-version = "0.0.1"
+version = "1.0.0"
 
 dependencies {
     implementation(libs.javapoet)
