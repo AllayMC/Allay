@@ -94,7 +94,7 @@ public final class AllayServer implements Server {
             0,
             TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<>(),
-            r -> new AllayComputeThread(r));
+            AllayComputeThread::new);
     // Thread pool for executing I/O-intensive tasks
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
