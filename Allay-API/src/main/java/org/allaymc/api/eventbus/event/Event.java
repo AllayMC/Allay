@@ -11,9 +11,6 @@ public abstract class Event {
     private boolean cancelled = false;
 
     public boolean isCancelled() {
-        if (!(this instanceof CancellableEvent)) {
-            throw new EventException("Event is not Cancellable");
-        }
         return cancelled;
     }
 

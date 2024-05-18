@@ -1,6 +1,7 @@
 package org.allaymc.server.eventbus;
 
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.EventException;
 import org.allaymc.api.eventbus.EventHandler;
 import org.junit.jupiter.api.Test;
 
@@ -59,5 +60,11 @@ public class EventBusTest {
         eventBus.callEvent(event);
         assertFalse(event.isCancelled());
         eventBus.registerListener(this);
+    }
+
+    @Test
+    void testCannotCancelNormalEvent() {
+        var event = new TestEvent();
+        assertThrows(EventException.class, () -> event.setCancelled(true));
     }
 }
