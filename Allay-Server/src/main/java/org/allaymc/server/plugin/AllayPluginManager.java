@@ -39,21 +39,27 @@ public class AllayPluginManager implements PluginManager {
         registerLoaderFactory(new JsPluginLoader.JsPluginLoaderFactory());
     }
 
+    protected Map<String, PluginDescriptor> descriptors;
+    protected Map<String, PluginLoader> loaders;
+
     @Override
-    public void loadPlugins() {
-        // 1. Load possible plugin paths from plugin sources
-        Set<Path> paths = findPluginPaths();
+    public void loadPlugins(PluginLoadOrder order) {
+        if (descriptors == null) {
+            descriptors = new HashMap<>();
+            loaders = new HashMap<>();
 
-        // 2. Find and use plugin loader to load plugin descriptor for each plugin path
-        Map<String, PluginDescriptor> descriptors = new HashMap<>();
-        Map<String, PluginLoader> loaders = new HashMap<>();
-        findLoadersAndLoadDescriptors(paths, descriptors, loaders);
+            // 1. Load possible plugin paths from plugin sources
+            Set<Path> paths = findPluginPaths();
 
-        // 3. Check for circular dependencies
-        checkCircularDependencies(descriptors);
+            // 2. Find and use plugin loader to load plugin descriptor for each plugin path
+            findLoadersAndLoadDescriptors(paths, descriptors, loaders);
+
+            // 3. Check for circular dependencies
+            checkCircularDependencies(descriptors);
+        }
 
         // 4. Load plugins (parent -> child)
-        onLoad(descriptors, loaders);
+        onLoad(descriptors, loaders, order);
     }
 
     protected void findLoadersAndLoadDescriptors(Set<Path> paths, Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
@@ -71,12 +77,13 @@ public class AllayPluginManager implements PluginManager {
         }
     }
 
-    protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
+    protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders, PluginLoadOrder order) {
         Iterator<String> iterator = pluginsSortedList.iterator();
         start:
         while (iterator.hasNext()) {
             var s = iterator.next();
             var descriptor = descriptors.get(s);
+            if (descriptor.getOrder() != order) continue;
             var loader = loaders.get(s);
             for (var e : descriptor.getDependencies()) {
                 if (!plugins.containsKey(e.name())) {

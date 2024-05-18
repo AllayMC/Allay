@@ -12,7 +12,7 @@ import java.util.Map;
 public interface PluginManager {
 
     @ApiStatus.Internal
-    void loadPlugins();
+    void loadPlugins(PluginLoadOrder order);
 
     void enablePlugins();
 

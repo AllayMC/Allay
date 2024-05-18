@@ -1,6 +1,7 @@
 package org.allaymc.server.plugin;
 
 import lombok.Getter;
+import org.allaymc.api.plugin.PluginLoadOrder;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.plugin.PluginDescriptor;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 public class SimplePluginDescriptor implements PluginDescriptor {
     private String entrance;
+    private PluginLoadOrder order;
     private String name;
     private String description;
     private String version;
@@ -35,5 +37,10 @@ public class SimplePluginDescriptor implements PluginDescriptor {
     public String getWebsite() {
         if (website == null) website = "";
         return website;
+    }
+
+    public PluginLoadOrder getOrder() {
+        if (order == null) order = PluginLoadOrder.POST_WORLD;
+        return order;
     }
 }

@@ -2,6 +2,7 @@
   "entrance": "main.js",
   "name": "ExamplePlugin-JS",
   "authors": ["daoge_cmd"],
-  "version": "1.0.0"/*,
+  "version": "1.0.0",
+  "order": "START_UP"/*,
   "debugPort": 9229*/
 }
