@@ -42,7 +42,7 @@ tasks.prepareKotlinBuildScriptModel {
 
 // The build of the root module does not need to write logic,
 // and the build of the same name of all submodules will be automatically called
-tasks.register<DefaultTask>("buildFast") {
+tasks.register<DefaultTask>("fastBuild") {
     group = "alpha build"
 }
 
@@ -94,7 +94,7 @@ subprojects {
         withSourcesJar()
     }
 
-    tasks.register<DefaultTask>("buildFast") {
+    tasks.register<DefaultTask>("fastBuild") {
         dependsOn(tasks.build)
         group = "alpha build"
         tasks["javadoc"].enabled = false
