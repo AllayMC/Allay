@@ -371,7 +371,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected void teleportOverDimension(Location3fc target) {
         // Teleporting to another dimension, there will be more works to be done
         this.location.dimension().getEntityService().removeEntity(thisEntity, () -> {
-            target.dimension().getChunkService().getChunkImmediately((int) target.x() >> 4, (int) target.z() >> 4);
+            target.dimension().getChunkService().getOrLoadChunkSynchronously((int) target.x() >> 4, (int) target.z() >> 4);
             setLocation(target, false);
             target.dimension().getEntityService().addEntity(thisEntity);
         });

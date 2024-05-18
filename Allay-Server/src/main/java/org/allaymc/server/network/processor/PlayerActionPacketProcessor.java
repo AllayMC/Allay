@@ -15,7 +15,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
             case RESPAWN -> {
                 var spawnPoint = player.getSpawnPoint();
                 var dimension = spawnPoint.dimension();
-                dimension.getChunkService().getChunkImmediately(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
+                dimension.getChunkService().getOrLoadChunkSynchronously(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
                 dimension.addPlayer(player, () -> {
                     player.teleport(new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), dimension));
                     player.setSprinting(false);

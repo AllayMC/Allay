@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.storage.PlayerData;
@@ -277,7 +276,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // Validate and set spawn point
         validateAndSetSpawnPoint(playerData);
         // Load the current point chunk firstly so that we can add player entity into the chunk
-        dimension.getChunkService().getChunkImmediately(
+        dimension.getChunkService().getOrLoadChunkSynchronously(
                 (int) currentPos.x() >> 4,
                 (int) currentPos.z() >> 4
         );

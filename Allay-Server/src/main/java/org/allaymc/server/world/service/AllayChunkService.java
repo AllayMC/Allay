@@ -1,16 +1,19 @@
 package org.allaymc.server.world.service;
 
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.MoreExecutors;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongComparator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.AllayComputeThread;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
@@ -50,7 +53,7 @@ public class AllayChunkService implements ChunkService {
 
     private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
-    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectArrayMap<>(Server.SETTINGS.genericSettings().maxClientCount());
+    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectOpenHashMap<>();
     private final Dimension dimension;
     private final WorldStorage worldStorage;
     private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
@@ -136,8 +139,12 @@ public class AllayChunkService implements ChunkService {
 
     @SlowOperation
     @Override
-    public synchronized Chunk getChunkImmediately(int x, int z) {
-        return getOrLoadChunk(x, z).join();
+    public Chunk getOrLoadChunkSynchronously(int x, int z) {
+        var chunk = getChunk(x, z);
+        if (chunk != null) {
+            return chunk;
+        }
+        return loadChunkSynchronously(x, z, null);
     }
 
     @Override
@@ -176,9 +183,21 @@ public class AllayChunkService implements ChunkService {
         if (isChunkLoaded(hashXZ)) {
             throw new IllegalStateException("Chunk is already loaded");
         }
-        CompletableFuture<Chunk> future;
-        // Prevent multiple threads from putting the same chunk into loadingChunks at the same time and wasting computing resources
-        var presentValue = loadingChunks.putIfAbsent(hashXZ, future = worldStorage.readChunk(x, z, DimensionInfo.OVERWORLD)
+        var future = new CompletableFuture<Chunk>();
+        // 只有一个线程可以成功向loadingChunks中写入future，其他线程将获取到写入成功线程的future
+        var presentValue = loadingChunks.putIfAbsent(hashXZ, future);
+        if (presentValue != null) {
+            return presentValue;
+        }
+        if (AllayComputeThread.isAllayComputeThread(Thread.currentThread())) {
+            // 若当前线程已经为计算线程，则直接在此线程上加载区块
+            // 否则会出现一个计算线程等待另外一个计算线程的情况，造成线程资源的浪费
+            // If the current thread is already a computing thread, load the block directly on this thread
+            // Otherwise, one computing thread will wait for another computing thread, resulting in a waste of thread resources
+            loadChunkSynchronously(x, z, future);
+            return future;
+        }
+        worldStorage.readChunk(x, z, DimensionInfo.OVERWORLD)
                 .exceptionally(t -> {
                     log.error("Error while reading chunk ({},{}) !", x, z, t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
@@ -192,15 +211,40 @@ public class AllayChunkService implements ChunkService {
                     prepareChunk.beforeSetChunk(dimension);
                     setChunk(x, z, prepareChunk);
                     prepareChunk.afterSetChunk(dimension);
+                    future.complete(prepareChunk);
                     loadingChunks.remove(hashXZ);
                     return prepareChunk;
-                })
-        );
-        if (presentValue == null) {
-            return future;
-        } else {
-            return presentValue;
+                });
+        return future;
+    }
+
+    @SneakyThrows
+    protected Chunk loadChunkSynchronously(int x, int z, CompletableFuture<Chunk> futureAlreadyExists) {
+        var hash = HashUtils.hashXZ(x, z);
+        var synchronizedFuture = futureAlreadyExists;
+        if (futureAlreadyExists == null) {
+            synchronizedFuture = new CompletableFuture<>();
+            loadingChunks.put(hash, synchronizedFuture);
         }
+        Chunk chunk;
+        try {
+            chunk = worldStorage.readChunkSynchronously(x, z, DimensionInfo.OVERWORLD);
+        } catch (Throwable t) {
+            log.error("Error while reading chunk ({},{}) !", x, z, t);
+            chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+        }
+        try {
+            generateChunkIfNeed(chunk);
+        } catch (Throwable t) {
+            log.error("Error while generating chunk ({},{}) !", x, z, t);
+            chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+        }
+        chunk.beforeSetChunk(dimension);
+        setChunk(x, z, chunk);
+        chunk.afterSetChunk(dimension);
+        synchronizedFuture.complete(chunk);
+        loadingChunks.remove(hash);
+        return chunk;
     }
 
     @Override

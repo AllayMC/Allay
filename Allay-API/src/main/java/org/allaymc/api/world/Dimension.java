@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
@@ -138,7 +137,7 @@ public interface Dimension {
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
-            chunk = getChunkService().getChunkImmediately(x >> 4, z >> 4);
+            chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
         }
         int xIndex = x & 15;
         int zIndex = z & 15;
@@ -178,7 +177,7 @@ public interface Dimension {
             return AIR_TYPE.getDefaultState();
         var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
-            chunk = getChunkService().getChunkImmediately(x >> 4, z >> 4);
+            chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
         }
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
@@ -359,7 +358,7 @@ public interface Dimension {
     default BlockEntity getBlockEntity(int x, int y, int z) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
-            chunk = getChunkService().getChunkImmediately(x >> 4, z >> 4);
+            chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
         }
         return chunk.getBlockEntity(x & 15, y, z & 15);
     }

@@ -224,7 +224,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             networkComponent.sendPacket(targetDim.getWorld().getWorldData().getGameRules().buildPacket());
         }
         this.location.dimension().removePlayer(thisEntity, () -> {
-            targetDim.getChunkService().getChunkImmediately((int) target.x() >> 4, (int) target.z() >> 4);
+            targetDim.getChunkService().getOrLoadChunkSynchronously((int) target.x() >> 4, (int) target.z() >> 4);
             setLocation(target, false);
             sendLocationToSelf();
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {

@@ -43,6 +43,11 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) {
+        return CompletableFuture.completedFuture(readChunkSynchronously(x, z, dimensionInfo));
+    }
+
+    @Override
+    public Chunk readChunkSynchronously(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
         Dimension dimension = Server.getInstance().getWorldPool().getWorld(worldData.getName()).getDimension(dimensionInfo.dimensionId());
         long l = HashUtils.hashXZ(x, z);
         var chunk = chunks.get(l);
@@ -51,7 +56,7 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
         }
         readEntities(l).stream().map(nbt -> EntityHelper.fromNBT(dimension, nbt)).forEach(e -> dimension.getEntityService().addEntity(e));
         readBlockEntities(l).stream().map(nbt -> BlockEntityHelper.fromNBT(dimension, nbt)).forEach(chunk::addBlockEntity);
-        return CompletableFuture.completedFuture(chunk);
+        return chunk;
     }
 
     @Override

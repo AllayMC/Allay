@@ -17,6 +17,8 @@ public interface WorldStorage {
 
     CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) throws WorldStorageException;
 
+    Chunk readChunkSynchronously(int chunkX, int chunkZ, DimensionInfo dimensionInfo) throws WorldStorageException;
+
     CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException;
 
     boolean containChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);

@@ -31,6 +31,7 @@ import org.allaymc.api.scoreboard.storage.JsonScoreboardStorage;
 import org.allaymc.api.server.BanInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.Whitelist;
+import org.allaymc.api.utils.AllayComputeThread;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.world.DimensionInfo;
@@ -93,11 +94,7 @@ public final class AllayServer implements Server {
             0,
             TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<>(),
-            r -> {
-                Thread thread = new Thread(r);
-                thread.setName("computation-thread-" + thread.threadId());
-                return thread;
-            });
+            r -> new AllayComputeThread(r));
     // Thread pool for executing I/O-intensive tasks
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();

@@ -91,27 +91,30 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
-        return CompletableFuture.supplyAsync(() -> {
-            AllayUnsafeChunk.Builder builder = AllayUnsafeChunk.builder()
-                    .chunkX(x)
-                    .chunkZ(z)
-                    .dimensionInfo(dimensionInfo);
-            byte[] versionValue = this.db.get(LevelDBKeyUtils.VERSION.getKey(x, z, dimensionInfo));
-            if (versionValue == null) {
-                versionValue = this.db.get(LevelDBKeyUtils.LEGACY_VERSION.getKey(x, z, dimensionInfo));
-            }
-            if (versionValue == null) {
-                return builder.build().toSafeChunk();
-            }
-            byte[] finalized = this.db.get(LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
-            if (finalized == null) {
-                builder.state(ChunkState.FINISHED);
-            } else {
-                builder.state(ChunkState.values()[Unpooled.wrappedBuffer(finalized).readIntLE() + 1]);
-            }
-            LevelDBChunkSerializer.INSTANCE.deserialize(this.db, builder);
+        return CompletableFuture.supplyAsync(() -> readChunkSynchronously(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool());
+    }
+
+    @Override
+    public Chunk readChunkSynchronously(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
+        AllayUnsafeChunk.Builder builder = AllayUnsafeChunk.builder()
+                .chunkX(x)
+                .chunkZ(z)
+                .dimensionInfo(dimensionInfo);
+        byte[] versionValue = this.db.get(LevelDBKeyUtils.VERSION.getKey(x, z, dimensionInfo));
+        if (versionValue == null) {
+            versionValue = this.db.get(LevelDBKeyUtils.LEGACY_VERSION.getKey(x, z, dimensionInfo));
+        }
+        if (versionValue == null) {
             return builder.build().toSafeChunk();
-        }, Server.getInstance().getVirtualThreadPool());
+        }
+        byte[] finalized = this.db.get(LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
+        if (finalized == null) {
+            builder.state(ChunkState.FINISHED);
+        } else {
+            builder.state(ChunkState.values()[Unpooled.wrappedBuffer(finalized).readIntLE() + 1]);
+        }
+        LevelDBChunkSerializer.INSTANCE.deserialize(this.db, builder);
+        return builder.build().toSafeChunk();
     }
 
     @Override
