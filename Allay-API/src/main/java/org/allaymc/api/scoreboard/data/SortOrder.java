@@ -5,7 +5,8 @@ package org.allaymc.api.scoreboard.data;
  *
  * @author daoge_cmd
  * <p>
- * 追踪目标显示顺序排序准则，客户端会依照准则根据分数排序所有追踪对象
+ * The tracking targets are displayed according to the sorting criteria,
+ * and the client will sort all the tracking targets according to the score
  */
 public enum SortOrder {
     //升序

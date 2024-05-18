@@ -7,14 +7,14 @@ import lombok.Getter;
  *
  * @author daoge_cmd
  * <p>
- * 计分板显示槽位枚举
+ * Scoreboard display slot enum
  */
 public enum DisplaySlot {
-    //玩家屏幕右侧
+    // Right side of player's screen
     SIDEBAR("sidebar"),
-    //玩家列表
+    // Player list
     LIST("list"),
-    //玩家名称标签下方
+    // Below the player's name tag
     BELOW_NAME("belowname");
 
     @Getter
