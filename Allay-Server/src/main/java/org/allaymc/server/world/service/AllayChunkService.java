@@ -316,8 +316,15 @@ public class AllayChunkService implements ChunkService {
     }
 
     @Override
+    @UnmodifiableView
     public Collection<Chunk> getLoadedChunks() {
-        return loadedChunks.values();
+        return Collections.unmodifiableCollection(loadedChunks.values());
+    }
+
+    @Override
+    @UnmodifiableView
+    public Collection<CompletableFuture<Chunk>> getLoadingChunks() {
+        return Collections.unmodifiableCollection(loadingChunks.values());
     }
 
     public void unloadChunk(int x, int z) {

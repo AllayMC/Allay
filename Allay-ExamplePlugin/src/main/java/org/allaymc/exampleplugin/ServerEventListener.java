@@ -53,6 +53,8 @@ public class ServerEventListener {
             int cx = chunk.getX();
             int cz = chunk.getZ();
             list.add("Chunk: §a" + cx + ", " + cz);
+            list.add("Loaded: §a" + player.getDimension().getChunkService().getLoadedChunks().size());
+            list.add("Loading: §a" + player.getDimension().getChunkService().getLoadingChunks().size());
             list.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x() & 15, (int) loc.y(), (int) loc.z() & 15));
             scoreboard.setLines(list);
             return true;

@@ -62,5 +62,9 @@ public interface ChunkService extends ChunkAccessible {
 
     void forEachLoadedChunks(Consumer<Chunk> consumer);
 
+    @UnmodifiableView
     Collection<Chunk> getLoadedChunks();
+
+    @UnmodifiableView
+    Collection<CompletableFuture<Chunk>> getLoadingChunks();
 }
