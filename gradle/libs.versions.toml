@@ -10,7 +10,7 @@ nbt = { group = "org.allaymc", name = "NBT", version = "3.0.9" }
 # Network protocol
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta2-SNAPSHOT" }
 # Block State Updater
-blockstateupdater = { group = "org.cloudburstmc", name = "block-state-updater", version = "1.20.80-SNAPSHOT" }
+blockstateupdater = { group = "org.cloudburstmc", name = "block-state-updater", version = "1.21.0-SNAPSHOT" }
 # Collections
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.13" }
 guava = { group = "com.google.guava", name = "guava", version = "33.2.0-jre" }
