@@ -89,15 +89,20 @@ public class Dashboard {
     protected void updateOnlinePlayerTable() {
         var title = new String[] {"Name", "Address", "UUID"};
         var players = Server.getInstance().getOnlinePlayers().values();
-        var data = new String[3][players.size() - 1];
-        int row = 0;
-        for (var player : players) {
-            data[row] = new String[] {
-                    player.getOriginName(),
-                    player.getClientSession().getSocketAddress().toString(),
-                    player.getUUID().toString()
-            };
-            row++;
+        String[][] data;
+        if (players.isEmpty()) {
+            data = new String[3][0];
+        } else {
+            data = new String[3][players.size() - 1];
+            int row = 0;
+            for (var player : players) {
+                data[row] = new String[]{
+                        player.getOriginName(),
+                        player.getClientSession().getSocketAddress().toString(),
+                        player.getUUID().toString()
+                };
+                row++;
+            }
         }
         var model = new UneditableDefaultTableModel(data, title);
         SwingUtilities.invokeLater(() -> playerTable.setModel(model));

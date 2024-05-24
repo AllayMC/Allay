@@ -51,7 +51,7 @@ public final class GraphPanel extends JPanel {
     private final static Color textColor = Color.WHITE;
     private final static Color backgroundColor = Color.DARK_GRAY;
     private final static Color lineColor = new Color(44, 102, 230, 255);
-    private final static Color pointColor = new Color(100, 100, 100, 255);
+    private final static Color pointColor = Color.LIGHT_GRAY;
     private final static Color gridColor = Color.GRAY;
     private static final Stroke graphStroke = new BasicStroke(2f);
     private final List<Integer> values = new ArrayList<>(50);
