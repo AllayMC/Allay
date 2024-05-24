@@ -13,10 +13,15 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.net.URL;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
- * java-swing-playground Project 2024/5/19
+ * Allay Project 2024/5/19
  *
  * @author daoge_cmd
  */
@@ -31,6 +36,9 @@ public class Dashboard {
     private JPanel pluginTab;
     private JTable pluginTable;
     private JLabel onlinePlayerCount;
+    private JTabbedPane tabbedPane1;
+    private GraphPanel ramGraph;
+    private List<Integer> ramValues;
 
     public static Dashboard getInstance() {
         if (INSTANCE != null) {
@@ -43,7 +51,7 @@ public class Dashboard {
         JFrame frame = new JFrame("Dashboard");
         frame.setContentPane(INSTANCE.rootPane);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
+        frame.setSize(700, 700);
         frame.setLocationRelativeTo(null);
         // Set icon
         URL image = Dashboard.class.getClassLoader().getResource("icon.png");
@@ -156,6 +164,45 @@ public class Dashboard {
      */
     public JComponent $$$getRootComponent$$$() {
         return rootPane;
+    }
+
+    private static final long MEGABYTE = 1024L * 1024L;
+
+    private void createUIComponents() {
+        ramGraph = new GraphPanel();
+        ramValues = new ArrayList<>();
+        // Set the ram graph to 0
+        for (int i = 0; i < 50; i++) {
+            ramValues.add(0);
+        }
+        ramGraph.setValues(ramValues);
+        ramGraph.setXLabel("Memory Usage");
+
+        Runnable periodicTask = () -> {
+            // Update ram graph
+            final long freeMemory = Runtime.getRuntime().freeMemory();
+            final long totalMemory = Runtime.getRuntime().totalMemory();
+            final int freePercent = (int) (freeMemory * 100.0 / totalMemory + 0.5);
+            ramValues.add(100 - freePercent);
+
+            ramGraph.setXLabel("Usage: " + String.format("%,d", (totalMemory - freeMemory) / MEGABYTE) + "mb (" + freePercent + "% free)");
+
+            // Trim the list
+            int k = ramValues.size();
+            if (k > 50)
+                ramValues.subList(0, k - 50).clear();
+
+            // Update the graph
+            ramGraph.setValues(ramValues);
+        };
+
+        // SwingUtilities.invokeLater is called so that we don't run into threading issues with the GUI
+        Server.getInstance().getScheduler().scheduleRepeating(
+                Server.getInstance(),
+                () -> {
+                    SwingUtilities.invokeLater(periodicTask);
+                    return true;},
+                20);
     }
 
     private static class UneditableDefaultTableModel extends DefaultTableModel {
