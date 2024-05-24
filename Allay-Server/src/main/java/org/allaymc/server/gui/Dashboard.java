@@ -12,6 +12,7 @@ import org.allaymc.api.server.Server;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.net.URL;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +45,13 @@ public class Dashboard {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 600);
         frame.setLocationRelativeTo(null);
+        // Set icon
+        URL image = Dashboard.class.getClassLoader().getResource("icon.png");
+        if (image != null) {
+            ImageIcon icon = new ImageIcon(image);
+            frame.setIconImage(icon.getImage());
+        }
+        // Show the frame
         frame.setVisible(true);
 
         var server = Server.getInstance();
