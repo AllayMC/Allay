@@ -39,6 +39,8 @@ dependencies {
     implementation(libs.js)
     implementation(libs.bundles.graalvm)
     implementation(libs.oshi)
+    implementation(libs.flatlaf)
+    implementation(libs.formsrt)
 
     testImplementation(libs.bytebuddy)
 }

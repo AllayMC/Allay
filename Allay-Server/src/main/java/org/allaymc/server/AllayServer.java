@@ -41,6 +41,7 @@ import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.eventbus.AllayEventBus;
+import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
@@ -143,6 +144,8 @@ public final class AllayServer implements Server {
             })
             .build();
 
+    private Dashboard dashboard;
+
     private AllayServer() {}
 
     public static AllayServer getInstance() {
@@ -190,6 +193,9 @@ public final class AllayServer implements Server {
         networkServer.start();
         startTime = System.currentTimeMillis();
         sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(startTime - timeMillis));
+        if (SETTINGS.genericSettings().enableGui()) {
+            dashboard = Dashboard.getInstance();
+        }
         gameLoop.startLoop();
     }
 
@@ -286,8 +292,6 @@ public final class AllayServer implements Server {
 
     @Override
     public void onDisconnect(EntityPlayer player, String reason) {
-        var event = new PlayerQuitEvent(player, reason);
-        eventBus.callEvent(event);
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
         if (player.isInitialized()) {
             broadcastTr("§e%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
@@ -303,6 +307,8 @@ public final class AllayServer implements Server {
         }
         players.remove(player.getUUID());
         networkServer.setPlayerCount(players.size());
+        var event = new PlayerQuitEvent(player, reason);
+        eventBus.callEvent(event);
     }
 
     @Override

@@ -62,6 +62,9 @@ public class ServerSettings extends OkaeriConfig {
 
         @CustomKey("is-whitelisted")
         private boolean isWhitelisted = false;
+
+        @Comment("Whether or not to display the GUI")
+        private boolean enableGui = true;
     }
 
     @Getter
