@@ -66,6 +66,8 @@ import org.allaymc.server.world.storage.AllayWorldStorageFactory;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
+import java.lang.reflect.Method;
+
 @Slf4j
 public final class Allay {
 
@@ -74,8 +76,12 @@ public final class Allay {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.setProperty("joml.format", "false"); // set JOML vectors are output without a scientific notation
-        System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // enable async logging
+        System.setProperty("joml.format", "false"); // Set JOML vectors are output without a scientific notation
+        System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // Enable async logging
+        // Check if the environment is headless
+        if (isHeadless()) {
+            Server.SETTINGS.genericSettings().enableGui(false);
+        }
         if (Server.SETTINGS.genericSettings().enableGui()) {
             DASHBOARD = Dashboard.getInstance();
         }
@@ -93,6 +99,16 @@ public final class Allay {
             log.error("Error while starting the server!", e);
             Server.getInstance().shutdown();
         }
+    }
+
+    private static boolean isHeadless() {
+        try {
+            Class<?> graphicsEnv = Class.forName("java.awt.GraphicsEnvironment");
+            Method isHeadless = graphicsEnv.getDeclaredMethod("isHeadless");
+            return (boolean) isHeadless.invoke(null);
+        } catch (Exception ignore) { }
+
+        return true;
     }
 
     @VisibleForTesting
