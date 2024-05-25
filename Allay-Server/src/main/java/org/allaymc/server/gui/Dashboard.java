@@ -175,7 +175,7 @@ public final class Dashboard {
         consolePane.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getButton() != MouseEvent.BUTTON1) return;
+                if (e.getButton() != MouseEvent.BUTTON3) return;
                 JPopupMenu popupMenu = new JPopupMenu();
 
                 JMenuItem changeFontSizeItem = new JMenuItem("Change Font Size");

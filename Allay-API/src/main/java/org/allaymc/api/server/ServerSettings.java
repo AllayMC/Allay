@@ -63,7 +63,7 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("is-whitelisted")
         private boolean isWhitelisted = false;
 
-        @Comment("Whether or not to display the GUI")
+        @Comment("Whether to display the GUI")
         private boolean enableGui = true;
     }
 
@@ -106,7 +106,7 @@ public class ServerSettings extends OkaeriConfig {
         private int viewDistance = 16;
 
         @CustomKey("chunk-try-send-count-per-tick")
-        private int chunkTrySendCountPerTick = 16;
+        private int chunkTrySendCountPerTick = 4;
 
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;
