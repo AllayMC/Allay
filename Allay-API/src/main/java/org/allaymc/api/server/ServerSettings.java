@@ -115,7 +115,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("This only works if sub-chunk sending system is not enabled")
         @Comment("And will be forced to SYNC if sub-chunk sending system is enabled")
         @CustomKey("chunk-sending-strategy")
-        private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.ASYNC;
+        private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.SYNC;
 
         @CustomKey("do-first-spawn-chunk-threshold")
         private int doFirstSpawnChunkThreshold = 56;
