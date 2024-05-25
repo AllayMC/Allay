@@ -9,7 +9,10 @@ import net.minecrell.terminalconsole.TerminalConsoleAppender;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
 import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
+import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -21,6 +24,8 @@ import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -28,6 +33,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 2024/5/19
@@ -39,6 +45,7 @@ public final class Dashboard {
     public static final int CHUNK_VALUE_COUNT = 100;
     public static final int ENTITY_VALUE_COUNT = 100;
     private static Dashboard INSTANCE;
+    private static ImageIcon ICON;
 
     private JPanel rootPane;
     private JTabbedPane tabbedPane;
@@ -74,11 +81,97 @@ public final class Dashboard {
         // Set icon
         URL image = Dashboard.class.getClassLoader().getResource("icon.png");
         if (image != null) {
-            ImageIcon icon = new ImageIcon(image);
-            frame.setIconImage(icon.getImage());
+            ICON = new ImageIcon(image);
+            frame.setIconImage(ICON.getImage());
         }
         // Show the frame
         frame.setVisible(true);
+        pluginTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != MouseEvent.BUTTON1) return;
+                // Show the focused plugin's information
+                JPopupMenu popupMenu = new JPopupMenu();
+                JMenuItem infoItem = new JMenuItem("Infomation");
+                infoItem.addActionListener(unused -> {
+                    if (pluginTable.getSelectedRow() == -1) return;
+                    // Get the plugin
+                    String pluginName = (String) pluginTable.getValueAt(pluginTable.getSelectedRow(), 0);
+                    var pluginDescriptor = Server.getInstance().getPluginManager().getPlugin(pluginName).descriptor();
+                    JOptionPane.showMessageDialog(null,
+                            "Name: " + pluginDescriptor.getName() + "\n" +
+                                    "Entrance: " + pluginDescriptor.getEntrance() + "\n" +
+                                    "Order: " + pluginDescriptor.getOrder() + "\n" +
+                                    "Description: " + pluginDescriptor.getDescription() + "\n" +
+                                    "Version: " + pluginDescriptor.getVersion() + "\n" +
+                                    "Authors: " + String.join(", ", pluginDescriptor.getAuthors()) + "\n" +
+                                    "Dependencies: " + pluginDescriptor.getDependencies().stream().map(PluginDependency::name).collect(Collectors.joining(", ")) + "\n" +
+                                    "Website: " + pluginDescriptor.getWebsite(),
+                            "Plugin Information",
+                            JOptionPane.INFORMATION_MESSAGE);
+                });
+                popupMenu.add(infoItem);
+                popupMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        });
+        playerTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != MouseEvent.BUTTON1) return;
+                JPopupMenu popupMenu = new JPopupMenu();
+
+                JMenuItem infoItem = new JMenuItem("Infomation");
+                infoItem.addActionListener(unused -> {
+                    if (playerTable.getSelectedRow() == -1) return;
+                    // Get the player
+                    String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
+                    var player = Server.getInstance().getOnlinePlayerByName(playerName);
+                    var pos = player.getLocation();
+                    JOptionPane.showMessageDialog(null,
+                            "Name: " + player.getOriginName() + "\n" +
+                                    "Address: " + player.getClientSession().getSocketAddress().toString() + "\n" +
+                                    "UUID: " + player.getUUID().toString() + "\n" +
+                                    "Pos: (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
+                                    "World: " + pos.dimension().getWorld().getWorldData().getName() + "\n" +
+                                    "DimensionId: " + pos.dimension().getDimensionInfo().dimensionId(),
+                            "Player Information",
+                            JOptionPane.INFORMATION_MESSAGE);
+                });
+                popupMenu.add(infoItem);
+
+                JMenuItem kickItem = new JMenuItem("Kick");
+                kickItem.addActionListener(unused -> {
+                    if (playerTable.getSelectedRow() == -1) return;
+                    // Get the player
+                    String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
+                    var player = Server.getInstance().getOnlinePlayerByName(playerName);
+                    player.disconnect(TrKeys.M_DISCONNECT_CLOSED);
+                });
+                popupMenu.add(kickItem);
+
+                JMenuItem banItem = new JMenuItem("Ban");
+                    banItem.addActionListener(unused -> {
+                    if (playerTable.getSelectedRow() == -1) return;
+                    // Get the player
+                    String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
+                    var player = Server.getInstance().getOnlinePlayerByName(playerName);
+                    Server.getInstance().ban(player.getUUID().toString());
+                });
+                popupMenu.add(banItem);
+
+                JMenuItem banIpItem = new JMenuItem("Ban");
+                banIpItem.addActionListener(unused -> {
+                    if (playerTable.getSelectedRow() == -1) return;
+                    // Get the player
+                    String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
+                    var player = Server.getInstance().getOnlinePlayerByName(playerName);
+                    Server.getInstance().banIP(AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0]);
+                });
+                popupMenu.add(banIpItem);
+
+                popupMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        });
     }
 
     private void wrapSystemOutputStreams() {
@@ -234,7 +327,10 @@ public final class Dashboard {
             }
         }
         var model = new UneditableDefaultTableModel(data, title);
-        SwingUtilities.invokeLater(() -> playerTable.setModel(model));
+        SwingUtilities.invokeLater(() -> {
+            playerTable.setModel(model);
+            playerTable.getTableHeader().setReorderingAllowed(false);
+        });
     }
 
     private void updatePluginTable() {
@@ -253,7 +349,10 @@ public final class Dashboard {
             row++;
         }
         var model = new UneditableDefaultTableModel(data, title);
-        SwingUtilities.invokeLater(() -> pluginTable.setModel(model));
+        SwingUtilities.invokeLater(() -> {
+            pluginTable.setModel(model);
+            pluginTable.getTableHeader().setReorderingAllowed(false);
+        });
     }
 
     {
