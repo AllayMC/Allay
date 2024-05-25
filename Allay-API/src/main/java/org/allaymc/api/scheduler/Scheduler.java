@@ -1,6 +1,7 @@
 package org.allaymc.api.scheduler;
 
 import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.server.Server;
 
 import java.util.concurrent.ExecutorService;
 
@@ -24,6 +25,13 @@ public interface Scheduler {
     void tick();
 
     void stop();
+
+    default void runLater(TaskCreator creator, Runnable runnable) {
+        scheduleDelayed(creator, () -> {
+            runnable.run();
+            return true;
+        }, 0);
+    }
 
     default void scheduleDelayed(TaskCreator creator, Task task, int delay) {
         scheduleDelayed(creator, task, delay, false);

@@ -172,6 +172,32 @@ public final class Dashboard {
                 popupMenu.show(e.getComponent(), e.getX(), e.getY());
             }
         });
+        consolePane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != MouseEvent.BUTTON1) return;
+                JPopupMenu popupMenu = new JPopupMenu();
+
+                JMenuItem changeFontSizeItem = new JMenuItem("Change Font Size");
+                changeFontSizeItem.addActionListener(unused -> {
+                    String input = JOptionPane.showInputDialog("Please input the font size you want:", consolePane.getFont().getSize());
+                    if (input == null) return;
+                    try {
+                        int fontSize = Integer.parseInt(input);
+                        consolePane.setFont(consolePane.getFont().deriveFont((float) fontSize));
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Invalid font size!", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+                popupMenu.add(changeFontSizeItem);
+
+                JMenuItem clearItem = new JMenuItem("Clear");
+                clearItem.addActionListener(unused -> consolePane.setText(""));
+                popupMenu.add(clearItem);
+
+                popupMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        });
     }
 
     private void wrapSystemOutputStreams() {
@@ -457,7 +483,8 @@ public final class Dashboard {
             String cmd = cmdInput.getText();
             cmdInput.setText(""); // clear the input
             appendTextToConsole(cmd + "\n"); // show what was run in the console
-            Server.getInstance().getCommandRegistry().execute(Server.getInstance(), cmd);
+            var server = Server.getInstance();
+            server.getScheduler().runLater(server, () -> server.getCommandRegistry().execute(Server.getInstance(), cmd));
         }
     }
 }
