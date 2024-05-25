@@ -49,12 +49,16 @@ public final class GraphPanel extends JPanel {
     private final static int pointWidth = 4;
     private final static int numberYDivisions = 20;
     private final static Color textColor = Color.WHITE;
-    private final static Color backgroundColor = Color.DARK_GRAY;
-    private final static Color lineColor = new Color(44, 102, 230, 255);
-    private final static Color pointColor = Color.LIGHT_GRAY;
+    private final static Color backgroundColor = new Color(40, 40, 40);
+    private final Color lineColor = new Color(44, 102, 230, 200);
+    private final Color pointColor = new Color(44, 102, 230, 200);
     private final static Color gridColor = Color.GRAY;
     private static final Stroke graphStroke = new BasicStroke(2f);
-    private final List<Integer> values = new ArrayList<>(50);
+    private final List<Integer> values = new ArrayList<>();
+    private final static int MAX_SCORE_THRESHOLD = 100;
+    private final static int MIN_SCORE_THRESHOLD = 0;
+    private int minScore = MIN_SCORE_THRESHOLD;
+    private int maxScore = MAX_SCORE_THRESHOLD;
 
     @Setter
     private String xLabel = "";
@@ -66,6 +70,7 @@ public final class GraphPanel extends JPanel {
     public void setValues(Collection<Integer> newValues) {
         values.clear();
         addValues(newValues);
+        calculateExtremum();
     }
 
     public void addValues(Collection<Integer> newValues) {
@@ -101,7 +106,7 @@ public final class GraphPanel extends JPanel {
         final FontMetrics fontMetrics = g.getFontMetrics();
         final int fontHeight = fontMetrics.getHeight();
 
-        // create hatch marks and grid lines for y axis.
+        // create hatch marks and grid lines for y-axis.
         for (int i = 0; i < numberYDivisions + 1; i++) {
             final int x1 = padding + labelPadding;
             final int x2 = pointWidth + padding + labelPadding;
@@ -119,7 +124,7 @@ public final class GraphPanel extends JPanel {
             g.drawLine(x1, y, x2, y);
         }
 
-        // and for x axis
+        // and for x-axis
         if (length > 1) {
             for (int i = 0; i < length; i++) {
                 final int x = i * (width - padding * 2 - labelPadding) / (length - 1) + padding + labelPadding;
@@ -181,10 +186,21 @@ public final class GraphPanel extends JPanel {
     }
 
     private int getMinScore() {
-        return 0;
+        return minScore;
     }
 
     private int getMaxScore() {
-        return 100;
+        return maxScore;
+    }
+
+    private void calculateExtremum() {
+        minScore = Integer.MAX_VALUE;
+        maxScore = Integer.MIN_VALUE;
+        for (int value : values) {
+            minScore = Math.min(minScore, value);
+            maxScore = Math.max(maxScore, value);
+        }
+        minScore = Math.min(MIN_SCORE_THRESHOLD, minScore);
+        maxScore = (int) Math.max(MAX_SCORE_THRESHOLD, maxScore * 1.2);
     }
 }

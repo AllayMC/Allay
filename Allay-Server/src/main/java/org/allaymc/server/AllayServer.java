@@ -144,8 +144,6 @@ public final class AllayServer implements Server {
             })
             .build();
 
-    private Dashboard dashboard;
-
     private AllayServer() {}
 
     public static AllayServer getInstance() {
@@ -193,9 +191,7 @@ public final class AllayServer implements Server {
         networkServer.start();
         startTime = System.currentTimeMillis();
         sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(startTime - timeMillis));
-        if (SETTINGS.genericSettings().enableGui()) {
-            dashboard = Dashboard.getInstance();
-        }
+        if (SETTINGS.genericSettings().enableGui()) Allay.DASHBOARD.serverStarted();
         gameLoop.startLoop();
     }
 

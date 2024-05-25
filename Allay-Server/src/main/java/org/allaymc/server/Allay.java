@@ -47,6 +47,7 @@ import org.allaymc.server.entity.effect.AllayEffectRegistry;
 import org.allaymc.server.entity.registry.AllayEntityTypeRegistry;
 import org.allaymc.server.entity.type.AllayEntityType;
 import org.allaymc.server.eventbus.AllayEventBus;
+import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18N;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.attribute.AllayVanillaItemAttributeRegistry;
@@ -69,11 +70,15 @@ import org.jetbrains.annotations.VisibleForTesting;
 public final class Allay {
 
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
+    public static Dashboard DASHBOARD;
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         System.setProperty("joml.format", "false"); // set JOML vectors are output without a scientific notation
         System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // enable async logging
+        if (Server.SETTINGS.genericSettings().enableGui()) {
+            DASHBOARD = Dashboard.getInstance();
+        }
         log.info("Starting Allay...");
         try {
             initAllayAPI();
