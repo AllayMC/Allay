@@ -218,13 +218,13 @@ public final class Dashboard {
         var originalOutputStream = System.out;
         return new OutputStream() {
             @Override
-            public void write(final int b) throws IOException {
+            public void write(final int b) {
                 originalOutputStream.write(b);
                 appendTextToConsole(String.valueOf((char) b));
             }
 
             @Override
-            public void write(byte @NonNull [] b, int off, int len) throws IOException {
+            public void write(byte @NonNull [] b, int off, int len) {
                 originalOutputStream.write(b, off, len);
                 appendTextToConsole(new String(b, off, len));
             }

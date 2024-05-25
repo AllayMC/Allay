@@ -40,6 +40,7 @@ plugins:
                 Permission Tree: 权限树,
             Core & Architecture: 核心与架构,
               Threading Model: 线程模型,
+              About The Chunk Lagging Issue: 关于卡区块问题,
               Server Auth Inventory: 服务端权威物品栏,
                 About Inventory Stack Packet: 关于物品堆栈数据包,
                 About Network Stack Id: 关于堆栈网络Id,
@@ -66,6 +67,7 @@ nav:
       - Permission Tree: plugin_development/permission/permission_tree.md
   - Core & Architecture:
     - Threading Model: core_and_architecture/architecture/threading_model.md
+    - About The Chunk Lagging Issue: core_and_architecture/about_the_chunk_lagging_issue.md
     - Server Auth Inventory:
       - About Inventory Stack Packet: core_and_architecture/server_auth_inventory/about_inventory_stack_packet.md
       - About Network Stack Id: core_and_architecture/server_auth_inventory/about_network_stack_id.md
