@@ -43,7 +43,7 @@ jobs:
           build-scan-terms-of-service-agree: "yes"
           arguments: buildForGithubAction -p Allay-Server --scan
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.4.0
+        uses: codecov/codecov-action@v4.4.1
         with:
           directory: .jacoco/test/
           token: ${{ secrets.CODECOV_TOKEN }}
