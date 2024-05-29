@@ -53,7 +53,7 @@ mockito-junit = { group = "org.mockito", name = "mockito-junit-jupiter", version
 javapoet = { group = "com.squareup", name = "javapoet", version = "1.13.0" }
 # Reflections
 reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
-fastreflect = { group = "com.github.daniellansun", name = "fast-reflection", version = "08ec134a5c" }
+fastreflect = { group = "com.github.AllayMC", name = "fast-reflection", version = "8733a599fa" }
 # Math computing
 joml = { group = "org.joml", name = "joml", version = "1.10.5" }
 joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.10.0" }
@@ -64,7 +64,7 @@ netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", ve
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.1" }
 # JeGenerator
-jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.2-R0.4" }
+jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.6-R0.1" }
 # GraalJS
 js = { group = "org.graalvm.polyglot", name = "js-community", version.ref = "graalvm" }
 polyglot = { group = "org.graalvm.polyglot", name = "polyglot", version.ref = "graalvm" }

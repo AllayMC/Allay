@@ -27,18 +27,18 @@ public final class JeGeneratorLoader {
         if (!file.exists()) {
             file.mkdirs();
         }
-        Paperclip.setup(Allay.EXTRA_RESOURCE_CLASS_LOADER, new String[]{WORK_PATH, "--noconsole", "--nogui", "--universe=jegenerator"});
+        Paperclip.setup(Allay.EXTRA_RESOURCE_CLASS_LOADER, new String[]{WORK_PATH, "allay", "--noconsole", "--nogui", "--universe=jegenerator"});
         try {
-            final Class<?> JeGeneratorMain = Class.forName("org.allaymc.jegenerator.JeGeneratorMain", true, Allay.EXTRA_RESOURCE_CLASS_LOADER);
+            final Class<?> main = Class.forName("org.allaymc.jegenerator.AllayVanillaGeneratorExtension", true, Allay.EXTRA_RESOURCE_CLASS_LOADER);
             final MethodType methodType = MethodType.methodType(WorldGenerator.class);
             OVERWORLD = MethodHandles.lookup()
-                    .findStatic(JeGeneratorMain, "overworld", methodType)
+                    .findStatic(main, "overworld", methodType)
                     .asFixedArity();
             NETHER = MethodHandles.lookup()
-                    .findStatic(JeGeneratorMain, "nether", methodType)
+                    .findStatic(main, "nether", methodType)
                     .asFixedArity();
             THE_END = MethodHandles.lookup()
-                    .findStatic(JeGeneratorMain, "end", methodType)
+                    .findStatic(main, "end", methodType)
                     .asFixedArity();
         } catch (Throwable e) {
             throw new RuntimeException(e);
