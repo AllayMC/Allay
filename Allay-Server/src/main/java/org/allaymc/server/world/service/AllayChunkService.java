@@ -1,7 +1,6 @@
 package org.allaymc.server.world.service;
 
 import com.google.common.collect.Sets;
-import com.google.common.util.concurrent.MoreExecutors;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
@@ -27,17 +26,10 @@ import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.ASYNC;
 import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.SYNC;
@@ -371,7 +363,7 @@ public class AllayChunkService implements ChunkService {
 
     private final class ChunkLoaderManager {
         private final ChunkLoader chunkLoader;
-        private final LongComparator chunkDistanceComparator = new LongComparator() {
+        private final LongComparator chunkDistanceComparatorHashed = new LongComparator() {
             @Override
             public int compare(long chunkHash1, long chunkHash2) {
                 Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
@@ -386,6 +378,24 @@ public class AllayChunkService implements ChunkService {
                         chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1,
                         chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2
                 );
+            }
+        };
+        private final Comparator<Chunk> chunkDistanceComparator = new Comparator<>() {
+            @Override
+            public int compare(Chunk c1, Chunk c2) {
+                Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
+                var loaderChunkX = floor.x >> 4;
+                var loaderChunkZ = floor.z >> 4;
+                var chunkDX1 = loaderChunkX - c1.getX();
+                var chunkDZ1 = loaderChunkZ - c1.getZ();
+                var chunkDX2 = loaderChunkX - c2.getX();
+                var chunkDZ2 = loaderChunkZ - c2.getZ();
+                // Compare distance to loader
+                return Integer.compare(
+                        chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1,
+                        chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2
+                );
+
             }
         };
         // Save all chunk hash values that have been sent in the last tick
@@ -448,13 +458,10 @@ public class AllayChunkService implements ChunkService {
             chunkSendQueue.clear();
             // Blocks that have already been sent will not be resent
             Sets.SetView<Long> difference = Sets.difference(inRadiusChunks, sentChunks);
-            difference.stream().sorted(chunkDistanceComparator).forEachOrdered(v -> chunkSendQueue.enqueue(v.longValue()));
+            difference.stream().sorted(chunkDistanceComparatorHashed).forEachOrdered(v -> chunkSendQueue.enqueue(v.longValue()));
         }
 
         private void loadAndSendQueuedChunks() {
-            // Send ncp to a client every tick to reduce the possibility of chunk disappearing.
-            // This solution is similar to what dragonfly does
-            chunkLoader.publishClientChunkUpdate();
             if (chunkSendQueue.isEmpty()) return;
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int triedSendChunkCount = 0;
@@ -483,6 +490,7 @@ public class AllayChunkService implements ChunkService {
                     chunkSendingStrategy = SYNC;
                 }
                 if (chunkSendingStrategy == ASYNC) {
+                    // TODO: ASYNC模式由于不满足“近区块优先发送”规则，概率导致卡区快，需要解决
                     List<CompletableFuture<Void>> completableFutureList = new ArrayList<>();
                     chunkReadyToSend.values().forEach(chunk -> {
                         completableFutureList.add(CompletableFuture.runAsync(() -> {
@@ -494,12 +502,15 @@ public class AllayChunkService implements ChunkService {
                         CompletableFuture.allOf(completableFutureList.toArray(CompletableFuture<?>[]::new)).join();
                     }
                 } else {
-                    Stream<Chunk> lcpStream = chunkReadyToSend.values().stream();
-                    lcpStream.map(chunk -> useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk()).forEachOrdered(
-                            chunkLoader::sendLevelChunkPacket
+                    // Priority is given to sending chunks that are close to the chunk loader
+                    var lcpStream = chunkReadyToSend.values().stream();
+                    lcpStream.sorted(chunkDistanceComparator).forEachOrdered(
+                            chunk -> {
+                                var lcp = useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk();
+                                chunkLoader.sendLevelChunkPacket(lcp);
+                                chunkLoader.onChunkInRangeSent(chunk);
+                            }
                     );
-                    // 3. Call onChunkInRangeSent()
-                    chunkReadyToSend.values().forEach(chunkLoader::onChunkInRangeSent);
                 }
                 sentChunks.addAll(chunkReadyToSend.keySet());
             }
