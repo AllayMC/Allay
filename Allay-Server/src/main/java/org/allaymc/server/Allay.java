@@ -1,7 +1,6 @@
 package org.allaymc.server;
 
 import lombok.extern.slf4j.Slf4j;
-import net.minecrell.terminalconsole.TerminalConsoleAppender;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
@@ -64,9 +63,6 @@ import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
 import org.allaymc.server.world.generator.AllayWorldGeneratorFactory;
 import org.allaymc.server.world.storage.AllayWorldStorageFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
