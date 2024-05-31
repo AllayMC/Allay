@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.server.Allay;
 import org.apache.commons.io.file.PathUtils;
@@ -54,7 +55,7 @@ public final class ComponentClassCacheUtils {
                     Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev")) &&
                     CACHE_ROOT_PATH.resolve("mapping.json").toFile().exists()
             ) {
-                log.info(I18n.get().tr("allay:cache.load"));
+                log.info(I18n.get().tr(TrKeys.A_CACHE_LOAD));
                 return;
             }
             var cn = CACHE_ROOT_PATH.resolve("cn");

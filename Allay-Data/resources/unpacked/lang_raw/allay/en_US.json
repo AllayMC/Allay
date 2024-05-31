@@ -1,6 +1,6 @@
 {
   "lang.set": "Server language was set to %1",
-  "api.implemented": "This server is running §b%1§f, implement Allay-API version §b%2",
+  "api.implemented": "This server is running §b%1§r, implement Allay-API version §b%2",
   "network.server.starting": "Starting up network server...",
   "network.server.started": "Network server started at %1:%2 (%3 ms)",
   "network.client.connected": "Client connected, IP: %1",
@@ -48,5 +48,6 @@
   "plugin.disable.error": "Error while disabling plugin %1. Error: %2",
   "plugin.construct.instance.error": "Error while constructing plugin instance for plugin %1. Error: %2",
   "plugin.entrance.missing": "Can't find the entrance of plugin %1",
-  "plugin.jar.entrance.typeinvalid": "The entrance class of plugin %1 is not a subclass of Plugin"
+  "plugin.jar.entrance.typeinvalid": "The entrance class of plugin %1 is not a subclass of Plugin",
+  "cache.load": "Class cache is loaded"
 }

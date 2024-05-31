@@ -1,6 +1,6 @@
 {
   "lang.set": "服务器语言已设置为 %1",
-  "api.implemented": "此服务器正在运行 §b%1§f, 实现Allay-API版本 §b%2",
+  "api.implemented": "此服务器正在运行 §b%1§r, 实现Allay-API版本 §b%2",
   "network.server.starting": "启动网络服务器中...",
   "network.server.started": "网络服务器已在 %1:%2 启动 (%3 毫秒)",
   "network.client.connected": "客户端已连接, 地址: %1",
@@ -48,5 +48,6 @@
   "plugin.disable.error": "卸载插件 %1 时发生错误: %2",
   "plugin.construct.instance.error": "创建插件 %1 实例时发生错误 %2",
   "plugin.entrance.missing": "无法找到插件 %1 的入口",
-  "plugin.jar.mainclass.typeinvalid": "插件 %1 的主类未继承Plugin"
+  "plugin.jar.mainclass.typeinvalid": "插件 %1 的主类未继承Plugin",
+  "cache.load": "已加载类缓存"
 }
