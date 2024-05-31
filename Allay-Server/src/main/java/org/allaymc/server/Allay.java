@@ -94,7 +94,6 @@ public final class Allay {
                 Server.SETTINGS.genericSettings().enableGui(false);
             }
         }
-        removeLog4jAppenderNotInUse(Server.SETTINGS.genericSettings().enableGui());
         log.info("Starting Allay...");
         try {
             initAllayAPI();
@@ -108,16 +107,6 @@ public final class Allay {
         } catch (Exception e) {
             log.error("Error while starting the server!", e);
             Server.getInstance().shutdown();
-        }
-    }
-
-    private static void removeLog4jAppenderNotInUse(boolean useGui) {
-        org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
-        for (Appender appender : logger.getAppenders().values()) {
-            // Prevents multiple appender/double logging and removes harmless errors
-            if ((useGui && appender instanceof TerminalConsoleAppender) || (!useGui && appender instanceof ConsoleAppender)) {
-                logger.removeAppender(appender);
-            }
         }
     }
 
