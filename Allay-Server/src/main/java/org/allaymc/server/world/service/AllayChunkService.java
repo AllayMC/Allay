@@ -490,8 +490,7 @@ public class AllayChunkService implements ChunkService {
             } while (!chunkSendingQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
             if (!chunkReadyToSend.isEmpty()) {
                 chunkLoader.publishClientChunkUpdate();
-                var worldSettings = Server.SETTINGS.worldSettings();
-                var chunkSendingStrategy = worldSettings.chunkSendingStrategy();
+                var chunkSendingStrategy = Server.SETTINGS.worldSettings().chunkSendingStrategy();
                 var useSubChunkSendingSystem = Server.SETTINGS.worldSettings().useSubChunkSendingSystem();
                 if (useSubChunkSendingSystem) {
                     // Use SYNC mode if a sub-chunk sending system is enabled

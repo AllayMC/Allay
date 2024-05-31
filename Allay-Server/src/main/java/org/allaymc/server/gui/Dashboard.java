@@ -159,7 +159,7 @@ public final class Dashboard {
                 });
                 popupMenu.add(banItem);
 
-                JMenuItem banIpItem = new JMenuItem("Ban");
+                JMenuItem banIpItem = new JMenuItem("BanIp");
                 banIpItem.addActionListener(unused -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
