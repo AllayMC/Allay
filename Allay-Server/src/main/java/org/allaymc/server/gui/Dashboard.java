@@ -201,13 +201,6 @@ public final class Dashboard {
     }
 
     private void wrapSystemOutputStreams() {
-        org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
-        for (Appender appender : logger.getAppenders().values()) {
-            // Prevents multiple appenders/double logging and removes harmless errors
-            if (appender instanceof TerminalConsoleAppender) {
-                logger.removeAppender(appender);
-            }
-        }
         var proxyOutputStream = createProxyOutputStream();
         // Override the system output streams
         System.setOut(new PrintStream(proxyOutputStream, true));

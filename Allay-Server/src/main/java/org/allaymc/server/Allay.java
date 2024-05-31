@@ -1,6 +1,7 @@
 package org.allaymc.server;
 
 import lombok.extern.slf4j.Slf4j;
+import net.minecrell.terminalconsole.TerminalConsoleAppender;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
@@ -63,6 +64,9 @@ import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
 import org.allaymc.server.world.generator.AllayWorldGeneratorFactory;
 import org.allaymc.server.world.storage.AllayWorldStorageFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -83,8 +87,14 @@ public final class Allay {
             Server.SETTINGS.genericSettings().enableGui(false);
         }
         if (Server.SETTINGS.genericSettings().enableGui()) {
-            DASHBOARD = Dashboard.getInstance();
+            try {
+                DASHBOARD = Dashboard.getInstance();
+            } catch (Throwable t) {
+                log.error("Cannot init Dashboard!", t);
+                Server.SETTINGS.genericSettings().enableGui(false);
+            }
         }
+        removeLog4jAppenderNotInUse(Server.SETTINGS.genericSettings().enableGui());
         log.info("Starting Allay...");
         try {
             initAllayAPI();
@@ -98,6 +108,16 @@ public final class Allay {
         } catch (Exception e) {
             log.error("Error while starting the server!", e);
             Server.getInstance().shutdown();
+        }
+    }
+
+    private static void removeLog4jAppenderNotInUse(boolean useGui) {
+        org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
+        for (Appender appender : logger.getAppenders().values()) {
+            // Prevents multiple appender/double logging and removes harmless errors
+            if ((useGui && appender instanceof TerminalConsoleAppender) || (!useGui && appender instanceof ConsoleAppender)) {
+                logger.removeAppender(appender);
+            }
         }
     }
 
