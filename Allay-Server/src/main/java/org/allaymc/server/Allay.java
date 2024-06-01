@@ -80,7 +80,7 @@ public final class Allay {
         long startTime = System.currentTimeMillis();
         System.setProperty("joml.format", "false"); // Set JOML vectors are output without a scientific notation
         System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // Enable async logging
-        AllayAPI.getInstance().bindI18n(new AllayI18N(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
+        initI18n();
         // Check if the environment is headless
         if (isHeadless()) {
             Server.SETTINGS.genericSettings().enableGui(false);
@@ -119,6 +119,10 @@ public final class Allay {
         return true;
     }
 
+    /**
+     * NOTICE: The i18n implementation must be registered before initializing the API,
+     * which means that you should call initI18n() before call initAllayAPI()!
+     */
     @VisibleForTesting
     public static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
@@ -185,5 +189,12 @@ public final class Allay {
         api.bind(PackRegistry.class, AllayPackRegistry::new);
 
         api.implement("Allay");
+    }
+
+    @VisibleForTesting
+    public static void initI18n() {
+        if (I18n.get() == null) {
+            AllayAPI.getInstance().bindI18n(new AllayI18N(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
+        }
     }
 }
