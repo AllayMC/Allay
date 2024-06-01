@@ -45,7 +45,6 @@ public final class Dashboard {
     public static final int CHUNK_VALUE_COUNT = 100;
     public static final int ENTITY_VALUE_COUNT = 100;
     private static Dashboard INSTANCE;
-    private static ImageIcon ICON;
 
     private JPanel rootPane;
     private JTabbedPane tabbedPane;
@@ -81,8 +80,7 @@ public final class Dashboard {
         // Set icon
         URL image = Dashboard.class.getClassLoader().getResource("icon.png");
         if (image != null) {
-            ICON = new ImageIcon(image);
-            frame.setIconImage(ICON.getImage());
+            frame.setIconImage(new ImageIcon(image).getImage());
         }
         // Show the frame
         frame.setVisible(true);
