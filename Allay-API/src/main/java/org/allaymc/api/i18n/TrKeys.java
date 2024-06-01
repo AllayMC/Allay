@@ -55,6 +55,80 @@ public interface TrKeys {
 
   String A_ENTITYTYPE_LOADING = "allay:entitytype.loading";
 
+  String A_GUI_CHUNK = "allay:gui.chunk";
+
+  String A_GUI_CHUNK_LABEL = "allay:gui.chunk.label";
+
+  String A_GUI_CONSOLE = "allay:gui.console";
+
+  String A_GUI_CONSOLE_CHANGEFONTSIZE = "allay:gui.console.changefontsize";
+
+  String A_GUI_CONSOLE_CHANGEFONTSIZE_DIALOG = "allay:gui.console.changefontsize.dialog";
+
+  String A_GUI_CONSOLE_CHANGEFONTSIZE_ERROR_DIALOG = "allay:gui.console.changefontsize.error.dialog";
+
+  String A_GUI_CONSOLE_CLEAR = "allay:gui.console.clear";
+
+  String A_GUI_ENTITY = "allay:gui.entity";
+
+  String A_GUI_ENTITY_LABEL = "allay:gui.entity.label";
+
+  String A_GUI_ERROR = "allay:gui.error";
+
+  String A_GUI_INFO = "allay:gui.info";
+
+  String A_GUI_MEMORY = "allay:gui.memory";
+
+  String A_GUI_NAME = "allay:gui.name";
+
+  String A_GUI_PERFORMANCE = "allay:gui.performance";
+
+  String A_GUI_PLAYER = "allay:gui.player";
+
+  String A_GUI_PLAYER_ADDRESS = "allay:gui.player.address";
+
+  String A_GUI_PLAYER_BAN = "allay:gui.player.ban";
+
+  String A_GUI_PLAYER_BANIP = "allay:gui.player.banip";
+
+  String A_GUI_PLAYER_DIMENSION = "allay:gui.player.dimension";
+
+  String A_GUI_PLAYER_INFO = "allay:gui.player.info";
+
+  String A_GUI_PLAYER_KICK = "allay:gui.player.kick";
+
+  String A_GUI_PLAYER_NAME = "allay:gui.player.name";
+
+  String A_GUI_PLAYER_ONLINE = "allay:gui.player.online";
+
+  String A_GUI_PLAYER_POS = "allay:gui.player.pos";
+
+  String A_GUI_PLAYER_UUID = "allay:gui.player.uuid";
+
+  String A_GUI_PLAYER_WORLD = "allay:gui.player.world";
+
+  String A_GUI_PLUGIN = "allay:gui.plugin";
+
+  String A_GUI_PLUGIN_AUTHORS = "allay:gui.plugin.authors";
+
+  String A_GUI_PLUGIN_DEPENDENCIES = "allay:gui.plugin.dependencies";
+
+  String A_GUI_PLUGIN_DESCRIPTION = "allay:gui.plugin.description";
+
+  String A_GUI_PLUGIN_ENTRANCE = "allay:gui.plugin.entrance";
+
+  String A_GUI_PLUGIN_INFO = "allay:gui.plugin.info";
+
+  String A_GUI_PLUGIN_NAME = "allay:gui.plugin.name";
+
+  String A_GUI_PLUGIN_ORDER = "allay:gui.plugin.order";
+
+  String A_GUI_PLUGIN_VERSION = "allay:gui.plugin.version";
+
+  String A_GUI_PLUGIN_WEBSITE = "allay:gui.plugin.website";
+
+  String A_GUI_RAM_LABEL = "allay:gui.ram.label";
+
   String A_ITEMTYPE_LOADED = "allay:itemtype.loaded";
 
   String A_ITEMTYPE_LOADING = "allay:itemtype.loading";
@@ -104,6 +178,8 @@ public interface TrKeys {
   String A_PLUGIN_LOAD_ERROR = "allay:plugin.load.error";
 
   String A_PLUGIN_LOADING = "allay:plugin.loading";
+
+  String A_SERVER_STARTING = "allay:server.starting";
 
   String A_WORLD_LOADED = "allay:world.loaded";
 
