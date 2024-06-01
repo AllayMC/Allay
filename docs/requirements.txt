@@ -1,3 +1,4 @@
+mkdocs
 black
 mkdocs-material
 mkdocs-git-committers-plugin-2
