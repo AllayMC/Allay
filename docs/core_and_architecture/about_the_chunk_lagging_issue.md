@@ -1,3 +1,7 @@
+---
+comments: true
+---
+
 **This article need to be updated**
 
 Block freezing has been an issue for a long time, and we have been looking for the root cause and solutions. Below is a
