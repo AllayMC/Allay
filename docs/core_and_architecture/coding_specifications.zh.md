@@ -32,3 +32,84 @@ class XXX{
 }
 ```
 
+## 减少嵌套层数
+
+这是一个老生常谈的问题了，嵌套过度的代码可读性特别差，而减少嵌套层数可以带来很大的好处。
+以下有一些常用的减少嵌套层数的方法：
+
+### 卫语句
+
+卫语句是一种编程技巧，它将复杂的条件表达式拆分成多个条件表达式，减少嵌套。
+如果条件语句极其复杂，就应该将条件语句拆解开，然后逐个检查，并在条件为真时立刻从函数中返回，这样的单独检查通常被称之为“卫语句”。
+卫语句的效果就是将原来需要仔细阅读代码、细心整理逻辑的条件判断整理成一眼能看透的逻辑关系。
+
+举个例子：
+
+原始代码
+```java
+public static void main(String[] args) {
+    for (int i = 1; i <= 100; i++) {
+        if (i % 3 == 0) {
+            if (i % 4 == 0) {
+                if (i % 5 == 0) {
+                    System.out.println(i);
+                }
+            }
+        }
+    }
+}
+```
+
+重构后
+```java
+public static void main(String[] args) {
+    for (int i = 1; i <= 100; i++) {
+        if (i%3 != 0){
+            continue;
+        }
+        if (i%4 != 0){
+            continue;
+        }
+        if (i%5 != 0){
+            continue;
+        }
+        System.out.println(i);
+    }
+}
+```
+
+只有在上面三个条件都不成立的情况下，才会走到最后一步输出的语句。也就是排除那些不符合条件的情况，剩下的自然就是符合条件的了。
+
+## 提取方法
+
+部分方法承担的功能重，逻辑复杂，往往代码嵌套也非常严重。
+这时我们可以考虑提取方法，将一个方法拆分为多个方法调用的组合
+
+## 善用return（和卫语句类似）
+
+在C时代，单一出口原则被广泛认同，即“一个方法内只能有一个return”。
+我们认为这过分严格了，至少在某些情况下，提前return可以降低嵌套层数：
+
+原始代码
+```java
+public static void main(String[] args) {
+    if (args.length == 0) {
+        return;
+    } else {
+        // Do something else
+    }
+}
+```
+
+重构后
+```java
+public static void main(String[] args) {
+    if (args.length == 0) {
+        return;
+    }
+    // Do something else
+}
+
+```
+
+这是一个十分简单却十分有效的技巧
