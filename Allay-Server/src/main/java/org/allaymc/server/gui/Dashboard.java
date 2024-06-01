@@ -3,18 +3,16 @@ package org.allaymc.server.gui;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import io.netty.util.internal.logging.Slf4JLoggerFactory;
-import net.minecrell.terminalconsole.TerminalConsoleAppender;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
 import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +30,6 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -44,11 +41,10 @@ public final class Dashboard {
     public static final int RAM_VALUE_COUNT = 100;
     public static final int CHUNK_VALUE_COUNT = 100;
     public static final int ENTITY_VALUE_COUNT = 100;
+    private static final long MEGABYTE = 1024L * 1024L;
     private static Dashboard INSTANCE;
-    private static ImageIcon ICON;
-
     private JPanel rootPane;
-    private JTabbedPane tabbedPane;
+    private JTabbedPane rootTabbedPane;
     private JPanel playerTab;
     private JPanel perfTab;
     private JTable playerTable;
@@ -59,21 +55,20 @@ public final class Dashboard {
     private GraphPanel entityGraph;
     private ConsolePanel consolePane;
     private JTextField cmdInput;
+    private JPanel entityTab;
+    private JPanel chunkTab;
+    private JPanel memoryTab;
+    private JPanel consoleTab;
+    private JPanel pluginTab;
+    private JTabbedPane perfTabbedPane;
     private List<Integer> ramValues;
     private List<Integer> chunkValues;
     private List<Integer> entityValues;
 
-    public static Dashboard getInstance() {
-        if (INSTANCE == null) {
-            FlatMacDarkLaf.setup();
-            INSTANCE = new Dashboard();
-        }
-        return INSTANCE;
-    }
-
     private Dashboard() {
+        $$$setupUI$$$();
         wrapSystemOutputStreams();
-        JFrame frame = new JFrame("Dashboard");
+        JFrame frame = new JFrame(I18n.get().tr(TrKeys.A_GUI_NAME));
         frame.setContentPane(rootPane);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 700);
@@ -81,9 +76,9 @@ public final class Dashboard {
         // Set icon
         URL image = Dashboard.class.getClassLoader().getResource("icon.png");
         if (image != null) {
-            ICON = new ImageIcon(image);
-            frame.setIconImage(ICON.getImage());
+            frame.setIconImage(new ImageIcon(image).getImage());
         }
+        applyI18nTexts();
         // Show the frame
         frame.setVisible(true);
         pluginTable.addMouseListener(new MouseAdapter() {
@@ -92,22 +87,22 @@ public final class Dashboard {
                 if (e.getButton() != MouseEvent.BUTTON1) return;
                 // Show the focused plugin's information
                 JPopupMenu popupMenu = new JPopupMenu();
-                JMenuItem infoItem = new JMenuItem("Infomation");
+                JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_INFO));
                 infoItem.addActionListener(unused -> {
                     if (pluginTable.getSelectedRow() == -1) return;
                     // Get the plugin
                     String pluginName = (String) pluginTable.getValueAt(pluginTable.getSelectedRow(), 0);
                     var pluginDescriptor = Server.getInstance().getPluginManager().getPlugin(pluginName).descriptor();
                     JOptionPane.showMessageDialog(null,
-                            "Name: " + pluginDescriptor.getName() + "\n" +
-                                    "Entrance: " + pluginDescriptor.getEntrance() + "\n" +
-                                    "Order: " + pluginDescriptor.getOrder() + "\n" +
-                                    "Description: " + pluginDescriptor.getDescription() + "\n" +
-                                    "Version: " + pluginDescriptor.getVersion() + "\n" +
-                                    "Authors: " + String.join(", ", pluginDescriptor.getAuthors()) + "\n" +
-                                    "Dependencies: " + pluginDescriptor.getDependencies().stream().map(PluginDependency::name).collect(Collectors.joining(", ")) + "\n" +
-                                    "Website: " + pluginDescriptor.getWebsite(),
-                            "Plugin Information",
+                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_NAME) + ": " + pluginDescriptor.getName() + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_ENTRANCE) + ": " + pluginDescriptor.getEntrance() + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_ORDER) + ": " + pluginDescriptor.getOrder() + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_DESCRIPTION) + ": " + pluginDescriptor.getDescription() + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_VERSION) + ": " + pluginDescriptor.getVersion() + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_AUTHORS) + ": " + String.join(", ", pluginDescriptor.getAuthors()) + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_DEPENDENCIES) + ": " + pluginDescriptor.getDependencies().stream().map(PluginDependency::name).collect(Collectors.joining(", ")) + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_WEBSITE) + ": " + pluginDescriptor.getWebsite(),
+                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_INFO),
                             JOptionPane.INFORMATION_MESSAGE);
                 });
                 popupMenu.add(infoItem);
@@ -120,7 +115,7 @@ public final class Dashboard {
                 if (e.getButton() != MouseEvent.BUTTON1) return;
                 JPopupMenu popupMenu = new JPopupMenu();
 
-                JMenuItem infoItem = new JMenuItem("Infomation");
+                JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_INFO));
                 infoItem.addActionListener(unused -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
@@ -128,18 +123,18 @@ public final class Dashboard {
                     var player = Server.getInstance().getOnlinePlayerByName(playerName);
                     var pos = player.getLocation();
                     JOptionPane.showMessageDialog(null,
-                            "Name: " + player.getOriginName() + "\n" +
-                                    "Address: " + player.getClientSession().getSocketAddress().toString() + "\n" +
-                                    "UUID: " + player.getUUID().toString() + "\n" +
-                                    "Pos: (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
-                                    "World: " + pos.dimension().getWorld().getWorldData().getName() + "\n" +
-                                    "DimensionId: " + pos.dimension().getDimensionInfo().dimensionId(),
-                            "Player Information",
+                            I18n.get().tr(TrKeys.A_GUI_PLAYER_NAME) + ": " + player.getOriginName() + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_ADDRESS) + ": " + player.getClientSession().getSocketAddress().toString() + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID) + ": " + player.getUUID().toString() + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getName() + "\n" +
+                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionInfo().dimensionId(),
+                            I18n.get().tr(TrKeys.A_GUI_PLAYER_INFO),
                             JOptionPane.INFORMATION_MESSAGE);
                 });
                 popupMenu.add(infoItem);
 
-                JMenuItem kickItem = new JMenuItem("Kick");
+                JMenuItem kickItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_PLAYER_KICK));
                 kickItem.addActionListener(unused -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
@@ -149,8 +144,8 @@ public final class Dashboard {
                 });
                 popupMenu.add(kickItem);
 
-                JMenuItem banItem = new JMenuItem("Ban");
-                    banItem.addActionListener(unused -> {
+                JMenuItem banItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_PLAYER_BAN));
+                banItem.addActionListener(unused -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
@@ -159,7 +154,7 @@ public final class Dashboard {
                 });
                 popupMenu.add(banItem);
 
-                JMenuItem banIpItem = new JMenuItem("BanIp");
+                JMenuItem banIpItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_PLAYER_BANIP));
                 banIpItem.addActionListener(unused -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
@@ -178,25 +173,48 @@ public final class Dashboard {
                 if (e.getButton() != MouseEvent.BUTTON3) return;
                 JPopupMenu popupMenu = new JPopupMenu();
 
-                JMenuItem changeFontSizeItem = new JMenuItem("Change Font Size");
+                JMenuItem changeFontSizeItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_CONSOLE_CHANGEFONTSIZE));
                 changeFontSizeItem.addActionListener(unused -> {
-                    String input = JOptionPane.showInputDialog("Please input the font size you want:", consolePane.getFont().getSize());
+                    String input = JOptionPane.showInputDialog(I18n.get().tr(TrKeys.A_GUI_CONSOLE_CHANGEFONTSIZE_DIALOG), consolePane.getFont().getSize());
                     if (input == null) return;
                     try {
                         int fontSize = Integer.parseInt(input);
                         consolePane.setFont(consolePane.getFont().deriveFont((float) fontSize));
                     } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "Invalid font size!", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, I18n.get().tr(TrKeys.A_GUI_CONSOLE_CHANGEFONTSIZE_ERROR_DIALOG), I18n.get().tr(TrKeys.A_GUI_ERROR), JOptionPane.ERROR_MESSAGE);
                     }
                 });
                 popupMenu.add(changeFontSizeItem);
 
-                JMenuItem clearItem = new JMenuItem("Clear");
+                JMenuItem clearItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_CONSOLE_CLEAR));
                 clearItem.addActionListener(unused -> consolePane.setText(""));
                 popupMenu.add(clearItem);
 
                 popupMenu.show(e.getComponent(), e.getX(), e.getY());
             }
+        });
+    }
+
+    public static Dashboard getInstance() {
+        if (INSTANCE == null) {
+            FlatMacDarkLaf.setup();
+            INSTANCE = new Dashboard();
+        }
+        return INSTANCE;
+    }
+
+    private void applyI18nTexts() {
+        SwingUtilities.invokeLater(() -> {
+            rootTabbedPane.setTitleAt(0, I18n.get().tr(TrKeys.A_GUI_CONSOLE));
+            rootTabbedPane.setTitleAt(1, I18n.get().tr(TrKeys.A_GUI_PERFORMANCE));
+            rootTabbedPane.setTitleAt(2, I18n.get().tr(TrKeys.A_GUI_PLAYER));
+            rootTabbedPane.setTitleAt(3, I18n.get().tr(TrKeys.A_GUI_PLUGIN));
+
+            perfTabbedPane.setTitleAt(0, (I18n.get().tr(TrKeys.A_GUI_MEMORY)));
+            perfTabbedPane.setTitleAt(1, (I18n.get().tr(TrKeys.A_GUI_CHUNK)));
+            perfTabbedPane.setTitleAt(2, (I18n.get().tr(TrKeys.A_GUI_ENTITY)));
+
+            onlinePlayerCount.setText(I18n.get().tr(TrKeys.A_GUI_PLAYER_ONLINE, 0));
         });
     }
 
@@ -223,7 +241,7 @@ public final class Dashboard {
             }
 
             @Override
-            public void write(byte @NonNull[] b) throws IOException {
+            public void write(byte @NonNull [] b) throws IOException {
                 write(b, 0, b.length);
             }
         };
@@ -236,7 +254,7 @@ public final class Dashboard {
             final long totalMemory = Runtime.getRuntime().totalMemory();
             final int freePercent = (int) (freeMemory * 100.0 / totalMemory + 0.5);
             ramValues.add(100 - freePercent);
-            ramGraph.setXLabel("Usage: " + String.format("%,d", (totalMemory - freeMemory) / MEGABYTE) + "mb (" + freePercent + "% free)");
+            ramGraph.setXLabel(I18n.get().tr(TrKeys.A_GUI_RAM_LABEL, String.format("%,d", (totalMemory - freeMemory) / MEGABYTE), freePercent));
             // Trim the list
             int k = ramValues.size();
             if (k > RAM_VALUE_COUNT)
@@ -259,7 +277,7 @@ public final class Dashboard {
                     )
                     .sum();
             chunkValues.add(loadedChunkCount);
-            chunkGraph.setXLabel("Loaded Chunk Count: " + loadedChunkCount);
+            chunkGraph.setXLabel(I18n.get().tr(TrKeys.A_GUI_CHUNK_LABEL, loadedChunkCount));
             // Trim the list
             k = chunkValues.size();
             if (k > CHUNK_VALUE_COUNT)
@@ -282,7 +300,7 @@ public final class Dashboard {
                     )
                     .sum();
             entityValues.add(loadedEntityCount);
-            entityGraph.setXLabel("Loaded Entity Count: " + loadedEntityCount);
+            entityGraph.setXLabel(I18n.get().tr(TrKeys.A_GUI_ENTITY_LABEL, loadedEntityCount));
             // Trim the list
             k = entityValues.size();
             if (k > ENTITY_VALUE_COUNT)
@@ -296,7 +314,8 @@ public final class Dashboard {
                 Server.getInstance(),
                 () -> {
                     SwingUtilities.invokeLater(guiUpdateTask);
-                    return true;},
+                    return true;
+                },
                 20);
 
         var server = Server.getInstance();
@@ -324,11 +343,11 @@ public final class Dashboard {
     }
 
     private void updateOnlinePlayerCount() {
-        SwingUtilities.invokeLater(() -> onlinePlayerCount.setText("Online: " + Server.getInstance().getOnlinePlayerCount()));
+        SwingUtilities.invokeLater(() -> onlinePlayerCount.setText(I18n.get().tr(TrKeys.A_GUI_PLAYER_ONLINE, Server.getInstance().getOnlinePlayerCount())));
     }
 
     private void updateOnlinePlayerTable() {
-        var title = new String[] {"Name", "Address", "UUID"};
+        var title = new String[]{I18n.get().tr(TrKeys.A_GUI_PLAYER_NAME), I18n.get().tr(TrKeys.A_GUI_PLAYER_ADDRESS), I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID)};
         var players = Server.getInstance().getOnlinePlayers().values();
         String[][] data;
         if (players.isEmpty()) {
@@ -353,13 +372,13 @@ public final class Dashboard {
     }
 
     private void updatePluginTable() {
-        var title = new String[] {"Name", "Description", "Version", "Author"};
+        var title = new String[]{I18n.get().tr(TrKeys.A_GUI_PLUGIN_NAME), I18n.get().tr(TrKeys.A_GUI_PLUGIN_DESCRIPTION), I18n.get().tr(TrKeys.A_GUI_PLUGIN_VERSION), I18n.get().tr(TrKeys.A_GUI_PLUGIN_AUTHORS)};
         var plugins = Server.getInstance().getPluginManager().getPlugins().values();
         var data = new String[4][plugins.size() - 1];
         int row = 0;
         for (var plugin : plugins) {
             var descriptor = plugin.descriptor();
-            data[row] = new String[] {
+            data[row] = new String[]{
                     descriptor.getName(),
                     descriptor.getDescription().isBlank() ? "N/A" : descriptor.getDescription(),
                     descriptor.getVersion(),
@@ -374,51 +393,72 @@ public final class Dashboard {
         });
     }
 
-    {
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
-        $$$setupUI$$$();
-    }
-
     /**
      * Method generated by IntelliJ IDEA GUI Designer
      * >>> IMPORTANT!! <<<
      * DO NOT edit this method OR call it in your code!
-     *
-     * @noinspection ALL
      */
     private void $$$setupUI$$$() {
+        createUIComponents();
         rootPane = new JPanel();
         rootPane.setLayout(new GridLayoutManager(1, 1, new Insets(8, 8, 8, 8), -1, -1));
-        tabbedPane = new JTabbedPane();
-        rootPane.add(tabbedPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        rootTabbedPane = new JTabbedPane();
+        rootPane.add(rootTabbedPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        consoleTab = new JPanel();
+        consoleTab.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        rootTabbedPane.addTab("Console", consoleTab);
+        final JScrollPane scrollPane1 = new JScrollPane();
+        consoleTab.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        scrollPane1.setViewportView(consolePane);
+        cmdInput = new JTextField();
+        cmdInput.setEnabled(false);
+        consoleTab.add(cmdInput, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        perfTab = new JPanel();
+        perfTab.setLayout(new FormLayout("fill:d:grow", "center:d:grow"));
+        rootTabbedPane.addTab("Performance", perfTab);
+        perfTabbedPane = new JTabbedPane();
+        perfTabbedPane.setAlignmentY(0.5f);
+        CellConstraints cc = new CellConstraints();
+        perfTab.add(perfTabbedPane, cc.xy(1, 1, CellConstraints.DEFAULT, CellConstraints.FILL));
+        memoryTab = new JPanel();
+        memoryTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        perfTabbedPane.addTab("Memory", memoryTab);
+        memoryTab.add(ramGraph, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        chunkTab = new JPanel();
+        chunkTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        perfTabbedPane.addTab("Chunk", chunkTab);
+        chunkTab.add(chunkGraph, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        entityTab = new JPanel();
+        entityTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        perfTabbedPane.addTab("Entity", entityTab);
+        entityTab.add(entityGraph, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         playerTab = new JPanel();
         playerTab.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
-        tabbedPane.addTab("Players", playerTab);
-        final JLabel label1 = new JLabel();
-        label1.setEnabled(true);
-        label1.setHorizontalAlignment(2);
-        label1.setText("Online: ");
-        playerTab.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JScrollPane scrollPane1 = new JScrollPane();
-        playerTab.add(scrollPane1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        rootTabbedPane.addTab("Players", playerTab);
+        onlinePlayerCount = new JLabel();
+        onlinePlayerCount.setEnabled(true);
+        onlinePlayerCount.setHorizontalAlignment(2);
+        onlinePlayerCount.setText("Online: 0");
+        playerTab.add(onlinePlayerCount, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JScrollPane scrollPane2 = new JScrollPane();
+        playerTab.add(scrollPane2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         playerTable = new JTable();
         playerTable.setAutoCreateRowSorter(true);
-        scrollPane1.setViewportView(playerTable);
-        perfTab = new JPanel();
-        perfTab.setLayout(new FormLayout("", ""));
-        tabbedPane.addTab("Performance", perfTab);
+        scrollPane2.setViewportView(playerTable);
+        pluginTab = new JPanel();
+        pluginTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        rootTabbedPane.addTab("Plugins", pluginTab);
+        final JScrollPane scrollPane3 = new JScrollPane();
+        pluginTab.add(scrollPane3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        pluginTable = new JTable();
+        pluginTable.setCellSelectionEnabled(false);
+        scrollPane3.setViewportView(pluginTable);
     }
 
     /**
-     * @noinspection ALL
+     *
      */
-    public JComponent $$$getRootComponent$$$() {
-        return rootPane;
-    }
-
-    private static final long MEGABYTE = 1024L * 1024L;
+    public JComponent $$$getRootComponent$$$() {return rootPane;}
 
     private void createUIComponents() {
         // Init the three graph
@@ -452,15 +492,6 @@ public final class Dashboard {
         consolePane.setEditable(false);
     }
 
-    private static class UneditableDefaultTableModel extends DefaultTableModel {
-        public UneditableDefaultTableModel(String[][] data, String[] title) {super(data, title);}
-
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    }
-
     public void appendTextToConsole(final String text) {
         SwingUtilities.invokeLater(() -> {
             consolePane.appendANSI(text);
@@ -469,6 +500,14 @@ public final class Dashboard {
         });
     }
 
+    private static class UneditableDefaultTableModel extends DefaultTableModel {
+        public UneditableDefaultTableModel(String[][] data, String[] title) {super(data, title);}
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    }
 
     private class CommandListener implements ActionListener {
         @Override

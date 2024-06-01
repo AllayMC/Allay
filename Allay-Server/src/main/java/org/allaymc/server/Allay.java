@@ -18,6 +18,8 @@ import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
@@ -78,6 +80,7 @@ public final class Allay {
         long startTime = System.currentTimeMillis();
         System.setProperty("joml.format", "false"); // Set JOML vectors are output without a scientific notation
         System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // Enable async logging
+        initI18n();
         // Check if the environment is headless
         if (isHeadless()) {
             Server.SETTINGS.genericSettings().enableGui(false);
@@ -90,7 +93,7 @@ public final class Allay {
                 Server.SETTINGS.genericSettings().enableGui(false);
             }
         }
-        log.info("Starting Allay...");
+        log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING));
         try {
             initAllayAPI();
             ComponentClassCacheUtils.saveCacheMapping();
@@ -116,11 +119,14 @@ public final class Allay {
         return true;
     }
 
+    /**
+     * NOTICE: The i18n implementation must be registered before initializing the API,
+     * which means that you should call initI18n() before call initAllayAPI()!
+     */
     @VisibleForTesting
     public static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
-        api.bindI18n(new AllayI18N(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
 
         ComponentClassCacheUtils.checkCacheValid();
         ComponentClassCacheUtils.readCacheMapping();
@@ -183,5 +189,12 @@ public final class Allay {
         api.bind(PackRegistry.class, AllayPackRegistry::new);
 
         api.implement("Allay");
+    }
+
+    @VisibleForTesting
+    public static void initI18n() {
+        if (I18n.get() == null) {
+            AllayAPI.getInstance().bindI18n(new AllayI18N(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
+        }
     }
 }
