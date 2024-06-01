@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "mkdocs serve",
-    "build": "mkdocs build -d public"
+    "dev": "cd ../;mkdocs serve",
+    "build": "cd ../;mkdocs build -d public"
   }
 }
