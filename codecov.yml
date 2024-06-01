@@ -1,0 +1,24 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 5
+        paths:
+          - "src"
+        branches:
+          - master
+        if_ci_failed: error
+        informational: true
+        only_pulls: false
+    patch:
+      default:
+        target: auto
+        threshold: 5
+        paths:
+          - "src"
+        branches:
+          - master
+        if_ci_failed: error
+        informational: true
+        only_pulls: false
