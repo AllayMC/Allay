@@ -5,17 +5,34 @@ comments: true
 [//]: # (PS: 需要进一步讨论)
 [//]: # (项目编码规范大体上基于[Google的Java编码规范]&#40;https://google.github.io/styleguide/javaguide.html&#41;，但在一些方面上可能有差异)
 
-## 禁止使用@NotNull, @Range以及@Nullable注解
+## 禁止使用@NotNull和@Nullable注解
 
 在之前，我们的项目使用了大量的此类注解，
 但是后来我们注意到这几个注释带来的好处十分有限，而坏处却十分明显
 
 具体来说，这几个注释只能起到标识作用，并不能提供任何编译期的检查。
-更糟糕的是，你可能不相信，@Range注释反而增大了方法误用的概率，因为它会给调用者一种“有@Range注解保驾护航”的错觉，实际上此注解不会执行任何真正的检查
 
 另外，我们注意到IDEA的误报率非常高:：编辑器并不能执行高级语义分析，导致在一些不可能出问题的点位报黄，引起极大混乱
 
-鉴于此，我们规定，在任何情况下禁止使用@NotNull, @Range以及@Nullable注解
+鉴于此，我们规定，在任何情况下禁止使用@NotNull和@Nullable注解
+
+## @Range的使用
+
+@Range同样也是一个纯标识作用的注解，它可以使ide提供数值参数的范围检查。
+但是请注意，@Range本身不带有任何真正的检查，你仍需要加上检查代码。
+
+```java
+public void setBlockInChunk(@Range(min = 0, max = 15) int x, @Range(min = 0, max = 15) int y, int z, BlockState block) {
+    // 假设这边x和z的值应该在[0, 15]范围内
+    if (x < 0 || x > 15) error();
+    if (z < 0 || z > 15) error();
+    // ...
+} 
+```
+
+我们规定：
+- @Range注解必须与显式代码检查一起使用，即@Range不得单独使用（避免给调用者一种“有@Range注解保驾护航”的错觉）
+- 对于参数存在范围或其他限制的方法，方法体内必须进行显式检查。对于数值参数，建议联合@Range注解一起使用
 
 ## 类注释
 
