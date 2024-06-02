@@ -44,7 +44,7 @@ Allay要求在每个类文件上按照一定格式标明信息，这是一个例
  *
  * @author daoge_cmd
  */
-class XXX{
+class XXX {
     
 }
 ```
@@ -81,15 +81,12 @@ public static void main(String[] args) {
 ```java
 public static void main(String[] args) {
     for (int i = 1; i <= 100; i++) {
-        if (i%3 != 0){
+        if (i % 3 != 0) {
             continue;
         }
-        if (i%4 != 0){
-            continue;
-        }
-        if (i%5 != 0){
-            continue;
-        }
+        // or
+        if (i % 4 != 0) continue;
+        if (i % 5 != 0) continue;
         System.out.println(i);
     }
 }

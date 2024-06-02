@@ -2,8 +2,6 @@
 comments: true
 ---
 
-**This article need to be updated**
-
 Block freezing has been an issue for a long time, and we have been looking for the root cause and solutions. Below is a
 summary of the current progress.
 
@@ -78,3 +76,12 @@ Both incorrect chunk packets and excessively high chunk packet sending rates can
 above understanding, limiting the sending rate of chunk packets is an effective method, provided that the chunk packet
 encoding is correct. By lowering the value of `world-settings.chunk-try-send-count-per-tick`, we found that the block
 freezing issue almost disappeared.
+
+## 2024/5/31 Supplement
+
+It seems that the incorrect order of chunk sending can also cause block freezing. Chunks close to the player **must** be
+sent first. If a distant chunk is sent while skipping an unsent closer chunk, the skipped chunk is very likely to
+freeze.
+
+This indicates that asynchronous chunk sending cannot simply be made asynchronous. The best approach is to create a
+separate chunk sending thread to ensure the correct order of chunk sending.
