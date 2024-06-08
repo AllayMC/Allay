@@ -3,6 +3,7 @@ package org.allaymc.api.plugin;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.command.CommandRegistry;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.server.Server;
@@ -77,6 +78,10 @@ public abstract class Plugin implements TaskCreator {
 
     public CommandRegistry getCommandRegistry() {
         return this.getServer().getCommandRegistry();
+    }
+
+    public I18n getPluginI18n() {
+        return pluginContainer.i18n();
     }
 
     @Override

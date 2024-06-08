@@ -1,25 +1,33 @@
 package org.allaymc.server.plugin.jar;
 
+import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.I18nLoader;
+import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.Plugin;
 import org.allaymc.api.plugin.PluginContainer;
 import org.allaymc.api.plugin.PluginDescriptor;
 import org.allaymc.api.plugin.PluginException;
 import org.allaymc.api.plugin.PluginLoader;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.server.i18n.AllayI18n;
+import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.plugin.SimplePluginDescriptor;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import static org.allaymc.api.plugin.PluginContainer.createPluginContainer;
 import static org.allaymc.server.plugin.DefaultPluginSource.getOrCreateDataFolder;
@@ -69,7 +77,8 @@ public class JarPluginLoader implements PluginLoader {
         return createPluginContainer(
                 pluginInstance,
                 descriptor, this,
-                getOrCreateDataFolder(descriptor.getName())
+                getOrCreateDataFolder(descriptor.getName()),
+                new AllayI18n(new JarPluginI18nLoader(), Server.SETTINGS.genericSettings().language())
         );
     }
 
@@ -82,6 +91,23 @@ public class JarPluginLoader implements PluginLoader {
             throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_ENTRANCE_MISSING, descriptor.getName()));
         } catch (MalformedURLException e2) {
             throw new PluginException("Invalid URL: " + pluginPath.toUri());
+        }
+    }
+
+    public class JarPluginI18nLoader implements I18nLoader {
+
+        @Override
+        public Map<String, String> getLangMap(LangCode langCode) {
+            try {
+                var str = Files.readString(jarFileSystem.getPath("lang/" + langCode.name() + ".json"));
+                TypeToken<HashMap<String, String>> typeToken = new TypeToken<>() {};
+                return JSONUtils.fromLenient(str,typeToken);
+            } catch (NoSuchFileException e) {
+                return Collections.emptyMap();
+            } catch (IOException e) {
+                log.error("Error while loading plugin language file", e);
+                return Collections.emptyMap();
+            }
         }
     }
 

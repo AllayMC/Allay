@@ -18,7 +18,7 @@ public class AllayI18nTest {
     public static final String TEST_VANILLA_KEY = "minecraft:" + TEST_VANILLA_KEY_NO_NAMESPACE;
     public static final String TEST_ALLAY_KEY_NO_NAMESPACE = "allay.starting";
     public static final String TEST_ALLAY_KEY = "allay:" + TEST_ALLAY_KEY_NO_NAMESPACE;
-    static I18n translator = new AllayI18N(new AllayI18nLoader(), LangCode.en_US);
+    static I18n translator = new AllayI18n(new AllayI18nLoader(), LangCode.en_US);
 
     @Test
     void testTr() {

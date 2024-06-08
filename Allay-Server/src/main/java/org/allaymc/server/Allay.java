@@ -50,7 +50,7 @@ import org.allaymc.server.entity.registry.AllayEntityTypeRegistry;
 import org.allaymc.server.entity.type.AllayEntityType;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.gui.Dashboard;
-import org.allaymc.server.i18n.AllayI18N;
+import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.attribute.AllayVanillaItemAttributeRegistry;
 import org.allaymc.server.item.enchantment.AllayEnchantmentRegistry;
@@ -194,7 +194,7 @@ public final class Allay {
     @VisibleForTesting
     public static void initI18n() {
         if (I18n.get() == null) {
-            AllayAPI.getInstance().bindI18n(new AllayI18N(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
+            AllayAPI.getInstance().bindI18n(new AllayI18n(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
         }
     }
 }

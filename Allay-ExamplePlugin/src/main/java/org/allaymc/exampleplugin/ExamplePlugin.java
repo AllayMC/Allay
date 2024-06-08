@@ -33,6 +33,7 @@ public final class ExamplePlugin extends Plugin {
     @Override
     public void onEnable() {
         log.info("ExamplePlugin enabled!");
+        log.info(getPluginI18n().tr("ep:example_plugin_i18n_test"));
         var server = Server.getInstance();
         server.getEventBus().registerListener(serverEventListener);
         server.getEventBus().registerListener(worldEventListener);

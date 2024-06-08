@@ -18,13 +18,13 @@ import static org.allaymc.api.i18n.I18n.isValidKeyCharacter;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayI18N implements I18n {
+public class AllayI18n implements I18n {
 
     protected EnumMap<LangCode, Map<String, String>> langMap = new EnumMap<>(LangCode.class);
     protected LangCode defaultLangCode;
     protected I18nLoader i18NLoader;
 
-    public AllayI18N(I18nLoader i18NLoader, LangCode defaultLangCode) {
+    public AllayI18n(I18nLoader i18NLoader, LangCode defaultLangCode) {
         this.i18NLoader = i18NLoader;
         this.defaultLangCode = defaultLangCode;
         setDefaultLangCode(defaultLangCode);
