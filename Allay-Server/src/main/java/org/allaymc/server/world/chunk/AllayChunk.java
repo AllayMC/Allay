@@ -352,6 +352,7 @@ public class AllayChunk implements Chunk {
     @Override
     public LevelChunkPacket createSubChunkLevelChunkPacket() {
         var levelChunkPacket = new LevelChunkPacket();
+        levelChunkPacket.setDimension(getDimensionInfo().dimensionId());
         levelChunkPacket.setChunkX(this.getX());
         levelChunkPacket.setChunkZ(this.getZ());
         levelChunkPacket.setCachingEnabled(false);
@@ -365,6 +366,7 @@ public class AllayChunk implements Chunk {
     @Override
     public LevelChunkPacket createFullLevelChunkPacketChunk() {
         var levelChunkPacket = new LevelChunkPacket();
+        levelChunkPacket.setDimension(getDimensionInfo().dimensionId());
         levelChunkPacket.setChunkX(this.getX());
         levelChunkPacket.setChunkZ(this.getZ());
         levelChunkPacket.setCachingEnabled(false);

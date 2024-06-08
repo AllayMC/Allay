@@ -191,7 +191,7 @@ public class AllayChunkService implements ChunkService {
             loadChunkSynchronously(x, z, future);
             return future;
         }
-        worldStorage.readChunk(x, z, DimensionInfo.OVERWORLD)
+        worldStorage.readChunk(x, z, dimension.getDimensionInfo())
                 .exceptionally(t -> {
                     log.error("Error while reading chunk ({},{}) !", x, z, t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
@@ -222,7 +222,7 @@ public class AllayChunkService implements ChunkService {
         }
         Chunk chunk;
         try {
-            chunk = worldStorage.readChunkSynchronously(x, z, DimensionInfo.OVERWORLD);
+            chunk = worldStorage.readChunkSynchronously(x, z, dimension.getDimensionInfo());
         } catch (Throwable t) {
             log.error("Error while reading chunk ({},{}) !", x, z, t);
             chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();

@@ -100,7 +100,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Getter
     @Setter
     protected Location3ic spawnPoint;
-    protected boolean needDimensionChangeACK;
+    protected boolean awaitingDimensionChangeACK;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
     protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();
@@ -232,7 +232,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 changeDimensionPacket.setDimension(targetDim.getDimensionInfo().dimensionId());
                 changeDimensionPacket.setPosition(MathUtils.JOMLVecToCBVec(target));
                 networkComponent.sendPacket(changeDimensionPacket);
-                needDimensionChangeACK = true;
+                awaitingDimensionChangeACK = true;
             }
             targetDim.addPlayer(thisEntity);
         });
@@ -493,8 +493,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void onChunkInRangeSent(Chunk chunk) {
-        if (needDimensionChangeACK) {
-            needDimensionChangeACK = false;
+        if (awaitingDimensionChangeACK) {
             sendDimensionChangeSuccess();
         }
         chunk.spawnEntitiesTo(thisEntity);
@@ -509,6 +508,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         ackPk.setBlockPosition(Vector3i.ZERO);
         ackPk.setResultPosition(Vector3i.ZERO);
         networkComponent.sendPacket(ackPk);
+        awaitingDimensionChangeACK = false;
     }
 
     @Override

@@ -18,7 +18,7 @@ public record DimensionInfo(
 ) {
 
     public static final DimensionInfo OVERWORLD = new DimensionInfo(0, -64, 319, 24);
-    public static final DimensionInfo NETHER = new DimensionInfo(1, 0, 127, 16);
+    public static final DimensionInfo NETHER = new DimensionInfo(1, 0, 127, 8);
     public static final DimensionInfo THE_END = new DimensionInfo(2, 0, 255, 16);
 
     public DimensionInfo(int dimensionId, int minHeight, int maxHeight) {

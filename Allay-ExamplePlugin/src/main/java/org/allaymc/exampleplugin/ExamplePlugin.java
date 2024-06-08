@@ -16,7 +16,7 @@ import org.allaymc.api.world.generator.WorldGeneratorFactory;
 public final class ExamplePlugin extends Plugin {
 
     public static ExamplePlugin INSTANCE;
-
+    
     private final ServerEventListener serverEventListener = new ServerEventListener();
     private final WorldEventListener worldEventListener = new WorldEventListener();
 
