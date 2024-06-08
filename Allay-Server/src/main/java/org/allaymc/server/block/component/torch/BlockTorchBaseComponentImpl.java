@@ -9,6 +9,7 @@ import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;
@@ -41,7 +42,8 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var oldBlock = dimension.getBlockState(placeBlockPos);
         var torchFace = computeTorchFacingDirection(blockFace);
 
-        if ((!oldBlock.getBlockAttributes().isAir() && !oldBlock.getBlockAttributes().isLiquid()) ||
+        // TODO: Rewrite the comment code
+        if ((oldBlock.getBlockType() != BlockTypes.AIR_TYPE/* && !oldBlock.getBlockAttributes().isLiquid()*/) ||
                 torchFace == TorchFacingDirection.UNKNOWN) return false;
 
         var targetBlock = dimension.getBlockState(targetBlockPos);
