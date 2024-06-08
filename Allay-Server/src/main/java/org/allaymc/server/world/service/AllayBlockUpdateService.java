@@ -1,5 +1,6 @@
 package org.allaymc.server.world.service;
 
+import org.allaymc.api.block.component.common.BlockLiquidComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
@@ -41,7 +42,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
             BlockState layer1 = dimension.getBlockState(p, 1);
             BlockStateWithPos b0 = new BlockStateWithPos(layer0, new Position3i(p, dimension), 0);
             layer0.getBehavior().onScheduledUpdate(b0);
-            if (layer1.getBlockAttributes().isLiquid()) {
+            if (layer1.getBehavior() instanceof BlockLiquidComponent) {
                 BlockStateWithPos b1 = new BlockStateWithPos(layer1, new Position3i(p, dimension), 1);
                 layer1.getBehavior().onScheduledUpdate(b1);
             }
@@ -55,7 +56,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
             BlockState layer0 = dimension.getBlockState(pos);
             BlockState layer1 = dimension.getBlockState(pos, 1);
             layer0.getBehavior().onNeighborUpdate(pos, neighborPos, blockFace, dimension);
-            if (layer1.getBlockAttributes().isLiquid()) {
+            if (layer1.getBehavior() instanceof BlockLiquidComponent) {
                 layer1.getBehavior().onNeighborUpdate(pos, neighborPos, blockFace, dimension);
             }
             c++;

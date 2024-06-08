@@ -3,6 +3,7 @@ package org.allaymc.server.block.component.torch;
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
+import org.allaymc.api.block.component.common.BlockLiquidComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.function.Place;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
@@ -42,8 +43,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var oldBlock = dimension.getBlockState(placeBlockPos);
         var torchFace = computeTorchFacingDirection(blockFace);
 
-        // TODO: Rewrite the comment code
-        if ((oldBlock.getBlockType() != BlockTypes.AIR_TYPE/* && !oldBlock.getBlockAttributes().isLiquid()*/) ||
+        if ((oldBlock.getBlockType() != BlockTypes.AIR_TYPE && !(oldBlock.getBehavior() instanceof BlockLiquidComponent)) ||
                 torchFace == TorchFacingDirection.UNKNOWN) return false;
 
         var targetBlock = dimension.getBlockState(targetBlockPos);
