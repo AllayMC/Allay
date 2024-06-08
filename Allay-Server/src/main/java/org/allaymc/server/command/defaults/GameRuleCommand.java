@@ -29,11 +29,13 @@ public class GameRuleCommand extends SimpleCommand {
         tree.getRoot()
                 .enumsIgnoreCase("rule", "", "BoolGameRule", BOOL_GAMERULE_ENUM)
                 .bool("value")
+                .defaultValue(null)
                 .optional()
                 .exec(executor(true))
                 .root()
                 .enumsIgnoreCase("rule", "", "IntGameRule", INT_GAMERULE_ENUM)
                 .intNum("value")
+                .defaultValue(null)
                 .optional()
                 .exec(executor(false));
     }
