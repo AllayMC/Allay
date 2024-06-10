@@ -5,6 +5,7 @@ import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
 import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
+import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
@@ -90,6 +91,11 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
                 dimension.getEntityService().addEntity(entity);
             }
         }
+    }
+
+    @Override
+    public boolean hasContainer(FullContainerType<?> type) {
+        return container.getContainerType() == type;
     }
 
     @Override

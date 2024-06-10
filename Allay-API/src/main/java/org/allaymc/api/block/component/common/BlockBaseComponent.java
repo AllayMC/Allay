@@ -6,9 +6,7 @@ import org.allaymc.api.block.function.*;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.PlayerArmorContainer;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
@@ -17,7 +15,6 @@ import org.allaymc.api.entity.effect.type.EffectHasteType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentAquaAffinityType;
 import org.allaymc.api.item.enchantment.type.EnchantmentEfficiencyType;
-import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.world.Dimension;
 
 /**
@@ -52,6 +49,7 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
         double blockHardness = blockState.getBlockAttributes().hardness();
         if (blockHardness == 0) return 0;
         boolean isCorrectTool = isCorrectTool(blockState, usedItem);
+        boolean canHarvestWithHand = canHarvestWithHand();
         boolean hasAquaAffinity = false;
         boolean isInWater = false;
         boolean isOnGround = true;
@@ -79,17 +77,13 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
         }
 
         // Calculate break time
-        double speed = 1.0d / blockHardness;
+        double baseTime = ((isCorrectTool || canHarvestWithHand) ? 1.5 : 5.0) * blockHardness;
+        double speed = 1.0d / baseTime;
         if (isCorrectTool) {
-            // 若是正确的工具，初始速度除以1.5
-            speed /= 1.5d;
             // 工具等级（木制，石制，铁制，etc...）加成
             speed *= toolBreakTimeBonus(usedItem, blockState);
             // 工具效率附魔加成
             speed += speedBonusByEfficiency(efficiencyLevel);
-        } else {
-            // 若不是正确的工具，初始速度除以5
-            speed /= 5.0d;
         }
         // 实体急迫药水效果加成
         speed *= 1.0d + (0.2d * hasteEffectLevel);
@@ -122,6 +116,15 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
     default boolean isCorrectTool(BlockState blockState, ItemStack usedItem) {
         checkBlockType(blockState);
         return false;
+    }
+
+    /**
+     * 部分方块（例如石头，黑曜石）不可以被徒手挖去，强行挖取它们不会掉落任何物品，
+     * 且挖掘速度会受到惩罚(baseTime增大5倍，正常是1.5倍)
+     * @return 是否可以徒手挖取
+     */
+    default boolean canHarvestWithHand() {
+        return true;
     }
 
     private void checkBlockType(BlockState blockState) {

@@ -266,11 +266,11 @@ public interface Dimension {
         return notEmpty ? blockStates : null;
     }
 
-    default void addLevelEvent(Vector3i pos, LevelEventType levelEventType, int data) {
-        var chunk = getChunkService().getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+    default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType, int data) {
+        var chunk = getChunkService().getChunk((int) x >> 4, (int) z >> 4);
         if (chunk == null) return;
         var levelEventPacket = new LevelEventPacket();
-        levelEventPacket.setPosition(pos.toFloat());
+        levelEventPacket.setPosition(Vector3f.from(x, y, z));
         levelEventPacket.setType(levelEventType);
         levelEventPacket.setData(data);
         chunk.sendChunkPacket(levelEventPacket);
