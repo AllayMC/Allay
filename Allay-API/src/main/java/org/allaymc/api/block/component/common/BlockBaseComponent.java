@@ -116,7 +116,6 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
 
     default boolean isCorrectTool(BlockState blockState, ItemStack usedItem) {
         checkBlockType(blockState);
-        VanillaBlockTags.
         return false;
     }
 
