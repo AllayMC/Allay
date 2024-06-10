@@ -61,7 +61,7 @@ file usually doesn't change much in minor updates.
 **Step two, check if there are any new entities in `entity_id_map.json`**. If so, first run `VanillaEntityIdEnumGen`,
 then run `VanillaEntityInterfaceGen`. This file usually doesn't change much in minor updates.
 
-**Step three, check for changes in `item_tags.json`**. If changes exist, run `VanillaItemTagGen`.
+**Step three, check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `VanillaItemTagGen` or `VanillaBlockTagGen`.
 
 **Step four, check for changes in `block_property_types.json`**. If changes exist, run `VanillaBlockPropertyTypeGen`.
 

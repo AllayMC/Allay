@@ -1,6 +1,7 @@
 package org.allaymc.server.block.type;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonParser;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -15,15 +16,16 @@ import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
+import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.data.*;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentProvider;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
@@ -42,6 +44,7 @@ import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -80,10 +83,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     @Getter
     private final Map<Integer, BlockState> blockStateHashMap;
     @Getter
-
     private final Map<Long, BlockState> specialValueMap;
     @Getter
     private final byte specialValueBits;
+    @Getter
+    private final Set<BlockTag> blockTags;
 
     private Class<T> injectedClass;
     @Getter
@@ -97,11 +101,13 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                            List<BlockComponent> components,
                            Map<String, BlockPropertyType<?>> properties,
                            Identifier identifier,
-                           ItemType<?> blockItemType) {
+                           ItemType<?> blockItemType,
+                           Set<BlockTag> blockTags) {
         this.interfaceClass = interfaceClass;
         this.components = components;
         this.properties = Collections.unmodifiableMap(properties);
         this.identifier = identifier;
+        this.blockTags = blockTags;
         this.blockItemType = blockItemType;
         this.blockStateHashMap = initStates();
         byte specialValueBits = 0;
@@ -344,6 +350,25 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     @Slf4j
     public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
+        // Use array instead of set to reduce memory usage
+        protected static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS;
+
+        static {
+            Map<VanillaBlockId, Set<BlockTag>> blockId2tags = new HashMap<>();
+            JsonParser.parseReader(new InputStreamReader(Objects.requireNonNull(AllayBlockType.class.getClassLoader().getResourceAsStream("block_tags.json"))))
+                    .getAsJsonObject()
+                    .entrySet()
+                    .forEach(entry -> {
+                        var tag = VanillaBlockTags.getTagByName(entry.getKey());
+                        entry.getValue().getAsJsonArray().forEach(blockId -> {
+                            var id = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(blockId.getAsString(), ":", "")[1].toUpperCase());
+                            blockId2tags.computeIfAbsent(id, unused -> new HashSet<>()).add(tag);
+                        });
+                    });
+            VANILLA_BLOCK_TAGS = new HashMap<>();
+            blockId2tags.forEach((id, tags) -> VANILLA_BLOCK_TAGS.put(id, tags.toArray(new BlockTag[0])));
+        }
+
         protected Class<T> interfaceClass;
         protected Map<Identifier, BlockComponent> components = new HashMap<>();
         protected Map<String, BlockPropertyType<?>> properties = new HashMap<>();
@@ -352,6 +377,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected ItemType<?> hardItemType;
         protected boolean isCustomBlock = false;
         protected Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
+        protected Set<BlockTag> blockTags = Set.of();
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -426,11 +452,18 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
+        public BlockTypeBuilder<T> setBlockTags(BlockTag... blockTags) {
+            // Unmodifiable set
+            this.blockTags = Set.of(blockTags);
+            return this;
+        }
+
+        @Override
         public AllayBlockType<T> build() {
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
             var listComponents = new ArrayList<>(components.values());
-            var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemType);
+            var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemType, blockTags);
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
                 listComponents.add(blockBaseComponentSupplier.apply(type));
             if (!components.containsKey(BlockAttributeComponentImpl.IDENTIFIER))

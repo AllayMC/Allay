@@ -52,7 +52,7 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 
 **第二步，检查`entity_id_map.json`里面是否存在新的实体**。若存在，先运行`VanillaEntityIdEnumGen`，然后运行`VanillaEntityInterfaceGen`。此文件小版本更新通常不会发生改变。
 
-**第三步，检查`item_tags.json`里面是否存在变动**。若存在，运行`VanillaItemTagGen`。
+**第三步，检查`item_tags.json`以及`block_tags.json`里面是否存在变动**。若存在，运行`VanillaItemTagGen`或`VanillaBlockTagGen`。
 
 **第四步，检查`block_property_types.json`里面是否存在变动**。若存在，运行`VanillaBlockPropertyTypeGen`。
 

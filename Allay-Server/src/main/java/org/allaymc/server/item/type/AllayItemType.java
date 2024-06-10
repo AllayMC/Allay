@@ -57,7 +57,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @Getter
     private final Set<ItemTag> itemTags;
     @Getter
-
     private BlockType<?> blockTypeCache;
     private boolean haveTriedInitBlockTypeCache;
 
