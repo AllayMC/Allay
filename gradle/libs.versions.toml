@@ -60,7 +60,7 @@ netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", vers
 # Netty kqueue
 netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version = "4.1.110.Final" }
 # Configulation lib
-okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.1" }
+okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.2" }
 # JeGenerator
 jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.6-R0.1" }
 # GraalJS
