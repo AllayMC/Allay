@@ -5,14 +5,17 @@ import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
+import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.Identified;
 import org.allaymc.api.utils.Identifier;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Allay Project 2023/3/19
@@ -65,5 +68,12 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
         for (var s : getBlockStateHashMap().values()) {
             registry.register(s.blockStateHash(), s);
         }
+    }
+
+    @Unmodifiable
+    Set<BlockTag> getBlockTags();
+
+    default boolean hasBlockTag(BlockTag blockTag) {
+        return getBlockTags().contains(blockTag);
     }
 }

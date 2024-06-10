@@ -7,6 +7,7 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
@@ -115,7 +116,7 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
 
     default boolean isCorrectTool(BlockState blockState, ItemStack usedItem) {
         checkBlockType(blockState);
-        // TODO: 需要先实现BlockTag (XXX_TIER)
+        VanillaBlockTags.
         return false;
     }
 

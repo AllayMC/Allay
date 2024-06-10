@@ -43,7 +43,6 @@ public interface ItemType<T extends ItemStack> extends Identified {
         return new SimpleItemDefinition(getIdentifier().toString(), getRuntimeId(), false);
     }
 
-
     @Unmodifiable
     Set<ItemTag> getItemTags();
 
