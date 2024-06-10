@@ -41,12 +41,13 @@ plugins:
             Core & Architecture: 核心与架构,
               Threading Model: 线程模型,
               About The Chunk Lagging Issue: 关于卡区块问题,
+              Update To The Next Protocol Version: 更新到下一个协议版本,
+              Coding Specifications: 编码规范,
+            Protocol Research: 协议研究,
               Server Auth Inventory: 服务端权威物品栏,
                 About Inventory Stack Packet: 关于物品堆栈数据包,
                 About Network Stack Id: 关于堆栈网络Id,
                 Crafting: 合成,
-              Update To The Next Protocol Version: 更新到下一个协议版本,
-              Coding Specifications: 编码规范
           }
   - git-revision-date-localized:
       enabled: !ENV [CI, false]
@@ -69,12 +70,14 @@ nav:
   - Core & Architecture:
     - Threading Model: core_and_architecture/architecture/threading_model.md
     - About The Chunk Lagging Issue: core_and_architecture/about_the_chunk_lagging_issue.md
+    - Update To The Next Protocol Version: core_and_architecture/update_to_the_next_protocol_version.md
+    - Coding Specifications: core_and_architecture/coding_specifications.md
+  - Protocol Research:
     - Server Auth Inventory:
       - About Inventory Stack Packet: core_and_architecture/server_auth_inventory/about_inventory_stack_packet.md
       - About Network Stack Id: core_and_architecture/server_auth_inventory/about_network_stack_id.md
       - Crafting: core_and_architecture/server_auth_inventory/crafting.md
-    - Update To The Next Protocol Version: core_and_architecture/update_to_the_next_protocol_version.md
-    - Coding Specifications: core_and_architecture/coding_specifications.md
+
 
 theme:
   name: 'material'
