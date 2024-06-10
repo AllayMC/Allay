@@ -697,6 +697,17 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
+    public boolean hasEffect(EffectType effectType) {
+        return effects.containsKey(effectType);
+    }
+
+    @Override
+    public int getEffectLevel(EffectType effectType) {
+        var effect = effects.get(effectType);
+        return effect == null ? 0 : effect.getAmplifier() + 1;
+    }
+
+    @Override
     public void addEffect(EffectInstance effectInstance) {
         var old = effects.put(effectInstance.getType(), effectInstance);
         effectInstance.getType().onAdd(thisEntity, effectInstance);

@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.component.common;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
@@ -203,6 +205,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     void onFall();
 
+    boolean hasEffect(EffectType effectType);
+
+    int getEffectLevel(EffectType effectType);
+
     void addEffect(EffectInstance effectInstance);
 
     void removeEffect(EffectType effectType);
@@ -333,4 +339,24 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     @UnmodifiableView
     Set<String> getTags();
+
+    default boolean isInWater() {
+        var loc = getLocation();
+        int fx = (int) loc.x();
+        int fy = (int) loc.y();
+        int fz = (int) loc.z();
+        var blockType = getDimension().getBlockState(fx, fy, fz).getBlockType();
+        if (isWaterType(blockType)) {
+            return true;
+        }
+        blockType = getDimension().getBlockState(fx, fy, fz, 1).getBlockType();
+        if (isWaterType(blockType)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isWaterType(BlockType<?> blockType) {
+        return blockType == BlockTypes.FLOWING_WATER_TYPE || blockType == BlockTypes.WATER_TYPE;
+    }
 }

@@ -5,6 +5,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
+import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
@@ -109,4 +110,10 @@ public interface ItemBaseComponent extends ItemComponent {
     }
 
     float calculateAttackDamage();
+
+    boolean hasEnchantment(EnchantmentType enchantmentType);
+
+    short getEnchantmentLevel(EnchantmentType enchantmentType);
+
+    void addEnchantment(EnchantmentType enchantmentType, short level);
 }

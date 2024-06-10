@@ -11,6 +11,7 @@ import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.function.Place;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;

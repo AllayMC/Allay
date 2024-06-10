@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
@@ -324,5 +325,21 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     public float calculateAttackDamage() {
         return attributeComponent.getItemAttributes().attackDamage();
+    }
+
+    @Override
+    public boolean hasEnchantment(EnchantmentType enchantmentType) {
+        return enchantments.containsKey(enchantmentType);
+    }
+
+    @Override
+    public short getEnchantmentLevel(EnchantmentType enchantmentType) {
+        var instance =  enchantments.get(enchantmentType);
+        return instance == null ? 0 : instance.getLevel();
+    }
+
+    @Override
+    public void addEnchantment(EnchantmentType enchantmentType, short level) {
+        enchantments.put(enchantmentType, new SimpleEnchantmentInstance(enchantmentType, level));
     }
 }

@@ -32,6 +32,11 @@ public class BaseContainerHolder implements ContainerHolder {
     }
 
     @Override
+    public boolean hasContainer(FullContainerType<?> type) {
+        return typeToContainer.containsKey(type);
+    }
+
+    @Override
     public <T extends Container> T getContainer(FullContainerType<T> type) {
         return (T) typeToContainer.get(type);
     }
