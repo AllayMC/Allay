@@ -1,6 +1,6 @@
 plugins {
-    `java-library`
     id("com.google.protobuf") version "0.9.4"
+    id("buildlogic.common")
 }
 
 group = "org.allaymc"

@@ -32,3 +32,4 @@
 /Allay-Server/whitelist.yml
 /.jacoco/
 /.vscode/
+/buildSrc/.gradle/
