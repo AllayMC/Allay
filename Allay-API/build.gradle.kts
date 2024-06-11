@@ -33,3 +33,10 @@ dependencies {
     api(libs.caffeine)
     implementation(libs.libdeflate)
 }
+
+tasks.clean {
+    group = "alpha build"
+    rootProject.rootDir.resolve(".run").listFiles { f -> !f.name.equals("Allay.run.xml") }?.forEach {
+        delete(it)
+    }
+}

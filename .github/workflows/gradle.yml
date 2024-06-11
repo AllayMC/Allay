@@ -8,12 +8,14 @@ on:
       - Allay-API/src/**
       - Allay-Server/src/**
       - Allay-Data/**
+      - buildSrc/**
   pull_request:
     paths:
       - .github/workflows/build.yml
       - Allay-API/src/**
       - Allay-Server/src/**
       - Allay-Data/**
+      - buildSrc/**
   workflow_dispatch:
 
 jobs:
