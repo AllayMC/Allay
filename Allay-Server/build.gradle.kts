@@ -6,6 +6,7 @@ plugins {
     application
     id("me.champeau.jmh") version "0.7.2"
     id("com.gorylenko.gradle-git-properties") version "2.4.2"
+    id("buildlogic.common")
 }
 
 group = "org.allaymc"

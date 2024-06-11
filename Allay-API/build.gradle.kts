@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    id("buildlogic.common")
 }
 
 group = "org.allaymc"

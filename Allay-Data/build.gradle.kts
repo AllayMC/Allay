@@ -1,3 +1,7 @@
+plugins {
+    id("buildlogic.common")
+}
+
 group = "org.allaymc"
 description = "data"
 version = "1.0.0"
