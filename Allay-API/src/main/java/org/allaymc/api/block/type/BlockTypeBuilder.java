@@ -5,6 +5,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.common.CustomBlockComponent;
+import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -75,6 +76,8 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
     BlockTypeBuilder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier);
 
     BlockTypeBuilder<T> setBlockTags(BlockTag... blockTags);
+
+    BlockTypeBuilder<T> setMaterial(Material material);
 
     BlockType<T> build();
 

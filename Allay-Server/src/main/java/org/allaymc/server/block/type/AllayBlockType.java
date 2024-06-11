@@ -12,6 +12,7 @@ import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.common.CustomBlockComponent;
+import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
@@ -88,6 +89,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private final byte specialValueBits;
     @Getter
     private final Set<BlockTag> blockTags;
+    @Getter
+    private final Material material;
 
     private Class<T> injectedClass;
     @Getter
@@ -102,12 +105,14 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                            Map<String, BlockPropertyType<?>> properties,
                            Identifier identifier,
                            ItemType<?> blockItemType,
-                           Set<BlockTag> blockTags) {
+                           Set<BlockTag> blockTags,
+                           Material material) {
         this.interfaceClass = interfaceClass;
         this.components = components;
         this.properties = Collections.unmodifiableMap(properties);
         this.identifier = identifier;
         this.blockTags = blockTags;
+        this.material = material;
         this.blockItemType = blockItemType;
         this.blockStateHashMap = initStates();
         byte specialValueBits = 0;
@@ -378,6 +383,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected boolean isCustomBlock = false;
         protected Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
         protected Set<BlockTag> blockTags = Set.of();
+        protected Material material;
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -398,6 +404,9 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             if (attributeMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
             components.put(BlockAttributeComponentImpl.IDENTIFIER, BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap));
+            var tags = VANILLA_BLOCK_TAGS.get(vanillaBlockId);
+            if (tags != null) setBlockTags(tags);
+            setMaterial(Material.getVanillaBlockMaterial(vanillaBlockId));
             return this;
         }
 
@@ -452,9 +461,15 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public BlockTypeBuilder<T> setBlockTags(BlockTag... blockTags) {
+        public Builder<T> setBlockTags(BlockTag... blockTags) {
             // Unmodifiable set
             this.blockTags = Set.of(blockTags);
+            return this;
+        }
+
+        @Override
+        public Builder<T> setMaterial(Material material) {
+            this.material = material;
             return this;
         }
 
@@ -463,7 +478,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
             var listComponents = new ArrayList<>(components.values());
-            var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemType, blockTags);
+            var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemType, blockTags, material);
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
                 listComponents.add(blockBaseComponentSupplier.apply(type));
             if (!components.containsKey(BlockAttributeComponentImpl.IDENTIFIER))

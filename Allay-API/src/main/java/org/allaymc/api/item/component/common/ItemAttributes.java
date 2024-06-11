@@ -22,7 +22,6 @@ public class ItemAttributes {
     protected int armorValue = 0;
     @Builder.Default
     protected int attackDamage = 0;
-    //auxValuesDescription
     @Builder.Default
     protected boolean canBeCharged = false;
     @Builder.Default
@@ -40,27 +39,7 @@ public class ItemAttributes {
     @Builder.Default
     protected String creativeGroup = "";
     @Builder.Default
-    protected int id = Integer.MAX_VALUE;
-    @Builder.Default
-    protected boolean isArmor = false;
-    @Builder.Default
-    protected boolean isBlockPlanterItem = false;
-    @Builder.Default
     protected boolean isDamageable = false;
-    @Builder.Default
-    protected boolean isDye = false;
-    @Builder.Default
-    protected boolean isDyeable = false;
-    @Builder.Default
-    protected boolean isElytra = false;
-    @Builder.Default
-    protected boolean isFertilizer = false;
-    @Builder.Default
-    protected boolean isFood = false;
-    @Builder.Default
-    protected boolean isThrowable = false;
-    @Builder.Default
-    protected boolean isUseable = false;
     @Builder.Default
     protected String itemColorName = "";
     @Builder.Default
@@ -69,8 +48,6 @@ public class ItemAttributes {
     protected int maxDamage = 0;
     @Builder.Default
     protected int maxStackSize = 64;
-    @Builder.Default
-    protected String name = "";
     @Builder.Default
     protected int toughnessValue = 0;
     @Builder.Default
@@ -94,22 +71,11 @@ public class ItemAttributes {
                 .cooldownType(nbt.getString("cooldownType"))
                 .creativeCategory(nbt.getInt("creativeCategory"))
                 .creativeGroup(nbt.getString("creativeGroup"))
-                .id(nbt.getInt("id"))
-                .isArmor(nbt.getBoolean("isArmor"))
-                .isBlockPlanterItem(nbt.getBoolean("isBlockPlanterItem"))
                 .isDamageable(nbt.getBoolean("isDamageable"))
-                .isDye(nbt.getBoolean("isDye"))
-                .isDyeable(nbt.getBoolean("isDyeable"))
-                .isElytra(nbt.getBoolean("isElytra"))
-                .isFertilizer(nbt.getBoolean("isFertilizer"))
-                .isFood(nbt.getBoolean("isFood"))
-                .isThrowable(nbt.getBoolean("isThrowable"))
-                .isUseable(nbt.getBoolean("isUseable"))
                 .itemColorName(nbt.getString("itemColorName"))
                 .itemColorRGB(nbt.getInt("itemColorRGB"))
                 .maxDamage(nbt.getInt("maxDamage"))
                 .maxStackSize(nbt.getInt("maxStackSize"))
-                .name(nbt.getString("name"))
                 .toughnessValue(nbt.getInt("toughnessValue"))
                 .viewDamping(nbt.getFloat("viewDamping"))
                 .build();

@@ -72,21 +72,9 @@ public class BlockAttributes {
     @Builder.Default
     protected float thickness = 0;
     @Builder.Default
-    protected float translucency = 0;
-    @Builder.Default
     protected boolean canContainLiquid = false;
     @Builder.Default
     protected boolean hasCollision = true;
-//    @Builder.Default
-//    protected boolean hasBlockEntity = false;
-//    @Builder.Default
-//    protected boolean hasComparatorSignal = false;
-    @Builder.Default
-    protected boolean isAlwaysDestroyable = true;
-//    @Builder.Default
-//    protected boolean isContainerBlock = false;
-//    @Builder.Default
-//    protected boolean isLiquid = false;
     /**
      * Whether the block blocking movement
      */
@@ -94,8 +82,6 @@ public class BlockAttributes {
     protected boolean isMotionBlockingBlock = false;
     @Builder.Default
     protected boolean isPowerSource = false;
-    @Builder.Default
-    protected boolean isSolid = false;
     @Builder.Default
     protected boolean isUnbreakable = false;
     @Builder.Default
@@ -107,33 +93,6 @@ public class BlockAttributes {
      */
     @Builder.Default
     protected boolean pushesUpFallingBlocks = false;
-    /**
-     * Blocks that can cause fire
-     */
-    @Builder.Default
-    protected boolean superHot = false;
-//    @Builder.Default
-//    protected boolean isAir = false;
-//    @Builder.Default
-//    protected boolean isBounceBlock = false;
-//    @Builder.Default
-//    protected boolean isButtonBlock = false;
-//    @Builder.Default
-//    protected boolean isCropBlock = false;
-//    @Builder.Default
-//    protected boolean isDoorBlock = false;
-//    @Builder.Default
-//    protected boolean isFenceBlock = false;
-//    @Builder.Default
-//    protected boolean isFenceGateBlock = false;
-//    @Builder.Default
-//    protected boolean isThinFenceBlock = false;
-//    @Builder.Default
-//    protected boolean isFallingBlock = false;
-//    @Builder.Default
-//    protected boolean isStemBlock = false;
-//    @Builder.Default
-//    protected boolean isSlabBlock = false;
 
     protected static AABBf parseAABBStr(String str) {
         var numbers = AllayStringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
@@ -165,34 +124,15 @@ public class BlockAttributes {
                 .explosionResistance(nbt.getFloat("explosionResistance"))
                 .friction(nbt.getFloat("friction"))
                 .hardness(nbt.getFloat("hardness"))
-//                .hasBlockEntity(nbt.getBoolean("hasBlockEntity"))
-//                .hasComparatorSignal(nbt.getBoolean("hasComparatorSignal"))
-                .isAlwaysDestroyable(nbt.getBoolean("isAlwaysDestroyable"))
-//                .isContainerBlock(nbt.getBoolean("isContainerBlock"))
-//                .isLiquid(nbt.getBoolean("isLiquid"))
                 .isMotionBlockingBlock(nbt.getBoolean("isMotionBlockingBlock"))
                 .isPowerSource(nbt.getBoolean("isPowerSource"))
-                .isSolid(nbt.getBoolean("isSolid"))
                 .isUnbreakable(nbt.getBoolean("isUnbreakable"))
                 .isWaterBlocking(nbt.getBoolean("isWaterBlocking"))
                 .lightEmission(nbt.getInt("lightEmission"))
                 .lightDampening(nbt.getInt("lightDampening"))
-//                .isAir(nbt.getBoolean("isAir"))
-//                .isBounceBlock(nbt.getBoolean("isBounceBlock"))
-//                .isButtonBlock(nbt.getBoolean("isButtonBlock"))
-//                .isCropBlock(nbt.getBoolean("isCropBlock"))
-//                .isDoorBlock(nbt.getBoolean("isDoorBlock"))
-//                .isFallingBlock(nbt.getBoolean("isFallingBlock"))
-//                .isFenceBlock(nbt.getBoolean("isFenceBlock"))
-//                .isFenceGateBlock(nbt.getBoolean("isFenceGateBlock"))
-//                .isLavaFlammable(nbt.getBoolean("isLavaFlammable"))
-//                .isSlabBlock(nbt.getBoolean("isSlabBlock"))
-//                .isStemBlock(nbt.getBoolean("isStemBlock"))
-//                .isThinFenceBlock(nbt.getBoolean("isThinFenceBlock"))
+                .isLavaFlammable(nbt.getBoolean("isLavaFlammable"))
                 .pushesUpFallingBlocks(nbt.getBoolean("pushesUpFallingBlocks"))
-                .superHot(nbt.getBoolean("superHot"))
                 .thickness(nbt.getFloat("thickness"))
-                .translucency(nbt.getFloat("translucency"))
                 .build();
     }
 

@@ -93,34 +93,15 @@ class BlockAttributesTest {
         assertEquals(15, blockAttributes.explosionResistance());
         assertEquals(Float.toHexString(0.6f), Float.toHexString(blockAttributes.friction()));
         assertEquals(3, blockAttributes.hardness());
-//        assertFalse(blockAttributes.hasBlockEntity());
-//        assertFalse(blockAttributes.hasComparatorSignal());
-        assertTrue(blockAttributes.isAlwaysDestroyable());
-//        assertFalse(blockAttributes.isContainerBlock());
-//        assertFalse(blockAttributes.isLiquid());
         assertFalse(blockAttributes.isMotionBlockingBlock());
         assertFalse(blockAttributes.isPowerSource());
-        assertFalse(blockAttributes.isSolid());
         assertFalse(blockAttributes.isUnbreakable());
         assertTrue(blockAttributes.isWaterBlocking());
         assertTrue(blockAttributes.isLavaFlammable());
         assertEquals(0, blockAttributes.lightDampening());
         assertEquals(0, blockAttributes.lightEmission());
         assertFalse(blockAttributes.pushesUpFallingBlocks());
-        assertFalse(blockAttributes.superHot());
         assertEquals(0, blockAttributes.thickness());
-        assertEquals(0, blockAttributes.translucency());
-//        assertTrue(blockAttributes.isAir());
-//        assertTrue(blockAttributes.isBounceBlock());
-//        assertTrue(blockAttributes.isButtonBlock());
-//        assertTrue(blockAttributes.isCropBlock());
-//        assertTrue(blockAttributes.isDoorBlock());
-//        assertTrue(blockAttributes.isFallingBlock());
-//        assertTrue(blockAttributes.isFenceBlock());
-//        assertTrue(blockAttributes.isFenceGateBlock());
-//        assertTrue(blockAttributes.isSlabBlock());
-//        assertTrue(blockAttributes.isStemBlock());
-//        assertTrue(blockAttributes.isThinFenceBlock());
     }
 
     @Test

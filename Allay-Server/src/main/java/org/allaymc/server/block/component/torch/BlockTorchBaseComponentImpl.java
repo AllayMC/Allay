@@ -47,12 +47,12 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
                 torchFace == TorchFacingDirection.UNKNOWN) return false;
 
         var targetBlock = dimension.getBlockState(targetBlockPos);
-        if (targetBlock.getBlockAttributes().isSolid()) {
+        if (targetBlock.getBlockType().getMaterial().isSolid()) {
             blockState = blockState.setProperty(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
         } else {
             blockState = blockState.setProperty(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION, TorchFacingDirection.TOP);
             var downBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
-            if (!downBlock.getBlockAttributes().isSolid()) return false;
+            if (!downBlock.getBlockType().getMaterial().isSolid()) return false;
         }
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         return true;
