@@ -48,6 +48,8 @@ plugins:
                 About Inventory Stack Packet: 关于物品堆栈数据包,
                 About Network Stack Id: 关于堆栈网络Id,
                 Crafting: 合成,
+              Server Auth Block Breaking: 服务端权威方块破坏,
+                Network Packets: 网络数据包细节,
           }
   - git-revision-date-localized:
       enabled: !ENV [CI, false]
@@ -74,9 +76,11 @@ nav:
     - Coding Specifications: core_and_architecture/coding_specifications.md
   - Protocol Research:
     - Server Auth Inventory:
-      - About Inventory Stack Packet: core_and_architecture/server_auth_inventory/about_inventory_stack_packet.md
-      - About Network Stack Id: core_and_architecture/server_auth_inventory/about_network_stack_id.md
-      - Crafting: core_and_architecture/server_auth_inventory/crafting.md
+      - About Inventory Stack Packet: protocol_research/server_auth_inventory/about_inventory_stack_packet.md
+      - About Network Stack Id: protocol_research/server_auth_inventory/about_network_stack_id.md
+      - Crafting: protocol_research/server_auth_inventory/crafting.md
+    - Server Auth Block Breaking:
+        - Network Packet Details: protocol_research/block_breaking_network_packets.zh.md
 
 
 theme:

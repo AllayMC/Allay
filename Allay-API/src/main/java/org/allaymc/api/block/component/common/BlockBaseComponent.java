@@ -7,8 +7,6 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.data.VanillaBlockTags;
-import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.effect.type.EffectConduitPowerType;
@@ -16,7 +14,13 @@ import org.allaymc.api.entity.effect.type.EffectHasteType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentAquaAffinityType;
 import org.allaymc.api.item.enchantment.type.EnchantmentEfficiencyType;
+import org.allaymc.api.item.tag.ItemTag;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
+
+import static org.allaymc.api.data.VanillaItemTags.*;
+import static org.allaymc.api.data.VanillaMaterialTypes.*;
+import static org.allaymc.api.item.type.ItemTypes.*;
 
 /**
  * Allay Project 2023/4/8
@@ -45,12 +49,15 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
         chunk.sendChunkPacket(Dimension.createBlockUpdatePacket(newBlockState, x, y, z, layer));
     }
 
+    // TODO: 此方法为服务端权威方块破坏准备，目前不完善，等待后续完善
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
         checkBlockType(blockState);
         double blockHardness = blockState.getBlockAttributes().hardness();
         if (blockHardness == 0) return 0;
         boolean isCorrectTool = isCorrectTool(blockState, usedItem);
-        boolean canHarvestWithHand = canHarvestWithHand();
+        //isAlwaysDestroyable为true时，表示方块可以被任何物品破坏并掉落物品
+        //部分方块（例如石头，黑曜石）不可以被徒手挖去，强行挖取它们不会掉落任何物品，且挖掘速度会受到惩罚(baseTime增大5倍，正常是1.5倍)
+        boolean isAlwaysDestroyable = getBlockType().getMaterial().isAlwaysDestroyable();
         boolean hasAquaAffinity = false;
         boolean isInWater = false;
         boolean isOnGround = true;
@@ -78,7 +85,7 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
         }
 
         // Calculate break time
-        double baseTime = ((isCorrectTool || canHarvestWithHand) ? 1.5 : 5.0) * blockHardness;
+        double baseTime = ((isCorrectTool || isAlwaysDestroyable) ? 1.5 : 5.0) * blockHardness;
         double speed = 1.0d / baseTime;
         if (isCorrectTool) {
             // 工具等级（木制，石制，铁制，etc...）加成
@@ -102,30 +109,55 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
         return efficiencyLevel * efficiencyLevel + 1;
     }
 
+    // TODO: toolBreakTimeBonus()和isCorrectTool()需要完善，未覆盖所有方块
     private double toolBreakTimeBonus(ItemStack usedItem, BlockState blockState) {
-        // TODO: 实现剑破坏蜘蛛网，剪刀破坏羊毛和树叶和蜘蛛网的加速
         var itemType = usedItem.getItemType();
-        if (itemType.hasItemTag(VanillaItemTags.GOLDEN_TIER)) return 12.0;
-        if (itemType.hasItemTag(VanillaItemTags.NETHERITE_TIER)) return 9.0;
-        if (itemType.hasItemTag(VanillaItemTags.DIAMOND_TIER)) return 8.0;
-        if (itemType.hasItemTag(VanillaItemTags.IRON_TIER)) return 6.0;
-        if (itemType.hasItemTag(VanillaItemTags.STONE_TIER)) return 4.0;
-        if (itemType.hasItemTag(VanillaItemTags.WOODEN_TIER)) return 2.0;
-        return 1.0;
+        var materialType = blockState.getBlockType().getMaterial().materialType();
+        // 剑破坏蜘蛛网加速
+        if (itemType.hasItemTag(IS_SWORD)) return materialType == WEB ? 15.0 : 1.5;
+        if (itemType == SHEARS_TYPE) {
+            // 剪刀破坏羊毛和树叶加速
+            if (materialType == CLOTH) {
+                return 5.0;
+            } else if (materialType == WEB || materialType == LEAVES) {
+                return 15.0;
+            }
+            return 1.0;
+        }
+        if (!itemType.hasItemTag(IS_TOOL)) return 1.0;
+        if (itemType.hasItemTag(GOLDEN_TIER)) return 12.0;
+        if (itemType.hasItemTag(NETHERITE_TIER)) return 9.0;
+        if (itemType.hasItemTag(DIAMOND_TIER)) return 8.0;
+        if (itemType.hasItemTag(IRON_TIER)) return 6.0;
+        if (itemType.hasItemTag(STONE_TIER)) return 4.0;
+        if (itemType.hasItemTag(WOODEN_TIER)) return 2.0;
+        return 1.0; 
     }
 
     default boolean isCorrectTool(BlockState blockState, ItemStack usedItem) {
         checkBlockType(blockState);
-        return false;
+        // TODO: 实现挖掘正确工具判断
+        return true;
     }
 
-    /**
-     * 部分方块（例如石头，黑曜石）不可以被徒手挖去，强行挖取它们不会掉落任何物品，
-     * 且挖掘速度会受到惩罚(baseTime增大5倍，正常是1.5倍)
-     * @return 是否可以徒手挖取
-     */
-    default boolean canHarvestWithHand() {
-        return true;
+    private boolean isItemTierBiggerThan(ItemType<?> itemType, ItemTag tier) {
+        var itemTier = 0;
+        for (ItemTag itemTag : itemType.getItemTags()) {
+            var value = computeItemTier(itemTag);
+            if (value > itemTier) itemTier = value;
+        }
+        return itemTier > computeItemTier(tier);
+    }
+
+    private int computeItemTier(ItemTag itemTag) {
+        int itemTier = 0;
+        if (itemTag == WOODEN_TIER) itemTier = 1;
+        if (itemTag == STONE_TIER) itemTier = 2;
+        if (itemTag == IRON_TIER) itemTier = 3;
+        if (itemTag == DIAMOND_TIER) itemTier = 4;
+        if (itemTag == NETHERITE_TIER) itemTier = 5;
+        if (itemTag == GOLDEN_TIER) itemTier = 6;
+        return itemTier;
     }
 
     private void checkBlockType(BlockState blockState) {
