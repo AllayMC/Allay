@@ -44,6 +44,7 @@ java {
 }
 
 tasks.build {
+    //control the task group is  "alpha build"
     group = "alpha build"
     dependsOn("shadowJar")
 }
@@ -70,10 +71,9 @@ tasks.register<DefaultTask>("buildForGithubAction") {
 
 tasks.clean {
     group = "alpha build"
-    enabled = true
 }
 
-// disable
+// disable assemble
 tasks.assemble {
     enabled = false
 }
