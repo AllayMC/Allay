@@ -1,3 +1,7 @@
+plugins {
+    id("buildlogic.common")
+}
+
 group = "org.allaymc"
 description = "codegen"
 version = "1.0.0"

@@ -2,7 +2,7 @@
   <configuration default="false" name="Allay" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="org.allaymc.server.Allay" />
     <module name="Allay.Allay-Server.main" />
-    <option name="VM_PARAMETERS" value="-Dfile.encoding=UTF-8 -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI"/>
+      <option name="VM_PARAMETERS" value="-Dfile.encoding=UTF-8 -XX:+UseZGC -XX:+ZGenerational"/>
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.run" />
     <method v="2">
       <option name="Make" enabled="true" />
