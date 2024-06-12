@@ -131,6 +131,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         stopBreakingTime = 0;
     }
 
+    // 由于是异步处理的block action，故有3gt的误差为正常现象
     protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = 3;
 
     protected void completeBreak(EntityPlayer player, int x, int y, int z) {
