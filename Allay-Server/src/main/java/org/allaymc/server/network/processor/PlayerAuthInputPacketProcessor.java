@@ -149,6 +149,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             pk.setData(oldState.blockStateHash());
             player.getCurrentChunk().addChunkPacket(pk);
             world.setBlockState(breakingBlockX, breakingBlockY, breakingBlockZ, AIR_TYPE.getDefaultState());
+            // TODO: drop items
         } else {
             log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakingTime, currentTime);
         }
