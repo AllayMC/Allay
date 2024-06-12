@@ -4,7 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.data.VanillaItemId;
+import org.allaymc.api.data.VanillaMaterialTypes;
+import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
@@ -23,18 +29,17 @@ import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtMapBuilder;
-import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.nbt.*;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.util.*;
+
+import static org.allaymc.api.item.ItemHelper.*;
 
 /**
  * Allay Project 2023/5/19
@@ -342,4 +347,99 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     public void addEnchantment(EnchantmentType enchantmentType, short level) {
         enchantments.put(enchantmentType, new SimpleEnchantmentInstance(enchantmentType, level));
     }
+
+    // 记录那些对工具品质有要求的方块的正确工具集合
+    private static final EnumMap<VanillaBlockId, VanillaItemId[]> CORRECT_TOOL_SPECIAL_MAP = new EnumMap<>(VanillaBlockId.class);
+
+    static {
+        try (var reader = NbtUtils.createGZIPReader(
+                new BufferedInputStream(
+                        Objects.requireNonNull(
+                                ItemBaseComponentImpl
+                                        .class
+                                        .getClassLoader()
+                                        .getResourceAsStream("block_correct_tool_special.nbt"),
+                                "block_correct_tool_special.nbt is missing!"
+                        )
+                )
+        )) {
+            var nbtMap = (NbtMap) reader.readTag();
+            nbtMap.forEach((k, v) -> {
+                var blockId = VanillaBlockId.fromIdentifier(new Identifier(k));
+                var list = (NbtList<String>) v;
+                VanillaItemId[] tools = list.stream().map(itemId -> VanillaItemId.fromIdentifier(new Identifier(itemId))).toArray(VanillaItemId[]::new);
+                CORRECT_TOOL_SPECIAL_MAP.put(blockId, tools);
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean isCorrectToolFor(BlockState blockState) {
+        var it = getItemType();
+        var bt = blockState.getBlockType();
+        var vanillaItemId = VanillaItemId.fromIdentifier(it.getIdentifier());
+        var vanillaBlockId = VanillaBlockId.fromIdentifier(bt.getIdentifier());
+        if (vanillaItemId != null && vanillaBlockId != null) {
+            var specialCorrectTools = CORRECT_TOOL_SPECIAL_MAP.get(vanillaBlockId);
+            if (specialCorrectTools != null) {
+                for (var tool : specialCorrectTools) {
+                    if (tool == vanillaItemId) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        var mt = blockState.getBlockType().getMaterial().materialType();
+        if (it == ItemTypes.SHEARS_TYPE) {
+            if (
+                    bt == BlockTypes.VINE_TYPE ||
+                            bt == BlockTypes.GLOW_LICHEN_TYPE
+            ) return true;
+            return mt == VanillaMaterialTypes.CLOTH ||
+                    mt == VanillaMaterialTypes.LEAVES ||
+                    mt == VanillaMaterialTypes.PLANT ||
+                    mt == VanillaMaterialTypes.WEB;
+        }
+        if (isAxe(it)) {
+            return mt == VanillaMaterialTypes.WOOD;
+        }
+        if (isShovel(it)) {
+            return mt == VanillaMaterialTypes.DIRT ||
+                    mt == VanillaMaterialTypes.CLAY ||
+                    mt == VanillaMaterialTypes.SAND ||
+                    mt == VanillaMaterialTypes.SNOW ||
+                    mt == VanillaMaterialTypes.TOPSNOW;
+        }
+        if (isHoe(it)) {
+            if (
+                    bt == BlockTypes.DRIED_KELP_BLOCK_TYPE ||
+                            bt == BlockTypes.HAY_BLOCK_TYPE ||
+                            bt == BlockTypes.TARGET_TYPE ||
+                            bt == BlockTypes.SPONGE_TYPE ||
+                            bt == BlockTypes.MOSS_BLOCK_TYPE
+            ) return true;
+            return mt == VanillaMaterialTypes.LEAVES ||
+                    mt == VanillaMaterialTypes.NETHERWART ||
+                    mt == VanillaMaterialTypes.SCULK;
+        }
+        if (isSword(it)) {
+            if (
+                    bt == BlockTypes.BAMBOO_TYPE ||
+                            bt == BlockTypes.BAMBOO_SAPLING_TYPE ||
+                            bt == BlockTypes.COCOA_TYPE ||
+                            bt == BlockTypes.HAY_BLOCK_TYPE ||
+                            bt == BlockTypes.VINE_TYPE ||
+                            bt == BlockTypes.GLOW_LICHEN_TYPE
+            ) return true;
+            return mt == VanillaMaterialTypes.VEGETABLE ||
+                    mt == VanillaMaterialTypes.LEAVES ||
+                    mt == VanillaMaterialTypes.WEB;
+        }
+        return false;
+    }
+
+
 }

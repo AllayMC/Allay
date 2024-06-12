@@ -24,6 +24,8 @@ public record Material(
         MaterialType materialType,
         boolean canBeMovingBlock,
         boolean canHavePrecipitation,
+        //isAlwaysDestroyable为true时，表示方块可以被任何物品破坏并掉落物品
+        //部分方块（例如石头，黑曜石）不可以被徒手挖去，强行挖取它们不会掉落任何物品，且挖掘速度会受到惩罚(baseTime增大5倍，正常是1.5倍)
         boolean isAlwaysDestroyable,
         boolean isLiquid,
         boolean isSolid,
