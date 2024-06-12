@@ -125,13 +125,13 @@ public class BlockAttributes {
                 .friction(nbt.getFloat("friction"))
                 .hardness(nbt.getFloat("hardness"))
                 .isMotionBlockingBlock(nbt.getBoolean("isMotionBlockingBlock"))
-                .isPowerSource(nbt.getBoolean("isPowerSource"))
+                .isPowerSource(nbt.getBoolean("isPowerSource"))// USELESS
                 .isUnbreakable(nbt.getBoolean("isUnbreakable"))
                 .isWaterBlocking(nbt.getBoolean("isWaterBlocking"))
                 .lightEmission(nbt.getInt("lightEmission"))
                 .lightDampening(nbt.getInt("lightDampening"))
                 .isLavaFlammable(nbt.getBoolean("isLavaFlammable"))
-                .pushesUpFallingBlocks(nbt.getBoolean("pushesUpFallingBlocks"))
+                .pushesUpFallingBlocks(nbt.getBoolean("pushesUpFallingBlocks"))// USELESS
                 .thickness(nbt.getFloat("thickness"))
                 .build();
     }

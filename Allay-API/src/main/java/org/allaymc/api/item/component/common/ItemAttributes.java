@@ -65,19 +65,19 @@ public class ItemAttributes {
                 .attackDamage(nbt.getInt("attackDamage"))
                 .canBeCharged(nbt.getBoolean("canBeCharged"))
                 .canBeDepleted(nbt.getBoolean("canBeDepleted"))
-                .canDestroyInCreative(nbt.getBoolean("canDestroyInCreative"))
+                .canDestroyInCreative(nbt.getBoolean("canDestroyInCreative"))// USELESS
                 .canUseOnSimTick(nbt.getBoolean("canUseOnSimTick"))
-                .cooldownTime(nbt.getInt("cooldownTime"))
-                .cooldownType(nbt.getString("cooldownType"))
-                .creativeCategory(nbt.getInt("creativeCategory"))
-                .creativeGroup(nbt.getString("creativeGroup"))
+                .cooldownTime(nbt.getInt("cooldownTime"))// USELESS
+                .cooldownType(nbt.getString("cooldownType"))// USELESS
+                .creativeCategory(nbt.getInt("creativeCategory"))// USELESS
+                .creativeGroup(nbt.getString("creativeGroup"))// USELESS
                 .isDamageable(nbt.getBoolean("isDamageable"))
-                .itemColorName(nbt.getString("itemColorName"))
-                .itemColorRGB(nbt.getInt("itemColorRGB"))
+                .itemColorName(nbt.getString("itemColorName"))// USELESS
+                .itemColorRGB(nbt.getInt("itemColorRGB"))// USELESS
                 .maxDamage(nbt.getInt("maxDamage"))
                 .maxStackSize(nbt.getInt("maxStackSize"))
                 .toughnessValue(nbt.getInt("toughnessValue"))
-                .viewDamping(nbt.getFloat("viewDamping"))
+                .viewDamping(nbt.getFloat("viewDamping"))// USELESS
                 .build();
     }
 }
