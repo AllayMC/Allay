@@ -201,8 +201,6 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     @Override
     public void handleSync(EntityPlayer player, PlayerAuthInputPacket packet) {
-        handleBlockAction(player, packet.getPlayerActions());
-        if (isBreakingBlock()) sendBreakingPracticeAndTime(player);
         handleInputData(player, packet.getInputData());
     }
 
@@ -211,6 +209,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (notReadyForInput(player)) return PacketSignal.HANDLED;
         // The pos which client sends to the server is higher than the actual coordinates (one base offset)
         handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
+        handleBlockAction(player, packet.getPlayerActions());
+        if (isBreakingBlock()) sendBreakingPracticeAndTime(player);
         return PacketSignal.UNHANDLED;
     }
 
