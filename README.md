@@ -34,7 +34,7 @@ For more information, check out our [Q&A](docs/Q&A.md).
 
 ## Name
 
-As you can see，our project is called Allay，the name of an entity in Minecraft
+As you can see, our project is called Allay，the name of an entity in Minecraft
 
 We wish this project to be as concise, reliable, and efficient as Allay.
 
@@ -53,7 +53,7 @@ We wish this project to be as concise, reliable, and efficient as Allay.
 - **Security:**
     - Allay has more checks on client packets than BDS, and theoretically does not have many of the pernicious vulnerabilities that BDS has.
     - Allay has network encryption enabled by default. In addition, Allay has a built-in resource packet encryption function that automatically encrypts resource packets sent to the client, preventing your data from leaking to a certain extent.
-- **Lots of new features:** Unlike the Nukkit server, Allay uses a lot of new protocol features that have been introduced by BDS, including, but not limited to, the server-side authoritative item bar, and sub-block packet sending.
+- **Lots of new features:** Unlike the Nukkit server, Allay uses a lot of new protocol features that have been introduced by BDS, including, but not limited to, the server-side authoritative inventory, and sub-chunk packet sending.
 - **Code Quality:** We pay a lot of attention to code quality and keep the project stable with the help of extensive unit testing and refactoring.
 
 ## Getting Started
