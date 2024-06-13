@@ -88,12 +88,33 @@ public interface ItemBaseComponent extends ItemComponent {
 
     void loadExtraTag(NbtMap extraTag);
 
-    boolean useItemOn(
+    /**
+     * 尝试在一个方块上使用该物品 <br>
+     * 方法内应该在使用成功时执行可能的减少物品数量，减少耐久等操作。不需要单独向玩家发送物品更新，调用方会发送 <br>
+     * 注意：放置方块不会调用此方法 <br>
+     * @return true如果成功使用
+     */
+    default boolean useItemOn(
             EntityPlayer player, Dimension dimension,
             Vector3ic targetBlockPos, Vector3ic placeBlockPos,
-            Vector3fc clickPos, BlockFace blockFace);
+            Vector3fc clickPos, BlockFace blockFace) {
+        return false;
+    }
 
-    boolean useItemInAir(EntityPlayer player);
+    /**
+     * 尝试用此物品执行放方块操作，不管此物品是否是方块物品 <br>
+     * @return true如果成功放置方块，false如果放置失败（原因：此物品不是方块物品、放置检查失败、事件被撤回）
+     */
+    default boolean placeBlock(
+            EntityPlayer player, Dimension dimension,
+            Vector3ic targetBlockPos, Vector3ic placeBlockPos,
+            Vector3fc clickPos, BlockFace blockFace) {
+        return false;
+    }
+
+    default boolean useItemInAir(EntityPlayer player) {
+        return false;
+    }
 
     default boolean canMerge(ItemStack itemStack) {
         return canMerge(itemStack, false);

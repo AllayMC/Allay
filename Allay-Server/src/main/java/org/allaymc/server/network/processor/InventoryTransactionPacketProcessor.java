@@ -2,12 +2,10 @@ package org.allaymc.server.network.processor;
 
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
@@ -24,8 +22,6 @@ import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
  * @author Cool_Loong
  */
 public class InventoryTransactionPacketProcessor extends PacketProcessor<InventoryTransactionPacket> {
-    protected long spamCheckTime;
-
     public static final int ITEM_USE_CLICK_BLOCK = 0;
     public static final int ITEM_USE_CLICK_AIR = 1;
     public static final int ITEM_USE_BREAK_BLOCK = 2;
@@ -48,63 +44,41 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
                         var placePos = blockFace.offsetPos(blockPos);
-                        if (!canInteract()) {
-                            var blockState = world.getBlockState(placePos.x(), placePos.y(), placePos.z());
-                            world.sendBlockUpdateTo(blockState, placePos.x(), placePos.y(), placePos.z(), 0, player);
-                            return;
-                        }
-                        this.spamCheckTime = System.currentTimeMillis();
+                        var dimension = player.getDimension();
+                        var interactedBlock = world.getBlockState(blockPos);
+                        if (player.isInteractingBlock()) {
+                            if (!interactedBlock.getBehavior().onInteract(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace)) {
+                                // 玩家与方块的互动不成功，可能是插件撤回了事件，需要覆盖客户端的方块变化
+                                // 覆盖被点击方块变化
+                                var blockStateClicked = dimension.getBlockState(blockPos);
+                                dimension.sendBlockUpdateTo(blockStateClicked, blockPos, 0, player);
 
-                        if (!interactBlockOrUseItem(player, itemStack, blockPos, placePos, clickPos, blockFace)) {
-                            //Failed to interact, send back origin block state to client
-                            var w = player.getLocation().dimension();
-                            var blockStateClicked = w.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
-                            w.sendBlockUpdateTo(blockStateClicked, blockPos.x(), blockPos.y(), blockPos.z(), 0, player);
-
-                            var blockStateReplaced = w.getBlockState(placePos.x(), placePos.y(), placePos.z());
-                            w.sendBlockUpdateTo(blockStateReplaced, placePos.x(), placePos.y(), placePos.z(), 0, player);
-                        } else {
-                            //Used! Update item slot to client
-                            if (itemStack.getCount() != 0) {
-                                inv.onSlotChange(inv.getHandSlot());
-                            } else {
-                                inv.setItemInHand(Container.EMPTY_SLOT_PLACE_HOLDER);
+                                // 玩家放置方块
+                                if (itemStack.getItemType() != AIR_TYPE) {
+                                    if (!itemStack.placeBlock(player, dimension, blockPos, placePos, clickPos, blockFace)) {
+                                        var blockStateReplaced = dimension.getBlockState(placePos);
+                                        dimension.sendBlockUpdateTo(blockStateReplaced, placePos, 0, player);
+                                    }
+                                }
                             }
-                        }
+                        } else itemStack.useItemOn(player, dimension, blockPos, placePos, clickPos, blockFace);
                     }
                     case ITEM_USE_CLICK_AIR -> {
                         if (itemStack.useItemInAir(player)) {
                             if (!player.hasAction()) {
                                 player.setAction(true);
-                                // TODO: check meaning of this return
-                                // return;
                             }
                             player.setAction(false);
                         }
                     }
-                    case ITEM_USE_BREAK_BLOCK -> {
-                        // TODO
-                    }
                 }
-            }
-            case NORMAL -> {
-                for (var action : packet.getActions()) {
-                    if (action.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) {
-                        if (action.getSource().getFlag().equals(InventorySource.Flag.DROP_ITEM)) {
-                            //Do not ask me why mojang still use the old item transaction pk even the server-auth inv was enabled
-                            var count = action.getToItem().getCount();
-                            player.tryDropItemInHand(count);
-                        }
-                    }
-                }
+                player.sendItemInHandUpdate();
             }
             case ITEM_USE_ON_ENTITY -> {
                 var target = player.getDimension().getEntityByRuntimeId(packet.getRuntimeEntityId());
                 Preconditions.checkNotNull(target, "Player " + player.getOriginName() + " try to attack a entity which doesn't exist! Entity id: " + packet.getRuntimeEntityId());
                 switch (packet.getActionType()) {
-                    case ITEM_USE_ON_ENTITY_INTERACT -> {
-                        // TODO
-                    }
+                    case ITEM_USE_ON_ENTITY_INTERACT -> target.onInteract(player, player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand());
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
                         EntityDamageComponent damageable;
                         if (target instanceof EntityDamageComponent cast) {
@@ -121,22 +95,20 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         damageable.attack(damageContainer);
                     }
                 }
+                player.sendItemInHandUpdate();
+            }
+            case NORMAL -> {
+                for (var action : packet.getActions()) {
+                    if (action.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) {
+                        if (action.getSource().getFlag().equals(InventorySource.Flag.DROP_ITEM)) {
+                            // Do not ask me why mojang still use the old item transaction pk even the server-auth inv was enabled
+                            var count = action.getToItem().getCount();
+                            player.tryDropItemInHand(count);
+                        }
+                    }
+                }
             }
         }
-    }
-
-    protected boolean canInteract() {
-        return System.currentTimeMillis() - this.spamCheckTime >= 100;
-    }
-
-    private boolean interactBlockOrUseItem(EntityPlayer player, ItemStack itemStack, Vector3ic blockPos, Vector3ic placePos, Vector3fc clickPos, BlockFace blockFace) {
-        var dimension = player.getLocation().dimension();
-        var blockStateClicked = dimension.getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
-        if (!blockStateClicked.getBehavior().onInteract(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace)) {
-            if (itemStack.getItemType() != AIR_TYPE) {
-                return itemStack.useItemOn(player, dimension, blockPos, placePos, clickPos, blockFace);
-            } else return false;
-        } else return true;
     }
 
     @Override

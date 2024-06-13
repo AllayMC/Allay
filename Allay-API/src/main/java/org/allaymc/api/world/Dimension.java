@@ -156,6 +156,10 @@ public interface Dimension {
         }
     }
 
+    default void sendBlockUpdateTo(BlockState blockState, Vector3ic pos, int layer, EntityPlayer player) {
+        sendBlockUpdateTo(blockState, pos.x(), pos.y(), pos.z(), layer, player);
+    }
+
     default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, EntityPlayer player) {
         player.sendPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
     }

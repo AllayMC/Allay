@@ -15,9 +15,8 @@ import org.joml.Vector3ic;
 @FunctionalInterface
 public interface OnInteract {
     /**
-     * @param player        The player who interacted with the block
+     * @param player        The player who interacted with the block, can be null
      * @param itemStack     The item in the player's hand
-     * @param dimension     The dimension of the block & player
      * @param blockPos      The pos of the block that the player clicked on
      * @param placeBlockPos Assuming the player is holding a block item in their hand, this parameter indicates where the block will be placed (if it can be placed)
      * @param clickPos      The precise pos where the player clicked

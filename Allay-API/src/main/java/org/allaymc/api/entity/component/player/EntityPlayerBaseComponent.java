@@ -5,7 +5,6 @@ import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.math.location.Location3ic;
@@ -40,6 +39,10 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     boolean isCrawling();
 
     void setCrawling(boolean crawling);
+
+    void setInteractingBlock(boolean interactingBlock);
+
+    boolean isInteractingBlock();
 
     int getHandSlot();
 

@@ -270,23 +270,18 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public boolean useItemOn(
-            EntityPlayer player,
-            Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
-            BlockFace blockFace) {
+    public boolean placeBlock(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
         if (thisItemStack.getItemType().getBlockType() == null)
             return false;
         var blockState = thisItemStack.toBlockState();
         return tryPlaceBlockState(player, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
     }
 
-    @Override
-    public boolean useItemInAir(EntityPlayer player) {
-        return false;
-    }
+    // TODO: 由于服务端侧方块放置检查与客户端方块放置检查不能做到100%同步，会导致“吞方块”现象出现，这里先关闭检查
+    protected static final boolean DO_BLOCK_PLACING_CHECK = false;
 
     protected boolean tryPlaceBlockState(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
-        if (player != null && hasEntityCollision(dimension, placeBlockPos, blockState))
+        if (player != null && DO_BLOCK_PLACING_CHECK && hasEntityCollision(dimension, placeBlockPos, blockState))
             return false;
         BlockType<?> blockType = blockState.getBlockType();
         boolean result = blockType.getBlockBehavior().place(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
@@ -300,13 +295,13 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {
-        var block_aabb = blockState.getBehavior().getBlockAttributes(blockState)
+        var blockAABB = blockState.getBehavior().getBlockAttributes(blockState)
                 .computeOffsetVoxelShape(
                         placePos.x(),
                         placePos.y(),
                         placePos.z()
                 );
-        return !dimension.getEntityPhysicsService().computeCollidingEntities(block_aabb).isEmpty();
+        return !dimension.getEntityPhysicsService().computeCollidingEntities(blockAABB).isEmpty();
     }
 
     @Override

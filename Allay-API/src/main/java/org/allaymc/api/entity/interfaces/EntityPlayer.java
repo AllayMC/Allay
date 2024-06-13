@@ -97,5 +97,12 @@ public interface EntityPlayer extends
         entityItem.setPickupDelay(40);
         dimension.getEntityService().addEntity(entityItem);
     }
+
+    default void sendItemInHandUpdate() {
+        var inv = getContainer(FullContainerType.PLAYER_INVENTORY);
+        var itemStack = inv.getItemInHand();
+        if (itemStack.getCount() != 0) inv.onSlotChange(inv.getHandSlot());
+        else inv.setItemInHand(Container.EMPTY_SLOT_PLACE_HOLDER);
+    }
 }
 

@@ -101,6 +101,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Setter
     protected Location3ic spawnPoint;
     protected boolean awaitingDimensionChangeACK;
+    protected boolean interactingBlock;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
     protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();
@@ -321,6 +322,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void setCrawling(boolean crawling) {
         setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
+    }
+
+    @Override
+    public void setInteractingBlock(boolean interactingBlock) {
+        this.interactingBlock = interactingBlock;
+    }
+
+    @Override
+    public boolean isInteractingBlock() {
+        return interactingBlock;
     }
 
     @Override

@@ -54,6 +54,22 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 world.setBlockState(pos.getX(), pos.getY(), pos.getZ(), AIR_TYPE.getDefaultState());
                 yield PacketSignal.HANDLED;
             }
+            case START_ITEM_USE_ON -> {
+                if (player.isInteractingBlock()) {
+                    log.warn("Player {} tried to start item use on without stopping", player.getOriginName());
+                    yield PacketSignal.HANDLED;
+                }
+                player.setInteractingBlock(true);
+                yield PacketSignal.HANDLED;
+            }
+            case STOP_ITEM_USE_ON -> {
+                if (!player.isInteractingBlock()) {
+                    log.warn("Player {} tried to stop item use on without starting", player.getOriginName());
+                    yield PacketSignal.HANDLED;
+                }
+                player.setInteractingBlock(false);
+                yield PacketSignal.HANDLED;
+            }
             default -> PacketSignal.UNHANDLED;
         };
     }

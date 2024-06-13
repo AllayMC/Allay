@@ -11,6 +11,7 @@ import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
@@ -354,6 +355,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
         if (isWaterType(blockType)) {
             return true;
         }
+        return false;
+    }
+
+    /**
+     * @param player The player who interacted with the entity, can be null
+     * @param itemStack The item used to interact with the entity
+     * @return true if the interaction is successful
+     */
+    default boolean onInteract(EntityPlayer player, ItemStack itemStack) {
         return false;
     }
 
