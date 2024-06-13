@@ -58,6 +58,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     if (isInvalidGameType(player)) continue;
                     // HACK: 客户端不知道为什么会在BLOCK_PREDICT_DESTROY前发个无意义的BLOCK_CONTINUE_DESTROY，应该是bug，这里忽略掉
                     if (breakingBlockX == pos.getX() && breakingBlockY == pos.getY() && breakingBlockZ == pos.getZ()) continue;
+                    stopBreak(player);
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
                 case BLOCK_PREDICT_DESTROY -> {
