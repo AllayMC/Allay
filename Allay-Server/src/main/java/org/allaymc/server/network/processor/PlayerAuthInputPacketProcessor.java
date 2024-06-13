@@ -57,7 +57,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     // 当玩家破坏一个方块一半时转而破坏另一个方块
                     if (isInvalidGameType(player)) continue;
                     // HACK: 客户端不知道为什么会在BLOCK_PREDICT_DESTROY前发个无意义的BLOCK_CONTINUE_DESTROY，应该是bug，这里忽略掉
-                    if (breakingBlockX == pos.getX() && breakingBlockY == pos.getY() && breakingBlockZ == pos.getZ()) continue;
+                    if (breakBlockX == pos.getX() && breakBlockY == pos.getY() && breakBlockZ == pos.getZ()) continue;
                     stopBreak(player);
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
@@ -78,57 +78,62 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR;
     }
 
-    protected int breakingBlockX = Integer.MAX_VALUE;
-    protected int breakingBlockY = Integer.MAX_VALUE;
-    protected int breakingBlockZ = Integer.MAX_VALUE;
-    protected int breakingFaceId;
-    protected BlockState breakingBlock;
+    protected int breakBlockX = Integer.MAX_VALUE;
+    protected int breakBlockY = Integer.MAX_VALUE;
+    protected int breakBlockZ = Integer.MAX_VALUE;
+    protected int breakFaceId;
+    protected BlockState breakBlock;
     protected long startBreakingTime; // Ticks
-    protected double neededBreakingTime; // Seconds
+    protected double needBreakingTime; // Seconds
     protected double stopBreakingTime; // Ticks
 
     protected boolean isBreakingBlock() {
-        return breakingBlock != null;
+        return breakBlock != null;
     }
 
     protected void startBreak(EntityPlayer player, int x, int y, int z, int blockFaceId) {
-        if (breakingBlock != null) {
+        if (breakBlock != null) {
             log.warn("Player {} tried to start breaking a block while already breaking one", player.getOriginName());
             stopBreak(player);
         }
-        if (breakingBlockX == x && breakingBlockY == y && breakingBlockZ == z) {
+        if (breakBlockX == x && breakBlockY == y && breakBlockZ == z) {
             log.warn("Player {} tried to start breaking the same block twice", player.getOriginName());
             return;
         }
-        breakingBlockX = x;
-        breakingBlockY = y;
-        breakingBlockZ = z;
-        breakingFaceId = blockFaceId;
-        breakingBlock = player.getDimension().getBlockState(x, y, z);
+        breakBlockX = x;
+        breakBlockY = y;
+        breakBlockZ = z;
+        breakFaceId = blockFaceId;
+        breakBlock = player.getDimension().getBlockState(x, y, z);
         startBreakingTime = player.getWorld().getTick();
-        neededBreakingTime = breakingBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakingBlock, player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand(), player);
-        stopBreakingTime = startBreakingTime + neededBreakingTime * 20.0d;
+        needBreakingTime = breakBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakBlock, player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand(), player);
+        stopBreakingTime = startBreakingTime + needBreakingTime * 20.0d;
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_START_BREAK);
         pk.setPosition(Vector3f.from(x, y, z));
-        pk.setData((int) (65535 / (neededBreakingTime * 20)));
+        pk.setData(toNetworkBreakTime(needBreakingTime));
         player.getCurrentChunk().addChunkPacket(pk);
         sendBreakingPracticeAndTime(player);
+    }
+
+    protected int toNetworkBreakTime(double breakTime) {
+        if (breakTime == 0) return 65535;
+        return (int) (65535 / (needBreakingTime * 20));
     }
 
     protected void stopBreak(EntityPlayer player) {
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_STOP_BREAK);
-        pk.setPosition(Vector3f.from(breakingBlockX, breakingBlockY, breakingBlockZ));
+        pk.setPosition(Vector3f.from(breakBlockX, breakBlockY, breakBlockZ));
         pk.setData(0);
         player.getCurrentChunk().addChunkPacket(pk);
-        breakingBlockX = Integer.MAX_VALUE;
-        breakingBlockY = Integer.MAX_VALUE;
-        breakingBlockZ = Integer.MAX_VALUE;
-        breakingFaceId = 0;
-        breakingBlock = null;
+        breakBlockX = Integer.MAX_VALUE;
+        breakBlockY = Integer.MAX_VALUE;
+        breakBlockZ = Integer.MAX_VALUE;
+        breakFaceId = 0;
+        breakBlock = null;
         startBreakingTime = 0;
-        neededBreakingTime = 0;
+        needBreakingTime = 0;
         stopBreakingTime = 0;
     }
 
@@ -136,20 +141,20 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = 3;
 
     protected void completeBreak(EntityPlayer player, int x, int y, int z) {
-        if (breakingBlockX != x || breakingBlockY != y || breakingBlockZ != z) {
+        if (breakBlockX != x || breakBlockY != y || breakBlockZ != z) {
             log.warn("Player {} tried to complete breaking a different block", player.getOriginName());
             return;
         }
         var currentTime = player.getWorld().getTick();
         if (Math.abs(currentTime - stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
             var world = player.getDimension();
-            var oldState = world.getBlockState(breakingBlockX, breakingBlockY, breakingBlockZ);
+            var oldState = world.getBlockState(breakBlockX, breakBlockY, breakBlockZ);
             var pk = new LevelEventPacket();
             pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
-            pk.setPosition(Vector3f.from(breakingBlockX + 0.5f, breakingBlockY + 0.5f, breakingBlockZ + 0.5f));
+            pk.setPosition(Vector3f.from(breakBlockX + 0.5f, breakBlockY + 0.5f, breakBlockZ + 0.5f));
             pk.setData(oldState.blockStateHash());
             player.getCurrentChunk().addChunkPacket(pk);
-            world.setBlockState(breakingBlockX, breakingBlockY, breakingBlockZ, AIR_TYPE.getDefaultState());
+            world.setBlockState(breakBlockX, breakBlockY, breakBlockZ, AIR_TYPE.getDefaultState());
             // TODO: drop items
         } else {
             log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakingTime, currentTime);
@@ -162,27 +167,27 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         var pk1 = new LevelEventPacket();
         pk1.setType(PARTICLE_CRACK_BLOCK);
-        var blockFaceOffset = Objects.requireNonNull(BlockFace.fromId(breakingFaceId)).getOffset();
-        pk1.setPosition(Vector3f.from(breakingBlockX + 0.5f + blockFaceOffset.x(), breakingBlockY + 0.5f + blockFaceOffset.y(), breakingBlockZ + 0.5f + blockFaceOffset.z()));
-        pk1.setData(breakingBlock.blockStateHash());
+        var blockFaceOffset = Objects.requireNonNull(BlockFace.fromId(breakFaceId)).getOffset();
+        pk1.setPosition(Vector3f.from(breakBlockX + 0.5f + blockFaceOffset.x(), breakBlockY + 0.5f + blockFaceOffset.y(), breakBlockZ + 0.5f + blockFaceOffset.z()));
+        pk1.setData(breakBlock.blockStateHash());
 
         var pk2 = new LevelEventPacket();
         pk2.setType(BLOCK_UPDATE_BREAK);
-        pk2.setPosition(Vector3f.from(breakingBlockX, breakingBlockY, breakingBlockZ));
-        pk2.setData((int) (65535 / (neededBreakingTime * 20)));
+        pk2.setPosition(Vector3f.from(breakBlockX, breakBlockY, breakBlockZ));
+        pk2.setData(toNetworkBreakTime(needBreakingTime));
 
         player.getCurrentChunk().addChunkPacket(pk1);
         player.getCurrentChunk().addChunkPacket(pk2);
     }
 
     protected void updateBreakingTime(EntityPlayer player) {
-        var newBreakingTime = breakingBlock.getBehavior().calculateBreakTime(breakingBlock, player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand(), player);
-        if (neededBreakingTime == newBreakingTime) return;
+        var newBreakingTime = breakBlock.getBehavior().calculateBreakTime(breakBlock, player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand(), player);
+        if (needBreakingTime == newBreakingTime) return;
         // 破坏时间有变化，进行修正
         var currentTime = player.getWorld().getTick();
         var timeLeft = stopBreakingTime - currentTime;
-        stopBreakingTime = currentTime + (timeLeft / neededBreakingTime) * newBreakingTime;
-        neededBreakingTime = newBreakingTime;
+        stopBreakingTime = currentTime + (timeLeft / needBreakingTime) * newBreakingTime;
+        needBreakingTime = newBreakingTime;
     }
 
     protected void handleInputData(EntityPlayer player, Set<PlayerAuthInputData> inputData) {

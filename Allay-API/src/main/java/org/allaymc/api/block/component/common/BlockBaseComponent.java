@@ -47,8 +47,8 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
 
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
         checkBlockType(blockState);
-        double blockHardness = blockState.getBlockAttributes().hardness();
-        if (blockHardness == 0) return 0;
+        if (usedItem.canInstantBreak(blockState)) return 0;
+        float blockHardness = blockState.getBlockAttributes().hardness();
         boolean isCorrectTool = usedItem.isCorrectToolFor(blockState);
         boolean isAlwaysDestroyable = getBlockType().getMaterial().isAlwaysDestroyable();
         boolean hasAquaAffinity = false;

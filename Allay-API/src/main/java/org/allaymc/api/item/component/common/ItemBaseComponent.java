@@ -2,6 +2,7 @@ package org.allaymc.api.item.component.common;
 
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -139,7 +140,6 @@ public interface ItemBaseComponent extends ItemComponent {
         // 剑破坏蜘蛛网加速
         if (itemType.hasItemTag(IS_SWORD)) {
             if (materialType == WEB) return 15.0;
-            if (blockState.getBlockType() == BAMBOO_BLOCK_TYPE) return Integer.MAX_VALUE;
         }
         if (itemType == SHEARS_TYPE) {
             // 剪刀破坏羊毛和树叶加速
@@ -167,4 +167,15 @@ public interface ItemBaseComponent extends ItemComponent {
      * @return 是否是正确工具
      */
     boolean isCorrectToolFor(BlockState blockState);
+
+    default boolean canInstantBreak(BlockState blockState) {
+        double blockHardness = blockState.getBlockAttributes().hardness();
+        // 硬度为0的方块可以被瞬间破坏
+        if (blockHardness == 0) return true;
+        if (getItemType().hasItemTag(IS_SWORD)) {
+            // 剑可以瞬间破坏竹子
+            return blockState.getBlockType() == BlockTypes.BAMBOO_TYPE;
+        }
+        return false;
+    }
 }
