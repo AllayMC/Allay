@@ -7,6 +7,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.processor.PacketProcessor;
+import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
@@ -48,6 +49,15 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (blockActions.isEmpty()) return;
         for (var action : blockActions) {
             var pos = action.getBlockPosition();
+            // Check interact distance
+            switch (action.getAction()) {
+                case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
+                    if (!player.canInteract(pos.getX(), pos.getY(), pos.getZ())) {
+                        log.warn("Player {} tried to break a block out of reach", player.getOriginName());
+                        continue;
+                    }
+                }
+            }
             switch (action.getAction()) {
                 case START_BREAK -> {
                     if (isInvalidGameType(player)) continue;
@@ -180,6 +190,13 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         player.getCurrentChunk().addChunkPacket(pk2);
     }
 
+    protected void checkInteractDistance(EntityPlayer player) {
+        if (!player.canInteract(breakBlockX, breakBlockY, breakBlockZ)) {
+            log.warn("Player {} tried to interact with a block out of reach", player.getOriginName());
+            stopBreak(player);
+        }
+    }
+
     protected void updateBreakingTime(EntityPlayer player) {
         var newBreakingTime = breakBlock.getBehavior().calculateBreakTime(breakBlock, player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand(), player);
         if (needBreakingTime == newBreakingTime) return;
@@ -218,7 +235,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         // The pos which client sends to the server is higher than the actual coordinates (one base offset)
         handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
         handleBlockAction(player, packet.getPlayerActions());
-        if (isBreakingBlock()) sendBreakingPracticeAndTime(player);
+        if (isBreakingBlock()) {
+            sendBreakingPracticeAndTime(player);
+            checkInteractDistance(player);
+        }
         return PacketSignal.UNHANDLED;
     }
 

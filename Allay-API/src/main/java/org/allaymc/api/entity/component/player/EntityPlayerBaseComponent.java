@@ -5,10 +5,12 @@ import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
+import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -123,4 +125,22 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     CustomForm removeServerSettingForm(int id);
 
     void showForm(Form form);
+
+    double BLOCK_INTERACT_MAX_DV_DIFF = 2.0;
+
+    default boolean canInteract(float x, float y, float z) {
+        var maxDistance = getMaxInteractDistance();
+        var location = getLocation();
+        if (location.distanceSquared(x, y, z) > maxDistance * maxDistance) return false;
+
+        var dv = MathUtils.JOMLVecToCBVec(MathUtils.getDirectionVector(location.yaw(), location.pitch()));
+        org.cloudburstmc.math.vector.Vector3f target = org.cloudburstmc.math.vector.Vector3f.from(x - location.x(), y - location.y(), z - location.z()).normalize();
+        var delta = dv.sub(target);
+        var diff = delta.dot(delta);
+        return diff < BLOCK_INTERACT_MAX_DV_DIFF;
+    }
+
+    default double getMaxInteractDistance() {
+        return getGameType() == GameType.CREATIVE ? 13 : 7;
+    }
 }

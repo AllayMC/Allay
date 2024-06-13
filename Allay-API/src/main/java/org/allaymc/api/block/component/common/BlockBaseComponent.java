@@ -14,6 +14,7 @@ import org.allaymc.api.entity.effect.type.EffectHasteType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentAquaAffinityType;
 import org.allaymc.api.item.enchantment.type.EnchantmentEfficiencyType;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
 
 import static org.allaymc.api.item.ItemHelper.isSword;
@@ -43,6 +44,10 @@ public interface BlockBaseComponent extends OnNeighborUpdate, OnRandomUpdate, Pl
         if (oldBlockState == newBlockState) return;
         chunk.setBlockState(xIndex, y, zIndex, newBlockState, layer);
         chunk.sendChunkPacket(Dimension.createBlockUpdatePacket(newBlockState, x, y, z, layer));
+    }
+
+    default boolean canDamageItem(ItemType<?> itemType) {
+        return true;
     }
 
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
