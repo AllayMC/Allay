@@ -236,6 +236,11 @@ public class AllayWorld implements World {
     }
 
     @Override
+    public <V> V getGameRule(GameRule gameRule) {
+        return worldData.getGameRule(gameRule);
+    }
+
+    @Override
     public void saveWorldData() {
         getWorldStorage().writeWorldData(worldData);
     }

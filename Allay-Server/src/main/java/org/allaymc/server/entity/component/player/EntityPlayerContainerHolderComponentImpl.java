@@ -5,6 +5,7 @@ import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.impl.*;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.component.common.EntityContainerHolderComponentImpl;
 
 /**
@@ -30,5 +31,10 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
         addContainer(new PlayerInventoryContainer(player));
+    }
+
+    @Override
+    protected boolean canDropItemInContainers() {
+        return !(boolean)player.getWorld().getGameRule(GameRule.KEEP_INVENTORY);
     }
 }

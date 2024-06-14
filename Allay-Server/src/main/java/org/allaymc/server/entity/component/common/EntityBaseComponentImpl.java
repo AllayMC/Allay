@@ -191,6 +191,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (attributeComponent.getHealth() == 0 && !dead) {
             var event = new EntityDieEvent(thisEntity);
             getWorld().getEventBus().callEvent(event);
+            manager.callEvent(new org.allaymc.api.entity.component.event.EntityDieEvent());
             dead = true;
             deadTimer = DEFAULT_DEAD_TIMER;
             applyEntityEvent(EntityEventType.DEATH, 0);

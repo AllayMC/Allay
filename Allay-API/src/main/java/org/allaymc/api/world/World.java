@@ -88,6 +88,8 @@ public interface World {
 
     void setGameRule(GameRule gamerule, Object value);
 
+    <V> V getGameRule(GameRule gameRule);
+
     default void broadcastPacket(BedrockPacket packet) {
         for (var dim : getDimensions().values()) {
             dim.broadcastPacket(packet);

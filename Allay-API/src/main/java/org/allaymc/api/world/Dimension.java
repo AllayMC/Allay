@@ -416,7 +416,11 @@ public interface Dimension {
 
     default void dropItem(ItemStack itemStack, Vector3fc pos) {
         var rand = ThreadLocalRandom.current();
-        dropItem(itemStack, pos, new org.joml.Vector3f(rand.nextFloat(0.2f) - 0.1f, 0.2f, rand.nextFloat(0.2f) - 0.1f), 10);
+        dropItem(itemStack, pos, new org.joml.Vector3f(rand.nextFloat(0.2f) - 0.1f, 0.2f, rand.nextFloat(0.2f) - 0.1f));
+    }
+
+    default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion) {
+        dropItem(itemStack, pos, motion, 10);
     }
 
     default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion, int pickupDelay) {

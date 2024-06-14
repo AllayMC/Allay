@@ -11,8 +11,6 @@ import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
-import org.allaymc.api.entity.init.SimpleEntityInitInfo;
-import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3f;
@@ -77,10 +75,12 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         var pos = event.getCurrentBlockState().pos();
         var dimension = pos.dimension();
         var rand = ThreadLocalRandom.current();
+        container.removeAllViewers();
         for (var itemStack : container.getItemStacks()) {
             if (itemStack == Container.EMPTY_SLOT_PLACE_HOLDER) continue;
             dimension.dropItem(itemStack, new Vector3f(pos.x() + rand.nextFloat(0.5f) + 0.25f, pos.y() + rand.nextFloat(0.5f) + 0.25f, pos.z() + rand.nextFloat(0.5f) + 0.25f));
         }
+        container.clearAllSlots();
     }
 
     @Override

@@ -76,10 +76,19 @@ public interface Container {
         setItemStack(slot, EMPTY_SLOT_PLACE_HOLDER);
     }
 
+    default void clearAllSlots() {
+        for (int slot = 0; slot < getItemStackArray().length; slot++) {
+            clearSlot(slot);
+        }
+    }
+
     void addViewer(ContainerViewer viewer);
 
     void removeViewer(ContainerViewer viewer);
 
+    default void removeAllViewers() {
+        getViewers().values().forEach(this::removeViewer);
+    }
 
     ContainerViewer removeViewer(byte viewerId);
 

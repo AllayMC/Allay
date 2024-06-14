@@ -172,6 +172,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     protected void tryPickUpItems() {
+        if (dead || !spawned || willBeDespawnedNextTick) return;
         var dimension = location.dimension;
         // pick up items
         var pickUpArea = new AABBf(
