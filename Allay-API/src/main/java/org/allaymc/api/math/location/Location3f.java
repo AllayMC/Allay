@@ -34,6 +34,13 @@ public class Location3f extends Position3f implements Location3fc {
         this.headYaw = l.headYaw();
     }
 
+    public Location3f(Location3ic l) {
+        super(l.x(), l.y(), l.z(), l.dimension());
+        this.pitch = l.pitch();
+        this.yaw = l.yaw();
+        this.headYaw = l.headYaw();
+    }
+
     public Location3f(float x, float y, float z, Dimension dimension) {
         super(x, y, z, dimension);
     }

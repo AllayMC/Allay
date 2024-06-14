@@ -13,7 +13,6 @@ import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.location.Location3fc;
-import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
@@ -67,6 +66,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     }
 
     Location3fc getLocation();
+
+    /**
+     * Set the location before the entity is spawned <br>
+     * This method is usually used when you want to spawn the entity at a specific location <br>
+     * Then you need to set the entity's location before spawn the entity <br>
+     * @throws IllegalStateException if the entity is already spawned
+     * @param location The location you want to set
+     */
+    void setLocationBeforeSpawn(Location3fc location);
 
     Dimension getDimension();
 

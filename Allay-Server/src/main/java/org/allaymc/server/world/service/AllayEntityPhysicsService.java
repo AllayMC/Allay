@@ -17,6 +17,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.EntityPhysicsService;
+import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;

@@ -234,11 +234,15 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return location;
     }
 
-    public void setLocation(Location3fc location) {
-        setLocation(location, true);
+    @Override
+    public void setLocationBeforeSpawn(Location3fc location) {
+        if (!canBeSpawnedIgnoreLocation()) {
+            throw new IllegalStateException("Trying to set location of an entity which cannot being spawned!");
+        }
+        setLocation(location, false);
     }
 
-    public void setLocation(Location3fc location, boolean calculateFallDistance) {
+    protected void setLocation(Location3fc location, boolean calculateFallDistance) {
         if (calculateFallDistance && !this.onGround) {
             if (this.fallDistance < 0) this.fallDistance = 0;
             this.fallDistance -= location.y() - this.location.y();
@@ -276,7 +280,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @ApiStatus.Internal
     public void setWillBeDespawnedNextTick(boolean willBeDespawnedNextTick) {
         this.willBeDespawnedNextTick = willBeDespawnedNextTick;
     }
@@ -287,7 +290,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @ApiStatus.Internal
     public void setSpawned(boolean spawned) {
         this.spawned = spawned;
     }
@@ -295,7 +297,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public boolean canBeSpawned() {
         return location.x != Integer.MAX_VALUE && location.y != Integer.MAX_VALUE && location.z != Integer.MAX_VALUE &&
-               location.dimension != null && !spawned && !willBeSpawnedNextTick;
+               location.dimension != null && canBeSpawnedIgnoreLocation();
+    }
+
+    protected boolean canBeSpawnedIgnoreLocation() {
+        return !spawned && !willBeSpawnedNextTick;
     }
 
     @Override
@@ -304,16 +310,14 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    @ApiStatus.Internal
     public void setWillBeSpawnedNextTick(boolean willBeSpawnedNextTick) {
         this.willBeSpawnedNextTick = willBeSpawnedNextTick;
     }
 
     @Override
-    @ApiStatus.Internal
     public void setLocationAndCheckChunk(Location3fc newLoc) {
         checkChunk(this.location, newLoc);
-        setLocation(newLoc);
+        setLocation(newLoc, true);
     }
 
     protected void checkChunk(Location3fc oldLoc, Location3fc newLoc) {
@@ -372,7 +376,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         // Teleporting to another dimension, there will be more works to be done
         this.location.dimension().getEntityService().removeEntity(thisEntity, () -> {
             target.dimension().getChunkService().getOrLoadChunkSynchronously((int) target.x() >> 4, (int) target.z() >> 4);
-            setLocation(target, false);
+            setLocationBeforeSpawn(target);
             target.dimension().getEntityService().addEntity(thisEntity);
         });
     }

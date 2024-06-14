@@ -1,11 +1,8 @@
 package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockStateWithPos;
-import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -27,6 +24,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 var spawnPoint = player.getSpawnPoint();
                 var dimension = spawnPoint.dimension();
                 dimension.getChunkService().getOrLoadChunkSynchronously(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
+                player.setLocationBeforeSpawn(new Location3f(spawnPoint));
                 dimension.addPlayer(player, () -> {
                     player.teleport(new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), dimension));
                     player.setSprinting(false);

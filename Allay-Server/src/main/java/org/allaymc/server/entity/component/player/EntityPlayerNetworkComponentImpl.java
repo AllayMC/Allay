@@ -280,7 +280,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 (int) currentPos.x() >> 4,
                 (int) currentPos.z() >> 4
         );
-        baseComponent.setLocation(new Location3f(currentPos.x(), currentPos.y(), currentPos.z(), dimension), false);
+        baseComponent.setLocationBeforeSpawn(new Location3f(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
         dimension.addPlayer(player);
 
         var spawnWorld = dimension.getWorld();

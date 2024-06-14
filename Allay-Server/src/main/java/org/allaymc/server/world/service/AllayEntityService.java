@@ -7,6 +7,7 @@ import org.allaymc.api.eventbus.event.world.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.world.entity.EntitySpawnEvent;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityService;
+import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.allaymc.server.world.chunk.AllayChunk;
 
 import java.util.Queue;

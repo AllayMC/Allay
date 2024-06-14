@@ -226,7 +226,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         }
         this.location.dimension().removePlayer(thisEntity, () -> {
             targetDim.getChunkService().getOrLoadChunkSynchronously((int) target.x() >> 4, (int) target.z() >> 4);
-            setLocation(target, false);
+            setLocationBeforeSpawn(target);
             sendLocationToSelf();
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
                 var changeDimensionPacket = new ChangeDimensionPacket();
