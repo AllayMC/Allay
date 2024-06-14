@@ -164,6 +164,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             pk.setPosition(Vector3f.from(breakBlockX + 0.5f, breakBlockY + 0.5f, breakBlockZ + 0.5f));
             pk.setData(oldState.blockStateHash());
             player.getCurrentChunk().addChunkPacket(pk);
+            // TODO: on break
             world.setBlockState(breakBlockX, breakBlockY, breakBlockZ, AIR_TYPE.getDefaultState());
             // TODO: drop items
         } else {

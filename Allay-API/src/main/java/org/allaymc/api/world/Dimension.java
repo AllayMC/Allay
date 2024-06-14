@@ -8,6 +8,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.Utils;
@@ -408,5 +409,9 @@ public interface Dimension {
         packet.setPosition(Vector3f.from(x, y, z));
 
         getChunkService().getChunkByLevelPos((int) x, (int) z).addChunkPacket(packet);
+    }
+
+    default void dropItem(ItemStack itemStack, float x, float y, float z) {
+
     }
 }
