@@ -91,8 +91,8 @@ public final class ComponentClassCacheUtils {
     public static void readCacheMapping() {
         File file = CACHE_ROOT_PATH.resolve("mapping.json").toFile();
         if (file.exists()) {
-            try {
-                CACHE_MAP.putAll(JSONUtils.from(new FileReader(file), Map.class));
+            try (var reader = new FileReader(file)) {
+                CACHE_MAP.putAll(JSONUtils.from(reader, Map.class));
                 CACHE_MAP.trim();
             } catch (IOException e) {
                 throw new RuntimeException(e);
