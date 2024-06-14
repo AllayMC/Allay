@@ -86,16 +86,7 @@ public interface EntityPlayer extends
     default void dropItemInPlayerPos(ItemStack itemStack) {
         var playerLoc = getLocation();
         var dimension = playerLoc.dimension();
-        var entityItem = EntityTypes.ITEM_TYPE.createEntity(
-                SimpleEntityInitInfo.builder()
-                        .dimension(dimension)
-                        .pos(playerLoc.x(), playerLoc.y() + this.getEyeHeight() - 0.25f, playerLoc.z())
-                        .motion(MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f))
-                        .build()
-        );
-        entityItem.setItemStack(itemStack);
-        entityItem.setPickupDelay(40);
-        dimension.getEntityService().addEntity(entityItem);
+        dimension.dropItem(itemStack, playerLoc, MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f), 40);
     }
 
     default void sendItemInHandUpdate() {

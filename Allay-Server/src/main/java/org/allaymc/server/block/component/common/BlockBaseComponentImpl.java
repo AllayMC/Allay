@@ -8,7 +8,6 @@ import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
 import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
-import org.allaymc.api.block.function.Place;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.utils.Identifier;
@@ -18,6 +17,7 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
@@ -60,7 +60,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        Place.checkParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
+        checkPlaceMethodParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         // TODO: check whether the old block can be replaced
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         return true;
@@ -74,6 +74,16 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
         manager.callEvent(new BlockOnReplaceEvent(currentBlockState, newBlockState));
+    }
+
+    @Override
+    public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
+        if (!blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() && !usedItem.isCorrectToolFor(blockState.blockState())) return;
+        var drops = getDrops(usedItem);
+        if (drops.length == 0) return;
+        for (var drop : drops) {
+            player.getDimension().dropItem(drop, new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f));
+        }
     }
 
     @Override

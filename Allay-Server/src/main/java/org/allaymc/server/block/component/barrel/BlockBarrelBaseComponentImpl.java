@@ -3,7 +3,6 @@ package org.allaymc.server.block.component.barrel;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.function.Place;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -30,7 +29,7 @@ public class BlockBarrelBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        Place.checkParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
+        checkPlaceMethodParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         if (player != null) {
             if (abs(player.getLocation().x() - placeBlockPos.x()) < 2 && abs(player.getLocation().z() - placeBlockPos.z()) < 2) {
                 var y = player.getLocation().y() + player.getEyeHeight();

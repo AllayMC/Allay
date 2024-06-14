@@ -57,6 +57,10 @@ public class SimpleEntityInitInfo<T extends Entity> implements EntityInitInfo<T>
             return this;
         }
 
+        public Builder pos(Vector3fc pos) {
+            return pos(pos.x(), pos.y(), pos.z());
+        }
+
         public Builder pos(float x, float y, float z) {
             nbtBuilder.putCompound("Pos",
                     NbtMap.builder()

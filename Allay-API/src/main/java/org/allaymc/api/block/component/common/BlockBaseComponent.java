@@ -63,7 +63,8 @@ public interface BlockBaseComponent extends BlockComponent {
 
     void onRandomUpdate(BlockStateWithPos blockState);
 
-    static void checkParam(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+    default void checkPlaceMethodParam(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        Preconditions.checkState(getBlockType() == blockState.getBlockType());
         // player is nullable
         Preconditions.checkNotNull(dimension);
         Preconditions.checkNotNull(blockState);
@@ -73,8 +74,27 @@ public interface BlockBaseComponent extends BlockComponent {
         Preconditions.checkNotNull(blockFace);
     }
 
-    boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
+    /**
+     * Try to place a block
+     * @param player The player who is placing the block, can be null
+     * @param dimension The dimension where the block is placed
+     * @param blockState The block that is being placed
+     * @param targetBlockPos The block that the player clicked on
+     * @param placeBlockPos The pos that the player is trying to place the block on
+     * @param clickPos The precise pos where the player clicked
+     * @param blockFace The face of the block that the player clicked on
+     * @return true if the block is placed successfully, false if failed
+     */
+    boolean place(
+            EntityPlayer player, Dimension dimension, BlockState blockState,
+            Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
+            BlockFace blockFace);
 
+    /**
+     * Called when a block is placed.
+     * @param currentBlockState The block that is being replaced
+     * @param newBlockState The block that is replacing the current block
+     */
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState);
 
     /**
@@ -91,11 +111,25 @@ public interface BlockBaseComponent extends BlockComponent {
      */
     boolean onInteract(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
 
+    /**
+     * Called when a block is replaced.
+     * @param currentBlockState The block that is being replaced
+     * @param newBlockState The block that is replacing the current block
+     */
     void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState);
+
+    /**
+     * Called when a block is broken by non-creative game mode player
+     * @param blockState The block that was broken
+     * @param usedItem The item that was used to break the block
+     * @param player The player who broke the block, can be null
+     */
+    void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player);
 
     void onScheduledUpdate(BlockStateWithPos blockState);
 
     default ItemStack[] getDrops(ItemStack itemStack) {
+        // TODO: needs more works
         if (getBlockType().getItemType() != null) {
             return new ItemStack[] {getBlockType().getItemType().createItemStack()};
         }

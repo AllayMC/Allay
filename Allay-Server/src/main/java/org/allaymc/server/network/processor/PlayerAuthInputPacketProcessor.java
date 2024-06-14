@@ -2,10 +2,13 @@ package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -164,9 +167,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             pk.setPosition(Vector3f.from(breakBlockX + 0.5f, breakBlockY + 0.5f, breakBlockZ + 0.5f));
             pk.setData(oldState.blockStateHash());
             player.getCurrentChunk().addChunkPacket(pk);
-            // TODO: on break
+            breakBlock.getBehavior().onBreak(
+                    new BlockStateWithPos(breakBlock, new Position3i(breakBlockX, breakBlockY, breakBlockZ, player.getDimension()), 0),
+                    player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand(),
+                    player
+            );
             world.setBlockState(breakBlockX, breakBlockY, breakBlockZ, AIR_TYPE.getDefaultState());
-            // TODO: drop items
         } else {
             log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakingTime, currentTime);
         }

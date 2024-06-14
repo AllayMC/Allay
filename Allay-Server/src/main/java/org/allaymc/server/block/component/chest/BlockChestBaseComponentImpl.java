@@ -29,6 +29,7 @@ public class BlockChestBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+        checkPlaceMethodParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         var face = MinecraftCardinalDirection.EAST;
         if (player != null) {
             face = toMinecraftCardinalDirection(player.getHorizontalFace().opposite());

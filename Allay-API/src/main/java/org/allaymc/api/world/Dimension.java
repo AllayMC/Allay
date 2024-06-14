@@ -7,7 +7,9 @@ import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.MathUtils;
@@ -34,6 +36,7 @@ import org.joml.primitives.AABBfc;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 
@@ -411,7 +414,21 @@ public interface Dimension {
         getChunkService().getChunkByLevelPos((int) x, (int) z).addChunkPacket(packet);
     }
 
-    default void dropItem(ItemStack itemStack, float x, float y, float z) {
+    default void dropItem(ItemStack itemStack, Vector3fc pos) {
+        var rand = ThreadLocalRandom.current();
+        dropItem(itemStack, pos, new org.joml.Vector3f(rand.nextFloat(0.2f) - 0.1f, 0.2f, rand.nextFloat(0.2f) - 0.1f), 10);
+    }
 
+    default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion, int pickupDelay) {
+        var entityItem = EntityTypes.ITEM_TYPE.createEntity(
+                SimpleEntityInitInfo.builder()
+                        .dimension(this)
+                        .pos(pos)
+                        .motion(motion)
+                        .build()
+        );
+        entityItem.setItemStack(itemStack);
+        entityItem.setPickupDelay(pickupDelay);
+        getEntityService().addEntity(entityItem);
     }
 }
