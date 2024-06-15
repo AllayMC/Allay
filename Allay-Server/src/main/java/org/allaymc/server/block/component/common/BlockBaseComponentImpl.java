@@ -79,7 +79,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
         if (!blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() && !usedItem.isCorrectToolFor(blockState.blockState())) return;
-        var drops = getDrops(usedItem);
+        var drops = getDrops(blockState.blockState(), usedItem);
         if (drops.length == 0) return;
         for (var drop : drops) {
             player.getDimension().dropItem(drop, new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f));

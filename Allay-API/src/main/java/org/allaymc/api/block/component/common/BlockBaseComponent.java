@@ -128,8 +128,9 @@ public interface BlockBaseComponent extends BlockComponent {
 
     void onScheduledUpdate(BlockStateWithPos blockState);
 
-    default ItemStack[] getDrops(ItemStack itemStack) {
-        // TODO: needs more works
+    default ItemStack[] getDrops(BlockState blockState, ItemStack usedItem) {
+        // TODO: 时运
+        // TODO: silk touch (精准采集)
         if (getBlockType().getItemType() != null) {
             return new ItemStack[] {getBlockType().getItemType().createItemStack()};
         }

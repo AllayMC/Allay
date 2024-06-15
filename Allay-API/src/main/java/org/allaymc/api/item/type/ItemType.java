@@ -27,7 +27,15 @@ public interface ItemType<T extends ItemStack> extends Identified {
     T createItemStack(ItemStackInitInfo<T> info);
 
     default T createItemStack() {
-        return createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        return createItemStack(1);
+    }
+
+    default T createItemStack(int count) {
+        return createItemStack(count, 0);
+    }
+
+    default T createItemStack(int count, int meta) {
+        return createItemStack(SimpleItemStackInitInfo.builder().count(count).meta(meta).build());
     }
 
     int getRuntimeId();
