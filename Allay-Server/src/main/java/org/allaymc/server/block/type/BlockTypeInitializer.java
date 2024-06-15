@@ -1,6 +1,7 @@
 package org.allaymc.server.block.type;
 
 import org.allaymc.api.block.interfaces.*;
+import org.allaymc.api.block.interfaces.glass.BlockGlassBehavior;
 import org.allaymc.api.block.interfaces.stairs.*;
 import org.allaymc.api.block.interfaces.torch.BlockColoredTorchBpBehavior;
 import org.allaymc.api.block.interfaces.torch.BlockColoredTorchRgBehavior;
@@ -20,6 +21,7 @@ import org.allaymc.server.block.component.chest.BlockChestBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
 import org.allaymc.server.block.component.craftingtable.BlockCraftingTableBaseComponentImpl;
 import org.allaymc.server.block.component.doubleplant.BlockDoublePlantBaseComponentImpl;
+import org.allaymc.server.block.component.glass.BlockGlassBaseComponentImpl;
 import org.allaymc.server.block.component.grassblock.BlockGrassBlockBaseComponentImpl;
 import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
 import org.allaymc.server.block.component.tallgrass.BlockTallgrassBaseComponentImpl;
@@ -54,6 +56,14 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(VanillaBlockId.DOUBLE_PLANT)
                 .setProperties(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initGlass() {
+        BlockTypes.GLASS_TYPE = BlockTypeBuilder
+                .builder(BlockGlassBehavior.class)
+                .vanillaBlock(VanillaBlockId.GLASS)
+                .setBlockBaseComponentSupplier(BlockGlassBaseComponentImpl::new)
                 .build();
     }
 
