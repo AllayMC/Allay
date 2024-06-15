@@ -2,6 +2,7 @@ package org.allaymc.api.world.generator;
 
 import lombok.Getter;
 import org.allaymc.api.world.Dimension;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Allay Project 2023/7/1
@@ -18,6 +19,7 @@ public abstract class WorldGenerator {
         this.preset = preset;
     }
 
+    @ApiStatus.Internal
     public void setDimension(Dimension dimension) {
         this.dimension = dimension;
     }
