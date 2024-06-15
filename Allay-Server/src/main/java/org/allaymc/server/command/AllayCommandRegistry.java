@@ -57,6 +57,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new WhitelistCommand());
         register(new ScoreboardCommand());
         register(new TimeCommand());
+        register(new EnchantCommand());
     }
 
     @Override

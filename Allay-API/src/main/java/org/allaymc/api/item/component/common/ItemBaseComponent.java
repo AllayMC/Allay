@@ -3,12 +3,10 @@ package org.allaymc.api.item.component.common;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
+import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
@@ -17,14 +15,12 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
-import java.util.EnumMap;
+import java.util.Collection;
 import java.util.List;
 
-import static org.allaymc.api.block.type.BlockTypes.BAMBOO_BLOCK_TYPE;
 import static org.allaymc.api.data.VanillaItemTags.*;
 import static org.allaymc.api.data.VanillaItemTags.WOODEN_TIER;
 import static org.allaymc.api.data.VanillaMaterialTypes.*;
-import static org.allaymc.api.item.type.ItemTypes.BAMBOO_TYPE;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS_TYPE;
 
 /**
@@ -148,6 +144,8 @@ public interface ItemBaseComponent extends ItemComponent {
 
     short getEnchantmentLevel(EnchantmentType enchantmentType);
 
+    Collection<EnchantmentInstance> getEnchantments();
+
     void addEnchantment(EnchantmentType enchantmentType, short level);
 
     /**
@@ -198,5 +196,18 @@ public interface ItemBaseComponent extends ItemComponent {
             return blockState.getBlockType() == BlockTypes.BAMBOO_TYPE;
         }
         return false;
+    }
+
+    default boolean checkEnchantmentCompatibility(EnchantmentType type) {
+        return getIncompatibleEnchantmentType(type) == null;
+    }
+
+    default EnchantmentType getIncompatibleEnchantmentType(EnchantmentType type) {
+        for (var enchantmentInstance : getEnchantments()) {
+            if (!enchantmentInstance.getType().checkCompatibility(type)) {
+                return enchantmentInstance.getType();
+            }
+        }
+        return null;
     }
 }

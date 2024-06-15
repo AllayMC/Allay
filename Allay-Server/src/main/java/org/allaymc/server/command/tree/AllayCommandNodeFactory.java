@@ -4,6 +4,7 @@ import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.server.command.tree.node.*;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3fc;
@@ -24,6 +25,11 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     @Override
     public CommandNode str(String name, CommandNode parent, String defaultValue) {
         return new StringNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode shortNum(String name, CommandNode parent, short defaultValue) {
+        return new ShortNode(name, parent, defaultValue);
     }
 
     @Override
@@ -104,5 +110,10 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     @Override
     public CommandNode wildcardTarget(String name, CommandNode parent, String defaultValue) {
         return new WildcardTargetNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode enchantmentNode(String name, CommandNode parent, EnchantmentType defaultValue) {
+        return new EnchantmentNode(name, parent, defaultValue);
     }
 }

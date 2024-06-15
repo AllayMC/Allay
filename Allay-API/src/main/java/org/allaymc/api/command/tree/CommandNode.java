@@ -6,6 +6,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
@@ -128,6 +129,14 @@ public interface CommandNode {
 
     default CommandNode str(String name) {
         return str(name, "");
+    }
+
+    default CommandNode shortNum(String name, short defaultValue) {
+        return addLeaf(getFactory().shortNum(name, this, defaultValue));
+    }
+
+    default CommandNode shortNum(String name) {
+        return shortNum(name, (short) 0);
     }
 
     default CommandNode intNum(String name, int defaultValue) {
@@ -258,5 +267,13 @@ public interface CommandNode {
 
     default CommandNode wildcardTarget(String name, String defaultValue) {
         return addLeaf(getFactory().wildcardTarget(name, this, defaultValue));
+    }
+
+    default CommandNode enchantmentNode(String name) {
+        return enchantmentNode(name, null);
+    }
+
+    default CommandNode enchantmentNode(String name, EnchantmentType defaultValue) {
+        return addLeaf(getFactory().enchantmentNode(name, this, defaultValue));
     }
 }

@@ -339,6 +339,11 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
+    public Collection<EnchantmentInstance> getEnchantments() {
+        return enchantments.values();
+    }
+
+    @Override
     public void addEnchantment(EnchantmentType enchantmentType, short level) {
         enchantments.put(enchantmentType, new SimpleEnchantmentInstance(enchantmentType, level));
     }

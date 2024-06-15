@@ -38,8 +38,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 Vector3ic blockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
                 Vector3fc clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
                 BlockFace blockFace = BlockFace.fromId(packet.getBlockFace());
-                var inv = player.getContainer(FullContainerType.PLAYER_INVENTORY);
-                var itemStack = inv.getItemInHand();
+                var itemStack = player.getItemInHand();
                 var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
@@ -78,7 +77,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 var target = player.getDimension().getEntityByRuntimeId(packet.getRuntimeEntityId());
                 Preconditions.checkNotNull(target, "Player " + player.getOriginName() + " try to attack a entity which doesn't exist! Entity id: " + packet.getRuntimeEntityId());
                 switch (packet.getActionType()) {
-                    case ITEM_USE_ON_ENTITY_INTERACT -> target.onInteract(player, player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand());
+                    case ITEM_USE_ON_ENTITY_INTERACT -> target.onInteract(player, player.getItemInHand());
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
                         EntityDamageComponent damageable;
                         if (target instanceof EntityDamageComponent cast) {
@@ -88,7 +87,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             return;
                         }
                         // TODO: Check whether the player can touch the target entity or not (to prevent cheater)
-                        var itemInHand = player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
+                        var itemInHand = player.getItemInHand();
                         var damage = itemInHand.calculateAttackDamage();
                         if (damage == 0) damage = 1;
                         var damageContainer = DamageContainer.entityAttack(player, damage);

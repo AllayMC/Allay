@@ -90,6 +90,10 @@ public interface EntityPlayer extends
         dimension.dropItem(itemStack, playerLoc.add(0,  + this.getEyeHeight() - 0.25f, 0, new Vector3f()), MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f), 40);
     }
 
+    default ItemStack getItemInHand() {
+        return getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
+    }
+
     default void sendItemInHandUpdate() {
         var inv = getContainer(FullContainerType.PLAYER_INVENTORY);
         var itemStack = inv.getItemInHand();

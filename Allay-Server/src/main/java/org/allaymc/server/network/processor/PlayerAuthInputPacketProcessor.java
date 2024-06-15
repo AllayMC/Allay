@@ -114,7 +114,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         breakFaceId = blockFaceId;
         breakBlock = player.getDimension().getBlockState(x, y, z);
         startBreakingTime = player.getWorld().getTick();
-        needBreakingTime = breakBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakBlock, player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand(), player);
+        needBreakingTime = breakBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
         stopBreakingTime = startBreakingTime + needBreakingTime * 20.0d;
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_START_BREAK);
@@ -164,7 +164,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             player.getCurrentChunk().addChunkPacket(pk);
             breakBlock.getBehavior().onBreak(
                     new BlockStateWithPos(breakBlock, new Position3i(breakBlockX, breakBlockY, breakBlockZ, player.getDimension()), 0),
-                    player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand(),
+                    player.getItemInHand(),
                     player
             );
             world.setBlockState(breakBlockX, breakBlockY, breakBlockZ, AIR_TYPE.getDefaultState());
@@ -200,7 +200,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void updateBreakingTime(EntityPlayer player) {
-        var newBreakingTime = breakBlock.getBehavior().calculateBreakTime(breakBlock, player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand(), player);
+        var newBreakingTime = breakBlock.getBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
         if (needBreakingTime == newBreakingTime) return;
         // 破坏时间有变化，进行修正
         var currentTime = player.getWorld().getTick();

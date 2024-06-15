@@ -91,11 +91,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private final Set<BlockTag> blockTags;
     @Getter
     private final Material material;
+    private final ItemType<?> blockItemType;
 
     private Class<T> injectedClass;
     @Getter
     private BlockState defaultState;
-    private ItemType<?> blockItemType;
     private Map<Integer, Integer> hashToMeta;
     @Getter
     private T blockBehavior;

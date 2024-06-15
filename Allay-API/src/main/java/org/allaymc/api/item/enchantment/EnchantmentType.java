@@ -20,6 +20,7 @@ public interface EnchantmentType {
     EnchantmentInstance createInstance(short level);
 
     default boolean checkCompatibility(EnchantmentType other) {
+        // TODO
         return true;
     }
 }

@@ -3,6 +3,7 @@ package org.allaymc.api.command.tree;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3fc;
 
@@ -24,6 +25,8 @@ public interface CommandNodeFactory {
     CommandNode key(String key, CommandNode parent, String defaultValue);
 
     CommandNode str(String name, CommandNode parent, String defaultValue);
+
+    CommandNode shortNum(String name, CommandNode parent, short defaultValue);
 
     CommandNode intNum(String name, CommandNode parent, int defaultValue);
 
@@ -56,4 +59,6 @@ public interface CommandNodeFactory {
     CommandNode pos(String name, CommandNode parent, Vector3fc defaultValue);
 
     CommandNode wildcardTarget(String name, CommandNode parent, String defaultValue);
+
+    CommandNode enchantmentNode(String name, CommandNode parent, EnchantmentType defaultValue);
 }

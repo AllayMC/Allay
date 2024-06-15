@@ -10,6 +10,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.item.enchantment.type.EnchantmentSilkTouchType;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
@@ -20,6 +21,8 @@ import org.allaymc.api.world.Dimension;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
+
+import java.util.Arrays;
 
 /**
  * Allay Project 2023/4/8
@@ -79,10 +82,15 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
         if (!blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() && !usedItem.isCorrectToolFor(blockState.blockState())) return;
+        var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);
+        if (usedItem.hasEnchantment(EnchantmentSilkTouchType.SILK_TOUCH_TYPE)) {
+            // 精准采集, 直接掉落方块本身
+            player.getDimension().dropItem(blockState.blockState().toItemStack(), dropPos);
+            return;
+        }
         var drops = getDrops(blockState.blockState(), usedItem);
-        if (drops.length == 0) return;
         for (var drop : drops) {
-            player.getDimension().dropItem(drop, new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f));
+            player.getDimension().dropItem(drop, dropPos);
         }
     }
 
