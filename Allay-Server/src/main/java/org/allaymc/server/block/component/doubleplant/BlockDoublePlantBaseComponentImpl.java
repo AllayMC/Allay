@@ -54,11 +54,15 @@ public class BlockDoublePlantBaseComponentImpl extends BlockBaseComponentImpl {
         var plantType = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE);
         var willBreak = false;
         if (isUpperBlock) {
-            var downBlock = dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos()));
-            willBreak = notSamePlant(downBlock, plantType);
+            willBreak = notSamePlant(
+                    dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())),
+                    plantType
+            );
         } else {
-            var upperBlock = dimension.getBlockState(BlockFace.UP.offsetPos(current.pos()));
-            willBreak = notSamePlant(upperBlock, plantType);
+            willBreak = notSamePlant(
+                    dimension.getBlockState(BlockFace.UP.offsetPos(current.pos())),
+                    plantType
+            );
         }
         if (willBreak) dimension.breakBlock(current.pos(), null, null);
     }
