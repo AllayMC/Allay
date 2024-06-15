@@ -12,8 +12,8 @@ import static org.allaymc.api.world.generator.WorldGeneratorType.INFINITE;
  * @author daoge_cmd
  */
 public class VoidWorldGenerator extends WorldGenerator {
-    public VoidWorldGenerator() {
-        super("");
+    public VoidWorldGenerator(String preset) {
+        super(preset);
     }
 
     @Override

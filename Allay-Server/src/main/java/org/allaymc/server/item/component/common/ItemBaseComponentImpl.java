@@ -8,9 +8,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaMaterialTypes;
-import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
-import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
@@ -346,6 +344,16 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     public void addEnchantment(EnchantmentType enchantmentType, short level) {
         enchantments.put(enchantmentType, new SimpleEnchantmentInstance(enchantmentType, level));
+    }
+
+    @Override
+    public void removeEnchantment(EnchantmentType enchantmentType) {
+        enchantments.remove(enchantmentType);
+    }
+
+    @Override
+    public void removeAllEnchantments() {
+        enchantments.clear();
     }
 
     // 记录那些对工具品质有要求的方块的正确工具集合

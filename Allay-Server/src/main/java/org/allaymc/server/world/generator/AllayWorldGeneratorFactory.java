@@ -21,7 +21,7 @@ public class AllayWorldGeneratorFactory extends SimpleMappedRegistry<String, Fun
     }
 
     protected void init() {
-        register("VOID", unused -> new VoidWorldGenerator());
+        register("VOID", VoidWorldGenerator::new);
         register("FLAT", FlatWorldGenerator::new);
         // TODO: Pass preset to je generator loader
         register("JEGEN_OVERWORLD", preset -> JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD));

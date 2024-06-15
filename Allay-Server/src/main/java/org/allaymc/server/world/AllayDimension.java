@@ -51,6 +51,7 @@ public class AllayDimension implements Dimension {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
+        this.worldGenerator.setDimension(this);
         this.chunkService = new AllayChunkService(this, world.getWorldStorage());
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.entityService = new AllayEntityService(entityPhysicsService);

@@ -148,6 +148,10 @@ public interface ItemBaseComponent extends ItemComponent {
 
     void addEnchantment(EnchantmentType enchantmentType, short level);
 
+    void removeEnchantment(EnchantmentType enchantmentType);
+
+    void removeAllEnchantments();
+
     /**
      * 获取破坏方块的加速倍数 <br>
      * @param blockState 要破坏的方块
