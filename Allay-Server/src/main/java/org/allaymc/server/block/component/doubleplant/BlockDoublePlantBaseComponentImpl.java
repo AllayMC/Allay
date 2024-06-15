@@ -29,8 +29,6 @@ public class BlockDoublePlantBaseComponentImpl extends BlockBaseComponentImpl {
         super(blockType);
     }
 
-    // TODO: block update
-
     @Override
     public ItemStack[] getDrops(BlockState blockState, ItemStack usedItem) {
         var plantType = blockState.getPropertyValue(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE);
