@@ -54,12 +54,11 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Call when a blockState causes another blockState to update.
      *
-     * @param updated   The vec of the updated block
-     * @param neighbor  The vec of the block that triggered the update
-     * @param face      The neighbor block is on the side of the current updated block
-     * @param dimension the dimension
+     * @param current  The current block
+     * @param neighbor The neighbor block that triggered the update
+     * @param face     The face of the current block
      */
-    void onNeighborUpdate(Vector3ic updated, Vector3ic neighbor, BlockFace face, Dimension dimension);
+    void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face);
 
     void onRandomUpdate(BlockStateWithPos blockState);
 

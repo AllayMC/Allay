@@ -52,12 +52,19 @@ public class AllayBlockUpdateService implements BlockUpdateService {
             var u = neighborUpdates.poll();
             var pos = u.pos;
             var neighborPos = u.neighborPos;
+            var neighborBlockStateWithPos = new BlockStateWithPos(dimension.getBlockState(neighborPos), new Position3i(neighborPos, dimension), 0);
             var blockFace = u.blockFace;
             BlockState layer0 = dimension.getBlockState(pos);
             BlockState layer1 = dimension.getBlockState(pos, 1);
-            layer0.getBehavior().onNeighborUpdate(pos, neighborPos, blockFace, dimension);
+            layer0.getBehavior().onNeighborUpdate(
+                    new BlockStateWithPos(layer0, new Position3i(pos, dimension), 0),
+                    neighborBlockStateWithPos,
+                    blockFace);
             if (layer1.getBehavior() instanceof BlockLiquidComponent) {
-                layer1.getBehavior().onNeighborUpdate(pos, neighborPos, blockFace, dimension);
+                layer1.getBehavior().onNeighborUpdate(
+                        new BlockStateWithPos(layer1, new Position3i(pos, dimension), 0),
+                        neighborBlockStateWithPos,
+                        blockFace);
             }
             c++;
         }

@@ -156,18 +156,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var currentTime = player.getWorld().getTick();
         if (Math.abs(currentTime - stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
             var world = player.getDimension();
-            var oldState = world.getBlockState(breakBlockX, breakBlockY, breakBlockZ);
-            var pk = new LevelEventPacket();
-            pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
-            pk.setPosition(Vector3f.from(breakBlockX + 0.5f, breakBlockY + 0.5f, breakBlockZ + 0.5f));
-            pk.setData(oldState.blockStateHash());
-            player.getCurrentChunk().addChunkPacket(pk);
-            breakBlock.getBehavior().onBreak(
-                    new BlockStateWithPos(breakBlock, new Position3i(breakBlockX, breakBlockY, breakBlockZ, player.getDimension()), 0),
-                    player.getItemInHand(),
-                    player
-            );
-            world.setBlockState(breakBlockX, breakBlockY, breakBlockZ, AIR_TYPE.getDefaultState());
+            world.breakBlock(breakBlockX, breakBlockY, breakBlockZ, player.getItemInHand(), player);
         } else {
             log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakingTime, currentTime);
         }

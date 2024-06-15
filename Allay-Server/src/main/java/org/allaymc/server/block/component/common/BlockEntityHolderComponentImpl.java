@@ -51,7 +51,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
     @EventHandler
     private void onNeighborChanged(BlockOnNeighborUpdateEvent event) {
-        var pos = new Position3i(event.getUpdated(), event.getDimension());
+        var pos = new Position3i(event.getCurrent().pos());
         var blockEntity = getBlockEntity(pos);
         blockEntity.onNeighborUpdate(event);
     }

@@ -2,9 +2,13 @@ package org.allaymc.server.block.component.doubleplant;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.block.property.enums.DoublePlantType;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
@@ -40,5 +44,27 @@ public class BlockDoublePlantBaseComponentImpl extends BlockBaseComponentImpl {
             }
             default -> super.getDrops(blockState, usedItem);
         };
+    }
+
+    @Override
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        if (face != BlockFace.UP && face != BlockFace.DOWN) return;
+        var dimension = current.pos().dimension();
+        var isUpperBlock = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT);
+        var plantType = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE);
+        var willBreak = false;
+        if (isUpperBlock) {
+            var downBlock = dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos()));
+            willBreak = notSamePlant(downBlock, plantType);
+        } else {
+            var upperBlock = dimension.getBlockState(BlockFace.UP.offsetPos(current.pos()));
+            willBreak = notSamePlant(upperBlock, plantType);
+        }
+        if (willBreak) dimension.breakBlock(current.pos(), null, null);
+    }
+
+    protected boolean notSamePlant(BlockState downBlock, DoublePlantType plantType) {
+        return downBlock.getBlockType() != BlockTypes.DOUBLE_PLANT_TYPE ||
+                downBlock.getPropertyValue(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE) != plantType;
     }
 }

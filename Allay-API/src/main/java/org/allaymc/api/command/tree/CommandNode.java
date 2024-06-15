@@ -82,7 +82,6 @@ public interface CommandNode {
 
     boolean match(CommandContext context);
 
-
     CommandNode nextNode(CommandContext context);
 
     boolean isLeaf();

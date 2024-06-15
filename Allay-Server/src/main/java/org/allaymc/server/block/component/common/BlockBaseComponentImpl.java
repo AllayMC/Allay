@@ -22,8 +22,6 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
-import java.util.Arrays;
-
 /**
  * Allay Project 2023/4/8
  *
@@ -49,8 +47,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onNeighborUpdate(Vector3ic updated, Vector3ic neighbor, BlockFace face, Dimension dimension) {
-        manager.callEvent(new BlockOnNeighborUpdateEvent(updated, neighbor, face, dimension));
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        manager.callEvent(new BlockOnNeighborUpdateEvent(current, neighbor, face));
     }
 
     @Override
@@ -83,14 +81,15 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
         if (!blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() && !usedItem.isCorrectToolFor(blockState.blockState())) return;
         var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);
-        if (usedItem.hasEnchantment(EnchantmentSilkTouchType.SILK_TOUCH_TYPE)) {
+        var dimension = blockState.pos().dimension();
+        if (usedItem != null && usedItem.hasEnchantment(EnchantmentSilkTouchType.SILK_TOUCH_TYPE)) {
             // 精准采集, 直接掉落方块本身
-            player.getDimension().dropItem(blockState.blockState().toItemStack(), dropPos);
+            dimension.dropItem(blockState.blockState().toItemStack(), dropPos);
             return;
         }
         var drops = getDrops(blockState.blockState(), usedItem);
         for (var drop : drops) {
-            player.getDimension().dropItem(drop, dropPos);
+            dimension.dropItem(drop, dropPos);
         }
     }
 

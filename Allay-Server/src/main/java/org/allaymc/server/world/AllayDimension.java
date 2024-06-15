@@ -2,7 +2,10 @@ package org.allaymc.server.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
@@ -15,11 +18,16 @@ import org.allaymc.server.world.service.AllayBlockUpdateService;
 import org.allaymc.server.world.service.AllayChunkService;
 import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.allaymc.server.world.service.AllayEntityService;
+import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
+import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 
 /**
  * Allay Project 11/12/2023
@@ -82,6 +90,26 @@ public class AllayDimension implements Dimension {
     @UnmodifiableView
     public Set<EntityPlayer> getPlayers() {
         return unmodifiablePlayersView;
+    }
+
+    @Override
+    public void breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player) {
+        var block = getBlockState(x, y, z);
+        if (block.getBlockType() == AIR_TYPE) {
+            log.warn("Trying to break air block at x={}, y={}, z={}", x, y, z);
+            return;
+        }
+        var pk = new LevelEventPacket();
+        pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
+        pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));
+        pk.setData(block.blockStateHash());
+        getChunkService().getChunkByLevelPos(x ,z).addChunkPacket(pk);
+        block.getBehavior().onBreak(
+                new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
+                usedItem,
+                player
+        );
+        setBlockState(x, y, z, AIR_TYPE.getDefaultState());
     }
 
     @Override
