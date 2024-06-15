@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    //libs.versions.toml cannot be used in public plugin scripts
+    // NOTICE: libs.versions.toml cannot be used in public plugin scripts
     compileOnly("org.projectlombok:lombok:1.18.32")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")

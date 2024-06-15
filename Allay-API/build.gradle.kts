@@ -40,3 +40,11 @@ tasks.clean {
         delete(it)
     }
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("allayAPI") {
+            from(components["java"])
+        }
+    }
+}
