@@ -15,6 +15,7 @@ import org.allaymc.api.eventbus.event.world.player.PlayerThrowItemEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
+import org.joml.Vector3f;
 
 import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
 import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
@@ -86,7 +87,7 @@ public interface EntityPlayer extends
     default void dropItemInPlayerPos(ItemStack itemStack) {
         var playerLoc = getLocation();
         var dimension = playerLoc.dimension();
-        dimension.dropItem(itemStack, playerLoc, MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f), 40);
+        dimension.dropItem(itemStack, playerLoc.add(0,  + this.getEyeHeight() - 0.25f, 0, new Vector3f()), MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f), 40);
     }
 
     default void sendItemInHandUpdate() {
