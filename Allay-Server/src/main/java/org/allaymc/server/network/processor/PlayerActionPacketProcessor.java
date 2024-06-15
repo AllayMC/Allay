@@ -3,6 +3,7 @@ package org.allaymc.server.network.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -21,18 +22,21 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
     public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet) {
         return switch (packet.getAction()) {
             case RESPAWN -> {
+                // 玩家还没死透
+                if (!player.canBeSpawned()) yield PacketSignal.HANDLED;
                 var spawnPoint = player.getSpawnPoint();
-                var dimension = spawnPoint.dimension();
-                dimension.getChunkService().getOrLoadChunkSynchronously(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
-                player.setLocationBeforeSpawn(new Location3f(spawnPoint));
-                dimension.addPlayer(player, () -> {
-                    player.teleport(new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), dimension));
-                    player.setSprinting(false);
-                    player.setSneaking(false);
-                    player.removeAllEffects();
-                    player.setHealth(player.getMaxHealth());
-                    player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, (short) 400);
-                });
+                var spawnDimension = spawnPoint.dimension();
+                var oldDimension = player.getDimension();
+                if (oldDimension != spawnDimension) {
+                    // 重生维度和玩家当前维度不同，需要将玩家从旧的维度删除
+                    oldDimension.removePlayer(player, () -> {
+                        prepareForRespawn(player, spawnPoint);
+                        spawnDimension.addPlayer(player, () -> afterRespawn(player, spawnPoint));
+                    });
+                } else {
+                    prepareForRespawn(player, spawnPoint);
+                    spawnDimension.getEntityService().addEntity(player, () -> afterRespawn(player, spawnPoint));
+                }
                 yield PacketSignal.HANDLED;
             }
             case DIMENSION_CHANGE_SUCCESS -> {
@@ -73,6 +77,23 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
             }
             default -> PacketSignal.UNHANDLED;
         };
+    }
+
+    private void prepareForRespawn(EntityPlayer player, Location3ic spawnPoint) {
+        var spawnDimension = spawnPoint.dimension();
+        spawnDimension.getChunkService().getOrLoadChunkSynchronously(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
+        player.setLocationBeforeSpawn(new Location3f(spawnPoint));
+    }
+
+    private void afterRespawn(EntityPlayer player, Location3ic spawnPoint) {
+        var spawnDimension = spawnPoint.dimension();
+        // tp一下防止玩家掉到奇怪的地方
+        player.teleport(new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), spawnDimension));
+        player.setSprinting(false);
+        player.setSneaking(false);
+        player.removeAllEffects();
+        player.setHealth(player.getMaxHealth());
+        player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, (short) 400);
     }
 
     @Override

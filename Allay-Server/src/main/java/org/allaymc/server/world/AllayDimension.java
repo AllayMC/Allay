@@ -81,9 +81,18 @@ public class AllayDimension implements Dimension {
 
     @Override
     public void removePlayer(EntityPlayer player, Runnable runnable) {
-        entityService.removeEntity(player, runnable);
-        chunkService.removeChunkLoader(player);
-        players.remove(player);
+        if (player.isSpawned()) {
+            // 玩家死亡后重生到另外一个维度时，玩家实体已经被卸载
+            // 所以说在卸载玩家实体时，需要先检查玩家实体是否生成
+            entityService.removeEntity(player, runnable);
+            chunkService.removeChunkLoader(player);
+            players.remove(player);
+        } else {
+            chunkService.removeChunkLoader(player);
+            players.remove(player);
+            // 直接运行回调
+            runnable.run();
+        }
     }
 
     @Override
