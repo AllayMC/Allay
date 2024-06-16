@@ -1,10 +1,9 @@
 package org.allaymc.api.utils;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * String helpers
@@ -13,6 +12,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
+@Slf4j
 @UtilityClass
 public class AllayStringUtils {
     public static List<String> fastSplit(String str, String delimiter) {
@@ -98,5 +98,19 @@ public class AllayStringUtils {
             args.add(arg);
         }
         return args;
+    }
+
+    public static Map<String, String> parseOptions(String preset) {
+        var splits = fastSplit(preset, ";");
+        var options = new HashMap<String, String>();
+        for(var split : splits) {
+            if (!split.contains("=")) {
+                log.warn("Invalid option: {}", split);
+                continue;
+            }
+            var kv = fastTwoPartSplit(split, "=", "");
+            options.put(kv[0], kv[1]);
+        }
+        return options;
     }
 }

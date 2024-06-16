@@ -1,5 +1,7 @@
 package org.allaymc.api.world.chunk;
 
+import org.allaymc.api.utils.HashUtils;
+
 /**
  * Allay Project 2023/7/1
  *
@@ -13,13 +15,26 @@ public interface ChunkAccessible {
         return getChunk(x >> 4, z >> 4);
     }
 
-    Chunk getChunk(long chunkHash);
+    default Chunk getChunk(long chunkHash) {
+        return getChunk(
+                HashUtils.getXFromHashXZ(chunkHash),
+                HashUtils.getZFromHashXZ(chunkHash)
+        );
+    }
 
-    int maxChunkX();
+    default int maxChunkX() {
+        return Integer.MAX_VALUE;
+    }
 
-    int maxChunkZ();
+    default int maxChunkZ() {
+        return Integer.MAX_VALUE;
+    }
 
-    int minChunkX();
+    default int minChunkX() {
+        return Integer.MIN_VALUE;
+    }
 
-    int minChunkZ();
+    default int minChunkZ() {
+        return Integer.MIN_VALUE;
+    }
 }

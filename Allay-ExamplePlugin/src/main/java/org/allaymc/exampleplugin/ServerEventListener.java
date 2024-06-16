@@ -55,7 +55,12 @@ public class ServerEventListener {
             list.add("Chunk: §a" + cx + ", " + cz);
             list.add("Loaded: §a" + player.getDimension().getChunkService().getLoadedChunks().size());
             list.add("Loading: §a" + player.getDimension().getChunkService().getLoadingChunks().size());
-            list.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x() & 15, (int) loc.y(), (int) loc.z() & 15));
+            try {
+                list.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x() & 15, (int) loc.y(), (int) loc.z() & 15));
+            } catch (IllegalArgumentException e) {
+                // y坐标超出范围了
+                list.add("Biome: §aN/A");
+            }
             scoreboard.setLines(list);
             return true;
         }, 20);

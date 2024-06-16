@@ -225,7 +225,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-
     public NbtMap saveExtraTag() {
         NbtMapBuilder nbtBuilder = NbtMap.builder();
         if (durability != 0) {

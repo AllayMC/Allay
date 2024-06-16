@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.plugin.Plugin;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorFactory;
 
 /**
@@ -27,7 +28,7 @@ public final class ExamplePlugin extends Plugin {
     @Override
     public void onLoad() {
         log.info("ExamplePlugin loaded!");
-        WorldGeneratorFactory.getFactory().register("RANDOM_BLOCK", RandomBlockGenerator::new);
+        WorldGeneratorFactory.getFactory().register("RANDOM_BLOCK", preset -> WorldGenerator.builder().name("RANDOM_BLOCK").noisers(new RandomBlockNoiser()).build());
     }
 
     @Override

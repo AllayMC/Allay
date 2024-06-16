@@ -32,6 +32,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.utils.exception.MissingRequirementException;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
+import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorFactory;
 import org.allaymc.api.world.storage.WorldStorageFactory;
 
@@ -189,6 +190,7 @@ public final class AllayAPI {
         requireImpl(VanillaItemMetaBlockStateBiMap.class, VanillaItemMetaBlockStateBiMap.REGISTRY::set);
 
         // World
+        requireImpl(WorldGenerator.WorldGeneratorBuilderFactory.class, WorldGenerator.BUILDER_FACTORY::set);
         requireImpl(WorldStorageFactory.class, WorldStorageFactory.FACTORY::set);
         requireImpl(WorldGeneratorFactory.class, WorldGeneratorFactory.FACTORY::set);
 

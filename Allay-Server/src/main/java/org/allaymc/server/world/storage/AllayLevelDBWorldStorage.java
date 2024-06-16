@@ -111,6 +111,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         if (finalized == null) {
             builder.state(ChunkState.FINISHED);
         } else {
+            // TODO: ChunkState枚举有变化，检查这行代码是否依然可用
             builder.state(ChunkState.values()[Unpooled.wrappedBuffer(finalized).readIntLE() + 1]);
         }
         LevelDBChunkSerializer.INSTANCE.deserialize(this.db, builder);

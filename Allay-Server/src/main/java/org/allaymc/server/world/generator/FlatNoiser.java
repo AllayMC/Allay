@@ -4,9 +4,9 @@ import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.api.world.generator.ChunkGenerateContext;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.api.world.generator.WorldGeneratorType;
+import org.allaymc.api.world.generator.context.NoiseContext;
+import org.allaymc.api.world.generator.function.Noiser;
 
 import java.util.ArrayList;
 
@@ -19,16 +19,21 @@ import static org.allaymc.api.block.type.BlockTypes.GRASS_BLOCK_TYPE;
  *
  * @author daoge_cmd
  */
-public class FlatWorldGenerator extends WorldGenerator {
+public class FlatNoiser implements Noiser {
 
     protected BlockState[] layers;
 
-    public FlatWorldGenerator(String preset) {
-        super(preset);
-        parsePreset();
+    @Override
+    public void init(WorldGenerator generator) {
+        parsePreset(generator.getPreset());
     }
 
-    protected void parsePreset() {
+    @Override
+    public String getName() {
+        return "FLAT_NOISER";
+    }
+
+    protected void parsePreset(String preset) {
         var list = new ArrayList<BlockState>();
         if (preset.isBlank()) {
             var bedrock = BEDROCK_TYPE.getDefaultState();
@@ -54,8 +59,8 @@ public class FlatWorldGenerator extends WorldGenerator {
     }
 
     @Override
-    public void generate(ChunkGenerateContext context) {
-        var flatChunk = context.chunk();
+    public Boolean apply(NoiseContext context) {
+        var flatChunk = context.getCurrentChunk();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 flatChunk.setHeight(x, z, layers.length + 1);
@@ -64,15 +69,6 @@ public class FlatWorldGenerator extends WorldGenerator {
                 }
             }
         }
-    }
-
-    @Override
-    public String getGeneratorName() {
-        return "FLAT";
-    }
-
-    @Override
-    public WorldGeneratorType getType() {
-        return WorldGeneratorType.FLAT;
+        return true;
     }
 }

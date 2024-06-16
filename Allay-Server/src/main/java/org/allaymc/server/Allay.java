@@ -32,6 +32,7 @@ import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
+import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorFactory;
 import org.allaymc.api.world.storage.WorldStorageFactory;
 import org.allaymc.server.block.attribute.AllayVanillaBlockAttributeRegistry;
@@ -63,6 +64,7 @@ import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
+import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.allaymc.server.world.generator.AllayWorldGeneratorFactory;
 import org.allaymc.server.world.storage.AllayWorldStorageFactory;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
@@ -168,6 +170,7 @@ public final class Allay {
         api.bind(VanillaItemMetaBlockStateBiMap.class, AllayVanillaItemMetaBlockStateBiMap::new, instance -> ((AllayVanillaItemMetaBlockStateBiMap) instance).init());
 
         // World
+        api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
         api.bind(WorldStorageFactory.class, AllayWorldStorageFactory::new);
         api.bind(WorldGeneratorFactory.class, AllayWorldGeneratorFactory::new);
 

@@ -3,7 +3,6 @@ package org.allaymc.server.world.generator;
 import io.papermc.paperclip.Paperclip;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.Allay;
 
 import java.io.File;
@@ -30,7 +29,7 @@ public final class JeGeneratorLoader {
         Paperclip.setup(Allay.EXTRA_RESOURCE_CLASS_LOADER, new String[]{WORK_PATH, "allay", "--noconsole", "--nogui", "--universe=jegenerator"});
         try {
             final Class<?> main = Class.forName("org.allaymc.jegenerator.AllayVanillaGeneratorExtension", true, Allay.EXTRA_RESOURCE_CLASS_LOADER);
-            final MethodType methodType = MethodType.methodType(WorldGenerator.class);
+            final MethodType methodType = MethodType.methodType(AllayWorldGenerator.class);
             OVERWORLD = MethodHandles.lookup()
                     .findStatic(main, "overworld", methodType)
                     .asFixedArity();
@@ -49,18 +48,18 @@ public final class JeGeneratorLoader {
         Utils.spinUntil(() -> !System.getProperties().getOrDefault("complete_start", false).equals("true"), Duration.of(20, ChronoUnit.MILLIS));
     }
 
-    public static WorldGenerator getJeGenerator(DimensionInfo info) {
+    public static AllayWorldGenerator getJeGenerator(DimensionInfo info) {
         if (loaded.compareAndSet(false, true)) {
             JeGeneratorLoader.setup();
             JeGeneratorLoader.waitStart();
         }
         try {
             if (info == DimensionInfo.NETHER) {
-                return (WorldGenerator) NETHER.invokeExact();
+                return (AllayWorldGenerator) NETHER.invokeExact();
             } else if (info == DimensionInfo.THE_END) {
-                return (WorldGenerator) THE_END.invokeExact();
+                return (AllayWorldGenerator) THE_END.invokeExact();
             } else {
-                return (WorldGenerator) OVERWORLD.invokeExact();
+                return (AllayWorldGenerator) OVERWORLD.invokeExact();
             }
         } catch (Throwable e) {
             throw new RuntimeException(e);

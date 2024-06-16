@@ -22,7 +22,6 @@ public enum WorldGeneratorType {
     // The generator id.
     private final int id;
 
-    @Contract("_ -> new")
     public static WorldGeneratorType of(int id) {
         Preconditions.checkArgument(id >= 0 && id <= 4);
         return values()[id];

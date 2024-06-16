@@ -1,53 +1,55 @@
 package org.allaymc.api.world.generator;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.world.Dimension;
-import org.jetbrains.annotations.ApiStatus;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.generator.function.EntitySpawner;
+import org.allaymc.api.world.generator.function.Noiser;
+import org.allaymc.api.world.generator.function.Lighter;
+import org.allaymc.api.world.generator.function.Populator;
 
 /**
- * Allay Project 2023/7/1
+ * Allay Project 2024/6/16
  *
  * @author daoge_cmd
  */
-@Getter
-@Slf4j
-public abstract class WorldGenerator {
+public interface WorldGenerator {
 
-    protected String preset;
-    protected Dimension dimension;
+    ApiInstanceHolder<WorldGeneratorBuilderFactory> BUILDER_FACTORY = ApiInstanceHolder.create();
 
-    public WorldGenerator(String preset) {
-        this.preset = preset;
+    static WorldGeneratorBuilder builder() {
+        return BUILDER_FACTORY.get().create();
     }
 
-    public void setDimension(Dimension dimension) {
-        this.dimension = dimension;
+    Chunk generateFinishedChunkSynchronously(int x, int z);
+
+    String getName();
+
+    WorldGeneratorType getType();
+
+    String getPreset();
+
+    void setDimension(Dimension dimension);
+    
+    interface WorldGeneratorBuilder {
+        WorldGeneratorBuilder name(String name);
+
+        WorldGeneratorBuilder type(WorldGeneratorType type);
+
+        WorldGeneratorBuilder preset(String preset);
+
+        WorldGeneratorBuilder noisers(Noiser... noisers);
+
+        WorldGeneratorBuilder populators(Populator... populators);
+
+        WorldGeneratorBuilder lighters(Lighter... lighters);
+
+        WorldGeneratorBuilder entitySpawners(EntitySpawner... entitySpawners);
+
+        WorldGenerator build();
     }
 
-    //empty chunk -> 各种 noise-> biome -> calc height map -> generate -> carvers
-    //feature -> structure place-> calc light -> spawn entity -> full
-    public abstract void generate(ChunkGenerateContext context);
-
-    public abstract String getGeneratorName();
-
-    public abstract WorldGeneratorType getType();
-
-    public static Map<String, String> parseOptions(String preset) {
-        var splits = AllayStringUtils.fastSplit(preset, ";");
-        var options = new HashMap<String, String>();
-        for(var split : splits) {
-            if (!split.contains("=")) {
-                log.warn("Invalid option: {}", split);
-                continue;
-            }
-            var kv = AllayStringUtils.fastTwoPartSplit(split, "=", "");
-            options.put(kv[0], kv[1]);
-        }
-        return options;
+    interface WorldGeneratorBuilderFactory {
+        WorldGeneratorBuilder create();
     }
 }
