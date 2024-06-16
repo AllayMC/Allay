@@ -7,7 +7,6 @@ import org.allaymc.api.block.interfaces.torch.*;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
-import org.allaymc.api.data.AllayBlockTags;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.CommonShapes;
@@ -693,7 +692,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockLilacBehavior.class)
                 .vanillaBlock(VanillaBlockId.LILAC)
                 .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
                 .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
                 .build();
     }
@@ -704,7 +702,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockTallGrassBehavior.class)
                 .vanillaBlock(VanillaBlockId.TALL_GRASS)
                 .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
                 .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
                 .build();
     }
@@ -715,7 +712,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockLargeFernBehavior.class)
                 .vanillaBlock(VanillaBlockId.LARGE_FERN)
                 .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
                 .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
                 .build();
     }
@@ -726,7 +722,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockRoseBushBehavior.class)
                 .vanillaBlock(VanillaBlockId.ROSE_BUSH)
                 .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
                 .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
                 .build();
     }
@@ -737,7 +732,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockPeonyBehavior.class)
                 .vanillaBlock(VanillaBlockId.PEONY)
                 .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
                 .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
                 .build();
     }
@@ -748,7 +742,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockSunflowerBehavior.class)
                 .vanillaBlock(VanillaBlockId.SUNFLOWER)
                 .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
                 .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
                 .build();
     }
