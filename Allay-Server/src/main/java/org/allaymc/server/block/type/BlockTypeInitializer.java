@@ -3,13 +3,7 @@ package org.allaymc.server.block.type;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.interfaces.glass.BlockGlassBehavior;
 import org.allaymc.api.block.interfaces.stairs.*;
-import org.allaymc.api.block.interfaces.torch.BlockColoredTorchBpBehavior;
-import org.allaymc.api.block.interfaces.torch.BlockColoredTorchRgBehavior;
-import org.allaymc.api.block.interfaces.torch.BlockRedstoneTorchBehavior;
-import org.allaymc.api.block.interfaces.torch.BlockSoulTorchBehavior;
-import org.allaymc.api.block.interfaces.torch.BlockTorchBehavior;
-import org.allaymc.api.block.interfaces.torch.BlockUnderwaterTorchBehavior;
-import org.allaymc.api.block.interfaces.torch.BlockUnlitRedstoneTorchBehavior;
+import org.allaymc.api.block.interfaces.torch.*;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
@@ -20,7 +14,6 @@ import org.allaymc.server.block.component.barrel.BlockBarrelBaseComponentImpl;
 import org.allaymc.server.block.component.chest.BlockChestBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
 import org.allaymc.server.block.component.craftingtable.BlockCraftingTableBaseComponentImpl;
-import org.allaymc.server.block.component.doubleplant.BlockDoublePlantBaseComponentImpl;
 import org.allaymc.server.block.component.glass.BlockGlassBaseComponentImpl;
 import org.allaymc.server.block.component.grassblock.BlockGrassBlockBaseComponentImpl;
 import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
@@ -41,21 +34,11 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static void initTallgrass() {
-        BlockTypes.TALLGRASS_TYPE = BlockTypeBuilder
-                .builder(BlockTallgrassBehavior.class)
-                .vanillaBlock(VanillaBlockId.TALLGRASS)
-                .setProperties(VanillaBlockPropertyTypes.TALL_GRASS_TYPE)
+    public static void initTallGrass() {
+        BlockTypes.TALL_GRASS_TYPE = BlockTypeBuilder
+                .builder(BlockTallGrassBehavior.class)
+                .vanillaBlock(VanillaBlockId.TALL_GRASS)
                 .setBlockBaseComponentSupplier(BlockTallgrassBaseComponentImpl::new)
-                .build();
-    }
-
-    public static void initDoublePlant() {
-        BlockTypes.DOUBLE_PLANT_TYPE = BlockTypeBuilder
-                .builder(BlockDoublePlantBehavior.class)
-                .vanillaBlock(VanillaBlockId.DOUBLE_PLANT)
-                .setProperties(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
                 .build();
     }
 

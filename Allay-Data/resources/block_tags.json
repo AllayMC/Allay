@@ -134,10 +134,15 @@
         "minecraft:oak_sapling",
         "minecraft:pitcher_plant",
         "minecraft:spruce_sapling",
-        "minecraft:double_plant",
+        "minecraft:sunflower",
+        "minecraft:rose_bush",
         "minecraft:jungle_sapling",
         "minecraft:acacia_sapling",
-        "minecraft:birch_sapling"
+        "minecraft:tall_grass",
+        "minecraft:large_fern",
+        "minecraft:lilac",
+        "minecraft:birch_sapling",
+        "minecraft:peony"
     ],
     "pumpkin": [
         "minecraft:pumpkin",
@@ -164,6 +169,7 @@
         "minecraft:granite",
         "minecraft:diorite",
         "minecraft:mossy_cobblestone",
+        "minecraft:sandstone_slab",
         "minecraft:polished_granite",
         "minecraft:stone_button",
         "minecraft:andesite",
@@ -173,10 +179,16 @@
         "minecraft:cobblestone",
         "minecraft:stone_stairs",
         "minecraft:stone_pressure_plate",
-        "minecraft:stone_block_slab",
+        "minecraft:cobblestone_slab",
         "minecraft:brick_block",
         "minecraft:polished_diorite",
+        "minecraft:nether_brick_slab",
+        "minecraft:stone_brick_slab",
         "minecraft:double_stone_block_slab",
+        "minecraft:quartz_slab",
+        "minecraft:petrified_oak_slab",
+        "minecraft:brick_slab",
+        "minecraft:smooth_stone_slab",
         "minecraft:polished_andesite"
     ],
     "stone_pick_diggable": [

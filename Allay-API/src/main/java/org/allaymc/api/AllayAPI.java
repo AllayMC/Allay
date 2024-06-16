@@ -176,7 +176,7 @@ public final class AllayAPI {
         requireImpl(VanillaBlockAttributeRegistry.class, VanillaBlockAttributeRegistry.REGISTRY::set);
         requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
         requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
-
+        
         // Entity
         requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);

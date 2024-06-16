@@ -148,7 +148,6 @@ accessibility.settings.chooseSeed=Elegir semilla	#
 
 accessibility.start.feedback=Enviar enlace de comentarios al sitio web	#
 accessibility.start.new=Nuevo	#
-accessibility.start.profile=Elegir perfil	#
 accessibility.start.skinPicker=Elegir aspecto	#
 
 accessibility.store.tag=Etiqueta	#
@@ -409,6 +408,10 @@ action.interact.read=Leer	#
 action.interact.wakevillager=Despertar aldeano	#
 action.interact.barter=Negociar	#
 action.interact.use=Usar objeto	#
+action.interact.brush=Pincel	#
+action.interact.equipwolfarmor=Equipar armadura para lobo	#
+action.interact.removewolfarmor=Quitar armadura para lobo	#
+action.interact.repairwolfarmor=Reparar armadura de lobo	#
 
 advMode.allEntities=@e = todas las entidades	#
 advMode.allPlayers=@a = todos los jugadores	#
@@ -421,6 +424,7 @@ advMode.randomPlayer=@r = jugador al azar	#
 advMode.self=@s = tú mismo	#
 advMode.setCommand=Establecer comando de consola para bloque	#
 advMode.setCommand.success=Comando establecido: %s	#
+advMode.command.charLimitExceeded=La entrada ingresada supera los 500 caracteres. No se puede abrir la entrada del teclado en este tipo de dispositivo.	#
 
 apple.iCloudDisabled.title=¡No pierdas tus mundos!	#
 apple.iCloudDisabled.message=Tus mundos no se están guardando como deberían. Puede que desaparezcan la próxima vez que juegues a Minecraft. Ve a la configuración de Apple TV y activa iCloud para asegurarte de que se guarden.	#
@@ -1089,10 +1093,6 @@ commands.me.description=Muestra un mensaje acerca de ti.	#
 commands.message.display.incoming=%1$s te susurró: %2$s.	#
 commands.message.display.outgoing=Susurraste a %1$s: %2$s.	#
 commands.message.sameTarget=¡No puedes enviarte un mensaje privado a ti mismo!	#
-commands.message.warn=§4Te enviaron un aviso. Puede que a otros jugadores tu comportamiento les parezca ofensivo. Ten en cuenta a los demás jugadores.	#
-commands.message.toastWarn=¡Minecraft es para todo el mundo! No olvides comportarte según los estándares de la comunidad.	#
-commands.warn.invalidWarningLevel=Nivel de aviso no válido.	#
-commands.warn.playerDoesNotExist=No se encontró al jugador. Selecciona un jugador válido.	#
 
 commands.mobevent.description=Controla qué eventos de criatura pueden ejecutarse.	#
 commands.mobevent.eventsEnabledSetToTrue=Los eventos de criaturas ahora están habilitados y los eventos individuales que están configurados como falsos no se ejecutarán.	#
@@ -1497,7 +1497,6 @@ commands.volumearea.entry.withIdentifier=- %s: %s de %d %d %d a %d %d %d	#
 commands.volumearea.entry.withoutIdentifier=- %s: de %d %d %d a %d %d %d	#
 commands.volumearea.noneExist.currentDimension=No existe ningún volumen en la dimensión actual.	#
 commands.volumearea.inUse=%1$d/%2$d volúmenes en uso.	#
-commands.warn.description=Envía un mensaje de aviso al jugador.	#
 commands.weather.clear=Cambiando a clima despejado	#
 commands.weather.description=Establece el clima.	#
 commands.weather.disabled=El ciclo atmosférico no está habilitado en este mundo.	#
@@ -1567,6 +1566,7 @@ container.beacon=Faro	#
 container.brewing=Puesto de destilado	#
 container.chest=Cofre	#
 container.chestDouble=Cofre grande	#
+container.crafter=Fabricante	#
 container.crafting=Fabricar	#
 container.creative=Selección de objetos	#
 container.dispenser=Dispensador	#
@@ -1882,8 +1882,6 @@ createWorldScreen.cavesandcliffs=Cuevas y acantilados	#
 createWorldScreen.cavesandcliffsDescription=Explora la generación de cuevas nueva y variada	#
 createWorldScreen.spectatorMode=Modo espectador	#
 createWorldScreen.spectatorModeDescription=Prueba las primeras versiones del modo espectador	#
-createWorldScreen.experimentalCameras=Cámaras experimentales	#
-createWorldScreen.experimentalCamerasDescription=Incluye ejemplos de preajustes de cámara (el comando de la cámara ya no es experimental)	#
 createWorldScreen.recipeUnlocking=Desbloqueo de recetas	#
 createWorldScreen.recipeUnlockingDescription=Habilitar desbloqueo de recetas	#
 createWorldScreen.experimentalholiday=Funciones del creador de días festivos	#
@@ -1910,6 +1908,8 @@ createWorldScreen.delete.confirm=¿Quieres borrar el mundo para siempre?	#
 createWorldScreen.deleteWarningFormat=¿Quieres eliminar "%s"? ¡Perderás este mundo para siempre! (¡Es muchísimo tiempo!)	#
 createWorldScreen.editTitleFormat=Editar "%s"	#
 createWorldScreen.game.settings=Configuración del juego	#
+createWorldScreen.hardcoreActive=Algunos ajustes están desactivados porque seleccionaste el modo extremo cuando creaste este mundo.	#
+createWorldScreen.isHardcore=Modo extremo	#
 createWorldScreen.gameMode=Modo de juego	#
 createWorldScreen.gameMode.default=Modo de juego predeterminado	#
 createWorldScreen.gameMode.personal=Modo de juego personal	#
@@ -1935,6 +1935,7 @@ createWorldScreen.progress.local=Creando mundo nuevo...	#
 createWorldScreen.progress.realms=Restableciendo el Realm...	#
 createWorldScreen.seed.desc=Ingresa una semilla para generar otra vez el mismo terreno. Déjalo en blanco si prefieres un mundo aleatorio.	#
 createWorldScreen.showCoordinates=Mostrar coordenadas	#
+createWorldScreen.showDaysPlayed=Mostrar días jugados	#
 createWorldScreen.worldType=Tipo de mundo	#
 createWorldScreen.randomtickspeed=Velocidad de marca aleatoria	#
 createWorldScreen.randomtickspeed.reset=Restablecimiento de velocidad de marca aleatoria	#
@@ -1956,6 +1957,10 @@ createWorldScreen.editor.deleteProject=Eliminar proyecto	#
 createWorldScreen.editor.projectOptionsLabel=Opciones de proyecto	#
 createWorldScreen.editor.delete.confirm=¿Eliminar el proyecto de forma permanente?	#
 createWorldScreen.editor.deleteWarningFormat=¿Realmente quieres eliminar "%s"? ¡Este proyecto se perderá para siempre!	#
+createWorldScreen.eduCloud.about.body=Nombre de archivo: «%1$s»%2$sÚltima actualización: %3$s%4$sPara descargar, haz clic en Aceptar y luego en Descargar.%5$s	#
+createWorldScreen.eduCloud.about.title=Acerca del archivo de Mundo en la nube	#
+createWorldScreen.eduCloud.delete.confirm=¿Eliminar mundo local?	#
+createWorldScreen.eduCloud.deleteWarningFormat=¿Seguro que quieres eliminar ''%1$s'' en este dispositivo? %2$sLa versión en la nube ''%3$s'' no se verá afectada y podrás volver a sincronizarla más tarde.	#
 createWorldScreen.experimentalDeferredTechnicalPreview=Renderizar características de dragón para creadores	#
 createWorldScreen.experimentalDeferredTechnicalPreviewDescription=Activar el canal de renderizado diferido. Requiere un pack de recursos con PBR activada y un hardware compatible.	#
 
@@ -2365,8 +2370,8 @@ realmsSettingsScreen.windowsStoreDisplayName=Tienda Windows	#
 realmsSettingsScreen.xboxOneStoreDisplayName=Tienda Xbox	#
 realmsSettingsScreen.amazonStoreDisplayName=Amazon Appstore	#
 realmsSettingsScreen.oculusStoreDisplayName=Tienda Oculus	#
-realmsSettingsScreen.berwickStoreDisplayName="PlayStation Store"	#
-realmsSettingsScreen.SonyStoreDisplayName=\"PlayStation Store\"	 	#### CertRequirement: ["PlayStation Store"]
+realmsSettingsScreen.berwickStoreDisplayName=PlayStation®Store		#### CertRequirement: [PlayStation®Store]
+realmsSettingsScreen.SonyStoreDisplayName=PlayStation®Store	 	#### CertRequirement: [PlayStation®Store]
 realmsSettingsScreen.unknownStoreDisplayName=tienda desconocida	#
 realmsSettingsScreen.extendingRealm=Extendiendo Realm...	#
 realmsSettingsScreen.offerError.title=Compra pendiente	#
@@ -2417,7 +2422,6 @@ xbl.syncIAP.confirmSync.prompt.description.line2=Los packs comprados fuera del M
 xbl.syncIAP.confirmSync.prompt.yes=Sí, sincronizar mis compras	#
 
 xbl.marketplace.account.error.body.nobutton=Hay un error con tu cuenta. No podrás usar el Mercado hasta que resolvamos este inconveniente. Si el problema continúa durante varios días, ponte en contacto con el servicio de soporte.	#
-xbl.marketplace.account.banned.body.nobutton=No puedes utilizar el mercado hasta que termine tu suspensión.	#
 
 playfab.account.banned.temporary=suspendido	#
 playfab.account.banned.permanent=Bloqueado	#
@@ -2478,6 +2482,14 @@ date.daysAbbreviated1Char=%sd		### It needs to be abbreviated with no more than 
 date.hoursAbbreviated1Char=%sh		### It needs to be abbreviated with no more than 1 characters
 date.minutesAbbreviated1Char=%sm		### It needs to be abbreviated with no more than 1 characters
 date.secondsAbbreviated1Char=%ss		### It needs to be abbreviated with no more than 1 characters
+date.daysPlural=%s días	#
+date.hoursPlural=%s horas	#
+date.minutesPlural=%s minutos	#
+date.secondsPlural=%s segundos	#
+date.daySingular=%s día	#
+date.hourSingular=%s hora	#
+date.minuteSingular=%s minuto	#
+date.secondSingular=%s segundo	#
 date.timeLeft=%s restantes	#
 
 dayOneExperience.carousel.title=¡Te damos la bienvenida a New Minecraft!	#
@@ -2758,13 +2770,16 @@ edu.worlds_screen.search_placeholder=Buscar en Mis mundos	#
 edu.worlds_screen.play=JUGAR	#
 edu.worlds_screen.host=ANFITRIÓN	#
 edu.worlds_screen.settings=CONFIGURACIÓN	#
+edu.worlds_screen.download=DESCARGAR 	### It needs to be localized in its verb form, not as a noun
 edu.worlds_screen.manage=ADMINISTRAR	#
+edu.worlds_screen.about=ACERCA DE	#
 edu.worlds_screen.back=ATRÁS	#
 edu.worlds_screen.copy=COPIAR	#
 edu.worlds_screen.export=EXPORTAR	#
 edu.worlds_screen.share=COMPARTIR	#
 edu.worlds_screen.delete=ELIMINAR	#
 edu.worlds_screen.courses_title=Mis cursos	#
+edu.worlds_screen.fetch_error=Hubo un error al conectarse a OneDrive. Puede ser que los mundos guardados en la nube no estén actualizados. Revisa tu conexión a internet.	#
 
 edu.templates.title=Mis plantillas	#
 edu.templates.search_placeholder=Buscar en Mis plantillas	#
@@ -2780,7 +2795,13 @@ edu.templates.empty_banner=Puedes conseguir plantillas de mundos en la bibliotec
 edu.pause.multiplayer.disabled=El modo multijugador no está disponible para esta clase.	#
 
 effect.badOmen=Mal presagio	#
+effect.infested=Infestado	#
+effect.oozing=Exudación	#
+effect.raid_omen=Presagio de asalto	#
+effect.trial_omen=Presagio de prueba	#
 effect.villageHero=Héroe de la aldea	#
+effect.weaving=Tejer	#
+effect.wind_charged=Carga ventosa	#
 
 enchantment.arrowDamage=Poder	#
 enchantment.arrowFire=Llama	#
@@ -2799,6 +2820,9 @@ enchantment.durability=Irrompibilidad	#
 enchantment.fire=Aspecto de fuego	#
 enchantment.fishingSpeed=Señuelo	#
 enchantment.frostwalker=Paso helado	#
+enchantment.heavy_weapon.breach=Invasión	#
+enchantment.heavy_weapon.density=Densidad	#
+enchantment.heavy_weapon.windburst=Ráfaga ventosa	#
 enchantment.knockback=Empuje	#
 enchantment.level.1=I	#
 enchantment.level.10=X	#
@@ -2832,12 +2856,16 @@ enchantment.tridentRiptide=Aguas revueltas	#
 enchantment.tridentImpaling=Empalamiento	#
 
 entity.area_effect_cloud.name=Nube de efecto de área	#
+entity.armadillo.name=Armadillo	#
 entity.armor_stand.name=Soporte para armaduras	#
 entity.arrow.name=Flecha	#
 entity.bat.name=Murciélago	#
 entity.bee.name=Abeja	#
 entity.blaze.name=Blaze	#
 entity.boat.name=Bote	#
+entity.bogged.name=Empantanado	#
+entity.breeze.name=Brisa	#
+entity.breeze_wind_charge_projectile.name=Carga ventosa	#
 entity.cat.name=Gato	#
 entity.cave_spider.name=Araña de las cuevas	#
 entity.chicken.name=Gallina	#
@@ -2945,6 +2973,7 @@ entity.villager.unskilled=Aldeano sin habilidades	#
 entity.villager_v2.name=Aldeano	#
 entity.vindicator.name=Vindicador	#
 entity.wandering_trader.name=Comerciante errante	#
+entity.wind_charge_projectile.name=Carga ventosa	#
 entity.witch.name=Bruja	#
 entity.wither.name=Wither	#
 entity.wither_skeleton.name=Esqueleto de Wither	#
@@ -2997,6 +3026,7 @@ feature.ruins=Ruinas del océano	#
 feature.pillager_outpost=Puesto de vigilancia de saqueador	#
 feature.bastion_remnant=Restos del bastión	#
 feature.ruined_portal=Portal arruinado	#
+feature.trial_chambers=Cámara de desafíos	#
 
 feed.like=Me gusta	#
 feed.manage_feed=Gestionar fuentes	#
@@ -3023,6 +3053,7 @@ feed.upload=Cargando captura de pantalla...	#
 feed.manage=Gestionar fuentes	#
 feed.share=Compartir	#
 feed.addScreenshot=Agregar captura de pantalla	#
+feed.shareScreenshot=Hiciste una captura de pantalla. Entra a Historias de Realms para compartirla.	#
 feed.comments=Comentarios	#
 feed.edit=Editar	#
 feed.screenshots=Capturas de pantalla	#
@@ -3079,9 +3110,20 @@ gameTip.playerMovement.touch=Muévete con la palanca de juego	#
 gameTip.playerMovement.touch.classic=Muévete con la palanca de juego	#
 gameTip.playerMovement.controller=Mueve :tip_left_stick: para moverte a tu alrededor	#
 
-gameTip.hotbar.mouse=Desplaza la rueda del ratón para seleccionar # en la barra activa y mantén la selección	#
-gameTip.hotbar.touch=Toca # en la barra activa para mantenerlo	#
-gameTip.hotbar.controller=Toca # en la barra activa para mantenerlo	#
+gameTip.flying.mouse=Toca :_input_key.jump: dos veces para volar	#
+gameTip.flying.touch=Toca salto dos veces para volar	#
+
+gameTip.flyDown.mouse=Presiona :_input_key.sneak: para volar hacia abajo	#
+gameTip.flyUp.mouse=Presiona :_input_key.jump: para volar hacia arriba	#
+
+gameTip.stopFlying.mouse=Toca :_input_key.jump: dos veces para detener el vuelo	#
+gameTip.stopFlying.touch=Toca Volar hacia abajo dos veces para detener el vuelo	#
+
+gameTip.jump.mouse=Salta con :_input_key.jump:	#
+gameTip.swim.mouse=Mantén presionado :_input_key.jump: para nadar hacia arriba	#
+
+gameTip.hotbar.selection.mouse=Usa la rueda del ratón o presiona %s para tomar un objeto    	### The added string will be a number between 1 and 9
+gameTip.hotbar.selection.touch=Toca un objeto de la barra de acceso rápido para tomarlo	#
 
 gameTip.breakBlock.mouse=Mantén presionado el botón izquierdo para romper bloques	#
 gameTip.breakBlock.touch=Toca y mantén para romper bloques	#
@@ -3102,12 +3144,13 @@ gameTip.openInventoryCreative.mouse=Abrir tu inventario[LINEBREAK]Presiona :_inp
 gameTip.openInventoryCreative.touch=Abre el inventario para ver los bloques de construcción	#
 gameTip.openInventoryCreative.controller=Presiona :_input_key.inventory: para abrir tu inventario	#
 
+gameTip.useSneak.mouse=¡Mantén :_input_key.sneak: para agacharte[LINEBREAK]Así no podrás caerte de los bordes		#
 
 gameTip.sneak.mouse=¡Vas agachado! Ahora no puedes caerte por los bordes.	#
 gameTip.sneak.touch=Vas agachado, así que no puedes caerte por los bordes	#
 gameTip.sneak.controller=Vas agachado, así que no puedes caerte por los bordes	#
 
-gameTip.placeCraftingTable.mouse=Coloca tu mesa de fabricación[LINEBREAK]Sostenla y haz clic para colocarla		#### {StrContains='LINEBREAK'}
+gameTip.placeCraftingTable.mouse=Coloca tu mesa de trabajo. Sostenla y haz clic para colocarla	#
 gameTip.placeCraftingTable.touch=Toca el suelo para colocar tu mesa de trabajo	#
 gameTip.placeCraftingTable.controller=Coloca tu mesa de trabajo, mantenla presionada y, luego, toca el suelo	#
 
@@ -3206,6 +3249,7 @@ gui.submitFeedback.success=¡Gracias por dejar tu reseña!	#
 gui.submitFeedback.failure.status.unprocessableEntity=No adquiriste el artículo sobre el que quieres dejar comentarios. (Código de error: %d)	#
 gui.submitFeedback.failure.status.tooManyRequests=¡Oh, no! Enviaste demasiadas reseñas; vuelve a intentarlo más tarde. (Código de error: %d)	#
 gui.submitFeedback.failure.status.other=No es posible enviar tu reseña en este momento; vuelve a intentarlo más tarde. (Código de error: %d)	#
+gui.togglable_slot=Presiona para desactivar la ranura	#
 gui.playOffline=Jugar sin conexión	#
 gui.signIn=Iniciar sesión	#
 gui.genericNetworkError=Algo salió mal. Revisa tu conexión a internet.	#
@@ -3255,11 +3299,22 @@ howtoplay.category.gettingSettled=Adaptación	#
 howtoplay.category.gettingStarted=Primeros pasos	#
 howtoplay.category.overworld=Mundo principal A-Z	#
 howtoplay.category.preparingForTheNight=Prepararse para la noche	#
+howtoplay.category.realms=Realms	#
 howtoplay.category.redstoneEngineering=Ingeniería de redstone	#
 howtoplay.category.standsAndTables=Soportes y mesas	#
 howtoplay.category.survivingTheFirstNight=Sobrevivir a la primera noche	#
 howtoplay.category.theEndDimension=La dimensión del End	#
 howtoplay.category.optionsAndCheats=Opciones y trucos	#
+howtoplay.category.marketplace=Marketplace	#
+
+howtoplay.addons=Complementos	#
+howtoplay.addons.text.1=Los complementos son un tipo de contenido disponible en el Marketplace de Minecraft con el que podrás agregar bloques, objetos, criaturas, recetas y demás contenido del juego a tu mundo.	#
+howtoplay.addons.text.2=Los complementos te permiten modificar tus mundos y Realms a través de las pantallas ''Editar mundo'' y ''Crear nuevo mundo''.	#
+howtoplay.addons.header.1=Acumular complementos	#
+howtoplay.addons.text.3=Acumular o añadir varios complementos puede aumentar los tiempos de carga y podría tener consecuencias inesperadas.	#
+howtoplay.addons.text.4=Te recomendamos que guardes una copia de tu mundo o Realm antes de añadir o eliminar complementos. 	#
+howtoplay.addons.text.5=Para obtener más información sobre cómo aprovechar al máximo los complementos, visita nuestra página de preguntas frecuentes.	#
+howtoplay.addons.button.text.1=Preguntas frecuentes de complementos	#
 
 howtoplay.adventureMode=Modo Aventura	#
 howtoplay.adventureMode.text.1=El modo Aventura es un modo de juego para creadores de mundos. En el modo Aventura, los jugadores tienen que usar herramientas especiales para colocar o romper bloques.	#
@@ -3715,7 +3770,7 @@ howtoplay.inventory.text.1.pc_console=Tu barra activa se irá llenando a medida 
 howtoplay.inventory.text.1.touch=Tu barra activa se irá llenando a medida que consigas más recursos. Toca el botón :tip_touch_inventory: para acceder a tu §einventario§f, donde tendrás más espacio para almacenar todo lo que hayas recogido.	#
 howtoplay.inventory.text.1.rift=Tu barra activa se irá llenando a medida que consigas más recursos. Presiona el botón :rift_B: para acceder a tu §einventario§f, donde tendrás más espacio para almacenar todo lo que hayas recogido.	#
 howtoplay.inventory.text.1.windowsmr=Tu barra activa se irá llenando a medida que consigas más recursos. Pulsa el botón :windowsmr_left_grab: para acceder a tu §einventario§f, donde tendrás más espacio para almacenar todo lo que hayas recogido.	#
-howtoplay.inventory.text.2.keyboard=¿Quieres mover algo de tu §hbarra activa§f a tu inventario? Abre el inventario, haz clic en el objeto que desees y arrástralo hasta el espacio vacío al que quieras moverlo.	#
+howtoplay.inventory.text.2.keyboard=¿Deseas mover algo de tu §ebarra activa§f a tu inventario? Abre el inventario, haz clic en el objeto que desees y arrástralo hasta el espacio vacío al que quieras moverlo.	#
 howtoplay.inventory.text.2.gamepad=¿Quieres mover algo de tu §hbarra activa§f a tu inventario? Usa el cursor para seleccionar un objeto y presiona :_gamepad_face_button_down:. Después, mueve el cursor hasta un espacio vacío y presiona de nuevo para soltar el objeto.	#
 howtoplay.inventory.text.2.touch=¿Quieres mover algo de tu §hbarra activa§f a tu inventario? Toca el objeto que desees y luego el espacio vacío al que quieras moverlo.	#
 howtoplay.inventory.text.2.vr=¿Quieres mover algo de tu §hbarra activa§f a tu inventario? Usa el cursor para seleccionar un objeto y presiona :_input_key.use:. Después, mueve el cursor a un espacio de objetos vacío y vuelve a presionar para soltarlo.	#
@@ -3741,6 +3796,17 @@ howtoplay.loom.text.2=Si colocas un estandarte en la primera ranura del telar y 
 howtoplay.loom.text.3=Un estandarte puede tener varias capas, lo que te permite experimentar con muchas posibilidades diferentes. Se pueden aplicar hasta 6 patrones a un estandarte para crear un diseño único.	#
 howtoplay.loom.header.2=Patrones del telar	#
 howtoplay.loom.text.4=Al agregar un patrón de telar a la tercera casilla del telar, podrás crear patrones especiales, como una cara de creeper o un diseño de flores. No perderás los patrones del telar cuando apliques estos patrones a tus estandartes.	#
+
+howtoplay.mashups=Popurrís	#
+howtoplay.mashups.text.1=¡Explora emocionantes mundos temáticos con aspectos y texturas a juego y mucho más!	#
+
+howtoplay.minecoins=Minecoins	#
+howtoplay.minecoins.text.1=¡Explora un mundo de posibilidades con las minecoins, la moneda de Minecraft! Las minecoins te permiten agregar variedad al juego en los juegos compatibles de Minecraft.	#
+howtoplay.minecoins.text.2=¡Al canjearlas, tus minecoins estarán vinculadas a tu cuenta de Microsoft para que puedas acceder a tus monedas y compras en otros dispositivos compatibles!	#
+howtoplay.minecoins.button.text.1=Conseguir Minecoins	#
+howtoplay.minecoins.header.1=Aviso legal	#
+howtoplay.minecoins.text.3=* Las minecoins requieren una versión de Minecraft: Bedrock Edition con el Mercado de Minecraft. Las minecoins no son compatibles con PlayStation® de Sony. Para obtener información sobre compatibilidad, visita minecraft.net/minecoins  	#### CertRequirement: [Sony PlayStation®]
+
 
 howtoplay.mining=Minería	#
 howtoplay.mining.title=Cómo se juega: minería	#
@@ -3785,6 +3851,7 @@ howtoplay.movingAround.text.2.windowsmr_controller=Mira a tu alrededor con :wind
 howtoplay.movingAround.text.3a.keyboard=Muévete por el mundo con :_input_key.forward:, :_input_key.left:, :_input_key.back: y :_input_key.right:.	#
 howtoplay.movingAround.text.3b.keyboard=Presiona :_input_key.jump: para saltar.	#
 howtoplay.movingAround.text.3.gamepad=Muévete por el mundo con :_gamepad_stick_left:.	#
+howtoplay.movingAround.text.3b.gamepad=Pulsa :_input_key.jump: para saltar.	#
 howtoplay.movingAround.text.3.touch.joystick_tap=Muévete por el mundo con el joystick de la pantalla :tip_virtual_joystick:.	#
 howtoplay.movingAround.text.3a.touch.classic_dpad=Muévete por el mundo usando los botones de la pantalla.	#
 howtoplay.movingAround.text.3b.touch.classic_dpad=:touch_forward: avanzar	#
@@ -3907,6 +3974,20 @@ howtoplay.redstone.text.3=Coloca polvo de redstone junto a una fuente de poder y
 howtoplay.redstone.text.4=Hay muchos objetos que usan una señal de redstone para hacer algo, como una tolva o un pistón.	#
 howtoplay.redstone.text.5=La redstone te ofrece posibilidades infinitas. ¡Intenta crear algo útil, como una granja automática!	#
 
+howtoplay.realms_stories=Historias de Realms	#
+howtoplay.realms_stories.text.1=Un centro de reunión para ti y todos los miembros del Realm. Publica en la sección de historias para compartir tus aventuras y tus creaciones. También puedes dar Me gusta y dejar comentarios para celebrar las publicaciones de otros miembros.	#
+howtoplay.realms_stories.header.1=Cuenta tu historia	#
+howtoplay.realms_stories.text.2=Haz clic en el botón Añadir historia para comenzar a publicar. ¡Puedes incluir una captura de pantalla, texto o ambos! Haz clic en Publicar para compartir tu texto o tu captura de pantalla en la sección de historias para que todos los miembros del Realm la disfruten. Si no tienes ninguna captura de pantalla que publicar, puedes usar la §ecámara§f:camera: del menú del juego para captar el momento.	#
+howtoplay.realms_stories.header.2=Mantente al día	#
+howtoplay.realms_stories.text.3=Cuando haya una nueva historia nueva en la sección, aparecerá un número sobre el botón Historias de Realms. Así siempre sabrás si tienes cosas nuevas que leer por parte de la comunidad de tu Realm. ¡Si te gusta lo que alguien compartió, no olvides dejarle un Me gusta, o un comentario en su historia!	#
+howtoplay.realms_stories.header.3=Organiza tu partida	#
+howtoplay.realms_stories.text.4=La línea del tiempo te ayuda saber quién está jugando en cada momento. Ahí podrás ver la última fecha de conexión y con quién jugó cada miembro. Esta información te servirá para organizar sesiones de juego compartidas.	#
+howtoplay.realms_stories.header.4=Ver quién está en el Realm	#
+howtoplay.realms_stories.text.5=La pestaña Miembros contiene una lista de todos los jugadores que forman parte de tu Realm. Así sabrás a quién le pertenece el Realm, quiénes son los operadores y quién se ha unido a las historias. Hay opciones de búsqueda, organización y filtros para ayudarte a navegar esta información.	#
+howtoplay.realms_stories.header.5=Conéctate desde cualquier lugar	#
+howtoplay.realms_stories.text.6=Puedes acceder a la sección Historias de Realms desde el menú del juego en el Realm y en la pestaña de Realms. Esto te permitirá estar al día y contar tu historia estés donde estés, incluso si no estás jugando. Podrás acceder a las historias desde tu consola, tu computadora o tu dispositivo móvil.	#
+
+
 howtoplay.scaffolding=Andamios	#
 howtoplay.scaffolding.header.1=Alcanza el cielo	#
 howtoplay.scaffolding.text.1.keyboard=¡Los andamios pueden ayudarte a crear estructuras grandes sin problemas! Puedes caminar y pararte sobre los andamios. Si tienes una columna de andamios, colócate en el andamio y presiona el botón :_input_key.jump: para subir. Presiona y mantén presionado el botón :_input_key.sneak: para bajar.	#
@@ -3920,6 +4001,9 @@ howtoplay.scaffolding.header.2=Apoya tu construcción	#
 howtoplay.scaffolding.text.2=Los andamios necesita apoyo. Solo puedes colocar un número limitado de andamios horizontalmente sin tocar un bloque diferente. Cuando intentes colocar demasiados bloques de andamios sin el apoyo adecuado, se caerán. Puedes colocar los andamios como los bloques normales, pero también puedes colocarlos sobre sus propia base para construir rápidamente una torre alta.	#
 howtoplay.scaffolding.header.3=Derríbalo	#
 howtoplay.scaffolding.text.3=Cuando se rompe el andamio, también se rompen todos los bloques de andamios que estaban siendo soportados por él. ¡Podrás eliminar rápidamente tus andamios al romper los bloques de soporte!	#
+
+howtoplay.skins=Aspectos	#
+howtoplay.skins.text.1=Ponte unos píxeles nuevos y exprésate con una gran variedad de estilos inspirados.	#
 
 howtoplay.structureBlocks=Bloques de estructura	#
 howtoplay.structureBlocks.text.1=Los bloques de estructura ofrecen a los creadores la capacidad de copiar y guardar secciones de su mundo en estructuras. Después, las estructuras guardadas se pueden volver a pegar en el mundo.		###
@@ -3966,6 +4050,9 @@ howtoplay.theEnd.header.1=El otro lado	#
 howtoplay.theEnd.text.3=Cuando el portal esté activo, salta dentro para ir al End.	#
 howtoplay.theEnd.text.4=El End es el hogar de la terrorífica dragona de Ender. Es una enemiga imponente y feroz que al parecer obtiene su poder de unos extraños cristales. Su aliento y sus ataques de bolas de fuego dejan ácido persistente en el campo de batalla. ¡Intenta enfrentarte a ella con algunos amigos para asegurar la victoria!	#
 howtoplay.theEnd.text.5=Una vez no es suficiente: agrega cuatro cristales de Ender en las esquinas del portal de salida para volver a despertar a la dragona de Ender.	#
+
+howtoplay.textures=Texturas	#
+howtoplay.textures.text.1=Los packs de texturas transforman la apariencia del juego y le dan una buena mano de pintura a tu mundo de Minecraft.	#
 
 howtoplay.tools=Herramientas	#
 howtoplay.tools.text.1=En Minecraft, hay muchas herramientas con las que puedes perforar bloques más rápido que con el puño, y se pueden fabricar con madera, piedra, hierro, oro, diamante o inframundita.	#
@@ -4032,6 +4119,24 @@ howtoplay.weapons.text.6.touch=El tridente es tanto un arma de ataque a distanci
 howtoplay.weapons.header.5=Armas encantadas	#
 howtoplay.weapons.text.7=¡Las espadas, los arcos, las ballestas y los tridentes tienen encantamientos específicos que puedes obtener desde la mesa de encantamientos o el yunque, y que mejorarán el daño, la durabilidad e incluso prenderán fuego a las criaturas!	#
 
+howtoplay.worlds=Mundos	#
+howtoplay.worlds.text.1=Mundos de los niveles del Marketplace de Minecraft donde nuestros socios alteraron el terreno y colocaron nuevos bloques para crear estructuras y superficies increíbles que puedes explorar y disfrutar.	#
+howtoplay.worlds.text.2=Los mundos también pueden incluir nuevos objetos, criaturas, bloques e incluso sistemas de juego personalizados.	#
+howtoplay.worlds.text.3=Todo el contenido del Marketplace está desarrollado por nuestros creadores profesionales de la comunidad.	#
+howtoplay.worlds.text.4=Puede haber muchos mundos distintos, por lo que hemos creado varias subcategorías para facilitar sus descripciones:	#
+howtoplay.worlds.header.1=Minijuegos	#
+howtoplay.worlds.text.5=Los minijuegos son mundos más pequeños con nuevas mecánicas, desafíos o reglas de juego.	#
+howtoplay.worlds.text.6=Estos juegos están diseñados con en el modo multijugador en mente: te permitirán poner a prueba tus habilidades y divertirte con tus amigos.	#
+howtoplay.worlds.header.2=Generaciones de supervivencia	#
+howtoplay.worlds.text.7=Las generaciones de supervivencia te permiten empezar a jugar en mundos personalizados mientras disfrutas de las mecánicas de supervivencia clásicas de Minecraft.	#
+howtoplay.worlds.text.8=Al igual que en el modo supervivencia, tendrás salud y hambre y tendrás que luchar contra criaturas peligrosas.	#
+howtoplay.worlds.header.3=Mapas de aventura 	#
+howtoplay.worlds.text.9=Los mapas de aventura te permiten convertir Minecraft en un tipo de juego completamente diferente.	#
+howtoplay.worlds.text.10=En estos mundos, no se pueden romper ni colocar bloques nuevos.	#
+howtoplay.worlds.header.4=Mundos dinámicos	#
+howtoplay.worlds.text.11=Los mundos dinámicos te permiten explorar los diseños creativos de los creadores del Marketplace en un mapa generado de forma aleatoria.	#
+howtoplay.worlds.text.12=Los mundos pueden tener nuevos biomas, estructuras personalizadas (edificios generados de forma aleatoria), nuevos bloques, texturas y criaturas.	#
+
 howtoplay.yourFirstCraft=Tu primera fabricación	#
 howtoplay.yourFirstCraft.title=Cómo se juega: tu primera fabricación	#
 howtoplay.yourFirstCraft.header.1=1. Recuadro de fabricación	#
@@ -4065,7 +4170,7 @@ level.editor.export.failed=Error en la exportación del proyecto	#
 level.editor.import.failed=Error en la importación del proyecto	#
 level.editor.import.failed.incompatibleEdition=Ocurrió un error al importar el proyecto: formato de archivo no compatible	#
 
-inbox.invite.title=Invitación a Realms	#
+inbox.invite.title=Invitación de Realms a	#
 
 invite.clear=Borrar selección	#
 invite.send=Enviar %d invitaciones	#
@@ -4100,6 +4205,7 @@ item.axolotlColorWild.name=Marrón	#
 item.axolotlColorBlue.name=Azul	#
 item.golden_apple.name=Manzana de oro	#
 item.appleEnchanted.name=Manzana encantada	#
+item.armadillo_scute.name=Escama de armadillo	#
 item.armor_stand.name=Soporte para armaduras	#
 item.arrow.name=Flecha	#
 item.tipped_arrow.name=Flecha con punta filosa	#
@@ -4267,6 +4373,22 @@ item.banner.diagonal_up_right.red=Tajado rojo invertido	#
 item.banner.diagonal_up_right.silver=Tajado gris claro invertido	#
 item.banner.diagonal_up_right.white=Tajado blanco invertido	#
 item.banner.diagonal_up_right.yellow=Tajado amarillo invertido	#
+item.banner.flow.black=Flujo negro	#
+item.banner.flow.blue=Flujo azul	#
+item.banner.flow.brown=Flujo marrón	#
+item.banner.flow.cyan=Flujo cian	#
+item.banner.flow.gray=Flujo gris	#
+item.banner.flow.green=Flujo verde	#
+item.banner.flow.lightBlue=Flujo celeste	#
+item.banner.flow.lime=Flujo verde lima	#
+item.banner.flow.magenta=Flujo magenta	#
+item.banner.flow.orange=Flujo naranja	#
+item.banner.flow.pink=Flujo rosa	#
+item.banner.flow.purple=Flujo morado	#
+item.banner.flow.red=Flujo rojo	#
+item.banner.flow.silver=Flujo gris claro	#
+item.banner.flow.white=Flujo blanco	#
+item.banner.flow.yellow=Flujo amarillo	#
 item.banner.flower.black=Figura de flor negra	#
 item.banner.flower.blue=Figura de flor azul	#
 item.banner.flower.brown=Figura de flor marrón	#
@@ -4333,6 +4455,22 @@ item.banner.gradient_up.white=Gradiente blanco en campaña	#
 item.banner.gradient_up.yellow=Gradiente amarillo en campaña	#
 item.banner.gray.name=Estandarte gris	#
 item.banner.green.name=Estandarte verde	#
+item.banner.guster.black=Guster negro	#
+item.banner.guster.blue=Guster azul	#
+item.banner.guster.brown=Guster marrón	#
+item.banner.guster.cyan=Guster cian	#
+item.banner.guster.gray=Guster gris	#
+item.banner.guster.green=Guster verde	#
+item.banner.guster.lightBlue=Guster celeste	#
+item.banner.guster.lime=Guster verde lima	#
+item.banner.guster.magenta=Guster Magenta	#
+item.banner.guster.orange=Guster naranja	#
+item.banner.guster.pink=Guster rosa	#
+item.banner.guster.purple=Guster morado	#
+item.banner.guster.red=Guster rojo	#
+item.banner.guster.silver=Guster gris claro	#
+item.banner.guster.white=Guster blanco	#
+item.banner.guster.yellow=Guster amarillo	#
 item.banner.half_horizontal.black=Cortado negro	#
 item.banner.half_horizontal.blue=Cortado azul	#
 item.banner.half_horizontal.brown=Cortado marrón	#
@@ -4792,6 +4930,7 @@ item.boat.acacia.name=Bote de acacia	#
 item.boat.big_oak.name=Bote de roble oscuro	#
 item.bone.name=Hueso	#
 item.book.name=Libro	#
+item.breeze_rod.name=Vara de vorágine	#
 item.chainmail_boots.name=Botas de malla	#
 item.leather_boots.name=Botas de cuero	#
 item.diamond_boots.name=Botas de diamante	#
@@ -4910,6 +5049,7 @@ item.comparator.name=Comparador de redstone	#
 item.compass.name=Brújula	#
 item.lodestonecompass.name=Brújula de magnetita	#
 item.cookie.name=Galleta	#
+item.copper_door.name=Puerta de cobre	#
 item.crossbow.name=Ballesta	#
 item.diamond.name=Diamante	#
 item.repeater.name=Repetidor de redstone	#
@@ -4957,6 +5097,7 @@ tile.end_rod.name=Vara de End	#
 item.ender_eye.name=Ojo de Ender	#
 item.ender_pearl.name=Perla de Ender	#
 item.experience_bottle.name=Botella de hechizo	#
+item.exposed_copper_door.name=Puerta de cobre expuesto	#
 item.feather.name=Pluma	#
 item.fermented_spider_eye.name=Ojo de araña fermentado	#
 item.fireball.name=Descarga de fuego	#
@@ -5049,6 +5190,7 @@ item.golden_leggings.name=Musleras de oro	#
 item.iron_leggings.name=Musleras de hierro	#
 item.nautilus_shell.name=Concha de Nautilus	#
 item.heart_of_the_sea.name=Corazón del Mar	#
+item.mace.name=Maza	#
 item.magma_cream.name=Crema de magma	#
 item.map.name=Mapa	#
 item.map.exploration.mansion.name=Mapa de explorador del bosque	#
@@ -5062,6 +5204,7 @@ item.map.exploration.village_savanna.name=Mapa de aldea de la sabana	#
 item.map.exploration.village_desert.name=Mapa de aldea del desierto	#
 item.map.exploration.jungle_temple.name=Mapa de explorador de la jungla	#
 item.map.exploration.swamp_hut.name=Mapa de explorador del pantano	#
+item.map.exploration.trial_chambers.name=Mapa de explorador de la prueba	#
 item.melon.name=Sandía	#
 item.milk.name=Leche	#
 item.minecart.name=Vagoneta	#
@@ -5069,12 +5212,18 @@ item.chest_minecart.name=Vagoneta con cofre	#
 item.command_block_minecart.name=Vagoneta con bloque de comandos	#
 item.minecartFurnace.name=Vagoneta con horno	#
 item.hopper_minecart.name=Vagoneta con tolva	#
+item.ominous_bottle.name=Botella ominosa	#
+item.ominous_trial_key.name=Llave de desafío ominosa	#
+item.oxidized_copper_door.name=Puerta de cobre oxidado	#
 item.tnt_minecart.name=Vagoneta con dinamita	#
 item.pitcher_pod.name=Semilla jarra	#
 item.torchflower_seeds.name=Semillas de bastón de emperador	#
 item.spawn_egg.entity.agent.name=Huevo generador de Agent	#
+item.spawn_egg.entity.armadillo.name=Huevo generador de armadillo	#
 item.spawn_egg.entity.axolotl.name=Huevo generador de ajolote	#
 item.spawn_egg.entity.bee.name=Huevo generador de abeja	#
+item.spawn_egg.entity.bogged.name=Huevo generador empantanado	#
+item.spawn_egg.entity.breeze.name=Huevo generador de vorágine	#
 item.spawn_egg.entity.hoglin.name=Huevo generador de hoglin	#
 item.spawn_egg.entity.cat.name=Huevo generador de gato	#
 item.spawn_egg.entity.chicken.name=Huevo generador de gallina	#
@@ -5129,7 +5278,7 @@ item.spawn_egg.entity.zombie_villager.name=Huevo generador de aldeano zombi	#
 item.spawn_egg.entity.zombie_villager_v2.name=Huevo generador de aldeano zombi	#
 item.spawn_egg.entity.witch.name=Huevo generador de bruja	#
 item.spawn_egg.entity.stray.name=Huevo generador de errante	#
-item.spawn_egg.entity.husk.name=Huevo generador de pusilánime	#
+item.spawn_egg.entity.husk.name=Huevo generador de vaina	#
 item.spawn_egg.entity.wither_skeleton.name=Huevo generador de esqueleto de Wither	#
 item.spawn_egg.entity.guardian.name=Huevo generador de guardián	#
 item.spawn_egg.entity.elder_guardian.name=Huevo generador de guardián anciano	#
@@ -5196,6 +5345,9 @@ item.record_ward.desc=C418 - ward	#
 item.record_pigstep.desc=Lena Raine - Pigstep	#
 item.record_otherside.desc=Lena Raine - otherside	#
 item.record_relic.desc=Aaron Cherof - Relic	#
+item.record_creator.desc=Lena Raine: creadora	#
+item.record_creator_music_box.desc=Lena Raine: creadora (caja de música)	#
+item.record_precipice.desc=Aaron Cherof: precipicio	#
 item.redstone.name=Polvo de redstone	#
 item.reeds.name=Cañas de azúcar	#
 item.kelp.name=Alga parda	#
@@ -5242,12 +5394,20 @@ item.iron_sword.name=Espada de hierro	#
 item.stone_sword.name=Espada de piedra	#
 item.wooden_sword.name=Espada de madera	#
 item.unbreakable=Irrompible	#
+item.waxed_copper_door.name=Puerta de cobre encerado	#
+item.waxed_exposed_copper_door.name=Puerta de cobre expuesto y encerado	#
+item.waxed_oxidized_copper_door.name=Puerta de cobre oxidado y encerado	#
+item.waxed_weathered_copper_door.name=Puerta de cobre desgastado y encerado	#
+item.weathered_copper_door.name=Puerta de cobre desgastado	#
+item.wind_charge.name=Carga ventosa	#
 item.wheat.name=Trigo	#
+item.wolf_armor.name=Armadura para lobo	#
 item.writable_book.name=Libro y pluma	#
 item.written_book.name=Libro escrito	#
 item.glowstone_dust.name=Polvo de piedra luminosa	#
 item.shulker_shell.name=Coraza de Shulker	#
 item.totem.name=Tótem de la inmortalidad	#
+item.trial_key.name=Llave de desafío	#
 item.turtle_helmet.name=Caparazón de tortuga	#
 item.turtle_shell_piece.name=Escama de tortuga	#
 item.phantom_membrane.name=Membrana de fantasma	#
@@ -5255,8 +5415,10 @@ item.sweet_berries.name=Bayas dulces	#
 item.suspicious_stew.name=Estofado sospechoso	#
 item.banner_pattern.bricks=Mazonado de campo	#
 item.banner_pattern.creeper=Figura de Creeper	#
+item.banner_pattern.flow=Flujo	#
 item.banner_pattern.flower=Figura de flor	#
 item.banner_pattern.globe=Globo terráqueo	#
+item.banner_pattern.guster=Guster	#
 item.banner_pattern.name=Patrón de estandarte	#
 item.banner_pattern.piglin=Trompa	#
 item.banner_pattern.skull=Figura de calavera	#
@@ -5367,6 +5529,8 @@ itemGroup.name.banner_pattern=Patrones de estandarte	#
 itemGroup.name.netherWartBlock=Verrugas del inframundo	#
 itemGroup.name.candles=Velas	#
 itemGroup.name.goatHorn=Cuernos de cabra	#
+itemGroup.name.compounds=Compuestos	#
+itemGroup.name.products=Productos	#
 
 jigsaw.title.target_pool=Grupo objetivo:	#
 jigsaw.title.name=Nombre:	#
@@ -5728,6 +5892,7 @@ menu.classroom_settings.caps=CONFIGURACIÓN DE SALÓN DE CLASES	#
 menu.serverStore=Tienda de %s	#
 menu.serverGenericName=Servidor	#
 menu.play=Jugar	#
+menu.profile=Perfil	#
 menu.playdemo=Jugar mundo de prueba	#
 menu.playOnRealms=Jugar en el realm	#
 menu.quickplay=Juego rápido	#
@@ -5756,6 +5921,9 @@ menu.editorMode=Modo Editor	#
 menu.editor.play=Reanudar	#
 menu.character_cast.select_title=Elige tu personaje inicial	#
 menu.character_cast.preview_title=¡Conoce al elenco!	#
+menu.realms=Realms		####{StrContains="Realms"}
+menu.realmsServer=Servidor Realms		####{StrContains="Realms"}{MaxLength='18'}
+menu.servers=Servidores	#
 
 merchant.deprecated=¡Comercia otra cosa para desbloquear más!	#
 
@@ -5851,6 +6019,7 @@ options.advancedVideoTitle=Ajustes de vídeo avanzados	#
 options.anaglyph=Visión 3D	#
 options.termsAndConditions=Términos y condiciones	#
 options.attribution=Atribución	#
+options.helpCenter=Centro de ayuda	#
 options.3DRendering=Representación en 3D	#
 options.animatetextures=Agua en movimiento	#
 options.ao=Iluminación suave	#
@@ -5939,7 +6108,6 @@ options.dev_assertions_debug_break=Interrupción de las aserciones en el depurad
 options.dev_assertions_show_dialog=Las aserciones muestran un diálogo modal	#
 options.dev_force_trial_mode=Forzar la habilitación del modo de prueba	#
 options.dev_eduDemo=Demo de educación (requiere volver a iniciar la sesión)	#
-options.dev_eduCloudDownload=Descarga en la nube	#
 options.remote_imgui_toggle=Imgui remoto habilitado	#
 options.dev_enableDebugUI=Activar interfaz de depuración	#
 options.dev_createRealmWithoutPurchase=Crear un Realm sin comprar	#
@@ -6167,7 +6335,7 @@ options.licenses=Licencias	#
 options.licensed_content=Contenido con licencia	#
 options.networkSettings=Configuración de la red	#
 options.ecoMode=Funciones experimentales de ahorro		#### {MaxLength='40'}
-options.enableEcoMode=Lower framerate when controller is disconnected		#### {MaxLength='55'}
+options.enableEcoMode=Menor velocidad de fotogramas desconectando el control		#### {MaxLength='55'}
 options.font_license=Licencia de fuente	#
 options.font_license_body=%1	#
 options.livingRoomFOV=Campo de visión de la sala de estar	#
@@ -6185,6 +6353,10 @@ options.fullKeyboardGameplay=Disposición de teclas del juego	#
 options.fullKeyboardLayout=Diseño completo del teclado	#
 options.improvedInputResponsePlaceholder=Mejor respuesta de entrada	#
 options.improvedInputResponsePlaceholder.tooltip=Reduce el tiempo de espera desde que actúas hasta que se refleja en la pantalla. Este parámetro puede consumir más batería.	#
+options.dynamicTexturesToggle=Eliminar límite de texturas	#
+options.dynamicTexturesToggle.tooltip=Para activarlo o desactivarlo será necesario reiniciar el juego. Usar varios complementos o paquetes de recursos con muchas texturas puede causar inestabilidad.	#
+options.dynamicTextures.popUp=Si activas la opción de Eliminar límite de texturas, tendrás que reiniciar el juego para desactivarla.	#
+options.dynamicTextures.popUp.title=¿Seguro?	#
 options.fullscreen=Pantalla completa	#
 options.gamepadcursorsensitivity=Sensibilidad del cursor del control	#
 options.gamertag=Gamertag:	#
@@ -6234,6 +6406,25 @@ options.hidehand=Ocultar mano	#
 options.classic_box_selection=Selección de contorno	#
 options.creator=Creador	#
 options.creatorTitle=Configuración del creador	#
+options.creator.debuggerHeading=Ajustes del depurador de secuencias de comandos	#
+options.creator.debuggerAutoAttach=Adjuntar depurador al cargar	#
+options.creator.debuggerAutoConnect=Conectar depurador al cargar	#
+options.creator.debuggerConnect=Conectar	#
+options.creator.debuggerListen=Escucha	#
+options.creator.debuggerHost=Anfitrión	#
+options.creator.debuggerPort=Puerto	#
+options.creator.watchdogHeading=Ajustes del controlador de secuencias de comandos	#
+options.creator.watchdogSlowWarning=Avisos de secuencias de comandos lentos	#
+options.creator.watchdogSlowThreshold=La media supera los	#
+options.creator.watchdogSlowFormat=%s milisegundos	#
+options.creator.watchdogSlowFormatDefault=%s milisegundos (predeterminado)	#
+options.creator.watchdogSpikeWarning=Avisos de picos de secuencias de comandos	#
+options.creator.watchdogSpikeThreshold=El pico supera los	#
+options.creator.watchdogSpikeFormat=%s milisegundos	#
+options.creator.watchdogSpikeFormatDefault=%s milisegundos (predeterminado)	#
+options.creator.watchdogHangThreshold=Interrumpir a los	#
+options.creator.watchdogHangFormat=%s segundos	#
+options.creator.watchdogHangFormatDefault=%s segundos (predeterminado)	#
 options.vr_classic_box_selection=Selección de contorno	#
 options.hidegamepadcursor=Ocultar el cursor del control	#
 options.hidegui=Ocultar interfaz de juego	#
@@ -6570,7 +6761,7 @@ options.makeBackup=Hacer una copia de seguridad de mi mundo	#
 options.managePrivacy=Para administrar tu configuración de privacidad, visita https://account.xbox.com/Settings en cualquier navegador.	###disable_3rd_party_console_resource_pack_check
 options.unlink_msa.button=Desvincular la cuenta de Microsoft	#
 options.unlink_msa.confirm.title=¿Quieres desvincular la cuenta de Microsoft?	#
-options.unlink_msa.confirm.warning=ADVERTENCIA: si desvinculas las cuentas, ya no podrás almacenar el progreso o las compras realizadas en tu consola "PlayStation 4" o en tu cuenta %s.	#
+options.unlink_msa.confirm.warning=AVISO: Después de desvincularte, ya no podrás almacenar el progreso ni las compras que realices en tu sistema PlayStation®4 con la cuenta %s. 	#### CertRequirement: [PlayStation®4]
 options.unlink_msa.confirm.warning.2=Si desvinculas tu cuenta de Microsoft de este juego, se verán afectadas todas las partidas de Minecraft creadas con esta cuenta de Microsoft en esta plataforma.	#
 options.unlink_msa.confirm.checkbox1=Ya no podré acceder a ningún contenido de la tienda dentro del juego al jugar en otras plataformas.	#
 options.unlink_msa.confirm.checkbox2=Ya no podré jugar juegos entre plataformas con mis amigos que utilizan otras plataformas.	#
@@ -6612,9 +6803,12 @@ options.shadowQuality.low=Baja	#
 options.shadowQuality.medium=Media	#
 options.shadowQuality.high=Alta	#
 options.shadowQuality.ultra=Ultra	#
-options.pointLightShadowEnabled=Sombras de luz de puntos activadas	#
-options.pointLightShadowDisabled=Sombras de luz de puntos desactivadas	#
-options.pointLightShadow.tooltip=Sombras proyectadas por antorchas, linternas y otras fuentes de luz pequeñas. Solo está disponible con los ajustes de calidad de sombras altos en algunos dispositivos.	#
+options.pointLightShadowQuality=Calidad de sombra de luz de puntos	#
+options.pointLightShadowQuality.off=Desactivado	#
+options.pointLightShadowQuality.low=Baja	#
+options.pointLightShadowQuality.medium=Media	#
+options.pointLightShadowQuality.high=Alta	#
+options.pointLightShadowQuality.ultra=Ultra	#
 options.pointLightLODingQuality=Calidad de luz de puntos	#
 options.pointLightLODingQuality.low=Baja	#
 options.pointLightLODingQuality.medium=Media	#
@@ -6626,6 +6820,12 @@ options.volumetricFogQuality.low=Baja	#
 options.volumetricFogQuality.medium=Media	#
 options.volumetricFogQuality.high=Alta	#
 options.volumetricFogQuality.ultra=Ultra	#
+options.reflectionsQuality=Calidad de los reflejos	#
+options.reflectionsQuality.off=Desactivado	#
+options.reflectionsQuality.low=Baja	#
+options.reflectionsQuality.medium=Media	#
+options.reflectionsQuality.high=Alta	#
+options.reflectionsQuality.ultra=Ultra	#
 
 options.dcast_character.Title=Nuevos personajes para la creación de personajes	#
 
@@ -6773,6 +6973,8 @@ hudScreen.controlCustomization.tooltip=Carga un mundo para personalizar los cont
 hudScreen.controlCustomization.tooltip.notouch=Usar un dispositivo táctil para personalizar los controles	#
 hudScreen.controlCustomization.tooltip.alreadycustomizing=Ya hay una pantalla de personalización de control táctil abierta	#
 hudScreen.controlCustomization.tooltip.alive=El jugador debe estar vivo para personalizar los controles.	#
+hudScreen.daysPlayed=Días jugados: %s	#
+hudScreen.daysPlayed.overflow=¡Demasiados como para contarlos!	#
 
 playscreen.fileSize.MB=MB	#
 playscreen.fileSize.GB=GB	#
@@ -6815,6 +7017,7 @@ playscreen.worlds=Mundos	#
 playscreen.dontSeeLegacyWorlds=¿No puedes ver tus mundos?	#
 playscreen.syncLegacyWorlds=Sincronizar mundos antiguos	#
 playscreen.fetchingLegacyWorlds=Obteniendo mundos antiguos...	#
+playscreen.fetchingRetailToPreviewWorlds=Obteniendo mundos de versión completa…	#
 playscreen.upgradeLegacyWorlds=Mundos antiguos	#
 playscreen.syncRetailWorlds=Copiar mundos de Minecraft (versión)	#
 playscreen.fetchingRetailWorlds=Copiando mundos de Minecraft (versión)...	#
@@ -6940,6 +7143,10 @@ potion.heal.splash.name=Poción de salpicadura de curación	#
 potion.heal.linger.name=Poción persistente de curación	#
 potion.healthBoost=Recuperación	#
 potion.hunger=Hambre	#
+potion.infested.linger.name=Poción persistente de infestación	#
+potion.infested.name=Poción de infestación	#
+potion.infested.splash.name=Poción de salpicadura de infestación	#
+potion.infested=Infestado	#
 potion.invisibility=Invisibilidad	#
 potion.invisibility.name=Poción de invisibilidad	#
 potion.invisibility.splash.name=Poción de salpicadura de invisibilidad	#
@@ -6965,6 +7172,10 @@ potion.nightVision=Visión nocturna	#
 potion.nightVision.name=Poción de visión nocturna	#
 potion.nightVision.splash.name=Poción de salpicadura de visión nocturna	#
 potion.nightVision.linger.name=Poción persistente de visión nocturna	#
+potion.oozing.linger.name=Poción persistente de exudación	#
+potion.oozing.name=Poción de exudación	#
+potion.oozing.splash.name=Poción de salpicadura de exudación	#
+potion.oozing=Exudación	#
 potion.poison=Veneno	#
 potion.poison.name=Poción de veneno	#
 potion.poison.splash.name=Poción de salpicadura de veneno	#
@@ -7006,6 +7217,14 @@ potion.weakness=Debilidad	#
 potion.weakness.name=Poción de debilidad	#
 potion.weakness.splash.name=Poción de salpicadura de debilidad	#
 potion.weakness.linger.name=Poción persistente de debilidad	#
+potion.weaving.linger.name=Poción persistente de tejido	#
+potion.weaving.name=Poción de tejido	#
+potion.weaving.splash.name=Poción de salpicadura de tejido	#
+potion.weaving=Tejer	#
+potion.windCharged.linger.name=Poción persistente de carga ventosa	#
+potion.windCharged.name=Poción de carga ventosa	#
+potion.windCharged.splash.name=Poción de salpicadura de carga ventosa	#
+potion.windCharged=Con carga de viento	#
 potion.wither=Wither	#
 potion.wither.name=Poción de deterioro	#
 potion.wither.splash.name=Poción de salpicadura de deterioro	#
@@ -7109,7 +7328,14 @@ progressScreen.message.directoryDepthError=No se puede abrir este mundo debido a
 progressScreen.message.forbiddenContent=No posees uno o más de los packs aplicados.	#
 progressScreen.message.loadingSplitScreenAppearances=Cargando aspectos de pantalla dividida...	#
 progressScreen.message.finishedLoadingSplitScreenAppearances=Se cargaron los aspectos de pantalla dividida.	#
-progressScreen.message.modifiedWorldWarning=Puede que este mundo no se vea o se comporte de la misma manera que los mundos no modificados y no puedas conseguir logros.	#
+progressScreen.message.modifiedWorldWarning.1=¡Estás jugando en un mundo con complementos! Esto le añadirá nuevas características a tu mundo de Minecraft.	#
+progressScreen.message.modifiedWorldWarning.2=¡No te limites a tener solo uno! Puedes cargar varios complementos a la vez en un único mundo.	#
+progressScreen.message.modifiedWorldWarning.3=Consejo avanzado: un pack de recursos puede cambiar las texturas de diferentes bloques y entidades.	#
+progressScreen.message.modifiedWorldWarning.4=Consejo avanzado: un pack de comportamiento puede cambiar la forma en que funcionan varios objetos, entidades o bloques diferentes.	#
+progressScreen.message.modifiedWorldWarning.5=Consejo avanzado: un complemento incluye tanto un pack de comportamiento como un pack de recursos. ¡Asegúrate de que ambos estén activados para que el complemento funcione!	#
+progressScreen.message.modifiedWorldWarning.6=Los complementos agregan nuevos bloques, objetos o criaturas a tus mundos.	#
+progressScreen.message.modifiedWorldWarning.7=¡Los mundos y los complementos son complejos! Aunque algunos combinan muy bien, podrías conseguir resultados graciosos con algunas combinaciones.	#
+progressScreen.message.modifiedWorldWarning.8=Cuantos más complementos, más diversión, pero puede que el juego tarde más en cargar.	#
 progressScreen.dialog.title.resourcePack=¿Descargar packs de recursos?	#
 progressScreen.dialog.title.behaviorAndResourcePack=¿Descargar packs de recursos y comportamientos del mundo?	#
 progressScreen.dialog.title.onlyBehavior=¿Descargar packs de comportamiento del mundo?	#
@@ -7223,9 +7449,16 @@ resourcePack.crashRecovery.title=Reinicio de recursos globales	#
 resourcePack.crashRecovery.message=No se pudieron cargar los recursos.	#
 resourcePack.warnings=Advertencias:	#
 resourcePack.warning.add.title=¿Actualizar el mundo?	#
-resourcePack.warning.add.body=Puede que este mundo no sea o se comporte de la misma manera que los mundos no modificados y no puedas conseguir logros. Quizá quieras guardar una copia de tu mundo antes de continuar. Pulsa Aceptar para activar el pack o Cancelar para mantenerlo desactivado.	#
+resourcePack.warning.add.body=Puede que este mundo tenga un aspecto o un comportamiento diferente a los mundos no modificados. Guarda una copia de tu mundo antes de continuar.	#
+resourcePack.warning.add.button.cancel=No agregar pack	#
+resourcePack.warning.add.button.ok=Añadir el pack igualmente	#
+resourcePack.warnings.contentKeyErrorBody=Hubo un problema al cargar el pack %s.	#
+resourcePack.warnings.contentKeyErrorBodyMultiple=Hubo un problema al cargar los packs %s.	#
+resourcePack.warnings.contentKeyErrorTitle=¡Error!	#
 resourcePack.warning.remove.title=¡Peligro, peligro!	#
-resourcePack.warning.remove.body=Quitar los packs de comportamiento después de jugar un mundo puede dañarlo y podrías perder lo que has creado. Tal vez quieras guardar una copia de tu mundo antes de continuar. Pulsa Aceptar para desactivar el pack o Cancelar para mantenerlo activo.	#
+resourcePack.warning.remove.body=Añadir o eliminar packs de un mundo después de haber jugado en él podría causar errores y hacer que pierdas todo lo que has creado.	#
+resourcePack.warning.remove.button.cancel=Conservar el pack	#
+resourcePack.warning.remove.button.ok=Eliminar el pack igualmente	#
 resourcePack.requiredDependency.title=Dependencia requerida	#
 resourcePack.requiredDependency.body=Este pack es una dependencia necesaria para otro pack que se está aplicando.	#
 resourcePack.missingDependency.title=Dependencias faltantes	#
@@ -7236,6 +7469,8 @@ resourcePack.deleteSelected=Este pack está seleccionado actualmente. Estás a p
 resourcePack.deleteMultiple=Estás a punto de eliminar los siguientes packs para siempre: %s ¿Estás seguro?	#
 resourcePack.editPack=Eliminar packs...	#
 resourcePack.editPackDone=Listo	#
+resourcePack.toast.addon.activated=%s activado	#
+resourcePack.toast.addon.deactivated=%s desactivado	#
 resourcePack.toast.unownedContent.title=%s desactivado	#
 resourcePack.toast.unownedContent.subtitle=Esta cuenta no tiene este pack de recursos.	#
 resourcePack.incompatibleDependency=Este pack tiene una dependencia (%s) que no es compatible con tu dispositivo	#
@@ -7302,10 +7537,15 @@ storageManager.contentType.worldTemplates=Plantillas de mundo	#
 storageManager.contentType.resourcePacks=Packs de recursos	#
 storageManager.contentType.behaviorPacks=Packs de comportamiento	#
 storageManager.contentType.skinPacks=Packs de aspecto	#
+storageManager.contentType.retailtopreview_worlds=Mundos de versión completa	#
 
 storageManager.sync_legacy_worlds=Sincronizar mundos antiguos	#
 storageManager.sync_legacy_worlds_description=Busca mundos de una versión anterior de Minecraft. Puede que tarde en terminar.	#
 storageManager.sync_legacy_worlds.conversion_description=Haz clic en un mundo para convertirlo en un mundo jugable	#
+
+storageManager.sync_retailtopreview_worlds=Sincronizar mundos de versión completa	#
+storageManager.sync_retailtopreview_worlds_description=Busca mundos de la versión completa de Minecraft. Puede tardar un poco.	#
+storageManager.sync_retailtopreview_worlds.conversion_description=Haz clic en un mundo para convertirlo en una versión de vista previa	#
 
 storageManager.sync_legacy_worlds.conversion_complete.content=Convertiste tu mundo. Ahora puedes encontrarlo en «todos los mundos».	#
 storageManager.sync_legacy_worlds.conversion_complete.title=¡Éxito!	#
@@ -7314,6 +7554,9 @@ storageManager.sync_legacy_worlds.conversion_complete.cancel_button=Cerrar	#
 
 storageManager.sync_legacy_worlds.fetch_complete.title=¡Éxito!	#
 storageManager.sync_legacy_worlds.fetch_complete.content=Encontramos %s mundos de una versión anterior de Minecraft.	#
+
+storageManager.sync_retailtopreview_worlds.fetch_complete.title=¡Éxito!	#
+storageManager.sync_retailtopreview_worlds.fetch_complete.content=Encontramos %s mundos de la versión completa de Minecraft.	#
 
 storageManager.sync_legacy_worlds.conversion_explanation.title=Convirtiendo tu mundo	#
 storageManager.sync_legacy_worlds.conversion_explanation.content=Tienes que convertir «%s» a la versión más reciente de Minecraft para poder acceder.	#
@@ -7441,7 +7684,9 @@ item.crimson_hanging_sign.name=Letrero colgante carmesí	#
 item.danger_pottery_sherd.name=Fragmento de cerámica con peligro	#
 item.dark_oak_hanging_sign.name=Letrero colgante de roble oscuro	#
 item.explorer_pottery_sherd.name=Fragmento de cerámica con explorador	#
+item.flow_pottery_sherd.name=Fragmento de cerámica con flujo	#
 item.friend_pottery_sherd.name=Fragmento de cerámica con amigo	#
+item.guster_pottery_sherd.name=Fragmento de cerámica con Guster	#
 item.heart_pottery_sherd.name=Fragmento de cerámica con corazón	#
 item.heartbreak_pottery_sherd.name=Fragmento de cerámica con corazón roto	#
 item.howl_pottery_sherd.name=Fragmento de cerámica con aullido	#
@@ -7452,6 +7697,7 @@ item.mourner_pottery_sherd.name=Fragmento de cerámica con doliente	#
 item.oak_hanging_sign.name=Letrero colgante de roble	#
 item.plenty_pottery_sherd.name=Fragmento de cerámica con riquezas	#
 item.prize_pottery_sherd.name=Fragmento de cerámica con tesoro	#
+item.scrape_pottery_sherd.name=Fragmento de cerámica con arañazos	#
 item.sheaf_pottery_sherd.name=Fragmento de cerámica con gavilla	#
 item.shelter_pottery_sherd.name=Fragmento de cerámica con refugio	#
 item.skull_pottery_sherd.name=Fragmento de cerámica con calavera	#
@@ -7497,6 +7743,8 @@ tile.cherry_stairs.name=Escaleras de cerezo	#
 tile.cherry_trapdoor.name=Escotilla de cerezo	#
 tile.cherry_wood.name=Madera de cerezo	#
 tile.chiseled_bookshelf.name=Estantería cincelada	#
+tile.chiseled_tuff.name=Toba volcánica cincelada	#
+tile.chiseled_tuff_bricks.name=Ladrillos de toba volcánica cincelada	#
 tile.decorated_pot.name=Maceta decorada	#
 tile.pink_petals.name=Pétalos rosas	#
 tile.stripped_bamboo_block.name=Bloque de bambú sin corteza	#
@@ -7530,6 +7778,8 @@ trim_pattern.vex.name=Acabado de armadura de vex	#
 trim_pattern.ward.name=Acabado de armadura de guardia	#
 trim_pattern.wayfinder.name=Acabado de armadura de buscador de caminos	#
 trim_pattern.wild.name=Acabado de armadura salvaje	#
+trim_pattern.bolt.name=Acabado de armadura de rayo	#
+trim_pattern.flow.name=Acabado de armadura de flujo	#
 upgrade.netherite_upgrade.name=Mejora de inframundita	#
 
 storageManager.mainSizeLabel=%s - 1 objeto	#
@@ -7731,6 +7981,7 @@ selectWorld.newWorld=Nuevo mundo	#
 selectWorld.newWorld.copyOf=Copia de %s	#
 selectWorld.newWorld.educationCopyOf=[EDU] %s	#
 selectWorld.worldTags.experimental=Experimental	#
+selectWorld.worldTags.hardcore=Extremo	#
 ## NOTE: "Realms" is the name of a service and doesn't get localized.
 selectWorld.realmsComingSoon=Próximamente: ¡Realms!	#
 selectWorld.realmsBeta=Realms Beta	#
@@ -7772,11 +8023,11 @@ selectTemplate.delete.confirm=¿Quieres eliminar la plantilla de mundo?	#
 selectTemplate.delete=Eliminar	#
 selectTemplate.myTemplates=Mis plantillas de mundo	#
 selectTemplate.realmsPlus=Plantillas destacadas de Realms Plus	#
-selectTemplate.marketplacePass=Plantillas destacadas del Marketplace Pass			#### {StrContains="Marketplace Pass"}
+selectTemplate.marketplacePass=Contenido destacado del Marketplace Pass			#### {StrContains="Marketplace Pass"}
 selectTemplate.importedTemplates=Plantillas importadas	#
 selectTemplate.download=Descargar	#
 selectTemplate.noTemplates=No hay plantillas de mundos en este dispositivo.	#
-selectTemplate.suggestedContent.title=Plantillas destacadas del Mercado	#
+selectTemplate.suggestedContent.title=Contenido destacado del Mercado	#
 selectTemplate.suggestedContent.button=Ver más plantillas	#
 selectTemplate.createdBy=Creado por %s	#
 selectTemplate.inventory=Mis packs del Mercado	#
@@ -7917,6 +8168,7 @@ store.disabledOnBeta=Por el momento, esta función está deshabilitada en la ver
 store.disabled.nopermission=No tienes permiso para utilizar la Tienda en este momento.	#
 store.disabled.generic=La Tienda no está disponible por el momento.	#
 store.disabled.preview=No se puede acceder al Marketplace desde la versión preliminar.	#
+store.marketplaceDisabledWin32=El Mercado no está disponible en las versiones de Win32. Considera usar la versión UWP del juego.	#
 
 store.loading.error.unavailable=El Marketplace no está disponible.	#
 store.loading.error.trying=Seguimos intentando establecer conexión. Espera un momento.	#
@@ -7925,6 +8177,7 @@ store.loading.error.connecting=Se produjo un problema al conectarse. Sal e inté
 store.loading.error.issues=Mmm, estamos teniendo algunos problemas con el Marketplace. Intenta conectarte más tarde.	#
 store.loading.error.internetDown=No podemos encontrar ninguna conexión a internet.	#
 store.loading.error.account=Hay un problema con tu cuenta. Vuelve a intentarlo más tarde y comunícate con el servicio de asistencia si no se soluciona.	#
+store.loading.error.account.banned=No puedes utilizar el Marketplace hasta que termine tu suspensión.	#
 
 store.giftPromo.day=Día %s			### %s being day number such as "Day 1", "Day 2", etc. Please use short translations. 3 letters if possible
 store.equipped=Obtenido	#
@@ -7957,21 +8210,21 @@ store.realmsPlus.buyNow.viewPrivacyPolicy=POLÍTICA DE PRIVACIDAD	#
 
 store.realmsPlus.buyNow.title=Comienza tu suscripción a Realms Plus	#
 store.realmsPlus.startTrial.description=Tu realm y más de 150 packs del Mercado estarán disponibles de inmediato. ¡Hasta 10 personas pueden jugar al mismo tiempo y todos ellos tendrán acceso a los mundos de tu realm de forma gratuita! El primer mes será gratis y luego se te cobrarán %s al mes. Podrás cancelar la suscripción en cualquier momento.	#
-store.realmsPlus.startTrial.description.contentSub=Tu Realm y más de 150 packs del Mercado incluidos en el Pase del mercado estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! El primer mes es gratis, y tendrá un costo de %s mensuales a partir del siguiente. Puedes cancelar la suscripción en cualquier momento.	#
+store.realmsPlus.startTrial.description.contentSub=Tu Realm y los más de 150 packs incluidos con el Marketplace Pass estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! El primer mes es gratis, y tendrá un costo de %s mensuales a partir del siguiente. Puedes cancelar la suscripción en cualquier momento.	#
 store.realmsPlus.noTrial.description=Tu realm y más de 150+ packs del Marketplace estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, quienes disfrutarán de acceso a los mundos de tu realm... ¡gratis! La suscripción estará disponible durante 30 días a un precio de :minecoin:%s.	#
-store.realmsPlus.noTrial.description.contentSub=Tu Realm y más de 150 packs del Mercado incluidos en el Pase del mercado estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! La suscripción estará disponible durante 30 días a un precio de %s:minecoin:.	#
+store.realmsPlus.noTrial.description.contentSub=Tu Realm y los más de 150 packs incluidos con el Marketplace Pass estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! La suscripción estará disponible durante 30 días a un precio de %s:minecoin:.	#
 store.realmsPlus.noTrial.description.iap=Tu realm y más de 150 packs del Mercado estarán disponibles de inmediato. ¡Hasta 10 personas pueden jugar al mismo tiempo y todos ellos tendrán acceso a los mundos de tu realm de forma gratuita! Se te cobrarán %s al mes, y podrás cancelar la suscripción para evitar cargos en el futuro al acceder a tu configuración de suscripciones.	#
-store.realmsPlus.noTrial.description.iap.contentSub=Tu Realm y más de 150 packs del Mercado incluidos en el Pase del mercado estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡quienes disfrutarán de acceso a tus mundos del Realm gratis! Tiene un costo de %s al mes. Puedes cancelar la suscripción para evitar futuros cargos desde los ajustes de las suscripciones.	#
+store.realmsPlus.noTrial.description.iap.contentSub=Tu Realm y los más de 150 packs incluidos con el Marketplace Pass estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡quienes disfrutarán de acceso a tus mundos del Realm, gratis! Tiene un costo de %s al mes. Puedes cancelar la suscripción para evitar futuros cargos desde los ajustes a las suscripciones.	#
 store.realmsPlus.realmName.placeholder=Realm de %s		#The string passed in here is the gamertag of the player to indicate the name of the player's world.	#
 
 store.realmsPlus.recurring.offerTrial=Realms Plus es una suscripción continua con una tarifa recurrente por suscripción, la cual se cobra automáticamente cada mes hasta que se cancela la suscripción.%sTendrás acceso inmediato a tu realm y a más de 150 packs del Mercado. ¡Hasta 10 personas pueden jugar al mismo tiempo, y todas tendrán acceso a los mundos de tu realm sin costo! Los primeros 30 días serán gratis, y se te cobrará la cantidad de %s al mes cuando termine la prueba gratuita. Puedes cancelar tu suscripción para evitar cargos en el futuro al acceder a tu configuración de suscripciones.	#
-store.realmsPlus.recurring.offerTrial.contentSub=Realms Plus es una suscripción continua con una cuota recurrente que se carga automáticamente cada mes hasta que se cancele.%sTu Realm y más de 150 packs del Mercado incluidos en el Pase del mercado estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! Los primeros 30 días son gratis, y tendrá un costo %s al mes a partir del siguiente. Puedes cancelar la suscripción para evitar futuros cargos desde los ajustes de las suscripciones.	#
+store.realmsPlus.recurring.offerTrial.contentSub=Realms Plus es una suscripción continua con una cuota recurrente que se carga automáticamente cada mes hasta que se cancele.%sTu Realm y los más de 150 packs incluidos con el Marketplace Pass estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm, gratis! Los primeros 30 días son gratis, y tendrá un costo %s al mes a partir del siguiente. Puedes cancelar la suscripción para evitar futuros cargos desde los ajustes de las suscripciones.	#
 store.realmsPlus.recurring.withoutTrial=Realms Plus es una suscripción continua con una tarifa recurrente por suscripción, la cual se cobra automáticamente cada mes hasta que se cancela la suscripción.%sTendrás acceso inmediato a tu realm y a más de 150 packs del Mercado. ¡Hasta 10 personas pueden jugar al mismo tiempo, y todas tendrán acceso a los mundos de tu realm sin costo! Se te cobrará la cantidad de %s al mes, y puedes cancelar tu suscripción para evitar cargos en el futuro al acceder a tu configuración de suscripciones.	#
-store.realmsPlus.recurring.withoutTrial.contentSub=Realms Plus es una suscripción continua con una cuota recurrente que se carga automáticamente cada mes hasta que se cancele.%sTu Realm y más de 150 packs del Mercado incluidos en el Pase del mercado estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! Tiene un costo de %s al mes. Puedes cancelar la suscripción para evitar futuros cargos desde los ajustes de las suscripciones.	#
+store.realmsPlus.recurring.withoutTrial.contentSub=Realms Plus es una suscripción continua con una cuota recurrente que se carga automáticamente cada mes hasta que se cancele.%sTu Realm y los más de 150 packs incluidos en el Marketplace Pass estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! Tiene un costo de %s al mes. Puedes cancelar la suscripción para evitar futuros cargos desde los ajustes de las suscripciones.	#
 store.realmsPlus.consumable.offerTrial=Tu realm y más de 150 packs del Mercado estarán disponibles de inmediato. ¡Hasta 10 personas pueden jugar al mismo tiempo y todos ellos tendrán acceso a los mundos de tu realm de forma gratuita! Los primeros 30 días de tu suscripción serán gratis, y después podrás renovar por otros 30 días por un costo de %s.	#
-store.realmsPlus.consumable.offerTrial.contentSub=Tu Realm y más de 150 packs del Mercado incluidos en el Pase del mercado estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! Los primeros 30 días serán gratis; después, puedes renovar la suscripción durante 30 días a un precio de %s.	#
+store.realmsPlus.consumable.offerTrial.contentSub=Tu Realm y más de 150 packs incluidos con el Marketplace Pass estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! Los primeros 30 días serán gratis; después, puedes renovar la suscripción durante 30 días a un precio de %s.	#
 store.realmsPlus.consumable.withoutTrial=Tu realm y más de 150 packs del Mercado estarán disponibles de inmediato. ¡Hasta 10 personas pueden jugar al mismo tiempo y todos ellos tendrán acceso a los mundos de tu realm de forma gratuita! Tu suscripción estará disponible durante 30 días por un costo de %s.	#
-store.realmsPlus.consumable.withoutTrial.contentSub=Tu Realm y más de 150 packs del Mercado incluidos en el Pase del mercado estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! La suscripción estará disponible durante 30 días a un precio de %s.	#
+store.realmsPlus.consumable.withoutTrial.contentSub=Tu Realm y los más de 150 packs incluidos en el Marketplace Pass estarán disponibles de inmediato. Pueden jugar al mismo tiempo hasta 10 jugadores, ¡todos disfrutarán de acceso a los mundos de tu Realm gratis! La suscripción estará disponible durante 30 días a un precio de %s.	#
 
 store.realmsPlus.landing.header=La suscripción incluye:	#
 store.realmsPlus.landing.headerTrial=Prueba gratuita de 30 días, luego %s al mes	#
@@ -7981,13 +8234,14 @@ store.realmsPlus.landing.info1.line2=Tus amigos juegan en tu Realm de forma grat
 store.realmsPlus.landing.info1.line3=Pasa de la consola al móvil o al PC: Juega a tu Realm en cualquier dispositivo gracias al Mercado de Minecraft.	#
 
 store.realmsPlus.landing.info2.catalog=Acceso gratuito a un catálogo con más de 150 packs del Mercado	#
-store.realmsPlus.landing.info2.contentSub=Incluye el Pase del mercado	#
+store.realmsPlus.landing.info2.contentSub=Incluye el Marketplace Pass	#
 store.realmsPlus.landing.info2.backups=Los mundos de tu Realm incluyen copias de seguridad gratuitas	#
 store.realmsPlus.landing.info2.renews=La suscripción se renueva automáticamente cada mes hasta que se cancele	#
 store.realmsPlus.landing.info2.cancel=Se puede cancelar en la página de suscripciones de los ajustes de Minecraft	#
 store.realmsPlus.landing.info2.subscribe=Suscríbete ya por %s/mes	#
 store.realmsPlus.landing.info2.recentlyAdded=Agregados recientemente	#
 store.realmsPlus.landing.info2.persona=Objetos del creador de personajes gratis: ¡canjea un nuevo conjunto cada mes!	#
+store.realmsPlus.landing.info2.social=Socializa con Historias de Realms	#
 
 store.realmsPlus.landing.beta=Beta	#
 store.realmsPlus.landing.preview=Vista previa	#
@@ -8008,7 +8262,7 @@ store.realmsPlus.faq.question4=¿Cuáles dispositivos son compatibles con Realms
 store.realmsPlus.faq.answer4=Actualmente, Realms Plus está disponible en cualquier plataforma donde puedas instalar Minecraft Bedrock Edition. Puedes jugar Realms y usar cualquier contenido de Realms Plus en cualquiera de estos dispositivos al iniciar sesión en tu cuenta de Microsoft.	###disable_3rd_party_console_resource_pack_check
 store.realmsPlus.faq.question5=¿Cuánto cuesta una suscripción a Realms Plus?	#
 store.realmsPlus.faq.answer5=%s al mes por un servidor para 10 jugadores y acceso a más de 150 packs del Mercado.	#
-store.realmsPlus.faq.answer5.contentSub=%s al mes. Añade miembros ilimitados y juega en línea con hasta 10 jugadores a la vez. Además, podrás disfrutar gratis de más de 150 nuevos contenidos del Mercado del catálogo del Pase del mercado.	#
+store.realmsPlus.faq.answer5.contentSub=%s al mes. Añade miembros ilimitados y juega en línea con hasta 10 jugadores a la vez. Además, podrás disfrutar gratis de más de 150 nuevos contenidos del catálogo del Marketplace Pass.	#
 store.realmsPlus.faq.question6=¿Cada cuánto se agregan nuevos packs a Realms Plus?	#
 store.realmsPlus.faq.answer6=Agregamos nuevos packs a Realms Plus cada mes.	#
 store.realmsPlus.faq.question7=¿Por cuánto tiempo tengo acceso a los packs en Realms Plus?	#
@@ -8017,10 +8271,12 @@ store.realmsPlus.faq.question8=¿Dónde puedo usar los packs de Realms Plus?	#
 store.realmsPlus.faq.answer8=Los mundos y los packs incluidos en la suscripción se pueden jugar en línea, con tu realm personal o en un dispositivo local. Tienes que jugar en línea al menos una vez cada 30 días para comprobar que tu suscripción esté activa.	#
 store.realmsPlus.faq.question9=¿Qué pasa con mis realms y mis mundos cuando se termina mi suscripción?	#
 store.realmsPlus.faq.answer9=Si tu suscripción termina, tú y tus amigos ya no podrán seguir jugando juntos en línea en los realms, y perderás el acceso a los packs de Realms Plus. Podrás descargar cualquier mundo que hayas guardado en tu realm (hasta 18 meses después del final de la suscripción). Si usaste mundos, packs de textura o popurrís de Realms Plus, deberás comprarlos en la tienda o, si el pack sigue disponible en Realms Plus, podrás volver a suscribirte para jugar con las plantillas de mundo correspondientes.	#
-store.realmsPlus.faq.question10=¿Necesito Realms Plus y el Pase del mercado?	#
-store.realmsPlus.faq.answer10=No. El Pase del mercado es un catálogo con el que podrás disfrutar de más de 150 packs. Realms Plus es un Realm de 10 jugadores que incluye el Pase del mercado. Te sugerimos que te suscribas al que más te convenga.	#
+store.realmsPlus.faq.question10=¿Necesito Realms Plus y el Marketplace Pass?	#
+store.realmsPlus.faq.answer10=No. El Marketplace Pass es un catálogo con el que podrás disfrutar de más de 150 packs. Realms Plus es un Realm de 10 jugadores que incluye el Marketplace Pass. Te sugerimos que te suscribas al que más te convenga.	#
+store.realmsPlus.faq.question11=¿Qué son las Historias de Realms?	#
+store.realmsPlus.faq.answer11=Las Historias de Realms son el centro social de tu Realm. Publica una historia en la sección de historias para enseñarles a los demás qué estás haciendo o para compartir tus aventuras y creaciones. Podrás saber quién es quién con su lista de miembros y ver quién está jugando, ver sus creaciones o unirte a ellos la próxima vez.	#
 
-store.realmsPlus.content.marketplacePass=¡Realms Plus incluye el Pase del mercado!	#
+store.realmsPlus.content.marketplacePass=¡Realms Plus incluye el Marketplace Pass!	#
 store.realmsPlus.content.skinDescription=¡Cambia tu imagen con aspectos!	#
 store.realmsPlus.content.skinDescriptionPersona=¡Vístete con aspectos!	#
 store.realmsPlus.content.skinDescriptionPersona.contentSub=¡Amplía tu selección con nuevos aspectos!	#
@@ -8068,15 +8324,15 @@ store.csb.buyNow.title=Comienza tu suscripción al Marketplace Pass		#### {StrCo
 
 store.csb.subscription=Después de iniciar sesión, tendrás a tu disposición más de 150 elementos de contenido emocionante de Minecraft. Descarga y juega mapas de aventura, ponte aspectos, sumérgete en packs de texturas e incluso puedes obtener un conjunto de objetos del creador de personajes cada mes. Con un catálogo que se actualiza sin parar, siempre hay algo nuevo que descubrir con el Marketplace Pass. Te cobraremos %s al mes y puedes cancelarlo en cualquier momento para evitar cargos futuros.		#### {StrContains="Marketplace Pass"}
 
-store.csb.recurring.offerTrial=El Marketplace Pass es una suscripción continua con una cuota recurrente. Esta cuota se carga automáticamente cada mes hasta que se cancela la suscripción.%sMás de 150 packs del Mercado estarán disponibles de inmediato. Puedes cancelar la suscripción para evitar futuros cargos accediendo a los ajustes de las suscripciones.		#### {StrContains="Marketplace Pass"}
-store.csb.recurring.withoutTrial=El Marketplace Pass es una suscripción continua con una cuota recurrente. Esta cuota se carga automáticamente cada mes hasta que se cancela la suscripción.%sMás de 150 packs del Mercado estarán disponibles de inmediato. Te cobraremos %s al mes y puedes cancelar la suscripción para evitar futuros cargos accediendo a los ajustes de las suscripciones.		#### {StrContains="Marketplace Pass"}
+store.csb.recurring.offerTrial=El Marketplace Pass es una suscripción continua con una cuota recurrente. Esta cuota se carga automáticamente cada mes hasta que se cancela la suscripción.%sMás de 150 packs del Marketplace estarán disponibles de inmediato. Puedes cancelar la suscripción para evitar futuros cargos accediendo a los ajustes de las suscripciones.		#### {StrContains="Marketplace Pass"}
+store.csb.recurring.withoutTrial=El Marketplace Pass es una suscripción continua con una cuota recurrente. Esta cuota se carga automáticamente cada mes hasta que se cancela la suscripción.%sMás de 150 packs del Marketplace estarán disponibles de inmediato. Te cobraremos %s al mes y puedes cancelar la suscripción para evitar futuros cargos accediendo a los ajustes de las suscripciones.		#### {StrContains="Marketplace Pass"}
 store.csb.consumable.offerTrial=Más de 150 packs del Pase de Mercado estarán disponibles de inmediato. Los primeros 30 días serán gratis; después, puedes renovar la suscripción durante 30 días a un precio de %s.	#
 store.csb.consumable.withoutTrial=Más de 150 packs del Pase de Mercado estarán disponibles de inmediato. La suscripción estará disponible durante 30 días a un precio de %s.	#
 
 store.csb.landing.header=Comienza tu suscripción al Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.landing.headerTrial=Prueba gratuita de 30 días. Después, %s por mes	#
 
-store.csb.landing.info=El Marketplace Pass es un servicio de suscripción mensual que te da acceso a más de 150 elementos de contenido del Mercado de Minecraft por %s. La suscripción te permite:		#### {StrContains="Marketplace Pass"}
+store.csb.landing.info=El Marketplace Pass es un servicio de suscripción mensual que te da acceso a más de 150 elementos de contenido del Marketplace de Minecraft por %s. La suscripción te permite:		#### {StrContains="Marketplace Pass"}
 store.csb.landing.info.line1=Sumergirte en aventuras narrativas descargando y jugando alguno de los muchos mundos y minijuegos temáticos	#
 store.csb.landing.info.line2=Cambiar el aspecto de los bloques, de los biomas e incluso de tus criaturas favoritas de Minecraft	#
 store.csb.landing.info.line3=Expandir tu armario dentro del juego	#
@@ -8090,11 +8346,11 @@ store.csb.landing.preview=Vista previa	#
 
 store.csb.faq.header=PREGUNTAS FRECUENTES	#
 store.csb.faq.question1=¿Qué es el Marketplace Pass?		#### {StrContains="Marketplace Pass"}
-store.csb.faq.answer1=El servicio de suscripción del Marketplace Pass te permite acceder a más de 150 elementos de contenido del Mercado de Minecraft por %s al mes.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer1=El servicio de suscripción del Marketplace Pass te permite acceder a más de 150 elementos de contenido del Marketplace de Minecraft por %s al mes.		#### {StrContains="Marketplace Pass"}
 store.csb.faq.question2=¿Con qué frecuencia se actualiza el contenido del Marketplace Pass?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer2=El contenido destacado se actualiza cada mes para que siempre haya algo nuevo que explorar.	#
 store.csb.faq.question3=¿Qué necesito para disfrutar del Marketplace Pass?		#### {StrContains="Marketplace Pass"}
-store.csb.faq.answer3=Para acceder al Marketplace Pass, necesitarás una suscripción activa y una versión de Minecraft: Bedrock Edition compatible con el Mercado de Minecraft. También tendrás que iniciar sesión con una cuenta de Microsoft.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer3=Para acceder al Marketplace Pass, necesitarás una suscripción activa y una versión de Minecraft: Bedrock Edition compatible con el Marketplace de Minecraft. También tendrás que iniciar sesión con una cuenta de Microsoft.		#### {StrContains="Marketplace Pass"}
 store.csb.faq.question4=¿Qué pasará con mi contenido después de que desaparezca del Marketplace Pass?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer4=Cuando un mundo, un pack de texturas, un pack de aspectos o popurrí sale del catálogo, tendrás que comprarlo en el Mercado para seguir jugando. Los packs no desaparecerán de tu almacenamiento local hasta que los elimines. Los objetos del creador de personajes mensuales que hayas canjeado serán tuyos y podrás quedártelos.	#
 store.csb.faq.question5=¿Qué pasa cuando se me acabe la suscripción?	#
@@ -8104,7 +8360,7 @@ store.csb.faq.answer6=La diferencia entre las dos suscripciones es que Realms Pl
 store.csb.faq.question7=¿Puedo suscribirme tanto al Marketplace Pass como a Realms Plus?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer7=La suscripción a Realms Plus incluye el Marketplace Pass. Si te suscribes al Marketplace Pass y quieres explorar Realms Plus, te sugerimos que canceles el Marketplace Pass primero. Los suscriptores activos de Realms Plus no pueden suscribirse al Marketplace Pass.		#### {StrContains="Marketplace Pass"}
 store.csb.faq.question8=¿Puedo usar el contenido del Marketplace Pass en cualquier dispositivo?		#### {StrContains="Marketplace Pass"}
-store.csb.faq.answer8=Si compras el Marketplace Pass, podrás acceder a todos los packs desde cualquier dispositivo con una versión de Minecraft: Bedrock Edition compatible con el Mercado de Minecraft (se vende por separado) si iniciaste sesión en tu cuenta de Minecraft. No es compatible con Amazon Kindle Fire o Minecraft Java Edition.		#### {StrContains="Marketplace Pass"}
+store.csb.faq.answer8=Si compras el Marketplace Pass, podrás acceder a todos los packs desde cualquier dispositivo con una versión de Minecraft: Bedrock Edition compatible con el Marketplace de Minecraft (se vende por separado) si iniciaste sesión en tu cuenta de Minecraft. No es compatible con Amazon Kindle Fire o Minecraft Java Edition.		#### {StrContains="Marketplace Pass"}
 store.csb.faq.question9=¿Puedo jugar al contenido del Marketplace Pass si me uní a la beta de Minecraft en Windows o Xbox?		#### {StrContains="Marketplace Pass"}
 store.csb.faq.answer9=Si ya te suscribiste, podrás acceder al contenido de tu suscripción, pero no podrás suscribirte al Marketplace Pass desde la versión preliminar/beta.		#### {StrContains="Marketplace Pass"}
 store.csb.faq.bottom2=Visita nuestra página de ayuda	#
@@ -8118,7 +8374,7 @@ store.csb.contentPacks.mashupDescription=¡Prueba un poco de todo con los popurr
 store.csb.content.popularPacks=Descubre el Marketplace Pass		#### {StrContains="Marketplace Pass"}
 store.csb.content.viewAllPacks=VER TODOS LOS PACKS	#
 store.csb.content.viewCharacterCreatorItems=VER OBJETOS PARA EL CREADOR DE PERSONAJES	#
-store.csb.content.contentDescription=¡Disfruta del impresionante contenido de Minecraft! Con el Marketplace Pass, tendrás acceso instantáneo a más de 150 artículos del Mercado, como popurrís, mundos, packs de aspectos y aventuras épicas con nuevas incorporaciones cada mes.		#### {StrContains="Marketplace Pass"}
+store.csb.content.contentDescription=¡Disfruta del impresionante contenido de Minecraft! Con el Marketplace Pass, tendrás acceso instantáneo a más de 150 artículos del Marketplace, como popurrís, mundos, packs de aspectos y aventuras épicas con nuevas incorporaciones cada mes.		#### {StrContains="Marketplace Pass"}
 
 store.csb.freeTrial=INICIAR LA PRUEBA GRATUITA	#
 
@@ -8284,15 +8540,36 @@ store.mashup.count.skin=1 aspecto	#
 store.mashup.count.skins=%s aspectos	#
 store.mashup.count.texturePack=1 pack de textura	#
 store.mashup.count.texturePacks=%s packs de textura	#number of texture packs	#
-store.mashup.count.world=1 mundo 	#
+store.mashup.count.world=1 mundo	#
 store.mashup.count.worlds=%s mundos	#number of worlds	#
 store.mashup.count.addonPack=1 complemento	#
 store.mashup.count.addonPacks=%s complementos	#number of addons	#
+store.mashup.count.mashup=Popurrí	#
+store.mashup.hover.label.addonPack=Los complementos se pueden aplicar a cualquier mundo.	#
+store.mashup.hover.label.world=Un mapa de Minecraft hecho a mano.	#
+store.mashup.hover.label.skin=Dale un nuevo aspecto a tu personaje.	#
+store.mashup.hover.label.texturePack=Añádele nuevos gráficos a tu mundo o la interfaz del juego.	#
+store.mashup.hover.label.mashup.lineOne=Una combinación de diferentes tipos de contenido.	#
+store.mashup.hover.label.mashup.lineTwo=Este popurrí incluye:	#
 
 store.addon.activateAddonPack=¡Activar complemento!	#
-store.addon.choseWorldPopupTitle=¿Dónde se puede agregar?	#
-store.addon.choseWorldPopupExisting=Disponibles	#
-store.addon.choseWorldPopupNew=Nuevo	#
+store.addon.newOrExistingTitle=¿Dónde se puede agregar?	#
+store.addon.choseExistingWorld=Disponibles	#
+store.addon.choseNewWorld=Nuevo	#
+store.addon.selectWorldTitle=Seleccionar mundo	#
+store.addon.continue=Continuar	#
+store.addon.local.worlds.title=Mundos (%s)	#
+store.addon.realms.worlds.title=Realms (%s)	#
+store.addon.update.local.title=¿Actualizar el mundo?	#
+store.addon.update.local.body1=Puede ser que el mundo no se vea o no se comporte de la misma forma que los mundos no modificados y no puedas conseguir logros.	#
+store.addon.update.local.body2=Es recomendable guardar una copia de tu mundo antes de continuar.	#
+store.addon.update.local.buttonCopy=Copiar y continuar	#
+store.addon.update.local.buttonContinue=Continuar	#
+store.addon.update.realms.title=¿Actualizar mundo en tus Realms?	#
+store.addon.update.realms.body1=Puede ser que este mundo no se vea o no se comporte de la misma forma que los mundos no modificados y no puedas conseguir logros.	#
+store.addon.update.realms.body2=Se guardará una copia de seguridad de tu Realm de forma automática, pero para conservar la copia de seguridad de manera indefinida, debes descargarla en tu dispositivo.	#
+store.addon.update.realms.buttonCopy=Descargar y continuar	#
+store.addon.update.realms.buttonContinue=Continuar	#
 
 store.mashup.bundle=Paquete	#
 store.mashup.bundle.multipleCreators=Múltiples creadores	#
@@ -8518,6 +8795,7 @@ store.search.filter.clear.minecoin=Borrar filtros de Minecoin	#
 store.search.filter.rating=Clasificaciones	#
 store.search.filter.rating.selectedCount=%d filtros de calificación	#
 store.search.filter.clear.rating=Borrar filtros de calificación	#
+store.search.filter.addonPacks=Complementos	#
 store.search.filter.skinPacks=Aspectos	#
 store.search.filter.texturePacks=Texturas	#
 store.search.filter.title=Filtros	#
@@ -8708,6 +8986,7 @@ tile.chalkboard.threeByTwo.name=Pizarrón	#
 tile.chest.name=Cofre	#
 tile.ender_chest.name=Cofre de Ender	#
 tile.jigsaw.name=Bloque rompecabezas	#
+tile.heavy_core.name=Núcleo pesado	#
 tile.honey_block.name=Bloque de miel	#
 tile.honeycomb_block.name=Bloque de panal	#
 tile.lodestone.name=Magnetita	#
@@ -8769,6 +9048,10 @@ tile.polished_blackstone_slab.name=Losa de piedra negra pulida	#
 tile.polished_blackstone_pressure_plate.name=Placa de presión de piedra negra pulida	#
 tile.polished_blackstone_button.name=Botón de piedra negra pulida	#
 tile.polished_blackstone_wall.name=Pared de piedra negra pulida	#
+tile.polished_tuff.name=Toba volcánica pulida	#
+tile.polished_tuff_slab.name=Losa de toba volcánica pulida	#
+tile.polished_tuff_stairs.name=Escaleras de toba volcánica pulida	#
+tile.polished_tuff_wall.name=Pared de toba volcánica pulida	#
 tile.soul_campfire.name=Fogata de alma	#
 tile.chiseled_nether_bricks.name=Ladrillos del inframundo cincelados	#
 tile.cracked_nether_bricks.name=Ladrillos del inframundo rotos	#
@@ -8847,6 +9130,8 @@ tile.stained_hardened_clay.yellow.name=Terracota amarilla	#
 tile.structure_block.name=Bloque de estructuras	#
 structure_block.waterlog_block=Bloques de agua	#
 tile.structure_void.name=Vacío de estructuras	#
+tile.trial_spawner.name=Generador de prueba	#
+tile.vault.name=Bóveda	#
 tile.wool.black.name=Lana negra	#
 tile.wool.blue.name=Lana azul	#
 tile.wool.brown.name=Lana marrón	#
@@ -9199,6 +9484,13 @@ tile.tallgrass.fern.name=Helecho	#
 tile.tallgrass.grass.name=Pasto	#
 tile.tallgrass.name=Pasto	#
 tile.tallgrass.shrub.name=Arbusto	#
+tile.tuff_brick_slab.name=Losa de ladrillos de toba volcánica	#
+tile.tuff_brick_stairs.name=Escaleras de ladrillos de toba volcánica	#
+tile.tuff_brick_wall.name=Pared de ladrillos de toba volcánica	#
+tile.tuff_bricks.name=Ladrillos de toba volcánica	#
+tile.tuff_slab.name=Losa de toba volcánica	#
+tile.tuff_stairs.name=Escaleras de toba volcánica	#
+tile.tuff_wall.name=Pared de toba volcánica	#
 tile.seagrass.seagrass.name=Algas marinas	#
 tile.sea_pickle.name=Pepinillo de mar	#
 tile.turtle_egg.name=Huevo pequeño de tortuga marina	#
@@ -9276,6 +9568,7 @@ tile.carpet.red.name=Alfombra roja	#
 tile.carpet.silver.name=Alfombra gris claro	#
 tile.carpet.white.name=Alfombra blanca	#
 tile.carpet.yellow.name=Alfombra amarilla	#
+tile.crafter.name=Fabricante	#
 tile.crafting_table.name=Mesa de trabajo	#
 
 tile.glazedTerracotta.white.name=Terracota vidriada blanca	#
@@ -9462,6 +9755,52 @@ tile.waxed_cut_copper_slab.name=Losa de cobre cortado encerado	#
 tile.waxed_exposed_cut_copper_slab.name=Losa de cobre cortado expuesto encerado	#
 tile.waxed_weathered_cut_copper_slab.name=Losa de cobre cortado desgastado encerado	#
 tile.waxed_oxidized_cut_copper_slab.name=Losa de cobre cortado oxidado encerado	#
+
+tile.chiseled_copper.name=Cobre cincelado	#
+tile.exposed_chiseled_copper.name=Cobre cincelado expuesto	#
+tile.oxidized_chiseled_copper.name=Cobre cincelado oxidado	#
+tile.waxed_chiseled_copper.name=Cobre cincelado encerado	#
+tile.waxed_exposed_chiseled_copper.name=Cobre cincelado, expuesto y encerado	#
+tile.waxed_oxidized_chiseled_copper.name=Cobre cincelado, oxidado y encerado	#
+tile.waxed_weathered_chiseled_copper.name=Cobre cincelado, erosionado y encerado	#
+tile.weathered_chiseled_copper.name=Cobre cincelado desgastado	#
+
+tile.copper_bulb.name=Lámpara de cobre	#
+tile.exposed_copper_bulb.name=Lámpara de cobre expuesto	#
+tile.oxidized_copper_bulb.name=Lámpara de cobre oxidado	#
+tile.waxed_copper_bulb.name=Lámpara de cobre encerado	#
+tile.waxed_exposed_copper_bulb.name=Lámpara de cobre expuesto encerado	#
+tile.waxed_oxidized_copper_bulb.name=Lámpara de cobre oxidado encerado	#
+tile.waxed_weathered_copper_bulb.name=Lámpara de cobre erosionado encerado	#
+tile.weathered_copper_bulb.name=Lámpara de cobre desgastado	#
+
+tile.copper_door.name=Puerta de cobre	#
+tile.exposed_copper_door.name=Puerta de cobre expuesto	#
+tile.oxidized_copper_door.name=Puerta de cobre oxidado	#
+tile.waxed_copper_door.name=Puerta de cobre encerado	#
+tile.waxed_exposed_copper_door.name=Puerta de cobre expuesto encerado	#
+tile.waxed_oxidized_copper_door.name=Puerta de cobre oxidado encerado	#
+tile.waxed_weathered_copper_door.name=Puerta de cobre erosionado encerado	#
+tile.weathered_copper_door.name=Puerta de cobre desgastado	#
+
+tile.copper_grate.name=Rejilla de cobre	#
+tile.exposed_copper_grate.name=Rejilla de cobre expuesto	#
+tile.oxidized_copper_grate.name=Rejilla de cobre oxidado	#
+tile.waxed_copper_grate.name=Rejilla de cobre encerado	#
+tile.waxed_exposed_copper_grate.name=Rejilla de cobre expuesto y encerado	#
+tile.waxed_oxidized_copper_grate.name=Rejilla de cobre oxidado y encerado	#
+tile.waxed_weathered_copper_grate.name=Rejilla de cobre desgastado y encerado	#
+tile.weathered_copper_grate.name=Rejilla de cobre desgastado	#
+
+tile.copper_trapdoor.name=Escotilla de cobre	#
+tile.exposed_copper_trapdoor.name=Escotilla de cobre expuesto	#
+tile.oxidized_copper_trapdoor.name=Escotilla de cobre oxidado	#
+tile.waxed_copper_trapdoor.name=Escotilla de cobre encerado	#
+tile.waxed_exposed_copper_trapdoor.name=Escotilla de cobre expuesto y encerado	#
+tile.waxed_oxidized_copper_trapdoor.name=Escotilla de cobre oxidado y encerado	#
+tile.waxed_weathered_copper_trapdoor.name=Escotilla de cobre desgastado y encerado	#
+tile.weathered_copper_trapdoor.name=Escotilla de cobre desgastado	#
+
 tile.raw_copper_block.name=Bloque de cobre crudo	#
 tile.raw_iron_block.name=Bloque de hierro crudo	#
 tile.raw_gold_block.name=Bloque de oro crudo	#
@@ -9542,6 +9881,10 @@ tipped_arrow.effect.luck=Flecha de suerte	#
 tipped_arrow.effect.wither=Flecha de deterioro	#
 tipped_arrow.effect.turtleMaster=Flecha del maestro de tortugas	#
 tipped_arrow.effect.slowFalling=Flecha de caída lenta	#
+tipped_arrow.effect.infested=Flecha de infestación	#
+tipped_arrow.effect.oozing=Flecha de exudación	#
+tipped_arrow.effect.weaving=Flecha de tejido	#
+tipped_arrow.effect.windCharged=Flecha de carga de viento	#
 
 structure_block.title=Bloque de estructuras	#
 structure_block.structure_name=Nombre de estructura	#
@@ -9649,6 +9992,12 @@ worldError.recoveredCorruptedWorld=El mundo dañado se recuperó correctamente.	
 worldError.recoveredCorruptedWorldWarning=Algunos de tus cambios más recientes se pueden haber perdido durante la recuperación.	#
 worldError.worldFailedRecovery=Error en la recuperación	#
 worldError.worldFailedRecoveryText=Detectamos un mundo dañado y no pudimos recuperarlo.	#
+
+writeThrottling.osDialog.body=La operación solicitada tardará %d minutos aproximadamente en completarse. No apagues el dispositivo durante este tiempo.	#
+writeThrottling.osDialog.cancel=Cancelar operación	#
+writeThrottling.osDialog.confirm=Continuar	#
+writeThrottling.progressBar.title=Preparando datos	#
+writeThrottling.progressBar.body=Preparando tus archivos…	#
 
 userData.recovered.title=Guardar datos recuperados	#
 userData.recovered.text=Los ajustes de usuario dañados se recuperaron correctamente.	#
@@ -9842,8 +10191,6 @@ xbox.dev_wrongSandboxSigninFailed.line1=Error al iniciar sesión en el sandbox d
 xbox.dev_wrongSandboxSigninFailed.button.dev=Cambiar a sandbox de desarrollador	#
 xbox.dev_wrongSandboxSigninFailed.button.retail=Cambiar a sandbox de minorista	#
 xbox.dev_wrongSandboxSigninFailed.button.clearXbl=Borrar datos de inicio de sesión en la cuenta	#
-xbox.achievementssignin.line1=Los logros y la puntuación obtenidos definen tu progreso en Minecraft.	#
-xbox.achievementssignin.line2=¡Inicia sesión con una cuenta de Microsoft para empezar a conseguirlos!	#
 xbox.addfriendsignin.line1=Busca a tus amigos con su gamertag para ver cuando estén en línea.	#
 xbox.addfriendsignin.line2=¡Inicia sesión con una cuenta de Microsoft para comenzar a agregar amigos!	#
 xbox.invitesignin.line1=Invita a tus amigos con su gamertag para ver sus mundos cuando estén en línea.	#
@@ -9862,8 +10209,6 @@ xbox.genericsignin.line3=La puedes usar en cualquier dispositivo donde juegues M
 xbox.disconectionscreen.notSignedIn=Inicia sesión con tu cuenta de Microsoft para jugar con tus amigos.	#
 xbox.disconectionscreen.multiplayerNotAllowed=Esta cuenta de Microsoft no tiene permiso para unirse a partidas multijugador.	#
 xbox.disconectionscreen.accessDenied=Debes ser amigo de un jugador de esta partida para poder unirte.	#
-
-xbox.addfriendsscreen.shareProfile=¡Añádeme como amigo en Minecraft!	#
 
 xbox.friendfinder.enterGamertag=Ingresa tu gamertag	#
 xbox.friendfinder.findFriends=Buscar amigos por gamertag	#
@@ -9897,7 +10242,6 @@ xbox.report.area.chat=Mensaje de chat	#
 xbox.report.area.skin=Aspecto de un jugador	#
 xbox.report.area.gameplay=Juego	#
 xbox.report.area.ingame=Creaciones en el juego	#
-xbox.report.area.other=Otro	#
 
 ## Player safety ban reasons defined by legal/compliance
 xbox.report.cyberbullying=Abuso cibernético	#
@@ -9951,6 +10295,8 @@ safety.bannedSkin.title=Aspecto no permitido en multijugador	#
 safety.bannedSkin.button=Más información	#
 safety.bannedSkin.continue=Continuar con el aspecto por defecto	#
 safety.bannedSkin=Tu aspecto actual infringe nuestras normas comunitarias. Selecciona un aspecto diferente para unirte a una partida en multijugador. Haz clic en «%s» para leer nuestras normas comunitarias o envía una solicitud de revisión para tu aspecto actual.	#
+
+safety.textProcessorOffline.message=§eEl chat y los demás textos generados por usuarios no están disponibles en este Realm en estos momentos. Vuelve a intentarlo más tarde.§f	#
 
 authserver.notavailable=Ocurrió un error. No podemos verificar que el servidor al que intentas conectarte sea de confianza. Te recomendamos intentar de nuevo más tarde.	#
 authserver.authfailed=Algo anda mal. El servidor no pasó la prueba de verificación. Alguna entidad no confiable podría estar fingiendo que es un servidor de confianza.	#
@@ -10822,7 +11168,7 @@ gathering.info.modal.body.connectFail=No pudimos establecer una conexión. Vuelv
 gathering.connect.title=Conectando...	#
 gathering.info.qr.title.onlineService=Aprender más	#
 gathering.info.qr.body.onlineService.nso=Necesitas una suscripción a Nintendo Switch Online para unirte a un evento en Minecraft.	#
-gathering.info.qr.body.onlineService.psn=Tienes que haber iniciado sesión en \"PlayStation Plus\" para unirte a un evento en Minecraft.	#
+gathering.info.qr.body.onlineService.psn=Tienes que haber iniciado sesión en PlayStation®Plus para unirte a un evento en Minecraft.		#### CertRequirement: [PlayStation®Plus]
 gathering.info.qr.body.onlineService=Debes haber iniciado sesión para unirte a un evento en Minecraft.	#
 gathering.info.qr.title.childAccount=Juego en línea no permitido	#
 gathering.info.qr.body.childAccount=Tu control parental actual no te permite jugar en línea.	#

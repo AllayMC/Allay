@@ -4,7 +4,6 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
-import org.allaymc.api.block.property.enums.DoublePlantType;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -22,7 +21,6 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author daoge_cmd
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "double_plant_type")
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "upper_block_bit")
 public class BlockDoublePlantBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockDoublePlantBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
@@ -31,19 +29,19 @@ public class BlockDoublePlantBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public ItemStack[] getDrops(BlockState blockState, ItemStack usedItem) {
-        var plantType = blockState.getPropertyValue(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE);
-        return switch (plantType) {
-            case FERN, GRASS -> {
-                var rand = ThreadLocalRandom.current();
-                if (rand.nextInt(8) == 0) {
-                    yield new ItemStack[]{ItemTypes.WHEAT_SEEDS_TYPE.createItemStack()};
-                }
-                yield Utils.EMPTY_ITEM_STACK_ARRAY;
+        if (blockState.getBlockType() == BlockTypes.LILAC_TYPE ||
+                blockState.getBlockType() == BlockTypes.TALL_GRASS_TYPE) {
+            var rand = ThreadLocalRandom.current();
+            if (rand.nextInt(8) == 0) {
+                return new ItemStack[]{ItemTypes.WHEAT_SEEDS_TYPE.createItemStack()};
             }
-            default -> super.getDrops(blockState, usedItem);
-        };
+            return Utils.EMPTY_ITEM_STACK_ARRAY;
+        } else {
+            return super.getDrops(blockState, usedItem);
+        }
     }
 
+    //todo fix ,use tag system
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         if (face != BlockFace.UP && face != BlockFace.DOWN) return;
@@ -65,7 +63,7 @@ public class BlockDoublePlantBaseComponentImpl extends BlockBaseComponentImpl {
         if (willBreak) dimension.breakBlock(current.pos(), null, null);
     }
 
-    protected boolean notSamePlant(BlockState downBlock, DoublePlantType plantType) {
+    protected boolean notSamePlant(BlockState downBlock, BlockType<?> plantType) {
         return downBlock.getBlockType() != BlockTypes.DOUBLE_PLANT_TYPE ||
                 downBlock.getPropertyValue(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE) != plantType;
     }

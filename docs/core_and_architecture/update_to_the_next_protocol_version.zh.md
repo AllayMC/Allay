@@ -18,31 +18,34 @@ DataExtractor有很多容易踩的坑，后面会详细说明一下
 
 如未特别说明，默认根目录为Allay-Data/resources
 
-**第一步，直接更新以下文件:**
-
-- biome_definitions.nbt
-- block_attributes.nbt
-- creative_items.nbt
-- entity_identifiers.nbt
-- item_data.nbt
-- item_tags.json
-
-**第二步，更新unpacked目录下的文件**。这些文件虽然说不会被打包进jar内，但是会在代码生成阶段被使用：
+**第一步，使用Allay-Data模块中的DownloadResource更新以下文件:**
 
 - block_palette.nbt
-- block_property_types.json
-- biome_id_and_type.json（这个文件不经常变动）
+- biome_definitions.nbt
+- entity_identifiers.nbt
+- creative_items.json
+- unpacked/runtime_item_states.json
+
+**第二步，利用DataExtractor更新以下文件:**
+
+- block_attributes.nbt
+- block_material_data.nbt
+- block_correct_tool_special.nbt
+- item_data.nbt
+
+**第三步，更新一些unpacked目录下的其他文件**。这些文件虽然说不会被打包进jar内，但是会在代码生成阶段被使用：
+
+- block_property_types.json (利用Allay-Data模块中的PropertyTypeDataDumper更新)
+- biome_id_and_type.json (这个文件不经常变动)
 - entity_id_map.json（从pmmp/BedrockData获取或手动更新，这个文件不经常变动）
 
-**第三步，更新lang文件**
+**第四步，更新lang文件**
 
-首先从BDS获取到原版语言文件，并复制到`unpacked/lang_raw/vanilla`目录下
-
+首先从BDS`resource_packs\vanilla\texts`获取到原版语言文件，并复制到`unpacked/lang_raw/vanilla`目录下
 然后，运行`Allay-Data`下的`LangBuilder`。
-
 最后，运行`Allay-CodeGen`下的`TrKeysGen`。自此完成语言文件更新。
 
-**第四步，运行`Allay-Data`下的`ItemMetaToBlockStateMappingsGenerator`**，此脚本会基于creative_items.nbt生成item_meta_block_state_bimap.nbt。运行前记得要删除旧的文件！
+**第五步，运行`Allay-Data`下的`AuxToBlockStateBimapExtractor`**，此脚本会生成aux_to_block_state_bimap.json
 
 ## 3.代码生成
 
@@ -56,7 +59,7 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 
 **第四步，检查`block_property_types.json`里面是否存在变动**。若存在，运行`VanillaBlockPropertyTypeGen`。
 
-**第五步，运行VanillaBlockInterfaceGen**。此步需要较多人工操作：
+**第五步，运行`VanillaBlockInterfaceGen`**。此步需要较多人工操作：
 
 - 你需要手动删除旧的方块，若存在方块属性变动，你需要手动修改以适配。你可以查看[BlockStateUpdater](https://github.com/CloudburstMC/BlockStateUpdater)来了解方块更改情况。
   通过查看`Allay-Server/src/main/java/org/allaymc/server/block/type/BlockTypeInitializer.java`内是否存在报错，你可以快速确定哪些方块属性发生了变动， 
@@ -78,10 +81,9 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 你需要更新`ProtocolInfo`里的`PACKET_CODEC`以及`MINECRAFT_VERSION`，`MINECRAFT_VERSION`的更新参考pmmp。确保在此之前依赖库已更新！
 
 ## 6.生成recipes.json（配方文件）
-
-**复制`crafting_data_packet.bin`到`Allay-Data/resources`下，运行`RecipeExportUtil`**。在此之前你需要确保你已经正确完成方块和物品的更新！运行前记得要删除旧的文件！
-
-若不出意外，`Allay-Data/resources/recipes.json`会被更新。自此资源文件已经全部更新完毕，删除先前复制的`crafting_data_packet.bin`。
+在此之前你需要确保你已经正确完成方块和物品的更新！运行前记得要删除旧的文件！ 
+**运行`Allay-Data/src/main/kotlin/org/jukeboxmc/extractor/DataExtractor`** 代理，登录微软账号，进入代理服务器。
+若不出意外，`Allay-Data/resources/recipes.json`会被更新。自此资源文件已经全部更新完毕。
 
 ## 7.测试，完成更新
 

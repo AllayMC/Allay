@@ -66,9 +66,8 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
                         continue;
                     }
                     var blockAttributes = BlockAttributes.fromNBT(dataEntry);
-                    if (!loaded.containsKey(type))
-                        loaded.put(type, new Int2ObjectOpenHashMap<>());
-                    loaded.get(type).put(dataEntry.getInt("blockStateHash"), blockAttributes);
+                    Map<Integer, BlockAttributes> integerBlockAttributesMap = loaded.computeIfAbsent(type, (t) -> new Int2ObjectOpenHashMap<>());
+                    integerBlockAttributesMap.put(dataEntry.getInt("blockStateHash"), blockAttributes);
                 }
                 log.info("Loaded vanilla block attribute data registry successfully");
                 return loaded;

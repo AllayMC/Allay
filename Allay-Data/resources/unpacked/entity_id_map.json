@@ -118,6 +118,12 @@
   "minecraft:allay": 134,
   "minecraft:camel": 138,
   "minecraft:sniffer": 139,
+  "minecraft:breeze": 140,
+  "minecraft:breeze_wind_charge_projectile": 141,
+  "minecraft:armadillo": 142,
+  "minecraft:wind_charge_projectile": 143,
+  "minecraft:bogged": 144,
+  "minecraft:ominous_item_spawner": 145,
   "minecraft:trader_llama": 157,
   "minecraft:chest_boat": 218,
   "minecraft:player": 257
