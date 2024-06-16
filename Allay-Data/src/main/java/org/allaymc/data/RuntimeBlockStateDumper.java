@@ -1,8 +1,6 @@
 package org.allaymc.data;
 
-import org.allaymc.data.chore.HashUtils;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
 
@@ -29,11 +27,7 @@ public class RuntimeBlockStateDumper {
                     bString.append(';').append(key).append('=').append(states.get(key).toString());
                 }
                 stringBuilder.append(bString).append('\n');
-                NbtMapBuilder builder = NbtMapBuilder.from(b);
-                builder.remove("version");
-                NbtMap build = builder.build();
-                int blockHash = HashUtils.fnv1a_32_nbt(build);
-                stringBuilder.append("blockHash=").append(blockHash).append('\n');
+                stringBuilder.append("blockHash=").append(b.getInt("network_id")).append('\n');
                 stringBuilder.append("runtimeId=").append(runtimeId).append("\n\n");
                 runtimeId++;
             }

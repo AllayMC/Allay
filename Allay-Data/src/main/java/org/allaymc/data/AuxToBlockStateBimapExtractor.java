@@ -15,10 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class AuxToBlockStateBimapExtractor {
     public static final BlockPropertyTypeFile BLOCK_PROPERTY_TYPE_INFO_FILE;
@@ -33,21 +30,31 @@ public class AuxToBlockStateBimapExtractor {
         try {
             // Fetch the HTML content of the page
             Document doc = Jsoup.connect(url).get();
-
             Elements elements = doc.select(".content > table > tbody");
             Element tbody = elements.getFirst();
+            block:
             for (var n : tbody.children()) {
                 String name = n.children().get(1).text();
                 int aux = Integer.parseInt(n.children().get(2).text());
                 String state = n.children().get(3).text();
-                state = state.replace(name, "").trim();
-                String[] split = new String[0];
-                if (state.equals("[")) {
-                    state = state.substring(1, state.length() - 1);
-                    split = state.split(",");
+
+                String stateName = state.trim();
+                List<String> split = new ArrayList<>();
+                if (state.contains("[")) {
+                    String[] values = stateName.split(" ");
+                    stateName = values[0];
+                    state = state.replace(stateName, "").trim();
+                    if (state.startsWith("[")) {
+                        state = state.substring(1);
+                    }
+                    if (state.endsWith("]")) {
+                        state = state.substring(0, state.length() - 1);
+                    }
+                    split = Arrays.stream(state.split(",")).toList();
                 }
-                NbtMapBuilder builder = NbtMap.builder().putString("name", name);
+
                 NbtMapBuilder states = NbtMap.builder();
+                NbtMapBuilder builder = NbtMap.builder().putString("name", stateName);
                 for (var s : split) {
                     String property = s.trim();
                     String[] propertyAndValue = property.split("=");
@@ -68,10 +75,10 @@ public class AuxToBlockStateBimapExtractor {
                     }
                     if (blockPropertyTypeInfo == null) {
                         System.out.println("Skip blockPropertyType %s for %s, aux %s".formatted(pn, name, aux));
-                        continue;
+                        continue block;
                     }
                     switch (blockPropertyTypeInfo.valueType) {
-                        case ENUM -> states.put(pn, pvalue);
+                        case ENUM -> states.put(pn, parseString(pvalue));
                         case BOOLEAN -> states.put(pn, parseBoolean(pvalue));
                         case INTEGER -> states.put(pn, Integer.parseInt(pvalue));
                     }
@@ -106,6 +113,16 @@ public class AuxToBlockStateBimapExtractor {
         } catch (NumberFormatException ignore) {
             return Boolean.parseBoolean(v);
         }
+    }
+
+    public static String parseString(String v) {
+        if (v.startsWith("\"")) {
+            v = v.substring(1);
+        }
+        if (v.endsWith("\"")) {
+            v = v.substring(0, v.length() - 1);
+        }
+        return v;
     }
 
     public static class BlockPropertyTypeFile {
