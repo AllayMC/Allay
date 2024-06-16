@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.doubleplant;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
@@ -8,6 +8,7 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.data.AllayBlockTags;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
@@ -41,13 +42,12 @@ public class BlockDoublePlantBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
-    //todo fix ,use tag system
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         if (face != BlockFace.UP && face != BlockFace.DOWN) return;
         var dimension = current.pos().dimension();
         var isUpperBlock = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT);
-        var plantType = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE);
+        var plantType = current.blockState().getBlockType();
         var willBreak = false;
         if (isUpperBlock) {
             willBreak = notSamePlant(
@@ -64,7 +64,6 @@ public class BlockDoublePlantBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected boolean notSamePlant(BlockState downBlock, BlockType<?> plantType) {
-        return downBlock.getBlockType() != BlockTypes.DOUBLE_PLANT_TYPE ||
-                downBlock.getPropertyValue(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE) != plantType;
+        return !downBlock.getBlockType().hasBlockTag(AllayBlockTags.DOUBLE_PLANT) || downBlock.getBlockType() != plantType;
     }
 }

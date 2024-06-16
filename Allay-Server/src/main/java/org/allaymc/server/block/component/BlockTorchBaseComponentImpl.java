@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.torch;
+package org.allaymc.server.block.component;
 
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;

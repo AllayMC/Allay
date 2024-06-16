@@ -1,7 +1,6 @@
 package org.allaymc.server.block.type;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonParser;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -17,24 +16,24 @@ import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
-import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.data.*;
-import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentProvider;
+import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.network.ProtocolInfo;
+import org.allaymc.api.tags.BlockTagRegistry;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.BlockComponentInjectException;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
@@ -45,7 +44,6 @@ import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -88,7 +86,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     @Getter
     private final byte specialValueBits;
     @Getter
-    private final Set<BlockTag> blockTags;
+    private final Set<String> blockTags;
     @Getter
     private final Material material;
     private final ItemType<?> blockItemType;
@@ -105,7 +103,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                            Map<String, BlockPropertyType<?>> properties,
                            Identifier identifier,
                            ItemType<?> blockItemType,
-                           Set<BlockTag> blockTags,
+                           Set<String> blockTags,
                            Material material) {
         this.interfaceClass = interfaceClass;
         this.components = components;
@@ -355,25 +353,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     @Slf4j
     public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
-        // Use array instead of set to reduce memory usage
-        protected static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS;
-
-        static {
-            Map<VanillaBlockId, Set<BlockTag>> blockId2tags = new HashMap<>();
-            JsonParser.parseReader(new InputStreamReader(Objects.requireNonNull(AllayBlockType.class.getClassLoader().getResourceAsStream("block_tags.json"))))
-                    .getAsJsonObject()
-                    .entrySet()
-                    .forEach(entry -> {
-                        var tag = VanillaBlockTags.getTagByName(entry.getKey());
-                        entry.getValue().getAsJsonArray().forEach(blockId -> {
-                            var id = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(blockId.getAsString(), ":", "")[1].toUpperCase());
-                            blockId2tags.computeIfAbsent(id, unused -> new HashSet<>()).add(tag);
-                        });
-                    });
-            VANILLA_BLOCK_TAGS = new HashMap<>();
-            blockId2tags.forEach((id, tags) -> VANILLA_BLOCK_TAGS.put(id, tags.toArray(new BlockTag[0])));
-        }
-
         protected Class<T> interfaceClass;
         protected Map<Identifier, BlockComponent> components = new HashMap<>();
         protected Map<String, BlockPropertyType<?>> properties = new HashMap<>();
@@ -382,7 +361,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected ItemType<?> hardItemType;
         protected boolean isCustomBlock = false;
         protected Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
-        protected Set<BlockTag> blockTags = Set.of();
+        protected Set<String> blockTags = Set.of();
         protected Material material;
 
         public Builder(Class<T> interfaceClass) {
@@ -404,7 +383,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             if (attributeMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
             components.put(BlockAttributeComponentImpl.IDENTIFIER, BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap));
-            var tags = VANILLA_BLOCK_TAGS.get(vanillaBlockId);
+            var tags = BlockTagRegistry.getRegistry().get(vanillaBlockId.getIdentifier());
             if (tags != null) setBlockTags(tags);
             setMaterial(Material.getVanillaBlockMaterial(vanillaBlockId));
             return this;
@@ -461,9 +440,16 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public Builder<T> setBlockTags(BlockTag... blockTags) {
+        public Builder<T> setBlockTags(String... blockTags) {
             // Unmodifiable set
-            this.blockTags = Set.of(blockTags);
+            return setBlockTags(Set.of(blockTags));
+        }
+
+        @Override
+        public Builder<T> setBlockTags(Set<String> blockTags) {
+            // Unmodifiable set
+            this.blockTags = Collections.unmodifiableSet(blockTags);
+            BlockTagRegistry.getRegistry().register(this.identifier, blockTags);
             return this;
         }
 

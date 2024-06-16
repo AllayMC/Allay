@@ -1,6 +1,5 @@
 package org.allaymc.server.item.type;
 
-import com.google.gson.JsonParser;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
@@ -8,36 +7,27 @@ import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
-import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.api.tags.ItemTagRegistry;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.item.component.common.ItemAttributeComponentImpl;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -55,7 +45,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @Getter
     private final int runtimeId;
     @Getter
-    private final Set<ItemTag> itemTags;
+    private final Set<String> itemTags;
     @Getter
     private BlockType<?> blockTypeCache;
     private boolean haveTriedInitBlockTypeCache;
@@ -65,7 +55,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
                           List<ComponentProvider<? extends ItemComponent>> componentProviders,
                           Identifier identifier,
                           int runtimeId,
-                          Set<ItemTag> itemTags) {
+                          Set<String> itemTags) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
         this.identifier = identifier;
@@ -116,31 +106,12 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
     @ToString
     public static class Builder<T extends ItemStack> implements ItemTypeBuilder<T, ItemComponent> {
-        // Use array instead of set to reduce memory usage
-        protected static final Map<VanillaItemId, ItemTag[]> VANILLA_ITEM_TAGS;
-
-        static {
-            Map<VanillaItemId, Set<ItemTag>> itemId2tags = new HashMap<>();
-            JsonParser.parseReader(new InputStreamReader(Objects.requireNonNull(AllayItemType.class.getClassLoader().getResourceAsStream("item_tags.json"))))
-                    .getAsJsonObject()
-                    .entrySet()
-                    .forEach(entry -> {
-                        var tag = VanillaItemTags.getTagByName(entry.getKey());
-                        entry.getValue().getAsJsonArray().forEach(itemId -> {
-                            var id = VanillaItemId.valueOf(AllayStringUtils.fastTwoPartSplit(itemId.getAsString(), ":", "")[1].toUpperCase());
-                            itemId2tags.computeIfAbsent(id, unused -> new HashSet<>()).add(tag);
-                        });
-                    });
-            VANILLA_ITEM_TAGS = new HashMap<>();
-            itemId2tags.forEach((id, tags) -> VANILLA_ITEM_TAGS.put(id, tags.toArray(new ItemTag[0])));
-        }
-
         protected static int CUSTOM_ITEM_RUNTIME_ID_COUNTER = 10000;
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders = new HashMap<>();
         protected Identifier identifier;
         protected int runtimeId = Integer.MAX_VALUE;
-        protected Set<ItemTag> itemTags = Set.of();
+        protected Set<String> itemTags = Set.of();
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -165,7 +136,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             var attributeComponent = new ItemAttributeComponentImpl(attributes);
             componentProviders.put(ItemAttributeComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
             // Tags for vanilla item
-            var tags = VANILLA_ITEM_TAGS.get(vanillaItemId);
+            var tags = ItemTagRegistry.getRegistry().get(vanillaItemId.getIdentifier());
             if (tags != null) setItemTags(tags);
             return this;
         }
@@ -202,9 +173,15 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> setItemTags(ItemTag... itemTags) {
+        public ItemTypeBuilder<T, ItemComponent> setItemTags(String... itemTags) {
+            return this.setItemTags(Set.of(itemTags));
+        }
+
+        @Override
+        public ItemTypeBuilder<T, ItemComponent> setItemTags(Set<String> itemTags) {
             // Unmodifiable set
-            this.itemTags = Set.of(itemTags);
+            this.itemTags = Collections.unmodifiableSet(itemTags);
+            ItemTagRegistry.getRegistry().register(this.identifier, itemTags);
             return this;
         }
 

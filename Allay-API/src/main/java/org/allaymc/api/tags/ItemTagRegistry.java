@@ -1,7 +1,7 @@
 package org.allaymc.api.tags;
 
 import com.google.gson.JsonParser;
-import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -13,16 +13,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class BlockTagRegistry extends SimpleMappedRegistry<Identifier, Set<String>, Map<Identifier, Set<String>>> {
+public class ItemTagRegistry extends SimpleMappedRegistry<Identifier, Set<String>, Map<Identifier, Set<String>>> {
     static final Map<String, Set<Identifier>> tag2Ids = new HashMap<>();
 
-    public static volatile BlockTagRegistry REGISTRY;
+    public static volatile ItemTagRegistry REGISTRY;
 
-    public static synchronized BlockTagRegistry getRegistry() {
+    public static synchronized ItemTagRegistry getRegistry() {
         if (REGISTRY == null) {
-            synchronized (BlockTagRegistry.class) {
+            synchronized (ItemTagRegistry.class) {
                 if (REGISTRY == null) {
-                    REGISTRY = new BlockTagRegistry();
+                    REGISTRY = new ItemTagRegistry();
                 }
             }
         }
@@ -37,7 +37,7 @@ public class BlockTagRegistry extends SimpleMappedRegistry<Identifier, Set<Strin
 
     @UnmodifiableView
     @NotNull
-    public Set<Identifier> getBlockSet(final String tag) {
+    public Set<Identifier> getItemSet(final String tag) {
         return Collections.unmodifiableSet(tag2Ids.getOrDefault(tag, Set.of()));
     }
 
@@ -45,8 +45,17 @@ public class BlockTagRegistry extends SimpleMappedRegistry<Identifier, Set<Strin
         return tag2Ids.containsKey(tag);
     }
 
-    private BlockTagRegistry() {
-        super(BlockTagRegistry.class.getClassLoader().getResourceAsStream("block_tags.json"), new BlockTagRegistryLoader());
+    @Override
+    public Set<String> register(Identifier identifier, Set<String> tags) {
+        for (var tag : tags) {
+            Set<Identifier> identifiers = tag2Ids.computeIfAbsent(tag, (t) -> new HashSet<>());
+            identifiers.add(identifier);
+        }
+        return super.register(identifier, tags);
+    }
+
+    private ItemTagRegistry() {
+        super(ItemTagRegistry.class.getClassLoader().getResourceAsStream("item_tags.json"), new ItemTagRegistryLoader());
 
         for (var e : getContent().entrySet()) {
             Set<String> value = e.getValue();
@@ -59,18 +68,18 @@ public class BlockTagRegistry extends SimpleMappedRegistry<Identifier, Set<Strin
     }
 
 
-    static class BlockTagRegistryLoader implements RegistryLoader<InputStream, Map<Identifier, Set<String>>> {
+    static class ItemTagRegistryLoader implements RegistryLoader<InputStream, Map<Identifier, Set<String>>> {
         @Override
         public Map<Identifier, Set<String>> load(InputStream input) {
-            Map<Identifier, Set<String>> blockId2tags = new HashMap<>();
+            Map<Identifier, Set<String>> map = new HashMap<>();
             JsonParser.parseReader(new InputStreamReader(Objects.requireNonNull(input)))
                     .getAsJsonObject()
                     .entrySet()
-                    .forEach(entry -> entry.getValue().getAsJsonArray().forEach(blockId -> {
-                        var id = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(blockId.getAsString(), ":", "")[1].toUpperCase());
-                        blockId2tags.computeIfAbsent(id.getIdentifier(), unused -> new HashSet<>()).add(entry.getKey());
+                    .forEach(entry -> entry.getValue().getAsJsonArray().forEach(id -> {
+                        var identifier = VanillaItemId.valueOf(AllayStringUtils.fastTwoPartSplit(id.getAsString(), ":", "")[1].toUpperCase());
+                        map.computeIfAbsent(identifier.getIdentifier(), unused -> new HashSet<>()).add(entry.getKey());
                     }));
-            return blockId2tags;
+            return map;
         }
     }
 }

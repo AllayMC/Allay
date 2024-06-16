@@ -7,8 +7,8 @@ import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.container.impl.BarrelContainer;
 import org.allaymc.api.container.impl.ChestContainer;
 import org.allaymc.api.data.VanillaBlockEntityId;
-import org.allaymc.server.blockentity.component.barrel.BlockEntityBarrelBaseComponentImpl;
-import org.allaymc.server.blockentity.component.chest.BlockEntityChestBaseComponentImpl;
+import org.allaymc.server.blockentity.component.BlockEntityBarrelBaseComponentImpl;
+import org.allaymc.server.blockentity.component.BlockEntityChestBaseComponentImpl;
 import org.allaymc.server.blockentity.component.common.BlockEntityContainerHolderComponentImpl;
 
 /**

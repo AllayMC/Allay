@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.allaymc.api.data.VanillaItemTags.*;
-import static org.allaymc.api.data.VanillaItemTags.WOODEN_TIER;
 import static org.allaymc.api.data.VanillaMaterialTypes.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS_TYPE;
 
@@ -78,9 +77,9 @@ public interface ItemBaseComponent extends ItemComponent {
 
     NbtMap saveExtraTag();
 
-    NbtMap getCustomNBTContent();
+    NbtMap getCustomNBT();
 
-    void setCustomNBTContent(NbtMap customNBTContent);
+    void setCustomNBT(NbtMap customNBTContent);
 
     void loadExtraTag(NbtMap extraTag);
 

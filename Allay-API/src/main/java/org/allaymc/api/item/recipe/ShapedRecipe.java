@@ -1,5 +1,6 @@
 package org.allaymc.api.item.recipe;
 
+import com.google.common.base.Preconditions;
 import lombok.Builder;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
@@ -7,6 +8,7 @@ import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.allaymc.api.item.recipe.input.Input;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapedRecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
@@ -29,13 +31,15 @@ public class ShapedRecipe extends CraftingRecipe {
     protected static final ItemStack[][] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0][0];
     protected char[][] pattern;
     protected Map<Character, ItemDescriptor> keys;
+    protected boolean assumeSymetry = true;
 
     @Builder
-    protected ShapedRecipe(Map<Character, ItemDescriptor> keys, char[][] pattern, Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
-        super(identifier, outputs, tag, uuid, priority);
+    protected ShapedRecipe(Identifier identifier, Map<Character, ItemDescriptor> keys, char[][] pattern, ItemStack[] outputs, String tag, UUID uuid, int priority, boolean assumeSymetry, RecipeUnlockingRequirement requirement) {
+        super(identifier, outputs, tag, uuid, priority, requirement);
         this.keys = keys;
         this.pattern = pattern;
         this.networkRecipeDataCache = buildNetworkRecipeData();
+        this.assumeSymetry = assumeSymetry;
     }
 
     @Override
@@ -44,11 +48,17 @@ public class ShapedRecipe extends CraftingRecipe {
     }
 
     protected RecipeData buildNetworkRecipeData() {
+        Preconditions.checkNotNull(requirement);
+        Preconditions.checkNotNull(identifier);
+        Preconditions.checkNotNull(uuid);
+        Preconditions.checkNotNull(tag);
+        Preconditions.checkNotNull(outputs);
+        Preconditions.checkNotNull(pattern);
         return ShapedRecipeData.of(
                 getType(), identifier.toString(),
                 pattern[0].length, pattern.length,
                 buildNetworkIngredients(), buildNetworkOutputs(), uuid,
-                tag, priority, networkId
+                tag, priority, networkId, assumeSymetry, requirement
         );
     }
 
@@ -176,6 +186,10 @@ public class ShapedRecipe extends CraftingRecipe {
             }
         }
         return false;
+    }
+
+    public boolean isAssumeSymetry() {
+        return assumeSymetry;
     }
 
     public char[][] getPattern() {

@@ -1,7 +1,6 @@
 package org.allaymc.api.item;
 
 import lombok.Getter;
-import org.allaymc.api.item.tag.ItemTag;
 
 import static org.allaymc.api.data.VanillaItemTags.*;
 
@@ -18,13 +17,12 @@ public enum ItemTier {
     NETHERITE(NETHERITE_TIER),
     GOLD(GOLDEN_TIER);
 
-    public static final ItemTier[] ORDER_OF_QUALITY =
-            {GOLD, NETHERITE, DIAMOND, IRON, STONE, WOODEN};
+    public static final ItemTier[] ORDER_OF_QUALITY = {GOLD, NETHERITE, DIAMOND, IRON, STONE, WOODEN};
 
     @Getter
-    private final ItemTag itemTag;
+    private final String itemTag;
 
-    ItemTier(ItemTag itemTag) {
+    ItemTier(String itemTag) {
         this.itemTag = itemTag;
     }
 

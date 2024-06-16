@@ -1,10 +1,10 @@
-package org.allaymc.server.block.component.grassblock;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 
 /**
@@ -12,13 +12,13 @@ import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
  *
  * @author daoge_cmd
  */
-public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockGrassBlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockGlassBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockGlassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
     @Override
     public ItemStack[] getDrops(BlockState blockState, ItemStack usedItem) {
-        return new ItemStack[]{ItemTypes.DIRT_TYPE.createItemStack()};
+        return Utils.EMPTY_ITEM_STACK_ARRAY;
     }
 }

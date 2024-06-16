@@ -5,16 +5,14 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.data.VanillaMaterialTypes;
-import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
+import org.allaymc.api.data.VanillaMaterialTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.common.ItemAttributeComponent;
@@ -22,10 +20,12 @@ import org.allaymc.api.item.component.common.ItemBaseComponent;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.*;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -69,7 +69,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected List<String> lore = new ArrayList<>();
     protected Map<EnchantmentType, EnchantmentInstance> enchantments = new HashMap<>();
     //TODO: item lock type
-    protected NbtMap customNBTContent = NbtMap.EMPTY;
+    protected NbtMap customNBT = NbtMap.EMPTY;
     protected int stackNetworkId;
 
     public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
@@ -104,6 +104,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
                 var enchantment = EnchantmentHelper.fromNBT(tag);
                 this.enchantments.put(enchantment.getType(), enchantment);
             });
+        }
+        if (extraTag.containsKey("customNBT")) {
+            this.customNBT = extraTag.getCompound("customNBT");
         }
     }
 
@@ -225,7 +228,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-
     public NbtMap saveExtraTag() {
         NbtMapBuilder nbtBuilder = NbtMap.builder();
         if (durability != 0) {
@@ -252,19 +254,19 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         //TODO: item lock type
 
         // Custom NBT content
-        nbtBuilder.putAll(customNBTContent);
+        nbtBuilder.putCompound("customNBT", customNBT);
 
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }
 
     @Override
-    public NbtMap getCustomNBTContent() {
-        return customNBTContent;
+    public NbtMap getCustomNBT() {
+        return customNBT;
     }
 
     @Override
-    public void setCustomNBTContent(NbtMap customNBTContent) {
-        this.customNBTContent = customNBTContent;
+    public void setCustomNBT(NbtMap customNBT) {
+        this.customNBT = customNBT;
     }
 
     @Override
@@ -332,7 +334,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public short getEnchantmentLevel(EnchantmentType enchantmentType) {
-        var instance =  enchantments.get(enchantmentType);
+        var instance = enchantments.get(enchantmentType);
         return instance == null ? 0 : instance.getLevel();
     }
 

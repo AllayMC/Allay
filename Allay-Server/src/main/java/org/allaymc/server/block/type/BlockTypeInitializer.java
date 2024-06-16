@@ -7,23 +7,17 @@ import org.allaymc.api.block.interfaces.torch.*;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
+import org.allaymc.api.data.AllayBlockTags;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.CommonShapes;
-import org.allaymc.server.block.component.barrel.BlockBarrelBaseComponentImpl;
-import org.allaymc.server.block.component.chest.BlockChestBaseComponentImpl;
+import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
-import org.allaymc.server.block.component.craftingtable.BlockCraftingTableBaseComponentImpl;
-import org.allaymc.server.block.component.glass.BlockGlassBaseComponentImpl;
-import org.allaymc.server.block.component.grassblock.BlockGrassBlockBaseComponentImpl;
-import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
-import org.allaymc.server.block.component.tallgrass.BlockTallgrassBaseComponentImpl;
-import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 
 /**
  * Allay Project 2024/3/9
  *
- * @author daoge_cmd
+ * @author daoge_cmd | CoolLoong
  */
 public final class BlockTypeInitializer {
     public static void initGrassBlock() {
@@ -31,14 +25,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockGrassBlockBehavior.class)
                 .vanillaBlock(VanillaBlockId.GRASS_BLOCK)
                 .setBlockBaseComponentSupplier(BlockGrassBlockBaseComponentImpl::new)
-                .build();
-    }
-
-    public static void initTallGrass() {
-        BlockTypes.TALL_GRASS_TYPE = BlockTypeBuilder
-                .builder(BlockTallGrassBehavior.class)
-                .vanillaBlock(VanillaBlockId.TALL_GRASS)
-                .setBlockBaseComponentSupplier(BlockTallgrassBaseComponentImpl::new)
                 .build();
     }
 
@@ -147,7 +133,7 @@ public final class BlockTypeInitializer {
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
     }
-    
+
     public static void initCherryStairs() {
         BlockTypes.CHERRY_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockCherryStairsBehavior.class)
@@ -698,6 +684,72 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(VanillaBlockId.UNLIT_REDSTONE_TORCH)
                 .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initLilac() {
+        if (BlockTypes.LILAC_TYPE != null) return;
+        BlockTypes.LILAC_TYPE = BlockTypeBuilder
+                .builder(BlockLilacBehavior.class)
+                .vanillaBlock(VanillaBlockId.LILAC)
+                .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
+                .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initTallGrass() {
+        if (BlockTypes.TALL_GRASS_TYPE != null) return;
+        BlockTypes.TALL_GRASS_TYPE = BlockTypeBuilder
+                .builder(BlockTallGrassBehavior.class)
+                .vanillaBlock(VanillaBlockId.TALL_GRASS)
+                .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
+                .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initLargeFern() {
+        if (BlockTypes.LARGE_FERN_TYPE != null) return;
+        BlockTypes.LARGE_FERN_TYPE = BlockTypeBuilder
+                .builder(BlockLargeFernBehavior.class)
+                .vanillaBlock(VanillaBlockId.LARGE_FERN)
+                .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
+                .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initRoseBush() {
+        if (BlockTypes.ROSE_BUSH_TYPE != null) return;
+        BlockTypes.ROSE_BUSH_TYPE = BlockTypeBuilder
+                .builder(BlockRoseBushBehavior.class)
+                .vanillaBlock(VanillaBlockId.ROSE_BUSH)
+                .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
+                .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initPeony() {
+        if (BlockTypes.PEONY_TYPE != null) return;
+        BlockTypes.PEONY_TYPE = BlockTypeBuilder
+                .builder(BlockPeonyBehavior.class)
+                .vanillaBlock(VanillaBlockId.PEONY)
+                .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
+                .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initSunflower() {
+        if (BlockTypes.SUNFLOWER_TYPE != null) return;
+        BlockTypes.SUNFLOWER_TYPE = BlockTypeBuilder
+                .builder(BlockSunflowerBehavior.class)
+                .vanillaBlock(VanillaBlockId.SUNFLOWER)
+                .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBlockTags(AllayBlockTags.DOUBLE_PLANT)
+                .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
                 .build();
     }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.UUID;
 /**
  * Allay Project 2023/11/25
  *
- * @author daoge_cmd
+ * @author daoge_cmd | CoolLoong
  */
 public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueRecipe, IdentifiedRecipe, NetworkRecipe {
     protected Identifier identifier;
@@ -26,14 +27,16 @@ public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueReci
     @Getter
     protected int priority;
     protected RecipeData networkRecipeDataCache;
+    protected RecipeUnlockingRequirement requirement;
 
-    protected CraftingRecipe(Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
+    protected CraftingRecipe(Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority, RecipeUnlockingRequirement requirement) {
         this.identifier = identifier;
         this.outputs = outputs;
         this.tag = tag;
         this.networkId = NetworkRecipe.assignNetworkId();
         this.uuid = uuid;
         this.priority = priority;
+        this.requirement = requirement;
     }
 
 
@@ -65,6 +68,10 @@ public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueReci
     @Override
     public RecipeData toNetworkRecipeData() {
         return networkRecipeDataCache;
+    }
+
+    public RecipeUnlockingRequirement getRequirement() {
+        return requirement;
     }
 
     protected List<ItemData> buildNetworkOutputs() {

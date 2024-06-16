@@ -3,7 +3,6 @@ package org.allaymc.api.item.descriptor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.tag.ItemTag;
 
 /**
  * Allay Project 2023/11/25
@@ -13,7 +12,7 @@ import org.allaymc.api.item.tag.ItemTag;
 @AllArgsConstructor
 @Getter
 public class ItemTagDescriptor implements ItemDescriptor {
-    protected ItemTag itemTag;
+    protected String itemTag;
 
     @Override
     public boolean match(ItemStack itemStack) {
@@ -23,7 +22,7 @@ public class ItemTagDescriptor implements ItemDescriptor {
     @Override
     public org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork() {
         return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemTagDescriptor(
-                itemTag.name()
+                itemTag
         );
     }
 }

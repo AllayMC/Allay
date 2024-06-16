@@ -1,4 +1,4 @@
-package org.allaymc.server.blockentity.component.chest;
+package org.allaymc.server.blockentity.component;
 
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;

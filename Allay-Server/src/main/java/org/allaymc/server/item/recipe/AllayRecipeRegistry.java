@@ -1,42 +1,37 @@
 package org.allaymc.server.item.recipe;
 
+import com.google.common.base.Preconditions;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.data.VanillaItemTags;
+import org.allaymc.api.block.palette.BlockStateHashPalette;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ComplexAliasDescriptor;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.recipe.NetworkRecipe;
-import org.allaymc.api.item.recipe.Recipe;
-import org.allaymc.api.item.recipe.RecipeRegistry;
-import org.allaymc.api.item.recipe.ShapedRecipe;
-import org.allaymc.api.item.recipe.ShapelessRecipe;
+import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
+import org.allaymc.api.tags.ItemTagRegistry;
 import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.item.type.AllayItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Allay Project 2023/11/25
@@ -68,10 +63,12 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 switch (CraftingDataType.byId(obj.get("type").getAsInt())) {
                     case SHAPELESS -> registerShapeless(parseShapeless(obj));
                     case SHAPED -> registerShaped(parseShaped(obj));
-                    case FURNACE, FURNACE_DATA, MULTI, SHULKER_BOX, SHAPELESS_CHEMISTRY, SHAPED_CHEMISTRY, SMITHING_TRANSFORM, SMITHING_TRIM -> {
+                    case FURNACE, FURNACE_DATA, MULTI, SHULKER_BOX, SHAPELESS_CHEMISTRY, SHAPED_CHEMISTRY,
+                         SMITHING_TRANSFORM, SMITHING_TRIM -> {
                         // TODO
                     }
-                    default -> throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
+                    default ->
+                            throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
                 }
 
                 // furnace recipes don't have both id and uuid
@@ -116,7 +113,9 @@ public class AllayRecipeRegistry implements RecipeRegistry {
             var itemDescriptor = parseItemDescriptor(k.getValue().getAsJsonObject());
             keys.put(key, itemDescriptor);
         });
-
+        boolean assumeSymetry = obj.get("assumeSymetry").getAsBoolean();
+        RecipeUnlockingRequirement requirement = parseRequirement(obj);
+        if (requirement == null) requirement = RecipeUnlockingRequirement.INVALID;
         return ShapedRecipe
                 .builder()
                 .identifier(new Identifier(obj.get("id").getAsString()))
@@ -126,27 +125,27 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 .outputs(parseOutputs(obj).toArray(ItemStack[]::new))
                 .tag(obj.get("block").getAsString())
                 .uuid(UUID.fromString(obj.get("uuid").getAsString()))
+                .assumeSymetry(assumeSymetry)
+                .requirement(requirement)
                 .build();
     }
 
+    private RecipeUnlockingRequirement parseRequirement(JsonObject obj) {
+        if (obj.get("requirement") != null) {
+            JsonObject requirement = obj.get("requirement").getAsJsonObject();
+            String string = requirement.get("context").getAsString();
+            RecipeUnlockingRequirement.UnlockingContext unlockingContext = RecipeUnlockingRequirement.UnlockingContext.valueOf(string.toUpperCase(Locale.ENGLISH));
 
-    private List<ItemStack> parseOutputs(JsonObject obj) {
-        // Outputs
-        // Multi output is possible
-        List<ItemStack> outputs = new ArrayList<>();
-        var outputJson = obj.get("output");
-        if (outputJson.isJsonObject()) {
-            outputs.add(parseOutput(outputJson.getAsJsonObject()));
-        } else {
-            for (var output : outputJson.getAsJsonArray()) {
-                outputs.add(parseOutput(output.getAsJsonObject()));
-            }
+            JsonArray items = requirement.get("items").getAsJsonArray();
+            RecipeUnlockingRequirement recipeUnlockingRequirement = new RecipeUnlockingRequirement(unlockingContext);
+            recipeUnlockingRequirement.getIngredients().addAll(items.asList().stream().map(JsonElement::getAsJsonObject).map(this::parseItemDescriptorWithCount).toList());
+            return recipeUnlockingRequirement;
         }
-        return outputs;
+        return null;
     }
 
     private ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
-        return switch(jsonObject.get("type").getAsString()) {
+        return switch (jsonObject.get("type").getAsString()) {
             case "default" -> {
                 var itemId = new Identifier(jsonObject.get("itemId").getAsString());
                 var itemType = ItemTypeRegistry.getRegistry().get(itemId);
@@ -165,21 +164,35 @@ public class AllayRecipeRegistry implements RecipeRegistry {
             }
             case "item_tag" -> {
                 var tagId = jsonObject.get("itemTag").getAsString();
-                var itemTag = VanillaItemTags.getTagByName(tagId);
-                Objects.requireNonNull(itemTag, "Unknown item tag: " + tagId);
-                yield new ItemTagDescriptor(itemTag);
+                Preconditions.checkArgument(ItemTagRegistry.getRegistry().contain(tagId), "Unknown item tag: " + tagId);
+                yield new ItemTagDescriptor(tagId);
             }
             default -> throw new IllegalStateException("Unexpected value: " + jsonObject.get("type").getAsString());
         };
     }
 
+    private ItemDescriptorWithCount parseItemDescriptorWithCount(JsonObject jsonObject) {
+        ItemDescriptor itemDescriptor = parseItemDescriptor(jsonObject);
+        int count = jsonObject.get("count").getAsInt();
+        return new ItemDescriptorWithCount(itemDescriptor.toNetwork(), count);
+    }
+
     private ItemStack parseOutput(JsonObject jsonObject) {
+        var count = jsonObject.get("count").getAsInt();
+        var meta = jsonObject.has("damage") ? jsonObject.get("damage").getAsInt() : jsonObject.has("auxValue") ? jsonObject.get("auxValue").getAsInt() : 0;
+        var nbtMap = jsonObject.has("nbt_b64") ? AllayNbtUtils.base64ToNbt(jsonObject.get("nbt_b64").getAsString()) : NbtMap.EMPTY;
+        
+        if(jsonObject.has("blockHash")){
+            int blockHash = jsonObject.get("blockHash").getAsInt();
+            BlockState blockState = BlockStateHashPalette.getRegistry().get(blockHash);
+            ItemStack itemStack = blockState.toItemStack();
+            itemStack.setCount(count);
+            itemStack.loadExtraTag(nbtMap);
+        }
+        
         var itemId = new Identifier(jsonObject.get("id").getAsString());
         var itemType = ItemTypeRegistry.getRegistry().get(itemId);
         Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
-        var count = jsonObject.get("count").getAsInt();
-        var meta = jsonObject.has("damage") ? jsonObject.get("damage").getAsInt() : 0;
-        var nbtMap = jsonObject.has("nbt_b64") ? AllayNbtUtils.base64ToNbt(jsonObject.get("nbt_b64").getAsString()) : NbtMap.EMPTY;
         return itemType.createItemStack(
                 SimpleItemStackInitInfo
                         .builder()
@@ -188,6 +201,22 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                         .extraTag(nbtMap)
                         .build()
         );
+    }
+
+
+    private List<ItemStack> parseOutputs(JsonObject obj) {
+        // Outputs
+        // Multi output is possible
+        List<ItemStack> outputs = new ArrayList<>();
+        var outputJson = obj.get("output");
+        if (outputJson.isJsonObject()) {
+            outputs.add(parseOutput(outputJson.getAsJsonObject()));
+        } else {
+            for (var output : outputJson.getAsJsonArray()) {
+                outputs.add(parseOutput(output.getAsJsonObject()));
+            }
+        }
+        return outputs;
     }
 
     @Override

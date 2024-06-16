@@ -6,7 +6,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.utils.Identified;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
@@ -52,9 +51,9 @@ public interface ItemType<T extends ItemStack> extends Identified {
     }
 
     @Unmodifiable
-    Set<ItemTag> getItemTags();
+    Set<String> getItemTags();
 
-    default boolean hasItemTag(ItemTag itemTag) {
+    default boolean hasItemTag(String itemTag) {
         return getItemTags().contains(itemTag);
     }
 }

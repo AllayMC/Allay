@@ -1,9 +1,6 @@
 package org.allaymc.server.item.type;
 
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemDiamondStack;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
@@ -29,7 +26,7 @@ public class AllayItemTypeTest {
         assertEquals(0, itemStack.getMeta());
         assertEquals(0, itemStack.getDurability());
         assertEquals("", itemStack.getCustomName());
-        assertEquals(NbtMap.EMPTY, itemStack.getCustomNBTContent());
+        assertEquals(NbtMap.EMPTY, itemStack.getCustomNBT());
         assertEquals(List.of(), itemStack.getLore());
         assertEquals(DIAMOND_TYPE, itemStack.getItemType());
     }
@@ -62,7 +59,7 @@ public class AllayItemTypeTest {
         assertEquals("TestCustomName", itemStack.getCustomName());
 
         // Custom NBT Content
-        itemStack.setCustomNBTContent(
+        itemStack.setCustomNBT(
                 NbtMap.builder()
                         .putString("testKey", "testValue")
                         .build()

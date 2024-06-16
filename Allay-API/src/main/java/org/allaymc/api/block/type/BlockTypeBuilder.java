@@ -7,7 +7,6 @@ import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.common.CustomBlockComponent;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.utils.Identifier;
@@ -15,6 +14,7 @@ import org.allaymc.api.utils.Identifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import static org.allaymc.api.component.interfaces.ComponentProvider.findComponentIdentifierInCertainClass;
@@ -75,7 +75,9 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
 
     BlockTypeBuilder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier);
 
-    BlockTypeBuilder<T> setBlockTags(BlockTag... blockTags);
+    BlockTypeBuilder<T> setBlockTags(String... blockTags);
+    
+    BlockTypeBuilder<T> setBlockTags(Set<String> blockTags);
 
     BlockTypeBuilder<T> setMaterial(Material material);
 

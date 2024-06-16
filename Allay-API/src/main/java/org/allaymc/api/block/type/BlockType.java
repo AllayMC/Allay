@@ -6,7 +6,6 @@ import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.Identified;
 import org.allaymc.api.utils.Identifier;
@@ -72,11 +71,11 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     }
 
     @Unmodifiable
-    Set<BlockTag> getBlockTags();
+    Set<String> getBlockTags();
 
     Material getMaterial();
 
-    default boolean hasBlockTag(BlockTag blockTag) {
+    default boolean hasBlockTag(String blockTag) {
         return getBlockTags().contains(blockTag);
     }
 }

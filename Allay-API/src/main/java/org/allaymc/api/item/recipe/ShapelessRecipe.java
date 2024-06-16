@@ -1,5 +1,6 @@
 package org.allaymc.api.item.recipe;
 
+import com.google.common.base.Preconditions;
 import lombok.Builder;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
@@ -7,6 +8,7 @@ import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.allaymc.api.item.recipe.input.Input;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.RecipeUnlockingRequirement;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapelessRecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
@@ -27,8 +29,8 @@ public class ShapelessRecipe extends CraftingRecipe {
     protected ItemDescriptor[] ingredients;
 
     @Builder
-    protected ShapelessRecipe(ItemDescriptor[] ingredients, Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
-        super(identifier, outputs, tag, uuid, priority);
+    protected ShapelessRecipe(Identifier identifier, ItemDescriptor[] ingredients, ItemStack[] outputs, String tag, UUID uuid, int priority, RecipeUnlockingRequirement requirement) {
+        super(identifier, outputs, tag, uuid, priority,requirement);
         this.ingredients = ingredients;
         this.networkRecipeDataCache = buildNetworkRecipeData();
     }
@@ -83,10 +85,16 @@ public class ShapelessRecipe extends CraftingRecipe {
     }
 
     protected RecipeData buildNetworkRecipeData() {
+        Preconditions.checkNotNull(requirement);
+        Preconditions.checkNotNull(identifier);
+        Preconditions.checkNotNull(uuid);
+        Preconditions.checkNotNull(tag);
+        Preconditions.checkNotNull(outputs);
+        Preconditions.checkNotNull(ingredients);
         return ShapelessRecipeData.of(
                 getType(), identifier.toString(),
                 buildNetworkIngredients(), buildNetworkOutputs(),
-                uuid, tag, priority, networkId
+                uuid, tag, priority, networkId, requirement
         );
     }
 

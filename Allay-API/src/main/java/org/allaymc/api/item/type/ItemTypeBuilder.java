@@ -6,11 +6,11 @@ import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.utils.Identifier;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -58,7 +58,9 @@ public interface ItemTypeBuilder<T extends ItemStack, C extends ItemComponent> {
 
     ItemTypeBuilder<T, C> addComponent(ComponentProvider<ItemComponent> componentProvider);
 
-    ItemTypeBuilder<T, C> setItemTags(ItemTag... itemTags);
+    ItemTypeBuilder<T, C> setItemTags(String... itemTags);
+
+    ItemTypeBuilder<T, C> setItemTags(Set<String> itemTags);
 
     ItemType<T> build();
 
