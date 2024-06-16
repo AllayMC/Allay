@@ -1,8 +1,10 @@
 package org.allaymc.server.item.registry;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
@@ -11,11 +13,15 @@ import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.JSONUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
@@ -55,7 +61,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
         }
 
         public Loader() {
-            this(() -> AllayCreativeItemRegistry.class.getClassLoader().getResourceAsStream("creative_items.nbt"));
+            this(() -> AllayCreativeItemRegistry.class.getClassLoader().getResourceAsStream("creative_items.json"));
         }
 
         @SneakyThrows
@@ -63,16 +69,16 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
         public Map<Integer, ItemStack> load(Void input) {
             log.info(I18n.get().tr(TrKeys.A_CREATIVEITEM_LOADING));
             var map = new TreeMap<Integer, ItemStack>();
-            NbtMap nbt;
-            try (var reader = NbtUtils.createGZIPReader(inputStreamSupplier.get())) {
-                nbt = (NbtMap) reader.readTag();
-            }
-            nbt.forEach((key, value) -> {
-                var index = Integer.parseInt(key);
-                var obj = (NbtMap) value;
-                var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(obj.getString("name")));
-                int meta = obj.getInt("damage");
-                var tag = obj.getCompound("tag", NbtMap.builder().build());
+            JsonObject from = JSONUtils.from(inputStreamSupplier.get(), JsonObject.class);
+            JsonArray items = from.getAsJsonArray("items");
+            for (int i = 0; i < items.size(); i++) {
+                JsonObject obj = items.get(i).getAsJsonObject();
+                var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(obj.get("id").getAsString()));
+
+                JsonElement jsonElement = obj.get("damage");
+                int meta = jsonElement == null ? 0 : jsonElement.getAsInt();
+
+                NbtMap tag = obj.get("nbt_b64") == null ? NbtMap.builder().build() : (NbtMap) NbtUtils.createReaderLE(new ByteArrayInputStream(Base64.getDecoder().decode(obj.get("nbt_b64").getAsString()))).readTag();
                 assert itemType != null;
                 var itemStack = itemType.createItemStack(
                         SimpleItemStackInitInfo
@@ -80,11 +86,11 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
                                 .count(1)
                                 .meta(meta)
                                 .extraTag(tag)
-                                .stackNetworkId(index + 1)
+                                .stackNetworkId(i + 1)
                                 .build()
                 );
-                map.put(index, itemStack);
-            });
+                map.put(i, itemStack);
+            }
             log.info(I18n.get().tr(TrKeys.A_CREATIVEITEM_LOADED));
             return Collections.synchronizedMap(map);
         }

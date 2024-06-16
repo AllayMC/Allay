@@ -1,6 +1,6 @@
 package org.allaymc.data;
 
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.data.chore.HashUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 public class RuntimeBlockStateDumper {
+
     public static void main(String[] args) throws IOException {
         StringBuilder stringBuilder = new StringBuilder("# WARNING! Don't edit this file! It's automatically regenerated!");
         stringBuilder.append('\n');

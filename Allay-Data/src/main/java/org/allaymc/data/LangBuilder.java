@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.data.chore.LangCode;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
+import static org.allaymc.data.chore.AllayStringUtils.fastTwoPartSplit;
 
 /**
  * Allay Project 2023/12/15

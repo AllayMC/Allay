@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.allaymc.codegen.Utils.convertToPascalCase;
+import static org.allaymc.codegen.chore.Utils.convertToPascalCase;
 
 /**
  * Allay Project 2023/4/8

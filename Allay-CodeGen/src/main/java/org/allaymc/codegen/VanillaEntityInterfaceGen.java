@@ -2,6 +2,8 @@ package org.allaymc.codegen;
 
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
+import org.allaymc.codegen.chore.BaseInterfaceGen;
+import org.allaymc.codegen.chore.Utils;
 import org.allaymc.dependence.VanillaEntityId;
 
 import javax.lang.model.element.Modifier;

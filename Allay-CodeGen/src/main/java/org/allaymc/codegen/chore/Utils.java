@@ -1,4 +1,4 @@
-package org.allaymc.codegen;
+package org.allaymc.codegen.chore;
 
 import org.allaymc.dependence.StringUtils;
 

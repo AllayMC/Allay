@@ -1,4 +1,4 @@
-package org.allaymc.codegen;
+package org.allaymc.codegen.chore;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;

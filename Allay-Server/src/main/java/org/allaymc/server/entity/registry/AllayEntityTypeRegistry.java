@@ -4,18 +4,19 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.api.utils.stream.BigEndianNetworkDataInputStream;
 import org.allaymc.server.entity.type.EntityTypeDefaultInitializer;
 import org.allaymc.server.entity.type.EntityTypeInitializer;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
+import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -69,7 +70,12 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
     @SneakyThrows
     private void loadVanillaEntityIdentifierTag() {
         //TODO: Support custom entity
-        availableEntityIdentifierTag = (NbtMap) NbtUtils.createNetworkReader(Objects.requireNonNull(AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("entity_identifiers.nbt"))).readTag();
+        try (NBTInputStream input = new NBTInputStream(new BigEndianNetworkDataInputStream(
+                Objects.requireNonNull(AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("entity_identifiers.nbt")),
+                0
+        ))) {
+            availableEntityIdentifierTag = (NbtMap) input.readTag();
+        }
     }
 
     @Override
