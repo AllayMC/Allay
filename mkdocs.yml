@@ -13,17 +13,13 @@ extra:
       link: https://github.com/AllayMC
 
 markdown_extensions:
-  - pymdownx.arithmatex:
-      generic: true
+  - mdx_math
 
 extra_javascript:
-  - javascripts/katex.js
-  - https://unpkg.com/katex@0/dist/katex.min.js
-  - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
+  - https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML
 
 extra_css:
   - stylesheets/extra.css
-  - https://unpkg.com/katex@0/dist/katex.min.css
 
 plugins:
   - search
