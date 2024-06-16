@@ -17,7 +17,7 @@ public abstract class Context {
         this.currentChunk = currentChunk;
     }
 
-    protected DimensionInfo getDimensionInfo() {
+    public DimensionInfo getDimensionInfo() {
         return currentChunk.getDimensionInfo();
     }
 }
