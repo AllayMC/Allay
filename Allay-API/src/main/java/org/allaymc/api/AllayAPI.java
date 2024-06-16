@@ -185,18 +185,18 @@ public final class AllayAPI {
         // Biome
         requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);
 
-        // Misc
-        requireImpl(VanillaItemMetaBlockStateBiMap.class, VanillaItemMetaBlockStateBiMap.REGISTRY::set);
-
         // World
         requireImpl(WorldStorageFactory.class, WorldStorageFactory.FACTORY::set);
         requireImpl(WorldGeneratorFactory.class, WorldGeneratorFactory.FACTORY::set);
 
-        // Creative Item Registry
-        requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
-
-        // Recipe
-        requireImpl(RecipeRegistry.class, RecipeRegistry.REGISTRY::set);
+        {
+            // Misc
+            requireImpl(VanillaItemMetaBlockStateBiMap.class, VanillaItemMetaBlockStateBiMap.REGISTRY::set);
+            // Creative Item Registry
+            requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
+            // Recipe
+            requireImpl(RecipeRegistry.class, RecipeRegistry.REGISTRY::set);
+        }
 
         // Perm
         requireImpl(PermTree.PermTreeFactory.class, PermTree.FACTORY::set);

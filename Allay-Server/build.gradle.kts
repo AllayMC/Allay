@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.formsrt)
 
     testImplementation(libs.bytebuddy)
+    testImplementation("org.jsoup:jsoup:1.17.2")
 }
 
 gitProperties {

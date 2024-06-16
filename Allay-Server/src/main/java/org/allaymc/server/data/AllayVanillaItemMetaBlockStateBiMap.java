@@ -37,13 +37,13 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
                     log.warn("Cannot find item type by identifier {}", itemIdentifier);
                     return;
                 }
-                Map<String, Integer> auxToBlockStateMap = (Map<String, Integer>) metaToHash;
-                auxToBlockStateMap.forEach((aux, blockStateHash) -> {
+                JsonObject auxToBlockStateMap = (JsonObject) metaToHash;
+                auxToBlockStateMap.asMap().forEach((aux, blockStateHash) -> {
                     var metaInt = Integer.parseInt(aux);
-                    var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
+                    var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash.getAsInt());
                     Objects.requireNonNull(blockState, "Cannot find block state by hash: " + blockStateHash);
                     ITEM_TYPE_TO_META_MAP.computeIfAbsent(itemType, k -> new Int2ObjectOpenHashMap<>()).put(metaInt, blockState);
-                    BLOCK_STATE_HASH_TO_META_MAP.computeIfAbsent(blockState.getBlockType(), k -> new Int2ObjectOpenHashMap<>()).put(blockStateHash, metaInt);
+                    BLOCK_STATE_HASH_TO_META_MAP.computeIfAbsent(blockState.getBlockType(), k -> new Int2ObjectOpenHashMap<>()).put(blockStateHash.getAsInt(), metaInt);
                 });
             });
         } catch (Exception e) {

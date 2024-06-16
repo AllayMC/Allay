@@ -15,7 +15,6 @@ dependencies {
         exclude(group = "org.cloudburstmc", module = "nbt") // use allay nbt
     }
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jsoup:jsoup:1.17.2")
 }
 
 tasks.processResources {

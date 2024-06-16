@@ -164,18 +164,18 @@ public final class Allay {
         // Biome
         api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
 
-        // Misc
-        api.bind(VanillaItemMetaBlockStateBiMap.class, AllayVanillaItemMetaBlockStateBiMap::new, instance -> ((AllayVanillaItemMetaBlockStateBiMap) instance).init());
-
         // World
         api.bind(WorldStorageFactory.class, AllayWorldStorageFactory::new);
         api.bind(WorldGeneratorFactory.class, AllayWorldGeneratorFactory::new);
 
-        // Creative Item Registry
-        api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
-
-        // Recipe
-        api.bind(RecipeRegistry.class, AllayRecipeRegistry::new, instance -> ((AllayRecipeRegistry) instance).registerVanillaRecipes());
+        {
+            // Misc
+            api.bind(VanillaItemMetaBlockStateBiMap.class, AllayVanillaItemMetaBlockStateBiMap::new, instance -> ((AllayVanillaItemMetaBlockStateBiMap) instance).init());
+            // Creative Item Registry
+            api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
+            // Recipe
+            api.bind(RecipeRegistry.class, AllayRecipeRegistry::new, instance -> ((AllayRecipeRegistry) instance).registerVanillaRecipes());
+        }
 
         // Perm
         api.bind(PermTree.PermTreeFactory.class, () -> AllayPermTree::create);

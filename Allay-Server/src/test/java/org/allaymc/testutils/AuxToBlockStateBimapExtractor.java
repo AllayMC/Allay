@@ -1,8 +1,14 @@
-package org.allaymc.data;
+package org.allaymc.testutils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.allaymc.data.chore.HashUtils;
+import org.allaymc.api.block.registry.BlockTypeRegistry;
+import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.data.VanillaBlockPropertyTypes;
+import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.exception.MissingImplementationException;
+import org.allaymc.server.Allay;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.jsoup.Jsoup;
@@ -17,12 +23,18 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
+/**
+ * 运行前需要关闭VanillaItemMetaBlockStateBiMap CreativeItemRegistry RecipeRegistry
+ */
 public class AuxToBlockStateBimapExtractor {
     public static final BlockPropertyTypeFile BLOCK_PROPERTY_TYPE_INFO_FILE;
     public static final Path BLOCK_PROPERTY_TYPES_FILE = Path.of("Allay-Data/resources/unpacked/block_property_types.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MissingImplementationException {
+        Allay.initI18n();
+        Allay.initAllayAPI();
+
         String url = "https://learn.microsoft.com/en-us/minecraft/creator/reference/content/blockreference/examples/auxvaluetoblockstatemap?view=minecraft-bedrock-stable";
 
         //                                       name         meta  blockStateHash
@@ -50,14 +62,20 @@ public class AuxToBlockStateBimapExtractor {
                     if (state.endsWith("]")) {
                         state = state.substring(0, state.length() - 1);
                     }
-                    split = Arrays.stream(state.split(",")).toList();
+                    split = Arrays.stream(state.split(",")).map(String::trim).toList();
                 }
 
-                NbtMapBuilder states = NbtMap.builder();
+                if (handleDocError(stateName, aux, split)) continue;
+
                 NbtMapBuilder builder = NbtMap.builder().putString("name", stateName);
+                BlockType<?> blockType = BlockTypeRegistry.getRegistry().get(new Identifier(stateName));
+                if (blockType == null) {
+                    System.out.println("Skip blockPropertyType %s, aux %s".formatted(stateName, aux));
+                    continue;
+                }
+                BlockState blockState = blockType.getDefaultState();
                 for (var s : split) {
-                    String property = s.trim();
-                    String[] propertyAndValue = property.split("=");
+                    String[] propertyAndValue = s.split("=");
                     String pn = propertyAndValue[0].trim();
                     String pvalue = propertyAndValue[1].trim();
                     pn = pn.substring(1, pn.length() - 1);
@@ -69,25 +87,30 @@ public class AuxToBlockStateBimapExtractor {
                             blockPropertyTypeInfo = first.get().getValue();
                         }
                     }
-                    if (blockPropertyTypeInfo == null && BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(pn)) {
-                        String s1 = BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(name).get(pn);
-                        blockPropertyTypeInfo = BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.get(s1);
+                    if (BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(pn)) {
+                        pn = BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(name).get(pn);
+                        blockPropertyTypeInfo = BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.get(pn);
                     }
                     if (blockPropertyTypeInfo == null) {
                         System.out.println("Skip blockPropertyType %s for %s, aux %s".formatted(pn, name, aux));
                         continue block;
                     }
+
+                    if (pn.contains(":")) {
+                        pn = pn.replace(":", "_");
+                    }
+
                     switch (blockPropertyTypeInfo.valueType) {
-                        case ENUM -> states.put(pn, parseString(pvalue));
-                        case BOOLEAN -> states.put(pn, parseBoolean(pvalue));
-                        case INTEGER -> states.put(pn, Integer.parseInt(pvalue));
+                        case ENUM ->
+                                blockState = blockState.setProperty(VanillaBlockPropertyTypes.from(pn).tryCreateValue(parseString(pvalue)));
+                        case BOOLEAN ->
+                                blockState = blockState.setProperty(VanillaBlockPropertyTypes.from(pn).tryCreateValue(parseBoolean(pvalue)));
+                        case INTEGER ->
+                                blockState = blockState.setProperty(VanillaBlockPropertyTypes.from(pn).tryCreateValue(Integer.parseInt(pvalue)));
                     }
                 }
-                builder.put("states", states.build());
-                NbtMap nbt = builder.build();
-                int i = HashUtils.fnv1a_32_nbt(nbt);
                 Map<Integer, Integer> integerIntegerMap = auxValue2BlockStateMap.computeIfAbsent(name, (xx) -> new LinkedHashMap<>());
-                integerIntegerMap.put(aux, i);
+                integerIntegerMap.put(aux, blockState.blockStateHash());
             }
             String json = GSON.toJson(auxValue2BlockStateMap);
             Path path = Path.of("Allay-Data/resources/aux_to_block_state_bimap.json");
@@ -96,6 +119,28 @@ public class AuxToBlockStateBimapExtractor {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Handle doc error in microsoft.
+     */
+    public static boolean handleDocError(String name, int aux, List<String> properties) {
+        if (name.equals("minecraft:cake") && aux == 7) {//skip because cake havent 7
+            return true;
+        }
+        if (name.equals("minecraft:chorus_flower") && (aux == 6 || aux == 7)) {//skip because chorus_flower havent 6,7
+            return true;
+        }
+        if (name.equals("minecraft:cocoa") && (aux >= 12)) {
+            return true;
+        }
+        if (name.equals("minecraft:composter") && (aux >= 9)) {
+            return true;
+        }
+        if (name.equals("minecraft:rail") && (aux >= 9)) {
+            return true;
+        }
+        return false;
     }
 
     static {
