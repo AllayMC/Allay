@@ -79,9 +79,9 @@ The `data` field in `LevelEventPacket(type=BLOCK_UPDATE_BREAK, position=(15.0, -
 time required to mine.
 The formula is
 
-```math
+$$
 time = \frac{6553.5}{\text{required mining seconds}}
-```
+$$
 
 The data field in `LevelEventPacket(type=PARTICLE_CRACK_BLOCK, position=(3.5, -60.5, -1.5), data=50342246)` indicates
 the block's BlockStateHash.
