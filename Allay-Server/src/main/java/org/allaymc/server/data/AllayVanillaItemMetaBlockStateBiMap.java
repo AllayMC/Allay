@@ -55,7 +55,7 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
     public Function<Integer, BlockState> getMetaToBlockStateMapper(ItemType<?> itemType) {
         var map = ITEM_TYPE_TO_META_MAP.get(itemType);
         if (map != null) {
-            return map::get;
+            return hash -> map.getOrDefault(hash, itemType.getBlockType().getDefaultState());
         } else {
             return unused -> itemType.getBlockType().getDefaultState();
         }
@@ -65,7 +65,7 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
     public Function<Integer, Integer> getBlockStateHashToMetaMapper(BlockType<?> blockType) {
         var map = BLOCK_STATE_HASH_TO_META_MAP.get(blockType);
         if (map != null) {
-            return map::get;
+            return hash -> map.getOrDefault(hash, 0);
         } else {
             return unused -> 0;
         }
