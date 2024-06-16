@@ -8,6 +8,8 @@ import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Lighter;
 import org.allaymc.api.world.generator.function.Populator;
 
+import java.util.function.Consumer;
+
 /**
  * Allay Project 2024/6/16
  *
@@ -30,6 +32,8 @@ public interface WorldGenerator {
     String getPreset();
 
     void setDimension(Dimension dimension);
+
+    Dimension getDimension();
     
     interface WorldGeneratorBuilder {
         WorldGeneratorBuilder name(String name);
@@ -45,6 +49,8 @@ public interface WorldGenerator {
         WorldGeneratorBuilder lighters(Lighter... lighters);
 
         WorldGeneratorBuilder entitySpawners(EntitySpawner... entitySpawners);
+
+        WorldGeneratorBuilder onDimensionSet(Consumer<Dimension> onDimensionSet);
 
         WorldGenerator build();
     }

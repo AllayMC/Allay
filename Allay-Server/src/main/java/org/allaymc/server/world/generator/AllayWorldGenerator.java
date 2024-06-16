@@ -22,13 +22,13 @@ import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Allay Project 2023/7/1
  *
  * @author daoge_cmd
  */
-@Getter
 @Slf4j
 public final class AllayWorldGenerator implements WorldGenerator {
 
@@ -42,9 +42,11 @@ public final class AllayWorldGenerator implements WorldGenerator {
     private final List<Populator> populators ;
     private final List<Lighter> lighters;
     private final List<EntitySpawner> entitySpawners;
+    private final Consumer<Dimension> onDimensionSet;
     // 存储基本区块，基本区块的ChunkStatus为NOISED
     private final Map<Long, Chunk> basicChunks = new Long2ObjectNonBlockingMap<>();
 
+    @Getter
     private Dimension dimension; // Will be set later
 
     public static AllayWorldGeneratorBuilder builder() {
@@ -58,7 +60,8 @@ public final class AllayWorldGenerator implements WorldGenerator {
             List<Noiser> noisers,
             List<Populator> populators,
             List<Lighter> lighters,
-            List<EntitySpawner> entitySpawners
+            List<EntitySpawner> entitySpawners,
+            Consumer<Dimension> onDimensionSet
     ) {
         this.name = name;
         this.type = type;
@@ -67,6 +70,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
         this.populators = populators;
         this.lighters = lighters;
         this.entitySpawners = entitySpawners;
+        this.onDimensionSet = onDimensionSet;
         init();
     }
 
@@ -83,6 +87,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
             throw new IllegalStateException("Dimension already set");
         }
         this.dimension = dimension;
+        onDimensionSet.accept(dimension);
     }
 
     /**
@@ -195,6 +200,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
         private List<Populator> populators = List.of();
         private List<Lighter> lighters = List.of();
         private List<EntitySpawner> entitySpawners = List.of();
+        private Consumer<Dimension> onDimensionSet;
 
         public AllayWorldGeneratorBuilder name(String name) {
             this.name = name;
@@ -231,11 +237,16 @@ public final class AllayWorldGenerator implements WorldGenerator {
             return this;
         }
 
+        public AllayWorldGeneratorBuilder onDimensionSet(Consumer<Dimension> onDimensionSet) {
+            this.onDimensionSet = onDimensionSet;
+            return this;
+        }
+
         public WorldGenerator build() {
             if (name == null || name.isBlank()) {
                 throw new IllegalStateException("Name cannot be null or blank");
             }
-            return new AllayWorldGenerator(name, type, preset, noisers, populators, lighters, entitySpawners);
+            return new AllayWorldGenerator(name, type, preset, noisers, populators, lighters, entitySpawners, onDimensionSet);
         }
     }
 }

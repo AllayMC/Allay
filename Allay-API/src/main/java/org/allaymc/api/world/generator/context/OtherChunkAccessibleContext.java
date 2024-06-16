@@ -1,5 +1,6 @@
 package org.allaymc.api.world.generator.context;
 
+import lombok.Getter;
 import org.allaymc.api.world.chunk.ChunkAccessible;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 
@@ -10,6 +11,7 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
  */
 public abstract class OtherChunkAccessibleContext extends Context {
 
+    @Getter
     protected ChunkAccessible chunkAccessor;
 
     public OtherChunkAccessibleContext(UnsafeChunk currentChunk, ChunkAccessible chunkAccessor) {
