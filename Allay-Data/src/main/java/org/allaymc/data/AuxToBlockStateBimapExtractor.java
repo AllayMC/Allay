@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class MarkdownListExtractor {
+public class AuxToBlockStateBimapExtractor {
     public static final BlockPropertyTypeFile BLOCK_PROPERTY_TYPE_INFO_FILE;
     public static final Path BLOCK_PROPERTY_TYPES_FILE = Path.of("Allay-Data/resources/unpacked/block_property_types.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
