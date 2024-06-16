@@ -4,7 +4,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
@@ -14,6 +13,7 @@ import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.common.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
@@ -119,6 +119,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
             throw new IllegalArgumentException("Trying to close a container which is not opened! Type: " + container.getContainerType());
         var containerClosePacket = new ContainerClosePacket();
         containerClosePacket.setId(assignedId);
+        containerClosePacket.setType(container.getContainerType().toNetworkType());
         networkComponent.sendPacket(containerClosePacket);
 
         typeToContainer.remove(idToContainer.remove(assignedId).getContainerType());
