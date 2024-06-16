@@ -10,7 +10,6 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.service.EntityPhysicsService;
@@ -114,7 +113,7 @@ public class AllayDimension implements Dimension {
         pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
         pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));
         pk.setData(block.blockStateHash());
-        getChunkService().getChunkByLevelPos(x ,z).addChunkPacket(pk);
+        getChunkService().getChunkByLevelPos(x, z).addChunkPacket(pk);
         block.getBehavior().onBreak(
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
                 usedItem,

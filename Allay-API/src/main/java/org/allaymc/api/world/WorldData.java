@@ -7,6 +7,7 @@ import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -21,6 +22,7 @@ public class WorldData {
     public static final long TIME_MIDNIGHT = 18000;
     public static final long TIME_SUNRISE = 23000;
     public static final long TIME_FULL = 24000;
+
     @Builder.Default
     String biomeOverride = "";
     @Builder.Default
@@ -30,8 +32,28 @@ public class WorldData {
     @Builder.Default
     Difficulty difficulty = Difficulty.from(1);
     @Builder.Default
+    @Language("JSON")
     String flatWorldLayers = """
-            {"biome_id":1,"block_layers":[{"block_name":"minecraft:bedrock","count":1},{"block_name":"minecraft:dirt","count":2},{"block_name":"minecraft:grass","count":1}],"encoding_version":6,"structure_options":null,"world_version":"version.post_1_18"}
+            {
+              "biome_id": 1,
+              "block_layers": [
+                {
+                  "block_name": "minecraft:bedrock",
+                  "count": 1
+                },
+                {
+                  "block_name": "minecraft:dirt",
+                  "count": 2
+                },
+                {
+                  "block_name": "minecraft:grass",
+                  "count": 1
+                }
+              ],
+              "encoding_version": 6,
+              "structure_options": null,
+              "world_version": "version.post_1_18"
+            }
             """;
     @Builder.Default
     boolean forceGameType = false;

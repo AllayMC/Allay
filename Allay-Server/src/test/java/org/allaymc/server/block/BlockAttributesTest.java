@@ -7,15 +7,13 @@ import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.testutils.AllayTestExtension;
+import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/3/25
@@ -25,54 +23,54 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(AllayTestExtension.class)
 @Slf4j
 class BlockAttributesTest {
+    @Language("JSON")
     private static final String json = """
             {
-                "aabbCollision": "0.0005,0.0005,0.0005,0.9995,0.1825,0.9995",
-                "burnAbility": 0,
-                "burnChance": 0,
-                "canContainLiquid": true,
-                "color": {
-                            "a": 255,
-                            "b": 178,
-                            "g": 76,
-                            "hexString": "#ff334cb2",
-                            "nearestColorCode": "§9",
-                            "r": 51
-                        },
-                "explosionResistance": 15,
-                "friction": 0.6,
-                "hardness": 3,
-                "hasBlockEntity": false,
-                "hasComparatorSignal": false,
-                "hasCollision": true,
-                "name": "minecraft:trapdoor",
-                "isAlwaysDestroyable": true,
-                "isContainerBlock": false,
-                "isLiquid": false,
-                "isMotionBlockingBlock": false,
-                "isPowerSource": false,
-                "isSolid": false,
-                "isUnbreakable": false,
-                "isWaterBlocking": true,
-                "isLavaFlammable": true,
-                "lightDampening": 0,
-                "lightEmission": 0,
-                "pushesUpFallingBlocks": false,
-                "superHot": false,
-                "thickness": 0,
-                "translucency": 0,
-                "isAir": true,
-                "isBounceBlock": true,
-                "isButtonBlock": true,
-                "isCropBlock": true,
-                "isDoorBlock": true,
-                "isFallingBlock": true,
-                "isFenceBlock": true,
-                "isFenceGateBlock": true,
-                "isLavaFlammable": true,
-                "isSlabBlock": true,
-                "isStemBlock": true,
-                "isThinFenceBlock": true
+              "aabbCollision": "0.0005,0.0005,0.0005,0.9995,0.1825,0.9995",
+              "burnAbility": 0,
+              "burnChance": 0,
+              "canContainLiquid": true,
+              "color": {
+                "a": 255,
+                "b": 178,
+                "g": 76,
+                "hexString": "#ff334cb2",
+                "nearestColorCode": "§9",
+                "r": 51
+              },
+              "explosionResistance": 15,
+              "friction": 0.6,
+              "hardness": 3,
+              "hasBlockEntity": false,
+              "hasComparatorSignal": false,
+              "hasCollision": true,
+              "name": "minecraft:trapdoor",
+              "isAlwaysDestroyable": true,
+              "isContainerBlock": false,
+              "isLiquid": false,
+              "isMotionBlockingBlock": false,
+              "isPowerSource": false,
+              "isSolid": false,
+              "isUnbreakable": false,
+              "isWaterBlocking": true,
+              "lightDampening": 0,
+              "lightEmission": 0,
+              "pushesUpFallingBlocks": false,
+              "superHot": false,
+              "thickness": 0,
+              "translucency": 0,
+              "isAir": true,
+              "isBounceBlock": true,
+              "isButtonBlock": true,
+              "isCropBlock": true,
+              "isDoorBlock": true,
+              "isFallingBlock": true,
+              "isFenceBlock": true,
+              "isFenceGateBlock": true,
+              "isLavaFlammable": true,
+              "isSlabBlock": true,
+              "isStemBlock": true,
+              "isThinFenceBlock": true
             }
             """;
 
@@ -115,8 +113,8 @@ class BlockAttributesTest {
             for (var state : type.getBlockStateHashMap().values()) {
                 var expected = attributeMap.get(state.blockStateHash());
                 if (expected == null) {
-                    log.error("Missing block attributes for state: " + state + ", Block: " + type.getIdentifier());
-                    log.info("expected blockhash: " + state.blockStateHash());
+                    log.error("Missing block attributes for state: {}, Block: {}", state, type.getIdentifier());
+                    log.info("expected blockhash: {}", state.blockStateHash());
                     error++;
                 }
             }

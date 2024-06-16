@@ -53,7 +53,7 @@ public final class AllayWorldPool implements WorldPool {
 
     @Override
     public void close() {
-        worlds.values().forEach(org.allaymc.api.world.World::close);
+        worlds.values().forEach(World::close);
     }
 
     @Override
