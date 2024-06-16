@@ -6,9 +6,7 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd | CoolLoong
  */
 public enum WallConnectionTypeSouth {
-  SHORT,
-
   NONE,
-
+  SHORT,
   TALL
 }

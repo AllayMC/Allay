@@ -86,7 +86,8 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         obj.getAsJsonArray("input").forEach(item -> {
             ingredients.add(parseItemDescriptor(item.getAsJsonObject()));
         });
-
+        RecipeUnlockingRequirement requirement = parseRequirement(obj);
+        if (requirement == null) requirement = RecipeUnlockingRequirement.INVALID;
         return ShapelessRecipe
                 .builder()
                 .identifier(new Identifier(obj.get("id").getAsString()))
@@ -95,6 +96,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 .outputs(parseOutputs(obj).toArray(ItemStack[]::new))
                 .tag(obj.get("block").getAsString())
                 .uuid(UUID.fromString(obj.get("uuid").getAsString()))
+                .requirement(requirement)
                 .build();
     }
 

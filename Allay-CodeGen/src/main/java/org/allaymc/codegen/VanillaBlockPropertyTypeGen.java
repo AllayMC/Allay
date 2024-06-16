@@ -122,14 +122,14 @@ public class VanillaBlockPropertyTypeGen {
                         .returns(BlockPropertyType)
                         .addParameter(String.class, "propertyName")
                         .addCode("""
-                                  try {
-                                  Field field = VanillaBlockPropertyTypes.class.getField(propertyName.toUpperCase(Locale.ENGLISH));
-                                  return (BlockPropertyType) field.get(VanillaBlockPropertyTypes.class);
-                                  } catch (NoSuchFieldException e) {
-                                      throw new RuntimeException(e);
-                                  } catch (IllegalAccessException e) {
-                                      throw new RuntimeException(e);
-                                  }""")
+                                try {
+                                Field field = VanillaBlockPropertyTypes.class.getField(propertyName.toUpperCase(Locale.ENGLISH));
+                                return (BlockPropertyType) field.get(VanillaBlockPropertyTypes.class);
+                                } catch (NoSuchFieldException e) {
+                                    throw new RuntimeException(e);
+                                } catch (IllegalAccessException e) {
+                                    throw new RuntimeException(e);
+                                }""")
                         .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                         .build()
         );
@@ -148,8 +148,10 @@ public class VanillaBlockPropertyTypeGen {
         }
         var javaFile = JavaFile.builder("org.allaymc.api.block.property.enums", codeBuilder.build()).build();
         var path = ENUM_PATH.resolve("enums/" + enumName + ".java");
-        if (Files.exists(path))
-            Files.delete(path);
+        if (Files.exists(path)) {
+            System.out.println("skip %s because exist".formatted(enumName));
+            return;
+        }
         Files.writeString(path, javaFile.toString());
     }
 
