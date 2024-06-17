@@ -192,7 +192,7 @@ public final class AllayChunkService implements ChunkService {
                 .thenApplyAsync(chunk -> {
                     if (chunk.getState() != FINISHED) {
                         // 只要未完全加载好都重新加载
-                        chunk = getWorldGenerator().generateFinishedChunkSynchronously(x, z);
+                        chunk = getWorldGenerator().generateChunk(x, z);
                     }
                     return chunk;
                     }, Server.getInstance().getComputeThreadPool())
@@ -228,7 +228,7 @@ public final class AllayChunkService implements ChunkService {
         }
         try {
             if (chunk.getState() != FINISHED) {
-                chunk = getWorldGenerator().generateFinishedChunkSynchronously(x, z);
+                chunk = getWorldGenerator().generateChunk(x, z);
             }
         } catch (Throwable t) {
             log.error("Error while generating chunk ({},{}) !", x, z, t);

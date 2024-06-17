@@ -23,7 +23,7 @@ public interface WorldGenerator {
         return BUILDER_FACTORY.get().create();
     }
 
-    Chunk generateFinishedChunkSynchronously(int x, int z);
+    Chunk generateChunk(int x, int z);
 
     String getName();
 

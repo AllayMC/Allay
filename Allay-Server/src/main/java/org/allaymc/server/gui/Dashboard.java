@@ -463,6 +463,7 @@ public final class Dashboard {
     private void createUIComponents() {
         // Init the three graph
         ramGraph = new GraphPanel();
+        ramGraph.setVariableExtreme(false);
         ramValues = new ArrayList<>();
         // Set the ram graph to 0
         for (int i = 0; i < RAM_VALUE_COUNT; i++) {

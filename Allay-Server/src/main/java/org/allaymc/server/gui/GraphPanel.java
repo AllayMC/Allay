@@ -59,7 +59,8 @@ public final class GraphPanel extends JPanel {
     private final static int MIN_SCORE_THRESHOLD = 0;
     private int minScore = MIN_SCORE_THRESHOLD;
     private int maxScore = MAX_SCORE_THRESHOLD;
-
+    @Setter
+    private boolean variableExtreme = true;
     @Setter
     private String xLabel = "";
 
@@ -194,6 +195,7 @@ public final class GraphPanel extends JPanel {
     }
 
     private void calculateExtremum() {
+        if (!variableExtreme) return;
         minScore = Integer.MAX_VALUE;
         maxScore = Integer.MIN_VALUE;
         for (int value : values) {

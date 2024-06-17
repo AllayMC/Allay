@@ -44,6 +44,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
     private final List<EntitySpawner> entitySpawners;
     private final Consumer<Dimension> onDimensionSet;
     // 存储基本区块，基本区块的ChunkStatus为NOISED
+    // 基本区块只会在当一个区块生成时需要访问相邻未生成区块时产生
     private final Map<Long, Chunk> basicChunks = new Long2ObjectNonBlockingMap<>();
 
     @Getter
@@ -94,7 +95,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
      * 立即在此线程生成完整区块，完整区块的ChunkStatus为FINISHED，即可被载入世界
      */
     @Override
-    public Chunk generateFinishedChunkSynchronously(int x, int z) {
+    public Chunk generateChunk(int x, int z) {
         Chunk chunk = basicChunks.remove(HashUtils.hashXZ(x, z));
         if (chunk != null) {
             statusNoisedToFinished(chunk);
@@ -106,20 +107,13 @@ public final class AllayWorldGenerator implements WorldGenerator {
     }
 
     private Chunk getOrGenerateBasicChunk(int x, int z) {
-        var chunkHash = HashUtils.hashXZ(x, z);
-        var chunk = basicChunks.get(chunkHash);
-        if (chunk != null) {
-            return chunk;
-        }
-        chunk = generateBasicChunkImmediately(x, z);
-        basicChunks.put(chunkHash, chunk);
-        return chunk;
+        return basicChunks.computeIfAbsent(HashUtils.hashXZ(x, z), unused -> generateBasicChunk(x, z));
     }
 
     /**
      * 生成基本区块，基本区块的ChunkStatus为NOISED
      */
-    private Chunk generateBasicChunkImmediately(int x, int z) {
+    private Chunk generateBasicChunk(int x, int z) {
         var chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         statusEmptyToNoised(chunk);
         return chunk;
