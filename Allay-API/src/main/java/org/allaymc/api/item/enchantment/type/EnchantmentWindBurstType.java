@@ -10,6 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EnchantmentWindBurstType extends AbstractEnchantmentType {
+    public static final EnchantmentWindBurstType WIND_BURST_TYPE = new EnchantmentWindBurstType();
     private EnchantmentWindBurstType() {
         // TODO: Check rarity
         super(new Identifier("minecraft:wind_burst"), 38, 4, Rarity.VERY_RARE);
