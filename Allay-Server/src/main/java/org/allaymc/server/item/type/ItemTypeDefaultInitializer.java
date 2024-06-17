@@ -143,7 +143,6 @@ import org.allaymc.api.item.interfaces.ItemCopperBulbStack;
 import org.allaymc.api.item.interfaces.ItemCopperGrateStack;
 import org.allaymc.api.item.interfaces.ItemCopperIngotStack;
 import org.allaymc.api.item.interfaces.ItemCopperOreStack;
-import org.allaymc.api.item.interfaces.ItemCoralBlockStack;
 import org.allaymc.api.item.interfaces.ItemCornflowerStack;
 import org.allaymc.api.item.interfaces.ItemCrackedDeepslateTilesStack;
 import org.allaymc.api.item.interfaces.ItemCrafterStack;
@@ -224,6 +223,7 @@ import org.allaymc.api.item.interfaces.ItemEyeArmorTrimSmithingTemplateStack;
 import org.allaymc.api.item.interfaces.ItemFarmlandStack;
 import org.allaymc.api.item.interfaces.ItemFeatherStack;
 import org.allaymc.api.item.interfaces.ItemFermentedSpiderEyeStack;
+import org.allaymc.api.item.interfaces.ItemFernStack;
 import org.allaymc.api.item.interfaces.ItemFieldMasonedBannerPatternStack;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
 import org.allaymc.api.item.interfaces.ItemFireChargeStack;
@@ -344,6 +344,7 @@ import org.allaymc.api.item.interfaces.ItemLapisBlockStack;
 import org.allaymc.api.item.interfaces.ItemLapisLazuliStack;
 import org.allaymc.api.item.interfaces.ItemLapisOreStack;
 import org.allaymc.api.item.interfaces.ItemLargeAmethystBudStack;
+import org.allaymc.api.item.interfaces.ItemLargeFernStack;
 import org.allaymc.api.item.interfaces.ItemLeadStack;
 import org.allaymc.api.item.interfaces.ItemLeatherHorseArmorStack;
 import org.allaymc.api.item.interfaces.ItemLeatherStack;
@@ -354,6 +355,7 @@ import org.allaymc.api.item.interfaces.ItemLightBlueDyeStack;
 import org.allaymc.api.item.interfaces.ItemLightGrayDyeStack;
 import org.allaymc.api.item.interfaces.ItemLightWeightedPressurePlateStack;
 import org.allaymc.api.item.interfaces.ItemLightningRodStack;
+import org.allaymc.api.item.interfaces.ItemLilacStack;
 import org.allaymc.api.item.interfaces.ItemLilyOfTheValleyStack;
 import org.allaymc.api.item.interfaces.ItemLimeDyeStack;
 import org.allaymc.api.item.interfaces.ItemLingeringPotionStack;
@@ -416,6 +418,8 @@ import org.allaymc.api.item.interfaces.ItemNoteblockStack;
 import org.allaymc.api.item.interfaces.ItemObserverStack;
 import org.allaymc.api.item.interfaces.ItemObsidianStack;
 import org.allaymc.api.item.interfaces.ItemOchreFroglightStack;
+import org.allaymc.api.item.interfaces.ItemOminousBottleStack;
+import org.allaymc.api.item.interfaces.ItemOminousTrialKeyStack;
 import org.allaymc.api.item.interfaces.ItemOrangeDyeStack;
 import org.allaymc.api.item.interfaces.ItemOrangeTulipStack;
 import org.allaymc.api.item.interfaces.ItemOxeyeDaisyStack;
@@ -426,6 +430,7 @@ import org.allaymc.api.item.interfaces.ItemPackedMudStack;
 import org.allaymc.api.item.interfaces.ItemPaintingStack;
 import org.allaymc.api.item.interfaces.ItemPaperStack;
 import org.allaymc.api.item.interfaces.ItemPearlescentFroglightStack;
+import org.allaymc.api.item.interfaces.ItemPeonyStack;
 import org.allaymc.api.item.interfaces.ItemPhantomMembraneStack;
 import org.allaymc.api.item.interfaces.ItemPiglinBannerPatternStack;
 import org.allaymc.api.item.interfaces.ItemPinkDyeStack;
@@ -502,6 +507,7 @@ import org.allaymc.api.item.interfaces.ItemRepeatingCommandBlockStack;
 import org.allaymc.api.item.interfaces.ItemReserved6Stack;
 import org.allaymc.api.item.interfaces.ItemRespawnAnchorStack;
 import org.allaymc.api.item.interfaces.ItemRibArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemRoseBushStack;
 import org.allaymc.api.item.interfaces.ItemRottenFleshStack;
 import org.allaymc.api.item.interfaces.ItemSaddleStack;
 import org.allaymc.api.item.interfaces.ItemSalmonStack;
@@ -523,6 +529,7 @@ import org.allaymc.api.item.interfaces.ItemSheafPotterySherdStack;
 import org.allaymc.api.item.interfaces.ItemShearsStack;
 import org.allaymc.api.item.interfaces.ItemShelterPotterySherdStack;
 import org.allaymc.api.item.interfaces.ItemShieldStack;
+import org.allaymc.api.item.interfaces.ItemShortGrassStack;
 import org.allaymc.api.item.interfaces.ItemShroomlightStack;
 import org.allaymc.api.item.interfaces.ItemShulkerShellStack;
 import org.allaymc.api.item.interfaces.ItemSilenceArmorTrimSmithingTemplateStack;
@@ -579,11 +586,13 @@ import org.allaymc.api.item.interfaces.ItemStructureBlockStack;
 import org.allaymc.api.item.interfaces.ItemStructureVoidStack;
 import org.allaymc.api.item.interfaces.ItemSugarCaneStack;
 import org.allaymc.api.item.interfaces.ItemSugarStack;
+import org.allaymc.api.item.interfaces.ItemSunflowerStack;
 import org.allaymc.api.item.interfaces.ItemSuspiciousGravelStack;
 import org.allaymc.api.item.interfaces.ItemSuspiciousSandStack;
 import org.allaymc.api.item.interfaces.ItemSuspiciousStewStack;
 import org.allaymc.api.item.interfaces.ItemSweetBerriesStack;
 import org.allaymc.api.item.interfaces.ItemSweetBerryBushStack;
+import org.allaymc.api.item.interfaces.ItemTallGrassStack;
 import org.allaymc.api.item.interfaces.ItemTallgrassStack;
 import org.allaymc.api.item.interfaces.ItemTargetStack;
 import org.allaymc.api.item.interfaces.ItemTideArmorTrimSmithingTemplateStack;
@@ -840,6 +849,17 @@ import org.allaymc.api.item.interfaces.coral.ItemDeadTubeCoralStack;
 import org.allaymc.api.item.interfaces.coral.ItemFireCoralStack;
 import org.allaymc.api.item.interfaces.coral.ItemHornCoralStack;
 import org.allaymc.api.item.interfaces.coral.ItemTubeCoralStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemBrainCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemBubbleCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemDeadBrainCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemDeadBubbleCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemDeadFireCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemDeadHornCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemDeadTubeCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemFireCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemHornCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralblock.ItemTubeCoralBlockStack;
 import org.allaymc.api.item.interfaces.coralfan.ItemBrainCoralFanStack;
 import org.allaymc.api.item.interfaces.coralfan.ItemBubbleCoralFanStack;
 import org.allaymc.api.item.interfaces.coralfan.ItemCoralFanDeadStack;
@@ -1190,11 +1210,14 @@ import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDisc5Stack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscBlocksStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscCatStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscChirpStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscCreatorMusicBoxStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscCreatorStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscFarStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscMallStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscMellohiStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscOthersideStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscPigstepStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscPrecipiceStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscRelicStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscStalStack;
 import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscStradStack;
@@ -1264,10 +1287,12 @@ import org.allaymc.api.item.interfaces.slab.ItemBirchDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBirchSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBlackstoneDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemBlackstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBrickSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCherryDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCherrySlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCobbledDeepslateDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCobbledDeepslateSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCobblestoneSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCrimsonDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCrimsonSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemCutCopperSlabStack;
@@ -1290,10 +1315,12 @@ import org.allaymc.api.item.interfaces.slab.ItemMangroveDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMangroveSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMudBrickDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemMudBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemNetherBrickSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemOakDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemOakSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemOxidizedCutCopperSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemOxidizedDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPetrifiedOakSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedBlackstoneBrickDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedBlackstoneBrickSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedBlackstoneDoubleSlabStack;
@@ -1302,12 +1329,16 @@ import org.allaymc.api.item.interfaces.slab.ItemPolishedDeepslateDoubleSlabStack
 import org.allaymc.api.item.interfaces.slab.ItemPolishedDeepslateSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedTuffDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemPolishedTuffSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemQuartzSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSandstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSmoothStoneSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemSpruceDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemSpruceSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab2Stack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab3Stack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab4Stack;
 import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemStoneBrickSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemTuffBrickDoubleSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemTuffBrickSlabStack;
 import org.allaymc.api.item.interfaces.slab.ItemTuffDoubleSlabStack;
@@ -2857,6 +2888,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initBrainCoralBlock() {
+    if (ItemTypes.BRAIN_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.BRAIN_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemBrainCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.BRAIN_CORAL_BLOCK)
+            .build();
+  }
+
   public static void initBrainCoralFan() {
     if (ItemTypes.BRAIN_CORAL_FAN_TYPE != null) return;
     ItemTypes.BRAIN_CORAL_FAN_TYPE = ItemTypeBuilder
@@ -2918,6 +2957,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.BRICK_BLOCK_TYPE = ItemTypeBuilder
             .builder(ItemBrickBlockStack.class)
             .vanillaItem(VanillaItemId.BRICK_BLOCK)
+            .build();
+  }
+
+  public static void initBrickSlab() {
+    if (ItemTypes.BRICK_SLAB_TYPE != null) return;
+    ItemTypes.BRICK_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemBrickSlabStack.class)
+            .vanillaItem(VanillaItemId.BRICK_SLAB)
             .build();
   }
 
@@ -3062,6 +3109,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.BUBBLE_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemBubbleCoralStack.class)
             .vanillaItem(VanillaItemId.BUBBLE_CORAL)
+            .build();
+  }
+
+  public static void initBubbleCoralBlock() {
+    if (ItemTypes.BUBBLE_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.BUBBLE_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemBubbleCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.BUBBLE_CORAL_BLOCK)
             .build();
   }
 
@@ -3726,6 +3781,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.COBBLESTONE_TYPE = ItemTypeBuilder
             .builder(ItemCobblestoneStack.class)
             .vanillaItem(VanillaItemId.COBBLESTONE)
+            .build();
+  }
+
+  public static void initCobblestoneSlab() {
+    if (ItemTypes.COBBLESTONE_SLAB_TYPE != null) return;
+    ItemTypes.COBBLESTONE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemCobblestoneSlabStack.class)
+            .vanillaItem(VanillaItemId.COBBLESTONE_SLAB)
             .build();
   }
 
@@ -4609,6 +4672,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDeadBrainCoralBlock() {
+    if (ItemTypes.DEAD_BRAIN_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.DEAD_BRAIN_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemDeadBrainCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.DEAD_BRAIN_CORAL_BLOCK)
+            .build();
+  }
+
   public static void initDeadBrainCoralFan() {
     if (ItemTypes.DEAD_BRAIN_CORAL_FAN_TYPE != null) return;
     ItemTypes.DEAD_BRAIN_CORAL_FAN_TYPE = ItemTypeBuilder
@@ -4622,6 +4693,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.DEAD_BUBBLE_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemDeadBubbleCoralStack.class)
             .vanillaItem(VanillaItemId.DEAD_BUBBLE_CORAL)
+            .build();
+  }
+
+  public static void initDeadBubbleCoralBlock() {
+    if (ItemTypes.DEAD_BUBBLE_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.DEAD_BUBBLE_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemDeadBubbleCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.DEAD_BUBBLE_CORAL_BLOCK)
             .build();
   }
 
@@ -4641,6 +4720,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDeadFireCoralBlock() {
+    if (ItemTypes.DEAD_FIRE_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.DEAD_FIRE_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemDeadFireCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.DEAD_FIRE_CORAL_BLOCK)
+            .build();
+  }
+
   public static void initDeadFireCoralFan() {
     if (ItemTypes.DEAD_FIRE_CORAL_FAN_TYPE != null) return;
     ItemTypes.DEAD_FIRE_CORAL_FAN_TYPE = ItemTypeBuilder
@@ -4657,6 +4744,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initDeadHornCoralBlock() {
+    if (ItemTypes.DEAD_HORN_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.DEAD_HORN_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemDeadHornCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.DEAD_HORN_CORAL_BLOCK)
+            .build();
+  }
+
   public static void initDeadHornCoralFan() {
     if (ItemTypes.DEAD_HORN_CORAL_FAN_TYPE != null) return;
     ItemTypes.DEAD_HORN_CORAL_FAN_TYPE = ItemTypeBuilder
@@ -4670,6 +4765,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.DEAD_TUBE_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemDeadTubeCoralStack.class)
             .vanillaItem(VanillaItemId.DEAD_TUBE_CORAL)
+            .build();
+  }
+
+  public static void initDeadTubeCoralBlock() {
+    if (ItemTypes.DEAD_TUBE_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.DEAD_TUBE_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemDeadTubeCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.DEAD_TUBE_CORAL_BLOCK)
             .build();
   }
 
@@ -6457,6 +6560,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initFern() {
+    if (ItemTypes.FERN_TYPE != null) return;
+    ItemTypes.FERN_TYPE = ItemTypeBuilder
+            .builder(ItemFernStack.class)
+            .vanillaItem(VanillaItemId.FERN)
+            .build();
+  }
+
   public static void initFieldMasonedBannerPattern() {
     if (ItemTypes.FIELD_MASONED_BANNER_PATTERN_TYPE != null) return;
     ItemTypes.FIELD_MASONED_BANNER_PATTERN_TYPE = ItemTypeBuilder
@@ -6494,6 +6605,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.FIRE_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemFireCoralStack.class)
             .vanillaItem(VanillaItemId.FIRE_CORAL)
+            .build();
+  }
+
+  public static void initFireCoralBlock() {
+    if (ItemTypes.FIRE_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.FIRE_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemFireCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.FIRE_CORAL_BLOCK)
             .build();
   }
 
@@ -7649,6 +7768,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initHornCoralBlock() {
+    if (ItemTypes.HORN_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.HORN_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemHornCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.HORN_CORAL_BLOCK)
+            .build();
+  }
+
   public static void initHornCoralFan() {
     if (ItemTypes.HORN_CORAL_FAN_TYPE != null) return;
     ItemTypes.HORN_CORAL_FAN_TYPE = ItemTypeBuilder
@@ -8353,6 +8480,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initLargeFern() {
+    if (ItemTypes.LARGE_FERN_TYPE != null) return;
+    ItemTypes.LARGE_FERN_TYPE = ItemTypeBuilder
+            .builder(ItemLargeFernStack.class)
+            .vanillaItem(VanillaItemId.LARGE_FERN)
+            .build();
+  }
+
   public static void initLava() {
     if (ItemTypes.LAVA_TYPE != null) return;
     ItemTypes.LAVA_TYPE = ItemTypeBuilder
@@ -8662,6 +8797,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.LIGHTNING_ROD_TYPE = ItemTypeBuilder
             .builder(ItemLightningRodStack.class)
             .vanillaItem(VanillaItemId.LIGHTNING_ROD)
+            .build();
+  }
+
+  public static void initLilac() {
+    if (ItemTypes.LILAC_TYPE != null) return;
+    ItemTypes.LILAC_TYPE = ItemTypeBuilder
+            .builder(ItemLilacStack.class)
+            .vanillaItem(VanillaItemId.LILAC)
             .build();
   }
 
@@ -9457,6 +9600,22 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initMusicDiscCreator() {
+    if (ItemTypes.MUSIC_DISC_CREATOR_TYPE != null) return;
+    ItemTypes.MUSIC_DISC_CREATOR_TYPE = ItemTypeBuilder
+            .builder(ItemMusicDiscCreatorStack.class)
+            .vanillaItem(VanillaItemId.MUSIC_DISC_CREATOR)
+            .build();
+  }
+
+  public static void initMusicDiscCreatorMusicBox() {
+    if (ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX_TYPE != null) return;
+    ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX_TYPE = ItemTypeBuilder
+            .builder(ItemMusicDiscCreatorMusicBoxStack.class)
+            .vanillaItem(VanillaItemId.MUSIC_DISC_CREATOR_MUSIC_BOX)
+            .build();
+  }
+
   public static void initMusicDiscFar() {
     if (ItemTypes.MUSIC_DISC_FAR_TYPE != null) return;
     ItemTypes.MUSIC_DISC_FAR_TYPE = ItemTypeBuilder
@@ -9494,6 +9653,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.MUSIC_DISC_PIGSTEP_TYPE = ItemTypeBuilder
             .builder(ItemMusicDiscPigstepStack.class)
             .vanillaItem(VanillaItemId.MUSIC_DISC_PIGSTEP)
+            .build();
+  }
+
+  public static void initMusicDiscPrecipice() {
+    if (ItemTypes.MUSIC_DISC_PRECIPICE_TYPE != null) return;
+    ItemTypes.MUSIC_DISC_PRECIPICE_TYPE = ItemTypeBuilder
+            .builder(ItemMusicDiscPrecipiceStack.class)
+            .vanillaItem(VanillaItemId.MUSIC_DISC_PRECIPICE)
             .build();
   }
 
@@ -9582,6 +9749,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.NETHER_BRICK_FENCE_TYPE = ItemTypeBuilder
             .builder(ItemNetherBrickFenceStack.class)
             .vanillaItem(VanillaItemId.NETHER_BRICK_FENCE)
+            .build();
+  }
+
+  public static void initNetherBrickSlab() {
+    if (ItemTypes.NETHER_BRICK_SLAB_TYPE != null) return;
+    ItemTypes.NETHER_BRICK_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemNetherBrickSlabStack.class)
+            .vanillaItem(VanillaItemId.NETHER_BRICK_SLAB)
             .build();
   }
 
@@ -9921,6 +10096,22 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOminousBottle() {
+    if (ItemTypes.OMINOUS_BOTTLE_TYPE != null) return;
+    ItemTypes.OMINOUS_BOTTLE_TYPE = ItemTypeBuilder
+            .builder(ItemOminousBottleStack.class)
+            .vanillaItem(VanillaItemId.OMINOUS_BOTTLE)
+            .build();
+  }
+
+  public static void initOminousTrialKey() {
+    if (ItemTypes.OMINOUS_TRIAL_KEY_TYPE != null) return;
+    ItemTypes.OMINOUS_TRIAL_KEY_TYPE = ItemTypeBuilder
+            .builder(ItemOminousTrialKeyStack.class)
+            .vanillaItem(VanillaItemId.OMINOUS_TRIAL_KEY)
+            .build();
+  }
+
   public static void initOrangeCandle() {
     if (ItemTypes.ORANGE_CANDLE_TYPE != null) return;
     ItemTypes.ORANGE_CANDLE_TYPE = ItemTypeBuilder
@@ -10166,6 +10357,22 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.PEARLESCENT_FROGLIGHT_TYPE = ItemTypeBuilder
             .builder(ItemPearlescentFroglightStack.class)
             .vanillaItem(VanillaItemId.PEARLESCENT_FROGLIGHT)
+            .build();
+  }
+
+  public static void initPeony() {
+    if (ItemTypes.PEONY_TYPE != null) return;
+    ItemTypes.PEONY_TYPE = ItemTypeBuilder
+            .builder(ItemPeonyStack.class)
+            .vanillaItem(VanillaItemId.PEONY)
+            .build();
+  }
+
+  public static void initPetrifiedOakSlab() {
+    if (ItemTypes.PETRIFIED_OAK_SLAB_TYPE != null) return;
+    ItemTypes.PETRIFIED_OAK_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemPetrifiedOakSlabStack.class)
+            .vanillaItem(VanillaItemId.PETRIFIED_OAK_SLAB)
             .build();
   }
 
@@ -10993,6 +11200,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initQuartzSlab() {
+    if (ItemTypes.QUARTZ_SLAB_TYPE != null) return;
+    ItemTypes.QUARTZ_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemQuartzSlabStack.class)
+            .vanillaItem(VanillaItemId.QUARTZ_SLAB)
+            .build();
+  }
+
   public static void initQuartzStairs() {
     if (ItemTypes.QUARTZ_STAIRS_TYPE != null) return;
     ItemTypes.QUARTZ_STAIRS_TYPE = ItemTypeBuilder
@@ -11385,6 +11600,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initRoseBush() {
+    if (ItemTypes.ROSE_BUSH_TYPE != null) return;
+    ItemTypes.ROSE_BUSH_TYPE = ItemTypeBuilder
+            .builder(ItemRoseBushStack.class)
+            .vanillaItem(VanillaItemId.ROSE_BUSH)
+            .build();
+  }
+
   public static void initRottenFlesh() {
     if (ItemTypes.ROTTEN_FLESH_TYPE != null) return;
     ItemTypes.ROTTEN_FLESH_TYPE = ItemTypeBuilder
@@ -11438,6 +11661,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.SANDSTONE_TYPE = ItemTypeBuilder
             .builder(ItemSandstoneStack.class)
             .vanillaItem(VanillaItemId.SANDSTONE)
+            .build();
+  }
+
+  public static void initSandstoneSlab() {
+    if (ItemTypes.SANDSTONE_SLAB_TYPE != null) return;
+    ItemTypes.SANDSTONE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemSandstoneSlabStack.class)
+            .vanillaItem(VanillaItemId.SANDSTONE_SLAB)
             .build();
   }
 
@@ -11590,6 +11821,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.SHIELD_TYPE = ItemTypeBuilder
             .builder(ItemShieldStack.class)
             .vanillaItem(VanillaItemId.SHIELD)
+            .build();
+  }
+
+  public static void initShortGrass() {
+    if (ItemTypes.SHORT_GRASS_TYPE != null) return;
+    ItemTypes.SHORT_GRASS_TYPE = ItemTypeBuilder
+            .builder(ItemShortGrassStack.class)
+            .vanillaItem(VanillaItemId.SHORT_GRASS)
             .build();
   }
 
@@ -11782,6 +12021,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.SMOOTH_STONE_TYPE = ItemTypeBuilder
             .builder(ItemSmoothStoneStack.class)
             .vanillaItem(VanillaItemId.SMOOTH_STONE)
+            .build();
+  }
+
+  public static void initSmoothStoneSlab() {
+    if (ItemTypes.SMOOTH_STONE_SLAB_TYPE != null) return;
+    ItemTypes.SMOOTH_STONE_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemSmoothStoneSlabStack.class)
+            .vanillaItem(VanillaItemId.SMOOTH_STONE_SLAB)
             .build();
   }
 
@@ -12249,6 +12496,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initStoneBrickSlab() {
+    if (ItemTypes.STONE_BRICK_SLAB_TYPE != null) return;
+    ItemTypes.STONE_BRICK_SLAB_TYPE = ItemTypeBuilder
+            .builder(ItemStoneBrickSlabStack.class)
+            .vanillaItem(VanillaItemId.STONE_BRICK_SLAB)
+            .build();
+  }
+
   public static void initStoneBrickStairs() {
     if (ItemTypes.STONE_BRICK_STAIRS_TYPE != null) return;
     ItemTypes.STONE_BRICK_STAIRS_TYPE = ItemTypeBuilder
@@ -12561,6 +12816,14 @@ public final class ItemTypeDefaultInitializer {
             .build();
   }
 
+  public static void initSunflower() {
+    if (ItemTypes.SUNFLOWER_TYPE != null) return;
+    ItemTypes.SUNFLOWER_TYPE = ItemTypeBuilder
+            .builder(ItemSunflowerStack.class)
+            .vanillaItem(VanillaItemId.SUNFLOWER)
+            .build();
+  }
+
   public static void initSuspiciousGravel() {
     if (ItemTypes.SUSPICIOUS_GRAVEL_TYPE != null) return;
     ItemTypes.SUSPICIOUS_GRAVEL_TYPE = ItemTypeBuilder
@@ -12614,6 +12877,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.TADPOLE_SPAWN_EGG_TYPE = ItemTypeBuilder
             .builder(ItemTadpoleSpawnEggStack.class)
             .vanillaItem(VanillaItemId.TADPOLE_SPAWN_EGG)
+            .build();
+  }
+
+  public static void initTallGrass() {
+    if (ItemTypes.TALL_GRASS_TYPE != null) return;
+    ItemTypes.TALL_GRASS_TYPE = ItemTypeBuilder
+            .builder(ItemTallGrassStack.class)
+            .vanillaItem(VanillaItemId.TALL_GRASS)
             .build();
   }
 
@@ -12798,6 +13069,14 @@ public final class ItemTypeDefaultInitializer {
     ItemTypes.TUBE_CORAL_TYPE = ItemTypeBuilder
             .builder(ItemTubeCoralStack.class)
             .vanillaItem(VanillaItemId.TUBE_CORAL)
+            .build();
+  }
+
+  public static void initTubeCoralBlock() {
+    if (ItemTypes.TUBE_CORAL_BLOCK_TYPE != null) return;
+    ItemTypes.TUBE_CORAL_BLOCK_TYPE = ItemTypeBuilder
+            .builder(ItemTubeCoralBlockStack.class)
+            .vanillaItem(VanillaItemId.TUBE_CORAL_BLOCK)
             .build();
   }
 

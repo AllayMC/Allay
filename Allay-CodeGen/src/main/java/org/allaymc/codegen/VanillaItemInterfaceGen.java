@@ -49,7 +49,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
     }
 
     public static void main(String[] args) {
-        VanillaItemIdEnumGen.generate();
+        // NOTICE: Please run VanillaItemIdEnumGen.generate() first before running this method
         generate();
     }
 
@@ -154,6 +154,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*WallStack"), "wall");
         registerSubPackage(Pattern.compile("ItemElement.*"), "element");
         registerSubPackage(Pattern.compile(".*CoralStack"), "coral");
+        registerSubPackage(Pattern.compile(".*CoralBlockStack"), "coralblock");
         registerSubPackage(Pattern.compile(".*CoralFan.*"), "coralfan");
         registerSubPackage(Pattern.compile(".*BricksStack"), "bricks");
         registerSubPackage(Pattern.compile(".*WoolStack"), "wool");
