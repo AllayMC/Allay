@@ -157,6 +157,7 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*WallBehavior"), "wall");
         registerSubPackage(Pattern.compile("BlockElement.*"), "element");
         registerSubPackage(Pattern.compile(".*CoralBehavior"), "coral");
+        registerSubPackage(Pattern.compile(".*CoralBlockBehavior"), "coralblock");
         registerSubPackage(Pattern.compile(".*CoralFan.*"), "coralfan");
         registerSubPackage(Pattern.compile(".*BricksBehavior"), "bricks");
         registerSubPackage(Pattern.compile(".*WoolBehavior"), "wool");
