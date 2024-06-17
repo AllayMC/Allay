@@ -15,7 +15,7 @@ public enum GameRule {
 
     COMMAND_BLOCKS_ENABLED("commandBlocksEnabled", true, Type.BOOLEAN),
     COMMAND_BLOCK_OUTPUT("commandBlockOutput", true, Type.BOOLEAN),
-    DO_DAYLIGHT_CYCLE("doDaylightCycle", true, Type.BOOLEAN), //Implemented
+    DO_DAYLIGHT_CYCLE("doDaylightCycle", true, Type.BOOLEAN),
     DO_ENTITY_DROPS("doEntityDrops", true, Type.BOOLEAN),
     DO_FIRE_TICK("doFireTick", true, Type.BOOLEAN),
     DO_INSOMNIA("doInsomnia", true, Type.BOOLEAN),
@@ -38,10 +38,12 @@ public enum GameRule {
     SHOW_DEATH_MESSAGES("showDeathMessages", true, Type.BOOLEAN),
     SPAWN_RADIUS("spawnRadius", 5, Type.INT),
     TNT_EXPLODES("tntExplodes", true, Type.BOOLEAN),
+    TNT_EXPLOSION_DROP_DECAY("tntExplosionDropDecay", false, Type.BOOLEAN),
     SHOW_TAGS("showTags", true, Type.BOOLEAN),
     FREEZE_DAMAGE("freezeDamage", true, Type.BOOLEAN),
     RESPAWN_BLOCKS_EXPLODE("respawnBlocksExplode", true, Type.BOOLEAN),
     SHOW_BORDER_EFFECT("showBorderEffect", true, Type.BOOLEAN),
+    SHOW_DAYS_PLAYED("showDaysPlayed", false, Type.BOOLEAN),
     FUNCTION_COMMAND_LIMIT("functionCommandLimit", 10000, Type.INT),
     DO_LIMITED_CRAFTING("dolimitedcrafting", false, Type.BOOLEAN);
 
