@@ -203,6 +203,8 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
             gameRules.put(GameRule.SHOW_TAGS, d.getBoolean("showtags"));
             gameRules.put(GameRule.SPAWN_RADIUS, d.getInt("spawnradius"));
             gameRules.put(GameRule.TNT_EXPLODES, d.getBoolean("tntexplodes"));
+            gameRules.put(GameRule.TNT_EXPLOSION_DROP_DECAY, d.getBoolean("tntexplosiondropdecay"));
+            gameRules.put(GameRule.SHOW_DAYS_PLAYED, d.getBoolean("showdaysplayed"));
             return WorldData.builder()
                     .biomeOverride(d.getString("BiomeOverride"))
                     .centerMapsToOrigin(d.getBoolean("CenterMapsToOrigin"))
@@ -432,6 +434,8 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         builder.put("showtags", worldData.getGameRules().get(GameRule.SHOW_TAGS));
         builder.put("spawnradius", worldData.getGameRules().get(GameRule.SPAWN_RADIUS));
         builder.put("tntexplodes", worldData.getGameRules().get(GameRule.TNT_EXPLODES));
+        builder.put("tntexplosiondropdecay", worldData.getGameRules().get(GameRule.TNT_EXPLOSION_DROP_DECAY));
+        builder.put("showdaysplayed", worldData.getGameRules().get(GameRule.SHOW_DAYS_PLAYED));
         return builder.build();
     }
 

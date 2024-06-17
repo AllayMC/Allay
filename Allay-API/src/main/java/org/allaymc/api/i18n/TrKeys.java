@@ -421,6 +421,8 @@ public interface TrKeys {
 
   String M_ACTION_INTERACT_BOOST = "minecraft:action.interact.boost";
 
+  String M_ACTION_INTERACT_BRUSH = "minecraft:action.interact.brush";
+
   String M_ACTION_INTERACT_CREATEMAP = "minecraft:action.interact.createMap";
 
   String M_ACTION_INTERACT_CREEPER = "minecraft:action.interact.creeper";
@@ -434,6 +436,8 @@ public interface TrKeys {
   String M_ACTION_INTERACT_EQUIPCARPET = "minecraft:action.interact.equipcarpet";
 
   String M_ACTION_INTERACT_EQUIPHORSEARMOR = "minecraft:action.interact.equiphorsearmor";
+
+  String M_ACTION_INTERACT_EQUIPWOLFARMOR = "minecraft:action.interact.equipwolfarmor";
 
   String M_ACTION_INTERACT_EXIT_BOAT = "minecraft:action.interact.exit.boat";
 
@@ -459,7 +463,11 @@ public interface TrKeys {
 
   String M_ACTION_INTERACT_READ = "minecraft:action.interact.read";
 
+  String M_ACTION_INTERACT_REMOVEWOLFARMOR = "minecraft:action.interact.removewolfarmor";
+
   String M_ACTION_INTERACT_REPAIR = "minecraft:action.interact.repair";
+
+  String M_ACTION_INTERACT_REPAIRWOLFARMOR = "minecraft:action.interact.repairwolfarmor";
 
   String M_ACTION_INTERACT_RIDE_BOAT = "minecraft:action.interact.ride.boat";
 
@@ -498,6 +506,8 @@ public interface TrKeys {
   String M_ADVMODE_ALLPLAYERS = "minecraft:advMode.allPlayers";
 
   String M_ADVMODE_COMMAND = "minecraft:advMode.command";
+
+  String M_ADVMODE_COMMAND_CHARLIMITEXCEEDED = "minecraft:advMode.command.charLimitExceeded";
 
   String M_ADVMODE_NEARESTPLAYER = "minecraft:advMode.nearestPlayer";
 
@@ -1697,10 +1707,6 @@ public interface TrKeys {
 
   String M_COMMANDS_MESSAGE_SAMETARGET = "minecraft:commands.message.sameTarget";
 
-  String M_COMMANDS_MESSAGE_TOASTWARN = "minecraft:commands.message.toastWarn";
-
-  String M_COMMANDS_MESSAGE_WARN = "minecraft:commands.message.warn";
-
   String M_COMMANDS_MOBEVENT_DESCRIPTION = "minecraft:commands.mobevent.description";
 
   String M_COMMANDS_MOBEVENT_EVENTISFALSE = "minecraft:commands.mobevent.eventIsFalse";
@@ -2479,12 +2485,6 @@ public interface TrKeys {
 
   String M_COMMANDS_VOLUMEAREA_REMOVE_ALL_SUCCESS = "minecraft:commands.volumearea.remove_all.success";
 
-  String M_COMMANDS_WARN_DESCRIPTION = "minecraft:commands.warn.description";
-
-  String M_COMMANDS_WARN_INVALIDWARNINGLEVEL = "minecraft:commands.warn.invalidWarningLevel";
-
-  String M_COMMANDS_WARN_PLAYERDOESNOTEXIST = "minecraft:commands.warn.playerDoesNotExist";
-
   String M_COMMANDS_WEATHER_CLEAR = "minecraft:commands.weather.clear";
 
   String M_COMMANDS_WEATHER_DESCRIPTION = "minecraft:commands.weather.description";
@@ -2592,6 +2592,8 @@ public interface TrKeys {
   String M_CONTAINER_CHEST = "minecraft:container.chest";
 
   String M_CONTAINER_CHESTDOUBLE = "minecraft:container.chestDouble";
+
+  String M_CONTAINER_CRAFTER = "minecraft:container.crafter";
 
   String M_CONTAINER_CRAFTING = "minecraft:container.crafting";
 
@@ -2753,9 +2755,13 @@ public interface TrKeys {
 
   String M_CUSTOMTEMPLATESSCREEN_HEADER = "minecraft:customTemplatesScreen.header";
 
+  String M_DATE_DAYSINGULAR = "minecraft:date.daySingular";
+
   String M_DATE_DAYSABBREVIATED1CHAR = "minecraft:date.daysAbbreviated1Char";
 
   String M_DATE_DAYSABBREVIATED3CHAR = "minecraft:date.daysAbbreviated3Char";
+
+  String M_DATE_DAYSPLURAL = "minecraft:date.daysPlural";
 
   String M_DATE_FORMATTED = "minecraft:date.formatted";
 
@@ -2785,17 +2791,29 @@ public interface TrKeys {
 
   String M_DATE_FULL_SEPTEMBER = "minecraft:date.full_september";
 
+  String M_DATE_HOURSINGULAR = "minecraft:date.hourSingular";
+
   String M_DATE_HOURSABBREVIATED1CHAR = "minecraft:date.hoursAbbreviated1Char";
 
   String M_DATE_HOURSABBREVIATED3CHAR = "minecraft:date.hoursAbbreviated3Char";
+
+  String M_DATE_HOURSPLURAL = "minecraft:date.hoursPlural";
+
+  String M_DATE_MINUTESINGULAR = "minecraft:date.minuteSingular";
 
   String M_DATE_MINUTESABBREVIATED1CHAR = "minecraft:date.minutesAbbreviated1Char";
 
   String M_DATE_MINUTESABBREVIATED3CHAR = "minecraft:date.minutesAbbreviated3Char";
 
+  String M_DATE_MINUTESPLURAL = "minecraft:date.minutesPlural";
+
+  String M_DATE_SECONDSINGULAR = "minecraft:date.secondSingular";
+
   String M_DATE_SECONDSABBREVIATED1CHAR = "minecraft:date.secondsAbbreviated1Char";
 
   String M_DATE_SECONDSABBREVIATED3CHAR = "minecraft:date.secondsAbbreviated3Char";
+
+  String M_DATE_SECONDSPLURAL = "minecraft:date.secondsPlural";
 
   String M_DATE_SHORT_APRIL = "minecraft:date.short_april";
 
@@ -3703,7 +3721,19 @@ public interface TrKeys {
 
   String M_EFFECT_DARKNESS = "minecraft:effect.darkness";
 
+  String M_EFFECT_INFESTED = "minecraft:effect.infested";
+
+  String M_EFFECT_OOZING = "minecraft:effect.oozing";
+
+  String M_EFFECT_RAID_OMEN = "minecraft:effect.raid_omen";
+
+  String M_EFFECT_TRIAL_OMEN = "minecraft:effect.trial_omen";
+
   String M_EFFECT_VILLAGEHERO = "minecraft:effect.villageHero";
+
+  String M_EFFECT_WEAVING = "minecraft:effect.weaving";
+
+  String M_EFFECT_WIND_CHARGED = "minecraft:effect.wind_charged";
 
   String M_EMOTE_WHEEL_GAMEPAD_HELPER_SELECT = "minecraft:emote_wheel.gamepad_helper.select";
 
@@ -3756,6 +3786,12 @@ public interface TrKeys {
   String M_ENCHANTMENT_FISHINGSPEED = "minecraft:enchantment.fishingSpeed";
 
   String M_ENCHANTMENT_FROSTWALKER = "minecraft:enchantment.frostwalker";
+
+  String M_ENCHANTMENT_HEAVY_WEAPON_BREACH = "minecraft:enchantment.heavy_weapon.breach";
+
+  String M_ENCHANTMENT_HEAVY_WEAPON_DENSITY = "minecraft:enchantment.heavy_weapon.density";
+
+  String M_ENCHANTMENT_HEAVY_WEAPON_WINDBURST = "minecraft:enchantment.heavy_weapon.windburst";
 
   String M_ENCHANTMENT_KNOCKBACK = "minecraft:enchantment.knockback";
 
@@ -3823,6 +3859,8 @@ public interface TrKeys {
 
   String M_ENTITY_AREA_EFFECT_CLOUD_NAME = "minecraft:entity.area_effect_cloud.name";
 
+  String M_ENTITY_ARMADILLO_NAME = "minecraft:entity.armadillo.name";
+
   String M_ENTITY_ARMOR_STAND_NAME = "minecraft:entity.armor_stand.name";
 
   String M_ENTITY_ARROW_NAME = "minecraft:entity.arrow.name";
@@ -3836,6 +3874,12 @@ public interface TrKeys {
   String M_ENTITY_BLAZE_NAME = "minecraft:entity.blaze.name";
 
   String M_ENTITY_BOAT_NAME = "minecraft:entity.boat.name";
+
+  String M_ENTITY_BOGGED_NAME = "minecraft:entity.bogged.name";
+
+  String M_ENTITY_BREEZE_NAME = "minecraft:entity.breeze.name";
+
+  String M_ENTITY_BREEZE_WIND_CHARGE_PROJECTILE_NAME = "minecraft:entity.breeze_wind_charge_projectile.name";
 
   String M_ENTITY_CAMEL_NAME = "minecraft:entity.camel.name";
 
@@ -4061,6 +4105,8 @@ public interface TrKeys {
 
   String M_ENTITY_WARDEN_NAME = "minecraft:entity.warden.name";
 
+  String M_ENTITY_WIND_CHARGE_PROJECTILE_NAME = "minecraft:entity.wind_charge_projectile.name";
+
   String M_ENTITY_WITCH_NAME = "minecraft:entity.witch.name";
 
   String M_ENTITY_WITHER_NAME = "minecraft:entity.wither.name";
@@ -4142,6 +4188,8 @@ public interface TrKeys {
   String M_FEATURE_TEMPLE = "minecraft:feature.temple";
 
   String M_FEATURE_TRAIL_RUINS = "minecraft:feature.trail_ruins";
+
+  String M_FEATURE_TRIAL_CHAMBERS = "minecraft:feature.trial_chambers";
 
   String M_FEATURE_VILLAGE = "minecraft:feature.village";
 
@@ -4360,6 +4408,8 @@ public interface TrKeys {
   String M_ITEM_APPLEENCHANTED_NAME = "minecraft:item.appleEnchanted.name";
 
   String M_ITEM_ARCHER_POTTERY_SHERD_NAME = "minecraft:item.archer_pottery_sherd.name";
+
+  String M_ITEM_ARMADILLO_SCUTE_NAME = "minecraft:item.armadillo_scute.name";
 
   String M_ITEM_ARMOR_UPGRADE = "minecraft:item.armor.upgrade";
 
@@ -4719,6 +4769,38 @@ public interface TrKeys {
 
   String M_ITEM_BANNER_DIAGONAL_UP_RIGHT_YELLOW = "minecraft:item.banner.diagonal_up_right.yellow";
 
+  String M_ITEM_BANNER_FLOW_BLACK = "minecraft:item.banner.flow.black";
+
+  String M_ITEM_BANNER_FLOW_BLUE = "minecraft:item.banner.flow.blue";
+
+  String M_ITEM_BANNER_FLOW_BROWN = "minecraft:item.banner.flow.brown";
+
+  String M_ITEM_BANNER_FLOW_CYAN = "minecraft:item.banner.flow.cyan";
+
+  String M_ITEM_BANNER_FLOW_GRAY = "minecraft:item.banner.flow.gray";
+
+  String M_ITEM_BANNER_FLOW_GREEN = "minecraft:item.banner.flow.green";
+
+  String M_ITEM_BANNER_FLOW_LIGHTBLUE = "minecraft:item.banner.flow.lightBlue";
+
+  String M_ITEM_BANNER_FLOW_LIME = "minecraft:item.banner.flow.lime";
+
+  String M_ITEM_BANNER_FLOW_MAGENTA = "minecraft:item.banner.flow.magenta";
+
+  String M_ITEM_BANNER_FLOW_ORANGE = "minecraft:item.banner.flow.orange";
+
+  String M_ITEM_BANNER_FLOW_PINK = "minecraft:item.banner.flow.pink";
+
+  String M_ITEM_BANNER_FLOW_PURPLE = "minecraft:item.banner.flow.purple";
+
+  String M_ITEM_BANNER_FLOW_RED = "minecraft:item.banner.flow.red";
+
+  String M_ITEM_BANNER_FLOW_SILVER = "minecraft:item.banner.flow.silver";
+
+  String M_ITEM_BANNER_FLOW_WHITE = "minecraft:item.banner.flow.white";
+
+  String M_ITEM_BANNER_FLOW_YELLOW = "minecraft:item.banner.flow.yellow";
+
   String M_ITEM_BANNER_FLOWER_BLACK = "minecraft:item.banner.flower.black";
 
   String M_ITEM_BANNER_FLOWER_BLUE = "minecraft:item.banner.flower.blue";
@@ -4850,6 +4932,38 @@ public interface TrKeys {
   String M_ITEM_BANNER_GRAY_NAME = "minecraft:item.banner.gray.name";
 
   String M_ITEM_BANNER_GREEN_NAME = "minecraft:item.banner.green.name";
+
+  String M_ITEM_BANNER_GUSTER_BLACK = "minecraft:item.banner.guster.black";
+
+  String M_ITEM_BANNER_GUSTER_BLUE = "minecraft:item.banner.guster.blue";
+
+  String M_ITEM_BANNER_GUSTER_BROWN = "minecraft:item.banner.guster.brown";
+
+  String M_ITEM_BANNER_GUSTER_CYAN = "minecraft:item.banner.guster.cyan";
+
+  String M_ITEM_BANNER_GUSTER_GRAY = "minecraft:item.banner.guster.gray";
+
+  String M_ITEM_BANNER_GUSTER_GREEN = "minecraft:item.banner.guster.green";
+
+  String M_ITEM_BANNER_GUSTER_LIGHTBLUE = "minecraft:item.banner.guster.lightBlue";
+
+  String M_ITEM_BANNER_GUSTER_LIME = "minecraft:item.banner.guster.lime";
+
+  String M_ITEM_BANNER_GUSTER_MAGENTA = "minecraft:item.banner.guster.magenta";
+
+  String M_ITEM_BANNER_GUSTER_ORANGE = "minecraft:item.banner.guster.orange";
+
+  String M_ITEM_BANNER_GUSTER_PINK = "minecraft:item.banner.guster.pink";
+
+  String M_ITEM_BANNER_GUSTER_PURPLE = "minecraft:item.banner.guster.purple";
+
+  String M_ITEM_BANNER_GUSTER_RED = "minecraft:item.banner.guster.red";
+
+  String M_ITEM_BANNER_GUSTER_SILVER = "minecraft:item.banner.guster.silver";
+
+  String M_ITEM_BANNER_GUSTER_WHITE = "minecraft:item.banner.guster.white";
+
+  String M_ITEM_BANNER_GUSTER_YELLOW = "minecraft:item.banner.guster.yellow";
 
   String M_ITEM_BANNER_HALF_HORIZONTAL_BLACK = "minecraft:item.banner.half_horizontal.black";
 
@@ -5711,9 +5825,13 @@ public interface TrKeys {
 
   String M_ITEM_BANNER_PATTERN_CREEPER = "minecraft:item.banner_pattern.creeper";
 
+  String M_ITEM_BANNER_PATTERN_FLOW = "minecraft:item.banner_pattern.flow";
+
   String M_ITEM_BANNER_PATTERN_FLOWER = "minecraft:item.banner_pattern.flower";
 
   String M_ITEM_BANNER_PATTERN_GLOBE = "minecraft:item.banner_pattern.globe";
+
+  String M_ITEM_BANNER_PATTERN_GUSTER = "minecraft:item.banner_pattern.guster";
 
   String M_ITEM_BANNER_PATTERN_NAME = "minecraft:item.banner_pattern.name";
 
@@ -5806,6 +5924,8 @@ public interface TrKeys {
   String M_ITEM_BOWL_NAME = "minecraft:item.bowl.name";
 
   String M_ITEM_BREAD_NAME = "minecraft:item.bread.name";
+
+  String M_ITEM_BREEZE_ROD_NAME = "minecraft:item.breeze_rod.name";
 
   String M_ITEM_BREWER_POTTERY_SHERD_NAME = "minecraft:item.brewer_pottery_sherd.name";
 
@@ -5923,6 +6043,8 @@ public interface TrKeys {
 
   String M_ITEM_COOKIE_NAME = "minecraft:item.cookie.name";
 
+  String M_ITEM_COPPER_DOOR_NAME = "minecraft:item.copper_door.name";
+
   String M_ITEM_COPPER_INGOT_NAME = "minecraft:item.copper_ingot.name";
 
   String M_ITEM_CRIMSON_DOOR_NAME = "minecraft:item.crimson_door.name";
@@ -6037,6 +6159,8 @@ public interface TrKeys {
 
   String M_ITEM_EXPLORER_POTTERY_SHERD_NAME = "minecraft:item.explorer_pottery_sherd.name";
 
+  String M_ITEM_EXPOSED_COPPER_DOOR_NAME = "minecraft:item.exposed_copper_door.name";
+
   String M_ITEM_FEATHER_NAME = "minecraft:item.feather.name";
 
   String M_ITEM_FERMENTED_SPIDER_EYE_NAME = "minecraft:item.fermented_spider_eye.name";
@@ -6109,6 +6233,8 @@ public interface TrKeys {
 
   String M_ITEM_FLINT_AND_STEEL_NAME = "minecraft:item.flint_and_steel.name";
 
+  String M_ITEM_FLOW_POTTERY_SHERD_NAME = "minecraft:item.flow_pottery_sherd.name";
+
   String M_ITEM_FLOWER_POT_NAME = "minecraft:item.flower_pot.name";
 
   String M_ITEM_FRAME_NAME = "minecraft:item.frame.name";
@@ -6156,6 +6282,8 @@ public interface TrKeys {
   String M_ITEM_GOLDEN_SWORD_NAME = "minecraft:item.golden_sword.name";
 
   String M_ITEM_GUNPOWDER_NAME = "minecraft:item.gunpowder.name";
+
+  String M_ITEM_GUSTER_POTTERY_SHERD_NAME = "minecraft:item.guster_pottery_sherd.name";
 
   String M_ITEM_HEART_OF_THE_SEA_NAME = "minecraft:item.heart_of_the_sea.name";
 
@@ -6245,6 +6373,8 @@ public interface TrKeys {
 
   String M_ITEM_LODESTONECOMPASS_NAME = "minecraft:item.lodestonecompass.name";
 
+  String M_ITEM_MACE_NAME = "minecraft:item.mace.name";
+
   String M_ITEM_MAGMA_CREAM_NAME = "minecraft:item.magma_cream.name";
 
   String M_ITEM_MANGROVE_DOOR_NAME = "minecraft:item.mangrove_door.name";
@@ -6264,6 +6394,8 @@ public interface TrKeys {
   String M_ITEM_MAP_EXPLORATION_SWAMP_HUT_NAME = "minecraft:item.map.exploration.swamp_hut.name";
 
   String M_ITEM_MAP_EXPLORATION_TREASURE_NAME = "minecraft:item.map.exploration.treasure.name";
+
+  String M_ITEM_MAP_EXPLORATION_TRIAL_CHAMBERS_NAME = "minecraft:item.map.exploration.trial_chambers.name";
 
   String M_ITEM_MAP_EXPLORATION_VILLAGE_DESERT_NAME = "minecraft:item.map.exploration.village_desert.name";
 
@@ -6347,6 +6479,12 @@ public interface TrKeys {
 
   String M_ITEM_OAK_HANGING_SIGN_NAME = "minecraft:item.oak_hanging_sign.name";
 
+  String M_ITEM_OMINOUS_BOTTLE_NAME = "minecraft:item.ominous_bottle.name";
+
+  String M_ITEM_OMINOUS_TRIAL_KEY_NAME = "minecraft:item.ominous_trial_key.name";
+
+  String M_ITEM_OXIDIZED_COPPER_DOOR_NAME = "minecraft:item.oxidized_copper_door.name";
+
   String M_ITEM_PAINTING_NAME = "minecraft:item.painting.name";
 
   String M_ITEM_PAPER_NAME = "minecraft:item.paper.name";
@@ -6411,6 +6549,10 @@ public interface TrKeys {
 
   String M_ITEM_RECORD_CHIRP_DESC = "minecraft:item.record_chirp.desc";
 
+  String M_ITEM_RECORD_CREATOR_DESC = "minecraft:item.record_creator.desc";
+
+  String M_ITEM_RECORD_CREATOR_MUSIC_BOX_DESC = "minecraft:item.record_creator_music_box.desc";
+
   String M_ITEM_RECORD_FAR_DESC = "minecraft:item.record_far.desc";
 
   String M_ITEM_RECORD_MALL_DESC = "minecraft:item.record_mall.desc";
@@ -6420,6 +6562,8 @@ public interface TrKeys {
   String M_ITEM_RECORD_OTHERSIDE_DESC = "minecraft:item.record_otherside.desc";
 
   String M_ITEM_RECORD_PIGSTEP_DESC = "minecraft:item.record_pigstep.desc";
+
+  String M_ITEM_RECORD_PRECIPICE_DESC = "minecraft:item.record_precipice.desc";
 
   String M_ITEM_RECORD_RELIC_DESC = "minecraft:item.record_relic.desc";
 
@@ -6446,6 +6590,8 @@ public interface TrKeys {
   String M_ITEM_SADDLE_NAME = "minecraft:item.saddle.name";
 
   String M_ITEM_SALMON_NAME = "minecraft:item.salmon.name";
+
+  String M_ITEM_SCRAPE_POTTERY_SHERD_NAME = "minecraft:item.scrape_pottery_sherd.name";
 
   String M_ITEM_SHEAF_POTTERY_SHERD_NAME = "minecraft:item.sheaf_pottery_sherd.name";
 
@@ -6533,6 +6679,8 @@ public interface TrKeys {
 
   String M_ITEM_SPAWN_EGG_ENTITY_ALLAY_NAME = "minecraft:item.spawn_egg.entity.allay.name";
 
+  String M_ITEM_SPAWN_EGG_ENTITY_ARMADILLO_NAME = "minecraft:item.spawn_egg.entity.armadillo.name";
+
   String M_ITEM_SPAWN_EGG_ENTITY_AXOLOTL_NAME = "minecraft:item.spawn_egg.entity.axolotl.name";
 
   String M_ITEM_SPAWN_EGG_ENTITY_BAT_NAME = "minecraft:item.spawn_egg.entity.bat.name";
@@ -6540,6 +6688,10 @@ public interface TrKeys {
   String M_ITEM_SPAWN_EGG_ENTITY_BEE_NAME = "minecraft:item.spawn_egg.entity.bee.name";
 
   String M_ITEM_SPAWN_EGG_ENTITY_BLAZE_NAME = "minecraft:item.spawn_egg.entity.blaze.name";
+
+  String M_ITEM_SPAWN_EGG_ENTITY_BOGGED_NAME = "minecraft:item.spawn_egg.entity.bogged.name";
+
+  String M_ITEM_SPAWN_EGG_ENTITY_BREEZE_NAME = "minecraft:item.spawn_egg.entity.breeze.name";
 
   String M_ITEM_SPAWN_EGG_ENTITY_CAMEL_NAME = "minecraft:item.spawn_egg.entity.camel.name";
 
@@ -6737,6 +6889,8 @@ public interface TrKeys {
 
   String M_ITEM_TOTEM_NAME = "minecraft:item.totem.name";
 
+  String M_ITEM_TRIAL_KEY_NAME = "minecraft:item.trial_key.name";
+
   String M_ITEM_TRIDENT_NAME = "minecraft:item.trident.name";
 
   String M_ITEM_TROPICALBODYBETTYMULTI_NAME = "minecraft:item.tropicalBodyBettyMulti.name";
@@ -6875,9 +7029,23 @@ public interface TrKeys {
 
   String M_ITEM_WARPED_SIGN_NAME = "minecraft:item.warped_sign.name";
 
+  String M_ITEM_WAXED_COPPER_DOOR_NAME = "minecraft:item.waxed_copper_door.name";
+
+  String M_ITEM_WAXED_EXPOSED_COPPER_DOOR_NAME = "minecraft:item.waxed_exposed_copper_door.name";
+
+  String M_ITEM_WAXED_OXIDIZED_COPPER_DOOR_NAME = "minecraft:item.waxed_oxidized_copper_door.name";
+
+  String M_ITEM_WAXED_WEATHERED_COPPER_DOOR_NAME = "minecraft:item.waxed_weathered_copper_door.name";
+
+  String M_ITEM_WEATHERED_COPPER_DOOR_NAME = "minecraft:item.weathered_copper_door.name";
+
   String M_ITEM_WHEAT_NAME = "minecraft:item.wheat.name";
 
   String M_ITEM_WHEAT_SEEDS_NAME = "minecraft:item.wheat_seeds.name";
+
+  String M_ITEM_WIND_CHARGE_NAME = "minecraft:item.wind_charge.name";
+
+  String M_ITEM_WOLF_ARMOR_NAME = "minecraft:item.wolf_armor.name";
 
   String M_ITEM_WOODEN_AXE_NAME = "minecraft:item.wooden_axe.name";
 
@@ -6922,6 +7090,8 @@ public interface TrKeys {
   String M_ITEMGROUP_NAME_CHESTBOAT = "minecraft:itemGroup.name.chestboat";
 
   String M_ITEMGROUP_NAME_CHESTPLATE = "minecraft:itemGroup.name.chestplate";
+
+  String M_ITEMGROUP_NAME_COMPOUNDS = "minecraft:itemGroup.name.compounds";
 
   String M_ITEMGROUP_NAME_CONCRETE = "minecraft:itemGroup.name.concrete";
 
@@ -7004,6 +7174,8 @@ public interface TrKeys {
   String M_ITEMGROUP_NAME_POTTERYSHERDS = "minecraft:itemGroup.name.potterySherds";
 
   String M_ITEMGROUP_NAME_PRESSUREPLATE = "minecraft:itemGroup.name.pressurePlate";
+
+  String M_ITEMGROUP_NAME_PRODUCTS = "minecraft:itemGroup.name.products";
 
   String M_ITEMGROUP_NAME_RAIL = "minecraft:itemGroup.name.rail";
 
@@ -7831,6 +8003,14 @@ public interface TrKeys {
 
   String M_POTION_HUNGER = "minecraft:potion.hunger";
 
+  String M_POTION_INFESTED = "minecraft:potion.infested";
+
+  String M_POTION_INFESTED_LINGER_NAME = "minecraft:potion.infested.linger.name";
+
+  String M_POTION_INFESTED_NAME = "minecraft:potion.infested.name";
+
+  String M_POTION_INFESTED_SPLASH_NAME = "minecraft:potion.infested.splash.name";
+
   String M_POTION_INVISIBILITY = "minecraft:potion.invisibility";
 
   String M_POTION_INVISIBILITY_LINGER_NAME = "minecraft:potion.invisibility.linger.name";
@@ -7884,6 +8064,14 @@ public interface TrKeys {
   String M_POTION_NIGHTVISION_NAME = "minecraft:potion.nightVision.name";
 
   String M_POTION_NIGHTVISION_SPLASH_NAME = "minecraft:potion.nightVision.splash.name";
+
+  String M_POTION_OOZING = "minecraft:potion.oozing";
+
+  String M_POTION_OOZING_LINGER_NAME = "minecraft:potion.oozing.linger.name";
+
+  String M_POTION_OOZING_NAME = "minecraft:potion.oozing.name";
+
+  String M_POTION_OOZING_SPLASH_NAME = "minecraft:potion.oozing.splash.name";
 
   String M_POTION_POISON = "minecraft:potion.poison";
 
@@ -7956,6 +8144,22 @@ public interface TrKeys {
   String M_POTION_WEAKNESS_NAME = "minecraft:potion.weakness.name";
 
   String M_POTION_WEAKNESS_SPLASH_NAME = "minecraft:potion.weakness.splash.name";
+
+  String M_POTION_WEAVING = "minecraft:potion.weaving";
+
+  String M_POTION_WEAVING_LINGER_NAME = "minecraft:potion.weaving.linger.name";
+
+  String M_POTION_WEAVING_NAME = "minecraft:potion.weaving.name";
+
+  String M_POTION_WEAVING_SPLASH_NAME = "minecraft:potion.weaving.splash.name";
+
+  String M_POTION_WINDCHARGED = "minecraft:potion.windCharged";
+
+  String M_POTION_WINDCHARGED_LINGER_NAME = "minecraft:potion.windCharged.linger.name";
+
+  String M_POTION_WINDCHARGED_NAME = "minecraft:potion.windCharged.name";
+
+  String M_POTION_WINDCHARGED_SPLASH_NAME = "minecraft:potion.windCharged.splash.name";
 
   String M_POTION_WITHER = "minecraft:potion.wither";
 
@@ -8052,6 +8256,8 @@ public interface TrKeys {
   String M_SAFETY_MUTED_MESSAGE = "minecraft:safety.muted.message";
 
   String M_SAFETY_MUTED_TITLE = "minecraft:safety.muted.title";
+
+  String M_SAFETY_TEXTPROCESSOROFFLINE_MESSAGE = "minecraft:safety.textProcessorOffline.message";
 
   String M_SCREENSHOT_CAPTION = "minecraft:screenshot.caption";
 
@@ -8351,11 +8557,17 @@ public interface TrKeys {
 
   String M_TILE_CHISELED_BOOKSHELF_NAME = "minecraft:tile.chiseled_bookshelf.name";
 
+  String M_TILE_CHISELED_COPPER_NAME = "minecraft:tile.chiseled_copper.name";
+
   String M_TILE_CHISELED_DEEPSLATE_NAME = "minecraft:tile.chiseled_deepslate.name";
 
   String M_TILE_CHISELED_NETHER_BRICKS_NAME = "minecraft:tile.chiseled_nether_bricks.name";
 
   String M_TILE_CHISELED_POLISHED_BLACKSTONE_NAME = "minecraft:tile.chiseled_polished_blackstone.name";
+
+  String M_TILE_CHISELED_TUFF_NAME = "minecraft:tile.chiseled_tuff.name";
+
+  String M_TILE_CHISELED_TUFF_BRICKS_NAME = "minecraft:tile.chiseled_tuff_bricks.name";
 
   String M_TILE_CHORUS_FLOWER_NAME = "minecraft:tile.chorus_flower.name";
 
@@ -8481,7 +8693,15 @@ public interface TrKeys {
 
   String M_TILE_COPPER_BLOCK_NAME = "minecraft:tile.copper_block.name";
 
+  String M_TILE_COPPER_BULB_NAME = "minecraft:tile.copper_bulb.name";
+
+  String M_TILE_COPPER_DOOR_NAME = "minecraft:tile.copper_door.name";
+
+  String M_TILE_COPPER_GRATE_NAME = "minecraft:tile.copper_grate.name";
+
   String M_TILE_COPPER_ORE_NAME = "minecraft:tile.copper_ore.name";
+
+  String M_TILE_COPPER_TRAPDOOR_NAME = "minecraft:tile.copper_trapdoor.name";
 
   String M_TILE_CORAL_BLUE_NAME = "minecraft:tile.coral.blue.name";
 
@@ -8550,6 +8770,8 @@ public interface TrKeys {
   String M_TILE_CRACKED_NETHER_BRICKS_NAME = "minecraft:tile.cracked_nether_bricks.name";
 
   String M_TILE_CRACKED_POLISHED_BLACKSTONE_BRICKS_NAME = "minecraft:tile.cracked_polished_blackstone_bricks.name";
+
+  String M_TILE_CRAFTER_NAME = "minecraft:tile.crafter.name";
 
   String M_TILE_CRAFTING_TABLE_NAME = "minecraft:tile.crafting_table.name";
 
@@ -8743,7 +8965,17 @@ public interface TrKeys {
 
   String M_TILE_ENDER_CHEST_NAME = "minecraft:tile.ender_chest.name";
 
+  String M_TILE_EXPOSED_CHISELED_COPPER_NAME = "minecraft:tile.exposed_chiseled_copper.name";
+
   String M_TILE_EXPOSED_COPPER_NAME = "minecraft:tile.exposed_copper.name";
+
+  String M_TILE_EXPOSED_COPPER_BULB_NAME = "minecraft:tile.exposed_copper_bulb.name";
+
+  String M_TILE_EXPOSED_COPPER_DOOR_NAME = "minecraft:tile.exposed_copper_door.name";
+
+  String M_TILE_EXPOSED_COPPER_GRATE_NAME = "minecraft:tile.exposed_copper_grate.name";
+
+  String M_TILE_EXPOSED_COPPER_TRAPDOOR_NAME = "minecraft:tile.exposed_copper_trapdoor.name";
 
   String M_TILE_EXPOSED_CUT_COPPER_NAME = "minecraft:tile.exposed_cut_copper.name";
 
@@ -8876,6 +9108,8 @@ public interface TrKeys {
   String M_TILE_HARDENED_CLAY_NAME = "minecraft:tile.hardened_clay.name";
 
   String M_TILE_HAY_BLOCK_NAME = "minecraft:tile.hay_block.name";
+
+  String M_TILE_HEAVY_CORE_NAME = "minecraft:tile.heavy_core.name";
 
   String M_TILE_HEAVY_WEIGHTED_PRESSURE_PLATE_NAME = "minecraft:tile.heavy_weighted_pressure_plate.name";
 
@@ -9121,7 +9355,17 @@ public interface TrKeys {
 
   String M_TILE_ORERUBY_NAME = "minecraft:tile.oreRuby.name";
 
+  String M_TILE_OXIDIZED_CHISELED_COPPER_NAME = "minecraft:tile.oxidized_chiseled_copper.name";
+
   String M_TILE_OXIDIZED_COPPER_NAME = "minecraft:tile.oxidized_copper.name";
+
+  String M_TILE_OXIDIZED_COPPER_BULB_NAME = "minecraft:tile.oxidized_copper_bulb.name";
+
+  String M_TILE_OXIDIZED_COPPER_DOOR_NAME = "minecraft:tile.oxidized_copper_door.name";
+
+  String M_TILE_OXIDIZED_COPPER_GRATE_NAME = "minecraft:tile.oxidized_copper_grate.name";
+
+  String M_TILE_OXIDIZED_COPPER_TRAPDOOR_NAME = "minecraft:tile.oxidized_copper_trapdoor.name";
 
   String M_TILE_OXIDIZED_CUT_COPPER_NAME = "minecraft:tile.oxidized_cut_copper.name";
 
@@ -9200,6 +9444,14 @@ public interface TrKeys {
   String M_TILE_POLISHED_DIORITE_STAIRS_NAME = "minecraft:tile.polished_diorite_stairs.name";
 
   String M_TILE_POLISHED_GRANITE_STAIRS_NAME = "minecraft:tile.polished_granite_stairs.name";
+
+  String M_TILE_POLISHED_TUFF_NAME = "minecraft:tile.polished_tuff.name";
+
+  String M_TILE_POLISHED_TUFF_SLAB_NAME = "minecraft:tile.polished_tuff_slab.name";
+
+  String M_TILE_POLISHED_TUFF_STAIRS_NAME = "minecraft:tile.polished_tuff_stairs.name";
+
+  String M_TILE_POLISHED_TUFF_WALL_NAME = "minecraft:tile.polished_tuff_wall.name";
 
   String M_TILE_PORTAL_NAME = "minecraft:tile.portal.name";
 
@@ -9765,11 +10017,27 @@ public interface TrKeys {
 
   String M_TILE_TRAPPED_CHEST_NAME = "minecraft:tile.trapped_chest.name";
 
+  String M_TILE_TRIAL_SPAWNER_NAME = "minecraft:tile.trial_spawner.name";
+
   String M_TILE_TRIPWIRE_NAME = "minecraft:tile.tripWire.name";
 
   String M_TILE_TRIPWIRE_HOOK_NAME = "minecraft:tile.tripwire_hook.name";
 
   String M_TILE_TUFF_NAME = "minecraft:tile.tuff.name";
+
+  String M_TILE_TUFF_BRICK_SLAB_NAME = "minecraft:tile.tuff_brick_slab.name";
+
+  String M_TILE_TUFF_BRICK_STAIRS_NAME = "minecraft:tile.tuff_brick_stairs.name";
+
+  String M_TILE_TUFF_BRICK_WALL_NAME = "minecraft:tile.tuff_brick_wall.name";
+
+  String M_TILE_TUFF_BRICKS_NAME = "minecraft:tile.tuff_bricks.name";
+
+  String M_TILE_TUFF_SLAB_NAME = "minecraft:tile.tuff_slab.name";
+
+  String M_TILE_TUFF_STAIRS_NAME = "minecraft:tile.tuff_stairs.name";
+
+  String M_TILE_TUFF_WALL_NAME = "minecraft:tile.tuff_wall.name";
 
   String M_TILE_TURTLE_EGG_NAME = "minecraft:tile.turtle_egg.name";
 
@@ -9778,6 +10046,8 @@ public interface TrKeys {
   String M_TILE_UNKNOWN_NAME = "minecraft:tile.unknown.name";
 
   String M_TILE_UNLIT_REDSTONE_TORCH_NAME = "minecraft:tile.unlit_redstone_torch.name";
+
+  String M_TILE_VAULT_NAME = "minecraft:tile.vault.name";
 
   String M_TILE_VERDANT_FROGLIGHT_NAME = "minecraft:tile.verdant_froglight.name";
 
@@ -9823,7 +10093,17 @@ public interface TrKeys {
 
   String M_TILE_WATERLILY_NAME = "minecraft:tile.waterlily.name";
 
+  String M_TILE_WAXED_CHISELED_COPPER_NAME = "minecraft:tile.waxed_chiseled_copper.name";
+
   String M_TILE_WAXED_COPPER_NAME = "minecraft:tile.waxed_copper.name";
+
+  String M_TILE_WAXED_COPPER_BULB_NAME = "minecraft:tile.waxed_copper_bulb.name";
+
+  String M_TILE_WAXED_COPPER_DOOR_NAME = "minecraft:tile.waxed_copper_door.name";
+
+  String M_TILE_WAXED_COPPER_GRATE_NAME = "minecraft:tile.waxed_copper_grate.name";
+
+  String M_TILE_WAXED_COPPER_TRAPDOOR_NAME = "minecraft:tile.waxed_copper_trapdoor.name";
 
   String M_TILE_WAXED_CUT_COPPER_NAME = "minecraft:tile.waxed_cut_copper.name";
 
@@ -9831,7 +10111,17 @@ public interface TrKeys {
 
   String M_TILE_WAXED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_cut_copper_stairs.name";
 
+  String M_TILE_WAXED_EXPOSED_CHISELED_COPPER_NAME = "minecraft:tile.waxed_exposed_chiseled_copper.name";
+
   String M_TILE_WAXED_EXPOSED_COPPER_NAME = "minecraft:tile.waxed_exposed_copper.name";
+
+  String M_TILE_WAXED_EXPOSED_COPPER_BULB_NAME = "minecraft:tile.waxed_exposed_copper_bulb.name";
+
+  String M_TILE_WAXED_EXPOSED_COPPER_DOOR_NAME = "minecraft:tile.waxed_exposed_copper_door.name";
+
+  String M_TILE_WAXED_EXPOSED_COPPER_GRATE_NAME = "minecraft:tile.waxed_exposed_copper_grate.name";
+
+  String M_TILE_WAXED_EXPOSED_COPPER_TRAPDOOR_NAME = "minecraft:tile.waxed_exposed_copper_trapdoor.name";
 
   String M_TILE_WAXED_EXPOSED_CUT_COPPER_NAME = "minecraft:tile.waxed_exposed_cut_copper.name";
 
@@ -9839,7 +10129,17 @@ public interface TrKeys {
 
   String M_TILE_WAXED_EXPOSED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_exposed_cut_copper_stairs.name";
 
+  String M_TILE_WAXED_OXIDIZED_CHISELED_COPPER_NAME = "minecraft:tile.waxed_oxidized_chiseled_copper.name";
+
   String M_TILE_WAXED_OXIDIZED_COPPER_NAME = "minecraft:tile.waxed_oxidized_copper.name";
+
+  String M_TILE_WAXED_OXIDIZED_COPPER_BULB_NAME = "minecraft:tile.waxed_oxidized_copper_bulb.name";
+
+  String M_TILE_WAXED_OXIDIZED_COPPER_DOOR_NAME = "minecraft:tile.waxed_oxidized_copper_door.name";
+
+  String M_TILE_WAXED_OXIDIZED_COPPER_GRATE_NAME = "minecraft:tile.waxed_oxidized_copper_grate.name";
+
+  String M_TILE_WAXED_OXIDIZED_COPPER_TRAPDOOR_NAME = "minecraft:tile.waxed_oxidized_copper_trapdoor.name";
 
   String M_TILE_WAXED_OXIDIZED_CUT_COPPER_NAME = "minecraft:tile.waxed_oxidized_cut_copper.name";
 
@@ -9847,7 +10147,17 @@ public interface TrKeys {
 
   String M_TILE_WAXED_OXIDIZED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_oxidized_cut_copper_stairs.name";
 
+  String M_TILE_WAXED_WEATHERED_CHISELED_COPPER_NAME = "minecraft:tile.waxed_weathered_chiseled_copper.name";
+
   String M_TILE_WAXED_WEATHERED_COPPER_NAME = "minecraft:tile.waxed_weathered_copper.name";
+
+  String M_TILE_WAXED_WEATHERED_COPPER_BULB_NAME = "minecraft:tile.waxed_weathered_copper_bulb.name";
+
+  String M_TILE_WAXED_WEATHERED_COPPER_DOOR_NAME = "minecraft:tile.waxed_weathered_copper_door.name";
+
+  String M_TILE_WAXED_WEATHERED_COPPER_GRATE_NAME = "minecraft:tile.waxed_weathered_copper_grate.name";
+
+  String M_TILE_WAXED_WEATHERED_COPPER_TRAPDOOR_NAME = "minecraft:tile.waxed_weathered_copper_trapdoor.name";
 
   String M_TILE_WAXED_WEATHERED_CUT_COPPER_NAME = "minecraft:tile.waxed_weathered_cut_copper.name";
 
@@ -9855,7 +10165,17 @@ public interface TrKeys {
 
   String M_TILE_WAXED_WEATHERED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_weathered_cut_copper_stairs.name";
 
+  String M_TILE_WEATHERED_CHISELED_COPPER_NAME = "minecraft:tile.weathered_chiseled_copper.name";
+
   String M_TILE_WEATHERED_COPPER_NAME = "minecraft:tile.weathered_copper.name";
+
+  String M_TILE_WEATHERED_COPPER_BULB_NAME = "minecraft:tile.weathered_copper_bulb.name";
+
+  String M_TILE_WEATHERED_COPPER_DOOR_NAME = "minecraft:tile.weathered_copper_door.name";
+
+  String M_TILE_WEATHERED_COPPER_GRATE_NAME = "minecraft:tile.weathered_copper_grate.name";
+
+  String M_TILE_WEATHERED_COPPER_TRAPDOOR_NAME = "minecraft:tile.weathered_copper_trapdoor.name";
 
   String M_TILE_WEATHERED_CUT_COPPER_NAME = "minecraft:tile.weathered_cut_copper.name";
 
@@ -9971,6 +10291,8 @@ public interface TrKeys {
 
   String M_TIPPED_ARROW_EFFECT_HEAL = "minecraft:tipped_arrow.effect.heal";
 
+  String M_TIPPED_ARROW_EFFECT_INFESTED = "minecraft:tipped_arrow.effect.infested";
+
   String M_TIPPED_ARROW_EFFECT_INVISIBILITY = "minecraft:tipped_arrow.effect.invisibility";
 
   String M_TIPPED_ARROW_EFFECT_JUMP = "minecraft:tipped_arrow.effect.jump";
@@ -9987,6 +10309,8 @@ public interface TrKeys {
 
   String M_TIPPED_ARROW_EFFECT_NIGHTVISION = "minecraft:tipped_arrow.effect.nightVision";
 
+  String M_TIPPED_ARROW_EFFECT_OOZING = "minecraft:tipped_arrow.effect.oozing";
+
   String M_TIPPED_ARROW_EFFECT_POISON = "minecraft:tipped_arrow.effect.poison";
 
   String M_TIPPED_ARROW_EFFECT_REGENERATION = "minecraft:tipped_arrow.effect.regeneration";
@@ -10002,6 +10326,10 @@ public interface TrKeys {
   String M_TIPPED_ARROW_EFFECT_WATERBREATHING = "minecraft:tipped_arrow.effect.waterBreathing";
 
   String M_TIPPED_ARROW_EFFECT_WEAKNESS = "minecraft:tipped_arrow.effect.weakness";
+
+  String M_TIPPED_ARROW_EFFECT_WEAVING = "minecraft:tipped_arrow.effect.weaving";
+
+  String M_TIPPED_ARROW_EFFECT_WINDCHARGED = "minecraft:tipped_arrow.effect.windCharged";
 
   String M_TIPPED_ARROW_EFFECT_WITHER = "minecraft:tipped_arrow.effect.wither";
 
@@ -10073,11 +10401,15 @@ public interface TrKeys {
 
   String M_TRIM_MATERIAL_REDSTONE_NAME = "minecraft:trim_material.redstone.name";
 
+  String M_TRIM_PATTERN_BOLT_NAME = "minecraft:trim_pattern.bolt.name";
+
   String M_TRIM_PATTERN_COAST_NAME = "minecraft:trim_pattern.coast.name";
 
   String M_TRIM_PATTERN_DUNE_NAME = "minecraft:trim_pattern.dune.name";
 
   String M_TRIM_PATTERN_EYE_NAME = "minecraft:trim_pattern.eye.name";
+
+  String M_TRIM_PATTERN_FLOW_NAME = "minecraft:trim_pattern.flow.name";
 
   String M_TRIM_PATTERN_HOST_NAME = "minecraft:trim_pattern.host.name";
 
@@ -10108,4 +10440,14 @@ public interface TrKeys {
   String M_UPGRADE_NETHERITE_UPGRADE_NAME = "minecraft:upgrade.netherite_upgrade.name";
 
   String M_USERDATA_UNRECOVERABLE_TEXT = "minecraft:userdata.unrecoverable.text";
+
+  String M_WRITETHROTTLING_OSDIALOG_BODY = "minecraft:writeThrottling.osDialog.body";
+
+  String M_WRITETHROTTLING_OSDIALOG_CANCEL = "minecraft:writeThrottling.osDialog.cancel";
+
+  String M_WRITETHROTTLING_OSDIALOG_CONFIRM = "minecraft:writeThrottling.osDialog.confirm";
+
+  String M_WRITETHROTTLING_PROGRESSBAR_BODY = "minecraft:writeThrottling.progressBar.body";
+
+  String M_WRITETHROTTLING_PROGRESSBAR_TITLE = "minecraft:writeThrottling.progressBar.title";
 }

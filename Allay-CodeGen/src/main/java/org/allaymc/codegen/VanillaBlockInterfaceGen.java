@@ -40,7 +40,7 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
-        VanillaBlockIdEnumGen.generate();
+        // NOTICE: Please run VanillaBlockIdEnumGen.generate() first before running this method
         VanillaBlockPropertyTypeGen.generate();
         generate();
     }
@@ -157,6 +157,7 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*WallBehavior"), "wall");
         registerSubPackage(Pattern.compile("BlockElement.*"), "element");
         registerSubPackage(Pattern.compile(".*CoralBehavior"), "coral");
+        registerSubPackage(Pattern.compile(".*CoralBlockBehavior"), "coralblock");
         registerSubPackage(Pattern.compile(".*CoralFan.*"), "coralfan");
         registerSubPackage(Pattern.compile(".*BricksBehavior"), "bricks");
         registerSubPackage(Pattern.compile(".*WoolBehavior"), "wool");

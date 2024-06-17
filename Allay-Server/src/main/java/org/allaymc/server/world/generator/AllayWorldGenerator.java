@@ -200,7 +200,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
         private List<Populator> populators = List.of();
         private List<Lighter> lighters = List.of();
         private List<EntitySpawner> entitySpawners = List.of();
-        private Consumer<Dimension> onDimensionSet;
+        private Consumer<Dimension> onDimensionSet = dimension -> {};
 
         public AllayWorldGeneratorBuilder name(String name) {
             this.name = name;

@@ -327,6 +327,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setEducationProductionId("");
         startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
         startGamePacket.setBlockNetworkIdsHashed(true);
+        startGamePacket.setServerId("");
+        startGamePacket.setWorldId("");
+        startGamePacket.setScenarioId("");
         sendPacket(startGamePacket);
 
         session.getPeer().getCodecHelper().setItemDefinitions(

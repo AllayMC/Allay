@@ -19,12 +19,12 @@ import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.barrel.BlockBarrelBaseComponentImpl;
 import org.allaymc.server.block.component.chest.BlockChestBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
+import org.allaymc.server.block.component.common.BlockTallWheatSeedDropableBaseComponentImpl;
+import org.allaymc.server.block.component.common.BlockWheatSeedDropableBaseComponentImpl;
 import org.allaymc.server.block.component.craftingtable.BlockCraftingTableBaseComponentImpl;
-import org.allaymc.server.block.component.doubleplant.BlockDoublePlantBaseComponentImpl;
 import org.allaymc.server.block.component.glass.BlockGlassBaseComponentImpl;
 import org.allaymc.server.block.component.grassblock.BlockGrassBlockBaseComponentImpl;
 import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
-import org.allaymc.server.block.component.tallgrass.BlockTallgrassBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 
 /**
@@ -41,21 +41,30 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static void initTallgrass() {
-        BlockTypes.TALLGRASS_TYPE = BlockTypeBuilder
-                .builder(BlockTallgrassBehavior.class)
-                .vanillaBlock(VanillaBlockId.TALLGRASS)
-                .setProperties(VanillaBlockPropertyTypes.TALL_GRASS_TYPE)
-                .setBlockBaseComponentSupplier(BlockTallgrassBaseComponentImpl::new)
+    public static void initShortGrass() {
+        BlockTypes.SHORT_GRASS_TYPE = BlockTypeBuilder
+                .builder(BlockShortGrassBehavior.class)
+                .vanillaBlock(VanillaBlockId.SHORT_GRASS)
+                .setBlockBaseComponentSupplier(BlockWheatSeedDropableBaseComponentImpl::new)
                 .build();
     }
 
-    public static void initDoublePlant() {
-        BlockTypes.DOUBLE_PLANT_TYPE = BlockTypeBuilder
-                .builder(BlockDoublePlantBehavior.class)
-                .vanillaBlock(VanillaBlockId.DOUBLE_PLANT)
-                .setProperties(VanillaBlockPropertyTypes.DOUBLE_PLANT_TYPE, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockBaseComponentSupplier(BlockDoublePlantBaseComponentImpl::new)
+    public static void initTallGrass() {
+        BlockTypes.TALL_GRASS_TYPE = BlockTypeBuilder
+                .builder(BlockTallGrassBehavior.class)
+                .vanillaBlock(VanillaBlockId.TALL_GRASS)
+                .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBlockBaseComponentSupplier(BlockTallWheatSeedDropableBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initLargeFern() {
+        // TODO: 需要适配
+        BlockTypes.LARGE_FERN_TYPE = BlockTypeBuilder
+                .builder(BlockLargeFernBehavior.class)
+                .vanillaBlock(VanillaBlockId.LARGE_FERN)
+                .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBlockBaseComponentSupplier(BlockTallWheatSeedDropableBaseComponentImpl::new)
                 .build();
     }
 

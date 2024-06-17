@@ -119,6 +119,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
             throw new IllegalArgumentException("Trying to close a container which is not opened! Type: " + container.getContainerType());
         var containerClosePacket = new ContainerClosePacket();
         containerClosePacket.setId(assignedId);
+        containerClosePacket.setType(container.getContainerType().toNetworkType());
         networkComponent.sendPacket(containerClosePacket);
 
         typeToContainer.remove(idToContainer.remove(assignedId).getContainerType());

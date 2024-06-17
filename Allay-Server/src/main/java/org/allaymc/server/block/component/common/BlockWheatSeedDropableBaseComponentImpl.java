@@ -1,22 +1,26 @@
-package org.allaymc.server.block.component.tallgrass;
+package org.allaymc.server.block.component.common;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.annotation.RequireBlockProperty;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Allay Project 2024/6/15
+ * Allay Project 2024/6/18
  *
  * @author daoge_cmd
  */
-public class BlockTallgrassBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockTallgrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockWheatSeedDropableBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 

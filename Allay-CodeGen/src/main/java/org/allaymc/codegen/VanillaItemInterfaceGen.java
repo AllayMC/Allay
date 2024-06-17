@@ -49,7 +49,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
     }
 
     public static void main(String[] args) {
-        VanillaItemIdEnumGen.generate();
+        // NOTICE: Please run VanillaItemIdEnumGen.generate() first before running this method
         generate();
     }
 
@@ -122,11 +122,19 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
     }
 
     private static String generateClassSimpleName(VanillaItemId id) {
-        return id == VanillaItemId.NETHERBRICK ? "ItemNetherbrick0Stack" : "Item" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_")) + "Stack";
+        // Windows环境对大小写不敏感，所以需要特殊处理一部分物品id
+        // netherbrick和nether_brick需要特殊处理
+        if (id == VanillaItemId.NETHERBRICK) return "ItemNetherbrick0Stack";
+        // tallgrass和tall_grass需要特殊处理
+        if (id == VanillaItemId.TALLGRASS) return "ItemTallgrass0Stack";
+        return "Item" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_")) + "Stack";
     }
 
     private static String generateInitializerMethodName(VanillaItemId id) {
-        return id == VanillaItemId.NETHERBRICK ? "initNetherbrick0" : "init" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_"));
+        // 同上
+        if (id == VanillaItemId.NETHERBRICK) return "initNetherbrick0";
+        if (id == VanillaItemId.TALLGRASS) return "initTallgrass0";
+        return "init" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_"));
     }
 
     private static String tryFindSpecifiedFolderName(String blockClassSimpleName) {
@@ -154,6 +162,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*WallStack"), "wall");
         registerSubPackage(Pattern.compile("ItemElement.*"), "element");
         registerSubPackage(Pattern.compile(".*CoralStack"), "coral");
+        registerSubPackage(Pattern.compile(".*CoralBlockStack"), "coralblock");
         registerSubPackage(Pattern.compile(".*CoralFan.*"), "coralfan");
         registerSubPackage(Pattern.compile(".*BricksStack"), "bricks");
         registerSubPackage(Pattern.compile(".*WoolStack"), "wool");
