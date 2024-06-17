@@ -592,7 +592,7 @@ import org.allaymc.api.item.interfaces.ItemSuspiciousStewStack;
 import org.allaymc.api.item.interfaces.ItemSweetBerriesStack;
 import org.allaymc.api.item.interfaces.ItemSweetBerryBushStack;
 import org.allaymc.api.item.interfaces.ItemTallGrassStack;
-import org.allaymc.api.item.interfaces.ItemTallgrassStack;
+import org.allaymc.api.item.interfaces.ItemTallgrass0Stack;
 import org.allaymc.api.item.interfaces.ItemTargetStack;
 import org.allaymc.api.item.interfaces.ItemTideArmorTrimSmithingTemplateStack;
 import org.allaymc.api.item.interfaces.ItemTntStack;
@@ -4421,7 +4421,7 @@ public final class ItemTypes {
 
   public static ItemType<ItemTallGrassStack> TALL_GRASS_TYPE;
 
-  public static ItemType<ItemTallgrassStack> TALLGRASS_TYPE;
+  public static ItemType<ItemTallgrass0Stack> TALLGRASS_TYPE;
 
   public static ItemType<ItemTargetStack> TARGET_TYPE;
 

@@ -22,6 +22,8 @@ DataExtractor有很多容易踩的坑，后面会详细说明一下
 
 - biome_definitions.nbt
 - block_attributes.nbt
+- block_correct_tool_special.nbt
+- block_material_data.nbt
 - creative_items.nbt
 - entity_identifiers.nbt (从pmmp/BedrockData获取)
 - item_data.nbt
