@@ -4,6 +4,7 @@ import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.interfaces.EntityAgent;
 import org.allaymc.api.entity.interfaces.EntityAllay;
 import org.allaymc.api.entity.interfaces.EntityAreaEffectCloud;
+import org.allaymc.api.entity.interfaces.EntityArmadillo;
 import org.allaymc.api.entity.interfaces.EntityArmorStand;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityAxolotl;
@@ -12,6 +13,9 @@ import org.allaymc.api.entity.interfaces.EntityBat;
 import org.allaymc.api.entity.interfaces.EntityBee;
 import org.allaymc.api.entity.interfaces.EntityBlaze;
 import org.allaymc.api.entity.interfaces.EntityBoat;
+import org.allaymc.api.entity.interfaces.EntityBogged;
+import org.allaymc.api.entity.interfaces.EntityBreeze;
+import org.allaymc.api.entity.interfaces.EntityBreezeWindChargeProjectile;
 import org.allaymc.api.entity.interfaces.EntityCamel;
 import org.allaymc.api.entity.interfaces.EntityCat;
 import org.allaymc.api.entity.interfaces.EntityCaveSpider;
@@ -65,6 +69,7 @@ import org.allaymc.api.entity.interfaces.EntityMooshroom;
 import org.allaymc.api.entity.interfaces.EntityMule;
 import org.allaymc.api.entity.interfaces.EntityNpc;
 import org.allaymc.api.entity.interfaces.EntityOcelot;
+import org.allaymc.api.entity.interfaces.EntityOminousItemSpawner;
 import org.allaymc.api.entity.interfaces.EntityPainting;
 import org.allaymc.api.entity.interfaces.EntityPanda;
 import org.allaymc.api.entity.interfaces.EntityParrot;
@@ -109,6 +114,7 @@ import org.allaymc.api.entity.interfaces.EntityVillagerV2;
 import org.allaymc.api.entity.interfaces.EntityVindicator;
 import org.allaymc.api.entity.interfaces.EntityWanderingTrader;
 import org.allaymc.api.entity.interfaces.EntityWarden;
+import org.allaymc.api.entity.interfaces.EntityWindChargeProjectile;
 import org.allaymc.api.entity.interfaces.EntityWitch;
 import org.allaymc.api.entity.interfaces.EntityWither;
 import org.allaymc.api.entity.interfaces.EntityWitherSkeleton;
@@ -152,6 +158,14 @@ public final class EntityTypeDefaultInitializer {
     EntityTypes.AREA_EFFECT_CLOUD_TYPE = EntityTypeBuilder
             .builder(EntityAreaEffectCloud.class)
             .vanillaEntity(VanillaEntityId.AREA_EFFECT_CLOUD)
+            .build();
+  }
+
+  public static void initArmadillo() {
+    if (EntityTypes.ARMADILLO_TYPE != null) return;
+    EntityTypes.ARMADILLO_TYPE = EntityTypeBuilder
+            .builder(EntityArmadillo.class)
+            .vanillaEntity(VanillaEntityId.ARMADILLO)
             .build();
   }
 
@@ -216,6 +230,30 @@ public final class EntityTypeDefaultInitializer {
     EntityTypes.BOAT_TYPE = EntityTypeBuilder
             .builder(EntityBoat.class)
             .vanillaEntity(VanillaEntityId.BOAT)
+            .build();
+  }
+
+  public static void initBogged() {
+    if (EntityTypes.BOGGED_TYPE != null) return;
+    EntityTypes.BOGGED_TYPE = EntityTypeBuilder
+            .builder(EntityBogged.class)
+            .vanillaEntity(VanillaEntityId.BOGGED)
+            .build();
+  }
+
+  public static void initBreeze() {
+    if (EntityTypes.BREEZE_TYPE != null) return;
+    EntityTypes.BREEZE_TYPE = EntityTypeBuilder
+            .builder(EntityBreeze.class)
+            .vanillaEntity(VanillaEntityId.BREEZE)
+            .build();
+  }
+
+  public static void initBreezeWindChargeProjectile() {
+    if (EntityTypes.BREEZE_WIND_CHARGE_PROJECTILE_TYPE != null) return;
+    EntityTypes.BREEZE_WIND_CHARGE_PROJECTILE_TYPE = EntityTypeBuilder
+            .builder(EntityBreezeWindChargeProjectile.class)
+            .vanillaEntity(VanillaEntityId.BREEZE_WIND_CHARGE_PROJECTILE)
             .build();
   }
 
@@ -643,6 +681,14 @@ public final class EntityTypeDefaultInitializer {
             .build();
   }
 
+  public static void initOminousItemSpawner() {
+    if (EntityTypes.OMINOUS_ITEM_SPAWNER_TYPE != null) return;
+    EntityTypes.OMINOUS_ITEM_SPAWNER_TYPE = EntityTypeBuilder
+            .builder(EntityOminousItemSpawner.class)
+            .vanillaEntity(VanillaEntityId.OMINOUS_ITEM_SPAWNER)
+            .build();
+  }
+
   public static void initPainting() {
     if (EntityTypes.PAINTING_TYPE != null) return;
     EntityTypes.PAINTING_TYPE = EntityTypeBuilder
@@ -992,6 +1038,14 @@ public final class EntityTypeDefaultInitializer {
     EntityTypes.WARDEN_TYPE = EntityTypeBuilder
             .builder(EntityWarden.class)
             .vanillaEntity(VanillaEntityId.WARDEN)
+            .build();
+  }
+
+  public static void initWindChargeProjectile() {
+    if (EntityTypes.WIND_CHARGE_PROJECTILE_TYPE != null) return;
+    EntityTypes.WIND_CHARGE_PROJECTILE_TYPE = EntityTypeBuilder
+            .builder(EntityWindChargeProjectile.class)
+            .vanillaEntity(VanillaEntityId.WIND_CHARGE_PROJECTILE)
             .build();
   }
 

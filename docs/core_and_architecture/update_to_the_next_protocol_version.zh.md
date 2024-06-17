@@ -23,9 +23,10 @@ DataExtractor有很多容易踩的坑，后面会详细说明一下
 - biome_definitions.nbt
 - block_attributes.nbt
 - creative_items.nbt
-- entity_identifiers.nbt
+- entity_identifiers.nbt (从pmmp/BedrockData获取)
 - item_data.nbt
 - item_tags.json
+- block_tags.json
 
 **第二步，更新unpacked目录下的文件**。这些文件虽然说不会被打包进jar内，但是会在代码生成阶段被使用：
 
@@ -36,7 +37,7 @@ DataExtractor有很多容易踩的坑，后面会详细说明一下
 
 **第三步，更新lang文件**
 
-首先从BDS获取到原版语言文件，并复制到`unpacked/lang_raw/vanilla`目录下
+首先从BDS获取到原版语言文件，并复制到`unpacked/lang_raw/vanilla`目录下 (不需要复制`language_names.json`和`languages.json`这两个文件)
 
 然后，运行`Allay-Data`下的`LangBuilder`。
 
@@ -52,7 +53,7 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 
 **第二步，检查`entity_id_map.json`里面是否存在新的实体**。若存在，先运行`VanillaEntityIdEnumGen`，然后运行`VanillaEntityInterfaceGen`。此文件小版本更新通常不会发生改变。
 
-**第三步，检查`item_tags.json`以及`block_tags.json`里面是否存在变动**。若存在，运行`VanillaItemTagGen`或`VanillaBlockTagGen`。
+**第三步，检查`item_tags.json`以及`block_tags.json`这两个文件的键集合是否存在变动**。若存在，运行`VanillaItemTagGen`或`VanillaBlockTagGen`。
 
 **第四步，检查`block_property_types.json`里面是否存在变动**。若存在，运行`VanillaBlockPropertyTypeGen`。
 

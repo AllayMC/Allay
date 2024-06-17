@@ -377,17 +377,6 @@
                 true
             ]
         },
-        "coral_color": {
-            "serializationName": "coral_color",
-            "valueType": "ENUM",
-            "values": [
-                "blue",
-                "pink",
-                "purple",
-                "red",
-                "yellow"
-            ]
-        },
         "coral_direction": {
             "serializationName": "coral_direction",
             "valueType": "INTEGER",
@@ -499,18 +488,6 @@
             "values": [
                 false,
                 true
-            ]
-        },
-        "double_plant_type": {
-            "serializationName": "double_plant_type",
-            "valueType": "ENUM",
-            "values": [
-                "fern",
-                "grass",
-                "paeonia",
-                "rose",
-                "sunflower",
-                "syringa"
             ]
         },
         "drag_down": {
@@ -967,6 +944,14 @@
                 true
             ]
         },
+        "ominous": {
+            "serializationName": "ominous",
+            "valueType": "BOOLEAN",
+            "values": [
+                false,
+                true
+            ]
+        },
         "open_bit": {
             "serializationName": "open_bit",
             "valueType": "BOOLEAN",
@@ -1316,16 +1301,6 @@
             "values": [
                 false,
                 true
-            ]
-        },
-        "tall_grass_type": {
-            "serializationName": "tall_grass_type",
-            "valueType": "ENUM",
-            "values": [
-                "default",
-                "fern",
-                "snow",
-                "tall"
             ]
         },
         "toggle_bit": {
