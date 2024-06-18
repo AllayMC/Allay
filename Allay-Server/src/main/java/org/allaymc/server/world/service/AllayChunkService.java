@@ -176,14 +176,6 @@ public final class AllayChunkService implements ChunkService {
         if (presentValue != null) {
             return presentValue;
         }
-//        if (AllayComputeThread.isAllayComputeThread(Thread.currentThread())) {
-//            // 若当前线程已经为计算线程，则直接在此线程上加载区块
-//            // 否则会出现一个计算线程等待另外一个计算线程的情况，造成线程资源的浪费
-//            // If the current thread is already a computing thread, load the block directly on this thread
-//            // Otherwise, one computing thread will wait for another computing thread, resulting in a waste of thread resources
-//            loadChunkSynchronously(x, z, future);
-//            return future;
-//        }
         worldStorage.readChunk(x, z, dimension.getDimensionInfo())
                 .exceptionally(t -> {
                     log.error("Error while reading chunk ({},{}) !", x, z, t);
@@ -226,13 +218,13 @@ public final class AllayChunkService implements ChunkService {
             log.error("Error while reading chunk ({},{}) !", x, z, t);
             chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         }
-        try {
-            if (chunk.getState() != FINISHED) {
+        if (chunk.getState() != FINISHED) {
+            try {
                 chunk = getWorldGenerator().generateChunk(x, z);
+            } catch (Throwable t) {
+                log.error("Error while generating chunk ({},{}) !", x, z, t);
+                chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
             }
-        } catch (Throwable t) {
-            log.error("Error while generating chunk ({},{}) !", x, z, t);
-            chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         }
         chunk.beforeSetChunk(dimension);
         setChunk(x, z, chunk);
