@@ -47,6 +47,7 @@ public class ConsolePanel extends JTextPane {
 
     private static Color colorCurrent = ANSIColor.RESET.getColor();
     private String remaining = "";
+    int currentLength = 0; // Used to let ProgressBars work
 
     /**
      * Append the given string in the given color to the text pane
@@ -57,6 +58,33 @@ public class ConsolePanel extends JTextPane {
         StyleContext sc = StyleContext.getDefaultStyleContext();
         AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
         int len = getDocument().getLength();
+
+        if(s.contains("\r")) {
+            // We have a carriage so we should be at the front of the line
+            boolean haveNewline = s.contains("\n");
+            if(haveNewline) {
+                // We're good to normally add to the document
+                try {
+                    getDocument().insertString(len, s, aset);
+                } catch (BadLocationException e) {
+                    log.error("Error while appending text to console", e);
+                }
+                currentLength = 0;
+                return;
+            }
+
+            // There's no newline, we should erase our progress to the start
+            try {
+                getDocument().remove(len-currentLength, currentLength);
+                getDocument().insertString(len-currentLength, s, aset);
+                currentLength = s.length();
+            } catch (BadLocationException e) {
+                log.error("Error while removing text from console, most likely has to do with printing weirdly", e);
+            }
+            return;
+        }
+
+        currentLength += s.length();
 
         try {
             getDocument().insertString(len, s, aset);
