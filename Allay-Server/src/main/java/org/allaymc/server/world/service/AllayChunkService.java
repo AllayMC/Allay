@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.AllayComputeThread;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.MathUtils;
@@ -124,6 +123,11 @@ public final class AllayChunkService implements ChunkService {
         return loadedChunks.get(chunkHash);
     }
 
+    @Override
+    public CompletableFuture<Chunk> getChunkLoadingFuture(int x, int z) {
+        return loadingChunks.get(HashUtils.hashXZ(x, z));
+    }
+
     @SlowOperation
     @Override
     public Chunk getOrLoadChunkSynchronously(int x, int z) {
@@ -192,13 +196,14 @@ public final class AllayChunkService implements ChunkService {
                     log.error("Error while generating chunk ({},{}) !", x, z, t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
-                .thenApply(prepareChunk -> {
-                    prepareChunk.beforeSetChunk(dimension);
-                    setChunk(x, z, prepareChunk);
-                    prepareChunk.afterSetChunk(dimension);
-                    future.complete(prepareChunk);
+                .thenApply(preparedChunk -> {
+                    preparedChunk.beforeSetChunk(dimension);
+                    setChunk(x, z, preparedChunk);
+                    preparedChunk.getChunkSetCallback().run();
+                    preparedChunk.afterSetChunk(dimension);
+                    future.complete(preparedChunk);
                     loadingChunks.remove(hashXZ);
-                    return prepareChunk;
+                    return preparedChunk;
                 });
         return future;
     }
@@ -228,6 +233,7 @@ public final class AllayChunkService implements ChunkService {
         }
         chunk.beforeSetChunk(dimension);
         setChunk(x, z, chunk);
+        chunk.getChunkSetCallback().run();
         chunk.afterSetChunk(dimension);
         synchronizedFuture.complete(chunk);
         loadingChunks.remove(hash);

@@ -51,6 +51,7 @@ public class AllayChunk implements Chunk {
     protected final StampedLock lightLock;
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<ChunkPacketEntry> chunkPacketQueue;
+    protected Runnable chunkSetCallback = () -> {};
 
     public AllayChunk(AllayUnsafeChunk unsafeChunk) {
         this.unsafeChunk = unsafeChunk;
@@ -582,6 +583,16 @@ public class AllayChunk implements Chunk {
     @UnmodifiableView
     public Set<ChunkLoader> getChunkLoaders() {
         return Collections.unmodifiableSet(chunkLoaders);
+    }
+
+    @Override
+    public void setChunkSetCallback(Runnable callback) {
+        this.chunkSetCallback = callback;
+    }
+
+    @Override
+    public Runnable getChunkSetCallback() {
+        return chunkSetCallback;
     }
 
     @Override

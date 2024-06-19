@@ -2,6 +2,8 @@ package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.utils.HashUtils;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * Allay Project 2023/7/1
  *

@@ -32,6 +32,12 @@ public interface Chunk extends UnsafeChunk {
         return getChunkLoaders().stream().filter(EntityPlayer.class::isInstance).map(EntityPlayer.class::cast).collect(Collectors.toSet());
     }
 
+    @ApiStatus.Internal
+    void setChunkSetCallback(Runnable callback);
+
+    @ApiStatus.Internal
+    Runnable getChunkSetCallback();
+
     void addChunkLoader(ChunkLoader chunkLoader);
 
     void removeChunkLoader(ChunkLoader chunkLoader);

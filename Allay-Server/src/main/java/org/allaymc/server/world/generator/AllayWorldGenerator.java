@@ -20,8 +20,11 @@ import org.allaymc.api.world.generator.function.Lighter;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -43,9 +46,10 @@ public final class AllayWorldGenerator implements WorldGenerator {
     private final List<Lighter> lighters;
     private final List<EntitySpawner> entitySpawners;
     private final Consumer<Dimension> onDimensionSet;
-    // 存储基本区块，基本区块的ChunkStatus为NOISED
-    // 基本区块只会在当一个区块生成时需要访问相邻未生成区块时产生
-    private final Map<Long, Chunk> basicChunks = new Long2ObjectNonBlockingMap<>();
+    // 原型区块是未完成生成的区块
+    private final Map<Long, CompletableFuture<Chunk>> protoChunks = new Long2ObjectNonBlockingMap<>();
+    // 存储已完成生成且正在被载入世界的基本区块
+    private final Set<Long> beingSetProtoChunk = Collections.newSetFromMap(new Long2ObjectNonBlockingMap<>());
 
     @Getter
     private Dimension dimension; // Will be set later
@@ -96,27 +100,46 @@ public final class AllayWorldGenerator implements WorldGenerator {
      */
     @Override
     public Chunk generateChunk(int x, int z) {
-        Chunk chunk = basicChunks.remove(HashUtils.hashXZ(x, z));
-        if (chunk != null) {
-            statusNoisedToFinished(chunk);
-        } else {
-            chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-            statusEmptyToFinished(chunk);
-        }
+        var chunk = getOrGenerateProtoChunk(x, z);
+        statusNoisedToFinished(chunk);
+        markProtoChunkBeingSet(x, z);
+        protoChunks.remove(HashUtils.hashXZ(x, z));
+        chunk.setChunkSetCallback(() -> afterProtoChunkBeingSet(x, z));
         return chunk;
     }
 
-    private Chunk getOrGenerateBasicChunk(int x, int z) {
-        return basicChunks.computeIfAbsent(HashUtils.hashXZ(x, z), unused -> generateBasicChunk(x, z));
+    private Chunk getOrGenerateProtoChunk(int x, int z) {
+        if (protoChunkBeingSet(x, z)) {
+            throw new IllegalStateException("Trying to access a proto chunk which is being set: x: " + x + ", z: " + z);
+        }
+        CompletableFuture<Chunk> future = new CompletableFuture<>();
+        var presentFuture = protoChunks.putIfAbsent(HashUtils.hashXZ(x, z), future);
+        if (presentFuture != null) {
+            // 原型区块已经在生成或已生成完毕
+            // 等待生成完毕后返回区块，或直接返回若已生成完毕
+            return presentFuture.join();
+        }
+        var chunk = generateProtoChunk(x, z);
+        future.complete(chunk);
+        return chunk;
     }
 
-    /**
-     * 生成基本区块，基本区块的ChunkStatus为NOISED
-     */
-    private Chunk generateBasicChunk(int x, int z) {
+    private Chunk generateProtoChunk(int x, int z) {
         var chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         statusEmptyToNoised(chunk);
         return chunk;
+    }
+
+    private void markProtoChunkBeingSet(int x, int z) {
+        beingSetProtoChunk.add(HashUtils.hashXZ(x, z));
+    }
+
+    private void afterProtoChunkBeingSet(int x, int z) {
+        beingSetProtoChunk.remove(HashUtils.hashXZ(x, z));
+    }
+
+    private boolean protoChunkBeingSet(int x, int z) {
+        return beingSetProtoChunk.contains(HashUtils.hashXZ(x, z));
     }
 
     private void statusEmptyToFinished(Chunk chunk) {
@@ -176,11 +199,22 @@ public final class AllayWorldGenerator implements WorldGenerator {
             if (x == currentChunk.getX() && z == currentChunk.getZ()) {
                 return currentChunk;
             }
+            var chunkService = dimension.getChunkService();
+
+            // 先获取future，避免在此过程中区块完成加载导致future被删除
+            CompletableFuture<Chunk> future = chunkService.getChunkLoadingFuture(x, z);
+            if (protoChunkBeingSet(x, z)) {
+                // 即使在此过程中future被删除（区块完成加载），此代码依然可以工作因为
+                // 区块完成加载后，future.join()等效于chunkService.getChunk(x, z)
+                return future.join();
+            }
+
+            var chunk = chunkService.getChunk(x, z);
             // 若区块已生成则直接返回
-            var chunk = dimension.getChunkService().getChunk(x, z);
             if (chunk != null) return chunk;
-            // 生成基本区块供使用
-            chunk = getOrGenerateBasicChunk(x, z);
+
+            // 获取或生成原型区块供使用
+            chunk = getOrGenerateProtoChunk(x, z);
             return chunk;
         }
     }

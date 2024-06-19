@@ -19,6 +19,8 @@ import java.util.function.Consumer;
 public interface ChunkService extends ChunkAccessible {
     void tick();
 
+    CompletableFuture<Chunk> getChunkLoadingFuture(int x, int z);
+
     CompletableFuture<Chunk> getOrLoadChunk(int x, int z);
 
     CompletableFuture<Set<Chunk>> getOrLoadRangedChunk(int x, int z, int range);

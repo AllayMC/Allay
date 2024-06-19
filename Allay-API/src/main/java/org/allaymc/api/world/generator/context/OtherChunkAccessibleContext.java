@@ -2,6 +2,7 @@ package org.allaymc.api.world.generator.context;
 
 import lombok.Getter;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.world.chunk.ChunkAccessible;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 
