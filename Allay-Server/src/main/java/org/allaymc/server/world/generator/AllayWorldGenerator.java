@@ -160,8 +160,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
 
     private void statusNoisedToFinished(Chunk chunk) {
          // 装饰地形
-        var chunkAccessor = new WorldGeneratorChunkAccessor(chunk);
-        var populateContext = new PopulateContext(chunk.toUnsafeChunk(), chunkAccessor);
+        var populateContext = new PopulateContext(chunk.toUnsafeChunk(), new WorldGeneratorChunkAccessor(chunk));
          for (var populator : populators) {
              if (!populator.apply(populateContext)) {
                  log.error("Failed to populate chunk {} with populator {}", chunk, populator.getName());
@@ -177,7 +176,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
          }
          chunk.setState(ChunkState.LIGHTED);
          // 生成实体
-        var entitySpawnContext = new EntitySpawnContext(chunk.toUnsafeChunk(), chunkAccessor);
+        var entitySpawnContext = new EntitySpawnContext(chunk.toUnsafeChunk());
         for (var entitySpawner : entitySpawners) {
             if (!entitySpawner.apply(entitySpawnContext)) {
                 log.error("Failed to spawn entity in chunk {} with entity spawner {}", chunk, entitySpawner.getName());

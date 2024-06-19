@@ -8,9 +8,9 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
  *
  * @author daoge_cmd
  */
-public class EntitySpawnContext extends OtherChunkAccessibleContext {
+public class EntitySpawnContext extends Context {
 
-    public EntitySpawnContext(UnsafeChunk currentChunk, ChunkAccessible chunkAccessor) {
-        super(currentChunk, chunkAccessor);
+    public EntitySpawnContext(UnsafeChunk currentChunk) {
+        super(currentChunk);
     }
 }
