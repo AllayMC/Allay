@@ -1,5 +1,6 @@
 package org.allaymc.server.blockentity.component.common;
 
+import lombok.Getter;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
 import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
@@ -10,13 +11,13 @@ import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
 import org.allaymc.api.blockentity.component.event.BlockEntitySaveNBTEvent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -32,6 +33,7 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     protected ComponentManager<T> manager;
 
     protected BlockEntityType<T> blockEntityType;
+    @Getter
     protected Position3ic position;
     protected String customName = "";
 
@@ -51,11 +53,6 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     }
 
     @Override
-    public Position3ic getPosition() {
-        return position;
-    }
-
-    @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder()
                 .putString("id", blockEntityType.getName())
@@ -71,14 +68,14 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
 
     @Override
     public void loadNBT(NbtMap nbt) {
-        if (nbt.containsKey("CustomName")) {
-            this.customName = nbt.getString("CustomName");
-        }
+        nbt.listenForString("CustomName", customName -> this.customName = customName);
+
         var pos = new Position3i(position);
         pos.x = nbt.getInt("x", position.x());
         pos.y = nbt.getInt("y", position.y());
         pos.z = nbt.getInt("z", position.z());
         position = pos;
+
         var event = new BlockEntityLoadNBTEvent(nbt);
         manager.callEvent(event);
     }

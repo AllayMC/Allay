@@ -1,6 +1,5 @@
 package org.allaymc.server.blockentity.component.barrel;
 
-import org.allaymc.api.block.interfaces.BlockBarrelBehavior;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;

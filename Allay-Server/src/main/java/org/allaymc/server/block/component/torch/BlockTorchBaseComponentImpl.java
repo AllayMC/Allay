@@ -43,7 +43,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var torchFace = computeTorchFacingDirection(blockFace);
 
         if ((oldBlock.getBlockType() != BlockTypes.AIR_TYPE && !(oldBlock.getBehavior() instanceof BlockLiquidComponent)) ||
-                torchFace == TorchFacingDirection.UNKNOWN) return false;
+            torchFace == TorchFacingDirection.UNKNOWN) return false;
 
         var targetBlock = dimension.getBlockState(targetBlockPos);
         if (targetBlock.getBlockType().getMaterial().isSolid()) {

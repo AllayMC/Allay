@@ -17,9 +17,6 @@ public class BaseContainerHolder implements ContainerHolder {
     protected final Map<FullContainerType<?>, Container> typeToContainer = new HashMap<>();
     protected final Map<ContainerSlotType, FullContainerType<?>> slotTypeToFullType = new HashMap<>();
 
-    public BaseContainerHolder() {
-    }
-
     public BaseContainerHolder(Container... containers) {
         for (Container container : containers) {
             this.addContainer(container);

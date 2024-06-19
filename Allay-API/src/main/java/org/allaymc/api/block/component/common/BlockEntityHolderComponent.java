@@ -44,7 +44,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         }
         var presentBlockEntity = chunk.getBlockEntity(x & 15, y, z & 15);
         if (presentBlockEntity != null) {
-            throw new IllegalStateException("Trying to create a block entity in Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z + "!");
+            throw new IllegalStateException("Trying to create a block entity when block entity already exists! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z + "!");
         }
         var blockEntity = getBlockEntityType().createBlockEntity(SimpleBlockEntityInitInfo.builder().pos(x, y, z).dimension(dimension).build());
         chunk.addBlockEntity(blockEntity);
