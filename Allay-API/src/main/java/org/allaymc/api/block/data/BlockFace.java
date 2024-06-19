@@ -1,5 +1,7 @@
 package org.allaymc.api.block.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3i;
@@ -15,6 +17,8 @@ import static java.lang.Math.min;
  *
  * @author JukeboxMC | daoge_cmd
  */
+@Getter
+@AllArgsConstructor
 public enum BlockFace {
 
     DOWN(-1, new Vector3i(0, -1, 0)),
@@ -24,17 +28,13 @@ public enum BlockFace {
     WEST(1, new Vector3i(-1, 0, 0)),
     EAST(3, new Vector3i(1, 0, 0));
 
-    public static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE =
-            new BlockFace[]{
-                    BlockFace.EAST, BlockFace.WEST,
-                    BlockFace.SOUTH, BlockFace.NORTH};
+    public static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE = new BlockFace[]{
+            BlockFace.EAST, BlockFace.WEST,
+            BlockFace.SOUTH, BlockFace.NORTH
+    };
+
     private final int horizontalIndex;
     private final Vector3ic offset;
-
-    BlockFace(int horizontalIndex, Vector3ic offset) {
-        this.horizontalIndex = horizontalIndex;
-        this.offset = offset;
-    }
 
     public static BlockFace fromId(int value) {
         return switch (value) {
@@ -49,27 +49,15 @@ public enum BlockFace {
     }
 
     public static BlockFace[] getHorizontal() {
-        return new BlockFace[]{
-                NORTH,
-                EAST,
-                SOUTH,
-                WEST
-        };
+        return new BlockFace[]{NORTH, EAST, SOUTH, WEST};
     }
 
     public static BlockFace[] getVertical() {
-        return new BlockFace[]{
-                UP,
-                DOWN
-        };
+        return new BlockFace[]{UP, DOWN};
     }
 
     public static BlockFace getBlockFaceByStairDirectionValue(int value) {
         return STAIR_DIRECTION_VALUE_TO_BLOCK_FACE[value];
-    }
-
-    public Vector3ic getOffset() {
-        return offset;
     }
 
     public Vector3ic offsetPos(int x, int y, int z) {
@@ -98,13 +86,13 @@ public enum BlockFace {
     @SuppressWarnings("SuspiciousNameCombination")
     public Vector3f rotateVector(Vector3fc vec) {
         Vector3f result = new Vector3f(vec);
-        // 平移到旋转点 (0.5, 0.5, 0.5)
+        // Translate to rotation point (0.5, 0.5, 0.5)
         result.sub(0.5f, 0.5f, 0.5f);
 
         float temp;
         switch (this) {
             case EAST -> {
-                // 不需要旋转，因为 EAST 是默认朝向
+                // No rotation needed as EAST is the default orientation
             }
             case NORTH -> {
                 temp = result.x;
@@ -132,14 +120,10 @@ public enum BlockFace {
             }
         }
 
-        // 平移回原点
+        // Translate back to original point
         result.add(0.5f, 0.5f, 0.5f);
 
         return result;
-    }
-
-    public int getHorizontalIndex() {
-        return horizontalIndex;
     }
 
     public BlockFace opposite() {

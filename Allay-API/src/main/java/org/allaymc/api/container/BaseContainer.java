@@ -81,7 +81,7 @@ public class BaseContainer implements Container {
     @Override
     public void addViewer(ContainerViewer viewer) {
         if (viewers.containsValue(viewer)) {
-            log.warn("Viewer already exists! Container: " + this.containerType + ", Viewer: " + viewer);
+            log.warn("Viewer already exists! Container: {}, Viewer: {}", this.containerType, viewer);
             removeViewer(viewer);
             addViewer(viewer);
             return;
@@ -164,8 +164,8 @@ public class BaseContainer implements Container {
     @Override
     public void loadNBT(List<NbtMap> nbtList) {
         for (var nbt : nbtList) {
-            int slot = nbt.getByte("Slot");
             try {
+                int slot = nbt.getByte("Slot");
                 ItemStack itemStack = fromNBT(nbt);
                 content[slot] = itemStack;
             } catch (NullPointerException e) {

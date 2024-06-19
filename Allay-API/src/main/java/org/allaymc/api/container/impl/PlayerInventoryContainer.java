@@ -39,7 +39,8 @@ public class PlayerInventoryContainer extends BaseContainer {
     @Override
     public void onSlotChange(int slot) {
         super.onSlotChange(slot);
-        //因为尽管客户端没有打开player inventory，但是他始终能看到自己的物品栏。所以说我们需要给客户端也发送库存包
+        // Because even if the client has not opened the player inventory, they can always see their own hot bar.
+        // Therefore, we need to send an inventory packet to the client as well.
         if (!viewers.containsValue(player)) {
             player.onSlotChange(this, slot);
         }

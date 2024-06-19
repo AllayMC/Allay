@@ -14,7 +14,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
 import java.util.Objects;
 
-/*
+/**
  * Allay Project 2024/06/18
  *
  * @author IWareQ

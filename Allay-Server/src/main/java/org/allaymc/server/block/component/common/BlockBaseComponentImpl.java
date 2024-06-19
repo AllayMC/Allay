@@ -1,5 +1,6 @@
 package org.allaymc.server.block.component.common;
 
+ import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
@@ -10,13 +11,13 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.item.enchantment.type.EnchantmentSilkTouchType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.enchantment.type.EnchantmentSilkTouchType;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -35,15 +36,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Manager
     protected ComponentManager<?> manager;
 
+    @Getter
     protected BlockType<? extends BlockBehavior> blockType;
 
     public BlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         this.blockType = blockType;
-    }
-
-    @Override
-    public BlockType<? extends BlockBehavior> getBlockType() {
-        return blockType;
     }
 
     @Override
@@ -52,12 +49,10 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos blockState) {
-    }
+    public void onRandomUpdate(BlockStateWithPos blockState) {}
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos blockState) {
-    }
+    public void onScheduledUpdate(BlockStateWithPos blockState) {}
 
     @Override
     public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
@@ -79,7 +74,9 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
-        if (!blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() && !usedItem.isCorrectToolFor(blockState.blockState())) return;
+        if (!blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() && !usedItem.isCorrectToolFor(blockState.blockState()))
+            return;
+
         var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);
         var dimension = blockState.pos().dimension();
         if (usedItem != null && usedItem.hasEnchantment(EnchantmentSilkTouchType.SILK_TOUCH_TYPE)) {
@@ -87,6 +84,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             dimension.dropItem(blockState.blockState().toItemStack(), dropPos);
             return;
         }
+
         var drops = getDrops(blockState.blockState(), usedItem);
         for (var drop : drops) {
             dimension.dropItem(drop, dropPos);

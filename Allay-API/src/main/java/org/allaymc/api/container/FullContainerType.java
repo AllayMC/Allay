@@ -19,11 +19,10 @@ public record FullContainerType<T extends Container>(
         int id,
         ContainerSlotType[] slotTypeTable,
         Set<ContainerSlotType> heldSlotTypes,
-        // 原版对于某些容器提供的slot范围与allay的设计不符，例如工作台：原版为32-39，而allay为0-8
-        // 此双向映射表用于解决上诉问题
-        // The slot range provided by vanilla for some containers does not match the design of the allay. For example, crafting table: 32-39 in vanilla but 0-8 in allay
-        // This bidirectional mapping table is used to resolve appeals
-        // network slot <-> slot that allay used
+        // The slot range provided by vanilla for some containers does not match the design of Allay.
+        // For example, crafting table: 32-39 in vanilla but 0-8 in Allay
+        // This bidirectional mapping table is used to resolve these issues
+        // network slot <-> slot that Allay used
         BiMap<Integer, Integer> networkSlotIndexMapper
 ) {
 

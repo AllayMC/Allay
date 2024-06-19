@@ -12,5 +12,4 @@ public class PlayerCursorContainer extends BaseContainer {
     public PlayerCursorContainer() {
         super(FullContainerType.CURSOR);
     }
-
 }

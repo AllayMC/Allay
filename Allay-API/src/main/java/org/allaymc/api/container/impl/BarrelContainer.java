@@ -1,5 +1,7 @@
 package org.allaymc.api.container.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.FullContainerType;
 import org.joml.Vector3ic;
@@ -13,6 +15,8 @@ public class BarrelContainer extends BaseContainer {
 
     // Block pos will be set through method setBlockPos()
     // See BlockEntityContainerHolderComponent.onNBTLoaded()
+    @Getter
+    @Setter
     protected Vector3ic blockPos;
 
     public BarrelContainer() {
@@ -22,15 +26,5 @@ public class BarrelContainer extends BaseContainer {
     @Override
     public boolean hasBlockPos() {
         return true;
-    }
-
-    @Override
-    public Vector3ic getBlockPos() {
-        return blockPos;
-    }
-
-    @Override
-    public void setBlockPos(Vector3ic blockPos) {
-        this.blockPos = blockPos;
     }
 }
