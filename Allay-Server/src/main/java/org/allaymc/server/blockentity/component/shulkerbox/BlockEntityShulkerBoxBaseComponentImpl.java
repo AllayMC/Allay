@@ -1,5 +1,7 @@
 package org.allaymc.server.blockentity.component.shulkerbox;
 
+import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
@@ -7,6 +9,7 @@ import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.ShulkerBoxContainer;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -22,6 +25,7 @@ import java.util.Objects;
 public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseComponentImpl<BlockEntityShulkerBox> {
     @Dependency
     private BlockEntityContainerHolderComponent containerHolderComponent;
+    private BlockFace facing = BlockFace.UP;
 
     public BlockEntityShulkerBoxBaseComponentImpl(BlockEntityInitInfo<BlockEntityShulkerBox> info) {
         super(info);
@@ -70,14 +74,37 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
         super.loadNBT(nbt);
         if (nbt.containsKey("Items"))
             Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.SHULKER_BOX)).loadNBT(nbt.getList("Items", NbtType.COMPOUND));
+        if (nbt.containsKey("facing"))
+            facing = BlockFace.fromId(nbt.getByte("facing"));
     }
 
     @Override
     public NbtMap saveNBT() {
-        return super.saveNBT().toBuilder().putList(
+        var builder =  super.saveNBT().toBuilder();
+        builder.putList(
                 "Items",
                 NbtType.COMPOUND,
                 Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.SHULKER_BOX)).saveNBT()
-        ).build();
+        );
+        builder.putByte("facing", (byte) facing.ordinal());
+        return builder.build();
+    }
+
+    @EventHandler
+    public void onPlace(BlockOnPlaceEvent event) {
+        var player = event.getPlayer();
+        if (player == null) return;
+        if (Math.abs(player.getLocation().x() - position.x()) < 2 && Math.abs(player.getLocation().z() - position.z()) < 2) {
+            var y = player.getLocation().y() + player.getEyeHeight();
+            if (y - position.y() > 2) {
+                facing = BlockFace.UP;
+            } else if (position.y() - y > 0) {
+                facing = BlockFace.DOWN;
+            } else {
+                facing = player.getHorizontalFace().opposite();
+            }
+        } else {
+            facing = player.getHorizontalFace().opposite();
+        }
     }
 }

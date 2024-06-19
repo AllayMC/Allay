@@ -91,10 +91,11 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Called when a block is placed.
+     * @param player The player who placed the block, can be null
      * @param currentBlockState The block that is being replaced
      * @param newBlockState The block that is replacing the current block
      */
-    void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState);
+    void onPlace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState);
 
     /**
      * @param player        The player who interacted with the block, can be null
@@ -112,10 +113,11 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Called when a block is replaced.
+     * @param player The player who replaced the block, can be null
      * @param currentBlockState The block that is being replaced
      * @param newBlockState The block that is replacing the current block
      */
-    void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState);
+    void onReplace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState);
 
     /**
      * Called when a block is broken by non-creative game mode player

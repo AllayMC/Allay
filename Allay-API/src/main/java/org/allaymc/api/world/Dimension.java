@@ -139,6 +139,10 @@ public interface Dimension {
     }
 
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update) {
+        setBlockState(x, y, z, blockState, layer, send, update, null);
+    }
+
+    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, EntityPlayer player) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
             chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
@@ -148,8 +152,8 @@ public interface Dimension {
         BlockState oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
 
         Position3i blockPos = new Position3i(x, y, z, this);
-        blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState);
-        oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState);
+        blockState.getBehavior().onPlace(player, new BlockStateWithPos(oldBlockState, blockPos, layer), blockState);
+        oldBlockState.getBehavior().onReplace(player, new BlockStateWithPos(oldBlockState, blockPos, layer), blockState);
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
 
         if (update) {

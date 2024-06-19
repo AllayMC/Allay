@@ -32,9 +32,14 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     @EventHandler
     private void onBlockPlace(BlockOnPlaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
-        createBlockEntityAt(pos);
+        createBlockEntityAt(pos, false);
         var blockEntity = getBlockEntity(pos);
         blockEntity.onPlace(event);
+        // Send block entity to client after onPlace()
+        // because onPlace() method may make some changes on this block entity
+        if (blockEntity.sendToClient()) {
+            blockEntity.sendBlockEntityDataPacketToAll();
+        }
     }
 
     @EventHandler

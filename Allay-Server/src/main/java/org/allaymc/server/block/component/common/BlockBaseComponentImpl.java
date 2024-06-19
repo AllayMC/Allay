@@ -58,18 +58,18 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
         checkPlaceMethodParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
         // TODO: check whether the old block can be replaced
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
+        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, 0, true, true, player);
         return true;
     }
 
     @Override
-    public void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
-        manager.callEvent(new BlockOnPlaceEvent(currentBlockState, newBlockState));
+    public void onPlace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState) {
+        manager.callEvent(new BlockOnPlaceEvent(player, currentBlockState, newBlockState));
     }
 
     @Override
-    public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState) {
-        manager.callEvent(new BlockOnReplaceEvent(currentBlockState, newBlockState));
+    public void onReplace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState) {
+        manager.callEvent(new BlockOnReplaceEvent(player, currentBlockState, newBlockState));
     }
 
     @Override

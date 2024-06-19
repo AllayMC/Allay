@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
@@ -14,6 +15,7 @@ import org.allaymc.api.eventbus.event.Event;
 @Getter
 @AllArgsConstructor
 public class BlockOnReplaceEvent extends Event {
+    protected EntityPlayer player; // Can be null
     protected BlockStateWithPos currentBlockState;
     protected BlockState newBlockState;
 }
