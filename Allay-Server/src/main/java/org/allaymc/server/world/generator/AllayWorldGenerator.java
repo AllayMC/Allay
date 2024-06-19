@@ -110,7 +110,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
 
     private Chunk getOrGenerateProtoChunk(int x, int z) {
         if (protoChunkBeingSet(x, z)) {
-            throw new IllegalStateException("Trying to access a proto chunk which is being set: x: " + x + ", z: " + z);
+            log.warn("Trying to access a proto chunk which is being set: x: " + x + ", z: " + z);
         }
         CompletableFuture<Chunk> future = new CompletableFuture<>();
         var presentFuture = protoChunks.putIfAbsent(HashUtils.hashXZ(x, z), future);
