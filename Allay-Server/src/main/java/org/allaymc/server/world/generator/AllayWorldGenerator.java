@@ -111,10 +111,6 @@ public final class AllayWorldGenerator implements WorldGenerator {
     }
 
     private Chunk getOrGenerateProtoChunk(int x, int z) {
-        if (protoChunkBeingSet(x, z)) {
-            log.error("Trying to access a proto chunk which is being set: x: " + x + ", z: " + z);
-            return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-        }
         CompletableFuture<Chunk> future = new CompletableFuture<>();
         // 这里的putIfAbsent()保证了只有一个线程可以写入future，其他线程只能获取这一个线程写入的future
         var presentFuture = protoChunks.putIfAbsent(HashUtils.hashXZ(x, z), future);
@@ -207,7 +203,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
 
             // 先获取future，避免在此过程中区块完成加载导致future被删除
             CompletableFuture<Chunk> future = chunkService.getChunkLoadingFuture(x, z);
-            if (protoChunkBeingSet(x, z)) {
+            if (future != null && protoChunkBeingSet(x, z)) {
                 // 即使在此过程中future被删除（区块完成加载），此代码依然可以工作因为
                 // 区块完成加载后，future.join()等效于chunkService.getChunk(x, z)
                 return future.join();
