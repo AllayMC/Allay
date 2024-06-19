@@ -64,20 +64,4 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
             }
         });
     }
-
-    @Override
-    public void loadNBT(NbtMap nbt) {
-        super.loadNBT(nbt);
-        if (nbt.containsKey("Items"))
-            Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.CHEST)).loadNBT(nbt.getList("Items", NbtType.COMPOUND));
-    }
-
-    @Override
-    public NbtMap saveNBT() {
-        return super.saveNBT().toBuilder().putList(
-                "Items",
-                NbtType.COMPOUND,
-                Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.CHEST)).saveNBT()
-        ).build();
-    }
 }

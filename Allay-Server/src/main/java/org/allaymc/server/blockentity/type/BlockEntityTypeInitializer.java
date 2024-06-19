@@ -7,12 +7,12 @@ import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.container.impl.BarrelContainer;
 import org.allaymc.api.container.impl.ChestContainer;
-import org.allaymc.api.container.impl.ShulkerBoxContainer;
 import org.allaymc.api.data.VanillaBlockEntityId;
 import org.allaymc.server.blockentity.component.barrel.BlockEntityBarrelBaseComponentImpl;
 import org.allaymc.server.blockentity.component.chest.BlockEntityChestBaseComponentImpl;
 import org.allaymc.server.blockentity.component.common.BlockEntityContainerHolderComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxBaseComponentImpl;
+import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxContainerHolderComponentImpl;
 
 /**
  * Allay Project 2024/3/9
@@ -43,7 +43,7 @@ public final class BlockEntityTypeInitializer {
                 .builder(BlockEntityShulkerBox.class)
                 .name(VanillaBlockEntityId.SHULKER_BOX)
                 .addComponent(BlockEntityShulkerBoxBaseComponentImpl::new, BlockEntityShulkerBoxBaseComponentImpl.class)
-                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(ShulkerBoxContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .addComponent(BlockEntityShulkerBoxContainerHolderComponentImpl::new, BlockEntityShulkerBoxContainerHolderComponentImpl.class)
                 .build();
     }
 }

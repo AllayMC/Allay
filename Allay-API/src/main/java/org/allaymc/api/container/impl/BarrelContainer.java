@@ -14,7 +14,7 @@ import org.joml.Vector3ic;
 public class BarrelContainer extends BaseContainer {
 
     // Block pos will be set through method setBlockPos()
-    // See BlockEntityContainerHolderComponent.onNBTLoaded()
+    // See BlockEntityContainerHolderComponent.onLoadNBT()
     @Getter
     @Setter
     protected Vector3ic blockPos;
