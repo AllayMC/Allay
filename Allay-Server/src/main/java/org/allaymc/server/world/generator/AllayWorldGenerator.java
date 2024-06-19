@@ -103,16 +103,20 @@ public final class AllayWorldGenerator implements WorldGenerator {
         var chunk = getOrGenerateProtoChunk(x, z);
         statusNoisedToFinished(chunk);
         markProtoChunkBeingSet(x, z);
-        protoChunks.remove(HashUtils.hashXZ(x, z));
-        chunk.setChunkSetCallback(() -> afterProtoChunkBeingSet(x, z));
+        chunk.setChunkSetCallback(() -> {
+            afterProtoChunkBeingSet(x, z);
+            protoChunks.remove(HashUtils.hashXZ(x, z));
+        });
         return chunk;
     }
 
     private Chunk getOrGenerateProtoChunk(int x, int z) {
         if (protoChunkBeingSet(x, z)) {
-            log.warn("Trying to access a proto chunk which is being set: x: " + x + ", z: " + z);
+            log.error("Trying to access a proto chunk which is being set: x: " + x + ", z: " + z);
+            return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         }
         CompletableFuture<Chunk> future = new CompletableFuture<>();
+        // 这里的putIfAbsent()保证了只有一个线程可以写入future，其他线程只能获取这一个线程写入的future
         var presentFuture = protoChunks.putIfAbsent(HashUtils.hashXZ(x, z), future);
         if (presentFuture != null) {
             // 原型区块已经在生成或已生成完毕
@@ -214,6 +218,8 @@ public final class AllayWorldGenerator implements WorldGenerator {
             if (chunk != null) return chunk;
 
             // 获取或生成原型区块供使用
+            // 此时有小概率出现目标区块已进入"BeingSet"状态的情况
+            // 但是这不会产生问题，因为在这种情况下获取的原型区块等效于稍后的chunkService.getChunk(x, z)
             chunk = getOrGenerateProtoChunk(x, z);
             return chunk;
         }
