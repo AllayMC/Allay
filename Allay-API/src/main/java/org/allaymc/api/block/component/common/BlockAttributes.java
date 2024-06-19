@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -24,6 +25,7 @@ import java.awt.*;
  * @author daoge_cmd | CoolLoong
  */
 @Getter
+@ToString
 @Accessors(fluent = true)
 @Builder(toBuilder = true)
 @EqualsAndHashCode
@@ -33,7 +35,9 @@ public class BlockAttributes {
      * See: <a href="https://www.mcpk.wiki/wiki/Slipperiness">Slipperiness</a>
      */
     public static final float DEFAULT_FRICTION = 0.6f;
+
     public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
+
     protected static Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(VoxelShape.class, (JsonDeserializer<Object>) (json, typeOfT, context) ->
                     VoxelShape.builder().solid(parseAABBStr(json.getAsString())).build())
@@ -43,8 +47,7 @@ public class BlockAttributes {
                 var b = json.getAsJsonObject().get("b").getAsInt();
                 var a = json.getAsJsonObject().get("a").getAsInt();
                 return new Color(r, g, b, a);
-            })
-            .create();
+            }).create();
     /**
      * block collision box
      */

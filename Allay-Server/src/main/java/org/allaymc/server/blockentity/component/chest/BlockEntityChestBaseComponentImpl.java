@@ -5,14 +5,9 @@ import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.ChestContainer;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
-
-import java.util.Objects;
 
 /**
  * Allay Project 2023/12/6

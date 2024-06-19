@@ -30,6 +30,11 @@ import static org.allaymc.api.item.ItemHelper.isSword;
  * @author daoge_cmd
  */
 public interface BlockBaseComponent extends BlockComponent {
+    private static double speedBonusByEfficiency(int efficiencyLevel) {
+        if (efficiencyLevel == 0) return 0;
+        return efficiencyLevel * efficiencyLevel + 1;
+    }
+
     BlockType<? extends BlockBehavior> getBlockType();
 
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, Dimension dimension) {
@@ -39,14 +44,16 @@ public interface BlockBaseComponent extends BlockComponent {
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, Dimension dimension, int layer) {
         var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) return;
-        int xIndex = x & 15;
-        int zIndex = z & 15;
+
+        var xIndex = x & 15;
+        var zIndex = z & 15;
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
-        if (oldBlockState.getBlockType() != getBlockType()) {
+        if (oldBlockState.getBlockType() != getBlockType())
             throw new IllegalArgumentException("Block type is not match! Expected: " + getBlockType().getIdentifier() + ", actual: " + oldBlockState.getBlockType().getIdentifier());
-        }
+
         var newBlockState = oldBlockState.setProperty(propertyType, value);
         if (oldBlockState == newBlockState) return;
+
         chunk.setBlockState(xIndex, y, zIndex, newBlockState, layer);
         chunk.sendChunkPacket(Dimension.createBlockUpdatePacket(newBlockState, x, y, z, layer));
     }
@@ -75,25 +82,28 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Try to place a block
-     * @param player The player who is placing the block, can be null
-     * @param dimension The dimension where the block is placed
-     * @param blockState The block that is being placed
+     *
+     * @param player         The player who is placing the block, can be null
+     * @param dimension      The dimension where the block is placed
+     * @param blockState     The block that is being placed
      * @param targetBlockPos The block that the player clicked on
-     * @param placeBlockPos The pos that the player is trying to place the block on
-     * @param clickPos The precise pos where the player clicked
-     * @param blockFace The face of the block that the player clicked on
+     * @param placeBlockPos  The pos that the player is trying to place the block on
+     * @param clickPos       The precise pos where the player clicked
+     * @param blockFace      The face of the block that the player clicked on
+     *
      * @return true if the block is placed successfully, false if failed
      */
     boolean place(
-            EntityPlayer player, Dimension dimension, BlockState blockState,
-            Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos,
-            BlockFace blockFace);
+            EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos,
+            Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace
+    );
 
     /**
      * Called when a block is placed.
-     * @param player The player who placed the block, can be null
+     *
+     * @param player            The player who placed the block, can be null
      * @param currentBlockState The block that is being replaced
-     * @param newBlockState The block that is replacing the current block
+     * @param newBlockState     The block that is replacing the current block
      */
     void onPlace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState);
 
@@ -109,31 +119,36 @@ public interface BlockBaseComponent extends BlockComponent {
      * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return true
      * If false is returned, the useItemOn method of the player's item will continue to be called
      */
-    boolean onInteract(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace);
+    boolean onInteract(
+            EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos,
+            Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace
+    );
 
     /**
      * Called when a block is replaced.
-     * @param player The player who replaced the block, can be null
+     *
+     * @param player            The player who replaced the block, can be null
      * @param currentBlockState The block that is being replaced
-     * @param newBlockState The block that is replacing the current block
+     * @param newBlockState     The block that is replacing the current block
      */
     void onReplace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState);
 
     /**
      * Called when a block is broken by non-creative game mode player
+     *
      * @param blockState The block that was broken
-     * @param usedItem The item that was used to break the block
-     * @param player The player who broke the block, can be null
+     * @param usedItem   The item that was used to break the block
+     * @param player     The player who broke the block, can be null
      */
     void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player);
 
     void onScheduledUpdate(BlockStateWithPos blockState);
 
     default ItemStack[] getDrops(BlockState blockState, ItemStack usedItem) {
-        // TODO: 时运
-        if (getBlockType().getItemType() != null) {
-            return new ItemStack[] {getBlockType().getItemType().createItemStack()};
-        }
+        // TODO: Fortune
+        if (getBlockType().getItemType() != null)
+            return new ItemStack[]{getBlockType().getItemType().createItemStack()};
+
         return Utils.EMPTY_ITEM_STACK_ARRAY;
     }
 
@@ -144,65 +159,70 @@ public interface BlockBaseComponent extends BlockComponent {
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
         checkBlockType(blockState);
         if (usedItem.canInstantBreak(blockState)) return 0;
-        float blockHardness = blockState.getBlockAttributes().hardness();
-        boolean isCorrectTool = usedItem.isCorrectToolFor(blockState);
-        boolean isAlwaysDestroyable = getBlockType().getMaterial().isAlwaysDestroyable();
-        boolean hasAquaAffinity = false;
-        boolean isInWater = false;
-        boolean isOnGround = true;
-        int hasteEffectLevel = 0;
-        int miningFatigueLevel = 0;
-        int efficiencyLevel = 0;
+
+        var blockHardness = blockState.getBlockAttributes().hardness();
+        var isCorrectTool = usedItem.isCorrectToolFor(blockState);
+        var isAlwaysDestroyable = getBlockType().getMaterial().isAlwaysDestroyable();
+        var hasAquaAffinity = false;
+        var isInWater = false;
+        var isOnGround = true;
+        var hasteEffectLevel = 0;
+        var miningFatigueLevel = 0;
+        var efficiencyLevel = 0;
 
         if (entity != null) {
             isInWater = entity.isInWater();
             isOnGround = entity.isOnGround();
             hasteEffectLevel = entity.getEffectLevel(EffectHasteType.HASTE_TYPE);
-            // 潮涌核心保证至少两级的急速效果
+            // Conduit Power ensures at least level 2 haste effect
             if (entity.hasEffect(EffectConduitPowerType.CONDUIT_POWER_TYPE)) {
                 hasteEffectLevel = Integer.max(hasteEffectLevel, 2);
             }
+
             miningFatigueLevel = entity.getEffectLevel(EffectHasteType.HASTE_TYPE);
+
             if (entity instanceof EntityContainerHolderComponent containerHolder) {
-                if (containerHolder.hasContainer(FullContainerType.ARMOR)) {
-                    hasAquaAffinity = containerHolder.getContainer(FullContainerType.ARMOR).getItemStack(0).hasEnchantment(EnchantmentAquaAffinityType.AQUA_AFFINITY_TYPE);
-                }
-                if (containerHolder.hasContainer(FullContainerType.PLAYER_INVENTORY)) {
-                    efficiencyLevel = containerHolder.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentEfficiencyType.EFFICIENCY_TYPE);
-                }
+                if (containerHolder.hasContainer(FullContainerType.ARMOR))
+                    hasAquaAffinity = containerHolder
+                            .getContainer(FullContainerType.ARMOR)
+                            .getItemStack(0)
+                            .hasEnchantment(EnchantmentAquaAffinityType.AQUA_AFFINITY_TYPE);
+
+                if (containerHolder.hasContainer(FullContainerType.PLAYER_INVENTORY))
+                    efficiencyLevel = containerHolder
+                            .getContainer(FullContainerType.PLAYER_INVENTORY)
+                            .getItemInHand()
+                            .getEnchantmentLevel(EnchantmentEfficiencyType.EFFICIENCY_TYPE);
             }
         }
 
         // Calculate break time
-        // TODO: 需要进一步验证算法
-        double baseTime = ((isCorrectTool || isAlwaysDestroyable) ? 1.5 : 5.0) * blockHardness;
-        double speed = 1.0d / baseTime;
+        // TODO: Further validation of the algorithm is needed
+        var baseTime = ((isCorrectTool || isAlwaysDestroyable) ? 1.5 : 5.0) * blockHardness;
+        var speed = 1.0d / baseTime;
         if (isCorrectTool) {
-            // 工具等级（木制，石制，铁制，etc...）加成
+            // Tool level (wooden, stone, iron, etc...) bonus
             speed *= usedItem.getBreakTimeBonus(blockState);
-            // 工具效率附魔加成
+            // Tool efficiency enchantment bonus
             speed += speedBonusByEfficiency(efficiencyLevel);
         } else if (isSword(usedItem.getItemType())) {
-            // 剑挖掘方块的最低速率是1.5倍
+            // The minimum speed for swords digging blocks is 1.5 times
             speed *= 1.5;
         }
-        // 实体急迫药水效果加成
+
+        // Entity haste potion effect bonus
         speed *= 1.0d + (0.2d * hasteEffectLevel);
-        // 实体挖掘疲劳效果负加成
+        // Entity mining fatigue effect negative bonus
         if (miningFatigueLevel != 0) speed /= Math.pow(miningFatigueLevel, 3);
-        // 在水中但是没有水下速挖掘效果
+        // In water but no underwater speed mining effect
         if (isInWater && !hasAquaAffinity) speed *= 0.2d;
-        // 在半空中
+        // In midair
         if (!isInWater && !isOnGround) speed *= 0.2d;
         return 1.0d / speed;
     }
 
-    private static double speedBonusByEfficiency(int efficiencyLevel) {
-        if (efficiencyLevel == 0) return 0;
-        return efficiencyLevel * efficiencyLevel + 1;
-    }
-
     private void checkBlockType(BlockState blockState) {
-        if (blockState.getBlockType() != getBlockType()) throw new IllegalArgumentException("Block type is not match! Expected: " + getBlockType().getIdentifier() + ", actual: " + blockState.getBlockType().getIdentifier());
+        if (blockState.getBlockType() != getBlockType())
+            throw new IllegalArgumentException("Block type is not match! Expected: " + getBlockType().getIdentifier() + ", actual: " + blockState.getBlockType().getIdentifier());
     }
 }

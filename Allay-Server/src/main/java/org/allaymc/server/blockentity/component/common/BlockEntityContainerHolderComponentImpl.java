@@ -60,8 +60,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @EventHandler
     private void onLoadNBT(BlockEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
-        if (nbt.containsKey("Items"))
-            container.loadNBT(nbt.getList("Items", NbtType.COMPOUND));
+        nbt.listenForList("Items", NbtType.COMPOUND, items -> container.loadNBT(items));
         container.setBlockPos(baseComponent.getPosition());
     }
 

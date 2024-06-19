@@ -7,15 +7,11 @@ import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.ShulkerBoxContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
-
-import java.util.Objects;
 
 /**
  * Allay Project 2024/06/18
@@ -25,6 +21,7 @@ import java.util.Objects;
 public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseComponentImpl<BlockEntityShulkerBox> {
     @Dependency
     private BlockEntityContainerHolderComponent containerHolderComponent;
+
     private BlockFace facing = BlockFace.UP;
 
     public BlockEntityShulkerBoxBaseComponentImpl(BlockEntityInitInfo<BlockEntityShulkerBox> info) {
@@ -72,28 +69,21 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        if (nbt.containsKey("Items"))
-            Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.SHULKER_BOX)).loadNBT(nbt.getList("Items", NbtType.COMPOUND));
-        if (nbt.containsKey("facing"))
-            facing = BlockFace.fromId(nbt.getByte("facing"));
+        nbt.listenForByte("facing", facing -> this.facing = BlockFace.fromId(facing));
     }
 
     @Override
     public NbtMap saveNBT() {
-        var builder =  super.saveNBT().toBuilder();
-        builder.putList(
-                "Items",
-                NbtType.COMPOUND,
-                Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.SHULKER_BOX)).saveNBT()
-        );
-        builder.putByte("facing", (byte) facing.ordinal());
-        return builder.build();
+        return super.saveNBT().toBuilder()
+                .putByte("facing", (byte) facing.ordinal())
+                .build();
     }
 
     @EventHandler
     public void onPlace(BlockOnPlaceEvent event) {
         var player = event.getPlayer();
         if (player == null) return;
+
         if (Math.abs(player.getLocation().x() - position.x()) < 2 && Math.abs(player.getLocation().z() - position.z()) < 2) {
             var y = player.getLocation().y() + player.getEyeHeight();
             if (y - position.y() > 2) {

@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.allaymc.api.data.VanillaItemTags.*;
-import static org.allaymc.api.data.VanillaItemTags.WOODEN_TIER;
 import static org.allaymc.api.data.VanillaMaterialTypes.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS_TYPE;
 
@@ -85,26 +84,32 @@ public interface ItemBaseComponent extends ItemComponent {
     void loadExtraTag(NbtMap extraTag);
 
     /**
-     * 尝试在一个方块上使用该物品 <br>
-     * 方法内应该在使用成功时执行可能的减少物品数量，减少耐久等操作。不需要单独向玩家发送物品更新，调用方会发送 <br>
-     * 注意：放置方块不会调用此方法 <br>
-     * @return true如果成功使用
+     * Attempt to use this item on a block.
+     * <p>
+     * This method should handle reducing item count, durability, etc., on successful use.
+     * No need to send item updates separately as the caller will handle it.
+     * <p>
+     * Note: Placing blocks will not invoke this method. <br>
+     *
+     * @return true if successfully used
      */
     default boolean useItemOn(
-            EntityPlayer player, Dimension dimension,
-            Vector3ic targetBlockPos, Vector3ic placeBlockPos,
-            Vector3fc clickPos, BlockFace blockFace) {
+            EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos,
+            Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace
+    ) {
         return false;
     }
 
     /**
-     * 尝试用此物品执行放方块操作，不管此物品是否是方块物品 <br>
-     * @return true如果成功放置方块，false如果放置失败（原因：此物品不是方块物品、放置检查失败、事件被撤回）
+     * Attempt to place a block using this item, regardless of whether this item is a block item.
+     *
+     * @return true if the block is successfully placed,
+     * false if placement fails (reasons: not a block item, placement check fails, event is canceled)
      */
     default boolean placeBlock(
-            EntityPlayer player, Dimension dimension,
-            Vector3ic targetBlockPos, Vector3ic placeBlockPos,
-            Vector3fc clickPos, BlockFace blockFace) {
+            EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos,
+            Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace
+    ) {
         return false;
     }
 
@@ -125,16 +130,19 @@ public interface ItemBaseComponent extends ItemComponent {
                 .putByte("Count", (byte) getCount())
                 .putShort("Damage", (short) getMeta())
                 .putString("Name", getItemType().getIdentifier().toString());
+
         var extraTag = saveExtraTag();
         if (extraTag != null) {
             builder.putCompound("tag", extraTag);
         }
+
         var blockState = toBlockState();
         if (blockState != null) {
             builder.put("Block", blockState.getBlockStateTag());
         }
-        //TODO: CanDestroy
-        //TODO: CanPlaceOn
+
+        // TODO: CanDestroy
+        // TODO: CanPlaceOn
         return builder.build();
     }
 
@@ -153,19 +161,21 @@ public interface ItemBaseComponent extends ItemComponent {
     void removeAllEnchantments();
 
     /**
-     * 获取破坏方块的加速倍数 <br>
-     * @param blockState 要破坏的方块
-     * @return 加速倍速
+     * Get the break time bonus for breaking a block with this item.
+     *
+     * @param blockState The block to be broken
+     *
+     * @return Break time bonus
      */
     default double getBreakTimeBonus(BlockState blockState) {
         var itemType = getItemType();
         var materialType = blockState.getBlockType().getMaterial().materialType();
-        // 剑破坏蜘蛛网加速
+        // Swords break cobwebs faster
         if (itemType.hasItemTag(IS_SWORD)) {
             if (materialType == WEB) return 15.0;
         }
         if (itemType == SHEARS_TYPE) {
-            // 剪刀破坏羊毛和树叶加速
+            // Shears break wool and leaves faster
             if (materialType == CLOTH) {
                 return 5.0;
             } else if (materialType == WEB || materialType == LEAVES) {
@@ -184,19 +194,22 @@ public interface ItemBaseComponent extends ItemComponent {
     }
 
     /**
-     * 判断是否是指定方块的正确破坏工具 <br>
-     * 若不是正确破坏工具，使用此物品破坏方块时将获得速度惩罚，且不会产生掉落物 <br>
-     * @param blockState 要破坏的方块
-     * @return 是否是正确工具
+     * Check if this item is the correct tool for breaking the specified block.
+     * <p>
+     * If it's not the correct tool, breaking the block with this item will result in speed penalty and no drops.
+     *
+     * @param blockState The block to be broken
+     *
+     * @return Whether it is the correct tool
      */
     boolean isCorrectToolFor(BlockState blockState);
 
     default boolean canInstantBreak(BlockState blockState) {
         double blockHardness = blockState.getBlockAttributes().hardness();
-        // 硬度为0的方块可以被瞬间破坏
+        // Blocks with hardness of 0 can be instantly broken
         if (blockHardness == 0) return true;
         if (getItemType().hasItemTag(IS_SWORD)) {
-            // 剑可以瞬间破坏竹子
+            // Swords can instantly break bamboo
             return blockState.getBlockType() == BlockTypes.BAMBOO_TYPE;
         }
         return false;
