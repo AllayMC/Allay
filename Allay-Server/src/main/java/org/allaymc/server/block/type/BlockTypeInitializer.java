@@ -28,140 +28,94 @@ import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
  * @author daoge_cmd
  */
 public final class BlockTypeInitializer {
-    public static void initYellowShulkerBox() {
+
+    public static void initShulkerBox() {
         BlockTypes.YELLOW_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockYellowShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.YELLOW_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initWhiteShulkerBox() {
         BlockTypes.WHITE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockWhiteShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.WHITE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initUndyedShulkerBox() {
         BlockTypes.UNDYED_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockUndyedShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.UNDYED_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initRedShulkerBox() {
         BlockTypes.RED_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockRedShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.RED_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initPurpleShulkerBox() {
         BlockTypes.PURPLE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockPurpleShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.PURPLE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initPinkShulkerBox() {
         BlockTypes.PINK_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockPinkShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.PINK_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initOrangeShulkerBox() {
         BlockTypes.ORANGE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockOrangeShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.ORANGE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initMagentaShulkerBox() {
         BlockTypes.MAGENTA_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockMagentaShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.MAGENTA_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initLimeShulkerBox() {
         BlockTypes.LIME_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockLimeShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIME_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initLightGrayShulkerBox() {
         BlockTypes.LIGHT_GRAY_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockLightGrayShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIGHT_GRAY_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initLightBlueShulkerBox() {
         BlockTypes.LIGHT_BLUE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockLightBlueShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIGHT_BLUE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initGreenShulkerBox() {
         BlockTypes.GREEN_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockGreenShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.GREEN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initGrayShulkerBox() {
         BlockTypes.GRAY_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockGrayShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.GRAY_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initCyanShulkerBox() {
         BlockTypes.CYAN_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockCyanShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.CYAN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initBrownShulkerBox() {
         BlockTypes.BROWN_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockBrownShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.BROWN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initBlueShulkerBox() {
         BlockTypes.BLUE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockBlueShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.BLUE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
-    }
-
-    public static void initBlackShulkerBox() {
         BlockTypes.BLACK_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockBlackShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.BLACK_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
                 .build();
+
     }
 
     public static void initGrassBlock() {
