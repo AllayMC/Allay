@@ -100,6 +100,8 @@ public interface BlockBaseComponent extends BlockComponent {
      */
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
+    boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player);
+
     /**
      * @param itemStack    The item in the player's hand
      * @param interactInfo The player interaction info, can be null

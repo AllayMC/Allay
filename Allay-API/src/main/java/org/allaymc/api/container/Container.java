@@ -62,6 +62,15 @@ public interface Container {
         return getItemStack(slot) == EMPTY_SLOT_PLACE_HOLDER;
     }
 
+    default boolean isEmpty() {
+        for (ItemStack itemStack : getItemStackArray()) {
+            if (itemStack != EMPTY_SLOT_PLACE_HOLDER) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @UnmodifiableView
     List<ItemStack> getItemStacks();
 

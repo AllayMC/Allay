@@ -4,11 +4,8 @@ package org.allaymc.server.block.component.common;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
  import org.allaymc.api.block.component.common.PlayerInteractInfo;
- import org.allaymc.api.block.component.event.BlockOnInteractEvent;
-import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
-import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
-import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
-import org.allaymc.api.block.data.BlockFace;
+ import org.allaymc.api.block.component.event.*;
+ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -20,7 +17,8 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentSilkTouchType;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
-import org.joml.Vector3f;
+ import org.cloudburstmc.protocol.bedrock.data.GameType;
+ import org.joml.Vector3f;
  import org.joml.Vector3ic;
 
 /**
@@ -74,7 +72,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
-        if (!blockState.blockState().getBlockAttributes().canHarvestWithHand() && !usedItem.isCorrectToolFor(blockState.blockState()))
+        if (!isDroppable(blockState, usedItem, player))
             return;
 
         var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);
@@ -89,6 +87,12 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         for (var drop : drops) {
             dimension.dropItem(drop, dropPos);
         }
+    }
+
+    @Override
+    public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
+        if (player.getGameType() == GameType.CREATIVE) return false;
+        return blockState.blockState().getBlockAttributes().canHarvestWithHand() || usedItem.isCorrectToolFor(blockState.blockState());
     }
 
     @Override
