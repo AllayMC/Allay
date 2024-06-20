@@ -74,7 +74,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
-        if (!blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() && !usedItem.isCorrectToolFor(blockState.blockState()))
+        if (!blockState.blockState().getBlockAttributes().canHarvestWithHand() && !usedItem.isCorrectToolFor(blockState.blockState()))
             return;
 
         var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);

@@ -96,6 +96,12 @@ public class BlockAttributes {
      */
     @Builder.Default
     protected boolean pushesUpFallingBlocks = false;
+    /**
+     * 此方块状态是否可以被徒手挖取
+     * 若可以，则玩家在非创造模式下可以使用任何工具挖取此方块并产生掉落物
+     */
+    @Builder.Default
+    protected boolean canHarvestWithHand = true;
 
     protected static AABBf parseAABBStr(String str) {
         var numbers = AllayStringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
@@ -136,6 +142,7 @@ public class BlockAttributes {
                 .isLavaFlammable(nbt.getBoolean("isLavaFlammable"))
                 .pushesUpFallingBlocks(nbt.getBoolean("pushesUpFallingBlocks"))// USELESS
                 .thickness(nbt.getFloat("thickness"))
+                .canHarvestWithHand(nbt.getBoolean("canHarvestWithHand"))
                 .build();
     }
 
