@@ -2,6 +2,7 @@ package org.allaymc.api.world;
 
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
@@ -142,7 +143,11 @@ public interface Dimension {
         setBlockState(x, y, z, blockState, layer, send, update, null);
     }
 
-    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, EntityPlayer player) {
+    default void setBlockState(int x, int y, int z, BlockState blockState, PlayerInteractInfo placementInfo) {
+        setBlockState(x, y, z, blockState, 0, true, true, placementInfo);
+    }
+
+    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, PlayerInteractInfo placementInfo) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
             chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
@@ -152,8 +157,8 @@ public interface Dimension {
         BlockState oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
 
         Position3i blockPos = new Position3i(x, y, z, this);
-        blockState.getBehavior().onPlace(player, new BlockStateWithPos(oldBlockState, blockPos, layer), blockState);
-        oldBlockState.getBehavior().onReplace(player, new BlockStateWithPos(oldBlockState, blockPos, layer), blockState);
+        blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
+        oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
 
         if (update) {

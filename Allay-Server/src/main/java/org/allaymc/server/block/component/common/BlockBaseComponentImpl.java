@@ -3,7 +3,8 @@ package org.allaymc.server.block.component.common;
  import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
-import org.allaymc.api.block.component.event.BlockOnInteractEvent;
+ import org.allaymc.api.block.component.common.PlayerInteractInfo;
+ import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
 import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
 import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
@@ -20,8 +21,7 @@ import org.allaymc.api.item.enchantment.type.EnchantmentSilkTouchType;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3f;
-import org.joml.Vector3fc;
-import org.joml.Vector3ic;
+ import org.joml.Vector3ic;
 
 /**
  * Allay Project 2023/4/8
@@ -55,21 +55,21 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public void onScheduledUpdate(BlockStateWithPos blockState) {}
 
     @Override
-    public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        checkPlaceMethodParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
+    public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         // TODO: check whether the old block can be replaced
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, 0, true, true, player);
+        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
 
     @Override
-    public void onPlace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState) {
-        manager.callEvent(new BlockOnPlaceEvent(player, currentBlockState, newBlockState));
+    public void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new BlockOnPlaceEvent(currentBlockState, newBlockState, placementInfo));
     }
 
     @Override
-    public void onReplace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState) {
-        manager.callEvent(new BlockOnReplaceEvent(player, currentBlockState, newBlockState));
+    public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new BlockOnReplaceEvent(currentBlockState, newBlockState, placementInfo));
     }
 
     @Override
@@ -92,8 +92,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public boolean onInteract(EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        var event = new BlockOnInteractEvent(player, itemStack, dimension, blockPos, placeBlockPos, clickPos, blockFace, false);
+    public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
+        var event = new BlockOnInteractEvent(itemStack, dimension, interactInfo, false);
         manager.callEvent(event);
         return event.isSuccess();
     }

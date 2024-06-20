@@ -19,7 +19,6 @@ import org.allaymc.api.item.enchantment.type.EnchantmentAquaAffinityType;
 import org.allaymc.api.item.enchantment.type.EnchantmentEfficiencyType;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.item.ItemHelper.isSword;
@@ -69,69 +68,58 @@ public interface BlockBaseComponent extends BlockComponent {
 
     void onRandomUpdate(BlockStateWithPos blockState);
 
-    default void checkPlaceMethodParam(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+    default void checkPlaceMethodParam(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         Preconditions.checkState(getBlockType() == blockState.getBlockType());
-        // player is nullable
         Preconditions.checkNotNull(dimension);
         Preconditions.checkNotNull(blockState);
-        Preconditions.checkNotNull(targetBlockPos);
         Preconditions.checkNotNull(placeBlockPos);
-        // clickPos is nullable
-        Preconditions.checkNotNull(blockFace);
+        // PlacementInfo is nullable
     }
 
     /**
      * Try to place a block
      *
-     * @param player         The player who is placing the block, can be null
-     * @param dimension      The dimension where the block is placed
-     * @param blockState     The block that is being placed
-     * @param targetBlockPos The block that the player clicked on
-     * @param placeBlockPos  The pos that the player is trying to place the block on
-     * @param clickPos       The precise pos where the player clicked
-     * @param blockFace      The face of the block that the player clicked on
+     * @param dimension     The dimension where the block is placed
+     * @param blockState    The block that is being placed
+     * @param placeBlockPos The pos that the player is trying to place the block on
+     * @param placementInfo The player placement info, can be null
      *
      * @return true if the block is placed successfully, false if failed
      */
     boolean place(
-            EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos,
-            Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace
-    );
+            Dimension dimension, BlockState blockState,
+            Vector3ic placeBlockPos,
+            PlayerInteractInfo placementInfo);
 
     /**
      * Called when a block is placed.
      *
-     * @param player            The player who placed the block, can be null
      * @param currentBlockState The block that is being replaced
      * @param newBlockState     The block that is replacing the current block
+     * @param placementInfo     The player placement info, can be null
      */
-    void onPlace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState);
+    void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
-     * @param player        The player who interacted with the block, can be null
-     * @param itemStack     The item in the player's hand
-     * @param blockPos      The pos of the block that the player clicked on
-     * @param placeBlockPos Assuming the player is holding a block item in their hand, this parameter indicates where the block will be placed (if it can be placed)
-     * @param clickPos      The precise pos where the player clicked
-     * @param blockFace     The face of the block that the player clicked on
+     * @param itemStack    The item in the player's hand
+     * @param interactInfo The player interaction info, can be null
      *
      * @return Whether the operation is valid.
      * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return true
      * If false is returned, the useItemOn method of the player's item will continue to be called
      */
     boolean onInteract(
-            EntityPlayer player, ItemStack itemStack, Dimension dimension, Vector3ic blockPos,
-            Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace
-    );
+            ItemStack itemStack, Dimension dimension,
+            PlayerInteractInfo interactInfo);
 
     /**
      * Called when a block is replaced.
      *
-     * @param player            The player who replaced the block, can be null
      * @param currentBlockState The block that is being replaced
      * @param newBlockState     The block that is replacing the current block
+     * @param placementInfo     The player placement info, can be null
      */
-    void onReplace(EntityPlayer player, BlockStateWithPos currentBlockState, BlockState newBlockState);
+    void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Called when a block is broken by non-creative game mode player

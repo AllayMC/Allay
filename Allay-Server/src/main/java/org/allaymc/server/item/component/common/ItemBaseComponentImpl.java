@@ -1,6 +1,7 @@
 package org.allaymc.server.item.component.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -267,21 +268,22 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public boolean placeBlock(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+    public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (thisItemStack.getItemType().getBlockType() == null)
             return false;
         var blockState = thisItemStack.toBlockState();
-        return tryPlaceBlockState(player, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
+        return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo);
     }
 
     // TODO: 由于服务端侧方块放置检查与客户端方块放置检查不能做到100%同步，会导致“吞方块”现象出现，这里先关闭检查
     protected static final boolean DO_BLOCK_PLACING_CHECK = false;
 
-    protected boolean tryPlaceBlockState(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
+    protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        var player = placementInfo.player();
         if (player != null && DO_BLOCK_PLACING_CHECK && hasEntityCollision(dimension, placeBlockPos, blockState))
             return false;
         BlockType<?> blockType = blockState.getBlockType();
-        boolean result = blockType.getBlockBehavior().place(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
+        boolean result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
         tryConsumeItem(player);
         return result;
     }

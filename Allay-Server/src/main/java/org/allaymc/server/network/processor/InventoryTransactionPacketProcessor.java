@@ -1,8 +1,8 @@
 package org.allaymc.server.network.processor;
 
 import com.google.common.base.Preconditions;
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -35,32 +35,38 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
         var transactionType = packet.getTransactionType();
         switch (transactionType) {
             case ITEM_USE -> {
-                Vector3ic blockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
+                Vector3ic clickBlockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
                 Vector3fc clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
                 BlockFace blockFace = BlockFace.fromId(packet.getBlockFace());
                 var itemStack = player.getItemInHand();
                 var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
-                        var placePos = blockFace.offsetPos(blockPos);
+                        var placeBlockPos = blockFace.offsetPos(clickBlockPos);
                         var dimension = player.getDimension();
-                        var interactedBlock = world.getBlockState(blockPos);
+                        var interactedBlock = world.getBlockState(clickBlockPos);
+                        var interactInfo = new PlayerInteractInfo(
+                                player, clickBlockPos,
+                                clickPos, blockFace
+                        );
                         if (player.isInteractingBlock()) {
-                            if (!interactedBlock.getBehavior().onInteract(player, itemStack, dimension, blockPos, placePos, clickPos, blockFace)) {
+                            if (!interactedBlock.getBehavior().onInteract(itemStack, dimension, interactInfo)) {
                                 // 玩家与方块的互动不成功，可能是插件撤回了事件，需要覆盖客户端的方块变化
                                 // 覆盖被点击方块变化
-                                var blockStateClicked = dimension.getBlockState(blockPos);
-                                dimension.sendBlockUpdateTo(blockStateClicked, blockPos, 0, player);
+                                var blockStateClicked = dimension.getBlockState(clickBlockPos);
+                                dimension.sendBlockUpdateTo(blockStateClicked, clickBlockPos, 0, player);
 
                                 // 玩家放置方块
                                 if (itemStack.getItemType() != AIR_TYPE) {
-                                    if (!itemStack.placeBlock(player, dimension, blockPos, placePos, clickPos, blockFace)) {
-                                        var blockStateReplaced = dimension.getBlockState(placePos);
-                                        dimension.sendBlockUpdateTo(blockStateReplaced, placePos, 0, player);
+                                    if (!itemStack.placeBlock(dimension, placeBlockPos, interactInfo)) {
+                                        var blockStateReplaced = dimension.getBlockState(placeBlockPos);
+                                        dimension.sendBlockUpdateTo(blockStateReplaced, placeBlockPos, 0, player);
                                     }
                                 }
                             }
-                        } else itemStack.useItemOn(player, dimension, blockPos, placePos, clickPos, blockFace);
+                        } else {
+                            itemStack.useItemOn(dimension, placeBlockPos, interactInfo);
+                        }
                     }
                     case ITEM_USE_CLICK_AIR -> {
                         if (itemStack.useItemInAir(player)) {

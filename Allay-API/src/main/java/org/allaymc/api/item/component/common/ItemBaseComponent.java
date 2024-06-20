@@ -1,5 +1,6 @@
 package org.allaymc.api.item.component.common;
 
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
@@ -93,10 +94,7 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @return true if successfully used
      */
-    default boolean useItemOn(
-            EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos,
-            Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace
-    ) {
+    default boolean useItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         return false;
     }
 
@@ -106,10 +104,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * @return true if the block is successfully placed,
      * false if placement fails (reasons: not a block item, placement check fails, event is canceled)
      */
-    default boolean placeBlock(
-            EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos,
-            Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace
-    ) {
+    default boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         return false;
     }
 

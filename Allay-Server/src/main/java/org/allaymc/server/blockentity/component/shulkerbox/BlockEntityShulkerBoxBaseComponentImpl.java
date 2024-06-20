@@ -81,20 +81,21 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
 
     @EventHandler
     public void onPlace(BlockOnPlaceEvent event) {
-        var player = event.getPlayer();
-        if (player == null) return;
+        var placementInfo = event.getPlacementInfo();
+        if (placementInfo == null) return;
 
-        if (Math.abs(player.getLocation().x() - position.x()) < 2 && Math.abs(player.getLocation().z() - position.z()) < 2) {
-            var y = player.getLocation().y() + player.getEyeHeight();
-            if (y - position.y() > 2) {
-                facing = BlockFace.UP;
-            } else if (position.y() - y > 0) {
-                facing = BlockFace.DOWN;
-            } else {
-                facing = player.getHorizontalFace().opposite();
-            }
-        } else {
-            facing = player.getHorizontalFace().opposite();
-        }
+        facing = placementInfo.blockFace();
+//        if (Math.abs(player.getLocation().x() - position.x()) < 2 && Math.abs(player.getLocation().z() - position.z()) < 2) {
+//            var y = player.getLocation().y() + player.getEyeHeight();
+//            if (y - position.y() > 2) {
+//                facing = BlockFace.UP;
+//            } else if (position.y() - y > 0) {
+//                facing = BlockFace.DOWN;
+//            } else {
+//                facing = player.getHorizontalFace().opposite();
+//            }
+//        } else {
+//            facing = player.getHorizontalFace().opposite();
+//        }
     }
 }

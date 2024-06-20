@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.component.common.BlockLiquidComponent;
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyType;
@@ -11,10 +12,8 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
-import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "torch_facing_direction")
@@ -37,15 +36,19 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean place(EntityPlayer player, Dimension dimension, BlockState blockState, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        checkPlaceMethodParam(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
+    public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
+        if (placementInfo == null) {
+            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
+            return true;
+        }
         var oldBlock = dimension.getBlockState(placeBlockPos);
-        var torchFace = computeTorchFacingDirection(blockFace);
+        var torchFace = computeTorchFacingDirection(placementInfo.blockFace());
 
         if ((oldBlock.getBlockType() != BlockTypes.AIR_TYPE && !(oldBlock.getBehavior() instanceof BlockLiquidComponent)) ||
             torchFace == TorchFacingDirection.UNKNOWN) return false;
 
-        var targetBlock = dimension.getBlockState(targetBlockPos);
+        var targetBlock = dimension.getBlockState(placementInfo.clickBlockPos());
         if (targetBlock.getBlockType().getMaterial().isSolid()) {
             blockState = blockState.setProperty(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
         } else {
@@ -53,7 +56,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
             var downBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
             if (!downBlock.getBlockType().getMaterial().isSolid()) return false;
         }
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
+        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
 }

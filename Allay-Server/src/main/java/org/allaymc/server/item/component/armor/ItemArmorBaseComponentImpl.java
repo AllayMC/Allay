@@ -1,5 +1,6 @@
 package org.allaymc.server.item.component.armor;
 
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -21,9 +22,9 @@ public class ItemArmorBaseComponentImpl<T extends ItemStack> extends ItemBaseCom
     }
 
     @Override
-    public boolean useItemOn(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        if (player == null) return false;
-        equipArmor(player, thisItemStack);
+    public boolean useItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+        if (interactInfo == null) return false;
+        equipArmor(interactInfo.player(), thisItemStack);
         return true;
     }
 
