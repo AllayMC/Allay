@@ -106,6 +106,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
                 this.enchantments.put(enchantment.getType(), enchantment);
             });
         }
+        if (extraTag.containsKey("CustomNBT")) {
+            this.customNBTContent = extraTag.getCompound("CustomNBT");
+        }
     }
 
     @Override
@@ -252,7 +255,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         //TODO: item lock type
 
         // Custom NBT content
-        nbtBuilder.putAll(customNBTContent);
+        nbtBuilder.put("CustomNBT", customNBTContent);
 
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }

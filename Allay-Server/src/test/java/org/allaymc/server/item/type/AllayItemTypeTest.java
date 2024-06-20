@@ -1,9 +1,6 @@
 package org.allaymc.server.item.type;
 
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemDiamondStack;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
@@ -68,8 +65,8 @@ public class AllayItemTypeTest {
                         .build()
         );
         var savedItemStackNBT = itemStack.saveNBT();
-        var extraTag = savedItemStackNBT.getCompound("tag");
-        assertTrue(extraTag.containsKey("testKey"));
-        assertEquals("testValue", extraTag.getString("testKey"));
+        var customNBT = savedItemStackNBT.getCompound("tag").getCompound("CustomNBT");
+        assertTrue(customNBT.containsKey("testKey"));
+        assertEquals("testValue", customNBT.getString("testKey"));
     }
 }
