@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component.glass;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.Utils;
@@ -18,7 +18,7 @@ public class BlockGlassBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public ItemStack[] getDrops(BlockState blockState, ItemStack usedItem) {
+    public ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
         return Utils.EMPTY_ITEM_STACK_ARRAY;
     }
 }

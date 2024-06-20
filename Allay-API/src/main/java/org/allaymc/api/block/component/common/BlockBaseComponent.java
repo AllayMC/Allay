@@ -132,12 +132,16 @@ public interface BlockBaseComponent extends BlockComponent {
 
     void onScheduledUpdate(BlockStateWithPos blockState);
 
-    default ItemStack[] getDrops(BlockState blockState, ItemStack usedItem) {
+    default ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
         // TODO: Fortune
         if (getBlockType().getItemType() != null)
-            return new ItemStack[]{getBlockType().getItemType().createItemStack()};
+            return new ItemStack[]{blockState.blockState().toItemStack()};
 
         return Utils.EMPTY_ITEM_STACK_ARRAY;
+    }
+
+    default ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
+        return blockState.blockState().toItemStack();
     }
 
     default boolean canDamageItem(ItemStack itemStack) {

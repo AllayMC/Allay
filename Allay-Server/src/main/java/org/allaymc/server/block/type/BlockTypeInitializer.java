@@ -19,6 +19,7 @@ import org.allaymc.server.block.component.common.BlockWheatSeedDropableBaseCompo
 import org.allaymc.server.block.component.craftingtable.BlockCraftingTableBaseComponentImpl;
 import org.allaymc.server.block.component.glass.BlockGlassBaseComponentImpl;
 import org.allaymc.server.block.component.grassblock.BlockGrassBlockBaseComponentImpl;
+import org.allaymc.server.block.component.shulkerbox.BlockShulkerBoxBaseComponentImpl;
 import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 
@@ -34,86 +35,103 @@ public final class BlockTypeInitializer {
                 .builder(BlockYellowShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.YELLOW_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.WHITE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockWhiteShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.WHITE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.UNDYED_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockUndyedShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.UNDYED_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.RED_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockRedShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.RED_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.PURPLE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockPurpleShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.PURPLE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.PINK_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockPinkShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.PINK_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.ORANGE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockOrangeShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.ORANGE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.MAGENTA_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockMagentaShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.MAGENTA_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.LIME_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockLimeShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIME_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.LIGHT_GRAY_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockLightGrayShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIGHT_GRAY_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.LIGHT_BLUE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockLightBlueShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIGHT_BLUE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.GREEN_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockGreenShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.GREEN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.GRAY_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockGrayShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.GRAY_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.CYAN_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockCyanShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.CYAN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.BROWN_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockBrownShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.BROWN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.BLUE_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockBlueShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.BLUE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.BLACK_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockBlackShulkerBoxBehavior.class)
                 .vanillaBlock(VanillaBlockId.BLACK_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX_TYPE)
+                .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
 
     }

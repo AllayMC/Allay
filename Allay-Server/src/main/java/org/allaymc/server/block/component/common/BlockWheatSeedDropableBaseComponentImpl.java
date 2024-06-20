@@ -1,13 +1,8 @@
 package org.allaymc.server.block.component.common;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.annotation.RequireBlockProperty;
-import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
-import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.Utils;
@@ -25,7 +20,7 @@ public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentI
     }
 
     @Override
-    public ItemStack[] getDrops(BlockState blockState, ItemStack usedItem) {
+    public ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
         var rand = ThreadLocalRandom.current();
         // 有1/8的几率掉落种子
         if (rand.nextInt(8) == 0) {

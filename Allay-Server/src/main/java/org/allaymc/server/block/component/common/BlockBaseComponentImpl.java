@@ -81,11 +81,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         var dimension = blockState.pos().dimension();
         if (usedItem != null && usedItem.hasEnchantment(EnchantmentSilkTouchType.SILK_TOUCH_TYPE)) {
             // 精准采集, 直接掉落方块本身
-            dimension.dropItem(blockState.blockState().toItemStack(), dropPos);
+            dimension.dropItem(getSilkTouchDrop(blockState), dropPos);
             return;
         }
 
-        var drops = getDrops(blockState.blockState(), usedItem);
+        var drops = getDrops(blockState, usedItem);
         for (var drop : drops) {
             dimension.dropItem(drop, dropPos);
         }

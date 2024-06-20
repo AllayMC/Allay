@@ -2,13 +2,17 @@ package org.allaymc.server.item.component.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.component.annotation.Manager;
+import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaMaterialTypes;
+import org.allaymc.api.item.component.event.ItemLoadExtraTagEvent;
+import org.allaymc.api.item.component.event.ItemPlacedAsBlockEvent;
+import org.allaymc.api.item.component.event.ItemSaveExtraTagEvent;
 import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -31,7 +35,6 @@ import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.*;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.io.BufferedInputStream;
@@ -61,6 +64,8 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected ItemAttributeComponent attributeComponent;
     @ComponentedObject
     protected T thisItemStack;
+    @Manager
+    protected ComponentManager<T> manager;
 
     protected ItemType<T> itemType;
     protected int count;
@@ -109,6 +114,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (extraTag.containsKey("CustomNBT")) {
             this.customNBTContent = extraTag.getCompound("CustomNBT");
         }
+
+        var event = new ItemLoadExtraTagEvent(extraTag);
+        manager.callEvent(event);
     }
 
     @Override
@@ -257,6 +265,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         // Custom NBT content
         nbtBuilder.put("CustomNBT", customNBTContent);
 
+        var event = new ItemSaveExtraTagEvent(nbtBuilder);
+        manager.callEvent(event);
+
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }
 
@@ -287,7 +298,11 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             return false;
         BlockType<?> blockType = blockState.getBlockType();
         boolean result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
-        tryConsumeItem(player);
+        if (result) {
+            tryConsumeItem(player);
+            var event = new ItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
+            manager.callEvent(event);
+        }
         return result;
     }
 

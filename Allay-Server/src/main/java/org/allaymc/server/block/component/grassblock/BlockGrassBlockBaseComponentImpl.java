@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component.grassblock;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
@@ -18,7 +18,7 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public ItemStack[] getDrops(BlockState blockState, ItemStack usedItem) {
+    public ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
         return new ItemStack[]{ItemTypes.DIRT_TYPE.createItemStack()};
     }
 }
