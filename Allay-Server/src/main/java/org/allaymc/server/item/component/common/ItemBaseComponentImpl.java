@@ -263,7 +263,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         //TODO: item lock type
 
         // Custom NBT content
-        nbtBuilder.put("CustomNBT", customNBTContent);
+        if (!customNBTContent.isEmpty()) {
+            nbtBuilder.put("CustomNBT", customNBTContent);
+        }
 
         var event = new ItemSaveExtraTagEvent(nbtBuilder);
         manager.callEvent(event);
