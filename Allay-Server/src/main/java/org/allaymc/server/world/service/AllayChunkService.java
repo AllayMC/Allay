@@ -1,13 +1,8 @@
 package org.allaymc.server.world.service;
 
 import com.google.common.collect.Sets;
-import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
-import it.unimi.dsi.fastutil.longs.LongComparator;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
@@ -33,7 +28,7 @@ import java.util.stream.Collectors;
 
 import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.ASYNC;
 import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.SYNC;
-import static org.allaymc.api.world.chunk.ChunkState.*;
+import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
 
 /**
  * Allay Project 2023/7/1
@@ -131,11 +126,7 @@ public final class AllayChunkService implements ChunkService {
     @SlowOperation
     @Override
     public Chunk getOrLoadChunkSynchronously(int x, int z) {
-        var chunk = getChunk(x, z);
-        if (chunk != null) {
-            return chunk;
-        }
-        return loadChunkSynchronously(x, z, null);
+        return getOrLoadChunk(x, z).join();
     }
 
     @Override
@@ -185,13 +176,13 @@ public final class AllayChunkService implements ChunkService {
                     log.error("Error while reading chunk ({},{}) !", x, z, t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
                 })
-                .thenApplyAsync(chunk -> {
+                .thenCompose(chunk -> {
                     if (chunk.getState() != FINISHED) {
                         // 只要未完全加载好都重新加载
-                        chunk = getWorldGenerator().generateChunk(x, z);
+                        return getWorldGenerator().generateChunk(x, z);
                     }
-                    return chunk;
-                    }, Server.getInstance().getComputeThreadPool())
+                    return CompletableFuture.completedFuture(chunk);
+                    })
                 .exceptionally(t -> {
                     log.error("Error while generating chunk ({},{}) !", x, z, t);
                     return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
@@ -199,45 +190,13 @@ public final class AllayChunkService implements ChunkService {
                 .thenApply(preparedChunk -> {
                     preparedChunk.beforeSetChunk(dimension);
                     setChunk(x, z, preparedChunk);
-                    preparedChunk.getChunkSetCallback().run();
+                    preparedChunk.onChunkSet();
                     preparedChunk.afterSetChunk(dimension);
                     future.complete(preparedChunk);
                     loadingChunks.remove(hashXZ);
                     return preparedChunk;
                 });
         return future;
-    }
-
-    @SneakyThrows
-    private Chunk loadChunkSynchronously(int x, int z, CompletableFuture<Chunk> futureAlreadyExists) {
-        var hash = HashUtils.hashXZ(x, z);
-        var synchronizedFuture = futureAlreadyExists;
-        if (futureAlreadyExists == null) {
-            synchronizedFuture = new CompletableFuture<>();
-            loadingChunks.put(hash, synchronizedFuture);
-        }
-        Chunk chunk;
-        try {
-            chunk = worldStorage.readChunkSynchronously(x, z, dimension.getDimensionInfo());
-        } catch (Throwable t) {
-            log.error("Error while reading chunk ({},{}) !", x, z, t);
-            chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-        }
-        if (chunk.getState() != FINISHED) {
-            try {
-                chunk = getWorldGenerator().generateChunk(x, z);
-            } catch (Throwable t) {
-                log.error("Error while generating chunk ({},{}) !", x, z, t);
-                chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-            }
-        }
-        chunk.beforeSetChunk(dimension);
-        setChunk(x, z, chunk);
-        chunk.getChunkSetCallback().run();
-        chunk.afterSetChunk(dimension);
-        synchronizedFuture.complete(chunk);
-        loadingChunks.remove(hash);
-        return chunk;
     }
 
     @Override

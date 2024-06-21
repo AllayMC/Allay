@@ -1,11 +1,14 @@
 package org.allaymc.server.block.component.common;
 
- import lombok.Getter;
+import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
- import org.allaymc.api.block.component.common.PlayerInteractInfo;
- import org.allaymc.api.block.component.event.*;
- import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.component.event.BlockOnInteractEvent;
+import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
+import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
+import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -17,9 +20,9 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentSilkTouchType;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
- import org.cloudburstmc.protocol.bedrock.data.GameType;
- import org.joml.Vector3f;
- import org.joml.Vector3ic;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.joml.Vector3f;
+import org.joml.Vector3ic;
 
 /**
  * Allay Project 2023/4/8
@@ -91,7 +94,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
-        if (player.getGameType() == GameType.CREATIVE) return false;
+        if (player != null && player.getGameType() == GameType.CREATIVE) return false;
         return blockState.blockState().getBlockAttributes().canHarvestWithHand() || usedItem.isCorrectToolFor(blockState.blockState());
     }
 

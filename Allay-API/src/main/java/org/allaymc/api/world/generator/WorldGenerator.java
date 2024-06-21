@@ -4,10 +4,11 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.generator.function.EntitySpawner;
-import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Lighter;
+import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -23,7 +24,14 @@ public interface WorldGenerator {
         return BUILDER_FACTORY.get().create();
     }
 
-    Chunk generateChunk(int x, int z);
+    /**
+     * 生成一个区块 <br>
+     * 此方法可能被任意线程调用，故实现应确保线程安全
+     * @param x 区块x坐标
+     * @param z 区块z坐标
+     * @return 生成的区块
+     */
+    CompletableFuture<Chunk> generateChunk(int x, int z);
 
     String getName();
 

@@ -3,6 +3,7 @@ package org.allaymc.api.world.generator.context;
 import lombok.Getter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.ChunkAccessible;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 
@@ -12,6 +13,8 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
  * @author daoge_cmd
  */
 public abstract class OtherChunkAccessibleContext extends Context {
+
+    private static BlockState AIR = BlockTypes.AIR_TYPE.getDefaultState();
 
     @Getter
     protected ChunkAccessible chunkAccessor;
@@ -35,7 +38,12 @@ public abstract class OtherChunkAccessibleContext extends Context {
 
     private void setBlockStateInOtherChunk(int x, int y, int z, BlockState blockState, int layer) {
         var chunk = chunkAccessor.getChunk(x >> 4, z >> 4);
+        if (chunk == null) return;
         chunk.setBlockState(x & 15, y, z & 15, blockState, layer);
+        if (chunk.isLoaded()) {
+            // 区块已经载入世界了，所以需要发送方块更新包
+            chunk.addChunkPacket(Dimension.createBlockUpdatePacket(blockState, x, y, z, layer));
+        }
     }
 
     public BlockState getBlockState(int x, int y, int z) {
@@ -51,6 +59,7 @@ public abstract class OtherChunkAccessibleContext extends Context {
 
     private BlockState getBlockStateInOtherChunk(int x, int y, int z, int layer) {
         var chunk = chunkAccessor.getChunk(x >> 4, z >> 4);
+        if (chunk == null) return AIR;
         return chunk.getBlockState(x & 15, y, z & 15);
     }
 

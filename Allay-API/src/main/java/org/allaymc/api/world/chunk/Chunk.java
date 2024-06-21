@@ -24,6 +24,8 @@ public interface Chunk extends UnsafeChunk {
     @ApiStatus.Internal
     void tick();
 
+    boolean isLoaded();
+
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();
 
@@ -32,11 +34,18 @@ public interface Chunk extends UnsafeChunk {
         return getChunkLoaders().stream().filter(EntityPlayer.class::isInstance).map(EntityPlayer.class::cast).collect(Collectors.toSet());
     }
 
+    /**
+     * Set the callback to be called when the chunk is loaded into the world
+     * @param callback the callback
+     */
     @ApiStatus.Internal
     void setChunkSetCallback(Runnable callback);
 
+    /**
+     * Called when the chunk is loaded into the world
+     */
     @ApiStatus.Internal
-    Runnable getChunkSetCallback();
+    void onChunkSet();
 
     void addChunkLoader(ChunkLoader chunkLoader);
 

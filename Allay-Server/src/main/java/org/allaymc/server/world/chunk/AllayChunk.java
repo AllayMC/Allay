@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -14,12 +15,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.chunk.ChunkLoader;
-import org.allaymc.api.world.chunk.ChunkSection;
-import org.allaymc.api.world.chunk.ChunkState;
-import org.allaymc.api.world.chunk.UnsafeChunk;
-import org.allaymc.api.world.chunk.UnsafeChunkOperate;
+import org.allaymc.api.world.chunk.*;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
@@ -28,12 +24,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Predicate;
 
@@ -51,6 +42,9 @@ public class AllayChunk implements Chunk {
     protected final StampedLock lightLock;
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<ChunkPacketEntry> chunkPacketQueue;
+    // 区块是否已载入世界
+    @Getter
+    protected boolean loaded = false;
     protected Runnable chunkSetCallback = () -> {};
 
     public AllayChunk(AllayUnsafeChunk unsafeChunk) {
@@ -591,8 +585,9 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public Runnable getChunkSetCallback() {
-        return chunkSetCallback;
+    public void onChunkSet() {
+        chunkSetCallback.run();
+        loaded = true;
     }
 
     @Override

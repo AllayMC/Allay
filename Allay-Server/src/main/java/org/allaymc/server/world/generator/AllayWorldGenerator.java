@@ -1,8 +1,12 @@
 package org.allaymc.server.world.generator;
 
+import com.google.common.base.Preconditions;
+import io.netty.util.internal.PlatformDependent;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
@@ -11,20 +15,19 @@ import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorType;
 import org.allaymc.api.world.generator.context.EntitySpawnContext;
-import org.allaymc.api.world.generator.context.NoiseContext;
 import org.allaymc.api.world.generator.context.LightContext;
+import org.allaymc.api.world.generator.context.NoiseContext;
 import org.allaymc.api.world.generator.context.PopulateContext;
 import org.allaymc.api.world.generator.function.EntitySpawner;
-import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Lighter;
+import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
 /**
@@ -42,19 +45,20 @@ public final class AllayWorldGenerator implements WorldGenerator {
     @Getter
     private final String preset;
     private final List<Noiser> noisers;
-    private final List<Populator> populators ;
+    private final List<Populator> populators;
     private final List<Lighter> lighters;
     private final List<EntitySpawner> entitySpawners;
     private final Consumer<Dimension> onDimensionSet;
-    // 原型区块是未完成生成的区块
-    private final Map<Long, CompletableFuture<Chunk>> protoChunks = new Long2ObjectNonBlockingMap<>();
-    // 存储已完成生成且正在被载入世界的基本区块
-    private final Set<Long> beingSetProtoChunk = Collections.newSetFromMap(new Long2ObjectNonBlockingMap<>());
+    private final Map<Long, CompletableFuture<Chunk>> chunkNoiseFutures = new Long2ObjectNonBlockingMap<>();
+    private final Map<Long, CompletableFuture<Chunk>> chunkFutures = new Long2ObjectNonBlockingMap<>();
+    private final Queue<PopulationQueueEntry> populationQueue = PlatformDependent.newMpscQueue();
+    private final Set<Long> populationLocks = Collections.newSetFromMap(new Long2ObjectNonBlockingMap<>());
+    private final ExecutorService computeThreadPool = AllayServer.getInstance().getComputeThreadPool();
 
     @Getter
     private Dimension dimension; // Will be set later
 
-    public static AllayWorldGeneratorBuilder builder() {
+    public static WorldGeneratorBuilder builder() {
         return new AllayWorldGeneratorBuilder();
     }
 
@@ -77,6 +81,10 @@ public final class AllayWorldGenerator implements WorldGenerator {
         this.entitySpawners = entitySpawners;
         this.onDimensionSet = onDimensionSet;
         init();
+        GameLoop populationQueueLoop = GameLoop.builder()
+                .onTick(this::processPopulationQueue)
+                .build();
+        Thread.ofVirtual().start(populationQueueLoop::startLoop);
     }
 
     private void init() {
@@ -95,59 +103,121 @@ public final class AllayWorldGenerator implements WorldGenerator {
         onDimensionSet.accept(dimension);
     }
 
-    /**
-     * 立即在此线程生成完整区块，完整区块的ChunkStatus为FINISHED，即可被载入世界
-     */
-    @Override
-    public Chunk generateChunk(int x, int z) {
-        var chunk = getOrGenerateProtoChunk(x, z);
-        statusNoisedToFinished(chunk);
-        markProtoChunkBeingSet(x, z);
-        chunk.setChunkSetCallback(() -> {
-            afterProtoChunkBeingSet(x, z);
-            protoChunks.remove(HashUtils.hashXZ(x, z));
-        });
-        return chunk;
-    }
-
-    private Chunk getOrGenerateProtoChunk(int x, int z) {
-        CompletableFuture<Chunk> future = new CompletableFuture<>();
-        // 这里的putIfAbsent()保证了只有一个线程可以写入future，其他线程只能获取这一个线程写入的future
-        var presentFuture = protoChunks.putIfAbsent(HashUtils.hashXZ(x, z), future);
-        if (presentFuture != null) {
-            // 原型区块已经在生成或已生成完毕
-            // 等待生成完毕后返回区块，或直接返回若已生成完毕
-            return presentFuture.join();
+    private void processPopulationQueue(GameLoop loop) {
+        if (!Server.getInstance().isRunning()) {
+            loop.stop();
+            return;
         }
-        var chunk = generateProtoChunk(x, z);
-        future.complete(chunk);
-        return chunk;
+        PopulationQueueEntry entry;
+        while ((entry = populationQueue.poll()) != null) {
+            var noiseFuture = entry.noiseFuture;
+            var chunk = noiseFuture.getNow(null);
+            if (chunk == null) {
+                // 噪声未生成，重新加入队列
+                populationQueue.add(entry);
+                continue;
+            }
+            var canPopulate = tryEnterPopulationStage(chunk.getX(), chunk.getZ());
+            if (!canPopulate) {
+                // 本区块或相邻区块有锁，重新加入队列
+                populationQueue.add(entry);
+                continue;
+            }
+            var chunkFuture = entry.chunkFuture;
+            noiseFuture
+                    .thenAcceptAsync(unused -> {
+                        statusNoisedToPopulated(chunk);
+                        releasePopulationLock(chunk.getX(), chunk.getZ());
+                        statusPopulatedToFinished(chunk);
+                        var chunkHash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
+                        // 删除记录的future
+                        chunk.setChunkSetCallback(() -> {
+                            chunkNoiseFutures.remove(chunkHash);
+                            chunkFutures.remove(chunkHash);
+                        });
+                        chunkFuture.complete(chunk);
+                    }, computeThreadPool);
+        }
     }
 
-    private Chunk generateProtoChunk(int x, int z) {
+    private boolean tryEnterPopulationStage(int x, int z) {
+        // 相邻区块噪声都已生成或已载入世界
+        // 且本区块以及相邻区块都没锁
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                var chunkHash = HashUtils.hashXZ(x + i, z + j);
+                if (populationLocks.contains(chunkHash)) {
+                    return false;
+                }
+                var noiseFuture = chunkNoiseFutures.get(chunkHash);
+                if (noiseFuture == null) {
+                    // 区块噪声未生成
+                    if (dimension.getChunkService().getChunk(chunkHash) == null) {
+                        getOrCreateNoiseFuture(x + i, z + j);
+                        return false;
+                    }
+                } else if (!noiseFuture.isDone()) {
+                    return false;
+                }
+            }
+        }
+        // 加锁
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                populationLocks.add(HashUtils.hashXZ(x + i, z + j));
+            }
+        }
+        return true;
+    }
+
+    private void releasePopulationLock(int x, int z) {
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                populationLocks.remove(HashUtils.hashXZ(x + i, z + j));
+            }
+        }
+    }
+
+    @Override
+    public CompletableFuture<Chunk> generateChunk(int x, int z) {
+        CompletableFuture<Chunk> future = new CompletableFuture<>();
+        var presentFuture = chunkFutures.putIfAbsent(HashUtils.hashXZ(x, z), future);
+        if (presentFuture != null) {
+            return presentFuture;
+        } else {
+            createChunkFuture(x, z).thenAccept(future::complete);
+            return future;
+        }
+    }
+
+    public CompletableFuture<Chunk> createChunkFuture(int x, int z) {
+        var noiseFuture = getOrCreateNoiseFuture(x, z);
+        CompletableFuture<Chunk> chunkFuture = new CompletableFuture<>();
+        // 添加区块到population队列中
+        populationQueue.add(new PopulationQueueEntry(chunkFuture, noiseFuture));
+        return chunkFuture;
+    }
+
+    public CompletableFuture<Chunk> getOrCreateNoiseFuture(int x, int z) {
+        // 并行计算区块噪声
+        CompletableFuture<Chunk> noiseFuture = new CompletableFuture<>();
+        var presentFuture = chunkNoiseFutures.putIfAbsent(HashUtils.hashXZ(x, z), noiseFuture);
+        if (presentFuture == null) {
+            generateNoisedChunk(x, z).thenAccept(noiseFuture::complete);
+        } else noiseFuture = presentFuture;
+        return noiseFuture;
+    }
+
+    /**
+     * 计算噪声 <br>
+     * 噪声生成由于不需要操作相邻区块，故是全并行的
+     */
+    public CompletableFuture<Chunk> generateNoisedChunk(int x, int z) {
         var chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-        statusEmptyToNoised(chunk);
-        return chunk;
+        return CompletableFuture.supplyAsync(() -> statusEmptyToNoised(chunk), computeThreadPool);
     }
 
-    private void markProtoChunkBeingSet(int x, int z) {
-        beingSetProtoChunk.add(HashUtils.hashXZ(x, z));
-    }
-
-    private void afterProtoChunkBeingSet(int x, int z) {
-        beingSetProtoChunk.remove(HashUtils.hashXZ(x, z));
-    }
-
-    private boolean protoChunkBeingSet(int x, int z) {
-        return beingSetProtoChunk.contains(HashUtils.hashXZ(x, z));
-    }
-
-    private void statusEmptyToFinished(Chunk chunk) {
-        statusEmptyToNoised(chunk);
-        statusNoisedToFinished(chunk);
-    }
-
-    private void statusEmptyToNoised(Chunk chunk) {
+    private Chunk statusEmptyToNoised(Chunk chunk) {
         // 基本地形
         var generateContext = new NoiseContext(chunk.toUnsafeChunk());
         for (var noiser : noisers) {
@@ -156,17 +226,21 @@ public final class AllayWorldGenerator implements WorldGenerator {
             }
         }
         chunk.setState(ChunkState.NOISED);
+        return chunk;
     }
 
-    private void statusNoisedToFinished(Chunk chunk) {
-         // 装饰地形
-        var populateContext = new PopulateContext(chunk.toUnsafeChunk(), new WorldGeneratorChunkAccessor(chunk));
-         for (var populator : populators) {
-             if (!populator.apply(populateContext)) {
-                 log.error("Failed to populate chunk {} with populator {}", chunk, populator.getName());
-             }
-         }
-         chunk.setState(ChunkState.POPULATED);
+    private void statusNoisedToPopulated(Chunk chunk) {
+        // 装饰地形
+        var populateContext = new PopulateContext(chunk.toUnsafeChunk(), new PopulationStageChunkAccessor(chunk));
+        for (var populator : populators) {
+            if (!populator.apply(populateContext)) {
+                log.error("Failed to populate chunk {} with populator {}", chunk, populator.getName());
+            }
+        }
+        chunk.setState(ChunkState.POPULATED);
+    }
+
+    private void statusPopulatedToFinished(Chunk chunk) {
          // 烘培光照
          var lightContext = new LightContext(chunk.toUnsafeChunk());
          for (var lighter : lighters) {
@@ -186,10 +260,10 @@ public final class AllayWorldGenerator implements WorldGenerator {
         chunk.setState(ChunkState.FINISHED);
     }
 
-    public final class WorldGeneratorChunkAccessor implements ChunkAccessible {
+    public final class PopulationStageChunkAccessor implements ChunkAccessible {
         private final Chunk currentChunk;
 
-        public WorldGeneratorChunkAccessor(Chunk currentChunk) {
+        public PopulationStageChunkAccessor(Chunk currentChunk) {
             this.currentChunk = currentChunk;
         }
 
@@ -198,29 +272,26 @@ public final class AllayWorldGenerator implements WorldGenerator {
             if (x == currentChunk.getX() && z == currentChunk.getZ()) {
                 return currentChunk;
             }
-            var chunkService = dimension.getChunkService();
-
-            // 先获取future，避免在此过程中区块完成加载导致future被删除
-            CompletableFuture<Chunk> future = chunkService.getChunkLoadingFuture(x, z);
-            if (future != null && protoChunkBeingSet(x, z)) {
-                // 即使在此过程中future被删除（区块完成加载），此代码依然可以工作因为
-                // 区块完成加载后，future.join()等效于chunkService.getChunk(x, z)
-                return future.join();
+            if (!isInRange(x, z)) {
+//                log.warn("Attempted to access chunk out of range during chunk population stage! CurrentChunk: ({}. {}), RequestedChunk: ({}. {})", currentChunk.getX(), currentChunk.getZ(), x, z);
+                return null;
             }
-
-            var chunk = chunkService.getChunk(x, z);
-            // 若区块已生成则直接返回
-            if (chunk != null) return chunk;
-
-            // 获取或生成原型区块供使用
-            // 此时有小概率出现目标区块已进入"BeingSet"状态的情况
-            // 但是这不会产生问题，因为在这种情况下获取的原型区块等效于稍后的chunkService.getChunk(x, z)
-            chunk = getOrGenerateProtoChunk(x, z);
+            var loadedChunk = dimension.getChunkService().getChunk(x, z);
+            if (loadedChunk != null) return loadedChunk;
+            var noiseFuture = chunkNoiseFutures.get(HashUtils.hashXZ(x, z));
+            Preconditions.checkNotNull(noiseFuture);
+            var chunk = noiseFuture.getNow(null);
+            Preconditions.checkNotNull(chunk);
             return chunk;
+        }
+
+        private boolean isInRange(int x, int z) {
+            // 只能访问相邻的区块
+            return Math.abs(x - currentChunk.getX()) <= 1 && Math.abs(z - currentChunk.getZ()) <= 1;
         }
     }
 
-    public static final class AllayWorldGeneratorBuilder implements WorldGenerator.WorldGeneratorBuilder {
+    protected static final class AllayWorldGeneratorBuilder implements WorldGenerator.WorldGeneratorBuilder {
 
         private String name;
         private WorldGeneratorType type = WorldGeneratorType.INFINITE;
@@ -278,4 +349,6 @@ public final class AllayWorldGenerator implements WorldGenerator {
             return new AllayWorldGenerator(name, type, preset, noisers, populators, lighters, entitySpawners, onDimensionSet);
         }
     }
+
+    protected record PopulationQueueEntry(CompletableFuture<Chunk> chunkFuture, CompletableFuture<Chunk> noiseFuture) {}
 }
