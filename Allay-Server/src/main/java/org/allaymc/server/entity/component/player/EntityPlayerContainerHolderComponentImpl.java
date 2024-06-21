@@ -19,7 +19,8 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     private EntityPlayer player;
 
     public EntityPlayerContainerHolderComponentImpl() {
-        super(new PlayerCursorContainer(),
+        super(
+                new PlayerCursorContainer(),
                 new PlayerCreatedOutputContainer(),
                 new PlayerArmorContainer(),
                 new PlayerOffhandContainer(),
@@ -35,6 +36,6 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
 
     @Override
     protected boolean canDropItemInContainers() {
-        return !(boolean)player.getWorld().getGameRule(GameRule.KEEP_INVENTORY);
+        return !(boolean) player.getWorld().getGameRule(GameRule.KEEP_INVENTORY);
     }
 }

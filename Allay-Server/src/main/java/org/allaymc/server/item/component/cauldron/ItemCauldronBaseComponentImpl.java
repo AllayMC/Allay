@@ -1,5 +1,6 @@
 package org.allaymc.server.item.component.cauldron;
 
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.init.ItemStackInitInfo;
@@ -22,7 +23,7 @@ public class ItemCauldronBaseComponentImpl extends ItemBaseComponentImpl<ItemCau
     }
 
     @Override
-    public boolean placeBlock(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
-        return tryPlaceBlockState(player, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, CAULDRON_TYPE.getDefaultState());
+    public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        return tryPlaceBlockState(dimension, CAULDRON_TYPE.getDefaultState(), placeBlockPos, placementInfo);
     }
 }

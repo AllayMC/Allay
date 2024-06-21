@@ -5,11 +5,11 @@ import org.allaymc.api.block.component.common.BlockAttributes;
 import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.api.utils.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,15 +26,17 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_attribute_component");
-    protected static final BlockAttributeComponentImpl DEFAULT = BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT);
-    protected Function<BlockState, BlockAttributes> attributeAccessor;
 
-    public static BlockAttributeComponentImpl ofDefault() {
-        return DEFAULT;
-    }
+    protected static final BlockAttributeComponentImpl DEFAULT = BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT);
+
+    protected Function<BlockState, BlockAttributes> attributeAccessor;
 
     protected BlockAttributeComponentImpl(Function<BlockState, BlockAttributes> attributeAccessor) {
         this.attributeAccessor = attributeAccessor;
+    }
+
+    public static BlockAttributeComponentImpl ofDefault() {
+        return DEFAULT;
     }
 
     public static BlockAttributeComponentImpl ofGlobalStatic(BlockAttributes attributes) {
@@ -100,14 +102,14 @@ public class BlockAttributeComponentImpl implements BlockAttributeComponent {
 
         @Override
         public BlockAttributes apply(BlockState blockState) {
-            return attributeMap.computeIfAbsent(blockState.blockStateHash(), unused -> directAttributeAccessor.apply(blockState));
+            return attributeMap.computeIfAbsent(blockState.blockStateHash(), $ -> directAttributeAccessor.apply(blockState));
         }
     }
 
     private static class LazyLoaderAttributeAccessor implements Function<BlockState, BlockAttributes> {
 
-        private Map<Integer, BlockAttributes> lazyLoadAttributeMap;
         private final Function<BlockType<?>, Map<Integer, BlockAttributes>> lazyLoader;
+        private Map<Integer, BlockAttributes> lazyLoadAttributeMap;
 
         public LazyLoaderAttributeAccessor(Function<BlockType<?>, Map<Integer, BlockAttributes>> lazyLoader) {
             this.lazyLoader = lazyLoader;

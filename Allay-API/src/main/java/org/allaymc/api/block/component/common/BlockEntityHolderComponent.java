@@ -37,6 +37,10 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
     }
 
     default void createBlockEntityAt(int x, int y, int z, Dimension dimension) {
+        createBlockEntityAt(x, y, z, dimension, true);
+    }
+
+    default void createBlockEntityAt(int x, int y, int z, Dimension dimension, boolean sendToClient) {
         Objects.requireNonNull(dimension);
         var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) {
@@ -44,17 +48,21 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         }
         var presentBlockEntity = chunk.getBlockEntity(x & 15, y, z & 15);
         if (presentBlockEntity != null) {
-            throw new IllegalStateException("Trying to create a block entity where block entity already exists! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z + "!");
+            throw new IllegalStateException("Trying to create a block entity when block entity already exists! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z + "!");
         }
         var blockEntity = getBlockEntityType().createBlockEntity(SimpleBlockEntityInitInfo.builder().pos(x, y, z).dimension(dimension).build());
         chunk.addBlockEntity(blockEntity);
-        if (blockEntity.sendToClient()) {
+        if (sendToClient && blockEntity.sendToClient()) {
             blockEntity.sendBlockEntityDataPacketToAll();
         }
     }
 
     default void createBlockEntityAt(Position3ic pos) {
         createBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.dimension());
+    }
+
+    default void createBlockEntityAt(Position3ic pos, boolean sendToClient) {
+        createBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.dimension(), sendToClient);
     }
 
     default void removeBlockEntityAt(int x, int y, int z, Dimension dimension) {

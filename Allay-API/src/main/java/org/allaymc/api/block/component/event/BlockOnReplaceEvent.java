@@ -2,6 +2,7 @@ package org.allaymc.api.block.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.Event;
@@ -16,4 +17,5 @@ import org.allaymc.api.eventbus.event.Event;
 public class BlockOnReplaceEvent extends Event {
     protected BlockStateWithPos currentBlockState;
     protected BlockState newBlockState;
+    protected PlayerInteractInfo placementInfo; // Can be null
 }

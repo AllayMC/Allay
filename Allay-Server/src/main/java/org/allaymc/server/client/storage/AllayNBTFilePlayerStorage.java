@@ -36,7 +36,7 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
         if (!Files.exists(path)) return PlayerData.createEmpty();
         try (var reader = NbtUtils.createGZIPReader(Files.newInputStream(path))) {
             return PlayerData.fromNBT((NbtMap) reader.readTag());
-        } catch (IOException e) {
+        } catch (Throwable e) {
             log.error("Error while reading player data " + uuid, e);
             return PlayerData.createEmpty();
         }
@@ -58,7 +58,7 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
         }
         try (var writer = NbtUtils.createGZIPWriter(Files.newOutputStream(path))) {
             writer.writeTag(playerData.toNBT());
-        } catch (IOException e) {
+        } catch (Throwable e) {
             // error, rename uuid_old.nbt file to uuid.nbt
             Files.move(oldPath, path);
             log.error("Error while writing player data " + uuid, e);

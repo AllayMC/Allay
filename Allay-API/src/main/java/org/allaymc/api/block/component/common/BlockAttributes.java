@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -24,6 +25,7 @@ import java.awt.*;
  * @author daoge_cmd | CoolLoong
  */
 @Getter
+@ToString
 @Accessors(fluent = true)
 @Builder(toBuilder = true)
 @EqualsAndHashCode
@@ -33,7 +35,9 @@ public class BlockAttributes {
      * See: <a href="https://www.mcpk.wiki/wiki/Slipperiness">Slipperiness</a>
      */
     public static final float DEFAULT_FRICTION = 0.6f;
+
     public static BlockAttributes DEFAULT = BlockAttributes.builder().build();
+
     protected static Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(VoxelShape.class, (JsonDeserializer<Object>) (json, typeOfT, context) ->
                     VoxelShape.builder().solid(parseAABBStr(json.getAsString())).build())
@@ -43,8 +47,7 @@ public class BlockAttributes {
                 var b = json.getAsJsonObject().get("b").getAsInt();
                 var a = json.getAsJsonObject().get("a").getAsInt();
                 return new Color(r, g, b, a);
-            })
-            .create();
+            }).create();
     /**
      * block collision box
      */
@@ -93,6 +96,12 @@ public class BlockAttributes {
      */
     @Builder.Default
     protected boolean pushesUpFallingBlocks = false;
+    /**
+     * 此方块状态是否可以被徒手挖取
+     * 若可以，则玩家在非创造模式下可以使用任何工具挖取此方块并产生掉落物
+     */
+    @Builder.Default
+    protected boolean canHarvestWithHand = true;
 
     protected static AABBf parseAABBStr(String str) {
         var numbers = AllayStringUtils.fastSplit(str, ",").stream().map(Float::valueOf).toList();
@@ -133,6 +142,7 @@ public class BlockAttributes {
                 .isLavaFlammable(nbt.getBoolean("isLavaFlammable"))
                 .pushesUpFallingBlocks(nbt.getBoolean("pushesUpFallingBlocks"))// USELESS
                 .thickness(nbt.getFloat("thickness"))
+                .canHarvestWithHand(nbt.getBoolean("canHarvestWithHand"))
                 .build();
     }
 

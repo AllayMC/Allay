@@ -7,6 +7,5 @@ import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
  *
  * @author daoge_cmd
  */
-public interface BlockEntity extends
-        BlockEntityBaseComponent {
+public interface BlockEntity extends BlockEntityBaseComponent {
 }

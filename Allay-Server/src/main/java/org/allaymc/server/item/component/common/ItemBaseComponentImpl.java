@@ -1,13 +1,18 @@
 package org.allaymc.server.item.component.common;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.component.annotation.Manager;
+import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaMaterialTypes;
+import org.allaymc.api.item.component.event.ItemLoadExtraTagEvent;
+import org.allaymc.api.item.component.event.ItemPlacedAsBlockEvent;
+import org.allaymc.api.item.component.event.ItemSaveExtraTagEvent;
 import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -30,7 +35,6 @@ import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.*;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.io.BufferedInputStream;
@@ -60,6 +64,8 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected ItemAttributeComponent attributeComponent;
     @ComponentedObject
     protected T thisItemStack;
+    @Manager
+    protected ComponentManager<T> manager;
 
     protected ItemType<T> itemType;
     protected int count;
@@ -105,6 +111,12 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
                 this.enchantments.put(enchantment.getType(), enchantment);
             });
         }
+        if (extraTag.containsKey("CustomNBT")) {
+            this.customNBTContent = extraTag.getCompound("CustomNBT");
+        }
+
+        var event = new ItemLoadExtraTagEvent(extraTag);
+        manager.callEvent(event);
     }
 
     @Override
@@ -251,7 +263,12 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         //TODO: item lock type
 
         // Custom NBT content
-        nbtBuilder.putAll(customNBTContent);
+        if (!customNBTContent.isEmpty()) {
+            nbtBuilder.put("CustomNBT", customNBTContent);
+        }
+
+        var event = new ItemSaveExtraTagEvent(nbtBuilder);
+        manager.callEvent(event);
 
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }
@@ -267,22 +284,27 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public boolean placeBlock(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace) {
+    public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (thisItemStack.getItemType().getBlockType() == null)
             return false;
         var blockState = thisItemStack.toBlockState();
-        return tryPlaceBlockState(player, dimension, targetBlockPos, placeBlockPos, clickPos, blockFace, blockState);
+        return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo);
     }
 
     // TODO: 由于服务端侧方块放置检查与客户端方块放置检查不能做到100%同步，会导致“吞方块”现象出现，这里先关闭检查
     protected static final boolean DO_BLOCK_PLACING_CHECK = false;
 
-    protected boolean tryPlaceBlockState(EntityPlayer player, Dimension dimension, Vector3ic targetBlockPos, Vector3ic placeBlockPos, Vector3fc clickPos, BlockFace blockFace, BlockState blockState) {
+    protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        var player = placementInfo.player();
         if (player != null && DO_BLOCK_PLACING_CHECK && hasEntityCollision(dimension, placeBlockPos, blockState))
             return false;
         BlockType<?> blockType = blockState.getBlockType();
-        boolean result = blockType.getBlockBehavior().place(player, dimension, blockState, targetBlockPos, placeBlockPos, clickPos, blockFace);
-        tryConsumeItem(player);
+        boolean result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
+        if (result) {
+            tryConsumeItem(player);
+            var event = new ItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
+            manager.callEvent(event);
+        }
         return result;
     }
 

@@ -12,5 +12,4 @@ public class PlayerArmorContainer extends BaseContainer {
     public PlayerArmorContainer() {
         super(FullContainerType.ARMOR);
     }
-
 }

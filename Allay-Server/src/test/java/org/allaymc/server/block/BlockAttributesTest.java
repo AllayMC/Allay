@@ -30,6 +30,7 @@ class BlockAttributesTest {
               "burnAbility": 0,
               "burnChance": 0,
               "canContainLiquid": true,
+              "canHarvestWithHand": false,
               "color": {
                 "a": 255,
                 "b": 178,
@@ -100,6 +101,7 @@ class BlockAttributesTest {
         assertEquals(0, blockAttributes.lightEmission());
         assertFalse(blockAttributes.pushesUpFallingBlocks());
         assertEquals(0, blockAttributes.thickness());
+        assertFalse(blockAttributes.canHarvestWithHand());
     }
 
     @Test

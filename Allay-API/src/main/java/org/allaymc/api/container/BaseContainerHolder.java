@@ -17,9 +17,6 @@ public class BaseContainerHolder implements ContainerHolder {
     protected final Map<FullContainerType<?>, Container> typeToContainer = new HashMap<>();
     protected final Map<ContainerSlotType, FullContainerType<?>> slotTypeToFullType = new HashMap<>();
 
-    public BaseContainerHolder() {
-    }
-
     public BaseContainerHolder(Container... containers) {
         for (Container container : containers) {
             this.addContainer(container);
@@ -49,7 +46,8 @@ public class BaseContainerHolder implements ContainerHolder {
     @Override
     public void addContainer(Container container) {
         if (typeToContainer.containsKey(container.getContainerType()))
-            throw new ContainerException("Inventory " + container.getClass().getSimpleName() + "already exists");
+            throw new ContainerException("Inventory " + container.getClass().getSimpleName() + " already exists");
+
         typeToContainer.put(container.getContainerType(), container);
         container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.put(slotType, container.getContainerType()));
     }

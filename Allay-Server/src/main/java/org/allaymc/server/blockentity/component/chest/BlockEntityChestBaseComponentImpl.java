@@ -5,15 +5,9 @@ import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.ChestContainer;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
-import org.cloudburstmc.math.vector.Vector3i;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
-
-import java.util.Objects;
 
 /**
  * Allay Project 2023/12/6
@@ -35,11 +29,7 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
         container.addOnOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
                 BlockEventPacket pk = new BlockEventPacket();
-                pk.setBlockPosition(Vector3i.from(
-                        position.x(),
-                        position.y(),
-                        position.z()
-                ));
+                pk.setBlockPosition(position.toNetwork());
                 pk.setEventType(1);
                 pk.setEventData(2);
 
@@ -55,11 +45,7 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
         container.addOnCloseListener(viewer -> {
             if (container.getViewers().isEmpty()) {
                 BlockEventPacket pk = new BlockEventPacket();
-                pk.setBlockPosition(Vector3i.from(
-                        position.x(),
-                        position.y(),
-                        position.z()
-                ));
+                pk.setBlockPosition(position.toNetwork());
                 pk.setEventType(1);
                 pk.setEventData(0);
 
@@ -72,21 +58,5 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
                 sendPacketToViewers(pk);
             }
         });
-    }
-
-    @Override
-    public void loadNBT(NbtMap nbt) {
-        super.loadNBT(nbt);
-        if (nbt.containsKey("Items"))
-            Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.CHEST)).loadNBT(nbt.getList("Items", NbtType.COMPOUND));
-    }
-
-    @Override
-    public NbtMap saveNBT() {
-        return super.saveNBT().toBuilder().putList(
-                "Items",
-                NbtType.COMPOUND,
-                Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.CHEST)).saveNBT()
-        ).build();
     }
 }

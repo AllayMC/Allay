@@ -3,6 +3,7 @@ package org.allaymc.api.block.component.event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.Event;
@@ -19,13 +20,9 @@ import org.joml.Vector3ic;
 @Getter
 @AllArgsConstructor
 public final class BlockOnInteractEvent extends Event {
-    private final EntityPlayer player;
     private final ItemStack itemStack;
     private final Dimension dimension;
-    private final Vector3ic blockPos;
-    private final Vector3ic placeBlockPos;
-    private final Vector3fc clickPos;
-    private final BlockFace blockFace;
+    private final PlayerInteractInfo interactInfo;
     @Setter
     private boolean success;
 }

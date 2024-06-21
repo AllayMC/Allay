@@ -28,11 +28,13 @@ import org.allaymc.api.item.interfaces.leggings.ItemGoldenLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemIronLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemLeatherLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemNetheriteLeggingsStack;
+import org.allaymc.api.item.interfaces.shulkerbox.*;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.air.ItemAirBaseComponentImpl;
 import org.allaymc.server.item.component.armor.ItemArmorBaseComponentImpl;
 import org.allaymc.server.item.component.cauldron.ItemCauldronBaseComponentImpl;
+import org.allaymc.server.item.component.common.ItemItemStorableComponentImpl;
 
 /**
  * Allay Project 2024/3/9
@@ -40,6 +42,100 @@ import org.allaymc.server.item.component.cauldron.ItemCauldronBaseComponentImpl;
  * @author daoge_cmd
  */
 public final class ItemTypeInitializer {
+
+    public static void initShulkerBox() {
+        ItemTypes.BLACK_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemBlackShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.BLACK_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.BLUE_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemBlueShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.BLUE_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.BROWN_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemBrownShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.BROWN_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.CYAN_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemCyanShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.CYAN_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.GRAY_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemGrayShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.GRAY_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.GREEN_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemGreenShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.GREEN_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.LIGHT_BLUE_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemLightBlueShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.LIGHT_BLUE_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.LIGHT_GRAY_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemLightGrayShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.LIGHT_GRAY_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.LIME_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemLimeShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.LIME_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.MAGENTA_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemMagentaShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.MAGENTA_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.ORANGE_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemOrangeShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.ORANGE_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.PINK_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemPinkShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.PINK_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.PURPLE_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemPurpleShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.PURPLE_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.RED_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemRedShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.RED_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.UNDYED_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemUndyedShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.UNDYED_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.WHITE_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemWhiteShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.WHITE_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+        ItemTypes.YELLOW_SHULKER_BOX_TYPE = ItemTypeBuilder
+                .builder(ItemYellowShulkerBoxStack.class)
+                .vanillaItem(VanillaItemId.YELLOW_SHULKER_BOX)
+                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .build();
+    }
+
     public static void initAir() {
         ItemTypes.AIR_TYPE = ItemTypeBuilder
                 .builder(ItemAirStack.class)
