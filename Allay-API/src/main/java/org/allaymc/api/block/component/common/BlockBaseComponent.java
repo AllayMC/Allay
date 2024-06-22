@@ -58,11 +58,21 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
+     * Check if the block can keep existing when a neighbor block updates.
+     * @param current The current block
+     * @param face The face of the current block that is being updated
+     * @return true if the block can keep existing, false if the block should be broken
+     */
+    default boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        return true;
+    }
+
+    /**
      * Call when a blockState causes another blockState to update.
      *
      * @param current  The current block
      * @param neighbor The neighbor block that triggered the update
-     * @param face     The face of the current block
+     * @param face     The face of the current block that is being updated
      */
     void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face);
 

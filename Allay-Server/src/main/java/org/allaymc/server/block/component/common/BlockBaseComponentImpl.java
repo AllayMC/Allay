@@ -47,6 +47,9 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         manager.callEvent(new BlockOnNeighborUpdateEvent(current, neighbor, face));
+        if (!canKeepExisting(current, neighbor, face)) {
+            current.pos().dimension().breakBlock(current.pos(), null, null);
+        }
     }
 
     @Override
@@ -95,7 +98,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
         if (player != null && player.getGameType() == GameType.CREATIVE) return false;
-        return blockState.blockState().getBlockAttributes().canHarvestWithHand() || usedItem.isCorrectToolFor(blockState.blockState());
+        return blockState.blockState().getBlockAttributes().canHarvestWithHand() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
     }
 
     @Override

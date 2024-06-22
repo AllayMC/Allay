@@ -22,8 +22,11 @@ public class BlockTallWheatSeedDropableBaseComponentImpl extends BlockWheatSeedD
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (face != BlockFace.UP && face != BlockFace.DOWN) return;
+    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        if (!super.canKeepExisting(current, neighbor, face)) {
+            return false;
+        }
+        if (face != BlockFace.UP && face != BlockFace.DOWN) return false;
         var dimension = current.pos().dimension();
         var isUpperBlock = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT);
         var willBreak = false;
@@ -31,8 +34,9 @@ public class BlockTallWheatSeedDropableBaseComponentImpl extends BlockWheatSeedD
             willBreak = notSamePlant(dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())));
         } else {
             willBreak = notSamePlant(dimension.getBlockState(BlockFace.UP.offsetPos(current.pos())));
+            if (!willBreak) willBreak = isPlaceableBlock(dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())).getBlockType());
         }
-        if (willBreak) dimension.breakBlock(current.pos(), null, null);
+        return willBreak;
     }
 
     protected boolean notSamePlant(BlockState downBlock) {
