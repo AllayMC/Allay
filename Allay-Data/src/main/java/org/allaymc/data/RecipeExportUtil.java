@@ -21,6 +21,7 @@ import org.allaymc.api.utils.Utils;
 import org.allaymc.server.Allay;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodecHelper;
+import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -55,8 +56,10 @@ public class RecipeExportUtil {
 
     @SneakyThrows
     public static void main(String[] args) {
+        Allay.initI18n();
         Allay.initAllayAPI();
         BedrockCodecHelper helper = CODEC.createHelper();
+        helper.setEncodingSettings(EncodingSettings.CLIENT);
         helper.setItemDefinitions(
                 SimpleDefinitionRegistry
                         .<ItemDefinition>builder()
